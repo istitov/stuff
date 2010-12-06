@@ -9,7 +9,7 @@ inherit eutils
 IUSE="guile tk"
 
 DESCRIPTION="Tool for launching commands on keystrokes"
-EGIT_REPO_URI="http://git.savannah.gnu.org/cgit/xbindkeys"
+EGIT_REPO_URI="git://git.sv.gnu.org/xbindkeys.git"
 HOMEPAGE="http://www.nongnu.org/xbindkeys/xbindkeys.html"
 
 LICENSE="GPL-2"
