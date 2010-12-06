@@ -27,7 +27,7 @@ src_configure() {
 	use tk || myconf="${myconf} --disable-tk"
 	use guile || myconf="${myconf} --disable-guile"
 
-	econf ${myconf} || die "configure failed"
+	./configure ${myconf} || die "configure failed"
 }
 
 src_compile() {
