@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
+<repositories xmlns="" version="1.0">
+  <repo quality="experimental" status="unofficial">
+    <name><![CDATA[stuff]]></name>
+    <description><![CDATA[stuff]]></description>
+    <homepage>https://github.com/megabaks/stuff</homepage>
+    <owner>
+      <email>megagreener@gmail.com</email>
+      <name><![CDATA[megabaks]]></name>
+    </owner>
+    <source type="git">git://github.com/megabaks/stuff.git</source>
+    <feed>https://github.com/megabaks/stuff/commits/master</feed>
+  </repo>
+</repositories>
