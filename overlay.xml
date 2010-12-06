@@ -2,7 +2,7 @@
 <repositories version="1.0">
   <repo priority="50" quality="experimental" status="unofficial">
     <name>stuff</name>
-    <description></description>
+    <description>stuff</description>
     <homepage></homepage>
     <owner>
       <email>megagreener@gmail.com</email>
