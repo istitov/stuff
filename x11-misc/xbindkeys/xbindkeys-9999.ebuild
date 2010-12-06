@@ -11,6 +11,7 @@ IUSE="guile tk"
 DESCRIPTION="Tool for launching commands on keystrokes"
 EGIT_REPO_URI="git://git.savannah.nongnu.org/xbindkeys.git"
 HOMEPAGE="http://www.nongnu.org/xbindkeys/xbindkeys.html"
+S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-2"
 KEYWORDS="~amd64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"

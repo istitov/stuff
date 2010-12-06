@@ -9,7 +9,7 @@ inherit eutils
 IUSE="guile tk"
 
 DESCRIPTION="Tool for launching commands on keystrokes"
-EGIT_REPO_URI="git://git.sv.gnu.org/xbindkeys.git"
+EGIT_REPO_URI="git://git.savannah.nongnu.org/xbindkeys.git"
 HOMEPAGE="http://www.nongnu.org/xbindkeys/xbindkeys.html"
 
 LICENSE="GPL-2"
@@ -23,11 +23,12 @@ DEPEND="${RDEPEND}
 	x11-proto/xproto"
 
 src_configure() {
+	
 	local myconf
 	use tk || myconf="${myconf} --disable-tk"
 	use guile || myconf="${myconf} --disable-guile"
 
-	./configure ${myconf} || die "configure failed"
+	econf ${myconf} || die "configure failed"
 }
 
 src_compile() {
