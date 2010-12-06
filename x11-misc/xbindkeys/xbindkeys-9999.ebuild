@@ -4,12 +4,13 @@
 
 EAPI="2"
 
-inherit eutils
+inherit git eutils
 
 IUSE="guile tk"
 
 DESCRIPTION="Tool for launching commands on keystrokes"
 EGIT_REPO_URI="git://git.savannah.nongnu.org/xbindkeys.git"
+EGIT_BRANCH="master"
 HOMEPAGE="http://www.nongnu.org/xbindkeys/xbindkeys.html"
 S="${WORKDIR}/${PN}"
 
