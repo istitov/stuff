@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libjpeg-turbo/libjpeg-turbo-1.0.90-r1.ebuild,v 1.1 2010/12/07 20:50:22 megabaks Exp $
 
-EAPI="2"
+EAPI="3"
 
-DEB_PV="7-1"
+DEB_PV="7-7"
 DEB_PN="libjpeg7"
 DEB="${DEB_PN}_${DEB_PV}"
 
