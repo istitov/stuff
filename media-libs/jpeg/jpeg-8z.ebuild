@@ -19,7 +19,7 @@ SRC_URI="http://dev.gentoo.org/~anarchy/dist/libjpeg-turbo-1.0.90-1.tar.bz2"
 
 LICENSE="as-is LGPL-2.1 wxWinLL-3.1"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE="static-libs"
 
 DEPEND="
