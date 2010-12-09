@@ -15,9 +15,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="static-libs"
 
-RDEPEND="media-libs/jpeg:0"
-DEPEND="${RDEPEND}
-   dev-lang/nasm"
+DEPEND="dev-lang/nasm"
 
 S="${WORKDIR}/${P}/"
 
