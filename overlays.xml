@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repositories version="1.0">
+  <repo priority="50" quality="experimental" status="unofficial">
+    <name>stuff</name>
+    <description>stuff</description>
+    <homepage>https://github.com/megabaks</homepage>
+    <owner>
+      <email />
+    </owner>
+    <source type="git">git://github.com/megabaks/stuff.git</source>
+    <feed />
+  </repo>
+  </repositories>
