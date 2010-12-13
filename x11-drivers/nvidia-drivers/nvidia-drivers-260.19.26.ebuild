@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-drivers/nvidia-drivers/nvidia-drivers-256.53.ebuild,v 1.1 2010/08/31 15:57:49 cardoe Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-drivers/nvidia-drivers/nvidia-drivers-260.19.26.ebuild,v 1.1 2010/08/31 15:57:49 megabaks Exp $
 
 EAPI="2"
 
