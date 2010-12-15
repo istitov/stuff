@@ -10,13 +10,12 @@ DESCRIPTION="music downloader from vkontakte.ru"
 HOMEPAGE="http://grabvk.sourceforge.net/"
 SRC_URI="http://sourceforge.net/projects/grabvk/files/grabvk_${PV}_version/grabvk_v${PV}_qtcreator_project.tar.gz"
 
-LICENSE=""
+LICENSE="GPLv3"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""
 
 DEPEND_COMMON="
-
 		x11-libs/qt-gui
 		x11-libs/qt-core
 	"
