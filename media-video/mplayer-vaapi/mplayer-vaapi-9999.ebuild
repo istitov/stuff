@@ -8,7 +8,7 @@ SRC_URI="http://www.splitted-desktop.com/~gbeauchesne/${PN}/${PN}-latest-FULL.ta
   
 LICENSE=""
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 IUSE=""
    
 DEPEND="x11-libs/libva
