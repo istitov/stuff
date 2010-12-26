@@ -16,6 +16,7 @@ KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""
 
 DEPEND_COMMON="
+		kde-base/kdelibs
 		>=x11-libs/qt-gui-4.7.0
 		>=x11-libs/qt-core-4.7.0
 	"
