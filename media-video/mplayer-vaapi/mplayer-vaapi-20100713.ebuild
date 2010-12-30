@@ -21,6 +21,7 @@ src_compile() {
 }
 
 src_install() {
-	into /opt/${PN}/
-	dobin ${PN}/mplayer
+	mv ${PN}/mplayer ${PN}/mplayer-vaapi
+	into /usr/local/
+	dobin ${PN}/mplayer-vaapi
 }
