@@ -29,7 +29,8 @@ src_install() {
 	doman doc/*.8
 	linux-mod_src_install
 	insinto /etc/modprobe.d
-	
+	insinto /etc/init.d
+	newinitd "${FILESDIR}"/davl davl
 	chmod 644 src/drv/davl_liveinfo.ko
 	insinto /lib/modules/$(uname -r)/kernel/drivers/davl
 	doins src/drv/davl_liveinfo.ko
