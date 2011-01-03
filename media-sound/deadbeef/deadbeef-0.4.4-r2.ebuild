@@ -17,7 +17,7 @@ LICENSE="GPL-2 ZLIB
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="+gtk gtk3 +alsa ffmpeg pulseaudio mp3 +vorbis +flac wavpack sndfile cdda +hotkeys
-	oss lastfm adplug +ape sid nullout supereq vtx gme dumb +notify cover curl
+	oss lastfm adplug +ape sid nullout +supereq vtx gme dumb +notify cover curl
 	shellexec musepack +tta dts aac midi mms shorten audiooverload nls rpath threads static"
 
 RDEPEND="media-libs/libsamplerate
