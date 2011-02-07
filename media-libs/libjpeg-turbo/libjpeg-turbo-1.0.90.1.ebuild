@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="static-libs"
 
-RDEPEND="media-libs/jpeg:0"
+RDEPEND=""
 DEPEND="${RDEPEND}
 	dev-lang/nasm"
 
