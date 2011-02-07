@@ -20,6 +20,7 @@ DEPEND="dev-lang/nasm"
 S="${WORKDIR}/${P}/"
 
 src_prepare() {
+	subversion_src_unpack
 	autoreconf -fiv
 }
 
