@@ -5,5 +5,5 @@
 EAPI="3"
 SLOT="0"
 KEYWORDS=""
-RDEPEND="media-libs/libjpeg-turbo:0"
+RDEPEND="media-libs/libjpeg-turbo"
 DEPEND="${RDEPEND}"
