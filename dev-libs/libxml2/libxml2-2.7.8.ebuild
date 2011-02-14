@@ -14,7 +14,7 @@ HOMEPAGE="http://www.xmlsoft.org/"
 LICENSE="MIT"
 SLOT="2"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="debug doc examples ipv6 python readline test"
+IUSE="debug doc icu examples ipv6 python readline test"
 
 XSTS_HOME="http://www.w3.org/XML/2004/xml-schema-test-suite"
 XSTS_NAME_1="xmlschema2002-01-16"
@@ -28,6 +28,7 @@ SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz
 		${XSTS_HOME}/${XSTS_NAME_2}/${XSTS_TARBALL_2} )"
 
 RDEPEND="sys-libs/zlib
+	icu? ( dev-libs/icu )
 	python? ( || ( <dev-lang/python-3[xml] ( <dev-lang/python-3 dev-python/pyxml ) ) )
 	readline? ( sys-libs/readline )"
 
@@ -80,6 +81,7 @@ src_configure() {
 		--docdir=/usr/share/doc/${PF}
 		$(use_with debug run-debug)
 		$(use_with python)
+		$(use_with icu)
 		$(use_with readline)
 		$(use_with readline history)
 		$(use_enable ipv6)"
