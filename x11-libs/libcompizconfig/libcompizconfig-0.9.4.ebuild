@@ -24,7 +24,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19
 "
-S="${WORKDIR}/${P}"
+S="${WORKDIR}/${PN}"
 src_configure() {
 	mycmakeargs=(
 		"-DCOMPIZ_DISABLE_SCHEMAS_INSTALL=ON"
