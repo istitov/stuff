@@ -75,7 +75,7 @@ RDEPEND="${COMMONDEPEND}
 	x11-apps/xvinfo
 "
 
-S="${WORKDIR}/${MY_P}/core"
+S="${WORKDIR}/core"
 
 src_prepare() {
 	epatch "${FILESDIR}/${PN}-desktop-gnome-or-not.patch"
