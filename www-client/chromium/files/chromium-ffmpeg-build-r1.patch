@@ -1,0 +1,10 @@
+--- trunk/src/media/ffmpeg/ffmpeg_common.h	2011/04/01 19:12:49	80199
++++ trunk/src/media/ffmpeg/ffmpeg_common.h	2011/04/01 19:30:32	80200
+@@ -19,7 +19,6 @@
+ // TODO(scherkus): fix and upstream the compiler warnings.
+ MSVC_PUSH_DISABLE_WARNING(4244);
+ #include <libavcodec/avcodec.h>
+-#include <libavcore/samplefmt.h>
+ #include <libavformat/avformat.h>
+ #include <libavformat/avio.h>
+ #include <libavutil/avutil.h>
