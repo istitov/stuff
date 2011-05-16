@@ -54,8 +54,6 @@ pkg_setup() {
 
 
 src_prepare() {
-	sh autogen.sh
-
 	if use midi ; then
 		# set default gentoo path
 		sed -e 's;/etc/timidity++/timidity-freepats.cfg;/usr/share/timidity/freepats/timidity.cfg;g' \
@@ -65,6 +63,7 @@ src_prepare() {
 
 src_configure() {
 	my_config="--disable-portable
+		--docdir=/usr/share/${PN}
 		$(use_enable alsa)
 		$(use_enable aac)
 		$(use_enable adplug)
@@ -144,8 +143,9 @@ src_compile() {
 }
 
 src_install() {
+  PORTAGE_COMPRESS=""
 	emake DESTDIR="${D}" install
-
+    
 	if use ao ; then
 		insinto /usr/$(get_libdir)/${PN}
 		doins ${S}/plugins/ao/*.so
