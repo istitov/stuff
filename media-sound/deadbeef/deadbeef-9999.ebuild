@@ -78,6 +78,7 @@ src_prepare() {
 
 src_configure() {
 	my_config="--disable-portable
+		--docdir=/usr/share/${PN}
 		$(use_enable alsa)
 		$(use_enable aac)
 		$(use_enable adplug)
