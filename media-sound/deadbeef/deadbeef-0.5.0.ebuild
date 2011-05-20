@@ -21,7 +21,7 @@ LICENSE="GPL-2
 SLOT="0"
 IUSE="adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath
-	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip"
+	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar"
 
 RDEPEND="aac? ( media-libs/faad2 )
 	alsa? ( media-libs/alsa-lib )
@@ -42,6 +42,7 @@ RDEPEND="aac? ( media-libs/faad2 )
 	vorbis? ( media-libs/libvorbis )
 	wavpack? ( media-sound/wavpack )
 	zip? ( dev-libs/libzip
+	infobar? ( media-sound/deadbeef-infobar )
 		sys-libs/zlib )"
 
 DEPEND="${RDEPEND}"
