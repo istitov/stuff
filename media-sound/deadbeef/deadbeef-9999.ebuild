@@ -131,6 +131,11 @@ src_configure() {
 			$(use_enable lastfm lfm)"
 	fi
 
+	if use infobar; then
+	  my_config="${my_config}
+	  --enable-vfs-curl"
+	fi
+	
 	econf ${my_config}
 }
 
