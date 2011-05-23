@@ -32,7 +32,7 @@ LICENSE="GPL-2
 SLOT="0"
 IUSE="adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath
-	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar"
+	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar mono2stereo"
 
 RDEPEND="aac? ( media-libs/faad2 )
 	alsa? ( media-libs/alsa-lib )
@@ -161,6 +161,11 @@ src_compile() {
 		cd ${S}/plugins/shn
 		emake
 	fi
+	
+	if use mono2stereo ; then
+		cd ${S}/plugins/mono2stereo
+		emake
+	fi
 }
 
 src_install() {
@@ -179,6 +184,11 @@ src_install() {
 	if use shn ; then
 		insinto /usr/$(get_libdir)/${PN}
 		doins ${S}/plugins/shn/*.so
+	fi
+	
+	if use mono2stereo ; then
+		insinto /usr/$(get_libdir)/${PN}
+		doins ${S}/plugins/mono2stereo/*.so
 	fi
 }
 
