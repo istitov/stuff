@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/firefox-bin/firefox-bin-5.0.ebuild,v 1.1 2011/05/11 20:55:02 anarchy Exp $
 
-EAPI="2"
+EAPI="3"
 
-inherit eutils mozilla-launcher multilib mozextension
+inherit eutils mozilla-launcher mozextension
 
 # Can be updated using scripts/get_langs.sh from mozilla overlay
 # '\' at EOL is needed for ${LANG} matching in linguas() below
@@ -21,8 +21,9 @@ MY_P="${MY_PN}-${MY_PV}"
 
 DESCRIPTION="Firefox Web Browser"
 REL_URI="http://releases.mozilla.org/pub/mozilla.org/${MY_PN}/releases/"
-SRC_URI="${REL_URI}/${MY_PV}/linux-i686/en-US/${MY_P}.tar.bz2
-	mirror://gentoo/libnotify.so.1.bz2"
+SRC_URI="( x86? ( ${REL_URI}/${MY_PV}/linux-i686/en-US/${MY_P}.tar.bz2 -> firefox_x86-${PV}.tar.bz2 )
+		 amd64? ( ${REL_URI}/${MY_PV}/linux-x86_64/en-US/${MY_P}.tar.bz2 -> firefox_x86_64-${PV}.tar.bz2 )
+		 )"
 HOMEPAGE="http://www.mozilla.com/firefox"
 RESTRICT="strip mirror"
 
@@ -52,24 +53,10 @@ RDEPEND="dev-libs/dbus-glib
 	x11-libs/libXrender
 	x11-libs/libXt
 	x11-libs/libXmu
-	x86? (
-		>=x11-libs/gtk+-2.2:2
-		 >=media-libs/alsa-lib-1.0.16
-	)
-	amd64? (
-		>=app-emulation/emul-linux-x86-baselibs-20081109
-		>=app-emulation/emul-linux-x86-gtklibs-20081109
-		>=app-emulation/emul-linux-x86-soundlibs-20081109
-	)"
+	>=x11-libs/gtk+-2.2:2
+	>=media-libs/alsa-lib-1.0.16"
 
 S="${WORKDIR}/${MY_PN}"
-
-pkg_setup() {
-	# This is a binary x86 package => ABI=x86
-	# Please keep this in future versions
-	# Danny van Dyk <kugelfang@gentoo.org> 2005/03/26
-	has_multilib_profile && ABI="x86"
-}
 
 linguas() {
 	local LANG SLANG
@@ -89,13 +76,16 @@ linguas() {
 				fi
 			done
 		fi
-		ewarn "Sorry, but ${PN} does not support the ${LANG} LINGUA"
+		ewarn "Sorry, but ${PN} does not support the ${LANG} LING"
 	done
 }
 
 src_unpack() {
-	unpack ${MY_P}.tar.bz2
-	unpack libnotify.so.1.bz2
+  if use x86;then
+	unpack ${MY_PN}_x86-${MY_PV}.tar.bz2
+  else
+	unpack ${MY_PN}_x86_64-${MY_PV}.tar.bz2
+  fi
 
 	linguas
 	for X in ${linguas}; do
@@ -163,34 +153,6 @@ fi
 	rm -rf "${D}"${MOZILLA_FIVE_HOME}/plugins
 	dosym /usr/"$(get_libdir)"/nsbrowser/plugins ${MOZILLA_FIVE_HOME}/plugins || die
 
-	# This is a copy of 32bit libnotify.so.1 from app-emulation/emul-linux-x86-gtklibs-20110129.
-	# http://bugs.gentoo.org/show_bug.cgi?id=360443.
-	exeinto /opt/firefox
-	doexe "${WORKDIR}"/libnotify.so.1 || die
-}
-
-pkg_postinst() {
-	if use x86; then
-		if ! has_version 'gnome-base/gconf' || ! has_version 'gnome-base/orbit' \
-			|| ! has_version 'net-misc/curl'; then
-			einfo
-			einfo "For using the crashreporter, you need gnome-base/gconf,"
-			einfo "gnome-base/orbit and net-misc/curl emerged."
-			einfo
-		fi
-		if has_version 'net-misc/curl[nss]'; then
-			einfo
-			einfo "Crashreporter won't be able to send reports"
-			einfo "if you have curl emerged with the nss USE-flag"
-			einfo
-		fi
-	else
-		einfo
-		einfo "NB: You just installed a 32-bit ${MY_P}"
-		einfo
-		einfo "Crashreporter won't work on amd64"
-		einfo
-	fi
 }
 
 pkg_postrm() {
