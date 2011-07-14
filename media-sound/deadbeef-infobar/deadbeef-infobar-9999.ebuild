@@ -42,5 +42,5 @@ src_compile() {
 src_install() {
   cd deadbeef-infobar/ 
   insinto /usr/lib/deadbeef
-  doins infobar.so
+  doins ddb_infobar.so
   }
