@@ -13,7 +13,8 @@ X86_FBSD_NV_PACKAGE="NVIDIA-FreeBSD-x86-${PV}"
 DESCRIPTION="NVIDIA X11 driver and GLX libraries"
 HOMEPAGE="http://www.nvidia.com/"
 SRC_URI="x86? ( http://us.download.nvidia.com/XFree86/Linux-x86/${PV}/${X86_NV_PACKAGE}.run )
-	 amd64? ( http://us.download.nvidia.com/XFree86/Linux-x86_64/${PV}/${AMD64_NV_PACKAGE}.run )"
+	 amd64? ( http://us.download.nvidia.com/XFree86/Linux-x86_64/${PV}/${AMD64_NV_PACKAGE}.run )
+	 x86-fbsd? ( http://us.download.nvidia.com/XFree86/FreeBSD-x86/${PV}/${X86_FBSD_NV_PACKAGE}.tar.gz )"
 
 LICENSE="NVIDIA"
 SLOT="0"
