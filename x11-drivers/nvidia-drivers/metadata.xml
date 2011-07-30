@@ -2,6 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<use>
-	  <flag name='rt'>Adds support for real-time kernels <pkg>x11-drivers/nvidia-drivers</pkg></flag>
+	  <flag name='rt'>Adds support for <pkg>sys-kernel/rt-sources</pkg>(real-time kernels)</flag>
 	</use>
 </pkgmetadata>
