@@ -19,7 +19,7 @@ SRC_URI="x86? ( ftp://download.nvidia.com/XFree86/Linux-x86/${PV}/${X86_NV_PACKA
 LICENSE="NVIDIA"
 SLOT="0"
 KEYWORDS="-* amd64 x86 x86-fbsd"
-IUSE="acpi custom-cflags gtk multilib kernel_linux"
+IUSE="acpi custom-cflags gtk multilib kernel_linux rt"
 RESTRICT="strip"
 EMULTILIB_PKG="true"
 
@@ -288,6 +288,9 @@ src_prepare() {
 
 		# If greater than 2.6.5 use M= instead of SUBDIR=
 		convert_to_m "${NV_SRC}"/Makefile.kbuild
+	fi
+	if use rt;then 
+	epatch "${FILESDIR}"/nvidiart.patch
 	fi
 }
 
