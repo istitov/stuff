@@ -1,12 +1,12 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/chromium/chromium-12.0.733.0.ebuild,v 1.1 2011/04/13 15:13:09 phajdan.jr Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/chromium/chromium-14.0.835.15.ebuild,v 1.1 2011/08/04 21:21:41 phajdan.jr Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2:2.6"
 
-inherit eutils fdo-mime flag-o-matic gnome2-utils multilib pax-utils \
-	portability python toolchain-funcs versionator virtualx
+inherit eutils fdo-mime flag-o-matic gnome2-utils linux-info multilib \
+	pax-utils portability python toolchain-funcs versionator virtualx
 
 DESCRIPTION="Open-source version of Google Chrome web browser"
 HOMEPAGE="http://chromium.org/"
@@ -14,8 +14,16 @@ SRC_URI="http://build.chromium.org/official/${P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86"
-IUSE="cups gnome gnome-keyring kerberos xinerama"
+KEYWORDS="~amd64 ~x86"
+IUSE="cups gnome gnome-keyring kerberos pulseaudio"
+
+# en_US is ommitted on purpose from the list below. It must always be available.
+LANGS="am ar bg bn ca cs da de el en_GB es es_LA et fa fi fil fr gu he hi hr
+hu id it ja kn ko lt lv ml mr nb nl pl pt_BR pt_PT ro ru sk sl sr sv sw ta te th
+tr uk vi zh_CN zh_TW"
+for lang in ${LANGS}; do
+	IUSE+=" linguas_${lang}"
+done
 
 RDEPEND="app-arch/bzip2
 	dev-libs/dbus-glib
@@ -30,26 +38,31 @@ RDEPEND="app-arch/bzip2
 	media-libs/flac
 	virtual/jpeg
 	media-libs/libpng
-	>=media-libs/libvpx-0.9.5
+	>=media-libs/libwebp-0.1.2
 	media-libs/speex
 	cups? ( >=net-print/cups-1.3.11 )
-	sys-libs/pam
 	sys-libs/zlib
-	>=virtual/ffmpeg-0.6.90[threads]
 	x11-libs/gtk+:2
+	x11-libs/libXinerama
 	x11-libs/libXScrnSaver
 	x11-libs/libXtst"
 DEPEND="${RDEPEND}
 	dev-lang/perl
 	>=dev-util/gperf-3.0.3
 	>=dev-util/pkgconfig-0.23
+	>=sys-devel/bison-2.4.3
 	sys-devel/flex
 	>=sys-devel/make-3.81-r2
-	x11-libs/libXinerama
-	test? ( dev-python/simplejson virtual/krb5 )"
+	pulseaudio? (
+		media-sound/pulseaudio
+	)
+	test? (
+		dev-python/pyftpdlib
+		dev-python/simplejson
+		virtual/krb5
+	)"
 RDEPEND+="
 	kerberos? ( virtual/krb5 )
-	xinerama? ( x11-libs/libXinerama )
 	x11-misc/xdg-utils
 	virtual/ttf-fonts"
 
@@ -67,6 +80,16 @@ egyp() {
 	"${@}"
 }
 
+# Chromium uses different names for some langs,
+# return Chromium name corresponding to a Gentoo lang.
+chromium_lang() {
+	if [[ "$1" == "es_LA" ]]; then
+		echo "es_419"
+	else
+		echo "$1"
+	fi
+}
+
 pkg_setup() {
 	CHROMIUM_HOME="/usr/$(get_libdir)/chromium-browser"
 
@@ -77,19 +100,6 @@ pkg_setup() {
 	python_set_active_version 2
 	python_pkg_setup
 
-	# Prevent user problems like bug #299777.
-	if ! grep -q /dev/shm <<< $(get_mounts); then
-		ewarn "You don't have tmpfs mounted at /dev/shm."
-		ewarn "${PN} may fail to start in that configuration."
-		ewarn "Please uncomment the /dev/shm entry in /etc/fstab,"
-		ewarn "and run 'mount /dev/shm'."
-	fi
-	if [ `stat -c %a /dev/shm` -ne 1777 ]; then
-		ewarn "/dev/shm does not have correct permissions."
-		ewarn "${PN} may fail to start in that configuration."
-		ewarn "Please run 'chmod 1777 /dev/shm'."
-	fi
-
 	# Prevent user problems like bug #348235.
 	eshopts_push -s extglob
 	if is-flagq '-g?(gdb)?([1-9])'; then
@@ -98,11 +108,19 @@ pkg_setup() {
 		ewarn "If compilation fails, please try removing -g{,gdb} before reporting a bug."
 	fi
 	eshopts_pop
+
+	# Warn if the kernel doesn't support features useful for sandboxing,
+	# bug #363907.
+	CONFIG_CHECK="~PID_NS ~NET_NS"
+	check_extra_config
 }
 
 src_prepare() {
-	# Make sure we don't use bundled libvpx headers.
-	epatch "${FILESDIR}/${PN}-system-vpx-r4.patch"
+	# bug #374903 - ICU 4.8 compatibility
+	epatch "${FILESDIR}/${PN}-icu-compatibility-r0.patch"
+
+	# Fix build with system libevent, to be upstreamed.
+	epatch "${FILESDIR}/${PN}-system-libevent-r0.patch"
 
 	# Remove most bundled libraries. Some are still needed.
 	find third_party -type f \! -iname '*.gyp*' \
@@ -120,22 +138,24 @@ src_prepare() {
 		\! -path 'third_party/launchpad_translations/*' \
 		\! -path 'third_party/leveldb/*' \
 		\! -path 'third_party/libjingle/*' \
-		\! -path 'third_party/libsrtp/*' \
-		\! -path 'third_party/libvpx/libvpx.h' \
-		\! -path 'third_party/libwebp/*' \
+		\! -path 'third_party/libphonenumber/*' \
+		\! -path 'third_party/libvpx/*' \
 		\! -path 'third_party/mesa/*' \
 		\! -path 'third_party/modp_b64/*' \
 		\! -path 'third_party/npapi/*' \
 		\! -path 'third_party/openmax/*' \
 		\! -path 'third_party/ots/*' \
 		\! -path 'third_party/protobuf/*' \
-		\! -path 'third_party/pyftpdlib/*' \
+		\! -path 'third_party/sfntly/*' \
 		\! -path 'third_party/skia/*' \
 		\! -path 'third_party/speex/speex.h' \
 		\! -path 'third_party/sqlite/*' \
 		\! -path 'third_party/tcmalloc/*' \
 		\! -path 'third_party/tlslite/*' \
 		\! -path 'third_party/undoview/*' \
+		\! -path 'third_party/webgl_conformance/*' \
+		\! -path 'third_party/webrtc/*' \
+		\! -path 'third_party/yasm/*' \
 		\! -path 'third_party/zlib/contrib/minizip/*' \
 		-delete || die
 
@@ -151,21 +171,25 @@ src_configure() {
 	# additions, bug #336871.
 	myconf+=" -Ddisable_sse2=1"
 
+	# Disable NaCl temporarily, this tarball doesn't have IRT.
+	myconf+=" -Ddisable_nacl=1"
+
 	# Use system-provided libraries.
+	# TODO: use_system_ffmpeg
 	# TODO: use_system_hunspell (upstream changes needed).
 	# TODO: use_system_ssl (http://crbug.com/58087).
 	# TODO: use_system_sqlite (http://crbug.com/22208).
+	# TODO: use_system_vpx
 	myconf+="
 		-Duse_system_bzip2=1
 		-Duse_system_flac=1
-		-Duse_system_ffmpeg=1
 		-Duse_system_icu=1
 		-Duse_system_libevent=1
 		-Duse_system_libjpeg=1
 		-Duse_system_libpng=1
+		-Duse_system_libwebp=1
 		-Duse_system_libxml=1
 		-Duse_system_speex=1
-		-Duse_system_vpx=1
 		-Duse_system_xdg_utils=1
 		-Duse_system_zlib=1"
 
@@ -189,21 +213,9 @@ src_configure() {
 
 	# Our system ffmpeg should support more codecs than the bundled one
 	# for Chromium.
-	myconf+=" -Dproprietary_codecs=1"
+	# myconf+=" -Dproprietary_codecs=1"
 
-	# Use target arch detection logic from bug #354601.
-	case ${CHOST} in
-		i?86-*) myarch=x86 ;;
-		x86_64-*)
-			if [[ $ABI = "" ]] ; then
-				myarch=amd64
-			else
-				myarch="$ABI"
-			fi ;;
-		arm*-*) myarch=arm ;;
-		*) die "Unrecognized CHOST: ${CHOST}"
-	esac
-
+	local myarch="$(tc-arch)"
 	if [[ $myarch = amd64 ]] ; then
 		myconf+=" -Dtarget_arch=x64"
 	elif [[ $myarch = x86 ]] ; then
@@ -227,14 +239,19 @@ src_configure() {
 	replace-flags "-Os" "-O2"
 
 	egyp ${myconf} || die
+
+	if use !pulseaudio;then
+	epatch "${FILESDIR}/pulse-disable.patch"
+	epatch "${FILESDIR}/pulse-disable2.patch"
+	fi
 }
 
 src_compile() {
 	emake chrome chrome_sandbox BUILDTYPE=Release V=1 || die
 	pax-mark m out/Release/chrome
 	if use test; then
-		emake {base,net}_unittests BUILDTYPE=Release V=1 || die
-		pax-mark m out/Release/{base,net}_unittests
+		emake {base,crypto,googleurl,net}_unittests BUILDTYPE=Release V=1 || die
+		pax-mark m out/Release/{base,crypto,googleurl,net}_unittests
 	fi
 }
 
@@ -249,9 +266,17 @@ src_test() {
 		die "locale ${mylocale} is not supported"
 	fi
 
+	# For more info see bug #370957.
+	if [[ $UID -eq 0 ]]; then
+		die "Tests must be run as non-root. Please use FEATURES=userpriv."
+	fi
+
 	# For more info see bug #350347.
 	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/base_unittests virtualmake \
 		'--gtest_filter=-ICUStringConversionsTest.*'
+
+	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/crypto_unittests virtualmake
+	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/googleurl_unittests virtualmake
 
 	# NetUtilTest: bug #361885.
 	# UDP: unstable, active development. We should revisit this later.
@@ -264,13 +289,70 @@ src_install() {
 	doexe out/Release/chrome
 	doexe out/Release/chrome_sandbox || die
 	fperms 4755 "${CHROMIUM_HOME}/chrome_sandbox"
-	newexe "${FILESDIR}"/chromium-launcher-r1.sh chromium-launcher.sh || die
+
+	# Install Native Client files on platforms that support it.
+	# insinto "${CHROMIUM_HOME}"
+	# case "$(tc-arch)" in
+	# 	amd64)
+	# 		doins native_client/irt_binaries/nacl_irt_x86_64.nexe || die
+	# 		doins out/Release/libppGoogleNaClPluginChrome.so || die
+	# 	;;
+	# 	x86)
+	# 		doins native_client/irt_binaries/nacl_irt_x86_32.nexe || die
+	# 		doins out/Release/libppGoogleNaClPluginChrome.so || die
+	# 	;;
+	# esac
+
+	newexe "${FILESDIR}"/chromium-launcher-r2.sh chromium-launcher.sh || die
 
 	# It is important that we name the target "chromium-browser",
 	# xdg-utils expect it; bug #355517.
 	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" /usr/bin/chromium-browser || die
 	# keep the old symlink around for consistency
 	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" /usr/bin/chromium || die
+
+	# Allow users to override command-line options, bug #357629.
+	dodir /etc/chromium || die
+	insinto /etc/chromium
+	newins "${FILESDIR}/chromium.default" "default" || die
+
+	# Support LINGUAS, bug #332751.
+	local pak
+	for pak in out/Release/locales/*.pak; do
+		local pakbasename="$(basename ${pak})"
+		local pakname="${pakbasename%.pak}"
+		local langname="${pakname//-/_}"
+
+		# Do not issue warning for en_US locale. This is the fallback
+		# locale so it should always be installed.
+		if [[ "${langname}" == "en_US" ]]; then
+			continue
+		fi
+
+		local found=false
+		local lang
+		for lang in ${LANGS}; do
+			local crlang="$(chromium_lang ${lang})"
+			if [[ "${langname}" == "${crlang}" ]]; then
+				found=true
+				break
+			fi
+		done
+		if ! $found; then
+			ewarn "LINGUAS warning: no ${langname} in LANGS"
+		fi
+	done
+	local lang
+	for lang in ${LANGS}; do
+		local crlang="$(chromium_lang ${lang})"
+		local pakfile="out/Release/locales/${crlang//_/-}.pak"
+		if [ ! -f "${pakfile}" ]; then
+			ewarn "LINGUAS warning: no .pak file for ${lang} (${pakfile} not found)"
+		fi
+		if ! use linguas_${lang}; then
+			rm "${pakfile}" || die
+		fi
+	done
 
 	insinto "${CHROMIUM_HOME}"
 	doins out/Release/chrome.pak || die
@@ -284,9 +366,11 @@ src_install() {
 
 	# Chromium looks for these in its folder
 	# See media_posix.cc and base_paths_linux.cc
-	dosym /usr/$(get_libdir)/libavcodec.so.52 "${CHROMIUM_HOME}" || die
-	dosym /usr/$(get_libdir)/libavformat.so.52 "${CHROMIUM_HOME}" || die
-	dosym /usr/$(get_libdir)/libavutil.so.50 "${CHROMIUM_HOME}" || die
+	# dosym /usr/$(get_libdir)/libavcodec.so.52 "${CHROMIUM_HOME}" || die
+	# dosym /usr/$(get_libdir)/libavformat.so.52 "${CHROMIUM_HOME}" || die
+	# dosym /usr/$(get_libdir)/libavutil.so.50 "${CHROMIUM_HOME}" || die
+	doexe out/Release/ffmpegsumo_nolink || die
+	doexe out/Release/libffmpegsumo.so || die
 
 	# Install icons and desktop entry.
 	for SIZE in 16 22 24 32 48 64 128 256 ; do
@@ -297,8 +381,9 @@ src_install() {
 	local mime_types="text/html;text/xml;application/xhtml+xml;"
 	mime_types+="x-scheme-handler/http;x-scheme-handler/https;" # bug #360797
 	make_desktop_entry chromium-browser "Chromium" chromium-browser \
-		"Network;WebBrowser" "MimeType=${mime_types}"
-	sed -e "/^Exec/s/$/ %U/" -i "${D}"/usr/share/applications/*.desktop || die
+		"Network;WebBrowser"
+		"MimeType=${mime_types}\nStartupWMClass=chromium-browser"
+	sed -e "/^Exec/s/$/ %U/" -i "${ED}"/usr/share/applications/*.desktop || die
 
 	# Install GNOME default application entry (bug #303100).
 	if use gnome; then

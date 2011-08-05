@@ -1,0 +1,31 @@
+--- orig/chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device.target.mk	2011-08-05 16:39:34.000000000 +0000
++++ fixed/chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device.target.mk	2011-08-05 16:40:49.000000000 +0000
+@@ -16,7 +16,6 @@
+ 	'-DWEBRTC_LINUX' \
+ 	'-DWEBRTC_THREAD_RR' \
+ 	'-DWEBRTC_VIDEO_EXTERNAL_CAPTURE_AND_RENDER' \
+-	'-DLINUX_PULSE' \
+ 	'-DLINUX_ALSA' \
+ 	'-DDYNAMIC_ANNOTATIONS_ENABLED=1' \
+ 	'-DWTF_USE_DYNAMIC_ANNOTATIONS=1' \
+@@ -73,7 +72,6 @@
+ 	'-DWEBRTC_LINUX' \
+ 	'-DWEBRTC_THREAD_RR' \
+ 	'-DWEBRTC_VIDEO_EXTERNAL_CAPTURE_AND_RENDER' \
+-	'-DLINUX_PULSE' \
+ 	'-DLINUX_ALSA' \
+ 	'-DNDEBUG' \
+ 	'-DNVALGRIND' \
+@@ -125,12 +123,9 @@
+ 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Dummy/audio_device_dummy.o \
+ 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/alsasymboltable.o \
+ 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_device_linux_alsa.o \
+-	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_device_linux_pulse.o \
+ 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_device_utility_linux.o \
+ 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_mixer_manager_linux_alsa.o \
+-	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_mixer_manager_linux_pulse.o \
+ 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/latebindingsymboltable.o \
+-	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/pulseaudiosymboltable.o
+ 
+ # Add to the list of files we sp
+ 

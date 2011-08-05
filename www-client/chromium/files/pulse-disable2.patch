@@ -1,0 +1,406 @@
+--- chromium-14.0.835.15//chrome/automated_ui_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/automated_ui_tests.target.mk	2011-08-05 20:45:56.000000000 +0000
+@@ -288,8 +288,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/automated_ui_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/automated_ui_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/browser/sync/tools/sync_listen_notifications.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/browser/sync/tools/sync_listen_notifications.target.mk
+--- chromium-14.0.835.15//chrome/browser/sync/tools/sync_listen_notifications.target.mk	2011-08-05 20:41:48.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/browser/sync/tools/sync_listen_notifications.target.mk	2011-08-05 20:52:57.000000000 +0000
+@@ -273,8 +273,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/sync_listen_notifications: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/sync_listen_notifications: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/browser_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/browser_tests.target.mk
+--- chromium-14.0.835.15//chrome/browser_tests.target.mk	2011-08-05 20:41:46.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/browser_tests.target.mk	2011-08-05 20:43:32.000000000 +0000
+@@ -538,8 +538,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/browser_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/browser_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/chromedriver.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/chromedriver.target.mk
+--- chromium-14.0.835.15//chrome/chromedriver.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/chromedriver.target.mk	2011-08-05 20:49:55.000000000 +0000
+@@ -267,8 +267,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/chromedriver: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/chromedriver: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/chromedriver_unittests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/chromedriver_unittests.target.mk
+--- chromium-14.0.835.15//chrome/chromedriver_unittests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/chromedriver_unittests.target.mk	2011-08-05 20:44:59.000000000 +0000
+@@ -274,8 +274,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/chromedriver_unittests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/chromedriver_unittests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/chrome.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/chrome.target.mk
+--- chromium-14.0.835.15//chrome/chrome.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/chrome.target.mk	2011-08-05 20:51:35.000000000 +0000
+@@ -305,8 +305,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/chrome: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/chrome: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/gpu_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/gpu_tests.target.mk
+--- chromium-14.0.835.15//chrome/gpu_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/gpu_tests.target.mk	2011-08-05 20:51:54.000000000 +0000
+@@ -327,8 +327,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/gpu_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/gpu_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/interactive_ui_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/interactive_ui_tests.target.mk
+--- chromium-14.0.835.15//chrome/interactive_ui_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/interactive_ui_tests.target.mk	2011-08-05 20:47:49.000000000 +0000
+@@ -339,8 +339,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/interactive_ui_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/interactive_ui_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/ipcfuzz.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/ipcfuzz.target.mk
+--- chromium-14.0.835.15//chrome/ipcfuzz.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/ipcfuzz.target.mk	2011-08-05 20:46:35.000000000 +0000
+@@ -275,8 +275,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(obj).target/chrome/libipcfuzz.so: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(obj).target/chrome/libipcfuzz.so: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/ipclist.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/ipclist.target.mk
+--- chromium-14.0.835.15//chrome/ipclist.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/ipclist.target.mk	2011-08-05 20:50:26.000000000 +0000
+@@ -275,8 +275,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/ipclist: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/ipclist: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/memory_test.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/memory_test.target.mk
+--- chromium-14.0.835.15//chrome/memory_test.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/memory_test.target.mk	2011-08-05 20:46:52.000000000 +0000
+@@ -283,8 +283,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/memory_test: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/memory_test: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/nacl_sandbox_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/nacl_sandbox_tests.target.mk
+--- chromium-14.0.835.15//chrome/nacl_sandbox_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/nacl_sandbox_tests.target.mk	2011-08-05 20:50:10.000000000 +0000
+@@ -300,8 +300,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/nacl_sandbox_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/nacl_sandbox_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/nacl_ui_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/nacl_ui_tests.target.mk
+--- chromium-14.0.835.15//chrome/nacl_ui_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/nacl_ui_tests.target.mk	2011-08-05 20:44:15.000000000 +0000
+@@ -296,8 +296,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/nacl_ui_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/nacl_ui_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/page_cycler_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/page_cycler_tests.target.mk
+--- chromium-14.0.835.15//chrome/page_cycler_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/page_cycler_tests.target.mk	2011-08-05 20:48:59.000000000 +0000
+@@ -283,8 +283,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/page_cycler_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/page_cycler_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/performance_ui_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/performance_ui_tests.target.mk
+--- chromium-14.0.835.15//chrome/performance_ui_tests.target.mk	2011-08-05 20:41:49.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/performance_ui_tests.target.mk	2011-08-05 20:52:23.000000000 +0000
+@@ -294,8 +294,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/performance_ui_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/performance_ui_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/perf_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/perf_tests.target.mk
+--- chromium-14.0.835.15//chrome/perf_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/perf_tests.target.mk	2011-08-05 20:45:38.000000000 +0000
+@@ -294,8 +294,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/perf_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/perf_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/plugin_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/plugin_tests.target.mk
+--- chromium-14.0.835.15//chrome/plugin_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/plugin_tests.target.mk	2011-08-05 20:50:44.000000000 +0000
+@@ -289,8 +289,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/plugin_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/plugin_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/pyautolib.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/pyautolib.target.mk
+--- chromium-14.0.835.15//chrome/pyautolib.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/pyautolib.target.mk	2011-08-05 20:46:16.000000000 +0000
+@@ -338,8 +338,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(obj).target/chrome/_pyautolib.so: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(obj).target/chrome/_pyautolib.so: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/reliability_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/reliability_tests.target.mk
+--- chromium-14.0.835.15//chrome/reliability_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/reliability_tests.target.mk	2011-08-05 20:49:39.000000000 +0000
+@@ -288,8 +288,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/reliability_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/reliability_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/safe_browsing_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/safe_browsing_tests.target.mk
+--- chromium-14.0.835.15//chrome/safe_browsing_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/safe_browsing_tests.target.mk	2011-08-05 20:48:42.000000000 +0000
+@@ -286,8 +286,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/safe_browsing_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/safe_browsing_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/startup_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/startup_tests.target.mk
+--- chromium-14.0.835.15//chrome/startup_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/startup_tests.target.mk	2011-08-05 20:48:04.000000000 +0000
+@@ -293,8 +293,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/startup_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/startup_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/sync_integration_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/sync_integration_tests.target.mk
+--- chromium-14.0.835.15//chrome/sync_integration_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/sync_integration_tests.target.mk	2011-08-05 20:49:15.000000000 +0000
+@@ -356,8 +356,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/sync_integration_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/sync_integration_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/sync_performance_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/sync_performance_tests.target.mk
+--- chromium-14.0.835.15//chrome/sync_performance_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/sync_performance_tests.target.mk	2011-08-05 20:43:54.000000000 +0000
+@@ -316,8 +316,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/sync_performance_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/sync_performance_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/sync_unit_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/sync_unit_tests.target.mk
+--- chromium-14.0.835.15//chrome/sync_unit_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/sync_unit_tests.target.mk	2011-08-05 20:51:02.000000000 +0000
+@@ -371,8 +371,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/sync_unit_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/sync_unit_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/tab_switching_test.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/tab_switching_test.target.mk
+--- chromium-14.0.835.15//chrome/tab_switching_test.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/tab_switching_test.target.mk	2011-08-05 20:51:17.000000000 +0000
+@@ -283,8 +283,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/tab_switching_test: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/tab_switching_test: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/ui_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/ui_tests.target.mk
+--- chromium-14.0.835.15//chrome/ui_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/ui_tests.target.mk	2011-08-05 20:47:17.000000000 +0000
+@@ -352,8 +352,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/ui_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/ui_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/unit_tests.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/unit_tests.target.mk
+--- chromium-14.0.835.15//chrome/unit_tests.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/unit_tests.target.mk	2011-08-05 20:45:17.000000000 +0000
+@@ -844,8 +844,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/unit_tests: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/unit_tests: LIBS := $(LIBS)
+diff -Naur chromium-14.0.835.15//chrome/url_fetch_test.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/url_fetch_test.target.mk
+--- chromium-14.0.835.15//chrome/url_fetch_test.target.mk	2011-08-05 20:41:47.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//chrome/url_fetch_test.target.mk	2011-08-05 20:48:23.000000000 +0000
+@@ -283,8 +283,7 @@
+ 	-lFLAC \
+ 	-lspeex \
+ 	-ldbus-glib-1 \
+-	-ldbus-1 \
+-	-lpulse
++	-ldbus-1
+ 
+ $(builddir)/url_fetch_test: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+ $(builddir)/url_fetch_test: LIBS := $(LIBS)
+--- chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device.gyp	2011-08-05 20:41:58.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device.gyp	2011-08-05 20:54:37.000000000 +0000
+@@ -141,7 +141,6 @@
+             'libraries': [
+               '-ldl',
+               '-lasound',
+-              '-lpulse',
+             ],
+           },
+         }],
+diff -Naur chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device_test_api.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device_test_api.target.mk
+--- chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device_test_api.target.mk	2011-08-05 20:41:58.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device_test_api.target.mk	2011-08-05 20:54:09.000000000 +0000
+@@ -152,7 +152,6 @@
+ 
+ LIBS := -ldl \
+ 	-lasound \
+-	-lpulse \
+ 	-lrt
+ 
+ $(builddir)/audio_device_test_api: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+diff -Naur chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device_test_func.target.mk fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device_test_func.target.mk
+--- chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device_test_func.target.mk	2011-08-05 20:41:58.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device_test_func.target.mk	2011-08-05 20:54:59.000000000 +0000
+@@ -155,7 +155,6 @@
+ 
+ LIBS := -ldl \
+ 	-lasound \
+-	-lpulse \
+ 	-lrt
+ 
+ $(builddir)/audio_device_test_func: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
+diff -Naur chromium-14.0.835.15//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi
+--- chromium-14.0.835.15//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi	2011-08-05 20:41:59.000000000 +0000
++++ fixed/chromium-14.0.835.15/work/chromium-14.0.835.15//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi	2011-08-05 20:55:42.000000000 +0000
+@@ -110,7 +110,6 @@
+             '-lXext',
+             '-lX11',
+             '-lasound',
+-            '-lpulse',
+ 
+ 
+           ],
