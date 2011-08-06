@@ -1,31 +1,67 @@
---- orig/chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device.target.mk	2011-08-05 16:39:34.000000000 +0000
-+++ fixed/chromium-14.0.835.15//third_party/webrtc/modules/audio_device/main/source/audio_device.target.mk	2011-08-05 16:40:49.000000000 +0000
-@@ -16,7 +16,6 @@
- 	'-DWEBRTC_LINUX' \
- 	'-DWEBRTC_THREAD_RR' \
- 	'-DWEBRTC_VIDEO_EXTERNAL_CAPTURE_AND_RENDER' \
--	'-DLINUX_PULSE' \
- 	'-DLINUX_ALSA' \
- 	'-DDYNAMIC_ANNOTATIONS_ENABLED=1' \
- 	'-DWTF_USE_DYNAMIC_ANNOTATIONS=1' \
-@@ -73,7 +72,6 @@
- 	'-DWEBRTC_LINUX' \
- 	'-DWEBRTC_THREAD_RR' \
- 	'-DWEBRTC_VIDEO_EXTERNAL_CAPTURE_AND_RENDER' \
--	'-DLINUX_PULSE' \
- 	'-DLINUX_ALSA' \
- 	'-DNDEBUG' \
- 	'-DNVALGRIND' \
-@@ -125,12 +123,9 @@
- 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Dummy/audio_device_dummy.o \
- 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/alsasymboltable.o \
- 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_device_linux_alsa.o \
--	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_device_linux_pulse.o \
- 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_device_utility_linux.o \
- 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_mixer_manager_linux_alsa.o \
--	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/audio_mixer_manager_linux_pulse.o \
- 	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/latebindingsymboltable.o \
--	$(obj).target/$(TARGET)/third_party/webrtc/modules/audio_device/main/source/Linux/pulseaudiosymboltable.o
+--- chromium-14.0.836.0//third_party/webrtc/modules/audio_device/main/source/audio_device.gyp	2011-08-06 21:45:16.000000000 +0000
++++ fixed/chromium-14.0.836.0//third_party/webrtc/modules/audio_device/main/source/audio_device.gyp	2011-08-06 21:47:43.290085049 +0000
+@@ -52,18 +52,12 @@
+         'Linux/alsasymboltable.h',
+         'Linux/audio_device_linux_alsa.cc',
+         'Linux/audio_device_linux_alsa.h',
+-        'Linux/audio_device_linux_pulse.cc',
+-        'Linux/audio_device_linux_pulse.h',
+         'Linux/audio_device_utility_linux.cc',
+         'Linux/audio_device_utility_linux.h',
+         'Linux/audio_mixer_manager_linux_alsa.cc',
+         'Linux/audio_mixer_manager_linux_alsa.h',
+-        'Linux/audio_mixer_manager_linux_pulse.cc',
+-        'Linux/audio_mixer_manager_linux_pulse.h',
+         'Linux/latebindingsymboltable.cc',
+         'Linux/latebindingsymboltable.h',
+-        'Linux/pulseaudiosymboltable.cc',
+-        'Linux/pulseaudiosymboltable.h',
+         'Mac/audio_device_mac.cc',
+         'Mac/audio_device_mac.h',
+         'Mac/audio_device_utility_mac.cc',
+@@ -89,16 +83,10 @@
+             'Linux/alsasymboltable.h',
+             'Linux/audio_device_linux_alsa.cc',
+             'Linux/audio_device_linux_alsa.h',
+-            'Linux/audio_device_linux_pulse.cc',
+-            'Linux/audio_device_linux_pulse.h',
+             'Linux/audio_mixer_manager_linux_alsa.cc',
+             'Linux/audio_mixer_manager_linux_alsa.h',
+-            'Linux/audio_mixer_manager_linux_pulse.cc',
+-            'Linux/audio_mixer_manager_linux_pulse.h',
+             'Linux/latebindingsymboltable.cc',
+             'Linux/latebindingsymboltable.h',
+-            'Linux/pulseaudiosymboltable.cc',
+-            'Linux/pulseaudiosymboltable.h',
+             # Don't remove these, needed for dummy device
+             # 'Linux/audio_device_utility_linux.cc',
+             # 'Linux/audio_device_utility_linux.h',
+@@ -131,7 +119,6 @@
+         }],
+         ['OS=="linux"', {
+           'defines': [
+-            'LINUX_PULSE',
+             'LINUX_ALSA',
+           ],
+           'include_dirs': [
+--- chromium-14.0.835.24//third_party/webrtc/modules/audio_device/main/source/audio_device.gyp	2011-08-06 19:38:20.000000000 +0000
++++ fixed/chromium-14.0.835.24//third_party/webrtc/modules/audio_device/main/source/audio_device.gyp	2011-08-06 19:38:43.000000000 +0000
+@@ -141,7 +141,6 @@
+             'libraries': [
+               '-ldl',
+               '-lasound',
+-              '-lpulse',
+             ],
+           },
+         }],
+diff -Naur chromium-14.0.835.24//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi fixed/chromium-14.0.835.24//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi
+--- chromium-14.0.835.24//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi	2011-08-06 19:38:20.000000000 +0000
++++ fixed/chromium-14.0.835.24//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi	2011-08-06 19:39:08.000000000 +0000
+@@ -110,7 +110,6 @@
+             '-lXext',
+             '-lX11',
+             '-lasound',
+-            '-lpulse',
  
- # Add to the list of files we sp
  
+           ],

@@ -164,7 +164,7 @@ src_prepare() {
 	python_convert_shebangs -q -r 2 build tools
 	
 	if use !pulseaudio;then
-	epatch "${FILESDIR}/pulse-disable2-${PV}.patch"
+	epatch "${FILESDIR}/pulse-disable.patch"
 	fi
 }
 
@@ -243,10 +243,6 @@ src_configure() {
 	replace-flags "-Os" "-O2"
 
 	egyp ${myconf} || die
-	if use !pulseaudio;then
-	epatch "${FILESDIR}/pulse-disable-${PV}.patch"
-	fi
-
 }
 
 src_compile() {

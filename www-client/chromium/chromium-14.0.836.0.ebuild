@@ -116,11 +116,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# bug #374903 - ICU 4.8 compatibility
-	epatch "${FILESDIR}/${PN}-icu-compatibility-r0.patch"
-
 	# Fix build with system libevent, to be upstreamed.
-	epatch "${FILESDIR}/${PN}-system-libevent-r0.patch"
+	epatch "${FILESDIR}/${PN}-system-libevent-r1.patch"
 
 	# Remove most bundled libraries. Some are still needed.
 	find third_party -type f \! -iname '*.gyp*' \
@@ -162,6 +159,10 @@ src_prepare() {
 	# Make sure the build system will use the right python, bug #344367.
 	# Only convert directories that need it, to save time.
 	python_convert_shebangs -q -r 2 build tools
+	
+	if use !pulseaudio;then
+	epatch "${FILESDIR}/pulse-disable.patch"
+	fi
 }
 
 src_configure() {
@@ -239,11 +240,6 @@ src_configure() {
 	replace-flags "-Os" "-O2"
 
 	egyp ${myconf} || die
-
-	if use !pulseaudio;then
-	epatch "${FILESDIR}/pulse-disable.patch"
-	epatch "${FILESDIR}/pulse-disable2.patch"
-	fi
 }
 
 src_compile() {
