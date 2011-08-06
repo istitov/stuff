@@ -1,0 +1,21 @@
+--- chromium-14.0.835.24//third_party/webrtc/modules/audio_device/main/source/audio_device.gyp	2011-08-06 19:38:20.000000000 +0000
++++ fixed/chromium-14.0.835.24//third_party/webrtc/modules/audio_device/main/source/audio_device.gyp	2011-08-06 19:38:43.000000000 +0000
+@@ -141,7 +141,6 @@
+             'libraries': [
+               '-ldl',
+               '-lasound',
+-              '-lpulse',
+             ],
+           },
+         }],
+diff -Naur chromium-14.0.835.24//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi fixed/chromium-14.0.835.24//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi
+--- chromium-14.0.835.24//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi	2011-08-06 19:38:20.000000000 +0000
++++ fixed/chromium-14.0.835.24//third_party/webrtc/video_engine/main/test/AutoTest/vie_auto_test.gypi	2011-08-06 19:39:08.000000000 +0000
+@@ -110,7 +110,6 @@
+             '-lXext',
+             '-lX11',
+             '-lasound',
+-            '-lpulse',
+ 
+ 
+           ],
