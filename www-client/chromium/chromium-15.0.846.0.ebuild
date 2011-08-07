@@ -158,7 +158,7 @@ src_prepare() {
 	python_convert_shebangs -q -r 2 build tools
 	
 	if use !pulseaudio;then
-	epatch "${FILESDIR}/pulse-disable.patch"
+	epatch "${FILESDIR}/pulse-disable2.patch"
 	fi
 }
 
