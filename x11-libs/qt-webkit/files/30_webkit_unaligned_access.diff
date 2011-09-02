@@ -1,0 +1,127 @@
+From: Mike Hommey <glandium@debian.org>
+Date: Sun, 6 Jul 2008 08:37:28 +0000 (+0200)
+Subject: Fixed some alignment problems on sparc
+X-Git-Tag: debian/1.0.1-1~7
+X-Git-Url: http://git.debian.org/?p=pkg-webkit%2Fwebkit.git;a=commitdiff_plain;h=11c220f6d31898a7a1dfafd5d96619fefe6ba597;hp=1db04c3a5c8c3e9c990b93836d5bb09d43a47921
+
+Fixed some alignment problems on sparc
+
+(and some that might occur on arm, too).
+
+Some compiler warnings about alignment remain, but I don't know if they are
+a real problem yet.
+---
+
+--- a/src/3rdparty/webkit/JavaScriptCore/wtf/FastMalloc.cpp
++++ b/src/3rdparty/webkit/JavaScriptCore/wtf/FastMalloc.cpp
+@@ -1936,13 +1936,13 @@ static TCMalloc_Central_FreeListPadded c
+ 
+ // Page-level allocator
+ static SpinLock pageheap_lock = SPINLOCK_INITIALIZER;
+-static void* pageheap_memory[(sizeof(TCMalloc_PageHeap) + sizeof(void*) - 1) / sizeof(void*)];
++static uint64_t pageheap_memory[(sizeof(TCMalloc_PageHeap) + sizeof(uint64_t) - 1) / sizeof(uint64_t)];
+ static bool phinited = false;
+ 
+ // Avoid extra level of indirection by making "pageheap" be just an alias
+ // of pageheap_memory.
+ typedef union {
+-    void* m_memory;
++    uint64_t* m_memory;
+     TCMalloc_PageHeap* m_pageHeap;
+ } PageHeapUnion;
+ 
+--- a/src/3rdparty/webkit/JavaScriptCore/wtf/ListHashSet.h
++++ b/src/3rdparty/webkit/JavaScriptCore/wtf/ListHashSet.h
+@@ -127,7 +127,7 @@ namespace WTF {
+             : m_freeList(pool())
+             , m_isDoneWithInitialFreeList(false)
+         { 
+-            memset(m_pool.pool, 0, sizeof(m_pool.pool));
++            memset(m_pool, 0, sizeof(m_pool));
+         }
+ 
+         Node* allocate()
+@@ -171,7 +171,7 @@ namespace WTF {
+         }
+ 
+     private:
+-        Node* pool() { return reinterpret_cast<Node*>(m_pool.pool); }
++        Node* pool() { return reinterpret_cast<Node*>(m_pool); }
+         Node* pastPool() { return pool() + m_poolSize; }
+ 
+         bool inPool(Node* node)
+@@ -182,10 +182,7 @@ namespace WTF {
+         Node* m_freeList;
+         bool m_isDoneWithInitialFreeList;
+         static const size_t m_poolSize = 256;
+-        union {
+-            char pool[sizeof(Node) * m_poolSize];
+-            double forAlignment;
+-        } m_pool;
++        uint32_t m_pool[(sizeof(Node) * m_poolSize + sizeof(uint32_t) - 1) / sizeof(uint32_t)];
+     };
+ 
+     template<typename ValueArg> struct ListHashSetNode {
+--- a/src/3rdparty/webkit/JavaScriptCore/wtf/Platform.h
++++ b/src/3rdparty/webkit/JavaScriptCore/wtf/Platform.h
+@@ -233,6 +233,23 @@
+ #   endif
+ #endif
+ 
++/* PLATFORM(SPARC) */
++#if   defined(__sparc__) \
++   || defined(__sparc)
++#define WTF_PLATFORM_SPARC 1
++#define WTF_PLATFORM_BIG_ENDIAN 1
++#endif
++
++/* For undefined platforms */
++#if !defined(WTF_PLATFORM_BIG_ENDIAN) && !defined(WTF_PLATFORM_MIDDLE_ENDIAN)
++#include <sys/param.h>
++#if __BYTE_ORDER == __BIG_ENDIAN
++#define WTF_PLATFORM_BIG_ENDIAN 1
++#elif  __BYTE_ORDER == __PDP_ENDIAN
++#define WTF_PLATFORM_MIDDLE_ENDIAN 1
++#endif
++#endif
++
+ /* Compiler */
+ 
+ /* COMPILER(MSVC) */
+--- a/src/3rdparty/webkit/WebCore/platform/text/AtomicString.cpp
++++ b/src/3rdparty/webkit/WebCore/platform/text/AtomicString.cpp
+@@ -101,7 +101,7 @@ static inline bool equal(StringImpl* str
+     if (string->length() != length)
+         return false;
+ 
+-#if PLATFORM(ARM)
++#if PLATFORM(ARM) || PLATFORM(SPARC)
+     const UChar* stringCharacters = string->characters();
+     for (unsigned i = 0; i != length; ++i) {
+         if (*stringCharacters++ != *characters++)
+--- a/src/3rdparty/webkit/WebCore/platform/text/StringHash.h
++++ b/src/3rdparty/webkit/WebCore/platform/text/StringHash.h
+@@ -47,6 +47,15 @@ namespace WebCore {
+             if (aLength != bLength)
+                 return false;
+ 
++#if PLATFORM(ARM) || PLATFORM(SPARC)
++            const UChar* aChars = a->characters();
++            const UChar* bChars = b->characters();
++            for (unsigned i = 0; i != aLength; ++i)
++                if (*aChars++ != *bChars++)
++                    return false;
++
++            return true;
++#else
+             const uint32_t* aChars = reinterpret_cast<const uint32_t*>(a->characters());
+             const uint32_t* bChars = reinterpret_cast<const uint32_t*>(b->characters());
+ 
+@@ -59,6 +68,7 @@ namespace WebCore {
+                 return false;
+ 
+             return true;
++#endif
+         }
+ 
+         static unsigned hash(const RefPtr<StringImpl>& key) { return key->hash(); }

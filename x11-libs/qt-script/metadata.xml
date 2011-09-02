@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>qt</herd> 
+	<use>
+		<flag name='exceptions'>Add support for exceptions - like catching them
+			inside the event loop (recommended by Nokia)</flag>
+		<flag name="private-headers">Install Qt declarative private headers
+			required by Qt-creator QmlDesigner and QmlInspector plugins"</flag>
+		<flag name="jit">Enables JIT for Javascript usage inside Qt</flag>
+	</use>
+</pkgmetadata>

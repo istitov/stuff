@@ -1,0 +1,11 @@
+# ChangeLog for x11-libs/qt-meta
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-meta/ChangeLog,v 1.1 2011/04/06 21:01:35 wired Exp $
+
+*qt-meta-4.7 (06 Apr 2011)
+*qt-meta-4.6 (06 Apr 2011)
+
+  06 Apr 2011; Alex Alexander <wired@gentoo.org> +qt-meta-4.6.ebuild,
+  +qt-meta-4.7.ebuild, +metadata.xml:
+  meta-package for users that need all Qt modules. replaces x11-libs/qt.
+

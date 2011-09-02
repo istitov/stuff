@@ -1,0 +1,27 @@
+(Open)Solaris doesn't have strnstr either:
+https://bugs.webkit.org/show_bug.cgi?id=30647
+http://trac.webkit.org/changeset/50533
+
+
+--- src/3rdparty/webkit/JavaScriptCore/wtf/StringExtras.h
++++ src/3rdparty/webkit/JavaScriptCore/wtf/StringExtras.h
+@@ -85,7 +85,7 @@
+ 
+ #endif
+ 
+-#if PLATFORM(WIN_OS) || PLATFORM(LINUX)
++#if PLATFORM(WIN_OS) || PLATFORM(LINUX) || PLATFORM(SOLARIS)
+ 
+ inline char* strnstr(const char* buffer, const char* target, size_t bufferLength)
+ {
+--- src/3rdparty/javascriptcore/JavaScriptCore/wtf/StringExtras.h
++++ src/3rdparty/javascriptcore/JavaScriptCore/wtf/StringExtras.h
+@@ -85,7 +85,7 @@
+ 
+ #endif
+ 
+-#if PLATFORM(WIN_OS) || PLATFORM(LINUX)
++#if PLATFORM(WIN_OS) || PLATFORM(LINUX) || PLATFORM(SOLARIS)
+ 
+ inline char* strnstr(const char* buffer, const char* target, size_t bufferLength)
+ {
