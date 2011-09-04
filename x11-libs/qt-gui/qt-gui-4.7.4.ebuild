@@ -8,7 +8,7 @@ inherit confutils qt4-build
 DESCRIPTION="The GUI module for the Qt toolkit"
 SLOT="4"
 KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 -sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
-IUSE="+accessibility cups dbus egl +glib gtkstyle mng nas nis private-headers qt3support raster tiff trace xinerama"
+IUSE="+accessibility cups dbus egl +glib gtkstyle mng nas nis private-headers qt3support raster tiff trace xinerama appmenu"
 
 RDEPEND="media-libs/fontconfig
 	media-libs/freetype:2
@@ -86,6 +86,10 @@ src_prepare() {
 
 	# Don't build plugins this go around, because they depend on qt3support lib
 	sed -i -e "s:CONFIG(shared:# &:g" "${S}"/tools/designer/src/src.pro
+	
+	if use appmenu;then
+	epatch "${FILESDIR}/qmenubar-plugin-system-4.7.3.patch"
+	fi
 }
 
 src_configure() {
