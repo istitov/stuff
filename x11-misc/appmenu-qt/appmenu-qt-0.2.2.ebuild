@@ -12,7 +12,7 @@ SRC_URI="http://launchpad.net/${PN}/trunk/${PV}/+download/${PN}-${PV}.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""
 
 CDEPEND=">=x11-libs/qt-gui-4.7.4 [appmenu]"
