@@ -15,7 +15,7 @@ SRC_URI="http://build.chromium.org/official/${P}.tar.bz2"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="chromedriver cups gnome gnome-keyring kerberos pulseaudio"
+IUSE="chromedriver cups gnome gnome-keyring kerberos pulseaudio kde"
 
 # en_US is ommitted on purpose from the list below. It must always be available.
 LANGS="am ar bg bn ca cs da de el en_GB es es_LA et fa fi fil fr gu he hi hr
@@ -50,7 +50,8 @@ RDEPEND="app-arch/bzip2
 	x11-libs/libXinerama
 	x11-libs/libXScrnSaver
 	x11-libs/libXtst
-	kerberos? ( virtual/krb5 )"
+	kerberos? ( virtual/krb5 )
+	kde? ( kde-base/kdialog:4 )"
 DEPEND="${RDEPEND}
 	dev-lang/perl
 	>=dev-util/gperf-3.0.3
@@ -162,6 +163,10 @@ src_prepare() {
 	# Make sure the build system will use the right python, bug #344367.
 	# Only convert directories that need it, to save time.
 	python_convert_shebangs -q -r 2 build tools
+	
+	if use kde;then 
+	epatch "${FILESDIR}"/chromium_dialogs_12.patch
+	fi
 }
 
 src_configure() {
@@ -246,6 +251,7 @@ src_configure() {
 	replace-flags "-Os" "-O2"
 
 	egyp ${myconf} || die
+	
 }
 
 src_compile() {
