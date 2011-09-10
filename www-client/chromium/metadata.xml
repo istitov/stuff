@@ -5,5 +5,6 @@
 	<longdescription>Chromium is the open-source web browser project behind Google Chrome</longdescription>
 	<use>
 	  <flag name='pulseaudio'>Adds support for <pkg>media-sound/pulseaudio</pkg></flag>
+	  <flag name='kde'>Adds support for <pkg>kde-base/kdialog</pkg></flag>
 	</use>
 </pkgmetadata>
