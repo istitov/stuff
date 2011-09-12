@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-CDEPEND=">=dev-libs/libdbusmenu-0.4.2 [gtk]"
-DEPEND=""
+DEPEND=">=dev-libs/libdbusmenu-0.4.2[gtk]
+		>=x11-libs/gtk+-2.24.6[appmenu]"
 RDEPEND="${DEPEND}"
 src_prepare(){
 epatch ${FILESDIR}/fix.patch
