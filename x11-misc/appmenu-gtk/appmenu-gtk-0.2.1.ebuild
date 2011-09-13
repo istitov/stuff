@@ -8,7 +8,7 @@ inherit autotools
 
 DESCRIPTION="Application menu module for GTK"
 HOMEPAGE="https://launchpad.net/appmenu-gtk"
-SRC_URI="http://launchpad.net/${PN}/trunk/${PV}/+download/${PN}-${PV}.tar.gz"
+SRC_URI="http://launchpad.net/${PN}/0.2/${PV}/+download/${PN}-${PV}.tar.gz"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
