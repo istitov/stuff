@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="debug test"
 
 DEPEND="
-	x11-misc/appmenu-qt
+	x11-misc/appmenu
 	>=dev-libs/libdbusmenu-qt-0.9.0
 	>=dev-libs/qjson-0.7.1
 "
