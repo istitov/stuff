@@ -93,8 +93,6 @@ src_configure() {
 		$(use_enable video_cards_nvidia opencl) \
 		--with-threads \
 		--without-included-ltdl \
-		--with-ltdl-include="${EPREFIX}/usr/include" \
-		--with-ltdl-lib="${EPREFIX}/usr/$(get_libdir)" \
 		--with-modules \
 		--with-quantum-depth=${depth} \
 		$(use_with cxx magick-plus-plus) \
