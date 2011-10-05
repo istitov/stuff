@@ -50,8 +50,7 @@ src_prepare() {
 
 src_configure() {
 	econf \
-		$(use_enable gtk) \
-		$(use_enable gtk dumper) \
+		$(use_with gtk gtk=2) \
 		$(use_enable introspection) \
 		$(use_enable test tests) \
 		$(use_enable vala)
