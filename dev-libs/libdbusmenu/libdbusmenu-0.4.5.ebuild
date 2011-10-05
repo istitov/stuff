@@ -20,7 +20,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="gtk introspection test vala"
 
-RDEPEND="dev-libs/glib:2
+RDEPEND="=dev-libs/glib-2.28.8
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
 	gtk? ( x11-libs/gtk+:2 )
