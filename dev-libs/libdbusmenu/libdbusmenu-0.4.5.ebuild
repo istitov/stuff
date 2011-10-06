@@ -18,7 +18,7 @@ SRC_URI="http://launchpad.net/dbusmenu/${MY_MAJOR_VERSION}/${PV}/+download/${P}.
 LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="gtk introspection test vala"
+IUSE="gtk introspection"
 
 RDEPEND="=dev-libs/glib-2.28.8
 	dev-libs/dbus-glib
@@ -27,11 +27,6 @@ RDEPEND="=dev-libs/glib-2.28.8
 	dev-libs/json-glib"
 DEPEND="${RDEPEND}
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
-	test? (
-		dev-libs/json-glib[introspection=]
-		dev-util/dbus-test-runner
-	)
-	vala? ( dev-lang/vala:0 )
 	dev-util/intltool
 	dev-util/pkgconfig"
 
@@ -51,9 +46,7 @@ src_prepare() {
 src_configure() {
 	econf \
 		$(use_with gtk gtk=2) \
-		$(use_enable introspection) \
-		$(use_enable test tests) \
-		$(use_enable vala)
+		$(use_enable introspection)
 }
 
 src_test() {
