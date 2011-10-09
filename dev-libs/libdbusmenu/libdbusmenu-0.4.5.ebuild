@@ -30,13 +30,6 @@ DEPEND="${RDEPEND}
 	dev-util/intltool
 	dev-util/pkgconfig"
 
-pkg_setup() {
-	if use vala && use !introspection ; then
-		eerror "Vala bindings (USE=vala) require introspection support (USE=introspection)"
-		die "Vala bindings (USE=vala) require introspection support (USE=introspection)"
-	fi
-}
-
 src_prepare() {
 
 	sed -e 's:-Werror::g' -i libdbusmenu-glib/Makefile.am libdbusmenu-gtk/Makefile.am || die "sed failed"
