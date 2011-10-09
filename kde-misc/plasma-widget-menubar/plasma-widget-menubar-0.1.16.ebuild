@@ -14,10 +14,11 @@ SRC_URI="http://launchpad.net/${PN}/trunk/${PV}/+download/${P}.tar.bz2"
 LICENSE="GPL-3"
 SLOT="4"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug test"
+IUSE="debug test gtk qt4"
 
 DEPEND="
-	x11-misc/appmenu
+	gtk? ( x11-misc/appmenu-gtk )
+	qt4? ( x11-misc/appmenu-qt )
 	>=dev-libs/libdbusmenu-qt-0.9.0
 	>=dev-libs/qjson-0.7.1
 "

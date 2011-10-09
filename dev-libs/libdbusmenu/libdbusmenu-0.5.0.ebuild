@@ -18,17 +18,29 @@ SRC_URI="http://launchpad.net/dbusmenu/${MY_MAJOR_VERSION}/${PV}/+download/${P}.
 LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="gtk introspection"
+IUSE="gtk introspection +test vala"
 
 RDEPEND="dev-libs/glib:2
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
 	gtk? ( x11-libs/gtk+:2 )
-	dev-libs/json-glib"
+	>=dev-libs/json-glib-0.13.4"
 DEPEND="${RDEPEND}
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
+	test? (
+		dev-libs/json-glib[introspection=]
+		dev-util/dbus-test-runner
+	)
+	vala? ( dev-lang/vala:0 )
 	dev-util/intltool
 	dev-util/pkgconfig"
+
+pkg_setup() {
+	if use vala && use !introspection ; then
+		eerror "Vala bindings (USE=vala) require introspection support (USE=introspection)"
+		die "Vala bindings (USE=vala) require introspection support (USE=introspection)"
+	fi
+}
 
 src_prepare() {
 
@@ -39,7 +51,9 @@ src_prepare() {
 src_configure() {
 	econf \
 		$(use_with gtk gtk=2) \
-		$(use_enable introspection)
+		$(use_enable introspection) \
+		$(use_enable test tests) \
+		$(use_enable vala)
 }
 
 src_test() {
