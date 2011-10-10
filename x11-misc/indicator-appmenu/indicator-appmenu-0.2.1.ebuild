@@ -21,7 +21,8 @@ RDEPEND=">=dev-libs/glib-2.18:2
 	>=gnome-base/gnome-panel-2
 	>=gnome-base/gconf-2
 	>=dev-libs/libindicator-0.3.0
-	>=dev-libs/libdbusmenu-0.3.0"
+	>=dev-libs/libdbusmenu-0.3.0
+	gnome-extra/indicator-applet"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	nls? ( dev-util/intltool )
