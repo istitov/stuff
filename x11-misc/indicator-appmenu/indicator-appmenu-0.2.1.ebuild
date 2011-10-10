@@ -38,3 +38,8 @@ src_prepare() {
 	gnome2_src_prepare
 	eautoreconf
 }
+src_install() {
+	emake DESTDIR="${D}" install || die
+	find "${D}" -name '*.la' -delete
+	find "${D}" -name '*.a' -delete
+}

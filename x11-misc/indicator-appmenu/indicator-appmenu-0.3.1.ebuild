@@ -45,3 +45,8 @@ src_configure(){
 	econf
   fi
 }
+src_install() {
+	emake DESTDIR="${D}" install || die
+	find "${D}" -name '*.la' -delete
+	find "${D}" -name '*.a' -delete
+}
