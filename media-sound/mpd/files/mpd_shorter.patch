@@ -1,0 +1,36 @@
+diff -ur mpd/src/playlist_control.c mpd_working/src/playlist_control.c
+--- mpd/src/playlist_control.c	2011-09-25 15:06:33.066769046 +0200
++++ mpd_working/src/playlist_control.c	2011-09-26 00:21:57.981468744 +0200
+@@ -229,7 +229,7 @@
+ 	playlist->stop_on_error = true;
+ 	playlist->error_count = 0;
+ 
+-	if (!playlist->playing || (unsigned)playlist->current != i) {
++	if (!playlist->playing || (unsigned)playlist->current != song) {
+ 		/* seeking is not within the current song - prepare
+ 		   song change */
+ 
+diff -ur mpd/src/playlist_state.c mpd_working/src/playlist_state.c
+--- mpd/src/playlist_state.c	2011-09-25 15:06:33.070102379 +0200
++++ mpd_working/src/playlist_state.c	2011-09-25 23:55:51.965945221 +0200
+@@ -212,13 +212,15 @@
+ 
+ 		if (state == PLAYER_STATE_STOP /* && config_option */)
+ 			playlist->current = current;
+-		else if (seek_time == 0)
++		else {
+ 			playlist_play(playlist, pc, current);
+-		else
+-			playlist_seek_song(playlist, pc, current, seek_time);
++			if (seek_time != 0)
++				playlist_seek_song(playlist, pc, current, seek_time);
++
++			if (state == PLAYER_STATE_PAUSE)
++				pc_pause(pc);
++		}
+ 
+-		if (state == PLAYER_STATE_PAUSE)
+-			pc_pause(pc);
+ 	}
+ 
+ 	return true;
