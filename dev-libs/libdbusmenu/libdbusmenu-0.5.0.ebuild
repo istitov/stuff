@@ -24,9 +24,7 @@ RDEPEND="dev-libs/glib:2
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
 	gtk? ( x11-libs/gtk+:2 )
-	>=dev-libs/json-glib-0.13.4
-	>=dev-libs/atk-2.1.0
-	>=x11-libs/pango-1.29.3"
+	>=dev-libs/json-glib-0.13.4"
 DEPEND="${RDEPEND}
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	test? (
@@ -45,7 +43,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-
+	epatch "${FILESDIR}"/libdbusmenu_0.5.0.patch
 	sed -e 's:-Werror::g' -i libdbusmenu-glib/Makefile.am libdbusmenu-gtk/Makefile.am || die "sed failed"
 	eautoreconf
 }
