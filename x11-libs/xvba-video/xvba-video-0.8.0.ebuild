@@ -13,7 +13,7 @@ SRC_URI="x86? ( http://www.splitted-desktop.com/~gbeauchesne/${PN}/${P}.i686.tar
 
 LICENSE=""
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="x11-libs/libva"
