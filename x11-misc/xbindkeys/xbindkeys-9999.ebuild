@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-misc/xbindkeys/xbindkeys-9999.ebuild,v 1.2 2010/02/08 18:20:05 megabaks Exp $
 
-EAPI="2"
+EAPI="4"
 
-inherit git eutils
+inherit git-2 eutils
 
 IUSE="guile tk"
 
 DESCRIPTION="Tool for launching commands on keystrokes"
-EGIT_REPO_URI="git://git.savannah.nongnu.org/xbindkeys.git"
+EGIT_REPO_URI="http://git.savannah.gnu.org/cgit/xbindkeys.git"
 EGIT_BRANCH="master"
 HOMEPAGE="http://www.nongnu.org/xbindkeys/xbindkeys.html"
 S="${WORKDIR}/${PN}"
