@@ -139,8 +139,8 @@ src_unpack() {
 	has_version '<=media-libs/libpng-1.4.8-r1' && epatch "${FILESDIR}"/qt-3.3.8-libpng14.patch
 	
 	# Fix gcc issues
-	(( `gcc-version | cut -d\. -f2` == 6 )) && epatch "${FILESDIR}"/patch-src_tools-qsettings.patch
-	(( `gcc-version | cut -d\. -f2` == 6 )) && epatch "${FILESDIR}"/patch-src__tools__qtvaluelist.patch
+	(( `gcc-minor-version` == 6 )) && epatch "${FILESDIR}"/patch-src_tools-qsettings.patch
+	(( `gcc-minor-version` == 6 )) && epatch "${FILESDIR}"/patch-src__tools__qtvaluelist.patch
 
 	if use immqt || use immqt-bc ; then
 		epatch ../${IMMQT_P}.diff
