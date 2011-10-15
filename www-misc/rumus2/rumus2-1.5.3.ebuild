@@ -6,7 +6,7 @@ EAPI=3
 
 inherit rpm
 
-DESCRIPTION="Trade-platform fxclub.org"
+DESCRIPTION="FOREX trading and technical analis terminal"
 HOMEPAGE="http://www.fxclub.org/tools_soft_rumus2/"
 SRC_URI="http://download.fxclub.org/Rumus2/FxClub/Rumus2.rpm"
 
