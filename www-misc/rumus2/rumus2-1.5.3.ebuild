@@ -7,7 +7,7 @@ EAPI=3
 inherit rpm
 
 DESCRIPTION="Trade-platform fxclub.org"
-HOMEPAGE="http://www.fxclub.org/tools_soft/"
+HOMEPAGE="http://www.fxclub.org/tools_soft_rumus2/"
 SRC_URI="http://download.fxclub.org/Rumus2/FxClub/Rumus2.rpm"
 
 LICENSE=""
