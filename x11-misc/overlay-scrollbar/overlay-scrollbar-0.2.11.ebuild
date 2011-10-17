@@ -25,6 +25,7 @@ src_configure(){
 src_install(){
   insinto /usr/lib/
   doins os/.libs/liboverlay-scrollbar-0.2.so
+  doins os/.libs/liboverlay-scrollbar-0.2.so.0
   doins os/.libs/liboverlay-scrollbar-0.2.so.0.0.11
   mv data/81overlay-scrollbar data/overlay-scrollbar.sh
   insinto /etc/profile.d/
