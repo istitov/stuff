@@ -12,11 +12,11 @@ SRC_URI="http://launchpad.net/ayatana-scrollbar/0.2/${PV}/+download/${PN}-${PV}.
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""
 
 CDEPEND=""
-DEPEND="x11-libs/gtk:2+[overlay]"
+DEPEND=">=x11-libs/gtk+-2.24.6[overlay]"
 RDEPEND="${DEPEND}"
 
 src_configure(){
