@@ -1,0 +1,1784 @@
+--- libdbusmenu-0.5.0.orig/libdbusmenu-gtk/client.c
++++ libdbusmenu-0.5.0/libdbusmenu-gtk/client.c
+@@ -823,14 +823,22 @@
+ 	return;
+ }
+ 
+-#ifdef MASSIVEDEBUGGING
+ static void
+-destroy_gmi (GtkMenuItem * gmi, DbusmenuMenuitem * mi)
++destroy_gmi (GtkMenuItem * gmi)
+ {
+-	g_debug("Destorying GTK Menuitem for %d", dbusmenu_menuitem_get_id(mi));
++#ifdef MASSIVEDEBUGGING
++	g_debug("Destroying GTK Menuitem %d", gmi);
++#endif
++
++	/* Call gtk_widget_destroy to remove from any containers and cleanup */
++	gtk_widget_destroy(GTK_WIDGET(gmi));
++
++	/* Now remove last ref that we are holding (due to g_object_ref_sink in
++	   dbusmenu_gtkclient_newitem_base).  This should finalize the object */
++	g_object_unref(G_OBJECT(gmi));
++
+ 	return;
+ }
+-#endif
+ 
+ /**
+  * dbusmenu_gtkclient_newitem_base:
+@@ -857,7 +865,7 @@
+ 
+ 	/* Attach these two */
+ 	g_object_ref_sink(G_OBJECT(gmi));
+-	g_object_set_data_full(G_OBJECT(item), data_menuitem, gmi, (GDestroyNotify)gtk_widget_destroy);
++	g_object_set_data_full(G_OBJECT(item), data_menuitem, gmi, (GDestroyNotify)destroy_gmi);
+ 
+ 	/* DbusmenuMenuitem signals */
+ 	g_signal_connect(G_OBJECT(item), DBUSMENU_MENUITEM_SIGNAL_PROPERTY_CHANGED, G_CALLBACK(menu_prop_change_cb), client);
+--- libdbusmenu-0.5.0.orig/libdbusmenu-gtk/genericmenuitem.c
++++ libdbusmenu-0.5.0/libdbusmenu-gtk/genericmenuitem.c
+@@ -449,6 +449,7 @@
+ 		if (GTK_IS_IMAGE(child)) {
+ 			/* We've got a label, let's update it. */
+ 			imagew = GTK_IMAGE(child);
++			child = NULL;
+ 		} else if (GTK_IS_BOX(child)) {
+ 			/* Look for the label in the box */
+ 			gtk_container_foreach(GTK_CONTAINER(child), set_image_helper, &imagew);
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-glib-dev.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-glib-dev.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/gir1.2-dbusmenu-gtk3-0.4.debhelper.log
++++ libdbusmenu-0.5.0/debian/gir1.2-dbusmenu-gtk3-0.4.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk-doc.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk-doc.install
+@@ -0,0 +1 @@
++debian/tmp/gtk2/usr/share/gtk-doc/html/libdbusmenu-gtk /usr/share/gtk-doc/html/
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk3-dev.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk3-dev.install
+@@ -0,0 +1,6 @@
++debian/tmp/gtk3/usr/include/libdbusmenu-0.4/libdbusmenu-gtk3 /usr/include/libdbusmenu-0.4/
++debian/tmp/gtk3/usr/lib/pkgconfig/dbusmenu-gtk3-0.4.pc /usr/lib/pkgconfig/
++debian/tmp/gtk3/usr/lib/libdbusmenu-gtk3.a /usr/lib/
++debian/tmp/gtk3/usr/lib/libdbusmenu-gtk3.so /usr/lib/
++debian/tmp/gtk3/usr/share/gir-1.0/DbusmenuGtk3-0.4.gir /usr/share/gir-1.0/
++debian/tmp/gtk3/usr/share/vala/vapi/DbusmenuGtk3-0.4.vapi /usr/share/gir-1.0/
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-tools.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-tools.install
+@@ -0,0 +1,3 @@
++debian/tmp/gtk3/usr/lib/libdbusmenu/dbusmenu-* /usr/lib/libdbusmenu/
++debian/tmp/gtk3/usr/share/libdbusmenu/* /usr/share/libdbusmenu-tools/
++debian/tmp/gtk3/usr/share/doc/libdbusmenu/README.dbusmenu-bench /usr/share/doc/libdbusmenu-tools/
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-glib-doc.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-glib-doc.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk-doc.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk-doc.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-glib-dev.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-glib-dev.install
+@@ -0,0 +1,6 @@
++debian/tmp/gtk3/usr/include/libdbusmenu-0.4/libdbusmenu-glib /usr/include/libdbusmenu-0.4/
++debian/tmp/gtk3/usr/lib/pkgconfig/dbusmenu-glib-0.4.pc /usr/lib/pkgconfig/
++debian/tmp/gtk3/usr/lib/libdbusmenu-glib.a /usr/lib/
++debian/tmp/gtk3/usr/lib/libdbusmenu-glib.so /usr/lib/
++debian/tmp/gtk3/usr/share/gir-1.0/Dbusmenu-0.4.gir /usr/share/gir-1.0/
++debian/tmp/gtk3/usr/share/vala/vapi/Dbusmenu-0.4.vapi /usr/share/vala/vapi/
+--- libdbusmenu-0.5.0.orig/debian/gir1.2-dbusmenu-gtk-0.4.debhelper.log
++++ libdbusmenu-0.5.0/debian/gir1.2-dbusmenu-gtk-0.4.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/copyright
++++ libdbusmenu-0.5.0/debian/copyright
+@@ -0,0 +1,40 @@
++Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
++Name: libdbusmenu
++Maintainer: Ted Gould <ted@canonical.com>
++Source: https://launchpad.net/dbusmenu
++
++Files: *
++Copyright: 2009-2010 Ted Gould <ted@canonical.com>, Canonical Ltd.
++License: GPL-3
++
++Files: libdbusmenu-{glib,gtk}/*
++Copyright: 2009-2010 Ted Gould <ted@canonical.com>, Canonical Ltd.
++License: LGPL-2.1 | LGPL-3
++
++Files: libdbusmenu-glib/dbus-menu.xml
++Copyright: 2009-2010 Ted Gould <ted@canonical.com>, Canonical Ltd.
++Copyright: 2009-2010 Aurélien Gâteau <aurelien.gateau@canonical.com>
++License: LGPL-2.1 | LGPL-3
++
++Files: tools/{dbusmenu-bench,testapp/main.c}
++Copyright: 2009-2010 Aurélien Gâteau <aurelien.gateau@canonical.com>
++License: LGPL-2.1 | LGPL-3
++
++Files: debian/*
++Copyright: 2009-2010 Evgeni Golov <evgeni@debian.org>
++Copyright: 2009-2010 Ted Gould <ted@canonical.com>, Canonical Ltd.
++Copyright: 2009-2010 Sebastien Bacher <seb128@ubuntu.com>
++Copyright: 2009-2010 Ken VanDine <ken.vandine@canonical.com>
++License: GPL-3
++
++License: GPL-3
++ On Debian systems, the complete text of the GNU General
++ Public License version 3 can be found in `/usr/share/common-licenses/GPL-3'.
++
++License: LGPL-2.1
++ On Debian systems, the complete text of the GNU Lesser General
++ Public License version 2.1 can be found in `/usr/share/common-licenses/LGPL-2.1'.
++
++License: LGPL-3
++ On Debian systems, the complete text of the GNU Lesser General
++ Public License version 3 can be found in `/usr/share/common-licenses/LGPL-3'.
+--- libdbusmenu-0.5.0.orig/debian/gir1.2-dbusmenu-glib-0.4.debhelper.log
++++ libdbusmenu-0.5.0/debian/gir1.2-dbusmenu-glib-0.4.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/gir1.2-dbusmenu-gtk3-0.4.install
++++ libdbusmenu-0.5.0/debian/gir1.2-dbusmenu-gtk3-0.4.install
+@@ -0,0 +1 @@
++debian/tmp/gtk3/usr/lib/girepository-1.0/DbusmenuGtk3-0.4.typelib /usr/lib/girepository-1.0/
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-jsonloader4.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-jsonloader4.install
+@@ -0,0 +1 @@
++debian/tmp/gtk3/usr/lib/libdbusmenu-jsonloader.so.* /usr/lib/
+--- libdbusmenu-0.5.0.orig/debian/debhelper.log
++++ libdbusmenu-0.5.0/debian/debhelper.log
+@@ -0,0 +1,2 @@
++dh_autoreconf_clean
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk3-4.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk3-4.install
+@@ -0,0 +1 @@
++debian/tmp/gtk3/usr/lib/libdbusmenu-gtk3.so.* /usr/lib/
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-jsonloader-dev.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-jsonloader-dev.install
+@@ -0,0 +1,4 @@
++debian/tmp/gtk3/usr/include/libdbusmenu-0.4/libdbusmenu-jsonloader /usr/include/libdbusmenu-0.4/
++debian/tmp/gtk3/usr/lib/pkgconfig/dbusmenu-jsonloader-0.4.pc /usr/lib/pkgconfig/
++debian/tmp/gtk3/usr/lib/libdbusmenu-jsonloader.a /usr/lib/
++debian/tmp/gtk3/usr/lib/libdbusmenu-jsonloader.so /usr/lib/
+--- libdbusmenu-0.5.0.orig/debian/gir1.2-dbusmenu-glib-0.4.install
++++ libdbusmenu-0.5.0/debian/gir1.2-dbusmenu-glib-0.4.install
+@@ -0,0 +1 @@
++debian/tmp/gtk3/usr/lib/girepository-1.0/Dbusmenu-0.4.typelib /usr/lib/girepository-1.0/
+--- libdbusmenu-0.5.0.orig/debian/rules
++++ libdbusmenu-0.5.0/debian/rules
+@@ -0,0 +1,28 @@
++#!/usr/bin/make -f
++
++DEB_BUILDDIR = build
++DEB_MAKE_FLAVORS = gtk2 gtk3
++
++include /usr/share/cdbs/1/rules/debhelper.mk
++include /usr/share/cdbs/1/class/gnome.mk
++include /usr/share/cdbs/1/rules/autoreconf.mk
++include /usr/share/cdbs/1/rules/patchsys-quilt.mk
++
++DEB_MAKE_DESTDIRSKEL = $(CURDIR)/debian/tmp/@FLAVOR@
++DEB_DESTDIR = $(CURDIR)/debian/tmp/$(cdbs_make_curflavor)/
++
++DEB_CONFIGURE_FLAGS_gtk2 = --with-gtk=2
++DEB_CONFIGURE_FLAGS_gtk3 = --with-gtk=3
++
++DEB_CONFIGURE_EXTRA_FLAGS += --disable-scrollkeeper --enable-gtk-doc --enable-introspection
++
++DEB_DH_SHLIBDEPS_ARGS_libdbusmenu-gtk4 = -- -xlibgtk2.0-0
++DEB_DH_SHLIBDEPS_ARGS_libdbusmenu-gtk3-4 = -- -xlibgtk-3-0
++
++LDFLAGS += -Wl,-z,defs -Wl,--as-needed
++
++debian/stamp-autotools/gtk2: cdbs_configure_flags += $(DEB_CONFIGURE_FLAGS_gtk2)
++debian/stamp-autotools/gtk3: cdbs_configure_flags += $(DEB_CONFIGURE_FLAGS_gtk3)
++
++common-install-arch::
++	find debian/tmp -name \*.la -delete
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk4.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk4.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/changelog
++++ libdbusmenu-0.5.0/debian/changelog
+@@ -0,0 +1,1106 @@
++libdbusmenu (0.5.0-0ubuntu3) oneiric; urgency=low
++
++  * libdbusmenu-gtk/client.c:
++    - Make sure to actually free memory associated with GtkMenuItems we
++      create.  We are holding the sunk floating ref, so we have to
++      actually unref as well as destroy the widget.  Part of bug 835646.
++  * libdbusmenu-gtk/genericmenuitem.c:
++    - When setting an image on a menu item for the second time before
++      setting a label, don't try to use free'd memory. 
++
++ -- Michael Terry <mterry@ubuntu.com>  Thu, 06 Oct 2011 10:35:21 -0400
++
++libdbusmenu (0.5.0-0ubuntu2) oneiric; urgency=low
++
++  * libdbusmenu-glib/client.c
++    - id of 0 in dbusmenu_client_send_about_to_show is valid, and used in 
++      appindicators like nm-applet (LP: #862989)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 30 Sep 2011 10:06:19 -0400
++
++libdbusmenu (0.5.0-0ubuntu1) oneiric; urgency=low
++
++  * New upstream release.
++    * Protect functions against NULL results (LP: #757569, LP: #742909,
++      LP: #743050, LP: #743661)
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 29 Sep 2011 14:46:57 -0500
++
++libdbusmenu (0.4.94-0ubuntu1) oneiric; urgency=low
++
++  [ Ted Gould ]
++  * New upstream release.
++    ∘ Protect functions from NULL submenus (LP: #803667)
++    ∘ Build fixes (LP: #552526, LP: #552530, LP: #552538, LP: #709761,
++      LP: #713690, LP: #643871, LP: #713685)
++
++  [ Ken VanDine ]
++  * debian/control
++    - build dep on valac-0.14
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 20 Sep 2011 09:16:41 -0700
++
++libdbusmenu (0.4.93-0ubuntu1) oneiric; urgency=low
++
++  * New upstream release.
++    * Fix packing of generic menu items to use toggle-spacing
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 25 Aug 2011 09:50:21 -0500
++
++libdbusmenu (0.4.92-0ubuntu1) oneiric; urgency=low
++
++  [ Ted Gould ]
++  * New upstream release (0.4.92).
++    * Add in a property for setting the menuitem disposition
++    * Fix GTK 2 build for style properties
++    * Fixed proxied menu events not getting returned (LP: #799878)
++  * Removed debian/patches:
++    * All upstream
++
++  [ Ken VanDine ]
++  * debian/libdbusmenu-gtk4.symbols debian/libdbusmenu-gtk3-4.symbols
++    - Added new symbols
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Wed, 24 Aug 2011 20:22:14 -0400
++
++libdbusmenu (0.4.90-0ubuntu4) oneiric; urgency=low
++
++  * debian/rules:
++    - avoid making indicator-appmenu* depends on gtk2/3 by dpkg-shlibdeps.
++      The library doesn't hurt if gtk isn't installed and that enable
++      pre-installlation of the indicator stack without requiring the full gtk
++      stack being there without any gtk app installed.
++
++ -- Didier Roche <didrocks@ubuntu.com>  Mon, 25 Jul 2011 18:18:11 +0200
++
++libdbusmenu (0.4.90-0ubuntu3) oneiric; urgency=low
++
++  * debian/patches/lp799878.patch
++    - Fixed proxied menu events not getting returned (LP: #799878)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 28 Jun 2011 17:53:31 +0100
++
++libdbusmenu (0.4.90-0ubuntu2) oneiric; urgency=low
++
++  * debian/control
++    - Also a a breaks to libdbusmenu-glib4 for gir1.2-unity-3.0 and 
++      gir1.2-indicate-0.5 to make sure the library gets held back too.
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 24 Jun 2011 16:05:56 -0400
++
++libdbusmenu (0.4.90-0ubuntu1) oneiric; urgency=low
++
++  [ Ted Gould ]
++  * debian/control, debian/*: Renaming packages for library version
++    bump from 3 to 4.
++  * New upstream release.
++    * Fixing visibility for Eclipse (LP: #770263 and LP: #618587)
++    * Unseting a GValue properly (LP: #785828)
++    * Memory leaks for GVariant usage (LP: #784890)
++    * Making GTK 3 default build
++    * Removing the SerializableMenuitem object
++  * debian/rules: Making GTK2 the special build 
++
++  [ Ken VanDine ]
++  * +debian/libdbusmenu-jsonloader4.symbols
++  * debian/*.symbols
++    - Fixed sonames and removed all the duplicate symbols
++  * debian/*.install, debian/rules
++    - Use cdbs to do the dual builds for gtk2/gtk3
++  * debian/control
++    - Updated standards version to 3.9.2
++    - Set version on the json-glib build depends to >= 0.13.4
++    - Make gir1.2-dbusmenu-glib-0.4 break gir1.2-unity-3.0 and 
++      gir1.2-indicate-0.5 built against older versions of dbusmenu to 
++      prevent breakage in python apps that use gir loading multiple versions
++      of dbusmenu-glib
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 24 Jun 2011 14:55:59 -0400
++
++libdbusmenu (0.4.4-0ubuntu1~ppa1) natty; urgency=low
++
++  * New upstream release.
++    - Fix a typo in the signal name to make it match the XML 
++      files (LP: #641209)
++    - Ref'ing the server for the entire time we're getting the 
++      bus (LP: #738568)
++    - Watch additions/removals from submenus that get added
++    - Activate new toplevel menu items as they get added
++    - Make sure we don't activate toplevel children that aren't
++      menu items or don't have submenus (LP: #761112)
++
++ -- Ted Gould <ted@ubuntu.com>  Mon, 25 Apr 2011 15:19:25 -0500
++
++libdbusmenu (0.4.3-0ubuntu3) natty; urgency=low
++
++  * Backport bug fixes from trunk:
++    - Fix a typo in the signal name to make it match the XML 
++      files (LP: #641209)
++    - Ref'ing the server for the entire time we're getting the 
++      bus (LP: #738568)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 19 Apr 2011 15:14:23 -0400
++
++libdbusmenu (0.4.3-0ubuntu2) natty; urgency=low
++
++  * Backport bug fixes from trunk:
++    - Watch additions/removals from submenus that get added
++    - Activate new toplevel menu items as they get added
++    - Make sure we don't activate toplevel children that aren't
++      menu items or don't have submenus (LP: #761112)
++
++ -- Michael Terry <mterry@ubuntu.com>  Fri, 15 Apr 2011 15:55:37 -0400
++
++libdbusmenu (0.4.3-0ubuntu1) natty; urgency=low
++
++  [ Ken VanDine ]
++  * debian/rules
++    - Fixed package names in build targets (LP: #760102)
++    - Dropped makeshlibs in favor of symbols files
++  * +debian/libdbusmenu-glib3.symbols
++  * +debian/libdbusmenu-gtk3-3.symbols
++  * +debian/libdbusmenu-gtk3.symbols
++
++  [ Ted Gould ]
++  * New upstream release.
++    ∘ Handle cases where labels are added later as subwidgets
++      in the menuitem (LP: #758759)
++    ∘ Fix the destruction of the attached GTK menuitem (LP: #746091)
++    ∘ Guard against an activation that does not actually have an
++      associated menu-hide (LP: #750588)
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 14 Apr 2011 16:49:13 -0500
++
++libdbusmenu (0.4.2-0ubuntu3) natty; urgency=low
++
++  * Merged fix, guard against an activation that does not actually have 
++    an associated menu-hide (LP: #750588)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Mon, 11 Apr 2011 00:56:02 -0400
++
++libdbusmenu (0.4.2-0ubuntu2) natty; urgency=low
++
++  * debian/libdbusmenu-gtk3-dev.install:
++    - Add missing header files to gtk3 dev package
++
++ -- Michael Terry <mterry@ubuntu.com>  Thu, 07 Apr 2011 20:20:25 -0400
++
++libdbusmenu (0.4.2-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    * Fix GIR scan to not include duplicate namespaces (LP: #750575)
++    * Keep refs to the client and makes sure to disconnect all handlers.
++      (LP: #749609)
++    * Add GTK side handlers for the open/close events to ensure GTK apps
++      can use those events still (LP: #750588)
++    * Create submenus for menuitems that don't have children but still
++      have told us they need them with the child-display property.
++      (LP: #619811)
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 07 Apr 2011 10:32:51 -0500
++
++libdbusmenu (0.4.1-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    * Managed variant iterators better to stop crash when dealing
++      with apps that have multiple shortcuts (LP: #741726)
++    * Handled GtkMenuItems with no labels as separators (LP: #729187)
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 31 Mar 2011 13:56:54 -0500
++
++libdbusmenu (0.4.0-0ubuntu2) natty; urgency=low
++
++  * Cherry picked fix for potential memory issues to fix unity-panel-service
++     crashed with SIGABRT in __kernel_vsyscall() (LP: #741726)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Mon, 28 Mar 2011 14:56:59 -0400
++
++libdbusmenu (0.4.0-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    * Protect from NULL variants by using iter_loop (LP: #737844)
++    * Look for accellerators inside the labels as well
++    * Protecting properties that are getting updated from an
++      extra remove signal.  (LP: #730925)
++    * Enter and exit the GDK threads before calling GTK (LP: #717162)
++
++ -- Ted Gould <ted@ubuntu.com>  Wed, 23 Mar 2011 14:56:24 -0500
++
++libdbusmenu (0.3.102-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    ∘ Remove child items when they're removed by GTK
++    ∘ Adding opened and closed events for menu visibility
++    ∘ Handle empty image types
++    ∘ Remove critical warning on parser menuitem check (LP: #733918)
++    ∘ Fix dependencies in pkgconfig files (LP: #733263)
++    ∘ Handle NULL labels (LP: #733688)
++    ∘ Fix memory leaks from variants (LP: #722972)
++
++ -- Ted Gould <ted@ubuntu.com>  Wed, 16 Mar 2011 14:08:13 -0500
++
++libdbusmenu (0.3.101-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    ∘ Add helper to get cached menuitem from widget
++    ∘ Have the GTK Dbusmenu Client handle theme directories (LP: #727325)
++    ∘ Fix a bunch of memory leaks (LP: #722972)
++    ∘ Handle _ in menuitems more correctly when parsing (LP: #621301) 
++    ∘ Protect from NULL layout_props (LP: #729722)
++    ∘ Remove the property from the hashtable before signaling that
++      it's been changed (LP: #725603)
++    ∘ Wrap emitted properties in a variant
++    ∘ Fix enum templates so they can be included by other programs
++      without error
++    ∘ Setting the cached menu item (LP: #723463) (LP: #729128) (LP: #729194)
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 10 Mar 2011 11:12:50 -0600
++
++libdbusmenu (0.3.100-0ubuntu4) natty; urgency=low
++
++  * libdbusmenu-gtk/parser.c
++    - Ensure we set the CACHED_MENUITEM data on GtkWidget's, this fixes a few
++      bugs (LP: #723463) (LP: #729128) (LP: #729194)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 08 Mar 2011 20:49:41 -0500
++
++libdbusmenu (0.3.100-0ubuntu3) natty; urgency=low
++
++  * libdbusmenu-glib/menuitem.c
++    - Steal earlier instead of later so that signal handlers don't find the 
++      value in the hashtable (LP: #725603) (LP: #730198)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Mon, 07 Mar 2011 14:27:09 -0500
++
++libdbusmenu (0.3.100-0ubuntu2) natty; urgency=low
++
++  * Cherry picked fix for path to find types.h
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 04 Mar 2011 10:22:36 -0500
++
++libdbusmenu (0.3.100-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    * GTK application menus are not correctly displayed (LP: #726678)
++    * Fix LP: #723873 - ensure that changing a menuitem property to a
++      default value gets propagated properly in the client
++    * Fix some crashes by disconnecting more signals when a menuitem is
++      deleted.  LP: #725980 and LP: #726153
++    * Making sure to grab the variant and dispose of it in handle_event.
++    * Change the destroy prototype to fix GIR warnings
++    * Fix emitting property changes to use tuples
++    * Track the icon theme directories
++    * Handle cases where passed in property names could be in the
++      properties hash table
++    * Making property names match DBus protocol recommendations
++    * Restricting GIR scanner to exported interfaces
++    * Use the library i18n libraries instead of the app ones
++    * Make GetLayout use the parent parameter
++  * debian/patches: All submitted upstream
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 03 Mar 2011 13:54:31 -0600
++
++libdbusmenu (0.3.99-0ubuntu5) natty; urgency=low
++
++  * debian/patches/lp726678.patch
++    - GTK application menus are not correctly displayed (LP: #726678)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 01 Mar 2011 12:14:35 -0500
++
++libdbusmenu (0.3.99-0ubuntu4) natty; urgency=low
++
++  * Fix a warning in gedit
++    - update debian/patches/fix-defaults-in-client.patch
++  * Fix missing submenus in bluetooth-applet
++    - add debian/patches/bluetooth-applet-fix.patch
++    - update debian/patches/series
++
++ -- Chris Coulson <chris.coulson@canonical.com>  Tue, 01 Mar 2011 15:13:00 +0000
++
++libdbusmenu (0.3.99-0ubuntu3) natty; urgency=low
++
++  * Fix LP: #723873 - ensure that changing a menuitem property to a default
++    value gets propagated properly in the client
++    - add debian/patches/fix-defaults-in-client.patch
++    - update debian/patches/series
++
++ -- Chris Coulson <chris.coulson@canonical.com>  Tue, 01 Mar 2011 00:47:24 +0000
++
++libdbusmenu (0.3.99-0ubuntu2) natty; urgency=low
++
++  * debian/patches/disconnect-more-signals.patch:
++    - Fix some crashes by disconnecting more signals when a menuitem is
++      deleted.  LP: #725980 and LP: #726153
++
++ -- Michael Terry <mterry@ubuntu.com>  Mon, 28 Feb 2011 10:09:57 -0500
++
++libdbusmenu (0.3.99-0ubuntu1) natty; urgency=low
++
++  [ Ted Gould ]
++  * New upstream release.
++    * Add a signal on the menuitem for generic event support
++    * Handle the case of a single NULL entry as well.
++    * Not checking defaults when value is NULL
++    * Add the 'type' variable first when processing new
++      menuitems
++    * Protection from unref'ing NULL variants
++    * Only send the requested properties and request fewer
++    * Add in a defaults database
++    * Only send property updates if the menu item has been
++      seen on the bus.
++    * Add a property for text direction.
++    * Add a property for needing attention.
++    * Documentation fixes
++    * Making menuitems track their own parents
++    * Resolving property changes by looking at the properties
++      directly.
++
++  [ Ken VanDine ]
++  * libdbusmenu-glib/menuitem.c
++    - Making sure to grab the variant and dispose of it in handle_event.
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 24 Feb 2011 22:54:54 -0500
++
++libdbusmenu (0.3.98-0ubuntu4) natty; urgency=low
++
++  * Merged from trunk (rev 220) 
++    - Cleaning up cleaning up so we don't unref twice and crash
++    - Fixing the signatures to make them more consistent
++    - Adding defaults to translatable files
++    - Support a set of defaults and not sending them over the bus.
++    - Fixing annotations and adding tests with python.
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Wed, 23 Feb 2011 11:34:57 -0500
++
++libdbusmenu (0.3.98-0ubuntu3) natty; urgency=low
++
++  * debian/control:
++    - Use new libgtk-3-dev build-depends
++
++ -- Robert Ancell <robert.ancell@canonical.com>  Tue, 22 Feb 2011 16:16:44 +1100
++
++libdbusmenu (0.3.98-0ubuntu2) natty; urgency=low
++
++  * libdbusmenu-glib/{client,menuitem,server}.c
++    * Be more selective on unref
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 22 Feb 2011 09:23:38 -0500
++
++libdbusmenu (0.3.98-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    ∘ Fixing distcheck
++    ∘ Grouping Property Change events into a single DBus signal
++    ∘ Removing XML from the GetLayout function
++    ∘ Clean up icon handling in the parser (LP: #715864)
++    ∘ Fixing signatures on dbusmenu-dumper
++  * debian/control: Removing libxml2 Build-Dep
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 17 Feb 2011 11:11:40 -0600
++
++libdbusmenu (0.3.97-0ubuntu1) natty; urgency=low
++
++  [Ted Gould]
++  * New upstream release.
++    ∘ Handle ChildAdded on GtkShell items (LP: #709839)
++    ∘ Fixing take_children() to not unref
++    ∘ Fix naming of the GIR file (LP: #713099)
++
++  [Ken VanDine]
++  * debian/gir1.2-dbusmenu-glib-0.4.install,
++    debian/libdbusmenu-glib-dev.install: Changing gir, typelib and vala
++    file names
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 10 Feb 2011 14:40:14 -0600
++
++libdbusmenu (0.3.96-0ubuntu3) natty; urgency=low
++
++  * libdbusmenu-gtk/parser.c
++    - Handle ChildAdded on GtkShell items and clean up the code so that it 
++      has single functions for doing common operations. (LP: #709839)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Mon, 07 Feb 2011 09:29:09 -0500
++
++libdbusmenu (0.3.96-0ubuntu2) natty; urgency=low
++
++  * libdbusmenu-glib/menuitem.c
++    - take_children() shouldn't unref as the caller wouldn't get a chance 
++      to use the items if this was the last ref.
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 04 Feb 2011 12:18:13 -0500
++
++libdbusmenu (0.3.96-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    * Remove signal handlers for correct objects
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 03 Feb 2011 14:11:16 -0600
++
++libdbusmenu (0.3.95-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    * Fix crashes on rapidly creating and destroying client
++      and menu objects (LP: #709754)
++    * Fix dynamically changed submenus to get the parsed
++     (LP: #696896)
++    * Fix bad signature on GetProperties with no hits 
++
++ -- Ted Gould <ted@ubuntu.com>  Mon, 31 Jan 2011 16:03:06 -0600
++
++libdbusmenu (0.3.94-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    * Fixing setting toggle to a boolean
++    * Fixing some memory leaks
++    * Fixing signatures in GetChildren
++    * Look for the serializable menuitems and use their
++      build functions
++    * Fix critical message from being printed 
++    * Fixing shutdown messages on destruction
++    * Fixing warnings from 'use-fallback'
++    * Adding a parser
++    * Adding a serializable menu item
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 27 Jan 2011 14:26:19 -0600
++
++libdbusmenu (0.3.93-0ubuntu1) natty; urgency=low
++
++  [ Ted Gould ]
++  * New upstream release.
++    * Fixing scanner export
++    * Increasing scanner warnings
++    * Signalling to DBus when object is registered
++    * Handling errors in GVariant better than crashing
++
++  [ Ken VanDine ]
++  * debian/control
++    - Bumped build depends for libgtk3.0-dev to >= 2.99.2-1ubuntu2, a gir
++      related patch we needed was dropped in 2.99.2-1ubuntu1 but re-added
++      in 2.99.2-1ubuntu2
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 20 Jan 2011 15:05:52 -0500
++
++libdbusmenu (0.3.92-0ubuntu3) natty; urgency=low
++
++  * libdbusmenu-glib/server.c
++    * Better error handling when parsing g_variants (LP: #703039)
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 18 Jan 2011 12:19:37 -0500
++
++libdbusmenu (0.3.92-0ubuntu2) natty; urgency=low
++
++  * libdbusmenu-glib/Makefile.am, libdbusmenu-gtk/Makefile.am
++    - Use EXPORT_PACKAGES to prevent circular build depends
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 18 Jan 2011 10:05:15 -0500
++
++libdbusmenu (0.3.92-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    * Fixing handle event to send unboxed values
++    * Build fixes
++
++ -- Ted Gould <ted@ubuntu.com>  Fri, 14 Jan 2011 10:43:44 -0600
++
++libdbusmenu (0.3.91-0ubuntu1) natty; urgency=low
++
++  * New upstream release.
++    * Porting from dbus-glib to GDBus
++    * Bumping the library ABI version
++  * debian/*.install: Changing to be the 0.4 version of the dbusmenu
++    API of all the filenames and paths.
++  * debian/control: Bumping ABI version in package names
++  * debian/control: Changing the GIR package names from "0.2" to
++    "0.4" which now the names of the actual files.
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 13 Jan 2011 10:24:28 -0600
++
++libdbusmenu (0.3.90-0ubuntu3) natty; urgency=low
++
++  * Updated for the gir abi transition
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 16 Dec 2010 10:06:26 -0500
++
++libdbusmenu (0.3.90-0ubuntu2) natty; urgency=low
++
++  * libdbusmenu-gtk/genericmenuitem.c
++    - Switching away from using set_activate as that doesn't actually set 
++      the value, it just signals
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 09 Dec 2010 17:46:41 -0500
++
++libdbusmenu (0.3.90-0ubuntu1) natty; urgency=low
++
++  * debian/rules
++    - Added build targets to build with gtk3 enabled in additional to 
++      default build with gtk2
++  * debian/control
++    - Updated build depends to support building with gtk+-3.0
++    - Added dh-autoreconf build depends
++    - Added libdbusmenu-gtk3-2, libdbusmenu-gtk3-dev, gir1.0-dbusmenu-gtk3-0.2
++      binaries
++    - build depend on libgdk-pixbuf2.0-dev >= 2.22.1-0ubuntu4, needed
++      for GIR fixes
++    - Removed build depends for gir-repository-dev (LP: #677382)
++    - Use gir:Depends
++  * docs/libdbusmenu-gtk/reference/Makefile.am, libdbusmenu-glib/Makefile.am, 
++    libdbusmenu-gtk/Makefile.am
++    - Fixes needed for building with-gtk=3
++
++  [ Ted Gould ]
++  * New upstream release.
++    * Breaking ABI and getting reserved back
++    * Adding build support for GTK2/3 builds
++    * Only force a flush of top level items, allow others to be
++      based on the count.
++  * debian/control, debian/libdbusmenu-glib2.install,
++    debian/libdbusmenu-gtk2.install: Switching package names to
++    match .so bump.
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Wed, 24 Nov 2010 12:05:39 -0500
++
++libdbusmenu (0.3.16-0ubuntu1) maverick; urgency=low
++
++  * New upstream release:
++    * Don't use a typedef in the signal handler in the class to
++      avoid confusing vapigen.
++
++ -- Ted Gould <ted@ubuntu.com>  Wed, 22 Sep 2010 10:28:01 -0500
++
++libdbusmenu (0.3.15-0ubuntu1) UNRELEASED; urgency=low
++
++  * New upstream release:
++    - fix Action for top-level dropdown menu item not activated (LP: #637692)
++
++ -- Didier Roche <didrocks@ubuntu.com>  Wed, 22 Sep 2010 14:55:44 +0200
++
++libdbusmenu (0.3.14-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    * Fixing a memory leak by unref'ing a hashtable
++    * Making a callback for the event dbus function happen off
++      of the mainloop so it returns a response. (LP: #636756)
++
++ -- Ted Gould <ted@ubuntu.com>  Wed, 15 Sep 2010 11:36:09 -0500
++
++libdbusmenu (0.3.13-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    * Handling window grabs on activated signals (LP: #633275)
++    * Fixing the passing of the value to the results signal
++    * Adding a test for checking event results signal
++    * Changing the timeouts on event calls for better detection
++      of failing applications
++
++  [Ken VanDine]
++  * debian/control
++    - Dropped build depends for dbus-test-runner, it isn't in the archive
++      yet, we should add that next cycle
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 09 Sep 2010 09:50:15 -0500
++
++libdbusmenu (0.3.12-0ubuntu1) maverick; urgency=low
++
++  * debian/rules: update the shlibs
++
++  [ Ted Gould ]
++  * New upstream release.
++    * Support activation of menus client side
++    * Increase layout XML size (LP: #621238)
++    * Display an event for the status of the signal to the server
++
++ -- Sebastien Bacher <seb128@ubuntu.com>  Thu, 26 Aug 2010 23:34:45 +0200
++
++libdbusmenu (0.3.11-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    * Fix to handle whitespace in layout XML better
++    * Fixes to test scripts on ARM
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 19 Aug 2010 13:47:33 -0500
++
++libdbusmenu (0.3.10-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    * Fixes to dbusmenu-dumper
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 12 Aug 2010 11:28:37 -0500
++
++libdbusmenu (0.3.9-0ubuntu2) maverick; urgency=low
++
++  * Rebuild with the current gobject introspection version
++
++ -- Sebastien Bacher <seb128@ubuntu.com>  Tue, 10 Aug 2010 21:50:16 +0200
++
++libdbusmenu (0.3.9-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    * Making it so that properties are requested bredth first
++    * Globbing layout signaling from the server
++    * Globbing property requests into group requests (LP: #604670)
++
++ -- Ted Gould <ted@ubuntu.com>  Mon, 02 Aug 2010 20:28:58 -0500
++
++libdbusmenu (0.3.8-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    - Added ItemActivationRequested signal.
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 30 Jul 2010 13:44:34 -0400
++
++libdbusmenu (0.3.7-1) unstable; urgency=low
++
++  * Merge latest upstream from Ubuntu.
++  * Standards-Version: 3.9.1
++
++ -- Evgeni Golov <evgeni@debian.org>  Thu, 29 Jul 2010 12:00:04 +0200
++
++libdbusmenu (0.3.7-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 22 Jul 2010 21:17:13 +0200
++
++libdbusmenu (0.3.6-1) unstable; urgency=low
++
++  * Merge new upstream from Ubuntu.
++
++ -- Evgeni Golov <evgeni@debian.org>  Sat, 17 Jul 2010 10:47:35 +0200
++
++libdbusmenu (0.3.6-0ubuntu2~ppa1) lucid; urgency=low
++
++  * Upstream Merge
++    * Making dbusmenu-dumper have a click to dump feature.
++  * Autogen update
++
++ -- Ted Gould <ted@ubuntu.com>  Tue, 20 Jul 2010 16:40:29 -0500
++
++libdbusmenu (0.3.6-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    ∘ Protect against NULL values as event
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 15 Jul 2010 09:42:07 -0500
++
++libdbusmenu (0.3.5-1) unstable; urgency=low
++
++  * Merge new upstream and changes from Ubuntu.
++  * debian/control:
++    + Add missing "used" to the json package description.
++
++ -- Evgeni Golov <evgeni@debian.org>  Wed, 14 Jul 2010 10:21:29 +0200
++
++libdbusmenu (0.3.5-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    ∘ Protect against NULL nodes (LP: #602444)
++    ∘ Remove extra warnings and messages
++    ∘ Handle not having a session bus better (LP: #598715)
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 08 Jul 2010 10:24:18 -0500
++
++libdbusmenu (0.3.4-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    * Block building submenus on separators (LP: #598620)
++    * Adding more through JSON support for testing
++    * Fixing up value handling in dbusmenu-dumper
++  * debian/control, debian/libdbusmenu-jsonloader*install: Adding
++    two binary packages for the jsonloader test library.
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 01 Jul 2010 09:00:16 -0500
++
++libdbusmenu (0.3.3-1) unstable; urgency=low
++
++  * Merge Ubuntu.
++    Preserve Maintainer and Vcs-* fields.
++  * Standards-Version: 3.9.0
++  * Source-Format: 1.0 for now
++
++ -- Evgeni Golov <evgeni@debian.org>  Thu, 01 Jul 2010 11:42:23 +0200
++
++libdbusmenu (0.3.3-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    * Adding support for menu shortcuts (LP: #591293)
++    * Fixing distcheck of documentation builds
++    * Autogen.sh fix for adding custom prefix (LP: #595565)
++    * Fixing children property name to match spec (LP: #597321)
++  * Merging in Debian branch
++  * debian/control: Switching branch on this branch to be the
++    dbusmenu-team.
++  * debian/rules: Updating shlibs to 0.3.3 for shortcut API additions
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 24 Jun 2010 09:32:42 -0500
++
++libdbusmenu (0.3.2-1) unstable; urgency=low
++
++  * Merge from Ubuntu.
++    Closes: #586069
++  * debian/control:
++    - Set Maintainer to pkg-ayatana.
++    - Add myself as Uploader.
++    - Update package descriptions.
++    - Standards-Version: 3.8.4
++    - Fix Homepage URL.
++    - Update Vcs-* fields.
++    - -doc packages are Arch:all
++  * debian/copyright:
++    - Convert to DEP5 format.
++    - Add Ken and Sebastien, according to changelog.
++    - Add Aurélien Gâteau, according to headers.
++
++ -- Evgeni Golov <evgeni@debian.org>  Sun, 20 Jun 2010 13:56:00 +0200
++
++libdbusmenu (0.3.2-0ubuntu1) maverick; urgency=low
++
++  * debian/control
++    - added doc packages
++    - added build dep for gtk-doc-tools
++  * debian/libdbusmenu-glib-doc.install added
++  * debian/libdbusmenu-gtk-doc.install added
++  * debian/rules 
++    - enabled gtk-doc for configure
++
++  [Ted Gould]
++  * New upstream release.
++    * Set the 'child-display' property on menuitems that
++      have child menuitems.
++    * gtk-doc support
++    * Document the 'shortcut' property
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 10 Jun 2010 16:33:42 -0400
++
++libdbusmenu (0.3.1-0ubuntu1) maverick; urgency=low
++
++  * New upstream release.
++    * Fix annotations for GIR scanner
++    * Add function to get submenu of GTK-ified items
++    * Fix signal prototype of ID update
++    * Fixing up VAPI files to build them correctly
++      * Fixing the version string in the GIR file
++    * Fix documentation title page
++    * Reject text nodes early (warnings with Qt integration)
++  * debian/libdbusmenu-glib-dev.install: Updating gir and vapi file
++    names for package list.
++  * debian/gir1.0-dbusmenu-glib-0.2.install: Changing the name of the
++    typelib file.
++
++ -- Ted Gould <ted@ubuntu.com>  Fri, 04 Jun 2010 14:42:26 -0500
++
++libdbusmenu (0.3.0-0ubuntu1~ppa1) lucid; urgency=low
++
++  * New upstream release.
++    * Add function to get submenu of GTK-ified items
++    * Fix signal prototype of ID update
++    * Fixing up VAPI files to build them correctly
++      * Fixing the version string in the GIR file
++    * Fix documentation title page
++    * Reject text nodes early (warnings with Qt integration)
++  * debian/libdbusmenu-glib-dev.install: Updating gir and vapi file
++    names for package list.
++  * debian/gir1.0-dbusmenu-glib-0.2.install: Changing the name of the
++    typelib file.
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 27 May 2010 11:47:05 -0500
++
++libdbusmenu (0.2.9-0ubuntu3) lucid; urgency=low
++
++  * Upstream Merge
++    * Only unref root if the root has changed.
++    * Ensure that callbacks retain references to objects incase
++      they get deleted quickly.
++    * Protecting references before signalling
++    * Decrementing refs when added to child menus
++
++ -- Ted Gould <ted@ubuntu.com>  Sat, 17 Apr 2010 13:09:57 -0500
++
++libdbusmenu (0.2.9-0ubuntu2) lucid; urgency=low
++
++  * Upstream Merge
++    * Changing GTK layer to look at position in realized
++      children to avoid realization races. (LP: #555816)
++    * Don't allow setting children twice
++    * Ref children of a menuitem
++    * Return error when parent ID of getlayout can't be found
++    * Adding in visible property to docs
++    * Helpful comments in the code
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 15 Apr 2010 01:25:42 -0500
++
++libdbusmenu (0.2.9-0ubuntu1) lucid; urgency=low
++
++  * New upstream release.
++    * Documentation fix
++    * Changing the parse function to get_children instead of
++      taking them. (LP: #471044)
++    * Supporting AboutToShow in event callbacks to catch up
++      with QT implementation.
++    * Unrefing on layout updates (LP: #545026)
++    * Resetting sync versions on disconnection
++    * Removing useless warning
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 01 Apr 2010 09:14:36 -0500
++
++libdbusmenu (0.2.8-0ubuntu2) lucid; urgency=low
++
++  * debian/control:
++    - restore vcs location, we move back to the non import version, the other
++      one don't allow merging trunk changes 
++
++  [ Ted Gould ]
++  * Upstream Merge
++    * Changing the parse function to get_children instead of
++      taking them. (LP: #471044)
++    * Supporting AboutToShow in event callbacks to catch up
++      with QT implementation.
++    * Unrefing on layout updates (LP: #545026)
++    * Resetting sync versions on disconnection
++    * Removing useless warning
++
++ -- Sebastien Bacher <seb128@ubuntu.com>  Thu, 01 Apr 2010 12:36:06 +0200
++
++libdbusmenu (0.2.8-0ubuntu1) lucid; urgency=low
++
++  * debian/control
++    - Dropped Vcs-Bzr and Vcs-Browser
++    - Added extended description for gir1.0-dbusmenu-gtk-0.2 and
++      gir1.0-dbusmenu-glib-0.2
++
++  * debian/rules
++    - bumped shlibs version to 0.2.8 for libdbusmenu-glib1
++
++  [Ted Gould]
++  * Upstream release 0.2.8
++    * Adding support for blank icons (LP: #534854)
++    * Remove unneeded warning (LP: #537312)
++    * Fix typo in documentation
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 25 Mar 2010 11:35:46 -0400
++
++libdbusmenu (0.2.7-0ubuntu1) lucid; urgency=low
++
++  * Upstream release 0.2.7
++    * Adding in building of the GObject Introspection details
++    * Adding in building of VAPI files
++  * debian/control:
++    * Adding dependency on valac
++    * Adding in gir's as build dependencies.
++    * Adding in build dependencies for GIR dev
++    * Adding dependencies for gir-repository-dev and
++      gobject-introspection to ensure we get all the GI goodies.
++  * debian/control, debian/gir1.0-dbusmenu-glib-0.2.install,
++    debian/gir1.0-dbusmenu-gtk-0.2.install: Adding new packages to
++    hold the typelib files generated by GObject introspection.
++  * debian/libdbusmenu-glib-dev.install,
++        debian/libdbusmenu-gtk-dev.install:
++    * Added VAPI files to the packages.
++    * Added GIR files to the packages.
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 04 Mar 2010 11:13:43 -0600
++
++libdbusmenu (0.2.6-0ubuntu1) lucid; urgency=low
++
++  * Upstream release 0.2.6
++    * Fix testing to make it more reliable
++    * Remove delayed property queueing as it was causing properties to not 
++      get updated. (lp: #524308)
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 25 Feb 2010 10:23:49 -0600
++
++libdbusmenu (0.2.5-0ubuntu1) lucid; urgency=low
++
++  * Upstream release 0.2.5
++    * Adding in menuitem proxy object.
++    * Adding ID to default <menu> item.
++  * debian/rules: Updating shlibs
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 18 Feb 2010 11:00:24 -0600
++
++libdbusmenu (0.2.4-0ubuntu1) lucid; urgency=low
++
++  * Upstream release 0.2.4
++    * Remove uneccessary reference to stop duplication of menus
++    * Handle dbus method errors better
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 11 Feb 2010 10:13:56 -0600
++
++libdbusmenu (0.2.3-0ubuntu3) lucid; urgency=low
++
++  * Backported lp:~ted/dbusmenu/dbus-error-handling to fix the 
++    indicator-applet crashing sometime on softwares close 
++    (lp: #518900, #519019)
++
++ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 10 Feb 2010 00:12:35 +0100
++
++libdbusmenu (0.2.3-0ubuntu2) lucid; urgency=low
++
++  * Upstream Merge
++    * Removing the ref to root and a setting of root
++
++ -- Ted Gould <ted@ubuntu.com>  Tue, 09 Feb 2010 08:53:00 -0600
++
++libdbusmenu (0.2.3-0ubuntu1) lucid; urgency=low
++
++  * Upstream release 0.2.3
++    * Fixing handing of root IDs being zero
++    * Handling syncing of properties when reusing items
++    * Shipping new JSON files and READMEs for testing.
++  * libdbusmenu-tools.install: Add in json file and README so
++    that they're put in the right directories.
++
++ -- Ted Gould <ted@ubuntu.com>  Fri, 05 Feb 2010 11:24:58 -0800
++
++libdbusmenu (0.2.2-0ubuntu3) lucid; urgency=low
++
++  * debian/control: 
++    - let libdbusmenu-glib1 breaks libdbusmenu-glib0 since they are create
++      issues at runtime if both got loaded
++
++ -- Sebastien Bacher <seb128@ubuntu.com>  Thu, 04 Feb 2010 18:10:56 -0800
++
++libdbusmenu (0.2.2-0ubuntu2) lucid; urgency=low
++
++  * debian/control: fix a typo in the tools depends
++
++ -- Sebastien Bacher <seb128@ubuntu.com>  Thu, 04 Feb 2010 14:18:47 -0800
++
++libdbusmenu (0.2.2-0ubuntu1) lucid; urgency=low
++
++  * Updated for the soname changes
++  
++  [ Ted Gould ]
++  * Upstream Release 0.2.2
++    * Interoperability fixes
++    * Adding timestamps to events
++    * Better handling of XML
++    * Adding tools for timing dbusmenu
++  * debian/libdbusmenu-tools.install: Adding a wildcard to get
++    all of the tools in libexec
++
++ -- Sebastien Bacher <seb128@ubuntu.com>  Thu, 04 Feb 2010 13:56:49 -0800
++
++libdbusmenu (0.2.1-0ubuntu1) lucid; urgency=low
++
++  * Upstream release 0.2.1
++    - Fix to not destroy the image if we're still using it.
++    - Adding code to support icon names that have an implied direction in them.
++    - Fix to put a small amount of padding between the icon and the label.
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 12 Jan 2010 11:03:39 -0500
++
++libdbusmenu (0.2.0-0ubuntu3) lucid; urgency=low
++
++  * debian/rules:
++    - updated shlibs version (lp: #505258)
++
++ -- Sebastien Bacher <seb128@ubuntu.com>  Mon, 11 Jan 2010 16:04:11 +0100
++
++libdbusmenu (0.2.0-0ubuntu2) lucid; urgency=low
++
++  * Added debian/libdbusmenu-tools.install
++  * debian/control
++    - improved description for libdbusmenu-tools
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Sat, 09 Jan 2010 09:05:47 -0500
++
++libdbusmenu (0.2.0-0ubuntu1) lucid; urgency=low
++
++  * Upstream release 0.2.0
++    - Remove unused libdbusmenu-qt
++    - Changing API to be V0.2 for reals
++    - Adding underline support
++    - Test suite fixes and automation support
++    - dbus-dumper tool
++    - Switch to org.ayatana
++    - Fixing the handling of typed properties, especially bools.
++    - Adding GetChildren function for getting a single submenu
++    - Starting to watch DBus if the proxy builds fail.
++    - Test suite fixes
++    - Fixing the consistency between the #defines and what
++      was used in the code.
++  * debian/control, debian/libdbusmenu-tools.install: Setting
++    up a package for the new dbusmenu-dumper tool.
++  * debian/control: Mentioning nicely that this will cause
++    indicator-messages << 0.3 and indicator-session << 0.2 to
++    break.
++
++ -- Ted Gould <ted@ubuntu.com>  Fri, 08 Jan 2010 08:42:59 -0600
++
++libdbusmenu (0.1.8-0ubuntu1) lucid; urgency=low
++
++  * Upstream release 0.1.8
++    * Changing the name to org.ayatana
++    * Underline fixes
++    * Documenation of the DBus API 
++    * Adding the GPL v3 Copying file so that we're all legal.
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 10 Dec 2009 12:55:07 -0600
++
++libdbusmenu (0.1.6-0ubuntu1) karmic; urgency=low
++
++  * Upstream release 0.1.6 (LP: #442822)
++    * Managing the life-cycle of the GTK Menu item better to
++      ensure that it is positioned correctly and dies
++      appropriately. (LP: #430904) and (LP: #419953)
++    * Checking returned properties to ensure that there wasn't
++      DBus errors. (LP: #433719)
++
++ -- Ted Gould <ted@ubuntu.com>  Fri, 02 Oct 2009 17:00:45 -0500
++
++libdbusmenu (0.1.5-0ubuntu1) karmic; urgency=low
++
++  * New upstream release (LP: #436185) 
++
++ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 24 Sep 2009 17:12:25 -0400
++
++libdbusmenu (0.1.4-0ubuntu1) karmic; urgency=low
++
++  * Upstream release (LP: #432003)
++    - Applying a fix by not blocking if we're calling for the root.  Everyone 
++      should be listening for root changes anyway (lp: #427819)
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 17 Sep 2009 11:29:40 -0500
++
++libdbusmenu (0.1.3-0ubuntu1) karmic; urgency=low
++
++  * Upstream update 0.1.3 (LP: #427360)
++    * Fixes reordering of menu item issue
++
++ -- Ted Gould <ted@ubuntu.com>  Thu, 10 Sep 2009 08:43:47 -0500
++
++libdbusmenu (0.1.2-0ubuntu1) karmic; urgency=low
++
++  * debian/rules:
++    - updated shlib version
++
++  [ Ted Gould ]
++  * Upstream release 0.1.2 (LP: #423958)
++
++  [ Ken VanDine ]
++  * debian/control
++    - Specify full urls for Vcs-Bzr
++
++ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 04 Sep 2009 11:12:38 +0200
++
++libdbusmenu (0.1.0-0ubuntu1) karmic; urgency=low
++
++  [ Ted Gould ]
++  * Upstream release 0.1.0
++  * debian/watch: Added for tarball
++  * debian/control: 
++    - Specify both Vcs-Bzr and Vcs-Browser
++    - Fixed the project name
++
++  [ Martin Pitt ]
++  * Add bzr-builddep configuration for merge mode.
++  * debian/control: Fix Vcs-* links.
++
++ -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 27 Aug 2009 20:55:55 +0200
++
++libdbusmenu (0.1~bzr5-0ubuntu1) karmic; urgency=low
++
++  * First version.
++
++ -- Ted Gould <ted@ubuntu.com>  Wed, 05 Aug 2009 00:46:41 +0100
++
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk-dev.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk-dev.install
+@@ -0,0 +1,6 @@
++debian/tmp/gtk2/usr/include/libdbusmenu-0.4/libdbusmenu-gtk /usr/include/libdbusmenu-0.4/
++debian/tmp/gtk2/usr/lib/pkgconfig/dbusmenu-gtk-0.4.pc /usr/lib/pkgconfig/
++debian/tmp/gtk2/usr/lib/libdbusmenu-gtk.a /usr/lib/
++debian/tmp/gtk2/usr/lib/libdbusmenu-gtk.so /usr/lib/
++debian/tmp/gtk2/usr/share/gir-1.0/DbusmenuGtk-0.4.gir /usr/share/gir-1.0/
++debian/tmp/gtk2/usr/share/vala/vapi/DbusmenuGtk-0.4.vapi /usr/share/vala/vapi/
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk4.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk4.install
+@@ -0,0 +1 @@
++debian/tmp/gtk2/usr/lib/libdbusmenu-gtk.so.* /usr/lib/
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-glib4.symbols
++++ libdbusmenu-0.5.0/debian/libdbusmenu-glib4.symbols
+@@ -0,0 +1,80 @@
++libdbusmenu-glib.so.4 libdbusmenu-glib4 #MINVER#
++ dbus_menu_clean_xml@Base 0.4.2
++ dbusmenu_client_add_type_handler@Base 0.4.2
++ dbusmenu_client_add_type_handler_full@Base 0.4.2
++ dbusmenu_client_get_icon_paths@Base 0.4.2
++ dbusmenu_client_get_root@Base 0.4.2
++ dbusmenu_client_get_status@Base 0.4.2
++ dbusmenu_client_get_text_direction@Base 0.4.2
++ dbusmenu_client_get_type@Base 0.4.2
++ dbusmenu_client_menuitem_get_type@Base 0.4.2
++ dbusmenu_client_menuitem_new@Base 0.4.2
++ dbusmenu_client_new@Base 0.4.2
++ dbusmenu_client_send_about_to_show@Base 0.4.2
++ dbusmenu_client_send_event@Base 0.4.2
++ dbusmenu_defaults_default_get@Base 0.4.2
++ dbusmenu_defaults_default_get_type@Base 0.4.2
++ dbusmenu_defaults_default_set@Base 0.4.2
++ dbusmenu_defaults_get_type@Base 0.4.2
++ dbusmenu_defaults_ref_default@Base 0.4.2
++ dbusmenu_menuitem_build_variant@Base 0.4.2
++ dbusmenu_menuitem_child_add_position@Base 0.4.2
++ dbusmenu_menuitem_child_append@Base 0.4.2
++ dbusmenu_menuitem_child_delete@Base 0.4.2
++ dbusmenu_menuitem_child_find@Base 0.4.2
++ dbusmenu_menuitem_child_prepend@Base 0.4.2
++ dbusmenu_menuitem_child_reorder@Base 0.4.2
++ dbusmenu_menuitem_exposed@Base 0.4.2
++ dbusmenu_menuitem_find_id@Base 0.4.2
++ dbusmenu_menuitem_foreach@Base 0.4.2
++ dbusmenu_menuitem_get_children@Base 0.4.2
++ dbusmenu_menuitem_get_id@Base 0.4.2
++ dbusmenu_menuitem_get_parent@Base 0.4.2
++ dbusmenu_menuitem_get_position@Base 0.4.2
++ dbusmenu_menuitem_get_position_realized@Base 0.4.2
++ dbusmenu_menuitem_get_root@Base 0.4.2
++ dbusmenu_menuitem_get_type@Base 0.4.2
++ dbusmenu_menuitem_handle_event@Base 0.4.2
++ dbusmenu_menuitem_new@Base 0.4.2
++ dbusmenu_menuitem_new_with_id@Base 0.4.2
++ dbusmenu_menuitem_properties_copy@Base 0.4.2
++ dbusmenu_menuitem_properties_list@Base 0.4.2
++ dbusmenu_menuitem_properties_variant@Base 0.4.2
++ dbusmenu_menuitem_property_exist@Base 0.4.2
++ dbusmenu_menuitem_property_get@Base 0.4.2
++ dbusmenu_menuitem_property_get_bool@Base 0.4.2
++ dbusmenu_menuitem_property_get_int@Base 0.4.2
++ dbusmenu_menuitem_property_get_variant@Base 0.4.2
++ dbusmenu_menuitem_property_is_default@Base 0.4.2
++ dbusmenu_menuitem_property_remove@Base 0.4.2
++ dbusmenu_menuitem_property_set@Base 0.4.2
++ dbusmenu_menuitem_property_set_bool@Base 0.4.2
++ dbusmenu_menuitem_property_set_int@Base 0.4.2
++ dbusmenu_menuitem_property_set_variant@Base 0.4.2
++ dbusmenu_menuitem_proxy_get_type@Base 0.4.2
++ dbusmenu_menuitem_proxy_get_wrapped@Base 0.4.2
++ dbusmenu_menuitem_proxy_new@Base 0.4.2
++ dbusmenu_menuitem_realized@Base 0.4.2
++ dbusmenu_menuitem_send_about_to_show@Base 0.4.2
++ dbusmenu_menuitem_set_parent@Base 0.4.2
++ dbusmenu_menuitem_set_realized@Base 0.4.2
++ dbusmenu_menuitem_set_root@Base 0.4.2
++ dbusmenu_menuitem_show_to_user@Base 0.4.2
++ dbusmenu_menuitem_take_children@Base 0.4.2
++ dbusmenu_menuitem_unparent@Base 0.4.2
++ dbusmenu_server_get_icon_paths@Base 0.4.2
++ dbusmenu_server_get_status@Base 0.4.2
++ dbusmenu_server_get_text_direction@Base 0.4.2
++ dbusmenu_server_get_type@Base 0.4.2
++ dbusmenu_server_new@Base 0.4.2
++ dbusmenu_server_set_icon_paths@Base 0.4.2
++ dbusmenu_server_set_root@Base 0.4.2
++ dbusmenu_server_set_status@Base 0.4.2
++ dbusmenu_server_set_text_direction@Base 0.4.2
++ dbusmenu_status_get_nick@Base 0.4.2
++ dbusmenu_status_get_type@Base 0.4.2
++ dbusmenu_status_get_value_from_nick@Base 0.4.2
++ dbusmenu_text_direction_get_nick@Base 0.4.2
++ dbusmenu_text_direction_get_type@Base 0.4.2
++ dbusmenu_text_direction_get_value_from_nick@Base 0.4.2
++ session_bus_cb@Base 0.4.2
+--- libdbusmenu-0.5.0.orig/debian/gir1.2-dbusmenu-gtk-0.4.install
++++ libdbusmenu-0.5.0/debian/gir1.2-dbusmenu-gtk-0.4.install
+@@ -0,0 +1 @@
++debian/tmp/gtk2/usr/lib/girepository-1.0/DbusmenuGtk-0.4.typelib /usr/lib/girepository-1.0/
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-jsonloader4.symbols
++++ libdbusmenu-0.5.0/debian/libdbusmenu-jsonloader4.symbols
+@@ -0,0 +1,3 @@
++libdbusmenu-jsonloader.so.4 libdbusmenu-jsonloader4 #MINVER#
++ dbusmenu_json_build_from_file@Base 0.4.2
++ dbusmenu_json_build_from_node@Base 0.4.2
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-tools.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-tools.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk3-4.symbols
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk3-4.symbols
+@@ -0,0 +1,36 @@
++libdbusmenu-gtk3.so.4 libdbusmenu-gtk3-4 #MINVER#
++ dbusmenu_gtk_parse_get_cached_item@Base 0.4.2
++ dbusmenu_gtk_parse_menu_structure@Base 0.4.2
++ dbusmenu_gtkclient_get_accel_group@Base 0.4.2
++ dbusmenu_gtkclient_get_type@Base 0.4.2
++ dbusmenu_gtkclient_menuitem_get@Base 0.4.2
++ dbusmenu_gtkclient_menuitem_get_submenu@Base 0.4.2
++ dbusmenu_gtkclient_new@Base 0.4.2
++ dbusmenu_gtkclient_newitem_base@Base 0.4.2
++ dbusmenu_gtkclient_set_accel_group@Base 0.4.2
++ dbusmenu_gtkmenu_get_client@Base 0.4.2
++ dbusmenu_gtkmenu_get_type@Base 0.4.2
++ dbusmenu_gtkmenu_new@Base 0.4.2
++ dbusmenu_menuitem_property_get_image@Base 0.4.2
++ dbusmenu_menuitem_property_get_shortcut@Base 0.4.2
++ dbusmenu_menuitem_property_set_image@Base 0.4.2
++ dbusmenu_menuitem_property_set_shortcut@Base 0.4.2
++ dbusmenu_menuitem_property_set_shortcut_menuitem@Base 0.4.2
++ dbusmenu_menuitem_property_set_shortcut_string@Base 0.4.2
++ genericmenuitem_check_type_get_nick@Base 0.4.92
++ genericmenuitem_check_type_get_type@Base 0.4.92
++ genericmenuitem_check_type_get_value_from_nick@Base 0.4.92
++ genericmenuitem_disposition_get_nick@Base 0.4.92
++ genericmenuitem_disposition_get_type@Base 0.4.92
++ genericmenuitem_disposition_get_value_from_nick@Base 0.4.92
++ genericmenuitem_get_disposition@Base 0.4.92
++ genericmenuitem_get_image@Base 0.4.2
++ genericmenuitem_get_type@Base 0.4.2
++ genericmenuitem_set_check_type@Base 0.4.2
++ genericmenuitem_set_disposition@Base 0.4.92
++ genericmenuitem_set_image@Base 0.4.2
++ genericmenuitem_set_state@Base 0.4.2
++ genericmenuitem_state_get_nick@Base 0.4.92
++ genericmenuitem_state_get_type@Base 0.4.92
++ genericmenuitem_state_get_value_from_nick@Base 0.4.92
++ theme_dir_db@Base 0.4.2
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-glib4.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-glib4.install
+@@ -0,0 +1 @@
++debian/tmp/gtk3/usr/lib/libdbusmenu-glib.so.* /usr/lib/
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-jsonloader-dev.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-jsonloader-dev.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk3-4.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk3-4.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk3-dev.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk3-dev.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk-dev.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk-dev.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-gtk4.symbols
++++ libdbusmenu-0.5.0/debian/libdbusmenu-gtk4.symbols
+@@ -0,0 +1,36 @@
++libdbusmenu-gtk.so.4 libdbusmenu-gtk4 #MINVER#
++ dbusmenu_gtk_parse_get_cached_item@Base 0.4.2
++ dbusmenu_gtk_parse_menu_structure@Base 0.4.2
++ dbusmenu_gtkclient_get_accel_group@Base 0.4.2
++ dbusmenu_gtkclient_get_type@Base 0.4.2
++ dbusmenu_gtkclient_menuitem_get@Base 0.4.2
++ dbusmenu_gtkclient_menuitem_get_submenu@Base 0.4.2
++ dbusmenu_gtkclient_new@Base 0.4.2
++ dbusmenu_gtkclient_newitem_base@Base 0.4.2
++ dbusmenu_gtkclient_set_accel_group@Base 0.4.2
++ dbusmenu_gtkmenu_get_client@Base 0.4.2
++ dbusmenu_gtkmenu_get_type@Base 0.4.2
++ dbusmenu_gtkmenu_new@Base 0.4.2
++ dbusmenu_menuitem_property_get_image@Base 0.4.2
++ dbusmenu_menuitem_property_get_shortcut@Base 0.4.2
++ dbusmenu_menuitem_property_set_image@Base 0.4.2
++ dbusmenu_menuitem_property_set_shortcut@Base 0.4.2
++ dbusmenu_menuitem_property_set_shortcut_menuitem@Base 0.4.2
++ dbusmenu_menuitem_property_set_shortcut_string@Base 0.4.2
++ genericmenuitem_check_type_get_nick@Base 0.4.92
++ genericmenuitem_check_type_get_type@Base 0.4.92
++ genericmenuitem_check_type_get_value_from_nick@Base 0.4.92
++ genericmenuitem_disposition_get_nick@Base 0.4.92
++ genericmenuitem_disposition_get_type@Base 0.4.92
++ genericmenuitem_disposition_get_value_from_nick@Base 0.4.92
++ genericmenuitem_get_disposition@Base 0.4.92
++ genericmenuitem_get_image@Base 0.4.2
++ genericmenuitem_get_type@Base 0.4.2
++ genericmenuitem_set_check_type@Base 0.4.2
++ genericmenuitem_set_disposition@Base 0.4.92
++ genericmenuitem_set_image@Base 0.4.2
++ genericmenuitem_set_state@Base 0.4.2
++ genericmenuitem_state_get_nick@Base 0.4.92
++ genericmenuitem_state_get_type@Base 0.4.92
++ genericmenuitem_state_get_value_from_nick@Base 0.4.92
++ theme_dir_db@Base 0.4.2
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-jsonloader4.debhelper.log
++++ libdbusmenu-0.5.0/debian/libdbusmenu-jsonloader4.debhelper.log
+@@ -0,0 +1 @@
++dh_autoreconf_clean
+--- libdbusmenu-0.5.0.orig/debian/control
++++ libdbusmenu-0.5.0/debian/control
+@@ -0,0 +1,230 @@
++Source: libdbusmenu
++Section: gnome
++Priority: optional
++Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
++XSBC-Original-Maintainer: The Ayatana Packagers <pkg-ayatana-devel@lists.alioth.debian.org>
++Uploaders: Evgeni Golov <evgeni@debian.org>
++Build-Depends: debhelper (>= 5.0),
++               cdbs (>= 0.4.41),
++               quilt,
++               libgtk2.0-dev (>= 2.23.2-0ubuntu2),
++               libgtk-3-dev (>= 2.99.2-1ubuntu2),
++               libgdk-pixbuf2.0-dev (>= 2.22.1-0ubuntu4),
++               libdbus-glib-1-dev,
++               gnome-doc-utils,
++               gtk-doc-tools,
++               libtool,
++               intltool,
++               libjson-glib-dev (>= 0.13.4),
++               gobject-introspection,
++               libgirepository1.0-dev (>= 0.9.3),
++               gir1.2-glib-2.0,
++               gir1.2-gtk-2.0,
++               gir1.2-gtk-3.0,
++               libx11-dev (>= 1.3), 
++               dh-autoreconf,
++               valac-0.14
++Standards-Version: 3.9.2
++Homepage: https://launchpad.net/dbusmenu
++Vcs-Bzr: https://code.launchpad.net/~ubuntu-desktop/dbusmenu/ubuntu
++Vcs-Browser: http://bazaar.launchpad.net/~ubuntu-desktop/dbusmenu/ubuntu
++
++Package: libdbusmenu-glib4
++Section: libs
++Architecture: any
++Depends: ${shlibs:Depends},
++         ${misc:Depends}
++Breaks: indicator-messages (<< 0.3.0),
++        indicator-session (<< 0.2.0),
++        libdbusmenu-glib0,
++        gir1.2-unity-3.0 (<< 3.8.4-0ubuntu2),
++        gir1.2-indicate-0.5 (<< 0.5.0-0ubuntu4)
++Description: library for passing menus over DBus
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains shared libraries to be used by applications.
++
++Package: libdbusmenu-glib-dev
++Section: libdevel
++Architecture: any
++Depends: ${shlibs:Depends},
++         ${misc:Depends},
++         libdbusmenu-glib4 (= ${binary:Version}),
++         libdbus-glib-1-dev (>= 0.76),
++         libgtk2.0-dev (>= 2.12.0)
++Description: library for passing menus over DBus - development files
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains files that are needed to build applications.
++
++Package: libdbusmenu-gtk4
++Section: libs
++Architecture: any
++Depends: ${shlibs:Depends},
++         ${misc:Depends}
++Description: library for passing menus over DBus - GTK+ version
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains shared libraries to be used by GTK+ applications.
++
++Package: libdbusmenu-gtk-dev
++Section: libdevel
++Architecture: any
++Depends: ${shlibs:Depends},
++         ${misc:Depends},
++         libdbusmenu-gtk4 (= ${binary:Version}),
++         libdbus-glib-1-dev (>= 0.76),
++         libgtk2.0-dev (>= 2.12.0),
++         libdbusmenu-glib-dev
++Description: library for passing menus over DBus - GTK+ version developement files
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains files that are needed to build GTK+ applications.
++
++Package: libdbusmenu-tools
++Section: devel
++Architecture: any
++Depends: ${shlibs:Depends},
++         ${misc:Depends},
++         python,
++         libdbusmenu-glib4 (= ${binary:Version})
++Description: tools useful during development with libdbusmenu
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains tools that are useful when developing and building
++ applications with libdbusmenu.
++
++Package: gir1.2-dbusmenu-glib-0.4
++Section: libs
++Architecture: any
++Depends: ${misc:Depends},
++         libdbusmenu-glib4 (= ${binary:Version}),
++         ${gir:Depends}
++Breaks: gir1.2-unity-3.0 (<< 3.8.4-0ubuntu2),
++        gir1.2-indicate-0.5 (<< 0.5.0-0ubuntu4)
++Description: typelib file for libdbusmenu-glib4
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package can be used by other packages using the GIRepository format to
++ generate dynamic bindings for libdbusmenu-glib4.
++
++Package: gir1.2-dbusmenu-gtk-0.4
++Section: libs
++Architecture: any
++Depends: ${misc:Depends},
++         libdbusmenu-gtk4 (= ${binary:Version}),
++         ${gir:Depends}
++Description: typelib file for libdbusmenu-gtk4
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package can be used by other packages using the GIRepository format to
++ generate dynamic bindings for libdbusmenu-gtk4.
++
++Package: libdbusmenu-glib-doc
++Section: doc
++Architecture: all
++Depends: ${misc:Depends}
++Description: library for passing menus over DBus - documentation
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains developer documentation for libdbusmenu-glib.
++
++Package: libdbusmenu-gtk-doc
++Section: doc
++Architecture: all
++Depends: ${misc:Depends}
++Description: library for passing menus over DBus - GTK+ version documentation
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains developer documentation for libdbusmenu-gtk.
++
++Package: libdbusmenu-jsonloader4
++Section: libs
++Architecture: any
++Depends: ${shlibs:Depends},
++         ${misc:Depends}
++Description: library for passing menus over DBus - Test lib
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains shared libraries to be used by test suites in
++ applications or libraries using dbusmenu.
++
++Package: libdbusmenu-jsonloader-dev
++Section: libdevel
++Architecture: any
++Depends: ${shlibs:Depends},
++         ${misc:Depends},
++         libdbusmenu-jsonloader4 (= ${binary:Version}),
++         libdbus-glib-1-dev (>= 0.76),
++         libdbusmenu-glib-dev (= ${binary:Version}),
++         libjson-glib-dev
++Description: library for passing menus over DBus - Test lib development files
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains files that are needed to build test suites in 
++ applications or libraries using dbusmenu.
++
++Package: libdbusmenu-gtk3-4
++Section: libs
++Architecture: any
++Depends: ${shlibs:Depends},
++         ${misc:Depends}
++Description: library for passing menus over DBus - GTK+ version
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains shared libraries to be used by GTK+ applications.
++
++Package: libdbusmenu-gtk3-dev
++Section: libdevel
++Architecture: any
++Depends: ${shlibs:Depends},
++         ${misc:Depends},
++         libdbusmenu-gtk3-4 (= ${binary:Version}),
++         libdbus-glib-1-dev (>= 0.76),
++         libgtk-3-dev (>= 2.91.4-0ubuntu1),
++         libdbusmenu-glib-dev
++Description: library for passing menus over DBus - GTK+ version developement files
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package contains files that are needed to build GTK+ applications.
++
++Package: gir1.2-dbusmenu-gtk3-0.4
++Section: libs
++Architecture: any
++Depends: ${misc:Depends},
++         libdbusmenu-gtk3-4 (= ${binary:Version}),
++         ${gir:Depends}
++Description: typelib file for libdbusmenu-gtk3-4
++ libdbusmenu passes a menu structure across DBus so that a program can
++ create a menu simply without worrying about how it is displayed on the
++ other side of the bus.
++ .
++ This package can be used by other packages using the GIRepository format to
++ generate dynamic bindings for libdbusmenu-gtk4.
++
+--- libdbusmenu-0.5.0.orig/debian/watch
++++ libdbusmenu-0.5.0/debian/watch
+@@ -0,0 +1,2 @@
++version=3
++http://launchpad.net/dbusmenu/+download .*/libdbusmenu-([0-9.]+)\.tar\.gz
+--- libdbusmenu-0.5.0.orig/debian/libdbusmenu-glib-doc.install
++++ libdbusmenu-0.5.0/debian/libdbusmenu-glib-doc.install
+@@ -0,0 +1 @@
++debian/tmp/gtk3/usr/share/gtk-doc/html/libdbusmenu-glib /usr/share/gtk-doc/html/
+--- libdbusmenu-0.5.0.orig/debian/source/format
++++ libdbusmenu-0.5.0/debian/source/format
+@@ -0,0 +1 @@
++1.0
+--- libdbusmenu-0.5.0.orig/libdbusmenu-glib/client.c
++++ libdbusmenu-0.5.0/libdbusmenu-glib/client.c
+@@ -1610,7 +1610,7 @@
+ dbusmenu_client_send_about_to_show(DbusmenuClient * client, gint id, void (*cb)(gpointer data), gpointer cb_data)
+ {
+ 	g_return_if_fail(DBUSMENU_CLIENT(client));
+-	g_return_if_fail(id > 0);
++	g_return_if_fail(id >= 0);
+ 
+ 	DbusmenuClientPrivate * priv = DBUSMENU_CLIENT_GET_PRIVATE(client);
+ 	g_return_if_fail(priv != NULL);
