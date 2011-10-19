@@ -29,7 +29,8 @@ DEPEND="${RDEPEND}
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	dev-util/intltool
 	dev-util/pkgconfig
-	>=dev-libs/atk-2.1.0"
+	>=dev-libs/atk-2.1.0
+	>=x11-libs/pango-1.29"
 
 src_prepare() {
 

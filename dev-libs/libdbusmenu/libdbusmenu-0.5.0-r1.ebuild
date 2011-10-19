@@ -34,7 +34,8 @@ DEPEND="${RDEPEND}
 	vala? ( dev-lang/vala:0 )
 	dev-util/intltool
 	dev-util/pkgconfig
-	>=dev-libs/atk-2.1.0"
+	>=dev-libs/atk-2.1.0
+	>=x11-libs/pango-1.29"
 
 pkg_setup() {
 	if use vala && use !introspection ; then
