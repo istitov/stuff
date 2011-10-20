@@ -23,7 +23,8 @@ IUSE="gtk gtk3 introspection +test vala"
 RDEPEND="dev-libs/glib:2
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
-	gtk? ( x11-libs/gtk+:3 )
+	gtk3? ( x11-libs/gtk+:3 )
+	gtk? ( x11-libs/gtk+:2 )
 	>=dev-libs/json-glib-0.13.4"
 DEPEND="${RDEPEND}
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
