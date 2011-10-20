@@ -13,17 +13,17 @@ fi
 
 DESCRIPTION="Library to pass menu structure across DBus"
 HOMEPAGE="https://launchpad.net/dbusmenu"
-SRC_URI="http://launchpad.net/dbusmenu/${MY_MAJOR_VERSION}/${PV}/+download/${P}.tar.gz"
+SRC_URI="http://launchpad.net/dbusmenu/0.5/${PV}/+download/libdbusmenu-${PV}.tar.gz"
 
 LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="gtk introspection +test vala"
+IUSE="gtk gtk3 introspection +test vala"
 
 RDEPEND="dev-libs/glib:2
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
-	gtk? ( x11-libs/gtk+:2 )
+	gtk? ( x11-libs/gtk+:3 )
 	>=dev-libs/json-glib-0.13.4"
 DEPEND="${RDEPEND}
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
@@ -36,6 +36,8 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	>=dev-libs/atk-2.1.0
 	>=x11-libs/pango-1.29"
+	
+S="${WORKDIR}/libdbusmenu-${PV}"
 
 pkg_setup() {
 	if use vala && use !introspection ; then
@@ -50,18 +52,53 @@ src_prepare() {
 }
 
 src_configure() {
+  if use gtk;then
+  econf \
+	--with-gtk=2 \
+	$(use_enable introspection) \
+	$(use_enable test tests) \
+	$(use_enable vala)
+  fi
+  
+  if use gtk3;then
+	mkdir gtk3-hack
+	cp -R * gtk3-hack &>/dev/null
+	cd gtk3-hack
+
 	econf \
-		$(use_with gtk gtk=2) \
+		--with-gtk=3 \
 		$(use_enable introspection) \
 		$(use_enable test tests) \
-		$(use_enable vala)
+		$(use_enable vala) \
+		--prefix=/usr/local \
+		--mandir=/usr/local/share \
+		--infodir=/usr/local/share \
+		--datadir=/usr/local/share \
+		--includedir=/usr/local/include
+  fi
+  
 }
 
 src_test() {
 	Xemake check || die "testsuite failed"
 }
-
+src_compile(){
+  emake
+  if use gtk3;then
+  cd gtk3-hack
+  emake
+  fi
+}
 src_install() {
+	if use gtk;then
 	emake DESTDIR="${ED}" install || die "make install failed"
+	fi
+	
+	if use gtk3;then
+	  cd gtk3-hack
+	  emake DESTDIR="${ED}" install || die "make install failed"
+	  mkdir -p ${D}/usr/lib/pkgconfig
+	  mv libdbusmenu-gtk/dbusmenu-gtk3-0.4.pc ${D}/usr/lib/pkgconfig/dbusmenu-gtk3-0.4.pc
+	fi
 	dodoc AUTHORS || die "dodoc failed"
 }
