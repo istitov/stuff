@@ -15,6 +15,6 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""
 
-DEPEND=">=x11-libs/qt-gui-4.7.4[appmenu]
+DEPEND="|| ( <x11-libs/qt-gui-4.8[appmenu] >=x11-libs/qt-gui-4.8 )
 		>=dev-libs/libdbusmenu-qt-0.9.0"
 RDEPEND="${DEPEND}"
