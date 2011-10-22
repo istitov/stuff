@@ -346,6 +346,9 @@ src_install() {
 	dosym /usr/$(get_libdir)/libnvidia-ml.so.${NV_SOVER} \
 		/usr/$(get_libdir)/libnvidia-ml.so || \
 		die "failed to create libnvidia-ml.so symlink"
+	dosym /usr/$(get_libdir)/libnvidia-ml.so.${NV_SOVER} \
+		/usr/$(get_libdir)/libnvidia-ml.so.1 || \
+		die "failed to create libnvidia-ml.so.1 symlink"
 
 	# NVIDIA video decode <-> CUDA
 	dolib.so ${NV_LIB}/libnvcuvid.so.${NV_SOVER} || \
