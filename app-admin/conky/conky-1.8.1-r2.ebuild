@@ -57,6 +57,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${P}-xmms2.patch"
 	epatch "${FILESDIR}/${P}-secunia-SA43225.patch"
 	epatch "${FILESDIR}/${P}-acpitemp.patch"
+	epatch "${FILESDIR}/${P}-curl-headers.patch"
 	epatch "${FILESDIR}/${PN}-fix_top.patch"
 	epatch "${FILESDIR}/${P}-curl-headers.patch"
 }
