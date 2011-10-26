@@ -1,0 +1,22 @@
+x11-libs/libX11 guile? ( >=dev-scheme/guile-1.8.4[deprecated] ) tk? ( dev-lang/tk ) x11-proto/xproto dev-vcs/git
+x11-libs/libX11 guile? ( >=dev-scheme/guile-1.8.4[deprecated] ) tk? ( dev-lang/tk )
+0
+
+
+http://www.nongnu.org/xbindkeys/xbindkeys.html
+GPL-2
+Tool for launching commands on keystrokes
+
+eutils git-2 multilib portability toolchain-funcs
+guile tk
+
+
+
+4
+
+compile configure install unpack
+
+
+
+
+

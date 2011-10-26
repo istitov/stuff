@@ -1,0 +1,22 @@
+>=x11-libs/gtk+-2 dev-util/pkgconfig x11-base/xorg-server x11-libs/libXt x11-libs/libXv x11-proto/xf86driproto x11-proto/xf86vidmodeproto
+>=x11-libs/gtk+-2 x11-base/xorg-server x11-libs/libXt x11-drivers/nvidia-drivers
+0
+ftp://download.nvidia.com/XFree86/nvidia-settings/nvidia-settings-260.19.29.tar.bz2
+
+http://www.nvidia.com/
+GPL-2
+NVIDIA Linux X11 Settings Utility
+-* ~amd64 ~x86 ~x86-fbsd
+eutils flag-o-matic multilib portability toolchain-funcs
+
+
+
+
+2
+
+compile install prepare
+
+
+
+
+

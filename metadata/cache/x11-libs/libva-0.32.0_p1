@@ -1,0 +1,22 @@
+>=x11-libs/libdrm-2.4 video_cards_intel? ( >=x11-libs/libdrm-2.4.21 ) x11-libs/libX11 x11-libs/libXext x11-libs/libXfixes opengl? ( virtual/opengl ) dev-util/pkgconfig || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool
+>=x11-libs/libdrm-2.4 video_cards_intel? ( >=x11-libs/libdrm-2.4.21 ) x11-libs/libX11 x11-libs/libXext x11-libs/libXfixes opengl? ( virtual/opengl )
+0
+http://www.splitted-desktop.com/~gbeauchesne/libva/libva_0.32.0-1+sds1.tar.gz
+
+http://www.splitted-desktop.com/~gbeauchesne/libva/
+MIT
+Video Acceleration (VA) API for Linux
+amd64 x86
+autotools eutils libtool multilib portability toolchain-funcs
+opengl video_cards_dummy video_cards_nvidia video_cards_intel
+
+video_cards_nvidia? ( x11-libs/vdpau-video )
+
+2
+
+configure install prepare
+
+
+
+
+

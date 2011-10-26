@@ -1,0 +1,22 @@
+>=x11-libs/gtk+-2.24.6[overlay] || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool
+>=x11-libs/gtk+-2.24.6[overlay]
+0
+http://launchpad.net/ayatana-scrollbar/0.2/0.2.12/+download/overlay-scrollbar-0.2.12.tar.gz
+
+https://launchpad.net/ayatana-scrollbar
+GPL-2 LGPL-2
+Ubuntu's scrollbars
+~alpha ~amd64 ~ppc64 ~sparc ~x86
+autotools eutils libtool multilib portability toolchain-funcs
++gtk2
+
+
+
+4
+
+configure install
+
+
+
+
+

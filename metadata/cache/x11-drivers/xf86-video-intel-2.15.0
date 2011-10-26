@@ -1,0 +1,22 @@
+>=x11-base/xorg-server-1.6 >=x11-libs/libdrm-2.4.23[video_cards_intel] x11-libs/libpciaccess x11-libs/libXext x11-libs/libXfixes x11-libs/libXvMC >=x11-libs/libxcb-1.5 >=x11-proto/dri2proto-1.99.3 x11-proto/fontsproto x11-proto/randrproto x11-proto/renderproto x11-proto/xextproto x11-proto/xproto dri? ( x11-proto/xf86driproto x11-proto/glproto ) || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool x86-interix? ( >=sys-devel/libtool-2.2.6a sys-devel/m4 >=x11-misc/util-macros-1.14.0 >=media-fonts/font-util-1.2.0 ) ppc-aix? ( >=sys-devel/libtool-2.2.6a sys-devel/m4 >=x11-misc/util-macros-1.14.0 >=media-fonts/font-util-1.2.0 ) x86-winnt? ( >=sys-devel/libtool-2.2.6a sys-devel/m4 >=x11-misc/util-macros-1.14.0 >=media-fonts/font-util-1.2.0 ) >=dev-util/pkgconfig-0.23 x11-proto/fontsproto x11-proto/randrproto x11-proto/renderproto x11-proto/videoproto x11-proto/xextproto x11-proto/xineramaproto x11-proto/xproto x11-base/xorg-server[xorg] x11-libs/libpciaccess
+>=x11-base/xorg-server-1.6 >=x11-libs/libdrm-2.4.23[video_cards_intel] x11-libs/libpciaccess x11-libs/libXext x11-libs/libXfixes x11-libs/libXvMC >=x11-libs/libxcb-1.5 x11-base/xorg-server[xorg] x11-libs/libpciaccess
+0
+http://xorg.freedesktop.org/releases/individual/driver/xf86-video-intel-2.15.0.tar.bz2
+
+http://xorg.freedesktop.org/
+MIT
+X.Org driver for Intel cards
+amd64 ia64 x86 -x86-fbsd
+autotools autotools-utils base eutils flag-o-matic libtool linux-info multilib portability toolchain-funcs versionator xorg-2
+dri
+
+
+
+3
+
+compile configure install postinst postrm prepare setup test unpack
+
+
+
+
+

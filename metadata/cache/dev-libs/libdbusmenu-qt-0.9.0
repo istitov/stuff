@@ -1,0 +1,22 @@
+>=x11-libs/qt-core-4.6.3:4 >=x11-libs/qt-gui-4.6.3:4[dbus] doc? ( app-doc/doxygen ) test? ( dev-libs/qjson >=x11-libs/qt-test-4.6.3:4 ) >=dev-util/cmake-2.8.4 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) test? ( !prefix? ( x11-base/xorg-server[xvfb] ) x11-apps/xhost )
+>=x11-libs/qt-core-4.6.3:4 >=x11-libs/qt-gui-4.6.3:4[dbus]
+0
+http://launchpad.net/libdbusmenu-qt/trunk/0.9.0/+download/libdbusmenu-qt-0.9.0.tar.bz2
+test
+https://launchpad.net/libdbusmenu-qt/
+LGPL-2
+A library providing Qt implementation of DBusMenu specification
+amd64 ~arm ppc ~ppc64 x86 ~amd64-linux ~x86-linux
+base cmake-utils eutils flag-o-matic multilib portability toolchain-funcs virtualx
+debug doc test
+
+
+
+4
+
+compile configure install prepare test unpack
+
+
+
+
+

@@ -1,0 +1,22 @@
+x11-libs/libva
+x11-libs/libva >=x11-drivers/ati-drivers-9.10
+0
+x86? ( http://www.splitted-desktop.com/~gbeauchesne/xvba-video/xvba-video-0.8.0.i686.tar.gz ) amd64? ( http://www.splitted-desktop.com/~gbeauchesne/xvba-video/xvba-video-0.8.0.x86_64.tar.gz )
+
+http://www.splitted-desktop.com/~gbeauchesne/xvba-video/
+
+xvba-video
+~x86 ~amd64
+multilib toolchain-funcs
+
+
+
+
+2
+
+install
+
+
+
+
+

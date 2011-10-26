@@ -1,0 +1,22 @@
+x11-libs/libX11 x11-libs/libSM x11-libs/libXft imlib2? ( media-libs/imlib2 ) xrandr? ( x11-libs/libXrandr ) xinerama? ( x11-libs/libXinerama ) >=dev-vcs/git-1.6
+x11-libs/libX11 x11-libs/libSM x11-libs/libXft imlib2? ( media-libs/imlib2 ) xrandr? ( x11-libs/libXrandr ) xinerama? ( x11-libs/libXinerama )
+0
+
+
+https://www.wmfs.info
+BSD
+Windows Manager From Scratch
+~amd64 ~x86
+eutils git multilib portability toolchain-funcs
+xinerama xrandr imlib2
+
+
+
+3
+
+configure install prepare unpack
+
+
+
+
+
