@@ -54,6 +54,7 @@ RDEPEND="app-arch/bzip2
 	x11-libs/libXtst
 	kerberos? ( virtual/krb5 )"
 DEPEND="${RDEPEND}
+	dev-lang/nacl-toolchain-newlib
 	dev-lang/perl
 	>=dev-util/gperf-3.0.3
 	>=dev-util/pkgconfig-0.23
