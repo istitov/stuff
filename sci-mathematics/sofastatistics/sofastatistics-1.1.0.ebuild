@@ -11,7 +11,7 @@ HOMEPAGE="http://sourceforge.net/projects/sofastatistics/"
 SRC_URI="http://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download# -> ${P}.tar.gz"
 LICENSE=""
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~amd64 ~x86"
 
 DEPEND=">=dev-lang/python-2.6.2
 		>=dev-python/wxpython-2.8.11.0
