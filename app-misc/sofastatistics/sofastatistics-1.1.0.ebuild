@@ -11,7 +11,7 @@ HOMEPAGE="http://sourceforge.net/projects/sofastatistics/"
 SRC_URI="http://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download# -> ${P}.tar.gz"
 LICENSE=""
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~x86"
 
 DEPEND=">=dev-lang/python-2.6.2
 		>=dev-python/wxpython-2.8.11.0
@@ -32,6 +32,5 @@ src_install(){
   exeinto /usr/share/sofastats
   doexe sofa_main/*.py*
   doexe sofa_main/*/*.py*
-  touch sofastats
   dosym  /usr/share/sofastats/start.py /usr/bin/sofastats
 }
