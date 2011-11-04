@@ -160,6 +160,7 @@ QA_DT_HASH_x86="usr/lib/libcuda.so.${PV}
 	usr/bin/nvidia-xconfig
 	usr/bin/nvidia-settings"
 
+
 S="${WORKDIR}/"
 
 mtrr_check() {
