@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/chromium/chromium-15.0.861.0.ebuild,v 1.1 2011/08/26 20:56:05 phajdan.jr Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/chromium/chromium-16.0.904.0-r2.ebuild,v 1.3 2011/10/15 03:12:32 phajdan.jr Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2:2.6"
@@ -15,7 +15,7 @@ SRC_URI="http://build.chromium.org/official/${P}.tar.bz2"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="chromedriver cups gnome gnome-keyring kerberos pulseaudio kde"
+IUSE="bindist chromedriver cups gnome gnome-keyring kerberos pulseaudio"
 
 # en_US is ommitted on purpose from the list below. It must always be available.
 LANGS="am ar bg bn ca cs da de el en_GB es es_LA et fa fi fil fr gu he hi hr
@@ -26,7 +26,9 @@ for lang in ${LANGS}; do
 done
 
 RDEPEND="app-arch/bzip2
+	>=dev-lang/v8-3.6.5.1
 	dev-libs/dbus-glib
+	dev-libs/elfutils
 	>=dev-libs/icu-4.4.1
 	>=dev-libs/libevent-1.4.13
 	dev-libs/libxml2[icu]
@@ -50,19 +52,17 @@ RDEPEND="app-arch/bzip2
 	x11-libs/libXinerama
 	x11-libs/libXScrnSaver
 	x11-libs/libXtst
-	kerberos? ( virtual/krb5 )
-	kde? ( kde-base/kdialog:4 )"
+	kerberos? ( virtual/krb5 )"
 DEPEND="${RDEPEND}
+	dev-lang/nacl-toolchain-newlib
 	dev-lang/perl
 	>=dev-util/gperf-3.0.3
 	>=dev-util/pkgconfig-0.23
+	dev-python/simplejson
 	>=sys-devel/bison-2.4.3
 	sys-devel/flex
 	>=sys-devel/make-3.81-r2
-	test? (
-		dev-python/pyftpdlib
-		dev-python/simplejson
-	)"
+	test? ( dev-python/pyftpdlib )"
 RDEPEND+="
 	x11-misc/xdg-utils
 	virtual/ttf-fonts"
@@ -91,6 +91,14 @@ chromium_lang() {
 	fi
 }
 
+get_bundled_v8_version() {
+	"$(PYTHON -2)" "${FILESDIR}"/extract_v8_version.py v8/src/version.cc
+}
+
+get_installed_v8_version() {
+	best_version dev-lang/v8 | sed -e 's@dev-lang/v8-@@g'
+}
+
 pkg_setup() {
 	CHROMIUM_HOME="/usr/$(get_libdir)/chromium-browser"
 
@@ -114,10 +122,28 @@ pkg_setup() {
 	# bug #363907.
 	CONFIG_CHECK="~PID_NS ~NET_NS"
 	check_extra_config
+
+	if use bindist; then
+		elog "bindist enabled: H.264 video support will be disabled."
+	else
+		elog "bindist disabled: Resulting binaries may not be legal to re-distribute."
+	fi
 }
 
 src_prepare() {
-	cp "${FILESDIR}/nacl.gypi" chrome/ || die
+	ln -s /usr/$(get_libdir)/nacl-toolchain-newlib \
+		native_client/toolchain/linux_x86_newlib || die
+		
+	# zlib-1.2.5.1-r1 renames the OF macro in zconf.h, bug 383371.
+	sed -i '1i#define OF(x) x' \
+		third_party/zlib/contrib/minizip/{ioapi,{,un}zip}.c \
+		chrome/common/zip.cc || die
+
+	epatch_user
+	
+	if use !cups;then 
+	  epatch "${FILESDIR}"/printing_fix.patch
+	fi
 
 	# Remove most bundled libraries. Some are still needed.
 	find third_party -type f \! -iname '*.gyp*' \
@@ -138,6 +164,7 @@ src_prepare() {
 		\! -path 'third_party/libjingle/*' \
 		\! -path 'third_party/libphonenumber/*' \
 		\! -path 'third_party/libvpx/*' \
+		\! -path 'third_party/lss/*' \
 		\! -path 'third_party/mesa/*' \
 		\! -path 'third_party/modp_b64/*' \
 		\! -path 'third_party/mongoose/*' \
@@ -145,8 +172,10 @@ src_prepare() {
 		\! -path 'third_party/openmax/*' \
 		\! -path 'third_party/ots/*' \
 		\! -path 'third_party/protobuf/*' \
+		\! -path 'third_party/scons-2.0.1/*' \
 		\! -path 'third_party/sfntly/*' \
 		\! -path 'third_party/skia/*' \
+		\! -path 'third_party/smhasher/*' \
 		\! -path 'third_party/speex/speex.h' \
 		\! -path 'third_party/sqlite/*' \
 		\! -path 'third_party/tcmalloc/*' \
@@ -158,15 +187,26 @@ src_prepare() {
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/yasm/*' \
 		\! -path 'third_party/zlib/contrib/minizip/*' \
+		\! -path 'third_party/jsoncpp/*' \
 		-delete || die
+
+	local v8_bundled="$(get_bundled_v8_version)"
+	local v8_installed="$(get_installed_v8_version)"
+	elog "V8 version: bundled - ${v8_bundled}; installed - ${v8_installed}"
+
+	# Remove bundled v8.
+	find v8 -type f \! -iname '*.gyp*' -delete || die
+
+	# The implementation files include v8 headers with full path,
+	# like #include "v8/include/v8.h". Make sure the system headers
+	# will be used.
+	# TODO: find a solution that can be upstreamed.
+	rmdir v8/include || die
+	ln -s /usr/include v8/include || die
 
 	# Make sure the build system will use the right python, bug #344367.
 	# Only convert directories that need it, to save time.
 	python_convert_shebangs -q -r 2 build tools
-	
-	if use kde;then 
-	epatch "${FILESDIR}"/chromium_dialogs_12.patch
-	fi
 }
 
 src_configure() {
@@ -175,13 +215,6 @@ src_configure() {
 	# Never tell the build system to "enable" SSE2, it has a few unexpected
 	# additions, bug #336871.
 	myconf+=" -Ddisable_sse2=1"
-
-	# Disable NaCl temporarily, this tarball doesn't have IRT.
-	myconf+=" -Ddisable_nacl=1"
-
-	# Disable WebRTC until they make PulseAudio dependency optional,
-	# bug #377847.
-	myconf+=" -Denable_webrtc=0"
 
 	# Use system-provided libraries.
 	# TODO: use_system_ffmpeg
@@ -199,11 +232,12 @@ src_configure() {
 		-Duse_system_libwebp=1
 		-Duse_system_libxml=1
 		-Duse_system_speex=1
+		-Duse_system_v8=1
 		-Duse_system_xdg_utils=1
 		-Duse_system_zlib=1"
 
 	# Optional dependencies.
-	# TODO: linux_link_kerberos
+	# TODO: linux_link_kerberos, bug #381289.
 	myconf+="
 		$(gyp_use cups use_cups)
 		$(gyp_use gnome use_gconf)
@@ -217,15 +251,20 @@ src_configure() {
 		-Dlinux_sandbox_path=${CHROMIUM_HOME}/chrome_sandbox
 		-Dlinux_sandbox_chrome_path=${CHROMIUM_HOME}/chrome"
 
-	if host-is-pax; then
-		# Prevent the build from failing (bug #301880). The performance
-		# difference is very small.
-		myconf+=" -Dv8_use_snapshot=0"
-	fi
+	# if host-is-pax; then
+	#	# Prevent the build from failing (bug #301880). The performance
+	#	# difference is very small.
+	#	myconf+=" -Dv8_use_snapshot=0"
+	# fi
 
 	# Our system ffmpeg should support more codecs than the bundled one
 	# for Chromium.
 	# myconf+=" -Dproprietary_codecs=1"
+
+	if ! use bindist; then
+		# Enable H.624 support in bundled ffmpeg.
+		myconf+=" -Dproprietary_codecs=1 -Dffmpeg_branding=Chrome"
+	fi
 
 	local myarch="$(tc-arch)"
 	if [[ $myarch = amd64 ]] ; then
@@ -251,15 +290,11 @@ src_configure() {
 	replace-flags "-Os" "-O2"
 
 	egyp ${myconf} || die
-	
 }
 
 src_compile() {
-	emake chrome chrome_sandbox BUILDTYPE=Release V=1 || die
+	emake chrome chrome_sandbox chromedriver BUILDTYPE=Release V=1 || die
 	pax-mark m out/Release/chrome
-	if use chromedriver; then
-		emake chromedriver BUILDTYPE=Release V=1 || die
-	fi
 	if use test; then
 		emake {base,crypto,googleurl,net}_unittests BUILDTYPE=Release V=1 || die
 		pax-mark m out/Release/{base,crypto,googleurl,net}_unittests
@@ -310,11 +345,11 @@ src_install() {
 	# insinto "${CHROMIUM_HOME}"
 	# case "$(tc-arch)" in
 	# 	amd64)
-	# 		doins native_client/irt_binaries/nacl_irt_x86_64.nexe || die
+	# 		doins out/Release/nacl_irt_x86_64.nexe || die
 	# 		doins out/Release/libppGoogleNaClPluginChrome.so || die
 	# 	;;
 	# 	x86)
-	# 		doins native_client/irt_binaries/nacl_irt_x86_32.nexe || die
+	# 		doins out/Release/nacl_irt_x86_32.nexe || die
 	# 		doins out/Release/libppGoogleNaClPluginChrome.so || die
 	# 	;;
 	# esac
@@ -388,8 +423,7 @@ src_install() {
 	doexe out/Release/libffmpegsumo.so || die
 
 	# Install icons and desktop entry.
-	# size 64: bug #378777.
-	for SIZE in 16 22 24 32 48 128 256 ; do
+	for SIZE in 16 22 24 32 48 64 128 256 ; do
 		insinto /usr/share/icons/hicolor/${SIZE}x${SIZE}/apps
 		newins chrome/app/theme/chromium/product_logo_${SIZE}.png \
 			chromium-browser.png || die
