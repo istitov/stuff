@@ -7,7 +7,7 @@ http://www.nvidia.com/
 GPL-2
 NVIDIA Linux X11 Settings Utility
 -* ~amd64 ~x86 ~x86-fbsd
-eutils flag-o-matic multilib portability toolchain-funcs
+eutils flag-o-matic multilib portability toolchain-funcs user
 
 
 

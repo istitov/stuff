@@ -7,7 +7,7 @@ http://deadbeef.sourceforge.net/
 GPL-2 LGPL-2.1 ZLIB ao? ( BSD XMAME ) dumb? ( DUMB-0.9.2 ) shn? ( shorten )
 foobar2k-like music player
 
-eutils fdo-mime git multilib portability toolchain-funcs
+eutils fdo-mime git multilib portability toolchain-funcs user
 adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar mono2stereo
 
 

@@ -7,7 +7,7 @@ https://launchpad.net/bamf
 LGPL3
 BAMF Application Matching Framework
 
-autotools eutils libtool multilib portability toolchain-funcs
+autotools eutils libtool multilib portability toolchain-funcs user
 +gtk2 gtk3
 
 

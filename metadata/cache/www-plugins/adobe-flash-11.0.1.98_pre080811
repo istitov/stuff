@@ -7,7 +7,7 @@ http://labs.adobe.com/technologies/flashplayer10/
 AdobeFlash-10.1
 Adobe Flash Player
 
-eutils multilib nsplugins portability toolchain-funcs versionator
+eutils multilib nsplugins portability toolchain-funcs user versionator
 multilib nspluginwrapper +32bit +64bit
 
 

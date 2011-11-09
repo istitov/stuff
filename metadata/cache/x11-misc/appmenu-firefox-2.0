@@ -7,7 +7,7 @@ https://code.launchpad.net/~extension-hackers/globalmenu-extension/2.0
 || ( MPL-1.1 GPL-2 LGPL-2.1 )
 Appmenu support for Firefox
 ~x86 ~amd64
-autotools bzr eutils libtool mozextension multilib portability toolchain-funcs
+autotools bzr eutils libtool mozextension multilib portability toolchain-funcs user
 wifi
 
 

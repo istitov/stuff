@@ -7,7 +7,7 @@ http://i3wm.org
 BSD
 An improved dynamic tiling window manager
 
-eutils git multilib portability toolchain-funcs
+eutils git multilib portability toolchain-funcs user
 debug doc
 
 

@@ -7,7 +7,7 @@ http://pf.natalenko.name/
 GPL-2 freedist
 Linux kernel fork with new features, including the -ck patchset (BFS), BFQ, TuxOnIce and LinuxIMQ
 -* ~amd64 ~ppc ~ppc64 ~x86
-eutils kernel-2 multilib portability toolchain-funcs versionator
+eutils kernel-2 multilib portability toolchain-funcs user versionator
 symlink build
 
 !build? ( virtual/dev-manager )

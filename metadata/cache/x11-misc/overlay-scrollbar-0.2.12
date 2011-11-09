@@ -7,7 +7,7 @@ https://launchpad.net/ayatana-scrollbar
 GPL-2 LGPL-2
 Ubuntu's scrollbars
 ~alpha ~amd64 ~ppc64 ~sparc ~x86
-autotools eutils libtool multilib portability toolchain-funcs
+autotools eutils libtool multilib portability toolchain-funcs user
 +gtk2
 
 

@@ -7,7 +7,7 @@ http://www.lm-sensors.org/
 GPL-2 LGPL-2.1
 Hardware Monitoring user-space utilities
 alpha amd64 ~mips ppc sparc x86
-eutils linux-info multilib portability toolchain-funcs versionator
+eutils linux-info multilib portability toolchain-funcs user versionator
 sensord
 
 

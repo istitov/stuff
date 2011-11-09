@@ -7,7 +7,7 @@ http://mesa3d.sourceforge.net/
 MIT LGPL-3 SGI-B-2.0
 OpenGL-like graphic library for Linux
 ~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris
-autotools base eutils flag-o-matic git-2 libtool multilib portability toolchain-funcs
+autotools base eutils flag-o-matic git-2 libtool multilib portability toolchain-funcs user
 video_cards_i915 video_cards_i965 video_cards_intel video_cards_r100 video_cards_r200 video_cards_r300 video_cards_r600 video_cards_radeon video_cards_nouveau video_cards_vmware bindist +classic d3d debug +egl g3dvl +gallium gbm gles1 gles2 +llvm +nptl openvg osmesa pax_kernel pic selinux shared-dricore +shared-glapi vdpau wayland xvmc kernel_FreeBSD xorg
 d3d? ( gallium ) g3dvl? ( gallium ) llvm? ( gallium ) openvg? ( gallium ) egl? ( shared-glapi ) gallium? ( video_cards_r300? ( x86? ( llvm ) amd64? ( llvm ) ) video_cards_radeon? ( x86? ( llvm ) amd64? ( llvm ) ) ) g3dvl? ( || ( vdpau xvmc ) ) vdpau? ( g3dvl ) xvmc? ( g3dvl ) video_cards_i915? ( classic ) video_cards_r100? ( classic ) video_cards_r200? ( classic ) video_cards_vmware? ( gallium )
 

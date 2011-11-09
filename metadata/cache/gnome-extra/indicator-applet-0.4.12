@@ -7,7 +7,7 @@ http://launchpad.net/indicator-applet/
 GPL-3
 A small applet to display information from various applications consistently in the panel
 
-autotools eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib portability toolchain-funcs versionator
+autotools eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib portability toolchain-funcs user versionator
 nls
 
 

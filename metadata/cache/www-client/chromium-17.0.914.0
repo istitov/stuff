@@ -7,7 +7,7 @@ http://chromium.org/
 BSD
 Open-source version of Google Chrome web browser
 ~amd64 ~x86
-eutils fdo-mime flag-o-matic gnome2-utils linux-info multilib pax-utils portability python toolchain-funcs versionator virtualx
+eutils fdo-mime flag-o-matic gnome2-utils linux-info multilib pax-utils portability python toolchain-funcs user versionator virtualx
 bindist chromedriver cups gnome gnome-keyring kerberos pulseaudio linguas_am linguas_ar linguas_bg linguas_bn linguas_ca linguas_cs linguas_da linguas_de linguas_el linguas_en_GB linguas_es linguas_es_LA linguas_et linguas_fa linguas_fi linguas_fil linguas_fr linguas_gu linguas_he linguas_hi linguas_hr linguas_hu linguas_id linguas_it linguas_ja linguas_kn linguas_ko linguas_lt linguas_lv linguas_ml linguas_mr linguas_nb linguas_nl linguas_pl linguas_pt_BR linguas_pt_PT linguas_ro linguas_ru linguas_sk linguas_sl linguas_sr linguas_sv linguas_sw linguas_ta linguas_te linguas_th linguas_tr linguas_uk linguas_vi linguas_zh_CN linguas_zh_TW test
 
 

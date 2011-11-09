@@ -7,7 +7,7 @@ http://projects.gnome.org/accessibility/
 LGPL-2
 GTK+ & GNOME Accessibility Toolkit
 ~amd64 ~x86
-eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib portability toolchain-funcs versionator
+eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib portability toolchain-funcs user versionator
 doc +introspection nls
 
 

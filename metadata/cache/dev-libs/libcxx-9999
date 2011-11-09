@@ -7,7 +7,7 @@ http://libcxx.llvm.org/
 
 High perfomance C++ library
 ~amd64
-base cmake-utils eutils flag-o-matic multilib portability subversion toolchain-funcs
+base cmake-utils eutils flag-o-matic multilib portability subversion toolchain-funcs user
 
 
 

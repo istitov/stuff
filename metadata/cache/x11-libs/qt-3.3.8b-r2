@@ -7,7 +7,7 @@ http://qt.nokia.com/
 || ( QPL-1.0 GPL-2 GPL-3 )
 The Qt toolkit is a comprehensive C++ application development framework.
 alpha amd64 hppa ia64 ~mips ppc ~ppc64 sparc x86 ~x86-fbsd
-eutils flag-o-matic multilib portability toolchain-funcs
+eutils flag-o-matic multilib portability toolchain-funcs user
 cups debug doc examples firebird ipv6 mysql nas nis odbc opengl postgres sqlite xinerama immqt immqt-bc
 
 odbc? ( ~dev-db/qt-unixODBC-3.3.8b )

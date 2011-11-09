@@ -7,7 +7,7 @@ http://labs.qt.nokia.com/2011/05/20/qt-quick-3d-downloads-available/
 || ( GPL-3 GPL-2 )
 Qt3D binding for qml
 ~amd64 ~arm ~ppc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris
-base eutils multilib portability qt4-r2 toolchain-funcs
+base eutils multilib portability qt4-r2 toolchain-funcs user
 debug doc
 
 

@@ -5,11 +5,11 @@
 EAPI=3
 inherit eutils qt4-r2 git-2
 
-MY_P="qt-quick3d"
+MY_P="quick3d"
 
 DESCRIPTION="Qt3D binding for qml"
 HOMEPAGE="http://labs.qt.nokia.com/2011/05/20/qt-quick-3d-downloads-available/"
-EGIT_REPO_URI="git://gitorious.org/${MY_P}/${MY_P}.git"
+EGIT_REPO_URI="git://gitorious.org/qt/${MY_P}.git"
 
 LICENSE="|| ( GPL-3 GPL-2 )"
 SLOT="0"

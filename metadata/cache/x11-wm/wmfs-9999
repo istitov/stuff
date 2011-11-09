@@ -7,7 +7,7 @@ https://www.wmfs.info
 BSD
 Windows Manager From Scratch
 ~amd64 ~x86
-eutils git multilib portability toolchain-funcs
+eutils git multilib portability toolchain-funcs user
 xinerama xrandr imlib2
 
 

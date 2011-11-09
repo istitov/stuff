@@ -7,7 +7,7 @@ https://launchpad.net/dbusmenu
 LGPL-3
 Library to pass menu structure across DBus
 ~amd64 ~x86
-autotools eutils libtool multilib portability toolchain-funcs versionator virtualx
+autotools eutils libtool multilib portability toolchain-funcs user versionator virtualx
 gtk gtk3 introspection +test vala test
 
 

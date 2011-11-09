@@ -7,7 +7,7 @@ http://www.kde-apps.org/content/show.php/soundKonverter?content=29024
 GPL-2
 A frontend to various audio converters
 ~amd64 ~x86
-base cmake-utils eutils fdo-mime flag-o-matic gnome2-utils kde4-base kde4-functions multilib portability toolchain-funcs versionator virtualx
+base cmake-utils eutils fdo-mime flag-o-matic gnome2-utils kde4-base kde4-functions multilib portability toolchain-funcs user versionator virtualx
 debug aqua kdeenablefinal
 
 

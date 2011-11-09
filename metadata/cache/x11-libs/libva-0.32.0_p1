@@ -7,7 +7,7 @@ http://www.splitted-desktop.com/~gbeauchesne/libva/
 MIT
 Video Acceleration (VA) API for Linux
 amd64 x86
-autotools eutils libtool multilib portability toolchain-funcs
+autotools eutils libtool multilib portability toolchain-funcs user
 opengl video_cards_dummy video_cards_nvidia video_cards_intel
 
 video_cards_nvidia? ( x11-libs/vdpau-video )
