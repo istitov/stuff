@@ -1,0 +1,22 @@
+sys-apps/sed sensord? ( net-analyzer/rrdtool )
+dev-lang/perl virtual/logger
+0
+http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-3.3.0.tar.bz2
+
+http://www.lm-sensors.org/
+GPL-2 LGPL-2.1
+Hardware Monitoring user-space utilities
+alpha amd64 ~mips ppc sparc x86
+eutils linux-info multilib portability toolchain-funcs user versionator
+sensord
+
+
+
+2
+
+compile install postinst prepare setup
+
+
+
+
+

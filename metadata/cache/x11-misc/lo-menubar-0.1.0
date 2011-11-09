@@ -1,0 +1,22 @@
+|| ( app-office/libreoffice-bin app-office/libreoffice )
+|| ( app-office/libreoffice-bin app-office/libreoffice )
+0
+x86? ( https://launchpad.net/ubuntu/+source/lo-menubar/0.1.0-0ubuntu3/+build/2774800/+files/lo-menubar_0.1.0-0ubuntu3_i386.deb ) amd64? ( https://launchpad.net/ubuntu/+source/lo-menubar/0.1.0-0ubuntu3/+build/2774798/+files/lo-menubar_0.1.0-0ubuntu3_amd64.deb )
+
+https://launchpad.net/lo-menubar
+GPL-2 LGPL-2
+A small plugin for LibreOffice to export the menus from the application into Unity's menubar.
+~x86 ~amd64
+
+
+
+
+
+4
+
+install prepare
+
+
+
+
+

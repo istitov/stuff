@@ -1,0 +1,22 @@
+dev-libs/glib:2 introspection? ( >=dev-libs/gobject-introspection-0.6.7 ) >=dev-lang/perl-5 dev-util/pkgconfig doc? ( >=dev-util/gtk-doc-1.13 ) nls? ( sys-devel/gettext ) app-arch/xz-utils >=sys-apps/sed-4
+dev-libs/glib:2 introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
+0
+mirror://gnome/sources/atk/2.1/atk-2.1.0.tar.xz
+
+http://projects.gnome.org/accessibility/
+LGPL-2
+GTK+ & GNOME Accessibility Toolkit
+~amd64 ~x86
+eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib portability toolchain-funcs user versionator
+doc +introspection nls
+
+
+
+4
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

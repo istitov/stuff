@@ -1,0 +1,22 @@
+sys-devel/clang >=dev-util/cmake-2.8.4 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) dev-vcs/subversion net-misc/rsync
+sys-devel/clang
+0
+
+
+http://libcxx.llvm.org/
+
+High perfomance C++ library
+~amd64
+base cmake-utils eutils flag-o-matic multilib portability subversion toolchain-funcs user
+
+
+
+
+2
+
+compile configure install preinst prepare test unpack
+
+
+
+
+
