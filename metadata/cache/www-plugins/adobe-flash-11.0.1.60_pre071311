@@ -1,0 +1,22 @@
+amd64? ( multilib? ( 32bit? ( nspluginwrapper? ( www-plugins/nspluginwrapper ) ) ) )
+x86? ( x11-libs/gtk+:2 media-libs/fontconfig dev-libs/nss net-misc/curl >=sys-libs/glibc-2.4 ) amd64? ( multilib? ( 64bit? ( x11-libs/gtk+:2 media-libs/fontconfig dev-libs/nss net-misc/curl >=sys-libs/glibc-2.4 ) 32bit? ( >=app-emulation/emul-linux-x86-gtklibs-20100409-r1 app-emulation/emul-linux-x86-soundlibs ) ) !multilib? ( x11-libs/gtk+:2 media-libs/fontconfig dev-libs/nss net-misc/curl >=sys-libs/glibc-2.4 ) ) || ( media-fonts/liberation-fonts media-fonts/corefonts ) amd64? ( multilib? ( 32bit? ( nspluginwrapper? ( www-plugins/nspluginwrapper ) ) ) )
+0
+x86? ( http://download.macromedia.com/pub/labs/flashplatformruntimes/flashplayer11/flashplayer11_b1_install_lin_32_071311.tar.gz ) amd64? ( multilib? ( 32bit? ( http://download.macromedia.com/pub/labs/flashplatformruntimes/flashplayer11/flashplayer11_b1_install_lin_32_071311.tar.gz ) 64bit? ( http://download.macromedia.com/pub/labs/flashplatformruntimes/flashplayer11/flashplayer11_b1_install_lin_64_071311.tar.gz ) ) !multilib? ( http://download.macromedia.com/pub/labs/flashplatformruntimes/flashplayer11/flashplayer11_b1_install_lin_64_071311.tar.gz ) )
+strip mirror
+http://labs.adobe.com/technologies/flashplayer10/
+AdobeFlash-10.1
+Adobe Flash Player
+
+eutils multilib nsplugins portability toolchain-funcs user versionator
+multilib nspluginwrapper +32bit +64bit
+
+
+
+3
+
+compile install postinst setup unpack
+
+
+
+
+

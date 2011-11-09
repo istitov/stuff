@@ -1,0 +1,22 @@
+>=dev-lang/vala-0.11.7 dev-util/gtk-doc gtk3? ( >=x11-libs/libwnck-3.2.1 >=x11-libs/gtk+-3.2.1 ) || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool
+>=dev-lang/vala-0.11.7 dev-util/gtk-doc gtk3? ( >=x11-libs/libwnck-3.2.1 >=x11-libs/gtk+-3.2.1 )
+0
+http://launchpad.net/bamf/0.2/0.2.204/+download/bamf-0.2.104.tar.gz
+
+https://launchpad.net/bamf
+LGPL3
+BAMF Application Matching Framework
+
+autotools eutils libtool multilib portability toolchain-funcs user
++gtk2 gtk3
+
+
+
+3
+
+compile configure install unpack
+
+
+
+
+

@@ -1,0 +1,22 @@
+x11-libs/libva || ( x11-libs/xvba-video x11-libs/vdpau-video )
+x11-libs/libva || ( x11-libs/xvba-video x11-libs/vdpau-video )
+0
+http://www.splitted-desktop.com/~gbeauchesne/mplayer-vaapi/mplayer-vaapi-20100602-FULL.tar.bz2
+
+http://www.splitted-desktop.com/~gbeauchesne/mplayer-vaapi/
+
+mplayer with patches add VA API support
+~x86 ~amd64
+
+
+
+
+
+
+
+compile install
+
+
+
+
+
