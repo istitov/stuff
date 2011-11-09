@@ -116,7 +116,7 @@ src_prepare() {
 	fi
 	
 	if use overlay;then
-	epatch ${FILESDIR}/100_gtk3_overlay_scrollbar_loading.patchh
+	epatch ${FILESDIR}/100_gtk3_overlay_scrollbar_loading.patch
 	fi
 	
 	if ! use test; then
