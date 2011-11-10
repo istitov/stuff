@@ -35,7 +35,8 @@ DEPEND="${RDEPEND}
 	dev-util/intltool
 	dev-util/pkgconfig
 	>=dev-libs/atk-2.1.0
-	>=x11-libs/pango-1.29"
+	>=x11-libs/pango-1.29
+	app-text/gnome-doc-utils"
 
 pkg_setup() {
 	if use vala && use !introspection ; then
