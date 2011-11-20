@@ -1,0 +1,10 @@
+<layman>
+    <overlay type="git" src="https://github.com/megabaks/stuff.git" contact="https://github.com/megabaks" status="unofficial" name="stuff">
+	<link>
+	https://github.com/megabaks/stuff
+	</link>
+	<description>
+	hz
+	</description>
+    </overlay>
+</layman>
