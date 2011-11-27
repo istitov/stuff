@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit eutils
+inherit eutils 
 
 DESCRIPTION="http://sourceforge.net/projects/sofastatistics/"
 HOMEPAGE="http://sourceforge.net/projects/sofastatistics/"
@@ -13,7 +13,7 @@ LICENSE=""
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-DEPEND=">=dev-lang/python-2.6.2
+DEPEND="dev-lang/python:2
 		>=dev-python/wxpython-2.8.11.0
 		>=dev-python/numpy-1.5.1
 		>=dev-python/pysqlite-2.6.3
@@ -27,6 +27,7 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/sofastats-${PV}"
 
 src_install(){
+  sed -e 's|/usr/bin/env python|/usr/bin/env python2|' -i sofa_main/start.py
   dodir /usr/share/sofastats
   cp -R sofa_main/* ${D}usr/share/sofastats
   exeinto /usr/share/sofastats
