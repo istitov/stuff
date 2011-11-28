@@ -1,8 +1,9 @@
 # Generic ebuild file for Eagle Mode 0.78.0
 # $Header: $
 
+EAPI=4
 DESCRIPTION="Zoomable user interface with plugin applications"
-SRC_URI="http://prdownloads.sourceforge.net/${PN}/${P}.tar.bz2"
+SRC_URI="http://sourceforge.net/projects/${PN}/files/${PN}-${PV}/${PN}-${PV}.tar.bz2/download -> ${PN}-${PV}.tar.bz2"
 HOMEPAGE="http://eaglemode.sourceforge.net/"
 KEYWORDS="~x86"
 SLOT="0"
