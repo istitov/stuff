@@ -41,6 +41,6 @@ src_compile() {
 
 }
 src_install() {
-  mkdir -p ${D}lib/nsbrowser/plugins/
-  cp -R rosamp-plugin/build/librosa-media-player-plugin-{qt,wmp,smp,dvx,rm}.so ${D}lib/nsbrowser/plugins/
+  mkdir -p ${D}usr/lib/nsbrowser/plugins/
+  cp -R rosamp-plugin/build/librosa-media-player-plugin-{qt,wmp,smp,dvx,rm}.so ${D}usr/lib/nsbrowser/plugins/
 }
