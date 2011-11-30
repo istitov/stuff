@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit eutils qt4
+inherit eutils qt4 multilib
 
 DESCRIPTION="ROSA Media Player"
 HOMEPAGE="http://www.rosalab.ru/"
@@ -46,7 +46,7 @@ src_install() {
   
   emake --makefile=Makefile-player PREFIX=/usr DESTDIR="${D}" install || die
   if use nsplugin;then
-	mkdir -p ${D}usr/lib/
-	cp -R build/librosampcore.so* ${D}usr/lib/
+	dodir usr/$(get_libdir)/
+	dolib build/librosampcore.so*
   fi
 }
