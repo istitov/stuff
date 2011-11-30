@@ -13,7 +13,7 @@ LICENSE=""
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-DEPEND="dev-lang/python:2[sqlite]
+DEPEND="dev-lang/python:2.7[sqlite]
 		>=dev-python/wxpython-2.8.11.0
 		>=dev-python/numpy-1.5.1
 		>=dev-python/pysqlite-2.6.3
