@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit eutils qt4
+inherit eutils qt4 multilib
 
 DESCRIPTION="ROSA Media Plugin"
 HOMEPAGE="http://www.rosalab.ru/"
@@ -19,11 +19,9 @@ RDEPEND=""
 DEPEND="${RDEPEND}
 	=media-video/rosa-media-player-${PV}[nsplugin]"
 
-S="${WORKDIR}"
+S="${WORKDIR}/rosamp-plugin"
 
-src_compile() {
-  cd rosamp-plugin
-  
+src_compile() {  
   eqmake4 rosamp-plugin-qt.pro
   emake || die
   
@@ -38,9 +36,8 @@ src_compile() {
   
   eqmake4 rosamp-plugin-rm.pro
   emake || die
-
 }
 src_install() {
-  mkdir -p ${D}usr/lib/nsbrowser/plugins/
-  cp -R rosamp-plugin/build/librosa-media-player-plugin-{qt,wmp,smp,dvx,rm}.so ${D}usr/lib/nsbrowser/plugins/
+  dodir usr/$(get_libdir)/nsbrowser/plugins/
+  cp -R build/librosa-media-player-plugin-{qt,wmp,smp,dvx,rm}.so ${D}usr/$(get_libdir)/nsbrowser/plugins/
 }
