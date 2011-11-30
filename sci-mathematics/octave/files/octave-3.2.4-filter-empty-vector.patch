@@ -1,0 +1,17 @@
+From:  "John W. Eaton" <jwe@octave.org>
+Subject: Don't crash on filtering an empty vector
+Origin: upstream, http://hg.savannah.gnu.org/hgweb/octave/rev/a277ba5da4dc
+Bug-Debian: http://bugs.debian.org/567975
+
+--- a/src/DLD-FUNCTIONS/filter.cc
++++ b/src/DLD-FUNCTIONS/filter.cc
+@@ -117,6 +117,9 @@
+ 	}
+     }
+ 
++  if (x_len == 0)
++    return x;
++
+   if (norm != static_cast<T>(1.0))
+     {
+       a = a / norm;

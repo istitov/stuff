@@ -1,0 +1,160 @@
+From: various upstream authors authors
+Description: Implement bicubic interpolation correctly
+ This patch fixes a bug triggered by octave-image's test suite.
+
+Origin: upstream, http://hg.savannah.gnu.org/hgweb/octave/file/62bb59f927b1/scripts/general/interp2.m
+Bug-Debian: http://bugs.debian.org/582276
+
+--- a/scripts/general/interp2.m
++++ b/scripts/general/interp2.m
+@@ -57,7 +57,7 @@
+ ## @item 'linear'
+ ## Linear interpolation from nearest neighbors.
+ ## @item 'pchip'
+-## Piece-wise cubic hermite interpolating polynomial (not implemented yet).
++## Piece-wise cubic hermite interpolating polynomial.
+ ## @item 'cubic'
+ ## Cubic interpolation from four nearest neighbors.
+ ## @item 'spline'
+@@ -218,18 +218,21 @@
+       c = Z(2:zr, 1:(zc - 1)) - a;
+       d = Z(2:zr, 2:zc) - a - b - c;
+ 
+-      idx = sub2ind (size (a), yidx, xidx);
+-
+       ## scale XI, YI values to a 1-spaced grid
+-      Xsc = (XI - X(xidx)) ./ (X(xidx + 1) - X(xidx));
+-      Ysc = (YI - Y(yidx)) ./ (Y(yidx + 1) - Y(yidx));
++      Xsc = (XI - X(xidx)) ./ (diff (X)(xidx));
++      Ysc = (YI - Y(yidx)) ./ (diff (Y)(yidx));
++
++      ## Get 2D index.
++      idx = sub2ind (size (a), yidx, xidx);
++      ## We can dispose of the 1D indices at this point to save memory.
++      clear xidx yidx
+ 
+       ## apply plane equation
+       ZI = a(idx) + b(idx).*Xsc + c(idx).*Ysc + d(idx).*Xsc.*Ysc;
+ 
+     elseif (strcmp (method, "nearest"))
+-      ii = (XI - X(xidx) > X(xidx + 1) - XI);
+-      jj = (YI - Y(yidx) > Y(yidx + 1) - YI);
++      ii = (XI - X(xidx) >= X(xidx + 1) - XI);
++      jj = (YI - Y(yidx) >= Y(yidx + 1) - YI);
+       idx = sub2ind (size (Z), yidx+jj, xidx+ii);
+       ZI = Z(idx);
+ 
+@@ -339,11 +342,64 @@
+ 
+     ## FIXME bicubic/__splinen__ don't handle arbitrary XI, YI
+     if (strcmp (method, "cubic"))
+-      ZI = bicubic (X, Y, Z, XI(1,:), YI(:,1), extrapval);
++      if (isgriddata (XI) && isgriddata (YI'))
++        ZI = bicubic (X, Y, Z, XI (1, :), YI (:, 1), extrapval);
++      elseif (isgriddata (X) && isgriddata (Y'))
++        ## Allocate output
++        ZI = zeros (size (X));
++  
++        ## Find inliers
++        inside = !(XI < X (1) | XI > X (end) | YI < Y (1) | YI > Y (end));
++  
++        ## Scale XI and YI to match indices of Z
++        XI = (columns (Z) - 1) * (XI - X (1)) / (X (end) - X (1)) + 1;
++        YI = (rows (Z) - 1) * (YI - Y (1)) / (Y (end) - Y (1)) + 1;
++  
++        ## Start the real work
++        K = floor (XI);
++        L = floor (YI);
++
++        ## Coefficients
++        AY1  = bc ((YI - L + 1));
++        AX1  = bc ((XI - K + 1));
++        AY0  = bc ((YI - L + 0));
++        AX0  = bc ((XI - K + 0));
++        AY_1 = bc ((YI - L - 1));
++        AX_1 = bc ((XI - K - 1));
++        AY_2 = bc ((YI - L - 2));
++        AX_2 = bc ((XI - K - 2));
++
++        ## Perform interpolation
++        sz = size(Z);
++        ZI = AY_2 .* AX_2 .* Z (sym_sub2ind (sz, L+2, K+2)) ...
++           + AY_2 .* AX_1 .* Z (sym_sub2ind (sz, L+2, K+1)) ...
++           + AY_2 .* AX0  .* Z (sym_sub2ind (sz, L+2, K))   ...
++           + AY_2 .* AX1  .* Z (sym_sub2ind (sz, L+2, K-1)) ...
++           + AY_1 .* AX_2 .* Z (sym_sub2ind (sz, L+1, K+2)) ...
++           + AY_1 .* AX_1 .* Z (sym_sub2ind (sz, L+1, K+1)) ...
++           + AY_1 .* AX0  .* Z (sym_sub2ind (sz, L+1, K))   ...
++           + AY_1 .* AX1  .* Z (sym_sub2ind (sz, L+1, K-1)) ...
++           + AY0  .* AX_2 .* Z (sym_sub2ind (sz, L,   K+2)) ...
++           + AY0  .* AX_1 .* Z (sym_sub2ind (sz, L,   K+1)) ...
++           + AY0  .* AX0  .* Z (sym_sub2ind (sz, L,   K))   ...
++           + AY0  .* AX1  .* Z (sym_sub2ind (sz, L,   K-1)) ...
++           + AY1  .* AX_2 .* Z (sym_sub2ind (sz, L-1, K+2)) ...
++           + AY1  .* AX_1 .* Z (sym_sub2ind (sz, L-1, K+1)) ...
++           + AY1  .* AX0  .* Z (sym_sub2ind (sz, L-1, K))   ...
++           + AY1  .* AX1  .* Z (sym_sub2ind (sz, L-1, K-1));
++        ZI (!inside) = extrapval;
++      
++      else
++        error ("interp2: input data must have `meshgrid' format");
++      endif
+ 
+     elseif (strcmp (method, "spline"))
+-      ZI = __splinen__ ({Y(:,1).', X(1,:)}, Z, {YI(:,1), XI(1,:)}, extrapval, 
++      if (isgriddata (XI) && isgriddata (YI'))
++        ZI = __splinen__ ({Y(:,1).', X(1,:)}, Z, {YI(:,1), XI(1,:)}, extrapval, 
+ 			"spline");
++      else
++        error ("interp2: input data must have `meshgrid' format");
++      endif
+     else
+       error ("interpolation method not recognized");
+     endif
+@@ -351,6 +407,38 @@
+   endif
+ endfunction
+ 
++function b = isgriddata (X)
++  d1 = diff (X, 1, 1);
++  d2 = diff (X, 1, 2);
++  b = all (d1 (:) == 0) & all (d2 (:) == d2 (1));
++endfunction
++
++## Compute the bicubic interpolation coefficients
++function o = bc(x)
++  x = abs(x);
++  o = zeros(size(x));
++  idx1 = (x < 1);
++  idx2 = !idx1 & (x < 2);
++  o(idx1) = 1 - 2.*x(idx1).^2 + x(idx1).^3;
++  o(idx2) = 4 - 8.*x(idx2) + 5.*x(idx2).^2 - x(idx2).^3;
++endfunction
++
++## This version of sub2ind behaves as if the data was symmetrically padded
++function ind = sym_sub2ind(sz, Y, X)
++  Y (Y < 1) = 1 - Y (Y < 1);
++  while (any (Y (:) > 2 * sz (1)))
++    Y (Y > 2 * sz (1)) = round (Y (Y > 2 * sz (1)) / 2);
++  endwhile
++  Y (Y > sz (1)) = 1 + 2 * sz (1) - Y (Y > sz (1));
++  X (X < 1) = 1 - X (X < 1);
++  while (any (X (:) > 2 * sz (2)))
++    X (X > 2 * sz (2)) = round (X (X > 2 * sz (2)) / 2);
++  endwhile
++  X (X > sz (2)) = 1 + 2 * sz (2) - X (X > sz (2));
++  ind = sub2ind(sz, Y, X);
++endfunction
++
++
+ %!demo
+ %! A=[13,-1,12;5,4,3;1,6,2];
+ %! x=[0,1,4]; y=[10,11,12];
+@@ -493,3 +581,7 @@
+ %!  assert(interp2(x,y,A,x,y,'linear'), A);
+ %!  assert(interp2(x,y,A,x,y,'nearest'), A);
+ 
++%!test % for Matlab-compatible rounding for 'nearest'
++%! X = meshgrid (1:4);
++%! assert (interp2 (X, 2.5, 2.5, 'nearest'), 3);
++

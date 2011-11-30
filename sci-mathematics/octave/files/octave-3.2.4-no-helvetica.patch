@@ -1,0 +1,25 @@
+Don't set Helvetica as default font, it's not available as TrueType
+font. Fixes Bug#477688.
+
+ -- Rafael Laboissiere <rafael@debian.org>  Sat, 19 Jul 2008 10:27:26 +0200
+
+--- a/scripts/plot/__go_draw_axes__.m
++++ b/scripts/plot/__go_draw_axes__.m
+@@ -1751,7 +1751,7 @@
+ 
+ function [f, s, fnt, it, bld] = get_fontname_and_size (t)
+   if (isempty (t.fontname))
+-    fnt = "Helvetica";
++    fnt = "*";
+   else
+     fnt = t.fontname;
+   endif
+@@ -1789,7 +1789,7 @@
+   if (strcmp (fld, "string"))
+     [f, s, fnt, it, bld] = get_fontname_and_size (obj);
+   else
+-    f = "Helvetica";
++    f = "*";
+     s = 10;
+     fnt = f;
+     it = false;

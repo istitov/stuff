@@ -1,0 +1,12 @@
+diff --git a/src/DLD-FUNCTIONS/urlwrite.cc b/src/DLD-FUNCTIONS/urlwrite.cc
+index 4f9aeac..d8a63da 100644
+--- a/src/DLD-FUNCTIONS/urlwrite.cc
++++ b/src/DLD-FUNCTIONS/urlwrite.cc
+@@ -46,7 +46,6 @@ along with Octave; see the file COPYING.  If not, see
+ #if defined (HAVE_CURL)
+ 
+ #include <curl/curl.h>
+-#include <curl/types.h>
+ #include <curl/easy.h>
+ 
+ // Write callback function for curl.

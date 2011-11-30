@@ -1,0 +1,27 @@
+From: Rik <octave@nomad.inbox5.com>
+Subject: Scale image point color according to colormap.
+
+Origin: upstream, http://hg.savannah.gnu.org/hgweb/octave/rev/bc4eb29e0cb4
+Bug: http://savannah.gnu.org/bugs/?29926
+Bug-Debian: http://bugs.debian.org/581998
+
+--- a/scripts/image/imshow.m
++++ b/scripts/image/imshow.m
+@@ -64,7 +64,6 @@
+ 
+   ## Get the image.
+   if (ischar (im))
+-    ## Eventually, this should be imread.
+     [im, map] = imread (im);
+     indexed = true;
+     colormap (map);
+@@ -163,7 +162,8 @@
+   if (true_color || indexed)
+     tmp = image ([], [], im);
+   else
+-    tmp = image (round ((rows (colormap ()) - 1) * im));
++    tmp = image (im);
++    set (tmp, "cdatamapping", "scaled");
+   endif
+   set (gca (), "visible", "off");
+   axis ("image");
