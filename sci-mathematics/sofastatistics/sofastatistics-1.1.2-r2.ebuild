@@ -34,4 +34,5 @@ src_install(){
   doexe sofa_main/*.py*
   doexe sofa_main/*/*.py*
   dosym  /usr/share/sofastats/start.py /usr/bin/sofastats
+  make_desktop_entry sofastats ${PN} /usr/share/sofastats/images/sofa_32x32.ico "Education;Math;"
 }
