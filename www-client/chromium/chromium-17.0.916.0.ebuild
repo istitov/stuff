@@ -47,7 +47,7 @@ RDEPEND="app-arch/bzip2
 		dev-libs/libgcrypt
 		>=net-print/cups-1.3.11
 	)
-	sys-libs/zlib
+	>=sys-libs/zlib-1.2.5.1-r2[minizip]
 	x11-libs/gtk+:2
 	x11-libs/libXinerama
 	x11-libs/libXScrnSaver
@@ -132,7 +132,7 @@ pkg_setup() {
 src_prepare() {
 	# zlib-1.2.5.1-r1 renames the OF macro in zconf.h, bug 383371.
 	sed -i '1i#define OF(x) x' \
-		third_party/zlib/contrib/minizip/{ioapi,{,un}zip}.c \
+		third_party/zlib/contrib/minizip/{ioapi,{,un}zip}.{c,h} \
 		chrome/common/zip.cc || die
 
 	epatch_user
