@@ -4,8 +4,6 @@
 
 EAPI=4
 
-inherit
-
 DESCRIPTION="A small plugin for LibreOffice to export the menus from the application into Unity's menubar."
 HOMEPAGE="https://launchpad.net/lo-menubar"
 SRC_URI=" x86? ( https://launchpad.net/ubuntu/+source/${PN}/${PV}-0ubuntu3/+build/2774800/+files/${PN}_${PV}-0ubuntu3_i386.deb )
@@ -22,11 +20,11 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
 src_prepare(){
-   unpack ${A}
-   unpack ./data.tar.gz
-   mkdir -p ${WORKDIR}/tmp/usr/lib/libreoffice/share/extensions/
+	unpack ${A}
+	unpack ./data.tar.gz
+	mkdir -p ${WORKDIR}/tmp/usr/lib/libreoffice/share/extensions/
 }
 src_install(){
-  cp -R usr/lib/libreoffice/share/extensions/menubar ${WORKDIR}/tmp/usr/lib/libreoffice/share/extensions/
-  cp -R ${WORKDIR}/tmp/* "${D}"
+	dodir -R usr/lib/libreoffice/share/extensions/menubar ${WORKDIR}/tmp/usr/$(get_libdir)/libreoffice/share/extensions/
+	doins -R ${WORKDIR}/tmp/* "${D}"
 }
