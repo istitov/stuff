@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-9999.ebuild,v 1.17 2008/05/18 02:08:03 hanno Exp $
 
-inherit eutils
-inherit subversion
+inherit eutils subversion
 
 ESVN_REPO_URI="https://sk1.svn.sourceforge.net/svnroot/sk1/trunk/sk1sdk"
 ESVN_PROJECT="${PN}"
