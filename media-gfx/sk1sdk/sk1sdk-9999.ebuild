@@ -22,19 +22,11 @@ DEPEND=""
 
 RDEPEND="${DEPEND}"
 
-#pkg_setup() {
-#}
-
-
-#src_unpack() {
-#cd sK1
-#}
-
 src_compile() {
-         python setup.py build || die "'python setup.py build' failed"
+	python setup.py build || die "'python setup.py build' failed"
 }
 
 src_install() {
-        python setup.py install --root="${D}" || die "'python setup.py install --root=\"${D}\"' failed"
+	python setup.py install --root="${D}" || die "'python setup.py install --root=\"${D}\"' failed"
 }
 

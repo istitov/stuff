@@ -36,26 +36,21 @@ DEPEND=">=sys-libs/glibc-2.6.1
 RDEPEND="${DEPEND}"
 
 pkg_setup() {
-        if  ! built_with_use dev-lang/python tk; then
-                eerror "This package requires dev-lang/python compiled with tk support."
-                die "Please reemerge dev-lang/python with USE=\"tk\"."
-        fi
-        if  ! built_with_use media-libs/lcms python; then
-                eerror "This package requires media-libs/lcms compiled with python support."
-                die "Please reemerge media-libs/lcms with USE=\"python\"."
-        fi
+	if  ! built_with_use dev-lang/python tk; then
+		eerror "This package requires dev-lang/python compiled with tk support."
+		die "Please reemerge dev-lang/python with USE=\"tk\"."
+	fi
+	if  ! built_with_use media-libs/lcms python; then
+		eerror "This package requires media-libs/lcms compiled with python support."
+		die "Please reemerge media-libs/lcms with USE=\"python\"."
+	fi
 }
 
-
-#src_unpack() {
-#cd sK1
-#}
-
 src_compile() {
-         python setup.py build || die "'python setup.py build' failed"
+	python setup.py build || die "'python setup.py build' failed"
 }
 
 src_install() {
-        python setup.py install --root="${D}" || die "'python setup.py install --root=\"${D}\"' failed"
+	python setup.py install --root="${D}" || die "'python setup.py install --root=\"${D}\"' failed"
 }
 
