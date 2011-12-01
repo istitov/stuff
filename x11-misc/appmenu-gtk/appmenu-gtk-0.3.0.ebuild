@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools eutils
+inherit autotools eutils multilib
 
 DESCRIPTION="Application menu module for GTK"
 HOMEPAGE="https://launchpad.net/appmenu-gtk"
@@ -48,12 +48,12 @@ src_compile(){
 }
 src_install(){
   if use gtk2;then
-	insinto /usr/lib/gtk-2.0/2.10.0/menuproxies/
+	insinto /usr/$(get_libdir)/gtk-2.0/2.10.0/menuproxies/
 	doins src/.libs/libappmenu.so
   fi
   
   if use gtk3;then
-    insinto /usr/lib/gtk-3.0/3.0.0/menuproxies
+    insinto /usr/$(get_libdir)/gtk-3.0/3.0.0/menuproxies
 	doins gtk3-hack/src/.libs/libappmenu.so
   fi
   mv 80appmenu appmenu.sh
