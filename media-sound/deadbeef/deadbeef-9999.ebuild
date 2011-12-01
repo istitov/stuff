@@ -7,7 +7,7 @@ EAPI="4"
 if [[ ${PV} = *9999* ]] ; then
 	EGIT_REPO_URI="git://deadbeef.git.sourceforge.net/gitroot/deadbeef/deadbeef"
 	EGIT_BRANCH="master"
-	GIT_ECLASS="git"
+	GIT_ECLASS="git-2"
 fi
 
 inherit fdo-mime ${GIT_ECLASS}
