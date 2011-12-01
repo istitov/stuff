@@ -4,7 +4,7 @@
 
 EAPI=3
 
-inherit autotools eutils versionator virtualx
+inherit autotools eutils versionator virtualx multilib
 
 MY_MAJOR_VERSION="$(get_version_component_range 1-2)"
 if version_is_at_least "${MY_MAJOR_VERSION}.50" ; then
