@@ -13,15 +13,13 @@ HOMEPAGE="http://www.rockbox.org/wiki/RockboxUtility"
 LICENSE="GPL-2"
 
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
+KEYWORDS=""
 IUSE="ypp2"
 
 RDEPEND="x11-libs/qt-gui:4"
 DEPEND="${RDEPEND}"
 
-src_unpack() {
-	subversion_src_unpack
-}
+S="${WORKDIR}/rbutil/rbutilqt"
 
 src_compile() {
 	use ypp2 && epatch "${FILESDIR}"/ypp2.patch
@@ -31,9 +29,9 @@ src_compile() {
 }
 
 src_install() {
-	dobin "${S}/rbutil/rbutilqt/RockboxUtility"
+	dobin "RockboxUtility"
 	insinto "/etc"
-	doins "${S}/rbutil/rbutilqt/rbutil.ini"
-	newicon "${S}/rbutil/rbutilqt/icons/rockbox.ico" "${PN}.ico"
+	doins "${S}/rbutil.ini"
+	newicon "${S}/rockbox.ico" "${PN}.ico"
 	make_desktop_entry RockboxUtility "Rockbox Utility" "/usr/share/pixmaps/${PN}.ico"
 }
