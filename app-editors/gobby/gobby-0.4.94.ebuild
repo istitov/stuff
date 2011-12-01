@@ -13,6 +13,7 @@ LICENSE="GPL-2"
 SLOT="0.5"
 KEYWORDS="~amd64 ~x86"
 IUSE="avahi doc nls gtk3"
+MY_PV=0.5
 
 RDEPEND="dev-cpp/glibmm:2
 	|| ( gtk3? ( dev-cpp/gtkmm:3 ) dev-cpp/gtkmm:2 )
@@ -37,8 +38,8 @@ src_configure() {
 
 src_install() {
 	emake DESTDIR="${D}" install || die
-	domenu contrib/gobby-0.5.desktop
-	doicon gobby-0.5.xpm
+	domenu contrib/gobby-${MY_PV}.desktop
+	doicon gobby-${MY_PV}.xpm
 }
 
 pkg_preinst() {
