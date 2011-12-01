@@ -19,7 +19,7 @@ DEPEND="dev-lang/python:2.7[sqlite]
 		>=dev-python/pysqlite-2.6.3
 		>=dev-python/mysql-python-1.2.3
 		>=dev-db/pygresql-3.8.1
-		dev-python/matplotlib
+		<dev-python/matplotlib-1.1.0
 		dev-python/pywebkitgtk"
 
 RDEPEND="${DEPEND}"
@@ -29,7 +29,8 @@ S="${WORKDIR}/sofastats-${PV}"
 src_install(){
   python_convert_shebangs 2 sofa_main/start.py
   dodir /usr/share/sofastats
-  cp -R sofa_main/* ${D}usr/share/sofastats
+  insinto /usr/share/sofastats
+  doins -r sofa_main/*
   exeinto /usr/share/sofastats
   doexe sofa_main/*.py*
   doexe sofa_main/*/*.py*
