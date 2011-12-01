@@ -28,7 +28,7 @@ RDEPEND=">=sys-devel/gcc-3.4.0
 	>=sys-devel/gettext-0.14.3
 	>=sys-devel/automake-1.6
 	>=sys-devel/autoconf-2.59
-	>=media-libs/libpng-1.4.3
+	media-libs/libpng:1.4
 	>=media-libs/jpeg-6b
 	app-arch/zip
 	dev-lang/perl

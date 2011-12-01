@@ -1,0 +1,4 @@
+# istitov (30 Dec 2011)
+#Masked as it doesn't compile with libpng:1.5 without a patch
+#Maybe you have one...
+=media-gfx/xaralx-0.7_p1785
