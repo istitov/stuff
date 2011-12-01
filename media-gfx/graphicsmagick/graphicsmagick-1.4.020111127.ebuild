@@ -51,12 +51,6 @@ pkg_setup() {
 	fi
 }
 
-#src_prepare() {
-#	epatch "${FILESDIR}"/${PN}-1.3.7-perl-ldflags.patch
-#	epatch "${FILESDIR}"/${PN}-1.3.7-debian-fixed.patch
-#	epatch "${WORKDIR}"/${P}-libpng15.patch
-#}
-
 src_configure() {
 	local quantumDepth
 	if use q16 ; then
