@@ -10,7 +10,7 @@ DESCRIPTION="Application designed to test QT performance"
 HOMEPAGE="http://code.google.com/p/qtperf/"
 SRC_URI="http://qtperf.googlecode.com/files/${P}.tar.gz"
 
-LICENSE=""
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug"
