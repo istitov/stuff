@@ -6,7 +6,7 @@ EAPI=4
 
 inherit eutils python
 
-DESCRIPTION="http://sourceforge.net/projects/sofastatistics/"
+DESCRIPTION="SOFA is a statistics, analysis, and reporting program"
 HOMEPAGE="http://sourceforge.net/projects/sofastatistics/"
 SRC_URI="http://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download# -> ${P}.tar.gz"
 LICENSE=""
