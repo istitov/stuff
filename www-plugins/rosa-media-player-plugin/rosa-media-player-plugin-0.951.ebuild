@@ -13,7 +13,7 @@ SRC_URI="http://svn.mandriva.com/svn/packages/cooker/${PN}/current/SOURCES/${PN}
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="+mpeg +rm +quicktime +wmp +divx"
 
 RDEPEND=""
 DEPEND="${RDEPEND}
@@ -21,23 +21,34 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/rosamp-plugin"
 
-src_compile() {  
-  eqmake4 rosamp-plugin-qt.pro
-  emake || die
+src_compile() {
+  if use "rm"; then
+	eqmake4 rosamp-plugin-rm.pro
+	emake || die
+  fi
   
-  eqmake4 rosamp-plugin-wmp.pro
-  emake || die
+  if use "quicktime"; then
+	eqmake4 rosamp-plugin-qt.pro
+	emake || die
+  fi
   
-  eqmake4 rosamp-plugin-smp.pro
-  emake || die
+  if use "wmp"; then
+	eqmake4 rosamp-plugin-wmp.pro
+	emake || die
+  fi
   
-  eqmake4 rosamp-plugin-dvx.pro
-  emake || die
+  if use "mpeg"; then
+	eqmake4 rosamp-plugin-smp.pro
+	emake || die
+  fi
   
-  eqmake4 rosamp-plugin-rm.pro
-  emake || die
+  if use "divx"; then
+	eqmake4 rosamp-plugin-dvx.pro
+	emake || die
+  fi
 }
 src_install() {
-  dodir usr/$(get_libdir)/nsbrowser/plugins/
-  cp -R build/librosa-media-player-plugin-{qt,wmp,smp,dvx,rm}.so ${D}usr/$(get_libdir)/nsbrowser/plugins/
+  dodir /usr/$(get_libdir)/nsbrowser/plugins/
+  insinto /usr/$(get_libdir)/nsbrowser/plugins/
+  doins build/librosa-media-player-plugin-*.so
 }
