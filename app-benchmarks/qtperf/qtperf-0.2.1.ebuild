@@ -8,29 +8,25 @@ inherit eutils qt4-r2
 
 DESCRIPTION="Application designed to test QT performance"
 HOMEPAGE="http://code.google.com/p/qtperf/"
-SRC_URI="http://www.corecrowd.com/qtperf.tar.bz2"
+SRC_URI="http://qtperf.googlecode.com/files/${P}.tar.gz"
 
 LICENSE=""
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug"
 
-DEPEND="
+RDEPEND="
 		x11-libs/qt-gui
 		x11-libs/qt-core
 		dev-libs/glib
 	"
-RDEPEND="
-	${DEPEND}
+DEPEND="
+	${RDEPEND}
 	"
 S="${WORKDIR}/${PN}"
-
-#src_compile() {
-#	eqmake "$(use_enable nls)"
-#	emake || die "emake failed"
-#}
-
+MY_PN="${PN}4"
 src_install() {
-	insinto /usr/bin/
-		dobin qtperf || die
+	into /usr/
+	newbin "${MY_PN}" "${PN}" || die "Can't install ${PN}"
+
 }
