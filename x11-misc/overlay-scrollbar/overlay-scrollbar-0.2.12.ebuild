@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools
+inherit autotools multilib
 
 DESCRIPTION="Ubuntu's scrollbars"
 HOMEPAGE="https://launchpad.net/ayatana-scrollbar"
@@ -29,13 +29,13 @@ src_configure(){
 }
 src_install(){
   if use gtk2;then
-	insinto /usr/lib/
+	insinto /usr/$(get_libdir)/
 	doins os/.libs/liboverlay-scrollbar-0.2.so.0.0.12
-	dosym /usr/lib/liboverlay-scrollbar-0.2.so.0.0.12 /usr/lib/liboverlay-scrollbar-0.2.so.0 
+	dosym /usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0.0.12 /usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0 
   else
-	insinto /usr/lib/
+	insinto /usr/$(get_libdir)/
 	doins os/.libs/liboverlay-scrollbar3-0.2.so.0.0.12
-	dosym /usr/lib/liboverlay-scrollbar3-0.2.so.0.0.12 /usr/lib/liboverlay-scrollbar3-0.2.so.0 
+	dosym /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0.0.12 /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0 
   fi
   
   mv data/81overlay-scrollbar data/overlay-scrollbar.sh
