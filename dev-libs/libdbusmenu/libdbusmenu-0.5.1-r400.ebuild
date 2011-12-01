@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	>=dev-libs/atk-2.1.0
 	>=x11-libs/pango-1.29"
-	
+
 S="${WORKDIR}/libdbusmenu-${PV}"
 
 pkg_setup() {
@@ -52,18 +52,18 @@ src_prepare() {
 }
 
 src_configure() {
-  if use gtk;then
-  econf \
-	--with-gtk=2 \
-	$(use_enable introspection) \
-	$(use_enable test tests) \
-	$(use_enable vala)
-  fi
-  
-  if use gtk3;then
-	mkdir gtk3-hack
-	cp -R * gtk3-hack &>/dev/null
-	cd gtk3-hack
+	if use gtk;then
+		econf \
+		--with-gtk=2 \
+		$(use_enable introspection) \
+		$(use_enable test tests) \
+		$(use_enable vala)
+	fi
+
+	if use gtk3;then
+		mkdir gtk3-hack
+		cp -R * gtk3-hack &>/dev/null
+		cd gtk3-hack
 
 	econf \
 		--with-gtk=3 \
@@ -75,30 +75,29 @@ src_configure() {
 		--infodir=/usr/local/share \
 		--datadir=/usr/local/share \
 		--includedir=/usr/local/include
-  fi
-  
+	fi
 }
 
 src_test() {
 	Xemake check || die "testsuite failed"
 }
 src_compile(){
-  emake
-  if use gtk3;then
-  cd gtk3-hack
-  emake
-  fi
+	emake
+	if use gtk3;then
+	cd gtk3-hack
+	emake
+	fi
 }
 src_install() {
 	if use gtk;then
 	emake DESTDIR="${ED}" install || die "make install failed"
 	fi
-	
+
 	if use gtk3;then
 	  cd gtk3-hack
 	  emake DESTDIR="${ED}" install || die "make install failed"
-	  mkdir -p ${D}/usr/lib/pkgconfig
-	  mv libdbusmenu-gtk/dbusmenu-gtk3-0.4.pc ${D}/usr/lib/pkgconfig/dbusmenu-gtk3-0.4.pc
+	  dodir ${D}/usr/$(get_libdir)/pkgconfig
+	  doins libdbusmenu-gtk/dbusmenu-gtk3-0.4.pc ${D}/usr/$(get_libdir)/pkgconfig/dbusmenu-gtk3-0.4.pc
 	fi
 	dodoc AUTHORS || die "dodoc failed"
 }
