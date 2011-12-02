@@ -2,3 +2,4 @@
 #Masked as it doesn't compile with libpng:1.5 without a patch
 #Maybe you have one...
 =media-gfx/xaralx-0.7_p1785
+>=app-benchmarks/qtperf-0.2
