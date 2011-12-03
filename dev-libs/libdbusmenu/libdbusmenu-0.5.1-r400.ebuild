@@ -97,8 +97,9 @@ src_install() {
 	if use gtk3;then
 	  cd gtk3-hack
 	  emake DESTDIR="${ED}" install || die "make install failed"
-	  dodir ${D}/usr/$(get_libdir)/pkgconfig
-	  doins libdbusmenu-gtk/dbusmenu-gtk3-0.4.pc ${D}/usr/$(get_libdir)/pkgconfig/dbusmenu-gtk3-0.4.pc
+	  dodir /usr/$(get_libdir)/pkgconfig
+	  insinto /usr/$(get_libdir)/pkgconfig/
+	  doins libdbusmenu-gtk/dbusmenu-gtk3-0.4.pc
 	fi
 	dodoc AUTHORS || die "dodoc failed"
 }
