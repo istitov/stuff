@@ -54,3 +54,11 @@ src_install() {
 	dolib build/librosampcore.so*
   fi
 }
+pkg_postinst() {
+  elog '====================================================================='
+  elog 'Use translations:'
+  elog 'change "language=" in "~/.config/rosamp/rosamp.ini"'
+  elog 'i.e.' 
+  elog 'sed -e "s|language=.*|language=$LANG|" -i ~/.config/rosamp/rosamp.ini'
+  elog '====================================================================='
+}
