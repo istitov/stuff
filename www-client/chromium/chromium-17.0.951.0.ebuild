@@ -54,7 +54,7 @@ RDEPEND="app-arch/bzip2
 	x11-libs/libXtst
 	kerberos? ( virtual/krb5 )"
 DEPEND="${RDEPEND}
-	dev-lang/nacl-toolchain-newlib
+	>=dev-lang/nacl-toolchain-newlib-0_p7295
 	dev-lang/perl
 	>=dev-util/gperf-3.0.3
 	>=dev-util/pkgconfig-0.23
@@ -66,6 +66,9 @@ DEPEND="${RDEPEND}
 RDEPEND+="
 	x11-misc/xdg-utils
 	virtual/ttf-fonts"
+
+QA_TEXTRELS="usr/$(get_libdir)/chromium-browser/libffmpegsumo.so
+			 usr/$(get_libdir)/chromium-browser/chrome"
 
 gyp_use() {
 	if [[ $# -lt 2 ]]; then
@@ -231,6 +234,7 @@ src_configure() {
 		-Duse_system_speex=1
 		-Duse_system_v8=1
 		-Duse_system_xdg_utils=1
+		-Duse_system_yasm=1
 		-Duse_system_zlib=1"
 
 	# Optional dependencies.
@@ -283,8 +287,9 @@ src_configure() {
 	# the build to fail because of that.
 	myconf+=" -Dwerror="
 
-	# Avoid a build error with -Os, bug #352457.
+	# Avoid CFLAGS problems, bug #352457, bug #390147.
 	replace-flags "-Os" "-O2"
+	strip-flags
 
 	egyp ${myconf} || die
 }
@@ -293,8 +298,8 @@ src_compile() {
 	emake chrome chrome_sandbox chromedriver BUILDTYPE=Release V=1 || die
 	pax-mark m out/Release/chrome
 	if use test; then
-		emake {base,crypto,googleurl,net}_unittests BUILDTYPE=Release V=1 || die
-		pax-mark m out/Release/{base,crypto,googleurl,net}_unittests
+		emake {base,cacheinvalidation,crypto,googleurl,gpu,media,net,printing}_unittests BUILDTYPE=Release V=1 || die
+		pax-mark m out/Release/{base,cacheinvalidation,crypto,googleurl,gpu,media,net,printing}_unittests
 	fi
 }
 
@@ -318,14 +323,19 @@ src_test() {
 	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/base_unittests virtualmake \
 		'--gtest_filter=-ICUStringConversionsTest.*'
 
+	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/cacheinvalidation_unittests virtualmake
 	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/crypto_unittests virtualmake
 	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/googleurl_unittests virtualmake
+	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/gpu_unittests virtualmake
+	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/media_unittests virtualmake
 
 	# NetUtilTest: bug #361885.
 	# NetUtilTest.GenerateFileName: some locale-related mismatch.
 	# UDP: unstable, active development. We should revisit this later.
 	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/net_unittests virtualmake \
 		'--gtest_filter=-NetUtilTest.IDNToUnicode*:NetUtilTest.FormatUrl*:NetUtilTest.GenerateFileName:*UDP*'
+
+	LC_ALL="${mylocale}" VIRTUALX_COMMAND=out/Release/printing_unittests virtualmake
 }
 
 src_install() {
@@ -334,30 +344,38 @@ src_install() {
 	doexe out/Release/chrome_sandbox || die
 	fperms 4755 "${CHROMIUM_HOME}/chrome_sandbox"
 
-	if use chromedriver; then
-		doexe out/Release/chromedriver || die
-	fi
+	doexe out/Release/chromedriver || die
 
 	# Install Native Client files on platforms that support it.
-	# insinto "${CHROMIUM_HOME}"
-	# case "$(tc-arch)" in
-	# 	amd64)
-	# 		doins out/Release/nacl_irt_x86_64.nexe || die
-	# 		doins out/Release/libppGoogleNaClPluginChrome.so || die
-	# 	;;
-	# 	x86)
-	# 		doins out/Release/nacl_irt_x86_32.nexe || die
-	# 		doins out/Release/libppGoogleNaClPluginChrome.so || die
-	# 	;;
-	# esac
+	insinto "${CHROMIUM_HOME}"
+	case "$(tc-arch)" in
+		amd64)
+			doexe out/Release/nacl_helper{,_bootstrap} || die
+			doins out/Release/nacl_irt_x86_64.nexe || die
+			doins out/Release/libppGoogleNaClPluginChrome.so || die
+		;;
+		x86)
+			doexe out/Release/nacl_helper{,_bootstrap} || die
+			doins out/Release/nacl_irt_x86_32.nexe || die
+			doins out/Release/libppGoogleNaClPluginChrome.so || die
+		;;
+	esac
 
 	newexe "${FILESDIR}"/chromium-launcher-r2.sh chromium-launcher.sh || die
+	if [[ "${CHROMIUM_SUFFIX}" != "" ]]; then
+		sed "s:chromium-browser:chromium-browser${CHROMIUM_SUFFIX}:g" \
+			-i "${ED}"/"${CHROMIUM_HOME}"/chromium-launcher.sh || die
+		sed "s:chromium.desktop:chromium${CHROMIUM_SUFFIX}.desktop:g" \
+			-i "${ED}"/"${CHROMIUM_HOME}"/chromium-launcher.sh || die
+		sed "s:plugins:plugins --user-data-dir=\${HOME}/.config/chromium${CHROMIUM_SUFFIX}:" \
+			-i "${ED}"/"${CHROMIUM_HOME}"/chromium-launcher.sh || die
+	fi
 
 	# It is important that we name the target "chromium-browser",
 	# xdg-utils expect it; bug #355517.
-	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" /usr/bin/chromium-browser || die
+	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" /usr/bin/chromium-browser${CHROMIUM_SUFFIX} || die
 	# keep the old symlink around for consistency
-	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" /usr/bin/chromium || die
+	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" /usr/bin/chromium${CHROMIUM_SUFFIX} || die
 
 	# Allow users to override command-line options, bug #357629.
 	dodir /etc/chromium || die
@@ -409,8 +427,8 @@ src_install() {
 	doins -r out/Release/locales || die
 	doins -r out/Release/resources || die
 
-	newman out/Release/chrome.1 chromium.1 || die
-	newman out/Release/chrome.1 chromium-browser.1 || die
+	newman out/Release/chrome.1 chromium${CHROMIUM_SUFFIX}.1 || die
+	newman out/Release/chrome.1 chromium-browser${CHROMIUM_SUFFIX}.1 || die
 
 	# Chromium looks for these in its folder
 	# See media_posix.cc and base_paths_linux.cc
@@ -423,11 +441,14 @@ src_install() {
 	for SIZE in 16 22 24 32 48 64 128 256 ; do
 		insinto /usr/share/icons/hicolor/${SIZE}x${SIZE}/apps
 		newins chrome/app/theme/chromium/product_logo_${SIZE}.png \
-			chromium-browser.png || die
+			chromium-browser${CHROMIUM_SUFFIX}.png || die
 	done
 	local mime_types="text/html;text/xml;application/xhtml+xml;"
 	mime_types+="x-scheme-handler/http;x-scheme-handler/https;" # bug #360797
-	make_desktop_entry chromium-browser "Chromium" chromium-browser \
+	make_desktop_entry \
+		chromium-browser${CHROMIUM_SUFFIX} \
+		"Chromium${CHROMIUM_SUFFIX}" \
+		chromium-browser${CHROMIUM_SUFFIX} \
 		"Network;WebBrowser" \
 		"MimeType=${mime_types}\nStartupWMClass=chromium-browser"
 	sed -e "/^Exec/s/$/ %U/" -i "${ED}"/usr/share/applications/*.desktop || die
@@ -436,7 +457,11 @@ src_install() {
 	if use gnome; then
 		dodir /usr/share/gnome-control-center/default-apps || die
 		insinto /usr/share/gnome-control-center/default-apps
-		doins "${FILESDIR}"/chromium-browser.xml || die
+		newins "${FILESDIR}"/chromium-browser.xml chromium-browser${CHROMIUM_SUFFIX}.xml || die
+		if [[ "${CHROMIUM_SUFFIX}" != "" ]]; then
+			sed "s:chromium-browser:chromium-browser${CHROMIUM_SUFFIX}:g" -i \
+				"${ED}"/usr/share/gnome-control-center/default-apps/chromium-browser${CHROMIUM_SUFFIX}.xml
+		fi
 	fi
 }
 
