@@ -27,10 +27,10 @@ DEPEND="${RDEPEND}
 
 src_compile() {
   sed -i '1i#define OF(x) x' \
-		src/findsubtitles/quazip/ioapi.{c,h} \
-		src/findsubtitles/quazip/{zip,unzip}.h || die
-		
-  emake || die
+	src/findsubtitles/quazip/ioapi.{c,h} \
+	src/findsubtitles/quazip/{zip,unzip}.h || die
+
+  emake PREFIX=/usr || die
   mv Makefile Makefile-player  
   
   if use nsplugin;then
