@@ -26,6 +26,10 @@ DEPEND="${RDEPEND}
 	x11-libs/qt-gui:4"
 
 src_compile() {
+  sed -i '1i#define OF(x) x' \
+		src/findsubtitles/quazip/ioapi.{c,h} \
+		src/findsubtitles/quazip/{zip,unzip}.h || die
+		
   emake || die
   mv Makefile Makefile-player  
   
