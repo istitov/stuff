@@ -13,7 +13,7 @@ SRC_URI="http://svn.mandriva.com/svn/packages/cooker/${PN}/current/SOURCES/${PN}
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="nsplugin"
+IUSE=""
 LANGS="ar bg ca cs de el en_GB es_LA es et eu fi fr gl hu it ja ka ko ku lt mk nl pl pt_PT pt pt_BR ro ru sk sl sr sv tr uk vi zh_CN zh_TW"
 for lang in ${LANGS}; do
 	IUSE+=" linguas_${lang}"
@@ -31,12 +31,6 @@ src_compile() {
 	src/findsubtitles/quazip/{zip,unzip}.h || die
 
   emake PREFIX=/usr || die
-  mv Makefile Makefile-player  
-  
-  if use nsplugin;then
-	eqmake4 rosampcore.pro
-	emake || die
-  fi
 }
 src_install() {
   for lang in ${LANGS};do
@@ -48,11 +42,7 @@ src_install() {
 	done
   done
   
-  emake --makefile=Makefile-player PREFIX=/usr DESTDIR="${D}" install || die
-  if use nsplugin;then
-	dodir usr/$(get_libdir)/
-	dolib build/librosampcore.so*
-  fi
+  emake PREFIX=/usr DESTDIR="${D}" install || die
 }
 pkg_postinst() {
   elog '====================================================================='
