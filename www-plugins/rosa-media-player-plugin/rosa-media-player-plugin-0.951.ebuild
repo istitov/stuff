@@ -14,6 +14,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+mpeg +rm +quicktime +wmp +divx"
+LANGS="ar bg ca cs de el en_GB es_LA es et eu fi fr gl hu it ja ka ko ku lt mk nl pl pt_PT pt pt_BR ro ru sk sl sr sv tr uk vi zh_CN zh_TW"
+for lang in ${LANGS}; do
+  IUSE+=" linguas_${lang}"
+done
 
 RDEPEND=""
 DEPEND="${RDEPEND}
@@ -51,4 +55,20 @@ src_install() {
   dodir /usr/$(get_libdir)/nsbrowser/plugins/
   insinto /usr/$(get_libdir)/nsbrowser/plugins/
   doins build/librosa-media-player-plugin-*.so
+
+  for lang in ${LANGS};do
+	for x in ${lang};do
+	  if ! use linguas_${x}; then
+		rm -f "$(find translations -type f -name "rosamp_plugin_${x}*.ts")"
+	  fi
+	done
+  done
+  
+  for i in $(find translations -type f -name "rosamp_plugin_*.ts");do
+	QM="${i%%.ts}.qm"
+	lrelease -silent $i -qm "${QM}"
+	dodir /usr/$(get_libdir)/mozilla/plugins/translations
+	insinto /usr/$(get_libdir)/mozilla/plugins/translations
+	doins ${QM}
+  done
 }
