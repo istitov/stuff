@@ -11,9 +11,6 @@ MY_P=${P/graphicsm/GraphicsM}
 DESCRIPTION="Collection of tools and libraries for many image formats"
 HOMEPAGE="http://www.graphicsmagick.org/"
 EHG_REPO_URI="http://graphicsmagick.hg.sourceforge.net:8000/hgroot/graphicsmagick/graphicsmagick"
-SRC_URI=""
-KEYWORDS=""
-S="${WORKDIR}"/hg
 
 LICENSE="MIT"
 SLOT="0"
@@ -53,12 +50,6 @@ pkg_setup() {
 		epause 5
 	fi
 }
-
-#src_prepare() {
-#	epatch "${FILESDIR}"/${PN}-1.3.7-perl-ldflags.patch
-#	epatch "${FILESDIR}"/${PN}-1.3.7-debian-fixed.patch
-#	epatch "${WORKDIR}"/${P}-libpng15.patch
-#}
 
 src_configure() {
 	local quantumDepth
