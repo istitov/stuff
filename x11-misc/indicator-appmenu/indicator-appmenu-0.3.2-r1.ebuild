@@ -12,7 +12,7 @@ HOMEPAGE="https://launchpad.net/indicator-appmenu"
 SRC_URI="http://launchpad.net/${PN}/0.3/${PV}/+download/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE="+gtk2 gtk3 nls"
 
 RDEPEND=">=dev-libs/glib-2.18:2

@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""
 
 DEPEND=">=dev-libs/libdbusmenu-0.4.2[gtk]
-		>=x11-libs/gtk+-2.24.6[appmenu]"
+		x11-libs/gtk+:2[appmenu]"
 RDEPEND="${DEPEND}"
 src_prepare(){
 epatch ${FILESDIR}/fix.patch
