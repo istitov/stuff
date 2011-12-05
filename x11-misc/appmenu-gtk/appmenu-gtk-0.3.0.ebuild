@@ -17,8 +17,9 @@ IUSE="+gtk2 gtk3"
 
 CDEPEND=""
 DEPEND=">=dev-libs/libdbusmenu-0.4.2[gtk]
-		gtk3? ( >=dev-libs/libdbusmenu-0.4.2[gtk3] )
-		>=x11-libs/gtk+-2.24.6[appmenu]"
+		gtk3? ( >=dev-libs/libdbusmenu-0.4.2[gtk3]
+				x11-libs/gtk+:3[appmenu] )
+		x11-libs/gtk+:2[appmenu]"
 RDEPEND="${DEPEND}"
 src_prepare(){
 epatch ${FILESDIR}/fix.patch
