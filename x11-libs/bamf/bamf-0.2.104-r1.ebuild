@@ -18,7 +18,8 @@ DEPEND=">=dev-lang/vala-0.11.7
 		dev-util/gtk-doc
 		gtk3? ( 
 		  >=x11-libs/libwnck-3.2.1
-		  >=x11-libs/gtk+-3.2.1 )"
+		  >=x11-libs/gtk+-3.2.1 )
+		gnome-base/libgtop"
 
 src_unpack() {
     unpack ${A}

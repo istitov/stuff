@@ -15,7 +15,8 @@ LICENSE="LGPL3"
 IUSE="+gtk2"
 
 DEPEND=">=dev-lang/vala-0.11.7
-	dev-util/gtk-doc"
+	dev-util/gtk-doc
+	gnome-base/libgtop"
 
 src_unpack() {
     unpack ${A}
