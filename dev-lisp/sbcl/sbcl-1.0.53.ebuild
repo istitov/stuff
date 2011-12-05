@@ -76,7 +76,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PV}-gentoo-fix_build_system.patch
 	epatch "${FILESDIR}"/gentoo-fix_install_man.patch
 	epatch "${FILESDIR}"/gentoo-fix_linux-os-c.patch
 
