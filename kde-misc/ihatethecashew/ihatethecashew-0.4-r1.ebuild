@@ -24,5 +24,5 @@ RDEPEND="
 S="${WORKDIR}/${MY_PN}"
 
 src_prepare() {
-    epatch "${FILESDIR}"/4.6-support.patch
+	epatch "${FILESDIR}"/4.6-support.patch
 }
