@@ -12,12 +12,12 @@ HOMEPAGE="http://www.leptonica.com/"
 SRC_URI="http://www.leptonica.com/source/${P}.tar.gz"
 
 LICENSE="Apache-2.0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 SLOT="0"
 
-DEPEND="media-libs/jpeg
+DEPEND="virtual/jpeg
 	media-libs/giflib
 	media-libs/tiff"
 RDEPEND="${DEPEND}"
