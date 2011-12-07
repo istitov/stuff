@@ -12,10 +12,9 @@ DESCRIPTION="Collection of tools and libraries for many image formats"
 HOMEPAGE="http://www.graphicsmagick.org/"
 SRC_URI="ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/snapshots/GraphicsMagick-${PV}.tar.bz2"
 
-KEYWORDS="~amd64 ~x86"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="alpha amd64 hppa ppc ppc64 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos"
+KEYWORDS="~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos"
 IUSE="bzip2 cxx debug doc fpx imagemagick jbig jpeg jpeg2k lcms modules openmp
 	perl png q16 q32 svg threads tiff truetype X wmf zlib"
 
