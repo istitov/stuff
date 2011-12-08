@@ -20,7 +20,7 @@ RDEPEND="x11-libs/qt-gui:4"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/rbutil/rbutilqt"
-RBBASE_DIR="${S}"
+
 src_compile() {
 	use ypp2 && epatch "${FILESDIR}"/ypp2.patch
 	cd "${S}"/rbutil/rbutilqt;
