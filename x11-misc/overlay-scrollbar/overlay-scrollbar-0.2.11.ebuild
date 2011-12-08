@@ -22,7 +22,7 @@ RDEPEND="${DEPEND}"
 
 src_configure(){
   if use gtk2;then
-	econf --with-gtk2
+	econf --with-gtk=2
   fi
 
   if use gtk3;then
