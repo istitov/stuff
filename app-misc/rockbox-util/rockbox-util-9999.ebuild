@@ -36,6 +36,6 @@ src_install() {
 	dobin "rbutil/rbutilqt/RockboxUtility"
 	insinto "/etc"
 	doins "rbutil/rbutilqt/rbutil.ini"
-	newicon "${S}/rockbox.ico" "${PN}.ico"
+	newicon "rbutil/rbutilqt/icons/rockbox.ico" "${PN}.ico"
 	make_desktop_entry RockboxUtility "Rockbox Utility" "/usr/share/pixmaps/${PN}.ico"
 }
