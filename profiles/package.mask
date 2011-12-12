@@ -1,5 +1,11 @@
-# istitov (30 Dec 2011)
+# istitov (30 Oct 2011)
 #Masked as it doesn't compile with libpng:1.5 without a patch
 #Maybe you have one...
 =media-gfx/xaralx-0.7_p1785
+#Leo Trotskij in terms of results...
 >=app-benchmarks/qtperf-0.2
+#istitov (12 Dec 2011)
+#Masked these as newer ebuild is in tree and older sources
+# are nowhere to be seen... :(
+=games-arcade/blobwars-1.13
+=games-arcade/blobwars-1.17
