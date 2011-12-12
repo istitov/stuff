@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header:
 
-EAPI=2
-inherit bzr gnome2 eutils
+EAPI=4
+inherit bzr gnome2 eutils flag-o-matic
 
 SRC_URI=""
 EBZR_REPO_URI="lp:inkscape"
@@ -15,7 +15,7 @@ HOMEPAGE="http://www.inkscape.org/"
 SLOT="0"
 LICENSE="GPL-2 LGPL-2.1"
 KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~x86"
-IUSE="dia gnome inkjar lcms mmx nls postscript spell wmf wpg"
+IUSE="dia gs gnome inkjar lcms mmx nls postscript spell wmf wpg"
 RESTRICT="test"
 
 COMMON_DEPEND="
@@ -28,22 +28,23 @@ COMMON_DEPEND="
    >=dev-libs/libxslt-1.0.15
    dev-libs/popt
    dev-python/lxml
-   dev-python/pyxml
-   media-gfx/imagemagick
+   media-gfx/imagemagick[cxx] || ( media-gfx/graphicsmagick[cxx,symlink] )
    media-libs/fontconfig
-   >=media-libs/freetype-2
-   >=media-libs/libpng-1.2
+   media-libs/freetype:2
+   >=media-libs/libpng-1.5
+   app-text/libwpd:0.9
+   app-text/libwpg:0.2
    sci-libs/gsl
    x11-libs/libXft
    >=x11-libs/gtk+-2.10.7
    >=x11-libs/pango-1.4.0
+   || ( dev-lang/python[xml] dev-python/pyxml )
    gnome? ( >=gnome-base/gnome-vfs-2.0 )
-   lcms? ( >=media-libs/lcms-1.14 )
+   lcms? ( media-libs/lcms:0 )
    spell? (
       app-text/aspell
       app-text/gtkspell
-   )
-   wpg? ( >=media-libs/libwpg-0.1 )"
+   )"
 
 # These only use executables provided by these packages
 # See share/extensions for more details. inkscape can tell you to
@@ -52,8 +53,9 @@ COMMON_DEPEND="
 RDEPEND="
    ${COMMON_DEPEND}
    dev-python/numpy
+   media-gfx/uniconvertor
    dia? ( app-office/dia )
-   postscript? ( >=media-gfx/pstoedit-3.44[plotutils] media-gfx/skencil )
+   gs? ( app-text/ghostscript-gpl )
    wmf? ( media-libs/libwmf )"
 
 DEPEND="${COMMON_DEPEND}
@@ -72,8 +74,10 @@ pkg_setup() {
 	G2CONF="${G2CONF} $(use_with gnome gnome-vfs)"
 	G2CONF="${G2CONF} $(use_with inkjar)"
 	G2CONF="${G2CONF} $(use_enable lcms)"
-	G2CONF="${G2CONF} $(use_enable mmx)"
 	G2CONF="${G2CONF} $(use_enable nls)"
+	G2CONF="${G2CONF} $(use_with spell aspell)"
+	G2CONF="${G2CONF} $(use_with spell gtkspell)"
+	G2CONF="${G2CONF} $(use_enable mmx)"
 	DOCS="AUTHORS ChangeLog NEWS README*"
 }
 
@@ -83,6 +87,9 @@ src_unpack() {
 src_configure(){
 	sh autogen.sh || die "autogen"
 	./configure
+	# aliasing unsafe wrt #310393
+	#append-flags -fno-strict-aliasing
+	#gnome2_src_configure
 }
 
 pkg_postinst() {
