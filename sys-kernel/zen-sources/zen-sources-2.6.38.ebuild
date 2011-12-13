@@ -18,7 +18,7 @@ HOMEPAGE="http://zen-kernel.org"
 
 ZEN_FILE="v${PV}_master.diff.gz"
 ZEN_URI="http://downloads.zen-kernel.org/snapshots/${ZEN_FILE}"
-SRC_URI="${KERNEL_URI} ${ZEN_URI}"
+SRC_URI="${KERNEL_URI} ${ZEN_URI} -> v${PVR}_master.diff.gz";
 
 KEYWORDS="-* ~amd64 ~ppc ~ppc64 ~x86"
 IUSE=""
@@ -38,7 +38,7 @@ pkg_setup(){
 }
 
 src_prepare(){
-	epatch "${DISTDIR}"/"${ZEN_FILE}"
+	epatch "${DISTDIR}"/"v${PVR}_master.diff.gz"
 }
 
 K_EXTRAEINFO="For more info on zen-sources and details on how to report problems, see: \
