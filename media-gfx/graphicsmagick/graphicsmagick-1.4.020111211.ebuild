@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/graphicsmagick/graphicsmagick-1.3.12-r1.ebuild,v 1.7 2011/10/23 16:20:25 armin76 Exp $
 
-EAPI="2"
+EAPI="4"
 
 inherit eutils toolchain-funcs flag-o-matic perl-module
 
@@ -10,13 +10,13 @@ MY_P=${P/graphicsm/GraphicsM}
 
 DESCRIPTION="Collection of tools and libraries for many image formats"
 HOMEPAGE="http://www.graphicsmagick.org/"
-SRC_URI="ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/snapshots/GraphicsMagick-${PV}.tar.bz2"
+SRC_URI="ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/snapshots/GraphicsMagick-${PV}.tar.xz"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos"
-IUSE="bzip2 cxx debug doc fpx imagemagick jbig jpeg jpeg2k lcms modules openmp
-	perl png q16 q32 svg threads tiff truetype X wmf zlib"
+IUSE="bzip2 cxx debug doc fpx imagemagick jbig jpeg jpeg2k lzma lcms lcms2 modules openmp
+	perl png q8 q16 q32 svg threads tiff truetype X wmf zlib"
 
 RDEPEND="app-text/ghostscript-gpl
 	bzip2? ( app-arch/bzip2 )
@@ -24,12 +24,13 @@ RDEPEND="app-text/ghostscript-gpl
 	jbig? ( media-libs/jbigkit )
 	jpeg? ( virtual/jpeg )
 	jpeg2k? ( >=media-libs/jasper-1.701.0 )
-	lcms? ( =media-libs/lcms-1* )
+	lcms? ( media-libs/lcms:0 )
+	lcms2? ( media-libs/lcms:2 )
 	perl? ( dev-lang/perl )
 	png? ( media-libs/libpng )
 	svg? ( dev-libs/libxml2 )
 	tiff? ( >=media-libs/tiff-3.8.2 )
-	truetype? ( >=media-libs/freetype-2.0 )
+	truetype? ( media-libs/freetype:2 )
 	wmf? ( media-libs/libwmf )
 	X? ( x11-libs/libXext x11-libs/libSM )
 	imagemagick? ( !media-gfx/imagemagick )"
@@ -52,17 +53,12 @@ pkg_setup() {
 }
 
 src_configure() {
-	local quantumDepth
-	if use q16 ; then
-		quantumDepth="16"
-	elif use q32 ; then
-		quantumDepth="32"
-	else
-		quantumDepth="8"
-	fi
+	local quantumDepth=16
+	use q8 && quantumDepth=8
+	use q32 && quantumDepth=32
 
 	# cannot use EAPI=3 because perl-module eclass doesn't support it yet
-	use !prefix && EPREFIX=
+	#use !prefix && EPREFIX=
 
 	use debug && filter-flags -fomit-frame-pointer
 	econf \
@@ -89,7 +85,9 @@ src_configure() {
 		$(use_with jbig) \
 		$(use_with jpeg) \
 		$(use_with jpeg2k jp2) \
+		$(use_with lzma) \
 		$(use_with lcms) \
+		$(use_with lcms2) \
 		$(use_with modules) \
 		$(use_with perl) \
 		$(use_with png) \
