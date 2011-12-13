@@ -28,7 +28,7 @@ COMMON_DEPEND="
    >=dev-libs/libxslt-1.0.15
    dev-libs/popt
    dev-python/lxml
-   media-gfx/imagemagick[cxx] || ( media-gfx/graphicsmagick[cxx,symlink] )
+   || ( media-gfx/imagemagick[cxx] media-gfx/graphicsmagick[cxx,symlink] )
    media-libs/fontconfig
    media-libs/freetype:2
    >=media-libs/libpng-1.5
