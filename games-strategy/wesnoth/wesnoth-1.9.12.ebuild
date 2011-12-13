@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/wesnoth/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 ppc ppc64 x86 ~x86-fbsd"
-IUSE="dbus dedicated doc nls server tinygui"
+IUSE="dbus dedicated doc nls server openmp tinygui"
 
 RDEPEND=">=media-libs/libsdl-1.2.7[video,X]
 	media-libs/sdl-net
@@ -22,13 +22,14 @@ RDEPEND=">=media-libs/libsdl-1.2.7[video,X]
 	!dedicated? (
 		dbus? ( sys-apps/dbus )
 	)
-	>=dev-libs/boost-1.35
+	>=dev-libs/boost-1.36
 	sys-libs/zlib
 	x11-libs/pango
 	dev-lang/lua
 	media-libs/fontconfig
 	virtual/libintl"
 DEPEND="${RDEPEND}
+	openmp? ( sys-devel/gcc[openmp] )
 	dev-util/pkgconfig
 	!dedicated? (
 		tinygui? (
@@ -98,6 +99,7 @@ src_configure() {
 		$(cmake-utils_use_enable nls NLS)
 		$(cmake-utils_use_enable dbus NOTIFICATIONS)
 		"-DGUI=$(use tinygui && echo tiny || echo normal)"
+		$(cmake-utils_use_enable openmp OMP)
 		"-DCMAKE_VERBOSE_MAKEFILE=TRUE"
 		"-DENABLE_FRIBIDI=FALSE"
 		"-DENABLE_STRICT_COMPILATION=FALSE"
