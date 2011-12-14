@@ -15,7 +15,7 @@ HOMEPAGE="http://www.inkscape.org/"
 SLOT="0"
 LICENSE="GPL-2 LGPL-2.1"
 KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~x86"
-IUSE="dia gs gnome inkjar dbus lcms mmx nls postscript spell wmf wpg"
+IUSE="dia gs gnome inkjar dbus lcms nls poppler postscript python perl wmf wpg"
 RESTRICT="test"
 
 COMMON_DEPEND="
@@ -41,10 +41,7 @@ COMMON_DEPEND="
    || ( dev-lang/python[xml] dev-python/pyxml )
    gnome? ( >=gnome-base/gnome-vfs-2.0 )
    lcms? ( media-libs/lcms:0 )
-   spell? (
-      app-text/aspell
-      app-text/gtkspell
-   )"
+   "
 
 # These only use executables provided by these packages
 # See share/extensions for more details. inkscape can tell you to
@@ -54,10 +51,10 @@ RDEPEND="
    ${COMMON_DEPEND}
    dev-python/numpy
    media-gfx/uniconvertor
+   postscript? ( media-gfx/pstoedit )
    dia? ( app-office/dia )
    gs? ( app-text/ghostscript-gpl )
-   wmf? ( media-libs/libwmf )"
-
+	"
 DEPEND="${COMMON_DEPEND}
    dev-libs/boost
    sys-devel/gettext
@@ -65,30 +62,25 @@ DEPEND="${COMMON_DEPEND}
    x11-libs/libX11
    >=dev-util/intltool-0.29"
 
-#S=${WORKDIR}/${PN}
-
-pkg_setup() {
-	G2CONF="${G2CONF} --without-perl"
-	G2CONF="${G2CONF} --enable-poppler-cairo"
-	G2CONF="${G2CONF} --with-xft"
-	G2CONF="${G2CONF} $(use_with gnome gnome-vfs)"
-	G2CONF="${G2CONF} $(use_with inkjar)"
-	G2CONF="${G2CONF} $(use_enable wpg)"
-	G2CONF="${G2CONF} $(use_enable dbus dbusapi)"
-	G2CONF="${G2CONF} $(use_enable lcms)"
-	G2CONF="${G2CONF} $(use_enable nls)"
-	G2CONF="${G2CONF} $(use_with spell aspell)"
-	G2CONF="${G2CONF} $(use_with spell gtkspell)"
-	G2CONF="${G2CONF} $(use_enable mmx)"
-	DOCS="AUTHORS ChangeLog NEWS README*"
-}
-
 src_unpack() {
 	bzr_src_unpack
 }
 src_configure(){
 	sh autogen.sh || die "autogen"
-	./configure
+	econf \
+	$(use_with perl)\
+	$(use_with python)\
+	$(use_enable poppler poppler-cairo)\
+	$(use_with gnome gnome-vfs)\
+	$(use_with inkjar)\
+	$(use_enable wpg)\
+	$(use_enable dbus dbusapi)\
+	$(use_enable lcms)\
+	$(use_enable nls)\
+
+	DOCS="AUTHORS ChangeLog NEWS README*"
+
+	#./configure
 	# aliasing unsafe wrt #310393
 	#append-flags -fno-strict-aliasing
 	#gnome2_src_configure
