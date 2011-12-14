@@ -15,7 +15,7 @@ HOMEPAGE="http://www.inkscape.org/"
 SLOT="0"
 LICENSE="GPL-2 LGPL-2.1"
 KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~x86"
-IUSE="dia gs gnome inkjar lcms mmx nls postscript spell wmf wpg"
+IUSE="dia gs gnome inkjar dbus lcms mmx nls postscript spell wmf wpg"
 RESTRICT="test"
 
 COMMON_DEPEND="
@@ -33,7 +33,7 @@ COMMON_DEPEND="
    media-libs/freetype:2
    >=media-libs/libpng-1.5
    app-text/libwpd:0.9
-   app-text/libwpg:0.2
+   wpg? ( app-text/libwpg:0.2 )
    sci-libs/gsl
    x11-libs/libXft
    >=x11-libs/gtk+-2.10.7
@@ -73,6 +73,8 @@ pkg_setup() {
 	G2CONF="${G2CONF} --with-xft"
 	G2CONF="${G2CONF} $(use_with gnome gnome-vfs)"
 	G2CONF="${G2CONF} $(use_with inkjar)"
+	G2CONF="${G2CONF} $(use_enable wpg)"
+	G2CONF="${G2CONF} $(use_enable dbus dbusapi)"
 	G2CONF="${G2CONF} $(use_enable lcms)"
 	G2CONF="${G2CONF} $(use_enable nls)"
 	G2CONF="${G2CONF} $(use_with spell aspell)"
