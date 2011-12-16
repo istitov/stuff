@@ -15,7 +15,7 @@ EHG_REPO_URI="http://graphicsmagick.hg.sourceforge.net:8000/hgroot/graphicsmagic
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos"
-IUSE="bzip2 cxx debug doc fpx imagemagick jbig jpeg jpeg2k lzma lcms lcms2 modules openmp
+IUSE="bzip2 cxx debug doc fpx imagemagick jbig jpeg jpeg2k lzma lcms modules openmp
 	perl png q8 q16 q32 svg threads tiff truetype X wmf zlib"
 
 RDEPEND="app-text/ghostscript-gpl
@@ -24,8 +24,7 @@ RDEPEND="app-text/ghostscript-gpl
 	jbig? ( media-libs/jbigkit )
 	jpeg? ( virtual/jpeg )
 	jpeg2k? ( >=media-libs/jasper-1.701.0 )
-	lcms? ( media-libs/lcms:0 )
-	lcms2? ( media-libs/lcms:2 )
+	lcms? ( media-libs/lcms:2 )
 	perl? ( dev-lang/perl )
 	png? ( media-libs/libpng )
 	svg? ( dev-libs/libxml2 )
@@ -83,8 +82,8 @@ src_configure() {
 		$(use_with jpeg) \
 		$(use_with jpeg2k jp2) \
 		$(use_with lzma) \
-		$(use_with lcms) \
-		$(use_with lcms2) \
+		--without-lcms \
+		$(use_with lcms lcms2) \
 		$(use_with modules) \
 		$(use_with perl) \
 		$(use_with png) \
