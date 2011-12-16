@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="4"
 
 PYTHON_DEPEND="2"
 PYTHON_USE_WITH="tk"
@@ -25,7 +25,7 @@ DEPEND="
 	>=dev-lang/tcl-8.5.0
 	>=dev-lang/tk-8.5.0
 	dev-python/imaging[tk]
-	>=media-libs/freetype-2.2.1:2
+	>=media-libs/freetype:2
 	>=sys-libs/zlib-1.1.4
 	>=x11-libs/cairo-1.2.4
 	x11-libs/libX11

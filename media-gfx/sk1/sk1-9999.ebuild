@@ -1,7 +1,7 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-9999.ebuild,v 1.17 2008/05/18 02:08:03 hanno Exp $
-EAPI=2
+EAPI=4
 inherit eutils subversion
 
 ESVN_REPO_URI="https://sk1.svn.sourceforge.net/svnroot/sk1/trunk/sK1"
@@ -19,7 +19,7 @@ IUSE=""
 
 DEPEND=">=sys-libs/glibc-2.6.1
         >=x11-libs/cairo-1.4.0
-        >=media-libs/freetype-2.3.5
+        >=media-libs/freetype:2
         x11-libs/libX11
         x11-libs/libXext
         >=dev-lang/tcl-8.5.5
