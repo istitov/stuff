@@ -1,38 +1,25 @@
-# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: 
+# $Header:
 
-EAPI="3"
+EAPI="4"
 
-KMNAME="kdesdk"
-inherit kde4-meta git-2
+KDE_OVERRIDE_MINIMAL="4.7"
+inherit kde4-base git-2 cmake-utils
 
 DESCRIPTION="Provides Dropbox integration in Dolphin."
 EGIT_REPO_URI="git://anongit.kde.org/scratch/trichard/dolphin-box-plugin"
 SRC_URI=""
 HOMEPAGE="http://gitweb.kde.org/scratch/trichard/dolphin-box-plugin.git"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
+
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 LICENSE="GPL-3"
-
 DEPEND="
 	$(add_kdebase_dep libkonq)
 "
-RDEPEND="${DEPEND}
-	dev-vcs/git
-"
-#	$(add_kdebase_dep kompare)
 
-src_unpack() {
-	git-2_src_unpack
-}
-
-src_prepare() {
-	git-2_src_prepare
-	cd "${S}"
-	cmake-utils_src_configure || die "cmake failed"
-}
-
+RDEPEND="${DEPEND}"
+ 
 pkg_postinst() {
 	elog ""
 	elog "Quick start:"
