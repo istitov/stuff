@@ -25,7 +25,7 @@ DEPEND="
 	>=dev-lang/tcl-8.5.0
 	>=dev-lang/tk-8.5.0
 	dev-python/imaging[tk]
-	>=media-libs/freetype:2
+	media-libs/freetype:2
 	>=sys-libs/zlib-1.1.4
 	>=x11-libs/cairo-1.2.4
 	x11-libs/libX11
