@@ -19,7 +19,7 @@ IUSE=""
 
 DEPEND=">=sys-libs/glibc-2.6.1
         >=x11-libs/cairo-1.4.0
-        >=media-libs/freetype:2
+        media-libs/freetype:2
         x11-libs/libX11
         x11-libs/libXext
         >=dev-lang/tcl-8.5.5
