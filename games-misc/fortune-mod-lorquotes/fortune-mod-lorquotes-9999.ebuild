@@ -4,7 +4,7 @@ EAPI=2
 MY_PN=${PN/mod-/}
 DESCRIPTION="The best phrases of Linux.Org.Ru members"
 HOMEPAGE="http://lorquotes.ru/,"
-SRC_URI="http://lorquotes.ru/fortraw.php"
+#SRC_URI="http://lorquotes.ru/fortraw.php"
 
 LICENSE="WTFPL" 
 SLOT="0"
@@ -16,7 +16,8 @@ RDEPEND="games-misc/fortune-mod"
 S=${WORKDIR}/${MY_PN}
 
 src_prepare(){
-iconv -f koi8r -t utf8 "${DISTDIR}/fortraw.php" > "${WORKDIR}/${PN}"
+wget -c http://lorquotes.ru/fortraw.php
+iconv -f koi8r -t utf8 "${WORKDIR}/fortraw.php" > "${WORKDIR}/${PN}"
 strfile "${WORKDIR}/${PN}"
 }
 src_install() {
