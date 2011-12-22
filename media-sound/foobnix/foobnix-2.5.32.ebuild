@@ -21,9 +21,10 @@ DEPEND="dev-python/chardet
 		dev-python/simplejson
 		dev-python/pygtk
 		media-libs/gst-plugins-good
+		media-plugins/gst-plugins-soup
+		media-plugins/gst-plugins-ffmpeg
 		sys-devel/gettext
 		virtual/ffmpeg
-		media-plugins/gst-plugins-ffmpeg
 		hotkeys? ( dev-libs/keybinder )
 		dvb? ( media-libs/gst-plugins-bad )
 		alsa? ( media-plugins/gst-plugins-alsa )
