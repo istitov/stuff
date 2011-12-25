@@ -17,7 +17,7 @@ EBZR_REPO_URI="lp:~l3on/sonata/sonata-plugins"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 ~ppc x86"
-IUSE="dbus lyrics taglib +trayicon +notify"
+IUSE="dbus lyrics taglib +trayicon +libnotify"
 
 RDEPEND=">=dev-python/pygtk-2.12
 	|| ( x11-libs/gdk-pixbuf:2[jpeg] x11-libs/gtk+:2[jpeg] )
@@ -26,7 +26,7 @@ RDEPEND=">=dev-python/pygtk-2.12
 	lyrics? ( dev-python/zsi )
 	taglib? ( >=dev-python/tagpy-0.93 )
 	trayicon? ( dev-python/egg-python )
-	notify? ( dev-python/notify-python )"
+	libnotify? ( dev-python/notify-python )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
@@ -34,7 +34,7 @@ DOCS="CHANGELOG README TODO TRANSLATORS"
 
 src_prepare(){
   unpack "${A}"
-  if use notify;then
+  if use libnotify;then
 	bzr_src_prepare
 	mv notify.py ${PN}-${PV}/sonata/plugins/
   fi
