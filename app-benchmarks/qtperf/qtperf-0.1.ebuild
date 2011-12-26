@@ -7,8 +7,8 @@ EAPI=4
 inherit eutils qt4-r2
 
 DESCRIPTION="Application designed to test QT performance"
-HOMEPAGE="http://code.google.com/p/qtperf/"
-SRC_URI="http://www.corecrowd.com/qtperf.tar.bz2"
+HOMEPAGE=""
+SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/qtperf.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -24,11 +24,6 @@ RDEPEND="
 	${DEPEND}
 	"
 S="${WORKDIR}/${PN}"
-
-#src_compile() {
-#	eqmake "$(use_enable nls)"
-#	emake || die "emake failed"
-#}
 
 src_install() {
 	insinto /usr/bin/
