@@ -30,7 +30,7 @@ EGIT_REPO_URI="git://fontforge.git.sourceforge.net/gitroot/fontforge/fontforge"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos"
-IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X"
+IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X capslock-for-alt freetype-bytecode freetype devicetables gb12345"
 
 RDEPEND="gif? ( >=media-libs/giflib-4.1.0-r1 )
 	jpeg? ( virtual/jpeg )
@@ -71,6 +71,7 @@ src_configure() {
 	use nls || export ac_cv_header_libintl_h=no
 	econf \
 		--disable-static \
+		--without-native-script \
 		$(use_with truetype-debugger freetype-src "/usr/include/freetype2/internal4fontforge/") \
 		$(use_enable type3) \
 		$(use_with python) \
@@ -81,7 +82,13 @@ src_configure() {
 		$(use_enable tilepath) \
 		$(use_enable debug debug-raw-points) \
 		$(use_with pango) \
-		$(use_with cairo)
+		$(use_with cairo) \
+		$(use_with capslock-for-alt) \
+		$(use_with iconv) \
+		$(use_enable libff) \
+		$(use_enable freetype) \
+		$(use_with freetype-bytecode) \
+		$(use_enable devicetables)
 }
 
 src_install() {
