@@ -1,0 +1,12 @@
+*** src/pngio.c	2011-12-05 12:15:10.000000000 +0100
+--- src/pngio.c.new	2011-12-05 12:14:07.000000000 +0100
+***************
+*** 107,112 ****
+--- 107,113 ----
+  /* --------------------------------------------*/
+  
+  #include "png.h"
++ #include "zlib.h"
+  
+  /* ----------------Set defaults for read/write options ----------------- */
+      /* strip 16 bpp --> 8 bpp on reading png; default is for stripping */

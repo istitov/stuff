@@ -1,0 +1,52 @@
+From 5cf0450c69f7bbdb0d1ca22ec54355e3b3e8c9c2 Mon Sep 17 00:00:00 2001
+From: Cosimo Cecchi <cosimoc@gnome.org>
+Date: Tue, 27 Sep 2011 21:06:59 +0000
+Subject: toolbutton: don't force the icon widget to be a GtkMisc
+
+There's really no reason the icon widget must be a GtkMisc. You might
+want to use e.g. a GtkSpinner.
+---
+diff --git a/gtk/gtktoolbutton.c b/gtk/gtktoolbutton.c
+index 8ee5fdf..934ca61 100644
+--- a/gtk/gtktoolbutton.c
++++ b/gtk/gtktoolbutton.c
+@@ -972,9 +972,9 @@ gtk_tool_button_new_from_stock (const gchar *stock_id)
+ /**
+  * gtk_tool_button_new:
+  * @label: (allow-none): a string that will be used as label, or %NULL
+- * @icon_widget: (allow-none): a #GtkMisc widget that will be used as icon widget, or %NULL
++ * @icon_widget: (allow-none): a widget that will be used as the button contents, or %NULL
+  *
+- * Creates a new %GtkToolButton using @icon_widget as icon and @label as
++ * Creates a new %GtkToolButton using @icon_widget as contents and @label as
+  * label.
+  *
+  * Return value: A new #GtkToolButton
+@@ -987,7 +987,7 @@ gtk_tool_button_new (GtkWidget	 *icon_widget,
+ {
+   GtkToolButton *button;
+ 
+-  g_return_val_if_fail (icon_widget == NULL || GTK_IS_MISC (icon_widget), NULL);
++  g_return_val_if_fail (icon_widget == NULL || GTK_IS_WIDGET (icon_widget), NULL);
+ 
+   button = g_object_new (GTK_TYPE_TOOL_BUTTON,
+                          "label", label,
+diff --git a/tests/testtoolbar.c b/tests/testtoolbar.c
+index 16d847a..aafac3d 100644
+--- a/tests/testtoolbar.c
++++ b/tests/testtoolbar.c
+@@ -680,6 +680,12 @@ main (gint argc, gchar **argv)
+   add_item_to_list (store, item, "Terminal");
+   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+ 
++  image = gtk_spinner_new ();
++  gtk_spinner_start (GTK_SPINNER (image));
++  item = gtk_tool_button_new (image, "Spinner");
++  add_item_to_list (store, item, "Spinner");
++  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
++
+   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+   gtk_container_add (GTK_CONTAINER (vbox), hbox);
+--
+cgit v0.9.0.2

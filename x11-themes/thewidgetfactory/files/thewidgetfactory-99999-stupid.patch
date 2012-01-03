@@ -1,0 +1,35 @@
+diff --git a/src/interface.c b/src/interface.c
+index 5cbfe99..2e5700f 100644
+--- a/src/interface.c
++++ b/src/interface.c
+@@ -26,6 +26,27 @@
+ #define GLADE_HOOKUP_OBJECT_NO_REF(component,widget,name) \
+   g_object_set_data (G_OBJECT (component), name, widget)
+ 
++
++GtkWidget *
++gtk_combo_box_entry_new_text (void) {
++  return NULL;
++}
++
++void
++gtk_combo_box_append_text (GtkComboBox *combo_box, const gchar *text) {
++}
++
++GtkWidget *
++gtk_combo_box_new_text (void) {
++  return NULL;
++}
++
++gchar *
++gtk_set_locale (void) {
++  return NULL;
++}
++
++
+ GtkWidget*
+ create_window2 (void)
+ {
+diff --git a/interface.o b/interface.o
+index bb2088a..3372e88 100644
+Binary files a/interface.o and b/interface.o differ

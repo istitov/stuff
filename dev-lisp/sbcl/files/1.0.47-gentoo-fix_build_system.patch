@@ -1,0 +1,546 @@
+diff --git a/contrib/asdf-module.mk b/contrib/asdf-module.mk
+index d3ffbad..7a5936e 100644
+--- a/contrib/asdf-module.mk
++++ b/contrib/asdf-module.mk
+@@ -1,3 +1,5 @@
++# -*- makefile -*- included by contribs built with ASDF
++
+ CC=gcc
+ 
+ # We need to extend flags to the C compiler and the linker
+@@ -7,6 +9,9 @@ CC=gcc
+ # directly via ASDF from a non-C-aware module which has these tricky
+ # ones as dependencies.
+ 
++# from src/runtime/
++-include platform.mk
++
+ UNAME:=$(shell uname -s)
+ 
+ ifeq (SunOS,$(UNAME))
+@@ -23,7 +28,9 @@ ifeq (CYGWIN,$(findstring CYGWIN,$(UNAME)))
+   CC:=$(shell cygpath -m $(shell readlink -fn $(shell which $(CC))))
+ endif
+ 
+-export CC SBCL EXTRA_CFLAGS EXTRA_LDFLAGS
++EXTRA_CFLAGS += $(CFLAGS)
++
++export CC SBCL EXTRA_CFLAGS
+ 
+ all: $(EXTRA_ALL_TARGETS)
+ 	$(MAKE) -C ../asdf
+diff --git a/contrib/vanilla-module.mk b/contrib/vanilla-module.mk
+index 41c1771..4c343ee 100644
+--- a/contrib/vanilla-module.mk
++++ b/contrib/vanilla-module.mk
+@@ -1,3 +1,7 @@
++# -*- makefile -*- included by contribs that don't use ASDF
++
++# from src/runtime/
++-include platform.mk
+ 
+ $(MODULE).fasl: $(MODULE).lisp ../../output/sbcl.core
+ 	$(SBCL) --eval '(compile-file (format nil "SYS:CONTRIB;~:@(~A~);~:@(~A~).LISP" "$(MODULE)" "$(MODULE)"))' </dev/null
+diff --git a/make-target-contrib.sh b/make-target-contrib.sh
+index 85345e6..e3185d8 100644
+--- a/make-target-contrib.sh
++++ b/make-target-contrib.sh
+@@ -66,7 +66,7 @@ for i in contrib/*; do
+     # export INSTALL_DIR=$SBCL_HOME/`basename $i `
+     test -f $i/test-passed && rm $i/test-passed
+     # hack to get exit codes right.
+-    if $GNUMAKE -C $i test 2>&1 && touch $i/test-passed ; then
++    if $GNUMAKE -C $i -I ../../src/runtime test 2>&1 && touch $i/test-passed ; then
+ 	:
+     else
+ 	exit $?
+diff --git a/src/runtime/Config.alpha-linux b/src/runtime/Config.alpha-linux
+index 42df1fc..ef140d3 100644
+--- a/src/runtime/Config.alpha-linux
++++ b/src/runtime/Config.alpha-linux
+@@ -10,7 +10,7 @@
+ # files for more information.
+ 
+ LD = ld -taso
+-LINKFLAGS += -dynamic -v -Wl,-T -Wl,ld-script.alpha-linux -rdynamic
++LDFLAGS += -dynamic -v -Wl,-T -Wl,ld-script.alpha-linux -rdynamic
+ NM = ./linux-nm
+ 
+ ASSEM_SRC = alpha-assem.S ldso-stubs.S
+diff --git a/src/runtime/Config.alpha-osf1 b/src/runtime/Config.alpha-osf1
+index 0553f48..8c39543 100644
+--- a/src/runtime/Config.alpha-osf1
++++ b/src/runtime/Config.alpha-osf1
+@@ -9,11 +9,10 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-CFLAGS += -Dosf1 -O0 -g -D_XOPEN_SOURCE=500 -D_OSF_SOURCE=500
+-CFLAGS += -msg_disable newlocale
++CFLAGS += -Dosf1 -O0 -D_XOPEN_SOURCE=500 -D_OSF_SOURCE=500 -msg_disable newlocale
+ ASFLAGS += -Dosf1 #-ULANGUAGE_ASSEMBLY
+ LD = ld -xtaso
+-LINKFLAGS = -non_shared # dynamic -v -g  -Wl,-T  -Wl,ld-script.alpha-linux
++LDFLAGS += -non_shared # dynamic -v -g  -Wl,-T  -Wl,ld-script.alpha-linux
+ # Digital^WCompaq^WHP's cc declares `static inline' functions to exist
+ # in multiple places in the binary; we add the '-g' flag to suppress all
+ # internal (i.e. static) function names being spat out.  GENESIS
+diff --git a/src/runtime/Config.hppa-hpux b/src/runtime/Config.hppa-hpux
+index fec282b..7509a60 100644
+--- a/src/runtime/Config.hppa-hpux
++++ b/src/runtime/Config.hppa-hpux
+@@ -9,7 +9,7 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-LINKFLAGS += -v
++LDFLAGS += -v
+ # avoid native tools
+ NM = /usr/local/bin/nm
+ CC = /usr/local/bin/gcc
+diff --git a/src/runtime/Config.hppa-linux b/src/runtime/Config.hppa-linux
+index 72449bd..4637c5c 100644
+--- a/src/runtime/Config.hppa-linux
++++ b/src/runtime/Config.hppa-linux
+@@ -9,7 +9,7 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-LINKFLAGS += -v -static
++LDFLAGS += -v -static
+ NM = ./linux-nm
+ 
+ ASSEM_SRC = hppa-assem.S #hppa-linux-stubs.S
+diff --git a/src/runtime/Config.mips-linux b/src/runtime/Config.mips-linux
+index 9f32f3c..01f13bc 100644
+--- a/src/runtime/Config.mips-linux
++++ b/src/runtime/Config.mips-linux
+@@ -9,7 +9,7 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-LINKFLAGS += -v -O2 -Wl,--export-dynamic
++LDFLAGS += -v -O2 -Wl,--export-dynamic
+ NM = ./linux-nm
+ 
+ ASSEM_SRC = mips-assem.S ldso-stubs.S
+diff --git a/src/runtime/Config.ppc-darwin b/src/runtime/Config.ppc-darwin
+index 0d3d79a..ea3eaf7 100644
+--- a/src/runtime/Config.ppc-darwin
++++ b/src/runtime/Config.ppc-darwin
+@@ -9,8 +9,8 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-CFLAGS = -g -Wall -O2 -fdollars-in-identifiers -mmacosx-version-min=10.4
+-LINKFLAGS += -mmacosx-version-min=10.4
++CFLAGS += -O2 -fdollars-in-identifiers -mmacosx-version-min=10.4
++LDFLAGS += -mmacosx-version-min=10.4
+ 
+ OS_SRC = bsd-os.c darwin-os.c ppc-darwin-os.c
+ 
+diff --git a/src/runtime/Config.ppc-linux b/src/runtime/Config.ppc-linux
+index f8ceded..0bfe84a 100644
+--- a/src/runtime/Config.ppc-linux
++++ b/src/runtime/Config.ppc-linux
+@@ -9,8 +9,7 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-CFLAGS = -g
+-LINKFLAGS += -v -rdynamic
++LDFLAGS += -v -rdynamic
+ NM = ./linux-nm
+ 
+ ASSEM_SRC = ppc-assem.S ldso-stubs.S
+diff --git a/src/runtime/Config.ppc-netbsd b/src/runtime/Config.ppc-netbsd
+index 07f668e..a17ebc7 100644
+--- a/src/runtime/Config.ppc-netbsd
++++ b/src/runtime/Config.ppc-netbsd
+@@ -9,8 +9,8 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-LINKFLAGS += -dynamic -export-dynamic
+-CFLAGS =  -g -Wall -O2
++LDFLAGS += -dynamic -export-dynamic
++CFLAGS += -O2
+ 
+ ASSEM_SRC = ppc-assem.S ldso-stubs.S
+ ARCH_SRC = ppc-arch.c
+diff --git a/src/runtime/Config.sparc-linux b/src/runtime/Config.sparc-linux
+index 1ad0213..96af999 100644
+--- a/src/runtime/Config.sparc-linux
++++ b/src/runtime/Config.sparc-linux
+@@ -9,8 +9,7 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-ASFLAGS = -g -Wall
+-LINKFLAGS += -v -rdynamic
++LDFLAGS += -v -rdynamic
+ NM = ./linux-nm
+ 
+ ASSEM_SRC = sparc-assem.S ldso-stubs.S
+diff --git a/src/runtime/Config.sparc-netbsd b/src/runtime/Config.sparc-netbsd
+index ec95cf8..7ca8cab 100644
+--- a/src/runtime/Config.sparc-netbsd
++++ b/src/runtime/Config.sparc-netbsd
+@@ -10,8 +10,8 @@
+ # files for more information.
+ 
+ CC = gcc
+-CFLAGS += -g -Wall -O2
+-LINKFLAGS += -v
++CFLAGS += -O2
++LDFLAGS += -v
+ NM = nm -t x -p
+ 
+ ASSEM_SRC = sparc-assem.S ldso-stubs.S
+diff --git a/src/runtime/Config.sparc-sunos b/src/runtime/Config.sparc-sunos
+index c5c89b8..7ca56e8 100644
+--- a/src/runtime/Config.sparc-sunos
++++ b/src/runtime/Config.sparc-sunos
+@@ -11,8 +11,8 @@
+ 
+ CC = gcc
+ CFLAGS += -DSVR4 -D_REENTRANT
+-ASFLAGS = -g -Wall -DSVR4
+-LINKFLAGS += -v
++ASFLAGS += -DSVR4
++LDFLAGS += -v
+ NM = nm -t x -p 
+ 
+ ASSEM_SRC = sparc-assem.S ldso-stubs.S
+diff --git a/src/runtime/Config.x86-64-darwin b/src/runtime/Config.x86-64-darwin
+index 24965f5..efecb06 100644
+--- a/src/runtime/Config.x86-64-darwin
++++ b/src/runtime/Config.x86-64-darwin
+@@ -9,13 +9,15 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-CFLAGS = -g -Wall -O2 -fdollars-in-identifiers
++CFLAGS += -arch x86_64 -O2 -fdollars-in-identifier
++LDFLAGS += -arch x86_64
++
+ ifdef LISP_FEATURE_DARWIN9_OR_BETTER
+ CFLAGS += -mmacosx-version-min=10.5
+-LINKFLAGS += -mmacosx-version-min=10.5
++LDFLAGS += -mmacosx-version-min=10.5
+ else
+ CFLAGS += -mmacosx-version-min=10.4
+-LINKFLAGS += -mmacosx-version-min=10.4
++LDFLAGS += -mmacosx-version-min=10.4
+ endif
+ ifdef LISP_FEATURE_INODE64
+ CFLAGS += -D_DARWIN_USE_64_BIT_INODE
+@@ -31,9 +33,9 @@ endif
+ ASSEM_SRC = x86-64-assem.S ldso-stubs.S
+ ARCH_SRC = x86-64-arch.c
+ 
+-LINKFLAGS += -arch x86_64 -dynamic -twolevel_namespace -bind_at_load -pagezero_size 0x100000
++LDFLAGS += -dynamic -twolevel_namespace -bind_at_load -pagezero_size 0x100000
+ 
+-CFLAGS += -arch x86_64 -fno-omit-frame-pointer -pagezero_size 0x100000
++CFLAGS += -fno-omit-frame-pointer -pagezero_size 0x100000
+ 
+ GC_SRC = gencgc.c
+ 
+diff --git a/src/runtime/Config.x86-64-freebsd b/src/runtime/Config.x86-64-freebsd
+index cb35476..2945aa5 100644
+--- a/src/runtime/Config.x86-64-freebsd
++++ b/src/runtime/Config.x86-64-freebsd
+@@ -13,11 +13,11 @@ include Config.x86-64-bsd
+ 
+ ASSEM_SRC += ldso-stubs.S
+ 
+-# Until sbcl-0.6.7.3, we used "LINKFLAGS+=-static" here, which
++# Until sbcl-0.6.7.3, we used "LDFLAGS+=-static" here, which
+ # worked fine for most things, but LOAD-FOREIGN & friends require
+ # dlopen() etc., which in turn depend on dynamic linking of the
+ # runtime.
+-LINKFLAGS += -dynamic -export-dynamic
++LDFLAGS += -dynamic -export-dynamic
+ 
+ # use libthr (1:1 threading).  libpthread (m:n threading) does not work.
+ ifdef LISP_FEATURE_SB_THREAD
+diff --git a/src/runtime/Config.x86-64-netbsd b/src/runtime/Config.x86-64-netbsd
+index e893ee0..41e66ba 100644
+--- a/src/runtime/Config.x86-64-netbsd
++++ b/src/runtime/Config.x86-64-netbsd
+@@ -14,9 +14,4 @@ include Config.x86-64-bsd
+ ASSEM_SRC += ldso-stubs.S
+ OS_LIBS += -lutil
+ 
+-# XXX why do all the other Configs set LINKFLAGS instead of LDFLAGS?
+-# LINKFLAGS is only used in src/runtime/GNUmakefile, this causes the
+-# dladdr test in tools-for-build/ to fail.
+-
+-LINKFLAGS += -export-dynamic
+ LDFLAGS += -export-dynamic
+diff --git a/src/runtime/Config.x86-64-openbsd b/src/runtime/Config.x86-64-openbsd
+index e893ee0..41e66ba 100644
+--- a/src/runtime/Config.x86-64-openbsd
++++ b/src/runtime/Config.x86-64-openbsd
+@@ -14,9 +14,4 @@ include Config.x86-64-bsd
+ ASSEM_SRC += ldso-stubs.S
+ OS_LIBS += -lutil
+ 
+-# XXX why do all the other Configs set LINKFLAGS instead of LDFLAGS?
+-# LINKFLAGS is only used in src/runtime/GNUmakefile, this causes the
+-# dladdr test in tools-for-build/ to fail.
+-
+-LINKFLAGS += -export-dynamic
+ LDFLAGS += -export-dynamic
+diff --git a/src/runtime/Config.x86-64-sunos b/src/runtime/Config.x86-64-sunos
+index 8441cef..208a4f7 100644
+--- a/src/runtime/Config.x86-64-sunos
++++ b/src/runtime/Config.x86-64-sunos
+@@ -1,14 +1,14 @@
+ CC=gcc
+-CFLAGS = -m64 -g -O2 -Wall -D__EXTENSIONS__ -D_POSIX_C_SOURCE=199506L -DSVR4 -D_REENTRANT -fno-omit-frame-pointer
+-ASFLAGS = -m64 -Wall
++CFLAGS += -m64 -O2 -D__EXTENSIONS__ -D_POSIX_C_SOURCE=199506L -DSVR4 -D_REENTRANT -fno-omit-frame-pointer
++ASFLAGS += -m64
+ LD = ld
+-LINKFLAGS = -m64 -g
++LDFLAGS += -m64 -g
+ NM = nm -xgp
+ GREP = ggrep
+ 
+ #CC=/opt/SunStudioExpress/bin/cc
+-#CFLAGS = -xarch=generic64 -g -O2 -Wall -D__EXTENSIONS__ -D_POSIX_C_SOURCE=199506L -DSVR4 -D_REENTRANT -fno-omit-frame-pointer
+-#ASFLAGS = -xarch=generic64 -Wall
++#CFLAGS += -xarch=generic64 -g -O2 -D__EXTENSIONS__ -D_POSIX_C_SOURCE=199506L -DSVR4 -D_REENTRANT -fno-omit-frame-pointer
++#ASFLAGS += -xarch=generic64
+ 
+ ASSEM_SRC = x86-64-assem.S ldso-stubs.S
+ ARCH_SRC = x86-64-arch.c
+diff --git a/src/runtime/Config.x86-darwin b/src/runtime/Config.x86-darwin
+index c1a3eb7..578f91a 100644
+--- a/src/runtime/Config.x86-darwin
++++ b/src/runtime/Config.x86-darwin
+@@ -9,14 +9,15 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+-CFLAGS = -arch i386 -g -Wall -O2 -fdollars-in-identifiers
+-LINKFLAGS += -arch i386
++CFLAGS += -arch i386 -g -Wall -O2 -fdollars-in-identifiers
++LDFLAGS += -arch i386
++
+ ifdef LISP_FEATURE_DARWIN9_OR_BETTER
+ CFLAGS += -mmacosx-version-min=10.5
+-LINKFLAGS += -mmacosx-version-min=10.5
++LDFLAGS += -mmacosx-version-min=10.5
+ else
+ CFLAGS += -mmacosx-version-min=10.4
+-LINKFLAGS += -mmacosx-version-min=10.4
++LDFLAGS += -mmacosx-version-min=10.4
+ endif
+ 
+ OS_SRC = bsd-os.c x86-bsd-os.c darwin-os.c x86-darwin-os.c
+diff --git a/src/runtime/Config.x86-freebsd b/src/runtime/Config.x86-freebsd
+index a7533b6..2b4b8bd 100644
+--- a/src/runtime/Config.x86-freebsd
++++ b/src/runtime/Config.x86-freebsd
+@@ -13,11 +13,11 @@ include Config.x86-bsd
+ 
+ ASSEM_SRC += ldso-stubs.S
+ 
+-# Until sbcl-0.6.7.3, we used "LINKFLAGS+=-static" here, which
++# Until sbcl-0.6.7.3, we used "LDFLAGS+=-static" here, which
+ # worked fine for most things, but LOAD-FOREIGN & friends require
+ # dlopen() etc., which in turn depend on dynamic linking of the
+ # runtime.
+-LINKFLAGS += -dynamic -export-dynamic
++LDFLAGS += -dynamic -export-dynamic
+ 
+ # use libthr (1:1 threading).  libpthread (m:n threading) does not work.
+ ifdef LISP_FEATURE_SB_THREAD
+diff --git a/src/runtime/Config.x86-linux b/src/runtime/Config.x86-linux
+index d64a779..5c3bfe7 100644
+--- a/src/runtime/Config.x86-linux
++++ b/src/runtime/Config.x86-linux
+@@ -27,11 +27,11 @@ OS_SRC = linux-os.c x86-linux-os.c
+ # (You *are* encouraged to design and implement a coherent stable
+ # interface, though.:-| As far as I (WHN 2002-05-19) know, no one is
+ # working on one and it would be a nice thing to have.)
+-LINKFLAGS += -Wl,--export-dynamic
++SBCL_LDFLAGS += -Wl,--export-dynamic
+ OS_LIBS = -ldl
+ 
+ ifdef LISP_FEATURE_LARGEFILE
+-  CFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
++  SBCL_CFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ endif
+ 
+ ifdef LISP_FEATURE_SB_THREAD
+diff --git a/src/runtime/Config.x86-netbsd b/src/runtime/Config.x86-netbsd
+index cd3782c..b0cd748 100644
+--- a/src/runtime/Config.x86-netbsd
++++ b/src/runtime/Config.x86-netbsd
+@@ -13,6 +13,6 @@ include Config.x86-bsd
+ 
+ ASSEM_SRC += ldso-stubs.S
+ OS_SRC += undefineds.c
+-LINKFLAGS += -dynamic -export-dynamic
++LDFLAGS += -dynamic -export-dynamic
+ 
+-CFLAGS =  -g -Wall -O2
++CFLAGS += -O2
+diff --git a/src/runtime/Config.x86-openbsd b/src/runtime/Config.x86-openbsd
+index b55c794..b98d701 100644
+--- a/src/runtime/Config.x86-openbsd
++++ b/src/runtime/Config.x86-openbsd
+@@ -18,11 +18,6 @@ OS_LIBS += -lutil
+ # locations used. If you wish to link the runtime using -Z option then
+ # please see the comments in src/compiler/x86/parms.lisp
+ 
+-# XXX why do all the other Configs set LINKFLAGS instead of LDFLAGS?
+-# LINKFLAGS is only used in src/runtime/GNUmakefile, this causes the
+-# dladdr test in tools-for-build/ to fail.
+-
+-LINKFLAGS += -export-dynamic
+ LDFLAGS += -export-dynamic
+ 
+-CFLAGS =  -g -Wall -O2
++CFLAGS += -O2
+diff --git a/src/runtime/Config.x86-sunos b/src/runtime/Config.x86-sunos
+index 2e58b51..fbb41aa 100644
+--- a/src/runtime/Config.x86-sunos
++++ b/src/runtime/Config.x86-sunos
+@@ -1,6 +1,5 @@
+ CC=gcc
+-CFLAGS = -g -O2 -Wall -D__EXTENSIONS__ -D_POSIX_C_SOURCE=199506L -DSVR4 -D_REENTRANT
+-ASFLAGS = -Wall
++CFLAGS += -O2 -D__EXTENSIONS__ -D_POSIX_C_SOURCE=199506L -DSVR4 -D_REENTRANT
+ LD = ld
+ NM = nm -xgp
+ GREP = ggrep
+diff --git a/src/runtime/Config.x86-win32 b/src/runtime/Config.x86-win32
+index b341808..8d24df6 100644
+--- a/src/runtime/Config.x86-win32
++++ b/src/runtime/Config.x86-win32
+@@ -25,13 +25,13 @@ OS_SRC = win32-os.c x86-win32-os.c os-common.c
+ # (You *are* encouraged to design and implement a coherent stable
+ # interface, though.:-| As far as I (WHN 2002-05-19) know, no one is
+ # working on one and it would be a nice thing to have.)
+-OS_LINK_FLAGS = -Wl,--export-dynamic,-mno-cygwin
++OS_LINK_FLAGS += -Wl,--export-dynamic,-mno-cygwin
+ OS_LIBS = -mno-cygwin
+ 
+ GC_SRC = gencgc.c
+ 
+-CFLAGS =  -g -Wall -O3 -mno-cygwin
+-ASFLAGS = $(CFLAGS)
++CFLAGS += -O3 -mno-cygwin
++ASFLAGS += $(CFLAGS)
+ 
+ CPP = cpp
+ CC = gcc-3
+diff --git a/src/runtime/Config.x86_64-linux b/src/runtime/Config.x86_64-linux
+index e1efb79..b17bfd4 100644
+--- a/src/runtime/Config.x86_64-linux
++++ b/src/runtime/Config.x86_64-linux
+@@ -27,7 +27,7 @@ OS_SRC = linux-os.c x86-64-linux-os.c
+ # (You *are* encouraged to design and implement a coherent stable
+ # interface, though.:-| As far as I (WHN 2002-05-19) know, no one is
+ # working on one and it would be a nice thing to have.)
+-LINKFLAGS += -Wl,--export-dynamic
++LDFLAGS += -Wl,--export-dynamic
+ OS_LIBS = -ldl
+ 
+ ifdef LISP_FEATURE_LARGEFILE
+diff --git a/src/runtime/GNUmakefile b/src/runtime/GNUmakefile
+index f0fbe19..6dc0581 100644
+--- a/src/runtime/GNUmakefile
++++ b/src/runtime/GNUmakefile
+@@ -18,27 +18,19 @@ TARGET=sbcl
+ # Config file. Most of them are same on most systems right now.
+ # If you need to override one of these, do it in Config.
+ LD = ld
+-LINKFLAGS = -g
++SBCL_LDFLAGS = -g
+ NM = nm -gp
+ DEPEND_FLAGS = -MM
+ GREP = grep
+ 
+ include ../../output/prefix.def
+ 
+-CFLAGS = -g -Wall -Wsign-compare -O3
+-ASFLAGS = $(CFLAGS)
+-CPPFLAGS = -I. -DSBCL_PREFIX=\"$(SBCL_PREFIX)\"
++SBCL_CFLAGS = -g -Wall -Wsign-compare -O3
++SBCL_ASFLAGS = $(SBCL_CFLAGS)
++SBCL_CPPFLAGS = -I. -DSBCL_PREFIX=\"$(SBCL_PREFIX)\"
+ 
+-# Give make access to the target Lisp features.
+-include genesis/Makefile.features
+-
+-# The Config file is the preferred place for tweaking options which
+-# are appropriate for particular setups (OS, ARCH, whatever). Make a
+-# Config-foo file for setup foo, then arrange for Config to be a
+-# symlink to Config-foo.
+-# Commonly used variables in Config are: ARCH_SRC, ASSEM_SRC, GC_SRC,
+-# OS_SRC, OS_LIBS, OS_OBJS, OS_CLEAN_FILES
+-include Config
++# Also included by tools-for-build/Makefile
++-include platform.mk
+ 
+ COMMON_SRC = alloc.c backtrace.c breakpoint.c coreparse.c \
+ 	dynbind.c funcall.c gc-common.c globals.c interr.c interrupt.c \
+@@ -58,7 +50,7 @@ LIBS = ${OS_LIBS} -lm
+ targets: $(TARGET) sbcl.nm
+ 
+ $(TARGET): $(OBJS)
+-	$(CC) ${LINKFLAGS} -o $@ $^ $(LIBS)
++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+ 
+ sbcl.nm: $(TARGET)
+ 	$(NM) $(TARGET) | $(GREP) -v " [FUw] " > ,$@
+diff --git a/src/runtime/platform.mk b/src/runtime/platform.mk
+new file mode 100644
+index 0000000..d2470cd
+--- /dev/null
++++ b/src/runtime/platform.mk
+@@ -0,0 +1,17 @@
++# -*- makefile -*- for the C-level run-time support for SBCL
++
++# Give make access to the target Lisp features.
++-include genesis/Makefile.features
++
++# The Config file is the preferred place for tweaking options which
++# are appropriate for particular setups (OS, ARCH, whatever). Make a
++# Config-foo file for setup foo, then arrange for Config to be a
++# symlink to Config-foo.
++# Commonly used variables in Config are: ARCH_SRC, ASSEM_SRC, GC_SRC,
++# OS_SRC, OS_LIBS, OS_OBJS, OS_CLEAN_FILES
++-include Config
++
++CPPFLAGS := $(SBCL_CPPFLAGS) $(CPPFLAGS)
++CFLAGS   := $(SBCL_CFLAGS)   $(CFLAGS)
++ASFLAGS  := $(SBCL_ASFLAGS)  $(ASFLAGS)
++LDFLAGS  := $(SBCL_LDFLAGS)  $(LDFLAGS)
+diff --git a/tools-for-build/Makefile b/tools-for-build/Makefile
+index 7a4c16f..dc99ebc 100644
+--- a/tools-for-build/Makefile
++++ b/tools-for-build/Makefile
+@@ -7,12 +7,11 @@
+ # provided with absolutely no warranty. See the COPYING and CREDITS
+ # files for more information.
+ 
+--include genesis/Makefile.features
+--include Config
++SBCL_CPPFLAGS = -I../src/runtime
++SBCL_LDFLAGS = $(OS_LIBS)
+ 
+-CPPFLAGS:=-I../src/runtime
+-LDFLAGS:=$(LDFLAGS)
+-LDLIBS:=$(OS_LIBS)
++# from src/runtime/
++-include platform.mk
+ 
+ all: grovel-headers determine-endianness where-is-mcontext \
+         modify-ldt-struct-name sigaction-sa-nodefer-works-test

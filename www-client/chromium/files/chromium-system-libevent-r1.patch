@@ -1,0 +1,12 @@
+--- chromium-14.0.836.0//base/base.gyp	2011-08-06 21:13:42.000000000 +0000
++++ fixed/chromium-14.0.836.0//base/base.gyp	2011-08-06 21:17:03.222084055 +0000
+@@ -283,6 +283,9 @@
+             'message_pump_libevent_unittest.cc',
+           ],
+         }, {  # OS != "win"
++          'dependencies': [
++            '../third_party/libevent/libevent.gyp:libevent'
++          ],
+           'sources/': [
+             ['exclude', '^win/'],
+           ],

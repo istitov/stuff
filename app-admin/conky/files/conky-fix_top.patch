@@ -1,0 +1,12 @@
+diff -Naur /home/megabaks/conky-1.8.1//src/top.c work/conky-1.8.1//src/top.c
+--- home/megabaks/conky-1.8.1//src/top.c	2010-10-05 21:29:36.000000000 +0000
++++ work/conky-1.8.1//src/top.c	2011-04-20 13:06:27.430296189 +0000
+@@ -997,7 +997,7 @@
+ 				break;
+ 			case TOP_PID:
+ 				width = MIN(p_max_size, 6);
+-				snprintf(p, width, "%5i",
++				snprintf(p, width, "%1i",
+ 						needed[td->num]->pid);
+ 				break;
+ 			case TOP_MEM:

@@ -1,0 +1,11 @@
+--- linux/linuxdir.c	2001-09-29 21:06:06.000000000 +0200
++++ linux/linuxdir.c	2007-07-18 15:51:21.000000000 +0200
+@@ -44,7 +44,7 @@
+ 	char pBuf[256];
+ 
+ 	FILE *pFile = fopen ("mission.dat", "rb");
+-	if (pFile == NULL) chdir ("game");
++	if (pFile == NULL) chdir ("/usr/games/lib/jjffe/firstenc/game");
+ 	else fclose (pFile);
+ 
+ 	CfgOpen (&cfg, __CONFIGFILE__);
