@@ -1,0 +1,21 @@
+Description: don't build perf measurement tools in static builds
+Bug: http://bugzilla.gnome.org/show_bug.cgi?id=346559
+
+Index: gtk+3.0-2.91.1/Makefile.am
+===================================================================
+--- gtk+3.0-2.91.1.orig/Makefile.am	2010-10-16 02:53:00.000000000 +0200
++++ gtk+3.0-2.91.1/Makefile.am	2010-10-18 14:10:10.239672000 +0200
+@@ -1,7 +1,12 @@
+ ## Makefile.am for GTK+
+ include $(top_srcdir)/Makefile.decl
+ 
+-SRC_SUBDIRS = gdk gtk libgail-util modules demos tests perf examples
++# don't build perf measurement tools in static builds
++if !ENABLE_STATIC
++MAYBE_PERF = perf
++endif
++
++SRC_SUBDIRS = gdk gtk libgail-util modules demos tests examples $(MAYBE_PERF)
+ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
+ 
+ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}

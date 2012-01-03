@@ -1,0 +1,34 @@
+Description: Don't query immodules for the local tree when cross-compiling or
+             when --disable-shared was given
+Bug: http://bugzilla.gnome.org/show_bug.cgi?id=346531
+
+Index: gtk+3.0-3.1.92/configure.ac
+===================================================================
+--- gtk+3.0-3.1.92.orig/configure.ac	2011-09-19 23:38:10.000000000 +0200
++++ gtk+3.0-3.1.92/configure.ac	2011-09-21 15:34:34.641475593 +0200
+@@ -208,6 +208,8 @@
+ # Create libtool early, because it's used in configure
+ LT_OUTPUT
+ 
++AM_CONDITIONAL([ENABLE_STATIC], [test "$enable_static" = yes])
++
+ # Make sure we use 64-bit versions of various file stuff.
+ AC_SYS_LARGEFILE
+ 
+Index: gtk+3.0-3.1.92/modules/input/Makefile.am
+===================================================================
+--- gtk+3.0-3.1.92.orig/modules/input/Makefile.am	2011-08-16 04:04:35.000000000 +0200
++++ gtk+3.0-3.1.92/modules/input/Makefile.am	2011-09-21 15:34:34.641475593 +0200
+@@ -174,8 +174,12 @@
+ if CROSS_COMPILING
+ RUN_QUERY_IMMODULES_TEST=false
+ else
++if ENABLE_STATIC
++RUN_QUERY_IMMODULES_TEST=false
++else
+ RUN_QUERY_IMMODULES_TEST=test -z "$(DESTDIR)"
+ endif
++endif
+ 
+ # Running this if cross compiling or if DESTDIR is set is going to
+ # not work at all, so skip it.

@@ -1,0 +1,22 @@
+Index: gtk+3.0-3.1.92/gtk/gtkrc.c
+===================================================================
+--- gtk+3.0-3.1.92.orig/gtk/gtkrc.c	2011-08-16 04:04:34.000000000 +0200
++++ gtk+3.0-3.1.92/gtk/gtkrc.c	2011-09-21 15:34:47.131475413 +0200
+@@ -958,6 +958,17 @@
+       if (im_module_file)
+         result = g_strdup (im_module_file);
+       else
++#if defined(__linux__) && ( defined(__i386__) || defined (__x86_64__) || defined(__ia64__) )
++# if defined (__i386__)
++        result = gtk_rc_make_default_dir ("immodules.cache.32");
++# else
++        result = gtk_rc_make_default_dir ("immodules.cache.64");
++# endif
++        /* Prefer compat immodules.cache file if it's usable. */
++        if (g_file_test(result, G_FILE_TEST_EXISTS))
++          return result;
++        g_free (result);
++#endif
+         result = gtk_rc_make_default_dir ("immodules.cache");
+     }
+ 
