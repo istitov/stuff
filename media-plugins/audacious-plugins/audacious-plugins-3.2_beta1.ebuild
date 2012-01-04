@@ -15,8 +15,9 @@ SRC_URI="http://distfiles.audacious-media-player.org/${MY_P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha amd64 hppa ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux"
-IUSE="aac adplug alsa aqua bs2b cdda cue ffmpeg flac fluidsynth gnome ipv6 jack
-lame libnotify libsamplerate midi mms mp3 mtp nls oss pulseaudio scrobbler sid sndfile vorbis wavpack gtk3"
+IUSE="aac adplug alsa bs2b cdda cue ffmpeg flac fluidsynth gnome ipv6 jack
+lame libnotify libsamplerate midi mms mp3 mtp nls oss pulseaudio scrobbler sid sndfile vorbis wavpack gtk3
+lyricwiki skins"
 
 RDEPEND="app-arch/unzip
 	>=dev-libs/dbus-glib-0.60
@@ -69,13 +70,13 @@ src_configure() {
 	econf \
 		--enable-modplug \
 		--enable-neon \
+		$(use_enable skins) \
+		$(use_enable lyricwiki) \
 		$(use_enable gtk3) \
 		$(use_enable adplug) \
 		$(use_enable aac) \
 		$(use_enable alsa) \
 		$(use_enable alsa amidiplug-alsa) \
-		$(use_enable aqua coreaudio) \
-		$(use_enable aqua dockalbumart) \
 		$(use_enable bs2b) \
 		$(use_enable cdda cdaudio) \
 		$(use_enable cue) \
