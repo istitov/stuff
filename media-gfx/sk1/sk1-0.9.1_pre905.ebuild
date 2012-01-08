@@ -22,6 +22,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="gnome kde"
 
 DEPEND="
+	dev-lang/python
 	>=dev-lang/tcl-8.5.0
 	>=dev-lang/tk-8.5.0
 	dev-python/imaging[tk]
