@@ -25,7 +25,7 @@ DEPEND=">=sys-libs/glibc-2.6.1
         >=dev-lang/tcl-8.5.5
         >=dev-lang/tk-8.5.5
         >=sys-libs/zlib-1.2.3-r1
-        virtual/python
+        dev-lang/python
         dev-python/imaging
         media-libs/lcms
         gnome-extra/zenity
