@@ -18,6 +18,10 @@ KEYWORDS="~alpha amd64 hppa ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-
 IUSE="aac adplug alsa bs2b cdda cue ffmpeg flac fluidsynth gnome ipv6 jack
 lame libnotify libsamplerate midi mms mp3 mtp nls oss pulseaudio scrobbler sid sndfile vorbis wavpack gtk3
 lyricwiki skins"
+LANGS="ca de cs cy es et eu fr hu ja it lt lv pl ro ru sk sr tr uk vi es_MX zh_CN zh_TW ru"
+for lang in ${LANGS}; do
+	IUSE+=" linguas_${lang}"
+done
 
 RDEPEND="app-arch/unzip
 	>=dev-libs/dbus-glib-0.60
@@ -112,4 +116,11 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS
+  for lang in ${LANGS};do
+	for x in ${lang};do
+	  if ! use linguas_${x}; then
+		rm -f "${D}/usr/share/locale/${x}/LC_MESSAGES/audacious-plugins.mo"
+	  fi
+	done
+  done
 }

@@ -15,6 +15,11 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha amd64 hppa ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux"
 IUSE="chardet nls session gtk3"
+LANGS="ca de cs cy es et eu fr hu ja it lt lv pl ro ru sk sr tr uk vi es_MX zh_CN zh_TW be bg ca br de cs cy el es
+et fi eu fr hi hr hu ja it ka ko lt mk lv nl pl ro ru sk sl sr sv tr uk vi ast es_MX pt_BR pt_PT zh_CN zh_TW sr@Latn"
+for lang in ${LANGS}; do
+	IUSE+=" linguas_${lang}"
+done
 
 RDEPEND=">=dev-libs/dbus-glib-0.60
 	>=dev-libs/glib-2.16
@@ -57,4 +62,12 @@ src_install() {
 	doins "${WORKDIR}"/gentoo_ice/*
 	docinto gentoo_ice
 	dodoc "${WORKDIR}"/README
+
+  for lang in ${LANGS};do
+	for x in ${lang};do
+	  if ! use linguas_${x}; then
+		rm -f "${D}usr/share/locale/${x}/LC_MESSAGES/audacious.mo"
+	  fi
+	done
+  done
 }
