@@ -16,7 +16,7 @@ HOMEPAGE="https://launchpad.net/dbusmenu"
 SRC_URI="http://launchpad.net/dbusmenu/0.5/${PV}/+download/libdbusmenu-${PV}.tar.gz"
 
 LICENSE="LGPL-3"
-SLOT="0"
+SLOT="3"
 KEYWORDS="~amd64 ~x86"
 IUSE="gtk gtk3 introspection +test vala"
 
