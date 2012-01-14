@@ -19,7 +19,8 @@ KEYWORDS="~x86 ~amd64"
 IUSE="wifi"
 
 DEPEND="|| ( www-client/firefox www-client/firefox-bin )
-		wifi? ( net-wireless/wireless-tools )"
+		wifi? ( net-wireless/wireless-tools )
+		x11-misc/appmenu-gtk"
 RDEPEND="${DEPEND}"
 
 src_unpack() {
