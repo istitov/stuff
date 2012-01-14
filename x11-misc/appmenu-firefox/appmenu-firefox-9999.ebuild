@@ -22,7 +22,8 @@ IUSE="wifi"
 
 DEPEND="|| ( www-client/firefox www-client/firefox-bin )
 		wifi? ( net-wireless/wireless-tools )
-		x11-misc/appmenu-gtk"
+		x11-misc/appmenu-gtk
+		app-text/gnome-doc-utils"
 RDEPEND="${DEPEND}"
 
 src_unpack() {
