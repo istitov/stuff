@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit multilib
+EAPI="4"
 
-EAPI="2"
+inherit multilib
 
 DESCRIPTION="xvba-video"
 HOMEPAGE="http://www.splitted-desktop.com/~gbeauchesne/xvba-video/"
