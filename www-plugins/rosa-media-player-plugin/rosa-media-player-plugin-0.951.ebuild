@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit eutils qt4 multilib
+inherit eutils qt4-r2 multilib
 
 DESCRIPTION="ROSA Media Plugin"
 HOMEPAGE="http://www.rosalab.ru/"

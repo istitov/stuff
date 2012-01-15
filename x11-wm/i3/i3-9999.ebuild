@@ -7,7 +7,7 @@ EAPI="2"
 EGIT_REPO_URI="git://code.stapelberg.de/i3"
 EGIT_BRANCH="next"
 
-inherit git multilib
+inherit git-2 multilib
 
 DESCRIPTION="An improved dynamic tiling window manager"
 HOMEPAGE="http://i3wm.org"

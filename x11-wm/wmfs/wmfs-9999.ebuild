@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=3
-inherit eutils git
+inherit eutils git-2
 
 DESCRIPTION="Windows Manager From Scratch"
 HOMEPAGE="https://www.wmfs.info"
