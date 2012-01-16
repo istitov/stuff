@@ -9,7 +9,7 @@ MY_P=ImageMagick-$(replace_version_separator 3 '-')
 
 DESCRIPTION="A collection of tools and libraries for many image formats"
 HOMEPAGE="http://www.imagemagick.org/"
-SRC_URI="http://image_magick.veidrodis.com/image_magick/${MY_P}.tar.xz"
+SRC_URI="http://image_magick.veidrodis.com/image_magick/${MY_P}.tar.xz http://www.imagemagick.org/download/${MY_P}.tar.xz"
 
 LICENSE="imagemagick"
 SLOT="0"
