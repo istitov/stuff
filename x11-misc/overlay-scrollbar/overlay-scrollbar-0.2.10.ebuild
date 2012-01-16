@@ -4,11 +4,13 @@
 
 EAPI=4
 
-inherit autotools
+inherit autotools multilib versionator
 
 DESCRIPTION="Ubuntu's scrollbars"
 HOMEPAGE="https://launchpad.net/ayatana-scrollbar"
 SRC_URI="http://launchpad.net/ayatana-scrollbar/0.2/${PV}/+download/${PN}-${PV}.tar.gz"
+
+MY_PV=$(get_version_component_range 3)
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
@@ -47,14 +49,14 @@ src_compile(){
 src_install(){
   if use gtk2;then
 	insinto /usr/$(get_libdir)/
-	doins os/.libs/liboverlay-scrollbar-0.2.so.0.0.10
-	dosym /usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0.0.10 /usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0 
+	doins os/.libs/liboverlay-scrollbar-0.2.so.0.0.${MY_PV}
+	dosym /usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0.0.${MY_PV} /usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0 
   fi
   
   if use gtk3;then
 	insinto /usr/$(get_libdir)/
-	doins gtk3-hack/os/.libs/liboverlay-scrollbar3-0.2.so.0.0.10
-	dosym /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0.0.10 /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0 
+	doins gtk3-hack/os/.libs/liboverlay-scrollbar3-0.2.so.0.0.${MY_PV}
+	dosym /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0.0.${MY_PV} /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0 
   fi
   
   mv data/81overlay-scrollbar data/overlay-scrollbar.sh
