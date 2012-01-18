@@ -1,0 +1,22 @@
+virtual/jpeg media-libs/giflib media-libs/tiff || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool
+virtual/jpeg media-libs/giflib media-libs/tiff
+0
+http://www.leptonica.com/source/leptonlib-1.67.tar.gz
+
+http://www.leptonica.com/
+Apache-2.0
+An open source C library for image processing and analysis
+~amd64 ~x86
+autotools eutils libtool multilib portability toolchain-funcs user
+
+
+
+
+2
+
+install prepare
+
+
+
+
+

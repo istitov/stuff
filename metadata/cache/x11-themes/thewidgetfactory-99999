@@ -1,0 +1,22 @@
+x11-libs/gtk+:3 dev-util/pkgconfig >=dev-vcs/bzr-2.0.1
+x11-libs/gtk+:3
+gtk-3
+
+
+https://code.launchpad.net/~cimi/+junk/twf-gtk+3
+GPL-2
+A showcase for GTK+ widgets
+
+bzr eutils multilib portability toolchain-funcs user
+
+
+
+
+2
+
+install prepare unpack
+
+
+
+
+

@@ -1,0 +1,22 @@
+dev-util/pkgconfig || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool
+x11-libs/libva[opengl?] opengl? ( virtual/opengl ) x11-libs/libvdpau
+0
+http://www.splitted-desktop.com/~gbeauchesne/vdpau-video/pre/vdpau-video-0.7.3.pre7.tar.gz
+
+http://www.freedesktop.org/wiki/Software/vaapi
+GPL-2
+VDPAU Backend for Video Acceleration (VA) API
+~amd64 ~x86
+autotools eutils libtool multilib portability toolchain-funcs user
+debug opengl
+
+
+
+2
+
+configure install prepare
+
+
+
+
+

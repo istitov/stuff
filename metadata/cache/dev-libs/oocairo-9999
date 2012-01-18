@@ -1,0 +1,22 @@
+dev-lang/lua x11-libs/cairo dev-vcs/git
+dev-lang/lua x11-libs/cairo
+0
+
+
+http://oocairo.naquadah.org/
+MIT
+oocairo are Lua bindings to the cairo library, allowing graphic and text rendering.
+
+git-2
+
+
+
+
+4
+
+prepare unpack
+
+
+
+
+

@@ -1,0 +1,22 @@
+>=media-libs/libsdl-1.2.7[video,X] media-libs/sdl-net >=media-libs/sdl-ttf-2.0.8 >=media-libs/sdl-mixer-1.2[vorbis] >=media-libs/sdl-image-1.2[jpeg,png] !dedicated? ( dbus? ( sys-apps/dbus ) ) >=dev-libs/boost-1.36 sys-libs/zlib x11-libs/pango dev-lang/lua media-libs/fontconfig virtual/libintl openmp? ( sys-devel/gcc[openmp] ) dev-util/pkgconfig !dedicated? ( tinygui? ( || ( media-gfx/imagemagick[jpeg,png] media-gfx/graphicsmagick[imagemagick,jpeg,png] ) ) ) sys-devel/gettext >=dev-util/cmake-2.8.4 userland_GNU? ( >=sys-apps/findutils-4.4.0 )
+>=media-libs/libsdl-1.2.7[video,X] media-libs/sdl-net >=media-libs/sdl-ttf-2.0.8 >=media-libs/sdl-mixer-1.2[vorbis] >=media-libs/sdl-image-1.2[jpeg,png] !dedicated? ( dbus? ( sys-apps/dbus ) ) >=dev-libs/boost-1.36 sys-libs/zlib x11-libs/pango dev-lang/lua media-libs/fontconfig virtual/libintl
+0
+mirror://sourceforge/wesnoth/wesnoth-1.9.12.tar.bz2
+
+http://www.wesnoth.org/
+GPL-2
+Battle for Wesnoth - A fantasy turn-based strategy game
+amd64 ppc ppc64 x86 ~x86-fbsd
+base cmake-utils eutils flag-o-matic games multilib portability toolchain-funcs user
+dbus dedicated doc nls server openmp tinygui
+
+
+
+2
+
+compile configure install postinst preinst prepare setup test unpack
+
+
+
+
+

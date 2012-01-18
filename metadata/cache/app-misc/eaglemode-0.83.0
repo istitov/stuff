@@ -1,0 +1,22 @@
+dev-lang/perl x11-libs/libX11 media-libs/jpeg media-libs/libpng media-libs/tiff media-libs/xine-lib media-libs/freetype gnome-base/librsvg
+dev-lang/perl x11-libs/libX11 media-libs/jpeg media-libs/libpng media-libs/tiff media-libs/xine-lib media-libs/freetype gnome-base/librsvg x11-terms/xterm app-text/ghostscript-gpl
+0
+http://sourceforge.net/projects/eaglemode/files/eaglemode-0.83.0/eaglemode-0.83.0.tar.bz2/download -> eaglemode-0.83.0.tar.bz2
+
+http://eaglemode.sourceforge.net/
+GPL-3
+Zoomable user interface with plugin applications
+~amd64 ~x86
+
+
+
+
+
+4
+
+compile install
+
+
+
+
+

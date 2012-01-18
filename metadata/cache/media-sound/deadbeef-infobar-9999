@@ -1,0 +1,22 @@
+x11-libs/gtk+ dev-libs/libxml2
+x11-libs/gtk+ dev-libs/libxml2
+0
+
+
+https://bitbucket.org/Not_eXist/deadbeef-infobar
+GPLv2
+Infobar plugin for DeadBeeF audio player. Shows lyrics and artist's biography for the current track.
+~alpha ~amd64 ~ppc64 ~sparc ~x86
+
+
+
+
+
+4
+
+compile configure install prepare
+
+
+
+
+

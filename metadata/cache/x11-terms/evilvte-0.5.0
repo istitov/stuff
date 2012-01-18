@@ -1,0 +1,22 @@
+x11-libs/vte:2.90 || ( gtk3? ( x11-libs/gtk+:3 ) x11-libs/gtk+:2 ) dev-util/pkgconfig
+x11-libs/vte:2.90 || ( gtk3? ( x11-libs/gtk+:3 ) x11-libs/gtk+:2 )
+0
+http://www.calno.com/evilvte/evilvte-0.5.0.tar.xz
+
+http://www.calno.com/evilvte
+GPL-2
+VTE based, super lightweight terminal emulator
+~amd64 ~x86
+multilib portability savedconfig toolchain-funcs
+gtk3 savedconfig
+
+
+
+4
+
+compile configure install postinst prepare
+
+
+
+
+

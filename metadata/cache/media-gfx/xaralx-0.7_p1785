@@ -1,0 +1,22 @@
+virtual/libintl x11-libs/gtk+ >=x11-libs/wxGTK-2.8.10 >=sys-devel/gettext-0.14.3 >=sys-devel/automake-1.6 >=sys-devel/autoconf-2.59 media-libs/libpng:1.4 >=media-libs/jpeg-6b app-arch/zip dev-lang/perl >=dev-libs/libxml2-2.6.0 dev-util/pkgconfig sys-devel/libtool || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool
+virtual/libintl x11-libs/gtk+ >=x11-libs/wxGTK-2.8.10 >=sys-devel/gettext-0.14.3 >=sys-devel/automake-1.6 >=sys-devel/autoconf-2.59 media-libs/libpng:1.4 >=media-libs/jpeg-6b app-arch/zip dev-lang/perl >=dev-libs/libxml2-2.6.0
+0
+http://downloads2.xara.com/opensource/XaraLX-0.7r1785.tar.bz2
+
+http://www.xaraxtreme.org/
+GPL-2
+Vector graphics editing program
+~x86
+autotools eutils libtool multilib portability toolchain-funcs user wxwidgets
+-debug -static +xarlib +filters international
+
+
+
+3
+
+configure install setup unpack
+
+
+
+
+

@@ -1,0 +1,22 @@
+|| ( www-client/firefox www-client/firefox-bin ) wifi? ( net-wireless/wireless-tools ) x11-misc/appmenu-gtk[gtk2] app-text/gnome-doc-utils || ( =sys-devel/automake-1.11* ) =sys-devel/autoconf-2.1* sys-devel/libtool >=dev-vcs/bzr-2.0.1 app-arch/unzip
+|| ( www-client/firefox www-client/firefox-bin ) wifi? ( net-wireless/wireless-tools ) x11-misc/appmenu-gtk[gtk2] app-text/gnome-doc-utils
+0
+
+
+https://code.launchpad.net/~extension-hackers/globalmenu-extension/2.0
+|| ( MPL-1.1 GPL-2 LGPL-2.1 )
+Appmenu support for Firefox
+~x86 ~amd64
+autotools bzr eutils libtool mozextension multilib portability toolchain-funcs user
+wifi
+
+
+
+3
+
+configure install prepare unpack
+
+
+
+
+

@@ -1,0 +1,22 @@
+dev-lang/python >=dev-lang/tcl-8.5.0 >=dev-lang/tk-8.5.0 dev-python/imaging[tk] media-libs/freetype:2 >=sys-libs/zlib-1.1.4 >=x11-libs/cairo-1.2.4 x11-libs/libX11 x11-libs/libXext >=app-admin/eselect-python-20091230 =dev-lang/python-2* =dev-lang/python-2*[tk]
+dev-lang/python >=dev-lang/tcl-8.5.0 >=dev-lang/tk-8.5.0 dev-python/imaging[tk] media-libs/freetype:2 >=sys-libs/zlib-1.1.4 >=x11-libs/cairo-1.2.4 x11-libs/libX11 x11-libs/libXext dev-python/reportlab app-text/ghostscript-gpl gnome? ( gnome-extra/zenity ) kde? ( kde-base/kdialog ) ~media-libs/sk1libs-0.9.1_pre905 >=app-admin/eselect-python-20091230 =dev-lang/python-2* =dev-lang/python-2*[tk]
+0
+http://sk1project.org/downloads/sk1/0.9.1pre_rev905/sK1-0.9.1pre_rev905.tar.gz
+
+http://www.sk1project.org
+|| ( GPL-2 LGPL-2 )
+sK1 vector graphics editor
+~amd64 ~x86
+distutils eutils multilib portability python toolchain-funcs user
+gnome kde
+
+
+
+4
+
+compile install postinst postrm prepare setup
+
+
+
+
+

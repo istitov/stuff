@@ -1,0 +1,22 @@
+x11-base/xorg-server kernel_linux? ( >=sys-libs/glibc-2.6.1 ) multilib? ( app-emulation/emul-linux-x86-xlibs ) >=app-admin/eselect-opengl-1.0.9 !<media-video/nvidia-settings-256.52 kernel_linux? ( virtual/linux-sources ) kernel_linux? ( sys-apps/module-init-tools ) sys-apps/sed kernel_linux? ( virtual/linux-sources ) sys-apps/pciutils
+x11-base/xorg-server kernel_linux? ( >=sys-libs/glibc-2.6.1 ) multilib? ( app-emulation/emul-linux-x86-xlibs ) >=app-admin/eselect-opengl-1.0.9 !<media-video/nvidia-settings-256.52 x11-libs/libXvMC acpi? ( sys-power/acpid ) kernel_linux? ( sys-apps/module-init-tools )
+0
+x86? ( http://us.download.nvidia.com/XFree86/Linux-x86/275.36/NVIDIA-Linux-x86-275.36.run ) amd64? ( http://us.download.nvidia.com/XFree86/Linux-x86_64/275.36/NVIDIA-Linux-x86_64-275.36.run ) x86-fbsd? ( http://us.download.nvidia.com/XFree86/FreeBSD-x86/275.36/NVIDIA-FreeBSD-x86-275.36.tar.gz )
+strip
+http://www.nvidia.com/
+NVIDIA
+NVIDIA X11 driver and GLX libraries
+-* amd64 x86 x86-fbsd
+eutils flag-o-matic linux-info linux-mod multilib nvidia-driver portability toolchain-funcs user versionator
+acpi custom-cflags gtk multilib kernel_linux rt kernel_linux
+
+>=x11-libs/libvdpau-0.3-r1 gtk? ( media-video/nvidia-settings )
+
+2
+
+compile install postinst postrm preinst prepare setup unpack
+
+
+
+
+

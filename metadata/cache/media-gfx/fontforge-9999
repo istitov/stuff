@@ -1,0 +1,22 @@
+gif? ( >=media-libs/giflib-4.1.0-r1 ) jpeg? ( virtual/jpeg ) png? ( >=media-libs/libpng-1.2.4 ) tiff? ( >=media-libs/tiff-3.5.7-r1 ) truetype? ( >=media-libs/freetype-2.1.4 ) truetype-debugger? ( >=media-libs/freetype-2.3.8[fontforge,-bindist] ) svg? ( >=dev-libs/libxml2-2.6.7 ) unicode? ( >=media-libs/libuninameslist-030713 ) cairo? ( >=x11-libs/cairo-1.6.4[X] ) pango? ( >=x11-libs/pango-1.20.3 ) x11-libs/libXi x11-proto/inputproto !media-gfx/pfaedit nls? ( sys-devel/gettext ) >=app-admin/eselect-python-20091230 python? ( =dev-lang/python-2* ) || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool dev-vcs/git
+gif? ( >=media-libs/giflib-4.1.0-r1 ) jpeg? ( virtual/jpeg ) png? ( >=media-libs/libpng-1.2.4 ) tiff? ( >=media-libs/tiff-3.5.7-r1 ) truetype? ( >=media-libs/freetype-2.1.4 ) truetype-debugger? ( >=media-libs/freetype-2.3.8[fontforge,-bindist] ) svg? ( >=dev-libs/libxml2-2.6.7 ) unicode? ( >=media-libs/libuninameslist-030713 ) cairo? ( >=x11-libs/cairo-1.6.4[X] ) pango? ( >=x11-libs/pango-1.20.3 ) x11-libs/libXi x11-proto/inputproto !media-gfx/pfaedit >=app-admin/eselect-python-20091230 python? ( =dev-lang/python-2* )
+0
+
+
+http://fontforge.sourceforge.net/
+BSD
+postscript font editor and converter
+alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos
+autotools eutils fdo-mime git-2 libtool multilib portability python toolchain-funcs user
+cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X capslock-for-alt freetype-bytecode freetype devicetables gb12345
+
+
+
+4
+
+configure install postinst postrm prepare setup unpack
+
+
+
+
+

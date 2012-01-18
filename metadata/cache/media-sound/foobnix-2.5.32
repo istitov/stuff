@@ -1,0 +1,22 @@
+dev-python/chardet dev-python/gst-python net-libs/glib-networking[ssl] dev-python/simplejson dev-python/pygtk media-libs/gst-plugins-good media-plugins/gst-plugins-soup media-plugins/gst-plugins-ffmpeg sys-devel/gettext virtual/ffmpeg hotkeys? ( dev-libs/keybinder ) dvb? ( media-libs/gst-plugins-bad ) alsa? ( media-plugins/gst-plugins-alsa ) fuse? ( sys-fs/fuseiso ) libnotify? ( dev-python/notify-python ) lame? ( media-sound/lame ) faac? ( media-libs/faac ) mp3? ( media-libs/gst-plugins-ugly ) webkit? ( dev-python/pywebkitgtk )
+
+0
+https://launchpad.net/~foobnix-player/+archive/foobnix/+files/foobnix_2.5.32o.tar.gz
+
+https://launchpad.net/~foobnix-player
+GPLv3
+Media player with VK/Last.fm integration
+~alpha ~amd64 ~ppc64 ~sparc ~x86
+eutils multilib portability toolchain-funcs user
+hotkeys dvb alsa fuse libnotify lame faac mp3 webkit linguas_bg linguas_de linguas_en_GB linguas_es linguas_fr linguas_it linguas_pl linguas_pt linguas_ru linguas_tr linguas_uk linguas_zh_CN
+
+
+
+4
+
+compile install
+
+
+
+
+
