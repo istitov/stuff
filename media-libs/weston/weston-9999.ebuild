@@ -4,8 +4,7 @@
 
 EAPI=3
 
-EGIT_REPO_URI="git://anongit.freedesktop.org/wayland/wayland-demos"
-EGIT_BOOTSTRAP="eautoreconf"
+EGIT_REPO_URI="git://anongit.freedesktop.org/wayland/weston"
 
 inherit autotools autotools-utils git-2
 
@@ -13,21 +12,20 @@ DESCRIPTION="demos for wayland the (compositing) display server library"
 HOMEPAGE="http://wayland.freedesktop.org"
 SRC_URI=""
 
-LICENSE="LGPL-2"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+poppler +svg +clients
-	+compositor-drm +compositor-x11 +compositor-wayland compositor-openwfd tablet"
+IUSE="+poppler +svg +clients +simple-clients
+	+compositor-drm +compositor-x11 +compositor-wayland compositor-openwfd"
 
 DEPEND="x11-base/wayland
-	>=media-libs/mesa-9999[gles2,wayland]
+	>=media-libs/mesa-9999[gles2,egl]
 	x11-libs/pixman
-	=x11-libs/libxkbcommon-9999
 	media-libs/libpng
-	media-libs/libjpeg-turbo
 	compositor-drm? (
 		>=sys-fs/udev-136
 		>=x11-libs/libdrm-2.4.25
+		media-libs/mesa[gbm]
 	)
 	compositor-x11? (
 		x11-libs/libxcb
@@ -35,40 +33,41 @@ DEPEND="x11-base/wayland
 	)
 	compositor-openwfd? (
 		media-libs/owfdrm
+		media-libs/mesa[gbm]
+	)
+	compositor-wayland? (
+		media-libs/mesa[wayland]
 	)
 	clients? (
+		media-libs/mesa[wayland]
 		dev-libs/glib:2
-		>=x11-libs/cairo-1.10.0[opengl]
+		media-libs/libjpeg-turbo
+		>=x11-libs/cairo-1.11.3[opengl]
 		|| ( x11-libs/gdk-pixbuf:2 <x11-libs/gtk+-2.20:2 )
+		=x11-libs/libxkbcommon-9999
 		poppler? ( app-text/poppler[cairo] )
 	)
+	simple-clients? ( media-libs/mesa[wayland] )
 	svg? ( gnome-base/librsvg )"
 
 RDEPEND="${DEPEND}"
 
 # FIXME: add with-poppler to wayland configure
 myeconfargs=(
+	# prefix with "wayland-" if not already
+	"--program-transform-name='/^weston/!s/^/weston-/'"
 	$(use_enable clients)
+	$(use_enable simple-clients)
 	$(use_enable compositor-drm drm-compositor)
 	$(use_enable compositor-x11 x11-compositor)
 	$(use_enable compositor-wayland wayland-compositor)
 	$(use_enable compositor-openwfd openwfd-compositor)
-	$(use_enable tablet tablet-shell)
 )
 
 src_prepare()
 {
 	sed -i -e "/PROGRAMS/s/noinst/bin/" \
-		{compositor,clients}"/Makefile.am" || \
+		{src,clients}"/Makefile.am" || \
 		die "sed {compositor,clients}/Makefile.am failed!"
-}
-
-pkg_postinst()
-{
-	einfo "To run the wayland exmaple compositor as x11 client execute:"
-	einfo "   DISPLAY=:0 EGL_PLATFORM=x11 EGL_DRIVER=egl_dri2 wayland-compositor"
-	einfo
-	einfo "Start the wayland clients with EGL_PLATFORM set to wayland:"
-	einfo "   EGL_PLATFORM=wayland terminal"
-	einfo
+	eautoreconf
 }
