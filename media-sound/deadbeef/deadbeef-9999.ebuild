@@ -34,6 +34,11 @@ IUSE="adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffm
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath
 	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar mono2stereo"
 
+LANGS="be bg bn ca cs da de el en_GB es fa fi fr gl he hr hu id it ja kk km lg nb nl pl pt_BR pt ru si sk sl sr@latin sr sv te tr uk vi zh_CN zh_TW"
+for lang in ${LANGS}; do
+	IUSE+=" linguas_${lang}"
+done
+
 RDEPEND="aac? ( media-libs/faad2 )
 	alsa? ( media-libs/alsa-lib )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
@@ -75,6 +80,13 @@ src_prepare() {
 		sed -e 's;/etc/timidity++/timidity-freepats.cfg;/usr/share/timidity/freepats/timidity.cfg;g' \
 			-i "${S}/plugins/wildmidi/wildmidiplug.c"
 	fi
+  for lang in ${LANGS};do
+	for x in ${lang};do
+	  if ! use linguas_${x}; then
+		rm -f "po/${x}.po"
+	  fi
+	done
+  done
 }
 
 src_configure() {

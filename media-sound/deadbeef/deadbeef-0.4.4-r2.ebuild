@@ -20,6 +20,11 @@ IUSE="+gtk gtk3 +alsa ffmpeg pulseaudio mp3 +vorbis +flac wavpack sndfile cdda +
 	oss lastfm adplug +ape sid nullout +supereq vtx gme dumb +notify cover curl
 	shellexec musepack +tta dts aac midi mms shorten audiooverload nls rpath threads static"
 
+LANGS="be bg bn ca cs da de el en_GB es fa fi fr gl he hr hu id it ja kk km lg nb nl pl pt_BR pt ru si sk sl sr@latin sr sv te tr uk vi zh_CN zh_TW"
+for lang in ${LANGS}; do
+	IUSE+=" linguas_${lang}"
+done
+
 RDEPEND="media-libs/libsamplerate
 	gtk? ( x11-libs/gtk+:2 )
 	alsa? ( media-libs/alsa-lib )
@@ -46,6 +51,13 @@ src_prepare() {
 		sed -e 's;/etc/timidity++/timidity-freepats.cfg;/usr/share/timidity/freepats/timidity.cfg;g' \
 			-i "${S}/plugins/wildmidi/wildmidiplug.c"
 	fi
+  for lang in ${LANGS};do
+	for x in ${lang};do
+	  if ! use linguas_${x}; then
+		rm -f "${D}usr/share/locale/${x}/LC_MESSAGES/audacious.mo"
+	  fi
+	done
+  done
 }
 
 src_configure() {
