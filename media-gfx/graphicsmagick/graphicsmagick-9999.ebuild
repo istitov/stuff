@@ -14,7 +14,7 @@ EHG_REPO_URI="http://graphicsmagick.hg.sourceforge.net:8000/hgroot/graphicsmagic
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos"
+KEYWORDS=""
 IUSE="bzip2 cxx debug doc fpx imagemagick jbig jpeg jpeg2k lzma lcms modules openmp
 	perl png q8 q16 q32 svg threads tiff truetype X wmf zlib"
 
