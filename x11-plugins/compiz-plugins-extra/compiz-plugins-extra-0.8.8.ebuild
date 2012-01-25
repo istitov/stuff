@@ -20,9 +20,7 @@ RDEPEND="
 	virtual/jpeg:0
 	>=x11-libs/compiz-bcop-${PV}
 	>=x11-plugins/compiz-plugins-main-${PV}
-	>=x11-wm/compiz-${PV}[gconf?]
-	=x11-libs/libnotify-0.5.2
-"
+	>=x11-wm/compiz-${PV}[gconf?]"
 
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
@@ -34,7 +32,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	#use old libnotify
-	sed -e 's|libnotify |libnotify-0.5.2 |' -i configure.ac
+	epatch "${FILESDIR}/${P}-libnotify-0.7.patch"
 
 	if ! use gconf; then
 		epatch "${FILESDIR}"/${PN}-no-gconf.patch

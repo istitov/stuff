@@ -1,0 +1,12 @@
+--- src/notification/notification.c~	2011-04-21 13:51:08.000000000 +0200
++++ src/notification/notification.c	2011-06-17 17:00:29.873690094 +0200
+@@ -104,9 +104,6 @@
+     n = notify_notification_new (logLevel,
+                                  message,
+                                  iconUri
+-#if !defined (HAVE_LIBNOTIFY_0_6_1)
+-                                 , NULL
+-#endif
+                                  );
+ 
+     notify_notification_set_timeout (n, nd->timeout);
