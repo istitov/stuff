@@ -33,16 +33,18 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
+	#use old libnotify
+	sed -e 's|libnotify |libnotify-0.5.2 |' -i configure.ac
+
 	if ! use gconf; then
 		epatch "${FILESDIR}"/${PN}-no-gconf.patch
 	fi
-	# required to apply the above patch
+
 	intltoolize --copy --force || die "intltoolize failed"
 	eautoreconf || die "eautoreconf failed"
 }
 
 src_configure() {
-  sed -e 's|"libnotify|"libnotify-0.5.2|g' -i configure
   econf \
 		--disable-dependency-tracking \
 		--enable-fast-install \
