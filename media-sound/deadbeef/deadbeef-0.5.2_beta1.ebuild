@@ -23,7 +23,7 @@ LICENSE="GPL-2
 	shn? ( shorten )"
 SLOT="0"
 IUSE="adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk
-	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath
+	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath mono2stereo
 	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar gtk3"
 
 LANGS="be bg bn ca cs da de el en_GB es fa fi fr gl he hr hu id it ja kk km lg nb nl pl pt_BR pt ru si sk sl sr@latin sr sv te tr uk vi zh_CN zh_TW"
@@ -51,7 +51,6 @@ RDEPEND="aac? ( media-libs/faad2 )
 	wavpack? ( media-sound/wavpack )
 	zip? ( dev-libs/libzip
 	infobar? ( media-sound/deadbeef-infobar )
-	gtk3? ( x11-libs/gtk+:3 )
 		sys-libs/zlib )"
 
 DEPEND="${RDEPEND}"
@@ -167,6 +166,11 @@ src_compile() {
 
 	if use shn ; then
 		cd ${S}/plugins/shn
+		emake
+	fi
+
+	if use mono2stereo ; then
+		cd ${S}/plugins/mono2stereo
 		emake
 	fi
 }

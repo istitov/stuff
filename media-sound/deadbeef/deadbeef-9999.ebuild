@@ -32,7 +32,7 @@ LICENSE="GPL-2
 SLOT="0"
 IUSE="adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath
-	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar mono2stereo"
+	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar mono2stereo gtk3"
 
 LANGS="be bg bn ca cs da de el en_GB es fa fi fr gl he hr hu id it ja kk km lg nb nl pl pt_BR pt ru si sk sl sr@latin sr sv te tr uk vi zh_CN zh_TW"
 for lang in ${LANGS}; do
@@ -45,7 +45,7 @@ RDEPEND="aac? ( media-libs/faad2 )
 	cover? ( media-libs/imlib2 )
 	ffmpeg? ( virtual/ffmpeg )
 	flac? ( media-libs/flac )
-	gtk? ( x11-libs/gtk+:2 )
+	gtk? ( || ( gtk3? ( x11-libs/gtk+:3 ) ( x11-libs/gtk+:2 ) ) )
 	lastfm? ( net-misc/curl )
 	notify? ( sys-apps/dbus )
 	midi? ( media-sound/timidity-freepats )
@@ -146,6 +146,14 @@ src_configure() {
 	if use infobar; then
 	  my_config="${my_config}
 	  --enable-vfs-curl"
+	fi
+	
+	if use gtk; then
+	  if use gtk3;then
+	  my_config="${my_config}
+	  --enable-gtk3
+	  --disable-gtk2"
+	  fi
 	fi
 	
 	econf ${my_config}
