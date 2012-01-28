@@ -8,7 +8,7 @@ GPL-2 LGPL-2.1 ZLIB ao? ( BSD XMAME ) dumb? ( DUMB-0.9.2 ) shn? ( shorten )
 foobar2k-like music player
 ~x86 ~amd64
 fdo-mime
-adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip
+adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip linguas_be linguas_bg linguas_bn linguas_ca linguas_cs linguas_da linguas_de linguas_el linguas_en_GB linguas_es linguas_fa linguas_fi linguas_fr linguas_gl linguas_he linguas_hr linguas_hu linguas_id linguas_it linguas_ja linguas_kk linguas_km linguas_lg linguas_nb linguas_nl linguas_pl linguas_pt_BR linguas_pt linguas_ru linguas_si linguas_sk linguas_sl linguas_sr@latin linguas_sr linguas_sv linguas_te linguas_tr linguas_uk linguas_vi linguas_zh_CN linguas_zh_TW
 
 
 
