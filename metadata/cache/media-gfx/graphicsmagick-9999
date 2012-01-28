@@ -6,7 +6,7 @@ app-text/ghostscript-gpl bzip2? ( app-arch/bzip2 ) fpx? ( media-libs/libfpx ) jb
 http://www.graphicsmagick.org/
 MIT
 Collection of tools and libraries for many image formats
-~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos
+
 base eutils flag-o-matic mercurial multilib perl-module portability toolchain-funcs user
 bzip2 cxx debug doc fpx imagemagick jbig jpeg jpeg2k lzma lcms modules openmp perl png q8 q16 q32 svg threads tiff truetype X wmf zlib
 

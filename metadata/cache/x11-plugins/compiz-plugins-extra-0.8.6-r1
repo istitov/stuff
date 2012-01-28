@@ -1,0 +1,22 @@
+>=gnome-base/librsvg-2.14.0:2 virtual/jpeg:0 >=x11-libs/compiz-bcop-0.8.4 >=x11-plugins/compiz-plugins-main-0.8.6 >=x11-wm/compiz-0.8.6[gconf?] libnotify? ( x11-libs/libnotify ) >=dev-util/intltool-0.35 >=dev-util/pkgconfig-0.19 >=sys-devel/gettext-0.15 x11-libs/cairo gconf? ( gnome-base/gconf:2 ) || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool >=sys-apps/sed-4
+>=gnome-base/librsvg-2.14.0:2 virtual/jpeg:0 >=x11-libs/compiz-bcop-0.8.4 >=x11-plugins/compiz-plugins-main-0.8.6 >=x11-wm/compiz-0.8.6[gconf?] libnotify? ( x11-libs/libnotify )
+0
+http://releases.compiz.org/0.8.6/compiz-plugins-extra-0.8.6.tar.bz2
+
+http://www.compiz.org/
+GPL-2
+Compiz Fusion Window Decorator Extra Plugins
+~amd64 ~ppc ~ppc64 ~x86
+autotools eutils gnome2-utils libtool multilib portability toolchain-funcs user
+gconf libnotify
+
+
+
+2
+
+configure install postinst preinst prepare
+
+
+
+
+
