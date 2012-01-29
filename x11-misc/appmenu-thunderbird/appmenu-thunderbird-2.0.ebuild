@@ -9,7 +9,7 @@ EBZR_REPO_URI="lp:globalmenu-extension/2.0"
 
 inherit autotools bzr mozextension
 
-DESCRIPTION="Appmenu support for Firefox"
+DESCRIPTION="Appmenu support for Thunderbird"
 HOMEPAGE="https://code.launchpad.net/~extension-hackers/globalmenu-extension/2.0"
 SRC_URI=""
 
