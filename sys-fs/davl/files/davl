@@ -1,0 +1,15 @@
+#!/sbin/runscript
+
+depend() {
+	need localmount
+}
+
+start() {
+	ebegin "Starting DAVL"
+	start-stop-daemon --quiet --start -x modprobe davl_liveinfo
+	eend $? "noip did not start, error code $?"
+}
+
+stop() {
+	rmmod davl_liveinfo
+}
