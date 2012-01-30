@@ -50,4 +50,6 @@ src_configure() {
 src_install() {
 	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/firefox"
 	xpi_install ${S}/dist/xpi-stage/globalmenu
+ $(has firefox-bin firefox-bin ) && \
+ dosym "/usr/$(get_libdir)/firefox/extensions/globalmenu@ubuntu.com" "/opt/firefox/extensions/globalmenu@ubuntu.com"
 }
