@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name='psf'>AOSDK-based PSF(QSF,SSF,DSF) plugin</flag>
+		<flag name='src'>Add <pkg>media-libs/libsamplerate</pkg> support</flag>
+		<flag name='supereq'>SuperEQ DSP plugin</flag>
+		<flag name='zip'>Vfs_zip plugin</flag>
+		<flag name='sid'>Commodore64 SID music player plugin</flag>
+		<flag name='shn'>Support for shorten (.shn) files</flag>
+		<flag name='shellexec'>Shell commands plugin</flag>
+		<flag name='nullout'>NULL output plugin</flag>
+		<flag name='notify'>Notification-daemon support plugin</flag>
+		<flag name='m3u'>Support for m3u playlists</flag>
+		<flag name='gme'>Game Music Emu plugin for NSF, AY, etc</flag>
+		<flag name='dumb'>Support for tracker music(MOD, S3M, XM, IT, STM, 669, PTM, PSM, MTM, DSM, ASYLUM AMF, UMX, J2B)</flag>
+	</use>
+</pkgmetadata>
