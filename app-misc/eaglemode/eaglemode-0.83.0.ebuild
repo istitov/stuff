@@ -14,7 +14,7 @@ DEPEND="dev-lang/perl
 	media-libs/jpeg
 	media-libs/libpng
 	media-libs/tiff
-	media-libs/xine-lib
+	<media-libs/xine-lib-1.2.0
 	media-libs/freetype
 	gnome-base/librsvg"
 RDEPEND="${DEPEND}
