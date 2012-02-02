@@ -9,7 +9,7 @@ inherit autotools
 DESCRIPTION="BAMF Application Matching Framework"
 SRC_URI="http://launchpad.net/${PN}/0.2/0.2.204/+download/${PN}-${PV}.tar.gz"
 HOMEPAGE="https://launchpad.net/bamf"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 SLOT="0" 
 LICENSE="LGPL3"
 IUSE="+gtk2 gtk3"
