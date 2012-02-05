@@ -1,0 +1,22 @@
+dev-libs/glib:2 dev-libs/libxml2:2 dev-libs/libxslt media-libs/libpng >=media-libs/mesa-6.5.1-r1 >=x11-base/xorg-server-1.1.1-r1 >=x11-libs/libX11-1.4 x11-libs/libxcb x11-libs/libXcomposite x11-libs/libXdamage x11-libs/libXinerama x11-libs/libXrandr x11-libs/libICE x11-libs/libSM >=x11-libs/libXrender-0.8.4 >=x11-libs/startup-notification-0.7 cairo? ( x11-libs/cairo[X] ) fuse? ( sys-fs/fuse ) gnome? ( >=gnome-base/gnome-control-center-2.16.1:2 gnome-base/gnome-desktop:2 gconf? ( gnome-base/gconf:2 ) ) gtk? ( >=x11-libs/gtk+-2.8.0:2 >=x11-libs/libwnck-2.18.3:1 x11-libs/pango ) kde? ( || ( >=kde-base/kwin-4.2.0 kde-base/kwin:live ) ) svg? ( >=gnome-base/librsvg-2.14.0:2 >=x11-libs/cairo-1.0 ) dev-util/pkgconfig x11-proto/damageproto x11-proto/xineramaproto || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool >=sys-apps/sed-4
+dev-libs/glib:2 dev-libs/libxml2:2 dev-libs/libxslt media-libs/libpng >=media-libs/mesa-6.5.1-r1 >=x11-base/xorg-server-1.1.1-r1 >=x11-libs/libX11-1.4 x11-libs/libxcb x11-libs/libXcomposite x11-libs/libXdamage x11-libs/libXinerama x11-libs/libXrandr x11-libs/libICE x11-libs/libSM >=x11-libs/libXrender-0.8.4 >=x11-libs/startup-notification-0.7 cairo? ( x11-libs/cairo[X] ) fuse? ( sys-fs/fuse ) gnome? ( >=gnome-base/gnome-control-center-2.16.1:2 gnome-base/gnome-desktop:2 gconf? ( gnome-base/gconf:2 ) ) gtk? ( >=x11-libs/gtk+-2.8.0:2 >=x11-libs/libwnck-2.18.3:1 x11-libs/pango ) kde? ( || ( >=kde-base/kwin-4.2.0 kde-base/kwin:live ) ) svg? ( >=gnome-base/librsvg-2.14.0:2 >=x11-libs/cairo-1.0 ) x11-apps/mesa-progs x11-apps/xvinfo
+0
+http://releases.compiz.org/0.8.6/compiz-0.8.6.tar.bz2
+
+http://www.compiz.org/
+GPL-2 LGPL-2.1 MIT
+OpenGL window and compositing manager
+~amd64 ~ppc ~ppc64 ~x86
+autotools eutils gnome2-utils libtool multilib portability toolchain-funcs user
++cairo fuse gnome gconf gtk kde +svg
+
+
+
+2
+
+configure install postinst preinst prepare prerm
+
+
+
+
+

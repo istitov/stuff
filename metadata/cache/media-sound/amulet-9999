@@ -1,0 +1,22 @@
+|| ( mp3? ( virtual/ffmpeg[mp3] ) virtual/ffmpeg ) x11-libs/qt-gui:4 x11-libs/qt-core:4 dev-vcs/git
+
+0
+
+
+http://gitorious.org/amulet
+GPL-2
+Audio converter based on ffmpeg
+~x86 ~amd64
+base eutils git-2 multilib portability qt4-r2 toolchain-funcs user
+mp3
+
+
+
+4
+
+compile configure install prepare unpack
+
+
+
+
+

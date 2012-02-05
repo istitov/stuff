@@ -1,0 +1,22 @@
+>=sys-libs/glibc-2.6.1 >=x11-libs/cairo-1.4.0 media-libs/freetype:2 x11-libs/libX11 x11-libs/libXext >=dev-lang/tcl-8.5.5 >=dev-lang/tk-8.5.5 >=sys-libs/zlib-1.2.3-r1 dev-lang/python dev-python/imaging media-libs/lcms gnome-extra/zenity media-libs/sk1libs media-gfx/sk1sdk dev-vcs/subversion net-misc/rsync
+>=sys-libs/glibc-2.6.1 >=x11-libs/cairo-1.4.0 media-libs/freetype:2 x11-libs/libX11 x11-libs/libXext >=dev-lang/tcl-8.5.5 >=dev-lang/tk-8.5.5 >=sys-libs/zlib-1.2.3-r1 dev-lang/python dev-python/imaging media-libs/lcms gnome-extra/zenity media-libs/sk1libs media-gfx/sk1sdk
+0
+
+
+http://www.sk1project.org/
+|| ( GPL-2 LGPL-2 )
+sK1 vector graphics editor
+~amd64 ~x86
+eutils multilib portability subversion toolchain-funcs user
+
+
+
+
+4
+
+compile install preinst prepare setup unpack
+
+
+
+
+

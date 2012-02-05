@@ -1,0 +1,22 @@
+|| ( mail-client/thunderbird mail-client/thunderbird-bin ) wifi? ( net-wireless/wireless-tools ) || ( =sys-devel/automake-1.11* ) =sys-devel/autoconf-2.1* sys-devel/libtool >=dev-vcs/bzr-2.0.1 app-arch/unzip
+|| ( mail-client/thunderbird mail-client/thunderbird-bin ) wifi? ( net-wireless/wireless-tools )
+0
+
+
+https://code.launchpad.net/~extension-hackers/globalmenu-extension/2.0
+|| ( MPL-1.1 GPL-2 LGPL-2.1 )
+Appmenu support for Thunderbird
+~x86 ~amd64
+autotools bzr eutils libtool mozextension multilib portability toolchain-funcs user
+wifi
+
+
+
+3
+
+configure install prepare unpack
+
+
+
+
+

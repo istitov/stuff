@@ -1,0 +1,22 @@
+sys-libs/zlib media-libs/libmad media-libs/libid3tag media-libs/libao[alsa?] || ( =sys-devel/automake-1.11* ) >=sys-devel/autoconf-2.61 sys-devel/libtool
+sys-libs/zlib media-libs/libmad media-libs/libid3tag media-libs/libao[alsa?]
+0
+mirror://sourceforge/mpg321/mpg321-0.2.13-4.tar.gz
+
+http://mpg321.sourceforge.net/
+GPL-2
+a realtime MPEG 1.0/2.0/2.5 audio player for layers 1, 2 and 3
+~alpha ~amd64 ~arm ~hppa ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos
+autotools eutils libtool multilib portability toolchain-funcs user
+alsa ipv6
+
+
+
+4
+
+configure install prepare
+
+
+
+
+

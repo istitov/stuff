@@ -1,0 +1,22 @@
+dev-lang/nasm dev-vcs/subversion net-misc/rsync
+dev-lang/nasm
+0
+
+
+http://sourceforge.net/projects/libjpeg-turbo/
+as-is LGPL-2.1 wxWinLL-3.1
+MMX, SSE, and SSE2 SIMD accellerated jpeg library
+
+eutils libtool multilib portability subversion toolchain-funcs user
+static-libs
+
+
+
+3
+
+configure install preinst prepare unpack
+
+
+
+
+
