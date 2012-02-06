@@ -6,7 +6,7 @@
 
 GPL-2
 Qsmmp is a audio player based on Qmmp. Qmmp is a Winamp-like player, while Qsmmp aimed to have native qt look.
-~amd64 ~x86
+
 base eutils git-2 multilib portability qt4-r2 toolchain-funcs user
 debug
 

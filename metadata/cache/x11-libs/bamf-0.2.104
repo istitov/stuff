@@ -4,7 +4,7 @@
 http://launchpad.net/bamf/0.2/0.2.204/+download/bamf-0.2.104.tar.gz
 
 https://launchpad.net/bamf
-LGPL3
+LGPL-3
 BAMF Application Matching Framework
 ~x86 ~amd64
 autotools eutils libtool multilib portability toolchain-funcs user

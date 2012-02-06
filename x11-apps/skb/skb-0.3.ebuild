@@ -10,7 +10,7 @@ DESCRIPTION="Simple keyboard layout indicator"
 HOMEPAGE=""
 SRC_URI="http://plhk.ru/static/skb/${PN}-${PV}.tar.gz"
 
-LICENSE="GPLv2"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""

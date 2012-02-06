@@ -8,7 +8,7 @@ DESCRIPTION="Infobar plugin for DeadBeeF audio player. Shows lyrics and artist's
 HOMEPAGE="https://bitbucket.org/Not_eXist/deadbeef-infobar"
 EHG_REPO_URI="https://hg@bitbucket.org/Not_eXist/deadbeef-infobar"
 
-LICENSE="GPLv2"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""

@@ -6,7 +6,7 @@ x11-base/wayland >=media-libs/mesa-9999[gles2,egl] x11-libs/pixman media-libs/li
 http://wayland.freedesktop.org
 MIT
 demos for wayland the (compositing) display server library
-~amd64 ~x86
+
 autotools autotools-utils eutils git-2 libtool multilib portability toolchain-funcs user
 +poppler +svg +clients +simple-clients +compositor-drm +compositor-x11 +compositor-wayland compositor-openwfd
 

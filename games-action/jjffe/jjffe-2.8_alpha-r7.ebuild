@@ -42,7 +42,7 @@ SRC_URI="
 # License of the package.  This must match the name of file(s) in
 # /usr/portage/licenses/.  For complex license combination see the developer
 # docs on gentoo.org for details.
-LICENSE="GPL"
+LICENSE="GPL-2"
 
 # The SLOT variable is used to tell Portage if it's OK to keep multiple
 # versions of the same package installed at the same time.  For example,

@@ -27,7 +27,7 @@ SRC_URI="http://www.erlang.org/download/${MY_P}.tar.gz
 	http://erlang.org/download/otp_doc_man_${MY_PV}.tar.gz
 	doc? ( http://erlang.org/download/otp_doc_html_${MY_PV}.tar.gz )"
 
-LICENSE="EPL"
+LICENSE="EPL-1.0"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris"
 IUSE="doc emacs halfword hipe java kpoll odbc smp sctp ssl tk wxwidgets"

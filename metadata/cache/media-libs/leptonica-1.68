@@ -6,7 +6,7 @@ http://www.leptonica.com/source/leptonica-1.68.tar.gz
 http://www.leptonica.com/
 Apache-2.0
 An open source C library for image processing and analysis
-~amd64 ~x86
+alpha amd64 ~mips ppc ppc64 sparc x86
 autotools eutils libtool multilib portability toolchain-funcs user
 
 

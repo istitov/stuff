@@ -11,7 +11,7 @@ SRC_URI="http://launchpad.net/${PN}/0.2/0.2.204/+download/${PN}-${PV}.tar.gz"
 HOMEPAGE="https://launchpad.net/bamf"
 KEYWORDS="~x86 ~amd64"
 SLOT="0" 
-LICENSE="LGPL3"
+LICENSE="LGPL-3"
 IUSE="+gtk2"
 
 DEPEND=">=dev-lang/vala-0.11.7

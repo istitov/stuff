@@ -10,7 +10,7 @@ DESCRIPTION="This KCM allows you to easily configure the standard Qt graphics sy
 HOMEPAGE="http://kde-apps.org/content/show.php?content=129817"
 SRC_URI="http://kde-apps.org/CONTENT/content-files/129817-kcm-qt-graphicssystem-${PV}.tar.xz"
 
-LICENSE="GPL"
+LICENSE="GPL-1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""

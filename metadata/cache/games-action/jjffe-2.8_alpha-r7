@@ -4,7 +4,7 @@ media-libs/libsdl >=dev-lang/nasm-0.98 app-arch/unzip
 http://jaj22.org.uk/jjffe/jjffe28a7s.zip http://www.eliteclub.co.uk/download/firstenc.zip
 strip mirror
 http://jaj22.org.uk/jjffe/
-GPL
+GPL-2
 JJFFE is set of recompiled replacement executables for the 1995 Frontier Developments game Frontier: First Encounters.
 x86 amd64
 
