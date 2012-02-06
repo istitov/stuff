@@ -6,7 +6,7 @@ http://releases.compiz.org/0.8.4/simple-ccsm-0.8.4.tar.bz2
 http://www.compiz.org/
 GPL-2
 Simplified Compizconfig Settings Manager
-~amd64 ~ppc ~ppc64 ~x86
+-alpha ~amd64 -ppc64 -sparc ~x86
 distutils gnome2-utils multilib python toolchain-funcs
 
 

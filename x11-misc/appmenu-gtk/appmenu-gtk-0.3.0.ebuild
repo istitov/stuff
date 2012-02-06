@@ -12,7 +12,7 @@ SRC_URI="http://launchpad.net/${PN}/0.3/${PV}/+download/${PN}-${PV}.tar.gz"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
+KEYWORDS="-alpha ~amd64 -ppc64 -sparc ~x86"
 IUSE="+gtk2 gtk3"
 
 CDEPEND=""

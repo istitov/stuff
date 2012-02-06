@@ -19,7 +19,7 @@ RDEPEND=">=dev-libs/glib-2.18:2
 	>=x11-libs/gtk+-2.12:2
 	gtk3? (
 	  >=x11-libs/gtk+-3.2.1:3
-	  >=x11-libs/wnck-3.2.1 )
+	  >=x11-libs/libwnck-3.2.1 )
 	>=dev-libs/dbus-glib-0.76
 	>=gnome-base/gnome-panel-2
 	>=gnome-base/gconf-2

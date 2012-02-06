@@ -1,0 +1,8 @@
+# Copyright 1999-2012 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/profiles/use.desc,v 1.476 2012/01/31 09:40:31 mr_bones_ Exp $
+
+gtk3 - build with x11-libs/gtk+:3
+gtk2 - build with x11-libs/gtk+:2
+appmenu - add support for ubuntu global menu
+overlay - add support for ubuntu overlay scrollbars

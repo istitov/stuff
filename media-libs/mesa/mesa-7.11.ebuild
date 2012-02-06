@@ -32,7 +32,7 @@ else
 		${SRC_PATCHES}"
 fi
 
-LICENSE="LGPL-2 kilgard"
+LICENSE="LGPL-2 glut"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 

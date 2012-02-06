@@ -12,7 +12,7 @@ SRC_URI="http://kde-apps.org/CONTENT/content-files/129817-kcm-qt-graphicssystem-
 
 LICENSE="GPL-1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
+KEYWORDS="-alpha ~amd64 -ppc64 -sparc ~x86"
 IUSE=""
 
 DEPEND_COMMON="

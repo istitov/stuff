@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>graphics</herd>
+	<use>
+		<flag name='dia'>
+			pull in <pkg>app-office/dia</pkg> for dia import extension
+		</flag>
+		<flag name='inkjar'>
+			enables support for OpenOffice.org SVG jar files
+		</flag>
+		<flag name='gs'>
+			enables support for the PostScript import extension
+		</flag>
+	</use>
+</pkgmetadata>
