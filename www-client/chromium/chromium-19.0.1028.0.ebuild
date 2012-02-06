@@ -66,7 +66,7 @@ DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81-r2
 	test? ( dev-python/pyftpdlib )"
 RDEPEND+="
-	!=www-client/chromium-9999
+	!www-client/chromium:live
 	x11-misc/xdg-utils
 	virtual/ttf-fonts"
 

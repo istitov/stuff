@@ -7,7 +7,7 @@ EAPI=2
 inherit eutils
 
 DESCRIPTION="evtest monitors an input device, displaying all the events it generates."
-HOMEPAGE=""
+HOMEPAGE="http://code.google.com/p/beagleboard/"
 SRC_URI="http://beagleboard.googlecode.com/files/evtest.c"
 
 LICENSE=""

@@ -13,13 +13,13 @@ SRC_URI="http://releases.compiz.org/${PV}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-alpha ~amd64 -ppc64 -sparc ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/compizconfig-python-${PV}
+	>=dev-python/compizconfig-python-0.8.4
 	>=dev-python/pygtk-2.10:2
-	>=x11-apps/ccsm-${PV}
+	>=x11-apps/ccsm-0.8.4
 "
 
 pkg_setup() {

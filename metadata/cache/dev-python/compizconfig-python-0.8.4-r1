@@ -6,7 +6,7 @@ http://releases.compiz.org/0.8.4/compizconfig-python-0.8.4.tar.bz2
 http://www.compiz.org/
 GPL-2
 Compizconfig Python Bindings
-~amd64 ~ppc ~ppc64 ~x86
+~amd64 ~x86
 multilib python toolchain-funcs
 
 

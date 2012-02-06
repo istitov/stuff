@@ -7,7 +7,7 @@ EAPI=4
 inherit eutils qt4-r2
 
 DESCRIPTION="Application designed to test QT performance"
-HOMEPAGE=""
+HOMEPAGE="none"
 SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/qtperf.tar.bz2"
 
 LICENSE="GPL-3"

@@ -6,7 +6,7 @@ http://craigd.wikispaces.com/file/view/QtCurve-Gtk2-1.8.10.tar.bz2
 http://www.kde-look.org/content/show.php?content=40492
 GPL-2
 A set of widget styles for GTK2 based apps, also available for KDE3 and Qt4
-~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86
+~alpha ~amd64 ~ppc ~ppc64 ~sparc ~x86
 base cmake-utils eutils flag-o-matic multilib portability toolchain-funcs user
 mozilla
 

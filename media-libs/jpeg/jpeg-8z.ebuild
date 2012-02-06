@@ -5,6 +5,7 @@
 EAPI="3"
 SLOT="0"
 KEYWORDS=""
+HOMEPAGE="none"
 RDEPEND="media-libs/libjpeg-turbo"
 DEPEND="${RDEPEND}"
 IUSE=""
