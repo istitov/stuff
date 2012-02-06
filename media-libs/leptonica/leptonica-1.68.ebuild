@@ -12,7 +12,7 @@ HOMEPAGE="http://www.leptonica.com/"
 SRC_URI="http://www.leptonica.com/source/${P}.tar.gz"
 
 LICENSE="Apache-2.0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="alpha amd64 ~mips ppc ppc64 sparc x86"
 IUSE=""
 
 SLOT="0"

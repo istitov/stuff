@@ -12,7 +12,7 @@ SRC_URI="http://download.fxclub.org/Rumus2/FxClub/Rumus2.rpm -> rumus-${PV}.rpm"
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
+KEYWORDS="-alpha ~amd64 -ppc64 -sparc ~x86"
 IUSE=""
 
 DEPEND_COMMON="x11-libs/qt-webkit:4

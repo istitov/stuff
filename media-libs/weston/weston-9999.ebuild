@@ -14,7 +14,7 @@ SRC_URI=""
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="+poppler +svg +clients +simple-clients
 	+compositor-drm +compositor-x11 +compositor-wayland compositor-openwfd"
 

@@ -12,10 +12,10 @@ EGIT_COMMIT="${EGIT_BRANCH}"
 DESCRIPTION="Qsmmp is a audio player based on Qmmp. Qmmp is a Winamp-like player, while Qsmmp aimed to have native qt look."
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="debug"
 
-RDEPEND="=media-sound/qmmp-9999
+RDEPEND="=media-sound/qmmp-${PV}
 		x11-libs/libqxt"
 
 DEPEND="${RDEPEND}"
