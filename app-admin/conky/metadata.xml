@@ -5,7 +5,6 @@
 		<email>megagreener@gmail.com</email>
 		<name>megabaks</name>
 	</maintainer>
-	<maintainer>
 	<longdescription>Conky is a system monitor that sits in the corner of your desktop. It is a fork of Torsmo that is actually maintained.</longdescription>
 	<use>
 		<flag name='apcupsd'>enable support for <pkg>sys-power/apcupsd</pkg></flag>
