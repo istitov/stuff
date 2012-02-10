@@ -1,10 +1,9 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.24.6.ebuild,v 1.1 2011/09/09 20:16:59 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.24.10.ebuild,v 1.2 2012/02/10 02:33:04 patrick Exp $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
-PYTHON_DEPEND="2:2.4"
+EAPI="4"
+PYTHON_DEPEND="2:2.5"
 
 inherit eutils flag-o-matic gnome.org libtool python virtualx autotools
 
@@ -18,7 +17,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 IUSE="aqua cups debug doc examples +introspection test vim-syntax xinerama appmenu overlay"
 
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
-RDEPEND="!aqua? (
+COMMON_DEPEND="!aqua? (
 		x11-libs/libXrender
 		x11-libs/libX11
 		x11-libs/libXi
@@ -45,7 +44,7 @@ RDEPEND="!aqua? (
 	cups? ( net-print/cups )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	!<gnome-base/gail-1000"
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.9
 	!aqua? (
 		x11-proto/xextproto
@@ -61,6 +60,10 @@ DEPEND="${RDEPEND}
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"
+# gtk+-2.24.8 breaks Alt key handling in <=x11-libs/vte-0.28.2:0
+# Remove blocker after >=vte-0.28.2-r201:0 is stable
+RDEPEND="${COMMON_DEPEND}
+	!<x11-libs/vte-0.28.2-r201:0"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
 
 strip_builddir() {
@@ -85,25 +88,21 @@ src_prepare() {
 	# Don't break inclusion of gtkclist.h, upstream bug 536767
 	epatch "${FILESDIR}/${PN}-2.14.3-limit-gtksignal-includes.patch"
 
-	# Create symlinks to old icons until apps are ported, bug #339319
-	epatch "${FILESDIR}/${PN}-2.24.4-old-icons.patch"
-
-	# fix building with gir #372953
-	epatch "${FILESDIR}"/${PN}-2.24.5-darwin-quartz-introspection.patch
+	# fix building with gir #372953, upstream bug #642085
+	epatch "${FILESDIR}"/${PN}-2.24.7-darwin-quartz-introspection.patch
 
 	if use appmenu;then
-	epatch ${FILESDIR}/appmenu/xid-collision-debug.patch
-	epatch ${FILESDIR}/appmenu/gtk2-dont-ellipsize-filters.diff
 	epatch ${FILESDIR}/appmenu/fix.patch
-	epatch ${FILESDIR}/appmenu/043_ubuntu_menu_proxy.patch
-	epatch ${FILESDIR}/appmenu/072_indicator_menu_update.patch
-	epatch ${FILESDIR}/appmenu/012_ubuntu-set-grab-add.patch
+	epatch ${FILESDIR}/${PV}/012_ubuntu-set-grab-add.patch
+	epatch ${FILESDIR}/${PV}/043_ubuntu_menu_proxy.patch
+	epatch ${FILESDIR}/${PV}/044_grips.patch
+	epatch ${FILESDIR}/${PV}/072_indicator_menu_update.patch
 	fi
 	
 	if use overlay;then
-	epatch ${FILESDIR}/100_overlay_scrollbar_loading.patch
+	epatch ${FILESDIR}/${PV}/100_overlay_scrollbar_loading.patch
 	fi
-	
+
 	# Stop trying to build unmaintained docs, bug #349754
 	strip_builddir SUBDIRS tutorial docs/Makefile.am docs/Makefile.in
 	strip_builddir SUBDIRS faq docs/Makefile.am docs/Makefile.in
@@ -114,28 +113,33 @@ src_prepare() {
 
 	use ppc64 && append-flags -mminimal-toc
 
-	# Non-working test in gentoo's env
-	sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
-		-i gtk/tests/testing.c || die "sed 1 failed"
-
-	# Cannot work because glib is too clever to find real user's home
-	# gentoo bug #285687, upstream bug #639832
-	# XXX: /!\ Pay extra attention to second sed when bumping /!\
-	sed '/TEST_PROGS.*recentmanager/d' -i gtk/tests/Makefile.am \
-		|| die "failed to disable recentmanager test (1)"
-	sed '/^TEST_PROGS =/,+3 s/recentmanager//' -i gtk/tests/Makefile.in \
-		|| die "failed to disable recentmanager test (2)"
-	sed 's:\({ "GtkFileChooserButton".*},\):/*\1*/:g' -i gtk/tests/object.c \
-		|| die "failed to disable recentmanager test (3)"
-
 	if ! use test; then
 		# don't waste time building tests
-		strip_builddir SRC_SUBDIRS tests Makefile.am Makefile.in
+		strip_builddir SRC_SUBDIRS tests Makefile.{am,in}
+		strip_builddir SUBDIRS tests gdk/Makefile.{am,in} gtk/Makefile.{am,in}
 	else
+		# Non-working test in gentoo's env
+		sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
+			-i gtk/tests/testing.c || die "sed 1 failed"
+
+		# Cannot work because glib is too clever to find real user's home
+		# gentoo bug #285687, upstream bug #639832
+		# XXX: /!\ Pay extra attention to second sed when bumping /!\
+		sed '/TEST_PROGS.*recentmanager/d' -i gtk/tests/Makefile.am \
+			|| die "failed to disable recentmanager test (1)"
+		sed '/^TEST_PROGS =/,+3 s/recentmanager//' -i gtk/tests/Makefile.in \
+			|| die "failed to disable recentmanager test (2)"
+		sed 's:\({ "GtkFileChooserButton".*},\):/*\1*/:g' -i gtk/tests/object.c \
+			|| die "failed to disable recentmanager test (3)"
+
 		# Skip tests known to fail
 		# https://bugzilla.gnome.org/show_bug.cgi?id=646609
 		sed -e '/g_test_add_func.*test_text_access/s:^://:' \
 			-i "${S}/gtk/tests/testing.c" || die
+
+		# https://bugzilla.gnome.org/show_bug.cgi?id=617473
+		sed -i -e 's:pltcheck.sh:$(NULL):g' \
+			gtk/Makefile.am || die
 	fi
 
 	if ! use examples; then
@@ -160,12 +164,11 @@ src_configure() {
 	if use aqua; then
 		myconf="${myconf} --with-gdktarget=quartz"
 	else
-		myconf="${myconf} --with-gdktarget=x11"
+		myconf="${myconf} --with-gdktarget=x11 --with-xinput"
 	fi
 
 	# Passing --disable-debug is not recommended for production use
 	use debug && myconf="${myconf} --enable-debug=yes"
-	use appmenu && myconf="${myconf} --with-xinput=yes --disable-visibility"
 
 	econf ${myconf}
 }
@@ -179,22 +182,22 @@ src_test() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "Installation failed"
+	emake DESTDIR="${D}" install
 
 	set_gtk2_confdir
-	dodir ${GTK2_CONFDIR} || die "dodir failed"
+	dodir ${GTK2_CONFDIR}
 	keepdir ${GTK2_CONFDIR}
 
 	# see bug #133241
 	echo 'gtk-fallback-icon-theme = "gnome"' > "${T}/gtkrc"
 	insinto /etc/gtk-2.0
-	doins "${T}"/gtkrc || die "doins gtkrc failed"
+	doins "${T}"/gtkrc
 
 	# Enable xft in environment as suggested by <utx@gentoo.org>
 	echo "GDK_USE_XFT=1" > "${T}"/50gtk2
-	doenvd "${T}"/50gtk2 || die "doenvd failed"
+	doenvd "${T}"/50gtk2
 
-	dodoc AUTHORS ChangeLog* HACKING NEWS* README* || die "dodoc failed"
+	dodoc AUTHORS ChangeLog* HACKING NEWS* README*
 
 	# add -framework Carbon to the .pc files
 	use aqua && for i in gtk+-2.0.pc gtk+-quartz-2.0.pc gtk+-unix-print-2.0.pc; do
@@ -203,7 +206,7 @@ src_install() {
 
 	python_convert_shebangs 2 "${ED}"usr/bin/gtk-builder-convert
 
-	find "${ED}" -name '*.la' -exec rm -f {} +
+	find "${D}" -name '*.la' -exec rm -f {} +
 }
 
 pkg_postinst() {
