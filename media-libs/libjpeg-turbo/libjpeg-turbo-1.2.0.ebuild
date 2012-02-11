@@ -10,11 +10,19 @@ unset _inherits
 
 JPEG_ABI=8
 
-inherit ${_inherits} java-pkg-opt-2 libtool toolchain-funcs subversion autotools
+if [[ ${PV} == *_p20* ]]; then
+	SRC_URI="http://dev.gentoo.org/~ssuominen/${P}.tar.xz"
+	_inherits=autotools
+else
+	SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+fi
+
+inherit ${_inherits} java-pkg-opt-2 libtool toolchain-funcs
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
 HOMEPAGE="http://libjpeg-turbo.virtualgl.org/ http://sourceforge.net/projects/libjpeg-turbo/"
-ESVN_REPO_URI="https://libjpeg-turbo.svn.sourceforge.net/svnroot/libjpeg-turbo/trunk/"
+SRC_URI="${SRC_URI}
+	mirror://debian/pool/main/libj/libjpeg${JPEG_ABI}/libjpeg${JPEG_ABI}_${JPEG_ABI}c-2.debian.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -60,6 +68,8 @@ src_compile() {
 	use java && _java_makeopts="-j1"
 	emake ${_java_makeopts}
 
+	ebegin "Building exifautotran and jpegexiforient extra tools"
+	pushd ../debian/extra >/dev/null
 	emake CC="$(tc-getCC)" CFLAGS="${LDFLAGS} ${CFLAGS}"
 	popd >/dev/null
 	eend $?
@@ -84,6 +94,10 @@ src_install() {
 		rm -rf "${ED}"usr/classes
 		java-pkg_dojar java/turbojpeg.jar
 	fi
+
+	ebegin "Installing exifautotran and jpegexiforient extra tools"
+	pushd ../debian/extra >/dev/null
+	newdoc ../changelog changelog.debian
 
 	emake \
 		DESTDIR="${D}" prefix="${EPREFIX}"/usr \
