@@ -2,18 +2,16 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="4"
+inherit eutils qt4-r2 git-2
 EGIT_REPO_URI="git://github.com/goldendict/goldendict.git"
 LANGSLONG="ar_SA bg_BG cs_CZ de_DE el_GR lt_LT ru_RU zh_CN"
-
-inherit git-2 qt4-r2
-
 DESCRIPTION="Feature-rich dictionary lookup program"
 HOMEPAGE="http://goldendict.berlios.de/"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE="debug kde"
 
 RDEPEND=">=app-text/hunspell-1.2
@@ -32,9 +30,7 @@ RDEPEND=">=app-text/hunspell-1.2
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
-src_unpack() {
-	S=${WORKDIR}/${P} git_src_unpack
-}
+S="${WORKDIR}/${MY_P}"
 
 src_prepare() {
 	qt4-r2_src_prepare
