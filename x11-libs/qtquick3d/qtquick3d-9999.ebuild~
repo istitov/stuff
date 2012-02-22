@@ -17,7 +17,6 @@ KEYWORDS=""
 IUSE="debug doc"
 
 RDEPEND="x11-libs/qt-gui:4
-	x11-libs/qt-opengl-qt3d:4
 	x11-libs/qt-sql:4
 	x11-libs/qt-webkit:4
 	x11-libs/qt-xmlpatterns:4"
