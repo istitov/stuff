@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/chromium/chromium-18.0.1003.1.ebuild,v 1.1 2012/01/11 17:38:00 phajdan.jr Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/chromium/chromium-18.0.1025.1.ebuild,v 1.1 2012/02/01 20:11:58 phajdan.jr Exp $
 
 EAPI="4"
 PYTHON_DEPEND="2:2.6"
@@ -15,11 +15,11 @@ SRC_URI="http://commondatastorage.googleapis.com/chromium-browser-official/${P}.
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="bindist cups custom-cflags gnome gnome-keyring kerberos pulseaudio kde"
+IUSE="bindist cups custom-cflags gnome gnome-keyring kerberos pulseaudio"
 
 # en_US is ommitted on purpose from the list below. It must always be available.
 LANGS="am ar bg bn ca cs da de el en_GB es es_LA et fa fi fil fr gu he hi hr
-hu id it ja kn ko lt lv ml ms mr nb nl pl pt_BR pt_PT ro ru sk sl sr sv sw ta te th
+hu id it ja kn ko lt lv ml mr ms nb nl pl pt_BR pt_PT ro ru sk sl sr sv sw ta te th
 tr uk vi zh_CN zh_TW"
 for lang in ${LANGS}; do
 	IUSE+=" linguas_${lang}"
@@ -30,7 +30,7 @@ RDEPEND="app-arch/bzip2
 		dev-libs/libgcrypt
 		>=net-print/cups-1.3.11
 	)
-	>=dev-lang/v8-3.8.9
+	>=dev-lang/v8-3.9.4
 	dev-libs/dbus-glib
 	dev-libs/elfutils
 	>=dev-libs/icu-4.4.1
@@ -43,9 +43,11 @@ RDEPEND="app-arch/bzip2
 	>=media-libs/alsa-lib-1.0.19
 	media-libs/flac
 	virtual/jpeg
+	media-libs/libpng
 	>=media-libs/libwebp-0.1.2
 	media-libs/speex
 	pulseaudio? ( media-sound/pulseaudio )
+	sys-fs/udev
 	sys-libs/zlib
 	x11-libs/gtk+:2
 	x11-libs/libXinerama
@@ -53,7 +55,7 @@ RDEPEND="app-arch/bzip2
 	x11-libs/libXtst
 	kerberos? ( virtual/krb5 )"
 DEPEND="${RDEPEND}
-	>=dev-lang/nacl-toolchain-newlib-0_p7431
+	>=dev-lang/nacl-toolchain-newlib-0_p7311
 	dev-lang/perl
 	dev-lang/yasm
 	dev-python/simplejson
@@ -66,8 +68,7 @@ DEPEND="${RDEPEND}
 RDEPEND+="
 	!www-client/chromium:live
 	x11-misc/xdg-utils
-	virtual/ttf-fonts
-	kde? ( kde-base/kdialog )"
+	virtual/ttf-fonts"
 
 gyp_use() {
 	if [[ $# -lt 2 ]]; then
@@ -184,14 +185,12 @@ src_prepare() {
 	sed -i '1i#define OF(x) x' \
 		third_party/zlib/contrib/minizip/{ioapi,{,un}zip}.c \
 		chrome/common/zip*.cc || die
-	
+
 	# Revert WebKit changeset responsible for Gentoo bug #393471.
-	#epatch "${FILESDIR}/${PN}-revert-jpeg-swizzle-r1.patch"
+	epatch "${FILESDIR}/${PN}-revert-jpeg-swizzle-r3.patch"
 
 	epatch_user
 
-	sed -e "s|'type': 'settings',|'type': 'shared_library',|" -i third_party/flac/flac.gyp
-	
 	# Remove most bundled libraries. Some are still needed.
 	find third_party -type f \! -iname '*.gyp*' \
 		\! -path 'third_party/WebKit/*' \
@@ -212,6 +211,7 @@ src_prepare() {
 		\! -path 'third_party/leveldatabase/*' \
 		\! -path 'third_party/libjingle/*' \
 		\! -path 'third_party/libphonenumber/*' \
+		\! -path 'third_party/libsrtp/*' \
 		\! -path 'third_party/libvpx/*' \
 		\! -path 'third_party/libyuv/*' \
 		\! -path 'third_party/lss/*' \
@@ -228,7 +228,6 @@ src_prepare() {
 		\! -path 'third_party/smhasher/*' \
 		\! -path 'third_party/speex/speex.h' \
 		\! -path 'third_party/sqlite/*' \
-		\! -path 'third_party/libsrtp/*' \
 		\! -path 'third_party/tcmalloc/*' \
 		\! -path 'third_party/tlslite/*' \
 		\! -path 'third_party/undoview/*' \
@@ -237,8 +236,7 @@ src_prepare() {
 		\! -path 'third_party/webgl_conformance/*' \
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/zlib/contrib/minizip/*' \
-		\! -path 'third_party/libpng/*' \
-		\! -path 'third_party/zlib/*' \
+		\! -path 'third_party/adobe/flash/*' \
 		-delete || die
 
 	local v8_bundled="$(get_bundled_v8_version)"
@@ -279,15 +277,18 @@ src_configure() {
 		-Duse_system_icu=1
 		-Duse_system_libevent=1
 		-Duse_system_libjpeg=1
-		-Duse_system_libpng=0
+		-Duse_system_libpng=1
 		-Duse_system_libwebp=1
 		-Duse_system_libxml=1
 		-Duse_system_speex=1
 		-Duse_system_v8=1
 		-Duse_system_xdg_utils=1
 		-Duse_system_yasm=1
-		-Duse_system_zlib=1
-		-Dremove_webcore_debug_symbols=1"
+		-Duse_system_zlib=1"
+
+	if ! $(tc-getLD) --version 2>&1 | grep -qs 'GNU gold'; then
+	  myconf+=" -Dlinux_use_gold_flags=0";
+	fi
 
 	# Optional dependencies.
 	# TODO: linux_link_kerberos, bug #381289.
@@ -303,16 +304,6 @@ src_configure() {
 	myconf+="
 		-Dlinux_sandbox_path=${CHROMIUM_HOME}/chrome_sandbox
 		-Dlinux_sandbox_chrome_path=${CHROMIUM_HOME}/chrome"
-
-	# if host-is-pax; then
-	#	# Prevent the build from failing (bug #301880). The performance
-	#	# difference is very small.
-	#	myconf+=" -Dv8_use_snapshot=0"
-	# fi
-
-	# Our system ffmpeg should support more codecs than the bundled one
-	# for Chromium.
-	# myconf+=" -Dproprietary_codecs=1"
 
 	if ! use bindist; then
 		# Enable H.624 support in bundled ffmpeg.
