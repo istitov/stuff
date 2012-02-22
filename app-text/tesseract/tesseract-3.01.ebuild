@@ -47,7 +47,7 @@ en? ( http://tesseract-ocr.googlecode.com/files/eng.traineddata.gz )"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="alpha amd64 ~mips ppc ppc64 sparc x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="tiff examples doc zh_trad zh_simp in sv ro sl sr tl tr hu fi it nl no ja vi es uk fr sk ko el ru pt bg lv lt pl de de_frak da da_frak cs ca +en"
 
 DEPEND="media-libs/leptonica"

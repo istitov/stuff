@@ -4,6 +4,7 @@
 
 EAPI="3"
 SLOT="0"
+DESCRIPTION="workaround for old ebuilds"
 KEYWORDS=""
 HOMEPAGE="none"
 RDEPEND="media-libs/libjpeg-turbo"
