@@ -9,7 +9,7 @@ inherit eutils python
 DESCRIPTION="SOFA is a statistics, analysis, and reporting program"
 HOMEPAGE="http://sourceforge.net/projects/sofastatistics/"
 SRC_URI="http://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download# -> ${P}.tar.gz"
-LICENSE=""
+LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""

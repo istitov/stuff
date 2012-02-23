@@ -8,6 +8,7 @@ inherit cmake-utils subversion
 
 DESCRIPTION="High perfomance C++ library"
 HOMEPAGE="http://libcxx.llvm.org/"
+LICENSE="MIT"
 ESVN_REPO_URI="http://llvm.org/svn/llvm-project/libcxx/trunk"
 KEYWORDS="~amd64"
 IUSE=""

@@ -5,6 +5,7 @@
 EAPI="3"
 SLOT="0"
 DESCRIPTION="workaround for old ebuilds"
+LICENSE="GPL-2"
 KEYWORDS=""
 HOMEPAGE="none"
 RDEPEND="media-libs/libjpeg-turbo"
