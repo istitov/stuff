@@ -6,7 +6,7 @@ EAPI=4
 
 PN_vala_version=0.14
 
-inherit virtualx
+inherit virtualx multilib
 
 DESCRIPTION="Library to pass menu structure across DBus"
 HOMEPAGE="https://launchpad.net/dbusmenu"
