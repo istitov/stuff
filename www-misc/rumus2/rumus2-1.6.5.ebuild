@@ -10,7 +10,7 @@ DESCRIPTION="FOREX trading and technical analis terminal"
 HOMEPAGE="http://www.fxclub.org/tools_soft_rumus2/"
 SRC_URI="http://download.fxclub.org/Rumus2/FxClub/Rumus2.rpm -> rumus-${PV}.rpm"
 
-LICENSE=""
+LICENSE="as-is"
 SLOT="0"
 KEYWORDS="-alpha ~amd64 -ppc64 -sparc ~x86"
 IUSE=""
