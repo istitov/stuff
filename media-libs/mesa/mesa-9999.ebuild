@@ -20,7 +20,6 @@ MY_P="${MY_PN}-${PV/_/-}"
 MY_SRC_P="${MY_PN}Lib-${PV/_/-}"
 
 FOLDER="${PV/_rc*/}"
-[[ ${PV/_rc*/} == ${PV} ]] || FOLDER+="/RC"
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="http://mesa3d.sourceforge.net/"
@@ -38,7 +37,7 @@ fi
 # GLES[2]/gl[2]{,ext,platform}.h are SGI-B-2.0
 LICENSE="MIT LGPL-3 SGI-B-2.0"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 
 INTEL_CARDS="i915 i965 intel"
 RADEON_CARDS="r100 r200 r300 r600 radeon"
@@ -48,33 +47,36 @@ for card in ${VIDEO_CARDS}; do
 done
 
 IUSE="${IUSE_VIDEO_CARDS}
-	bindist +classic d3d debug +egl g3dvl +gallium gbm gles1 gles2 +llvm +nptl openvg osmesa pax_kernel pic selinux shared-dricore +shared-glapi vdpau wayland xvmc kernel_FreeBSD xorg"
+	bindist +classic d3d debug +egl g3dvl +gallium gbm gles +llvm +nptl xorg
+	openvg osmesa pax_kernel pic selinux +shared-glapi vdpau wayland xvmc kernel_FreeBSD"
 
 REQUIRED_USE="
 	d3d?    ( gallium )
 	g3dvl?  ( gallium )
 	llvm?   ( gallium )
-	openvg? ( gallium )
-	egl? ( shared-glapi )
-	gallium? (
-		video_cards_r300?   ( x86? ( llvm ) amd64? ( llvm ) )
-		video_cards_radeon? ( x86? ( llvm ) amd64? ( llvm ) )
-	)
+	openvg? ( egl gallium )
+	gbm?    ( shared-glapi )
 	g3dvl? ( || ( vdpau xvmc ) )
 	vdpau? ( g3dvl )
 	xvmc?  ( g3dvl )
-	video_cards_i915?   ( classic )
+	video_cards_intel?  ( || ( classic gallium ) )
+	video_cards_i915?   ( || ( classic gallium ) )
+	video_cards_i965?   ( classic )
+	video_cards_nouveau? ( || ( classic gallium ) )
+	video_cards_radeon? ( || ( classic gallium ) )
 	video_cards_r100?   ( classic )
 	video_cards_r200?   ( classic )
+	video_cards_r300?   ( gallium )
+	video_cards_r600?   ( gallium )
 	video_cards_vmware? ( gallium )
 "
 
-LIBDRM_DEPSTRING=">=x11-libs/libdrm-2.4.24"
+LIBDRM_DEPSTRING=">=x11-libs/libdrm-2.4.31"
 # not a runtime dependency of this package, but dependency of packages which
 # depend on this package, bug #342393
 EXTERNAL_DEPEND="
 	>=x11-proto/dri2proto-2.6
-	>=x11-proto/glproto-1.4.14
+	>=x11-proto/glproto-1.4.15
 "
 # keep correct libdrm and dri2proto dep
 # keep blocks in rdepend for binpkg
@@ -90,9 +92,10 @@ RDEPEND="${EXTERNAL_DEPEND}
 	x11-libs/libXdamage
 	x11-libs/libXext
 	x11-libs/libXxf86vm
+	>=x11-libs/libxcb-1.8
 	d3d? ( app-emulation/wine )
 	vdpau? ( >=x11-libs/libvdpau-0.4.1 )
-	wayland? ( x11-base/wayland )
+	wayland? ( dev-libs/wayland )
 	xvmc? ( x11-libs/libXvMC )
 	${LIBDRM_DEPSTRING}[video_cards_nouveau?,video_cards_vmware?]
 "
@@ -131,13 +134,8 @@ QA_WX_LOAD="usr/lib*/opengl/xorg-x11/lib/libGL.so*"
 # Think about: ggi, fbcon, no-X configs
 
 pkg_setup() {
-	# gcc 4.2 has buggy ivopts
-	if [[ $(gcc-version) = "4.2" ]]; then
-		append-flags -fno-ivopts
-	fi
-
-	# recommended by upstream
-	append-flags -ffast-math
+	# workaround toc-issue wrt #386545
+	use ppc64 && append-flags -mminimal-toc
 }
 
 src_unpack() {
@@ -153,6 +151,9 @@ src_prepare() {
 		EPATCH_SUFFIX="patch" \
 		epatch
 	fi
+
+	# relax the requirement that r300 must have llvm, bug 380303
+	epatch "${FILESDIR}"/${P}-dont-require-llvm-for-r300.patch
 
 	# fix for hardened pax_kernel, bug 240956
 	[[ ${PV} != 9999* ]] && epatch "${FILESDIR}"/glx_ro_text_segm.patch
@@ -188,13 +189,9 @@ src_configure() {
 		# ATI code
 		driver_enable video_cards_r100 radeon
 		driver_enable video_cards_r200 r200
-		driver_enable video_cards_r300 r300
-		driver_enable video_cards_r600 r600
 		if ! use video_cards_r100 && \
-				! use video_cards_r200 && \
-				! use video_cards_r300 && \
-				! use video_cards_r600; then
-			driver_enable video_cards_radeon radeon r200 r300 r600
+				! use video_cards_r200; then
+			driver_enable video_cards_radeon radeon r200
 		fi
 	fi
 
@@ -205,10 +202,6 @@ src_configure() {
 		"
 	fi
 
-	if use !gallium && use !classic; then
-		ewarn "You enabled neither classic nor gallium USE flags. No hardware"
-		ewarn "drivers will be built."
-	fi
 	if use gallium; then
 		myconf+="
 			$(use_enable d3d d3d1x)
@@ -222,10 +215,8 @@ src_configure() {
 		gallium_enable video_cards_vmware svga
 		gallium_enable video_cards_nouveau nouveau
 		gallium_enable video_cards_i915 i915
-		gallium_enable video_cards_i965 i965
-		if ! use video_cards_i915 && \
-				! use video_cards_i965; then
-			gallium_enable video_cards_intel i915 i965
+		if ! use video_cards_i915; then
+			gallium_enable video_cards_intel i915
 		fi
 
 		gallium_enable video_cards_r300 r300
@@ -243,21 +234,23 @@ src_configure() {
 		"
 	fi
 
+	if use gles; then
+		myconf+="
+			--enable-gles1 \
+			--enable-gles2 \
+			"
+	fi
+
 	econf \
-		--disable-option-checking \
 		--enable-dri \
 		--enable-glx \
-		--enable-xcb \
 		$(use_enable !bindist texture-float) \
 		$(use_enable debug) \
 		$(use_enable egl) \
 		$(use_enable gbm) \
-		$(use_enable gles1) \
-		$(use_enable gles2) \
 		$(use_enable nptl glx-tls) \
 		$(use_enable osmesa) \
 		$(use_enable !pic asm) \
-		$(use_enable shared-dricore) \
 		$(use_enable shared-glapi) \
 		$(use_enable xorg) \
 		--with-dri-drivers=${DRI_DRIVERS} \
@@ -267,6 +260,8 @@ src_configure() {
 
 src_install() {
 	base_src_install
+
+	find "${ED}" -name '*.la' -exec rm -f {} + || die
 
 	if use !bindist; then
 		dodoc docs/patents.txt
@@ -279,7 +274,7 @@ src_install() {
 
 	# Install config file for eselect mesa
 	insinto /usr/share/mesa
-	newins "${FILESDIR}/eselect-mesa.conf.7.12" eselect-mesa.conf
+	newins "${FILESDIR}/eselect-mesa.conf.8.0" eselect-mesa.conf
 
 	# Move libGL and others from /usr/lib to /usr/lib/opengl/blah/lib
 	# because user can eselect desired GL provider.
@@ -339,6 +334,14 @@ pkg_postinst() {
 	# Switch to the xorg implementation.
 	echo
 	eselect opengl set --use-old ${OPENGL_DIR}
+
+	# switch to xorg-x11 and back if necessary, bug #374647 comment 11
+	OLD_IMPLEM="$(eselect opengl show)"
+	if [[ ${OPENGL_DIR}x != ${OLD_IMPLEM}x ]]; then
+		eselect opengl set ${OPENGL_DIR}
+		eselect opengl set ${OLD_IMPLEM}
+	fi
+
 	# Select classic/gallium drivers
 	if use classic || use gallium; then
 		eselect mesa set --auto
