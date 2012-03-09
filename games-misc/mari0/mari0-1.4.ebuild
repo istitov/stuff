@@ -2,9 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI=4
+
 inherit eutils
 
-EAPI=4
 DESCRIPTION="A clone of Super Mario Bros"
 HOMEPAGE="http://stabyourself.net/mari0/"
 SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${PN}-linux-${PV}.zip"
