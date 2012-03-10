@@ -6,7 +6,7 @@ EAPI=4
 
 DESCRIPTION="Infobar plugin for DeadBeeF audio player. Shows lyrics and artist's biography for the current track."
 HOMEPAGE="https://bitbucket.org/Not_eXist/deadbeef-infobar"
-EHG_REPO_URI="https://hg@bitbucket.org/Not_eXist/deadbeef-infobar"
+EHG_REPO_URI="https://bitbucket.org/dsimbiriatin/deadbeef-infobar"
 
 LICENSE="GPL-2"
 SLOT="0"
