@@ -17,7 +17,8 @@ IUSE=""
 
 DEPEND_COMMON="x11-libs/qt-webkit:4
 			   x11-libs/qt-core:4
-			   x11-libs/qt-gui:4"
+			   x11-libs/qt-gui:4
+			   !x86? ( app-emulation/emul-linux-x86-qtlibs )"
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
