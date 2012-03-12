@@ -5,14 +5,14 @@
 EAPI="3"
 inherit qt4-build
 
-DESCRIPTION="The OpenVG module for the Qt toolkit"
+DESCRIPTION="Qt network bearer plugin set"
 SLOT="4"
 KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
-IUSE="qt3support"
+IUSE="networkmanager"
 
-DEPEND="~x11-libs/qt-core-${PV}[aqua=,c++0x=,debug=,qt3support=]
-	~x11-libs/qt-dbus-${PV}[aqua=,c++0x=,debug=,egl,qt3support=]
-	net-misc/networkmanager
+DEPEND="~x11-libs/qt-core-${PV}[aqua=,c++0x=,debug=]
+	~x11-libs/qt-dbus-${PV}[aqua=,c++0x=,debug=]
+	networkmanager? ( net-misc/networkmanager )
 "
 RDEPEND="${DEPEND}"
 
