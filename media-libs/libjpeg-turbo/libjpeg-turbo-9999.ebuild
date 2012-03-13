@@ -18,7 +18,7 @@ ESVN_REPO_URI="https://libjpeg-turbo.svn.sourceforge.net/svnroot/libjpeg-turbo/t
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~hppa ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS=""
 IUSE="java static-libs"
 
 ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
