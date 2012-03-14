@@ -37,7 +37,7 @@ fi
 # GLES[2]/gl[2]{,ext,platform}.h are SGI-B-2.0
 LICENSE="MIT LGPL-3 SGI-B-2.0"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 
 INTEL_CARDS="i915 i965 intel"
 RADEON_CARDS="r100 r200 r300 r600 radeon"
@@ -47,8 +47,10 @@ for card in ${VIDEO_CARDS}; do
 done
 
 IUSE="${IUSE_VIDEO_CARDS}
-	bindist +classic d3d debug +egl g3dvl +gallium gbm gles +llvm +nptl xorg
-	openvg osmesa pax_kernel pic selinux +shared-glapi vdpau wayland xvmc kernel_FreeBSD"
+	bindist +classic d3d debug +egl g3dvl +gallium gbm gles1 gles2 +llvm +nptl
+	openvg osmesa pax_kernel pic selinux +shared-glapi vdpau wayland xvmc xa
+	xorg
+	kernel_FreeBSD"
 
 REQUIRED_USE="
 	d3d?    ( gallium )
@@ -58,6 +60,7 @@ REQUIRED_USE="
 	gbm?    ( shared-glapi )
 	g3dvl? ( || ( vdpau xvmc ) )
 	vdpau? ( g3dvl )
+	xa?  ( gallium )
 	xvmc?  ( g3dvl )
 	video_cards_intel?  ( || ( classic gallium ) )
 	video_cards_i915?   ( || ( classic gallium ) )
@@ -234,13 +237,6 @@ src_configure() {
 		"
 	fi
 
-	if use gles; then
-		myconf+="
-			--enable-gles1 \
-			--enable-gles2 \
-			"
-	fi
-
 	econf \
 		--enable-dri \
 		--enable-glx \
@@ -248,11 +244,14 @@ src_configure() {
 		$(use_enable debug) \
 		$(use_enable egl) \
 		$(use_enable gbm) \
+		$(use_enable gles1) \
+		$(use_enable gles2) \
 		$(use_enable nptl glx-tls) \
 		$(use_enable osmesa) \
 		$(use_enable !pic asm) \
 		$(use_enable shared-glapi) \
-		$(use_enable xorg) \
+		$(use_enable xa) \
+		$(use_enable xorg) \		
 		--with-dri-drivers=${DRI_DRIVERS} \
 		--with-gallium-drivers=${GALLIUM_DRIVERS} \
 		${myconf}
