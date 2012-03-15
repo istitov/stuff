@@ -1,0 +1,8 @@
+[Unit]
+Description=CUPS Printing Service
+
+[Service]
+ExecStart=/usr/sbin/cupsd -f
+
+[Install]
+WantedBy=multi-user.target

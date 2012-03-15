@@ -1,0 +1,9 @@
+[Unit]
+Description=Very Secure FTP Daemon 
+
+[Service]
+# Override any background= setting in the config file
+ExecStart=/usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf -obackground=NO
+
+[Install]
+WantedBy=network.target

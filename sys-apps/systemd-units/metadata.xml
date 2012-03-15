@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>no-herd</herd>
+	<maintainer>
+		<email>trapni@gentoo.org</email>
+		<name>Christian Parpart</name>
+	</maintainer>
+	<use>
+		<flag name='basic'>installs basic systemd files (used on desktop and on server)</flag>
+		<flag name='server'>installs server-related systemd files</flag>
+		<flag name='desktop'>installs desktop-related systemd files</flag>
+		<flag name='ingnome3'>installs systemd files for packages that have one in the Gnome 3 overlay</flag>
+	</use>
+</pkgmetadata>

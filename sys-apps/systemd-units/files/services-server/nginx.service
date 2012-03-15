@@ -1,0 +1,15 @@
+[Unit]
+Description=nginx HTTP daemon
+After=networking.target
+After=syslog.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
+StandardOutput=syslog
+StandardError=syslog
+#Restart=always
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=http-daemon.target

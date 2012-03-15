@@ -1,0 +1,37 @@
+[Unit]
+Description=Lighttpd Web Server
+After=network.target
+
+[Service]
+# Lighttpd has a broken PID file handling scheme.
+# The PID file is written by the child, and this fools systemd's detection
+# of the main PID. So we run lighttpd as a foreground process.
+ExecStart=/usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf -D
+
+# Lighttpd does not support graceful reloading in a sane way, that's why
+# you can't reload this service. SIGHUP is for reopening log files, not for
+# reloading configuration.
+#
+# Here is the procedure proposed upstream:
+# http://blog.lighttpd.net/articles/2005/09/02/graceful-restart
+# However, an attempt to implement it triggers an assertion in systemd-16:
+# http://lists.freedesktop.org/archives/systemd-devel/2011-January/001055.html
+# Even after removing the wrong assertion, it requires systemd to notice
+# that the main PID changed. Systemd developers agreed that it is invalid to
+# change the main PID while reloading the service.
+#
+# Anyway, the proposed scheme doesn't make sense even for a traditional
+# SysV init: while both the old and the new inscances of lighttpd
+# coexist, it is impossible to forcefully terminate them all without
+# using killall, as the PID of the old instance is not stored in any
+# file.
+
+# Configuration testing (/usr/sbin/lighttpd -t -f
+# /etc/lighttpd/lighttpd.conf) is not supported by systemd-16 in a
+# meaningful way (it is impossible to block attempts to start, restart
+# or reload the service with a bad config).  That's why this lighttpd
+# feature is not used.
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=http-daemon.target

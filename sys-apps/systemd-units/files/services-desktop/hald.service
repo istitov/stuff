@@ -1,0 +1,11 @@
+[Unit]
+Description=Hardware Abstraction Layer Daemon
+After=syslog.target
+
+[Service]
+Type=dbus
+BusName=org.freedesktop.Hal
+ExecStart=/usr/sbin/hald --use-syslog --daemon=no
+
+[Install]
+WantedBy=graphical.target
