@@ -13,7 +13,7 @@ SRC_URI="basic? ( http://0pointer.de/public/systemd-units/sshd.service
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="+basic +desktop server ingnome3"
 
 RDEPEND=""
