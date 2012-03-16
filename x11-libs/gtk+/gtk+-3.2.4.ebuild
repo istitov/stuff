@@ -86,7 +86,10 @@ src_prepare() {
 	replace-flags -O3 -O2
 	strip-flags
 
-	# Non-working test in gentoo's env
+	# https://bugzilla.gnome.org/show_bug.cgi?id=654108
+	epatch "${FILESDIR}/${PN}-3.2.4-fallback-theme.patch"
+
+# Non-working test in gentoo's env
 	sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
 		-i gtk/tests/testing.c || die "sed 1 failed"
 	sed '\%/recent-manager/add%,/recent_manager_purge/ d' \
