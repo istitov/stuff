@@ -34,7 +34,7 @@ RDEPEND=">=dev-lang/spidermonkey-1.8.5
 	virtual/fam
 	virtual/jpeg
 	virtual/opengl
-	editor? ( x11-libs/wxGTK:2.8 )"
+	editor? ( x11-libs/wxGTK:2.8[X] )"
 #	nvtt? ( dev-util/nvidia-texture-tools )"
 
 DEPEND="${RDEPEND}
