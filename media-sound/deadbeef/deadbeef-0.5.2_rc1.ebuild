@@ -18,12 +18,12 @@ HOMEPAGE="http://deadbeef.sourceforge.net/"
 LICENSE="GPL-2
 	LGPL-2.1
 	ZLIB
-	ao? ( BSD XMAME )
+	psf? ( BSD XMAME )
 	dumb? ( DUMB-0.9.2 )
 	shn? ( shorten )"
 SLOT="0"
-IUSE="adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk
-	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath
+IUSE="adplug aac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk
+	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath mono2stereo
 	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar gtk3"
 
 LANGS="be bg bn ca cs da de el en_GB es fa fi fr gl he hr hu id it ja kk km lg nb nl pl pt_BR pt ru si sk sl sr@latin sr sv te tr uk vi zh_CN zh_TW"
@@ -51,13 +51,12 @@ RDEPEND="aac? ( media-libs/faad2 )
 	wavpack? ( media-sound/wavpack )
 	zip? ( dev-libs/libzip
 	infobar? ( media-sound/deadbeef-infobar )
-	gtk3? ( x11-libs/gtk+:3 )
 		sys-libs/zlib )"
 
 DEPEND="${RDEPEND}"
 S="${WORKDIR}/${PN}-${MY_PV}"
 pkg_setup() {
-	if use ao || use dumb || use shn && use static ; then
+	if use psf || use dumb || use shn && use static ; then
 		die "ao/converter/dumb or shn plugins can't be builded statically"
 	fi
 }
@@ -81,31 +80,36 @@ src_prepare() {
 src_configure() {
 	my_config="--disable-portable
 		--docdir=/usr/share/${PN}
-		$(use_enable alsa)
 		$(use_enable aac)
 		$(use_enable adplug)
+		$(use_enable alsa)
 		$(use_enable ape ffap)
 		$(use_enable cdda)
 		$(use_enable converter)
 		$(use_enable dts dca)
+		$(use_enable dumb)
 		$(use_enable ffmpeg)
 		$(use_enable flac)
 		$(use_enable gme)
+		$(use_enable gtk gtkui)
 		$(use_enable hotkeys)
-		$(use_enable midi wildmidi)
 		$(use_enable m3u)
+		$(use_enable midi wildmidi)
 		$(use_enable mms)
+		$(use_enable mono2stereo)
 		$(use_enable mp3 mad)
 		$(use_enable musepack)
 		$(use_enable nls)
 		$(use_enable notify)
 		$(use_enable nullout)
 		$(use_enable oss)
+		$(use_enable psf)
 		$(use_enable pulseaudio pulse)
 		$(use_enable rpath)
 		$(use_enable shellexec)
-		$(use_enable sndfile)
+		$(use_enable shn)
 		$(use_enable sid)
+		$(use_enable sndfile)
 		$(use_enable src)
 		$(use_enable static)
 		$(use_enable static staticlink)
@@ -145,50 +149,6 @@ src_configure() {
 	fi
 	
 	econf ${my_config}
-}
-
-src_compile() {
-	emake
-
-	if use ao ; then
-		cd ${S}/plugins/ao
-		emake
-	fi
-
-	if use converter ; then
-		cd ${S}/plugins/converter
-		emake
-	fi
-
-	if use dumb ; then
-		cd ${S}/plugins/dumb
-		emake
-	fi
-
-	if use shn ; then
-		cd ${S}/plugins/shn
-		emake
-	fi
-}
-
-src_install() {
-  PORTAGE_COMPRESS=""
-	emake DESTDIR="${D}" install
-    
-	if use ao ; then
-		insinto /usr/$(get_libdir)/${PN}
-		doins ${S}/plugins/ao/*.so
-	fi
-
-	if use dumb ; then
-		insinto /usr/$(get_libdir)/${PN}
-		doins ${S}/plugins/dumb/*.so
-	fi
-
-	if use shn ; then
-		insinto /usr/$(get_libdir)/${PN}
-		doins ${S}/plugins/shn/*.so
-	fi
 }
 
 pkg_postinst() {
