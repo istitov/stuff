@@ -7,7 +7,7 @@ EAPI="4"
 inherit cmake-utils mercurial
 
 DESCRIPTION="Qt interface plugin for Deadbeef player"
-HOMEPAGE="http://bitbucket.org/tonn/deadbeef-qt/"
+HOMEPAGE="https://bitbucket.org/tonn/deadbeef-qt/overview"
 EHG_REPO_URI="https://bitbucket.org/tonn/deadbeef-qt/"
 
 LICENSE="|| ( GPL-2 LGPL-2.1 )"
