@@ -1,0 +1,16 @@
+--- nvidia-settings-1.0/src/libXNVCtrlAttributes/NvCtrlAttributesVidMode.c
++++ nvidia-settings-1.0/src/libXNVCtrlAttributes/NvCtrlAttributesVidMode.c
+@@ -210,11 +210,12 @@
+     if (vm) free(vm);
+ 
+     /* restore the original error handler, if we overrode it */
+-
++#if defined(X_XF86VidModeGetGammaRampSize)
+     if (prev_error_handler) {
+         XSetErrorHandler(prev_error_handler);
+         prev_error_handler = NULL;
+     }
++#endif
+ 
+     return NULL;
+ 

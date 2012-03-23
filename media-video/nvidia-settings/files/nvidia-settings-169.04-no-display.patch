@@ -1,0 +1,112 @@
+diff -ur nvidia-settings-1.0-old/src/gtk+-2.x/ctkui.c nvidia-settings-1.0/src/gtk+-2.x/ctkui.c
+--- nvidia-settings-1.0-old/src/gtk+-2.x/ctkui.c	2007-11-15 01:43:51.000000000 +0100
++++ nvidia-settings-1.0/src/gtk+-2.x/ctkui.c	2007-11-20 21:07:50.000000000 +0100
+@@ -37,6 +37,11 @@
+     gtk_init(argc, argv);
+ }
+ 
++gboolean ctk_init_check(int *argc, char **argv[])
++{
++    return gtk_init_check(argc, argv);
++}
++
+ char *ctk_get_display(void)
+ {
+     return gdk_get_display();
+diff -ur nvidia-settings-1.0-old/src/gtk+-2.x/ctkui.h nvidia-settings-1.0/src/gtk+-2.x/ctkui.h
+--- nvidia-settings-1.0-old/src/gtk+-2.x/ctkui.h	2007-11-15 01:43:51.000000000 +0100
++++ nvidia-settings-1.0/src/gtk+-2.x/ctkui.h	2007-11-20 21:07:50.000000000 +0100
+@@ -28,9 +28,12 @@
+ #include "NvCtrlAttributes.h"
+ #include "parse.h"
+ #include "config-file.h"
++#include <gtk/gtk.h>
+ 
+ void ctk_init(int *argc, char **argv[]);
+ 
++gboolean ctk_init_check(int *argc, char **argv[]);
++
+ char *ctk_get_display(void);
+ 
+ void ctk_main(NvCtrlAttributeHandle **, int,
+Only in nvidia-settings-1.0/src/gtk+-2.x: ctkui.h.orig
+diff -ur nvidia-settings-1.0-old/src/nvidia-settings.c nvidia-settings-1.0/src/nvidia-settings.c
+--- nvidia-settings-1.0-old/src/nvidia-settings.c	2007-11-15 01:43:51.000000000 +0100
++++ nvidia-settings-1.0/src/nvidia-settings.c	2007-11-20 21:10:31.000000000 +0100
+@@ -22,6 +22,8 @@
+  *
+  */
+ 
++#include <gtk/gtk.h>
++
+ #include "NvCtrlAttributes.h"
+ 
+ #include "command-line.h"
+@@ -44,7 +46,9 @@
+     NvCtrlAttributeHandle **vcsc_handles = NULL;
+     Options *op;
+     int ret, i, num_screen_handles, num_gpu_handles, num_vcsc_handles;
+-    
++    char *dpy = NULL;
++    int gui = 0;
++
+     /*
+      * initialize the ui
+      *
+@@ -52,14 +56,21 @@
+      * may not even use the gui, but we want the toolkit to have a
+      * chance to parse the commandline before we do... we should
+      * investigate gtk_init_check().
++     *
++     * gui flag used to decide if gtk should be used or not, as
++     * use might just use control the display from a remote console
++     * but for some reason cannot initialize the gtk gui. - TY 2005-05-27
+      */
+-    
+-    ctk_init(&argc, &argv);
+-    
++
++
++    if (ctk_init_check(&argc, &argv) == TRUE) {
++        dpy = ctk_get_display();
++        gui = 1;
++    }
++
+     /* parse the commandline */
+     
+-    op = parse_command_line(argc, argv, ctk_get_display());
+-
++    op = parse_command_line(argc, argv, dpy);
+     /* process any query or assignment commandline options */
+ 
+     if (op->num_assignments || op->num_queries) {
+@@ -67,6 +78,14 @@
+         return ret ? 0 : 1;
+     }
+     
++    /* quit here if display is undefineds - TY 2005-05-27 */
++
++    if (op->ctrl_display == NULL) {
++        nv_error_msg("Display is undefined, please run `%s --help` "
++                     "for usage information.\n", argv[0]);
++        return 1;
++    }
++    
+     /* initialize the parsed attribute list */
+ 
+     p = nv_parsed_attribute_init();
+@@ -165,6 +184,14 @@
+     }
+     
+     /* pass control to the gui */
++    /*
++     * if gtk wasn't initiated, exit here.
++     * Using a -c flag without gtk would behave as if using -l - TY 2005-05-27
++     */
++    if (gui == 0) {
++        nv_error_msg("Unable to create gui.\n");
++        return 1;
++    }
+ 
+     ctk_main(screen_handles, num_screen_handles,
+              gpu_handles, num_gpu_handles,
