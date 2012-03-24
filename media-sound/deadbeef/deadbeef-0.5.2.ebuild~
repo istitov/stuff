@@ -143,7 +143,8 @@ src_configure() {
 	if use gtk; then
 	  if use gtk3;then
 	  my_config="${my_config}
-	  --enable-gtk3"
+	  --enable-gtk3
+	  --disable-gtk2"
 	  fi
 	fi
 	
