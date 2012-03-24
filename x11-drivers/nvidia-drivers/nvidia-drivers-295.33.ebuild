@@ -18,7 +18,7 @@ SRC_URI="x86? ( http://us.download.nvidia.com/XFree86/Linux-x86/${PV}/${X86_NV_P
 
 LICENSE="NVIDIA"
 SLOT="0"
-KEYWORDS="-* ~amd64 ~x86 ~x86-fbsd"
+KEYWORDS="-* amd64 ~x86 ~x86-fbsd"
 IUSE="acpi custom-cflags gtk multilib kernel_linux"
 RESTRICT="strip"
 EMULTILIB_PKG="true"
@@ -284,9 +284,9 @@ src_prepare() {
 		#epatch "${FILESDIR}"/256.35-unified-arch.patch
 
 		# Fix building with Linux 3.3.x wrt #408841
-		#sed -i \
-		#	-e '/CFLAGS="$CFLAGS/s:-I$SOURCES/arch/x86/include:& -I$OUTPUT/arch/x86/include/generated:' \
-		#	kernel/conftest.sh || die
+		sed -i \
+			-e '/CFLAGS="$CFLAGS/s:-I$SOURCES/arch/x86/include:& -I$OUTPUT/arch/x86/include/generated:' \
+			kernel/conftest.sh || die
 
 		# If you set this then it's your own fault when stuff breaks :)
 		use custom-cflags && sed -i "s:-O:${CFLAGS}:" "${NV_SRC}"/Makefile.*
