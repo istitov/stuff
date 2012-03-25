@@ -45,7 +45,8 @@ RDEPEND="aac? ( media-libs/faad2 )
 	cover? ( media-libs/imlib2 )
 	ffmpeg? ( virtual/ffmpeg )
 	flac? ( media-libs/flac )
-	gtk? ( || ( gtk3? ( x11-libs/gtk+:3 ) ( x11-libs/gtk+:2 ) ) )
+	gtk? ( gtk2? ( x11-libs/gtk+:2 ) )
+	gtk? ( gtk3? ( x11-libs/gtk+:3 ) )
 	lastfm? ( net-misc/curl )
 	notify? ( sys-apps/dbus )
 	midi? ( media-sound/timidity-freepats )
@@ -155,7 +156,10 @@ src_configure() {
 	if use gtk; then
 	  if use gtk3;then
 	  my_config="${my_config}
-	  --enable-gtk3
+	  --enable-gtk3"
+	  fi
+	  if ! use gtk2;then
+	  my_config="${my_config}
 	  --disable-gtk2"
 	  fi
 	fi
