@@ -29,7 +29,7 @@ EGIT_REPO_URI="git://fontforge.git.sourceforge.net/gitroot/fontforge/fontforge"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos"
+KEYWORDS=""
 IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X capslock-for-alt freetype-bytecode freetype devicetables gb12345"
 
 RDEPEND="gif? ( >=media-libs/giflib-4.1.0-r1 )
