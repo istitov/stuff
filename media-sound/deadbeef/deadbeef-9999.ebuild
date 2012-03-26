@@ -60,7 +60,8 @@ RDEPEND="aac? ( media-libs/faad2 )
 	wavpack? ( media-sound/wavpack )
 	zip? ( dev-libs/libzip
 	infobar? ( media-sound/deadbeef-infobar )
-		sys-libs/zlib )"
+		sys-libs/zlib )
+	dev-util/intltool"
 
 DEPEND="${RDEPEND}"
 
