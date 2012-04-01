@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit fdo-mime versionator
+inherit fdo-mime gnome2-utils versionator
 
 MY_PV="$(replace_version_separator 3 '-')"
 
@@ -22,7 +22,7 @@ LICENSE="GPL-2
 	dumb? ( DUMB-0.9.2 )
 	shn? ( shorten )"
 SLOT="0"
-IUSE="adplug aac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk
+IUSE="adplug aac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath mono2stereo
 	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar gtk3 +gtk2"
 
@@ -37,8 +37,8 @@ RDEPEND="aac? ( media-libs/faad2 )
 	cover? ( media-libs/imlib2 )
 	ffmpeg? ( virtual/ffmpeg )
 	flac? ( media-libs/flac )
-	gtk? ( gtk2? ( x11-libs/gtk+:2 ) )
-	gtk? ( gtk3? ( x11-libs/gtk+:3 ) )
+	gtk2? ( x11-libs/gtk+:2 )
+	gtk3? ( x11-libs/gtk+:3 )
 	lastfm? ( net-misc/curl )
 	notify? ( sys-apps/dbus )
 	midi? ( media-sound/timidity-freepats )
@@ -93,7 +93,6 @@ src_configure() {
 		$(use_enable ffmpeg)
 		$(use_enable flac)
 		$(use_enable gme)
-		$(use_enable gtk gtkui)
 		$(use_enable hotkeys)
 		$(use_enable m3u)
 		$(use_enable midi wildmidi)
@@ -142,18 +141,25 @@ src_configure() {
 	  --enable-vfs-curl"
 	fi
 	
-	if use gtk; then
-	  if use gtk3;then
+	if use gtk3;then
 	  my_config="${my_config}
-	  --enable-gtk3"
-	  fi
-	  if ! use gtk2;then
-	  my_config="${my_config}
-	  --disable-gtk2"
-	  fi
+	  --enable-gtk3
+	  --enable-gtkui"
 	fi
 	
+	if use gtk2;then
+	  my_config="${my_config}
+	  --enable-gtkui"
+	else
+	  my_config="${my_config}
+	  --disable-gtk2"
+	fi
 	econf ${my_config}
+}
+
+pkg_preinst() {
+	gnome2_icon_savelist
+	gnome2_schemas_savelist
 }
 
 pkg_postinst() {
@@ -161,4 +167,16 @@ pkg_postinst() {
 		einfo "enable manually freepats support for timidity via"
 		einfo "eselect timidity set --global freepats"
 	fi
+	fdo-mime_desktop_database_update
+	fdo-mime_mime_database_update
+	gnome2_icon_cache_update
+	gnome2_schemas_update
 }
+
+pkg_postrm() {
+	fdo-mime_desktop_database_update
+	fdo-mime_mime_database_update
+	gnome2_icon_cache_update
+	gnome2_schemas_update
+}
+
