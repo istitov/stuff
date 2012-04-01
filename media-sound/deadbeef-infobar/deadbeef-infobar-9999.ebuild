@@ -15,7 +15,8 @@ IUSE=""
 
 DEPEND_COMMON="
 		x11-libs/gtk+
-		dev-libs/libxml2"
+		dev-libs/libxml2
+		dev-vcs/mercurial"
 		
 RDEPEND="
 	${DEPEND_COMMON}
