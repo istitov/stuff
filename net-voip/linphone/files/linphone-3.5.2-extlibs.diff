@@ -1,0 +1,30 @@
+diff -r f00113966297 -r 7fb66403f980 configure.ac
+--- a/configure.ac	Thu Mar 29 14:37:29 2012 +0400
++++ b/configure.ac	Thu Mar 29 14:37:45 2012 +0400
+@@ -448,6 +448,8 @@
+       [AS_HELP_STRING([--enable-external-mediastreamer],[Use external mediastreamer library])],,
+       [enable_external_mediastreamer=no])
+ 
++enable_external_mediastreamer=yes
++
+ AS_CASE($enable_external_mediastreamer,
+ 		[yes],[
+ 			PKG_CHECK_MODULES([MEDIASTREAMER], [mediastreamer])
+@@ -511,7 +513,7 @@
+ AC_SUBST(LINPHONE_CFLAGS)
+ AC_SUBST(LINPHONE_LIBS)
+ 
+-AC_DEFINE_UNQUOTED(LINPHONE_VERSION,"$PACKAGE_VERSION",[Linphone's version number])
++AC_DEFINE_UNQUOTED(LINPHONE_VERSION,"$PACKAGE_VERSION",[Linphone version number])
+ 
+ AC_DEFINE_UNQUOTED(LINPHONE_PLUGINS_DIR, "${package_prefix}/lib64/liblinphone/plugins" ,[path of liblinphone plugins, not mediastreamer2 plugins])
+ LINPHONE_PLUGINS_DIR="${package_prefix}/lib64/liblinphone/plugins"
+@@ -525,6 +527,8 @@
+         *) AC_MSG_ERROR(bad value ${enableval} for --enable-external-ortp) ;;
+       esac],[external_ortp=false])
+ 
++external_ortp=true
++
+ if test "$external_ortp" = 'true'; then
+ 	PKG_CHECK_MODULES([ORTP], [ortp])
+ 	ORTP_VERSION=`$PKG_CONFIG --modversion ortp`
