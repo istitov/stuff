@@ -4,7 +4,4 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
-  <use>
-    <flag name='dconf'>Enable support for <pkg>gnome-base/dconf</pkg></flag>
-  </use>
 </pkgmetadata>
