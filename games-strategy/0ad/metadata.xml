@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+  <use>
+    <flag name='editor'>Enable editor</flag>
+  </use>
 </pkgmetadata>
