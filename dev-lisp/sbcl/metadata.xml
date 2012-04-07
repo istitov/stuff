@@ -4,4 +4,8 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+<use>
+  <flag name='cobalt'>mips only: use mipsel binary instead of mips big endian binary to bootstrap</flag>
+  <flag name='ldb'>Include support for the SBCL low level debugger</flag>
+</use>
 </pkgmetadata>
