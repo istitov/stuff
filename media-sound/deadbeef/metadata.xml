@@ -14,5 +14,18 @@
 		<flag name='m3u'>Support for m3u playlists</flag>
 		<flag name='gme'>Game Music Emu plugin for NSF, AY, etc</flag>
 		<flag name='dumb'>Support for tracker music(MOD, S3M, XM, IT, STM, 669, PTM, PSM, MTM, DSM, ASYLUM AMF, UMX, J2B)</flag>
+		<flag name='mono2stereo'>Enable mono2stereo plugin</flag>
+		<flag name='converter'>Enable media-converter</flag>
+		<flag name='infobar'>Build <pkg>media-sound/deadbeef-infobar</pkg></flag>
+		<flag name='hotkeys'>Enable hotkeys plugin</flag>
+		<flag name='lastfm'>Enable lastfm plugin</flag>
+		<flag name='midi'>Add support for midi files</flag>
+		<flag name='vtx'>Libayemy VTX ZX-Spectrum music player plugin</flag>
+		<flag name='rpath'>Hardcode runtime library paths</flag>
+		<flag name='ape'>Monkey's Audio plugin</flag>
+		<flag name='adplug'>Add supereq for <pkg>media-libs/adplug</pkg></flag>
+		<flag name='cover'>Build album art loader plugin</flag>
+		<flag name='cover-imlib2'>Use imlib2 in artwork plugin</flag>
+		<flag name='tta'>Build tta plugin</flag>
 	</use>
 </pkgmetadata>

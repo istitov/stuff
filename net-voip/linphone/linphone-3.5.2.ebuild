@@ -8,11 +8,10 @@ inherit eutils autotools multilib versionator pax-utils
 
 DESCRIPTION="Video softphone based on the SIP protocol"
 HOMEPAGE="http://www.linphone.org/"
-SRC_URI="http://download.savannah.nongnu.org/releases-noredirect/${PN}/$(get_version_component_range 1-2).x/sources/${P}.tar.gz"
-
+SRC_URI="mirror://nongnu/${PN}/$(get_version_component_range 1-2).x/sources/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="doc gtk ipv6 ncurses nls video srtp g729"
 
 RDEPEND=">=media-libs/mediastreamer-2.7.3[video?,ipv6?]

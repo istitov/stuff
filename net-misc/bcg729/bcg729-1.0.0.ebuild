@@ -10,7 +10,7 @@ DESCRIPTION="Backported G729 implementation for Linphone"
 HOMEPAGE="http://www.linphone.org"
 SRC_URI="http://download.savannah.gnu.org/releases/linphone/plugins/sources/${P}.tar.gz"
 
-LICENSE="GPLv2"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""

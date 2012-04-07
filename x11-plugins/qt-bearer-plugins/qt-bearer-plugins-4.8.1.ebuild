@@ -10,8 +10,8 @@ SLOT="4"
 KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
 IUSE="networkmanager"
 
-DEPEND="~x11-libs/qt-core-${PV}[aqua=,c++0x=,debug=]
-	~x11-libs/qt-dbus-${PV}[aqua=,c++0x=,debug=]
+DEPEND="~x11-libs/qt-core-${PV}
+	~x11-libs/qt-dbus-${PV}
 	networkmanager? ( net-misc/networkmanager )
 "
 RDEPEND="${DEPEND}"
