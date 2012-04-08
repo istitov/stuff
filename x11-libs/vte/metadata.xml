@@ -6,5 +6,6 @@
 	<flag name='glade'>Provide integration with <pkg>dev-util/glade</pkg>.</flag>
 	<flag name="introspection">Use <pkg>dev-libs/gobject-introspection</pkg> for
 	introspection</flag>
+	<flag name="gtk3">Build with x11-libs/gtk+:3</flag>
 </use>
 </pkgmetadata>

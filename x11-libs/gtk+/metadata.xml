@@ -18,5 +18,7 @@
       for introspection</flag>
     <flag name="packagekit">Enable support for the distro-neutral package
 	  manager GUI <pkg>app-admin/packagekit</pkg> in application chooser</flag>
+	<flag name="appmenu">Add support for ubuntu global menu</flag>
+	<flag name="overlay">Add support for ubuntu overlay scrollbars</flag>
   </use>
 </pkgmetadata>

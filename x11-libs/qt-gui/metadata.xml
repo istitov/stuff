@@ -21,5 +21,6 @@
 			all drawing operations into a trace buffer. Later it can be replayed
 			with the qttracereplay utility
 		</flag>
+		<flag name="appmenu">Add support for ubuntu global menu</flag>
 	</use>
 </pkgmetadata>

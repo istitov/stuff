@@ -4,4 +4,8 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<use>
+	  <flag name="gtk3">Build with x11-libs/gtk+:3</flag>
+	  <flag name='dconf'>Enable support for <pkg>gnome-base/dconf</pkg></flag>
+	</use>
 </pkgmetadata>
