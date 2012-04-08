@@ -9,12 +9,12 @@ WANT_AUTOMAKE="latest"
 WX_GTK_VER="2.8"
 inherit eutils wxwidgets autotools
 
-MY_P="XaraLX-${PV/_p/r}"
+MY_PV="${PV/_p/_rev}"
 S="${WORKDIR}/${MY_P}"
 
 DESCRIPTION="Vector graphics editing program"
 HOMEPAGE="http://www.xaraxtreme.org/"
-SRC_URI="http://downloads2.xara.com/opensource/${MY_P}.tar.bz2"
+SRC_URI="http://downloads.xara.com/opensource/${PN}${MY_PV}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
