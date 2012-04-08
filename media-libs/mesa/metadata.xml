@@ -21,6 +21,6 @@
 	<flag name='wayland'>Enable support for dev-libs/wayland</flag>
 	<flag name='xa'>Enable the XA (X Acceleration) API for Gallium3D.</flag>
 	<flag name='xvmc'>Enable the XvMC acceleration interface for the Gallium3D Video Layer.</flag>
-	
+	<flag name='xorg'>Enable support for X.Org DDX API</flag>
 </use>
 </pkgmetadata>
