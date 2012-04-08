@@ -1,4 +1,4 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -109,13 +109,13 @@ RDEPEND="${DEPEND}"
 #S="${WORKDIR}/${P}"
 
 src_unpack() {
-	mkdir -p ${S}
-	cd ${S}
+	mkdir -p "${S}"
+	cd "${S}"
 	for f in ${A}; do
 		unzip -qqL "${PORTAGE_TMPDIR}/portage/${CATEGORY}/${PF}/distdir/${f}"
 	done
-	epatch ${FILESDIR}/gcc32.patch
-	epatch ${FILESDIR}/gentoopath.patch
+	epatch "${FILESDIR}"/gcc32.patch
+	epatch "${FILESDIR}"/gentoopath.patch
 }
 
 src_compile() {
@@ -180,5 +180,5 @@ src_install() {
 	into /usr/games
 	dobin ffelnxsdl
 	insinto /usr/games/lib/jjffe
-	cp -dpR ${WORKDIR}/firstenc ${D}/usr/games/lib/jjffe
+	cp -dpR "${WORKDIR}"/firstenc "${D}"/usr/games/lib/jjffe
 }

@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -28,13 +28,13 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/sofastats-${PV}"
 
 src_install(){
-  python_convert_shebangs 2 sofa_main/start.py
-  dodir /usr/share/sofastats
-  insinto /usr/share/sofastats
-  doins -r sofa_main/*
-  exeinto /usr/share/sofastats
-  doexe sofa_main/*.py*
-  doexe sofa_main/*/*.py*
-  dosym  /usr/share/sofastats/start.py /usr/bin/sofastats
-  make_desktop_entry sofastats ${PN} /usr/share/sofastats/images/sofa_32x32.ico "Education;Math;"
+	python_convert_shebangs 2 sofa_main/start.py
+	dodir /usr/share/sofastats
+	insinto /usr/share/sofastats
+	doins -r sofa_main/*
+	exeinto /usr/share/sofastats
+	doexe sofa_main/*.py*
+	doexe sofa_main/*/*.py*
+	dosym /usr/share/sofastats/start.py /usr/bin/sofastats
+	make_desktop_entry sofastats ${PN} /usr/share/sofastats/images/sofa_32x32.ico "Education;Math;"
 }

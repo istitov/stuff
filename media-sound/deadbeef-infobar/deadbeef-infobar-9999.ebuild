@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: media-sound/deadbeef-infobar/deadbeef-infobar-9999.ebuild,v 1 2011/05/20 00:13:35 megabaks Exp $
 
@@ -14,10 +14,10 @@ KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE=""
 
 DEPEND_COMMON="
-		x11-libs/gtk+
-		dev-libs/libxml2
-		dev-vcs/mercurial"
-		
+	x11-libs/gtk+
+	dev-libs/libxml2
+	dev-vcs/mercurial"
+
 RDEPEND="
 	${DEPEND_COMMON}
 	"
@@ -27,21 +27,21 @@ DEPEND="
 S="${WORKDIR}"
 
 src_prepare() {
-  hg clone $EHG_REPO_URI
- }
+	hg clone $EHG_REPO_URI
+}
 
 src_configure() {
-  cd deadbeef-infobar/ 
-  cmake .
-  }
-  
+	cd deadbeef-infobar/
+	cmake .
+}
+
 src_compile() {
-  cd deadbeef-infobar/
-  emake || die
-  }
+	cd deadbeef-infobar/
+	emake || die
+}
 
 src_install() {
-  cd deadbeef-infobar/ 
-  insinto /usr/lib/deadbeef
-  doins ddb_infobar.so
-  }
+	cd deadbeef-infobar/
+	insinto /usr/lib/deadbeef
+	doins ddb_infobar.so
+}

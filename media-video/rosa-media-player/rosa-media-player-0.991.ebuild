@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -26,29 +26,29 @@ DEPEND="${RDEPEND}
 	x11-libs/qt-gui:4"
 
 src_compile() {
-  sed -i '1i#define OF(x) x' \
+	sed -i '1i#define OF(x) x' \
 	src/findsubtitles/quazip/ioapi.{c,h} \
 	src/findsubtitles/quazip/{zip,unzip}.h || die
 
-  emake PREFIX=/usr || die
+	emake PREFIX=/usr || die
 }
 src_install() {
-  for lang in ${LANGS};do
-	for x in ${lang};do
-	  if ! use linguas_${x}; then
-		rm -f "$(find src/translations -type f -name "rosamp_${x}*.qm")"
-		rm -rf docs/${x}
-	  fi
+	for lang in ${LANGS};do
+	  for x in ${lang};do
+		if ! use linguas_${x}; then
+		  rm -f "$(find src/translations -type f -name "rosamp_${x}*.qm")"
+		  rm -rf docs/${x}
+		fi
+	  done
 	done
-  done
-  
-  emake PREFIX=/usr DESTDIR="${D}" install || die
+
+	emake PREFIX=/usr DESTDIR="${D}" install || die
 }
 pkg_postinst() {
-  elog '====================================================================='
-  elog 'Use translations:'
-  elog 'change "language=" in "~/.config/rosamp/rosamp.ini"'
-  elog 'i.e.' 
-  elog 'sed -e "s|language=.*|language=$LANG|" -i ~/.config/rosamp/rosamp.ini'
-  elog '====================================================================='
+	elog '====================================================================='
+	elog 'Use translations:'
+	elog 'change "language=" in "~/.config/rosamp/rosamp.ini"'
+	elog 'i.e.'
+	elog 'sed -e "s|language=.*|language=$LANG|" -i ~/.config/rosamp/rosamp.ini'
+	elog '====================================================================='
 }

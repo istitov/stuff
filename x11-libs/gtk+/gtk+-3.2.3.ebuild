@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-3.2.1.ebuild,v 1.1 2011/10/19 03:48:07 tetromino Exp $
 
@@ -109,14 +109,13 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.2.1-failing-tests.patch"
 
 	if use appmenu;then
-	#epatch ${FILESDIR}/appmenu3/fix.patch
-	epatch ${FILESDIR}/appmenu3/*.patch
+	epatch "${FILESDIR}"/appmenu3/*.patch
 	fi
-	
+
 	if use overlay;then
-	epatch ${FILESDIR}/100_gtk3_overlay_scrollbar_loading.patchh
+	epatch "${FILESDIR}"/100_gtk3_overlay_scrollbar_loading.patchh
 	fi
-	
+
 	if ! use test; then
 		# don't waste time building tests
 		strip_builddir SRC_SUBDIRS tests Makefile.am

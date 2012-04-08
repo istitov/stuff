@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/soundkonverter/soundkonverter-1.2.0.ebuild,v 1.1 2011/11/15 23:38:09 dilfridge Exp $
 

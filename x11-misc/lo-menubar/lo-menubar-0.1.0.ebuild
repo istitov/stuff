@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -9,7 +9,7 @@ inherit multilib
 DESCRIPTION="A small plugin for LibreOffice to export the menus from the application into Unity's menubar."
 HOMEPAGE="https://launchpad.net/lo-menubar"
 SRC_URI=" x86? ( https://launchpad.net/ubuntu/+source/${PN}/${PV}-0ubuntu3/+build/2774800/+files/${PN}_${PV}-0ubuntu3_i386.deb )
-		  amd64? ( https://launchpad.net/ubuntu/+source/${PN}/${PV}-0ubuntu3/+build/2774798/+files/${PN}_${PV}-0ubuntu3_amd64.deb )"
+		amd64? ( https://launchpad.net/ubuntu/+source/${PN}/${PV}-0ubuntu3/+build/2774798/+files/${PN}_${PV}-0ubuntu3_amd64.deb )"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
@@ -23,10 +23,10 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}"
 QA_PRESTRIPPED="/usr/$(get_libdir)/libreoffice/share/extensions/menubar/Linux_x86/menubar.uno.so"
 src_prepare(){
-  unpack ${A}
-  unpack ./data.tar.gz
+	unpack ${A}
+	unpack ./data.tar.gz
 }
 src_install(){
- insinto /usr/$(get_libdir)/libreoffice/share/extensions/
- doins -r usr/lib/libreoffice/share/extensions/*
+	insinto /usr/$(get_libdir)/libreoffice/share/extensions/
+	doins -r usr/lib/libreoffice/share/extensions/*
 }

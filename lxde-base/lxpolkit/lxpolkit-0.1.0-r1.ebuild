@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/lxde-base/lxpolkit/lxpolkit-0.1.0-r1.ebuild,v 1.2 2011/10/18 21:26:23 ssuominen Exp $
 
@@ -27,7 +27,7 @@ src_prepare() {
 	echo 'AutostartCondition=GNOME3 if-session gnome-fallback' >> ${f}
 }
 
-src_configure() { 
-  econf \
-  $(use_enable gtk3)
+src_configure() {
+	econf \
+	$(use_enable gtk3)
 }

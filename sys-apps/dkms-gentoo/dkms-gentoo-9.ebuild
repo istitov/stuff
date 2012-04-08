@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -19,10 +19,10 @@ DEPEND="sys-apps/openrc"
 RDEPEND="${DEPEND}"
 
 src_install(){
-  dosbin dkms-gentoo
-  newinitd dkms dkms
+	dosbin dkms-gentoo
+	newinitd dkms dkms
 }
 
 pkg_postinst() {
-  elog "Now you need run 'dkms-gentoo --db'"
+	elog "Now you need run 'dkms-gentoo --db'"
 }

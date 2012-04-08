@@ -20,7 +20,7 @@ DEPEND="
 "
 
 RDEPEND="${DEPEND}"
- 
+
 pkg_postinst() {
 	elog ""
 	elog "Quick start:"

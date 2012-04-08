@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -251,7 +251,7 @@ src_configure() {
 		$(use_enable !pic asm) \
 		$(use_enable shared-glapi) \
 		$(use_enable xa) \
-		$(use_enable xorg) \		
+		$(use_enable xorg) \
 		--with-dri-drivers=${DRI_DRIVERS} \
 		--with-gallium-drivers=${GALLIUM_DRIVERS} \
 		${myconf}

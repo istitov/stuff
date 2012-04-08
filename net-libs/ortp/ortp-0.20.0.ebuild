@@ -53,7 +53,7 @@ src_prepare() {
 		sed -i -e 's/$(docdir)\/$(PACKAGE)-$(VERSION)/$(docdir)/' Makefile.in \
 			|| die "patching Makefile.in failed"
 	fi
-	
+
 	# make sure to use host libtool version
 	rm -f m4/libtool.m4 m4/lt*.m4 #282268
 	mkdir m4

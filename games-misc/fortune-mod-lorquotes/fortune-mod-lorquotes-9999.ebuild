@@ -8,7 +8,7 @@ DESCRIPTION="The best phrases of Linux.Org.Ru members"
 HOMEPAGE="http://lorquotes.ru/,"
 #SRC_URI="http://lorquotes.ru/fortraw.php"
 
-LICENSE="WTFPL-2" 
+LICENSE="WTFPL-2"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
 IUSE=""
@@ -18,9 +18,9 @@ RDEPEND="games-misc/fortune-mod"
 S=${WORKDIR}/${MY_PN}
 
 src_prepare(){
-wget -c http://lorquotes.ru/fortraw.php
-iconv -f koi8r -t utf8 "${WORKDIR}/fortraw.php" > "${WORKDIR}/${PN}"
-strfile "${WORKDIR}/${PN}"
+	wget -c http://lorquotes.ru/fortraw.php
+	iconv -f koi8r -t utf8 "${WORKDIR}/fortraw.php" > "${WORKDIR}/${PN}"
+	strfile "${WORKDIR}/${PN}"
 }
 src_install() {
 	insinto /usr/share/fortune

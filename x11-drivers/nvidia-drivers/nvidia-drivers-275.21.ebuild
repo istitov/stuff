@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-drivers/nvidia-drivers/nvidia-drivers-270.41.03.ebuild,v 1.3 2011/04/24 18:48:24 ulm Exp $
 
@@ -289,7 +289,7 @@ src_prepare() {
 		# If greater than 2.6.5 use M= instead of SUBDIR=
 		convert_to_m "${NV_SRC}"/Makefile.kbuild
 	fi
-	if use rt;then 
+	if use rt;then
 	epatch "${FILESDIR}"/nvidiart.patch
 	fi
 }

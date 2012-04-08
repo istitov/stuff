@@ -17,20 +17,19 @@ DEPEND="~x11-libs/qt-core-${PV}
 RDEPEND="${DEPEND}"
 
 pkg_setup() {
-  QT4_EXTRACT_DIRECTORIES="
+	QT4_EXTRACT_DIRECTORIES="
 	include/QtOpenGL/private
 	src/opengl"
 }
 
 src_configure(){
-  sed -e 's|../||' -i include/QtOpenGL/private/qglextensions_p.h
+	sed -e 's|../||' -i include/QtOpenGL/private/qglextensions_p.h
 }
 
 src_install() {
-  insinto "${QTHEADERDIR#${EPREFIX}}"/QtOpenGL/private || die
-  doins include/QtOpenGL/private/qglextensions_p.h || die
+	insinto "${QTHEADERDIR#${EPREFIX}}"/QtOpenGL/private || die
+	doins include/QtOpenGL/private/qglextensions_p.h || die
 
-  insinto "${QTHEADERDIR#${EPREFIX}}"/src/opengl || die
-  doins src/opengl/qglextensions_p.h || die
-
+	insinto "${QTHEADERDIR#${EPREFIX}}"/src/opengl || die
+	doins src/opengl/qglextensions_p.h || die
 }

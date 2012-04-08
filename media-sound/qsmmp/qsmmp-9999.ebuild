@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/qsmmp/qsmmp-9999.ebuild,v 1.1 2011/01/13 23:44:36 dexon Exp $
 

@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-9999.ebuild,v 1.17 2008/05/18 02:08:03 hanno Exp $
 
@@ -22,10 +22,9 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_compile() {
-         python setup.py build || die "'python setup.py build' failed"
+	python setup.py build || die "'python setup.py build' failed"
 }
 
 src_install() {
-        python setup.py install --root="${D}" || die "'python setup.py install --root=\"${D}\"' failed"
+	python setup.py install --root="${D}" || die "'python setup.py install --root=\"${D}\"' failed"
 }
-

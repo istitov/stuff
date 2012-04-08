@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-misc/xbindkeys/xbindkeys-9999.ebuild,v 1.2 2010/02/08 18:20:05 megabaks Exp $
 
@@ -25,7 +25,6 @@ DEPEND="${RDEPEND}
 	x11-proto/xproto"
 
 src_configure() {
-	
 	local myconf
 	use tk || myconf="${myconf} --disable-tk"
 

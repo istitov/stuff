@@ -21,11 +21,10 @@ S=${WORKDIR}
 
 src_install() {
 	insinto /usr/share/mari0
-	doins mari0_${PV}.love || die
-	dobin ${FILESDIR}/mari0-${PV}
-	
-	insinto /usr/share/pixmaps
-	newins ${FILESDIR}/icon.png mario.png
-	make_desktop_entry mari0-${PV} "Mari0" mario
-}
+	doins mari0_"${PV}".love || die
+	dobin "${FILESDIR}/mari0-${PV}"
 
+	insinto /usr/share/pixmaps
+	newins "${FILESDIR}"/icon.png mario.png
+	make_desktop_entry mari0-"${PV}" "Mari0" mario
+}

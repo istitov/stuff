@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -21,4 +21,3 @@ DEPEND="kde-base/libkworkspace:4
 		kde-base/kwin:4
 		x11-misc/appmenu-qt"
 RDEPEND="${DEPEND}"
-

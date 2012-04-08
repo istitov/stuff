@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/arora/arora-0.11.0.ebuild,v 1.2 2011/01/26 16:20:15 darkside Exp $
 
@@ -29,4 +29,3 @@ S="${WORKDIR}"/"${MY_P}"
 src_configure() {
 	eqmake4 CONFIG+=package PREFIX="${EPREFIX}"/usr
 }
-

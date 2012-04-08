@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header:
+# $Header: $
 
 EAPI=4
 inherit bzr gnome2 eutils flag-o-matic
@@ -19,48 +19,46 @@ IUSE="dia gs gnome inkjar dbus lcms nls poppler postscript python perl wmf wpg"
 RESTRICT="test"
 
 COMMON_DEPEND="
-   dev-cpp/glibmm
-   dev-cpp/gtkmm:2.4
-   >=dev-libs/boehm-gc-6.4
-   >=dev-libs/glib-2.6.5
-   >=dev-libs/libsigc++-2.0.12
-   >=dev-libs/libxml2-2.6.20
-   >=dev-libs/libxslt-1.0.15
-   dev-libs/popt
-   dev-python/lxml
-   || ( media-gfx/imagemagick[cxx] media-gfx/graphicsmagick[cxx,symlink] )
-   media-libs/fontconfig
-   media-libs/freetype:2
-   >=media-libs/libpng-1.5
-   app-text/libwpd:0.9
-   wpg? ( app-text/libwpg:0.2 )
-   sci-libs/gsl
-   x11-libs/libXft
-   x11-libs/gtk+:2
-   >=x11-libs/pango-1.4.0
-   || ( dev-lang/python[xml] dev-python/pyxml )
-   gnome? ( >=gnome-base/gnome-vfs-2.0 )
-   lcms? ( media-libs/lcms:0 )
-   "
+	dev-cpp/glibmm
+	dev-cpp/gtkmm:2.4
+	>=dev-libs/boehm-gc-6.4
+	>=dev-libs/glib-2.6.5
+	>=dev-libs/libsigc++-2.0.12
+	>=dev-libs/libxml2-2.6.20
+	>=dev-libs/libxslt-1.0.15
+	dev-libs/popt
+	dev-python/lxml
+	|| ( media-gfx/imagemagick[cxx] media-gfx/graphicsmagick[cxx,symlink] )
+	media-libs/fontconfig
+	media-libs/freetype:2
+	>=media-libs/libpng-1.5
+	app-text/libwpd:0.9
+	wpg? ( app-text/libwpg:0.2 )
+	sci-libs/gsl
+	x11-libs/libXft
+	x11-libs/gtk+:2
+	>=x11-libs/pango-1.4.0
+	|| ( dev-lang/python[xml] dev-python/pyxml )
+	gnome? ( >=gnome-base/gnome-vfs-2.0 )
+	lcms? ( media-libs/lcms:0 )"
 
 # These only use executables provided by these packages
 # See share/extensions for more details. inkscape can tell you to
 # install these so we could of course just not depend on those and rely
 # on that.
 RDEPEND="
-   ${COMMON_DEPEND}
-   dev-python/numpy
-   media-gfx/uniconvertor
-   postscript? ( media-gfx/pstoedit )
-   dia? ( app-office/dia )
-   gs? ( app-text/ghostscript-gpl )
-	"
+	${COMMON_DEPEND}
+	dev-python/numpy
+	media-gfx/uniconvertor
+	postscript? ( media-gfx/pstoedit )
+	dia? ( app-office/dia )
+	gs? ( app-text/ghostscript-gpl )"
 DEPEND="${COMMON_DEPEND}
-   dev-libs/boost
-   sys-devel/gettext
-   dev-util/pkgconfig
-   x11-libs/libX11
-   >=dev-util/intltool-0.29"
+	dev-libs/boost
+	sys-devel/gettext
+	dev-util/pkgconfig
+	x11-libs/libX11
+	>=dev-util/intltool-0.29"
 
 src_unpack() {
 	bzr_src_unpack

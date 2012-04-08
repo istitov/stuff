@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-terms/roxterm/roxterm-2.2.2.ebuild,v 1.4 2011/11/11 09:23:34 phajdan.jr Exp $
 
@@ -27,7 +27,7 @@ DOCS=( AUTHORS ChangeLog NEWS README TODO )
 
 src_prepare() {
 	sed -i -e 's:TerminalEmulator:System;&:' roxterm.desktop || die
-	cp ${FILESDIR}/*.{ico,png} Help/lib/
+	cp "${FILESDIR}"/*.{ico,png} Help/lib/
 }
 
 src_configure() {

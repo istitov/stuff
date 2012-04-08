@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-voip/linphone/linphone-3.4.3-r1.ebuild,v 1.4 2011/11/06 12:47:49 grobian Exp $
 
@@ -85,6 +85,6 @@ src_install() {
 	find "${ED}" -name '*.la' -exec rm -f {} +
 
 	dodoc AUTHORS BUGS ChangeLog NEWS README README.arm TODO
-	
+
 	pax-mark m "${ED}usr/bin/linphone"
 }

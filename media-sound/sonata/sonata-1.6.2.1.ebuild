@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/sonata/sonata-1.6.2.1.ebuild,v 1.9 2011/10/29 09:45:35 angelos Exp $
 
@@ -33,18 +33,18 @@ DEPEND="${RDEPEND}
 DOCS="CHANGELOG README TODO TRANSLATORS"
 
 src_prepare(){
-  unpack "${A}"
-  if use libnotify;then
-	bzr_src_prepare
-	mv notify.py ${PN}-${PV}/sonata/plugins/
-  fi
+	unpack ${A}
+	if use libnotify;then
+	  bzr_src_prepare
+	  mv notify.py ${PN}-${PV}/sonata/plugins/
+	fi
 }
 src_compile(){
- cd ${PN}-${PV}
- distutils_src_compile
+	cd ${PN}-${PV}
+	distutils_src_compile
 }
 src_install() {
-  cd ${PN}-${PV}
-  distutils_src_install
-  rm -rf "${D}"/usr/share/sonata
+	cd ${PN}-${PV}
+	distutils_src_install
+	rm -rf "${D}"/usr/share/sonata
 }

@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -42,11 +42,11 @@ src_prepare() {
 	eautoreconf
 }
 src_configure() {
-  if use gtk2;then
-  econf --with-gtk=2 
-  fi
-  
-  if use gtk3;then
+	if use gtk2;then
+	econf --with-gtk=2
+	fi
+
+	if use gtk3;then
 	mkdir gtk3-hack
 	cp -R * gtk3-hack &>/dev/null
 	cd gtk3-hack
@@ -54,25 +54,24 @@ src_configure() {
 	econf \
 		--with-gtk=3 \
 		--libexec=/usr/local/libexec
-  fi
-  
+	fi
 }
 
 src_compile(){
-  if use gtk2;then
-  emake || die
-  fi 
-  
-  if use gtk3;then
-  cd gtk3-hack
-  emake || die
-  fi
+	if use gtk2;then
+	emake || die
+	fi
+
+	if use gtk3;then
+	cd gtk3-hack
+	emake || die
+	fi
 }
 src_install() {
 	if use gtk2;then
 	make -j3 DESTDIR="${D}" 'scrollkeeper_localstate_dir="${D}"/var/lib/scrollkeeper ' install || die "make install failed"
 	fi
-	
+
 	if use gtk3;then
 	  cd gtk3-hack
 	  make -j3 DESTDIR="${D}" 'scrollkeeper_localstate_dir="${D}"/var/lib/scrollkeeper ' install || die "make install failed"

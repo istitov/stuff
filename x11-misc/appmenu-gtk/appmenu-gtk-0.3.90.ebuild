@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -22,42 +22,42 @@ DEPEND=">=dev-libs/libdbusmenu-0.5.91[gtk]
 		gtk2? ( x11-libs/gtk+:2[appmenu] )"
 RDEPEND="${DEPEND}"
 src_prepare(){
-epatch ${FILESDIR}/fix.patch
+epatch "${FILESDIR}"/fix.patch
 }
 
 src_configure(){
-  if use gtk2;then
+	if use gtk2;then
 	econf --with-gtk2
-  fi
+	fi
 
-  if use gtk3;then
+	if use gtk3;then
 	mkdir gtk3-hack
 	cp -R * gtk3-hack
 	cd gtk3-hack
-	econf 
-  fi
+	econf
+	fi
 }
 src_compile(){
-  if use gtk2;then
-  emake
-  fi 
-  
-  if use gtk3;then
-  cd gtk3-hack
-  emake
-  fi
+	if use gtk2;then
+	emake
+	fi
+
+	if use gtk3;then
+	cd gtk3-hack
+	emake
+	fi
 }
 src_install(){
-  if use gtk2;then
+	if use gtk2;then
 	insinto /usr/$(get_libdir)/gtk-2.0/2.10.0/menuproxies/
 	doins src/.libs/libappmenu.so
-  fi
-  
-  if use gtk3;then
-    insinto /usr/$(get_libdir)/gtk-3.0/3.0.0/menuproxies
+	fi
+
+	if use gtk3;then
+		insinto /usr/$(get_libdir)/gtk-3.0/3.0.0/menuproxies
 	doins gtk3-hack/src/.libs/libappmenu.so
-  fi
-  mv 80appmenu appmenu.sh
-  insinto /etc/profile.d/
-  doins appmenu.sh
+	fi
+	mv 80appmenu appmenu.sh
+	insinto /etc/profile.d/
+	doins appmenu.sh
 }

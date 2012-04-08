@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -25,12 +25,12 @@ S="${WORKDIR}"
 QA_PRESTRIPPED="//usr/lib/firefox/extensions/globalmenu@ubuntu.com/components/libglobalmenu.so"
 
 src_unpack() {
-  unpack ${A}
-  unpack ./data.tar.gz
+	unpack ${A}
+	unpack ./data.tar.gz
 }
 
 src_install() {
-  mv usr/lib/firefox-addons usr/lib/firefox
-  cp -R usr "${D}"
-  dosym "/usr/lib/firefox/extensions/globalmenu@ubuntu.com" "/opt/firefox/extensions/globalmenu@ubuntu.com"
+	mv usr/lib/firefox-addons usr/lib/firefox
+	cp -R usr "${D}"
+	dosym "/usr/lib/firefox/extensions/globalmenu@ubuntu.com" "/opt/firefox/extensions/globalmenu@ubuntu.com"
 }

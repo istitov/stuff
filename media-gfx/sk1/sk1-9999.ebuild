@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-9999.ebuild,v 1.17 2008/05/18 02:08:03 hanno Exp $
 EAPI=4
@@ -18,17 +18,17 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=">=sys-libs/glibc-2.6.1
-        >=x11-libs/cairo-1.4.0
-        media-libs/freetype:2
-        x11-libs/libX11
-        x11-libs/libXext
-        >=dev-lang/tcl-8.5.5
-        >=dev-lang/tk-8.5.5
-        >=sys-libs/zlib-1.2.3-r1
-        dev-lang/python
-        dev-python/imaging
-        media-libs/lcms
-        gnome-extra/zenity
+	>=x11-libs/cairo-1.4.0
+	media-libs/freetype:2
+	x11-libs/libX11
+	x11-libs/libXext
+	>=dev-lang/tcl-8.5.5
+	>=dev-lang/tk-8.5.5
+	>=sys-libs/zlib-1.2.3-r1
+	dev-lang/python
+	dev-python/imaging
+	media-libs/lcms
+	gnome-extra/zenity
 	media-libs/sk1libs
 	media-gfx/sk1sdk"
 
@@ -52,4 +52,3 @@ src_compile() {
 src_install() {
 	python setup.py install --root="${D}" || die "'python setup.py install --root=\"${D}\"' failed"
 }
-

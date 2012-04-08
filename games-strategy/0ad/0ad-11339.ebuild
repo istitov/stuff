@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -63,15 +63,15 @@ use gcc-config or copy/paste this
 
 ##################################
 #COMPILERS
-if [ -f ${ROOT}/etc/portage/package.compilers ]; then
-  while read target ver; do
-	if [ "${target}" = "${CATEGORY}/${PN}" ]; then
-	MY_GCC="$(find /usr/$MACHTYPE/gcc-bin/ -name "$ver*")"
-	export ROOTPATH="${MY_GCC}:${ROOTPATH}"
-	export PATH="${MY_GCC}:${PATH}"
-	export LIBRARY_PATH="$(gcc-config -L):${LIBRARY_PATH}"
-	fi
-  done < ${ROOT}/etc/portage/package.compilers
+if [ -f "${ROOT}/etc/portage/package.compilers" ]; then
+	while read target ver; do
+	  if [ "${target}" = "${CATEGORY}/${PN}" ]; then
+		MY_GCC="$(find /usr/$MACHTYPE/gcc-bin/ -name "$ver*")"
+		export ROOTPATH="${MY_GCC}:${ROOTPATH}"
+		export PATH="${MY_GCC}:${PATH}"
+		export LIBRARY_PATH="$(gcc-config -L):${LIBRARY_PATH}"
+	  fi
+	done < "${ROOT}/etc/portage/package.compilers"
 fi
 ##################################
 in /etc/portage/bashrc

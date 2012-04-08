@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libdbusmenu/libdbusmenu-0.5.1-r300.ebuild,v 1.3 2011/11/28 22:37:34 zmedico Exp $
 
@@ -56,7 +56,7 @@ src_configure() {
 		--with-html-dir=/usr/share/doc/${PF} \
 		--with-gtk=2
 	fi
-	
+
 	if use gtk3;then
 		mkdir gtk3-hack
 		cp -R * gtk3-hack &>/dev/null

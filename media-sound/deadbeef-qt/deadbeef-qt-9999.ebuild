@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -16,7 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="media-sound/deadbeef
-      x11-libs/qt-gui:4"
+		x11-libs/qt-gui:4"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${PN}/"

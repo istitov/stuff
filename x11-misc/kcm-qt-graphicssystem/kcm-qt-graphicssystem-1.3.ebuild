@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-misc/kcm-qt-graphicssystem/kcm-qt-graphicssystem-1.2.ebuild,v 1 2010/12/26 05:32:35 megabaks Exp $
 
@@ -29,7 +29,7 @@ DEPEND="
 S="${WORKDIR}/${PF}"
 
 src_compile() {
-	cmake -DCMAKE_INSTALL_PREFIX=/usr ${S} 
+	cmake -DCMAKE_INSTALL_PREFIX=/usr "${S}"
 	emake || die "emake failed"
 }
 

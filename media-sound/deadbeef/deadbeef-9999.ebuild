@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -71,7 +71,6 @@ pkg_setup() {
 	fi
 }
 
-
 src_prepare() {
 	if [[ ${PV} = *9999* ]] ; then
 	sh autogen.sh
@@ -82,13 +81,13 @@ src_prepare() {
 		sed -e 's;/etc/timidity++/timidity-freepats.cfg;/usr/share/timidity/freepats/timidity.cfg;g' \
 			-i "${S}/plugins/wildmidi/wildmidiplug.c"
 	fi
-  for lang in ${LANGS};do
+	for lang in ${LANGS};do
 	for x in ${lang};do
 	  if ! use linguas_${x}; then
 		rm -f "po/${x}.po"
 	  fi
 	done
-  done
+	done
 }
 
 src_configure() {
@@ -152,13 +151,13 @@ src_configure() {
 	  my_config="${my_config}
 	  --enable-vfs-curl"
 	fi
-	
+
 	if use gtk3;then
 	  my_config="${my_config}
 	  --enable-gtk3
 	  --enable-gtkui"
 	fi
-	
+
 	if use gtk2;then
 	  my_config="${my_config}
 	  --enable-gtkui"

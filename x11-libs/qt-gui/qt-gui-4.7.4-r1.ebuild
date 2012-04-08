@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.7.4-r1.ebuild,v 1.2 2011/11/28 22:52:01 pesa Exp $
 
@@ -88,7 +88,7 @@ src_prepare() {
 
 	# Don't build plugins this go around, because they depend on qt3support lib
 	sed -i -e "s:CONFIG(shared:# &:g" "${S}"/tools/designer/src/src.pro
-	
+
 	if use appmenu;then
 	epatch "${FILESDIR}/qmenubar-plugin-system-4.7.3.patch"
 	fi

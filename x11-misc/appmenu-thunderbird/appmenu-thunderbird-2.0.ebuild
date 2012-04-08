@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -19,34 +19,34 @@ KEYWORDS="~x86 ~amd64"
 IUSE="wifi"
 
 DEPEND="|| ( mail-client/thunderbird mail-client/thunderbird-bin )
- wifi? ( net-wireless/wireless-tools )"
+		wifi? ( net-wireless/wireless-tools )"
 RDEPEND="${DEPEND}"
 
 src_unpack() {
- bzr_src_unpack
+	bzr_src_unpack
 }
 
 src_prepare() {
- eautoreconf || die "eautoreconf failed"
- sed -i 's/^ \t/\t/' "${S}/config/rules.mk"
- sed -i '/^XPIDL_COMPILE[[:space:]]*=/s@\$(LIBXUL_DIST)/@&sdk/@' \
- "${S}/config/config.mk"
+	eautoreconf || die "eautoreconf failed"
+	sed -i 's/^ \t/\t/' "${S}/config/rules.mk"
+	sed -i '/^XPIDL_COMPILE[[:space:]]*=/s@\$(LIBXUL_DIST)/@&sdk/@' \
+	"${S}/config/config.mk"
 }
 
 src_configure() {
- econf \
- --with-libxul-sdk="${EPREFIX}"/usr/$(get_libdir)/firefox \
- --with-system-nspr \
- --enable-application=extensions \
- --enable-extensions=globalmenu \
- --disable-tests \
- $(use_enable wifi necko-wifi)
+	econf \
+	--with-libxul-sdk="${EPREFIX}"/usr/$(get_libdir)/firefox \
+	--with-system-nspr \
+	--enable-application=extensions \
+	--enable-extensions=globalmenu \
+	--disable-tests \
+	$(use_enable wifi necko-wifi)
 }
 
 src_install() {
- MOZILLA_FIVE_HOME="/usr/$(get_libdir)/thunderbird"
- xpi_install ${S}/dist/xpi-stage/globalmenu
- 
- $(has thunderbird-bin thunderbird-bin ) && \
- dosym "/usr/$(get_libdir)/thunderbird/extensions/globalmenu@ubuntu.com" "/opt/thunderbird/extensions/globalmenu@ubuntu.com"
+	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/thunderbird"
+	xpi_install "${S}/dist/xpi-stage/globalmenu"
+
+	$(has thunderbird-bin thunderbird-bin ) && \
+	dosym "/usr/$(get_libdir)/thunderbird/extensions/globalmenu@ubuntu.com" "/opt/thunderbird/extensions/globalmenu@ubuntu.com"
 }

@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -58,20 +58,19 @@ pkg_setup() {
 	fi
 }
 
-
 src_prepare() {
 	if use midi ; then
 		# set default gentoo path
 		sed -e 's;/etc/timidity++/timidity-freepats.cfg;/usr/share/timidity/freepats/timidity.cfg;g' \
-			-i "${S}/plugins/wildmidi/wildmidiplug.c"
+			-i ""${S}"/plugins/wildmidi/wildmidiplug.c"
 	fi
-  for lang in ${LANGS};do
+	for lang in ${LANGS};do
 	for x in ${lang};do
 	  if ! use linguas_${x}; then
 		rm -f "${D}usr/share/locale/${x}/LC_MESSAGES/audacious.mo"
 	  fi
 	done
-  done
+	done
 }
 
 src_configure() {
@@ -140,43 +139,43 @@ src_compile() {
 	emake
 
 	if use ao ; then
-		cd ${S}/plugins/ao
+		cd "${S}"/plugins/ao
 		emake
 	fi
 
 	if use converter ; then
-		cd ${S}/plugins/converter
+		cd "${S}"/plugins/converter
 		emake
 	fi
 
 	if use dumb ; then
-		cd ${S}/plugins/dumb
+		cd "${S}"/plugins/dumb
 		emake
 	fi
 
 	if use shn ; then
-		cd ${S}/plugins/shn
+		cd "${S}"/plugins/shn
 		emake
 	fi
 }
 
 src_install() {
-  PORTAGE_COMPRESS=""
+	PORTAGE_COMPRESS=""
 	emake DESTDIR="${D}" install
-    
+
 	if use ao ; then
 		insinto /usr/$(get_libdir)/${PN}
-		doins ${S}/plugins/ao/*.so
+		doins "${S}"/plugins/ao/*.so
 	fi
 
 	if use dumb ; then
 		insinto /usr/$(get_libdir)/${PN}
-		doins ${S}/plugins/dumb/*.so
+		doins "${S}"/plugins/dumb/*.so
 	fi
 
 	if use shn ; then
 		insinto /usr/$(get_libdir)/${PN}
-		doins ${S}/plugins/shn/*.so
+		doins "${S}"/plugins/shn/*.so
 	fi
 }
 

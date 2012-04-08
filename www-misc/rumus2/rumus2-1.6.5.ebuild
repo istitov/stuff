@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-misc/rumus2/rumus2-1.6.5.ebuild,v 1 2011/10/15 00:13:35 megabaks Exp $
 
@@ -23,12 +23,12 @@ RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
 src_unpack () {
-    rpm_src_unpack ${A}
-    cd "${WORKDIR}"
+	rpm_src_unpack ${A}
+	cd "${WORKDIR}"
 }
 
 src_install() {
-    cp -R "." "${D}" 
-    insinto /usr/share/applications
-    doins usr/local/share/apps/rumus2/etc/rumus2.desktop
+	cp -R "." "${D}"
+	insinto /usr/share/applications
+	doins usr/local/share/apps/rumus2/etc/rumus2.desktop
 }

@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-3.2.2-r1.ebuild,v 1.1 2011/11/16 23:44:46 nirbheek Exp $
 
@@ -124,15 +124,15 @@ src_prepare() {
 		strip_builddir SRC_SUBDIRS demos Makefile.am
 		strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
-	
+
 	if use appmenu;then
-	epatch ${FILESDIR}/appmenu-gtk3/${PV}/043_ubuntu_menu_proxy.patch
-	epatch ${FILESDIR}/appmenu-gtk3/${PV}/062_ubuntu-set-grab-add.patch
-	epatch ${FILESDIR}/appmenu-gtk3/${PV}/072_indicator_menu_update.patch
+	epatch "${FILESDIR}/appmenu-gtk3/${PV}/043_ubuntu_menu_proxy.patch"
+	epatch "${FILESDIR}/appmenu-gtk3/${PV}/062_ubuntu-set-grab-add.patch"
+	epatch "${FILESDIR}/appmenu-gtk3/${PV}/072_indicator_menu_update.patch"
 	fi
-	
+
 	if use overlay;then
-	epatch ${FILESDIR}/${PV}-100_overlay_scrollbar_loading.patch
+	epatch "${FILESDIR}/${PV}"-100_overlay_scrollbar_loading.patch
 	fi
 }
 
