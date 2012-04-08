@@ -4,4 +4,8 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<use>
+	  <flag name="xrandr">Add support for <pkg>x11-libs/libXrandr</pkg></flag>
+	  <flag name="imlib2">Compile with <pkg>media-libs/imlib2</pkg> support</flag>
+	</use>
 </pkgmetadata>
