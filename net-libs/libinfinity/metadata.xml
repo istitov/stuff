@@ -6,5 +6,6 @@
 	</maintainer>
 	<use>
 	  <flag name="gtk3">Build with x11-libs/gtk+:3</flag>
+	  <flag name="server">Build the infinote standalone server</flag>
 	</use>
 </pkgmetadata>

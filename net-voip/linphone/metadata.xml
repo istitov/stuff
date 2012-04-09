@@ -8,5 +8,6 @@
 	</maintainer>
 	<use>
 		<flag name='video'>Enable video support (display/capture)</flag>
+		<flag name='g729'>Add support for <pkg>net-misc/bcg729</pkg></flag>
 	</use>
 </pkgmetadata>

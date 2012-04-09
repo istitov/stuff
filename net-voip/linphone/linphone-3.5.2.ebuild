@@ -12,7 +12,7 @@ SRC_URI="mirror://nongnu/${PN}/$(get_version_component_range 1-2).x/sources/${P}
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc gtk ipv6 ncurses nls video srtp g729"
+IUSE="doc gtk ipv6 ncurses nls video g729"
 
 RDEPEND=">=media-libs/mediastreamer-2.7.3[video?,ipv6?]
 	>=net-libs/libeXosip-3.0.2

@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<use>
+	  <flag name="sourceview">Better Pygwy console user interface</flag>
+	</use>
 </pkgmetadata>
