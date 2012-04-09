@@ -15,7 +15,7 @@ SRC_URI=""
 
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 IUSE="wifi"
 
 DEPEND="|| ( mail-client/thunderbird mail-client/thunderbird-bin )

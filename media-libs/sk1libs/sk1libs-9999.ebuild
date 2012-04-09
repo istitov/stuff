@@ -14,7 +14,7 @@ HOMEPAGE="http://www.sk1project.org/"
 
 LICENSE="|| ( GPL-2 LGPL-2 )"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
 IUSE=""
 
@@ -27,5 +27,5 @@ src_compile() {
 }
 
 src_install() {
-  python setup.py install --root="${D}" || die "'python setup.py install --root=\"${D}\"' failed"
+	python setup.py install --root="${D}" || die "'python setup.py install --root=\"${D}\"' failed"
 }

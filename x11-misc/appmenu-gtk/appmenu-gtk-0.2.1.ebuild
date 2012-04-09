@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools
+inherit
 
 DESCRIPTION="Application menu module for GTK"
 HOMEPAGE="https://launchpad.net/appmenu-gtk"

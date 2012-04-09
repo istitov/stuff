@@ -90,7 +90,7 @@ src_compile(){
 }
 
 src_install() {
-	emake -j1 DESTDIR="${D}" install
+	MAKEOPTS="${MAKEOPTS} -j1" emake DESTDIR="${D}" install
 	dodoc AUTHORS ChangeLog README
 	find "${ED}" -name '*.la' -exec rm -f {} +
 

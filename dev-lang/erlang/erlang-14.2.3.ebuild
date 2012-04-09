@@ -90,7 +90,7 @@ src_configure() {
 
 src_compile() {
 	use java || export JAVAC=false
-	emake -j1 || die
+	MAKEOPTS="${MAKEOPTS} -j1" emake || die
 
 	if use emacs ; then
 		pushd lib/tools/emacs
@@ -108,7 +108,7 @@ src_install() {
 	local ERL_INTERFACE_VER=$(extract_version lib/erl_interface EI_VSN)
 	local ERL_ERTS_VER=$(extract_version erts VSN)
 
-	emake -j1 INSTALL_PREFIX="${D}" install || die
+	MAKEOPTS="${MAKEOPTS} -j1" emake INSTALL_PREFIX="${D}" install || die
 	dodoc AUTHORS README.md
 
 	dosym "${ERL_LIBDIR}/bin/erl" /usr/bin/erl

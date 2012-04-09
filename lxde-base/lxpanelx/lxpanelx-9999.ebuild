@@ -11,7 +11,7 @@ HOMEPAGE="http://code.google.com/p/lxpanelx/"
 ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk/"
 
 LICENSE="GPL-2"
-KEYWORDS="~alpha ~amd64 ~arm ~ppc ~x86 ~x86-interix ~amd64-linux ~x86-linux"
+KEYWORDS=""
 SLOT="0"
 IUSE="+alsa"
 RESTRICT="test"  # bug 249598

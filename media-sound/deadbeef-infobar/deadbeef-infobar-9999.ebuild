@@ -10,7 +10,7 @@ EHG_REPO_URI="https://bitbucket.org/dsimbiriatin/deadbeef-infobar"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
+KEYWORDS=""
 IUSE=""
 
 DEPEND_COMMON="

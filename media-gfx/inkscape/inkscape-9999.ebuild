@@ -14,7 +14,7 @@ HOMEPAGE="http://www.inkscape.org/"
 
 SLOT="0"
 LICENSE="GPL-2 LGPL-2.1"
-KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~x86"
+KEYWORDS=""
 IUSE="dia gs gnome inkjar dbus lcms nls poppler postscript python perl wmf wpg"
 RESTRICT="test"
 

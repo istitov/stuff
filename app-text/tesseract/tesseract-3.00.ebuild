@@ -53,7 +53,7 @@ linguas_en? ( http://tesseract-ocr.googlecode.com/files/eng.traineddata.gz )"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="alpha amd64 ~mips ppc ppc64 sparc x86"
+KEYWORDS="amd64 x86"
 
 DEPEND="tiff? ( media-libs/tiff )"
 RDEPEND="${DEPEND}"

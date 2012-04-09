@@ -29,7 +29,7 @@ src_compile() {
 	qmake -recursive || die "qmake failed"
 	sed -e "s|${WORKDIR}/rbutil/sansapatcher|"${S}"/rbutil/sansapatcher|" -i Makefile
 	sed -e "s|-I${WORKDIR}/tools |-I"${S}"/tools |" -i Makefile
-	emake -j1 || die "emake failed"
+	MAKEOPTS="${MAKEOPTS} -j1" emake || die "emake failed"
 }
 
 src_install() {

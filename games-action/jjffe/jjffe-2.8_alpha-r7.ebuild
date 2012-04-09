@@ -92,15 +92,17 @@ RESTRICT="strip mirror"
 # had installed on your system when you tested the package.  Then
 # other users hopefully won't be caught without the right version of
 # a dependency.
-DEPEND="
+RDEPEND="
 	media-libs/libsdl
-	>=dev-lang/nasm-0.98
 	app-arch/unzip
 	"
 
 # Run-time dependencies. Must be defined to whatever this depends on to run.
 # The below is valid if the same run-time depends are required to compile.
-RDEPEND="${DEPEND}"
+DEPEND="
+	>=dev-lang/nasm-2.09.10
+	${RDEPEND}
+	"
 
 # Source directory; the dir where the sources can be found (automatically
 # unpacked) inside ${WORKDIR}.  The default value for S is ${WORKDIR}/${P}

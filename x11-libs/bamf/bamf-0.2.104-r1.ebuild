@@ -15,16 +15,18 @@ LICENSE="LGPL-3"
 IUSE="+gtk2 gtk3"
 
 DEPEND=">=dev-lang/vala-0.11.7
-		dev-util/gtk-doc
 		gtk3? (
 		  >=x11-libs/libwnck-3.2.1
 		  >=x11-libs/gtk+-3.2.1 )
-		gnome-base/libgtop"
+		gnome-base/libgtop
+		dev-util/gtk-doc"
 
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
+}
 
+src_prepare(){
 	sed -i -e 's/vapigen/vapigen-0.12/' configure.in
 	sed -i -e 's/-Werror//' configure.in
 

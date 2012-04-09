@@ -12,7 +12,7 @@ SRC_URI="mirror://nongnu/linphone/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="amd64 ppc ~ppc64 x86 ~x64-macos ~x86-macos"
 IUSE="+alsa amr bindist coreaudio debug examples gsm ilbc ipv6 oss portaudio
 pulseaudio sdl +speex static-libs theora video x264 X"
 REQUIRED_USE="|| ( oss alsa portaudio coreaudio pulseaudio )

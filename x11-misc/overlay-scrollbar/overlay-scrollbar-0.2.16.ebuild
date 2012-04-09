@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools multilib
+inherit multilib
 
 DESCRIPTION="Ubuntu's scrollbars"
 HOMEPAGE="https://launchpad.net/ayatana-scrollbar"

@@ -11,7 +11,7 @@ HOMEPAGE="http://goldendict.berlios.de/"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 IUSE="debug kde"
 
 RDEPEND=">=app-text/hunspell-1.2

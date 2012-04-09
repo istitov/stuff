@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 		dev-libs/json-glib[introspection=]
 		dev-util/dbus-test-runner
 	)
-	vala? ( dev-lang/vala:0 )
+	vala? ( dev-lang/vala )
 	dev-util/intltool
 	dev-util/pkgconfig
 	>=dev-libs/atk-2.1.0

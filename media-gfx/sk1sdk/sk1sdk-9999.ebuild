@@ -13,7 +13,7 @@ HOMEPAGE="http://www.sk1project.org/"
 
 LICENSE="|| ( GPL-2 LGPL-2 )"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
 IUSE=""
 

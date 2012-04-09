@@ -39,7 +39,7 @@ src_configure() {
 }
 
 src_compile() {
-	emake -j1
+	MAKEOPTS="${MAKEOPTS} -j1" emake
 }
 
 src_install() {

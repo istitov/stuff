@@ -15,8 +15,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="avahi doc nls gtk3"
 MY_PV=0.5
 
-RDEPEND="dev-cpp/glibmm:2.4
-	|| ( gtk3? ( dev-cpp/gtkmm:3.0 ) dev-cpp/gtkmm:2.4 )
+RDEPEND="
+	|| ( gtk3? ( dev-cpp/gtkmm:3.0 ) dev-cpp/gtkmm:2 )
 	dev-libs/libsigc++:2
 	|| ( gtk3? ( >=net-libs/libinfinity-0.4[gtk3,gtk,avahi?] ) >=net-libs/libinfinity-0.4[-gtk3,gtk,avahi?] )
 	|| ( gtk3? ( x11-libs/gtk+:3 ) x11-libs/gtk+:2 )
@@ -24,6 +24,7 @@ RDEPEND="dev-cpp/glibmm:2.4
 	>=net-libs/libgsasl-1.6.1
 	x11-libs/gtksourceview:3.0"
 DEPEND="${RDEPEND}
+	dev-cpp/glibmm:2
 	dev-util/pkgconfig
 	doc? (
 		app-text/gnome-doc-utils

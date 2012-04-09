@@ -16,7 +16,7 @@ EBZR_REPO_URI="lp:~l3on/sonata/sonata-plugins"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 ~ppc x86"
+KEYWORDS=""
 IUSE="dbus lyrics taglib +trayicon +libnotify"
 
 RDEPEND=">=dev-python/pygtk-2.12

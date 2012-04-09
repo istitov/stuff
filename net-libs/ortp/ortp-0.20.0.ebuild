@@ -12,7 +12,7 @@ SRC_URI="mirror://nongnu/linphone/${PN}/sources/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="alpha amd64 ia64 ppc ~ppc64 sparc x86 ~x86-fbsd ~ppc-macos ~x64-macos ~x86-macos"
 IUSE="debug doc examples ipv6 minimal srtp ssl"
 
 RDEPEND="srtp? ( net-libs/libsrtp )
