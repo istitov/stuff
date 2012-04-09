@@ -90,13 +90,13 @@ src_compile(){
 }
 
 src_install() {
-	MAKEOPTS="${MAKEOPTS} -j1" emake DESTDIR="${D}" install
+	emake DESTDIR="${D}" install
 	dodoc AUTHORS ChangeLog README
 	find "${ED}" -name '*.la' -exec rm -f {} +
 
 	if use gtk3;then
 	  cd gtk3-hack
-	  emake -j1 DESTDIR="${D}" install
+	  emake DESTDIR="${D}" install
 	  dodir /usr/$(get_libdir)/pkgconfig
 	  insinto /usr/$(get_libdir)/pkgconfig/
 	  doins libdbusmenu-gtk/dbusmenu-gtk3-0.4.pc
