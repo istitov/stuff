@@ -202,6 +202,7 @@ src_prepare() {
 		\! -path 'third_party/harfbuzz/*' \
 		\! -path 'third_party/hunspell/*' \
 		\! -path 'third_party/iccjpeg/*' \
+		\! -path 'third_party/icu/*' \
 		\! -path 'third_party/jsoncpp/*' \
 		\! -path 'third_party/json_minify/*' \
 		\! -path 'third_party/khronos/*' \
@@ -213,6 +214,7 @@ src_prepare() {
 		\! -path 'third_party/libsrtp/*' \
 		\! -path 'third_party/libvpx/*' \
 		\! -path 'third_party/libyuv/*' \
+		\! -path 'third_party/libusb/*' \
 		\! -path 'third_party/lss/*' \
 		\! -path 'third_party/mesa/*' \
 		\! -path 'third_party/modp_b64/*' \
@@ -273,7 +275,6 @@ src_configure() {
 	myconf+="
 		-Duse_system_bzip2=1
 		-Duse_system_flac=1
-		-Duse_system_icu=1
 		-Duse_system_libevent=1
 		-Duse_system_libjpeg=1
 		-Duse_system_libpng=1
@@ -288,6 +289,8 @@ src_configure() {
 	if ! $(tc-getLD) --version 2>&1 | grep -qs 'GNU gold'; then
 	  myconf+=" -Dlinux_use_gold_flags=0";
 	fi
+
+	$(has_version ">=dev-libs/icu-49.1") && myconf+=" -Duse_system_icu=0" || myconf+=" -Duse_system_icu=1"
 
 	# Optional dependencies.
 	# TODO: linux_link_kerberos, bug #381289.
