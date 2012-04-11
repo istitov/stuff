@@ -31,4 +31,5 @@ src_install() {
 	cp -R "." "${D}"
 	insinto /usr/share/applications
 	doins usr/local/share/apps/rumus2/etc/rumus2.desktop
+	dosym /usr/local/lib/rumus2/libNewsModule2.so /usr/local/lib/rumus2/libNewsModule.so
 }
