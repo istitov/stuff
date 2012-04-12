@@ -20,5 +20,6 @@
 	  manager GUI <pkg>app-admin/packagekit</pkg> in application chooser</flag>
 	<flag name="appmenu">Add support for ubuntu global menu</flag>
 	<flag name="overlay">Add support for ubuntu overlay scrollbars</flag>
+	<flag name="wayland">Enable <pkg>dev-libs/wayland</pkg> backend</flag>
   </use>
 </pkgmetadata>
