@@ -1,0 +1,326 @@
+Index: gtk+3.0-3.3.20/gtk/deprecated/gtkhscrollbar.c
+===================================================================
+--- gtk+3.0-3.3.20.orig/gtk/deprecated/gtkhscrollbar.c	2012-03-18 21:58:25.000000000 +0100
++++ gtk+3.0-3.3.20/gtk/deprecated/gtkhscrollbar.c	2012-03-20 18:48:18.385061470 +0100
+@@ -31,7 +31,7 @@
+ #include "gtkintl.h"
+ #include "gtkorientable.h"
+ #include "gtkscrollbar.h"
+-
++#include "ubuntuoverlayscrollbar.h"
+ 
+ /**
+  * SECTION:gtkhscrollbar
+@@ -81,6 +81,9 @@
+   g_return_val_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment),
+                         NULL);
+ 
++  if (ubuntu_overlay_scrollbar_get_enabled ())
++    return _ubuntu_overlay_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
++
+   return g_object_new (GTK_TYPE_HSCROLLBAR,
+                        "adjustment", adjustment,
+                        NULL);
+Index: gtk+3.0-3.3.20/gtk/deprecated/gtkvscrollbar.c
+===================================================================
+--- gtk+3.0-3.3.20.orig/gtk/deprecated/gtkvscrollbar.c	2012-03-18 21:58:25.000000000 +0100
++++ gtk+3.0-3.3.20/gtk/deprecated/gtkvscrollbar.c	2012-03-20 18:48:18.385061470 +0100
+@@ -31,7 +31,7 @@
+ #include "gtkintl.h"
+ #include "gtkorientable.h"
+ #include "gtkscrollbar.h"
+-
++#include "ubuntuoverlayscrollbar.h"
+ 
+ /**
+  * SECTION:gtkvscrollbar
+@@ -80,6 +80,9 @@
+   g_return_val_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment),
+                         NULL);
+ 
++  if (ubuntu_overlay_scrollbar_get_enabled ())
++    return _ubuntu_overlay_scrollbar_new (GTK_ORIENTATION_VERTICAL, adjustment);
++
+   return g_object_new (GTK_TYPE_VSCROLLBAR,
+                        "adjustment", adjustment,
+                        NULL);
+Index: gtk+3.0-3.3.20/gtk/gtkmain.c
+===================================================================
+--- gtk+3.0-3.3.20.orig/gtk/gtkmain.c	2012-03-20 18:48:18.013061452 +0100
++++ gtk+3.0-3.3.20/gtk/gtkmain.c	2012-03-20 18:48:18.389061469 +0100
+@@ -127,6 +127,7 @@
+ #include "gtkversion.h"
+ #include "gtkwidgetprivate.h"
+ #include "gtkwindowprivate.h"
++#include "ubuntuoverlayscrollbar.h"
+ 
+ #include "a11y/gailutil.h"
+ 
+@@ -716,6 +717,9 @@
+ 
+   _gtk_accel_map_init ();
+ 
++  /* initialize ubuntu overlay scrollbars */
++  _ubuntu_overlay_scrollbar_init ();
++
+   /* Set the 'initialized' flag.
+    */
+   gtk_initialized = TRUE;
+Index: gtk+3.0-3.3.20/gtk/gtkscrollbar.c
+===================================================================
+--- gtk+3.0-3.3.20.orig/gtk/gtkscrollbar.c	2012-03-18 21:58:26.000000000 +0100
++++ gtk+3.0-3.3.20/gtk/gtkscrollbar.c	2012-03-20 18:48:18.389061469 +0100
+@@ -30,6 +30,7 @@
+ #include "gtkadjustment.h"
+ #include "gtkintl.h"
+ #include "gtkprivate.h"
++#include "ubuntuoverlayscrollbar.h"
+ 
+ #include "a11y/gtkscrollbaraccessible.h"
+ 
+@@ -166,6 +167,9 @@
+   g_return_val_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment),
+                         NULL);
+ 
++  if (ubuntu_overlay_scrollbar_get_enabled ())
++    return _ubuntu_overlay_scrollbar_new (orientation, adjustment);
++
+   return g_object_new (GTK_TYPE_SCROLLBAR,
+                        "orientation", orientation,
+                        "adjustment",  adjustment,
+Index: gtk+3.0-3.3.20/gtk/gtkscrolledwindow.c
+===================================================================
+--- gtk+3.0-3.3.20.orig/gtk/gtkscrolledwindow.c	2012-03-19 11:15:07.000000000 +0100
++++ gtk+3.0-3.3.20/gtk/gtkscrolledwindow.c	2012-03-20 18:48:18.397061470 +0100
+@@ -40,6 +40,7 @@
+ #include "gtkwidgetprivate.h"
+ #include "gtkwindow.h"
+ #include "a11y/gtkscrolledwindowaccessible.h"
++#include "ubuntuoverlayscrollbar.h"
+ 
+ #include <math.h>
+ 
+@@ -1547,7 +1548,7 @@
+ 
+       gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
+ 
+-      if (!scrollbars_within_bevel)
++      if (!scrollbars_within_bevel && !ubuntu_overlay_scrollbar_get_enabled ())
+         {
+           GtkStateFlags state;
+           GtkBorder padding, border;
+@@ -2197,7 +2198,7 @@
+ 
+       if (priv->shadow_type != GTK_SHADOW_NONE)
+ 	{
+-          if (!scrollbars_within_bevel)
++          if (!scrollbars_within_bevel && !ubuntu_overlay_scrollbar_get_enabled ())
+             {
+               child_allocation.x -= padding.left + border.left;
+               child_allocation.width += padding.left + padding.right + border.left + border.right;
+@@ -2245,7 +2246,7 @@
+ 
+       if (priv->shadow_type != GTK_SHADOW_NONE)
+ 	{
+-          if (!scrollbars_within_bevel)
++          if (!scrollbars_within_bevel && !ubuntu_overlay_scrollbar_get_enabled ())
+             {
+               child_allocation.y -= padding.top + border.top;
+ 	      child_allocation.height += padding.top + padding.bottom + border.top + border.bottom;
+@@ -3161,6 +3162,9 @@
+     
+   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), 0);
+ 
++  if (ubuntu_overlay_scrollbar_get_enabled ())
++    return 0;
++
+   class = GTK_SCROLLED_WINDOW_GET_CLASS (scrolled_window);
+ 
+   if (class->scrollbar_spacing >= 0)
+Index: gtk+3.0-3.3.20/gtk/Makefile.am
+===================================================================
+--- gtk+3.0-3.3.20.orig/gtk/Makefile.am	2012-03-20 18:48:18.201061460 +0100
++++ gtk+3.0-3.3.20/gtk/Makefile.am	2012-03-20 18:48:18.405061471 +0100
+@@ -1068,7 +1068,7 @@
+ lib_LTLIBRARIES = libgtk-3.la
+ 
+ gtkincludedir = $(includedir)/gtk-3.0/gtk
+-gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
++gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) ubuntuoverlayscrollbar.h gtkversion.h
+ 
+ deprecatedincludedir = $(includedir)/gtk-3.0/gtk/deprecated
+ deprecatedinclude_HEADERS= $(deprecated_h_sources)
+@@ -1076,7 +1076,7 @@
+ gtkunixprintincludedir = $(includedir)/gtk-3.0/unix-print/gtk
+ gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)
+ 
+-libgtk_3_la_SOURCES = $(gtk_c_sources)
++libgtk_3_la_SOURCES = $(gtk_c_sources) ubuntuoverlayscrollbar.c
+ libgtk_3_la_LDFLAGS = $(libtool_opts)
+ libgtk_3_la_LIBADD = $(libadd)
+ libgtk_3_la_DEPENDENCIES = $(deps)
+Index: gtk+3.0-3.3.20/gtk/ubuntuoverlayscrollbar.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ gtk+3.0-3.3.20/gtk/ubuntuoverlayscrollbar.c	2012-03-20 18:48:18.409061470 +0100
+@@ -0,0 +1,111 @@
++/*
++ * Copyright (C) 2011 Canonical, Ltd.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the
++ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++ * Boston, MA 02111-1307, USA.
++ *
++ * Authors: Andrea Cimitan <andrea.cimitan@canonical.com>
++ */
++
++#include "config.h"
++
++#include "gtkprivate.h"
++#include "ubuntuoverlayscrollbar.h"
++
++static gboolean use_overlay_scrollbar = FALSE;
++static GtkWidget* (*os_scrollbar_new) (GtkOrientation, GtkAdjustment*) = NULL;
++
++/*
++ * _ubuntu_overlay_scrollbar_init:
++ *
++ * Initialize local use of the overlay-scrollbar module.
++ * 
++ * If the module is installed, this code checks both a whitelist
++ * and a blacklist to decide whether to activate the remplacement
++ * scrollbars.
++ *
++ * It is possible to force the feature to be disabled by setting
++ * the LIBOVERLAY_SCROLLBAR environment variable to either '0' or an
++ * empty value.
++ */
++void
++_ubuntu_overlay_scrollbar_init (void)
++{
++  GModule *module = NULL;
++  gpointer symbol = NULL;
++
++  gchar *flag = (gchar*) g_getenv ("LIBOVERLAY_SCROLLBAR");
++
++  /* check if LIBOVERLAY_SCROLLBAR is set to 0 or an empty value
++     and disable the feature in this case */
++  if (flag != NULL && (*flag == '\0' || *flag == '0'))
++    return;
++
++  /* default extension library to use for this release */
++  gchar *path = "/usr/lib/liboverlay-scrollbar3-0.2.so.0";
++
++  module = g_module_open (path, G_MODULE_BIND_LOCAL);
++  if (module == NULL)
++    return;
++
++  /* check the blacklist, in all cases */
++  if (g_module_symbol (module, "os_utils_is_blacklisted", &symbol))
++    {
++      gboolean (*os_utils_is_blacklisted) (const gchar*) = symbol;
++      if (os_utils_is_blacklisted (g_get_prgname ()) == TRUE)
++        return;
++    }
++
++  /* all controls are positive: the feature can be activated now */
++  if (g_module_symbol (module, "os_scrollbar_new", &symbol))
++    {
++      os_scrollbar_new = symbol;
++      use_overlay_scrollbar = TRUE;
++    }
++}
++
++GtkWidget *
++_ubuntu_overlay_scrollbar_new (GtkOrientation orientation,
++                              GtkAdjustment* adjustment)
++{
++  g_return_if_fail (os_scrollbar_new);
++
++  return os_scrollbar_new (orientation, adjustment);
++}
++
++/**
++ * ubuntu_overlay_scrollbar_get_enabled:
++ * 
++ * Returns whether the overlay scrollbar is enabled.
++ *
++ * Returns: whether the overlay scrollbar is enabled
++ */
++gboolean
++ubuntu_overlay_scrollbar_get_enabled (void)
++{
++  return use_overlay_scrollbar;
++}
++
++/**
++ * ubuntu_overlay_scrollbar_set_enabled:
++ * @enabled: %TRUE to allow overlay scrollbars
++ * 
++ * Sets whether the overlay scrollbar can be enabled.
++ */
++void
++ubuntu_overlay_scrollbar_set_enabled (gboolean enabled)
++{
++  use_overlay_scrollbar = enabled;
++}
+Index: gtk+3.0-3.3.20/gtk/ubuntuoverlayscrollbar.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ gtk+3.0-3.3.20/gtk/ubuntuoverlayscrollbar.h	2012-03-20 18:48:18.417061471 +0100
+@@ -0,0 +1,44 @@
++/*
++ * Copyright (C) 2011 Canonical, Ltd.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the
++ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++ * Boston, MA 02111-1307, USA.
++ *
++ * Authors: Andrea Cimitan <andrea.cimitan@canonical.com>
++ */
++
++#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
++#error "Only <gtk/gtk.h> can be included directly."
++#endif
++
++#ifndef __UBUNTU_OVERLAY_SCROLLBAR_H__
++#define __UBUNTU_OVERLAY_SCROLLBAR_H__
++
++#include <gtk/gtkwidget.h>
++
++G_BEGIN_DECLS
++
++gboolean   ubuntu_overlay_scrollbar_get_enabled (void);
++
++void       ubuntu_overlay_scrollbar_set_enabled (gboolean enabled);
++
++void       _ubuntu_overlay_scrollbar_init       (void);
++
++GtkWidget* _ubuntu_overlay_scrollbar_new        (GtkOrientation orientation,
++                                                                 GtkAdjustment* adjustment);
++
++G_END_DECLS
++
++#endif /* __UBUNTU_OVERLAY_SCROLLBAR_H__ */
