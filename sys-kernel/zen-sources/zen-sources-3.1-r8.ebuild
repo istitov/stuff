@@ -1,24 +1,19 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
-
 EAPI="2"
 
-COMPRESSTYPE=".gz"
 K_USEPV="yes"
 UNIPATCH_STRICTORDER="yes"
 K_SECURITY_UNSUPPORTED="1"
 
 ETYPE="sources"
-inherit eutils kernel-2
+inherit kernel-2
 detect_version
 K_NOSETEXTRAVERSION="don't_set_it"
 
-DESCRIPTION="The Zen Kernel Sources v2.6"
+DESCRIPTION="The Zen Kernel Sources v3.x"
 HOMEPAGE="http://zen-kernel.org"
-
-#ZEN_FILE="v${PV}_master.diff.gz"
-#ZEN_URI="http://downloads.zen-kernel.org/snapshots/${ZEN_FILE}"
 SRC_URI="${KERNEL_URI}";
 
 KEYWORDS="-* ~amd64 ~ppc ~ppc64 ~x86"

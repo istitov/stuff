@@ -1,13 +1,13 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/dev-lisp/sbcl/sbcl-1.0.55-r1.ebuild,v 1.1 2012/04/09 22:21:40 neurogeek Exp $
 
 EAPI=3
-inherit multilib eutils flag-o-matic
+inherit multilib eutils flag-o-matic pax-utils
 
 #same order as http://www.sbcl.org/platform-table.html
-BV_X86=1.0.53
-BV_AMD64=1.0.53
+BV_X86=1.0.37
+BV_AMD64=1.0.37
 BV_PPC=1.0.28
 BV_SPARC=1.0.28
 BV_ALPHA=1.0.28
@@ -29,11 +29,11 @@ RESTRICT="mirror"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86"
-IUSE="ldb source +threads +unicode debug doc cobalt"
+IUSE="+asdf ldb source +threads +unicode debug doc cobalt"
 
 DEPEND="doc? ( sys-apps/texinfo >=media-gfx/graphviz-2.26.0 )"
-RDEPEND="elibc_glibc? ( >=sys-libs/glibc-2.3 || ( <sys-libs/glibc-2.6[nptl] >=sys-libs/glibc-2.6 ) )"
-PDEPEND="dev-lisp/gentoo-init"
+RDEPEND="elibc_glibc? ( >=sys-libs/glibc-2.3 || ( <sys-libs/glibc-2.6[nptl] >=sys-libs/glibc-2.6 ) )
+		asdf? ( >=dev-lisp/gentoo-init-0.1 )"
 
 # Disable warnings about executable stacks, as this won't be fixed soon by upstream
 QA_EXECSTACK="usr/bin/sbcl"
@@ -78,6 +78,17 @@ src_unpack() {
 src_prepare() {
 	epatch "${FILESDIR}"/gentoo-fix_install_man.patch
 	epatch "${FILESDIR}"/gentoo-fix_linux-os-c.patch
+	epatch "${FILESDIR}"/gentoo_fix_waitpid_c.patch
+
+	if use !doc; then
+		epatch "${FILESDIR}"/${P}_no_doc_install.patch
+	fi
+
+	# To make the hardened compiler NOT compile with -fPIE -pie
+	if gcc-specs-pie ; then
+		einfo "Disabling PIE..."
+		epatch "${FILESDIR}"/gentoo-fix_nopie_for_hardened_toolchain.patch
+	fi
 
 	use source && sed 's%"$(BUILD_ROOT)%$(MODULE).lisp "$(BUILD_ROOT)%' -i contrib/vanilla-module.mk
 
@@ -104,10 +115,14 @@ src_compile() {
 
 	strip-unsupported-flags ; filter-flags -fomit-frame-pointer
 
-	# To make the hardened compiler NOT compile with -fPIE -pie
-	if gcc-specs-pie ; then
-		filter-flags -fPIE
-		append-ldflags -nopie
+	if host-is-pax ; then
+		# To disable PaX on hardened systems
+		pax-mark -C "${bindir}"/src/runtime/sbcl
+		pax-mark -mr "${bindir}"/src/runtime/sbcl
+
+		# Hack to disable PaX on second GENESIS stage
+		sed -i -e '/load/!s/^echo \/\/doing warm.*$/&\npaxctl -C \.\/src\/runtime\/sbcl\npaxctl -mprexs \.\/src\/runtime\/sbcl/' \
+			"${S}"/make-target-2.sh || die "Cannot disable PaX on second GENESIS runtime"
 	fi
 
 	# clear the environment to get rid of non-ASCII strings, see bug 174702
@@ -144,16 +159,20 @@ src_install() {
 (setf (logical-pathname-translations "SYS")
 	'(("SYS:SRC;**;*.*.*" #p"/usr/$(get_libdir)/sbcl/src/**/*.*")
 	  ("SYS:CONTRIB;**;*.*.*" #p"/usr/$(get_libdir)/sbcl/**/*.*")))
+EOF
+	if use asdf; then
+		cat >> "${D}"/etc/sbclrc <<EOF
 
-;;; Setup ASDF
+;;; Setup ASDF2
 (load "/etc/gentoo-init.lisp")
 EOF
+	fi
 
-	# Install documentation
 	unset SBCL_HOME
 	INSTALL_ROOT="${D}/usr" LIB_DIR="/usr/$(get_libdir)" DOC_DIR="${D}/usr/share/doc/${PF}" \
 		sh install.sh || die "install.sh failed"
 
+	# Install documentation
 	# rm empty directories lest paludis complain about this
 	find "${D}" -empty -type d -exec rmdir -v {} +
 
@@ -167,7 +186,7 @@ EOF
 		rm -Rv "${D}/usr/share/doc/${PF}"
 	fi
 
-	dodoc BUGS CREDITS INSTALL NEWS OPTIMIZATIONS PRINCIPLES README STYLE TLA TODO
+	dodoc BUGS CREDITS INSTALL NEWS OPTIMIZATIONS PRINCIPLES README TLA TODO
 
 	# install the SBCL source
 	if use source; then
@@ -179,4 +198,10 @@ EOF
 	echo "SBCL_HOME=/usr/$(get_libdir)/${PN}" > "${ENVD}"
 	echo "SBCL_SOURCE_ROOT=/usr/$(get_libdir)/${PN}/src" >> "${ENVD}"
 	doenvd "${ENVD}"
+}
+
+pkg_postinst() {
+	einfo "If you are upgrading from versions <1.0.55, remember"
+	einfo "to run:"
+	einfo 'source /etc/profile && env-update'
 }
