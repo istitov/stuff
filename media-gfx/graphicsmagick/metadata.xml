@@ -2,7 +2,7 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer>
-		<email>megagreener@gmail.com</email>
+		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
 	<use>
 	  <flag name="fpx">Enable FlashPIX support</flag>

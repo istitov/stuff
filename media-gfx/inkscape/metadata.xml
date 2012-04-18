@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<maintainer>
+	        <email>iohann.s.titov@gmail.com</email>
+    </maintainer>
 	<herd>graphics</herd>
 	<use>
 		<flag name='dia'>Pull in <pkg>app-office/dia</pkg> for dia import extension</flag>
