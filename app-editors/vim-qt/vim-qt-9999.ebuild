@@ -18,8 +18,7 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND=""
-RDEPEND="
-!x11-misc/appmenu-qt"
+RDEPEND="${DEPEND}"
 
 src_configure() {
 	cd "${S}/src" || die
