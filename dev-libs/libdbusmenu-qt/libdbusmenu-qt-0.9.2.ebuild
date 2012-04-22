@@ -29,6 +29,7 @@ IUSE="debug doc"
 RDEPEND="
 	>=x11-libs/qt-core-${QT_DEPEND}:4
 	>=x11-libs/qt-gui-${QT_DEPEND}:4[dbus]
+	>=x11-libs/qt-test-${QT_DEPEND}:4
 "
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
