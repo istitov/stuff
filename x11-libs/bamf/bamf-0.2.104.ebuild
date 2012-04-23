@@ -7,7 +7,7 @@ EAPI="3"
 inherit autotools
 
 DESCRIPTION="BAMF Application Matching Framework"
-SRC_URI="http://launchpad.net/${PN}/0.2/0.2.204/+download/${PN}-${PV}.tar.gz"
+SRC_URI="http://launchpad.net/${PN}/0.2/0.2.104/+download/${PN}-${PV}.tar.gz"
 HOMEPAGE="https://launchpad.net/bamf"
 KEYWORDS="~x86 ~amd64"
 SLOT="0"
