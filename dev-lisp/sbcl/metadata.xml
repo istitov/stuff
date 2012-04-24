@@ -7,5 +7,6 @@
 <use>
   <flag name='cobalt'>mips only: use mipsel binary instead of mips big endian binary to bootstrap</flag>
   <flag name='ldb'>Include support for the SBCL low level debugger</flag>
+  <flag name='asdf'>support for Another System Definition Facility</flag>
 </use>
 </pkgmetadata>
