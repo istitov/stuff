@@ -28,5 +28,6 @@
 		<flag name='tta'>Build tta plugin</flag>
 		<flag name="gtk2">Build with x11-libs/gtk+:2</flag>
 		<flag name="gtk3">Build with x11-libs/gtk+:3</flag>
+		<flag name="infobar">Add support for <pkg>media-sound/deadbeef-infobar</pkg></flag>
 	</use>
 </pkgmetadata>
