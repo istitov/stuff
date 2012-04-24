@@ -21,7 +21,7 @@ LICENSE="GPL-2
 SLOT="0"
 IUSE="adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath
-	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip"
+	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar"
 
 LANGS="be bg bn ca cs da de el en_GB es fa fi fr gl he hr hu id it ja kk km lg nb nl pl pt_BR pt ru si sk sl sr@latin sr sv te tr uk vi zh_CN zh_TW"
 for lang in ${LANGS}; do

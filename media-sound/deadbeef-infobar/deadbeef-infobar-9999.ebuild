@@ -16,7 +16,8 @@ IUSE=""
 DEPEND_COMMON="
 	x11-libs/gtk+
 	dev-libs/libxml2
-	dev-vcs/mercurial"
+	dev-vcs/mercurial
+	media-sound/deadbeef[infobar]"
 
 RDEPEND="
 	${DEPEND_COMMON}

@@ -21,6 +21,7 @@ DEPEND_COMMON="
 
 RDEPEND="
 	${DEPEND_COMMON}
+	media-sound/deadbeef[infobar]
 	"
 DEPEND="
 	${DEPEND_COMMON}
