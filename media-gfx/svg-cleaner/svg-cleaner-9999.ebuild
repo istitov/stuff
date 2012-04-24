@@ -3,12 +3,12 @@
 # $Header: $
 
 EAPI=4
-inherit git-2 
+inherit git-2
 DESCRIPTION="SVG Cleaner cleans up your SVG files from unnecessary data."
 HOMEPAGE="http://qt-apps.org/content/show.php?action=content&content=147974 https://github.com/RazrFalcon/SVGCleaner"
 EGIT_REPO_URI="https://github.com/RazrFalcon/SVGCleaner.git"
 
-LICENSE=""
+LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
