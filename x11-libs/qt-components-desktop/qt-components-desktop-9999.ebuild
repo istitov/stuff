@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-EGIT_REPO_URI="git://gitorious.org/qt-components/desktop.git"
+EGIT_REPO_URI="git://gitorious.org/qtplayground/qtdesktopcomponents.git"
 inherit qt4-r2 git-2
 
 DESCRIPTION="Qt4 desktop components"
