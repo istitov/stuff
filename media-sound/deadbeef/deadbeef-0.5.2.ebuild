@@ -51,7 +51,8 @@ RDEPEND="aac? ( media-libs/faad2 )
 	vorbis? ( media-libs/libvorbis )
 	wavpack? ( media-sound/wavpack )
 	zip? ( dev-libs/libzip
-		sys-libs/zlib )"
+		sys-libs/zlib )
+	curl? ( net-misc/curl )"
 
 DEPEND="
 	dev-util/intltool
@@ -127,6 +128,7 @@ src_configure() {
 			$(use_enable cover artwork)
 			$(use_enable cover-imlib2 artwork-imlib2)
 			$(use_enable lastfm lfm)"
+		RDEPEND+=' net-misc/curl'
 	else
 		my_config="${my_config}
 			$(use_enable cover artwork)
@@ -138,6 +140,7 @@ src_configure() {
 	if use infobar; then
 	  my_config="${my_config}
 	  --enable-vfs-curl"
+	  RDEPEND+=' net-misc/curl'
 	fi
 
 	if use gtk3;then
