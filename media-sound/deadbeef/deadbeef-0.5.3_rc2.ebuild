@@ -34,7 +34,7 @@ done
 RDEPEND="aac? ( media-libs/faad2 )
 	alsa? ( media-libs/alsa-lib )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
-	cover? ( media-libs/imlib2 net-misc/curl)
+	cover? ( media-libs/imlib2 net-misc/curl )
 	ffmpeg? ( virtual/ffmpeg )
 	flac? ( media-libs/flac )
 	gtk2? ( x11-libs/gtk+:2 )
@@ -51,9 +51,9 @@ RDEPEND="aac? ( media-libs/faad2 )
 	vorbis? ( media-libs/libvorbis )
 	wavpack? ( media-sound/wavpack )
 	zip? ( dev-libs/libzip
-	curl? (net-misc/curl)
-	infobar? (net-misc/curl)
-		sys-libs/zlib )"
+	sys-libs/zlib )
+	curl? ( net-misc/curl )
+	infobar? ( net-misc/curl )"
 
 DEPEND="
 	dev-util/intltool
