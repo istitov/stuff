@@ -1,8 +1,0 @@
-[Unit]
-Description=Next Generation System Logging Service
-
-[Service]
-ExecStart=/usr/sbin/syslog-ng --foreground
-
-[Install]
-WantedBy=multi-user.target

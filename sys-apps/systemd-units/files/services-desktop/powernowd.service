@@ -1,9 +1,0 @@
-[Unit]
-Description=PowerNow! Daemon
-
-[Service]
-Type=simple
-ExecStart=/usr/sbin/powernowd -d -q
-
-[Install]
-WantedBy=multi-user.target

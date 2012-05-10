@@ -1,9 +1,0 @@
-[Unit]
-Description=OpenVPN Client
-
-[Service]
-Type=simple
-ExecStart=/usr/sbin/openvpn --cd /etc/openvpn/ --config %I.conf
-
-[Install]
-WantedBy=network.target
