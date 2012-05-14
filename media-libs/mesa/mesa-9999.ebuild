@@ -48,7 +48,8 @@ done
 
 IUSE="${IUSE_VIDEO_CARDS}
 	bindist +classic d3d debug +egl g3dvl +gallium gbm gles1 gles2 +llvm +nptl
-	openvg osmesa pax_kernel pic r600-llvm-compiler selinux +shared-glapi vdpau
+	openvg opencl osmesa pax_kernel pic r600-llvm-compiler selinux +shared-glapi
+vdpau
 	wayland xvmc xa xorg kernel_FreeBSD"
 
 REQUIRED_USE="
@@ -225,6 +226,7 @@ src_configure() {
 			$(use_enable r600-llvm-compiler)
 			$(use_enable vdpau)
 			$(use_enable xvmc)
+			$(use_enable opencl)
 		"
 		gallium_enable swrast
 		gallium_enable video_cards_vmware svga

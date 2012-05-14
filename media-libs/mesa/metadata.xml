@@ -23,5 +23,6 @@
 	<flag name='xvmc'>Enable the XvMC acceleration interface for the Gallium3D Video Layer.</flag>
 	<flag name='xorg'>Enable support for X.Org DDX API</flag>
 	<flag name='r600-llvm-compiler'>Enable llvm support for r600 (need llvm 3.1)</flag>
+	<flag name='opencl'>Enable opencl clover support</flag>
 </use>
 </pkgmetadata>
