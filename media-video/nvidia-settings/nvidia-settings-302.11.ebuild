@@ -26,8 +26,7 @@ COMMON_DEPEND="x11-libs/libX11
 	x11-libs/libXrandr
 	dev-libs/glib:2"
 
-RDEPEND="=x11-drivers/nvidia-drivers-2*
-	|| ( >=x11-drivers/nvidia-drivers-295.33 <x11-drivers/nvidia-drivers-295.33[-gtk] )
+RDEPEND="=x11-drivers/nvidia-drivers-3*
 	${COMMON_DEPEND}"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
