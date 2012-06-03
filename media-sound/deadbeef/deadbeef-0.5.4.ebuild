@@ -109,6 +109,7 @@ src_configure() {
 		$(use_enable pulseaudio pulse)
 		$(use_enable rpath)
 		$(use_enable shellexec)
+		$(use_enable shellexec shellexecui)
 		$(use_enable shn)
 		$(use_enable sid)
 		$(use_enable sndfile)

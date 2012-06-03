@@ -10,7 +10,7 @@ if [[ ${PV} = *9999* ]] ; then
 	GIT_ECLASS="git-2"
 fi
 
-inherit fdo-mime ${GIT_ECLASS}
+inherit fdo-mime gnome2-utils ${GIT_ECLASS}
 
 if [[ ${PV} = *9999* ]] ; then
 	SRC_URI=""
@@ -121,6 +121,7 @@ src_configure() {
 		$(use_enable pulseaudio pulse)
 		$(use_enable rpath)
 		$(use_enable shellexec)
+		$(use_enable shellexec shellexecui)
 		$(use_enable shn)
 		$(use_enable sid)
 		$(use_enable sndfile)
