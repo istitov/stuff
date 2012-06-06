@@ -6,8 +6,8 @@ EAPI=4
 
 inherit eutils autotools git-2
 
-DESCRIPTION="Infobar plugin for DeadBeeF audio player. Shows lyrics and artist's biography for the current track."
-HOMEPAGE="https://bitbucket.org/dsimbiriatin/deadbeef-infobar/wiki/Home"
+DESCRIPTION="MPRIS-plugin for deadbeef"
+HOMEPAGE="https://github.com/kernelhcy/DeaDBeeF-MPRIS-plugin"
 EGIT_REPO_URI="git://github.com/kernelhcy/DeaDBeeF-MPRIS-plugin.git"
 
 LICENSE="GPL-3"
