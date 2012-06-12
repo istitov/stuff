@@ -18,7 +18,7 @@ IUSE=""
 DEPEND_COMMON="
 	x11-libs/gtk+:2
 	dev-libs/libxml2
-	media-sound/deadbeef"
+	media-sound/deadbeef[gtk2]"
 
 RDEPEND="
 	${DEPEND_COMMON}
