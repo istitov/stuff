@@ -1,5 +1,5 @@
---- config.lib.orig	2011-08-08 11:40:21.641085825 -0400
-+++ config.lib	2011-08-08 11:44:19.655285851 -0400
+--- config.lib.orig
++++ config.lib
 @@ -1357,14 +1357,12 @@
  			CFLAGS="-I/gg/os-include -noixemul -fstrict-aliasing -fexpensive-optimizations -mcpu=604 -fno-inline -mstring -mmultiple $CFLAGS"
  			LDFLAGS="$LDFLAGS -noixemul"
