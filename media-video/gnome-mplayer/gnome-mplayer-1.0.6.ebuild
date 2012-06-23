@@ -30,7 +30,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26
 		)
 	pulseaudio? ( >=media-sound/pulseaudio-0.9.14 )"
 RDEPEND="${COMMON_DEPEND}
-	|| ( >=media-video/mplayer-1.0_rc4_p20100101[ass] media-video/mplayer2[ass] )"
+	|| ( >=media-video/mplayer-1.0_rc4_p20100101[libass] media-video/mplayer2[libass] )"
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	sys-devel/gettext"
