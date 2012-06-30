@@ -20,7 +20,7 @@ DEPEND="dev-lang/python:2.7[sqlite]
 		>=dev-python/pysqlite-2.6.3
 		>=dev-python/mysql-python-1.2.3
 		>=dev-db/pygresql-3.8.1
-		<dev-python/matplotlib-1.1.0
+		dev-python/matplotlib
 		dev-python/pywebkitgtk"
 
 RDEPEND="${DEPEND}"
