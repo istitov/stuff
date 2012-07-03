@@ -109,6 +109,7 @@ src_prepare() {
 	>py-compile
 
 	epatch "${FILESDIR}"/${P}-automake-1.11.2.patch #397477
+	epatch "${FILESDIR}"/${P}-parallel.patch #411351
 
 	eautoreconf
 }
