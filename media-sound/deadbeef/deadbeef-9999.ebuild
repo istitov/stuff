@@ -10,7 +10,7 @@ if [[ ${PV} = *9999* ]] ; then
 	GIT_ECLASS="git-2"
 fi
 
-inherit fdo-mime gnome2-utils ${GIT_ECLASS}
+inherit fdo-mime gnome2-utils ${GIT_ECLASS} autotools
 
 if [[ ${PV} = *9999* ]] ; then
 	SRC_URI=""
@@ -75,6 +75,7 @@ pkg_setup() {
 
 src_prepare() {
 	if [[ ${PV} = *9999* ]] ; then
+	touch config.rpath
 	sh autogen.sh
 	fi
 
