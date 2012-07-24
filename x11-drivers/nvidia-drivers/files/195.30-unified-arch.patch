@@ -1,8 +1,7 @@
-Add support for the 'x86' unified kernel arch in conftest.sh
-
---- NVIDIA-Linux-x86-256.25/kernel/conftest.sh
-+++ NVIDIA-Linux-x86-256.25/kernel/conftest.sh
-@@ -101,7 +101,7 @@ build_cflags() {
+diff -Naurp NVIDIA-Linux-x86_64-195.30-pkg2-orig/usr/src/nv/conftest.sh NVIDIA-Linux-x86_64-195.30-pkg2/usr/src/nv/conftest.sh
+--- NVIDIA-Linux-x86_64-195.30-pkg2-orig/usr/src/nv/conftest.sh	2010-02-07 22:53:38.000000000 +0100
++++ NVIDIA-Linux-x86_64-195.30-pkg2/usr/src/nv/conftest.sh	2010-02-07 22:57:10.000000000 +0100
+@@ -82,7 +82,7 @@ build_cflags() {
  
      if [ "$OUTPUT" != "$SOURCES" ]; then
          MACH_CFLAGS="-I$HEADERS/asm-$ARCH/mach-default"
@@ -11,7 +10,7 @@ Add support for the 'x86' unified kernel arch in conftest.sh
              MACH_CFLAGS="$MACH_CFLAGS -I$HEADERS/asm-x86/mach-default"
              MACH_CFLAGS="$MACH_CFLAGS -I$SOURCES/arch/x86/include/asm/mach-default"
          fi
-@@ -110,7 +110,7 @@ build_cflags() {
+@@ -91,7 +91,7 @@ build_cflags() {
          fi
      else
          MACH_CFLAGS="-I$HEADERS/asm/mach-default"
@@ -20,9 +19,9 @@ Add support for the 'x86' unified kernel arch in conftest.sh
              MACH_CFLAGS="$MACH_CFLAGS -I$HEADERS/asm-x86/mach-default"
              MACH_CFLAGS="$MACH_CFLAGS -I$SOURCES/arch/x86/include/asm/mach-default"
          fi
-@@ -121,7 +121,7 @@ build_cflags() {
+@@ -102,7 +102,7 @@ build_cflags() {
  
-     CFLAGS="$BASE_CFLAGS $MACH_CFLAGS $OUTPUT_CFLAGS -I$HEADERS $AUTOCONF_CFLAGS"
+     CFLAGS="$BASE_CFLAGS $MACH_CFLAGS $OUTPUT_CFLAGS -I$HEADERS"
  
 -    if [ "$ARCH" = "i386" -o "$ARCH" = "x86_64" ]; then
 +    if [ "$ARCH" = "i386" -o "$ARCH" = "x86_64" -o "$ARCH" = "x86" ]; then

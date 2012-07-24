@@ -4,5 +4,6 @@
 	<use>
 	  <flag name='rt'>Adds support for <pkg>sys-kernel/rt-sources</pkg>(real-time kernels)2.6</flag>
 	  <flag name='tools'>Installs additional tools such as nvidia-settings</flag>
+	  <flag name='no-prelink'>Don't prelinking Nvidia's libs</flag>
 	</use>
 </pkgmetadata>
