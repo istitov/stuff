@@ -491,8 +491,8 @@ src_install-libs() {
 
 	# CUDA & OpenCL
 	if use kernel_linux; then
-		donvidia${libdir}/libcuda.so ${NV_SOVER}
-		donvidia${libdir}/libnvidia-compiler.so ${NV_SOVER}
+		donvidia ${libdir}/libcuda.so ${NV_SOVER}
+		donvidia ${libdir}/libnvidia-compiler.so ${NV_SOVER}
 		donvidia ${libdir}/libOpenCL.so 1.0.0 ${CL_ROOT}
 	fi
 }
