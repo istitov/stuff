@@ -435,8 +435,8 @@ src_install() {
 
 	# Desktop entries for nvidia-settings
 	if use tools ; then
-		newicon ${NV_OBJ}/nvidia-settings.png nvidia-driver-settings.png
-		domenu "${FILESDIR}"/nvidia-driver-settings.desktop
+		newicon ${NV_OBJ}/nvidia-settings.png nvidia-drivers-settings.png
+		domenu "${FILESDIR}"/nvidia-drivers-settings.desktop
 		insinto /etc/xdg/autostart
 		doins "${FILESDIR}"/nvidia-autostart.desktop
 	fi
