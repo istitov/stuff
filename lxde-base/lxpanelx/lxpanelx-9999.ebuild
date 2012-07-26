@@ -33,7 +33,7 @@ src_prepare() {
 
 src_configure() {
 	local plugins=all
-	[[ ${CHOST} == *-interix* ]] && plugins=deskno,kbled,xkb
+	[[ ${CHOST} == *-interix* ]] && plugins=taskbar,netstatus,volume,volumealsa,cpu,deskno,batt,kbled,xkb,thermal,cpufreq
 
 	econf $(use_enable alsa) --with-x --with-plugins=${plugins}
 	# the gtk+ dep already pulls in libX11, so we might as well hardcode with-x
