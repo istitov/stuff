@@ -7,11 +7,11 @@ inherit eutils games
 
 DESCRIPTION="OpenTTD is a clone of Transport Tycoon Deluxe"
 HOMEPAGE="http://www.openttd.org/"
-SRC_URI="http://binaries.openttd.org/releases/${PV}/${P}-source.tar.xz"
-
+SRC_URI="http://binaries.openttd.org/releases/1.2.2-RC1/${PN}-1.2.2-RC1-source.tar.xz"
+#http://binaries.openttd.org/releases/1.2.2-RC1/openttd-1.2.2-RC1-source.tar.xz
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 ppc x86"
+KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="aplaymidi debug dedicated iconv icu lzo +openmedia +png +timidity +truetype zlib"
 
 DEPEND="!dedicated? (
