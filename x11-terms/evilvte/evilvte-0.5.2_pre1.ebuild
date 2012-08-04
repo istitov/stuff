@@ -12,7 +12,7 @@ SRC_URI="http://www.calno.com/${PN}/${MY_P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="gtk3"
 
 RDEPEND="x11-libs/vte:2.90
