@@ -54,6 +54,7 @@ src_prepare() {
 
 src_configure() {
 	# selfwritten configure script
+	chmod +x configure
 	./configure \
 		--prefix="${EPREFIX}"/usr \
 		--psfdir="${EPREFIX}"/usr/share/consolefonts \
