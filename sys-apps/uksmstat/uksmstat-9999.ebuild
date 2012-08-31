@@ -16,5 +16,5 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}"
 src_install() {
-	dosbin uksmstat || die "Install failed"
+	dosbin uksmstat/uksmstat || die "Install failed"
 }
