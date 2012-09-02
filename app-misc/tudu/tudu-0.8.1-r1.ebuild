@@ -7,8 +7,8 @@ EAPI=3
 inherit flag-o-matic
 
 DESCRIPTION="Command line interface to manage hierarchical todos"
-HOMEPAGE="http://cauterized.net/~meskio/tudu/"
-SRC_URI="http://cauterized.net/~meskio/${PN}/${P}.tar.gz"
+HOMEPAGE="http://code.meskio.net/tudu"
+SRC_URI="http://code.meskio.net/tudu/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -17,13 +17,6 @@ IUSE=""
 
 DEPEND="sys-libs/ncurses[unicode]"
 RDEPEND="${DEPEND}"
-
-src_prepare()
-{
-sed -i 's/${LDFLAGS} test.c/${LD_CURSES} ${LDFLAGS} test.c/g
-	s/${LDFLAGS} $LD_CURSES/$LD_CURSES ${LDFLAGS}/g' \
-	"${S}/configure" || die "Can't fix package"
-}
 
 src_compile()
 {
