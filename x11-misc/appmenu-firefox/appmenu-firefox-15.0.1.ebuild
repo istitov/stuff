@@ -6,8 +6,8 @@ EAPI=3
 
 DESCRIPTION="Appmenu support for Firefox"
 HOMEPAGE="https://code.launchpad.net/~extension-hackers/globalmenu-extension"
-SRC_URI="( x86? ( mirror://ubuntu/pool/main/f/firefox/firefox-globalmenu_${PV}+build1-0ubuntu0.12.04.3_i386.deb )
-		 amd64? ( mirror://ubuntu/pool/main/f/firefox/firefox-globalmenu_${PV}+build1-0ubuntu0.12.04.3_amd64.deb )
+SRC_URI="( x86? ( mirror://ubuntu/pool/main/f/firefox/firefox-globalmenu_${PV}+build1-0ubuntu2_i386.deb )
+		 amd64? ( mirror://ubuntu/pool/main/f/firefox/firefox-globalmenu_${PV}+build1-0ubuntu2_amd64.deb )
 		 )"
 
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
