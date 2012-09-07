@@ -160,12 +160,14 @@ src_configure() {
 	  my_config="${my_config}
 	  --enable-gtk3
 	  --enable-gtkui"
+	else
+	  my_config="${my_config}
+	  --disable-gtk3"
 	fi
 
 	if use gtk2;then
 	  my_config="${my_config}
-	  --enable-gtkui
-	  --disable-gtk3"
+	  --enable-gtkui"
 	else
 	  my_config="${my_config}
 	  --disable-gtk2"
