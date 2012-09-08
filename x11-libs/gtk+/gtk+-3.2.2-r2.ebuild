@@ -128,7 +128,7 @@ src_prepare() {
 	fi
 
 	if use appmenu;then
-	epatch "${FILESDIR}/appmenu-gtk3/${PV}/043_ubuntu_menu_proxy.patch"
+	epatch "${FILESDIR}/appmenu-gtk3/${PV}/043_ubuntu_menu_proxy.patch.bz2"
 	epatch "${FILESDIR}/appmenu-gtk3/${PV}/062_ubuntu-set-grab-add.patch"
 	epatch "${FILESDIR}/appmenu-gtk3/${PV}/072_indicator_menu_update.patch"
 	fi

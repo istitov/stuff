@@ -109,7 +109,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.2.1-failing-tests.patch"
 
 	if use appmenu;then
-	epatch "${FILESDIR}"/appmenu-gtk3/043_ubuntu_menu_proxy.patch
+	epatch "${FILESDIR}"/appmenu-gtk3/043_ubuntu_menu_proxy.patch.bz2
 	epatch "${FILESDIR}"/appmenu-gtk3/062_ubuntu-set-grab-add.patch
 	epatch "${FILESDIR}"/appmenu-gtk3/072_indicator_menu_update.patch
 	fi

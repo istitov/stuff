@@ -130,7 +130,7 @@ src_prepare() {
 	fi
 
 	if use appmenu;then
-	epatch "${FILESDIR}"/appmenu-gtk3/3.4.0/*.patch
+	epatch "${FILESDIR}"/appmenu-gtk3/3.4.0/*.patch*
 	fi
 
 	if use overlay;then

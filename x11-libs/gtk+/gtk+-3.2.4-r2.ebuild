@@ -113,7 +113,7 @@ src_prepare() {
 
 	if use appmenu;then
 	#epatch ${FILESDIR}/appmenu3/fix.patch
-	epatch "${FILESDIR}"/appmenu3/*.patch
+	epatch "${FILESDIR}"/appmenu3/*.patch*
 	fi
 
 	if use overlay;then

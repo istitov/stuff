@@ -94,8 +94,8 @@ src_prepare() {
 	if use appmenu;then
 	epatch "${FILESDIR}"/appmenu/fix.patch
 	epatch "${FILESDIR}/${PV}"/012_ubuntu-set-grab-add.patch
-	epatch "${FILESDIR}/${PV}"/043_ubuntu_menu_proxy.patch
-	epatch "${FILESDIR}/${PV}"/044_grips.patch
+	epatch "${FILESDIR}/${PV}"/043_ubuntu_menu_proxy.patch.bz2
+	epatch "${FILESDIR}/${PV}"/044_grips.patch.bz2
 	epatch "${FILESDIR}/${PV}"/072_indicator_menu_update.patch
 	fi
 

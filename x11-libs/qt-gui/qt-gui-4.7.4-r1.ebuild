@@ -90,7 +90,7 @@ src_prepare() {
 	sed -i -e "s:CONFIG(shared:# &:g" "${S}"/tools/designer/src/src.pro
 
 	if use appmenu;then
-	epatch "${FILESDIR}/qmenubar-plugin-system-4.7.3.patch"
+	epatch "${FILESDIR}/qmenubar-plugin-system-4.7.3.patch.bz2"
 	fi
 }
 

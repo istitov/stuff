@@ -100,7 +100,7 @@ src_prepare() {
 
 	if use appmenu;then
 	epatch "${FILESDIR}/appmenu/fix.patch"
-	epatch "${FILESDIR}/${PV}"/*.patch
+	epatch "${FILESDIR}/${PV}"/*.patch*
 	fi
 
 	if use overlay;then

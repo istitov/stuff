@@ -109,7 +109,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.2.1-failing-tests.patch"
 
 	if use appmenu;then
-	epatch "${FILESDIR}"/appmenu3/*.patch
+	epatch "${FILESDIR}"/appmenu3/*.patch*
 	fi
 
 	if use overlay;then
