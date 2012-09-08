@@ -19,25 +19,20 @@ DEPEND_COMMON="
 	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2] )
 	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3] )"
 
-RDEPEND="
-	${DEPEND_COMMON}
-	"
-DEPEND="
-	${DEPEND_COMMON}
-	"
+RDEPEND="${DEPEND_COMMON}"
+DEPEND="${DEPEND_COMMON}"
 
 S="${WORKDIR}/deadbeef-devel"
 
 src_prepare() {
-  epatch "${FILESDIR}/makefile.in.patch"
+	epatch "${FILESDIR}/makefile.in.patch"
 }
 
 src_configure() {
-  my_config="
-	--disable-static
-	$(use_enable gtk3)
-	$(use_enable gtk2)"
-  econf ${my_config}
+	my_config="--disable-static
+	  $(use_enable gtk3)
+	  $(use_enable gtk2)"
+	econf ${my_config}
 }
 
 src_install() {

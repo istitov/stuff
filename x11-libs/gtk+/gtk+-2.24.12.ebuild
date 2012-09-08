@@ -99,12 +99,12 @@ src_prepare() {
 		perf/marshalers.c || die
 
 	if use appmenu;then
-	epatch ${FILESDIR}/appmenu/fix.patch
-	epatch ${FILESDIR}/${PV}/*.patch
+	epatch "${FILESDIR}/appmenu/fix.patch"
+	epatch "${FILESDIR}/${PV}"/*.patch
 	fi
 
 	if use overlay;then
-	epatch ${FILESDIR}/${PV}/scroll/100_overlay_scrollbar_loading.patch
+	epatch "${FILESDIR}/${PV}/scroll/100_overlay_scrollbar_loading.patch"
 	fi
 
 	# Stop trying to build unmaintained docs, bug #349754

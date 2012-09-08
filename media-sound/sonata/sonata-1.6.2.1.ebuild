@@ -28,7 +28,7 @@ RDEPEND=">=dev-python/pygtk-2.12
 	trayicon? ( dev-python/egg-python )
 	libnotify? ( dev-python/notify-python )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 DOCS="CHANGELOG README TODO TRANSLATORS"
 

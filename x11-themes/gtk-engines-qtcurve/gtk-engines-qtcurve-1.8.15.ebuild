@@ -20,7 +20,7 @@ CDEPEND="
 	x11-libs/gtk+:2
 "
 DEPEND="${CDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 "
 RDEPEND="${CDEPEND}
 	mozilla? ( || (

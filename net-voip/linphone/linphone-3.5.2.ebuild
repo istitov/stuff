@@ -25,7 +25,7 @@ RDEPEND=">=media-libs/mediastreamer-2.7.3[video?,ipv6?]
 	ncurses? ( sys-libs/readline
 		sys-libs/ncurses )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	doc? ( app-text/sgmltools-lite )
 	nls? ( dev-util/intltool
 		sys-devel/gettext )"

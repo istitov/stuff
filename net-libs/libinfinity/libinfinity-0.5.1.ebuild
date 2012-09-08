@@ -24,7 +24,7 @@ RDEPEND="dev-libs/glib:2
 	avahi? ( net-dns/avahi )
 	gtk? ( || ( gtk3? ( x11-libs/gtk+:3 ) x11-libs/gtk+:2 ) )"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.23
+	virtual/pkgconfig
 	sys-devel/gettext
 	doc? ( dev-util/gtk-doc )"
 

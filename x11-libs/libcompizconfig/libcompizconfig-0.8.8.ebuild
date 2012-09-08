@@ -20,7 +20,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.41
-	>=dev-util/pkgconfig-0.19
+	virtual/pkgconfig
 "
 
 RESTRICT="test"

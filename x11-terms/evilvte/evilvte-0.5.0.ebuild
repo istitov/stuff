@@ -18,7 +18,7 @@ IUSE="gtk3"
 RDEPEND="x11-libs/vte:2.90
 	|| ( gtk3? ( x11-libs/gtk+:3 ) x11-libs/gtk+:2 )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 S=${WORKDIR}/${MY_P}
 

@@ -28,21 +28,22 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${PN}"
 
 src_compile() {
-  sed -i '1i#define OF(x) x' \
-	src/findsubtitles/quazip/ioapi.{c,h} \
-	src/findsubtitles/quazip/{zip,unzip}.h || die
+	sed -i '1i#define OF(x) x' \
+	  src/findsubtitles/quazip/ioapi.{c,h} \
+	  src/findsubtitles/quazip/{zip,unzip}.h || die
 
-  emake PREFIX=/usr || die
+	emake PREFIX=/usr || die
 }
+
 src_install() {
-  for lang in ${LANGS};do
-	for x in ${lang};do
-	  if ! use linguas_${x}; then
-		rm -f "$(find src/translations -type f -name "rosamp_${x}*.qm")"
-		rm -rf docs/${x}
-	  fi
+	for lang in ${LANGS};do
+	  for x in ${lang};do
+		if ! use linguas_${x}; then
+		  rm -f "$(find src/translations -type f -name "rosamp_${x}*.qm")"
+		  rm -rf docs/${x}
+		fi
+	  done
 	done
-  done
-  
-  emake PREFIX=/usr DESTDIR="${D}" install || die
+
+	emake PREFIX=/usr DESTDIR="${D}" install || die
 }

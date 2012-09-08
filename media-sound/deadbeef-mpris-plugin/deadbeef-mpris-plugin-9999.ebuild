@@ -27,4 +27,4 @@ DEPEND="
 
 src_prepare(){
   eautoreconf
-  }
+}

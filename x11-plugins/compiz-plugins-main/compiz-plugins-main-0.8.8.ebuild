@@ -25,7 +25,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.19
+	virtual/pkgconfig
 	>=sys-devel/gettext-0.15
 	gconf? ( gnome-base/gconf:2 )
 "

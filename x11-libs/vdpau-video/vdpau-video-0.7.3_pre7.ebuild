@@ -20,7 +20,7 @@ RDEPEND="x11-libs/libva[opengl?]
 	x11-libs/libvdpau"
 
 DEPEND="${DEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 S=${WORKDIR}/${MY_P}
 

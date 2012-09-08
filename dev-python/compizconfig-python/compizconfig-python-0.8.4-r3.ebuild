@@ -27,7 +27,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	dev-python/pyrex
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 src_configure() {
 	python_src_configure \

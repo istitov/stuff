@@ -14,7 +14,7 @@ IUSE=""
 
 DEPEND="
 dev-libs/libusb:1
-dev-util/pkgconfig"
+virtual/pkgconfig"
 RDEPEND="${DEPEND}"
 src_configure() {
 	./autogen.sh

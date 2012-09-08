@@ -23,7 +23,7 @@ RDEPEND=">=dev-libs/glib-2.18:2
 	>=gnome-base/gconf-2
 	>=dev-libs/libindicator-0.4"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	nls? ( >=dev-util/intltool-0.35 )"
 
 pkg_setup() {

@@ -25,7 +25,7 @@ RDEPEND="
 	x11-libs/gtksourceview:3.0"
 DEPEND="${RDEPEND}
 	dev-cpp/glibmm:2
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	doc? (
 		app-text/gnome-doc-utils
 		app-text/scrollkeeper

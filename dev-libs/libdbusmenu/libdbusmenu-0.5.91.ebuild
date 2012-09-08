@@ -34,7 +34,7 @@ DEPEND="${RDEPEND}
 	)
 	vala? ( dev-lang/vala )
 	dev-util/intltool
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	>=dev-libs/atk-2.1.0
 	>=x11-libs/pango-1.29"
 

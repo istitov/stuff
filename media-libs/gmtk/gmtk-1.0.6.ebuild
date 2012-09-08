@@ -22,7 +22,7 @@ RDEPEND="${COMMON_DEPEND}
 	dconf? ( gnome-base/dconf )"
 DEPEND="${COMMON_DEPEND}
 	dev-util/intltool
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	sys-devel/gettext"
 
 DOCS=( ChangeLog )

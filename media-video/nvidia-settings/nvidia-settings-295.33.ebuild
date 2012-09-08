@@ -29,7 +29,7 @@ IUSE="examples"
 #RDEPEND="x11-drivers/nvidia-drivers
 #	${COMMON_DEPEND}"
 #DEPEND="${RDEPEND}
-#	dev-util/pkgconfig
+#	virtual/pkgconfig
 #	x11-proto/xproto"
 
 DEPEND="x11-libs/libX11

@@ -31,7 +31,7 @@ RDEPEND=">=x11-libs/libdrm-2.4
 	opengl? ( virtual/opengl )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 PDEPEND="video_cards_nvidia? ( x11-libs/vdpau-video )"
 	#video_cards_fglrx? ( x11-libs/xvba-video )
 

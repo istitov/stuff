@@ -95,15 +95,15 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-2.24.7-darwin-quartz-introspection.patch
 
 	if use appmenu;then
-	epatch ${FILESDIR}/appmenu/fix.patch
-	epatch ${FILESDIR}/${PV}/012_ubuntu-set-grab-add.patch
-	epatch ${FILESDIR}/${PV}/043_ubuntu_menu_proxy.patch
-	epatch ${FILESDIR}/${PV}/044_grips.patch
-	epatch ${FILESDIR}/${PV}/072_indicator_menu_update.patch
+	epatch "${FILESDIR}/appmenu/fix.patch"
+	epatch "${FILESDIR}/${PV}/012_ubuntu-set-grab-add.patch"
+	epatch "${FILESDIR}/${PV}/043_ubuntu_menu_proxy.patch"
+	epatch "${FILESDIR}/${PV}/044_grips.patch"
+	epatch "${FILESDIR}/${PV}/072_indicator_menu_update.patch"
 	fi
-	
+
 	if use overlay;then
-	epatch ${FILESDIR}/${PV}/100_overlay_scrollbar_loading.patch
+	epatch "${FILESDIR}/${PV}/100_overlay_scrollbar_loading.patch"
 	fi
 
 	# marshalers code was pre-generated with glib-2.31, upstream bug #671763

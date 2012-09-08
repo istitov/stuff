@@ -18,7 +18,7 @@ RDEPEND=">=sys-auth/polkit-0.102
 	!gnome-extra/polkit-gnome"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40.0
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	sys-devel/gettext"
 
 src_prepare() {

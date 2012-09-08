@@ -42,13 +42,13 @@ src_prepare() {
 
 src_install() {
 	if use gtk2; then
-	cd ${S}/gtk2/
+	cd "${S}"/gtk2/
 	insinto /usr/$(get_libdir)/deadbeef
 	doins ddb_infobar_gtk2.so
 	fi
 
 	if use gtk3; then
-	cd ${S}/gtk3/
+	cd "${S}"/gtk3/
 	insinto /usr/$(get_libdir)/deadbeef
 	doins ddb_infobar_gtk3.so
 	fi

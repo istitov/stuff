@@ -44,7 +44,7 @@ COMMON_DEPEND="!aqua? (
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	!<gnome-base/gail-1000"
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	!aqua? (
 		x11-proto/xextproto
 		x11-proto/xproto

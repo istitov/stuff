@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 	vala? ( dev-lang/vala:${PN_vala_version}[vapigen] )
 	app-text/gnome-doc-utils
 	dev-util/intltool
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 src_prepare() {
 	# Drop DEPRECATED flags, bug #391103

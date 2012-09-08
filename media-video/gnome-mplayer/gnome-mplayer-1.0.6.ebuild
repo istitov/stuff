@@ -32,7 +32,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26
 RDEPEND="${COMMON_DEPEND}
 	|| ( >=media-video/mplayer-1.0_rc4_p20100101[libass] media-video/mplayer2[libass] )"
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	sys-devel/gettext"
 
 DOCS="ChangeLog README DOCS/*.txt DOCS/tech/*.txt"

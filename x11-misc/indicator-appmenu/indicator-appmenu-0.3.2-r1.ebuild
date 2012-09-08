@@ -27,7 +27,7 @@ RDEPEND=">=dev-libs/glib-2.18:2
 	>=dev-libs/libdbusmenu-0.5.0[test]
 	gnome-extra/indicator-applet"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	nls? ( dev-util/intltool )
 	x11-libs/bamf"
 

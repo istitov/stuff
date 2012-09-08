@@ -21,7 +21,7 @@ RDEPEND="dev-libs/dbus-glib
 	x11-libs/libSM
 	x11-libs/vte:2.90"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 DOCS=( AUTHORS ChangeLog NEWS README TODO )
 

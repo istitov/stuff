@@ -37,7 +37,7 @@ RDEPEND="
 		)"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	X?  (
 		x11-proto/xproto
 		x11-proto/xineramaproto

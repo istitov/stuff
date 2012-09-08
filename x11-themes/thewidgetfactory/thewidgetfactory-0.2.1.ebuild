@@ -15,7 +15,7 @@ IUSE=""
 
 RDEPEND=">=x11-libs/gtk+-2.4:2"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 src_install() {
 	emake DESTDIR="${D}" install || die

@@ -49,7 +49,7 @@ RDEPEND="
 	"
 DEPEND="
 	${DEPEND_COMMON}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	"
 
 src_prepare() {

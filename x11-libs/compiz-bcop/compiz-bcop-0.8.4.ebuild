@@ -13,7 +13,7 @@ IUSE=""
 
 RDEPEND="dev-libs/libxslt"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.19"
+	virtual/pkgconfig"
 
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"

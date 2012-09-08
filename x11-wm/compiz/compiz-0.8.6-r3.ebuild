@@ -61,7 +61,7 @@ COMMONDEPEND="
 # dbus? ( >=sys-apps/dbus-1.0 )
 
 DEPEND="${COMMONDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	x11-proto/damageproto
 	x11-proto/xineramaproto
 "

@@ -26,7 +26,7 @@ RDEPEND="x11-libs/gtk+:2
 	)"
 DEPEND="x11-libs/gtk+:2
 	x11-libs/cairo
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 S=${WORKDIR}/${MY_P}
 DOCS="ChangeLog README TODO"

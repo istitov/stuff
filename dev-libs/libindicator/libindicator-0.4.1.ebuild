@@ -19,7 +19,7 @@ RDEPEND=">=x11-libs/gtk+-2.18:2
 	>=dev-libs/dbus-glib-0.76
 	!<gnome-extra/indicator-applet-0.2"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 src_prepare() {
 #	epatch "${FILESDIR}"/${P}-missing_template.patch

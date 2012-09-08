@@ -26,4 +26,3 @@ DEPEND="
 	"
 
 S="${WORKDIR}/deadbeef-${PV}"
-

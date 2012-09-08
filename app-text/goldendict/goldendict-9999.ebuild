@@ -28,7 +28,7 @@ RDEPEND=">=app-text/hunspell-1.2
 	) )
 	kde? ( media-libs/phonon )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 S="${WORKDIR}/${MY_P}"
 

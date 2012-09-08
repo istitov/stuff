@@ -18,7 +18,7 @@ IUSE=""
 
 RDEPEND="x11-libs/gtk+:3"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 src_prepare() {
 	epatch "${FILESDIR}"/${P}-stupid.patch

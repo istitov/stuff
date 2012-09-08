@@ -33,7 +33,7 @@ RDEPEND=">=net-libs/ortp-0.20.0[ipv6?]
 		X? ( x11-libs/libX11
 			x11-libs/libXv ) )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	x11-proto/videoproto"
 
 PDEPEND="amr? ( !bindist? ( media-plugins/mediastreamer-amr ) )

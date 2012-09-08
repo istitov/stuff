@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libdbusmenu/libdbusmenu-0.5.1-r300.ebuild,v 1.3 2011/11/28 22:37:34 zmedico Exp $
 
@@ -32,8 +32,9 @@ DEPEND="${RDEPEND}
 	vala? ( dev-lang/vala:${PN_vala_version}[vapigen] )
 	app-text/gnome-doc-utils
 	dev-util/intltool
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
+MAKEOPTS="${MAKEOPTS} -j1"
 
 src_prepare() {
 	# Drop DEPRECATED flags, bug #391103
@@ -57,7 +58,7 @@ src_configure() {
 		--with-html-dir=/usr/share/doc/${PF} \
 		--with-gtk=2
 	fi
-	
+
 	if use gtk3;then
 		mkdir gtk3-hack
 		cp -R * gtk3-hack &>/dev/null
@@ -91,13 +92,13 @@ src_compile(){
 }
 
 src_install() {
-	emake -j1 DESTDIR="${D}" install
+	emake DESTDIR="${D}" install
 	dodoc AUTHORS ChangeLog README
 	find "${ED}" -name '*.la' -exec rm -f {} +
 
 	if use gtk3;then
 	  cd gtk3-hack
-	  emake -j1 DESTDIR="${D}" install
+	  emake DESTDIR="${D}" install
 	  dodir /usr/$(get_libdir)/pkgconfig
 	  insinto /usr/$(get_libdir)/pkgconfig/
 	  doins libdbusmenu-gtk/dbusmenu-gtk3-0.4.pc

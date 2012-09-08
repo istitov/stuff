@@ -24,7 +24,7 @@ RDEPEND="x11-libs/gtk+:2
 	!lxde-base/lxpanel
 	alsa? ( media-libs/alsa-lib )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	sys-devel/gettext"
 S="${WORKDIR}"
 src_prepare() {
