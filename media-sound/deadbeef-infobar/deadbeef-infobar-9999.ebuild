@@ -13,34 +13,38 @@ EHG_REPO_URI="https://bitbucket.org/dsimbiriatin/deadbeef-infobar"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE=""
+IUSE="gtk2 gtk3"
+REQUIRED_USE="|| ( ${IUSE} )"
 
 DEPEND_COMMON="
-	x11-libs/gtk+
-	dev-libs/libxml2
-	dev-vcs/mercurial
-	media-sound/deadbeef[gtk2]"
+	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2] )
+	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3] )
+	dev-libs/libxml2"
 
-RDEPEND="
-	${DEPEND_COMMON}
-	"
-DEPEND="
-	${DEPEND_COMMON}
-	"
+RDEPEND="${DEPEND_COMMON}"
+DEPEND="${DEPEND_COMMON}"
 S="${WORKDIR}"
 
-src_configure() {
-	cd deadbeef-infobar/
-	cmake .
-}
+src_prepare() {
+	if ! use gtk3; then
+	  sed -e "s|.*GTK3.*||g" -e "s|.*gtk3.*||g" -e "s|.*GTK+3.*||g"  -i Makefile
+	fi
 
-src_compile() {
-	cd deadbeef-infobar/
-	emake || die
+	if ! use gtk2; then
+	  sed -e "s|.*GTK2.*||g" -e "s|.*gtk2.*||g" -e "s|.*GTK+2.*||g"  -i Makefile
+	fi
 }
 
 src_install() {
-	cd deadbeef-infobar/
-	insinto /usr/lib/deadbeef
-	doins ddb_infobar.so
+	if use gtk2; then
+	cd "${S}"/gtk2/
+	insinto /usr/$(get_libdir)/deadbeef
+	doins ddb_infobar_gtk2.so
+	fi
+
+	if use gtk3; then
+	cd "${S}"/gtk3/
+	insinto /usr/$(get_libdir)/deadbeef
+	doins ddb_infobar_gtk3.so
+	fi
 }
