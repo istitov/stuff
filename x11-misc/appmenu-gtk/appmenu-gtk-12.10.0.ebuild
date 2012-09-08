@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools eutils multilib
+inherit eutils multilib
 
 DESCRIPTION="Application menu module for GTK"
 HOMEPAGE="https://launchpad.net/appmenu-gtk"

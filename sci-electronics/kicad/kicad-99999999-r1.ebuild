@@ -40,7 +40,7 @@ RDEPEND="${CDEPEND}
 	sci-electronics/electronics-menu"
 
 pkg_setup() {
-        python_set_active_version 2
+	python_set_active_version 2
 }
 
 src_unpack() {

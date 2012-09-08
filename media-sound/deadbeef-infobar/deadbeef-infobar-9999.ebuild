@@ -4,6 +4,8 @@
 
 EAPI=4
 
+inherit mercurial
+
 DESCRIPTION="Infobar plugin for DeadBeeF audio player. Shows lyrics and artist's biography for the current track."
 HOMEPAGE="https://bitbucket.org/Not_eXist/deadbeef-infobar"
 EHG_REPO_URI="https://bitbucket.org/dsimbiriatin/deadbeef-infobar"
@@ -26,10 +28,6 @@ DEPEND="
 	${DEPEND_COMMON}
 	"
 S="${WORKDIR}"
-
-src_prepare() {
-	hg clone $EHG_REPO_URI
-}
 
 src_configure() {
 	cd deadbeef-infobar/

@@ -12,7 +12,7 @@ SRC_URI="http://${PN}.googlecode.com/files/${PN}-${PV}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND_COMMON="

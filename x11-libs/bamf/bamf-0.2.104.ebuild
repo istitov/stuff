@@ -17,6 +17,7 @@ IUSE="+gtk2"
 DEPEND=">=dev-lang/vala-0.11.7
 	gnome-base/libgtop
 	dev-util/gtk-doc"
+RDEPEND="${DEPEND}"
 
 src_unpack() {
 	unpack ${A}

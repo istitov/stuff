@@ -28,6 +28,7 @@ DEPEND="
 	iconv? ( virtual/libiconv )
 	png? ( media-libs/libpng )
 	zlib? ( sys-libs/zlib )"
+RDEPEND="${DEPEND}"
 PDEPEND="
 	!dedicated? (
 		openmedia? (

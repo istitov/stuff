@@ -17,6 +17,7 @@ IUSE=""
 
 DEPEND=">=sys-fs/e2fsprogs-1.38
 	>=x11-libs/gtk+-2.6"
+RDEPEND="${DEPEND}"
 
 src_compile() {
 	emake WITH_DRV=1 || die "emake failed"

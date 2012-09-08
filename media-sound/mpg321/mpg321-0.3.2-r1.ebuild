@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools eutils
+inherit eutils
 
 DESCRIPTION="a realtime MPEG 1.0/2.0/2.5 audio player for layers 1, 2 and 3"
 HOMEPAGE="http://mpg321.sourceforge.net/"

@@ -18,7 +18,7 @@ SRC_URI="x86? ( ftp://download.nvidia.com/XFree86/Linux-x86/${PV}/${X86_NV_PACKA
 
 LICENSE="NVIDIA"
 SLOT="0"
-KEYWORDS="-* amd64 x86 x86-fbsd"
+KEYWORDS="-* amd64 x86 ~x86-fbsd"
 IUSE="acpi custom-cflags gtk multilib kernel_linux rt"
 RESTRICT="strip"
 EMULTILIB_PKG="true"
@@ -262,7 +262,7 @@ src_unpack() {
 		ewarn "DO NOT file bug reports for kernel versions less than 2.6.7 as they will be ignored."
 	fi
 
-	if ! use x86-fbsd; then
+	if ! use ~x86-fbsd; then
 		cd "${S}"
 		unpack_makeself
 	else
@@ -272,7 +272,7 @@ src_unpack() {
 
 src_prepare() {
 	# Please add a brief description for every added patch
-	use x86-fbsd && cd doc
+	use ~x86-fbsd && cd doc
 
 	if use kernel_linux; then
 		# Quiet down warnings the user does not need to see
@@ -300,7 +300,7 @@ src_compile() {
 	# it by itself, pass this.
 
 	cd "${NV_SRC}"
-	if use x86-fbsd; then
+	if use ~x86-fbsd; then
 		MAKE="$(get_bmake)" CFLAGS="-Wno-sign-compare" emake CC="$(tc-getCC)" \
 			LD="$(tc-getLD)" LDFLAGS="$(raw-ldflags)" || die
 	elif use kernel_linux; then
@@ -325,7 +325,7 @@ src_install() {
 			"${WORKDIR}"/nvidia
 		insinto /etc/modprobe.d
 		newins "${WORKDIR}"/nvidia nvidia.conf || die
-	elif use x86-fbsd; then
+	elif use ~x86-fbsd; then
 		insinto /boot/modules
 		doins "${WORKDIR}/${NV_PACKAGE}/src/nvidia.kld" || die
 
@@ -383,7 +383,7 @@ src_install() {
 
 	# Documentation
 	dohtml ${NV_DOC}/html/*
-	if use x86-fbsd; then
+	if use ~x86-fbsd; then
 		dodoc "${NV_DOC}/README"
 		doman "${NV_MAN}/nvidia-xconfig.1"
 		use gtk && doman "${NV_MAN}/nvidia-settings.1"
@@ -466,7 +466,7 @@ src_install-libs() {
 	# The GLX libraries
 	donvidia ${NV_ROOT}/lib ${libdir}/libGL.so ${sover}
 	donvidia /usr/${inslibdir} ${libdir}/libnvidia-glcore.so ${sover}
-	if use x86-fbsd; then
+	if use ~x86-fbsd; then
 		donvidia ${NV_ROOT}/lib ${libdir}/libnvidia-tls.so ${sover}
 	else
 		donvidia ${NV_ROOT}/lib ${libdir}/tls/libnvidia-tls.so ${sover}
