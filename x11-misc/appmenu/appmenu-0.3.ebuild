@@ -14,6 +14,6 @@ DEPEND="gtk? ( x11-misc/appmenu-gtk )
 		kde? || (
 		  kde-misc/plasma-widget-menubar
 		  kde-misc/plasma-widget-kappmenubar
-		  kded-appmenu )
+		  kde-misc/kded-appmenu )
 		gnome? ( x11-misc/indicator-appmenu )"
 RDEPEND="${DEPEND}"
