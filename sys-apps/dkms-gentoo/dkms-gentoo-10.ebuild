@@ -18,6 +18,8 @@ IUSE=""
 DEPEND="sys-apps/openrc"
 RDEPEND="${DEPEND}"
 
+S="${WORKDIR}/${PN}"
+
 src_install(){
 	dosbin dkms-gentoo
 	newinitd dkms dkms
