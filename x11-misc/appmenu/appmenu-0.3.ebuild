@@ -11,6 +11,6 @@ KEYWORDS="-alpha ~amd64 -ppc64 -sparc ~x86"
 IUSE="gtk qt4 kde gnome"
 DEPEND="gtk? ( x11-misc/appmenu-gtk )
 		qt4?  ( x11-misc/appmenu-qt )
-		kde? ( kde-misc/plasma-widget-menubar )
+		kde? || ( kde-misc/plasma-widget-menubar kde-misc/plasma-widget-kappmenubar )
 		gnome? ( x11-misc/indicator-appmenu )"
 RDEPEND="${DEPEND}"
