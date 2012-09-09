@@ -71,7 +71,7 @@ src_prepare() {
 		|| die "Failed to fix systemsettingsrc install location"
 
 	if use appmenu;then
-	  epatch "${FILESDIR}"/appmenu-18.patch
+	  epatch "${FILESDIR}"/appmenu-18.patch.bz2
 	fi
 
 	kde4-meta_src_prepare
