@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<use>
+	  <flag name="appmenu">Add support for <pkg>kde-misc/kded-appmenu</pkg></flag>
+	</use>
 </pkgmetadata>
