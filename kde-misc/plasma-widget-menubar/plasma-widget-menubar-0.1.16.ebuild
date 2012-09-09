@@ -24,4 +24,5 @@ DEPEND="
 "
 RDEPEND="${DEPEND}
 	!kde-misc/plasma-indicatordisplay
+	!kde-misc/kded-appmenu
 "
