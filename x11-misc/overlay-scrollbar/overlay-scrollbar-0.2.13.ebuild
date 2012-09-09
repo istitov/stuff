@@ -8,7 +8,7 @@ inherit multilib versionator
 
 DESCRIPTION="Ubuntu's scrollbars"
 HOMEPAGE="https://launchpad.net/ayatana-scrollbar"
-SRC_URI="http://launchpad.net/ayatana-scrollbar/0.2/${PV}/+download/${PN}-${PV}.tar.gz"
+SRC_URI="http://launchpad.net/ayatana-scrollbar/$(get_version_component_range 1-2)/${PV}/+download/${P}.tar.gz"
 
 MY_PV=$(get_version_component_range 3)
 

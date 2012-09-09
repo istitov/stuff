@@ -4,11 +4,11 @@
 
 EAPI=4
 
-inherit eutils multilib
+inherit eutils multilib versionator
 
 DESCRIPTION="Application menu module for GTK"
 HOMEPAGE="https://launchpad.net/appmenu-gtk"
-SRC_URI="http://launchpad.net/${PN}/12.10/${PV}/+download/${PN}-${PV}.tar.gz"
+SRC_URI="http://launchpad.net/${PN}/$(get_version_component_range 1-2)/${PV}/+download/${P}.tar.gz"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
