@@ -29,5 +29,6 @@
 		<flag name="gtk2">Build with x11-libs/gtk+:2</flag>
 		<flag name="gtk3">Build with x11-libs/gtk+:3</flag>
 		<flag name="infobar">Add support for <pkg>media-sound/deadbeef-infobar</pkg></flag>
+		<flag name="zxcvbnp">Disable z,x,c,v,b,n,p buttons for usability adress bar of <pkg>media-sound/deadbeef-fb</pkg></flag>
 	</use>
 </pkgmetadata>
