@@ -7,9 +7,11 @@ EAPI=4
 VIRTUALX_REQUIRED="test"
 inherit kde4-base
 
+MY_PN="kwinbuttonapplet-improved"
+
 DESCRIPTION="KWinButton applet"
 HOMEPAGE="http://kde-look.org/content/show.php/KWin+Button+applet+improved?content=143971"
-SRC_URI="http://dl.dropbox.com/u/4514366/kwinbuttonapplet-improved-${PV}.tar.gz"
+SRC_URI="http://dl.dropbox.com/u/4514366/${MY_PN}-${PV}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="4"
@@ -20,4 +22,4 @@ DEPEND="kde-base/libkworkspace:4
 		kde-base/libtaskmanager:4"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/kwinbuttonapplet-improved-${PV}"
+S="${WORKDIR}/${MY_PN}-${PV}"
