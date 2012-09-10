@@ -25,13 +25,13 @@ RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 S="${WORKDIR}"
 
-src_prepare() {
-	if ! use gtk3; then
-	  sed -e "s|.*GTK3.*||g" -e "s|.*gtk3.*||g" -e "s|.*GTK+3.*||g"  -i Makefile
+src_compile() {
+	if use gtk2; then
+	  emake gtk2
 	fi
 
-	if ! use gtk2; then
-	  sed -e "s|.*GTK2.*||g" -e "s|.*gtk2.*||g" -e "s|.*GTK+2.*||g"  -i Makefile
+	if use gtk3; then
+	  emake gtk3
 	fi
 }
 
