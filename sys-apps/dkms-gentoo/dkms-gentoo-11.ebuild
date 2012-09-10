@@ -15,7 +15,10 @@ SLOT="4"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="sys-apps/openrc"
+DEPEND="sys-apps/openrc
+		app-shells/bash
+		sys-apps/gawk
+		sys-apps/portage"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${PN}"
@@ -23,8 +26,13 @@ S="${WORKDIR}/${PN}"
 src_install(){
 	dosbin dkms-gentoo
 	newinitd dkms dkms
+
+	if ! [ -f "${ROOT}/var/lib/portage/dkms_db" ];then
+	dodir "/var/lib/portage/"
+	DKMS_DB="${D}/var/lib/portage/dkms_db" "${D}"/usr/sbin/dkms-gentoo --db
+	fi
 }
 
 pkg_postinst() {
-	elog "Now you need run 'dkms-gentoo --db'"
+	[ ! -f /etc/runlevels/*/dkms ] && elog "Now you need run 'rc-update add dkms boot'"
 }
