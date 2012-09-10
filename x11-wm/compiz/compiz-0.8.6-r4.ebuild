@@ -84,8 +84,10 @@ src_prepare() {
 		epatch "${FILESDIR}"/${PN}-no-gconf.patch
 	fi
 	eautoreconf
+
 	if use kde; then
-	  $(has_version ">=kde-base/kwin-4.8") && epatch "${FILESDIR}"/${PN}-kde-4.8.patch
+	  $(has_version ">=kde-base/kwin-4.8") && $(has_version "<kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.8.patch
+	  $(has_version ">=kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.9.patch
 	fi
 }
 
