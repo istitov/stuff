@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-wm/compiz/compiz-0.8.6-r3.ebuild,v 1.3 2011/11/11 22:54:51 ssuominen Exp $
 
-EAPI="2"
+EAPI="4"
 
 inherit autotools eutils gnome2-utils
 
@@ -73,20 +73,20 @@ RDEPEND="${COMMONDEPEND}
 
 src_prepare() {
 
-	echo "gtk/gnome/compiz-wm.desktop.in" >> "${S}/po/POTFILES.skip"
-	echo "metadata/core.xml.in" >> "${S}/po/POTFILES.skip"
+	echo gtk/gnome/compiz-wm.desktop.in >> po/POTFILES.skip
+	echo metadata/core.xml.in >> po/POTFILES.skip
 
 	# fix cont corruption, bug #343861
 
 	if ! use gnome || ! use gconf; then
 		epatch "${FILESDIR}"/${PN}-no-gconf.patch
 	fi
-	eautoreconf
 
 	if use kde; then
 	  $(has_version ">=kde-base/kwin-4.8") && $(has_version "<kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.8.patch
 	  $(has_version ">=kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.9.patch
 	fi
+	eautoreconf
 }
 
 src_configure() {
@@ -125,7 +125,7 @@ src_configure() {
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
-	find "${D}" -name '*.la' -delete || die
+	prune_libtool_files --all
 
 	# Install compiz-manager
 	dobin "${FILESDIR}/compiz-manager" || die "dobin failed"
