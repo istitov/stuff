@@ -28,8 +28,11 @@ src_install(){
 	newinitd dkms dkms
 
 	if ! [ -f "${ROOT}/var/lib/portage/dkms_db" ];then
-	dodir "/var/lib/portage/"
-	DKMS_DB="${D}/var/lib/portage/dkms_db" "${D}"/usr/sbin/dkms-gentoo --db
+	  dodir "/var/lib/portage/"
+	  DKMS_DB="${D}/var/lib/portage/dkms_db" "${D}"/usr/sbin/dkms-gentoo --db
+	else
+	  dodir "/var/lib/portage/"
+	  cp "${ROOT}/var/lib/portage/dkms_db" "${D}/var/lib/portage/dkms_db"
 	fi
 }
 
