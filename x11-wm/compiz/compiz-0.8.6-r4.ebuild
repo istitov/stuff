@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2-utils
+inherit autotools eutils gnome2-utils toolchain-funcs
 
 DESCRIPTION="OpenGL window and compositing manager"
 HOMEPAGE="http://www.compiz.org/"
@@ -85,6 +85,9 @@ src_prepare() {
 	fi
 	eautoreconf
 
+	#gcc-4.7
+	[ "$(gcc-version)" == "4.7" ] && epatch "${FILESDIR}/${PN}-gcc4.7.patch"
+	
 	if use kde; then
 	  $(has_version ">=kde-base/kwin-4.8") && $(has_version "<kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.8.patch
 	  $(has_version ">=kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.9.patch
