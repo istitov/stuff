@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="DKMS analog for gentoo"
 HOMEPAGE="https://github.com/megabaks/dkms-gentoo"
-SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${P}.tar.gz"
+SRC_URI="https://github.com/downloads/megabaks/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
