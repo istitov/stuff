@@ -24,7 +24,22 @@ S="${WORKDIR}"
 src_install(){
 	insinto /etc/portage
 	doins gcc-switcher
+
+	if [ -f "${ROOT}/etc/portage/package.compilers" ];then
+	  cp "${ROOT}/etc/portage/package.compilers" "${D}/etc/portage/package.compilers"
+	else
+	  insinto /etc/portage
+	  doins "${FILESDIR}/package.compilers"
+	fi
+
+	if [ -f "${ROOT}/etc/portage/package.compilers-full" ];then
+	  cp "${ROOT}/etc/portage/package.compilers-full" "${D}/etc/portage/package.compilers-full"
+	else
+	  insinto /etc/portage
+	  doins "${FILESDIR}/package.compilers-full"
+	fi
 }
 pkg_postinst() {
-  grep -q gcc-switcher "${ROOT}/etc/portage/bashrc" || elog "Now you need run:\necho 'source /etc/portage/gcc-switcher' >> /etc/portage/bashrc"
+  grep -q gcc-switcher "${ROOT}/etc/portage/bashrc" || \
+  elog "Now you need run:\necho 'source /etc/portage/gcc-switcher' >> /etc/portage/bashrc"
 }

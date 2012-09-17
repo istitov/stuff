@@ -1,0 +1,4 @@
+#switch gcc-version for target
+#${CATEGORY}/${PN} major.minor (SLOT)
+#example:
+#sys-boot/grub 4.4
