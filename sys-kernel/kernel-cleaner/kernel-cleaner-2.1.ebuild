@@ -4,15 +4,15 @@
 
 EAPI=4
 
-inherit eutils git-2
+inherit eutils
 
 DESCRIPTION="Disigned for remove broken kernels from /boot and source_dirs/modules_dirs"
 HOMEPAGE="https://github.com/megabaks/kernel-cleaner"
-EGIT_REPO_URI="git://github.com/megabaks/${PN}.git"
+SRC_URI="https://github.com/downloads/megabaks/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE="+parallel"
 
 DEPEND="virtual/linux-sources
@@ -20,6 +20,8 @@ DEPEND="virtual/linux-sources
 		sys-apps/gawk"
 RDEPEND="${DEPEND}
 	parallel? ( sys-process/parallel )"
+
+S="${WORKDIR}"
 
 src_install(){
 	if ! use parallel;then
