@@ -19,7 +19,8 @@ DEPEND="virtual/linux-sources
 		app-shells/bash
 		sys-apps/gawk"
 RDEPEND="${DEPEND}
-	parallel? ( sys-process/parallel )"
+	parallel? ( sys-process/parallel )
+	sys-apps/openrc"
 
 src_install(){
 	if ! use parallel;then
