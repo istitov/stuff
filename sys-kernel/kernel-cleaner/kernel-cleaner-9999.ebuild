@@ -13,7 +13,7 @@ EGIT_REPO_URI="git://github.com/megabaks/${PN}.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="parallel"
+IUSE="+parallel"
 
 DEPEND="virtual/linux-sources
 		app-shells/bash
