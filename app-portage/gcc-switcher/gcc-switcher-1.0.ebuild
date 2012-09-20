@@ -40,6 +40,7 @@ src_install(){
 	fi
 }
 pkg_postinst() {
-  grep -q gcc-switcher "${ROOT}/etc/portage/bashrc" || \
-  elog "Now you need run:\necho 'source /etc/portage/gcc-switcher' >> /etc/portage/bashrc"
+	if grep -q gcc-switcher "${ROOT}/etc/portage/bashrc";then
+	  elog "Now you need run:\necho 'source /etc/portage/gcc-switcher' >> /etc/portage/bashrc"
+	fi
 }

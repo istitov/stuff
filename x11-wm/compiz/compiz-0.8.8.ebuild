@@ -86,7 +86,7 @@ src_prepare() {
 	[ "$(gcc-version)" == "4.7" ] && \
 	epatch "${FILESDIR}/${PN}-gcc4.7.patch" && \
 	sed -e 's|-D_FORTIFY_SOURCE=2||g' -i configure{,.ac}
-	
+
 	if use kde; then
 	  $(has_version ">=kde-base/kwin-4.8") && $(has_version "<kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.8.patch
 	  $(has_version ">=kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.9.patch
