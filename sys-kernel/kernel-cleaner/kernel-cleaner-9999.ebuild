@@ -22,9 +22,10 @@ RDEPEND="${DEPEND}
 	parallel? ( sys-process/parallel )"
 
 src_install(){
-  if ! use parallel;then
-	epatch no_parallel.patch
-  fi
+	if ! use parallel;then
+	  epatch no_parallel.patch
+	fi
+
 	dosbin kernel-cleaner
 	insinto /etc
 	doins kernel-cleaner.conf
