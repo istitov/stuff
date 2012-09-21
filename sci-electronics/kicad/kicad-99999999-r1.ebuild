@@ -14,7 +14,7 @@ WX_GTK_VER="2.8"
 inherit cmake-utils wxwidgets fdo-mime gnome2-utils bzr python flag-o-matic
 
 DESCRIPTION="Electronic Schematic and PCB design tools."
-HOMEPAGE="http://kicad.sourceforge.net"
+HOMEPAGE="http://www.kicad-pcb.org"
 
 SRC_URI=""
 
