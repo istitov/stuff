@@ -8,10 +8,8 @@ VIM_VERSION="7.3"
 inherit git-2 vim toolchain-funcs
 
 DESCRIPTION="Qt powered vim GUI"
-HOMEPAGE="https://code.google.com/p/vim-qt/"
-EGIT_REPO_URI="git://gitorious.org/vim-qt/vim-qt.git
-	https://gitorious.org/vim-qt/vim-qt.git"
-
+HOMEPAGE="https://bitbucket.org/equalsraf/vim-qt/wiki/Home"
+EGIT_REPO_URI="https://bitbucket.org/equalsraf/vim-qt.git"
 LICENSE="vim"
 SLOT="0"
 KEYWORDS=""
