@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer>
+    <email>sergey.zhuga@gmail.com</email>
+  </maintainer>
+  <use>
+    <flag name='ack'></flag>
+    <flag name='adb'></flag>
+    <flag name='android'></flag>
+    <flag name='attach'></flag>
+    <flag name='bpython'></flag>
+    <flag name='brew'></flag>
+    <flag name='bundle'></flag>
+    <flag name='cap'></flag>
+    <flag name='colorex'></flag>
+    <flag name='cpanm'></flag>
+    <flag name='debuild'></flag>
+    <flag name='dhcpcd'></flag>
+    <flag name='ditz'></flag>
+    <flag name='emulator'></flag>
+    <flag name='fab'></flag>
+    <flag name='gas'></flag>
+    <flag name='geany'></flag>
+    <flag name='gem'></flag>
+    <flag name='git-flow'></flag>
+    <flag name='github'></flag>
+    <flag name='git-pulls'></flag>
+    <flag name='heroku'></flag>
+    <flag name='jmeter'></flag>
+    <flag name='jmeter-plugins'></flag>
+    <flag name='jonas'></flag>
+    <flag name='knife'></flag>
+    <flag name='lein'></flag>
+    <flag name='lunar'></flag>
+    <flag name='lunchy'></flag>
+    <flag name='manage.py'></flag>
+    <flag name='mvn'></flag>
+    <flag name='pear'></flag>
+    <flag name='pgsql_utils'></flag>
+    <flag name='pip'></flag>
+    <flag name='pkcon'></flag>
+    <flag name='play'></flag>
+    <flag name='port'></flag>
+    <flag name='redis-cli'></flag>
+    <flag name='rvm'></flag>
+    <flag name='setup.py'></flag>
+    <flag name='showoff'></flag>
+    <flag name='smartmontools'></flag>
+    <flag name='srm'></flag>
+    <flag name='ssh-copy-id'></flag>
+    <flag name='symfony'></flag>
+    <flag name='task'></flag>
+    <flag name='teamocil'></flag>
+    <flag name='thor'></flag>
+    <flag name='vagrant'></flag>
+    <flag name='virtualbox'></flag>
+    <flag name='vpnc'></flag>
+    <flag name='zargs'></flag>
+  </use>
+</pkgmetadata>
