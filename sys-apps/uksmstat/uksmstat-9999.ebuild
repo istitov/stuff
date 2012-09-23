@@ -17,4 +17,5 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 src_install() {
 	dosbin uksmstat/uksmstat || die "Install failed"
+	dodoc README.md || die "Install failed"
 }
