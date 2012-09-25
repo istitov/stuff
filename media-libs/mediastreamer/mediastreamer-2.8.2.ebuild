@@ -57,6 +57,8 @@ src_prepare() {
 	sed -i -e "s:\(doc_htmldir=\).*:\1\$(htmldir):" help/Makefile.am \
 		|| die "patching help/Makefile.am failed"
 
+	epatch ${FILESDIR}/${P}-autopoint.patch
+
 #	# linux/videodev.h dropped in 2.6.38
 #	sed -i -e 's:msv4l.c::' src/Makefile.am || die
 #	sed -i -e 's:linux/videodev.h ::' configure.ac || die
