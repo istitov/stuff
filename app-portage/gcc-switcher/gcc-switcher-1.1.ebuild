@@ -27,6 +27,9 @@ src_install(){
 
 	if [ -f "${ROOT}/etc/portage/package.compilers" ];then
 	  cp "${ROOT}/etc/portage/package.compilers" "${D}/etc/portage/package.compilers"
+	elif [ -d "${ROOT}/etc/portage/package.compilers" ];then
+	  insinto /etc/portage/package.compilers
+	  doins "${FILESDIR}/package.compilers"
 	else
 	  insinto /etc/portage
 	  doins "${FILESDIR}/package.compilers"
@@ -34,6 +37,9 @@ src_install(){
 
 	if [ -f "${ROOT}/etc/portage/package.compilers-full" ];then
 	  cp "${ROOT}/etc/portage/package.compilers-full" "${D}/etc/portage/package.compilers-full"
+	elif [ -d "${ROOT}/etc/portage/package.compilers-full" ];then
+	  insinto /etc/portage/package.compilers-full
+	  doins "${FILESDIR}/package.compilers-full"
 	else
 	  insinto /etc/portage
 	  doins "${FILESDIR}/package.compilers-full"
