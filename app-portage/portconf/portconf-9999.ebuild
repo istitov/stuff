@@ -25,7 +25,8 @@ S="${WORKDIR}"
 
 src_install(){
 	if [ -f "${ROOT}/etc/portconf.conf" ];then
-	  cp "${ROOT}/etc/portconf.conf" "${D}/etc/portconf.conf"
+		mkdir "${D}/etc"
+		cp "${ROOT}/etc/portconf.conf" "${D}/etc/portconf.conf"
 	else
 	  insinto /etc/
 	  doins "portconf.conf"
