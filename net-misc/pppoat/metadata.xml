@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+    <maintainer>
+        <email>pasis.ua@gmail.com</email>
+    </maintainer>
+    <use>
+        <flag name='xmpp'>Support PPP over Jabber</flag>
+    </use>
+</pkgmetadata>
