@@ -6,7 +6,7 @@ EAPI=4
 
 EGIT_REPO_URI="git://github.com/metajack/libstrophe.git"
 
-inherit autotools eutils git-2
+inherit libtool autotools eutils git-2
 
 DESCRIPTION="A simple, lightweight C library for writing XMPP clients"
 HOMEPAGE="http://strophe.im/libstrophe"
@@ -26,6 +26,9 @@ S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
 		epatch "${FILESDIR}"/${PN}-libxml2-build-fix.patch
+		epatch "${FILESDIR}"/${PN}-build-shared-library.patch
+		epatch "${FILESDIR}"/${PN}-pkg-config-support.patch
+		elibtoolize
 		eautoreconf
 }
 
