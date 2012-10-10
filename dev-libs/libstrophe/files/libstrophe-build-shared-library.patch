@@ -1,0 +1,61 @@
+diff --git a/Makefile.am b/Makefile.am
+index 788d37c..b09ee58 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -6,15 +6,16 @@ PARSER_CFLAGS=@PARSER_CFLAGS@
+ PARSER_LIBS=@PARSER_LIBS@
+ 
+ SSL_LIBS = -lssl -lcrypto -lz
++LIBS += $(SSL_LIBS) $(PARSER_LIBS)
+ 
+ STROPHE_FLAGS = -I$(top_srcdir)
+-STROPHE_LIBS = libstrophe.a $(PARSER_LIBS) $(SSL_LIBS)
++STROPHE_LIBS = libstrophe.la
+ 
+ ## Main build targets
+-lib_LIBRARIES = libstrophe.a
++lib_LTLIBRARIES = libstrophe.la
+ 
+-libstrophe_a_CFLAGS=$(STROPHE_FLAGS) $(PARSER_CFLAGS)
+-libstrophe_a_SOURCES = src/auth.c src/conn.c src/ctx.c \
++libstrophe_la_CFLAGS=$(STROPHE_FLAGS) $(PARSER_CFLAGS)
++libstrophe_la_SOURCES = src/auth.c src/conn.c src/ctx.c \
+ 	src/event.c src/handler.c src/hash.c \
+ 	src/jid.c src/md5.c src/sasl.c src/sha1.c \
+ 	src/snprintf.c src/sock.c src/stanza.c src/thread.c \
+@@ -23,9 +24,9 @@ libstrophe_a_SOURCES = src/auth.c src/conn.c src/ctx.c \
+ 	src/sasl.h src/sha1.h src/sock.h src/thread.h src/tls.h src/util.h
+ 
+ if PARSER_EXPAT
+-libstrophe_a_SOURCES += src/parser_expat.c
++libstrophe_la_SOURCES += src/parser_expat.c
+ else
+-libstrophe_a_SOURCES += src/parser_libxml2.c
++libstrophe_la_SOURCES += src/parser_libxml2.c
+ endif
+ 
+ include_HEADERS = strophe.h
+diff --git a/bootstrap.sh b/bootstrap.sh
+index 473f746..3b72d88 100755
+--- a/bootstrap.sh
++++ b/bootstrap.sh
+@@ -5,6 +5,7 @@ if [ -d /usr/local/share/aclocal ]; then
+     ACFLAGS="-I /usr/local/share/aclocal"
+ fi
+ 
++libtoolize
+ aclocal ${ACFLAGS}
+ automake --add-missing --foreign --copy
+ autoconf
+diff --git a/configure.ac b/configure.ac
+index e170fc3..9ad2c1b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3,6 +3,7 @@ AM_INIT_AUTOMAKE
+ 
+ AC_PROG_CC
+ AC_PROG_RANLIB
++AC_PROG_LIBTOOL
+ AM_PROG_CC_C_O
+ 
+ AC_CHECK_HEADER(openssl/ssl.h, [], [AC_MSG_ERROR([couldn't find openssl headers, openssl required])])
