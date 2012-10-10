@@ -4,4 +4,10 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<use>
+	  <flag name="wayland">Wayland support</flag>
+	  <flag name="gles2">gles2 support</flag>
+	  <flag name="systemd">systemd support</flag>
+	  <flag name="pango">pango support</flag>
+	</use>
 </pkgmetadata>
