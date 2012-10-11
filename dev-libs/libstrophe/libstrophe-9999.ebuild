@@ -4,7 +4,7 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/metajack/libstrophe.git"
+EGIT_REPO_URI="git://github.com/pasis/libstrophe.git"
 
 inherit libtool autotools eutils git-2
 
@@ -25,12 +25,6 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
-		epatch "${FILESDIR}"/${PN}-libxml2-build-fix.patch
-		epatch "${FILESDIR}"/${PN}-build-shared-library.patch
-		epatch "${FILESDIR}"/${PN}-pkg-config-support.patch
-		epatch "${FILESDIR}"/${PN}-preserve-cflags.patch
-		epatch "${FILESDIR}"/${PN}-avoid-null-pointer-dereference.patch
-		epatch "${FILESDIR}"/${PN}-handle-zero-buffer.patch
 		elibtoolize
 		eautoreconf
 }

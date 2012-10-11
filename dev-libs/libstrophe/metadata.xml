@@ -2,7 +2,7 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer>
-		<email>megagreener@gmail.com</email>
+		<email>pasis.ua@gmail.com</email>
 	</maintainer>
 	<use>
 		<flag name='xml'>Use dev-libs/libxml2 to parse XML</flag>
