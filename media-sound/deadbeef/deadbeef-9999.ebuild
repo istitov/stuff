@@ -76,8 +76,8 @@ pkg_setup() {
 
 src_prepare() {
 	if [[ ${PV} = *9999* ]] ; then
-	touch config.rpath
-	sh autogen.sh
+		touch config.rpath
+		sh autogen.sh
 	fi
 
 	if use zxcvbnp;then
@@ -87,14 +87,15 @@ src_prepare() {
 	if use midi ; then
 		# set default gentoo path
 		sed -e 's;/etc/timidity++/timidity-freepats.cfg;/usr/share/timidity/freepats/timidity.cfg;g' \
-			-i "${S}/plugins/wildmidi/wildmidiplug.c"
+		-i "${S}/plugins/wildmidi/wildmidiplug.c"
 	fi
+
 	for lang in ${LANGS};do
-	for x in ${lang};do
-	  if ! use linguas_${x}; then
-		rm -f "po/${x}.po"
-	  fi
-	done
+		for x in ${lang};do
+			if ! use linguas_${x}; then
+				rm -f "po/${x}.po"
+			fi
+		done
 	done
 }
 
@@ -112,7 +113,10 @@ src_configure() {
 		$(use_enable ffmpeg)
 		$(use_enable flac)
 		$(use_enable gme)
+		$(use_enable gtk2)
+		$(use_enable gtk3)
 		$(use_enable hotkeys)
+		$(use_enable infobar vfs-curl)
 		$(use_enable m3u)
 		$(use_enable midi wildmidi)
 		$(use_enable mms)
@@ -156,27 +160,6 @@ src_configure() {
 			$(use_enable lastfm lfm)"
 	fi
 
-	if use infobar; then
-	  my_config="${my_config}
-	  --enable-vfs-curl"
-	fi
-
-	if use gtk3;then
-	  my_config="${my_config}
-	  --enable-gtk3
-	  --enable-gtkui"
-	else
-	  my_config="${my_config}
-	  --disable-gtk3"
-	fi
-
-	if use gtk2;then
-	  my_config="${my_config}
-	  --enable-gtkui"
-	else
-	  my_config="${my_config}
-	  --disable-gtk2"
-	fi
 	econf ${my_config}
 }
 pkg_preinst() {
