@@ -10,7 +10,7 @@ if [[ ${PV} = *9999* ]] ; then
 	GIT_ECLASS="git-2"
 fi
 
-inherit fdo-mime gnome2-utils ${GIT_ECLASS}
+inherit fdo-mime gnome2-utils ${GIT_ECLASS} eutils
 
 if [[ ${PV} = *9999* ]] ; then
 	SRC_URI=""
