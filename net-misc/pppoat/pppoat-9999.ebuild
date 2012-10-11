@@ -14,7 +14,7 @@ HOMEPAGE="https://github.com/pasis/pppoat"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="+xmpp"
+IUSE="-extra +xmpp"
 
 RDEPEND="xmpp? ( dev-libs/libstrophe )"
 DEPEND="${RDEPEND}"
@@ -26,5 +26,6 @@ src_prepare() {
 }
 
 src_configure() {
-		econf $(use_enable xmpp)
+		econf $(use_enable xmpp) \
+			$(use_enable extra loop)
 }
