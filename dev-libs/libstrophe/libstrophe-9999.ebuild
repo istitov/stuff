@@ -29,6 +29,8 @@ src_prepare() {
 		epatch "${FILESDIR}"/${PN}-build-shared-library.patch
 		epatch "${FILESDIR}"/${PN}-pkg-config-support.patch
 		epatch "${FILESDIR}"/${PN}-preserve-cflags.patch
+		epatch "${FILESDIR}"/${PN}-avoid-null-pointer-dereference.patch
+		epatch "${FILESDIR}"/${PN}-handle-zero-buffer.patch
 		elibtoolize
 		eautoreconf
 }
