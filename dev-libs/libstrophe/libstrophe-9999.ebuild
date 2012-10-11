@@ -28,6 +28,7 @@ src_prepare() {
 		epatch "${FILESDIR}"/${PN}-libxml2-build-fix.patch
 		epatch "${FILESDIR}"/${PN}-build-shared-library.patch
 		epatch "${FILESDIR}"/${PN}-pkg-config-support.patch
+		epatch "${FILESDIR}"/${PN}-preserve-cflags.patch
 		elibtoolize
 		eautoreconf
 }
