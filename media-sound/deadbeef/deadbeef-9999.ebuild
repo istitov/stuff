@@ -30,7 +30,7 @@ LICENSE="GPL-2
 	dumb? ( DUMB-0.9.2 )
 	shn? ( shorten )"
 SLOT="0"
-IUSE="adplug aac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme
+IUSE="adplug aac alac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath mono2stereo
 	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2 infobar
 	zxcvbnp"
@@ -42,6 +42,7 @@ done
 
 RDEPEND="aac? ( media-libs/faad2 )
 	alsa? ( media-libs/alsa-lib )
+	alac? ( media-libs/faad2 )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
 	cover? ( media-libs/imlib2 net-misc/curl )
 	ffmpeg? ( virtual/ffmpeg )
@@ -104,6 +105,7 @@ src_configure() {
 		--docdir=/usr/share/${PN}
 		$(use_enable aac)
 		$(use_enable adplug)
+		$(use_enable alac)
 		$(use_enable alsa)
 		$(use_enable ape ffap)
 		$(use_enable cdda)
