@@ -5,6 +5,7 @@
         <email>pasis.ua@gmail.com</email>
     </maintainer>
     <use>
-        <flag name='xmpp'>Support PPP over Jabber</flag>
+        <flag name='xmpp'>Enable xmpp module (PPP over Jabber)</flag>
+        <flag name='extra'>Enable extra modules</flag>
     </use>
 </pkgmetadata>
