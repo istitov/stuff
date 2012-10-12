@@ -3,6 +3,7 @@
 <pkgmetadata>
     <maintainer>
         <email>pasis.ua@gmail.com</email>
+        <name>Dmitry Podgorny</name>
     </maintainer>
     <use>
         <flag name='xmpp'>Enable xmpp module (PPP over Jabber)</flag>
