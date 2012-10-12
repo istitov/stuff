@@ -4,12 +4,12 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/pasis/libstrophe.git"
+EGIT_REPO_URI="git://github.com/pasis/libcouplet.git"
 
 inherit libtool autotools eutils git-2
 
-DESCRIPTION="A simple, lightweight C library for writing XMPP clients"
-HOMEPAGE="http://strophe.im/libstrophe"
+DESCRIPTION="Fork of libstrophe - a simple, lightweight C library for writing XMPP clients"
+HOMEPAGE=""
 
 LICENSE="MIT GPL-3"
 SLOT="0"
