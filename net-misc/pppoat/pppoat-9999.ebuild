@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="-extra +xmpp"
 
-RDEPEND="xmpp? ( dev-libs/libstrophe )"
+RDEPEND="xmpp? ( dev-libs/libcouplet )"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${P/-/_}"
