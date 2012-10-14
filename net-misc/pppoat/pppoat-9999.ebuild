@@ -17,7 +17,8 @@ KEYWORDS=""
 IUSE="-extra +xmpp"
 
 RDEPEND="xmpp? ( dev-libs/libcouplet )"
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+		dev-util/pkgconfig"
 
 S="${WORKDIR}/${P/-/_}"
 

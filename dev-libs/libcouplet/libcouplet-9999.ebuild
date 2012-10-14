@@ -20,7 +20,8 @@ RDEPEND="xml? ( dev-libs/libxml2 )
 		!xml? ( dev-libs/expat )
 		dev-libs/openssl"
 DEPEND="${RDEPEND}
-		doc? ( app-doc/doxygen )"
+		doc? ( app-doc/doxygen )
+		dev-util/pkgconfig"
 
 S="${WORKDIR}/${P/-/_}"
 
