@@ -18,7 +18,7 @@ IUSE="-extra +xmpp"
 
 RDEPEND="xmpp? ( dev-libs/libcouplet )"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig"
+		virtual/pkgconfig"
 
 S="${WORKDIR}/${P/-/_}"
 
