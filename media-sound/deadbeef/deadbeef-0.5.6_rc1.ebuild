@@ -4,21 +4,13 @@
 
 EAPI="4"
 
-if [[ ${PV} = *9999* ]] ; then
-	EGIT_REPO_URI="git://deadbeef.git.sourceforge.net/gitroot/deadbeef/deadbeef"
-	EGIT_BRANCH="master"
-	GIT_ECLASS="git-2"
-fi
+inherit fdo-mime gnome2-utils versionator
 
-inherit fdo-mime gnome2-utils ${GIT_ECLASS} eutils
+MY_PV="$(replace_version_separator 3 '-')"
 
-if [[ ${PV} = *9999* ]] ; then
-	SRC_URI=""
-	KEYWORDS=""
-else
-	SRC_URI="mirror://sourceforge/${PN}/${PN}-${PV}.tar.bz2"
-	KEYWORDS="~x86 ~amd64"
-fi
+SRC_URI="mirror://sourceforge/${PN}/${PN}-${MY_PV}.tar.bz2
+		 http://sourceforge.net/projects/${PN}/files/${PN}-${MY_PV}.tar.bz2/download -> ${PN}-${MY_PV}.tar.bz2"
+KEYWORDS="~x86 ~amd64"
 
 DESCRIPTION="foobar2k-like music player"
 HOMEPAGE="http://deadbeef.sourceforge.net/"
@@ -32,8 +24,7 @@ LICENSE="GPL-2
 SLOT="0"
 IUSE="adplug aac alac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath mono2stereo
-	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2 infobar
-	zxcvbnp"
+	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2 infobar"
 
 LANGS="be bg bn ca cs da de el en_GB eo es et fa fi fr gl he hr hu id it ja kk km lg lt nb nl pl pt
 		pt_BR ro ru si sk sl sr sr@latin sv te tr ug uk vi zh_CN zh_TW"
@@ -70,6 +61,8 @@ DEPEND="
 	dev-util/intltool
 	${RDEPEND}"
 
+S="${WORKDIR}/${PN}-${MY_PV}"
+
 pkg_setup() {
 	if use psf || use dumb || use shn && use static ; then
 		die "ao/converter/dumb or shn plugins can't be builded statically"
@@ -80,10 +73,6 @@ src_prepare() {
 	if [[ ${PV} = *9999* ]] ; then
 		touch config.rpath
 		sh autogen.sh
-	fi
-
-	if use zxcvbnp;then
-	  epatch "${FILESDIR}"/deadbeef_zxcvbnp.patch
 	fi
 
 	if use midi ; then
