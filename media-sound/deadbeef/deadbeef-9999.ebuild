@@ -77,10 +77,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	if [[ ${PV} = *9999* ]] ; then
-		touch config.rpath
-		sh autogen.sh
-	fi
+	touch config.rpath
+	sh autogen.sh
 
 	if use zxcvbnp;then
 	  epatch "${FILESDIR}"/deadbeef_zxcvbnp.patch
@@ -166,6 +164,7 @@ src_configure() {
 	econf ${my_config}
 }
 pkg_preinst() {
+	use linguas_pt_BR || rm -f "${D}/usr/share/deadbeef/help.pt_BR.txt"
 	gnome2_icon_savelist
 	gnome2_schemas_savelist
 }

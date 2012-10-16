@@ -70,11 +70,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	if [[ ${PV} = *9999* ]] ; then
-		touch config.rpath
-		sh autogen.sh
-	fi
-
 	if use midi ; then
 		# set default gentoo path
 		sed -e 's;/etc/timidity++/timidity-freepats.cfg;/usr/share/timidity/freepats/timidity.cfg;g' \
@@ -155,6 +150,7 @@ src_configure() {
 	econf ${my_config}
 }
 pkg_preinst() {
+	use linguas_pt_BR || rm -f "${D}/usr/share/deadbeef/help.pt_BR.txt"
 	gnome2_icon_savelist
 	gnome2_schemas_savelist
 }
