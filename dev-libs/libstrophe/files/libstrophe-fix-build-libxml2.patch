@@ -1,0 +1,28 @@
+commit 53cdc96a4b79558a2fb1afb1d388070a5cb8a8f1
+Author: Dmitry Podgorny <pasis.ua@gmail.com>
+Date:   Mon Oct 8 12:09:49 2012 +0300
+
+    configure.ac: fix building without libxml2
+    
+    Options --with-libxml2 and --without-libxml2 are broken. libstrophe is
+    always built with libxml2 support. This patch fixes the problem and
+    makes libstrophe be built with expat support by default.
+
+diff --git a/configure.ac b/configure.ac
+index 97444e5..e170fc3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -9,11 +9,9 @@ AC_CHECK_HEADER(openssl/ssl.h, [], [AC_MSG_ERROR([couldn't find openssl headers,
+ PKG_CHECK_MODULES([check], [check >= 0.9.4], [], [AC_MSG_WARN([libcheck not found; unit tests will not be compilable])])
+ 
+ AC_ARG_WITH([libxml2],
+-            [AS_HELP_STRING([--with-libxml2], [use libxml2 for XML parsing])],
+-            [with_libxml2=check],
+-            [with_libxml2=no])
++            [AS_HELP_STRING([--with-libxml2], [use libxml2 for XML parsing])])
+ 
+-if test "x$with_libxml2" != xno; then
++if test "x$with_libxml2" = xyes; then
+   PKG_CHECK_MODULES([libxml2], [libxml-2.0 >= 2.7],
+                     [with_libxml2=yes],
+                     [AC_MSG_ERROR([couldn't find libxml2])])
