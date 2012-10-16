@@ -16,6 +16,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND_COMMON="
+	media-sound/deadbeef[curl]
 	x11-libs/gtk+:2
 	dev-libs/libxml2
 	media-sound/deadbeef[gtk2]"

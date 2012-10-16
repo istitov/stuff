@@ -32,8 +32,7 @@ LICENSE="GPL-2
 SLOT="0"
 IUSE="adplug aac alac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath mono2stereo
-	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2 infobar
-	zxcvbnp"
+	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2 zxcvbnp"
 
 LANGS="be bg bn ca cs da de el en_GB eo es et fa fi fr gl he hr hu id it ja kk km lg lt nb nl pl pt
 		pt_BR ro ru si sk sl sr sr@latin sv te tr ug uk vi zh_CN zh_TW"
@@ -63,8 +62,7 @@ RDEPEND="aac? ( media-libs/faad2 )
 	wavpack? ( media-sound/wavpack )
 	zip? ( dev-libs/libzip
 	sys-libs/zlib )
-	curl? ( net-misc/curl )
-	infobar? ( net-misc/curl )"
+	curl? ( net-misc/curl )"
 
 DEPEND="
 	dev-util/intltool
@@ -117,7 +115,6 @@ src_configure() {
 		$(use_enable gtk2)
 		$(use_enable gtk3)
 		$(use_enable hotkeys)
-		$(use_enable infobar vfs-curl)
 		$(use_enable m3u)
 		$(use_enable midi wildmidi)
 		$(use_enable mms)
