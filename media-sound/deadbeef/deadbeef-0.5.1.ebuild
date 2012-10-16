@@ -21,7 +21,7 @@ LICENSE="GPL-2
 SLOT="0"
 IUSE="adplug aac alsa ao ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme gtk
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath
-	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip infobar"
+	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip"
 
 LANGS="be bg bn ca cs da de el en_GB es fa fi fr gl he hr hu id it ja kk km lg nb nl pl pt_BR pt ru si sk sl sr@latin sr sv te tr uk vi zh_CN zh_TW"
 for lang in ${LANGS}; do
@@ -46,8 +46,7 @@ RDEPEND="aac? ( media-libs/faad2 )
 	src? ( media-libs/libsamplerate )
 	vorbis? ( media-libs/libvorbis )
 	wavpack? ( media-sound/wavpack )
-	zip? ( dev-libs/libzip
-		sys-libs/zlib )"
+	zip? ( dev-libs/libzip sys-libs/zlib )"
 
 DEPEND="${RDEPEND}"
 S="${WORKDIR}/${PN}-${PV}"
@@ -124,11 +123,6 @@ src_configure() {
 			$(use_enable cover-imlib2 artwork-imlib2)
 			$(use_enable curl vfs-curl)
 			$(use_enable lastfm lfm)"
-	fi
-
-	if use infobar; then
-	  my_config="${my_config}
-	  --enable-vfs-curl"
 	fi
 
 	econf ${my_config}

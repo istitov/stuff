@@ -13,7 +13,6 @@
 		<flag name='gtk2'>Build with x11-libs/gtk+:2</flag>
 		<flag name='gtk3'>Build with x11-libs/gtk+:3</flag>
 		<flag name='hotkeys'>Enable hotkeys plugin</flag>
-		<flag name='infobar'>Add support for <pkg>media-sound/deadbeef-infobar</pkg></flag>
 		<flag name='lastfm'>Enable lastfm plugin</flag>
 		<flag name='m3u'>Support for m3u playlists</flag>
 		<flag name='midi'>Add support for midi files</flag>
