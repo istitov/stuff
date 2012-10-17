@@ -32,7 +32,7 @@ LICENSE="GPL-2
 SLOT="0"
 IUSE="adplug aac alac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath mono2stereo
-	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2 zxcvbnp"
+	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2"
 
 LANGS="be bg bn ca cs da de el en_GB eo es et fa fi fr gl he hr hu id it ja kk km lg lt nb nl pl pt
 		pt_BR ro ru si sk sl sr sr@latin sv te tr ug uk vi zh_CN zh_TW"
@@ -68,6 +68,8 @@ DEPEND="
 	dev-util/intltool
 	${RDEPEND}"
 
+QA_TEXTRELS="usr/lib/deadbeef/ffap.so.0.0.0"
+
 pkg_setup() {
 	if use psf || use dumb || use shn && use static ; then
 		die "ao/converter/dumb or shn plugins can't be builded statically"
@@ -78,15 +80,14 @@ src_prepare() {
 	touch config.rpath
 	sh autogen.sh
 
-	if use zxcvbnp;then
-	  epatch "${FILESDIR}"/deadbeef_zxcvbnp.patch
-	fi
-
 	if use midi ; then
 		# set default gentoo path
 		sed -e 's;/etc/timidity++/timidity-freepats.cfg;/usr/share/timidity/freepats/timidity.cfg;g' \
 		-i "${S}/plugins/wildmidi/wildmidiplug.c"
 	fi
+
+	# FDO-standart fix
+	epatch "${FILESDIR}/desktop.patch"
 
 	for lang in ${LANGS};do
 		for x in ${lang};do

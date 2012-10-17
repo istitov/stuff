@@ -29,6 +29,5 @@
 		<flag name='tta'>Build tta plugin</flag>
 		<flag name='vtx'>Libayemy VTX ZX-Spectrum music player plugin</flag>
 		<flag name='zip'>Vfs_zip plugin</flag>
-		<flag name='zxcvbnp'>Disable z,x,c,v,b,n,p buttons for usability adressbar of <pkg>media-sound/deadbeef-fb</pkg></flag>
 	</use>
 </pkgmetadata>
