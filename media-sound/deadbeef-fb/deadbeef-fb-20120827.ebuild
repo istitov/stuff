@@ -16,7 +16,6 @@ KEYWORDS="~x86 ~amd64"
 IUSE="gtk2 gtk3"
 
 DEPEND_COMMON="
-	media-sound/deadbeef[zxcvbnp]
 	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2] )
 	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3] )"
 
