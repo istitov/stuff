@@ -1,35 +1,32 @@
---- orig/deadbeef.desktop.in	2012-10-05 19:35:48.000000000 +0400
-+++ fixed/deadbeef.desktop.in	2012-10-17 20:54:09.000000000 +0400
-@@ -14,27 +14,27 @@
+--- orig/deadbeef.desktop.in	2012-10-18 13:58:43.000000000 +0400
++++ fixed/deadbeef.desktop.in	2012-10-18 13:58:08.000000000 +0400
+@@ -12,29 +12,3 @@
+ Terminal=false
+ Type=Application
  Icon=deadbeef
- 
- X-Ayatana-Desktop-Shortcuts=Play;Pause;Stop;Next;Prev
+-
+-X-Ayatana-Desktop-Shortcuts=Play;Pause;Stop;Next;Prev
 -[Play Shortcut Group]
-+[X-Play Shortcut Group]
- Name=Play
- Exec=deadbeef --play
- TargetEnvironment=Unity
- 
+-Name=Play
+-Exec=deadbeef --play
+-TargetEnvironment=Unity
+-
 -[Pause Shortcut Group]
-+[X-Pause Shortcut Group]
- Name=Pause
- Exec=deadbeef --pause
- TargetEnvironment=Unity
- 
+-Name=Pause
+-Exec=deadbeef --pause
+-TargetEnvironment=Unity
+-
 -[Stop Shortcut Group]
-+[X-Stop Shortcut Group]
- Name=Stop
- Exec=deadbeef --stop
- TargetEnvironment=Unity
- 
+-Name=Stop
+-Exec=deadbeef --stop
+-TargetEnvironment=Unity
+-
 -[Next Shortcut Group]
-+[X-Next Shortcut Group]
- Name=Next
- Exec=deadbeef --next
- TargetEnvironment=Unity
- 
+-Name=Next
+-Exec=deadbeef --next
+-TargetEnvironment=Unity
+-
 -[Prev Shortcut Group]
-+[X-Prev Shortcut Group]
- Name=Prev
- Exec=deadbeef --prev
- TargetEnvironment=Unity
+-Name=Prev
+-Exec=deadbeef --prev
+-TargetEnvironment=Unity

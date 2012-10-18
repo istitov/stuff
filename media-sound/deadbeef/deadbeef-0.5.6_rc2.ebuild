@@ -77,7 +77,7 @@ src_prepare() {
 		-i "${S}/plugins/wildmidi/wildmidiplug.c"
 	fi
 
-	# FDO-standart fix
+	# remove unity trash
 	epatch "${FILESDIR}/desktop.patch"
 
 	for lang in ${LANGS};do
