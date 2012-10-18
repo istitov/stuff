@@ -14,7 +14,7 @@ HOMEPAGE="http://git.gnome.org/browse/vte"
 SRC_URI="${SRC_URI} mirror://gentoo/introspection.m4.bz2"
 
 LICENSE="LGPL-2"
-SLOT="2.90"
+SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc glade +introspection gtk3"
 
