@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit fdo-mime gnome2-utils versionator
+inherit fdo-mime gnome2-utils versionator eutils
 
 MY_PV="$(replace_version_separator 3 '-')"
 
@@ -58,6 +58,9 @@ DEPEND="
 	dev-util/intltool
 	${RDEPEND}"
 S="${WORKDIR}/${PN}-${MY_PV}"
+
+QA_TEXTRELS="usr/lib/deadbeef/ffap.so.0.0.0"
+
 pkg_setup() {
 	if use psf || use dumb || use shn && use static ; then
 		die "ao/converter/dumb or shn plugins can't be builded statically"
@@ -70,10 +73,14 @@ src_prepare() {
 		sed -e 's;/etc/timidity++/timidity-freepats.cfg;/usr/share/timidity/freepats/timidity.cfg;g' \
 			-i "${S}/plugins/wildmidi/wildmidiplug.c"
 	fi
+
+	# remove unity trash
+	epatch "${FILESDIR}/desktop.patch"
+
 	for lang in ${LANGS};do
 	for x in ${lang};do
 	  if ! use linguas_${x}; then
-		rm -f "po/${x}.po"
+		sed -e "s|^${x}$||" -i "po/LINGUAS"
 	  fi
 	done
 	done
@@ -154,6 +161,8 @@ src_configure() {
 }
 
 pkg_preinst() {
+	use linguas_pt_BR || rm -f "${D}/usr/share/deadbeef/help.pt_BR.txt"
+	use linguas_ru || rm -f "${D}/usr/share/deadbeef/help.ru.txt"
 	gnome2_icon_savelist
 	gnome2_schemas_savelist
 }
