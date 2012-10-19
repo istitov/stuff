@@ -9,7 +9,7 @@ EGIT_REPO_URI="git://github.com/metajack/libstrophe.git"
 inherit autotools eutils git-2
 
 DESCRIPTION="A simple, lightweight C library for writing XMPP clients"
-HOMEPAGE=""
+HOMEPAGE="http://strophe.im/libstrophe/"
 
 LICENSE="MIT GPL-3"
 SLOT="0"

@@ -9,7 +9,7 @@ EGIT_REPO_URI="git://github.com/pasis/libcouplet.git"
 inherit libtool autotools eutils git-2
 
 DESCRIPTION="Fork of libstrophe - a simple, lightweight C library for writing XMPP clients"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/pasis/libcouplet"
 
 LICENSE="MIT GPL-3"
 SLOT="0"
