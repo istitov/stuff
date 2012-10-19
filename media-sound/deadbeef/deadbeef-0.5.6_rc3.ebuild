@@ -83,7 +83,7 @@ src_prepare() {
 	for lang in ${LANGS};do
 		for x in ${lang};do
 			if ! use linguas_${x}; then
-				rm -f "po/${x}.po"
+				sed -e "s|^${x}$||" -i "po/LINGUAS"
 			fi
 		done
 	done
@@ -154,6 +154,7 @@ src_configure() {
 }
 pkg_preinst() {
 	use linguas_pt_BR || rm -f "${D}/usr/share/deadbeef/help.pt_BR.txt"
+	use linguas_ru || rm -f "${D}/usr/share/deadbeef/help.ru.txt"
 	gnome2_icon_savelist
 	gnome2_schemas_savelist
 }
