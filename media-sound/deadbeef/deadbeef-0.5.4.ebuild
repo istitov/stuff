@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit fdo-mime gnome2-utils versionator eutils
+inherit fdo-mime gnome2-utils versionator
 
 MY_PV="$(replace_version_separator 3 '-')"
 
