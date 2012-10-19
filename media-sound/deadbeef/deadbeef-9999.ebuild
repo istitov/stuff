@@ -8,7 +8,6 @@ inherit fdo-mime gnome2-utils git-2 eutils
 
 EGIT_REPO_URI="git://deadbeef.git.sourceforge.net/gitroot/deadbeef/deadbeef"
 EGIT_BRANCH="master"
-GIT_ECLASS="git-2"
 
 KEYWORDS=""
 
