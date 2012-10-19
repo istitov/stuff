@@ -4,21 +4,13 @@
 
 EAPI="4"
 
-if [[ ${PV} = *9999* ]] ; then
-	EGIT_REPO_URI="git://deadbeef.git.sourceforge.net/gitroot/deadbeef/deadbeef"
-	EGIT_BRANCH="master"
-	GIT_ECLASS="git-2"
-fi
+inherit fdo-mime gnome2-utils git-2 eutils
 
-inherit fdo-mime gnome2-utils ${GIT_ECLASS} eutils
+EGIT_REPO_URI="git://deadbeef.git.sourceforge.net/gitroot/deadbeef/deadbeef"
+EGIT_BRANCH="master"
+GIT_ECLASS="git-2"
 
-if [[ ${PV} = *9999* ]] ; then
-	SRC_URI=""
-	KEYWORDS=""
-else
-	SRC_URI="mirror://sourceforge/${PN}/${PN}-${PV}.tar.bz2"
-	KEYWORDS="~x86 ~amd64"
-fi
+KEYWORDS=""
 
 DESCRIPTION="foobar2k-like music player"
 HOMEPAGE="http://deadbeef.sourceforge.net/"
@@ -34,8 +26,13 @@ IUSE="adplug aac alac alsa psf ape cdda cover cover-imlib2 dts dumb converter cu
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath mono2stereo
 	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2"
 
+REQUIRED_USE="
+	cover? ( curl )
+	lastfm? ( curl )"
+
 LANGS="be bg bn ca cs da de el en_GB eo es et fa fi fr gl he hr hu id it ja kk km lg lt nb nl pl pt
 		pt_BR ro ru si sk sl sr sr@latin sv te tr ug uk vi zh_CN zh_TW"
+
 for lang in ${LANGS}; do
 	IUSE+=" linguas_${lang}"
 done
@@ -108,6 +105,7 @@ src_configure() {
 		$(use_enable ape ffap)
 		$(use_enable cdda)
 		$(use_enable converter)
+		$(use_enable curl vfs-curl)
 		$(use_enable dts dca)
 		$(use_enable dumb)
 		$(use_enable ffmpeg)
@@ -147,7 +145,6 @@ src_configure() {
 
 	if use cover || use lastfm ; then
 		my_config="${my_config}
-			--enable-vfs-curl
 			$(use_enable cover artwork)
 			$(use_enable cover-imlib2 artwork-imlib2)
 			$(use_enable lastfm lfm)"
@@ -155,7 +152,6 @@ src_configure() {
 		my_config="${my_config}
 			$(use_enable cover artwork)
 			$(use_enable cover-imlib2 artwork-imlib2)
-			$(use_enable curl vfs-curl)
 			$(use_enable lastfm lfm)"
 	fi
 
