@@ -12,7 +12,7 @@ SRC_URI="https://github.com/downloads/boothj5/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="libnotify"
 
 RDEPEND="dev-libs/expat
