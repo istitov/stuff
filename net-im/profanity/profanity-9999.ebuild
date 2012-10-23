@@ -18,7 +18,7 @@ IUSE="libnotify"
 
 RDEPEND="dev-libs/expat
 		dev-libs/glib:2
-		dev-libs/libstrophe
+		dev-libs/libstrophe[-xml]
 		dev-libs/libxml2
 		dev-libs/openssl
 		net-misc/curl
