@@ -14,11 +14,11 @@ HOMEPAGE="http://www.boothj5.com/profanity.shtml"
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS=""
-IUSE="libnotify"
+IUSE="libnotify xml"
 
 RDEPEND="dev-libs/expat
 		dev-libs/glib:2
-		dev-libs/libstrophe[-xml]
+		dev-libs/libstrophe[xml=]
 		dev-libs/libxml2
 		dev-libs/openssl
 		net-misc/curl
@@ -30,4 +30,8 @@ S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
 		eautoreconf
+}
+
+src_configure() {
+		econf $(use_with xml libxml2)
 }

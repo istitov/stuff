@@ -7,5 +7,6 @@
     </maintainer>
     <use>
         <flag name='libnotify'>Enable desktop notifications support</flag>
+        <flag name='xml'>Link with libxml2 instead of expat</flag>
     </use>
 </pkgmetadata>
