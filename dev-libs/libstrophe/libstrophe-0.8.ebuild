@@ -4,6 +4,8 @@
 
 EAPI=4
 
+inherit eutils
+
 DESCRIPTION="A simple, lightweight C library for writing XMPP clients"
 HOMEPAGE="http://strophe.im/libstrophe/"
 SRC_URI="https://github.com/downloads/metajack/${PN}/${P}-snapshot.tar.gz"
@@ -20,6 +22,10 @@ DEPEND="${RDEPEND}
 		doc? ( app-doc/doxygen )"
 
 S="${WORKDIR}/${P}-snapshot"
+
+src_prepare() {
+		epatch "${FILESDIR}"/${PN}-xmpp-conn-disable-tls.patch
+}
 
 src_configure() {
 		use xml && econf $(use_with xml libxml2)
