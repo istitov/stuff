@@ -40,12 +40,11 @@ RDEPEND="aac? ( media-libs/faad2 )
 	alsa? ( media-libs/alsa-lib )
 	alac? ( media-libs/faad2 )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
-	cover? ( media-libs/imlib2 net-misc/curl )
+	cover? ( media-libs/imlib2 )
 	ffmpeg? ( virtual/ffmpeg )
 	flac? ( media-libs/flac )
 	gtk2? ( x11-libs/gtk+:2 )
 	gtk3? ( x11-libs/gtk+:3 )
-	lastfm? ( net-misc/curl )
 	notify? ( sys-apps/dbus )
 	midi? ( media-sound/timidity-freepats )
 	mms? ( media-libs/libmms )
@@ -104,6 +103,8 @@ src_configure() {
 		$(use_enable ape ffap)
 		$(use_enable cdda)
 		$(use_enable converter)
+		$(use_enable cover artwork)
+		$(use_enable cover-imlib2 artwork-imlib2)
 		$(use_enable curl vfs-curl)
 		$(use_enable dts dca)
 		$(use_enable dumb)
@@ -113,6 +114,7 @@ src_configure() {
 		$(use_enable gtk2)
 		$(use_enable gtk3)
 		$(use_enable hotkeys)
+		$(use_enable lastfm lfm)
 		$(use_enable m3u)
 		$(use_enable midi wildmidi)
 		$(use_enable mms)
@@ -141,18 +143,6 @@ src_configure() {
 		$(use_enable vtx)
 		$(use_enable wavpack)
 		$(use_enable zip vfs-zip)"
-
-	if use cover || use lastfm ; then
-		my_config="${my_config}
-			$(use_enable cover artwork)
-			$(use_enable cover-imlib2 artwork-imlib2)
-			$(use_enable lastfm lfm)"
-	else
-		my_config="${my_config}
-			$(use_enable cover artwork)
-			$(use_enable cover-imlib2 artwork-imlib2)
-			$(use_enable lastfm lfm)"
-	fi
 
 	econf ${my_config}
 }
