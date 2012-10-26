@@ -19,6 +19,7 @@ DEPEND="app-shells/bash
 		sys-apps/portage"
 RDEPEND="${DEPEND}
 		app-portage/eix
+		app-portage/portage-utils
 		sys-apps/gawk"
 
 S="${WORKDIR}"
