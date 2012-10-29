@@ -1,0 +1,92 @@
+diff --git a/src/TitleModel.h b/src/TitleModel.h
+index 35c0e99..ae5fe23 100644
+--- a/src/TitleModel.h
++++ b/src/TitleModel.h
+@@ -26,6 +26,8 @@
+ #ifndef TITLEMODEL_H
+ #define TITLEMODEL_H
+ 
++#include <stdint.h>
++
+ #include <QAbstractItemModel>
+ #include <QModelIndex>
+ #include <QVariant>
+diff --git a/src/cdialogfind.h b/src/cdialogfind.h
+index 3ecce2b..b969c4f 100644
+--- a/src/cdialogfind.h
++++ b/src/cdialogfind.h
+@@ -21,6 +21,8 @@
+ #ifndef CDIALOGFIND_H
+ #define CDIALOGFIND_H
+ 
++#include <stdint.h>
++
+ #include <qdialog.h>
+ #include <ui_find_dlg.h>
+ 
+diff --git a/src/cdialogsetdirectory.h b/src/cdialogsetdirectory.h
+index 5911187..73f2d5f 100644
+--- a/src/cdialogsetdirectory.h
++++ b/src/cdialogsetdirectory.h
+@@ -20,6 +20,9 @@
+ 
+ #ifndef CDIALOGSETDIRECTORY_H
+ #define CDIALOGSETDIRECTORY_H
++
++#include <stdint.h>
++
+ #include <QStringList>
+ #include <ui_setdirectory_dlg.h>
+ 
+diff --git a/src/mainwindow.h b/src/mainwindow.h
+index 6adf4a7..98e0d83 100644
+--- a/src/mainwindow.h
++++ b/src/mainwindow.h
+@@ -21,6 +21,8 @@
+ #ifndef MAINWINDOW_H
+ #define MAINWINDOW_H
+ 
++#include <stdint.h>
++
+ #include <QStringList>
+ #include <QMainWindow>
+ #include <QDir>
+diff --git a/src/mdichild.h b/src/mdichild.h
+index 3e39e39..89183db 100644
+--- a/src/mdichild.h
++++ b/src/mdichild.h
+@@ -23,6 +23,8 @@
+     #ifndef MDICHILD_H
+     #define MDICHILD_H
+ 
++#include <stdint.h>
++
+     #include <QSplitter>
+ 
+ #define PARSER_NORMALTEXT 0
+diff --git a/src/qrfceditor.h b/src/qrfceditor.h
+index 829d01f..7ef8444 100644
+--- a/src/qrfceditor.h
++++ b/src/qrfceditor.h
+@@ -21,6 +21,8 @@
+ #ifndef QRFCEDITOR_H
+ #define QRFCEDITOR_H
+ 
++#include <stdint.h>
++
+ #include <qtextbrowser.h>
+ class QStringList;
+ 
+diff --git a/src/rfcloader.h b/src/rfcloader.h
+index 95c2f4d..4fd66f8 100644
+--- a/src/rfcloader.h
++++ b/src/rfcloader.h
+@@ -21,6 +21,8 @@
+ #ifndef RFCLOADER_H
+ #define RFCLOADER_H
+ 
++#include <stdint.h>
++
+ #include <qobject.h>
+ #include <QStringList>
+ #include <QMap>
