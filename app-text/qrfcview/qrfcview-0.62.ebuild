@@ -21,6 +21,7 @@ DEPEND="${RDEPEND}"
 
 src_prepare() {
 		epatch "${FILESDIR}"/${PN}-include-stdint-h.patch
+		epatch "${FILESDIR}"/${PN}-increase-max-rfc-num.patch
 }
 
 src_install() {
