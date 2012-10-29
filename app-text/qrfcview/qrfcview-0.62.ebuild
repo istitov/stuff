@@ -15,7 +15,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND=""
+RDEPEND="x11-libs/qt-core
+		x11-libs/qt-gui"
 DEPEND="${RDEPEND}"
 
 src_prepare() {
