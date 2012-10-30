@@ -14,7 +14,7 @@ inherit ${_inherits} java-pkg-opt-2 libtool toolchain-funcs subversion autotools
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
 HOMEPAGE="http://libjpeg-turbo.virtualgl.org/ http://sourceforge.net/projects/libjpeg-turbo/"
-ESVN_REPO_URI="https://libjpeg-turbo.svn.sourceforge.net/svnroot/libjpeg-turbo/trunk/"
+ESVN_REPO_URI="svn://svn.code.sf.net/p/libjpeg-turbo/code/trunk"
 
 LICENSE="BSD"
 SLOT="0"
