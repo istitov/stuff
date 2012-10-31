@@ -6,6 +6,7 @@
 		<name>Dmitry Podgorny</name>
 	</maintainer>
 	<use>
+		<flag name='doc'>Install doxygen documentation</flag>
 		<flag name='xml'>Use dev-libs/libxml2 to parse XML</flag>
 	</use>
 </pkgmetadata>
