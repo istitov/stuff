@@ -16,7 +16,7 @@ KEYWORDS="-alpha ~amd64 -ppc64 -sparc ~x86"
 IUSE="+gtk2 gtk3"
 
 CDEPEND=""
-DEPEND="gtk3? ( >=dev-libs/libdbusmenu-0.6.1[gtk]
+DEPEND="gtk3? ( || ( >=dev-libs/libdbusmenu-0.6.1[gtk] >=dev-libs/libdbusmenu-0.6.1[gtk3] )
 				x11-libs/gtk+:3[appmenu] )
 		gtk2? ( >=dev-libs/libdbusmenu-0.6.1[gtk]
 				x11-libs/gtk+:2[appmenu] )"
