@@ -54,13 +54,17 @@ src_install(){
 	if use gtk2;then
 	  insinto /usr/$(get_libdir)/gtk-2.0/2.10.0/menuproxies/
 	  doins src/.libs/libappmenu.so
+	  mv 80appmenu appmenu_gtk2.sh
+	  insinto /etc/profile.d/
+	  doins appmenu_gtk2.sh
 	fi
 
 	if use gtk3;then
 	  insinto /usr/$(get_libdir)/gtk-3.0/3.0.0/menuproxies
 	  doins gtk3-hack/src/.libs/libappmenu.so
+	  mv gtk3-hack/80appmenu-gtk3 gtk3-hack/appmenu_gtk3.sh
+	  insinto /etc/profile.d/
+	  doins gtk3-hack/appmenu_gtk3.sh
 	fi
-	mv 80appmenu appmenu.sh
-	insinto /etc/profile.d/
-	doins appmenu.sh
+
 }
