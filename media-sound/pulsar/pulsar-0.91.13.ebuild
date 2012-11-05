@@ -23,8 +23,7 @@ DEPEND="x11-libs/qt-core:4
 	x11-libs/qt-xmlpatterns:4
 	x11-libs/qt-script:4
 	media-libs/qt-gstreamer
-	media-libs/gst-plugins-ugly
-	|| ( x11-libs/qt-phonon:4 kde-base/phonon-kde:4 media-libs/phonon )"
+	media-libs/gst-plugins-ugly"
 RDEPEND=${DEPEND}
 
 IUSE=""
