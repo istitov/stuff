@@ -7,7 +7,7 @@ EAPI=4
 inherit autotools
 
 DESCRIPTION="Ncurses based jabber client inspired by irssi"
-HOMEPAGE="http://www.boothj5.com/profanity.shtml"
+HOMEPAGE="http://www.profanity.im/"
 SRC_URI="https://github.com/downloads/boothj5/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3+"

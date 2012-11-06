@@ -9,7 +9,7 @@ EGIT_REPO_URI="git://github.com/boothj5/profanity.git"
 inherit autotools git-2
 
 DESCRIPTION="Ncurses based jabber client inspired by irssi"
-HOMEPAGE="http://www.boothj5.com/profanity.shtml"
+HOMEPAGE="http://www.profanity.im/"
 
 LICENSE="GPL-3+"
 SLOT="0"
