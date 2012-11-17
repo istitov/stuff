@@ -25,4 +25,5 @@ src_install() {
 src_install() {
 dosbin rfsd || die "Install failed"
 dodoc README.md || die "Install failed"
+dodoc ChangeLog || die "Install failed"
 }
