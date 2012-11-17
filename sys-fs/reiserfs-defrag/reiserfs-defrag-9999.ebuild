@@ -16,7 +16,7 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}"
 src_compile() {
-	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr "${S}"
+	cmake -DCMAKE_INSTALL_PREFIX=/usr "${S}"
 	emake || die "emake failed"
 }
 src_install() {
