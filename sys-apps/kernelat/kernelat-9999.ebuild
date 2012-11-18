@@ -13,10 +13,12 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND="dev-libs/openssl"
+DEPEND="dev-libs/openssl dev-libs/libpww net-libs/zeromq"
 RDEPEND="${DEPEND}"
 src_install() {
+	dosbin kernelat-child/kernelat-child || die "Install failed"
 	dosbin kernelat-spawner/kernelat-spawner || die "Install failed"
-	dosbin kernelat-spawner/kernelat.sh || die "Install failed"
+	dosbin kernelat-tester/kernelat-tester.sh || die "Install failed"
 	dodoc README.md || die "Install failed"
+	dodoc COPYING || die "Install failed"
 }
