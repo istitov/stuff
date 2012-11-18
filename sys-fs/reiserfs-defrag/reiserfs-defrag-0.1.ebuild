@@ -9,7 +9,6 @@ HOMEPAGE="https://github.com/i-rinat/reiserfs-defrag"
 MY_P=${PN}-v${PV}
 SRC_URI="https://github.com/downloads/i-rinat/${PN}/${MY_P}.tar.xz"
 
-
 LICENSE="as-is"
 SLOT="0"
 KEYWORDS=""
@@ -26,7 +25,7 @@ src_install() {
 	make DESTDIR="${D}" install || die "make install failed"
 }
 src_install() {
-dosbin rfsd || die "Install failed"
-dodoc README.md || die "Install failed"
-dodoc ChangeLog || die "Install failed"
+	dosbin rfsd || die "Install failed"
+	dodoc README.md || die "Install failed"
+	dodoc ChangeLog || die "Install failed"
 }

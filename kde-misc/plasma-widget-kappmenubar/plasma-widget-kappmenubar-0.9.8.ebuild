@@ -20,4 +20,4 @@ DEPEND=""
 RDEPEND="${DEPEND}
 	kde-misc/libkappmenu
 	!kde-misc/plasma-widget-menubar
-        dev-libs/qjson"
+	dev-libs/qjson"
