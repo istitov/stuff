@@ -25,12 +25,7 @@ RDEPEND="${DEPEND}
 S="${WORKDIR}"
 
 src_install(){
-	if [ -f "${ROOT}/etc/portconf.conf" ];then
-		mkdir "${D}/etc"
-		cp "${ROOT}/etc/portconf.conf" "${D}/etc/portconf.conf"
-	else
-	  insinto /etc/
-	  doins "portconf.conf"
-	fi
+	insinto /etc/
+	newins portconf.conf portconf.conf
 	dosbin portconf
 }
