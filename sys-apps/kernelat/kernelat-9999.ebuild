@@ -15,7 +15,7 @@ IUSE=""
 
 DEPEND="dev-libs/openssl
 dev-libs/libpww
->=net-libs/zeromq-3"
+net-libs/zeromq"
 RDEPEND="${DEPEND}"
 src_compile() {
 	cmake -DCMAKE_INSTALL_PREFIX=/usr "${S}"
