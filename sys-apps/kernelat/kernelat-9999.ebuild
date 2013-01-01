@@ -13,7 +13,8 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND="dev-libs/openssl dev-libs/libpww net-libs/zeromq"
+DEPEND="dev-libs/openssl dev-libs/libpww
+>=net-libs/zeromq-3"
 RDEPEND="${DEPEND}"
 src_install() {
 	dosbin kernelat-child/kernelat-child || die "Install failed"
