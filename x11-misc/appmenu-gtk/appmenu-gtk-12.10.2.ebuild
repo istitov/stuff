@@ -18,7 +18,7 @@ IUSE="+gtk2 gtk3"
 CDEPEND=""
 DEPEND="gtk3? ( || ( >=dev-libs/libdbusmenu-0.6.1[gtk] >=dev-libs/libdbusmenu-0.6.1[gtk3] )
 				x11-libs/gtk+:3[appmenu] )
-		gtk2? ( >=dev-libs/libdbusmenu-0.6.1[gtk]
+		gtk2? ( >=dev-libs/libdbusmenu-0.6.1[gtk2]
 				x11-libs/gtk+:2[appmenu] )"
 RDEPEND="${DEPEND}"
 
