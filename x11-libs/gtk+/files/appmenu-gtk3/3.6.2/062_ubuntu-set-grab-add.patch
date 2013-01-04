@@ -1,0 +1,42 @@
+Index: gtk+-3.6.0/gtk/gtk.symbols
+===================================================================
+--- gtk+-3.6.0.orig/gtk/gtk.symbols	2012-09-25 11:55:59.176154117 +1200
++++ gtk+-3.6.0/gtk/gtk.symbols	2012-09-25 11:56:02.512154085 +1200
+@@ -3974,6 +3974,7 @@
+ gtk_wrap_mode_get_type
+ ubuntu_gtk_menu_shell_activate_mnemonic
+ ubuntu_gtk_menu_shell_activate_first
++ubuntu_gtk_widget_set_has_grab
+ ubuntu_menu_proxy_activate_menu
+ ubuntu_menu_proxy_get_type
+ ubuntu_menu_proxy_get
+Index: gtk+-3.6.0/gtk/gtkwidget.c
+===================================================================
+--- gtk+-3.6.0.orig/gtk/gtkwidget.c	2012-09-19 03:34:43.000000000 +1200
++++ gtk+-3.6.0/gtk/gtkwidget.c	2012-09-25 11:56:02.516154085 +1200
+@@ -14140,3 +14140,11 @@
+   else
+     g_action_muxer_remove (muxer, name);
+ }
++
++void
++ubuntu_gtk_widget_set_has_grab (GtkWidget *widget,
++                                gboolean   has_grab)
++{
++  _gtk_widget_set_has_grab (widget, has_grab);
++}
++ 
+Index: gtk+-3.6.0/gtk/gtkwidget.h
+===================================================================
+--- gtk+-3.6.0.orig/gtk/gtkwidget.h	2012-09-19 03:34:43.000000000 +1200
++++ gtk+-3.6.0/gtk/gtkwidget.h	2012-09-25 11:56:02.516154085 +1200
+@@ -891,6 +891,9 @@
+                                                                          const gchar  *name,
+                                                                          GActionGroup *group);
+ 
++void   ubuntu_gtk_widget_set_has_grab  (GtkWidget *widget,
++                                        gboolean   has_grab);
++
+ G_END_DECLS
+ 
+ #endif /* __GTK_WIDGET_H__ */

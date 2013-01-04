@@ -59,6 +59,9 @@ src_install(){
 	dosym /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0.0.${MY_PV} /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0
 	fi
 
+	if use gtk3;then
+	mv gtk3-hack/data/81overlay-scrollbar data/overlay-scrollbar.sh
+	fi
 	mv data/81overlay-scrollbar data/overlay-scrollbar.sh
 	insinto /etc/profile.d/
 	doins data/overlay-scrollbar.sh
