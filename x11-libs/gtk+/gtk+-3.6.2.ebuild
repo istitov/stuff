@@ -96,6 +96,7 @@ strip_builddir() {
 src_prepare() {
 	if use appmenu;then
 		for patch in $(cat "${FILESDIR}/appmenu-gtk3/${PV}/series" | grep -v \# ); do
+			[[ "${patch}" == "043_ubuntu_menu_proxy.patch" ]] && patch="043_ubuntu_menu_proxy.patch.bz2"
 			PATCHES+=( "${FILESDIR}/appmenu-gtk3/${PV}/${patch}" )
 		done
 		base_src_prepare
