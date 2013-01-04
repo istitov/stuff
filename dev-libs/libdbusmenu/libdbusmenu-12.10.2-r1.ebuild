@@ -76,7 +76,7 @@ src_configure() {
 src_test() { :; } #440192
 
 src_compile(){
-	if use gtk3;then
+	if use gtk;then
 		emake
 	fi
 
