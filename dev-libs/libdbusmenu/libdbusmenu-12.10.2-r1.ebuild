@@ -76,7 +76,10 @@ src_configure() {
 src_test() { :; } #440192
 
 src_compile(){
-	emake
+	if use gtk3;then
+		emake
+	fi
+
 	if use gtk2;then
 		cd gtk2-hack
 		emake
@@ -84,8 +87,10 @@ src_compile(){
 }
 
 src_install() {
-	emake -j1 DESTDIR="${D}" install
-	dodoc AUTHORS ChangeLog README
+	if use gtk;then
+		emake -j1 DESTDIR="${D}" install
+		dodoc AUTHORS ChangeLog README
+	fi
 
 	local a b
 	for a in ${PN}-{glib,gtk}; do
@@ -98,7 +103,6 @@ src_install() {
 	if use gtk2;then
 		cd gtk2-hack
 		emake -j1 DESTDIR="${D}" install
-
 		prune_libtool_files
 	fi
 }
