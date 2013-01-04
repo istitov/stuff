@@ -21,5 +21,7 @@
 	<flag name="appmenu">Add support for ubuntu global menu</flag>
 	<flag name="overlay">Add support for ubuntu overlay scrollbars</flag>
 	<flag name="wayland">Enable <pkg>dev-libs/wayland</pkg> backend</flag>
+	<flag name="egl">Use EGL surfaces and Cairo GL in the wayland
+	  backend. This flag has no effect on X or aqua backends.</flag>
   </use>
 </pkgmetadata>
