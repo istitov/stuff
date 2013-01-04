@@ -4,27 +4,24 @@
 
 EAPI=4
 
-inherit autotools
-
 DESCRIPTION="Ncurses based jabber client inspired by irssi"
 HOMEPAGE="http://www.profanity.im/"
-SRC_URI="https://github.com/downloads/boothj5/${PN}/${P}.tar.gz"
+SRC_URI="http://www.profanity.im/${P}.tar.gz"
 
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="libnotify"
+IUSE="libnotify xml xscreensaver"
 
-RDEPEND="dev-libs/expat
-		dev-libs/glib:2
-		dev-libs/libstrophe
-		dev-libs/libxml2
+RDEPEND="dev-libs/glib:2
+		dev-libs/libstrophe[xml=]
 		dev-libs/openssl
 		net-misc/curl
 		sys-libs/ncurses
+		xscreensaver? ( x11-libs/libXScrnSaver )
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}"
 
-src_prepare() {
-		eautoreconf
+src_configure() {
+		econf $(use_with xml libxml2)
 }
