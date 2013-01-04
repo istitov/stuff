@@ -14,15 +14,14 @@ HOMEPAGE="http://www.profanity.im/"
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS=""
-IUSE="libnotify xml"
+IUSE="libnotify xml xscreensaver"
 
-RDEPEND="dev-libs/expat
-		dev-libs/glib:2
+RDEPEND="dev-libs/glib:2
 		dev-libs/libstrophe[xml=]
-		dev-libs/libxml2
 		dev-libs/openssl
 		net-misc/curl
 		sys-libs/ncurses
+		xscreensaver? ( x11-libs/libXScrnSaver )
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}"
 
