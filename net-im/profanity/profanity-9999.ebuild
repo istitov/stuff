@@ -32,5 +32,8 @@ src_prepare() {
 }
 
 src_configure() {
-		econf $(use_with xml libxml2)
+		econf \
+			$(use_enable libnotify notifications) \
+			$(use_with xml libxml2) \
+			$(use_with xscreensaver)
 }
