@@ -20,7 +20,8 @@ DEPEND="virtual/linux-sources
 		sys-apps/gawk
 		sys-apps/portage"
 RDEPEND="${DEPEND}
-	parallel? ( sys-process/parallel )"
+	parallel? ( sys-process/parallel )
+	<sys-apps/file-5.12"
 
 src_install(){
 	if ! use parallel;then

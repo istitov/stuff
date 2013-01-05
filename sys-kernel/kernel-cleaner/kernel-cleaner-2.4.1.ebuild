@@ -20,7 +20,8 @@ DEPEND="virtual/linux-sources
 		sys-apps/portage
 		sys-apps/gawk"
 RDEPEND="${DEPEND}
-	parallel? ( sys-process/parallel )"
+	parallel? ( sys-process/parallel )
+	<sys-apps/file-5.12"
 
 S="${WORKDIR}"
 
