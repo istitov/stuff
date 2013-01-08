@@ -1,0 +1,83 @@
+From 567bbeb4c639aa55bfe4cb70919623f1931b9357 Mon Sep 17 00:00:00 2001
+From: Didier Roche <didrocks@ubuntu.com>
+Date: Fri, 8 Oct 2010 18:54:44 +0200
+Subject: [PATCH] Add gtk_range_get_event_window to get the event_window for a GtkRange
+
+This is useful when you try to build your own widget based on GtkRange and then,
+should access to the GdkWindow.
+---
+ docs/reference/gtk/gtk3-sections.txt |    1 +
+ gtk/gtk.symbols                      |    1 +
+ gtk/gtkrange.c                       |   19 +++++++++++++++++++
+ gtk/gtkrange.h                       |    1 +
+ 4 files changed, 22 insertions(+), 0 deletions(-)
+
+Bug-Debian: https://bugzilla.gnome.org/show_bug.cgi?id=631695
+
+Index: gtk+-3.6.0/docs/reference/gtk/gtk3-sections.txt
+===================================================================
+--- gtk+-3.6.0.orig/docs/reference/gtk/gtk3-sections.txt	2012-09-25 10:55:42.000000000 +1200
++++ gtk+-3.6.0/docs/reference/gtk/gtk3-sections.txt	2012-09-25 11:56:06.296154049 +1200
+@@ -2634,6 +2634,7 @@
+ gtk_range_get_slider_size_fixed
+ gtk_range_set_min_slider_size
+ gtk_range_set_slider_size_fixed
++gtk_range_get_event_window
+ 
+ <SUBSECTION Standard>
+ GTK_RANGE
+Index: gtk+-3.6.0/gtk/gtk.symbols
+===================================================================
+--- gtk+-3.6.0.orig/gtk/gtk.symbols	2012-09-25 11:56:02.512154085 +1200
++++ gtk+-3.6.0/gtk/gtk.symbols	2012-09-25 11:56:06.296154049 +1200
+@@ -2166,6 +2166,7 @@
+ gtk_radio_tool_button_new_with_stock_from_widget
+ gtk_radio_tool_button_set_group
+ gtk_range_get_adjustment
++gtk_range_get_event_window
+ gtk_range_get_fill_level
+ gtk_range_get_flippable
+ gtk_range_get_inverted
+Index: gtk+-3.6.0/gtk/gtkrange.c
+===================================================================
+--- gtk+-3.6.0.orig/gtk/gtkrange.c	2012-09-19 03:34:42.000000000 +1200
++++ gtk+-3.6.0/gtk/gtkrange.c	2012-09-25 11:56:06.296154049 +1200
+@@ -4174,6 +4174,26 @@
+   return range->priv->has_origin;
+ }
+ 
++/**
++ * gtk_range_get_event_window:
++ * @range: a #GtkRange
++ *
++ * Returns the range's event window if it is realized, %NULL otherwise.
++ * This function should be rarely needed.
++ *
++ * Return value: (transfer none): @range's event window.
++ *
++ * Since: 2.24
++ */
++GdkWindow*
++gtk_range_get_event_window (GtkRange *range)
++{
++  g_return_val_if_fail (GTK_IS_RANGE (range), NULL);
++  GtkRangePrivate *priv = range->priv;
++
++  return priv->event_window;
++}
++
+ void
+ _gtk_range_set_stop_values (GtkRange *range,
+                             gdouble  *values,
+Index: gtk+-3.6.0/gtk/gtkrange.h
+===================================================================
+--- gtk+-3.6.0.orig/gtk/gtkrange.h	2012-09-19 03:34:42.000000000 +1200
++++ gtk+-3.6.0/gtk/gtkrange.h	2012-09-25 11:56:06.296154049 +1200
+@@ -143,6 +143,7 @@
+ void               gtk_range_set_round_digits              (GtkRange      *range,
+                                                             gint           round_digits);
+ gint                gtk_range_get_round_digits              (GtkRange      *range);
++GdkWindow*         gtk_range_get_event_window              (GtkRange      *range);
+ 
+ /* internal API */
+ gdouble            _gtk_range_get_wheel_delta              (GtkRange       *range,
