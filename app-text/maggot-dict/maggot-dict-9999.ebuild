@@ -30,3 +30,11 @@ src_prepare() {
 src_install() {
 	emake DESTDIR="${D}" install
 }
+
+pkg_postinst() {
+	elog "To enable command-line completion for ${PN}, run:"
+	elog "  eselect bashcomp enable maggot-dict-cli"
+	elog "to install locally, or"
+	elog "  eselect bashcomp enable --global maggot-dict-cli"
+	elog "to install system-wide."
+}
