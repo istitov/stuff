@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="A simple, lightweight C library for writing XMPP clients"
 HOMEPAGE="http://strophe.im/libstrophe/"
-SRC_URI="https://github.com/downloads/metajack/${PN}/${P}-snapshot.tar.gz"
+SRC_URI="mirror://github/metajack/${PN}/${P}-snapshot.tar.gz"
 
 LICENSE="MIT GPL-3"
 SLOT="0"

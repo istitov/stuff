@@ -5,7 +5,7 @@
 EAPI=4
 
 inherit qt4-r2
-SRC_URI="https://github.com/downloads/pasis/${PN}/${P}.tar.gz"
+SRC_URI="mirror://github/pasis/${PN}/${P}.tar.gz"
 
 DESCRIPTION="Environment for executing and debugging Markov algorithm"
 HOMEPAGE="https://github.com/pasis/fvm2"
