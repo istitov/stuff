@@ -24,6 +24,7 @@ RDEPEND="${DEPEND} app-shells/bash-completion"
 
 src_prepare() {
 	git submodule update --init --recursive
+	sed 's|completions||g' -i Makefile
 }
 
 src_install() {
