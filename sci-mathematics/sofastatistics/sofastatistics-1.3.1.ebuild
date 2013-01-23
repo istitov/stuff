@@ -17,7 +17,7 @@ IUSE=""
 DEPEND="dev-lang/python:2.7[sqlite]
 		>=dev-python/wxpython-2.8.11.0
 		>=dev-python/numpy-1.5.1
-		>=dev-python/pysqlite-2.6.3
+		dev-python/pysqlite
 		>=dev-python/mysql-python-1.2.3
 		>=dev-db/pygresql-3.8.1
 		dev-python/matplotlib

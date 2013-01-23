@@ -41,7 +41,7 @@ done
 RDEPEND="aac? ( media-libs/faad2 )
 	alsa? ( media-libs/alsa-lib )
 	alac? ( media-libs/faad2 )
-	cdda? ( dev-libs/libcdio media-libs/libcddb )
+	cdda? ( >=dev-libs/libcdio-0.90 media-libs/libcddb )
 	cover? ( media-libs/imlib2 )
 	ffmpeg? ( virtual/ffmpeg )
 	flac? ( media-libs/flac )
