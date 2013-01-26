@@ -6,7 +6,7 @@ EAPI=3
 
 DESCRIPTION="Appmenu support for Firefox"
 HOMEPAGE="https://code.launchpad.net/~extension-hackers/globalmenu-extension"
-UBUNTU_VER="12.10.3"
+UBUNTU_VER="12.10.1"
 UBUNTU_BUILD="build1"
 SRC_URI="( x86? ( mirror://ubuntu/pool/main/f/firefox/firefox-globalmenu_${PV}+${UBUNTU_BUILD}-0ubuntu0.${UBUNTU_VER}_i386.deb )
 		 amd64? ( mirror://ubuntu/pool/main/f/firefox/firefox-globalmenu_${PV}+${UBUNTU_BUILD}-0ubuntu0.${UBUNTU_VER}_amd64.deb )
