@@ -1,0 +1,21 @@
+Index: latex2rtf-2.3.1/doc/Makefile
+===================================================================
+--- latex2rtf-2.3.1.orig/doc/Makefile
++++ latex2rtf-2.3.1/doc/Makefile
+@@ -25,14 +25,14 @@ latex2rt.txt: latex2rtf.1
+ 	nroff -man <latex2rtf.1 | perl -pe 's/.\x08//g' > latex2rt.txt
+ 
+ web/manpage.html: header.html footer.html latex2rtf.1
+-	man ./latex2rtf.1 | man2html --pgsize=100000 --bare > mid.html
++	man -Hcat ./latex2rtf.1 > mid.html
+ 	perl -pi.bak -e 's/^ {3}//' mid.html
+ 	cat header.html mid.html footer.html > man.html
+ 	sed "s/HHTITLEHH/latex2rtf: man page/" man.html > web/manpage.html
+ 	rm mid.html mid.html.bak man.html
+ 
+ web/latex2png.html: header.html footer.html latex2png.1
+-	man ./latex2png.1 | man2html --pgsize=100000 --bare > mid.html
++	man -Hcat ./latex2png.1 > mid.html
+ 	perl -pi.bak -e 's/^ {3}//' mid.html
+ 	cat header.html mid.html footer.html > man.html
+ 	sed "s/HHTITLEHH/latex2rtf: man mage/" man.html > web/latex2png.html
