@@ -18,7 +18,7 @@ IUSE="gtk2 gtk3"
 
 DEPEND="
 	x11-misc/appmenu-qt
-	kde-base/systemsettings[appmenu]
+	<kde-base/systemsettings-4.10[appmenu]
 	gtk2? ( x11-misc/appmenu-gtk[gtk2] )
 	gtk3? ( x11-misc/appmenu-gtk[gtk3] )"
 RDEPEND="
