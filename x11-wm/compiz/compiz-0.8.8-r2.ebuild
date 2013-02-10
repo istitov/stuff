@@ -90,6 +90,7 @@ src_prepare() {
 	if use kde; then
 	  $(has_version ">=kde-base/kwin-4.8") && $(has_version "<kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.8.patch
 	  $(has_version ">=kde-base/kwin-4.9") && epatch "${FILESDIR}"/${PN}-kde-4.9.patch
+	  $(has_version ">=kde-base/kwin-4.10") && epatch "${FILESDIR}"/${PN}-kde-4.10.patch
 	fi
 	eautoreconf
 }
