@@ -43,7 +43,7 @@ src_configure() {
 		--disable-static \
 		--disable-silent-rules \
 		--disable-scrollkeeper \
-		$(use_enable gtk) \
+		--enable-gtk \
 		--disable-dumper \
 		--disable-tests \
 		$(use_enable introspection) \
@@ -62,7 +62,7 @@ src_configure() {
 			--disable-static \
 			--disable-silent-rules \
 			--disable-scrollkeeper \
-			$(use_enable gtk) \
+			--enable-gtk \
 			--disable-dumper \
 			--disable-tests \
 			$(use_enable introspection) \
@@ -98,11 +98,11 @@ src_install() {
 		[[ -d ${ED}/${b} ]] && dosym ${b} /usr/share/gtk-doc/html/${a}
 	done
 
-	prune_libtool_files
-
 	if use gtk2;then
 		cd gtk2-hack
 		emake -j1 DESTDIR="${D}" install
 		prune_libtool_files
 	fi
+
+	prune_libtool_files
 }
