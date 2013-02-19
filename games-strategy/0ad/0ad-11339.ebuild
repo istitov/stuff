@@ -14,7 +14,7 @@ HOMEPAGE="http://wildfiregames.com/0ad/"
 SRC_URI="mirror://sourceforge/zero-ad/${MY_P}-unix-build.tar.xz
 	mirror://sourceforge/zero-ad/${MY_P}-unix-data.tar.xz"
 
-LICENSE="GPL-2 CCPL-Attribution-ShareAlike-3.0"
+LICENSE="GPL-2 CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="debug editor pch test" #nvtt
