@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -41,7 +41,7 @@ RDEPEND="aac? ( media-libs/faad2 )
 	alac? ( media-libs/faad2 )
 	cdda? ( >=dev-libs/libcdio-0.90 media-libs/libcddb )
 	cover? ( media-libs/imlib2 )
-	ffmpeg? ( virtual/ffmpeg )
+	ffmpeg? ( || ( media-video/libav <media-video/ffmpeg-1.0.4 ) )
 	flac? ( media-libs/flac )
 	gtk2? ( x11-libs/gtk+:2 )
 	gtk3? ( x11-libs/gtk+:3 )
