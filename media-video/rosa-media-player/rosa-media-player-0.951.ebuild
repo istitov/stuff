@@ -22,8 +22,8 @@ done
 RDEPEND="media-video/mplayer"
 DEPEND="${RDEPEND}
 	dev-libs/glib
-	x11-libs/qt-core:4
-	x11-libs/qt-gui:4"
+	dev-qt/qtcore:4
+	dev-qt/qtgui:4"
 
 src_compile() {
 	sed -i '1i#define OF(x) x' \

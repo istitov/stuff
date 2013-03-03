@@ -27,7 +27,7 @@ DEPEND="dev-libs/boost
 		media-libs/tiff
 		sys-libs/zlib
 		viewer? ( media-libs/glew
-				 x11-libs/qt-opengl
+				 dev-qt/qtopengl
 		)"
 
 RDEPEND="${DEPEND}"

@@ -22,10 +22,10 @@ DEPEND="virtual/ffmpeg
 	media-libs/glew
 	media-libs/libsdl
 	media-libs/opencv
-	x11-libs/qt-opengl
-	x11-libs/qt-script
-	x11-libs/qt-test
-	x11-libs/qt-xmlpatterns
+	dev-qt/qtopengl
+	dev-qt/qtscript
+	dev-qt/qttest
+	dev-qt/qtxmlpatterns
 	virtual/jpeg"
 
 RDEPEND="${DEPEND}"

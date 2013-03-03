@@ -17,7 +17,7 @@ SLOT="4"
 KEYWORDS=""
 IUSE="debug"
 
-DEPEND=">=x11-libs/qt-declarative-4.7.4
+DEPEND=">=dev-qt/qtdeclarative-4.7.4
 "
 
 RDEPEND="${DEPEND}"

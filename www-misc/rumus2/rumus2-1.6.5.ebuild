@@ -15,9 +15,9 @@ SLOT="0"
 KEYWORDS="-* ~x86"
 IUSE=""
 
-DEPEND_COMMON="x11-libs/qt-webkit:4
-			   x11-libs/qt-core:4
-			   x11-libs/qt-gui:4
+DEPEND_COMMON="dev-qt/qtwebkit:4
+			   dev-qt/qtcore:4
+			   dev-qt/qtgui:4
 			   amd64? ( app-emulation/emul-linux-x86-qtlibs )"
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"

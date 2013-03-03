@@ -17,7 +17,7 @@ DEPEND="
 dev-perl/XML-Twig
 app-arch/p7zip
 dev-lang/perl
->=x11-libs/qt-svg-4.6"
+>=dev-qt/qtsvg-4.6"
 RDEPEND="${DEPEND}"
 src_configure() {
 qmake \"PREFIX+="${D}"\"

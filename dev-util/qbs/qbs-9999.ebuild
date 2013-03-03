@@ -14,8 +14,8 @@ SLOT="0"
 KEYWORDS=""
 IUSE="debug"
 
-RDEPEND="x11-libs/qt-core
-	x11-libs/qt-script"
+RDEPEND="dev-qt/qtcore
+	dev-qt/qtscript"
 DEPEND="${RDEPEND}"
 
 src_install() {

@@ -17,8 +17,8 @@ IUSE=""
 
 DEPEND_COMMON="
 		kde-base/kdelibs
-		>=x11-libs/qt-gui-4.7.0
-		>=x11-libs/qt-core-4.7.0
+		>=dev-qt/qtgui-4.7.0
+		>=dev-qt/qtcore-4.7.0
 	"
 RDEPEND="
 	${DEPEND_COMMON}

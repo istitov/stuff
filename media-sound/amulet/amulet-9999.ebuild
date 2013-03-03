@@ -15,6 +15,6 @@ SLOT="0"
 KEYWORDS=""
 IUSE="mp3"
 DEPEND="|| ( mp3? ( virtual/ffmpeg[mp3] ) virtual/ffmpeg )
-		x11-libs/qt-gui:4
-		x11-libs/qt-core:4"
+		dev-qt/qtgui:4
+		dev-qt/qtcore:4"
 S="${WORKDIR}/${PN}"

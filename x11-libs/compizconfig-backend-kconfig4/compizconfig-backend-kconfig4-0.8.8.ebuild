@@ -15,6 +15,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE=""
 
-DEPEND="x11-libs/qt-dbus:4
+DEPEND="dev-qt/qtdbus:4
 	>=x11-libs/libcompizconfig-${PV}
 	>=x11-wm/compiz-${PV}"
