@@ -6,7 +6,7 @@ EAPI=4
 
 inherit eutils git-2
 
-DESCRIPTION="Disigned for remove broken kernels from /boot and source_dirs/modules_dirs"
+DESCRIPTION="Designed for remove broken kernels from /boot and source_dirs/modules_dirs"
 HOMEPAGE="https://github.com/megabaks/kernel-cleaner"
 EGIT_REPO_URI="git://github.com/megabaks/${PN}.git"
 

@@ -6,7 +6,7 @@ EAPI=4
 
 inherit eutils
 
-DESCRIPTION="Disigned for remove broken kernels from /boot and source_dirs/modules_dirs"
+DESCRIPTION="Designed for remove broken kernels from /boot and source_dirs/modules_dirs"
 HOMEPAGE="https://github.com/megabaks/kernel-cleaner"
 SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${P}.tar.gz"
 
