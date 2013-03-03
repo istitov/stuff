@@ -88,19 +88,19 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.14.3-limit-gtksignal-includes.patch"
 
 	# fix building with gir #372953, upstream bug #642085
-	epatch "${FILESDIR}"/${PN}-2.24.7-darwin-quartz-introspection.patch
+	epatch "${FILESDIR}/${PN}-2.24.7-darwin-quartz-introspection.patch"
 
 	# marshalers code was pre-generated with glib-2.31, upstream bug #671763
 	rm -v gdk/gdkmarshalers.c gtk/gtkmarshal.c gtk/gtkmarshalers.c \
 		perf/marshalers.c || die
 
 	if use appmenu;then
-	epatch ${FILESDIR}/appmenu/fix.patch
-	epatch ${FILESDIR}/${PV}/*
+	epatch "${FILESDIR}"/appmenu/fix.patch
+	epatch "${FILESDIR}/${PV}"/*
 	fi
 
 	if use overlay;then
-	epatch ${FILESDIR}/${PV}/scroll/100_overlay_scrollbar_loading.patch
+	epatch "${FILESDIR}/${PV}/scroll/100_overlay_scrollbar_loading.patch"
 	fi
 
 	# Stop trying to build unmaintained docs, bug #349754
