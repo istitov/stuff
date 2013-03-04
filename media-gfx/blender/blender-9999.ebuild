@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.1 2012/12/06 20:25:23 brothermechanic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.2 2013/03/04 16:09:45 brothermechanic Exp $
 
 EAPI=4
 
@@ -42,7 +42,8 @@ for X in ${LANGS} ; do
 	REQUIRED_USE+=" linguas_${X}? ( nls )"
 done
 
-DEPEND="virtual/jpeg
+DEPEND=">=dev-lang/python-3.3.0-r1
+	virtual/jpeg
 	media-libs/libpng:0
 	x11-libs/libXi
 	x11-libs/libX11
@@ -52,11 +53,11 @@ DEPEND="virtual/jpeg
 	>=media-libs/freetype-2.0
 	media-libs/glew
 	dev-cpp/eigen:3
-	>=sci-physics/bullet-2.78[-double-precision]
+	>=sci-physics/bullet-2.80[-double-precision]
 	sys-libs/zlib
 	cycles? (
-		ocio? ( =media-gfx/opencolorio-9999 )
-		=media-libs/openimageio-9999
+		ocio? ( >=media-libs/opencolorio-1.0.8 )
+		>=media-libs/openimageio-1.1.5[pugixml]
 		>=dev-libs/boost-1.52.0[threads(+)]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
 		osl? ( =media-gfx/osl-9999 )
@@ -73,7 +74,7 @@ DEPEND="virtual/jpeg
 	jack? (	media-sound/jack-audio-connection-kit )
 	sndfile? ( media-libs/libsndfile )
 	collada? ( media-libs/opencollada )
-	cuda? ( =dev-util/nvidia-cuda-toolkit-4.2 )
+	cuda? ( >=dev-util/nvidia-cuda-toolkit-4.2 )
 	ndof? ( dev-libs/libspnav )
 	doc? ( dev-python/sphinx )"
 

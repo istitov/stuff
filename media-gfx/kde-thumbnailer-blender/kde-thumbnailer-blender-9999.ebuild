@@ -1,16 +1,18 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI=4
 
-inherit cmake-utils git
-
-DESCRIPTION="create thumbnails for blend files in KDE"
-HOMEPAGE="https://github.com/kayosiii/kde-thumbnailer-blender"
 EGIT_REPO_URI="https://github.com/kayosiii/kde-thumbnailer-blender.git"
 
-LICENSE="BSD"
+inherit cmake-utils eutils git-2 kde4-base
+
+
+DESCRIPTION="to create thumbnails for blend files in KDE"
+HOMEPAGE="https://github.com/kayosiii/kde-thumbnailer-blender"
+
+LICENSE="GPL-3"
 
 SLOT="0"
 
@@ -27,6 +29,5 @@ src_configure() {
 }
 
 src_install() {
-	cmake-utils_src_install || die
-
+	cmake-utils_src_install
 }

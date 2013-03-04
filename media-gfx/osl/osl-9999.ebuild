@@ -1,6 +1,6 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/osl/osl-9999.ebuild,v 1.1 2012/12/06 20:49:23 brothermechanic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/osl/osl-9999.ebuild,v 1.1 2013/03/04 16:11:23 brothermechanic Exp $
 
 EAPI=4
 
@@ -17,8 +17,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="test"
 
 DEPEND="
-	dev-libs/boost
-	media-libs/openimageio
+	>=dev-libs/boost-1.52.0
+	media-libs/openimageio[pugixml]
 	sys-devel/clang
 	sys-devel/bison
 	sys-devel/flex
