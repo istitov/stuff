@@ -6,7 +6,7 @@ EAPI=4
 
 EGIT_REPO_URI="https://github.com/kayosiii/kde-thumbnailer-blender.git"
 
-inherit cmake-utils eutils git-2 kde4-base
+inherit cmake-utils eutils git-2
 
 
 DESCRIPTION="to create thumbnails for blend files in KDE"
