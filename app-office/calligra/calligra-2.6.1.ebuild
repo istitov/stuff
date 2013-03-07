@@ -83,7 +83,7 @@ RDEPEND="
 	$(add_kdebase_dep knewstuff)
 	media-libs/libpng
 	sys-libs/zlib
-	>=xdev-qt/qtgui-4.8.4-r1:4
+	>=dev-qt/qtgui-4.8.4-r1:4
 	virtual/libiconv
 	attica? ( dev-libs/libattica )
 	crypt? ( app-crypt/qca:2 )
