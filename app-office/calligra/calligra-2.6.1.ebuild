@@ -8,7 +8,7 @@
 
 EAPI=5
 
-EGIT_BRANCH="calligra/2.5"
+EGIT_BRANCH="calligra/2.6"
 
 KDE_MINIMAL=4.6.4
 QT_MINIMAL=4.8.1
@@ -83,7 +83,7 @@ RDEPEND="
 	$(add_kdebase_dep knewstuff)
 	media-libs/libpng
 	sys-libs/zlib
-	>=x11-libs/qt-gui-4.8.1-r1:4
+	>=x11-libs/qtgui-4.8.1-r1:4
 	virtual/libiconv
 	attica? ( dev-libs/libattica )
 	crypt? ( app-crypt/qca:2 )
