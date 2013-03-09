@@ -67,6 +67,7 @@ REQUIRED_USE="corefonts? ( truetype )
 S=${WORKDIR}/${MY_P}
 
 src_prepare() {
+	epatch "${FILESDIR}"/pc.patch
 	elibtoolize # for Darwin modules
 }
 
