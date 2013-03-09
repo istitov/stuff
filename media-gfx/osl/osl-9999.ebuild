@@ -13,7 +13,7 @@ EGIT_BRANCH="blender-fixes"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="test"
 
 DEPEND="
@@ -22,7 +22,8 @@ DEPEND="
 	sys-devel/clang
 	sys-devel/bison
 	sys-devel/flex
-	media-libs/ilmbase"
+	media-libs/ilmbase
+	dev-cpp/tbb"
 
 RDEPEND=""
 
