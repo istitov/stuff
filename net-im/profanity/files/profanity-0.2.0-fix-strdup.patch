@@ -1,0 +1,45 @@
+diff --git a/src/xmpp/connection.h b/src/xmpp/connection.h
+index 3c0c1bf..b570125 100644
+--- a/src/xmpp/connection.h
++++ b/src/xmpp/connection.h
+@@ -25,6 +25,8 @@
+ 
+ #include <strophe.h>
+ 
++#include "resource.h"
++
+ xmpp_conn_t *connection_get_conn(void);
+ xmpp_ctx_t *connection_get_ctx(void);
+ int connection_error_handler(xmpp_conn_t * const conn,
+diff --git a/src/xmpp/stanza.c b/src/xmpp/stanza.c
+index 8e02343..4ee3bad 100644
+--- a/src/xmpp/stanza.c
++++ b/src/xmpp/stanza.c
+@@ -27,6 +27,7 @@
+ #include <strophe.h>
+ 
+ #include "common.h"
++#include "xmpp/connection.h"
+ #include "xmpp/stanza.h"
+ #include "xmpp/capabilities.h"
+ 
+@@ -562,6 +563,7 @@ DataForm *
+ stanza_create_form(xmpp_stanza_t * const stanza)
+ {
+     DataForm *result = NULL;
++    xmpp_ctx_t *ctx = connection_get_ctx();
+ 
+     xmpp_stanza_t *child = xmpp_stanza_get_children(stanza);
+ 
+@@ -591,7 +593,10 @@ stanza_create_form(xmpp_stanza_t * const stanza)
+             // handle values
+             while (value != NULL) {
+                 char *text = xmpp_stanza_get_text(value);
+-                field->values = g_slist_insert_sorted(field->values, strdup(text), (GCompareFunc)octet_compare);
++                if (text != NULL) {
++                    field->values = g_slist_insert_sorted(field->values, strdup(text), (GCompareFunc)octet_compare);
++                    xmpp_free(ctx, text);
++                }
+                 value = xmpp_stanza_get_next(value);
+             }
+ 

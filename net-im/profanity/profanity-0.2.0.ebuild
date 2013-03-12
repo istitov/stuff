@@ -4,6 +4,8 @@
 
 EAPI=4
 
+inherit eutils
+
 DESCRIPTION="Ncurses based jabber client inspired by irssi"
 HOMEPAGE="http://www.profanity.im/"
 SRC_URI="http://www.profanity.im/${P}.tar.gz"
@@ -21,6 +23,10 @@ RDEPEND="dev-libs/glib:2
 		xscreensaver? ( x11-libs/libXScrnSaver )
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}"
+
+src_prepare() {
+		epatch "${FILESDIR}"/${P}-fix-strdup.patch
+}
 
 src_configure() {
 		econf $(use_with xml libxml2)
