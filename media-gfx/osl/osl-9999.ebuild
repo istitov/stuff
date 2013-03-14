@@ -18,7 +18,7 @@ IUSE="test"
 
 DEPEND="
 	>=dev-libs/boost-1.52.0
-	media-libs/openimageio[pugixml]
+	media-libs/openimageio[python]
 	sys-devel/clang
 	sys-devel/bison
 	sys-devel/flex
