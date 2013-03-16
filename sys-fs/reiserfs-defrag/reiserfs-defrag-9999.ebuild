@@ -23,7 +23,9 @@ src_install() {
 	make DESTDIR="${D}" install || die "make install failed"
 }
 src_install() {
-dosbin rfsd || die "Install failed"
+dosbin reiserfs-defrag || die "Install failed"
 dodoc README.md || die "Install failed"
+dodoc doc/inside.md || die "Install failed"
 dodoc ChangeLog || die "Install failed"
+doman doc/reiserfs-defrag.8 || die "Install failed"
 }
