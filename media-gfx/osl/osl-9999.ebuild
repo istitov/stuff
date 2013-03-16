@@ -23,7 +23,7 @@ DEPEND="
 	sys-devel/bison
 	sys-devel/flex
 	media-libs/ilmbase
-	>=dev-cpp/tbb-4.1.20121003"
+	>=dev-cpp/tbb-4.1.20130116"
 
 RDEPEND=""
 
