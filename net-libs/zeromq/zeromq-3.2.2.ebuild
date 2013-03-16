@@ -7,7 +7,6 @@ EAPI=3
 
 
 WANT_AUTOCONF="2.5"
-inherit autotools
 
 DESCRIPTION="ZeroMQ is a brokerless messaging kernel with extremely high performance."
 HOMEPAGE="http://www.zeromq.org"
