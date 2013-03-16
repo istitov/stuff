@@ -28,8 +28,5 @@
     <flag name="tbb">
       Add support for tbb.
     </flag>
-	<flag name="viewer">
-		unknown
-	</flag>
   </use>
 </pkgmetadata>
