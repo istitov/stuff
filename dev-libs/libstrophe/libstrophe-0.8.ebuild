@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -25,6 +25,8 @@ S="${WORKDIR}/${P}-snapshot"
 
 src_prepare() {
 		epatch "${FILESDIR}"/${PN}-xmpp-conn-disable-tls.patch
+		epatch "${FILESDIR}"/${PN}-fix-memory-leaks.patch
+		epatch "${FILESDIR}"/${PN}-fix-crash-on-non-latin1.patch
 }
 
 src_configure() {
