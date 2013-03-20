@@ -17,11 +17,9 @@ IUSE="debug"
 
 RDEPEND="
 	dev-qt/qtgui:4
-	dev-qt/qt-mobility:4[multimedia]
-"
+# 	>=dev-qt/qt-mobility-1.2.2_p20121205:4[multimedia]"
 DEPEND="${RDEPEND}
-	app-arch/unzip
-"
+	app-arch/unzip"
 
 DOCS="AUTHORS README"
 
