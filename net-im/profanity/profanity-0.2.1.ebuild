@@ -1,10 +1,8 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI=4
-
-inherit eutils
 
 DESCRIPTION="Ncurses based jabber client inspired by irssi"
 HOMEPAGE="http://www.profanity.im/"
@@ -23,10 +21,6 @@ RDEPEND="dev-libs/glib:2
 		xscreensaver? ( x11-libs/libXScrnSaver )
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}"
-
-src_prepare() {
-		epatch "${FILESDIR}"/${P}-fix-strdup.patch
-}
 
 src_configure() {
 		econf $(use_with xml libxml2)
