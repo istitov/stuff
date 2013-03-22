@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="Designed for remove broken kernels from /boot and source_dirs/modules_dirs"
 HOMEPAGE="https://github.com/megabaks/kernel-cleaner"
-SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${P}.tar.gz"
+SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -22,13 +22,12 @@ DEPEND="virtual/linux-sources
 RDEPEND="${DEPEND}
 	parallel? ( sys-process/parallel )"
 
-S="${WORKDIR}"
-
-src_install(){
+src_prepare(){
 	if ! use parallel;then
 	  epatch no_parallel.patch
 	fi
-
+}
+src_install(){
 	dosbin kernel-cleaner
 	insinto /etc
 	doins kernel-cleaner.conf
