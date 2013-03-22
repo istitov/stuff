@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="/etc/portage manager"
 HOMEPAGE="https://github.com/megabaks/portconf"
-SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz"
+SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
