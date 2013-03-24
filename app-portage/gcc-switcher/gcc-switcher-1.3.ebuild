@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="Switch gcc's version per package"
 HOMEPAGE="https://github.com/megabaks/gcc-switcher"
-SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${P}.tar.gz"
+SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
