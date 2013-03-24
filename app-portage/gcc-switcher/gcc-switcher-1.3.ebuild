@@ -19,8 +19,6 @@ DEPEND="app-shells/bash
 		sys-apps/portage"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}"
-
 src_install(){
 	insinto /etc/portage
 	doins gcc-switcher
