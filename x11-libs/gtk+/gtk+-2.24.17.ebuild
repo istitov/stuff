@@ -1,8 +1,8 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.24.13.ebuild,v 1.2 2012/09/26 20:35:28 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.24.17.ebuild,v 1.1 2013/03/19 03:09:54 tetromino Exp $
 
-EAPI="4"
+EAPI="5"
 
 inherit eutils flag-o-matic gnome.org virtualx autotools
 
@@ -12,8 +12,8 @@ SRC_URI="${SRC_URI} mirror://gentoo/introspection.m4.bz2"
 
 LICENSE="LGPL-2+"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="aqua cups debug doc examples +introspection test vim-syntax xinerama appmenu overlay"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+IUSE="aqua cups debug examples +introspection test vim-syntax xinerama appmenu overlay"
 
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 COMMON_DEPEND="!aqua? (
@@ -27,11 +27,11 @@ COMMON_DEPEND="!aqua? (
 		x11-libs/libXfixes
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
-		>=x11-libs/cairo-1.6[X,svg]
+		>=x11-libs/cairo-1.6:=[X,svg]
 		x11-libs/gdk-pixbuf:2[X,introspection?]
 	)
 	aqua? (
-		>=x11-libs/cairo-1.6[aqua,svg]
+		>=x11-libs/cairo-1.6:=[aqua,svg]
 		x11-libs/gdk-pixbuf:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
@@ -40,7 +40,7 @@ COMMON_DEPEND="!aqua? (
 	>=dev-libs/atk-1.29.2[introspection?]
 	media-libs/fontconfig
 	x11-misc/shared-mime-info
-	cups? ( net-print/cups )
+	cups? ( net-print/cups:= )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	!<gnome-base/gail-1000"
 DEPEND="${COMMON_DEPEND}
@@ -53,9 +53,6 @@ DEPEND="${COMMON_DEPEND}
 	)
 	xinerama? ( x11-proto/xineramaproto )
 	>=dev-util/gtk-doc-am-1.11
-	doc? (
-		>=dev-util/gtk-doc-1.11
-		~app-text/docbook-xml-dtd-4.1.2 )
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"
@@ -80,9 +77,6 @@ set_gtk2_confdir() {
 }
 
 src_prepare() {
-	#
-	epatch "${FILESDIR}/${PN}-2.24.13-gold.patch"
-
 	# use an arch-specific config directory so that 32bit and 64bit versions
 	# dont clash on multilib systems
 	epatch "${FILESDIR}/${PN}-2.21.3-multilib.patch"
@@ -98,12 +92,12 @@ src_prepare() {
 		perf/marshalers.c || die
 
 	if use appmenu;then
-	epatch "${FILESDIR}/appmenu/fix.patch"
-	epatch "${FILESDIR}/${PV}"/*.patch*
+		epatch "${FILESDIR}/appmenu/fix.patch"
+		epatch "${FILESDIR}/${PV}"/*
 	fi
 
 	if use overlay;then
-	epatch "${FILESDIR}/${PV}/scroll/100_overlay_scrollbar_loading.patch"
+		epatch "${FILESDIR}/${PV}/scroll/100_overlay_scrollbar_loading.patch"
 	fi
 
 	# Stop trying to build unmaintained docs, bug #349754
@@ -143,12 +137,23 @@ src_prepare() {
 		# https://bugzilla.gnome.org/show_bug.cgi?id=617473
 		sed -i -e 's:pltcheck.sh:$(NULL):g' \
 			gtk/Makefile.am || die
+
+		# UI tests require immodules already installed; bug #413185
+		if ! has_version 'x11-libs/gtk+:2'; then
+			ewarn "Disabling UI tests because this is the first install of"
+			ewarn "gtk+:2 on this machine. Please re-run the tests after $P"
+			ewarn "has been installed."
+			sed '/g_test_add_func.*ui-tests/ d' \
+				-i gtk/tests/testing.c || die "sed 2 failed"
+		fi
 	fi
 
 	if ! use examples; then
 		# don't waste time building demos
 		strip_builddir SRC_SUBDIRS demos Makefile.am Makefile.in
 	fi
+
+	epatch_user
 
 	# http://bugs.gentoo.org/show_bug.cgi?id=371907
 	mkdir -p "${S}/m4" || die
@@ -159,21 +164,15 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf="$(use_enable doc gtk-doc)
-		$(use_enable xinerama)
-		$(use_enable cups cups auto)
-		$(use_enable introspection)
-		--disable-papi"
-	if use aqua; then
-		myconf="${myconf} --with-gdktarget=quartz"
-	else
-		myconf="${myconf} --with-gdktarget=x11 --with-xinput"
-	fi
-
 	# Passing --disable-debug is not recommended for production use
-	use debug && myconf="${myconf} --enable-debug=yes"
-
-	econf ${myconf}
+	econf \
+		$(usex aqua --with-gdktarget=quartz --with-gdktarget=x11) \
+		$(usex aqua "" --with-xinput) \
+		$(usex debug --enable-debug=yes "") \
+		$(use_enable cups cups auto) \
+		$(use_enable introspection) \
+		$(use_enable xinerama) \
+		--disable-papi
 }
 
 src_test() {
@@ -185,7 +184,7 @@ src_test() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
+	default
 
 	set_gtk2_confdir
 	dodir ${GTK2_CONFDIR}
@@ -195,10 +194,6 @@ src_install() {
 	echo 'gtk-fallback-icon-theme = "gnome"' > "${T}/gtkrc"
 	insinto /etc/gtk-2.0
 	doins "${T}"/gtkrc
-
-	# Enable xft in environment as suggested by <utx@gentoo.org>
-	echo "GDK_USE_XFT=1" > "${T}"/50gtk2
-	doenvd "${T}"/50gtk2
 
 	dodoc AUTHORS ChangeLog* HACKING NEWS* README*
 
@@ -251,4 +246,9 @@ pkg_postinst() {
 		elog "Alternatively, check \"gtk-print-preview-command\" documentation and"
 		elog "add it to your gtkrc."
 	fi
+
+	elog "To make the gtk2 file chooser use 'current directory' mode by default,"
+	elog "edit ~/.config/gtk-2.0/gtkfilechooser.ini to contain the following:"
+	elog "[Filechooser Settings]"
+	elog "StartupMode=cwd"
 }
