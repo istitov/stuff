@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="DKMS analog for gentoo"
 HOMEPAGE="https://github.com/megabaks/dkms-gentoo"
-SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${P}.tar.gz"
+SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -21,11 +21,9 @@ DEPEND="sys-apps/openrc
 		sys-apps/portage"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/${PN}"
-
 src_install(){
-	dosbin dkms-gentoo
-	newinitd dkms dkms
+	dosbin dkms-gentoo/dkms-gentoo
+	newinitd dkms-gentoo/dkms dkms
 
 	if ! [ -f "${ROOT}/var/lib/portage/dkms_db" ];then
 	  dodir "/var/lib/portage/"
