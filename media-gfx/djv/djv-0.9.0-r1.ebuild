@@ -56,7 +56,7 @@ src_compile() {
 	lib/djv_core/${file_fix}.orig \
 		> lib/djv_core/${file_fix}
 	done
-	
+
 	cmake-utils_src_compile
 }
 
