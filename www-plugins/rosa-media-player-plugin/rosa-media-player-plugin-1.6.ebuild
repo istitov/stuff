@@ -22,6 +22,7 @@ DEPEND="${RDEPEND}
 	dev-qt/qtgui:4"
 
 src_compile() {
+	lrelease rosa-media-player-plugin.pro
 	cd romp/rosa-media-player
 	eqmake4 rosampcore.pro
 	emake
@@ -57,4 +58,8 @@ src_install() {
 
 	dodir usr/$(get_libdir)/
 	dolib romp/rosa-media-player/build/librosampcore.so*
+
+	dodir /usr/$(get_libdir)/mozilla/plugins/translations
+	insinto /usr/$(get_libdir)/mozilla/plugins/translations
+	doins translations/rosamp_plugin_*.qm
 }

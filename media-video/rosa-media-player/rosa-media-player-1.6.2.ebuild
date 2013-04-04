@@ -15,10 +15,6 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
-LANGS="ar_SY bg ca cs de el_GR en en_US es et eu fi fr gl hu it ja ka ko ku lt mk ms_MY nl pl pt pt_BR ro_RO ru_RU sk sl sl_SI sr sv tr uk_UA vi_VN zh_CN zh_TW"
-for lang in ${LANGS}; do
-	IUSE+=" linguas_${lang}"
-done
 
 RDEPEND="media-video/mplayer"
 DEPEND="${RDEPEND}
@@ -40,14 +36,5 @@ src_compile() {
 
 src_install() {
 	cd "${PN}"
-	for lang in ${LANGS};do
-	  for x in ${lang};do
-		if ! use linguas_${x}; then
-		  rm -f "$(find src/translations -type f -name "rosamp_${x}.qm")"
-		  rm -rf docs/${x}
-		fi
-	  done
-	done
-
 	emake PREFIX=/usr DESTDIR="${D}" install || die
 }
