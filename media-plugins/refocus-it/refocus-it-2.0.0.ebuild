@@ -11,7 +11,6 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
-RESTRICT="nomirror"
 DEPEND=">=x11-libs/gtk+-2.4.4
 	>=media-gfx/gimp-2.2.0"
 RDEPEND=""

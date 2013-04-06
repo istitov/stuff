@@ -1,4 +1,4 @@
-# Copyright 2008-2012 Funtoo Technologies
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -10,7 +10,7 @@ DESCRIPTION="On board debugger driver for stm32-discovery boards"
 HOMEPAGE="https://github.com/burjui/stlink"
 EGIT_REPO_URI="git://github.com/karlp/stlink.git"
 
-LICENSE="as-is"
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""

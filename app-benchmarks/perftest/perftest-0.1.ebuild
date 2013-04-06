@@ -10,7 +10,7 @@ DESCRIPTION="Application designed to test gtk2/gtk3 performance"
 HOMEPAGE="none"
 SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${PN}.zip"
 
-LICENSE="as-is"
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""

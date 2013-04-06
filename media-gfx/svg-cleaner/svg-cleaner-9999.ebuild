@@ -1,4 +1,4 @@
-# Copyright 2008-2012 Funtoo Technologies
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -8,7 +8,7 @@ DESCRIPTION="SVG Cleaner cleans up your SVG files from unnecessary data."
 HOMEPAGE="http://qt-apps.org/content/show.php?action=content&content=147974 https://github.com/RazrFalcon/SVGCleaner"
 EGIT_REPO_URI="https://github.com/RazrFalcon/SVGCleaner.git"
 
-LICENSE="as-is"
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""

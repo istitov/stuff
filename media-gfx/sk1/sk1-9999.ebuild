@@ -1,7 +1,9 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-9999.ebuild,v 1.17 2008/05/18 02:08:03 hanno Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/sk1/sk1-9999.ebuild,v 1.17 2013/04/07 01:18:03 megabaks Exp $
+
 EAPI=4
+
 inherit eutils subversion
 
 ESVN_REPO_URI="https://sk1.svn.sourceforge.net/svnroot/sk1/trunk/sK1"
@@ -25,25 +27,14 @@ DEPEND=">=sys-libs/glibc-2.6.1
 	>=dev-lang/tcl-8.5.5
 	>=dev-lang/tk-8.5.5
 	>=sys-libs/zlib-1.2.3-r1
-	dev-lang/python
+	dev-lang/python[tk]
 	dev-python/imaging
-	media-libs/lcms
+	media-libs/lcms:0[python]
 	gnome-extra/zenity
 	media-libs/sk1libs
 	media-gfx/sk1sdk"
 
 RDEPEND="${DEPEND}"
-
-pkg_setup() {
-	if ! built_with_use dev-lang/python tk; then
-		eerror "This package requires dev-lang/python compiled with tk support."
-		die "Please reemerge dev-lang/python with USE=\"tk\"."
-	fi
-	if ! built_with_use media-libs/lcms:0 python; then
-		eerror "This package requires media-libs/lcms compiled with python support."
-		die "Please reemerge media-libs/lcms with USE=\"python\"."
-	fi
-}
 
 src_compile() {
 	python setup.py build || die "'python setup.py build' failed"
