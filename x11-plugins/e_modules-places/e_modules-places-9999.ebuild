@@ -17,4 +17,3 @@ IUSE=""
 DEPEND="x11-wm/enlightenment"
 
 RDEPEND="${DEPEND}"
-

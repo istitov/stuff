@@ -1,4 +1,4 @@
-# Copyright 1999-20013 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -17,5 +17,5 @@ DEPEND=">=x11-libs/gtk+-2.4.4
 RDEPEND=""
 
 src_install() {
-    make install DESTDIR=${D} || die
+	make install DESTDIR="${D}" || die
 }

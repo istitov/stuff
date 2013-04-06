@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/fontforge/fontforge-20110222-r1.ebuild,v 1.7 2012/05/09 02:09:37 aballier Exp $
 

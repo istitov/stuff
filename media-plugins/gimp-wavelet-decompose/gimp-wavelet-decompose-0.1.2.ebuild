@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -28,10 +28,9 @@ src_install() {
 		dodir "/usr/share/locale/${i}/LC_MESSAGES"
 	done
 	emake -C po install LOCALEDIR="${D}/usr/share/locale" || die "Install failed"
-	
+
 	exeinto "$( gimptool-2.0 --gimpplugindir )/plug-ins"
 	doexe "src/${MY_PN}"
 
 	dodoc AUTHORS ChangeLog COPYING INSTALL README THANKS TRANSLATIONS
 }
-

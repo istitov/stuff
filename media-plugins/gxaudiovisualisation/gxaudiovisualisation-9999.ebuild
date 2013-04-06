@@ -24,7 +24,7 @@ RDEPEND=""
 
 src_install() {
 	if v="/usr/share/blender/*";then
-        dodir $v/scripts/
-        cp "${S}"/*.py "${D}"$v/scripts/
-        fi
+		dodir $v/scripts/
+		cp "${S}"/*.py "${D}"$v/scripts/
+	fi
 }

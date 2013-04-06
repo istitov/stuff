@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/mediastreamer/mediastreamer-2.7.3-r3.ebuild,v 1.12 2012/01/06 15:06:02 ranger Exp $
 
