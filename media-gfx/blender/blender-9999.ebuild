@@ -25,7 +25,7 @@ fi
 LICENSE="|| ( GPL-2 BL )"
 SLOT="2.6"
 KEYWORDS=""
-IUSE_MODULES="+cycles +ocio -osl +compositor +tomato +game-engine player addons"
+IUSE_MODULES="+cycles +ocio -osl -freestyle -compositor +tomato +game-engine player addons"
 IUSE_MODIFIERS="fluid +boolean +decimate +remesh smoke oceansim"
 IUSE_CODECS="ffmpeg +openexr jpeg2k openal -dds -tiff -cin -redcode"
 IUSE_SYSTEM="openmp +fftw sndfile jack sdl +sse nls ndof -collada -doc -tweak-mode -debug"
@@ -205,6 +205,7 @@ src_configure() {
 		$(cmake-utils_use_with ocio OPENCOLORIO)
 		$(cmake-utils_use_with osl CYCLES_OSL)
 		$(cmake-utils_use_with osl LLVM)
+		$(cmake-utils_use_with freestyle FREESTYLE)
 		$(cmake-utils_use_with player PLAYER)
 		$(cmake-utils_use_with sdl SDL)
 		$(cmake-utils_use_with sndfile CODEC_SNDFILE)
