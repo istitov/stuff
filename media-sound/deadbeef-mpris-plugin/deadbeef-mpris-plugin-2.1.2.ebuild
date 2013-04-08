@@ -26,3 +26,10 @@ DEPEND="
 	"
 
 S="${WORKDIR}/deadbeef-${PV}"
+
+pkg_postinst(){
+	ewarn "
+	This package is deprecated
+	use media-plugins/${PN} instead, please
+	"
+}

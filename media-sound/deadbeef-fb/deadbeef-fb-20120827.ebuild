@@ -39,3 +39,10 @@ src_install() {
 	emake DESTDIR="${D}" install
 	find "${D}" -name "${PN}-${PV}" -exec rm -rf {} +
 }
+
+pkg_postinst(){
+	ewarn "
+	This package is deprecated
+	use media-plugins/${PN} instead, please
+	"
+}

@@ -16,7 +16,8 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND_COMMON="
-	media-sound/deadbeef"
+	media-sound/deadbeef
+	!media-sound/deadbeef-remote"
 
 RDEPEND="
 	${DEPEND_COMMON}
@@ -36,11 +37,4 @@ src_install(){
 	dodir usr/$(get_libdir)/deadbeef
 	insinto /usr/$(get_libdir)/deadbeef
 	doins remote.so
-}
-
-pkg_postinst(){
-	ewarn "
-	This package is deprecated
-	use media-plugins/${PN} instead, please
-	"
 }

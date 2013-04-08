@@ -16,7 +16,8 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND_COMMON="
-	media-sound/deadbeef"
+	media-sound/deadbeef
+	media-sound/deadbeef-mpris-plugin"
 
 RDEPEND="
 	${DEPEND_COMMON}
@@ -27,11 +28,4 @@ DEPEND="
 
 src_prepare(){
 	eautoreconf
-}
-
-pkg_postinst(){
-	ewarn "
-	This package is deprecated
-	use media-plugins/${PN} instead, please
-	"
 }

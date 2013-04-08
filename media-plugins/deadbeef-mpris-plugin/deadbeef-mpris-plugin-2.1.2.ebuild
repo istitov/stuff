@@ -4,19 +4,20 @@
 
 EAPI=4
 
-inherit eutils autotools git-2
+inherit eutils
 
 DESCRIPTION="MPRIS-plugin for deadbeef"
 HOMEPAGE="https://github.com/kernelhcy/DeaDBeeF-MPRIS-plugin"
-EGIT_REPO_URI="git://github.com/kernelhcy/DeaDBeeF-MPRIS-plugin.git"
+SRC_URI="http://${PN}.googlecode.com/files/${PN}-${PV}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND_COMMON="
-	media-sound/deadbeef"
+	media-sound/deadbeef
+	!media-sound/deadbeef-mpris-plugin"
 
 RDEPEND="
 	${DEPEND_COMMON}
@@ -25,13 +26,4 @@ DEPEND="
 	${DEPEND_COMMON}
 	"
 
-src_prepare(){
-	eautoreconf
-}
-
-pkg_postinst(){
-	ewarn "
-	This package is deprecated
-	use media-plugins/${PN} instead, please
-	"
-}
+S="${WORKDIR}/deadbeef-${PV}"

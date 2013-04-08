@@ -21,7 +21,8 @@ REQUIRED_USE="|| ( ${IUSE} )"
 
 DEPEND_COMMON="dev-libs/json-glib
 	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2,curl] )
-	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3,curl] )"
+	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3,curl] )
+	!media-sound/deadbeef-vk"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
@@ -32,11 +33,4 @@ src_configure() {
 	$(cmake-utils_use_with gtk2 GTK2)
 	$(cmake-utils_use_with gtk3 GTK3)"
 	cmake-utils_src_configure
-}
-
-pkg_postinst(){
-	ewarn "
-	This package is deprecated
-	use media-plugins/${PN} instead, please
-	"
 }

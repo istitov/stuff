@@ -30,3 +30,10 @@ src_configure() {
 	$(cmake-utils_use_with gtk3 GTK3)"
 	cmake-utils_src_configure
 }
+
+pkg_postinst(){
+	ewarn "
+	This package is deprecated
+	use media-plugins/${PN} instead, please
+	"
+}

@@ -30,7 +30,7 @@ RDEPEND="
 	zlib? ( sys-libs/zlib )
 	!media-video/qt-faststart
 	!media-libs/libpostproc
-"
+	!media-video/deadbeef-ffmpeg"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
@@ -176,11 +176,4 @@ src_install() {
 		sed -e 's| libavutil | deadbeef-libavutil |;s| libavcodec | deadbeef-libavcodec |;s|||' -i "${pc}"
 		mv "${pc}" "${D}/usr/$(get_libdir)/pkgconfig/deadbeef-${pc##*/}"
 	done
-}
-
-pkg_postinst(){
-	ewarn "
-	This package is deprecated
-	use media-plugins/${PN} instead, please
-	"
 }

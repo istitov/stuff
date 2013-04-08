@@ -51,3 +51,10 @@ src_install() {
 	  doins gtk3/ddb_infobar_gtk3.so
 	fi
 }
+
+pkg_postinst(){
+	ewarn "
+	This package is deprecated
+	use media-plugins/${PN} instead, please
+	"
+}

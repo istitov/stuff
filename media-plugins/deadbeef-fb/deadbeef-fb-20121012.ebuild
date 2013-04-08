@@ -17,7 +17,8 @@ IUSE="gtk2 gtk3"
 
 DEPEND_COMMON="
 	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2] )
-	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3] )"
+	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3] )
+	!media-sound/deadbeef-fb"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
@@ -34,11 +35,4 @@ src_configure() {
 src_install() {
 	emake DESTDIR="${D}" install
 	find "${D}" -name "${PN}-${PV}" -exec rm -rf {} +
-}
-
-pkg_postinst(){
-	ewarn "
-	This package is deprecated
-	use media-plugins/${PN} instead, please
-	"
 }

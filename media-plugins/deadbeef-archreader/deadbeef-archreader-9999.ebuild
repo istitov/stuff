@@ -15,7 +15,8 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-DEPEND_COMMON="media-sound/deadbeef"
+DEPEND_COMMON="media-sound/deadbeef
+	!media-sound/deadbeef-archreader"
 
 RDEPEND="
 	${DEPEND_COMMON}
@@ -27,11 +28,4 @@ DEPEND="
 src_install() {
 	insinto /usr/$(get_libdir)/deadbeef
 	doins ddb_archive_reader.so
-}
-
-pkg_postinst(){
-	ewarn "
-	This package is deprecated
-	use media-plugins/${PN} instead, please
-	"
 }
