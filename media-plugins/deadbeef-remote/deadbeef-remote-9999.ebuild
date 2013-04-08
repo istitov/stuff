@@ -25,7 +25,7 @@ RDEPEND="
 DEPEND="
 	${DEPEND_COMMON}
 	"
-QA_TEXTRELS="usr/lib/deadbeef/remote.so"
+QA_TEXTRELS="usr/$(get_libdir)/deadbeef/remote.so"
 
 src_prepare(){
 	epatch "${FILESDIR}/remote.patch"
