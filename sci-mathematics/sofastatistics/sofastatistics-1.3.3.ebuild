@@ -15,10 +15,15 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="dev-lang/python:2.7[sqlite]
-		>=dev-python/wxpython-2.8.11.0
+		dev-python/wxpython:2.8
+		dev-python/psycopg:2
+		media-gfx/wkhtmltopdf
+		app-text/pdftk
+		dev-python/pyPdf
 		>=dev-python/numpy-1.5.1
 		>=dev-python/mysql-python-1.2.3
-		>=dev-db/pygresql-3.8.1
+		dev-python/pyxdg
+		dev-python/pycrypto
 		dev-python/matplotlib
 		dev-python/pywebkitgtk"
 
