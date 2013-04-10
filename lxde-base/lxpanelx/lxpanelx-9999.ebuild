@@ -1,0 +1,75 @@
+# Copyright 1999-2013 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: lxde-base/lxpanelx/lxpanelx-9999.ebuild,v 1 2013/04/10 09:19:57 megabaks Exp $
+
+EAPI="5"
+
+inherit autotools eutils subversion
+
+DESCRIPTION="lxpanel fork with improved taskbar"
+HOMEPAGE="http://code.google.com/p/lxpanelx/"
+ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk/"
+
+LICENSE="GPL-2"
+KEYWORDS=""
+SLOT="0"
+IUSE="+alsa oss plugins libfm libindicator menucache"
+RESTRICT="test"  # bug 249598
+
+RDEPEND="x11-libs/gtk+:2
+	x11-libs/libXmu
+	x11-libs/libXpm
+	lxde-base/lxmenu-data
+	!lxde-base/lxpanel
+	alsa? ( media-libs/alsa-lib )
+	libindicator? ( dev-libs/libindicator[gtk2] )
+	libfm? ( x11-libs/libfm )
+	menucache? ( lxde-base/menu-cache )"
+
+DEPEND="${RDEPEND}
+	dev-util/pkgconfig
+	sys-devel/gettext"
+
+S="${WORKDIR}"
+
+src_prepare() {
+	eautoreconf
+}
+
+src_configure() {
+	if use plugins;then
+		all="taskbar,netstatus,volume,volumealsa,cpu,deskno,batt,kbled,xkb,thermal,cpufreq"
+		local plugins="${all}"
+		[[ ${CHOST} == *-interix* ]] && plugins="deskno,kbled,xkb"
+		if ! use alsa;then
+			plugins="${plugins/,volumealsa/}"
+		fi
+		if ! use oss;then
+			plugins="${plugins/,volume/}"
+		fi
+		myconf="plugins=${plugins}"
+	fi
+
+	econf \
+		--with-x \
+		--disable-dependency-tracking \
+		--enable-silent-rules \
+		$(use_enable alsa) \
+		$(use_with libfm) \
+		$(use_enable libindicator indicator-support) \
+		$(use_with plugins ${myconf})
+}
+
+src_install () {
+	emake DESTDIR="${D}" install
+	dodoc AUTHORS ChangeLog README
+
+	# Get rid of the .la files.
+	find "${D}" -name '*.la' -delete
+}
+
+pkg_postinst() {
+	elog "If you have problems with broken icons shown in the main panel,"
+	elog "you will have to configure panel settings via its menu."
+	elog "This will not be an issue with first time installations."
+}

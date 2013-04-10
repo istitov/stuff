@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>megagreener@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name='libfm'>Add support for <pkg>x11-libs/libfm</pkg></flag>
+		<flag name='libindicator'>Add support for <pkg>dev-libs/libindicator</pkg></flag>
+		<flag name='menucache'>Add support for <pkg>lxde-base/menu-cache</pkg></flag>
+		<flag name='oss'>Adds support for OSS (Open Sound System)</flag>
+		<flag name='plugins'>Enable plugin loading</flag>
+	</use>
+</pkgmetadata>
