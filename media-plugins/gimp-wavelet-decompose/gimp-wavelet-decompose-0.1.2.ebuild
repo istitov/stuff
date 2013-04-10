@@ -32,5 +32,5 @@ src_install() {
 	exeinto "$( gimptool-2.0 --gimpplugindir )/plug-ins"
 	doexe "src/${MY_PN}"
 
-	dodoc AUTHORS ChangeLog COPYING INSTALL README THANKS TRANSLATIONS
+	dodoc AUTHORS ChangeLog INSTALL README THANKS TRANSLATIONS
 }

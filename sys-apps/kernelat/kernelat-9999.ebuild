@@ -30,5 +30,4 @@ src_install() {
 	dosbin kernelat-spawner/kernelat-spawner || die "Install failed"
 	dosbin kernelat-tester/kernelat-tester.sh || die "Install failed"
 	dodoc README.md || die "Install failed"
-	dodoc COPYING || die "Install failed"
 }

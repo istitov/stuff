@@ -16,7 +16,7 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND="media-sound/deadbeef
-      dev-qt/qtgui:4"
+		dev-qt/qtgui:4"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${PN}/"
