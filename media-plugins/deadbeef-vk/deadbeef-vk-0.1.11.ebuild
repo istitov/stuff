@@ -21,8 +21,7 @@ REQUIRED_USE="|| ( ${IUSE} )"
 
 DEPEND_COMMON="dev-libs/json-glib
 	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2,curl] )
-	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3,curl] )
-	!media-sound/deadbeef-vk"
+	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3,curl] )"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"

@@ -6,7 +6,7 @@ EAPI=4
 
 inherit eutils git-2
 
-DESCRIPTION="Adds support for Gnome multimedia keys to DeaDBeeF player by listening for DBus messages. Should work only in Gnome and Unity DEs."
+DESCRIPTION="Adds support for Gnome multimedia keys to DeaDBeeF player. Should work only in Gnome and Unity DEs."
 HOMEPAGE="https://code.google.com/p/deadbeef-gnome-mmkeys/"
 EGIT_REPO_URI="https://code.google.com/p/deadbeef-gnome-mmkeys/"
 

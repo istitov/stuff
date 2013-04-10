@@ -15,9 +15,7 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND_COMMON="
-	media-sound/deadbeef
-	!media-sound/deadbeef-mpris-plugin"
+DEPEND_COMMON="media-sound/deadbeef"
 
 RDEPEND="
 	${DEPEND_COMMON}

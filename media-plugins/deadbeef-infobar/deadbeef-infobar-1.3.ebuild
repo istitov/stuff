@@ -24,8 +24,7 @@ DEPEND_COMMON="
 		)
 	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2] )
 	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3] )
-	dev-libs/libxml2
-	!media-sound/deadbeef-infobar"
+	dev-libs/libxml2"
 
 RDEPEND="
 	${DEPEND_COMMON}

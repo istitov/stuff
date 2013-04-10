@@ -29,8 +29,7 @@ RDEPEND="
 	gnutls? ( >=net-libs/gnutls-2.12.16 )
 	zlib? ( sys-libs/zlib )
 	!media-video/qt-faststart
-	!media-libs/libpostproc
-	!media-video/deadbeef-ffmpeg"
+	!media-libs/libpostproc"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
