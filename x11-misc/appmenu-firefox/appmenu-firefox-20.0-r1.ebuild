@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND="|| ( ~www-client/firefox-${PV} ~www-client/firefox-bin-${PV} )
+DEPEND="|| ( >=www-client/firefox-${PV} >=www-client/firefox-bin-${PV} )
 		x11-misc/appmenu-gtk[gtk2]
 		app-text/gnome-doc-utils"
 RDEPEND="${DEPEND}"
