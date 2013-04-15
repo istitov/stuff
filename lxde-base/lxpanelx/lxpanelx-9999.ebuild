@@ -27,7 +27,7 @@ RDEPEND="x11-libs/gtk+:2
 	menucache? ( lxde-base/menu-cache )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	sys-devel/gettext"
 
 S="${WORKDIR}"
