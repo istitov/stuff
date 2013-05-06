@@ -39,10 +39,10 @@ src_prepare(){
 }
 src_compile(){
 	cd ${PN}-${PV}
-	distutils-r1_src_compile
+	distutils_src_compile
 }
 src_install() {
 	cd ${PN}-${PV}
-	distutils-r1_src_install
+	distutils_src_install
 	rm -rf "${D}"/usr/share/sonata
 }
