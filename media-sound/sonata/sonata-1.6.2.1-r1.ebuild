@@ -2,12 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/sonata/sonata-1.6.2.1.ebuild,v 1.9 2011/10/29 09:45:35 angelos Exp $
 
-EAPI="3"
-PYTHON_DEPEND="2:2.6"
-SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="2.[45] 3.* *-jython"
+EAPI="5"
+PYTHON_COMPAT=( python2_7 )
 
-inherit distutils bzr
+inherit distutils-r1 bzr
 
 DESCRIPTION="an elegant GTK+ music client for the Music Player Daemon (MPD)."
 HOMEPAGE="http://sonata.berlios.de/"
@@ -41,10 +39,10 @@ src_prepare(){
 }
 src_compile(){
 	cd ${PN}-${PV}
-	distutils_src_compile
+	distutils-r1_src_compile
 }
 src_install() {
 	cd ${PN}-${PV}
-	distutils_src_install
+	distutils-r1_src_install
 	rm -rf "${D}"/usr/share/sonata
 }

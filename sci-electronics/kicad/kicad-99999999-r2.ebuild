@@ -6,12 +6,12 @@
 # the latest snapshot ebuild. e.g.:
 # cp kicad-YYYYMMDD_pXXXX.ebuild kicad-99999999-r1.ebuild
 
-EAPI="3"
-PYTHON_DEPEND=2
+EAPI="5"
+PYTHON_COMPAT=( python2_7 )
 
 WX_GTK_VER="2.8"
 
-inherit cmake-utils wxwidgets fdo-mime gnome2-utils bzr python flag-o-matic
+inherit cmake-utils wxwidgets fdo-mime gnome2-utils bzr python-r1 flag-o-matic
 
 DESCRIPTION="Electronic Schematic and PCB design tools."
 HOMEPAGE="http://www.kicad-pcb.org"

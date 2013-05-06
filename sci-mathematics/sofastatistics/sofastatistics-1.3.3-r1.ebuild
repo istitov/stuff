@@ -2,9 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
-
-inherit eutils python
+EAPI="5"
+PYTHON_COMPAT=( python2_7 )
+PYTHON_USE_WITH="sqlite"
+inherit eutils python-r1
 
 DESCRIPTION="SOFA is a statistics, analysis, and reporting program"
 HOMEPAGE="http://sourceforge.net/projects/sofastatistics/"
@@ -14,11 +15,15 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="dev-lang/python:2.7[sqlite]
-		dev-python/wxpython:2.8
+DEPEND="dev-python/wxpython:2.8
+		dev-python/psycopg:2
+		media-gfx/wkhtmltopdf
+		app-text/pdftk
+		dev-python/pyPdf
 		>=dev-python/numpy-1.5.1
 		>=dev-python/mysql-python-1.2.3
-		>=dev-db/pygresql-3.8.1
+		dev-python/pyxdg
+		dev-python/pycrypto
 		dev-python/matplotlib
 		dev-python/pywebkitgtk"
 

@@ -2,10 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI="5"
 AUTOTOOLS_IN_SOURCE_BUILD=1
+PYTHON_COMPAT=( python2_7 )
 
-inherit eutils autotools-utils multilib toolchain-funcs python
+inherit eutils autotools-utils multilib toolchain-funcs python-r1
 
 DESCRIPTION="EXIF and IPTC metadata C++ library and command line utility"
 HOMEPAGE="http://www.exiv2.org/"

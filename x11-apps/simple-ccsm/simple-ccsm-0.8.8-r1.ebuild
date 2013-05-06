@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-apps/simple-ccsm/simple-ccsm-0.8.4-r1.ebuild,v 1.2 2011/04/11 20:14:39 arfrever Exp $
 
-EAPI="3"
-PYTHON_DEPEND="2"
+EAPI="5"
+PYTHON_COMPAT=( python2_7 )
 
-inherit distutils gnome2-utils
+inherit distutils-r1 gnome2-utils
 
 DESCRIPTION="Simplified Compizconfig Settings Manager"
 HOMEPAGE="http://www.compiz.org/"

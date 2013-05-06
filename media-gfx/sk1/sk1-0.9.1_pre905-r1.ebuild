@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 
-PYTHON_DEPEND="2"
+PYTHON_COMPAT=( python2_7 )
 PYTHON_USE_WITH="tk"
 
-inherit distutils eutils
+inherit distutils-r1 eutils
 
 MY_PN="sK1"
 MY_PV="${PV/_pre/pre_rev}"
@@ -48,7 +48,7 @@ pkg_setup() {
 }
 
 src_install() {
-	distutils_src_install
+	distutils-r1_src_install
 
 	newicon src/share/icons/CrystalSVG/icon_sk1_64.png sk1.png
 	make_desktop_entry ${PN} "${MY_PN}" ${PN} "Graphics;VectorGraphics;"

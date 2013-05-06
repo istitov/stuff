@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/fontforge/fontforge-20110222-r1.ebuild,v 1.6 2011/10/12 15:19:11 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/fontforge/fontforge-20110222-r1.ebuild,v 1.7 2012/05/09 02:09:37 aballier Exp $
 
 # Some notes for maintainers this package:
 # 1. README-unix: freetype headers are required to make use of truetype debugger
@@ -13,24 +13,24 @@
 # users. http://fontforge.sourceforge.net/faq.html#libraries. To see what
 # libraries fontforge thinks with use $ fontforge --library-status
 
-EAPI=4
+EAPI="5"
 
-PYTHON_DEPEND="python? 2"
-inherit eutils fdo-mime python autotools git-2
+PYTHON_COMPAT=( python2_7 )
+inherit eutils fdo-mime python-r1 autotools
 
-HTDOCSV="20110221"
+MY_PV="${PV}-b"
+HTDOCSV="${PV}-b"
 CIDMAPV="20090121"
 DESCRIPTION="postscript font editor and converter"
 HOMEPAGE="http://fontforge.sourceforge.net/"
-EGIT_REPO_URI="git://fontforge.git.sourceforge.net/gitroot/fontforge/fontforge"
-#SRC_URI="git://fontforge.git.sourceforge.net/gitroot/fontforge/fontforge
-#	doc? ( mirror://sourceforge/fontforge/fontforge_htdocs-${HTDOCSV}.tar.bz2 )
-#	cjk? ( mirror://gentoo/cidmaps-${CIDMAPV}.tgz )"	# http://fontforge.sf.net/cidmaps.tgz
+SRC_URI="mirror://sourceforge/fontforge/${PN}_full-${MY_PV}.tar.bz2
+	doc? ( mirror://sourceforge/fontforge/fontforge_htdocs-${HTDOCSV}.tar.bz2 )
+	cjk? ( mirror://gentoo/cidmaps-${CIDMAPV}.tgz )" # http://fontforge.sf.net/cidmaps.tgz
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
-IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X capslock-for-alt freetype-bytecode freetype devicetables gb12345"
+KEYWORDS="~amd64 ~x86"
+IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X"
 
 RDEPEND="gif? ( >=media-libs/giflib-4.1.0-r1 )
 	jpeg? ( virtual/jpeg )
@@ -48,7 +48,7 @@ RDEPEND="gif? ( >=media-libs/giflib-4.1.0-r1 )
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
 
-S="${WORKDIR}/${MY_P}"
+S="${WORKDIR}/${PN}-${MY_PV}"
 
 pkg_setup() {
 	if use python; then
@@ -57,9 +57,17 @@ pkg_setup() {
 	fi
 }
 
+src_unpack() {
+	unpack ${PN}_full-${MY_PV}.tar.bz2
+	use cjk && unpack cidmaps-${CIDMAPV}.tgz
+	if use doc; then
+		mkdir html
+		cd html
+		unpack fontforge_htdocs-${HTDOCSV}.tar.bz2
+	fi
+}
+
 src_prepare() {
-	epatch "${FILESDIR}/${P}-lxkbui.patch"
-	epatch "${FILESDIR}/${P}-libz.so-linkage.patch"
 	if use doc; then
 		chmod -x "${WORKDIR}"/html/*.html || die
 	fi
@@ -70,25 +78,18 @@ src_configure() {
 	# no real way of disabling gettext/nls ...
 	use nls || export ac_cv_header_libintl_h=no
 	econf \
-		--disable-static \
-		--without-native-script \
-		$(use_with truetype-debugger freetype-src "/usr/include/freetype2/internal4fontforge/") \
-		$(use_enable type3) \
-		$(use_with python) \
-		$(use_enable python pyextension) \
-		$(use_enable pasteafter) \
-		$(use_with X x) \
-		$(use_enable cjk gb12345) \
-		$(use_enable tilepath) \
-		$(use_enable debug debug-raw-points) \
-		$(use_with pango) \
-		$(use_with cairo) \
-		$(use_with capslock-for-alt) \
-		$(use_with iconv) \
-		$(use_enable libff) \
-		$(use_enable freetype) \
-		$(use_with freetype-bytecode) \
-		$(use_enable devicetables)
+	--disable-static \
+	$(use_with truetype-debugger freetype-src "/usr/include/freetype2/internal4fontforge/") \
+	$(use_enable type3) \
+	$(use_with python) \
+	$(use_enable python pyextension) \
+	$(use_enable pasteafter) \
+	$(use_with X x) \
+	$(use_enable cjk gb12345) \
+	$(use_enable tilepath) \
+	$(use_enable debug debug-raw-points) \
+	$(use_with pango) \
+	$(use_with cairo)
 }
 
 src_install() {
@@ -102,7 +103,10 @@ src_install() {
 		doins "${WORKDIR}"/*.cidmap || die
 	fi
 
-	doicon Packaging/fontforge.png || die
+	for isize in 16 22 24 32 48;do
+		doicon -s ${isize} Packaging/icons/${isize}x${isize}/apps/fontforge.png || die
+	done
+	doicon -s scalable Packaging/icons/scalable/apps/fontforge.svg || die
 	insinto /usr/share/applications
 	doins Packaging/fontforge.desktop || die
 	insinto /usr/share/mime/application

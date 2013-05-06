@@ -2,8 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-terms/roxterm/roxterm-2.6.5.ebuild,v 1.1 2012/07/31 06:12:20 ssuominen Exp $
 
-EAPI=4
-inherit gnome2-utils python toolchain-funcs
+EAPI="5"
+PYTHON_COMPAT=( python2_7 )
+inherit gnome2-utils python-r1 toolchain-funcs
 
 DESCRIPTION="A terminal emulator designed to integrate with the ROX environment"
 HOMEPAGE="http://roxterm.sourceforge.net/"
@@ -15,18 +16,17 @@ KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="nls gtk3"
 
 RDEPEND=">=dev-libs/dbus-glib-0.100
->=dev-libs/glib-2.28
-x11-libs/gtk+:3
-x11-libs/libICE
-x11-libs/libSM
-x11-libs/vte:2.90"
+		>=dev-libs/glib-2.28
+		x11-libs/gtk+:3
+		x11-libs/libICE
+		x11-libs/libSM
+		x11-libs/vte:2.90"
 DEPEND="${RDEPEND}
-dev-lang/python:2.7
-dev-libs/libxslt
-dev-python/lockfile
-virtual/pkgconfig
-|| ( media-gfx/imagemagick media-gfx/graphicsmagick[imagemagick] )
-nls? ( app-text/po4a sys-devel/gettext )"
+		dev-libs/libxslt
+		dev-python/lockfile
+		virtual/pkgconfig
+		|| ( media-gfx/imagemagick media-gfx/graphicsmagick[imagemagick] )
+		nls? ( app-text/po4a sys-devel/gettext )"
 
 pkg_setup() {
 	python_set_active_version 2
