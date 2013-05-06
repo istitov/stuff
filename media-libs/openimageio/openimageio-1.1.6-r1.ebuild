@@ -6,7 +6,8 @@ EAPI="5"
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit cmake-utils eutils multilib python-r1 vcs-snapshot
+inherit cmake-utils eutils multilib python-r1
+vcs-snapshot
 
 DESCRIPTION="A library for reading and writing images"
 HOMEPAGE="http://sites.google.com/site/openimageio/ http://github.com/OpenImageIO"
@@ -73,14 +74,14 @@ src_configure() {
 		-DLIB_INSTALL_DIR=/usr/$(get_libdir)
 		-DBUILDSTATIC=OFF
 		-DLINKSTATIC=OFF
-		$(use python-r1 && echo -DPYLIB_INSTALL_DIR=$(python-r1_get_sitedir))
+		$(use python && echo -DPYLIB_INSTALL_DIR=$(python_get_sitedir))
 		-DUSE_FIELD3D=OFF # missing in Portage
 		$(cmake-utils_use_use truetype freetype)
 		$(cmake-utils_use_use ocio OCIO)
 		$(cmake-utils_use_use opencv)
 		$(cmake-utils_use_use opengl)
 		$(cmake-utils_use_use jpeg2k OPENJPEG)
-		$(cmake-utils_use_use python-r1)
+		$(cmake-utils_use_use python)
 		$(cmake-utils_use_use qt4 QT)
 		$(cmake-utils_use_use tbb)
 		)
