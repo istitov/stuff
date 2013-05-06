@@ -6,8 +6,7 @@ EAPI="5"
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit cmake-utils eutils multilib python-r1
-vcs-snapshot
+inherit cmake-utils eutils multilib python-r1 vcs-snapshot
 
 DESCRIPTION="A library for reading and writing images"
 HOMEPAGE="http://sites.google.com/site/openimageio/ http://github.com/OpenImageIO"
