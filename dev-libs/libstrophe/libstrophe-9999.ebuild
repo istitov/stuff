@@ -4,7 +4,7 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/metajack/libstrophe.git"
+EGIT_REPO_URI="git://github.com/strophe/libstrophe.git"
 
 inherit autotools eutils git-2
 
