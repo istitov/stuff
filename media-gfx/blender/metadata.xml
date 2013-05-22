@@ -23,11 +23,11 @@
     </flag>
     <flag name="osl">
       Adds Open Shading Language support to Cycles engine
-    <pkg>media-gfx/osl</pkg>.
+      <pkg>media-gfx/osl</pkg>.	
     </flag>
     <flag name="freestyle">
       An advanced edges rendering
-    <pkg>media-gfx/osl</pkg>.
+      <pkg>media-gfx/osl</pkg>.
     </flag>
     <flag name="compositor">
       Adds new Tiles compositor to Blender.

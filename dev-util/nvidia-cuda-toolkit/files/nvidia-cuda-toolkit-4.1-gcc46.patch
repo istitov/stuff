@@ -1,0 +1,11 @@
+--- include/host_config.h.orig	2011-10-20 07:53:49.000000000 +0400
++++ include/host_config.h	2011-11-12 22:10:53.000000000 +0400
+@@ -79,7 +79,7 @@
+ 
+ #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 5)
+ 
+-#error -- unsupported GNU version! gcc 4.6 and up are not supported!
++//#error -- unsupported GNU version! gcc 4.8 and up are not supported!
+ 
+ #endif /* __GNUC__> 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 5) */
+ 

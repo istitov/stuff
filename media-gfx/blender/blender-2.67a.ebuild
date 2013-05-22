@@ -24,7 +24,7 @@ fi
 
 LICENSE="|| ( GPL-2 BL )"
 SLOT="2.6"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE_MODULES="+cycles +ocio -osl -freestyle +compositor +tomato +game-engine player addons"
 IUSE_MODIFIERS="fluid +boolean +decimate +remesh smoke oceansim"
 IUSE_CODECS="ffmpeg +openexr jpeg2k openal -dds -tiff -cin -redcode"
