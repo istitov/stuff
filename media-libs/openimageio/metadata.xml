@@ -13,11 +13,11 @@
   </longdescription>
 
   <use>
-    <flag name="nopugixml">
-      Remove bundled code, see https://github.com/OpenImageIO/oiio/issues/403.
+    <flag name="colorio">
+      May be it for opencolorio support)))
     </flag>
     <flag name="pugixml">
-      To remove pugixml! Don't required for osl build.
+      To save pugixml for osl build.
     </flag>
     <flag name="opencv">
       Add support for opencv.
