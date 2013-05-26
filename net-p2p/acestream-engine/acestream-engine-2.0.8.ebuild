@@ -20,7 +20,7 @@ IUSE=""
 
 DEPEND="dev-python/m2crypto
 		dev-python/apsw
-		media-video/acestream-python-appindicator"
+		dev-libs/acestream-python-appindicator"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"

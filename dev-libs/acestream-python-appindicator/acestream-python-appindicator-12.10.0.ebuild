@@ -5,8 +5,6 @@
 EAPI=5
 inherit eutils
 
-AYATANA_VALA_VERSION=0.16
-
 DESCRIPTION="A library to allow applications to export a menu into the Unity Menu bar"
 HOMEPAGE="http://launchpad.net/libappindicator"
 MY_PN="${PN#acestream-}"

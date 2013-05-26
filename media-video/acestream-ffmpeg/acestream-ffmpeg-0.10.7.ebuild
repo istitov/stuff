@@ -18,7 +18,7 @@ FFMPEG_REVISION="${PV#*_p}"
 
 LICENSE="GPL-2 amr? ( GPL-3 ) encode? ( aac? ( GPL-3 ) )"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
+KEYWORDS="~x86 ~amd64"
 IUSE="
 	aac aacplus alsa amr bindist +bzip2 cdio celt cpudetection debug
 	dirac doc +encode faac frei0r gnutls gsm +hardcoded-tables ieee1394 jack
