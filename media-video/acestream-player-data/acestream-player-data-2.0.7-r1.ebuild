@@ -42,7 +42,7 @@ DEPEND="media-libs/aalib
 		pulseaudio? ( media-sound/pulseaudio )
 		portaudio? ( media-libs/portaudio )
 		avahi? ( net-dns/avahi )
-		media-video/acestream-ffmpeg
+		media-video/acestream-ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora=,v4l=,vaapi=,vorbis=,alsa]
 		media-libs/acestream-x264
 		cddb? ( media-libs/libcddb )
 		cdda? ( media-libs/libcddb dev-libs/libcdio )
