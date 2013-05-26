@@ -15,9 +15,8 @@ SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="pulseaudio jack portaudio"
+IUSE=""
 
-CDEPEND=""
 DEPEND="media-video/acestream-player"
 RDEPEND="${DEPEND}"
 
