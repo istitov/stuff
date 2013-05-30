@@ -9,3 +9,6 @@
 # are nowhere to be seen... :(
 =games-arcade/blobwars-1.13
 =games-arcade/blobwars-1.17
+#megabaks (31 May 2013)
+# link-deps
+=x11-misc/appmenu-firefox-21.0
