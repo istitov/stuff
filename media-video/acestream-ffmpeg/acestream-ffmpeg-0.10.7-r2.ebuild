@@ -236,7 +236,7 @@ src_configure() {
 src_install() {
 	emake DESTDIR="${D}" install
 	rm -r "${D}"/usr/{bin,include,share}
-	rm -r "${D}"/usr/lib/pkgconfig
-	rm "${D}"/usr/lib/{libavcodec.so,libavformat.so,libavutil.so}
-	rm "${D}"/usr/lib/{libavdevice.*,libavfilter.*,libpostproc.*,libswresample.*,libswscale.*,libavutil.so*}
+	rm -r "${D}"/usr/lib*/pkgconfig
+	rm "${D}"/usr/lib*/{libavcodec.so,libavformat.so,libavutil.so}
+	rm "${D}"/usr/lib*/{libavdevice.*,libavfilter.*,libpostproc.*,libswresample.*,libswscale.*,libavutil.so*}
 }
