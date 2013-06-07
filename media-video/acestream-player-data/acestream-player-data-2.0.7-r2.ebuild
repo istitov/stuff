@@ -96,7 +96,7 @@ src_prepare(){
 src_install(){
 	cp -R usr "${D}"
 
-	dosym /usr/$(get_libdir)/libgnutls.so /usr/$(get_libdir)/libgnutls.so.26
+	$(has_version ">=net-libs/gnutls-3.1.10") && dosym /usr/$(get_libdir)/libgnutls.so /usr/$(get_libdir)/libgnutls.so.26
 	dosym /usr/$(get_libdir)/liblua.so /usr/$(get_libdir)/liblua5.1.so.0
 	dosym /usr/$(get_libdir)/libmpcdec.so /usr/$(get_libdir)/libmpcdec.so.6
 	dosym /usr/$(get_libdir)/liba52.so /usr/$(get_libdir)/liba52-0.7.4.so
