@@ -5,7 +5,7 @@
 EAPI=4
 
 inherit qt4-r2
-SRC_URI="mirror://github/pasis/${PN}/${P}.tar.gz"
+SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 
 DESCRIPTION="Environment for executing and debugging Markov algorithm"
 HOMEPAGE="https://github.com/pasis/fvm2"
@@ -16,13 +16,13 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc examples"
 
 RDEPEND="dev-qt/qtcore
-		dev-qt/qtgui"
+	dev-qt/qtgui"
 DEPEND="${RDEPEND}"
 
 src_install() {
-		dodoc README
-		use doc && dohtml -r docs/ua/html/*
-		use examples && dodoc docs/examples/vm_markov_3^x-2y.fvm
-		insinto /usr/bin/
-		dobin bin/fvm2 || die
+	dodoc README
+	use doc && dodoc docs/en/text/*
+	use examples && dodoc examples/*
+	insinto /usr/bin/
+	dobin bin/fvm2 || die
 }
