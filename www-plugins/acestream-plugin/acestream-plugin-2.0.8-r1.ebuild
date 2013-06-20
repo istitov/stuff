@@ -9,15 +9,15 @@ inherit multilib
 DESCRIPTION="ACE Stream multimedia plugin for web browsers"
 HOMEPAGE="http://torrentstream.org/"
 MY_PN="acestream-mozilla-plugin"
-SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_${PV}-1quantal1_i386.deb )
-		amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_${PV}-1quantal1_amd64.deb )"
+SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_${PV}-1raring1_i386.deb )
+		amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_${PV}-1raring1_amd64.deb )"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND="media-video/acestream-player"
+DEPEND="~media-video/acestream-player-data-${PV}"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
