@@ -6,7 +6,7 @@ EAPI=4
 
 inherit eutils git-2
 
-DESCRIPTION="/etc/portage manager"
+DESCRIPTION="/etc/portage cleaner"
 HOMEPAGE="https://github.com/megabaks/portconf"
 EGIT_REPO_URI="git://github.com/megabaks/${PN}.git"
 
