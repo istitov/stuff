@@ -6,7 +6,7 @@ EAPI="4"
 
 inherit fdo-mime gnome2-utils git-2 eutils
 
-EGIT_REPO_URI="git://deadbeef.git.sourceforge.net/gitroot/deadbeef/deadbeef"
+EGIT_REPO_URI="git://git.code.sf.net/p/deadbeef/code"
 EGIT_BRANCH="master"
 
 KEYWORDS=""
