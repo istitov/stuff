@@ -5,6 +5,6 @@
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
 	<use>
-	  <flag name="gtk3">Build with x11-libs/gtk+:3</flag>
+		<flag name="gtk3">Build with x11-libs/gtk+:3</flag>
 	</use>
 </pkgmetadata>

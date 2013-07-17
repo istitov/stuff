@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-<herd>embedded</herd>
-<maintainer>
-        <email>iohann.s.titov@gmail.com</email>
-</maintainer>
-<longdescription>
-	On board debugger driver for stm32-discovery boards.
-	The chip is 	called stlink and there are 2 versions:
-	. STLINKv1, present on STM32VL discovery kits,
-	. STLINKv2, present on STM32L discovery and later kits.
-	2 different transport layers are used:
-	. STLINKv1 uses SCSI passthru commands over USB,
-	. STLINKv2 uses raw USB commands.
-</longdescription>
+	<herd>embedded</herd>
+	<maintainer>
+		<email>iohann.s.titov@gmail.com</email>
+	</maintainer>
+	<longdescription>
+		On board debugger driver for stm32-discovery boards.
+		The chip is called stlink and there are 2 versions:
+		. STLINKv1, present on STM32VL discovery kits,
+		. STLINKv2, present on STM32L discovery and later kits.
+		2 different transport layers are used:
+		. STLINKv1 uses SCSI passthru commands over USB,
+		. STLINKv2 uses raw USB commands.
+	</longdescription>
 </pkgmetadata>

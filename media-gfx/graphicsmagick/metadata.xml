@@ -5,9 +5,9 @@
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
 	<use>
-	  <flag name="fpx">Enable FlashPIX support</flag>
-	  <flag name="q8">8 bits in a pixel quantum</flag>
-	  <flag name="q16">16 bits in a pixel quantum</flag>
-	  <flag name="q32">32 bits in a pixel quantum</flag>
+		<flag name="fpx">Enable FlashPIX support</flag>
+		<flag name="q8">8 bits in a pixel quantum</flag>
+		<flag name="q16">16 bits in a pixel quantum</flag>
+		<flag name="q32">32 bits in a pixel quantum</flag>
 	</use>
 </pkgmetadata>
