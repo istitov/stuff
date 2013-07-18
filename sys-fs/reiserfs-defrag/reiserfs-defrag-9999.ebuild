@@ -20,9 +20,6 @@ src_compile() {
 	emake || die "emake failed"
 }
 src_install() {
-	make DESTDIR="${D}" install || die "make install failed"
-}
-src_install() {
 dosbin reiserfs-defrag || die "Install failed"
 dodoc README.md || die "Install failed"
 dodoc doc/inside.md || die "Install failed"
