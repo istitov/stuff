@@ -8,7 +8,7 @@ inherit autotools eutils gnome2-utils
 
 DESCRIPTION="OpenGL window and compositing manager"
 HOMEPAGE="http://www.compiz.org/"
-SRC_URI="http://releases.compiz.org/${PV}/${P}.tar.bz2"
+SRC_URI="http://cgit.compiz.org/compiz/core/snapshot/${P}.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2.1 MIT"
 SLOT="0"
