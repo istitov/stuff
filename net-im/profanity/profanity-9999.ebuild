@@ -17,7 +17,7 @@ KEYWORDS=""
 IUSE="libnotify xml xscreensaver"
 
 RDEPEND="dev-libs/glib:2
-		dev-libs/libstrophe[xml=]
+		>=dev-libs/libstrophe-0.8-r1[xml=]
 		dev-libs/openssl
 		net-misc/curl
 		sys-libs/ncurses
