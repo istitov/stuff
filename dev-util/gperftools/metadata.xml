@@ -5,4 +5,10 @@
         <email>pasis.ua@gmail.com</email>
         <name>Dmitry Podgorny</name>
     </maintainer>
+	<use>
+		<flag name='cpu-profiler'>Build the cpu profiler</flag>
+		<flag name='debug'>Build versions of libs with debugalloc</flag>
+		<flag name='heap-profiler'>Build the heap profiler</flag>
+		<flag name='heap-checker'>Build the heap checker</flag>
+	</use>
 </pkgmetadata>
