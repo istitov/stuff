@@ -22,6 +22,8 @@ RDEPEND=">=dev-libs/dbus-glib-0.98
 	>=x11-libs/gtk+-2.24.12:2"
 DEPEND="${RDEPEND}"
 
+QA_PRESTRIPPED="usr/lib/python2.7/site-packages/appindicator/_appindicator.so"
+
 S="${WORKDIR}"
 
 src_prepare(){
@@ -32,4 +34,11 @@ src_prepare(){
 
 src_install() {
 	cp -R usr/ "${D}"
+	# remove trash and fix needed link
+	rm "${D}/usr/share/doc/python-appindicator/README"
+	rm "${D}/usr/share/doc/python-appindicator/AUTHORS"
+	rm "${D}/usr/share/doc/python-appindicator/changelog.Debian.gz"
+	rm "${D}/usr/$(get_libdir)/pyshared/python2.7/appindicator/_appindicator.so"
+	dosym "${D}usr/$(get_libdir)/python2.7/site-packages/appindicator/_appindicator.so" \
+	"/usr/$(get_libdir)/pyshared/python2.7/appindicator/_appindicator.so"
 }
