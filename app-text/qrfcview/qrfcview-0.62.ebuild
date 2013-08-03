@@ -22,9 +22,11 @@ DEPEND="${RDEPEND}"
 src_prepare() {
 		epatch "${FILESDIR}"/${PN}-include-stdint-h.patch
 		epatch "${FILESDIR}"/${PN}-fixed-rfc-number-limit.patch
+		epatch "${FILESDIR}"/01-removal-of-spurious-debug-output.patch
 }
 
 src_install() {
 		insinto /usr/bin/
 		dobin bin/qRFCView || die
+		doman "${FILESDIR}"/qRFCView.1 || die
 }

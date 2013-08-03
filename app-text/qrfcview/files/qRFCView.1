@@ -1,0 +1,37 @@
+.TH qRFCView 1 "2007-08-21" "0.62" "RFC viewer"
+.SH NAME
+qRFCView \- RFC viewer
+.SH SYNOPSIS
+.B qRFCView
+.SH DESCRIPTION
+.B qRFCView
+is a GUI viewer for IETF RFC with automatic table of content, handling
+of RFC internal cross-references, automatic downloading of a
+referenced RFC from the IETF web site and more...
+.SH OPTIONS
+.B qRFCView
+has no options.
+.SH FILES
+.I ~/.config/MELCO/qRFCView.conf
+.RS
+Configuration file
+.RE
+.PP
+By default,
+.B qRFCView
+uses the current directory from where it is called for caching the
+RFCs it downloads. You can change this setting with the menu Edit ->
+Set Directories. The default directory shall be writable. You can add
+other directories (even read-only) in the same way.
+.B qRFCView
+will look first for RFCs in these directories when you ask for a new download.
+.SH SEE ALSO
+.BR Website:
+<http://qrfcview.berlios.de/>
+.SH AUTHOR
+.B qRFCView
+was written by Romain Rollet <rfcview@gmail.com>.
+.PP
+This manual page was written by Frederic Daniel Luc Lehobey
+<Frederic@Lehobey.net>, for the Debian project (but may be used by
+others).
