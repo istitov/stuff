@@ -76,8 +76,7 @@ DEPEND="media-libs/aalib
 		vcdx? ( dev-libs/libcdio media-video/vcdimager )
 		vorbis? ( media-libs/libvorbis )
 		dev-libs/libxml2
-		x11-libs/libXpm
-		media-libs/libmpcdec"
+		x11-libs/libXpm"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
