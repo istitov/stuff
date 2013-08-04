@@ -1,0 +1,150 @@
+From e061305d617da3eafdedabe00031c31be9acdc03 Mon Sep 17 00:00:00 2001
+From: "Owen W. Taylor" <otaylor@fishsoup.net>
+Date: Wed, 26 Jun 2013 10:05:38 -0400
+Subject: [PATCH] Disable frame sync for GtkPlug
+
+Plug windows weren't redrawing properly because the embedded
+window was expecting to get messages for each frame from the
+compositor, but the compositor doesn't know about embedded
+windows. Simply disable frame sync for GtkPlug's GdkWindow -
+extending XEMBED to handle frame sync isn't interesting
+at this point.
+
+A new API gdk_x11_window_set_frame_sync_enabled() is added
+to allow this to be done.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=701613
+---
+ gdk/x11/gdkwindow-x11.c | 35 ++++++++++++++++++++++++++++++++++-
+ gdk/x11/gdkwindow-x11.h |  3 +++
+ gdk/x11/gdkx11window.h  |  4 ++++
+ gtk/gtkplug.c           |  7 +++++++
+ 4 files changed, 48 insertions(+), 1 deletion(-)
+
+diff --git a/gdk/x11/gdkwindow-x11.c b/gdk/x11/gdkwindow-x11.c
+index 26eaf69..ca42e86 100644
+--- a/gdk/x11/gdkwindow-x11.c
++++ b/gdk/x11/gdkwindow-x11.c
+@@ -157,6 +157,7 @@ gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
+   impl->toplevel_window_type = -1;
+   impl->device_cursor = g_hash_table_new_full (NULL, NULL,
+                                                NULL, g_object_unref);
++  impl->frame_sync_enabled = TRUE;
+ }
+ 
+ GdkToplevelX11 *
+@@ -403,7 +404,8 @@ gdk_x11_window_end_frame (GdkWindow *window)
+ 		       impl->toplevel->extended_update_counter,
+ 		       impl->toplevel->current_counter_value);
+ 
+-      if (gdk_x11_screen_supports_net_wm_hint (gdk_window_get_screen (window),
++      if (impl->frame_sync_enabled &&
++          gdk_x11_screen_supports_net_wm_hint (gdk_window_get_screen (window),
+ 					       gdk_atom_intern_static_string ("_NET_WM_FRAME_DRAWN")))
+         {
+           impl->toplevel->frame_pending = TRUE;
+@@ -5306,6 +5308,37 @@ gdk_x11_window_get_xid (GdkWindow *window)
+   return GDK_WINDOW_IMPL_X11 (window->impl)->xid;
+ }
+ 
++/**
++ * gdk_x11_window_set_frame_sync_enabled:
++ * @window: (type GdkX11Window): a native #GdkWindow
++ * @frame_sync_enabled: whether frame-synchronization should be enabled
++ *
++ * This function can be used to disable frame synchronization for a window.
++ * Normally frame synchronziation will be enabled or disabled based on whether
++ * the system has a compositor that supports frame synchronization, but if
++ * the window is not directly managed by the window manager, then frame
++ * synchronziation may need to be disabled. This is the case for a window
++ * embedded via the XEMBED protocol.
++ *
++ * Since: 3.8
++ */
++void
++gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
++                                       gboolean   frame_sync_enabled)
++{
++  /* Try to ensure the window has a native window */
++  if (!_gdk_window_has_impl (window))
++    gdk_window_ensure_native (window);
++
++  if (!GDK_WINDOW_IS_X11 (window))
++    {
++      g_warning (G_STRLOC " drawable is not a native X11 window");
++      return;
++    }
++
++  GDK_WINDOW_IMPL_X11 (window->impl)->frame_sync_enabled = FALSE;
++}
++
+ static void
+ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
+ {
+diff --git a/gdk/x11/gdkwindow-x11.h b/gdk/x11/gdkwindow-x11.h
+index 9982a5e..7e9b4dd 100644
+--- a/gdk/x11/gdkwindow-x11.h
++++ b/gdk/x11/gdkwindow-x11.h
+@@ -73,6 +73,7 @@ struct _GdkWindowImplX11
+                            * unset during resizing and scaling */
+   guint override_redirect : 1;
+   guint frame_clock_connected : 1;
++  guint frame_sync_enabled : 1;
+ 
+   cairo_surface_t *cairo_surface;
+ 
+@@ -172,6 +173,8 @@ GType gdk_window_impl_x11_get_type (void);
+ 
+ void            gdk_x11_window_set_user_time        (GdkWindow *window,
+ 						     guint32    timestamp);
++void            gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
++                                                       gboolean   frame_sync_enabled);
+ 
+ GdkToplevelX11 *_gdk_x11_window_get_toplevel        (GdkWindow *window);
+ void            _gdk_x11_window_tmp_unset_bg        (GdkWindow *window,
+diff --git a/gdk/x11/gdkx11window.h b/gdk/x11/gdkx11window.h
+index 88cc40f..63090ed 100644
+--- a/gdk/x11/gdkx11window.h
++++ b/gdk/x11/gdkx11window.h
+@@ -67,6 +67,10 @@ void     gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
+                                                           gboolean   hide_titlebar_when_maximized);
+ void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
+ 
++GDK_AVAILABLE_IN_3_8
++void     gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
++                                                gboolean   frame_sync_enabled);
++
+ /**
+  * GDK_WINDOW_XDISPLAY:
+  * @win: a #GdkWindow.
+diff --git a/gtk/gtkplug.c b/gtk/gtkplug.c
+index c93adeb..9171278 100644
+--- a/gtk/gtkplug.c
++++ b/gtk/gtkplug.c
+@@ -1057,6 +1057,13 @@ gtk_plug_realize (GtkWidget *widget)
+       else /* If it's a passive plug, we use the root window */
+         gdk_window = gdk_window_new (gtk_widget_get_root_window (widget),
+                                      &attributes, attributes_mask);
++      /* Because the window isn't known to the window manager,
++       * frame sync won't work. In theory, XEMBED could be extended
++       * so that embedder did frame sync like a window manager, but
++       * it's just not worth the effort considering the current
++       * minimal use of XEMBED.
++       */
++      gdk_x11_window_set_frame_sync_enabled (gdk_window, FALSE);
+       gtk_widget_set_window (widget, gdk_window);
+ 
+       gdk_display_sync (gtk_widget_get_display (widget));
+--- a/gdk/gdk.symbols
++++ b/gdk/gdk.symbols
+@@ -631,6 +631,7 @@
+ gdk_x11_window_get_type
+ gdk_x11_window_get_xid
+ gdk_x11_window_move_to_current_desktop
++gdk_x11_window_set_frame_sync_enabled
+ gdk_x11_window_set_theme_variant
+ gdk_x11_window_set_hide_titlebar_when_maximized
+ gdk_x11_window_set_user_time
+-- 
+1.8.3.2
+

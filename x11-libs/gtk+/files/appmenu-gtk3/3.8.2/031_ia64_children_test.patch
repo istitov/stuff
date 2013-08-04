@@ -1,0 +1,42 @@
+Author: Stephan Schreiber <info@fs-driver.org>
+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=711107
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=702370
+
+diff -u10 -pr gtk+3.0-3.8.2-orig/tests/a11y/children.c gtk+3.0-3.8.2/tests/a11y/children.c
+--- gtk+3.0-3.8.2-orig/tests/a11y/children.c	2013-06-15 09:17:05.000000000 +0200
++++ gtk+3.0-3.8.2/tests/a11y/children.c	2013-06-15 10:11:38.000000000 +0200
+@@ -190,28 +190,24 @@ test_add_remove (GtkWidget *widget)
+ 
+       if (GTK_IS_ENTRY (widget))
+         g_object_unref (child_accessible);
+     }
+   for (j = 0 ; j < i; j++)
+     {
+       remove_child (&state, j);
+       g_assert_cmpint (add_data.count, ==, i);
+       g_assert_cmpint (remove_data.count, ==, j + 1);
+       g_assert_cmpint (remove_data.n_children, ==, step_children + i - j - 1);
+-      if (parent_data[j].count == 2)
+-        g_assert (parent_data[j].parent == NULL);
+-      else if (!GTK_IS_ENTRY (widget))
++      if (!GTK_IS_ENTRY (widget))
+         {
+-          AtkStateSet *set;
+-          set = atk_object_ref_state_set (ATK_OBJECT (parent_data[j].parent));
+-          g_assert (atk_state_set_contains_state (set, ATK_STATE_DEFUNCT));
+-          g_object_unref (set);
++          g_assert_cmpint (parent_data[j].count, ==, 2);
++          g_assert (parent_data[j].parent == NULL);
+         }
+     }
+ 
+   g_signal_handlers_disconnect_by_func (accessible, G_CALLBACK (children_changed), &add_data);
+   g_signal_handlers_disconnect_by_func (accessible, G_CALLBACK (children_changed), &remove_data);
+ }
+ 
+ static void
+ add_child_test (const gchar      *prefix,
+                 GTestFixtureFunc  test_func,
+
+Signed-off-by: Stephan Schreiber <info@fs-driver.org>
+

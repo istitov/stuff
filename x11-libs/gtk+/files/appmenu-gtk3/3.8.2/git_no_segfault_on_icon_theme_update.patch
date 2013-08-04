@@ -1,0 +1,19 @@
+https://bugzilla.gnome.org/show_bug.cgi?id=702598
+---
+diff --git a/gtk/gtkicontheme.c b/gtk/gtkicontheme.c
+index 66ea174..4af2537 100644
+--- a/gtk/gtkicontheme.c
++++ b/gtk/gtkicontheme.c
+@@ -1399,7 +1399,10 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
+ 
+       if (ABS (tv.tv_sec - priv->last_stat_time) > 5 &&
+ 	  rescan_themes (icon_theme))
+-	blow_themes (icon_theme);
++        {
++          g_hash_table_remove_all (priv->info_cache);
++          blow_themes (icon_theme);
++        }
+     }
+   
+   if (!priv->themes_valid)
+--
