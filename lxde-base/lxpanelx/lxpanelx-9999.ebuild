@@ -47,17 +47,23 @@ src_configure() {
 		if ! use oss;then
 			plugins="${plugins/,volume/}"
 		fi
-		myconf="plugins=${plugins}"
+		myconf="${plugins}"
+	else
+		use alsa && myconf+="volumealsa,"
+		use oss && myconf+="volume,"
+		if ! use alsa && ! use oss;then
+			myconf="none"
+		fi
 	fi
 
 	econf \
 		--with-x \
 		--disable-dependency-tracking \
 		--enable-silent-rules \
+		--with-plugins=${myconf%,} \
 		$(use_enable alsa) \
 		$(use_with libfm) \
-		$(use_enable libindicator indicator-support) \
-		$(use_with plugins ${myconf})
+		$(use_enable libindicator indicator-support)
 }
 
 src_install () {
