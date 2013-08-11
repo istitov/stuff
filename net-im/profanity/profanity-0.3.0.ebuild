@@ -14,7 +14,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="libnotify xml xscreensaver"
 
 RDEPEND="dev-libs/glib:2
-		=dev-libs/libstrophe-0.8[xml=]
+		>=dev-libs/libstrophe-0.8-r1[xml=]
 		dev-libs/openssl
 		net-misc/curl
 		sys-libs/ncurses
@@ -24,4 +24,10 @@ DEPEND="${RDEPEND}"
 
 src_configure() {
 		econf $(use_with xml libxml2)
+}
+
+pkg_postinst() {
+		elog
+		elog "User guide is available online:"
+		elog "  http://www.profanity.im/userguide.html"
 }
