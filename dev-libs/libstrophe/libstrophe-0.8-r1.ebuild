@@ -26,6 +26,7 @@ S="${WORKDIR}/${P}-snapshot"
 src_prepare() {
 		epatch "${FILESDIR}"/${PN}-xmpp-conn-disable-tls.patch
 		epatch "${FILESDIR}"/${PN}-fix-memory-leaks.patch
+		epatch "${FILESDIR}"/${PN}-fix-memory-leak-in-logging.patch
 		epatch "${FILESDIR}"/${PN}-fix-crash-on-non-latin1.patch
 		epatch "${FILESDIR}"/${PN}-xml-escape.patch
 }
