@@ -132,8 +132,6 @@ src_install(){
 	if ! use dvd;then
 		rm "${D}/usr/lib/acestreamplayer/plugins/access/libdvdread_plugin.so"
 		rm "${D}/usr/lib/acestreamplayer/plugins/access/libdvdnav_plugin.so"
-		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libts_plugin.so"
-		rm "${D}/usr/lib/acestreamplayer/plugins/mux/libmux_ts_plugin.so"
 	fi
 
 	if ! use dirac;then
@@ -154,6 +152,8 @@ src_install(){
 	if ! use dvb;then
 		rm "${D}/usr/lib/acestreamplayer/plugins/access/libdvb_plugin.so"
 		rm "${D}/usr/lib/acestreamplayer/plugins/codec/libdvbsub_plugin.so"
+		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libts_plugin.so"
+		rm "${D}/usr/lib/acestreamplayer/plugins/mux/libmux_ts_plugin.so"
 	fi
 
 	if ! use vcdx;then
