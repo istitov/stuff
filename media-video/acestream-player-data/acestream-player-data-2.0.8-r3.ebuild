@@ -8,13 +8,13 @@ inherit multilib
 
 DESCRIPTION="ACE Stream player libraries files"
 HOMEPAGE="http://torrentstream.org/"
-SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1quantal1_i386.deb )
-		amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1quantal1_amd64.deb )"
+SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1raring1_i386.deb )
+		amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1raring1_amd64.deb )"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="pulseaudio jack portaudio avahi cddb cdda dvd dirac dvb aac flac ogg lirc mad matroska modplug musepack mpeg
+IUSE="pulseaudio jack portaudio avahi cddb cdda dvd dirac aac flac ogg lirc mad matroska modplug musepack mpeg
 		ieee1394 samba mtp ncurses libproxy speex theora upnp v4l vaapi vcdx vorbis"
 
 LANGS="ach af am ar ast be bg bn br ca cgg ckb co cs da de el en_GB es et eu fa ff fi fr fur ga gl he
@@ -49,7 +49,7 @@ DEPEND="media-libs/aalib
 		sys-apps/dbus
 		dvd? ( media-libs/libdca media-libs/libdvdnav media-libs/libdvdread )
 		dirac? ( media-video/dirac media-libs/schroedinger )
-		dvb? ( media-libs/libdvbpsi )
+		media-libs/libdvbpsi
 		aac? ( media-libs/faad2 )
 		flac? ( media-libs/flac )
 		ogg? ( media-libs/libogg media-libs/libkate )
@@ -79,6 +79,8 @@ DEPEND="media-libs/aalib
 		x11-libs/libXpm"
 RDEPEND="${DEPEND}"
 
+RESTRICT="strip"
+
 S="${WORKDIR}"
 
 src_prepare(){
@@ -96,85 +98,59 @@ src_prepare(){
 src_install(){
 	cp -R usr "${D}"
 
-	$(has_version ">=net-libs/gnutls-3.1.10") && dosym /usr/$(get_libdir)/libgnutls.so /usr/$(get_libdir)/libgnutls.so.26
-	dosym /usr/$(get_libdir)/liblua.so /usr/$(get_libdir)/liblua5.1.so.0
-	dosym /usr/$(get_libdir)/libmpcdec.so /usr/$(get_libdir)/libmpcdec.so.6
-	dosym /usr/$(get_libdir)/liba52.so /usr/$(get_libdir)/liba52-0.7.4.so
+	$(has_version ">=net-libs/gnutls-3.1.10") && dosym "libgnutls.so" "/usr/$(get_libdir)/libgnutls.so.26"
+	dosym "liblua.so" "/usr/$(get_libdir)/liblua5.1.so.0"
+	dosym "liba52.so" "/usr/$(get_libdir)/liba52-0.7.4.so"
+
+	use pulseaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libpulse_plugin.so"
+	use portaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libportaudio_plugin.so"
+	use v4l || rm "${D}/usr/lib/acestreamplayer/plugins/access/libv4l2_plugin.so"
+	use cdda || rm "${D}/usr/lib/acestreamplayer/plugins/access/libcdda_plugin.so"
+	use modplug || rm "${D}/usr/lib/acestreamplayer/plugins/demux/libmod_plugin.so"
+	use mpeg || rm "${D}/usr/lib/acestreamplayer/plugins/codec/liblibmpeg2_plugin.so"
+	use speex || rm "${D}/usr/lib/acestreamplayer/plugins/codec/libspeex_plugin.so"
+	use theora || rm "${D}/usr/lib/acestreamplayer/plugins/codec/libtheora_plugin.so"
+	use vorbis || rm "${D}/usr/lib/acestreamplayer/plugins/codec/libvorbis_plugin.so"
+
+	if use musepack;then
+		dosym "libmpcdec.so" "/usr/$(get_libdir)/libmpcdec.so.6"
+	else
+		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libmpc_plugin.so"
+	fi
 
 	if use matroska;then
-		dosym /usr/$(get_libdir)/libmatroska.so /usr/$(get_libdir)/libmatroska.so.4
+		dosym "libmatroska.so" "/usr/$(get_libdir)/libmatroska.so.4"
 	else
-		rm "${D}"/usr/lib/acestreamplayer/plugins/demux/libmkv_plugin.so
-	fi
-
-	if ! use pulseaudio;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/audio_output/libpulse_plugin.so
-	fi
-
-	if ! use portaudio;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/audio_output/libportaudio_plugin.so
+		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libmkv_plugin.so"
 	fi
 
 	if ! use jack;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/audio_output/libjack_plugin.so
-		rm "${D}"/usr/lib/acestreamplayer/plugins/access/libaccess_jack_plugin.so
-	fi
-
-	if ! use v4l;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/access/libv4l2_plugin.so
-	fi
-
-	if ! use cdda;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/access/libcdda_plugin.so
+		rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libjack_plugin.so"
+		rm "${D}/usr/lib/acestreamplayer/plugins/access/libaccess_jack_plugin.so"
 	fi
 
 	if ! use dvd;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/access/libdvdread_plugin.so
-		rm "${D}"/usr/lib/acestreamplayer/plugins/access/libdvdnav_plugin.so
+		rm "${D}/usr/lib/acestreamplayer/plugins/access/libdvdread_plugin.so"
+		rm "${D}/usr/lib/acestreamplayer/plugins/access/libdvdnav_plugin.so"
 	fi
 
 	if ! use dirac;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/demux/libdirac_plugin.so
-		rm "${D}"/usr/lib/acestreamplayer/plugins/codec/libdirac_plugin.so
+		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libdirac_plugin.so"
+		rm "${D}/usr/lib/acestreamplayer/plugins/codec/libdirac_plugin.so"
 	fi
 
 	if ! use flac;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/demux/libflacsys_plugin.so
-		rm "${D}"/usr/lib/acestreamplayer/plugins/codec/libflac_plugin.so
+		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libflacsys_plugin.so"
+		rm "${D}/usr/lib/acestreamplayer/plugins/codec/libflac_plugin.so"
 	fi
 
 	if ! use ogg;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/demux/libogg_plugin.so
-		rm "${D}"/usr/lib/acestreamplayer/plugins/mux/libmux_ogg_plugin.so
-	fi
-
-	if ! use dvb;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/access/libdvb_plugin.so
-		rm "${D}"/usr/lib/acestreamplayer/plugins/codec/libdvbsub_plugin.so
-	fi
-
-	if ! use modplug;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/demux/libmod_plugin.so
-	fi
-
-	if ! use mpeg;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/codec/liblibmpeg2_plugin.so
-	fi
-
-	if ! use speex;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/codec/libspeex_plugin.so
-	fi
-
-	if ! use theora;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/codec/libtheora_plugin.so
+		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libogg_plugin.so"
+		rm "${D}/usr/lib/acestreamplayer/plugins/mux/libmux_ogg_plugin.so"
 	fi
 
 	if ! use vcdx;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/access/libvcd_plugin.so
-		rm "${D}"/usr/lib/acestreamplayer/plugins/codec/libsvcdsub_plugin.so
-	fi
-
-	if ! use vorbis;then
-		rm "${D}"/usr/lib/acestreamplayer/plugins/codec/libvorbis_plugin.so
+		rm "${D}/usr/lib/acestreamplayer/plugins/access/libvcd_plugin.so"
+		rm "${D}/usr/lib/acestreamplayer/plugins/codec/libsvcdsub_plugin.so"
 	fi
 }

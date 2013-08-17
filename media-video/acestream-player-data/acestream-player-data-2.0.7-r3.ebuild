@@ -8,13 +8,13 @@ inherit multilib
 
 DESCRIPTION="ACE Stream player libraries files"
 HOMEPAGE="http://torrentstream.org/"
-SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1raring1_i386.deb )
-		amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1raring1_amd64.deb )"
+SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1quantal1_i386.deb )
+		amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1quantal1_amd64.deb )"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="pulseaudio jack portaudio avahi cddb cdda dvd dirac dvb aac flac ogg lirc mad matroska modplug musepack mpeg
+IUSE="pulseaudio jack portaudio avahi cddb cdda dvd dirac aac flac ogg lirc mad matroska modplug musepack mpeg
 		ieee1394 samba mtp ncurses libproxy speex theora upnp v4l vaapi vcdx vorbis"
 
 LANGS="ach af am ar ast be bg bn br ca cgg ckb co cs da de el en_GB es et eu fa ff fi fr fur ga gl he
@@ -49,7 +49,7 @@ DEPEND="media-libs/aalib
 		sys-apps/dbus
 		dvd? ( media-libs/libdca media-libs/libdvdnav media-libs/libdvdread )
 		dirac? ( media-video/dirac media-libs/schroedinger )
-		dvb? ( media-libs/libdvbpsi )
+		media-libs/libdvbpsi
 		aac? ( media-libs/faad2 )
 		flac? ( media-libs/flac )
 		ogg? ( media-libs/libogg media-libs/libkate )
@@ -98,9 +98,10 @@ src_prepare(){
 src_install(){
 	cp -R usr "${D}"
 
-	$(has_version ">=net-libs/gnutls-3.1.10") && dosym "libgnutls.so" "/usr/$(get_libdir)/libgnutls.so.26"
-	dosym "liblua.so" "/usr/$(get_libdir)/liblua5.1.so.0"
-	dosym "liba52.so" "/usr/$(get_libdir)/liba52-0.7.4.so"
+	$(has_version ">=net-libs/gnutls-3.1.10") && dosym /usr/$(get_libdir)/libgnutls.so /usr/$(get_libdir)/libgnutls.so.26
+	dosym /usr/$(get_libdir)/liblua.so /usr/$(get_libdir)/liblua5.1.so.0
+	dosym /usr/$(get_libdir)/libmpcdec.so /usr/$(get_libdir)/libmpcdec.so.6
+	dosym /usr/$(get_libdir)/liba52.so /usr/$(get_libdir)/liba52-0.7.4.so
 
 	use pulseaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libpulse_plugin.so"
 	use portaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libportaudio_plugin.so"
@@ -147,13 +148,6 @@ src_install(){
 	if ! use ogg;then
 		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libogg_plugin.so"
 		rm "${D}/usr/lib/acestreamplayer/plugins/mux/libmux_ogg_plugin.so"
-	fi
-
-	if ! use dvb;then
-		rm "${D}/usr/lib/acestreamplayer/plugins/access/libdvb_plugin.so"
-		rm "${D}/usr/lib/acestreamplayer/plugins/codec/libdvbsub_plugin.so"
-		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libts_plugin.so"
-		rm "${D}/usr/lib/acestreamplayer/plugins/mux/libmux_ts_plugin.so"
 	fi
 
 	if ! use vcdx;then

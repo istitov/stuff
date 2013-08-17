@@ -70,5 +70,5 @@ src_configure() {
 }
 
 src_install() {
-	newlib.so "${WORKDIR}"/x264-snapshot-20110831-2245/libx264.so.116 libx264.so.116
+	newlib.so "${WORKDIR}/${MY_P}"/libx264.so.116 libx264.so.116
 }

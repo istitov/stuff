@@ -35,5 +35,6 @@ src_install(){
 	if ! use gtk;then
 		sed 's|client_gtk|client_console|' -i usr/bin/acestreamengine-client-gtk
 	fi
+	sed 's|python |python2.7 |' -i usr/bin/acestreamengine
 	cp -R usr "${D}"
 }
