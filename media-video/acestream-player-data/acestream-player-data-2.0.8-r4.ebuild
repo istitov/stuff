@@ -34,7 +34,7 @@ DEPEND="media-libs/aalib
 		media-libs/libpng:1.2
 		musepack? ( media-sound/musepack-tools )
 		modplug? ( media-libs/libmodplug )
-		matroska? ( media-libs/libmatroska <dev-libs/libebml-1.3.0 media-libs/libmkv )
+		matroska? ( media-libs/libmatroska dev-libs/acestream-libebml media-libs/libmkv )
 		media-libs/alsa-lib
 		jack? ( media-sound/jack-audio-connection-kit )
 		media-libs/libcaca
