@@ -10,6 +10,9 @@
       to work with GNOME, and might actually be faster if it's not
       used.
     </flag>
+	<flag name="nvidia">
+      Antitearing patch for nvidia users.
+    </flag>
   </use>
 
   <herd>desktop-effects</herd>

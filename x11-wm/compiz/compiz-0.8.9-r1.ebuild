@@ -13,7 +13,7 @@ SRC_URI="http://cgit.compiz.org/compiz/core/snapshot/${P}.tar.bz2"
 LICENSE="GPL-2 LGPL-2.1 MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
-IUSE="+cairo dbus fuse gnome gconf gtk kde +svg"
+IUSE="+cairo dbus fuse gnome gconf gtk kde +svg nvidia"
 
 COMMONDEPEND="
 	>=dev-libs/glib-2
@@ -88,6 +88,8 @@ src_prepare() {
 	if ! use gnome || ! use gconf; then
 		epatch "${FILESDIR}"/${PN}-no-gconf.patch
 	fi
+
+	use nvidia && epatch "${FILESDIR}"/nvidia_tearing.patch
 
 	eautoreconf
 }

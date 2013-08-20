@@ -1,0 +1,29 @@
+--- src/display.c	2009-02-28 23:32:55.000000000 +0500
++++ src/display.c	2009-02-28 23:35:25.000000000 +0500
+@@ -1644,6 +1644,7 @@
+ 			    }
+ 			}
+
++			s->damageMask |= COMP_SCREEN_DAMAGE_ALL_MASK;
+ 			if (s->damageMask & COMP_SCREEN_DAMAGE_REGION_MASK)
+ 			{
+ 			    XIntersectRegion (s->damage, &s->region,
+@@ -1684,6 +1685,7 @@
+
+ 			if (mask & COMP_SCREEN_DAMAGE_ALL_MASK)
+ 			{
++			    glFlush ();
+ 			    glXSwapBuffers (d->display, s->output);
+ 			}
+ 			else
+--- src/screen.c	2009-02-28 23:33:05.000000000 +0500
++++ src/screen.c	2009-02-28 23:37:18.000000000 +0500
+@@ -3845,7 +3845,7 @@
+     if (s->pendingCommands)
+     {
+ 	makeScreenCurrent (s);
+-	glFinish ();
++	glFlush();
+
+ 	s->pendingCommands = FALSE;
+     }
