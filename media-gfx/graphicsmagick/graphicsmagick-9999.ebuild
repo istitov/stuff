@@ -1,14 +1,14 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphicsmagick/graphicsmagick-1.3.12-r1.ebuild,v 1.7 2011/10/23 16:20:25 armin76 Exp $
+# $Header: $
 
-EAPI="4"
+EAPI="5"
 
 inherit eutils toolchain-funcs flag-o-matic perl-module mercurial
 
 MY_P=${P/graphicsm/GraphicsM}
 
-DESCRIPTION="Collection of tools and libraries for many image formats"
+DESCRIPTION="GraphicsMagick is the swiss army knife of image processing."
 HOMEPAGE="http://www.graphicsmagick.org/"
 EHG_REPO_URI="http://graphicsmagick.hg.sourceforge.net:8000/hgroot/graphicsmagick/graphicsmagick"
 
