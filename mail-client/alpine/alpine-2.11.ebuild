@@ -36,10 +36,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-
-#	if use patches ; then
-		epatch "${FILESDIR}/${PF}-all.patch.gz"
-#	fi
 	eautoreconf
 }
 
