@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 inherit bzr gnome2 eutils flag-o-matic
 
 SRC_URI=""
@@ -19,7 +19,7 @@ IUSE="dia gs gnome inkjar dbus lcms nls poppler postscript python perl wmf wpg"
 RESTRICT="test"
 
 COMMON_DEPEND="
-	dev-cpp/glibmm
+	>=dev-cpp/glibmm-2.36
 	dev-cpp/gtkmm:2.4
 	>=dev-libs/boehm-gc-6.4
 	>=dev-libs/glib-2.6.5
