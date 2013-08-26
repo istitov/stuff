@@ -13,6 +13,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="git://github.com/zsh-users/${PN}.git"
 	EGIT_BRANCH="master"
 	KEYWORDS=""
+	S="${WORKDIR}/${PN}"
 else
 	SRC_URI="https://github.com/zsh-users/${PN}/archive/${PV}.zip -> ${P}.zip"
 	KEYWORDS="~arm ~amd64 ~x86"
@@ -25,7 +26,6 @@ DEPEND=">=app-shells/zsh-4.3.5"
 RDEPEND="${DEPEND}
 !app-shells/zsh-completion"
 
-S="${WORKDIR}/${PN}"
 
 src_install() {
 	insinto /usr/share/zsh/site-functions
