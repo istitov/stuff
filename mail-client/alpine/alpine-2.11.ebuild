@@ -1,18 +1,21 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
-EAPI=4
+EAPI=5
 
 inherit eutils flag-o-matic autotools multilib toolchain-funcs
 
 DESCRIPTION="alpine is an easy to use text-based based mail and news client"
 HOMEPAGE="http://www.washington.edu/alpine/ http://patches.freeiz.com/alpine/"
-SRC_URI="http://patches.freeiz.com/alpine/release/src/${P}.tar.xz"
+SRC_URI="
+!patches? ( http://patches.freeiz.com/alpine/release/src/${P}.tar.xz -> ${P}-clean.tar.xz )
+patches?  ( http://patches.freeiz.com/alpine/patches/${P}/${P}.tar.xz -> ${P}-patched.tar.xz )"
 
 LICENSE="Apache-2.0"
-KEYWORDS="amd64"
+KEYWORDS="~x86 ~amd64"
 SLOT="0"
-IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads topal"
+IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads topal
+patches"
 
 DEPEND="virtual/pam
 	>=net-libs/c-client-2007f-r4[topal=]
@@ -33,6 +36,10 @@ pkg_setup() {
 }
 
 src_prepare() {
+
+#	if use patches ; then
+		epatch "${FILESDIR}/${PF}-all.patch.gz"
+#	fi
 	eautoreconf
 }
 
