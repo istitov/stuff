@@ -34,8 +34,7 @@ DEPEND="${RDEPEND}
 	dev-util/intltool
 	virtual/pkgconfig"
 
-MAKEOPTS="${MAKEOPTS} -j1"
-
+MAKEOPTS="${MAKEOPTS} -j1" #nowarn
 src_prepare() {
 	# Drop DEPRECATED flags, bug #391103
 	sed -i \
