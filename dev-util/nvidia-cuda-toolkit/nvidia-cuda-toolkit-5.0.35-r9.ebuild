@@ -1,8 +1,8 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/nvidia-cuda-toolkit/nvidia-cuda-toolkit-5.0.35-r3.ebuild,v 1.1 2013/02/13 22:02:07 jlec Exp $
+# $Header: $
 
-EAPI=5
+EAPI="5"
 
 inherit cuda unpacker versionator
 
@@ -44,23 +44,24 @@ pkg_setup() {
 src_unpack() {
 	unpacker
 	unpacker run_files/cudatoolkit*run
-	epatch ${FILESDIR}/${PN}-5.0-gcc48.patch
+}
+
+src_prepare() {
+	epatch "${FILESDIR}/${PN}-5.0-gcc48.patch"
 # https://projects.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/cuda&id=3f7b5c0fbba62743849d9b5902e0bee71ee7f422
 # https://projects.archlinux.org/svntogit/community.git/commit/trunk/PKGBUILD?h=packages/cuda&id=3f7b5c0fbba62743849d9b5902e0bee71ee7f422
 
 # Now, let the hacks begin!
 # allow gcc 4.7 to work
-	sed -i "/unsupported GNU/d" ${WORKDIR}/include/host_config.h
+	sed -i "/unsupported GNU/d" "${WORKDIR}/include/host_config.h" || die
 # allow gcc 4.8 to work
-	sed -i "1 i #define __STRICT_ANSI__" ${WORKDIR}/include/cuda_runtime.h
-	echo "#undef _GLIBCXX_ATOMIC_BUILTINS" >> ${WORKDIR}/include/cuda_runtime.h
-	echo "#define _GLIBCXX_GTHREAD_USE_WEAK 0" >> ${WORKDIR}/include/cuda_runtime.h
+	sed -i "1 i #define __STRICT_ANSI__" "${WORKDIR}"/include/cuda_runtime.h || die
+	echo "#undef _GLIBCXX_ATOMIC_BUILTINS" >> "${WORKDIR}"/include/cuda_runtime.h || die
+	echo "#define _GLIBCXX_GTHREAD_USE_WEAK 0" >> "${WORKDIR}"/include/cuda_runtime.h || die
 # fix nvidia path fuckup
 #	sed -i "s|/build/pkg||g" ${WORKDIR}/bin/nvvp
 #	sed -i "s|/build/pkg||g" ${WORKDIR}/bin/nsight
-}
 
-src_prepare() {
 	local cuda_supported_gcc
 
 	cuda_supported_gcc="4.8"
@@ -75,7 +76,7 @@ src_install() {
 	local i j
 	local remove="doc jre run_files install-linux.pl "
 	local cudadir=/opt/cuda
-	local ecudadir="${EPREFIX}"${cudadir}
+	local ecudadir="${EPREFIX}${cudadir}"
 
 	dodoc doc/*txt
 	if use doc; then
