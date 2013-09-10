@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI="5"
 inherit eutils fdo-mime flag-o-matic
 
 DESCRIPTION="Additional completion definitions for Zsh"
@@ -25,8 +25,7 @@ SLOT="0"
 
 DEPEND=">=app-shells/zsh-4.3.5"
 RDEPEND="${DEPEND}
-!app-shells/zsh-completion"
-
+	!app-shells/zsh-completion"
 
 src_install() {
 	insinto /usr/share/zsh/site-functions
