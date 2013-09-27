@@ -88,7 +88,7 @@ src_compile(){
 
 src_install() {
 	if use gtk;then
-		emake -j1 DESTDIR="${D}" install
+		emake -j1 DESTDIR="${D}" install #nowarn
 		dodoc AUTHORS ChangeLog README
 	fi
 
@@ -100,7 +100,7 @@ src_install() {
 
 	if use gtk2;then
 		cd gtk2-hack
-		emake -j1 DESTDIR="${D}" install
+		emake -j1 DESTDIR="${D}" install #nowarn
 		prune_libtool_files
 	fi
 
