@@ -98,7 +98,7 @@ strip_builddir() {
 
 src_prepare() {
 	if use appmenu;then
-		epatch ${FILESDIR}/appmenu-gtk3/${PV}/*
+		epatch "${FILESDIR}/appmenu-gtk3/${PV}"/*
 		base_src_prepare
 	fi
 

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI="5"
 
 inherit eutils git-2
 
@@ -15,18 +15,21 @@ SLOT="0"
 KEYWORDS=""
 IUSE="+parallel"
 
-DEPEND="virtual/linux-sources
-		app-shells/bash
-		sys-apps/gawk
-		sys-apps/portage"
-RDEPEND="${DEPEND}
+KCDEPEND="app-shells/bash
+	sys-apps/portage
+	sys-apps/gawk"
+DEPEND="${KCDEPEND}
+	virtual/linux-sources"
+RDEPEND="${KCDEPEND}
 	parallel? ( sys-process/parallel )"
 
-src_install(){
+src_prepare() {
 	if ! use parallel;then
-	  epatch no_parallel.patch
+		epatch no_parallel.patch
 	fi
+}
 
+src_install() {
 	dosbin kernel-cleaner
 	insinto /etc
 	doins kernel-cleaner.conf
