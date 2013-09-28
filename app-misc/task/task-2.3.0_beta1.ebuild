@@ -13,7 +13,7 @@ SRC_URI="http://taskwarrior.org/download/${MY_P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~x64-macos"
+KEYWORDS="~amd64 ~x86 ~x64-macos ~arm"
 IUSE="vim-syntax zsh-completion"
 S="${WORKDIR}/${MY_P}"
 
