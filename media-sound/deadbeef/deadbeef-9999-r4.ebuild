@@ -88,7 +88,7 @@ src_prepare() {
 	fi
 
 	# remove unity trash
-	epatch "${FILESDIR}/desktop.patch"
+	# need fix epatch "${FILESDIR}/desktop.patch"
 
 	for lang in ${LANGS};do
 		for x in ${lang};do
