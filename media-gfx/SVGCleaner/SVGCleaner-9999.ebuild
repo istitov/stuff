@@ -19,15 +19,13 @@ else
 	KEYWORDS="~arm ~amd64 ~x86"
 fi
 
-LICENSE="BSD"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="
-dev-perl/XML-Twig
 app-arch/p7zip
-dev-lang/perl
 >=dev-qt/qtsvg-4.6"
 RDEPEND="${DEPEND}"
 src_configure() {
