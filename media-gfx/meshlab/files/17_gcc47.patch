@@ -1,0 +1,361 @@
+From: Teemu Ikonen <tpikonen@gmail.com>
+Subject: Fix FTBFS with GCC-4.7
+X-git-branch: p/gcc47
+
+Closes: #667276
+
+Thanks to Matej Vela for the patch.
+
+ meshlab/src/fgt/filter_trioptimize/curvedgeflip.h  |    2 +-
+ .../meshlabplugins/decorate_base/colorhistogram.h  |    6 +++---
+ .../filter_isoparametrization/param_collapse.h     |    6 +++---
+ .../filter_meshing/quadric_tex_simp.h              |    4 ++--
+ .../filter_plymc/tri_edge_collapse_mc.h            |    2 +-
+ .../complex/local_optimization/tri_edge_collapse.h |    4 ++--
+ .../local_optimization/tri_edge_collapse_quadric.h |    4 ++--
+ .../vcg/complex/local_optimization/tri_edge_flip.h |    8 ++++----
+ vcglib/vcg/math/lin_algebra.h                      |   14 +++++++-------
+ vcglib/vcg/space/index/grid_static_obj.h           |    6 +++---
+ vcglib/vcg/space/index/octree.h                    |    8 ++++----
+ vcglib/vcg/space/index/spatial_hashing.h           |    4 ++--
+ vcglib/wrap/gl/trimesh.h                           |    2 +-
+ vcglib/wrap/ply/plystuff.h                         |    1 +
+ 14 files changed, 36 insertions(+), 35 deletions(-)
+
+diff --git a/meshlab/src/fgt/filter_trioptimize/curvedgeflip.h b/meshlab/src/fgt/filter_trioptimize/curvedgeflip.h
+index 8bbd3a6..735fef2 100644
+--- a/meshlab/src/fgt/filter_trioptimize/curvedgeflip.h
++++ b/meshlab/src/fgt/filter_trioptimize/curvedgeflip.h
+@@ -326,7 +326,7 @@ public:
+ 				for (unsigned int i = 0; i < 3; i++)
+ 					if ((*fi).V1(i) - (*fi).V0(i) > 0) {
+ 						PosType newpos(&*fi, i);
+-            Insert(heap, newpos, tri::IMark(m));
++            CurvEdgeFlip::Insert(heap, newpos, tri::IMark(m));
+ 					}
+ 	}
+ }; // end CurvEdgeFlip class
+diff --git a/meshlab/src/meshlabplugins/decorate_base/colorhistogram.h b/meshlab/src/meshlabplugins/decorate_base/colorhistogram.h
+index 906bede..143d385 100644
+--- a/meshlab/src/meshlabplugins/decorate_base/colorhistogram.h
++++ b/meshlab/src/meshlabplugins/decorate_base/colorhistogram.h
+@@ -27,7 +27,7 @@ public:
+    */
+   void Add(ScalarType v,Color4b c,float increment);
+ 
+-  Color4b BinColorAvg(ScalarType v) { return BinColorAvgInd(BinIndex(v)); }
++  Color4b BinColorAvg(ScalarType v) { return BinColorAvgInd(this->BinIndex(v)); }
+ 
+   Color4b BinColorAvgInd(int index) {
+     return Color4b( (unsigned char)((CV[index][0] / float(this->H[index]))),
+@@ -40,7 +40,7 @@ public:
+ 
+   //! Reset histogram data.
+   void Clear() {
+-    this->::Clear();
++    Histogram<ScalarType>::Clear();
+     CV.clear();
+   }
+   /*
+@@ -82,7 +82,7 @@ asking for 4    lower bound will return an iterator pointing to R[3]==4; and wil
+ template <class ScalarType>
+ void ColorHistogram<ScalarType>::Add(ScalarType v,Color4b c,float increment=1.0f)
+ {
+-  int pos=BinIndex(v);
++  int pos=this->BinIndex(v);
+   if(v<this->minElem) this->minElem=v;
+   if(v>this->maxElem) this->maxElem=v;
+   if(pos>=0 && pos<=this->n)
+diff --git a/meshlab/src/meshlabplugins/filter_isoparametrization/param_collapse.h b/meshlab/src/meshlabplugins/filter_isoparametrization/param_collapse.h
+index 7564f2e..0c1eb3e 100644
+--- a/meshlab/src/meshlabplugins/filter_isoparametrization/param_collapse.h
++++ b/meshlab/src/meshlabplugins/filter_isoparametrization/param_collapse.h
+@@ -60,7 +60,7 @@ public:
+   }
+ 
+ 	inline bool IsFeasible(){
+-    return LinkConditions(Super::pos);
++    return this->LinkConditions(Super::pos);
+ 	}
+ 
+   inline void SetHlevMeshUV(const std::vector<BaseFace*> &LowFace,
+@@ -225,7 +225,7 @@ public:
+ 	for (unsigned int i=0;i<created.face.size();i++)
+ 		domain.face[i].areadelta=created.face[i].areadelta;
+ 
+-	DoCollapse(created,posEdge, newPos); // v0 is deleted and v1 take the new position
++	this->DoCollapse(created,posEdge, newPos); // v0 is deleted and v1 take the new position
+ 	
+ 	UpdateTopologies<BaseMesh>(&created);
+ 
+@@ -617,7 +617,7 @@ void Execute(BaseMesh &m)
+ 		ScalarType area0=Area<BaseFace>(orderedFaces0);
+ 
+ 		///do the collapse
+-		DoCollapse(m, this->pos, newPos); // v0 is deleted and v1 take the new position
++		this->DoCollapse(m, this->pos, newPos); // v0 is deleted and v1 take the new position
+ 		//vcg::tri::UpdateTopology<BaseMesh>::TestVertexFace(m); ///TEST
+ 		//---------------------------///
+ 		///create a parametrized submesh post-collapse #1
+diff --git a/meshlab/src/meshlabplugins/filter_meshing/quadric_tex_simp.h b/meshlab/src/meshlabplugins/filter_meshing/quadric_tex_simp.h
+index 73f483e..4931f2d 100644
+--- a/meshlab/src/meshlabplugins/filter_meshing/quadric_tex_simp.h
++++ b/meshlab/src/meshlabplugins/filter_meshing/quadric_tex_simp.h
+@@ -424,7 +424,7 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType,
+ 			}
+ 
+ 
+-			this->_priority = max(priority1, priority2)*(1 + (Params().ExtraTCoordWeight)*(QH::Vd(this->pos.V(0)).size()+QH::Vd(this->pos.V(1)).size() - 2));
++			this->_priority = std::max(priority1, priority2)*(1 + (Params().ExtraTCoordWeight)*(QH::Vd(this->pos.V(0)).size()+QH::Vd(this->pos.V(1)).size() - 2));
+ 		
+ 			return this->_priority;
+ 		}
+@@ -668,7 +668,7 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType,
+ 												constraint has been imposed during the re-computation of the other minimal */
+ 
+ 		
+-	 DoCollapse(m, this->pos, newPos ); // v0 is deleted and v1 take the new position	 
++	 this->DoCollapse(m, this->pos, newPos ); // v0 is deleted and v1 take the new position	 
+ 
+ 	vcg::TexCoord2f newtcoord;
+ 	Quadric5<double> newq;
+diff --git a/meshlab/src/meshlabplugins/filter_plymc/tri_edge_collapse_mc.h b/meshlab/src/meshlabplugins/filter_plymc/tri_edge_collapse_mc.h
+index 4029fd0..f52a66f 100644
+--- a/meshlab/src/meshlabplugins/filter_plymc/tri_edge_collapse_mc.h
++++ b/meshlab/src/meshlabplugins/filter_plymc/tri_edge_collapse_mc.h
+@@ -98,7 +98,7 @@ class MCTriEdgeCollapse: public tri::TriEdgeCollapse< MCTriMesh, MYTYPE> {
+ //        assert(	(p0[0]==p1[0]) ||
+ //                        (p0[1]==p1[1]) ||
+ //                        (p0[2]==p1[2]) );
+-      DoCollapse(m, this->pos, MidPoint);
++      this->DoCollapse(m, this->pos, MidPoint);
+ 	}
+ 						
+ 						
+diff --git a/vcglib/vcg/complex/local_optimization/tri_edge_collapse.h b/vcglib/vcg/complex/local_optimization/tri_edge_collapse.h
+index 2ea9c39..b794199 100644
+--- a/vcglib/vcg/complex/local_optimization/tri_edge_collapse.h
++++ b/vcglib/vcg/complex/local_optimization/tri_edge_collapse.h
+@@ -163,7 +163,7 @@ public:
+   inline void Execute(TriMeshType &m)
+   {	
+     CoordType MidPoint=(pos.V(0)->P()+pos.V(1)->P())/2.0;
+-    DoCollapse(m, pos, MidPoint);
++    this->DoCollapse(m, pos, MidPoint);
+   }
+   
+   static bool IsSymmetric() { return true;}
+@@ -235,7 +235,7 @@ public:
+   ModifierType IsOfType(){ return TriEdgeCollapseOp;}
+ 
+   inline bool IsFeasible(){
+-		return LinkConditions(pos);
++		return this->LinkConditions(pos);
+ 	}
+ 
+   inline bool IsUpToDate(){
+diff --git a/vcglib/vcg/complex/local_optimization/tri_edge_collapse_quadric.h b/vcglib/vcg/complex/local_optimization/tri_edge_collapse_quadric.h
+index 1f0275a..bbfca43 100644
+--- a/vcglib/vcg/complex/local_optimization/tri_edge_collapse_quadric.h
++++ b/vcglib/vcg/complex/local_optimization/tri_edge_collapse_quadric.h
+@@ -207,7 +207,7 @@ public:
+ 
+ 
+ 		inline bool IsFeasible(){
+-      bool res = ( !Params().PreserveTopology || LinkConditions(this->pos) );
++      bool res = ( !Params().PreserveTopology || this->LinkConditions(this->pos) );
+       if(!res) ++( TriEdgeCollapse< TriMeshType,MYTYPE>::FailStat::LinkConditionEdge() );
+       return res;
+     }
+@@ -219,7 +219,7 @@ public:
+ 		//this->pos.V(1)->Qd()+=this->pos.V(0)->Qd();
+     QH::Qd(this->pos.V(1))+=QH::Qd(this->pos.V(0));
+ 		//int FaceDel=
+-		DoCollapse(m, this->pos, newPos); // v0 is deleted and v1 take the new position
++		this->DoCollapse(m, this->pos, newPos); // v0 is deleted and v1 take the new position
+ 		//m.fn-=FaceDel;
+ 		//--m.vn;
+   }
+diff --git a/vcglib/vcg/complex/local_optimization/tri_edge_flip.h b/vcglib/vcg/complex/local_optimization/tri_edge_flip.h
+index 6ea3b5c..119694b 100644
+--- a/vcglib/vcg/complex/local_optimization/tri_edge_flip.h
++++ b/vcglib/vcg/complex/local_optimization/tri_edge_flip.h
+@@ -550,13 +550,13 @@ public:
+ 		// edges of the first face, except the flipped edge
+ 		for(int i = 0; i < 3; i++) if(i != flipped) {
+ 			PosType newpos(f1, i);
+-			Insert(heap, newpos, this->GlobalMark());
++			this->Insert(heap, newpos, this->GlobalMark());
+ 		}
+ 
+ 		// edges of the second face, except the flipped edge
+ 		for(int i = 0; i < 3; i++) if(i != f1->FFi(flipped)) {
+ 			PosType newpos(f2, i);
+-			Insert(heap, newpos, this->GlobalMark());
++			this->Insert(heap, newpos, this->GlobalMark());
+ 		}
+ 
+ 		// every edge with v0, v1 v3 of f1
+@@ -575,7 +575,7 @@ public:
+ 			do {
+ 				VertexPointer v = pos.VFlip();
+ 				if(v != v0 && v != v1 && v != v2 && v != v3)
+-				Insert(heap, pos, this->GlobalMark());
++				this->Insert(heap, pos, this->GlobalMark());
+ 
+ 				pos.NextE();
+ 			} while(pos != startpos && !pos.IsBorder());
+@@ -595,7 +595,7 @@ public:
+ 		do {
+ 			VertexPointer v = pos.VFlip();
+ 			if(v != v0 && v != v1 && v != v2 && v != v3)
+-			Insert(heap, pos, this->GlobalMark());
++			this->Insert(heap, pos, this->GlobalMark());
+ 
+ 			pos.NextE();
+ 		} while(pos != startpos && !pos.IsBorder());
+diff --git a/vcglib/vcg/math/lin_algebra.h b/vcglib/vcg/math/lin_algebra.h
+index 2d9d546..5b46a4a 100644
+--- a/vcglib/vcg/math/lin_algebra.h
++++ b/vcglib/vcg/math/lin_algebra.h
+@@ -218,6 +218,13 @@ namespace vcg
+ 	};
+ 
+ 
++	template <typename TYPE>
++	inline static TYPE sqr(TYPE a)
++	{
++		TYPE sqr_arg = a;
++		return (sqr_arg == 0 ? 0 : sqr_arg*sqr_arg);
++	}
++
+ 	// Computes (a^2 + b^2)^(1/2) without destructive underflow or overflow.
+ 	template <typename TYPE>
+ 	inline static TYPE pythagora(TYPE a, TYPE b)
+@@ -236,13 +243,6 @@ namespace vcg
+ 		return (b >= 0.0 ? fabs(a) : -fabs(a));
+ 	};
+ 
+-	template <typename TYPE>
+-	inline static TYPE sqr(TYPE a)
+-	{
+-		TYPE sqr_arg = a;
+-		return (sqr_arg == 0 ? 0 : sqr_arg*sqr_arg);
+-	}
+-
+ 	/*!
+ 	*
+ 	*/
+diff --git a/vcglib/vcg/space/index/grid_static_obj.h b/vcglib/vcg/space/index/grid_static_obj.h
+index 392ee7a..485288d 100644
+--- a/vcglib/vcg/space/index/grid_static_obj.h
++++ b/vcglib/vcg/space/index/grid_static_obj.h
+@@ -72,7 +72,7 @@ class GridStaticObj : public BasicGrid<FLT>
+ 	 inline ~GridStaticObj() { if(grid) delete[] grid; }
+ 	 inline void Init(const ObjType &val)
+ 	 {
+-		 fill(grid,grid+size(),val);
++		 std::fill(grid,grid+size(),val);
+ 	 }
+ 
+ 
+@@ -94,7 +94,7 @@ class GridStaticObj : public BasicGrid<FLT>
+ 	 }
+ 
+ 	 // Dato un punto ritorna l'indice della cella
+-	 inline int GridIndF( const Point3<FLT> & p ) const { return GridIndI(GridP(p)); 	}
++	 inline int GridIndF( const Point3<FLT> & p ) const { return GridIndI(this->GridP(p)); 	}
+   
+ 	void Create( const Point3i &_siz, const ObjType & init )
+ 	{
+@@ -106,7 +106,7 @@ class GridStaticObj : public BasicGrid<FLT>
+ 		if(grid) delete[] grid;
+ 		int n = this->siz[0]*this->siz[1]*this->siz[2];
+ 		grid = new ObjType[n];
+-		fill(grid,grid+n,init);
++		std::fill(grid,grid+n,init);
+ 	}
+ 
+ 	/// Crea una griglia di un dato bbox e con un certo numero di elem.
+diff --git a/vcglib/vcg/space/index/octree.h b/vcglib/vcg/space/index/octree.h
+index 1c37319..7436e3b 100644
+--- a/vcglib/vcg/space/index/octree.h
++++ b/vcglib/vcg/space/index/octree.h
+@@ -288,7 +288,7 @@ public:
+ 				{
+ 					int placeholder_index = int(placeholders.size());
+ 					placeholders.push_back( ObjectPlaceholder< NodeType >() ); 
+-					placeholders[placeholder_index].z_order			 = BuildRoute(hit_leaf, route);
++					placeholders[placeholder_index].z_order			 = this->BuildRoute(hit_leaf, route);
+ 					placeholders[placeholder_index].leaf_pointer = route[depth];
+ 					placeholders[placeholder_index].object_index = i;					
+ 					
+@@ -631,7 +631,7 @@ OBJECT_RETRIEVER:
+ 				query_bb.Offset(TemplatedOctree::leafDiagonal);
+ 				sphere_radius+= TemplatedOctree::leafDiagonal;
+ 
+-				ContainedLeaves(query_bb, leaves, TemplatedOctree::Root(), TemplatedOctree::boundingBox);
++				this->ContainedLeaves(query_bb, leaves, TemplatedOctree::Root(), TemplatedOctree::boundingBox);
+ 
+ 				leaves_count = int(leaves.size());
+ 				object_count = 0;
+@@ -724,10 +724,10 @@ OBJECT_RETRIEVER:
+ 			VoxelPointer son_voxel;
+ 			for (int s=0; s<8; s++)
+ 			{
+-				NodePointer son_index = Son(n, s);
++				NodePointer son_index = this->Son(n, s);
+ 				if (son_index!=NULL)
+ 				{
+-					if (Level(son_index)!=TemplatedOctree::maximumDepth)
++					if (this->Level(son_index)!=TemplatedOctree::maximumDepth)
+ 						IndexInnerNodes(son_index);
+ 
+ 					son_voxel = TemplatedOctree::Voxel(son_index);
+diff --git a/vcglib/vcg/space/index/spatial_hashing.h b/vcglib/vcg/space/index/spatial_hashing.h
+index f2a2f7d..ee9a3bb 100644
+--- a/vcglib/vcg/space/index/spatial_hashing.h
++++ b/vcglib/vcg/space/index/spatial_hashing.h
+@@ -178,7 +178,7 @@ protected:
+ 			Box3<ScalarType> b;
+ 			s->GetBBox(b);
+ 			vcg::Box3i bb;
+-			BoxToIBox(b,bb);
++			this->BoxToIBox(b,bb);
+ 			//then insert all the cell of bb
+ 			for (int i=bb.min.X();i<=bb.max.X();i++)
+ 				for (int j=bb.min.Y();j<=bb.max.Y();j++)
+@@ -203,7 +203,7 @@ protected:
+         {
+             Box3x b(p-Point3f(radius,radius,radius),p+Point3f(radius,radius,radius));
+             vcg::Box3i bb;
+-            BoxToIBox(b,bb);
++            this->BoxToIBox(b,bb);
+             ScalarType r2=radius*radius;
+             int cnt=0;
+             std::vector<HashIterator> toDel;
+diff --git a/vcglib/wrap/gl/trimesh.h b/vcglib/wrap/gl/trimesh.h
+index d891085..5f02e81 100644
+--- a/vcglib/wrap/gl/trimesh.h
++++ b/vcglib/wrap/gl/trimesh.h
+@@ -990,7 +990,7 @@ void Crease(MESH_TYPE &m, typename MESH_TYPE::scalar_type angleRad)
+ 			}
+ 		}
+ 
+-	m.vert.math::Swap(newvert);
++	m.vert.swap(newvert);
+ 	m.vn=m.vert.size();
+ }
+ 
+diff --git a/vcglib/wrap/ply/plystuff.h b/vcglib/wrap/ply/plystuff.h
+index 3e41e63..4af9508 100644
+--- a/vcglib/wrap/ply/plystuff.h
++++ b/vcglib/wrap/ply/plystuff.h
+@@ -75,6 +75,7 @@ using namespace vcg;
+ #define pb_close  _close
+ #define DIR_SEP "\\"
+ #else
++#include <unistd.h>
+ #define pb_mkdir(n)  mkdir(n,0755)
+ #define pb_access access
+ #define pb_stat   stat
