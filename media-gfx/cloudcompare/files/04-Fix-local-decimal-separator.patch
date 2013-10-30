@@ -1,0 +1,32 @@
+From: Romain Janvier <romain.janvier@hotmail.fr>
+Date: Fri, 15 Mar 2013 09:47:39 +0100
+Subject: Fix local decimal separator
+
+Inspired by a patch from Teemu Ikonen <tpikonen@gmail.com>
+Debian maintener for Meshlab. The dot is now de default separator.
+It give consistency with Meshlab behavior.
+---
+ ccViewer/main.cpp |    1 +
+ qCC/main.cpp      |    1 +
+ 2 files changed, 2 insertions(+)
+
+--- a/ccViewer/main.cpp
++++ b/ccViewer/main.cpp
+@@ -43,6 +43,7 @@ class ccApplication : public QApplicatio
+       {
+          setOrganizationName("CCCorp");
+          setApplicationName("CloudCompareViewer");
++         std::setlocale(LC_NUMERIC, "C");
+ #ifdef Q_OS_MAC
+          mViewer = NULL;
+          
+--- a/qCC/main.cpp
++++ b/qCC/main.cpp
+@@ -51,6 +51,7 @@ class qccApplication : public QApplicati
+       {
+          setOrganizationName("CCCorp");
+          setApplicationName("CloudCompare");
++         std::setlocale(LC_NUMERIC, "C");
+ #ifdef Q_OS_MAC         
+          // Mac OS X apps don't show icons in menus
+          setAttribute( Qt::AA_DontShowIconsInMenus );

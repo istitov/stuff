@@ -1,0 +1,95 @@
+From: Romain Janvier <romain.janvier@hotmail.fr>
+Date: Mon, 14 Jan 2013 21:15:12 +0100
+Subject: Use debian libGLEW
+
+---
+ qCC/CMakeLists.txt  |   11 +-
+ qCC/ccGLWindow.cpp  |    6 +-
+ qCC/config.h.in     |    1 +
+ 3 files changed, 15 insertions(+), 3 deletions(-)
+ create mode 100644 qCC/config.h.in
+
+--- a/qCC/CMakeLists.txt
++++ b/qCC/CMakeLists.txt
+@@ -37,7 +37,7 @@ endif()
+ # Load plugins
+ add_subdirectory( plugins )
+ 
+-include_directories( ${GLEW_SOURCE_DIR}/include )
++#include_directories( ${GLEW_SOURCE_DIR}/include )
+ include_directories( ${CC_FBO_SOURCE_DIR}/include )
+ include_directories( ${CC_DLL_SOURCE_DIR}/include )
+ include_directories( ${QCC_DB_DLL_SOURCE_DIR} )
+@@ -123,7 +123,8 @@ target_link_DXFLIB( ${PROJECT_NAME} )
+ set_default_cc_preproc( ${PROJECT_NAME} )
+ 
+ # Add custom prepocessor definitions
+-set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS USE_GLEW GLEW_STATIC )
++set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS
++USE_GLEW GLEW_STATIC )
+ if( WIN32 )
+ 	set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS CC_USE_AS_DLL QCC_DB_USE_AS_DLL )
+ endif()
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,7 +35,7 @@ add_subdirectory( CC )
+ # Add external libraries
+ include( CMakeExternalLibs.cmake )
+ # Libs requested by both qCC & ccViewer
+-add_subdirectory( libs/Glew )
++#add_subdirectory( libs/Glew )
+ add_subdirectory( libs/CCFbo )
+ add_subdirectory( libs/qCC_db ) # must always be included after CCFbo (dependency)
+ 
+--- a/libs/CCFbo/CMakeLists.txt
++++ b/libs/CCFbo/CMakeLists.txt
+@@ -16,5 +16,6 @@ target_link_libraries( ${PROJECT_NAME} G
+ set_default_cc_preproc( ${PROJECT_NAME} )
+ 
+ # Add custom prepocessor definitions
+-set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS USE_GLEW GLEW_STATIC )
++set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS
++USE_GLEW GLEW_STATIC )
+ 
+--- a/libs/qCC_db/CMakeLists.txt
++++ b/libs/qCC_db/CMakeLists.txt
+@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
+ 
+ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
+ include_directories( ${EXTERNAL_LIBS_INCLUDE_DIR} )
+-include_directories( ${GLEW_SOURCE_DIR}/include )
++#include_directories( ${GLEW_SOURCE_DIR}/include )
+ include_directories( ${CC_DLL_SOURCE_DIR}/include )
+ include_directories( ${CC_FBO_SOURCE_DIR}/include )
+ if( MSVC )
+@@ -29,7 +29,8 @@ target_link_libraries( ${PROJECT_NAME} $
+ set_default_cc_preproc( ${PROJECT_NAME} )
+ 
+ # Add custom prepocessor definitions
+-set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS USE_GLEW GLEW_STATIC )
++set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS
++USE_GLEW GLEW_STATIC )
+ if (WIN32)
+ 	set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS CC_USE_AS_DLL QCC_DB_USE_AS_DLL )
+ endif()
+--- a/ccViewer/CMakeLists.txt
++++ b/ccViewer/CMakeLists.txt
+@@ -8,7 +8,7 @@ else()
+ 	set( ccViewer_dest_debug ccViewer_debug )
+ endif()
+ 
+-include_directories( ${GLEW_SOURCE_DIR}/include )
++#include_directories( ${GLEW_SOURCE_DIR}/include )
+ include_directories( ${CC_FBO_SOURCE_DIR}/include )
+ include_directories( ${CC_DLL_SOURCE_DIR}/include )
+ include_directories( ${QCC_DB_DLL_SOURCE_DIR} )
+@@ -95,7 +95,8 @@ target_link_DXFLIB( ${PROJECT_NAME} )
+ set_default_cc_preproc( ${PROJECT_NAME} )
+ 
+ # Add custom prepocessor definitions
+-set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS CC_VIEWER USE_GLEW GLEW_STATIC )
++set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS
++CC_VIEWER USE_GLEW GLEW_STATIC )
+ if (WIN32)
+ 	set_property( TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS CC_USE_AS_DLL QCC_DB_USE_AS_DLL )
+ endif()

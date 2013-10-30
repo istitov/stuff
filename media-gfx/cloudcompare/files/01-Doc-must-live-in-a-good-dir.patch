@@ -1,0 +1,48 @@
+From: Romain Janvier <romain.janvier@hotmail.fr>
+Date: Mon, 14 Jan 2013 20:50:53 +0100
+Subject: Doc must live in a good dir
+
+---
+ ccViewer/CMakeLists.txt |    6 +++---
+ qCC/CMakeLists.txt      |    8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+--- a/qCC/CMakeLists.txt
++++ b/qCC/CMakeLists.txt
+@@ -148,7 +148,7 @@ else()
+ endif()
+ 
+ # Auxiliary files
+-set( auxFiles bin_other/history.txt bin_other/license.txt )
++# set( auxFiles bin_other/history.txt bin_other/license.txt )
+ 
+ if( WIN32 )
+ 	# Export Qt dlls & plugins
+@@ -160,9 +160,9 @@ if( WIN32 )
+ endif()
+ 
+ # Install auxiliary files
+-foreach( filename ${auxFiles} )
+-	install_ext( FILES ${filename} ${CloudCompare_dest_release} ${CloudCompare_dest_debug} )
+-endforeach()
++#foreach( filename ${auxFiles} )
++#	install_ext( FILES ${filename} ${CloudCompare_dest_release} ${CloudCompare_dest_debug} )
++#endforeach()
+ 
+ # in order to ensure that everything else is installed first, put the Mac bundling in its own subdirectory
+ if( APPLE )
+--- a/ccViewer/CMakeLists.txt
++++ b/ccViewer/CMakeLists.txt
+@@ -127,9 +127,9 @@ if( WIN32 )
+ endif()
+ 
+ # Install auxiliary files
+-foreach( filename ${auxFiles} )
+-	install_ext( FILES ${filename} ${ccViewer_dest_release} ${ccViewer_dest_debug} )
+-endforeach()
++#foreach( filename ${auxFiles} )
++#	install_ext( FILES ${filename} ${ccViewer_dest_release} ${ccViewer_dest_debug} )
++#endforeach()
+ 
+ # Put together our App bundle on Mac OS X
+ if( APPLE )

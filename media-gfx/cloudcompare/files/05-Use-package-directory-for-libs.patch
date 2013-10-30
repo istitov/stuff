@@ -1,0 +1,42 @@
+From: Romain Janvier <romain.janvier@hotmail.fr>
+Date: Fri, 15 Mar 2013 09:55:09 +0100
+Subject: Use package directory for libs
+
+---
+ CC/CMakeLists.txt          |    2 +-
+ libs/qCC_db/CMakeLists.txt |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+--- a/CC/CMakeLists.txt
++++ b/CC/CMakeLists.txt
+@@ -45,7 +45,7 @@ endif()
+ 
+ # Install (shared) library to specified destinations
+ if( UNIX )
+-	install_shared( CC_DLL lib lib ) #default destination: /usr/lib
++	install_shared( CC_DLL lib/cloudcompare lib ) #default destination: /usr/lib
+ else()
+ foreach( dest ${INSTALL_DESTINATIONS} )
+ 	install_shared( CC_DLL ${dest} ${dest}_debug )
+--- a/libs/qCC_db/CMakeLists.txt
++++ b/libs/qCC_db/CMakeLists.txt
+@@ -37,7 +37,7 @@ endif()
+ 
+ # install (shared) lib to specified destinations
+ if( UNIX )
+-	install_shared( QCC_DB_DLL lib lib ) #default destination: /usr/lib
++	install_shared( QCC_DB_DLL lib/cloudcompare lib ) #default destination: /usr/lib
+ else()
+ foreach( dest ${INSTALL_DESTINATIONS} )
+ 	install_shared( QCC_DB_DLL ${dest} ${dest}_debug )
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,6 +10,8 @@ if( UNIX )
+         set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+ endif()
+ 
++SET(CMAKE_INSTALL_RPATH "/usr/lib/cloudcompare")
++
+ if( MSVC )
+ 	OPTION( OPTION_MP_BUILD "Check to activate multithreaded compilation with MSVC" OFF )
+     if( ${OPTION_MP_BUILD} )
