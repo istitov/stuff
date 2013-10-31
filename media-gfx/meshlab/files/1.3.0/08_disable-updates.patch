@@ -1,0 +1,20 @@
+From: Teemu Ikonen <tpikonen@gmail.com>
+Subject: Disable checking for updates on startup.
+X-git-branch: p/disable-updates
+
+ meshlab/src/meshlab/mainwindow_Init.cpp |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/meshlab/src/meshlab/mainwindow_Init.cpp b/meshlab/src/meshlab/mainwindow_Init.cpp
+index 5ef9f6f..f2a2224 100644
+--- a/meshlab/src/meshlab/mainwindow_Init.cpp
++++ b/meshlab/src/meshlab/mainwindow_Init.cpp
+@@ -800,7 +800,7 @@ void MainWindow::saveRecentFileList(const QString &fileName)
+ 
+ 	if(loadedMeshCounter-lastComunicatedValue>connectionInterval && !myLocalBuf.isOpen())
+   {
+-#if not defined(__DISABLE_AUTO_STATS__)
++#if defined(__ENABLE_AUTO_STATS__)
+ 		checkForUpdates(false);
+ #endif
+     int congratsMeshCounter = settings.value("congratsMeshCounter",50).toInt();

@@ -12,7 +12,7 @@ SRC_URI="https://launchpadlibrarian.net/145153756/meshlab_1.3.3.orig.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE=""
 DEPEND="media-libs/glew
 	sci-libs/levmar
@@ -34,13 +34,13 @@ src_prepare() {
 	cd ${PORTAGE_BUILDDIR}
 	ln -s work meshlab-1.3.3
 	#patches from https://launchpad.net/~zarquon42/+archive/meshlab/+packages
-	epatch "${FILESDIR}"/fix-external.pro.patch
-	epatch "${FILESDIR}"/fixlocale.patch
-	epatch "${FILESDIR}"/fix-rpath.patch
-	epatch "${FILESDIR}"/disable-updates.patch
-	epatch "${FILESDIR}"/pluginsdir.patch
-	epatch "${FILESDIR}"/shadersdir.patch
-	epatch "${FILESDIR}"/fix-plystuff.h.patch
+	epatch "${FILESDIR}"/1.3.3/fix-external.pro.patch
+	epatch "${FILESDIR}"/1.3.3/fixlocale.patch
+	epatch "${FILESDIR}"/1.3.3/fix-rpath.patch
+	epatch "${FILESDIR}"/1.3.3/disable-updates.patch
+	epatch "${FILESDIR}"/1.3.3/pluginsdir.patch
+	epatch "${FILESDIR}"/1.3.3/shadersdir.patch
+	epatch "${FILESDIR}"/1.3.3/fix-plystuff.h.patch
 	cd "${S}"
 }
 

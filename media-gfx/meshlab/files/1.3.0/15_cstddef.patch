@@ -1,0 +1,45 @@
+From: Teemu Ikonen <tpikonen@gmail.com>
+Subject: Include <cstddef> on files using offsetoff (closes: #625053)
+X-git-branch: p/cstddef
+
+ vcglib/wrap/io_tetramesh/import_ply.h |    1 +
+ vcglib/wrap/io_trimesh/import_ply.h   |    1 +
+ vcglib/wrap/ply/plystuff.h            |    1 +
+ 3 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/vcglib/wrap/io_tetramesh/import_ply.h b/vcglib/wrap/io_tetramesh/import_ply.h
+index 0da4c1f..8370e48 100644
+--- a/vcglib/wrap/io_tetramesh/import_ply.h
++++ b/vcglib/wrap/io_tetramesh/import_ply.h
+@@ -36,6 +36,7 @@ created
+ #include<wrap/ply/io_mask.h>
+ #include<wrap/io_tetramesh/io_ply.h>
+ #include<vcg/complex/tetramesh/allocate.h>
++#include <cstddef>
+ 
+ 
+ 
+diff --git a/vcglib/wrap/io_trimesh/import_ply.h b/vcglib/wrap/io_trimesh/import_ply.h
+index 249a417..0e8c4dc 100644
+--- a/vcglib/wrap/io_trimesh/import_ply.h
++++ b/vcglib/wrap/io_trimesh/import_ply.h
+@@ -157,6 +157,7 @@ Initial commit
+ #include<vcg/complex/trimesh/create/platonic.h>
+ #include<vcg/space/color4.h>
+ #include <vector>
++#include <cstddef>
+ 
+ namespace vcg {
+ namespace tri {
+diff --git a/vcglib/wrap/ply/plystuff.h b/vcglib/wrap/ply/plystuff.h
+index 3e41e63..4761e9f 100644
+--- a/vcglib/wrap/ply/plystuff.h
++++ b/vcglib/wrap/ply/plystuff.h
+@@ -57,6 +57,7 @@ Cleaning of the automatic bbox caching support for ply files. First working vers
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <fcntl.h> 
++#include <cstddef>
+ #ifdef WIN32
+ #include <io.h>
+ #endif

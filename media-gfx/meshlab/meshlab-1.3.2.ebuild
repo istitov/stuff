@@ -8,7 +8,7 @@ inherit eutils multilib qt4-r2
 
 DESCRIPTION="A mesh processing system"
 HOMEPAGE="http://meshlab.sourceforge.net/"
-SRC_URI="mirror://sourceforge/meshlab/meshlab/MeshLab%20v1.3.0/MeshLabSrc_AllInc_v130a.tgz"
+SRC_URI="http://kaz.dl.sourceforge.net/project/meshlab/meshlab/MeshLab%20v1.3.2/MeshLabSrc_AllInc_v132.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -19,6 +19,7 @@ DEPEND="media-libs/glew
 	media-libs/lib3ds
 	>=dev-cpp/muParser-1.30
 	media-libs/qhull
+	media-libs/openctm
 	dev-qt/qtcore
 	dev-qt/qtopengl"
 RDEPEND="${DEPEND}"
@@ -31,27 +32,31 @@ src_unpack(){
 }
 
 src_prepare() {
-	rm ${WORKDIR}/meshlab/src/fgt/filter_qhull/qhull_tools.h
+	rm ${WORKDIR}/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h
 	cd ${PORTAGE_BUILDDIR}
 	ln -s work a
-	epatch "${FILESDIR}"/1.3.0/01_muparser.patch
-	epatch "${FILESDIR}"/1.3.0/02_qhull_gentoo.patch
-	epatch "${FILESDIR}"/1.3.0/03_lib3ds.patch
-	epatch "${FILESDIR}"/1.3.0/04_libbz2.patch
-	epatch "${FILESDIR}"/1.3.0/05_glew.patch
-	epatch "${FILESDIR}"/1.3.0/06_CONFLICTS_IN_eigen.patch
-	epatch "${FILESDIR}"/1.3.0/07_eigen.patch
-	epatch "${FILESDIR}"/1.3.0/08_disable-updates.patch
-	epatch "${FILESDIR}"/1.3.0/09_externals.patch
-	epatch "${FILESDIR}"/1.3.0/10_CONFLICTS_IN_rpath.patch
-	epatch "${FILESDIR}"/1.3.0/11_rpath.patch
-	epatch "${FILESDIR}"/1.3.0/12_shadersdir.patch
-	epatch "${FILESDIR}"/1.3.0/13_pluginsdir.patch
-	epatch "${FILESDIR}"/1.3.0/14_ply_numeric.patch
-	epatch "${FILESDIR}"/1.3.0/15_cstddef.patch
-	epatch "${FILESDIR}"/1.3.0/16_structuresynth.patch
-	epatch "${FILESDIR}"/1.3.0/17_gcc47.patch
-	epatch "${FILESDIR}"/1.3.0/18_RESOLUTION.patch
+	#pathes from debian repo
+	epatch "${FILESDIR}"/1.3.2/01_crash-on-save.patch
+	epatch "${FILESDIR}"/1.3.2/02_cstddef.patch
+	epatch "${FILESDIR}"/1.3.2/03_disable-updates.patch
+	epatch "${FILESDIR}"/1.3.2/04_eigen.patch
+	epatch "${FILESDIR}"/1.3.2/05_externals.patch
+	epatch "${FILESDIR}"/1.3.2/06_format-security.patch
+	epatch "${FILESDIR}"/1.3.2/07_gcc47.patch
+	epatch "${FILESDIR}"/1.3.2/08_lib3ds.patch
+	epatch "${FILESDIR}"/1.3.2/09_libbz2.patch
+	epatch "${FILESDIR}"/1.3.2/10_muparser.patch
+	epatch "${FILESDIR}"/1.3.2/11_openctm.patch
+	epatch "${FILESDIR}"/1.3.2/12_overflow.patch
+	epatch "${FILESDIR}"/1.3.2/13_pluginsdir.patch
+	epatch "${FILESDIR}"/1.3.2/14_ply_numeric.patch
+	epatch "${FILESDIR}"/1.3.2/15_qhull.patch
+	epatch "${FILESDIR}"/1.3.2/16_shadersdir.patch
+	epatch "${FILESDIR}"/1.3.2/17_structuresynth.patch
+	epatch "${FILESDIR}"/1.3.2/18_glew.c18p1.patch
+	epatch "${FILESDIR}"/1.3.2/19_CONFLICTS_IN_rpath.patch
+	epatch "${FILESDIR}"/1.3.2/20_rpath.c18p2.patch
+	epatch "${FILESDIR}"/1.3.2/21_RESOLUTION.patch
 	cd "${S}"
 }
 

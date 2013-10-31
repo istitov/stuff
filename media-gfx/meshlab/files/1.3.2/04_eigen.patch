@@ -1,0 +1,102 @@
+From: Teemu Ikonen <tpikonen@gmail.com>
+Subject: Use Debian Eigen.
+Git-Branch: p/eigen
+Git-Diff: 532bdd9a6bde03cf47da8fb63fee60..4c7dc79313100768c23320743a4233
+
+ meshlab/src/meshlabplugins/filter_texture/filter_texture.cpp |    8 ++++----
+ meshlab/src/shared.pri                                       |    1 +
+ .../vcg/complex/algorithms/parametrization/poisson_solver.h  |    8 ++++----
+ vcglib/vcg/complex/algorithms/update/curvature_fitting.h     |   10 +++++-----
+ vcglib/vcg/math/eigen.h                                      |    8 ++++----
+ 5 files changed, 18 insertions(+), 17 deletions(-)
+
+diff --git a/meshlab/src/meshlabplugins/filter_texture/filter_texture.cpp b/meshlab/src/meshlabplugins/filter_texture/filter_texture.cpp
+index ef4de59..c999530 100644
+--- a/meshlab/src/meshlabplugins/filter_texture/filter_texture.cpp
++++ b/meshlab/src/meshlabplugins/filter_texture/filter_texture.cpp
+@@ -23,10 +23,10 @@
+ #include <vcg/math/base.h>
+ #include <QtGui>
+ #define EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET
+-#include <eigenlib/Eigen/Sparse>
+-#include <eigenlib/Eigen/src/Sparse/SparseMatrix.h>
+-#include <eigenlib/Eigen/src/Sparse/DynamicSparseMatrix.h>
+-#include <eigenlib/unsupported/Eigen/SparseExtra>
++#include <eigen3/Eigen/Sparse>
++#include <eigen3/Eigen/src/SparseCore/SparseMatrix.h>
++#include <eigen3/unsupported/Eigen/src/SparseExtra/DynamicSparseMatrix.h>
++#include <eigen3/unsupported/Eigen/SparseExtra>
+ 
+ #include <float.h>
+ #include <stdlib.h>
+diff --git a/meshlab/src/shared.pri b/meshlab/src/shared.pri
+index 93ed32f..98d2515 100644
+--- a/meshlab/src/shared.pri
++++ b/meshlab/src/shared.pri
+@@ -36,6 +36,7 @@ win32-msvc2010:DEFINES += GLEW_STATIC _USE_MATH_DEFINES
+ # CONFIG += warn_off
+ 
+ INCLUDEPATH  *= ../.. $$VCGDIR ../$$GLEWDIR/include
++INCLUDEPATH += /usr/include/eigen3
+ DEPENDPATH += ../.. $$VCGDIR
+ 
+ # Uncomment these if you want to experiment with newer gcc compilers
+diff --git a/vcglib/vcg/complex/algorithms/parametrization/poisson_solver.h b/vcglib/vcg/complex/algorithms/parametrization/poisson_solver.h
+index b19d13f..5b895f7 100644
+--- a/vcglib/vcg/complex/algorithms/parametrization/poisson_solver.h
++++ b/vcglib/vcg/complex/algorithms/parametrization/poisson_solver.h
+@@ -25,10 +25,10 @@
+ #define VCG_POISSON_SOLVER
+ 
+ #define EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET
+-#include <eigenlib/Eigen/Sparse>
+-#include <eigenlib/Eigen/src/Sparse/SparseMatrix.h>
+-#include <eigenlib/Eigen/src/Sparse/DynamicSparseMatrix.h>
+-#include <eigenlib/unsupported/Eigen/SparseExtra>
++#include <eigen3/Eigen/Sparse>
++#include <eigen3/Eigen/src/SparseCore/SparseMatrix.h>
++#include <eigen3/unsupported/Eigen/src/SparseExtra/DynamicSparseMatrix.h>
++#include <eigen3/unsupported/Eigen/SparseExtra>
+ 
+ #include <time.h>
+ #include <vcg/complex/allocate.h>
+diff --git a/vcglib/vcg/complex/algorithms/update/curvature_fitting.h b/vcglib/vcg/complex/algorithms/update/curvature_fitting.h
+index 055e2fa..6ed5054 100644
+--- a/vcglib/vcg/complex/algorithms/update/curvature_fitting.h
++++ b/vcglib/vcg/complex/algorithms/update/curvature_fitting.h
+@@ -41,11 +41,11 @@
+ #include <vcg/complex/algorithms/inertia.h>
+ #include <vcg/math/matrix33.h>
+ 
+-#include <eigenlib/Eigen/Core>
+-#include <eigenlib/Eigen/QR>
+-#include <eigenlib/Eigen/LU>
+-#include <eigenlib/Eigen/SVD>
+-#include <eigenlib/Eigen/Eigenvalues>
++#include <Eigen/Core>
++#include <Eigen/QR>
++#include <Eigen/LU>
++#include <Eigen/SVD>
++#include <Eigen/Eigenvalues>
+ // GG include
+ #include <vector>
+ #include <vcg/complex/algorithms/nring.h>
+diff --git a/vcglib/vcg/math/eigen.h b/vcglib/vcg/math/eigen.h
+index 1522e75..f9ce4bd 100644
+--- a/vcglib/vcg/math/eigen.h
++++ b/vcglib/vcg/math/eigen.h
+@@ -53,10 +53,10 @@ struct ei_to_vcgtype;
+ }
+ 
+ #include "base.h"
+-#include "../../eigenlib/Eigen/LU"
+-#include "../../eigenlib/Eigen/Geometry"
+-#include "../../eigenlib/Eigen/Array"
+-#include "../../eigenlib/Eigen/Core"
++#include <Eigen/LU>
++#include <Eigen/Geometry>
++#include <Eigen/Array>
++#include <Eigen/Core>
+ 
+ // add support for unsigned char and short int
+ namespace Eigen {
