@@ -1,0 +1,11 @@
+diff -Naur arc3d_client/gui/mainwindow.cpp arc3d_client-fix/gui/mainwindow.cpp
+--- arc3d_client/gui/mainwindow.cpp	2010-07-06 14:13:10.000000000 +0000
++++ arc3d_client-fix/gui/mainwindow.cpp	2013-11-04 13:33:58.826706594 +0000
+@@ -49,6 +49,7 @@
+ #include "Image.h"
+ #include "ListItem.h"
+ #include "ListModel.h"
++#include <unistd.h>
+ 
+ #include "../serverinterface/ServerInterface.hpp"
+ #include "../utils/ImageValidator.hpp"
