@@ -16,7 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 DEPEND="media-libs/glew
 	sci-libs/levmar
-	media-libs/lib3ds
+	media-libs/lib3ds:1
 	>=dev-cpp/muParser-1.30
 	media-libs/qhull
 	media-libs/openctm
