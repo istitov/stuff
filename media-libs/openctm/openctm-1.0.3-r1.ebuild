@@ -12,7 +12,7 @@ MY_PF=OpenCTM-1.0.3
 
 DESCRIPTION="OpenCTM - the Open Compressed Triangle Mesh file format - is a file format, a software library and a tool set for compression of 3D triangle meshes."
 HOMEPAGE="http://openctm.sourceforge.net"
-SRC_URI="http://ftp.de.debian.org/debian/pool/main/o/openctm/openctm_1.0.3+dfsg1.orig.tar.bz2"
+SRC_URI="mirror://debian/pool/main/o/openctm/openctm_1.0.3+dfsg1.orig.tar.bz2"
 
 
 LICENSE="GPL-2"
