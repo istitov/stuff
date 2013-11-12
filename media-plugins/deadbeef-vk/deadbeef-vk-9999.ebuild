@@ -6,7 +6,7 @@ EAPI=4
 
 inherit cmake-utils git-2
 
-DESCRIPTION="DeadBeef plugin for listening musing from vkontakte.com"
+DESCRIPTION="DeadBeef plugin for listening music from vkontakte.com"
 HOMEPAGE="https://github.com/scorpp/db-vk"
 EGIT_REPO_URI="git://github.com/scorpp/db-vk.git"
 
@@ -17,8 +17,8 @@ IUSE="gtk2 gtk3"
 REQUIRED_USE="|| ( ${IUSE} )"
 
 DEPEND_COMMON="dev-libs/json-glib
-	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2,curl] )
-	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3,curl] )"
+	gtk2? ( media-sound/deadbeef[gtk2,curl] )
+	gtk3? ( media-sound/deadbeef[gtk3,curl] )"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"

@@ -9,7 +9,7 @@ inherit cmake-utils versionator
 MY_PV="$(replace_version_separator 2 '-')"
 MY_PN="db-vk"
 
-DESCRIPTION="DeadBeef plugin for listening musing from vkontakte.com"
+DESCRIPTION="DeadBeef plugin for listening music from vkontakte.com"
 HOMEPAGE="https://github.com/scorpp/db-vk"
 SRC_URI="https://github.com/scorpp/${MY_PN}/archive/${MY_PN}_${MY_PV}.tar.gz"
 
@@ -20,8 +20,8 @@ IUSE="gtk2 gtk3"
 REQUIRED_USE="|| ( ${IUSE} )"
 
 DEPEND_COMMON="dev-libs/json-glib
-	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2,curl] )
-	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3,curl] )"
+	gtk2? ( media-sound/deadbeef[gtk2,curl] )
+	gtk3? ( media-sound/deadbeef[gtk3,curl] )"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
