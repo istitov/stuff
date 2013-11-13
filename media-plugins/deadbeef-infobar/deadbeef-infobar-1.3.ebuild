@@ -22,8 +22,8 @@ DEPEND_COMMON="
 		media-sound/deadbeef[cover]
 		media-sound/deadbeef[lastfm]
 		)
-	gtk2? ( x11-libs/gtk+:2 media-sound/deadbeef[gtk2] )
-	gtk3? ( x11-libs/gtk+:3 media-sound/deadbeef[gtk3] )
+	gtk2? ( media-sound/deadbeef[gtk2] )
+	gtk3? ( media-sound/deadbeef[gtk3] )
 	dev-libs/libxml2"
 
 RDEPEND="
