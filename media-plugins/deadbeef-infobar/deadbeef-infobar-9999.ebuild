@@ -7,7 +7,7 @@ EAPI=4
 inherit mercurial
 
 DESCRIPTION="Infobar plugin for DeadBeeF audio player. Shows lyrics and artist's biography for the current track."
-HOMEPAGE="https://bitbucket.org/Not_eXist/deadbeef-infobar"
+HOMEPAGE="https://bitbucket.org/dsimbiriatin/deadbeef-infobar/wiki/Home"
 EHG_REPO_URI="https://bitbucket.org/dsimbiriatin/deadbeef-infobar"
 
 LICENSE="GPL-2"
