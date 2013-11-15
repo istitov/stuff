@@ -12,9 +12,13 @@ EGIT_REPO_URI="git://gitorious.org/amulet/amulet.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
-IUSE="mp3"
-DEPEND="|| ( mp3? ( virtual/ffmpeg[mp3] ) virtual/ffmpeg )
-		dev-qt/qtgui:4
-		dev-qt/qtcore:4"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
+IUSE="flac mp3"
+
+DEPEND="flac? ( media-libs/flac )
+	mp3? ( media-sound/lame )
+	media-libs/taglib
+	dev-qt/qtgui:4
+	dev-qt/qtcore:4"
+
 S="${WORKDIR}/${PN}"
