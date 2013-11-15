@@ -3,14 +3,15 @@
 <pkgmetadata>
   <herd>sound</herd>
   <maintainer>
-    <email>angelos@gentoo.org</email>
-    <name>Christoph Mende</name>
+    <email>dolphinstkom@gmail.com</email>
+    <name>Komashko Stanislav</name>
   </maintainer>
   <longdescription>
 Sonata is a lightweight GTK+ music client for the Music Player Daemon (MPD). It aims to be efficient (no toolbar, main menu, or statusbar), user-friendly, and clean.
 </longdescription>
   <use>
-    <flag name="lyrics">Support for lyrics fetching</flag>
-    <flag name="trayicon">Enable support for trayicon</flag>
+    <flag name="mpd">Support for mpd fetching</flag>
+    <flag name="dbus">Support for dbus fetching</flag>
+    <flag name="taglib">Enable support for taglib</flag>
   </use>
 </pkgmetadata>

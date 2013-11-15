@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer>
-		<email>megagreener@gmail.com</email>
-	</maintainer>
+  <herd>sound</herd>
+  <maintainer>
+    <email>dolphinstkom@gmail.com</email>
+    <name>Komashko Stanislav</name>
+  </maintainer>
+  <longdescription>
+Amulet is a simple and user-friendly application for conversion music.
+</longdescription>
+  <use>
+    <flag name="flac">Support for flac fetching</flag>
+    <flag name="mp3">Support for mp3 fetching</flag>
+  </use>
 </pkgmetadata>
