@@ -12,7 +12,7 @@ EGIT_REPO_URI="git://github.com/multani/sonata.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="dbus mpd taglib"
 
 LANGS="da it ko sk tr nl ca sl be zh_CN ru et sv pt_BR cs el_GR de fi ar pl uk ja es zh_TW fr"
