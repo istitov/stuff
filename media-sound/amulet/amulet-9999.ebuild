@@ -4,9 +4,9 @@
 
 EAPI="4"
 
-inherit qt4-r2 git-2
+inherit qt4-r2 git-r3
 
-DESCRIPTION="Audio converter based on ffmpeg"
+DESCRIPTION="Audio converter based on flac, lame..."
 HOMEPAGE="http://gitorious.org/amulet"
 EGIT_REPO_URI="git://gitorious.org/amulet/amulet.git"
 
