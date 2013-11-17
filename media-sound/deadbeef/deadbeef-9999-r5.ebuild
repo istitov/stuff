@@ -41,7 +41,7 @@ RDEPEND="aac? ( media-libs/faad2 )
 	alac? ( media-libs/faad2 )
 	cdda? ( >=dev-libs/libcdio-0.90 media-libs/libcddb )
 	cover? ( media-libs/imlib2 )
-	ffmpeg? ( media-plugins/deadbeef-ffmpeg )
+	ffmpeg? ( !media-plugins/deadbeef-ffmpeg >=media-video/ffmpeg-1.0.7 )
 	flac? ( media-libs/flac )
 	gtk2? ( x11-libs/gtk+:2 x11-libs/gtkglext )
 	gtk3? ( x11-libs/gtk+:3 )
@@ -72,11 +72,11 @@ pkg_setup() {
 }
 
 src_prepare() {
-	if use ffmpeg ;then
-		sed -e 's|libavcodec >= 51.0.0 libavutil libavformat|deadbeef-libavcodec >= 51.0.0 deadbeef-libavutil deadbeef-libavformat|g' \
-		-e 's|libavcodec libavutil libavformat|deadbeef-libavcodec deadbeef-libavutil deadbeef-libavformat|g' \
-		-i configure.ac
-	fi
+# 	if use ffmpeg ;then
+# 		sed -e 's|libavcodec >= 51.0.0 libavutil libavformat|deadbeef-libavcodec >= 51.0.0 deadbeef-libavutil deadbeef-libavformat|g' \
+# 		-e 's|libavcodec libavutil libavformat|deadbeef-libavcodec deadbeef-libavutil deadbeef-libavformat|g' \
+# 		-i configure.ac
+# 	fi
 
 	touch config.rpath
 	sh autogen.sh
