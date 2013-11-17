@@ -1,12 +1,16 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.2 2013/03/04 16:09:45 brothermechanic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.4 2013/11/08 19:24:12 brothermechanic Exp $
 
-EAPI=4
+EAPI=5
 
 if [ "${PV}" = "9999" ];then
-ESVN_REPO_URI="https://svn.blender.org/svnroot/bf-blender/trunk/blender"
-SCM="subversion"
+BLENDGIT_URI="http://git.blender.org"
+EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
+BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
+BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
+BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
+SCM="git-2"
 else
 SRC_URI="http://download.blender.org/source/${P}.tar.gz"
 fi
@@ -16,25 +20,21 @@ PYTHON_DEPEND="3:3.3"
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="http://www.blender.org/"
-if [ "${PV}" = "9999" ];then
-SRC_URI=""
-else
-SRC_URI="http://download.blender.org/source/${P}.tar.gz"
-fi
 
 LICENSE="|| ( GPL-2 BL )"
 SLOT="2.6"
-KEYWORDS="~amd64 ~x86"
-IUSE_MODULES="+cycles +ocio -osl -freestyle +compositor +tomato +game-engine player addons"
-IUSE_MODIFIERS="fluid +boolean +decimate +remesh smoke oceansim"
-IUSE_CODECS="ffmpeg +openexr jpeg2k openal -dds -tiff -cin -redcode"
-IUSE_SYSTEM="openmp +fftw sndfile jack sdl +sse nls ndof -collada -doc -tweak-mode -debug"
+KEYWORDS=""
+IUSE_MODULES="cycles +ocio -osl -freestyle +compositor +tomato game-engine player +addons contrib +X"
+IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke +oceansim eltopo"
+IUSE_CODECS="+ffmpeg openexr jpeg2k openal -dds -tiff -cin -redcode quicktime"
+IUSE_SYSTEM="+openmp +fftw sndfile jack sdl +sse +sse2 nls ndof collada -doc -debug -lzma -valgrind +buildinfo"
 IUSE_GPU="-cuda -sm_20 -sm_21 -sm_30"
 IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU}"
 
-REQUIRED_USE="cuda? ( cycles )
-			  osl? ( cuda )
-			  redcode? ( ffmpeg )"
+REQUIRED_USE="cycles? ( ocio )
+		cuda? ( cycles )
+		  osl? ( cycles )
+		    redcode? ( ffmpeg jpeg2k )"
 
 LANGS="en ar bg ca cs de el es es_ES fa fi fr he hr hu id it ja ky ne nl pl pt pt_BR ru sr sr@latin sv tr uk zh_CN zh_TW"
 for X in ${LANGS} ; do
@@ -42,23 +42,30 @@ for X in ${LANGS} ; do
 	REQUIRED_USE+=" linguas_${X}? ( nls )"
 done
 
-DEPEND=">=dev-lang/python-3.3.0-r1
+DEPEND="dev-cpp/gflags
+	dev-cpp/glog[gflags]
+	dev-python/numpy[python_targets_python3_3]
+	sci-libs/colamd
+	sci-libs/ldl
+	virtual/glu
+	virtual/libintl
+	dev-lang/python:3.3
 	virtual/jpeg
 	media-libs/libpng:0
-	x11-libs/libXi
-	x11-libs/libX11
 	media-libs/tiff:0
-	media-libs/libsamplerate
-	virtual/opengl
-	>=media-libs/freetype-2.0
-	media-libs/glew
-	dev-cpp/eigen:3
-	>=sci-physics/bullet-2.80[-double-precision]
+        media-libs/libsamplerate
+	X? ( x11-libs/libXi
+		x11-libs/libX11
+		virtual/opengl
+		media-libs/freetype
+		media-libs/glew 
+	)
+	eltopo? ( virtual/lapack )
 	sys-libs/zlib
+	ocio? ( >=media-libs/opencolorio-1.0.8 )
 	cycles? (
-		ocio? ( >=media-libs/opencolorio-1.0.8 )
 		>=media-libs/openimageio-1.1.5
-		>=dev-libs/boost-1.52.0[threads(+)]
+		>=dev-libs/boost-1.49.0[threads(+)]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
 		osl? ( =media-gfx/osl-9999 )
 		osl? ( >=sys-devel/llvm-3.1 )
@@ -76,10 +83,17 @@ DEPEND=">=dev-lang/python-3.3.0-r1
 	collada? ( media-libs/opencollada )
 	cuda? ( >=dev-util/nvidia-cuda-toolkit-4.2 )
 	ndof? ( dev-libs/libspnav )
-	doc? ( dev-python/sphinx )"
+	quicktime? ( media-libs/libquicktime )
+	lzma? ( app-arch/lzma )
+	valgrind? ( dev-util/valgrind )"
+	
 
-RDEPEND="nls? ( sys-devel/gettext )
-	${DEPEND}"
+RDEPEND="${DEPEND}
+	 dev-cpp/eigen:3
+	 nls? ( sys-devel/gettext )
+	 doc? ( dev-python/sphinx
+		app-doc/doxygen[-nodot(-),dot(+)]
+		)"
 
 # configure internationalization only if LINGUAS have more
 # languages than 'en', otherwise must be disabled
@@ -97,11 +111,26 @@ done
 
 src_unpack(){
 if [ "${PV}" = "9999" ];then
-	subversion_fetch
+	git-2_src_unpack
+	unset EGIT_BRANCH EGIT_COMMIT
 	if use addons; then
-		S="${S}"/release/scripts/addons_contrib subversion_fetch \
-		"https://svn.blender.org/svnroot/bf-extensions/contrib/py/scripts/addons/"
+		unset EGIT_BRANCH EGIT_COMMIT
+		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons" \
+		EGIT_REPO_URI="${BLENDER_ADDONS_URI}" \
+		git-2_src_unpack
 	fi
+		if use contrib; then
+			unset EGIT_BRANCH EGIT_COMMIT
+        		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons_contrib" \
+        		EGIT_REPO_URI="${BLENDER_ADDONS_CONTRIB_URI}" \
+        		git-2_src_unpack
+		fi
+			if use nls; then
+                        	unset EGIT_BRANCH EGIT_COMMIT
+                        	EGIT_SOURCEDIR="${WORKDIR}/${P}/release/datafiles/locale" \
+                        	EGIT_REPO_URI="${BLENDER_TRANSLATIONS_URI}" \
+                        	git-2_src_unpack
+                	fi
 else
 	unpack ${A}
 fi
@@ -134,7 +163,37 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-desktop.patch
+	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
+		"${FILESDIR}"/02-${PN}-2.68-unbundle-colamd.patch \
+		"${FILESDIR}"/03-${PN}-2.68-remove-binreloc.patch \
+		"${FILESDIR}"/04-${PN}-2.68-unbundle-glog.patch \
+		"${FILESDIR}"/05-${PN}-2.68-unbundle-eigen3.patch \
+		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
+		"${FILESDIR}"/07-${PN}-2.68-sse2.patch \
+		"${FILESDIR}"/${PN}-desktop.patch
+
+	rm -r \
+		${WORKDIR}/${P}/extern/Eigen3 \
+		${WORKDIR}/${P}/extern/libopenjpeg \
+		${WORKDIR}/${P}/extern/glew \
+		${WORKDIR}/${P}/extern/colamd \
+		${WORKDIR}/${P}/extern/binreloc \
+		|| die
+		
+	sed -i \
+		-e 's#set(WITH_BINRELOC ON)#set(WITH_BINRELOC OFF)#' \
+		CMakeLists.txt || die
+
+	# we don't want static glew, but it's scattered across
+	# thousand files
+	# !!!CHECK THIS SED ON EVERY VERSION BUMP!!!
+	sed -i \
+		-e '/-DGLEW_STATIC/d' \
+		$(find . -type f -name "CMakeLists.txt") || die
+
+	ewarn "$(echo "Remaining bundled dependencies:";
+			( find extern -mindepth 1 -maxdepth 1 -type d; find extern/libmv/third_party -mindepth 1 -maxdepth 1 -type d; ) | sed 's|^|- |')"
+		
 }
 
 src_configure() {
@@ -229,9 +288,16 @@ src_configure() {
 		$(cmake-utils_use_with smoke MOD_SMOKE)
 		$(cmake-utils_use_with fftw FFTW3)
 		$(cmake-utils_use_with ffmpeg CODEC_FFMPEG)
-		$(cmake-utils_use_with tweak-mode TWEAK_MODE)
 		$(cmake-utils_use_with debug DEBUG)
-		$(cmake-utils_use_with doc DOCS)"
+		$(cmake-utils_use_with doc DOCS)
+		$(cmake-utils_use_with eltopo ELTOPO)
+		$(cmake-utils_use_with sse2 SSE2)
+		$(cmake-utils_use_with buildinfo BUILDINFO)
+		$(cmake-utils_use_with !X HEADLESS)
+		$(cmake-utils_use_with lzma LZMA)
+		$(cmake-utils_use_with valgrind VALGRIND)
+		$(cmake-utils_use_with quicktime QUICKTIME)"
+		
 
 	# FIX: Game Engine module needs to be active to build the Blender Player
 	if ! use game-engine && use player; then
