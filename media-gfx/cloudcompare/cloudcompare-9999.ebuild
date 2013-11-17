@@ -14,12 +14,11 @@ EGIT_BRANCH="master"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="pcl"
+IUSE=""
 
 DEPEND="media-libs/glew
         dev-qt/qtcore
-        dev-qt/qtopengl
-	pcl? ( sci-libs/pcl )"
+        dev-qt/qtopengl"
 
 RDEPEND="${DEPEND}"
 
@@ -37,8 +36,13 @@ src_configure() {
 	local mycmakeargs=""
 	mycmakeargs="${mycmakeargs}"
 	-DCMAKE_INSTALL_PREFIX="${D}/usr"
-	if use pcl; then
-	mycmakeargs="${mycmakeargs} -DINSTALL_QPCL_PLUGIN=ON"
-	fi
 	cmake-utils_src_configure
 }
+
+src_install() {
+	cmake-utils_src_install
+	newicon ${S}/qCC/images/icon/cc_icon_64.png "${PN}".png
+        make_desktop_entry CloudCompare "Cloud Compare" Graphics
+}
+
+
