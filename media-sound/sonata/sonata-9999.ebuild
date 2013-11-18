@@ -24,7 +24,7 @@ RDEPEND=">=dev-python/python-mpd-0.4.6
 	>=x11-libs/gtk+-3.4
 	mpd? ( >=media-sound/mpd-0.15 )
 	dbus? ( dev-python/dbus-python )
-	taglib? ( >=dev-python/tagpy-0.93 )"
+	taglib? ( >=dev-python/tagpy-2013.1 )"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
