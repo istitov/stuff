@@ -42,6 +42,9 @@
       Build the Blender Player. THis requires the Game engine.
     </flag>
     <flag name="addons">
+      Adds bledner addons.
+    </flag>
+    <flag name="contrib">
       Adds some extra addons from blender community.
     </flag>
     <flag name='fluid'>
@@ -101,6 +104,15 @@
     <flag name='collada'>
       Adds support for collada 3d format package
       <pkg>media-libs/opencollada</pkg>.
+    </flag>
+    <flag name='eltopo'>
+      Lapack layer for cloth simulation (experimental)
+    </flag>
+    <flag name='buildinfo'>
+      Add build info to blender's systeminfo.txt
+    </flag>
+    <flag name='valgrind'>
+      Adds support for valgrind
     </flag>
     <flag name="doc">
       Build C and Python API documentation directly from the source code.
