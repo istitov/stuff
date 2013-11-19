@@ -10,7 +10,7 @@ DESCRIPTION="Patch-based Multi-view Stereo Software"
 HOMEPAGE="http://www.di.ens.fr/pmvs/"
 SRC_URI="http://www.di.ens.fr/pmvs/pmvs-2-fix0.tar.gz"
 
-LICENSE="GPL"
+LICENSE="GPL-1+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""

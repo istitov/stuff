@@ -10,7 +10,7 @@ DESCRIPTION="Clustering Views for Multi-view Stereo"
 HOMEPAGE="http://www.di.ens.fr/cmvs/"
 SRC_URI="http://www.di.ens.fr/cmvs/cmvs-fix2.tar.gz"
 
-LICENSE="GPL"
+LICENSE="GPL-1+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""

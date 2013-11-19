@@ -10,7 +10,7 @@ DESCRIPTION="A fast graph clustering software"
 HOMEPAGE="http://www.cs.utexas.edu/users/dml/Software/graclus.html"
 SRC_URI="graclus-1.2.tar.gz"
 
-LICENSE="GPL"
+LICENSE="GPL-1+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="abi_x86_64"
