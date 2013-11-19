@@ -1,0 +1,47 @@
+diff -Naur pmvs-2/program/base/numeric/mylapack.cc pmvs-2.fix/program/base/numeric/mylapack.cc
+--- pmvs-2/program/base/numeric/mylapack.cc	2009-08-17 01:06:55.000000000 +0000
++++ pmvs-2.fix/program/base/numeric/mylapack.cc	2013-11-19 12:58:23.253463543 +0000
+@@ -3,7 +3,7 @@
+ #include <iostream>
+ 
+ extern "C" {
+-#include <clapack/f2c.h>
++#include <f2c.h>
+ #include <clapack/clapack.h>
+ };
+ 
+diff -Naur pmvs-2/program/base/numeric/mylapack.h pmvs-2.fix/program/base/numeric/mylapack.h
+--- pmvs-2/program/base/numeric/mylapack.h	2009-08-17 01:06:55.000000000 +0000
++++ pmvs-2.fix/program/base/numeric/mylapack.h	2013-11-19 12:57:30.245465772 +0000
+@@ -28,11 +28,11 @@
+ 
+   static void lls(std::vector<float>& A,
+                   std::vector<float>& b,
+-                  long int width, long int height);
++                  int width, int height);
+   
+   static void lls(std::vector<double>& A,
+                   std::vector<double>& b,
+-                  long int width, long int height);
++                  int width, int height);
+ 
+   // SVD
+   // A = U Sigma V^T
+diff -Naur pmvs-2/program/main/Makefile pmvs-2.fix/program/main/Makefile
+--- pmvs-2/program/main/Makefile	2009-08-25 10:22:00.000000000 +0000
++++ pmvs-2.fix/program/main/Makefile	2013-11-19 13:00:50.215457362 +0000
+@@ -12,12 +12,12 @@
+ YOURINCLUDEPATH =
+ 
+ # Your LDLIBRARY path (e.g., -L/usr/lib)
+-YOURLDLIBPATH =
++YOURLDLIBPATH = -L/usr/lib
+ 
+ CXXFLAGS = -O2 -Wall -Wno-deprecated ${YOURINCLUDEPATH}
+ 
+ LDFLAGS = ${YOURLDLIBPATH} -lXext -lX11 -ljpeg -lm -lpthread \
+-	-llapack -lgsl -lgslcblas
++	-lclapack -lgsl -lgslcblas
+ 
+ ######################################################################
+ all: pmvs2

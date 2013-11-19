@@ -1,0 +1,302 @@
+diff -Naur src/pba/pba.h src.fix/pba/pba.h
+--- src/pba/pba.h	1970-01-01 00:00:00.000000000 +0000
++++ src/pba/pba.h	2013-11-19 12:16:38.734568869 +0000
+@@ -0,0 +1,137 @@
++////////////////////////////////////////////////////////////////////////////
++//	File:		    pba.h
++//	Author:		    Changchang Wu (ccwu@cs.washington.edu)
++//	Description :   interface of class ParallelBA, which has two implementations
++//                  SparseBundleCU for CUDA-based version, and
++//                  SparseBundleCPU<Float> for CPU multi-threading version
++//
++//  Copyright (c) 2011  Changchang Wu (ccwu@cs.washington.edu)
++//    and the University of Washington at Seattle 
++//
++//  This library is free software; you can redistribute it and/or
++//  modify it under the terms of the GNU General Public
++//  License as published by the Free Software Foundation; either
++//  Version 3 of the License, or (at your option) any later version.
++//
++//  This library is distributed in the hope that it will be useful,
++//  but WITHOUT ANY WARRANTY; without even the implied warranty of
++//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++//  General Public License for more details.
++//
++////////////////////////////////////////////////////////////////////////////////
++
++#include <stdlib.h>
++#ifndef PARALLEL_BA_H
++#define PARALLEL_BA_H
++
++#if  defined(_WIN32) 
++    #ifdef PBA_DLL
++        #ifdef DLL_EXPORT
++            #define PBA_EXPORT __declspec(dllexport)
++        #else
++            #define PBA_EXPORT __declspec(dllimport)
++        #endif
++    #else
++        #define PBA_EXPORT
++    #endif
++
++    #define PBA_EXPORT_EXTERN PBA_EXPORT
++
++    #if _MSC_VER > 1000
++        #pragma once
++    #endif
++#else
++    #define PBA_EXPORT
++    #define PBA_EXPORT_EXTERN extern "C"
++#endif
++
++//filetype definitions for points and camera
++#include "DataInterface.h"
++#include "ConfigBA.h"
++
++
++class ParallelBA
++{ 
++
++public:
++    enum StatusT
++    {
++        STATUS_SUCCESS = 0,
++        STATUS_CAMERA_MISSING = 1,
++        STATUS_POINT_MISSING,
++        STATUS_PROJECTION_MISSING,
++        STATUS_MEASURMENT_MISSING,
++        STATUS_ALLOCATION_FAIL
++    };
++    enum DeviceT
++    {
++        PBA_INVALID_DEVICE = -4,
++        PBA_CPU_DOUBLE = -3,
++        PBA_CPU_FLOAT = -2,
++        PBA_CUDA_DEVICE_DEFAULT = -1,
++        PBA_CUDA_DEVICE0 = 0
++    };
++    enum DistortionT
++    {
++        PBA_MEASUREMENT_DISTORTION = -1, //single parameter, apply to measurements
++        PBA_NO_DISTORTION = 0,           //no radial distortion
++        PBA_PROJECTION_DISTORTION = 1    //single parameter, apply to projectino
++    };
++	enum BundleModeT
++	{
++		BUNDLE_FULL = 0,
++		BUNDLE_ONLY_MOTION = 1,
++		BUNDLE_ONLY_STRUCTURE = 2,
++	};
++private:
++    ParallelBA *   _optimizer; 
++public:
++    ////////////////////////////////////////////////////
++    //methods for changing bundle adjustment settings 
++    PBA_EXPORT virtual void ParseParam(int narg, char** argv);           //indirect method
++    PBA_EXPORT virtual ConfigBA* GetInternalConfig();                    //direct method
++    PBA_EXPORT virtual void SetFixedIntrinsics(bool fixed);              //call this for calibrated system
++    PBA_EXPORT virtual void EnableRadialDistortion(DistortionT type);    //call this to enable radial distortion
++    PBA_EXPORT virtual void SetNextTimeBudget(int seconds);              //# of seconds for next run (0 = no limit)
++    PBA_EXPORT virtual void ReserveStorage(size_t ncam, size_t npt, size_t nproj);
++public:	
++	//function name change; the old one is mapped as inline function
++	inline void SetFocalLengthFixed(bool fixed) {SetFixedIntrinsics(fixed); }
++	inline void ResetBundleStorage() {ReserveStorage(0, 0, 0); /*Reset devide for CUDA*/ }
++public:
++    /////////////////////////////////////////////////////
++    //optimizer interface, input and run
++    PBA_EXPORT virtual void SetCameraData(size_t ncam,  CameraT* cams);			//set camera data
++    PBA_EXPORT virtual void SetPointData(size_t npoint, Point3D* pts);			//set 3D point data
++    PBA_EXPORT virtual void SetProjection(size_t nproj, 
++        const Point2D* imgpts,  const int* point_idx, const int* cam_idx);		//set projections
++	PBA_EXPORT virtual void SetNextBundleMode(BundleModeT mode = BUNDLE_FULL);	//mode of the next bundle adjustment call
++    PBA_EXPORT virtual int  RunBundleAdjustment();								//start bundle adjustment, return number of successful LM iterations
++public:
++    //////////////////////////////////////////////////
++    //Query optimzer runing status for Multi-threading 
++    //Three functions below can be called from a differnt thread while bundle is running
++    PBA_EXPORT virtual float GetMeanSquaredError();        //read back results during/after BA
++    PBA_EXPORT virtual void  AbortBundleAdjustment();      //tell bundle adjustment to abort ASAP
++    PBA_EXPORT virtual int   GetCurrentIteration();        //which iteration is it working on?
++public:
++    PBA_EXPORT ParallelBA(DeviceT device = PBA_CUDA_DEVICE_DEFAULT);  
++    PBA_EXPORT void* operator new (size_t size); 
++    PBA_EXPORT virtual ~ParallelBA();
++
++public:
++	//////////////////////////////////////////////
++	//Future functions will be added to the end for compatiability with old version.
++	PBA_EXPORT virtual void SetFocalMask(const int * fmask, float weight = 1.0f);
++};
++
++//function for dynamic loading of library
++PBA_EXPORT_EXTERN ParallelBA * NewParallelBA(ParallelBA::DeviceT device = ParallelBA::PBA_CUDA_DEVICE_DEFAULT);
++typedef ParallelBA * (*NEWPARALLELBAPROC)(ParallelBA::DeviceT);
++
++///////////////////////////////////////////////
++//older versions do not have this function. 
++PBA_EXPORT_EXTERN int  ParallelBA_GetVersion();
++
++#endif
++
+diff -Naur src/pba/SparseBundleCU.h src.fix/pba/SparseBundleCU.h
+--- src/pba/SparseBundleCU.h	1970-01-01 00:00:00.000000000 +0000
++++ src/pba/SparseBundleCU.h	2013-11-19 12:21:08.808557511 +0000
+@@ -0,0 +1,157 @@
++////////////////////////////////////////////////////////////////////////////
++//	File:		    SparseBundleCU.h
++//	Author:		    Changchang Wu (ccwu@cs.washington.edu)
++//	Description :   interface of the CUDA-version of multicore bundle adjustment
++//
++//  Copyright (c) 2011  Changchang Wu (ccwu@cs.washington.edu)
++//    and the University of Washington at Seattle 
++//
++//  This library is free software; you can redistribute it and/or
++//  modify it under the terms of the GNU General Public
++//  License as published by the Free Software Foundation; either
++//  Version 3 of the License, or (at your option) any later version.
++//
++//  This library is distributed in the hope that it will be useful,
++//  but WITHOUT ANY WARRANTY; without even the implied warranty of
++//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++//  General Public License for more details.
++//
++////////////////////////////////////////////////////////////////////////////////
++
++#if !defined(SPARSE_BUNDLE_CU_H)
++#define SPARSE_BUNDLE_CU_H
++
++#include <stdlib.h>
++#include "CuTexImage.h"
++#include "ConfigBA.h"
++#include "DataInterface.h"
++
++
++class SparseBundleCU : public ParallelBA, public ConfigBA
++{
++protected:      //cpu data
++    int             _num_camera;
++    int             _num_point;
++    int             _num_imgpt;
++    CameraT*        _camera_data;   
++    float*          _point_data;
++    ////////////////////////////////
++    const float*    _imgpt_data;
++    const int*      _camera_idx;
++    const int*      _point_idx;
++	const int*		_focal_mask;
++    vector<float>   _imgpt_datax;
++    ////////////////////////
++    float           _projection_sse;    //sumed square error
++protected:      //cuda data
++    CuTexImage      _cuCameraData;
++    CuTexImage      _cuCameraDataEX;
++    CuTexImage      _cuPointData;
++    CuTexImage      _cuPointDataEX;
++    CuTexImage      _cuMeasurements;
++    CuTexImage      _cuImageProj;
++    CuTexImage      _cuJacobianCamera;  
++    CuTexImage      _cuJacobianPoint;  
++    CuTexImage      _cuJacobianCameraT; 
++    CuTexImage      _cuProjectionMap;
++    CuTexImage      _cuPointMeasurementMap;  
++    CuTexImage      _cuCameraMeasurementMap;  
++    CuTexImage      _cuCameraMeasurementList; 
++    CuTexImage      _cuCameraMeasurementListT; 
++
++    ///////////////////////////////
++    CuTexImage      _cuBufferData;
++    ////////////////////////////
++    CuTexImage      _cuBlockPC;
++    CuTexImage      _cuVectorSJ;
++
++    ///LM normal    equation
++    CuTexImage      _cuVectorJtE;
++    CuTexImage      _cuVectorJJ;
++    CuTexImage      _cuVectorJX;
++    CuTexImage      _cuVectorXK;
++    CuTexImage      _cuVectorPK;
++    CuTexImage      _cuVectorZK;
++    CuTexImage      _cuVectorRK;
++
++	///////////////////////
++protected:
++	int             _num_imgpt_q;
++	float			_weight_q;
++	CuTexImage		_cuCameraQList;
++	CuTexImage		_cuCameraQMap;
++	CuTexImage		_cuCameraQMapW;
++	CuTexImage		_cuCameraQListW;
++protected:
++	bool		ProcessIndexCameraQ(vector<int>&qmap, vector<int>& qlist);
++	void		ProcessWeightCameraQ(vector<int>&cpnum, vector<int>&qmap, vector<float>& qmapw, vector<float>&qlistw);
++
++protected:      //internal functions
++    int         GetParameterLength();
++    int         InitializeBundle();
++    int         ValidateInputData();
++    void        ReleaseAllocatedData();
++    bool        InitializeStorageForCG();
++    bool        InitializeBundleGPU();
++    bool        TransferDataToGPU();
++    void        TransferDataToHost();
++    void        DenormalizeData();
++    void        NormalizeData();
++    void        NormalizeDataF();
++    void        NormalizeDataD();
++    void        DebugProjections();
++    void        RunDebugSteps();
++    bool        CheckRequiredMem(int fresh = 1);
++    bool        CheckRequiredMemX();
++    void        ReserveStorage(size_t ncam, size_t npt, size_t nproj);
++    void        ReserveStorageAuto();
++
++protected:
++    float       EvaluateProjection(CuTexImage& cam, CuTexImage&point, CuTexImage& proj);
++    float       EvaluateProjectionX(CuTexImage& cam, CuTexImage&point, CuTexImage& proj);
++    float       UpdateCameraPoint(CuTexImage& dx, CuTexImage& cuImageTempProj);
++	float		SaveUpdatedSystem(float residual_reduction, float dx_sqnorm, float damping);
++	float		EvaluateDeltaNorm();
++    void        EvaluateJacobians(bool shuffle = true);
++    void        PrepareJacobianNormalization();
++    void        ComputeJtE(CuTexImage& E, CuTexImage& JtE, int mode = 0); 
++    void        ComputeJX(CuTexImage& X, CuTexImage& JX, int mode = 0);
++    void        ComputeDiagonal(CuTexImage& JJ, CuTexImage& JJI);
++    void        ComputeBlockPC(float lambda, bool dampd = true);
++    void        ApplyBlockPC(CuTexImage& v, CuTexImage& pv, int mode =0);
++    int         SolveNormalEquationPCGB(float lambda);
++    int         SolveNormalEquationPCGX(float lambda);
++	int			SolveNormalEquation(float lambda);
++	void		AdjustBundleAdjsutmentMode();
++    void        NonlinearOptimizeLM();
++    void        BundleAdjustment();
++    void        RunTestIterationLM(bool reduced);
++    void        SaveBundleRecord(int iter, float res, float damping, float& g_norm, float& g_inf);
++    /////////////////////////////////
++    void        SaveNormalEquation(float lambda);
++    void        RunProfileSteps();
++    void        WarmupDevice();
++public:
++    virtual float GetMeanSquaredError();
++    virtual void SetCameraData(size_t ncam,  CameraT* cams);
++    virtual void SetPointData(size_t npoint, Point3D* pts);
++    virtual void SetProjection(size_t nproj, const Point2D* imgpts, const int* point_idx, const int* cam_idx);
++	virtual void SetFocalMask(const int* fmask, float weight);
++    virtual int  RunBundleAdjustment();
++
++    ///
++    virtual void AbortBundleAdjustment()                    {__abort_flag = true;}
++    virtual int  GetCurrentIteration()                      {return __current_iteration; }
++    virtual void SetNextTimeBudget(int seconds)             {__bundle_time_budget = seconds;}
++	virtual void SetNextBundleMode(BundleModeT mode)		{__bundle_mode_next = mode;}
++    virtual void SetFixedIntrinsics(bool fixed)             {__fixed_intrinsics = fixed; }
++    virtual void EnableRadialDistortion(DistortionT type)   {__use_radial_distortion = type; }
++    virtual void ParseParam(int narg, char** argv)          {ConfigBA::ParseParam(narg, argv); }
++    virtual ConfigBA* GetInternalConfig()                   {return this; }
++public:
++    SparseBundleCU(int device);
++	size_t  GetMemCapacity();
++};
++
++#endif
++
