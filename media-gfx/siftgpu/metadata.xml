@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>brothermechanic@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name='cuda'>Add support for <pkg>dev-util/nvidia-cuda-toolkit</pkg></flag>
+  </use>
 </pkgmetadata>
