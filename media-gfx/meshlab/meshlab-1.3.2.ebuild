@@ -15,9 +15,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 DEPEND="media-libs/glew
+	sys-libs/libunwind
 	sci-libs/levmar
 	=media-libs/lib3ds-1*
-	>=dev-cpp/muParser-1.30
+	dev-cpp/muParser
 	media-libs/qhull
 	media-libs/openctm
 	dev-qt/qtcore
@@ -32,6 +33,7 @@ src_unpack(){
 }
 
 src_prepare() {
+	rm ${WORKDIR}/meshlab/src/distrib/plugins/*.xml
 	rm ${WORKDIR}/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h
 	cd ${PORTAGE_BUILDDIR}
 	ln -s work a
@@ -86,5 +88,4 @@ src_install() {
 	insinto ${my_libdir}/shaders
 	doins -r distrib/shaders/* || die
 	newicon ${S}/meshlab/images/eye64.png "${PN}".png
-        make_desktop_entry meshlab "Meshlab"
 }

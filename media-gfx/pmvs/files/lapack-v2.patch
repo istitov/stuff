@@ -1,0 +1,71 @@
+diff -uNr pmvs-2-orig/program/base/numeric/mylapack.cc pmvs-2/program/base/numeric/mylapack.cc
+--- pmvs-2-orig/program/base/numeric/mylapack.cc	2009-08-17 05:06:55.000000000 +0400
++++ pmvs-2/program/base/numeric/mylapack.cc	2013-11-20 02:19:23.271919137 +0400
+@@ -1,9 +1,9 @@
+-#include "mylapack.h"
+ #include <cstdlib>
+ #include <iostream>
++#include "mylapack.h"
+ 
+ extern "C" {
+-#include <clapack/f2c.h>
++#include <f2c.h>
+ #include <clapack/clapack.h>
+ };
+ 
+diff -uNr pmvs-2-orig/program/base/numeric/mylapack.h pmvs-2/program/base/numeric/mylapack.h
+--- pmvs-2-orig/program/base/numeric/mylapack.h	2009-08-17 05:06:55.000000000 +0400
++++ pmvs-2/program/base/numeric/mylapack.h	2013-11-20 02:19:29.395946744 +0400
+@@ -3,6 +3,12 @@
+ 
+ #include <vector>
+ 
++extern "C" {
++#include <f2c.h>
++#include <clapack/clapack.h>
++}
++
++
+ class Cmylapack {
+  public:
+ 
+@@ -28,11 +34,11 @@
+ 
+   static void lls(std::vector<float>& A,
+                   std::vector<float>& b,
+-                  long int width, long int height);
++                  integer width, integer height);
+   
+   static void lls(std::vector<double>& A,
+                   std::vector<double>& b,
+-                  long int width, long int height);
++                  integer width, integer height);
+ 
+   // SVD
+   // A = U Sigma V^T
+diff -uNr pmvs-2-orig/program/base/pmvs/filter.cc pmvs-2/program/base/pmvs/filter.cc
+--- pmvs-2-orig/program/base/pmvs/filter.cc	2009-08-24 06:05:18.000000000 +0400
++++ pmvs-2/program/base/pmvs/filter.cc	2013-11-20 02:25:21.010853431 +0400
+@@ -2,9 +2,9 @@
+ #include <numeric>
+ #include <ctime>
+ #include <sys/time.h>
+-#include "../numeric/mylapack.h"
+ #include "findMatch.h"
+ #include "filter.h"
++#include "../numeric/mylapack.h"
+ 
+ using namespace Patch;
+ using namespace PMVS3;
+diff -uNr pmvs-2-orig/program/main/Makefile pmvs-2/program/main/Makefile
+--- pmvs-2-orig/program/main/Makefile	2009-08-25 14:22:00.000000000 +0400
++++ pmvs-2/program/main/Makefile	2013-11-20 02:54:22.909521843 +0400
+@@ -17,7 +17,7 @@
+ CXXFLAGS = -O2 -Wall -Wno-deprecated ${YOURINCLUDEPATH}
+ 
+ LDFLAGS = ${YOURLDLIBPATH} -lXext -lX11 -ljpeg -lm -lpthread \
+-	-llapack -lgsl -lgslcblas
++	-lclapack -lgsl -lgslcblas
+ 
+ ######################################################################
+ all: pmvs2

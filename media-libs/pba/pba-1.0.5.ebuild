@@ -10,7 +10,7 @@ DESCRIPTION="Multicore Bundle Adjustment"
 HOMEPAGE="http://grail.cs.washington.edu/projects/mcba/"
 SRC_URI="http://grail.cs.washington.edu/projects/mcba/pba_v1.0.5.zip"
 
-LICENSE="GPL-1+"
+LICENSE="GPL-1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="cuda"
