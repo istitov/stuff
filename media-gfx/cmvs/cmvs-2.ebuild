@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/cmvs/cmvs-2.ebuild,v 0.2 2013/11/19 09:30:12 Micky53 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/cmvs/cmvs-2.ebuild,v 0.3 2013/11/21 09:30:12 Micky53 Exp $
 
 EAPI=5
 
@@ -17,7 +17,8 @@ IUSE=""
 
 DEPEND="
 	sci-libs/clapack
-	dev-libs/libf2c"
+	dev-libs/libf2c
+	media-libs/graclus"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/cmvs/program/main/"
@@ -31,8 +32,8 @@ src_prepare() {
 }
 
 src_compile() {
-	emake YOURINCLUDEPATH="${CXXFLAGS}" YOURLDLIBPATH="${LDFLAGS}" depend
-        emake YOURINCLUDEPATH="${CXXFLAGS}" YOURLDLIBPATH="${LDFLAGS}"
+	emake YOURINCLUDEPATH="${CXXFLAGS}" YOURLDLIBPATH="${LDFLAGS} -L/usr/lib/graclus" depend
+        emake YOURINCLUDEPATH="${CXXFLAGS}" YOURLDLIBPATH="${LDFLAGS} -L/usr/lib/graclus"
 }
 
 src_install() {
