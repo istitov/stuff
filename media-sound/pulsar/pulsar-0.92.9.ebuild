@@ -33,7 +33,7 @@ IUSE=""
 S="${WORKDIR}/${PN}"
 
 src_prepare() {
-	epatch "${FILESDIR}/fdo_desktop-${PV}.patch"
+	epatch "${FILESDIR}/fdo_desktop.patch"
 }
 
 src_install() {

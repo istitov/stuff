@@ -1,6 +1,6 @@
---- a/src/pulsar.desktop	2012-09-25 10:49:57.000000000 +0400
-+++ b/src/pulsar.desktop	2012-11-05 01:00:39.000000000 +0400
-@@ -1,9 +1,8 @@
+--- orig/src/pulsar.desktop	2013-04-23 04:51:06.000000000 +0400
++++ fixed/src/pulsar.desktop	2013-04-27 21:28:32.000000000 +0400
+@@ -1,25 +1,8 @@
  [Desktop Entry]
 -Encoding=UTF-8
  Name=Pulsar
@@ -11,5 +11,20 @@
 +Terminal=false
  Type=Application
 -Categories=AudioVideo;Internet;Player;Qt;
-\ No newline at end of file
+-X-Ayatana-Desktop-Shortcuts=PlayPause;Previous;Next;
+-
+-[PlayPause Shortcut Group]
+-Name=Play / Pause
+-Exec=dbus-send --type=method_call --print-reply --dest=org.mpris.MediaPlayer2.pulsar /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+-TargetEnvironment=Unity
+-
+-[Previous Shortcut Group]
+-Name=Previous
+-Exec=dbus-send --type=method_call --print-reply --dest=org.mpris.MediaPlayer2.pulsar /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous
+-TargetEnvironment=Unity
+-
+-[Next Shortcut Group]
+-Name=Next
+-Exec=dbus-send --type=method_call --print-reply --dest=org.mpris.MediaPlayer2.pulsar /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next
+-TargetEnvironment=Unity
 +Categories=AudioVideo;Player;Qt;
