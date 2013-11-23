@@ -32,8 +32,8 @@ src_prepare() {
 }
 
 src_compile() {
-	emake YOURINCLUDEPATH="${CXXFLAGS}" YOURLDLIBPATH="${LDFLAGS} -L/usr/lib/graclus" depend
-        emake YOURINCLUDEPATH="${CXXFLAGS}" YOURLDLIBPATH="${LDFLAGS} -L/usr/lib/graclus"
+	emake YOUR_INCLUDE_PATH="${CXXFLAGS}" YOUR_LDLIB_PATH="${LDFLAGS} -L/usr/lib/graclus" depend
+        emake YOUR_INCLUDE_PATH="${CXXFLAGS}" YOUR_LDLIB_PATH="${LDFLAGS} -L/usr/lib/graclus"
 }
 
 src_install() {

@@ -978,7 +978,7 @@ diff -Naur cmvs/program/main/Makefile cmvs.fix2/program/main/Makefile
 -Your LDLIBRARY path (e.g., -L/usr/lib)
 -YOUR_LDLIB_PATH =
 +#Your LDLIBRARY path (e.g., -L/usr/lib)
-+YOUR_LDLIB_PATH = -L/usr/lib/graclus
++YOUR_LDLIB_PATH =
  
  ######################################################################
  CXXFLAGS_PMVS = -O2 -Wall -Wno-deprecated ${YOUR_INCLUDE_PATH}
