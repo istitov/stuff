@@ -30,7 +30,8 @@ IUSE="adplug aac alac alsa psf ape cdda cover cover-imlib2 dts dumb converter cu
 
 REQUIRED_USE="
 	cover? ( curl )
-	lastfm? ( curl )"
+	lastfm? ( curl )
+	|| ( alsa oss pulseaudio nullout )"
 
 LANGS="be bg bn ca cs da de el en_GB eo es et fa fi fr gl he hr hu id it ja kk km lg lt nb nl pl pt
 		pt_BR ro ru si sk sl sr sr@latin sv te tr ug uk vi zh_CN zh_TW"
