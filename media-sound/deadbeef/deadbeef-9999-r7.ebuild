@@ -23,7 +23,7 @@ LICENSE="GPL-2
 SLOT="0"
 IUSE="adplug aac alac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme
 	hotkeys lastfm m3u midi mms mp3 musepack nls notify nullout oss pulseaudio rpath mono2stereo
-	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2"
+	shellexec shn sid sndfile src static supereq threads tta vorbis vtx wavpack zip gtk3 +gtk2 wma"
 
 REQUIRED_USE="
 	cover? ( curl )
@@ -89,7 +89,7 @@ src_prepare() {
 	fi
 
 	# remove unity trash
-	# need fix epatch "${FILESDIR}/desktop.patch"
+	epatch "${FILESDIR}/desktop-2.patch"
 
 	for lang in ${LANGS};do
 		for x in ${lang};do
@@ -149,7 +149,8 @@ src_configure() {
 		$(use_enable vorbis)
 		$(use_enable vtx)
 		$(use_enable wavpack)
-		$(use_enable zip vfs-zip)"
+		$(use_enable zip vfs-zip)
+		$(use_enable wma)"
 
 	econf ${my_config}
 }
