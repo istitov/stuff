@@ -1,0 +1,62 @@
+From 22ca91ffae166aa90389792ec5e2251a7d5bfc58 Mon Sep 17 00:00:00 2001
+From: Federico Mena Quintero <federico@gnome.org>
+Date: Sat, 22 Jun 2013 00:14:36 +0000
+Subject: GtkFileChooserButton: Also emit 'file-set' when changing the selection through the combo box
+
+https://bugzilla.gnome.org/show_bug.cgi?id=696498
+---
+diff --git a/gtk/gtkfilechooserbutton.c b/gtk/gtkfilechooserbutton.c
+index 05c6a8b..bdcc2ea 100644
+--- a/gtk/gtkfilechooserbutton.c
++++ b/gtk/gtkfilechooserbutton.c
+@@ -2764,12 +2764,15 @@ static void
+ combo_box_changed_cb (GtkComboBox *combo_box,
+ 		      gpointer     user_data)
+ {
++  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
++  GtkFileChooserButtonPrivate *priv = button->priv;
+   GtkTreeIter iter;
++  gboolean file_was_set;
++
++  file_was_set = FALSE;
+ 
+   if (gtk_combo_box_get_active_iter (combo_box, &iter))
+     {
+-      GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
+-      GtkFileChooserButtonPrivate *priv = button->priv;
+       gchar type;
+       gpointer data;
+ 
+@@ -2788,7 +2791,10 @@ combo_box_changed_cb (GtkComboBox *combo_box,
+ 	case ROW_TYPE_BOOKMARK:
+ 	case ROW_TYPE_CURRENT_FOLDER:
+ 	  if (data)
+-	    gtk_file_chooser_button_select_file (GTK_FILE_CHOOSER (button), data, NULL);
++	    {
++	      gtk_file_chooser_button_select_file (GTK_FILE_CHOOSER (button), data, NULL);
++	      file_was_set = TRUE;
++	    }
+ 	  break;
+ 	case ROW_TYPE_VOLUME:
+ 	  {
+@@ -2798,6 +2804,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
+ 	    if (base_file)
+ 	      {
+ 		gtk_file_chooser_button_select_file (GTK_FILE_CHOOSER (button), base_file, NULL);
++		file_was_set = TRUE;
+ 		g_object_unref (base_file);
+ 	      }
+ 	  }
+@@ -2809,6 +2816,9 @@ combo_box_changed_cb (GtkComboBox *combo_box,
+ 	  break;
+ 	}
+     }
++
++  if (file_was_set)
++    g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
+ }
+ 
+ /* Calback for the "notify::popup-shown" signal on the combo box.
+--
+cgit v0.9.2
+

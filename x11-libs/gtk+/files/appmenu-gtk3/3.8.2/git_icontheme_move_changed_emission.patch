@@ -1,0 +1,120 @@
+From 4932d44b9eefb6306eafe6d8ed08758b675a78ee Mon Sep 17 00:00:00 2001
+From: Alexander Larsson <alexl@redhat.com>
+Date: Wed, 19 Jun 2013 09:06:20 +0000
+Subject: IconTheme: Move changed emission to an idle
+
+By delaying the emission to an idle we avoid a lot of tricky
+reentrancy issues. For instance, a normal gtk_icon_theme_choose_icon()
+call could in very rare cases (when a user updated an icon theme) emit
+a signal which could affect the icon currently being looked up.  This
+kind of reentrancy is very hard to test against, especially when it is
+so rare, so we're better of avoiding it.
+
+There is no real value to get the change signal directly anyway. All
+it can do is affect which icon is rendered the next frame, and we will
+handle the queued emission before rendering. Not to mention that icon
+theme change detection is polled anyway, so it is already delayed.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=694755
+(cherry picked from commit 159cccfe7b50e1e0fbede08132abfc74f4206fdb)
+---
+diff --git a/gtk/gtkicontheme.c b/gtk/gtkicontheme.c
+index 1046f17..38f0f73 100644
+--- a/gtk/gtkicontheme.c
++++ b/gtk/gtkicontheme.c
+@@ -204,7 +204,7 @@ struct _GtkIconThemePrivate
+   glong last_stat_time;
+   GList *dir_mtimes;
+ 
+-  gulong reset_styles_idle;
++  gulong theme_changed_idle;
+ };
+ 
+ typedef struct {
+@@ -796,7 +796,7 @@ free_dir_mtime (IconThemeDirMtime *dir_mtime)
+ }
+ 
+ static gboolean
+-reset_styles_idle (gpointer user_data)
++theme_changed_idle (gpointer user_data)
+ {
+   GtkIconTheme *icon_theme;
+   GtkIconThemePrivate *priv;
+@@ -804,15 +804,28 @@ reset_styles_idle (gpointer user_data)
+   icon_theme = GTK_ICON_THEME (user_data);
+   priv = icon_theme->priv;
+ 
++  g_signal_emit (icon_theme, signal_changed, 0);
++
+   if (priv->screen && priv->is_screen_singleton)
+     gtk_style_context_reset_widgets (priv->screen);
+ 
+-  priv->reset_styles_idle = 0;
++  priv->theme_changed_idle = 0;
+ 
+   return FALSE;
+ }
+ 
+ static void
++queue_theme_changed (GtkIconTheme *icon_theme)
++{
++  GtkIconThemePrivate *priv = icon_theme->priv;
++
++  if (!priv->theme_changed_idle)
++    priv->theme_changed_idle =
++      gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2,
++                                 theme_changed_idle, icon_theme, NULL);
++}
++
++static void
+ do_theme_change (GtkIconTheme *icon_theme)
+ {
+   GtkIconThemePrivate *priv = icon_theme->priv;
+@@ -821,16 +834,13 @@ do_theme_change (GtkIconTheme *icon_theme)
+ 
+   if (!priv->themes_valid)
+     return;
+-  
++
+   GTK_NOTE (ICONTHEME, 
+ 	    g_print ("change to icon theme \"%s\"\n", priv->current_theme));
+   blow_themes (icon_theme);
+-  g_signal_emit (icon_theme, signal_changed, 0);
+ 
+-  if (!priv->reset_styles_idle)
+-    priv->reset_styles_idle = 
+-      gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2, 
+-		       reset_styles_idle, icon_theme, NULL);
++  queue_theme_changed (icon_theme);
++
+ }
+ 
+ static void
+@@ -865,10 +875,10 @@ gtk_icon_theme_finalize (GObject *object)
+   g_hash_table_destroy (priv->info_cache);
+   g_assert (priv->info_cache_lru == NULL);
+ 
+-  if (priv->reset_styles_idle)
++  if (priv->theme_changed_idle)
+     {
+-      g_source_remove (priv->reset_styles_idle);
+-      priv->reset_styles_idle = 0;
++      g_source_remove (priv->theme_changed_idle);
++      priv->theme_changed_idle = 0;
+     }
+ 
+   unset_screen (icon_theme);
+@@ -1411,9 +1421,7 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
+       load_themes (icon_theme);
+ 
+       if (was_valid)
+-	{
+-	  g_signal_emit (icon_theme, signal_changed, 0);
+-	}
++        queue_theme_changed (icon_theme);
+     }
+ 
+   priv->loading_themes = FALSE;
+--
+cgit v0.9.2
+
