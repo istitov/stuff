@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.24.20.ebuild,v 1.1 2013/07/07 13:03:07 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.24.22.ebuild,v 1.2 2013/10/14 19:17:25 pacho Exp $
 
 EAPI="5"
 inherit eutils flag-o-matic gnome2-utils gnome.org multilib virtualx autotools readme.gentoo
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2+"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="aqua cups debug examples +introspection test vim-syntax xinerama  appmenu overlay"
+IUSE="aqua cups debug examples +introspection test vim-syntax xinerama appmenu overlay"
 
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 COMMON_DEPEND="
@@ -19,7 +19,6 @@ COMMON_DEPEND="
 		x11-libs/libXrender
 		x11-libs/libX11
 		x11-libs/libXi
-		x11-libs/libXt
 		x11-libs/libXext
 		>=x11-libs/libXrandr-1.3
 		x11-libs/libXcursor
@@ -34,7 +33,7 @@ COMMON_DEPEND="
 		x11-libs/gdk-pixbuf:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.30:2
+	>=dev-libs/glib-2.34:2
 	>=x11-libs/pango-1.20[introspection?]
 	>=dev-libs/atk-1.29.2[introspection?]
 	media-libs/fontconfig
@@ -58,7 +57,6 @@ DEPEND="${COMMON_DEPEND}
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )
 "
-# introspection.m4 is in the tarball, so gobject-introspection-common is not needed
 
 # gtk+-2.24.8 breaks Alt key handling in <=x11-libs/vte-0.28.2:0
 # Add blocker against old gtk-builder-convert to be sure we maintain both
@@ -92,15 +90,8 @@ set_gtk2_confdir() {
 src_prepare() {
 	gnome2_environment_reset
 
-	# use an arch-specific config directory so that 32bit and 64bit versions
-	# dont clash on multilib systems
-#	epatch "${FILESDIR}/${PN}-2.21.3-multilib.patch"
-
-	# Don't break inclusion of gtkclist.h, upstream bug #536767
-	epatch "${FILESDIR}/${PN}-2.14.3-limit-gtksignal-includes.patch"
-
-	# fix building with gir #372953, upstream bug #642085
-	epatch "${FILESDIR}"/${PN}-2.24.7-darwin-quartz-introspection.patch
+	# Fix building due to moved definition, upstream bug #704766
+	epatch "${FILESDIR}"/${PN}-2.24.20-darwin-quartz-pasteboard.patch
 
 	# marshalers code was pre-generated with glib-2.31, upstream bug #671763
 	rm -v gdk/gdkmarshalers.c gtk/gtkmarshal.c gtk/gtkmarshalers.c \
@@ -195,13 +186,9 @@ src_test() {
 src_install() {
 	default
 
-#	set_gtk2_confdir
-#	dodir ${GTK2_CONFDIR}
-#	keepdir ${GTK2_CONFDIR}
-
 	# see bug #133241
 	echo 'gtk-fallback-icon-theme = "gnome"' > "${T}/gtkrc"
-	insinto /etc/gtk-2.0
+	insinto /usr/share/gtk-2.0
 	doins "${T}"/gtkrc
 
 	dodoc AUTHORS ChangeLog* HACKING NEWS* README*
@@ -222,9 +209,6 @@ src_install() {
 pkg_postinst() {
 	set_gtk2_confdir
 
-	# gtk.immodules should be in their CHOST directories respectively.
-#	gtk-query-immodules-2.0  > "${EROOT%/}${GTK2_CONFDIR}/gtk.immodules" \
-#		|| ewarn "Failed to run gtk-query-immodules-2.0"
 	gtk-query-immodules-2.0 --update-cache || die "Update immodules cache failed"
 
 	if [ -e "${EROOT%/}/etc/gtk-2.0/gtk.immodules" ]; then

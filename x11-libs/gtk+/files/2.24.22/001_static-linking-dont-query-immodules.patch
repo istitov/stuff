@@ -34,20 +34,20 @@ Index: gtk+-2.24.19/modules/input/Makefile.am
 @@ -253,7 +257,18 @@
  included-modules: $(noinst_LTLIBRARIES)
  
- gtk.immodules: Makefile.am $(module_LTLIBRARIES)
--	$(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > gtk.immodules
+ immodules.cache: Makefile.am $(module_LTLIBRARIES)
+-	$(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > immodules.cache
 +	@if $(RUN_QUERY_IMMODULES_TEST) ; then \
-+	  echo "$(top_builddir)/gtk/gtk-query-immodules-2.0 > gtk.immodules" ; \
-+	$(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > gtk.immodules; \
++	  echo "$(top_builddir)/gtk/gtk-query-immodules-2.0 > immodules.cache" ; \
++	  $(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > immodules.cache; \
 +	else \
 +	  echo "***" ; \
-+	  echo "*** Warning: gtk.immodules not built" ; \
++	  echo "*** Warning: immodules.cache not built" ; \
 +	  echo "***" ; \
 +	  echo "*** Generate this file manually on host" ; \
 +	  echo "*** system using gtk-query-immodules-2.0" ; \
 +	  echo "***" ; \
-+	  touch gtk.immodules; \
++	  touch immodules.cache; \
 +        fi
  
- CLEANFILES = gtk.immodules
+ CLEANFILES = immodules.cache
  
