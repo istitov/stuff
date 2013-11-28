@@ -13,12 +13,12 @@ SRC_URI="${HOMEPAGE}/${P}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="plasma"
+IUSE=""
 
 RDEPEND="
 	virtual/blas
 	virtual/lapack
-	plasma? ( sci-libs/plasma )"
+	"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
@@ -29,8 +29,6 @@ src_configure() {
 		-DNEED_F2C=OFF
 		-DHAVE_LAPACK=ON
 		-DLAPACKBLAS_LIB_NAMES="$($(tc-getPKG_CONFIG) --libs blas lapack)"
-		$(cmake-utils_use plasma PLASMA)
-		$(cmake-utils_use test BUILD_DEMO)
 	)
 	cmake-utils_src_configure
 }
