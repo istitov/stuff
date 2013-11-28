@@ -25,21 +25,20 @@ PDEPEND=""
 S="${WORKDIR}/graclus1.2/"
 
 pkg_nofetch() {
-    einfo "Please contains a form that asks for an email address prior to download"
-    einfo "from ${HOMEPAGE}"
-    einfo "_u_www_users_dml_Software_graclus1.2.tar.gz"
-    einfo "rename it to graclus-1.2.tar.gz"
-    einfo "and place them in ${DISTDIR}"
+	einfo "Please contains a form that asks for an email address prior to download"
+	einfo "from ${HOMEPAGE}"
+	einfo "_u_www_users_dml_Software_graclus1.2.tar.gz"
+	einfo "rename it to graclus-1.2.tar.gz"
+	einfo "and place them in ${DISTDIR}"
 }
-
 
 src_prepare() {
 	if use abi_x86_64; then
-	epatch "${FILESDIR}"/amd64.patch
-fi
+		epatch "${FILESDIR}"/amd64.patch
+	fi
 }
 
 src_install() {
 	insinto /usr/lib/graclus
-	doins -r ${S}/*
+	doins -r "${S}"/*
 }

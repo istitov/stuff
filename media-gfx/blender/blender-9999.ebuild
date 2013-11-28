@@ -31,10 +31,11 @@ IUSE_SYSTEM="+openmp +fftw sndfile jack sdl nls ndof collada -doc -debug -lzma -
 IUSE_GPU="-cuda -sm_20 -sm_21 -sm_30"
 IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU}"
 
-REQUIRED_USE="cycles? ( ocio )
-		cuda? ( cycles )
-		  osl? ( cycles )
-		    redcode? ( ffmpeg jpeg2k )"
+REQUIRED_USE="
+	cycles? ( ocio )
+	cuda? ( cycles )
+	osl? ( cycles )
+	redcode? ( ffmpeg jpeg2k )"
 
 LANGS="en ar bg ca cs de el es es_ES fa fi fr he hr hu id it ja ky ne nl pl pt pt_BR ru sr sr@latin sv tr uk zh_CN zh_TW"
 for X in ${LANGS} ; do
@@ -53,12 +54,12 @@ DEPEND="dev-cpp/gflags
 	virtual/jpeg
 	media-libs/libpng:0
 	media-libs/tiff:0
-        media-libs/libsamplerate
+	media-libs/libsamplerate
 	X? ( x11-libs/libXi
 		x11-libs/libX11
 		virtual/opengl
 		media-libs/freetype
-		media-libs/glew 
+		media-libs/glew
 	)
 	eltopo? ( virtual/lapack )
 	sys-libs/zlib
@@ -73,12 +74,12 @@ DEPEND="dev-cpp/gflags
 	sdl? ( media-libs/libsdl[audio,joystick] )
 	openexr? ( media-libs/openexr )
 	ffmpeg? (
-	    >=media-video/ffmpeg-0.10[x264,xvid,mp3,encode]
+		>=media-video/ffmpeg-0.10[x264,xvid,mp3,encode]
 		jpeg2k? ( >=media-video/ffmpeg-0.10[x264,xvid,mp3,encode,jpeg2k] )
 	)
 	openal? ( >=media-libs/openal-1.6.372 )
-	fftw? (	sci-libs/fftw:3.0 )
-	jack? (	media-sound/jack-audio-connection-kit )
+	fftw? ( sci-libs/fftw:3.0 )
+	jack? ( media-sound/jack-audio-connection-kit )
 	sndfile? ( media-libs/libsndfile )
 	collada? ( media-libs/opencollada )
 	cuda? ( >=dev-util/nvidia-cuda-toolkit-4.2 )
@@ -86,14 +87,11 @@ DEPEND="dev-cpp/gflags
 	quicktime? ( media-libs/libquicktime )
 	lzma? ( app-arch/lzma )
 	valgrind? ( dev-util/valgrind )"
-	
 
 RDEPEND="${DEPEND}
-	 dev-cpp/eigen:3
-	 nls? ( sys-devel/gettext )
-	 doc? ( dev-python/sphinx
-		app-doc/doxygen[-nodot(-),dot(+)]
-		)"
+	dev-cpp/eigen:3
+	nls? ( sys-devel/gettext )
+	doc? ( dev-python/sphinx app-doc/doxygen[-nodot(-),dot(+)] )"
 
 # configure internationalization only if LINGUAS have more
 # languages than 'en', otherwise must be disabled
@@ -119,18 +117,18 @@ if [ "${PV}" = "9999" ];then
 		EGIT_REPO_URI="${BLENDER_ADDONS_URI}" \
 		git-2_src_unpack
 	fi
-		if use contrib; then
-			unset EGIT_BRANCH EGIT_COMMIT
-        		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons_contrib" \
-        		EGIT_REPO_URI="${BLENDER_ADDONS_CONTRIB_URI}" \
-        		git-2_src_unpack
-		fi
-			if use nls; then
-                        	unset EGIT_BRANCH EGIT_COMMIT
-                        	EGIT_SOURCEDIR="${WORKDIR}/${P}/release/datafiles/locale" \
-                        	EGIT_REPO_URI="${BLENDER_TRANSLATIONS_URI}" \
-                        	git-2_src_unpack
-                	fi
+	if use contrib; then
+		unset EGIT_BRANCH EGIT_COMMIT
+		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons_contrib" \
+		EGIT_REPO_URI="${BLENDER_ADDONS_CONTRIB_URI}" \
+		git-2_src_unpack
+	fi
+	if use nls; then
+		unset EGIT_BRANCH EGIT_COMMIT
+		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/datafiles/locale" \
+		EGIT_REPO_URI="${BLENDER_TRANSLATIONS_URI}" \
+		git-2_src_unpack
+	fi
 else
 	unpack ${A}
 fi
@@ -144,7 +142,7 @@ pkg_setup() {
 		else
 			ewarn "You are using gcc built without 'openmp' USE."
 			ewarn "Switch CXX to an OpenMP capable compiler."
-			die	"Need openmp"
+			die "Need openmp"
 		fi
 	fi
 
@@ -163,22 +161,22 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
-		"${FILESDIR}"/02-${PN}-2.68-unbundle-colamd.patch \
-		"${FILESDIR}"/03-${PN}-2.68-remove-binreloc.patch \
-		"${FILESDIR}"/04-${PN}-2.68-unbundle-glog.patch \
-		"${FILESDIR}"/05-${PN}-2.68-unbundle-eigen3.patch \
-		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
-		"${FILESDIR}"/${PN}-desktop.patch
+	epatch "${FILESDIR}"/01-"${PN}"-2.68-doxyfile.patch \
+		"${FILESDIR}"/02-"${PN}"-2.68-unbundle-colamd.patch \
+		"${FILESDIR}"/03-"${PN}"-2.68-remove-binreloc.patch \
+		"${FILESDIR}"/04-"${PN}"-2.68-unbundle-glog.patch \
+		"${FILESDIR}"/05-"${PN}"-2.68-unbundle-eigen3.patch \
+		"${FILESDIR}"/06-"${PN}"-2.68-fix-install-rules.patch \
+		"${FILESDIR}/${PN}"-desktop.patch
 
 	rm -r \
-		${WORKDIR}/${P}/extern/Eigen3 \
-		${WORKDIR}/${P}/extern/libopenjpeg \
-		${WORKDIR}/${P}/extern/glew \
-		${WORKDIR}/${P}/extern/colamd \
-		${WORKDIR}/${P}/extern/binreloc \
+		"${WORKDIR}/${P}"/extern/Eigen3 \
+		"${WORKDIR}/${P}"/extern/libopenjpeg \
+		"${WORKDIR}/${P}"/extern/glew \
+		"${WORKDIR}/${P}"/extern/colamd \
+		"${WORKDIR}/${P}"/extern/binreloc \
 		|| die
-		
+
 	sed -i \
 		-e 's#set(WITH_BINRELOC ON)#set(WITH_BINRELOC OFF)#' \
 		CMakeLists.txt || die
@@ -192,7 +190,6 @@ src_prepare() {
 
 	ewarn "$(echo "Remaining bundled dependencies:";
 			( find extern -mindepth 1 -maxdepth 1 -type d; ) | sed 's|^|- |')"
-		
 }
 
 src_configure() {
@@ -294,7 +291,6 @@ src_configure() {
 		$(cmake-utils_use_with lzma LZMA)
 		$(cmake-utils_use_with valgrind VALGRIND)
 		$(cmake-utils_use_with quicktime QUICKTIME)"
-		
 
 	# FIX: Game Engine module needs to be active to build the Blender Player
 	if ! use game-engine && use player; then

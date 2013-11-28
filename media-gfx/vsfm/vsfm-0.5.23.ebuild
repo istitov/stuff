@@ -21,8 +21,7 @@ DEPEND="
 	media-libs/atlas-c++
 	sci-libs/cminpack
 	virtual/fortran
-	sci-libs/parmetis
-	"
+	sci-libs/parmetis"
 RDEPEND="${DEPEND}"
 
 PDEPEND="
@@ -34,9 +33,9 @@ PDEPEND="
 S="${WORKDIR}/vsfm"
 
 src_install() {
-	dobin ${S}/bin/VisualSFM
-	mkdir -p ${D}/usr/bin/log
-	chmod 777 ${D}/usr/bin/log
+	dobin "${S}"/bin/VisualSFM
+	mkdir -p "${D}"/usr/bin/log
+	chmod 777 "${D}"/usr/bin/log
 	newicon "${FILESDIR}"/"${PN}".png "${PN}".png
-        make_desktop_entry VisualSFM Graphics
+	make_desktop_entry VisualSFM Graphics
 }

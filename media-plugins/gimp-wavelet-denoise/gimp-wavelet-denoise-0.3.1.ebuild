@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-plugins/gimp-wavelet-denoise/gimp-wavelet-denoise-0.3.1.ebuild,v 0.1 2013/11/25 20:30:12 brothermechanic Exp $
 
@@ -25,19 +25,19 @@ src_configure() {
 }
 
 src_compile() {
-        emake CFLAGS="${CFLAGS} -Wall $( gimptool-2.0 --cflags )"
+	emake CFLAGS="${CFLAGS} -Wall $( gimptool-2.0 --cflags )"
 }
 
 src_install() {
 	exeinto /usr/lib64/gimp/2.0/plug-ins/
 	doexe src/wavelet-denoise
-        for i in de ru it pl; do
-                dodir "/usr/share/locale/${i}/LC_MESSAGES"
-        done
-        emake -C po install LOCALEDIR="${D}/usr/share/locale" || die "Install failed"
+	for i in de ru it pl; do
+		dodir "/usr/share/locale/${i}/LC_MESSAGES"
+	done
+	emake -C po install LOCALEDIR="${D}/usr/share/locale" || die "Install failed"
 
-        exeinto "$( gimptool-2.0 --gimpplugindir )/plug-ins"
-        doexe "src/${MY_PN}"
+	exeinto "$( gimptool-2.0 --gimpplugindir )/plug-ins"
+	doexe "src/${MY_PN}"
 
-        dodoc AUTHORS ChangeLog COPYING INSTALL README THANKS TRANSLATIONS
+	dodoc AUTHORS ChangeLog INSTALL README THANKS TRANSLATIONS
 }

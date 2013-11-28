@@ -25,7 +25,7 @@ S="${WORKDIR}/cmvs/program/main/"
 
 src_prepare() {
 	rm *.so.*
-	cd ${WORKDIR}
+	cd "${WORKDIR}"
 	rm rm cmvs/program/base/pmvs/filter.cc
 	#patch by Micky53 micky53@mail.ru
 	epatch "${FILESDIR}"/fix_from_Micky53-v3.patch
@@ -33,9 +33,9 @@ src_prepare() {
 
 src_compile() {
 	emake YOUR_INCLUDE_PATH="${CXXFLAGS}" YOUR_LDLIB_PATH="${LDFLAGS} -L/usr/lib/graclus" depend
-        emake YOUR_INCLUDE_PATH="${CXXFLAGS}" YOUR_LDLIB_PATH="${LDFLAGS} -L/usr/lib/graclus"
+	emake YOUR_INCLUDE_PATH="${CXXFLAGS}" YOUR_LDLIB_PATH="${LDFLAGS} -L/usr/lib/graclus"
 }
 
 src_install() {
-	dobin ${WORKDIR}/cmvs/program/main/pmvs2 ${WORKDIR}/cmvs/program/main/cmvs ${WORKDIR}/cmvs/program/main/genOption
+	dobin "${WORKDIR}"/cmvs/program/main/pmvs2 "${WORKDIR}"/cmvs/program/main/cmvs "${WORKDIR}"/cmvs/program/main/genOption
 }

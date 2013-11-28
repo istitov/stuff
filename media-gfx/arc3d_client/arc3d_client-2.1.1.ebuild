@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/arc3d_client/arc3d_client-2.1.1.ebuild,v 0.1 2013/11/04 13:38:00 brothermechanic Exp $
 
@@ -20,7 +20,7 @@ DEPEND="media-gfx/exiv2
 	virtual/jpeg"
 RDEPEND="${DEPEND}"
 
-S=${WORKDIR}/arc3d_client
+S="${WORKDIR}/arc3d_client"
 
 src_prepare() {
 	#path from oh-la-la http://www.linux.org.ru/forum/development/9776470?lastmod=1383557443423#comment-9776560
@@ -32,8 +32,8 @@ src_configure() {
 }
 
 src_install() {
-        dobin bin/*
-        dolib lib/*
+	dobin bin/*
+	dolib lib/*
 	newicon gui/resources/gui/arc_logo32x32.png "${PN}".png
-        make_desktop_entry arc3d_gui "ARC 3D" Graphics
+	make_desktop_entry arc3d_gui "ARC 3D" Graphics
 }

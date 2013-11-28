@@ -16,14 +16,15 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="media-libs/glew
-        dev-qt/qtcore
-        dev-qt/qtopengl"
+DEPEND="
+	media-libs/glew
+	dev-qt/qtcore
+	dev-qt/qtopengl"
 
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-        epatch "${FILESDIR}"/01-Doc-must-live-in-a-good-dir.patch
+	epatch "${FILESDIR}"/01-Doc-must-live-in-a-good-dir.patch
 	epatch "${FILESDIR}"/02-Dynamic-directories.patch
 	epatch "${FILESDIR}"/03-Use-Debian-libGLEW.patch
 	epatch "${FILESDIR}"/04-Fix-local-decimal-separator.patch
@@ -41,8 +42,6 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
-	newicon ${S}/qCC/images/icon/cc_icon_64.png "${PN}".png
-        make_desktop_entry CloudCompare "Cloud Compare" Graphics
+	newicon "${S}"/qCC/images/icon/cc_icon_64.png "${PN}".png
+	make_desktop_entry CloudCompare "Cloud Compare" Graphics
 }
-
-

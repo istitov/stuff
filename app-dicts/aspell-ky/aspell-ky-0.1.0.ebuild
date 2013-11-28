@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-dicts/aspell-ky/aspell-ky-0.1.0.ebuild,v 0.1 2013/11/10 14:37:41 brothermechanic Exp $
 
@@ -16,10 +16,9 @@ IUSE=""
 FILENAME=aspell6-ky-0.01-0
 
 SRC_URI="mirror://gnu/aspell/dict/ky/${FILENAME}.tar.bz2"
-S=${WORKDIR}/${FILENAME}
+S="${WORKDIR}/${FILENAME}"
 
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
 }
-

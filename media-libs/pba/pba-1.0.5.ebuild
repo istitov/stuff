@@ -24,7 +24,7 @@ MAKEOPTS="-j1"
 S="${WORKDIR}/pba"
 
 src_prepare() {
-	rm makefile src/pba/SparseBundleCU.h src/pba/pba.h 
+	rm makefile src/pba/SparseBundleCU.h src/pba/pba.h
 	epatch "${FILESDIR}"/include.patch
 	if use cuda; then
 		epatch "${FILESDIR}"/cuda.patch
@@ -35,17 +35,17 @@ src_prepare() {
 }
 
 src_install() {
-	if use cuda; then 
-		dobin ${S}/bin/driver
-        	dolib ${S}/bin/libpba.so
-        	insinto /usr/include
-        	doins ${S}/bin/libpba.a
-	        dodoc doc/manual.pdf
-	else
-		dobin ${S}/bin/driver_no_gpu
-		dolib ${S}/bin/libpba_no_gpu.so
+	if use cuda; then
+		dobin"${S}"/bin/driver
+		dolib"${S}"/bin/libpba.so
 		insinto /usr/include
-		doins ${S}/bin/libpba_no_gpu.a
+		doins"${S}"/bin/libpba.a
+		dodoc doc/manual.pdf
+	else
+		dobin"${S}"/bin/driver_no_gpu
+		dolib"${S}"/bin/libpba_no_gpu.so
+		insinto /usr/include
+		doins"${S}"/bin/libpba_no_gpu.a
 		dodoc doc/manual.pdf
 	fi
 }

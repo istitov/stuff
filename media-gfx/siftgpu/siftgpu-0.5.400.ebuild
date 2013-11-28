@@ -15,9 +15,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="cuda"
 
-DEPEND="
-	cuda? ( dev-util/nvidia-cuda-toolkit )
-	"
+DEPEND="cuda? ( dev-util/nvidia-cuda-toolkit )"
 RDEPEND="${DEPEND}"
 
 MAKEOPTS="-j1"
@@ -31,9 +29,9 @@ src_prepare() {
 }
 
 src_install() {
-	dobin ${S}/bin/MultiThreadSIFT ${S}/bin/SimpleSIFT ${S}/bin/speed ${S}/bin/TestWinGlut
-	dolib ${S}/bin/libsiftgpu.so
+	dobin "${S}"/bin/MultiThreadSIFT "${S}"/bin/SimpleSIFT "${S}"/bin/speed "${S}"/bin/TestWinGlut
+	dolib "${S}"/bin/libsiftgpu.so
 	insinto /usr/include
-	doins ${S}/bin/libsiftgpu.a
+	doins "${S}"/bin/libsiftgpu.a
 	dodoc -r doc data demos
 }

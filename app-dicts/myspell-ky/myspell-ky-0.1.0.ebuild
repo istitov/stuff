@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-dicts/aspell-ky/myspell-ky-0.1.0.ebuild,v 0.2 2013/11/10 16:24:41 brothermechanic Exp $
 
@@ -26,8 +26,8 @@ DEPEND="
 
 RDEPEND="${DEPEND}
 	app-text/aspell"
-	
-S=${WORKDIR}/${FILENAME}
+
+S="${WORKDIR}/${FILENAME}"
 
 src_unpack() {
 	unpack ${A}
@@ -50,10 +50,10 @@ src_configure() {
 src_compile() {
 	emake
 	export LANG=ky_KG.utf8
-        preunzip -d *.cwl
-        cat *.wl > kirghiz.wordlist
-        wordlist2hunspell kirghiz.wordlist ky_KG
-        cp -p ky_affix.dat ky_KG.aff
+	preunzip -d *.cwl
+	cat *.wl > kirghiz.wordlist
+	wordlist2hunspell kirghiz.wordlist ky_KG
+	cp -p ky_affix.dat ky_KG.aff
 }
 
 src_install() {
@@ -65,5 +65,4 @@ src_install() {
 	dosym /usr/share/hunspell/*.aff /usr/share/myspell
 	dodir /usr/share/doc/hunspell-ky
 	dodoc doc/Crewler.txt Copyright README
-}	
-
+}

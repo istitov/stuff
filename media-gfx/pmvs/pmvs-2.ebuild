@@ -24,7 +24,7 @@ S="${WORKDIR}/pmvs-2/program/main/"
 
 src_prepare() {
 	rm *.so.*
-	cd ${WORKDIR}
+	cd "${WORKDIR}"
 	rm pmvs-2/program/base/pmvs/filter.cc
 	#patch by Micky53 micky53@mail.ru
 	epatch "${FILESDIR}"/lapack-v3.patch
@@ -36,6 +36,6 @@ src_compile() {
 }
 
 src_install() {
-	dobin ${WORKDIR}/pmvs-2/program/main/pmvs2
-	dodoc ${WORKDIR}/pmvs-2/license/libgfx-license.html
+	dobin "${WORKDIR}"/pmvs-2/program/main/pmvs2
+	dodoc "${WORKDIR}"/pmvs-2/license/libgfx-license.html
 }
