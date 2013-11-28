@@ -20,8 +20,8 @@ IUSE="gtk2 gtk3"
 REQUIRED_USE="|| ( ${IUSE} )"
 
 DEPEND_COMMON="dev-libs/json-glib
-	gtk2? ( <media-sound/deadbeef-0.6[gtk2,curl] )
-	gtk3? ( <media-sound/deadbeef-0.6[gtk3,curl] )"
+	gtk2? ( media-sound/deadbeef[gtk2,curl] )
+	gtk3? ( media-sound/deadbeef[gtk3,curl] )"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
