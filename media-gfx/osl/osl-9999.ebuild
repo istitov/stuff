@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit git-2 eutils cmake-utils
+inherit git-2 cmake-utils
 
 DESCRIPTION="Open Shading Language"
 HOMEPAGE="http://code.google.com/p/openshadinglanguage/"
@@ -14,7 +14,7 @@ EGIT_BRANCH="RB-1.4"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="test"
+IUSE="test tbb"
 
 DEPEND="
 	>=dev-libs/boost-1.49.0
@@ -22,16 +22,22 @@ DEPEND="
 	sys-devel/clang
 	sys-devel/bison
 	sys-devel/flex
-	media-libs/ilmbase"
+	media-libs/ilmbase
+	tbb? ( dev-cpp/tbb )"
 
 RDEPEND=""
 
 src_configure() {
-	mycmakeargs=(	-DUSE_EXTERNAL_PUGIXML=ON -DLLVM_STATIC=0 -DCMAKE_INSTALL_PREFIX=/usr )
+	local mycmakeargs=""
+	mycmakeargs="${mycmakeargs}
+		$(cmake-utils_use_use tbb TBB)
+		$(cmake-utils_use_build test TESTING)
+		-DUSE_EXTERNAL_PUGIXML=ON
+		-DLLVM_STATIC=0"
 	if use test ; then
-	mycmakeargs=( ${mycmakeargs} -DBUILD_TESTING=ON  )
+	mycmakeargs="${mycmakeargs} -DBUILD_TESTING=ON"
 	else
-	mycmakeargs=( ${mycmakeargs} -DBUILD_TESTING=OFF )
+	mycmakeargs="${mycmakeargs} -DBUILD_TESTING=OFF"
 	fi
 
 	cmake-utils_src_configure
