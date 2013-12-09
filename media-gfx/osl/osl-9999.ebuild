@@ -4,63 +4,41 @@
 
 EAPI=5
 
-inherit git-2 cmake-utils
+inherit git-2 eutils cmake-utils
 
 DESCRIPTION="Open Shading Language"
 HOMEPAGE="http://code.google.com/p/openshadinglanguage/"
-EGIT_REPO_URI="https://github.com/DingTo/OpenShadingLanguage.git"
-EGIT_BRANCH="blender-fixes"
+EGIT_REPO_URI="https://github.com/imageworks/OpenShadingLanguage.git"
+EGIT_BRANCH="RB-1.4"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="test tbb"
+IUSE="test"
 
 DEPEND="
-	>=dev-libs/boost-1.52.0
-	media-libs/openimageio[-pugixml]
+	>=dev-libs/boost-1.49.0
+	media-libs/openimageio
 	sys-devel/clang
 	sys-devel/bison
 	sys-devel/flex
-	media-libs/ilmbase
-	tbb? ( dev-cpp/tbb )"
+	media-libs/ilmbase"
 
 RDEPEND=""
 
-CMAKE_USE_DIR="${WORKDIR}/${P}/src"
-
-src_unpack() {
-	git-2_src_unpack
-}
-
 src_configure() {
-	epatch "${FILESDIR}"/gabornoise-306.patch || die "Patch failed"
-	$(has_version ">=sys-devel/llvm-3.2") && epatch "${FILESDIR}"/llvm32.patch || die "Patch failed"
-	$(has_version ">=sys-devel/llvm-3.3") && epatch "${FILESDIR}"/llvm33.patch || die "Patch failed"
-	mycmakeargs=(
-		$(cmake-utils_use_use tbb TBB)
-		$(cmake-utils_use_build test TESTING)
-		)
+	mycmakeargs=(	-DUSE_EXTERNAL_PUGIXML=ON -DLLVM_STATIC=0 -DCMAKE_INSTALL_PREFIX=/usr )
+	if use test ; then
+	mycmakeargs=( ${mycmakeargs} -DBUILD_TESTING=ON  )
+	else
+	mycmakeargs=( ${mycmakeargs} -DBUILD_TESTING=OFF )
+	fi
+
 	cmake-utils_src_configure
 }
 
 src_install() {
-	if use amd64;then
-		dobin dist/linux64/bin/*
-		dodoc dist/linux64/doc/*
-		insinto /usr/include/
-		doins -r dist/linux64/include/*
-		dolib dist/linux64/lib/*
-		insinto /usr/include/OSL/shaders
-		doins -r dist/linux64/shaders/*
-		cmake-utils_src_install
-	elif use x86;then
-		dobin dist/linux/bin/*
-		dodoc dist/linux/doc/*
-		insinto /usr/include/
-		doins -r dist/linux/include/*
-		dolib dist/linux/lib/*
-		insinto /usr/include/OSL/shaders
-		doins -r dist/linux/shaders/*
-	fi
+	cmake-utils_src_install 
+	mkdir -p ${D}/usr/share/OSL/
+        mv ${D}/usr/{CHANGES,INSTALL,LICENSE,README.md,shaders,doc} ${D}/usr/share/OSL/ || die
 }
