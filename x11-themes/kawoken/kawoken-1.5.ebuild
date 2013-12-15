@@ -10,7 +10,7 @@ DESCRIPTION="A port of AwOken icon theme on KDE"
 HOMEPAGE="https://alecive.deviantart.com/art/"
 SRC_URI="https://dl.dropboxusercontent.com/u/8029324/kAwOken-1.5.zip"
 
-LICENSE="CC BY-NC-SA-3.0 - CC BY-NC-ND-3.0"
+LICENSE="CC-BY-NC-SA-3.0 CC-BY-NC-ND-3.0"
 SLOT="0"
 KEYWORDS="amd64 x86"
 IUSE="-minimal +orig +dark +white"
