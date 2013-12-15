@@ -25,20 +25,20 @@ S="${WORKDIR}"/${MY_PN}-${PV}
 
 src_install() {
 	if use orig; then
-	unpack ./${MY_PN}.tar.gz
-	mv ./${MY_PN}/Installation_and_Instructions.pdf README.pdf
-	dodoc README.pdf
-	dodir /usr/share/icons
-	mv ./${MY_PN} "${D}"/usr/share/icons/ 
+		unpack ./${MY_PN}.tar.gz
+		mv ./${MY_PN}/Installation_and_Instructions.pdf README.pdf
+		dodoc README.pdf
+		dodir /usr/share/icons
+		mv ./${MY_PN} "${D}"/usr/share/icons/
 	fi
 	if use dark; then
-        unpack ./${MY_PN}Dark.tar.gz
-        dodir /usr/share/icons
-        mv ./${MY_PN}Dark "${D}"/usr/share/icons/ 
-        fi
+		unpack ./${MY_PN}Dark.tar.gz
+		dodir /usr/share/icons
+		mv ./${MY_PN}Dark "${D}"/usr/share/icons/
+	fi
 	if use white; then
-        unpack ./${MY_PN}White.tar.gz
-        dodir /usr/share/icons
-        mv ./${MY_PN}White "${D}"/usr/share/icons/ 
-        fi
+		unpack ./${MY_PN}White.tar.gz
+		dodir /usr/share/icons
+		mv ./${MY_PN}White "${D}"/usr/share/icons/
+	fi
 }

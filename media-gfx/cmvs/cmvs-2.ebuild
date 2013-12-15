@@ -28,7 +28,7 @@ src_prepare() {
 	cd "${WORKDIR}"
 	rm rm cmvs/program/base/pmvs/filter.cc
 	#patch by Micky53 micky53@mail.ru
-	epatch "${FILESDIR}"/fix_from_Micky53-v3.patch
+	epatch "${FILESDIR}"/fix_from_Micky53-v3.patch.bz2
 }
 
 src_compile() {

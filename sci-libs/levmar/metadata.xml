@@ -10,7 +10,4 @@
   iterative technique that finds a local minimum of a function that is
   expressed as the sum of squares of nonlinear functions.
 </longdescription>
-<use>
-  <flag name="plasma">Use the multi-threaded <pkg>sci-libs/plasma</pkg> library for linear algebra</flag>
-</use>
 </pkgmetadata>

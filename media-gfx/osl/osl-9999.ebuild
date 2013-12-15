@@ -34,17 +34,17 @@ src_configure() {
 		$(cmake-utils_use_build test TESTING)
 		-DUSE_EXTERNAL_PUGIXML=ON
 		-DLLVM_STATIC=0"
-	if use test ; then
-	mycmakeargs="${mycmakeargs} -DBUILD_TESTING=ON"
+	if use test; then
+		mycmakeargs="${mycmakeargs} -DBUILD_TESTING=ON"
 	else
-	mycmakeargs="${mycmakeargs} -DBUILD_TESTING=OFF"
+		mycmakeargs="${mycmakeargs} -DBUILD_TESTING=OFF"
 	fi
 
 	cmake-utils_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install 
-	mkdir -p ${D}/usr/share/OSL/
-        mv ${D}/usr/{CHANGES,INSTALL,LICENSE,README.md,shaders,doc} ${D}/usr/share/OSL/ || die
+	cmake-utils_src_install
+	mkdir -p "${D}"/usr/share/OSL/
+	mv "${D}"/usr/{CHANGES,INSTALL,LICENSE,README.md,shaders,doc} "${D}"/usr/share/OSL/ || die
 }

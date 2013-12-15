@@ -8,7 +8,7 @@ inherit cmake-utils eutils
 
 MY_P=${PN}-${PV}
 
-DESCRIPTION="Professional movie playback and image processing software for the film and computer animation industries."
+DESCRIPTION="Professional movie playback for the film and computer animation industries."
 HOMEPAGE="http://djv.sf.net"
 SRC_URI="mirror://sourceforge/${PN}/${MY_P}_src.tar.gz"
 

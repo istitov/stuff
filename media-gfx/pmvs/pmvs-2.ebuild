@@ -27,7 +27,7 @@ src_prepare() {
 	cd "${WORKDIR}"
 	rm pmvs-2/program/base/pmvs/filter.cc
 	#patch by Micky53 micky53@mail.ru
-	epatch "${FILESDIR}"/lapack-v3.patch
+	epatch "${FILESDIR}"/lapack-v3.patch.bz2
 }
 
 src_compile() {

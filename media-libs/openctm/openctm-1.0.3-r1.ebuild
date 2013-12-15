@@ -10,7 +10,7 @@ inherit eutils multilib qt4-r2 versionator
 
 MY_PF=OpenCTM-1.0.3
 
-DESCRIPTION="OpenCTM - the Open Compressed Triangle Mesh file format - is a file format, a software library and a tool set for compression of 3D triangle meshes."
+DESCRIPTION="OpenCTM - the Open Compressed Triangle Mesh."
 HOMEPAGE="http://openctm.sourceforge.net"
 SRC_URI="mirror://debian/pool/main/o/openctm/openctm_1.0.3+dfsg1.orig.tar.bz2"
 
