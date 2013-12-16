@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<project name="Alchemy" default="default" basedir=".">
+	<description>Builds, tests, and runs the project Alchemy.</description>
+	<import file="nbproject/build-impl.xml"/>
+	<import file="nbproject/profiler-build-impl.xml"/>
+
+	<!-- Import the resource bundle where the version info is stored -->
+	<property file="${basedir}/src/org/alchemy/core/AlcResourceBundle.properties"/>
+
+	<target name="-pre-jar">
+		<!-- Ant config lets us loop & use if statements -->
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="${basedir}/lib/ant/ant-contrib-0.6.jar"/>
+			</classpath>
+		</taskdef>
+
+
+		<!-- Copy the required libraries into the build file -->
+		<unjar src="${file.reference.commons-logging.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.itext.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.jpf.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.foxtrot.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.PDFRenderer.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.mime-util.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.jpen-2.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.miglayout.jar}" dest="${build.classes.dir}"/>
+
+		<!-- The mass of batik libraries -->
+		<unjar src="${file.reference.batik-awt-util.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.batik-dom.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.batik-ext.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.batik-svggen.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.batik-util.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.batik-xml.jar}" dest="${build.classes.dir}"/>
+		<unjar src="${file.reference.xml-apis.jar}" dest="${build.classes.dir}"/>
+
+
+		<!-- Copy the module folder over to be built.-->
+		<copy todir="${build.dir}/modules">
+			<fileset dir="${basedir}/modules">
+				<!-- Leave out the old zip and class files -->
+				<exclude name="**/*.class"/>
+				<exclude name="**/*.zip"/>
+			</fileset>
+		</copy>
+
+
+		<!-- Copy the module class files over starting with core -->
+		<copy file="${build.classes.dir}/org/alchemy/core/AlcCore.class" todir="${build.dir}/modules/core/org/alchemy"/>
+
+
+		<!-- CREATES -->
+		<for list="shapes,typeShapes,inverseShapes,micShapes,medianShapes,speedShapes,xShapes,traceShapes,detachShapes,scrawlShapes,pullShapes,pressureShapes,splatterShapes,ribbonShapes,pitchShapes,evolveShapes" param="create">
+			<sequential>
+				<copy todir="${build.dir}/modules/@{create}/org/alchemy/create">
+					<!-- Include all files that begin with the module name -->
+					<fileset dir="${build.classes.dir}/org/alchemy/create/" includes="@{create}*" casesensitive="no" />
+				</copy>
+			</sequential>
+		</for>
+
+
+		<!-- AFFECTS -->
+		<for list="mirror,blindness,random,micExpand,repeat,displace,colorSwitcher,shapeSwap,gradient,smooth,limit" param="affect">
+			<sequential>
+				<copy todir="${build.dir}/modules/@{affect}/org/alchemy/affect">
+					<!-- Include all files that begin with the module name -->
+					<fileset dir="${build.classes.dir}/org/alchemy/affect/" includes="@{affect}*" casesensitive="no" />
+				</copy>
+			</sequential>
+		</for>
+
+		<!-- Delete the module class files so they are included as plugins and not in the dist -->
+		<delete includeemptydirs="true">
+			<fileset dir="${build.classes.dir}/org/alchemy/affect" includes="**/*"/>
+			<fileset dir="${build.classes.dir}/org/alchemy/create" includes="**/*"/>
+		</delete>
+	</target>
+	<target name="-post-jar">
+
+		<!-- Classpath for the custom tasks -->
+		<path id="classpath">
+			<fileset dir="lib/jpf" includes="*.jar" />
+		</path>
+
+		<!-- Define custom JPF specific Ant tasks -->
+		<typedef resource="org/java/plugin/tools/ant/jpf-tasks.properties">
+			<classpath refid="classpath" />
+		</typedef>	
+
+		<!-- Call "jpf-zip" task to process plug-ins packaging every plug-in
+			 from the build dir as single ZIP file -->
+		<jpf-zip
+			basedir="${build.dir}/modules"
+			includes="*/*.xml"
+			destdir="${build.dir}/modules"/>
+
+		<!-- The Alchemy folder in the dist directory -->
+		<property name="alchemy.dir" value="${dist.dir}/Alchemy"/>
+
+		<!-- Copy all of the modules to the dist/Alchemy/modules dir -->
+		<copy todir="${alchemy.dir}/modules">
+			<fileset dir="${build.dir}/modules">
+				<include name="**/*.zip"/>
+				<exclude name="**/*shapeSwap*"/>
+				<exclude name="**/*pitchShapes*"/>
+			</fileset>
+		</copy>
+
+
+		<!-- Delete the old modules then copy the new ones to the base directory -->
+		<delete>
+			<fileset dir="${basedir}/modules" includes="*.zip"/>
+		</delete>
+		<copy todir="${basedir}/modules">
+			<fileset dir="${build.dir}/modules">
+				<include name="*.zip"/>
+			</fileset>
+		</copy>
+
+
+		<!-- Delete the lib directory
+			 Required libs are added manually based on the platform -->
+		<delete dir="${dist.dir}/lib"/>
+		<!-- Delete the Netbeans README.TXT file -->
+		<delete file="${dist.dir}/README.TXT"/>
+
+		<!-- Copy the manual into the dist directory -->
+		<copy file="${basedir}/res/Alchemy.pdf" todir="${alchemy.dir}"/>
+		<copy file="${basedir}/res/COPYING" todir="${alchemy.dir}"/>
+		<copy file="${basedir}/res/ReadMe.txt" todir="${alchemy.dir}"/>
+
+		<!-- Copy the shapes folder into the dist directory -->
+		<copy todir="${alchemy.dir}/shapes">
+			<fileset dir="${basedir}/shapes" />
+		</copy>
+
+		<!-- Create platform specific executables -->
+		<antcall target="unix"/>
+	</target>
+
+
+	<!-- 
+	======================
+	LINUX
+	======================
+	-->
+	<target name="unix" if="unix">
+
+		<!-- LINUX Shell Script to Launch Alchemy -->
+		<copy file="${basedir}/res/Alchemy" todir="${alchemy.dir}"/>
+		<copy file="${basedir}/res/AlchemyOpenGL" todir="${alchemy.dir}"/>
+		<!-- Make the shell script executable -->
+		<chmod file="${alchemy.dir}/Alchemy" perm="+x"/>
+		<chmod file="${alchemy.dir}/AlchemyOpenGL" perm="+x"/>
+
+		<!-- JPen -->
+		<copy file="${basedir}/lib/jpen/libjpen-2-3.so" todir="${alchemy.dir}/lib"/>
+		<copy file="${basedir}/lib/jpen/libjpen-2-3-ia64.so" todir="${alchemy.dir}/lib"/>
+		<copy file="${basedir}/lib/jpen/libjpen-2-3-x86_64.so" todir="${alchemy.dir}/lib"/>
+
+		<!-- Move the Jar file -->
+		<move file="${dist.dir}/Alchemy.jar" tofile="${alchemy.dir}/Alchemy.jar"/>
+		<echo message="Copying modules" />
+		<copy todir="${alchemy.dir}/modules">
+			<fileset dir="${dist.dir}/modules">
+				<include name="*.zip"/>
+			</fileset>
+		</copy>
+
+		<!-- Create a .tar.gz for distribution
+		<tar destfile="${dist.dir}/Alchemy-${version.number}.tar" basedir="${dist.dir}"/>
+		<gzip destfile="${dist.dir}/Alchemy-${version.number}.tar.gz" src="${dist.dir}/Alchemy-${version.number}.tar"/>
+		<delete file="${dist.dir}/Alchemy-${version.number}.tar" />
+ -->
+	</target>
+
+	<!-- JAVA DOCS -->
+	<target name="-javadoc-build" depends="init">
+		<mkdir dir="${dist.javadoc.dir}"/>
+		<javadoc destdir="${dist.javadoc.dir}" source="${javac.source}" notree="${javadoc.notree}" use="${javadoc.use}" nonavbar="${javadoc.nonavbar}" noindex="${javadoc.noindex}" splitindex="${javadoc.splitindex}" author="${javadoc.author}" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}" private="${javadoc.private}" additionalparam="${javadoc.additionalparam}" failonerror="true" useexternalfile="true">
+			<classpath>
+				<path path="${javac.classpath}"/>
+			</classpath>
+			<sourcepath>
+				<pathelement location="${basedir}/src/org/alchemy/core"/>
+			</sourcepath>
+			<packageset dir="${basedir}/src/org/alchemy/core" includes="*/**"/>
+			<fileset dir="${basedir}/src/org/alchemy/core" includes="*.java" excludes="AlcCore.java"/>
+		</javadoc>
+	</target>
+</project>

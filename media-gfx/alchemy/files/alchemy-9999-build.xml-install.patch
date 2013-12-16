@@ -1,0 +1,298 @@
+diff -Naur alchemy-9999.org/Alchemy/build.xml alchemy-9999/Alchemy/build.xml
+--- alchemy-9999.org/Alchemy/build.xml	2011-03-21 10:29:36.000000000 +0100
++++ alchemy-9999/Alchemy/build.xml	2011-03-21 10:37:08.000000000 +0100
+@@ -6,88 +6,11 @@
+     <description>Builds, tests, and runs the project Alchemy.</description>
+     <import file="nbproject/build-impl.xml"/>
+ 
+-    <import file="nbproject/profiler-build-impl.xml"/>    <import file="nbproject/profiler-build-impl.xml"/>
++    <import file="nbproject/profiler-build-impl.xml"/>
+     
+     <!-- Import the resource bundle where the version info is stored -->
+     <property file="${basedir}/src/org/alchemy/core/AlcResourceBundle.properties"/>
+     
+-    <!-- Detect the OS -->
+-    <condition property="mac">
+-        <os family="mac"/>
+-    </condition>
+-    <condition property="unix">
+-        <and>
+-            <os family="unix"/>
+-            <not>
+-                <os family="mac"/>
+-            </not>
+-        </and>
+-    </condition>
+-    <condition property="windows">
+-        <os family="windows"/>
+-    </condition>
+-       
+-    <!--
+-
+-    There exist several targets which are by default empty and which can be 
+-    used for execution of your tasks. These targets are usually executed 
+-    before and after some main targets. They are: 
+-
+-      -pre-init:                 called before initialization of project properties
+-      -post-init:                called after initialization of project properties
+-      -pre-compile:              called before javac compilation
+-      -post-compile:             called after javac compilation
+-      -pre-compile-single:       called before javac compilation of single file
+-      -post-compile-single:      called after javac compilation of single file
+-      -pre-compile-test:         called before javac compilation of JUnit tests
+-      -post-compile-test:        called after javac compilation of JUnit tests
+-      -pre-compile-test-single:  called before javac compilation of single JUnit test
+-      -post-compile-test-single: called after javac compilation of single JUunit test
+-      -pre-jar:                  called before JAR building
+-      -post-jar:                 called after JAR building
+-      -post-clean:               called after cleaning build products
+-
+-    (Targets beginning with '-' are not intended to be called on their own.)
+-
+-    Example of inserting an obfuscator after compilation could look like this:
+-
+-        <target name="-post-compile">
+-            <obfuscate>
+-                <fileset dir="${build.classes.dir}"/>
+-            </obfuscate>
+-        </target>
+-
+-    For list of available properties check the imported 
+-    nbproject/build-impl.xml file. 
+-
+-
+-    Another way to customize the build is by overriding existing main targets.
+-    The targets of interest are: 
+-
+-      -init-macrodef-javac:     defines macro for javac compilation
+-      -init-macrodef-junit:     defines macro for junit execution
+-      -init-macrodef-debug:     defines macro for class debugging
+-      -init-macrodef-java:      defines macro for class execution
+-      -do-jar-with-manifest:    JAR building (if you are using a manifest)
+-      -do-jar-without-manifest: JAR building (if you are not using a manifest)
+-      run:                      execution of project 
+-      -javadoc-build:           Javadoc generation
+-      test-report:              JUnit report generation
+-
+-    An example of overriding the target for project execution could look like this:
+-
+-        <target name="run" depends="Alchemy-impl.jar">
+-            <exec dir="bin" executable="launcher.exe">
+-                <arg file="${dist.jar}"/>
+-            </exec>
+-        </target>
+-
+-    Notice that the overridden target depends on the jar target and not only on 
+-    the compile target as the regular run target does. Again, for a list of available 
+-    properties which you can use, check the target you are overriding in the
+-    nbproject/build-impl.xml file. 
+-
+-    -->
+     <target name="-pre-jar">
+         <!-- Ant config lets us loop & use if statements -->
+         <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+@@ -104,21 +27,7 @@
+         <unjar src="${file.reference.foxtrot.jar}" dest="${build.classes.dir}"/>
+         <unjar src="${file.reference.PDFRenderer.jar}" dest="${build.classes.dir}"/>
+         <unjar src="${file.reference.mime-util.jar}" dest="${build.classes.dir}"/>
+-        
+-        <if>
+-            <equals arg1="${mac}" arg2="true" />
+-            <then>
+-                <echo message="Ignoring the JPen Library for now" />
+-            </then>
+-            <else>
+-                <unjar src="${file.reference.jpen-2.jar}" dest="${build.classes.dir}"/>
+-            </else>
+-        </if>
+-
+-        
+-        <!--
+-        <unjar src="${file.reference.beads.jar}" dest="${build.classes.dir}"/>
+-        -->
++        <unjar src="${file.reference.jpen-2.jar}" dest="${build.classes.dir}"/>
+         <unjar src="${file.reference.miglayout.jar}" dest="${build.classes.dir}"/>
+ 
+         <!-- The mass of batik libraries -->
+@@ -236,89 +145,7 @@
+ 
+ 
+         <!-- Create platform specific executables -->
+-        <antcall target="mac"/>
+         <antcall target="unix"/>
+-        <antcall target="windows"/>
+-    </target>
+-    
+-    
+-    <!-- 
+-    ======================
+-    MAC
+-    ======================
+-    -->
+-    <target name="mac" if="mac">
+-
+-        <!-- Create the mac .app executable bundle -->
+-        <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" >
+-            <classpath>
+-                <pathelement location="${basedir}/lib/ant/jarbundler-2.0.0.jar"/>
+-            </classpath>
+-        </taskdef>
+-        <jarbundler 
+-            
+-            dir="${alchemy.dir}"
+-            name="${application.title}"
+-            mainclass="${main.class}" 
+-            jar="${dist.jar}"
+-            
+-            icon="${basedir}/res/Alchemy.icns" 
+-            jvmversion="1.5+"
+-            version="${version.numeric}"
+-            infostring="${version.string}, ${copyright}" 
+-            arguments="-Xms128m -Xmx512m">
+-                
+-            <!-- Adjust the look, feel and behavior -->
+-            <javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
+-        </jarbundler>
+-        <property name="mac.bundle" value="${alchemy.dir}/Alchemy.app/Contents/Resources/Java" />
+-        
+-        <!-- Copy the Quaqua libraries for more mac looking interface support -->
+-        <copy file="${file.reference.quaqua.jar}" todir="${mac.bundle}/lib"/>
+-        <copy file="${basedir}/lib/quaqua/libquaqua.jnilib" todir="${mac.bundle}"/>
+-        <copy file="${basedir}/lib/quaqua/libquaqua64.jnilib" todir="${mac.bundle}"/>
+-         
+-         <!-- Alchemy Native -->
+-        <copy file="${basedir}/lib/libAlcNative.jnilib" todir="${mac.bundle}"/>
+-        
+-        <!-- JPen -->
+-        <!-- Copy the regular version -->
+-        <copy file="${basedir}/lib/jpen/libjpen-2-3.jnilib" todir="${mac.bundle}"/>
+-        <copy file="${file.reference.jpen-2.jar}" todir="${mac.bundle}/lib"/>
+-        
+-        <!-- Copy the Tiger version 
+-        <copy file="${basedir}/lib/jpen/jpen-tiger/libjpen-2.jnilib" todir="${mac.bundle}"/>
+-        <copy file="${basedir}/lib/jpen/jpen-tiger/jpen-2.jar" todir="${mac.bundle}/lib"/>
+-        -->
+-
+-        <!-- Delete the Alchemy Jar file -->
+-        <delete file="${dist.dir}/Alchemy.jar"/>
+-        
+-
+-        <!-- Move the Alchemy folder to a sub directory to make a drag and drop install easier -->
+-        <move todir="${alchemy.dir}/Alchemy">
+-            <fileset dir="${alchemy.dir}" />
+-        </move>
+-        
+-        <!-- Create a Mac .dmg file for distribution. 
+-             Create a hidden folder and copy the background image, 
+-             then copy the DS_Store file which holds the preferences of how it looks,
+-             finally create the .dmg file using the command line hdiutil -->
+-        <copy file="${basedir}/res/dmg/Alchemy.png" todir="${alchemy.dir}/.background"/>
+-        <copy file="${basedir}/res/dmg/DS_Store" todir="${alchemy.dir}"/>
+-        <move file="${alchemy.dir}/DS_Store" tofile="${alchemy.dir}/.DS_Store"/>
+-        
+-       
+-
+-        <exec executable="hdiutil">
+-            <arg line="create -srcfolder ${alchemy.dir} ${dist.dir}/Alchemy-${version.number}.dmg"/>
+-        </exec>
+-        
+-        
+-        <move todir="${alchemy.dir}">
+-            <fileset dir="${alchemy.dir}/Alchemy" />
+-        </move>
+-        
+     </target>
+     
+     
+@@ -344,82 +171,22 @@
+         
+         <!-- Move the Jar file -->
+         <move file="${dist.dir}/Alchemy.jar" tofile="${alchemy.dir}/Alchemy.jar"/>
++        <echo message="Copying modules" />
++        <copy todir="${alchemy.dir}/modules">
++            <fileset dir="${dist.dir}/modules">
++                <include name="*.zip"/>
++            </fileset>
++        </copy>
++
+ 
+-        <!-- Create a .tar.gz for distribution -->
++        <!-- Create a .tar.gz for distribution
+         <tar destfile="${dist.dir}/Alchemy-${version.number}.tar" basedir="${dist.dir}"/>
+         <gzip destfile="${dist.dir}/Alchemy-${version.number}.tar.gz" src="${dist.dir}/Alchemy-${version.number}.tar"/>
+         <delete file="${dist.dir}/Alchemy-${version.number}.tar" />
+-
+-    </target>
+-    
+-    
+-
+-    <!-- 
+-    ======================
+-    WINDOWS
+-    ======================
+-    -->
+-    <target name="windows" if="windows">
+-        
+-        <!-- 
+-        Create the Windows executable bundle 
+-        Launch4j needs to be installed into the Program Files folder
+-        http://launch4j.sourceforge.net/
+         -->
+-        <property name="launch4j.dir" location="C:/Program Files/Launch4j" />
+-        <taskdef name="launch4j"
+-            classname="net.sf.launch4j.ant.Launch4jTask"
+-            classpath="${launch4j.dir}/launch4j.jar
+-                :${launch4j.dir}/lib/xstream.jar" />
+-        <launch4j>
+-            <config 
+-                dontWrapJar="false"
+-                headerType="console" 
+-                jarPath="${dist.jar}" 
+-                outfile="${alchemy.dir}/Alchemy.exe" 
+-                errTitle="Java Install Required"
+-                priority="normal"
+-                downloadUrl="http://java.com/download"
+-                customProcName="true"
+-                stayAlive="false"
+-                icon="${basedir}/res/Alchemy.ico">
+-                <jre
+-                minVersion="1.5.0"
+-                dontUsePrivateJres="false"
+-                initialHeapSize="128"
+-                maxHeapSize="512">
+-                    <opt>-Djava.library.path=lib</opt>
+-                </jre>
+-                <versionInfo
+-                fileVersion="${version.numeric}"
+-                txtFileVersion="${version.string}"
+-                productVersion="${version.numeric}"
+-                fileDescription="${application.desc}"
+-                copyright="${copyright}"
+-                txtProductVersion="${version.string}"
+-                productName="${application.title}"
+-                internalName="${application.title}"
+-                originalFilename="Alchemy.exe"
+-                />
+-            </config>
+-        </launch4j>
+-
+-        
+-        <!-- JPen -->
+-        <copy file="${basedir}/lib/jpen/jpen-2-2.dll" todir="${alchemy.dir}/lib"/>
+-        <copy file="${basedir}/lib/jpen/jpen-2-2-64.dll" todir="${alchemy.dir}/lib"/>
+-        
+-        <!-- Delete the Alchemy Jar file -->
+-        <delete file="${dist.dir}/Alchemy.jar"/>
+-
+-        <!-- Create a .zip for distribution -->
+-        <zip destfile="${dist.dir}/Alchemy-${version.number}.zip"
+-            basedir="${dist.dir}"
+-        />
+-        
+     </target>
+     
+-    
++
+     <!-- JAVA DOCS -->
+     <target name="-javadoc-build" depends="init">
+         <mkdir dir="${dist.javadoc.dir}"/>

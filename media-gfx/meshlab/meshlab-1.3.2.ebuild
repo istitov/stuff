@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/meshlab/meshlab-1.3.0a.ebuild,v 0.2 2013/10/29 20:54:13 brothermechanic Exp $
 
@@ -33,9 +33,9 @@ src_unpack(){
 }
 
 src_prepare() {
-	rm "${WORKDIR}"/meshlab/src/distrib/plugins/*.xml
-	rm "${WORKDIR}"/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h
-	cd "${PORTAGE_BUILDDIR}"
+	rm ${WORKDIR}/meshlab/src/distrib/plugins/*.xml
+	rm ${WORKDIR}/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h
+	cd ${PORTAGE_BUILDDIR}
 	ln -s work a
 	#pathes from debian repo
 	epatch "${FILESDIR}"/1.3.2/01_crash-on-save.patch
@@ -74,17 +74,15 @@ src_compile() {
 
 src_install() {
 	dobin distrib/{meshlab,meshlabserver}
-	local my_libdir=/usr/$(get_libdir)/meshlab
-	exeinto /usr/$(get_libdir)
 	dolib distrib/libcommon.so.1.0.0
 	dosym libcommon.so.1.0.0 /usr/$(get_libdir)/libcommon.so.1
-	dosym libcommon.so.1 /usr/$(get_libdir)/libcommon.so
+        dosym libcommon.so.1 /usr/$(get_libdir)/libcommon.so
 
-	exeinto "${my_libdir}"/plugins
+	exeinto /usr/$(get_libdir)/meshlab/plugins
 	doexe distrib/plugins/*.so
 
 	insinto /usr/share/meshlab/shaders
 	doins -r distrib/shaders/*
-	newicon "${S}"/meshlab/images/eye64.png "${PN}".png
+	newicon ${S}/meshlab/images/eye64.png "${PN}".png
 	make_desktop_entry meshlab "Meshlab"
 }
