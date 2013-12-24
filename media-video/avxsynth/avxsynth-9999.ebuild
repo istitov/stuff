@@ -44,3 +44,10 @@ src_install() {
         make_desktop_entry AVXEdit
 }
 
+pkg_postinst() {
+	ln -s /usr/bin/mplayer2 /usr/bin/mplayer
+	echo "a portage created the symlink /usr/bin/mplayer"
+}
+pkg_postrm() {
+	rm /usr/bin/mplayer
+}
