@@ -53,12 +53,12 @@ DEPEND="dev-cpp/gflags
 	virtual/jpeg
 	media-libs/libpng:0
 	media-libs/tiff:0
-        media-libs/libsamplerate
+	media-libs/libsamplerate
 	X? ( x11-libs/libXi
 		x11-libs/libX11
 		virtual/opengl
 		media-libs/freetype
-		media-libs/glew 
+		media-libs/glew
 	)
 	eltopo? ( virtual/lapack )
 	sys-libs/zlib
@@ -73,7 +73,7 @@ DEPEND="dev-cpp/gflags
 	sdl? ( media-libs/libsdl[audio,joystick] )
 	openexr? ( media-libs/openexr )
 	ffmpeg? (
-	    >=media-video/ffmpeg-0.10[x264,xvid,mp3,encode]
+		>=media-video/ffmpeg-0.10[x264,xvid,mp3,encode]
 		jpeg2k? ( >=media-video/ffmpeg-0.10[x264,xvid,mp3,encode,jpeg2k] )
 	)
 	openal? ( >=media-libs/openal-1.6.372 )
@@ -86,14 +86,13 @@ DEPEND="dev-cpp/gflags
 	quicktime? ( media-libs/libquicktime )
 	lzma? ( app-arch/lzma )
 	valgrind? ( dev-util/valgrind )"
-	
 
 RDEPEND="${DEPEND}
-	 dev-cpp/eigen:3
-	 nls? ( sys-devel/gettext )
-	 doc? ( dev-python/sphinx
-		app-doc/doxygen[-nodot(-),dot(+)]
-		)"
+	dev-cpp/eigen:3
+	nls? ( sys-devel/gettext )
+	doc? ( dev-python/sphinx
+	app-doc/doxygen[-nodot(-),dot(+)]
+	)"
 
 # configure internationalization only if LINGUAS have more
 # languages than 'en', otherwise must be disabled
@@ -119,18 +118,18 @@ if [ "${PV}" = "9999" ];then
 		EGIT_REPO_URI="${BLENDER_ADDONS_URI}" \
 		git-2_src_unpack
 	fi
-		if use contrib; then
-			unset EGIT_BRANCH EGIT_COMMIT
-        		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons_contrib" \
-        		EGIT_REPO_URI="${BLENDER_ADDONS_CONTRIB_URI}" \
-        		git-2_src_unpack
-		fi
-			if use nls; then
-                        	unset EGIT_BRANCH EGIT_COMMIT
-                        	EGIT_SOURCEDIR="${WORKDIR}/${P}/release/datafiles/locale" \
-                        	EGIT_REPO_URI="${BLENDER_TRANSLATIONS_URI}" \
-                        	git-2_src_unpack
-                	fi
+	if use contrib; then
+		unset EGIT_BRANCH EGIT_COMMIT
+		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons_contrib" \
+		EGIT_REPO_URI="${BLENDER_ADDONS_CONTRIB_URI}" \
+		git-2_src_unpack
+	fi
+	if use nls; then
+		unset EGIT_BRANCH EGIT_COMMIT
+		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/datafiles/locale" \
+		EGIT_REPO_URI="${BLENDER_TRANSLATIONS_URI}" \
+		git-2_src_unpack
+	fi
 else
 	unpack ${A}
 fi
@@ -172,13 +171,13 @@ src_prepare() {
 		"${FILESDIR}"/${PN}-desktop.patch
 
 	rm -r \
-		${WORKDIR}/${P}/extern/Eigen3 \
-		${WORKDIR}/${P}/extern/libopenjpeg \
-		${WORKDIR}/${P}/extern/glew \
-		${WORKDIR}/${P}/extern/colamd \
-		${WORKDIR}/${P}/extern/binreloc \
+		"${WORKDIR}/${P}"/extern/Eigen3 \
+		"${WORKDIR}/${P}"/extern/libopenjpeg \
+		"${WORKDIR}/${P}"/extern/glew \
+		"${WORKDIR}/${P}"/extern/colamd \
+		"${WORKDIR}/${P}"/extern/binreloc \
 		|| die
-		
+
 	sed -i \
 		-e 's#set(WITH_BINRELOC ON)#set(WITH_BINRELOC OFF)#' \
 		CMakeLists.txt || die
@@ -192,7 +191,6 @@ src_prepare() {
 
 	ewarn "$(echo "Remaining bundled dependencies:";
 			( find extern -mindepth 1 -maxdepth 1 -type d; ) | sed 's|^|- |')"
-		
 }
 
 src_configure() {
@@ -294,7 +292,6 @@ src_configure() {
 		$(cmake-utils_use_with lzma LZMA)
 		$(cmake-utils_use_with valgrind VALGRIND)
 		$(cmake-utils_use_with quicktime QUICKTIME)"
-		
 
 	# FIX: Game Engine module needs to be active to build the Blender Player
 	if ! use game-engine && use player; then

@@ -27,7 +27,6 @@ src_prepare() {
 JAVA_ANT_REWRITE_CLASSPATH="true"
 EANT_BUILD_XML="./Alchemy/build.xml"
 
-
 src_compile() {
 	local mem
 	use amd64 && mem="320"
@@ -37,7 +36,6 @@ src_compile() {
 	export ANT_OPTS="-Xmx${mem}m"
 	java-pkg-2_src_compile
 }
-
 
 src_install() {
 	java-pkg_dojar Alchemy/dist/Alchemy.jar
@@ -55,4 +53,3 @@ src_install() {
 pkg_postinst() {
 	fdo-mime_desktop_database_update
 }
-

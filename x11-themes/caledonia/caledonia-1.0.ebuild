@@ -4,13 +4,11 @@
 
 EAPI=5
 
-inherit 
-
 DESCRIPTION="Caledonia) icon theme for KDE4"
 HOMEPAGE="https://malcer.deviantart.com/art/CLD-Icons-UNSUPPORTED-264978107"
 SRC_URI="http://downloads.sourceforge.net/project/cldicons/Icon%20theme/CLD-Icons.tar.gz"
 
-LICENSE="CCPL"
+LICENSE="CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS="amd64 x86"
 IUSE="-minimal"
@@ -23,7 +21,7 @@ RESTRICT="binchecks strip"
 S="${WORKDIR}"/CLD-Icons
 
 src_install() {
-	cd ${WORKDIR}
+	cd "${WORKDIR}"
 	dodir /usr/share/icons
 	mv ./CLD-Icons "${D}"/usr/share/icons/ || die
 }

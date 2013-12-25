@@ -23,7 +23,7 @@ RESTRICT="binchecks strip"
 S="${WORKDIR}"/mak-lion-taste-icons-master/
 
 src_install() {
-	unpack ./MakLionTaste_036.tar.gz 
+	unpack ./MakLionTaste_036.tar.gz
 	insinto /usr/share/icons
-	doins -r ./MakLionTaste 
+	doins -r ./MakLionTaste
 }

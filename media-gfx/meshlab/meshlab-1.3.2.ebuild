@@ -4,11 +4,12 @@
 
 EAPI=5
 
-inherit eutils multilib qt4-r2
+inherit eutils versionator multilib qt4-r2
 
 DESCRIPTION="A mesh processing system"
 HOMEPAGE="http://meshlab.sourceforge.net/"
-SRC_URI="http://kaz.dl.sourceforge.net/project/meshlab/meshlab/MeshLab%20v1.3.2/MeshLabSrc_AllInc_v132.tgz"
+MY_PV="$(delete_all_version_separators ${PV})"
+SRC_URI="mirror://sourceforge/project/${PN}/${PN}/MeshLab%20v${PV}/MeshLabSrc_AllInc_v${MY_PV}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -25,7 +26,7 @@ DEPEND="media-libs/glew
 	dev-qt/qtopengl"
 RDEPEND="${DEPEND}"
 
-S=${WORKDIR}/meshlab/src
+S="${WORKDIR}/meshlab/src"
 
 src_unpack(){
 	unpack ${A}
@@ -33,8 +34,8 @@ src_unpack(){
 }
 
 src_prepare() {
-	rm ${WORKDIR}/meshlab/src/distrib/plugins/*.xml
-	rm ${WORKDIR}/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h
+	rm "${WORKDIR}"/meshlab/src/distrib/plugins/*.xml
+	rm "${WORKDIR}"/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h
 	cd ${PORTAGE_BUILDDIR}
 	ln -s work a
 	#pathes from debian repo
@@ -76,13 +77,13 @@ src_install() {
 	dobin distrib/{meshlab,meshlabserver}
 	dolib distrib/libcommon.so.1.0.0
 	dosym libcommon.so.1.0.0 /usr/$(get_libdir)/libcommon.so.1
-        dosym libcommon.so.1 /usr/$(get_libdir)/libcommon.so
+	dosym libcommon.so.1 /usr/$(get_libdir)/libcommon.so
 
 	exeinto /usr/$(get_libdir)/meshlab/plugins
 	doexe distrib/plugins/*.so
 
 	insinto /usr/share/meshlab/shaders
 	doins -r distrib/shaders/*
-	newicon ${S}/meshlab/images/eye64.png "${PN}".png
+	newicon "${S}"/meshlab/images/eye64.png "${PN}".png
 	make_desktop_entry meshlab "Meshlab"
 }

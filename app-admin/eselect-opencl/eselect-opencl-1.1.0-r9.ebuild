@@ -22,12 +22,12 @@ HOMEPAGE="http://www.gentoo.org/"
 MIRROR="http://www.khronos.org/registry/cl/api/${CL_ABI}/"
 SRC_URI="${MIRROR}/opencl.h
 	${MIRROR}/cl_platform.h
-	${MIRROR}/cl.h 
+	${MIRROR}/cl.h
 	${MIRROR}/cl_ext.h
 	${MIRROR}/cl_gl.h
 	${MIRROR}/cl_egl.h
-	${MIRROR}/cl_gl_ext.h 
-	${MIRROR}/cl.hpp 
+	${MIRROR}/cl_gl_ext.h
+	${MIRROR}/cl.hpp
 	http://dev.gentoo.org/~xarthisius/distfiles/${P}-r1.tar.xz"
 
 LICENSE="GPL-2"
@@ -52,5 +52,5 @@ src_install() {
 
 	local headers=( opencl.h cl_platform.h cl.h cl_egl.h cl_ext.h cl_gl.h cl_gl_ext.h cl.hpp )
 	insinto /usr/$(get_libdir)/OpenCL/global/include/CL
-	doins ${DISTDIR}/{*.h,*.hpp}
+	doins "${DISTDIR}"/{*.h,*.hpp}
 }

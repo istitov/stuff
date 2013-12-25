@@ -23,7 +23,7 @@ RESTRICT="binchecks strip"
 S="${WORKDIR}"/NITRUX-KDE
 
 src_install() {
-	cd ${WORKDIR}
+	cd "${WORKDIR}"
 	insinto /usr/share/icons
 	doins -r ./NITRUX-KDE
 }

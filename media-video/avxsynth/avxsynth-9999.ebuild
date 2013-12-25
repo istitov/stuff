@@ -31,8 +31,8 @@ RDEPEND=""
 
 src_prepare() {
 	epatch "${FILESDIR}"/ldconfig.patch
-        eautoreconf -if
-} 
+	eautoreconf -if
+}
 
 scr_configure() {
 	econf --prefix=/usr --enable-silent-rules --with-pic
@@ -41,7 +41,7 @@ scr_configure() {
 src_install() {
 	einstall || die "einstall failed"
 	newicon apps/AVXEdit/images/mplayer.png "${PN}".png
-        make_desktop_entry AVXEdit
+	make_desktop_entry AVXEdit
 }
 
 pkg_postinst() {

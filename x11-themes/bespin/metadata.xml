@@ -4,6 +4,9 @@
 	<maintainer>
 		<email>brothermechanic@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name='windeco'>Enable window decoration for KWin.</flag>
+	</use>
 </pkgmetadata>
 
 

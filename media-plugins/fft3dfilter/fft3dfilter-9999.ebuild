@@ -11,20 +11,19 @@ HOMEPAGE="https://github.com/fundies/fft3dfilter-linux"
 EGIT_REPO_URI="https://github.com/fundies/fft3dfilter-linux.git"
 EGIT_BRANCH="master"
 
-LICENSE="GPL"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="sci-libs/fftw
-	media-video/avxsynth"
+		media-video/avxsynth"
 
 RDEPEND=""
 
-S=${WORKDIR}/fft3dfilter-linux
+S="${WORKDIR}/fft3dfilter-linux"
 
 src_install() {
-        insinto /usr/lib/avxsynth/
-        doins fft3dfilter.so
+	insinto /usr/lib/avxsynth/
+	doins fft3dfilter.so
 }
-

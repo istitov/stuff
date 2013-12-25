@@ -23,7 +23,7 @@ RESTRICT="binchecks strip"
 S="${WORKDIR}"
 
 src_install() {
-	cd ${WORKDIR}
+	cd "${WORKDIR}"
 	unpack ./KDelementary.tar.gz
 	dodir /usr/share/icons
 	mv ./elementary "${D}"/usr/share/icons/
