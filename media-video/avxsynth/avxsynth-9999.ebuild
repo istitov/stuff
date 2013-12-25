@@ -25,7 +25,7 @@ DEPEND="
 	x11-libs/cairo
 	virtual/ffmpeg
 	virtual/jpeg
-	media-libs/ffmpegsource"
+	media-video/x264-encoder[avs,ffmpegsource]"
 
 RDEPEND=""
 
