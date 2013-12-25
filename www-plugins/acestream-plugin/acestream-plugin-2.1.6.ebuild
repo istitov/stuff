@@ -10,9 +10,9 @@ DESCRIPTION="ACE Stream multimedia plugin for web browsers"
 HOMEPAGE="http://torrentstream.org/"
 MY_PN="acestream-mozilla-plugin"
 SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_${PV}-1raring2_i386.deb
-				 https://github.com/megabaks/test/raw/master/distfiles/${PN}_${PV}-1raring2_i386.deb )
+				 https://github.com/megabaks/test/raw/master/distfiles/${MY_PN}_${PV}-1raring2_i386.deb )
 		amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_${PV}-1raring2_amd64.deb
-				 https://github.com/megabaks/test/raw/master/distfiles/${PN}_${PV}-1raring2_amd64.deb )"
+				 https://github.com/megabaks/test/raw/master/distfiles/${MY_PN}_${PV}-1raring2_amd64.deb )"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
