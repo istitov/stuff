@@ -25,7 +25,7 @@ DEPEND="
 	x11-libs/cairo
 	virtual/ffmpeg
 	virtual/jpeg
-	media-plugins/ffms2"
+	media-libs/ffmpegsource"
 
 RDEPEND=""
 
@@ -35,7 +35,7 @@ src_prepare() {
 } 
 
 scr_configure() {
-	econf --prefix=/usr --enable-silent-rules
+	econf --prefix=/usr --enable-silent-rules --with-pic
 }
 
 src_install() {
