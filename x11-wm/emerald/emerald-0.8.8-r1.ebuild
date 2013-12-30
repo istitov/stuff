@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils
+inherit eutils flag-o-matic
 
 THEMES_RELEASE=0.5.2
 
@@ -38,6 +38,7 @@ src_prepare() {
 }
 
 src_configure() {
+	append-ldflags -ldl -lm
 	econf \
 		--disable-dependency-tracking \
 		--disable-static \
