@@ -24,7 +24,6 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS README"
 
 src_prepare() {
-	append-ldflags -lz
 	default
 	sed -i -e 's,src/zlib/,,' src/zip/zip.h src/zip/unzip.h || die
 	rm -r src/zlib/ || die
