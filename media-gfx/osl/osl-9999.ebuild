@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit git-2 cmake-utils flag-o-matic
+inherit git-2 cmake-utils
 
 DESCRIPTION="Open Shading Language"
 HOMEPAGE="http://code.google.com/p/openshadinglanguage/"
