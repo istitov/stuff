@@ -27,7 +27,6 @@ src_prepare() {
 }
 
 src_configure() {
-# 	append-cflags "-lrt"
 	append-cxxflags "-lrt"
 	local myeconfargs=(
 		$(use_enable static-libs static)
