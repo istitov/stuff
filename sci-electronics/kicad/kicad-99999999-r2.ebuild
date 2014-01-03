@@ -27,7 +27,7 @@ if [[ "${PV}" != "99999999" ]]; then
 	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 fi
 
-IUSE="dev-doc debug doc examples minimal python nanometr gost sexpr"
+IUSE="dev-doc debug doc examples minimal python nanometr gost sexpr" #github-plugin
 
 CDEPEND="x11-libs/wxGTK:2.8[X,opengl,gnome]"
 DEPEND="${CDEPEND}
@@ -37,35 +37,11 @@ DEPEND="${CDEPEND}
 	dev-doc? ( app-doc/doxygen )"
 RDEPEND="${CDEPEND}
 	sys-libs/zlib
-	sci-electronics/electronics-menu"
-
-pkg_setup() {
-	python_set_active_version 2
-}
+	sci-electronics/electronics-menu
+	!minimal? ( sci-electronics/kicad-library )"
 
 src_unpack() {
-	if [[ "${PV}" != "99999999" ]]; then
-		EBZR_REVISION="${PV#*_p}"
-	fi
 	bzr_src_unpack
-
-	if [[ "${PV}" = "99999999" ]]; then
-		EBZR_REVISION=""
-	else
-		local date="${PV%_p*}"
-		EBZR_REVISION="before:${date:0:4}-${date:4:2}-${date:6:2},23:59:59"
-	fi
-
-	# FIXME: we need to send patches for bzr.eclass, to avoid the weird
-	# declarations of ${P} below.
-
-	if ! use minimal; then
-		EBZR_REPO_URI="lp:~kicad-lib-committers/kicad/library" \
-			EBZR_PROJECT="kicad-library" \
-			P="${P}/kicad-library" \
-			EBZR_CACHE_DIR="kicad-library" \
-			bzr_fetch
-	fi
 
 	if use doc; then
 		EBZR_REPO_URI="lp:~kicad-developers/kicad/doc" \
@@ -77,21 +53,11 @@ src_unpack() {
 }
 
 src_prepare() {
-	sed -i \
-		-e '/add_subdirectory(template)/ a \
-			add_subdirectory(kicad-doc)\
-			add_subdirectory(kicad-library)' \
-		-e 's/create_svn_version_header()/#create_svn_version_header()/' \
-		-e 's/ -O2 / /' \
-		CMakeLists.txt || die 'sed failed'
+	sed 's|bzr patch -p0| patch -p0 -i|g' -i CMakeModules/download_boost.cmake
 
 	sed -i \
 		-e 's/Scientific;Development/Engineering;Electronics/' \
 		resources/linux/mime/applications/*.desktop || die 'sed failed'
-
-	# Use native boost
-	sed -i -e '/Boost/s/^#check_find_package/check_find_package/' \
-		-e '/Boost/s/^#find_package/find_package/' CMakeLists.txt || die "sed failed"
 
 	# Add important doc files
 	sed -i -e 's/INSTALL.txt/AUTHORS.txt CHANGELOG.txt README.txt TODO.txt/' CMakeLists.txt || die "sed failed"
@@ -102,8 +68,7 @@ src_prepare() {
 
 	# Handle optional minimal install
 	if use minimal ; then
-		sed -i -e '/add_subdirectory(template)/d' \
-			-e '/add_subdirectory(kicad-library)/d' CMakeLists.txt || die "sed failed"
+		sed -i -e '/add_subdirectory(template)/d' CMakeLists.txt || die "sed failed"
 	fi
 
 	# Add documentation and fix necessary code if requested
@@ -123,11 +88,12 @@ src_prepare() {
 }
 
 src_configure() {
+	bzr whoami "megabaks megagreener@gmail.com"
 	if use amd64;then
 		append-cxxflags -fPIC
 	fi
 	need-wxwidgets unicode
-
+	CMAKE_VERBOSE=ON
 	mycmakeargs="${mycmakeargs}
 		-DKICAD_MINIZIP=OFF
 		-DKICAD_CYRILLIC=ON
