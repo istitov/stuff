@@ -15,5 +15,6 @@
 		<flag name="nanometr">pcbnew nanometres</flag>
 		<flag name="gost">Kicad gost</flag>
 		<flag name="sexpr">pcbnew sexpr file format</flag>
+		<flag name="github">github plugin</flag>
 	</use>
 </pkgmetadata>

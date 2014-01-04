@@ -1,10 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
-
-# rafaelmartins: Please try to keep the live ebuild synchronized with
-# the latest snapshot ebuild. e.g.:
-# cp kicad-YYYYMMDD_pXXXX.ebuild kicad-99999999-r1.ebuild
 
 EAPI="5"
 PYTHON_COMPAT=( python2_7 )
@@ -16,20 +12,16 @@ inherit cmake-utils wxwidgets fdo-mime gnome2-utils bzr python-r1 flag-o-matic
 DESCRIPTION="Electronic Schematic and PCB design tools."
 HOMEPAGE="http://www.kicad-pcb.org"
 
-SRC_URI=""
-
 LICENSE="GPL-2"
 SLOT="0"
 EBZR_REPO_URI="lp:kicad"
+EBZR_REVISION="${PR#r}"
 
 KEYWORDS=""
-if [[ "${PV}" != "99999999" ]]; then
-	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
-fi
 
-IUSE="dev-doc debug doc examples minimal python nanometr gost sexpr" #github-plugin
+IUSE="dev-doc debug doc examples minimal python nanometr gost sexpr github"
 
-CDEPEND="x11-libs/wxGTK:2.8[X,opengl,gnome]"
+CDEPEND="x11-libs/wxGTK:2.8[X,opengl]"
 DEPEND="${CDEPEND}
 	>=dev-util/cmake-2.6.0
 	>=dev-libs/boost-1.40[python?]
@@ -45,26 +37,24 @@ src_unpack() {
 
 	if use doc; then
 		EBZR_REPO_URI="lp:~kicad-developers/kicad/doc" \
-			EBZR_PROJECT="kicad-doc" \
-			P="${P}/kicad-doc" \
-			EBZR_CACHE_DIR="kicad-doc" \
-			bzr_fetch
+		EBZR_PROJECT="kicad-doc" \
+		P="${P}/kicad-doc" \
+		EBZR_CACHE_DIR="kicad-doc" \
+		bzr_fetch
 	fi
 }
 
 src_prepare() {
-	sed 's|bzr patch -p0| patch -p0 -i|g' -i CMakeModules/download_boost.cmake
+	sed 's|bzr patch -p0|patch -p0 -i|g' -i CMakeModules/download_boost.cmake
 
-	sed -i \
-		-e 's/Scientific;Development/Engineering;Electronics/' \
-		resources/linux/mime/applications/*.desktop || die 'sed failed'
+	sed -e 's/Categories=Electronics/Categories=Development;Electronics/' \
+		-i	resources/linux/mime/applications/kicad.desktop || die 'sed failed'
 
 	# Add important doc files
 	sed -i -e 's/INSTALL.txt/AUTHORS.txt CHANGELOG.txt README.txt TODO.txt/' CMakeLists.txt || die "sed failed"
 
 	# Fix desktop files
 	rm resources/linux/mime/applications/eeschema.desktop
-	sed -i -e 's/Development;//' resources/linux/mime/applications/kicad.desktop || die "sed failed"
 
 	# Handle optional minimal install
 	if use minimal ; then
@@ -85,36 +75,32 @@ src_prepare() {
 	else
 		sed -i -e '/add_subdirectory(demos)/d' CMakeLists.txt || die "sed failed"
 	fi
+	sed 's|^    ../scripting/wx_python_helpers.cpp$||' -i pcbnew/CMakeLists.txt || die "sed failed"
 }
 
 src_configure() {
-	bzr whoami "megabaks megagreener@gmail.com"
+	bzr whoami "anonymous"
 	if use amd64;then
 		append-cxxflags -fPIC
 	fi
 	need-wxwidgets unicode
-	CMAKE_VERBOSE=ON
+
 	mycmakeargs="${mycmakeargs}
-		-DKICAD_MINIZIP=OFF
+		-DKICAD_DOCS=/usr/share/doc/${PF}
+		-DKICAD_HELP=/usr/share/doc/${PF}
 		-DKICAD_CYRILLIC=ON
 		-DwxUSE_UNICODE=ON
+		-DKICAD_TESTING_VERSION=ON
+		-DKICAD_MINIZIP=OFF
+		-DKICAD_AUIMANAGER=OFF
+		-DKICAD_AUITOOLBAR=OFF
 		$(cmake-utils_use gost KICAD_GOST)
 		$(cmake-utils_use nanometr USE_PCBNEW_NANOMETRES)
 		$(cmake-utils_use sexpr USE_PCBNEW_SEXPR_FILE_FORMAT)
-		-DKICAD_AUIMANAGER=OFF
-		-DKICAD_AUITOOLBAR=OFF
+		$(cmake-utils_use github BUILD_GITHUB_PLUGIN)
 		$(cmake-utils_use python KICAD_SCRIPTING)
 		$(cmake-utils_use python KICAD_SCRIPTING_MODULES)
-		-DKICAD_DOCS=/usr/share/doc/${PF}
-		-DKICAD_HELP=/usr/share/doc/${PF}"
-
-	if [[ "${PV}" = "99999999" ]]; then
-		mycmakeargs="${mycmakeargs} -DKICAD_TESTING_VERSION=ON"
-		echo "======Testing====="
-	else
-		mycmakeargs="${mycmakeargs} -DKICAD_STABLE_VERSION=ON"
-	fi
-
+		$(cmake-utils_use python KICAD_SCRIPTING_WXPYTHON)"
 	cmake-utils_src_configure
 }
 
@@ -128,7 +114,7 @@ src_install() {
 		insinto /usr/share/doc/${PF}
 		doins uncrustify.cfg
 		cd Documentation
-		doins -r GUI_Translation_HOWTO.pdf guidelines/UIpolicies.txt doxygen/doxygen
+		doins -r GUI_Translation_HOWTO.pdf guidelines/UIpolicies.txt doxygen/*
 	fi
 }
 
