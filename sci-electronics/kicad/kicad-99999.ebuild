@@ -16,6 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 EBZR_REPO_URI="lp:kicad"
 EBZR_REVISION="${PR#r}"
+[[ "${EBZR_REVISION}" == "0" ]] && EBZR_REVISION=""
 
 KEYWORDS=""
 
