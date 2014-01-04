@@ -16,10 +16,17 @@ LICENSE="GPL-2"
 SLOT="0"
 EBZR_REPO_URI="lp:kicad"
 EBZR_REVISION="${PR#r}"
+[[ "${EBZR_REVISION}" == "0" ]] && EBZR_REVISION=""
 
 KEYWORDS=""
 
 IUSE="dev-doc debug doc examples minimal python nanometr gost sexpr github"
+
+LANGS="bg ca cs de el_GR en es fi fr hu it ja ko nl pl pt ru sl sv zh_CN"
+
+for lang in ${LANGS}; do
+	IUSE+=" linguas_${lang}"
+done
 
 CDEPEND="x11-libs/wxGTK:2.8[X,opengl,gnome]
 		media-libs/glew"
@@ -31,7 +38,7 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}
 	sys-libs/zlib
 	sci-electronics/electronics-menu
-	!minimal? ( sci-electronics/kicad-library )"
+	!minimal? ( !sci-electronics/electronics-menu )"
 
 src_unpack() {
 	bzr_src_unpack
@@ -39,44 +46,58 @@ src_unpack() {
 	if use doc; then
 		EBZR_REPO_URI="lp:~kicad-developers/kicad/doc" \
 		EBZR_PROJECT="kicad-doc" \
-		P="${P}/kicad-doc" \
+		EBZR_UNPACK_DIR="${EBZR_UNPACK_DIR}/kicad-doc" \
 		EBZR_CACHE_DIR="kicad-doc" \
+		bzr_fetch
+	fi
+
+	if ! use minimal; then
+		EBZR_REPO_URI="lp:~kicad-testing-committers/kicad/library" \
+		EBZR_PROJECT="kicad-library" \
+		EBZR_UNPACK_DIR="${EBZR_UNPACK_DIR}/kicad-library" \
+		EBZR_CACHE_DIR="kicad-library" \
 		bzr_fetch
 	fi
 }
 
 src_prepare() {
+	if use doc;then
+		for lang in ${LANGS};do
+			for x in ${lang};do
+				if ! use linguas_${x}; then
+					sed "s| \<${x}\>||" -i kicad-doc/{internat,doc/{help,tutorials}}/CMakeLists.txt || die "sed LANGS"
+				fi
+			done
+		done
+	fi
 	sed 's|bzr patch -p0|patch -p0 -i|g' -i CMakeModules/download_boost.cmake
 
-	sed -e 's/Categories=Electronics/Categories=Development;Electronics/' \
-		-i	resources/linux/mime/applications/kicad.desktop || die 'sed failed'
+	sed -e 's/Categories=Development;Electronics$/Categories=Development;Electronics;/' \
+		-i resources/linux/mime/applications/*.desktop || die 'sed failed'
 
 	# Add important doc files
-	sed -i -e 's/INSTALL.txt/AUTHORS.txt CHANGELOG.txt README.txt TODO.txt/' CMakeLists.txt || die "sed failed"
-
-	# Fix desktop files
-	rm resources/linux/mime/applications/eeschema.desktop
+	sed -e 's/INSTALL.txt/AUTHORS.txt CHANGELOG.txt README.txt TODO.txt/' -i CMakeLists.txt || die "sed failed"
 
 	# Handle optional minimal install
-	if use minimal ; then
-		sed -i -e '/add_subdirectory(template)/d' CMakeLists.txt || die "sed failed"
+	if use minimal; then
+		sed -e '/add_subdirectory( template )/d' -i CMakeLists.txt || die "sed failed"
+	else
+		sed '/add_subdirectory( bitmaps_png )/a add_subdirectory( kicad-library )' -i CMakeLists.txt || die "sed failed"
+		sed '/make uninstall/,/# /d' -i kicad-library/CMakeLists.txt || die "sed failed"
 	fi
 
 	# Add documentation and fix necessary code if requested
-	if use doc ; then
-		sed -i -e "s/subdirs.Add( wxT( \"kicad\" ) );/subdirs.Add( wxT( \"${PF}\" ) );/" \
-			-e '/subdirs.Add( _T( "help" ) );/d' common/edaappl.cpp || die "sed failed"
-	else
-		sed -i -e '/add_subdirectory(kicad-doc)/d' CMakeLists.txt || die "sed failed"
+	if use doc; then
+		sed '/add_subdirectory( bitmaps_png )/a add_subdirectory( kicad-doc )' -i CMakeLists.txt || die "sed failed"
+		sed '/make uninstall/,$d' -i kicad-doc/CMakeLists.txt || die "sed failed"
 	fi
 
 	# Install examples in the right place if requested
-	if use examples ; then
-		sed -i -e 's:${KICAD_DATA}/demos:${KICAD_DOCS}/examples:' CMakeLists.txt || die "sed failed"
+	if use examples; then
+		sed -e 's:${KICAD_DATA}/demos:${KICAD_DOCS}/examples:' -i CMakeLists.txt || die "sed failed"
 	else
-		sed -i -e '/add_subdirectory(demos)/d' CMakeLists.txt || die "sed failed"
+		sed -e '/add_subdirectory( demos )/d' -i CMakeLists.txt || die "sed failed"
 	fi
-	sed 's|^    ../scripting/wx_python_helpers.cpp$||' -i pcbnew/CMakeLists.txt || die "sed failed"
 }
 
 src_configure() {
