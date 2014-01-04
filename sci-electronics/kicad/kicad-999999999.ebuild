@@ -22,7 +22,8 @@ KEYWORDS=""
 
 IUSE="dev-doc debug doc examples minimal python nanometr gost sexpr github"
 
-CDEPEND="x11-libs/wxGTK:2.8[X,opengl,gnome]"
+CDEPEND="x11-libs/wxGTK:2.8[X,opengl,gnome]
+		media-libs/glew"
 DEPEND="${CDEPEND}
 	>=dev-util/cmake-2.6.0
 	>=dev-libs/boost-1.40[python?]
