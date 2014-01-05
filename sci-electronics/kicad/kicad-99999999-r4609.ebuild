@@ -48,6 +48,7 @@ src_unpack() {
 		EBZR_PROJECT="kicad-doc" \
 		EBZR_UNPACK_DIR="${EBZR_UNPACK_DIR}/kicad-doc" \
 		EBZR_CACHE_DIR="kicad-doc" \
+		EBZR_REVISION="" \
 		bzr_fetch
 	fi
 
@@ -56,6 +57,7 @@ src_unpack() {
 		EBZR_PROJECT="kicad-library" \
 		EBZR_UNPACK_DIR="${EBZR_UNPACK_DIR}/kicad-library" \
 		EBZR_CACHE_DIR="kicad-library" \
+		EBZR_REVISION="" \
 		bzr_fetch
 	fi
 }
