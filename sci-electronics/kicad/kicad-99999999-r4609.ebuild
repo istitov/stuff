@@ -38,7 +38,7 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}
 	sys-libs/zlib
 	sci-electronics/electronics-menu
-	!minimal? ( !sci-electronics/electronics-menu )"
+	!minimal? ( !sci-electronics/kicad-library )"
 
 src_unpack() {
 	bzr_src_unpack
@@ -61,17 +61,24 @@ src_unpack() {
 }
 
 src_prepare() {
+	if use python;then
+		# dev-python/wxpython don't support python3
+		sed '/set(_PYTHON3_VERSIONS 3.3 3.2 3.1 3.0)/d' -i CMakeModules/FindPythonLibs.cmake || die "sed failed"
+	fi
+
 	if use doc;then
 		for lang in ${LANGS};do
 			for x in ${lang};do
 				if ! use linguas_${x}; then
-					sed "s| \<${x}\>||" -i kicad-doc/{internat,doc/{help,tutorials}}/CMakeLists.txt || die "sed LANGS"
+					sed "s| \<${x}\>||" -i kicad-doc/{internat,doc/{help,tutorials}}/CMakeLists.txt || die "sed failed"
 				fi
 			done
 		done
 	fi
+	# hack or dev-vcs/bzrtools
 	sed 's|bzr patch -p0|patch -p0 -i|g' -i CMakeModules/download_boost.cmake
 
+	#fdo
 	sed -e 's/Categories=Development;Electronics$/Categories=Development;Electronics;/' \
 		-i resources/linux/mime/applications/*.desktop || die 'sed failed'
 
