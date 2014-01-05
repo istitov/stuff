@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>iohann.s.titov@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="fpx">Enable FlashPIX support</flag>
+		<flag name="q8">8 bits in a pixel quantum</flag>
+		<flag name="q16">16 bits in a pixel quantum</flag>
+		<flag name="q32">32 bits in a pixel quantum</flag>
+	</use>
+</pkgmetadata>
