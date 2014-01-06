@@ -10,8 +10,10 @@ HOMEPAGE="https://plex.tv/"
 MY_PN="plexmediaserver"
 MY_REV="11b7fdd"
 
-SRC_URI=" x86? ( http://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${PV}-${MY_REV}_i386.deb )
-		amd64? ( http://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${PV}-${MY_REV}_amd64.deb )"
+SRC_URI=" x86? ( http://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${PV}-${MY_REV}_i386.deb
+				https://dl.dropboxusercontent.com/u/9454972/distfiles/${MY_PN}_${PV}-${MY_REV}_i386.deb )
+		amd64? ( http://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${PV}-${MY_REV}_amd64.deb
+				https://dl.dropboxusercontent.com/u/9454972/distfiles/${MY_PN}_${PV}-${MY_REV}_amd64.deb )"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
