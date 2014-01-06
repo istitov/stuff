@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit multilib
+inherit multilib unpacker
 
 DESCRIPTION="ACE Stream player libraries files"
 HOMEPAGE="http://torrentstream.org/"
@@ -101,9 +101,6 @@ RESTRICT="strip"
 S="${WORKDIR}"
 
 src_prepare(){
-	unpack ${A}
-	unpack ./data.tar.gz
-
 	for lang in ${LANGS};do
 		for x in ${lang};do
 			if ! use linguas_${x}; then

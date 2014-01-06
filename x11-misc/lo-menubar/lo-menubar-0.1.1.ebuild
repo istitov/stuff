@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit multilib
+inherit multilib unpacker
 
 DESCRIPTION="A small plugin for LibreOffice to export the menus from the application into Unity's menubar."
 HOMEPAGE="https://launchpad.net/lo-menubar"
@@ -23,10 +23,7 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
 QA_PRESTRIPPED="/usr/$(get_libdir)/libreoffice/share/extensions/menubar/Linux_x86/menubar.uno.so"
-src_prepare(){
-	unpack ${A}
-	unpack ./data.tar.gz
-}
+
 src_install(){
 	insinto /usr/$(get_libdir)/libreoffice/share/extensions/
 	doins -r usr/lib/libreoffice/share/extensions/*

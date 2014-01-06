@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit eutils
+inherit eutils unpacker
 
 DESCRIPTION="A set of symbols and convience functions that all indicators would like to use"
 HOMEPAGE="http://launchpad.net/libindicator"
@@ -22,11 +22,6 @@ RDEPEND=">=dev-libs/glib-2.22
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}"
-
-src_prepare(){
-	unpack ${A}
-	unpack ./data.tar.gz
-}
 
 src_install() {
 	dolib usr/lib/libindicator.so.7 usr/lib/libindicator.so.7.0.0

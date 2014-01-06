@@ -6,7 +6,7 @@ EAPI=5
 
 PYTHON_COMPAT="python2_7"
 
-inherit multilib python-r1
+inherit multilib python-r1 unpacker
 
 DESCRIPTION="ACE Stream Engine"
 HOMEPAGE="http://torrentstream.org/"
@@ -26,11 +26,6 @@ DEPEND="dev-python/m2crypto
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
-
-src_prepare(){
-	unpack ${A}
-	unpack ./data.tar.gz
-}
 
 src_install(){
 	mv usr/lib/python2.7/dist-packages usr/lib/python2.7/site-packages

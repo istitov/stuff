@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit multilib
+inherit multilib unpacker
 
 DESCRIPTION="ACE Stream multimedia plugin for web browsers"
 HOMEPAGE="http://torrentstream.org/"
@@ -25,10 +25,6 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
 
-src_prepare(){
-	unpack ${A}
-	unpack ./data.tar.gz
-}
 src_install(){
 	mv usr/lib/mozilla usr/lib/nsbrowser
 	rm -rf usr/lib/xulrunner-addons usr/lib/mozilla-firefox

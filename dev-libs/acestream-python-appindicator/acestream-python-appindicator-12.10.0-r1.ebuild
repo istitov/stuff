@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libappindicator/libappindicator-12.10.0.ebuild,v 1.2 2012/07/27 16:34:15 ssuominen Exp $
 
 EAPI=5
-inherit eutils
+inherit eutils unpacker
 
 DESCRIPTION="A library to allow applications to export a menu into the Unity Menu bar"
 HOMEPAGE="http://launchpad.net/libappindicator"
@@ -27,8 +27,6 @@ QA_PRESTRIPPED="usr/lib/python2.7/site-packages/appindicator/_appindicator.so"
 S="${WORKDIR}"
 
 src_prepare(){
-	unpack ${A}
-	unpack ./data.tar.gz
 	mv usr/lib/python2.7/dist-packages usr/lib/python2.7/site-packages
 }
 

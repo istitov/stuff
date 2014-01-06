@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit eutils
+inherit eutils unpacker
 
 DESCRIPTION="A library to allow applications to export a menu into the Unity Menu bar"
 HOMEPAGE="http://launchpad.net/libappindicator"
@@ -25,11 +25,6 @@ RDEPEND=">=dev-libs/dbus-glib-0.98
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}"
-
-src_prepare(){
-	unpack ${A}
-	unpack ./data.tar.gz
-}
 
 src_install() {
 	dolib usr/lib/libappindicator.so.1.0.0 usr/lib/libappindicator.so.1
