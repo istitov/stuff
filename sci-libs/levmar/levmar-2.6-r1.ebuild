@@ -25,10 +25,11 @@ DEPEND="${RDEPEND}
 PATCHES=( "${FILESDIR}"/${P}-shared.patch )
 
 src_configure() {
+	sed 's|SET(LIBS levmar)|SET(LIBS levmar m)|' -i CMakeLists.txt
 	local mycmakeargs+=(
 		-DNEED_F2C=OFF
 		-DHAVE_LAPACK=ON
-		-DLAPACKBLAS_LIB_NAMES="$($(tc-getPKG_CONFIG) --libs blas lapack)"
+		-DLAPACKBLAS_LIB_NAMES="$($(tc-getPKG_CONFIG) --libs lapack blas)"
 	)
 	cmake-utils_src_configure
 }
