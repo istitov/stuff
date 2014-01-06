@@ -4,6 +4,8 @@
 
 EAPI=5
 
+inherit unpacker
+
 DESCRIPTION="PLEX media server"
 HOMEPAGE="https://plex.tv/"
 
@@ -23,15 +25,15 @@ IUSE=""
 RDEPEND="net-dns/avahi"
 
 QA_PRESTRIPPED="usr/lib/plexmediaserver/libavcodec.so.54
-usr/lib/plexmediaserver/Plex.*Media.*Server
+usr/lib/plexmediaserver/Plex.Media.Server
 usr/lib/plexmediaserver/libavutil.so.52
 usr/lib/plexmediaserver/libavformat.so.54
-usr/lib/plexmediaserver/Plex.*DLNA.*Server
+usr/lib/plexmediaserver/Plex.DLNA.Server
 usr/lib/plexmediaserver/libfreeimage.so.3
 usr/lib/plexmediaserver/libswscale.so.2
-usr/lib/plexmediaserver/Resources/Plex.*New.*Transcoder
-usr/lib/plexmediaserver/Resources/Plex.*Transcoder
-usr/lib/plexmediaserver/Plex.*Media.*Scanner"
+usr/lib/plexmediaserver/Resources/Plex.New.Transcoder
+usr/lib/plexmediaserver/Resources/Plex.Transcoder
+usr/lib/plexmediaserver/Plex.Media.Scanner"
 
 QA_TEXTRELS="usr/lib/plexmediaserver/libavcodec.so.54
 usr/lib/plexmediaserver/libavutil.so.52
@@ -41,17 +43,15 @@ usr/lib/plexmediaserver/libswscale.so.2"
 S="${WORKDIR}"
 
 src_prepare(){
-	unpack ${A}
-	unpack ./data.tar.gz
 	#ubuntu's trash
 	rm -rf etc/apt
 	rm etc/init.d/plexmediaserver
-	#port for openrc
-	cp "${FILESDIR}/pms" etc/init.d/pms
 	#fdo
 	sed 's|Audio;Music;Video;Player;Media;|AudioVideo;Player;|;s|x-www-browser|xdg-open|' \
 		-i usr/share/applications/plexmediamanager.desktop
 }
 src_install(){
 	cp -R {usr,etc} "${D}"
+	#port for openrc
+	doinitd "${FILESDIR}/pms"
 }
