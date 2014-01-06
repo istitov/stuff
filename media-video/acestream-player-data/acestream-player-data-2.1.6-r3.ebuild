@@ -122,11 +122,15 @@ src_install(){
 	use mpeg || rm "${D}/usr/lib/acestreamplayer/plugins/codec/liblibmpeg2_plugin.so"
 	use speex || rm "${D}/usr/lib/acestreamplayer/plugins/codec/libspeex_plugin.so"
 
-	if ! use musepack;then
+	if use musepack;then
+		dosym "libmpcdec.so" "/usr/$(get_libdir)/libmpcdec.so.6"
+	else
 		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libmpc_plugin.so"
 	fi
 
-	if ! use matroska;then
+	if use matroska;then
+		dosym "libmatroska.so" "/usr/$(get_libdir)/libmatroska.so.4"
+	else
 		rm "${D}/usr/lib/acestreamplayer/plugins/demux/libmkv_plugin.so"
 	fi
 
