@@ -31,6 +31,7 @@ CDEPEND=""
 DEPEND="media-libs/aalib
 		media-libs/libass
 		x11-libs/libdrm
+		media-libs/taglib
 		media-libs/xvid
 		media-libs/x264
 		media-libs/acestream-x264
@@ -41,11 +42,15 @@ DEPEND="media-libs/aalib
 		media-sound/lame
 		media-libs/faac
 		dev-lang/orc
+		media-libs/libggi
+		media-libs/libgii
 		>=dev-lang/lua-5.1
 		media-libs/libshout[speex=,theora]
 		media-libs/libpng:1.2
 		media-libs/alsa-lib
 		media-libs/libcaca
+		dev-libs/openssl
+		>=dev-libs/libebml-1.3.0
 		>=media-libs/a52dec-0.7.4
 		|| ( media-video/acestream-ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vaapi,vorbis,alsa]
 			media-video/ffmpeg:0.10[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vaapi,vorbis,alsa] )
@@ -121,6 +126,9 @@ src_install(){
 	use modplug || rm "${D}/usr/lib/acestreamplayer/plugins/demux/libmod_plugin.so"
 	use mpeg || rm "${D}/usr/lib/acestreamplayer/plugins/codec/liblibmpeg2_plugin.so"
 	use speex || rm "${D}/usr/lib/acestreamplayer/plugins/codec/libspeex_plugin.so"
+	use avahi || rm "${D}/usr/lib/acestreamplayer/plugins/services_discovery/libbonjour_plugin.so"
+	use aac || rm "${D}/usr/lib/acestreamplayer/plugins/codec/libfaad_plugin.so"
+	use mad || rm "${D}/usr/lib/acestreamplayer/plugins/audio_filter/libmpgatofixed32_plugin.so"
 
 	if use musepack;then
 		dosym "libmpcdec.so" "/usr/$(get_libdir)/libmpcdec.so.6"
