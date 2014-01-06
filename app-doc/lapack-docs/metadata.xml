@@ -2,6 +2,9 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 <herd>sci</herd>
+<maintainer>
+	<email>brothermechanic@gmail.com</email>
+</maintainer>
 <longdescription lang="en">
   LAPACK is a comprehensive FORTRAN library that does linear
   algebra operations including matrix inversions, least squared

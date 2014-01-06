@@ -2,6 +2,9 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 <herd>desktop-effects</herd>
+	<maintainer>
+		<email>megagreener@gmail.com</email>
+	</maintainer>
 <longdescription lang="en">
 Package with several compiz-fusion plugins:
 fakeargb, mswitch, snow, tile.

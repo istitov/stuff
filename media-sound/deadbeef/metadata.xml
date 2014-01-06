@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<maintainer>
+		<email>megagreener@gmail.com</email>
+	</maintainer>
 	<use>
 		<flag name='adplug'>Add supereq for <pkg>media-libs/adplug</pkg></flag>
 		<flag name='alac'>Enable support for alac</flag>

@@ -3,6 +3,9 @@
 <pkgmetadata>
   <herd>kde</herd>
   <herd>ayatana</herd>
+	<maintainer>
+		<email>megagreener@gmail.com</email>
+	</maintainer>
   <use>
 	<flag name='introspection'>Use <pkg>dev-libs/gobject-introspection</pkg> for introspection</flag>
 	<flag name="vala">Enable bindings for <pkg>dev-lang/vala</pkg></flag>

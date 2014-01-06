@@ -6,6 +6,9 @@
   <flag name="unsupported">Install the <pkg>x11-plugins/compiz-fusion-plugins-unsupported</pkg> package.</flag>
 </use>
 <herd>desktop-effects</herd>
+	<maintainer>
+		<email>megagreener@gmail.com</email>
+	</maintainer>
 <longdescription>
 compiz-fusion is a community-driven project that is aimed at extending the compiz window manager.
 </longdescription>

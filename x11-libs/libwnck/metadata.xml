@@ -2,6 +2,9 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<herd>gnome</herd>
+	<maintainer>
+		<email>megagreener@gmail.com</email>
+	</maintainer>
 	<use>
 		<flag name="introspection">Use <pkg>dev-libs/gobject-introspection</pkg>
 			for introspection</flag>

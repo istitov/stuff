@@ -2,9 +2,9 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <herd>video</herd>
-  <maintainer>
-    <email></email>
-  </maintainer>
+	<maintainer>
+		<email>megagreener@gmail.com</email>
+	</maintainer>
   <use>
     <flag name="rm">Adds real audo/video support</flag>
 	<flag name="mpeg">Adds libmpeg3 support to various packages</flag>
