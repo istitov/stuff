@@ -17,7 +17,7 @@ LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="pulseaudio jack portaudio avahi cddb cdda dvd dirac aac flac ogg lirc mad matroska modplug musepack mpeg
-		ieee1394 samba mtp ncurses libproxy speex theora upnp v4l vaapi vcdx vorbis"
+		ieee1394 samba mtp ncurses libproxy speex theora upnp v4l vcdx vorbis"
 
 LANGS="ach af am ar ast be bg bn br ca cgg ckb co cs da de el en_GB es et eu fa ff fi fr fur ga gl he
 		hi hr hu hy id is it ja ka kk km ko lg lt lv mk ml mn ms my nb ne nl nn oc pa pl ps pt_BR pt_PT
@@ -44,8 +44,8 @@ DEPEND="media-libs/aalib
 		pulseaudio? ( media-sound/pulseaudio )
 		portaudio? ( media-libs/portaudio )
 		avahi? ( net-dns/avahi )
-		|| ( media-video/acestream-ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora=,v4l=,vaapi=,vorbis=,alsa]
-			media-video/ffmpeg:0.10[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora=,v4l=,vaapi=,vorbis=,alsa] )
+		|| ( media-video/acestream-ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora=,v4l=,vaapi,vorbis=,alsa]
+			media-video/ffmpeg:0.10[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora=,v4l=,vaapi,vorbis=,alsa] )
 		media-libs/acestream-x264
 		cddb? ( media-libs/libcddb )
 		cdda? ( media-libs/libcddb dev-libs/libcdio )
@@ -75,7 +75,7 @@ DEPEND="media-libs/aalib
 		theora? ( media-libs/libtheora )
 		upnp? ( net-libs/libupnp )
 		v4l? ( media-libs/libv4l )
-		vaapi? ( x11-libs/libva )
+		x11-libs/libva
 		vcdx? ( dev-libs/libcdio media-video/vcdimager )
 		vorbis? ( media-libs/libvorbis )
 		dev-libs/libxml2
