@@ -11,12 +11,13 @@ depend() {
 
 start() {
 	ebegin "Starting plex-media-server"
-	start-stop-daemon --start -b -x /usr/sbin/start_pms
+	. /etc/default/plexmediaserver
+	start-stop-daemon --start -b -x /usr/sbin/start_pms -u $PLEX_MEDIA_SERVER_USER --pidfile /var/run/pms.pid
 	eend $?
 }
 
 stop() {
 	ebegin "Stopping plex-media-server"
-	killall -g start_pms
+	start-stop-daemon --stop -x /usr/sbin/start_pms --pidfile /var/run/pms.pid
 	eend $?
 }

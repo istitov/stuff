@@ -59,5 +59,5 @@ src_install(){
 
 pkg_preinst() {
 	enewgroup plex
-	enewuser plex -1 -1 -1 plex
+	enewuser plex -1 /bin/bash /var/lib/plexmediaserver plex
 }
