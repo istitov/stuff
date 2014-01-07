@@ -17,6 +17,6 @@ start() {
 
 stop() {
 	ebegin "Stopping plex-media-server"
-	killall start_pms "Plex Media Server"
+	killall -g start_pms
 	eend $?
 }
