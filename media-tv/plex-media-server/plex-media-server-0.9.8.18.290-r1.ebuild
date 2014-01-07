@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit unpacker
+inherit unpacker user
 
 DESCRIPTION="PLEX media server"
 HOMEPAGE="https://plex.tv/"
@@ -50,8 +50,14 @@ src_prepare(){
 	sed 's|Audio;Music;Video;Player;Media;|AudioVideo;Player;|;s|x-www-browser|xdg-open|' \
 		-i usr/share/applications/plexmediamanager.desktop
 }
+
 src_install(){
 	cp -R {usr,etc} "${D}"
 	#port for openrc
 	doinitd "${FILESDIR}/pms"
+}
+
+pkg_preinst() {
+	enewgroup plex
+	enewuser plex -1 -1 -1 plex
 }
