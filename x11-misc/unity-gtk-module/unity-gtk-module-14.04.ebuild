@@ -34,7 +34,9 @@ src_prepare(){
 src_configure(){
 	if use gtk2;then
 		sed 's|gtk+-$with_gtk.0|gtk+-2.0|g' -i configure
-		econf --with-gtk=gtk2
+		econf \
+			--with-gtk=gtk2 \
+			--disable-schemas-compile
 	fi
 
 	if use gtk3;then
@@ -58,13 +60,14 @@ src_compile(){
 }
 
  src_install(){
-# 	if use gtk2;then
+	if use gtk2;then
 # 	  insinto /usr/$(get_libdir)/gtk-2.0/2.10.0/menuproxies/
 # 	  doins src/.libs/libappmenu.so
 # 	  mv 80appmenu appmenu_gtk2.sh
 # 	  insinto /etc/profile.d/
 # 	  doins appmenu_gtk2.sh
-# 	fi
+	emake DESTDIR="${D}" install
+	fi
 # 
 	if use gtk3;then
 		cd gtk3-hack
