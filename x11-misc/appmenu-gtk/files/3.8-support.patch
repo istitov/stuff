@@ -1,0 +1,12 @@
+--- orig/src/bridge.c	2012-10-03 21:21:06.000000000 +0400
++++ fixed/src/bridge.c	2014-01-08 09:21:50.000000000 +0400
+@@ -857,9 +857,6 @@
+   if (g_object_get_data (G_OBJECT (parent), "gtk-model-menu-binding"))
+     return;
+ 
+-  if (GTK_IS_TEAROFF_MENU_ITEM (child))
+-    return;
+-
+   bridge = APP_MENU_BRIDGE (proxy);
+ 
+   toplevel = gtk_widget_get_toplevel (parent);
