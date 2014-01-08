@@ -24,7 +24,7 @@ RDEPEND="${DEPEND}"
 
 src_prepare(){
 	epatch "${FILESDIR}/fix.patch"
-	$(has_version ">=x11-libs/gtk+-3.8.2") && epatch "${FILESDIR}"/3.8-support.patch
+	#$(has_version ">=x11-libs/gtk+-3.8.2") && epatch "${FILESDIR}"/3.8-support.patch
 }
 
 src_configure(){
