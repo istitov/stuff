@@ -9,5 +9,11 @@
 		<flag name="q8">8 bits in a pixel quantum</flag>
 		<flag name="q16">16 bits in a pixel quantum</flag>
 		<flag name="q32">32 bits in a pixel quantum</flag>
+		<flag name="sbcl">sbcl</flag>
+		<flag name="cmucl">cmucl</flag>
+		<flag name="gcl">gcl</flag>
+		<flag name="ecls">ecls</flag>
+		<flag name="clozurecl">gcl</flag>
+		<flag name="clisp">ecls</flag>
 	</use>
 </pkgmetadata>

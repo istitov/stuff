@@ -1,8 +1,8 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-benchmarks/qtperf/qtperf-0.1.ebuild,v 1 2010/12/06 00:13:35 megabaks Exp $
 
-EAPI=4
+EAPI=5
 
 inherit eutils qt4-r2
 
@@ -15,17 +15,15 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug"
 
-DEPEND="
-		dev-qt/qtgui:4
+DEPEND="dev-qt/qtgui:4
 		dev-qt/qtcore:4
-		dev-libs/glib:4
-	"
-RDEPEND="
-	${DEPEND}
-	"
+		dev-libs/glib"
+
+RDEPEND="${DEPEND}"
+
 S="${WORKDIR}/${PN}"
 
 src_install() {
 	insinto /usr/bin/
-		dobin qtperf || die
+	dobin qtperf || die
 }
