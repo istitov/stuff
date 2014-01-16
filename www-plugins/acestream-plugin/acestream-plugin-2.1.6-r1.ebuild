@@ -25,8 +25,16 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
 
+QA_PRESTRIPPED="usr/lib/nsbrowser/plugins/libace_plugin.so"
+
 src_install(){
 	mv usr/lib/mozilla usr/lib/nsbrowser
 	rm -rf usr/lib/xulrunner-addons usr/lib/mozilla-firefox
 	cp -R usr "${D}"
+}
+
+pkg_postinst() {
+	elog "Acastream plugin installed now."
+	elog "The \"Magic player\" extension needed:"
+	elog "http://magicplayer.torrentstream.org/?lang=en#/install"
 }
