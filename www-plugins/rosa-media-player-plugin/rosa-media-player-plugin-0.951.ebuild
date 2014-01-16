@@ -8,7 +8,8 @@ inherit eutils qt4-r2 multilib
 
 DESCRIPTION="ROSA Media Plugin"
 HOMEPAGE="http://www.rosalab.ru/"
-SRC_URI="http://svn.mandriva.com/svn/packages/cooker/${PN}/current/SOURCES/${PN}-${PV}.tar.gz"
+SRC_URI="http://svn.mandriva.com/svn/packages/cooker/${PN}/current/SOURCES/${PN}-${PV}.tar.gz
+		 http://stuff.tazhate.com/distfiles/${PN}-${PV}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"

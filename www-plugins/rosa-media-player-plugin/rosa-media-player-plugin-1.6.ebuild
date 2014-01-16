@@ -8,7 +8,7 @@ inherit eutils qt4-r2 multilib
 
 DESCRIPTION="ROSA Media Player Plugin is designed to use with internet browsers like Firefox and Chrome/Chromium."
 HOMEPAGE="http://www.rosalab.ru/"
-SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${P}.tar.gz"
+SRC_URI="http://stuff.tazhate.com/distfiles/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"

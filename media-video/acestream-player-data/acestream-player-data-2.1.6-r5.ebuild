@@ -9,9 +9,9 @@ inherit multilib unpacker
 DESCRIPTION="ACE Stream player libraries files"
 HOMEPAGE="http://torrentstream.org/"
 SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1raring2_i386.deb
-				 https://github.com/megabaks/test/raw/master/distfiles/${PN}_${PV}-1raring2_i386.deb )
+				 http://stuff.tazhate.com/distfiles/${PN}_${PV}-1raring2_i386.deb )
 		amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-1raring2_amd64.deb
-				 https://github.com/megabaks/test/raw/master/distfiles/${PN}_${PV}-1raring2_amd64.deb )"
+				 http://stuff.tazhate.com/distfiles/${PN}_${PV}-1raring2_amd64.deb )"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"

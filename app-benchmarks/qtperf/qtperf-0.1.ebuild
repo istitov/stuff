@@ -8,7 +8,7 @@ inherit eutils qt4-r2
 
 DESCRIPTION="Application designed to test QT performance"
 HOMEPAGE="none"
-SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/qtperf.tar.bz2"
+SRC_URI="http://stuff.tazhate.com/distfiles/${PN}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -16,9 +16,9 @@ KEYWORDS="~amd64 ~x86"
 IUSE="debug"
 
 DEPEND="
-		dev-qt/qtgui
-		dev-qt/qtcore
-		dev-libs/glib
+		dev-qt/qtgui:4
+		dev-qt/qtcore:4
+		dev-libs/glib:4
 	"
 RDEPEND="
 	${DEPEND}

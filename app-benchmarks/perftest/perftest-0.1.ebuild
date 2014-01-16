@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="Application designed to test gtk2/gtk3 performance"
 HOMEPAGE="none"
-SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${PN}.zip"
+SRC_URI="http://stuff.tazhate.com/distfiles/${PN}.zip"
 
 LICENSE="BSD"
 SLOT="0"

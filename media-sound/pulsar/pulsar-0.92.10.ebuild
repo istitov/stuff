@@ -11,7 +11,7 @@ PREMY_PV=$(replace_all_version_separators '-')
 MY_PV=$(replace_version_separator 1 '.' $PREMY_PV)
 
 SRC_URI="https://launchpad.net/~yuberion/+archive/pulsar/+files/${PN}_${MY_PV}.tar.gz
-		https://github.com/megabaks/test/raw/master/distfiles/${PN}_${MY_PV}.tar.gz"
+		 http://stuff.tazhate.com/distfiles/${PN}_${MY_PV}.tar.gz"
 DESCRIPTION="Cloud audio player (i.e. vk.com)"
 HOMEPAGE="https://launchpad.net/~yuberion/+archive/pulsar"
 LICENSE="GPL-2"

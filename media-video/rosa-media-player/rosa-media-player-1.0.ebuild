@@ -8,7 +8,7 @@ inherit eutils qt4-r2 multilib
 
 DESCRIPTION="ROSA Media Player"
 HOMEPAGE="http://www.rosalab.ru/"
-SRC_URI="https://github.com/megabaks/test/raw/master/distfiles/${P}.tar.gz"
+SRC_URI="http://stuff.tazhate.com/distfiles/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
