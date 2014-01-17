@@ -53,8 +53,7 @@ DEPEND="media-libs/aalib
 		>=dev-libs/libebml-1.3.0
 		>=media-libs/a52dec-0.7.4
 		media-video/ffmpeg:0
-		|| ( media-video/acestream-ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vaapi,vorbis,alsa]
-			media-video/ffmpeg:0.10[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vorbis,alsa] )
+		media-video/acestream-ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vaapi,vorbis,alsa]
 		sys-apps/dbus
 		media-video/dirac
 		media-libs/libdvbpsi
@@ -116,6 +115,7 @@ src_install(){
 	$(has_version ">=net-libs/gnutls-3.1.10") && dosym "libgnutls.so" "/usr/$(get_libdir)/libgnutls.so.26"
 	dosym "liblua.so" "/usr/$(get_libdir)/liblua5.1.so.0"
 	dosym "liba52.so" "/usr/$(get_libdir)/liba52-0.7.4.so"
+	dosym "libgcrypt.so" "/usr/$(get_libdir)/libgcrypt.so.11"
 
 	use pulseaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libpulse_plugin.so"
 	use portaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libportaudio_plugin.so"
