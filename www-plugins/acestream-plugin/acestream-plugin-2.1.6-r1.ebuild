@@ -34,7 +34,7 @@ src_install(){
 }
 
 pkg_postinst() {
-	elog "Acastream plugin installed now."
+	elog "Acestream plugin installed now."
 	elog "The \"Magic player\" extension needed:"
 	elog "http://magicplayer.torrentstream.org/?lang=en#/install"
 }
