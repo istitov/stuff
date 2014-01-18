@@ -4,7 +4,7 @@
 
 EAPI=5
 
-PYTHON_COMPAT="python2_7"
+PYTHON_COMPAT=( python2_7 )
 
 inherit multilib python-r1 unpacker
 
@@ -20,8 +20,8 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND="dev-python/m2crypto
-		dev-python/apsw
+DEPEND="dev-python/m2crypto[${PYTHON_USEDEP}]
+		dev-python/apsw[${PYTHON_USEDEP}]
 		dev-libs/acestream-python-appindicator"
 RDEPEND="${DEPEND}"
 
