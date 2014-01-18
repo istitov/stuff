@@ -18,20 +18,23 @@ SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="gtk"
+IUSE=""
 
 DEPEND="dev-python/m2crypto
 		dev-python/apsw
-		gtk? ( dev-libs/acestream-python-appindicator )"
+		dev-libs/acestream-python-appindicator"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
 
+QA_PRESTRIPPED="usr/bin/acestreamengine
+usr/share/acestream/lib/acestreamengine/Core.so
+usr/share/acestream/lib/acestreamengine/node.so
+usr/share/acestream/lib/acestreamengine/pycompat.so
+usr/share/acestream/lib/acestreamengine/Transport.so
+usr/share/acestream/lib/acestreamengine/CoreApp.so
+usr/share/acestream/lib/acestreamengine/streamer.so"
+
 src_install(){
-	mv usr/lib/python2.7/dist-packages usr/lib/python2.7/site-packages
-	if ! use gtk;then
-		sed 's|client_gtk|client_console|' -i usr/bin/acestreamengine-client-gtk
-	fi
-	sed 's|python |python2.7 |' -i usr/bin/acestreamengine
 	cp -R usr "${D}"
 }
