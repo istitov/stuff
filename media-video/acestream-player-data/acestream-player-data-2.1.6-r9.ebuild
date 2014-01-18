@@ -49,7 +49,7 @@ DEPEND="media-libs/aalib
 		media-libs/libpng:1.2
 		media-libs/alsa-lib
 		media-libs/libcaca
-		dev-libs/openssl
+		dev-libs/openssl:0
 		>=dev-libs/libebml-1.3.0
 		>=media-libs/a52dec-0.7.4
 		media-video/ffmpeg:0
