@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit multilib unpacker
+inherit multilib unpacker toolchain-funcs
 
 DESCRIPTION="ACE Stream player libraries files"
 HOMEPAGE="http://torrentstream.org/"
@@ -116,7 +116,7 @@ src_install(){
 	$(has_version ">=net-libs/gnutls-3.1.10") && dosym "libgnutls.so" "/usr/$(get_libdir)/libgnutls.so.26"
 	dosym "liblua.so" "/usr/$(get_libdir)/liblua5.1.so.0"
 	dosym "liba52.so" "/usr/$(get_libdir)/liba52-0.7.4.so"
-	dosym "libgcrypt.so" "/usr/$(get_libdir)/libgcrypt.so.11"
+	$(has_version ">=dev-libs/libgcrypt-1.6.0") && dosym "libgcrypt.so" "/usr/$(get_libdir)/libgcrypt.so.11"
 
 	use pulseaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libpulse_plugin.so"
 	use portaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libportaudio_plugin.so"
