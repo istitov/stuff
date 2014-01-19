@@ -60,7 +60,7 @@ DEPEND="media-libs/aalib
 		media-libs/libdvbpsi
 		media-libs/libogg
 		dev-libs/fribidi
-		dev-libs/libgcrypt
+		|| ( <dev-libs/libgcrypt-1.6.0 dev-libs/acestream-libgcrypt )
 		dev-libs/libgpg-error
 		media-libs/mesa
 		dev-qt/qtwebkit
@@ -116,7 +116,6 @@ src_install(){
 	$(has_version ">=net-libs/gnutls-3.1.10") && dosym "libgnutls.so" "/usr/$(get_libdir)/libgnutls.so.26"
 	dosym "liblua.so" "/usr/$(get_libdir)/liblua5.1.so.0"
 	dosym "liba52.so" "/usr/$(get_libdir)/liba52-0.7.4.so"
-	$(has_version ">=dev-libs/libgcrypt-1.6.0") && dosym "libgcrypt.so" "/usr/$(get_libdir)/libgcrypt.so.11"
 
 	use pulseaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libpulse_plugin.so"
 	use portaudio || rm "${D}/usr/lib/acestreamplayer/plugins/audio_output/libportaudio_plugin.so"

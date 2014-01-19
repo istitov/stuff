@@ -76,7 +76,7 @@ RDEPEND="
 	zlib? ( sys-libs/zlib )
 	!media-video/qt-faststart
 	!media-libs/libpostproc
-"
+	!media-video/ffmpeg:0.10"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
@@ -98,6 +98,10 @@ REQUIRED_USE="bindist? ( encode? ( !faac !aacplus ) !openssl )
 	test? ( encode zlib )"
 
 S=${WORKDIR}/${MY_PN}-${PV/_/-}
+
+QA_TEXTRELS="usr/lib/libavcodec.so.53.61.100
+usr/lib/libavformat.so.53.32.100
+usr/lib/libavutil.so.51.35.100"
 
 src_prepare() {
 	if [ "${PV%_p*}" != "${PV}" ] ; then # Snapshot
@@ -238,5 +242,5 @@ src_install() {
 	rm -r "${D}"/usr/{bin,include,share}
 	rm -r "${D}"/usr/lib*/pkgconfig
 	rm "${D}"/usr/lib*/{libavcodec.so,libavformat.so,libavutil.so}
-	rm "${D}"/usr/lib*/{libavdevice.*,libavfilter.*,libpostproc.*,libswresample.*,libswscale.*,libavutil.so*}
+	rm "${D}"/usr/lib*/{libavdevice.*,libavfilter.*,libpostproc.*,libswresample.*,libswscale.*}
 }
