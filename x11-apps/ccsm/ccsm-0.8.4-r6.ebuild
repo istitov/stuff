@@ -6,6 +6,7 @@ EAPI="5"
 
 PYTHON_COMPAT=( python2_{6,7} )
 DISTUTILS_IN_SOURCE_BUILD=1
+
 inherit distutils-r1
 
 DESCRIPTION="Compizconfig Settings Manager"
@@ -20,12 +21,14 @@ RDEPEND="
 	>=dev-python/compizconfig-python-${PV}[${PYTHON_USEDEP}]
 	>=dev-python/pygtk-2.12:2[${PYTHON_USEDEP}]
 	gnome-base/librsvg
-	<=dev-python/pygobject-2.28.6-r53
+	dev-python/pygobject:2
 "
 
 DOCS=( AUTHORS )
 
 python_prepare_all() {
+	epatch "${FILESDIR}"/dialog.patch
+	epatch "${FILESDIR}"/pygobject.patch
 	# return error if wrong arguments passed to setup.py
 	sed -i -e 's/raise SystemExit/\0(1)/' setup.py || die 'sed on setup.py failed'
 	# fix desktop file

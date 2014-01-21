@@ -1,0 +1,37 @@
+From 0c0a0609f027bdb191f72059ffd8f45e4b2ab3e8 Mon Sep 17 00:00:00 2001
+From: Scott Moreau <oreaus@gmail.com>
+Date: Tue, 10 Jul 2012 21:54:02 +0000
+Subject: Don't destroy match dialog before reading contents
+
+This was never correct, but it worked in previous versions of gtk+ because a
+reference to the Entry was held. Gtk+-2.20 stores the text in an EntryBuffer
+object, which was getting unreffed and collected before ccsm could read the
+text.
+
+This fixes a bug where there is a blank match string after using the '+'
+button to add a match by clicking on a window.
+---
+diff --git a/ccm/Widgets.py b/ccm/Widgets.py
+index 51fe828..961d194 100644
+--- a/ccm/Widgets.py
++++ b/ccm/Widgets.py
+@@ -1193,7 +1193,7 @@ class MatchButton(gtk.Button):
+         dlg.show_all ()
+ 
+         response = dlg.run ()
+-        dlg.destroy ()
++        dlg.hide ()
+         if response == gtk.RESPONSE_OK:
+             type     = type_chooser.get_active_text ()
+             value    = entry.get_text ()
+@@ -1201,6 +1201,8 @@ class MatchButton(gtk.Button):
+             invert   = check.get_active ()
+             self.generate_match (type, value, relation, invert)
+ 
++        dlg.destroy ()
++
+ class FileButton (gtk.Button):
+     __gsignals__    = {"changed" : (gobject.SIGNAL_RUN_FIRST,
+                                     gobject.TYPE_NONE,
+--
+cgit v0.9.0.3

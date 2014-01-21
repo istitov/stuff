@@ -1,0 +1,22 @@
+From 2513000801e72a0e035ba408f5a5fa7458c19c30 Mon Sep 17 00:00:00 2001
+From: Scott Moreau <oreaus@gmail.com>
+Date: Fri, 08 Mar 2013 19:01:59 +0000
+Subject: Fix missing icons and text in CCSM main screen
+
+Thanks to danilo for the fix and grepper for pointing out it should be upstreamed.
+---
+diff --git a/ccm/Utils.py b/ccm/Utils.py
+index 16f8e83..17a5d85 100644
+--- a/ccm/Utils.py
++++ b/ccm/Utils.py
+@@ -184,7 +184,7 @@ class PrettyButton (gtk.Button):
+         if has_focus:
+             self.unset_flags (gtk.HAS_FOCUS)
+ 
+-        ret = super (PrettyButton, self).do_expose_event (self, event)
++        ret = gtk.Button.do_expose_event (self, event)
+ 
+         if has_focus:
+             self.set_flags (gtk.HAS_FOCUS)
+--
+cgit v0.9.0.3
