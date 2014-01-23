@@ -4,12 +4,13 @@
 
 EAPI="5"
 
-inherit fdo-mime gnome2-utils git-2 eutils
+inherit fdo-mime gnome2-utils eutils versionator
 
-EGIT_REPO_URI="git://git.code.sf.net/p/deadbeef/code"
-EGIT_BRANCH="master"
+MY_PV="$(replace_version_separator 3 '-')"
 
-KEYWORDS=""
+SRC_URI="mirror://sourceforge/${PN}/${PN}-${MY_PV}.tar.bz2
+		 http://sourceforge.net/projects/${PN}/files/${PN}-${MY_PV}.tar.bz2/download -> ${PN}-${MY_PV}.tar.bz2"
+KEYWORDS="~x86 ~amd64"
 
 DESCRIPTION="foobar2k-like music player"
 HOMEPAGE="http://deadbeef.sourceforge.net/"
@@ -65,6 +66,8 @@ DEPEND="
 	${RDEPEND}"
 
 QA_TEXTRELS="usr/lib/deadbeef/ffap.so.0.0.0"
+
+S="${WORKDIR}/${PN}-${MY_PV}"
 
 pkg_setup() {
 	if use psf || use dumb || use shn && use static ; then

@@ -22,6 +22,7 @@
 		<flag name='mono2stereo'>Enable mono2stereo plugin</flag>
 		<flag name='notify'>Notification-daemon support plugin</flag>
 		<flag name='nullout'>NULL output plugin</flag>
+		<flag name='pltbrowser'>Playlist browser gui plugin</flag>
 		<flag name='psf'>AOSDK-based PSF(QSF,SSF,DSF) plugin</flag>
 		<flag name='rpath'>Hardcode runtime library paths</flag>
 		<flag name='shellexec'>Shell commands plugin</flag>
@@ -31,7 +32,7 @@
 		<flag name='supereq'>SuperEQ DSP plugin</flag>
 		<flag name='tta'>Build tta plugin</flag>
 		<flag name='vtx'>Libayemy VTX ZX-Spectrum music player plugin</flag>
-		<flag name='zip'>Vfs_zip plugin</flag>
 		<flag name='wma'>WMA plugin</flag>
+		<flag name='zip'>Vfs_zip plugin</flag>
 	</use>
 </pkgmetadata>
