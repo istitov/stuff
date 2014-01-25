@@ -26,8 +26,6 @@ src_prepare() {
 
 	# don't automatically install scripts
 	sed -i -e '/scripts/d' CMakeLists.txt || die
-
-	epatch "${FILESDIR}"/${PN}-2.0.0_beta4-rcdir.patch
 }
 
 src_configure() {
