@@ -38,6 +38,7 @@ for lang in ${LANGS}; do
 done
 
 RDEPEND="aac? ( media-libs/faad2 )
+	adplug? ( media-libs/adplug )
 	alsa? ( media-libs/alsa-lib )
 	alac? ( media-libs/faad2 )
 	cdda? ( >=dev-libs/libcdio-0.90 media-libs/libcddb )
