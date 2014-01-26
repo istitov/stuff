@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -18,11 +18,11 @@ SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE=""
+IUSE="+gtk"
 
 DEPEND="dev-python/m2crypto[${PYTHON_USEDEP}]
 		dev-python/apsw[${PYTHON_USEDEP}]
-		dev-libs/acestream-python-appindicator"
+		gtk? ( dev-libs/acestream-python-appindicator )"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
