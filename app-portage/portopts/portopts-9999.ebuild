@@ -6,8 +6,8 @@ EAPI=5
 
 inherit eutils git-2
 
-DESCRIPTION="/etc/portage cleaner"
-HOMEPAGE="https://github.com/megabaks/portconf"
+DESCRIPTION="quick set opts per package"
+HOMEPAGE="https://github.com/megabaks/portopts"
 EGIT_REPO_URI="git://github.com/megabaks/${PN}.git"
 
 LICENSE="GPL-3"
