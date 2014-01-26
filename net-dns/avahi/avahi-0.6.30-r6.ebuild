@@ -51,7 +51,6 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 	doc? (
 		app-doc/doxygen
-		mono? ( >=virtual/monodoc-1.1.8 )
 	)"
 RDEPEND="${COMMON_DEPEND}
 	howl-compat? ( !net-misc/howl )
