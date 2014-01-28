@@ -77,8 +77,10 @@ pkg_setup() {
 }
 
 src_prepare() {
-	touch config.rpath
-	sh autogen.sh
+	if [[ -f autogen.sh ]];then
+		touch config.rpath
+		sh autogen.sh
+	fi
 
 	if use midi ; then
 		# set default gentoo path
