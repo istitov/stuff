@@ -4,7 +4,6 @@
 
 EAPI=4
 
-QT_DEPEND="4.6.3"
 EGIT_REPO_URI="git://gitorious.org/dbusmenu/dbusmenu-qt.git"
 
 [[ ${PV} == 9999* ]] && GIT_ECLASS="git-2"
@@ -27,15 +26,15 @@ SLOT="0"
 IUSE="debug doc"
 
 RDEPEND="
-	>=dev-qt/qtcore-${QT_DEPEND}:4
-	>=dev-qt/qtgui-${QT_DEPEND}:4[dbus]
-	>=dev-qt/qttest-${QT_DEPEND}:4
+	dev-qt/qtcore:4
+	dev-qt/qtgui:4
+	dev-qt/qttest:4
 "
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
 	test? (
 		dev-libs/qjson
-		>=dev-qt/qttest-${QT_DEPEND}:4
+		dev-qt/qttest:4
 	)
 "
 
