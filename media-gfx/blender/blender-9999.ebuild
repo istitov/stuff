@@ -24,7 +24,7 @@ HOMEPAGE="http://www.blender.org/"
 LICENSE="|| ( GPL-2 BL )"
 SLOT="2.6"
 KEYWORDS=""
-IUSE_MODULES="+cycles +ocio -osl +freestyle +compositor +tomato +game-engine player +addons +contrib +X"
+IUSE_MODULES="+cycles +ocio -osl openvdb +freestyle +compositor +tomato +game-engine player +addons +contrib +X"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke +oceansim eltopo"
 IUSE_CODECS="+ffmpeg openexr -jpeg2k -dds -tiff -cin -redcode quicktime"
 IUSE_SYSTEM="+openmp +fftw sndfile jack +sdl -openal +nls ndof +collada -doc -debug -lzma -valgrind +buildinfo"
@@ -69,6 +69,7 @@ DEPEND="dev-cpp/gflags
 		cuda? ( dev-util/nvidia-cuda-toolkit )
 		osl? ( =media-gfx/osl-9999 )
 		osl? ( >=sys-devel/llvm-3.1 )
+		openvdb? ( media-gfx/openvdb )
 	)
 	sdl? ( media-libs/libsdl[audio,joystick] )
 	openexr? ( media-libs/openexr )
@@ -291,7 +292,8 @@ src_configure() {
 		$(cmake-utils_use_with !X HEADLESS)
 		$(cmake-utils_use_with lzma LZMA)
 		$(cmake-utils_use_with valgrind VALGRIND)
-		$(cmake-utils_use_with quicktime QUICKTIME)"
+		$(cmake-utils_use_with quicktime QUICKTIME)
+		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)"
 
 	# FIX: Game Engine module needs to be active to build the Blender Player
 	if ! use game-engine && use player; then
