@@ -18,12 +18,12 @@
       <pkg>dev-libs/boost</pkg>).
     </flag>
     <flag name="ocio">
-      Build pro Color Management support requires 
+      Build pro Color Management support requires
       <pkg>media-gfx/opencolorio</pkg>.
     </flag>
     <flag name="osl">
       Adds Open Shading Language support to Cycles engine
-      <pkg>media-gfx/osl</pkg>.	
+      <pkg>media-gfx/osl</pkg>.
     </flag>
     <flag name="freestyle">
       An advanced edges rendering
@@ -129,6 +129,10 @@
     </flag>
     <flag name="sm_30">
       Build Cycles renderer with CUDA kernel ~gtx660 support.
+    </flag>
+    <flag name='openvdb'>
+      Adds support for openvdb
+      <pkg>media-gfx/openvdb</pkg>.
     </flag>
   </use>
 </pkgmetadata>
