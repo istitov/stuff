@@ -74,6 +74,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch -R "${FILESDIR}/tmp_fix_gtkui.patch"
 	touch config.rpath
 	sh autogen.sh
 
