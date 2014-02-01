@@ -4,4 +4,8 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name='linguas_tr_TR'>Turkish locale</flag>
+		<flag name='linguas_hr_HR'>Croatian locale</flag>
+	</use>
 </pkgmetadata>
