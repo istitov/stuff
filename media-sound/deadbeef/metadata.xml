@@ -5,7 +5,7 @@
 		<email>megagreener@gmail.com</email>
 	</maintainer>
 	<use>
-		<flag name='adplug'>Adplug plugin</flag>
+		<flag name='adplug'>Adplug player (OPL2/OPL3 emulation)</flag>
 		<flag name='alac'>Enable support for alac</flag>
 		<flag name='ape'>Monkey's Audio plugin</flag>
 		<flag name='converter'>Enable media-converter</flag>
