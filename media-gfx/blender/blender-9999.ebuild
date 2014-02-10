@@ -15,8 +15,9 @@ else
 	SRC_URI="http://download.blender.org/source/${P}.tar.gz"
 fi
 
-inherit cmake-utils subversion eutils ${SCM}
-PYTHON_DEPEND="3:3.3"
+PYTHON_COMPAT=( python3_3 )
+
+inherit cmake-utils subversion eutils python-r1 ${SCM}
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="http://www.blender.org/"
@@ -42,14 +43,12 @@ for X in ${LANGS} ; do
 	REQUIRED_USE+=" linguas_${X}? ( nls )"
 done
 
-DEPEND="dev-cpp/gflags
-	dev-cpp/glog[gflags]
-	dev-python/numpy[python_targets_python3_3]
+DEPEND="dev-cpp/glog[gflags]
+	dev-python/numpy[${PYTHON_USEDEP}]
 	sci-libs/colamd
 	sci-libs/ldl
 	virtual/glu
 	virtual/libintl
-	dev-lang/python:3.3
 	virtual/jpeg
 	media-libs/libpng:0
 	media-libs/tiff:0
@@ -65,7 +64,7 @@ DEPEND="dev-cpp/gflags
 	ocio? ( >=media-libs/opencolorio-1.0.8 )
 	cycles? (
 		>=media-libs/openimageio-1.1.5
-		>=dev-libs/boost-1.49.0[threads(+)]
+		>=dev-libs/boost-1.49.0[threads(+),${PYTHON_USEDEP}]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
 		osl? ( =media-gfx/osl-9999 )
 		osl? ( >=sys-devel/llvm-3.1 )
@@ -91,9 +90,10 @@ DEPEND="dev-cpp/gflags
 RDEPEND="${DEPEND}
 	dev-cpp/eigen:3
 	nls? ( sys-devel/gettext )
-	doc? ( dev-python/sphinx
-			app-doc/doxygen[-nodot(-),dot(+)]
-		)"
+	doc? (
+		dev-python/sphinx[${PYTHON_USEDEP}]
+		app-doc/doxygen[-nodot(-),dot(+)]
+	)"
 
 # configure internationalization only if LINGUAS have more
 # languages than 'en', otherwise must be disabled
@@ -245,7 +245,7 @@ src_configure() {
 		-DWITH_SYSTEM_GLEW=ON
 		-DWITH_BUILTIN_GLEW=OFF
 		-DWITH_MOD_CLOTH_ELTOPO=OFF
-		-DPYTHON_VERSION="3.3"
+		-DPYTHON_VERSION="${EPYTHON#python}"
 		-DWITH_PYTHON_INSTALL=OFF
 		-DWITH_PYTHON_INSTALL_NUMPY=OFF
 		-DWITH_INSTALL_PORTABLE=OFF
