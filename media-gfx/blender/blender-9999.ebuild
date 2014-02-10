@@ -1,18 +1,18 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.4 2013/11/08 19:24:12 brothermechanic Exp $
 
 EAPI=5
 
 if [ "${PV}" = "9999" ];then
-BLENDGIT_URI="http://git.blender.org"
-EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
-BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
-BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
-BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
-SCM="git-2"
+	BLENDGIT_URI="http://git.blender.org"
+	EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
+	BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
+	BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
+	BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
+	SCM="git-2"
 else
-SRC_URI="http://download.blender.org/source/${P}.tar.gz"
+	SRC_URI="http://download.blender.org/source/${P}.tar.gz"
 fi
 
 inherit cmake-utils subversion eutils ${SCM}
@@ -33,8 +33,8 @@ IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU
 
 REQUIRED_USE="cycles? ( ocio )
 		cuda? ( cycles )
-		  osl? ( cycles )
-		    redcode? ( ffmpeg jpeg2k )"
+		osl? ( cycles )
+		redcode? ( ffmpeg jpeg2k )"
 
 LANGS="en ar bg ca cs de el es es_ES fa fi fr he hr hu id it ja ky ne nl pl pt pt_BR ru sr sr@latin sv tr uk zh_CN zh_TW"
 for X in ${LANGS} ; do
@@ -53,12 +53,12 @@ DEPEND="dev-cpp/gflags
 	virtual/jpeg
 	media-libs/libpng:0
 	media-libs/tiff:0
-        media-libs/libsamplerate
+	media-libs/libsamplerate
 	X? ( x11-libs/libXi
 		x11-libs/libX11
 		virtual/opengl
 		media-libs/freetype
-		media-libs/glew 
+		media-libs/glew
 	)
 	eltopo? ( virtual/lapack )
 	sys-libs/zlib
@@ -74,12 +74,12 @@ DEPEND="dev-cpp/gflags
 	sdl? ( media-libs/libsdl[audio,joystick] )
 	openexr? ( media-libs/openexr )
 	ffmpeg? (
-	    >=media-video/ffmpeg-0.10[x264,xvid,mp3,encode]
+		>=media-video/ffmpeg-0.10[x264,xvid,mp3,encode]
 		jpeg2k? ( >=media-video/ffmpeg-0.10[x264,xvid,mp3,encode,jpeg2k] )
 	)
 	openal? ( >=media-libs/openal-1.6.372 )
-	fftw? (	sci-libs/fftw:3.0 )
-	jack? (	media-sound/jack-audio-connection-kit )
+	fftw? ( sci-libs/fftw:3.0 )
+	jack? ( media-sound/jack-audio-connection-kit )
 	sndfile? ( media-libs/libsndfile )
 	collada? ( media-libs/opencollada )
 	cuda? ( >=dev-util/nvidia-cuda-toolkit-4.2 )
@@ -87,13 +87,12 @@ DEPEND="dev-cpp/gflags
 	quicktime? ( media-libs/libquicktime )
 	lzma? ( app-arch/lzma )
 	valgrind? ( dev-util/valgrind )"
-	
 
 RDEPEND="${DEPEND}
-	 dev-cpp/eigen:3
-	 nls? ( sys-devel/gettext )
-	 doc? ( dev-python/sphinx
-		app-doc/doxygen[-nodot(-),dot(+)]
+	dev-cpp/eigen:3
+	nls? ( sys-devel/gettext )
+	doc? ( dev-python/sphinx
+			app-doc/doxygen[-nodot(-),dot(+)]
 		)"
 
 # configure internationalization only if LINGUAS have more
@@ -108,8 +107,6 @@ for mylang in "${LINGUAS}" ; do
 	fi
 done
 
-# S="${WORKDIR}/${PN}"
-
 src_unpack(){
 if [ "${PV}" = "9999" ];then
 	git-2_src_unpack
@@ -120,18 +117,18 @@ if [ "${PV}" = "9999" ];then
 		EGIT_REPO_URI="${BLENDER_ADDONS_URI}" \
 		git-2_src_unpack
 	fi
-		if use contrib; then
-			unset EGIT_BRANCH EGIT_COMMIT
-        		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons_contrib" \
-        		EGIT_REPO_URI="${BLENDER_ADDONS_CONTRIB_URI}" \
-			git-2_src_unpack
-		fi
-			if use nls; then
-                        	unset EGIT_BRANCH EGIT_COMMIT
-                        	EGIT_SOURCEDIR="${WORKDIR}/${P}/release/datafiles/locale" \
-                        	EGIT_REPO_URI="${BLENDER_TRANSLATIONS_URI}" \
-                        	git-2_src_unpack
-                	fi
+	if use contrib; then
+		unset EGIT_BRANCH EGIT_COMMIT
+			EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons_contrib" \
+			EGIT_REPO_URI="${BLENDER_ADDONS_CONTRIB_URI}" \
+		git-2_src_unpack
+	fi
+	if use nls; then
+		unset EGIT_BRANCH EGIT_COMMIT
+		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/datafiles/locale" \
+		EGIT_REPO_URI="${BLENDER_TRANSLATIONS_URI}" \
+		git-2_src_unpack
+	fi
 else
 	unpack ${A}
 fi
@@ -145,7 +142,7 @@ pkg_setup() {
 		else
 			ewarn "You are using gcc built without 'openmp' USE."
 			ewarn "Switch CXX to an OpenMP capable compiler."
-			die	"Need openmp"
+			die "Need openmp"
 		fi
 	fi
 
@@ -164,23 +161,23 @@ pkg_setup() {
 }
 
 src_prepare() {
-	rm -r ${WORKDIR}/${P}/release/scripts/addons_contrib/sequencer_extra_actions/* \
+	rm -r "${WORKDIR}/${P}"/release/scripts/addons_contrib/sequencer_extra_actions/* \
 	|| die
-	
-	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
-		"${FILESDIR}"/02-${PN}-2.68-unbundle-colamd.patch \
-		"${FILESDIR}"/03-${PN}-2.68-remove-binreloc.patch \
-		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
-		"${FILESDIR}"/${PN}-desktop.patch \
+
+	epatch "${FILESDIR}/01-${PN}"-2.68-doxyfile.patch \
+		"${FILESDIR}/02-${PN}"-2.68-unbundle-colamd.patch \
+		"${FILESDIR}/03-${PN}"-2.68-remove-binreloc.patch \
+		"${FILESDIR}/06-${PN}"-2.68-fix-install-rules.patch \
+		"${FILESDIR}/${PN}"-desktop.patch \
 		"${FILESDIR}"/sequencer_extra_actions-3.8.patch.bz2
 
 	rm -r \
-		${WORKDIR}/${P}/extern/libopenjpeg \
-		${WORKDIR}/${P}/extern/glew \
-		${WORKDIR}/${P}/extern/colamd \
-		${WORKDIR}/${P}/extern/binreloc \
+		"${WORKDIR}/${P}"/extern/libopenjpeg \
+		"${WORKDIR}/${P}"/extern/glew \
+		"${WORKDIR}/${P}"/extern/colamd \
+		"${WORKDIR}/${P}"/extern/binreloc \
 		|| die
-		
+
 	sed -i \
 		-e 's#set(WITH_BINRELOC ON)#set(WITH_BINRELOC OFF)#' \
 		CMakeLists.txt || die
@@ -194,13 +191,10 @@ src_prepare() {
 
 	ewarn "$(echo "Remaining bundled dependencies:";
 			( find extern -mindepth 1 -maxdepth 1 -type d; ) | sed 's|^|- |')"
-		
 }
 
 src_configure() {
-
 	local mycmakeargs=""
-
 	#CUDA Kernal Selection
 	local CUDA_ARCH=""
 	if use cuda; then
@@ -225,7 +219,6 @@ src_configure() {
 				CUDA_ARCH="sm_30"
 			fi
 		fi
-
 		#If a kernel isn't selected then all of them are built by default
 		if [ -n "${CUDA_ARCH}" ] ; then
 			mycmakeargs="${mycmakeargs} -DCYCLES_CUDA_ARCH=${CUDA_ARCH}"
@@ -236,7 +229,6 @@ src_configure() {
 		-DCUDA_LIBRARIES=/opt/cuda/lib64
 		-DCUDA_NVCC=/opt/cuda/bin/nvcc"
 	fi
-
 	#iconv is enabled when international is enabled
 	if use nls; then
 		for mylang in "${LINGUAS}" ; do
@@ -246,8 +238,7 @@ src_configure() {
 			fi
 		done
 	fi
-
-		#modified the install prefix in order to get everything to work for src_install
+	#modified the install prefix in order to get everything to work for src_install
 	#make DESTDIR="${D}" install didn't work
 	mycmakeargs="${mycmakeargs}
 		-DWITH_SYSTEM_OPENJPEG=ON
@@ -297,8 +288,6 @@ src_configure() {
 		$(cmake-utils_use_with valgrind VALGRIND)
 		$(cmake-utils_use_with quicktime QUICKTIME)
 		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)"
-		
-
 	# FIX: Game Engine module needs to be active to build the Blender Player
 	if ! use game-engine && use player; then
 		elog "Forcing Game Engine [+game-engine] as required by Blender Player [+player]"
@@ -307,7 +296,6 @@ src_configure() {
 		mycmakeargs="${mycmakeargs}
 		$(cmake-utils_use_with game-engine GAMEENGINE)"
 	fi
-
 	if use redcode && ! use jpeg2k && ! use ffmpeg; then
 		elog "Forcing OpenJPEG as required by Redcode [+redcode]"
 		mycmakeargs="${mycmakeargs} -DWITH_IMAGE_OPENJPEG=ON"
@@ -315,7 +303,6 @@ src_configure() {
 		mycmakeargs="${mycmakeargs}
 		$(cmake-utils_use_with jpeg2k IMAGE_OPENJPEG)"
 	fi
-
 	cmake-utils_src_configure
 }
 
@@ -327,17 +314,14 @@ src_install() {
 pkg_preinst() {
 	cd "${D}/usr"
 	VERSION=`ls share/blender/`
-
 	mv "bin/blender" "bin/blender-bin-${SLOT}"
 	mv "bin/blender-thumbnailer.py" "bin/blender-thumbnailer-${SLOT}.py"
 	if use player; then
 		mv "bin/blenderplayer" "bin/blenderplayer-${SLOT}"
 	fi
-
 	# create a wrapper
 	cat <<- EOF >> "bin/blender-${SLOT}"
 		#!/bin/sh
-
 		# stop this script if the local blender path is a symlink
 		 if [ -L \${HOME}/.blender ]; then
 			echo "Detected a symbolic link for \${HOME}/.blender"
@@ -346,11 +330,9 @@ pkg_preinst() {
 			echo "  # rm -i \${HOME}/.blender"
 			exit 1
 		fi
-
 		export BLENDER_SYSTEM_SCRIPTS="/usr/share/blender/${VERSION}/scripts"
 		export BLENDER_SYSTEM_DATAFILES="/usr/share/blender/${VERSION}/datafiles"
 		exec /usr/bin/blender-bin-${SLOT} \$*
 	EOF
-
 	chmod 755 "bin/blender-${SLOT}"
 }
