@@ -172,7 +172,7 @@ src_prepare() {
 		"${FILESDIR}"/03-${PN}-2.68-remove-binreloc.patch \
 		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
 		"${FILESDIR}"/${PN}-desktop.patch \
-		"${FILESDIR}"/sequencer_extra_actions-3.8.patch
+		"${FILESDIR}"/sequencer_extra_actions-3.8.patch.bz2
 
 	rm -r \
 		${WORKDIR}/${P}/extern/libopenjpeg \
