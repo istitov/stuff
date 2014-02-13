@@ -39,7 +39,6 @@ pkg_setup(){
 	ewarn "Do *not* open bugs in Gentoo's bugzilla unless you have issues with"
 	ewarn "the ebuilds. Thank you."
 	ewarn
-	ebeep 8
 	kernel-2_pkg_setup
 }
 
