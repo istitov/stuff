@@ -134,5 +134,17 @@
       Adds support for openvdb
       <pkg>media-gfx/openvdb</pkg>.
     </flag>
+	<flag name="boost">
+      Enable features depending on boost.
+    </flag>
+	<flag name="bullet">
+      Enable Bullet (Physics Engine).
+	</flag>
+	<flag name="colorio">
+      Enable OpenColorIO color management.
+	</flag>
+	<flag name='elbeem'>
+      Adds surface fluid simulation to Blender using El'Beem library.
+    </flag>
   </use>
 </pkgmetadata>
