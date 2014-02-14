@@ -194,6 +194,7 @@ src_prepare() {
 }
 
 src_configure() {
+	python_setup
 	local mycmakeargs=""
 	#CUDA Kernal Selection
 	local CUDA_ARCH=""
@@ -240,6 +241,7 @@ src_configure() {
 	fi
 	#modified the install prefix in order to get everything to work for src_install
 	#make DESTDIR="${D}" install didn't work
+
 	mycmakeargs="${mycmakeargs}
 		-DWITH_SYSTEM_OPENJPEG=ON
 		-DWITH_SYSTEM_GLEW=ON
