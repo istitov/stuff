@@ -71,7 +71,7 @@ RDEPEND="
 	cycles? (
 		media-libs/openimageio
 		cuda? ( dev-util/nvidia-cuda-toolkit )
-		osl? ( <media-gfx/osl-1.5 >media-gfx/osl-1.5 )
+		osl? ( <media-gfx/osl-1.5 )
 		openvdb? ( media-gfx/openvdb )
 	)
 	ffmpeg? (
