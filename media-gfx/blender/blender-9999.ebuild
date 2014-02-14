@@ -66,8 +66,7 @@ DEPEND="dev-cpp/glog[gflags]
 		>=media-libs/openimageio-1.1.5
 		>=dev-libs/boost-1.49.0[threads(+),${PYTHON_USEDEP}]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
-		osl? ( =media-gfx/osl-9999 )
-		osl? ( >=sys-devel/llvm-3.1 )
+		osl? ( media-gfx/osl )
 		openvdb? ( media-gfx/openvdb )
 	)
 	sdl? ( media-libs/libsdl[audio,joystick] )
@@ -227,7 +226,7 @@ src_configure() {
 		mycmakeargs="${mycmakeargs}
 		-DWITH_CYCLES_CUDA=ON
 		-DCUDA_INCLUDES=/opt/cuda/include
-		-DCUDA_LIBRARIES=/opt/cuda/lib64
+		-DCUDA_LIBRARIES=/opt/cuda/$(get_libdir)
 		-DCUDA_NVCC=/opt/cuda/bin/nvcc"
 	fi
 	#iconv is enabled when international is enabled
