@@ -25,6 +25,10 @@ RDEPEND=" dev-qt/qtgui:4
 
 DEPEND="${RDEPEND}"
 
+src_prepare(){
+	sed 's|/usr/local/bin|/usr/bin|' -i mytetra.pro
+}
+
 src_install() {
 	qt4-r2_src_install
 	domenu desktop/mytetra.desktop
