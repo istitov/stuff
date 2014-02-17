@@ -312,28 +312,28 @@ src_install() {
 	emake install || die
 }
 
-pkg_preinst() {
-	cd "${D}/usr"
-	VERSION=`ls share/blender/`
-	mv "bin/blender" "bin/blender-bin-${SLOT}"
-	mv "bin/blender-thumbnailer.py" "bin/blender-thumbnailer-${SLOT}.py"
-	if use player; then
-		mv "bin/blenderplayer" "bin/blenderplayer-${SLOT}"
-	fi
-	# create a wrapper
-	cat <<- EOF >> "bin/blender-${SLOT}"
-		#!/bin/sh
-		# stop this script if the local blender path is a symlink
-		 if [ -L \${HOME}/.blender ]; then
-			echo "Detected a symbolic link for \${HOME}/.blender"
-			echo "Sorry, to avoid dangerous situations, the Blender binary can"
-			echo "not be started until	you have removed the symbolic link:"
-			echo "  # rm -i \${HOME}/.blender"
-			exit 1
-		fi
-		export BLENDER_SYSTEM_SCRIPTS="/usr/share/blender/${VERSION}/scripts"
-		export BLENDER_SYSTEM_DATAFILES="/usr/share/blender/${VERSION}/datafiles"
-		exec /usr/bin/blender-bin-${SLOT} \$*
-	EOF
-	chmod 755 "bin/blender-${SLOT}"
-}
+# pkg_preinst() {
+# 	cd "${D}/usr"
+# 	VERSION=`ls share/blender/`
+# 	mv "bin/blender" "bin/blender-bin-${SLOT}"
+# 	mv "bin/blender-thumbnailer.py" "bin/blender-thumbnailer-${SLOT}.py"
+# 	if use player; then
+# 		mv "bin/blenderplayer" "bin/blenderplayer-${SLOT}"
+# 	fi
+# 	# create a wrapper
+# 	cat <<- EOF >> "bin/blender-${SLOT}"
+# 		#!/bin/sh
+# 		# stop this script if the local blender path is a symlink
+# 		 if [ -L \${HOME}/.blender ]; then
+# 			echo "Detected a symbolic link for \${HOME}/.blender"
+# 			echo "Sorry, to avoid dangerous situations, the Blender binary can"
+# 			echo "not be started until	you have removed the symbolic link:"
+# 			echo "  # rm -i \${HOME}/.blender"
+# 			exit 1
+# 		fi
+# 		export BLENDER_SYSTEM_SCRIPTS="/usr/share/blender/${VERSION}/scripts"
+# 		export BLENDER_SYSTEM_DATAFILES="/usr/share/blender/${VERSION}/datafiles"
+# 		exec /usr/bin/blender-bin-${SLOT} \$*
+# 	EOF
+# 	chmod 755 "bin/blender-${SLOT}"
+# }
