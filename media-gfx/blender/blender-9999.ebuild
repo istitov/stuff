@@ -23,7 +23,7 @@ DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="http://www.blender.org/"
 
 LICENSE="|| ( GPL-2 BL )"
-SLOT="2.6"
+SLOT="0"
 KEYWORDS=""
 IUSE_MODULES="+cycles +ocio -osl openvdb +freestyle +compositor +tomato +game-engine player +addons +contrib +X"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke +oceansim eltopo"
