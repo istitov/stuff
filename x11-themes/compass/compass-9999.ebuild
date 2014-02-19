@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: bar-overlay/x11-themes/compass/compass-9999.ebuild,v 3.0 2014/02/15 18:01:00 brothermechanic Exp $
 
@@ -23,7 +23,7 @@ RESTRICT="binchecks strip"
 S="${WORKDIR}"/Compass-KDE
 
 src_install() {
-	cd ${WORKDIR}
+	cd "${WORKDIR}"
 	insinto /usr/share/icons
 	doins -r ./Compass-KDE
 }

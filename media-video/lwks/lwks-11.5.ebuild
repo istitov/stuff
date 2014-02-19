@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -14,7 +14,7 @@ RESTRICT="fetch mirror"
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND=""
@@ -37,12 +37,12 @@ RDEPEND="
 S="${WORKDIR}/"
 
 src_install() {
-	cp -R . ${D}
+	cp -R . "${D}"
 
 	# There dirs can be changed by the user
 	fperms a+rw /usr/share/lightworks/{Preferences,"Audio Mixes"}
 
-	rm ${D}/control.tar.gz ${D}/data.tar.gz ${D}/debian-binary
+	rm "${D}/control.tar.gz" "${D}/data.tar.gz" "${D}/debian-binary"
 }
 
 pkg_postinst() { gnome2_icon_cache_update; }
