@@ -1,0 +1,51 @@
+--- a/plugins/djv_openexr/djv_openexr.h
++++ b/plugins/djv_openexr/djv_openexr.h
+@@ -39,15 +39,7 @@
+ 
+ #include <ImathBox.h>
+ #include <ImfPixelType.h>
+-
+-namespace Imf
+-{
+-
+-struct Channel;
+-class ChannelList;
+-class Header;
+-
+-} // Imf
++#include <ImfForward.h>
+ 
+ //! \namespace djv_openexr
+ //
+--- a/plugins/djv_openexr/djv_openexr_load.h
++++ b/plugins/djv_openexr/djv_openexr_load.h
+@@ -36,13 +36,6 @@
+ 
+ #include <djv_openexr.h>
+ 
+-namespace Imf
+-{
+-
+-class InputFile;
+-
+-} // Imf
+-
+ namespace djv_openexr
+ {
+ using namespace djv;
+--- a/plugins/djv_openexr/djv_openexr_save.h
++++ b/plugins/djv_openexr/djv_openexr_save.h
+@@ -36,13 +36,6 @@
+ 
+ #include <djv_openexr.h>
+ 
+-namespace Imf
+-{
+-
+-class OutputFile;
+-
+-} // Imf
+-
+ namespace djv_openexr
+ {
+ using namespace djv;

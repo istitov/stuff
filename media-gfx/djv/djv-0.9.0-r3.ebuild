@@ -8,7 +8,7 @@ inherit cmake-utils eutils
 
 MY_P=${PN}-${PV}
 
-DESCRIPTION="Professional movie playback for the film and computer animation industries."
+DESCRIPTION="Professional movie playback and image processing software for the film and computer animation industries."
 HOMEPAGE="http://djv.sf.net"
 SRC_URI="mirror://sourceforge/${PN}/${MY_P}_src.tar.gz"
 
@@ -36,6 +36,7 @@ files_fix="djv_file.h djv_file.cpp djv_file_inline.h djv_user.h djv_user.cpp"
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
+	epatch "${FILESDIR}"/djv_openexr_201.patch
 }
 
 src_compile() {
