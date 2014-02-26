@@ -18,12 +18,12 @@
       <pkg>dev-libs/boost</pkg>).
     </flag>
     <flag name="ocio">
-      Build pro Color Management support requires
+      Build pro Color Management support requires 
       <pkg>media-gfx/opencolorio</pkg>.
     </flag>
     <flag name="osl">
       Adds Open Shading Language support to Cycles engine
-      <pkg>media-gfx/osl</pkg>.
+      <pkg>media-gfx/osl</pkg>.	
     </flag>
     <flag name="freestyle">
       An advanced edges rendering
@@ -117,6 +117,12 @@
     <flag name="doc">
       Build C and Python API documentation directly from the source code.
     </flag>
+    <flag name="tweak-mode">
+      This flag allows you to model without confirming each translation,
+      in particular it lets you grab with left mouse button (LMB) and not
+      having to confirm by another click. Blender 'Tweak Mode' is similar
+      to the 'Tweak Mode' of the Wings modeller (<pkg>media-gfx/wings</pkg>).
+    </flag>
     <flag name="cuda">
       Build Cycles renderer with CUDA support through package
       <pkg>dev-util/nvidia-cuda-toolkit</pkg>.
@@ -129,22 +135,6 @@
     </flag>
     <flag name="sm_30">
       Build Cycles renderer with CUDA kernel ~gtx660 support.
-    </flag>
-    <flag name='openvdb'>
-      Adds support for openvdb
-      <pkg>media-gfx/openvdb</pkg>.
-    </flag>
-	<flag name="boost">
-      Enable features depending on boost.
-    </flag>
-	<flag name="bullet">
-      Enable Bullet (Physics Engine).
-	</flag>
-	<flag name="colorio">
-      Enable OpenColorIO color management.
-	</flag>
-	<flag name='elbeem'>
-      Adds surface fluid simulation to Blender using El'Beem library.
     </flag>
   </use>
 </pkgmetadata>
