@@ -47,6 +47,7 @@ IUSE="
 	openssl opus oss pic pulseaudio quvi rtmp schroedinger sdl speex ssh
 	static-libs test theora threads truetype twolame v4l vaapi vdpau vorbis vpx
 	wavpack X x264 xvid +zlib zvbi
+	avisynth vidstab opencv
 	"
 
 ARM_CPU_FEATURES="armv5te armv6 armv6t2 neon armvfp:vfp"
@@ -130,6 +131,9 @@ RDEPEND="
 	X? ( x11-libs/libX11 x11-libs/libXext x11-libs/libXfixes )
 	zlib? ( sys-libs/zlib )
 	zvbi? ( media-libs/zvbi )
+	opencv? ( media-libs/opencv )
+	vidstab? ( media-plugins/vidstab )
+	avisynth? ( media-video/avxsynth )
 	!media-video/qt-faststart
 	!media-libs/libpostproc
 "
@@ -256,6 +260,17 @@ src_configure() {
 		break
 	done
 
+	#STUFF
+	if use avisynth ; then
+		myconf="${myconf} --enable-avisynth"
+	fi
+	if use vidstab ; then
+		myconf="${myconf} --enable-libvidstab"
+	fi
+	if use opencv ; then
+		myconf="${myconf} --enable-libopencv"
+	fi
+	
 	# Mandatory configuration
 	myconf="
 		--enable-gpl
