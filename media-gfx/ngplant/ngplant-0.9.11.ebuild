@@ -57,19 +57,19 @@ src_compile() {
 }
 
 src_install() {
-	dobin ${PN}/${PN} ngpview/ngpview devtools/ngpbench ngpshot/ngpshot scripts/ngp2obj.py 
-	dolib.a ngpcore/libngpcore.a ngput/libngput.a 
+	dobin ${PN}/${PN} ngpview/ngpview devtools/ngpbench ngpshot/ngpshot scripts/ngp2obj.py
+	dolib.a ngpcore/libngpcore.a ngput/libngput.a
 	insinto /usr/share/${PN}/
-	doins -r plugins shaders 
-        dodoc ReleaseNotes 
+	doins -r plugins shaders
+	dodoc ReleaseNotes
 
-        if use examples; then
-                doins -r samples
-        fi
+	if use examples; then
+		doins -r samples
+	fi
 
-        if use doc; then
-                dohtml -r docapi 
-        fi
+	if use doc; then
+		dohtml -r docapi
+	fi
 	insinto /usr/share/pixmaps/
 	doins ngplant/images/ngplant.xpm
 	insinto /usr/share/applications/

@@ -136,5 +136,9 @@
     <flag name="sm_30">
       Build Cycles renderer with CUDA kernel ~gtx660 support.
     </flag>
+    <flag name='openvdb'>
+      Adds support for openvdb
+      <pkg>media-gfx/openvdb</pkg>.
+    </flag>
   </use>
 </pkgmetadata>

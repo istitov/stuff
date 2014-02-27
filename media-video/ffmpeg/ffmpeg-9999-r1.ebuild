@@ -42,7 +42,7 @@ fi
 IUSE="
 	aac aacplus alsa amr amrenc bindist bluray +bzip2 cdio celt
 	cpudetection debug doc +encode examples faac fdk flite fontconfig frei0r
-	gme	gnutls gsm +hardcoded-tables +iconv iec61883 ieee1394 jack jpeg2k
+	gme gnutls gsm +hardcoded-tables +iconv iec61883 ieee1394 jack jpeg2k
 	ladspa libass libcaca libsoxr libv4l modplug mp3 +network openal opengl
 	openssl opus oss pic pulseaudio quvi rtmp schroedinger sdl speex ssh
 	static-libs test theora threads truetype twolame v4l vaapi vdpau vorbis vpx
@@ -209,7 +209,7 @@ src_configure() {
 	for i in alsa oss jack ; do
 		use ${i} || myconf="${myconf} --disable-indev=${i}"
 	done
-	ffuse="${ffuse}	libv4l:libv4l2 pulseaudio:libpulse X:x11grab"
+	ffuse="${ffuse} libv4l:libv4l2 pulseaudio:libpulse X:x11grab"
 
 	# Outdevs
 	for i in alsa oss sdl ; do
@@ -270,7 +270,7 @@ src_configure() {
 	if use opencv ; then
 		myconf="${myconf} --enable-libopencv"
 	fi
-	
+
 	# Mandatory configuration
 	myconf="
 		--enable-gpl

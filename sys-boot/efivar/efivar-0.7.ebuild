@@ -10,7 +10,7 @@ DESCRIPTION="Library to manipulate EFI variables"
 HOMEPAGE="https://github.com/vathpela/efivar"
 SRC_URI="https://github.com/vathpela/${PN}/archive/${PV}.tar.gz"
 
-LICENSE="LGPL2.1"
+LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""

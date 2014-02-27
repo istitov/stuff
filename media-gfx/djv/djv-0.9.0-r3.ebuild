@@ -36,6 +36,9 @@ files_fix="djv_file.h djv_file.cpp djv_file_inline.h djv_user.h djv_user.cpp"
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
+}
+
+src_prepare() {
 	epatch "${FILESDIR}"/djv_openexr_201.patch
 }
 

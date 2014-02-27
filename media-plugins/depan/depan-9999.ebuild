@@ -11,7 +11,7 @@ HOMEPAGE="https://github.com/btb/depan"
 EGIT_REPO_URI="https://github.com/btb/depan.git"
 EGIT_BRANCH="master"
 
-LICENSE="GPL"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
@@ -20,4 +20,3 @@ DEPEND="sci-libs/fftw
 	media-video/avxsynth"
 
 RDEPEND=""
-

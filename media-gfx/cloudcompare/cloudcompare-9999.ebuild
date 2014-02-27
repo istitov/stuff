@@ -17,8 +17,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="media-libs/glew
-        dev-qt/qtcore
-        dev-qt/qtopengl"
+	dev-qt/qtcore
+	dev-qt/qtopengl"
 
 RDEPEND="${DEPEND}"
 
@@ -35,8 +35,6 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
-	newicon ${S}/qCC/images/icon/cc_icon_64.png "${PN}".png
-        make_desktop_entry CloudCompare
+	newicon "${S}"/qCC/images/icon/cc_icon_64.png "${PN}".png
+	make_desktop_entry CloudCompare
 }
-
-
