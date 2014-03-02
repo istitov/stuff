@@ -26,7 +26,8 @@ RDEPEND=">=app-text/hunspell-1.2
 		>=dev-qt/qtphonon-4.5:4[exceptions]
 		media-libs/phonon
 	) )
-	kde? ( media-libs/phonon )"
+	kde? ( media-libs/phonon )
+	media-libs/libao"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
