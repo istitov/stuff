@@ -6,9 +6,9 @@ EAPI=4
 
 inherit eutils git-2
 
-DESCRIPTION="Adds support for Gnome multimedia keys to DeaDBeeF player. Should work only in Gnome and Unity DEs."
-HOMEPAGE="https://code.google.com/p/deadbeef-gnome-mmkeys/"
-EGIT_REPO_URI="https://code.google.com/p/deadbeef-gnome-mmkeys/"
+DESCRIPTION="DeaDBeeF player Gnome (via DBus) multimedia keys plugin"
+HOMEPAGE="https://github.com/barthez/deadbeef-gnome-mmkeys"
+EGIT_REPO_URI="https://github.com/barthez/deadbeef-gnome-mmkeys.git"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -17,25 +17,10 @@ IUSE=""
 
 DEPEND_COMMON="
 	media-sound/deadbeef
-	dev-libs/glib:2
-	dev-libs/dbus-glib"
+	dev-libs/glib:2"
 
-RDEPEND="
-	${DEPEND_COMMON}
-	"
-DEPEND="
-	${DEPEND_COMMON}
-	"
-
-QA_TEXTRELS="usr/$(get_libdir)/deadbeef/ddb_gnome_mmkeys.so"
-
-src_prepare(){
-	sed 's|tcc|gcc|g' -i make.sh
-}
-
-src_compile(){
-	./make.sh
-}
+RDEPEND="${DEPEND_COMMON}"
+DEPEND="${DEPEND_COMMON}"
 
 src_install(){
 	insinto /usr/$(get_libdir)/deadbeef
