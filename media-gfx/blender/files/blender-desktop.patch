@@ -3,7 +3,7 @@
 @@ -1,5 +1,5 @@
  [Desktop Entry]
 -Name=Blender
-+Name=Blender-2.6
++Name=Blender-2.7
  GenericName=3D modeller
  GenericName[es]=modelador 3D
  GenericName[de]=3D-Modellierer
@@ -12,7 +12,7 @@
  Comment[es]=modelado 3D, animaciГіn, renderizado y post-producciГіn
  Comment[de]=3D-Modellierung, Animation, Rendering und Nachbearbeitung
 -Exec=blender
-+Exec=blender-2.6 %f
++Exec=blender-2.7 %f
  Icon=blender
  Terminal=false
  Type=Application
