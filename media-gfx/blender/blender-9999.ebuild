@@ -4,6 +4,8 @@
 
 EAPI=5
 
+VSLOT="2.7"
+
 if [ "${PV}" = "9999" ];then
 	BLENDGIT_URI="http://git.blender.org"
 	EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
@@ -22,7 +24,7 @@ DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="http://www.blender.org/"
 
 LICENSE="|| ( GPL-2 BL )"
-SLOT="2.6"
+SLOT="0"
 KEYWORDS=""
 IUSE_MODULES="+cycles +ocio -osl openvdb +freestyle +compositor +tomato +game-engine player +addons +contrib +X"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke +oceansim eltopo"
@@ -324,14 +326,14 @@ pkg_preinst() {
 	cd "${D}/usr"
 	VERSION=`ls share/blender/`
 
-	mv "bin/blender" "bin/blender-bin-${SLOT}"
-	mv "bin/blender-thumbnailer.py" "bin/blender-thumbnailer-${SLOT}.py"
+	mv "bin/blender" "bin/blender-bin-${VSLOT}"
+	mv "bin/blender-thumbnailer.py" "bin/blender-thumbnailer-${VSLOT}.py"
 	if use player; then
-		mv "bin/blenderplayer" "bin/blenderplayer-${SLOT}"
+		mv "bin/blenderplayer" "bin/blenderplayer-${VSLOT}"
 	fi
 
 	# create a wrapper
-	cat <<- EOF >> "bin/blender-${SLOT}"
+	cat <<- EOF >> "bin/blender-${VSLOT}"
 		#!/bin/sh
 
 		# stop this script if the local blender path is a symlink
@@ -345,8 +347,8 @@ pkg_preinst() {
 
 		export BLENDER_SYSTEM_SCRIPTS="/usr/share/blender/${VERSION}/scripts"
 		export BLENDER_SYSTEM_DATAFILES="/usr/share/blender/${VERSION}/datafiles"
-		exec /usr/bin/blender-bin-${SLOT} \$*
+		exec /usr/bin/blender-bin-${VSLOT} \$*
 	EOF
 
-	chmod 755 "bin/blender-${SLOT}"
+	chmod 755 "bin/blender-${VSLOT}"
 }
