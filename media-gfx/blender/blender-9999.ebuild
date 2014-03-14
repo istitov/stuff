@@ -4,8 +4,6 @@
 
 EAPI=5
 
-VSLOT="2.7"
-
 if [ "${PV}" = "9999" ];then
 	BLENDGIT_URI="http://git.blender.org"
 	EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
@@ -326,14 +324,8 @@ pkg_preinst() {
 	cd "${D}/usr"
 	VERSION=`ls share/blender/`
 
-	mv "bin/blender" "bin/blender-bin-${VSLOT}"
-	mv "bin/blender-thumbnailer.py" "bin/blender-thumbnailer-${VSLOT}.py"
-	if use player; then
-		mv "bin/blenderplayer" "bin/blenderplayer-${VSLOT}"
-	fi
-
 	# create a wrapper
-	cat <<- EOF >> "bin/blender-${VSLOT}"
+	cat <<- EOF >> "bin/blender"
 		#!/bin/sh
 
 		# stop this script if the local blender path is a symlink
@@ -347,8 +339,8 @@ pkg_preinst() {
 
 		export BLENDER_SYSTEM_SCRIPTS="/usr/share/blender/${VERSION}/scripts"
 		export BLENDER_SYSTEM_DATAFILES="/usr/share/blender/${VERSION}/datafiles"
-		exec /usr/bin/blender-bin-${VSLOT} \$*
+		exec /usr/bin/blender-bin \$*
 	EOF
 
-	chmod 755 "bin/blender-${VSLOT}"
+	chmod 755 "bin/blender"
 }
