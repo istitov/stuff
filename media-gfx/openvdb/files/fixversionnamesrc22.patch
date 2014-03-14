@@ -12,8 +12,8 @@ Index: openvdb/version.h
  /// vdb::vX_Y_Z::Vec3i, vdb::vX_Y_Z::io::File, vdb::vX_Y_Z::tree::Tree, etc.,
  /// where X, Y and Z are OPENVDB_LIBRARY_MAJOR_VERSION, OPENVDB_LIBRARY_MINOR_VERSION
  /// and OPENVDB_LIBRARY_PATCH_VERSION, respectively (defined below).
--#define OPENVDB_VERSION_NAME v2_1_0
-+#define OPENVDB_VERSION_NAME v2_1
+-#define OPENVDB_VERSION_NAME v2_2_0
++#define OPENVDB_VERSION_NAME v2_2
  
  // Library major, minor and patch version numbers
  #define OPENVDB_LIBRARY_MAJOR_VERSION_NUMBER 2
