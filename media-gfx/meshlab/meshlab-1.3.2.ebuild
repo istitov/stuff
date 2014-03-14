@@ -23,44 +23,19 @@ DEPEND="media-libs/glew
 	media-libs/qhull
 	media-libs/openctm
 	dev-qt/qtcore
-	dev-qt/qtopengl"
+	dev-qt/qtopengl
+	dev-cpp/eigen:3"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/meshlab/src"
-
-src_unpack(){
-	unpack ${A}
-	cd "${S}"
-}
 
 src_prepare() {
 	rm "${WORKDIR}"/meshlab/src/distrib/plugins/*.xml
 	rm "${WORKDIR}"/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h
 	cd ${PORTAGE_BUILDDIR}
 	ln -s work a
-	#pathes from debian repo
-	epatch "${FILESDIR}"/1.3.2/01_crash-on-save.patch
-	epatch "${FILESDIR}"/1.3.2/02_cstddef.patch
-	epatch "${FILESDIR}"/1.3.2/03_disable-updates.patch
-	epatch "${FILESDIR}"/1.3.2/04_eigen.patch
-	epatch "${FILESDIR}"/1.3.2/05_externals.patch
-	epatch "${FILESDIR}"/1.3.2/06_format-security.patch
-	epatch "${FILESDIR}"/1.3.2/07_gcc47.patch
-	epatch "${FILESDIR}"/1.3.2/08_lib3ds.patch
-	epatch "${FILESDIR}"/1.3.2/09_libbz2.patch
-	epatch "${FILESDIR}"/1.3.2/10_muparser.patch
-	epatch "${FILESDIR}"/1.3.2/11_openctm.patch
-	epatch "${FILESDIR}"/1.3.2/12_overflow.patch
-	epatch "${FILESDIR}"/1.3.2/13_pluginsdir.patch
-	epatch "${FILESDIR}"/1.3.2/14_ply_numeric.patch
-	epatch "${FILESDIR}"/1.3.2/15_qhull.patch
-	epatch "${FILESDIR}"/1.3.2/16_shadersdir.patch
-	epatch "${FILESDIR}"/1.3.2/17_structuresynth.patch
-	epatch "${FILESDIR}"/1.3.2/18_glew.c18p1.patch
-	epatch "${FILESDIR}"/1.3.2/19_CONFLICTS_IN_rpath.patch
-	epatch "${FILESDIR}"/1.3.2/20_rpath.c18p2.patch
-	epatch "${FILESDIR}"/1.3.2/21_RESOLUTION.patch
-	cd "${S}"
+	#patches from debian repo
+	epatch "${FILESDIR}/${PV}"/*.patch
 }
 
 src_configure() {
