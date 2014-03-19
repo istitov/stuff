@@ -6,9 +6,9 @@ EAPI=4
 
 inherit unpacker gnome2-utils
 
-DESCRIPTION="LightWorks video editor software"
+DESCRIPTION="LightWorks video editor software.Unstable"
 HOMEPAGE="http://www.lwks.com/"
-SRC_URI="lwks-11.5.1.A-amd64.deb"
+SRC_URI="lwks-11.5.1.C-amd64.deb"
 
 RESTRICT="fetch mirror"
 
@@ -35,6 +35,10 @@ RDEPEND="
 	"
 
 S="${WORKDIR}/"
+
+src_prepare() {
+	epatch "${FILESDIR}"/desktop.patch
+}
 
 src_install() {
 	cp -R . "${D}"
