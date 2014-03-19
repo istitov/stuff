@@ -53,7 +53,6 @@ IUSE="
 ARM_CPU_FEATURES="armv5te armv6 armv6t2 neon armvfp:vfp"
 MIPS_CPU_FEATURES="mips32r2 mipsdspr1 mipsdspr2 mipsfpu"
 PPC_CPU_FEATURES="altivec"
-SPARC_CPU_FEATURES="vis"
 X86_CPU_FEATURES="3dnow:amd3dnow 3dnowext:amd3dnowext avx avx2 fma4 mmx mmxext sse sse2 sse3 ssse3 sse4 sse4_2:sse42"
 
 # String for CPU features in the useflag[:configure_option] form
@@ -62,7 +61,6 @@ CPU_FEATURES="
 	${ARM_CPU_FEATURES}
 	${MIPS_CPU_FEATURES}
 	${PPC_CPU_FEATURES}
-	${SPARC_CPU_FEATURES}
 	${X86_CPU_FEATURES}
 "
 
