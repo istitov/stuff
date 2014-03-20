@@ -4,8 +4,6 @@
 
 EAPI=5
 
-inherit
-
 DESCRIPTION="nitrux OS icons for KDE"
 HOMEPAGE="http://nitrux.weebly.com"
 SRC_URI="http://store.nitrux.in/files/Compass-KDE.tar.gz"
