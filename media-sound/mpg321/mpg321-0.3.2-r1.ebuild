@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/mpg321/mpg321-0.2.12-r1.ebuild,v 1.2 2011/08/31 20:33:54 mattst88 Exp $
 

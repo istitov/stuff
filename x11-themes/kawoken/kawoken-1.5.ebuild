@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: bar-overlay/x11-themes/kawoken/kawoken-1.5.ebuild,v 1.1 2013/12/14 09:01:00 brothermechanic Exp $
 

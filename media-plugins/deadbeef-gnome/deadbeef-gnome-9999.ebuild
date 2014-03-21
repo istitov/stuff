@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: media-sound/deadbeef-gnome/deadbeef-gnome-9999.ebuild,v 1 2011/05/20 00:13:35 megabaks Exp $
 

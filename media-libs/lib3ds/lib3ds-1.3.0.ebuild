@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/lib3ds/Attic/lib3ds-1.3.0.ebuild,v 1.10 2014/03/07 15:31:26 mr_bones_ dead $
 

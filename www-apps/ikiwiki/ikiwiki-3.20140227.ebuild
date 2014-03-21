@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-apps/ikiwiki/ikiwiki-3.20130904.1.ebuild,v 1.2 2013/12/23 15:48:37 pacho Exp $
 

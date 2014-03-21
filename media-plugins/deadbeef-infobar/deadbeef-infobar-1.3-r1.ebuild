@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: media-sound/deadbeef-infobar/deadbeef-infobar-1.3.ebuild,v 1 2012/08/31 00:59:00 megabaks Exp $
 
