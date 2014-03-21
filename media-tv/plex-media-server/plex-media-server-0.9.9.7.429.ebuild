@@ -10,7 +10,7 @@ DESCRIPTION="PLEX media server"
 HOMEPAGE="https://plex.tv/"
 
 MY_PN="plexmediaserver"
-MY_REV="da1d892"
+MY_REV="f80a8d6"
 
 SRC_URI=" x86? ( http://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${PV}-${MY_REV}_i386.deb
 				 http://stuff.tazhate.com/distfiles/${MY_PN}_${PV}-${MY_REV}_i386.deb )
