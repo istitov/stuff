@@ -76,7 +76,7 @@ src_configure(){
 	$(use_enable lcms)\
 	$(use_enable nls)\
 
-	DOCS="AUTHORS ChangeLog NEWS README*"
+	DOCS="AUTHORS ChangeLog* NEWS README*"
 
 	#./configure
 	# aliasing unsafe wrt #310393
