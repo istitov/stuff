@@ -76,8 +76,8 @@ DEPEND="dev-cpp/gflags
 	sdl? ( media-libs/libsdl[audio,joystick] )
 	openexr? ( media-libs/openexr )
 	ffmpeg? (
-		>=media-video/ffmpeg-0.10[x264,xvid,mp3,encode]
-		jpeg2k? ( >=media-video/ffmpeg-0.10[x264,xvid,mp3,encode,jpeg2k] )
+		>=media-video/ffmpeg-2.2[x264,xvid,mp3,encode]
+		jpeg2k? ( >=media-video/ffmpeg-2.2[x264,xvid,mp3,encode,jpeg2k] )
 	)
 	openal? ( >=media-libs/openal-1.6.372 )
 	fftw? ( sci-libs/fftw:3.0 )
