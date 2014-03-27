@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit unpacker gnome2-utils
+inherit unpacker gnome2-utils eutils
 
 DESCRIPTION="LightWorks video editor software.Unstable"
 HOMEPAGE="http://www.lwks.com/"
@@ -38,12 +38,11 @@ S="${WORKDIR}/"
 
 src_prepare() {
 	epatch "${FILESDIR}"/desktop.patch || die
-}
-
-src_install() {
 	mkdir -p usr/share/icons/hicolor/64x64/apps/
 	cp usr/share/lightworks/Icons/App.png usr/share/icons/hicolor/64x64/apps/lightworks.png
-	
+}
+
+src_install() {	
 	cp -R . "${D}"
 
 	# There dirs can be changed by the user
