@@ -37,12 +37,13 @@ RDEPEND="
 S="${WORKDIR}/"
 
 src_prepare() {
-	epatch "${FILESDIR}"/desktop.patch
-	mkdir -p usr/share/icons/hicolor/64x64/apps/
-	mv usr/share/lightworks/Icons/App.png usr/share/icons/hicolor/64x64/apps/lightworks.png
+	epatch "${FILESDIR}"/desktop.patch || die
 }
 
 src_install() {
+	mkdir -p usr/share/icons/hicolor/64x64/apps/
+	cp usr/share/lightworks/Icons/App.png usr/share/icons/hicolor/64x64/apps/lightworks.png
+	
 	cp -R . "${D}"
 
 	# There dirs can be changed by the user
