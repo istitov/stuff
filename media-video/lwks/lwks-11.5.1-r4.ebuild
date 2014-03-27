@@ -8,7 +8,7 @@ inherit unpacker gnome2-utils
 
 DESCRIPTION="LightWorks video editor software.Unstable"
 HOMEPAGE="http://www.lwks.com/"
-SRC_URI="lwks-11.5.1.C-amd64.deb"
+SRC_URI="lwks-11.5.1.D-amd64.deb"
 
 RESTRICT="fetch mirror"
 
@@ -38,6 +38,8 @@ S="${WORKDIR}/"
 
 src_prepare() {
 	epatch "${FILESDIR}"/desktop.patch
+	mkdir -p usr/share/icons/hicolor/64x64/apps/
+	mv usr/share/lightworks/Icons/App.png usr/share/icons/hicolor/64x64/apps/
 }
 
 src_install() {
