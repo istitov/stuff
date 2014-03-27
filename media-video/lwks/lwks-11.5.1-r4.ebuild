@@ -39,7 +39,7 @@ S="${WORKDIR}/"
 src_prepare() {
 	epatch "${FILESDIR}"/desktop.patch
 	mkdir -p usr/share/icons/hicolor/64x64/apps/
-	mv usr/share/lightworks/Icons/App.png usr/share/icons/hicolor/64x64/apps/
+	mv usr/share/lightworks/Icons/App.png usr/share/icons/hicolor/64x64/apps/lightworks.png
 }
 
 src_install() {
