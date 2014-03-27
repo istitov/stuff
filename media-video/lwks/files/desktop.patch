@@ -1,5 +1,5 @@
---- usr/share/Applications/lightworks.desktop	2014-02-26 14:41:19.000000000 +0400
-+++ usr/share/Applications/lightworks.desktop.fix	2014-03-19 20:20:28.557857664 +0400
+--- usr/share/applications/lightworks.desktop	2014-02-26 14:41:19.000000000 +0400
++++ usr/share/applications/lightworks.desktop	2014-03-19 20:20:28.557857664 +0400
 @@ -3,7 +3,7 @@
  Name=Lightworks
  Comment=Cross-platform film & video editor
