@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: bar-overlay/x11-themes/elementary/elementary-1.0.ebuild,v 1.1 2013/12/14 13:01:00 brothermechanic Exp $
+# $Header: bar-overlay/x11-themes/nitrux-kde/nitrux-kde-9999.ebuild,v 2.0 2014/03/28 11:25:00 brothermechanic Exp $
 
 EAPI=5
 
@@ -8,7 +8,7 @@ inherit
 
 DESCRIPTION="nitrux OS icons for KDE"
 HOMEPAGE="http://nitrux.weebly.com"
-SRC_URI="http://nitrux.weebly.com/uploads/1/9/8/8/19881405/nitrux-kde.7z"
+SRC_URI="http://store.nitrux.in/files/NITRUX-KDE.tar.gz"
 
 LICENSE="CC-BY-NC-ND-4"
 SLOT="0"
