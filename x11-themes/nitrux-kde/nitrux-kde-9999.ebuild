@@ -24,6 +24,7 @@ S="${WORKDIR}"/NITRUX-KDE
 
 src_install() {
 	cd "${WORKDIR}"
+	mv ./NITRUX-KDE/apps/scalable/linuxdcpp.svg* ./NITRUX-KDE/apps/scalable/linuxdcpp.svg
 	insinto /usr/share/icons
 	doins -r ./NITRUX-KDE
 }
