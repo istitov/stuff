@@ -11,23 +11,29 @@ SRC_URI="http://www.profanity.im/${P}.tar.gz"
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="libnotify xml xscreensaver"
+IUSE="libnotify otr xml xscreensaver"
 
 RDEPEND="dev-libs/glib:2
 		>=dev-libs/libstrophe-0.8-r1[xml=]
 		dev-libs/openssl
 		net-misc/curl
 		sys-libs/ncurses
+		otr? ( net-libs/libotr )
 		xscreensaver? ( x11-libs/libXScrnSaver )
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}"
 
 src_configure() {
-		econf $(use_with xml libxml2)
+		econf \
+			$(use_enable libnotify notifications) \
+			$(use_enable otr) \
+			$(use_with xml libxml2) \
+			$(use_with xscreensaver)
 }
 
 pkg_postinst() {
 		elog
 		elog "User guide is available online:"
 		elog "  http://www.profanity.im/userguide.html"
+		elog
 }
