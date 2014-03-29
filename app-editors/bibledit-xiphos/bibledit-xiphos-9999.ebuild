@@ -21,8 +21,6 @@ DEPEND="dev-vcs/rcs
 
 RDEPEND="${DEPEND}"
 
-#S="${WORKDIR}/${P}/xiphos"
-
 src_prepare() {
 	mv xiphos/* .
 	chmod +x configure || die

@@ -7,6 +7,7 @@ EAPI="5"
 DESCRIPTION="The software for translating a Bible"
 HOMEPAGE="https://sites.google.com/site/bibledit/"
 SLOT="0"
+LICENSE="GPL-3"
 KEYWORDS="~amd64 ~ppc ~x86"
 
 DEPEND="app-editors/bibledit-bibletime

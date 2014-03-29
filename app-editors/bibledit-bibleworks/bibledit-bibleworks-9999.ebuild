@@ -22,7 +22,7 @@ DEPEND="dev-vcs/rcs
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-        mv bibleworks/* .
-        chmod +x configure || die
+	mv bibleworks/* .
+	chmod +x configure || die
 	eautoreconf
 }

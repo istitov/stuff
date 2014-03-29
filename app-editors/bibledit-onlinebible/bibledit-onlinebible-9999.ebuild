@@ -22,8 +22,7 @@ DEPEND="dev-vcs/rcs
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-        mv onlinebible/* .
-        chmod +x configure || die
+	mv onlinebible/* .
+	chmod +x configure || die
 	eautoreconf
 }
-

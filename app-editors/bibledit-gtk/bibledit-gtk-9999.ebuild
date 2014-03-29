@@ -22,8 +22,7 @@ DEPEND="dev-vcs/rcs
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-        mv gtk/* .
-        chmod +x configure || die
+	mv gtk/* .
+	chmod +x configure || die
 	eautoreconf
 }
-

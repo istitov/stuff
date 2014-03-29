@@ -22,7 +22,7 @@ DEPEND="dev-vcs/rcs
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-        mv paratext/* .
-        chmod +x configure || die
+	mv paratext/* .
+	chmod +x configure || die
 	eautoreconf
 }
