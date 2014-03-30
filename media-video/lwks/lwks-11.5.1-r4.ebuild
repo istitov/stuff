@@ -24,7 +24,7 @@ RDEPEND="
 	x11-libs/gdk-pixbuf
 	x11-libs/gtk+
 	gnome-extra/libgsf
-	media-libs/jpeg
+	virtual/jpeg
 	x11-libs/pango
 	media-gfx/nvidia-cg-toolkit
 	media-libs/portaudio

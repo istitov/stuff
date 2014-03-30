@@ -21,7 +21,7 @@ RDEPEND=">=x11-libs/fltk-1.1
 		>=media-libs/openexr-1.6.1
 		>=media-libs/glew-1.4
 		ffmpeg? ( >=media-video/ffmpeg-0.4.9 )
-		jpeg? ( >=media-libs/jpeg-6b )
+		jpeg? ( virtual/jpeg )
 		png? ( >=media-libs/libpng-1.2 )
 		quicktime? ( >=media-libs/libquicktime-1.0 )
 		tiff? ( >=media-libs/tiff-3.8.2 )"
