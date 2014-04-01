@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-dicts/aspell-ky/myspell-ky-0.1.0.ebuild,v 0.2 2013/11/10 16:24:41 brothermechanic Exp $
 
-EAPI=1
+EAPI=5
 
 MYSPELL_DICT=(
 	"ky_KG.aff"
@@ -21,30 +21,15 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="
-	app-text/hunspell"
+DEPEND="app-text/hunspell"
 
 RDEPEND="${DEPEND}
 	app-text/aspell"
 
 S="${WORKDIR}/${FILENAME}"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-}
-
 src_configure() {
-	econf --vars \
-	--prefix=/usr \
-	--build=x86_64-pc-linux-gnu \
-	--host=x86_64-pc-linux-gnu \
-	--mandir=/usr/share/man \
-	--infodir=/usr/share/info \
-	--datadir=/usr/share \
-	--sysconfdir=/etc \
-	--localstatedir=/var/lib \
-	--libdir=/usr/lib64
+	./configure
 }
 
 src_compile() {
@@ -54,15 +39,4 @@ src_compile() {
 	cat *.wl > kirghiz.wordlist
 	wordlist2hunspell kirghiz.wordlist ky_KG
 	cp -p ky_affix.dat ky_KG.aff
-}
-
-src_install() {
-	dodir /usr/share/hunspell
-	insinto /usr/share/hunspell
-	doins *.dic *.aff
-	dodir /usr/share/myspell
-	dosym /usr/share/hunspell/*.dic /usr/share/myspell
-	dosym /usr/share/hunspell/*.aff /usr/share/myspell
-	dodir /usr/share/doc/hunspell-ky
-	dodoc doc/Crewler.txt Copyright README
 }
