@@ -78,5 +78,5 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	emake DESTDIR="${EPREFIX}/${D}" install || die "emake install failed"
 }
