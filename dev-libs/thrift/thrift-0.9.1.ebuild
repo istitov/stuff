@@ -70,6 +70,13 @@ src_configure() {
 	filter-flags -fwhole-program -fwhopr
 
 	econf \
+	        --prefix=${EPREFIX}/usr \
+                --exec-prefix=${EPREFIX}/usr \
+                PY_PREFIX=${EPREFIX}/usr \
+                JAVA_PREFIX=${EPREFIX}/usr/local/lib \
+                PHP_PREFIX=${EPREFIX}/usr/local/lib \
+                PHP_CONFIG_PREFIX=${EPREFIX}/etc/php.d \
+                PERL_PREFIX=${EPREFIX}/usr/local/lib \
 		${myconf}
 }
 
@@ -78,5 +85,5 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${EPREFIX}/${D}" install || die "emake install failed"
+	emake DESTDIR="${D}" install || die "emake install failed"
 }
