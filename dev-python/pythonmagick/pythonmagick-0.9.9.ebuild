@@ -12,7 +12,7 @@ MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Python bindings for ImageMagick"
 HOMEPAGE="http://www.imagemagick.org/script/api.php"
-SRC_URI="http://www.imagemagick.org/download/python/${MY_P}.tar.xz"
+SRC_URI="mirror://imagemagick/python/${MY_P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
