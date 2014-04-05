@@ -3,6 +3,9 @@
 <pkgmetadata>
 	<herd>kde</herd>
 	<herd>openoffice</herd>
+	<maintainer>
+		<email>iohann.s.titov@gmail.com</email>
+	</maintainer>
 	<use>
 		<flag name="attica">Get hot stuff with <pkg>dev-libs/libattica</pkg></flag>
 		<flag name="eigen">Enable <pkg>dev-cpp/eigen</pkg> mathematical templates support</flag>

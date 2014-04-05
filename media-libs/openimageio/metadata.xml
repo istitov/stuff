@@ -2,6 +2,9 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<herd>graphics</herd>
+	<maintainer>
+		<email>brothermechanic@gmail.com</email>
+	</maintainer>
 	<use>
 		<flag name='colorio'>Use <pkg>media-gfx/opencolorio</pkg></flag>
 		<flag name='opencv'>Use <pkg>media-libs/opencv</pkg></flag>

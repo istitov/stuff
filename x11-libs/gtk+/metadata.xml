@@ -4,24 +4,24 @@
 	<maintainer>
 		<email>megagreener@gmail.com</email>
 	</maintainer>
-  <herd>gnome</herd>
-  <longdescription>
-    GTK+ is a multi-platform toolkit for creating graphical user
-    interfaces. Offering a complete set of widgets, GTK+ is suitable
-    for projects ranging from small one-off projects to complete
-    application suites.
-  </longdescription>
-  <use>
-    <flag name="colord">Use <pkg>x11-misc/colord</pkg> for color management
-	  in printing</flag>
-    <flag name="introspection">Use <pkg>dev-libs/gobject-introspection</pkg>
-      for introspection</flag>
-    <flag name="packagekit">Enable support for the distro-neutral package
-	  manager GUI <pkg>app-admin/packagekit</pkg> in application chooser</flag>
-	<flag name="appmenu">Add support for ubuntu global menu</flag>
-	<flag name="overlay">Add support for ubuntu overlay scrollbars</flag>
-	<flag name="wayland">Enable <pkg>dev-libs/wayland</pkg> backend</flag>
-	<flag name="egl">Use EGL surfaces and Cairo GL in the wayland
-	  backend. This flag has no effect on X or aqua backends.</flag>
-  </use>
+	<herd>gnome</herd>
+	<longdescription>
+		GTK+ is a multi-platform toolkit for creating graphical user
+		interfaces. Offering a complete set of widgets, GTK+ is suitable
+		for projects ranging from small one-off projects to complete
+		application suites.
+	</longdescription>
+	<use>
+		<flag name="colord">Use <pkg>x11-misc/colord</pkg> for color management
+			in printing</flag>
+		<flag name="introspection">Use <pkg>dev-libs/gobject-introspection</pkg>
+			for introspection</flag>
+		<flag name="packagekit">Enable support for the distro-neutral package
+			manager GUI <pkg>app-admin/packagekit</pkg> in application chooser</flag>
+		<flag name="appmenu">Add support for ubuntu global menu</flag>
+		<flag name="overlay">Add support for ubuntu overlay scrollbars</flag>
+		<flag name="wayland">Enable <pkg>dev-libs/wayland</pkg> backend</flag>
+		<flag name="egl">Use EGL surfaces and Cairo GL in the wayland
+			backend. This flag has no effect on X or aqua backends.</flag>
+	</use>
 </pkgmetadata>
