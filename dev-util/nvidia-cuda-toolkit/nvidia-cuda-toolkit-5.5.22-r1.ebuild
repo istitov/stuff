@@ -19,12 +19,12 @@ SRC_URI="
 
 SLOT="0/${PV}"
 LICENSE="NVIDIA-r1"
-KEYWORDS="-* ~amd64 ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS=""
 IUSE="debugger doc eclipse profiler"
 
 DEPEND=""
 RDEPEND="${DEPEND}
-	>=sys-devel/gcc-4.6
+	>=sys-devel/gcc-4.8
 	!<=x11-drivers/nvidia-drivers-270.41
 	debugger? (
 		sys-libs/libtermcap-compat
@@ -56,7 +56,7 @@ src_unpack() {
 src_prepare() {
 	local cuda_supported_gcc
 
-	cuda_supported_gcc="4.6"
+	cuda_supported_gcc="4.8"
 
 	sed \
 		-e "s:CUDA_SUPPORTED_GCC:${cuda_supported_gcc}:g" \

@@ -8,7 +8,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 78bb3c6..d5f4576 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -86,6 +86,7 @@ cmake_policy(SET CMP0014 NEW)
+@@ -86,6 +86,7 @@
  #-----------------------------------------------------------------------------
  # Load some macros.
  include(build_files/cmake/macros.cmake)
@@ -16,15 +16,15 @@ index 78bb3c6..d5f4576 100644
  
  
  #-----------------------------------------------------------------------------
-@@ -255,6 +256,7 @@ option(WITH_FREESTYLE     "Enable Freestyle (advanced edges rendering)" ON)
+@@ -251,6 +252,7 @@
  # Misc
  option(WITH_INPUT_NDOF "Enable NDOF input devices (SpaceNavigator and friends)" ON)
  option(WITH_RAYOPTIMIZATION	"Enable use of SIMD (SSE) optimizations for the raytracer" ON)
 +cmake_dependent_option(WITH_SSE2 "SSE2 optimizations" ON WITH_RAYOPTIMIZATION OFF)
+ option(WITH_OPENNL        "Enable use of Open Numerical Library" ON)
  if(UNIX AND NOT APPLE)
  	option(WITH_INSTALL_PORTABLE "Install redistributeable runtime, otherwise install into CMAKE_INSTALL_PREFIX" ON)
- 	option(WITH_STATIC_LIBS "Try to link with static libraries, as much as possible, to make blender more portable across distributions" OFF)
-@@ -1833,7 +1835,7 @@ if(WITH_RAYOPTIMIZATION)
+@@ -1950,7 +1952,7 @@
  		set(PLATFORM_CFLAGS " ${COMPILER_SSE_FLAG} ${PLATFORM_CFLAGS}")
  		add_definitions(-D__SSE__ -D__MMX__)
  	endif()

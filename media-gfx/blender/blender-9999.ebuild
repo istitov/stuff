@@ -29,8 +29,8 @@ KEYWORDS=""
 IUSE_MODULES="+cycles +ocio -osl openvdb +freestyle +compositor +tomato +game-engine player +addons +contrib +X"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke +oceansim eltopo"
 IUSE_CODECS="+ffmpeg openexr -jpeg2k -dds -tiff -cin -redcode quicktime"
-IUSE_SYSTEM="+openmp +fftw sndfile jack +sdl -openal +nls ndof +collada -doc -debug -lzma -valgrind +buildinfo"
-IUSE_GPU="-cuda -sm_20 -sm_21 -sm_30"
+IUSE_SYSTEM="+openmp +sse2 +fftw sndfile jack +sdl -openal +nls ndof +collada -doc -debug -lzma -valgrind +buildinfo"
+IUSE_GPU="-cuda -sm_20 -sm_21 -sm_30 -sm_35"
 IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU}"
 
 REQUIRED_USE="cycles? ( ocio )
@@ -69,7 +69,7 @@ DEPEND="dev-cpp/gflags
 		>=media-libs/openimageio-1.1.5
 		>=dev-libs/boost-1.49.0[threads(+)]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
-		osl? ( =media-gfx/osl-9999 )
+		osl? ( media-gfx/osl )
 		osl? ( >=sys-devel/llvm-3.1 )
 		openvdb? ( media-gfx/openvdb )
 	)
@@ -151,7 +151,7 @@ pkg_setup() {
 		fi
 	fi
 
-	if ! use sm_20 && ! use sm_21 && ! use sm_30; then
+	if ! use sm_20 && ! use sm_21 && ! use sm_30 ! use sm_35; then
 		if use cuda; then
 			ewarn "You have not chosen a CUDA kernel. It takes an extreamly long time"
 			ewarn "to compile all the CUDA kernels. Check http://www.nvidia.com/object/cuda_gpus.htm"
@@ -169,12 +169,7 @@ src_prepare() {
 	rm -r "${WORKDIR}/${P}"/release/scripts/addons_contrib/sequencer_extra_actions/* \
 	|| die
 
-	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
-		"${FILESDIR}"/02-${PN}-2.68-unbundle-colamd.patch \
-		"${FILESDIR}"/03-${PN}-2.68-remove-binreloc.patch \
-		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
-		"${FILESDIR}"/${PN}-desktop.patch \
-		"${FILESDIR}"/sequencer_extra_actions-3.8.patch.bz2
+	epatch "${FILESDIR}"/*.patch*
 
 	rm -r \
 		"${WORKDIR}/${P}"/extern/libopenjpeg \
@@ -224,6 +219,13 @@ src_configure() {
 				CUDA_ARCH="sm_30"
 			fi
 		fi
+		if use sm_35; then
+			if [[ -n "${CUDA_ARCH}" ]] ; then
+				CUDA_ARCH="${CUDA_ARCH};sm_35"
+			else
+				CUDA_ARCH="sm_35"
+			fi
+		fi
 
 		#If a kernel isn't selected then all of them are built by default
 		if [ -n "${CUDA_ARCH}" ] ; then
@@ -231,6 +233,7 @@ src_configure() {
 		fi
 		mycmakeargs="${mycmakeargs}
 		-DWITH_CYCLES_CUDA=ON
+		-DWITH_CYCLES_CUDA_BINARIES=ON
 		-DCUDA_INCLUDES=/opt/cuda/include
 		-DCUDA_LIBRARIES=/opt/cuda/lib64
 		-DCUDA_NVCC=/opt/cuda/bin/nvcc"
@@ -282,6 +285,7 @@ src_configure() {
 		$(cmake-utils_use_with oceansim MOD_OCEANSIM)
 		$(cmake-utils_use_with remesh MOD_REMESH)
 		$(cmake-utils_use_with jack JACK)
+		$(cmake-utils_use_with jack JACK_DYNLOAD)
 		$(cmake-utils_use_with collada OPENCOLLADA)
 		$(cmake-utils_use_with ndof INPUT_NDOF)
 		$(cmake-utils_use_with smoke MOD_SMOKE)
@@ -295,7 +299,8 @@ src_configure() {
 		$(cmake-utils_use_with lzma LZMA)
 		$(cmake-utils_use_with valgrind VALGRIND)
 		$(cmake-utils_use_with quicktime QUICKTIME)
-		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)"
+		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)
+		$(cmake-utils_use_with sse2 SSE2)"
 
 	# FIX: Game Engine module needs to be active to build the Blender Player
 	if ! use game-engine && use player; then
