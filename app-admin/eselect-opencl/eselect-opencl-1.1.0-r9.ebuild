@@ -8,7 +8,7 @@ CL_ABI=1.2
 inherit multilib
 
 DESCRIPTION="Utility to change the OpenCL implementation being used"
-HOMEPAGE="http://www.gentoo.org/"
+HOMEPAGE="http://www.khronos.org/registry/cl/"
 
 # Source:
 # http://www.khronos.org/registry/cl/api/${CL_ABI}/opencl.h

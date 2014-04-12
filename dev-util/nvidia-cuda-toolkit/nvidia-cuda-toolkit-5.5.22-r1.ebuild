@@ -18,7 +18,7 @@ SRC_URI="
 #	x86? ( ${CURI}/cuda_${PV}-linux_32.run )"
 
 SLOT="0/${PV}"
-LICENSE="NVIDIA-CUDA"
+LICENSE="NVIDIA-r1"
 KEYWORDS=""
 IUSE="debugger doc eclipse profiler"
 
