@@ -66,6 +66,7 @@ DEPEND="media-libs/aalib
 		dev-qt/qtwebkit
 		dev-qt/qtdeclarative
 		media-libs/libsdl
+		media-libs/sdl-image
 		media-libs/libtheora
 		x11-libs/libva
 		media-libs/libvorbis
