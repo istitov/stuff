@@ -14,7 +14,7 @@ HOMEPAGE="http://www.profanity.im/"
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS=""
-IUSE="libnotify otr xml xscreensaver"
+IUSE="libnotify otr +themes xml xscreensaver"
 
 RDEPEND="dev-libs/glib:2
 		>=dev-libs/libstrophe-0.8-r1[xml=]
@@ -36,6 +36,7 @@ src_configure() {
 		econf \
 			$(use_enable libnotify notifications) \
 			$(use_enable otr) \
+			$(use_with themes) \
 			$(use_with xml libxml2) \
 			$(use_with xscreensaver)
 }
