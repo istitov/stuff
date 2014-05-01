@@ -18,7 +18,7 @@ else
 fi
 
 inherit cmake-utils subversion eutils ${SCM}
-PYTHON_DEPEND="3:3.3"
+PYTHON_DEPEND="3:3.4"
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="http://www.blender.org/"
@@ -46,12 +46,12 @@ done
 
 DEPEND="dev-cpp/gflags
 	dev-cpp/glog[gflags]
-	dev-python/numpy[python_targets_python3_3]
+	dev-python/numpy[python_targets_python3_4]
 	sci-libs/colamd
 	sci-libs/ldl
 	virtual/glu
 	virtual/libintl
-	dev-lang/python:3.3
+	dev-lang/python:3.4
 	virtual/jpeg
 	media-libs/libpng:0
 	media-libs/tiff:0
@@ -256,7 +256,7 @@ src_configure() {
 		-DWITH_SYSTEM_GLEW=ON
 		-DWITH_BUILTIN_GLEW=OFF
 		-DWITH_MOD_CLOTH_ELTOPO=OFF
-		-DPYTHON_VERSION="3.3"
+		-DPYTHON_VERSION="3.4"
 		-DWITH_PYTHON_INSTALL=OFF
 		-DWITH_PYTHON_INSTALL_NUMPY=OFF
 		-DWITH_INSTALL_PORTABLE=OFF
