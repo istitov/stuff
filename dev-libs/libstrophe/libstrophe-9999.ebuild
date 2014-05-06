@@ -25,6 +25,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
+		epatch "${FILESDIR}"/${PN}-automake-foreign.patch
 		epatch "${FILESDIR}"/${PN}-fix-build-libxml2.patch
 		eautoreconf
 }

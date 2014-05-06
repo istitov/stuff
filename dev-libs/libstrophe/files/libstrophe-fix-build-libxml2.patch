@@ -1,8 +1,8 @@
 diff --git a/configure.ac b/configure.ac
-index e4f9299..401ded7 100644
+index fb123e4..a9ac211 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -9,21 +9,12 @@ AC_CHECK_HEADER(openssl/ssl.h, [], [AC_MSG_ERROR([couldn't find openssl headers,
+@@ -9,11 +9,9 @@ AC_CHECK_HEADER(openssl/ssl.h, [], [AC_MSG_ERROR([couldn't find openssl headers,
  PKG_CHECK_MODULES([check], [check >= 0.9.4], [], [AC_MSG_WARN([libcheck not found; unit tests will not be compilable])])
  
  AC_ARG_WITH([libxml2],
@@ -14,17 +14,5 @@ index e4f9299..401ded7 100644
 -if test "x$with_libxml2" != xno; then
 +if test "x$with_libxml2" = xyes; then
    PKG_CHECK_MODULES([libxml2], [libxml-2.0 >= 2.7],
--                    [with_libxml2=yes], [dummy=1])
--  if test "x$with_libxml2" != yes; then
--    old_CFLAGS=$CFLAGS
--    CFLAGS="-I /usr/include/libxml2"
--    AC_CHECK_HEADER([libxml/parser.h],
--                    [with_libxml2=yes; libxml2_CFLAGS="-I /usr/include/libxml2"; libxml2_LIBS="-lxml2"],
--                    [AC_MSG_ERROR([couldn't find libxml2])])
--    CFLAGS=$old_CFLAGS
--  fi
-+                    [with_libxml2=yes],
-+		    [AC_MSG_ERROR([couldn't find libxml2])])
- else
-   AC_CHECK_HEADER(expat.h, [], [AC_MSG_ERROR([couldn't find expat headers; expat required])])
- fi
+                     [with_libxml2=yes], [dummy=1])
+   if test "x$with_libxml2" != xyes; then
