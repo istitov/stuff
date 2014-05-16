@@ -65,7 +65,7 @@ RDEPEND="
 	openal? ( >=media-libs/openal-1.1 )
 	pulseaudio? ( media-sound/pulseaudio )
 	rtmp? ( >=media-video/rtmpdump-2.2f )
-	sdl? ( >=media-libs/libsdl-1.2.13-r1[audio,video] )
+	sdl? ( >=media-libs/libsdl-1.2.13-r1[sound,video] )
 	schroedinger? ( media-libs/schroedinger )
 	speex? ( >=media-libs/speex-1.2_beta3 )
 	truetype? ( media-libs/freetype:2 )
