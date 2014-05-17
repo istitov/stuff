@@ -73,7 +73,7 @@ DEPEND="dev-cpp/gflags
 		osl? ( >=sys-devel/llvm-3.1 )
 		openvdb? ( media-gfx/openvdb )
 	)
-	sdl? ( media-libs/libsdl[audio,joystick] )
+	sdl? ( media-libs/libsdl[sound,joystick] )
 	openexr? ( media-libs/openexr )
 	ffmpeg? (
 		>=media-video/ffmpeg-2.2[x264,xvid,mp3,encode]
