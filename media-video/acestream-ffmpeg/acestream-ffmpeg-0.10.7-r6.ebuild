@@ -117,6 +117,11 @@ src_prepare() {
 			-e 's:cdio/paranoia.h:cdio/paranoia/paranoia.h:' \
 			configure libavdevice/libcdio.c || die
 	fi
+
+	if has_version '>=media-libs/freetype-2.5.1';then
+		sed 's|freetype/freetype.h|freetype2/freetype.h|' -i configure
+		sed 's|freetype/config/ftheader.h|freetype2/config/ftheader.h|' -i libavfilter/vf_drawtext.c
+	fi
 }
 
 src_configure() {
