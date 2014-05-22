@@ -8,8 +8,6 @@
 	</maintainer>
   <use>
 	<flag name='introspection'>Use <pkg>dev-libs/gobject-introspection</pkg> for introspection</flag>
-	<flag name="vala">Enable bindings for <pkg>dev-lang/vala</pkg></flag>
-	<flag name="gtk3">Build with x11-libs/gtk+:3</flag>
 	<flag name="gtk2">Build with x11-libs/gtk+:2</flag>
   </use>
 </pkgmetadata>
