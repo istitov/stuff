@@ -23,7 +23,7 @@ DEPEND="
 	media-libs/openexr
 	>=dev-cpp/tbb-3.0
 	>=dev-util/cppunit-1.10
-	doc? ( >=app-doc/doxygen-1.4.7 
+	doc? ( >=app-doc/doxygen-1.4.7
 	       dev-python/epydoc[${PYTHON_USEDEP}]
 	       >=app-text/ghostscript-gpl-8.70 )
 	( >=media-libs/glfw-2.7.5 <media-libs/glfw-3.0.3 )

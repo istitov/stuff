@@ -70,13 +70,13 @@ src_configure() {
 	filter-flags -fwhole-program -fwhopr
 
 	econf \
-	        --prefix=${EPREFIX}/usr \
-                --exec-prefix=${EPREFIX}/usr \
-                PY_PREFIX=${EPREFIX}/usr \
-                JAVA_PREFIX=${EPREFIX}/usr/local/lib \
-                PHP_PREFIX=${EPREFIX}/usr/local/lib \
-                PHP_CONFIG_PREFIX=${EPREFIX}/etc/php.d \
-                PERL_PREFIX=${EPREFIX}/usr/local/lib \
+	        --prefix="${EPREFIX}"/usr \
+                --exec-prefix="${EPREFIX}"/usr \
+                PY_PREFIX="${EPREFIX}"/usr \
+                JAVA_PREFIX="${EPREFIX}"/usr/local/lib \
+                PHP_PREFIX="${EPREFIX}"/usr/local/lib \
+                PHP_CONFIG_PREFIX="${EPREFIX}"/etc/php.d \
+                PERL_PREFIX="${EPREFIX}"/usr/local/lib \
 		${myconf}
 }
 
