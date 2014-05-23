@@ -12,9 +12,9 @@ SRC_URI="lwks-11.5.1-amd64.deb"
 
 RESTRICT="fetch mirror"
 
-LICENSE="as-is"
+LICENSE="EditShare"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND=""

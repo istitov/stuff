@@ -10,7 +10,7 @@ DESCRIPTION="JACK output plugin for DeaDBeeF."
 HOMEPAGE="https://gitorious.org/deadbeef-sm-plugins/jack"
 EGIT_REPO_URI="git://gitorious.org/deadbeef-sm-plugins/jack.git"
 
-LICENSE="as-is"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
 IUSE=""

@@ -10,7 +10,7 @@ DESCRIPTION="A simple stereo widener plugin for DeaDBeeF."
 HOMEPAGE="https://gitorious.org/deadbeef-sm-plugins/stereo-widener"
 EGIT_REPO_URI="git://gitorious.org/deadbeef-sm-plugins/stereo-widener.git"
 
-LICENSE="as-is"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
 IUSE=""
