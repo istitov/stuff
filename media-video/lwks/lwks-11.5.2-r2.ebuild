@@ -8,7 +8,7 @@ inherit unpacker gnome2-utils eutils
 
 DESCRIPTION="LightWorks video editor software.Unstable"
 HOMEPAGE="http://www.lwks.com/"
-SRC_URI="lwks-11.5.1-amd64.deb"
+SRC_URI="lwks-11.5.2.B-amd64.deb"
 
 RESTRICT="fetch mirror"
 
