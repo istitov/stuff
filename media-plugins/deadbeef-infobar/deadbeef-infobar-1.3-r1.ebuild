@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="Infobar plugin for DeadBeeF audio player. Shows lyrics and artist's biography for the current track."
 HOMEPAGE="https://bitbucket.org/dsimbiriatin/deadbeef-infobar/wiki/Home"
-SRC_URI="https://bitbucket.org/dsimbiriatin/${PN}/downloads/${P}.tar.gz"
+SRC_URI="mirror://bitbucket/dsimbiriatin/${PN}/downloads/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"

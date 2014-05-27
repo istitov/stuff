@@ -8,7 +8,7 @@ DESCRIPTION="Disk fragmentation viewer written with boost and gtkmm"
 HOMEPAGE="https://github.com/i-rinat/fragview"
 EGIT_REPO_URI="git://github.com/i-rinat/fragview.git"
 
-LICENSE="GPL-2 BOOST-1.0"
+LICENSE="GPL-2 Boost-1.0"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""

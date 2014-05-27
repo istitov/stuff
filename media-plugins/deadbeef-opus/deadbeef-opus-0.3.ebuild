@@ -8,7 +8,7 @@ inherit eutils flag-o-matic
 
 DESCRIPTION="Ogg Opus decoder plugin for DeaDBeeF audio player."
 HOMEPAGE="https://bitbucket.org/Lithopsian/deadbeef-opus/overview"
-SRC_URI="https://bitbucket.org/Lithopsian/${PN}/downloads/opus-${PV}.tar.gz"
+SRC_URI="mirror://bitbucket/Lithopsian/${PN}/downloads/opus-${PV}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
