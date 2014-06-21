@@ -174,7 +174,6 @@ src_prepare() {
 	rm -r \
 		"${WORKDIR}/${P}"/extern/libopenjpeg \
 		"${WORKDIR}/${P}"/extern/glew \
-		"${WORKDIR}/${P}"/extern/colamd \
 		"${WORKDIR}/${P}"/extern/binreloc \
 		|| die
 

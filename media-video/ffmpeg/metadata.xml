@@ -25,9 +25,11 @@
     <flag name="cdio">Enables audio CD grabbing with <pkg>dev-libs/libcdio</pkg>.</flag>
 	<flag name="celt">Adds Xiph CELT audio decoding support via <pkg>media-libs/celt</pkg></flag>
     <flag name="cpudetection">Enables runtime CPU detection (useful for bindist, compatibility on other CPUs)</flag>
+    <flag name="dirac">Enable Dirac video support (an advanced royalty-free video compression format) via the reference library: dirac.</flag>
 	<flag name="faac">Use external faac library for AAC encoding</flag>
 	<flag name="fdk">Use external fdk-aac library for AAC encoding</flag>
 	<flag name="flite">Adds a text-to-speech filter based on <pkg>app-accessibility/flite</pkg>.</flag>
+	<flag name="fma3">Enables FMA3 optimizations: AMD processors starting with Piledriver architecture and Intel Haswell based processors or later.</flag>
 	<flag name="fma4">Enables FMA4 optimizations: AMD processors starting with Bulldozer architecture.</flag>
 	<flag name="frei0r">Enable frei0r wrapping in libavfilter</flag>
     <flag name="gme">Enables support for <pkg>media-libs/game-music-emu</pkg> for playing various video game music formats.</flag>
@@ -53,10 +55,10 @@
     <flag name="ssse3">Faster floating point optimization for SSSE3 capable chips (Intel Core 2 and later chips)</flag>
 	<flag name="twolame">Enables MP2 encoding via <pkg>media-sound/twolame</pkg> as an alternative to the internal encoder.</flag>
 	<flag name="vaapi">Enables VAAPI (Video Acceleration API) for hardware decoding</flag>
+	<flag name="vis"> Adds support for SIMD optimizations for UltraSPARC processors.</flag>
 	<flag name="vpx">Enables vp8 codec support using libvpx: Decoding vp8 does not require this to be enabled but libvpx can also be used for decoding; encoding vp8 requires this useflag to be enabled though.</flag>
+	<flag name="webp">Enables WebP encoding with <pkg>media-libs/libwebp</pkg>.</flag>
+	<flag name="x265">Enables HEVC encoding with <pkg>media-libs/x265</pkg>.</flag>
 	<flag name="zvbi">Enables <pkg>media-libs/zvbi</pkg> based teletext decoder.</flag>
-	<flag name="vidstab">Enables <pkg>media-plugins/vidstab</pkg> support.</flag>
-	<flag name="avisynth">Enables <pkg>media-video/avxsynth</pkg> support.</flag>
-	<flag name="opencv">Enables <pkg>media-libs/opencv</pkg> support.</flag>
   </use>
 </pkgmetadata>

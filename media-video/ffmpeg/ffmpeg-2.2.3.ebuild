@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.147 2014/02/17 18:13:36 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-2.2.3.ebuild,v 1.1 2014/06/03 06:18:01 aballier Exp $
 
 EAPI="5"
 
@@ -37,23 +37,23 @@ FFMPEG_REVISION="${PV#*_p}"
 LICENSE="GPL-2 amr? ( GPL-3 ) encode? ( aac? ( GPL-3 ) )"
 SLOT="0/${FFMPEG_SUBSLOT}"
 if [ "${PV#9999}" = "${PV}" ] ; then
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
+	KEYWORDS="~amd64 ~hppa ~mips ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
 fi
 IUSE="
 	aac aacplus alsa amr amrenc bindist bluray +bzip2 cdio celt
 	cpudetection debug doc +encode examples faac fdk flite fontconfig frei0r
-	gme gnutls gsm +hardcoded-tables +iconv iec61883 ieee1394 jack jpeg2k
+	gme	gnutls gsm +hardcoded-tables +iconv iec61883 ieee1394 jack jpeg2k
 	ladspa libass libcaca libsoxr libv4l modplug mp3 +network openal opengl
 	openssl opus oss pic pulseaudio quvi rtmp schroedinger sdl speex ssh
 	static-libs test theora threads truetype twolame v4l vaapi vdpau vorbis vpx
-	wavpack X x264 xvid +zlib zvbi
+	wavpack webp X x264 x265 xvid +zlib zvbi
 	avisynth vidstab opencv
 	"
 
 ARM_CPU_FEATURES="armv5te armv6 armv6t2 neon armvfp:vfp"
 MIPS_CPU_FEATURES="mips32r2 mipsdspr1 mipsdspr2 mipsfpu"
 PPC_CPU_FEATURES="altivec"
-X86_CPU_FEATURES="3dnow:amd3dnow 3dnowext:amd3dnowext avx avx2 fma4 mmx mmxext sse sse2 sse3 ssse3 sse4 sse4_2:sse42"
+X86_CPU_FEATURES="3dnow:amd3dnow 3dnowext:amd3dnowext avx avx2 fma3 fma4 mmx mmxext sse sse2 sse3 ssse3 sse4 sse4_2:sse42"
 
 # String for CPU features in the useflag[:configure_option] form
 # if :configure_option isn't set, it will use 'useflag' as configure option
@@ -90,7 +90,9 @@ RDEPEND="
 		theora? ( >=media-libs/libtheora-1.1.1[encode] media-libs/libogg )
 		twolame? ( media-sound/twolame )
 		wavpack? ( media-sound/wavpack )
+		webp? ( media-libs/libwebp )
 		x264? ( >=media-libs/x264-0.0.20111017:= )
+		x265? ( media-libs/x265:= )
 		xvid? ( >=media-libs/xvid-1.1.0 )
 	)
 	fdk? ( >=media-libs/fdk-aac-0.1.3 )
@@ -129,9 +131,9 @@ RDEPEND="
 	X? ( x11-libs/libX11 x11-libs/libXext x11-libs/libXfixes )
 	zlib? ( sys-libs/zlib )
 	zvbi? ( media-libs/zvbi )
-	opencv? ( media-libs/opencv )
-	vidstab? ( media-plugins/vidstab )
 	avisynth? ( media-video/avxsynth )
+	vidstab? ( media-plugins/vidstab )
+	opencv? ( media-libs/opencv )
 	!media-video/qt-faststart
 	!media-libs/libpostproc
 "
@@ -164,6 +166,7 @@ src_prepare() {
 	if [ "${PV%_p*}" != "${PV}" ] ; then # Snapshot
 		export revision=git-N-${FFMPEG_REVISION}
 	fi
+	epatch "${FILESDIR}/ladspadl.patch"
 	epatch_user
 }
 
@@ -177,14 +180,15 @@ src_configure() {
 	# This will feed configure with $(use_enable foo bar)
 	# or $(use_enable foo foo) if no :bar is set.
 	local ffuse="bzip2:bzlib cpudetection:runtime-cpudetect debug doc
-			     gnutls hardcoded-tables iconv network openssl sdl:ffplay vaapi vdpau zlib"
+			     gnutls hardcoded-tables iconv network openssl sdl:ffplay vaapi
+				 vdpau zlib"
 	use openssl && myconf="${myconf} --enable-nonfree"
 
 	# Encoders
 	if use encode
 	then
 		ffuse="${ffuse} aac:libvo-aacenc amrenc:libvo-amrwbenc mp3:libmp3lame"
-		for i in aacplus faac theora twolame wavpack x264 xvid; do
+		for i in aacplus faac theora twolame wavpack webp x264 x265 xvid; do
 			ffuse="${ffuse} ${i}:lib${i}"
 		done
 
@@ -207,7 +211,7 @@ src_configure() {
 	for i in alsa oss jack ; do
 		use ${i} || myconf="${myconf} --disable-indev=${i}"
 	done
-	ffuse="${ffuse} libv4l:libv4l2 pulseaudio:libpulse X:x11grab"
+	ffuse="${ffuse}	libv4l:libv4l2 pulseaudio:libpulse X:x11grab"
 
 	# Outdevs
 	for i in alsa oss sdl ; do
@@ -268,7 +272,7 @@ src_configure() {
 	if use opencv ; then
 		myconf="${myconf} --enable-libopencv"
 	fi
-
+	
 	# Mandatory configuration
 	myconf="
 		--enable-gpl
