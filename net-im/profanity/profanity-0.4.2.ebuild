@@ -19,7 +19,7 @@ RDEPEND="dev-libs/glib:2
 		>=net-libs/gnutls-2.8.0
 		net-misc/curl
 		sys-libs/ncurses
-		net-libs/libotr
+		otr? ( net-libs/libotr )
 		xscreensaver? ( x11-libs/libXScrnSaver )
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}"
