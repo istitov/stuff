@@ -1,10 +1,8 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.4 2013/11/08 19:24:12 brothermechanic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.4 2014/06/01 23:00:00 brothermechanic Exp $
 
 EAPI=5
-
-VSLOT="2.7"
 
 if [ "${PV}" = "9999" ];then
 	BLENDGIT_URI="http://git.blender.org"
@@ -17,15 +15,15 @@ else
 	SRC_URI="http://download.blender.org/source/${P}.tar.gz"
 fi
 
-inherit cmake-utils subversion eutils ${SCM}
-PYTHON_DEPEND="3:3.4"
+inherit cmake-utils eutils python-single-r1 gnome2-utils fdo-mime pax-utils ${SCM}
 
+PYTHON_COMPAT="python3_4"
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="http://www.blender.org/"
 
 LICENSE="|| ( GPL-2 BL )"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE_MODULES="+cycles +ocio -osl openvdb +freestyle +compositor +tomato +game-engine player +addons +contrib +X"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke +oceansim eltopo"
 IUSE_CODECS="+ffmpeg openexr -jpeg2k -dds -tiff -cin -redcode quicktime"
@@ -33,7 +31,8 @@ IUSE_SYSTEM="+openmp +sse2 +fftw sndfile jack +sdl -openal +nls ndof +collada -d
 IUSE_GPU="-cuda -sm_20 -sm_21 -sm_30 -sm_35"
 IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU}"
 
-REQUIRED_USE="cycles? ( ocio )
+REQUIRED_USE="${PYTHON_REQUIRED_USE}
+	      cycles? ( ocio )
 		cuda? ( cycles )
 		  osl? ( cycles )
 		    redcode? ( ffmpeg jpeg2k )"
@@ -44,17 +43,18 @@ for X in ${LANGS} ; do
 	REQUIRED_USE+=" linguas_${X}? ( nls )"
 done
 
-DEPEND="dev-cpp/gflags
+DEPEND="${PYTHON_DEPS}
+	dev-cpp/gflags
 	dev-cpp/glog[gflags]
-	dev-python/numpy[python_targets_python3_4]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/requests[${PYTHON_USEDEP}]
 	sci-libs/colamd
 	sci-libs/ldl
 	virtual/glu
 	virtual/libintl
-	dev-lang/python:3.4
 	virtual/jpeg
-	media-libs/libpng:0
-	media-libs/tiff:0
+	media-libs/libpng
+	media-libs/tiff
 	media-libs/libsamplerate
 	X? ( x11-libs/libXi
 		x11-libs/libX11
@@ -67,10 +67,12 @@ DEPEND="dev-cpp/gflags
 	ocio? ( >=media-libs/opencolorio-1.0.8 )
 	cycles? (
 		>=media-libs/openimageio-1.1.5
-		>=dev-libs/boost-1.49.0[threads(+)]
+		dev-libs/boost[threads(+)]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
-		osl? ( media-gfx/osl )
-		osl? ( >=sys-devel/llvm-3.1 )
+		osl? ( 
+		      >=sys-devel/llvm-3.1
+		      media-gfx/osl
+		      )
 		openvdb? ( media-gfx/openvdb )
 	)
 	sdl? ( media-libs/libsdl[sound,joystick] )
@@ -140,6 +142,7 @@ fi
 }
 
 pkg_setup() {
+	python-single-r1_pkg_setup
 	enable_openmp="OFF"
 	if use openmp; then
 		if tc-has-openmp; then
@@ -174,7 +177,9 @@ src_prepare() {
 	rm -r \
 		"${WORKDIR}/${P}"/extern/libopenjpeg \
 		"${WORKDIR}/${P}"/extern/glew \
+		"${WORKDIR}/${P}"/extern/colamd \
 		"${WORKDIR}/${P}"/extern/binreloc \
+		"${WORKDIR}/${P}"/extern/libmv/third_party/{glog,gflags} \
 		|| die
 
 	sed -i \
@@ -255,11 +260,13 @@ src_configure() {
 		-DWITH_SYSTEM_GLEW=ON
 		-DWITH_BUILTIN_GLEW=OFF
 		-DWITH_MOD_CLOTH_ELTOPO=OFF
-		-DPYTHON_VERSION="3.4"
+		-DPYTHON_VERSION="${EPYTHON/python/}"
+		-DPYTHON_LIBRARY="$(python_get_library_path)"
+		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DWITH_PYTHON_INSTALL=OFF
 		-DWITH_PYTHON_INSTALL_NUMPY=OFF
 		-DWITH_INSTALL_PORTABLE=OFF
-		-DCMAKE_INSTALL_PREFIX="${D}/usr"
+		-DCMAKE_INSTALL_PREFIX="/usr"
 		$(cmake-utils_use_with tomato LIBMV)
 		$(cmake-utils_use_with compositor COMPOSITOR)
 		$(cmake-utils_use_with cycles CYCLES)
@@ -321,38 +328,52 @@ src_configure() {
 	cmake-utils_src_configure
 }
 
+src_test() { :; }
+
 src_install() {
-	cd "${CMAKE_BUILD_DIR}"
-	emake install || die
+	local i
+
+	# Pax mark blender for hardened support.
+	pax-mark m "${CMAKE_BUILD_DIR}"/bin/blender
+
+	if use doc; then
+		docinto "API/python"
+		dohtml -r "${CMAKE_USE_DIR}"/doc/python_api/BPY_API/*
+
+		docinto "API/blender"
+		dohtml -r "${CMAKE_USE_DIR}"/doc/doxygen/html/*
+	fi
+
+	# fucked up cmake will relink binary for no reason
+	emake -C "${CMAKE_BUILD_DIR}" DESTDIR="${D}" install/fast
+
+	# fix doc installdir
+	dohtml "${CMAKE_USE_DIR}"/release/text/readme.html
+	rm -rf "${ED%/}"/usr/share/doc/blender
+
+	python_fix_shebang "${ED%/}"/usr/bin/blender-thumbnailer.py
+	python_optimize "${ED%/}"/usr/share/blender/${PV}/scripts
 }
 
 pkg_preinst() {
-	cd "${D}/usr"
-	VERSION=`ls share/blender/`
+	gnome2_icon_savelist
+}
 
-	mv "bin/blender" "bin/blender-bin-${VSLOT}"
-	mv "bin/blender-thumbnailer.py" "bin/blender-thumbnailer-${VSLOT}.py"
-	if use player; then
-		mv "bin/blenderplayer" "bin/blenderplayer-${VSLOT}"
-	fi
+pkg_postinst() {
+	elog
+	elog "Blender uses python integration. As such, may have some"
+	elog "inherit risks with running unknown python scripting."
+	elog
+	elog "It is recommended to change your blender temp directory"
+	elog "from /tmp to /home/user/tmp or another tmp file under your"
+	elog "home directory. This can be done by starting blender, then"
+	elog "dragging the main menu down do display all paths."
+	elog
+	gnome2_icon_cache_update
+	fdo-mime_desktop_database_update
+}
 
-	# create a wrapper
-	cat <<- EOF >> "bin/blender-${VSLOT}"
-		#!/bin/sh
-
-		# stop this script if the local blender path is a symlink
-		 if [ -L \${HOME}/.blender ]; then
-			echo "Detected a symbolic link for \${HOME}/.blender"
-			echo "Sorry, to avoid dangerous situations, the Blender binary can"
-			echo "not be started until you have removed the symbolic link:"
-			echo "  # rm -i \${HOME}/.blender"
-			exit 1
-		fi
-
-		export BLENDER_SYSTEM_SCRIPTS="/usr/share/blender/${VERSION}/scripts"
-		export BLENDER_SYSTEM_DATAFILES="/usr/share/blender/${VERSION}/datafiles"
-		exec /usr/bin/blender-bin-${VSLOT} \$*
-	EOF
-
-	chmod 755 "bin/blender-${VSLOT}"
+pkg_postrm() {
+	gnome2_icon_cache_update
+	fdo-mime_desktop_database_update
 }
