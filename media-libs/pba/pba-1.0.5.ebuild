@@ -30,22 +30,15 @@ src_prepare() {
 		epatch "${FILESDIR}"/cuda.patch
 	else
 		mv makefile_no_gpu makefile
+		epatch "${FILESDIR}"/no_gpu.patch
 	fi
 	chmod +x makefile
 }
 
 src_install() {
-	if use cuda; then
-		dobin"${S}"/bin/driver
-		dolib"${S}"/bin/libpba.so
-		insinto /usr/include
-		doins"${S}"/bin/libpba.a
-		dodoc doc/manual.pdf
-	else
-		dobin"${S}"/bin/driver_no_gpu
-		dolib"${S}"/bin/libpba_no_gpu.so
-		insinto /usr/include
-		doins"${S}"/bin/libpba_no_gpu.a
-		dodoc doc/manual.pdf
-	fi
+	dobin "${S}"/bin/driver
+	dolib "${S}"/bin/libpba.so
+	insinto /usr/include
+	doins "${S}"/bin/libpba.a
+	dodoc doc/manual.pdf	
 }
