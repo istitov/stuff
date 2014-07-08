@@ -15,7 +15,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="cuda"
 
-DEPEND="cuda? ( dev-util/nvidia-cuda-toolkit )"
+DEPEND="media-libs/glew
+		media-libs/devil
+		cuda? ( dev-util/nvidia-cuda-toolkit )"
 RDEPEND="${DEPEND}"
 
 MAKEOPTS="-j1"
@@ -23,9 +25,11 @@ MAKEOPTS="-j1"
 S="${WORKDIR}/SiftGPU"
 
 src_prepare() {
-	rm makefile
-	epatch "${FILESDIR}"/cuda.patch
-	chmod +x makefile
+	if use cuda ; then
+		epatch "${FILESDIR}"/with-cuda.patch
+	else
+		epatch "${FILESDIR}"/no-cuda.patch
+	fi
 }
 
 src_install() {

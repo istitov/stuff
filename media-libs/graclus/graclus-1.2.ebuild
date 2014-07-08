@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="A fast graph clustering software"
 HOMEPAGE="http://www.cs.utexas.edu/users/dml/Software/graclus.html"
-SRC_URI="graclus-1.2.tar.gz"
+SRC_URI="http://www.cs.utexas.edu/users/dml/Software/graclus1.2.tar.gz"
 
 LICENSE="GPL-1+"
 SLOT="0"
@@ -23,14 +23,6 @@ RDEPEND="${DEPEND}"
 PDEPEND=""
 
 S="${WORKDIR}/graclus1.2/"
-
-pkg_nofetch() {
-	einfo "Please contains a form that asks for an email address prior to download"
-	einfo "from ${HOMEPAGE}"
-	einfo "_u_www_users_dml_Software_graclus1.2.tar.gz"
-	einfo "rename it to graclus-1.2.tar.gz"
-	einfo "and place them in ${DISTDIR}"
-}
 
 src_prepare() {
 	if use abi_x86_64; then
