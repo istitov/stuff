@@ -179,7 +179,6 @@ src_prepare() {
 		"${WORKDIR}/${P}"/extern/glew \
 		"${WORKDIR}/${P}"/extern/colamd \
 		"${WORKDIR}/${P}"/extern/binreloc \
-		"${WORKDIR}/${P}"/extern/libmv/third_party/{glog,gflags} \
 		|| die
 
 	sed -i \
