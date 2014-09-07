@@ -4,6 +4,8 @@
 
 EAPI=4
 
+inherit eutils
+
 DESCRIPTION="Ncurses based jabber client inspired by irssi"
 HOMEPAGE="http://www.profanity.im/"
 SRC_URI="http://www.profanity.im/${P}.tar.gz"
@@ -13,16 +15,18 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="libnotify otr +themes xml xscreensaver"
 
-RDEPEND="dev-libs/glib:2
+RDEPEND=">=dev-libs/glib-2.26:2
 		>=dev-libs/libstrophe-0.8-r1[xml=]
-		dev-libs/openssl
-		>=net-libs/gnutls-2.8.0
 		net-misc/curl
 		sys-libs/ncurses
 		otr? ( net-libs/libotr )
 		xscreensaver? ( x11-libs/libXScrnSaver )
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}"
+
+src_prepare() {
+		epatch "${FILESDIR}"/${PN}-fix-libstrophe-check.patch
+}
 
 src_configure() {
 		econf \
