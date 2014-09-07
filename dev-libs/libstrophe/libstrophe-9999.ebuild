@@ -25,13 +25,13 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
-		epatch "${FILESDIR}"/${PN}-automake-foreign.patch
-		epatch "${FILESDIR}"/${PN}-fix-build-libxml2.patch
 		eautoreconf
 }
 
 src_configure() {
-		econf $(use_with xml libxml2)
+		use xml && econf $(use_with xml libxml2)
+		# workaround for building with expat support
+		use xml || econf
 }
 
 src_compile() {
