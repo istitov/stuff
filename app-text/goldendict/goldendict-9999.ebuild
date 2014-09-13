@@ -7,7 +7,7 @@ inherit eutils qt4-r2 git-2
 EGIT_REPO_URI="git://github.com/goldendict/goldendict.git"
 LANGSLONG="ar_SA bg_BG cs_CZ de_DE el_GR lt_LT ru_RU zh_CN"
 DESCRIPTION="Feature-rich dictionary lookup program"
-HOMEPAGE="http://goldendict.berlios.de/"
+HOMEPAGE="http://goldendict.org/"
 
 LICENSE="GPL-3"
 SLOT="0"
