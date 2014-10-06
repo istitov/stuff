@@ -69,7 +69,7 @@ DEPEND="${PYTHON_DEPS}
 		>=media-libs/openimageio-1.1.5
 		dev-libs/boost[threads(+)]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
-		osl? ( 
+		osl? (
 		      >=sys-devel/llvm-3.1
 		      media-gfx/osl
 		      )

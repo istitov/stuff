@@ -40,5 +40,5 @@ src_install() {
 	dolib "${S}"/bin/libpba.so
 	insinto /usr/include
 	doins "${S}"/bin/libpba.a
-	dodoc doc/manual.pdf	
+	dodoc doc/manual.pdf
 }

@@ -12,14 +12,13 @@ DESCRIPTION="NVIDIA CUDA Toolkit (compiler and friends)"
 HOMEPAGE="http://developer.nvidia.com/cuda"
 CURI="http://developer.download.nvidia.com/compute/cuda/${MYD}/rel/installers"
 # http://developer.download.nvidia.com/compute/cuda/5_5/rel/installers/cuda_5.5.22_linux_64.run
-SRC_URI=""
 SRC_URI="
 	amd64? ( ${CURI}/cuda_${PV}_linux_64.run )"
 #	x86? ( ${CURI}/cuda_${PV}-linux_32.run )"
 
 SLOT="0/${PV}"
 LICENSE="NVIDIA-r1"
-KEYWORDS=""
+KEYWORDS="-* ~amd64 ~amd64-linux"
 IUSE="debugger doc eclipse profiler"
 
 DEPEND=""
