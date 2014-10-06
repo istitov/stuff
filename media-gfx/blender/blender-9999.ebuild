@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.4 2014/06/01 23:00:00 brothermechanic Exp $
 
 EAPI=5
+PYTHON_COMPAT=( python3_4 )
 
 if [ "${PV}" = "9999" ];then
 	BLENDGIT_URI="http://git.blender.org"
@@ -17,7 +18,6 @@ fi
 
 inherit cmake-utils eutils python-single-r1 gnome2-utils fdo-mime pax-utils ${SCM}
 
-PYTHON_COMPAT="python3_4"
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="http://www.blender.org/"
 
