@@ -1,4 +1,4 @@
-# Copyright 2008-2012 Funtoo Technologies
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -34,15 +34,15 @@ src_install() {
 	install -d -m755 $INST_DIR
 	cp -r "${S}"/makehuman/* $INST_DIR
 	install -d -m755 "${D}usr/bin/"
-	cp -a ${FILESDIR}/makehuman_launcher.sh "${D}usr/bin/makehuman"
+	cp -a "${FILESDIR}/makehuman_launcher.sh" "${D}usr/bin/makehuman"
 	install -d -m755 "${D}usr/share/doc/makehuman"
 	cp -a docs/* "${D}usr/share/doc/makehuman/"
 	install -d -m755 "${D}usr/share/applications"
-	cp -a ${FILESDIR}/makehuman.desktop "${D}usr/share/applications"
+	cp -a "${FILESDIR}/makehuman.desktop" "${D}usr/share/applications"
 	install -d -m755 "${D}usr/share/pixmaps"
-	cp -a ${FILESDIR}/makehuman.png "${D}usr/share/pixmaps/"
+	cp -a "${FILESDIR}/makehuman.png" "${D}usr/share/pixmaps/"
 	if v="/usr/share/blender/*";then
-        dodir $v/scripts/addons/
-        cp -r "${S}"/blendertools/* "${D}"$v/scripts/addons/ || die
-        fi
+	dodir $v/scripts/addons/
+	cp -r "${S}"/blendertools/* "${D}"$v/scripts/addons/ || die
+	fi
 }

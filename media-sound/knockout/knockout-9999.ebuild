@@ -18,7 +18,6 @@ KEYWORDS="~x86 ~amd64"
 
 IUSE=""
 
-
 RDEPEND="
 	  media-libs/lv2
 	  dev-util/lv2-c++-tools

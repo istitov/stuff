@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name='luajit'>Use <pkg>dev-lang/luajit</pkg> instead of <pkg>dev-lang/lua</pkg></flag>
+	</use>
 </pkgmetadata>
