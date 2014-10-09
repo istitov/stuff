@@ -1,20 +1,20 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/openexr/openexr-2.0.1-r1.ebuild,v 1.1 2013/08/11 16:02:14 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/openexr/openexr-2.2.0.ebuild,v 1.1 2014/08/22 22:17:36 ssuominen Exp $
 
 EAPI=5
-inherit autotools-multilib flag-o-matic
+inherit autotools-multilib
 
 DESCRIPTION="ILM's OpenEXR high dynamic-range image file format libraries"
 HOMEPAGE="http://openexr.com/"
 SRC_URI="http://download.savannah.gnu.org/releases/openexr/${P}.tar.gz"
 
 LICENSE="BSD"
-SLOT="0/2.0.1" # 2.0.1 for the namespace off -> on switch, caused library renaming
-KEYWORDS="~alpha ~amd64 -arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd"
+SLOT="0/22" # based on SONAME
+KEYWORDS="~alpha ~amd64 -arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="examples static-libs"
 
-RDEPEND="sys-libs/zlib:=[${MULTILIB_USEDEP}]
+RDEPEND=">=sys-libs/zlib-1.2.8-r1:=[${MULTILIB_USEDEP}]
 	>=media-libs/ilmbase-${PV}:=[${MULTILIB_USEDEP}]"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
@@ -23,11 +23,12 @@ DOCS=( AUTHORS ChangeLog NEWS README )
 src_prepare() {
 	# Fix path for testsuite
 	sed -i -e "s:/var/tmp/:${T}:" IlmImfTest/tmpDir.h || die
+	# https://github.com/openexr/openexr/issues/128
+	epatch "${FILESDIR}"/openexr-2.2.0-imf.patch
 	autotools-multilib_src_prepare
 }
 
 src_configure() {
-	append-cxxflags "-lrt"
 	local myeconfargs=(
 		$(use_enable static-libs static)
 		$(use_enable examples imfexamples)
@@ -37,12 +38,9 @@ src_configure() {
 
 src_install() {
 	autotools-multilib_src_install \
-		docdir=/usr/share/doc/${PF}/pdf \
-		examplesdir=/usr/share/doc/${PF}/examples
+		docdir="${EPREFIX}"/usr/share/doc/${PF}/pdf \
+		examplesdir="${EPREFIX}"/usr/share/doc/${PF}/examples
 
 	docompress -x /usr/share/doc/${PF}/examples
-
-	if ! use examples; then
-		rm -rf "${ED}"/usr/share/doc/${PF}/examples
-	fi
+	use examples || rm -rf "${ED}"/usr/share/doc/${PF}/examples
 }

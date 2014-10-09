@@ -6,7 +6,7 @@ EAPI=5
 
 inherit git-2 eutils
 
-DESCRIPTION="FFT3DFilter hacked to work on linux"
+DESCRIPTION="FFT3DFilter for avxsynth"
 HOMEPAGE="https://github.com/fundies/fft3dfilter-linux"
 EGIT_REPO_URI="https://github.com/fundies/fft3dfilter-linux.git"
 EGIT_BRANCH="master"
