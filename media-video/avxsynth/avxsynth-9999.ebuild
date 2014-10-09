@@ -19,7 +19,7 @@ IUSE=""
 DEPEND="
 	dev-libs/log4cpp
 	dev-qt/qtgui
-	media-video/mplayer2
+	media-video/mplayer
 	sys-devel/autoconf
 	sys-devel/automake
 	x11-libs/cairo
@@ -44,10 +44,3 @@ src_install() {
 	make_desktop_entry AVXEdit
 }
 
-pkg_postinst() {
-	ln -s /usr/bin/mplayer2 /usr/bin/mplayer
-	echo "a portage created the symlink /usr/bin/mplayer"
-}
-pkg_postrm() {
-	rm /usr/bin/mplayer
-}
