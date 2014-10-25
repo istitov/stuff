@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/shotcut/shotcut-9999.ebuild,v 1.1 2014-08-31 13:19:13 brothermechanic Exp $
 
-EAPI=4
+EAPI=5
 
 inherit git-2 eutils
 
@@ -31,6 +31,8 @@ DEPEND="
 	dev-qt/qtopengl:5
 	dev-qt/qtwidgets:5
 	dev-qt/qtconcurrent:5
+	dev-qt/qtmultimedia:5
+	dev-qt/qtprintsupport:5
 	=media-video/ffmpeg-2*
 	media-libs/x264
 	media-libs/libvpx
@@ -43,9 +45,14 @@ RDEPEND="${DEPEND}"
 
 
 src_prepare() {
-	/usr/lib64/qt5/bin/qmake PREFIX=D/usr/
+	/usr/lib64/qt5/bin/qmake PREFIX=${D}/usr/
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
+	dobin src/shotcut
+	insinto /usr/share/shotcut
+	doins -r src/qml
+	newicon "${S}"/icons/shotcut-logo-64.png "${PN}".png
+	make_desktop_entry shotcut "Shotcut"
+#	emake PREFIX=/usr DESTDIR="${D}" install
 }
