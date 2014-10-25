@@ -24,18 +24,21 @@ RDEPEND="
     virtual/blas
     virtual/cblas
 "
-DEPEND="$RDEPEND"
+DEPEND="$RDEPEND
+	media-gfx/jhead
+	"
 
 
 src_prepare() {
-    epatch "${FILESDIR}"/extract_focal.patch
+    #epatch "${FILESDIR}"/extract_focal.patch
+    epatch "${FILESDIR}"/BASE_PATH.patch
     if use ceres; then
 	    epatch "${FILESDIR}"/ceres.patch
     fi
 
     mv bin orig_bin || die
     mkdir bin || die
-    rm -r vc++|| die
+    rm -r vc++ orig_bin/*.dll || die
 }
 
 src_compile() {
@@ -54,12 +57,8 @@ src_install() {
     # Эта функция нуждается в доработке - возможно устанавливаем не всё, что нужно.
 
     dobin RunBundler.sh
+    dobin orig_bin/*
     cd bin || die
     dobin Bundle2Ply Bundle2PMVS Bundle2Vis bundler KeyMatchFull RadialUndistort
     dolib.so libANN_char.so
-
-    cd ../orig_bin || die
-    dodir /usr/libexec/$PN
-    insinto /usr/libexec/$PN
-    INSOPTIONS="-m755" doins ToSift.sh extract_focal.pl
 }
