@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-apps/ikiwiki/ikiwiki-3.20130904.1.ebuild,v 1.2 2013/12/23 15:48:37 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-apps/ikiwiki/ikiwiki-3.20140916.ebuild,v 1.1 2014/10/08 13:27:40 mrueg Exp $
 
 EAPI=5
 
@@ -47,7 +47,18 @@ SUGGESTED_RDEPEND="
 	media-gfx/imagemagick[perl]
 "
 
-TEST_DEPEND="dev-perl/File-chdir"
+TEST_DEPEND="
+	dev-perl/File-chdir
+	dev-perl/File-ReadBackwards
+	dev-perl/File-MimeInfo
+	dev-perl/HTML-LinkExtractor
+	dev-perl/HTML-Tree
+	dev-perl/Net-OpenID-Consumer
+	dev-perl/RPC-XML
+	dev-perl/XML-Feed
+	dev-perl/XML-Twig
+	dev-vcs/cvs[server]
+	dev-vcs/cvsps"
 
 DEPEND="
 	>=dev-lang/perl-5.10
@@ -76,6 +87,9 @@ DEPEND="${DEPEND}
 SRC_TEST=do
 
 src_prepare() {
+	#bug 498444 /usr/lib/plan9/lib/fortunes.index
+	addpredict "/usr/lib/plan9/lib/fortunes"
+
 	sed -i 's,lib/ikiwiki,libexec/ikiwiki,' \
 		"${S}"/{IkiWiki.pm,Makefile.PL,doc/plugins/install.mdwn} || die
 #	if use w3m ; then
