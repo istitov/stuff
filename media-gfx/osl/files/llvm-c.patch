@@ -1,0 +1,29 @@
+--- src/liboslexec/llvm_util.cpp.orig	2014-10-30 12:52:12.875500464 +0300
++++ src/liboslexec/llvm_util.cpp	2014-10-30 12:56:16.164487602 +0300
+@@ -43,7 +43,7 @@
+ # include <llvm/IR/LLVMContext.h>
+ # include <llvm/IR/IRBuilder.h>
+ # include <llvm/IR/DataLayout.h>
+-# include <llvm/Linker.h>
++# include <llvm-c/Linker.h>
+ # if OSL_LLVM_VERSION >= 34
+ #   include <llvm/IR/LegacyPassManager.h>
+ # else
+@@ -56,7 +56,7 @@
+ # include <llvm/DerivedTypes.h>
+ # include <llvm/Instructions.h>
+ # include <llvm/Intrinsics.h>
+-# include <llvm/Linker.h>
++# include <llvm-c/Linker.h>
+ # include <llvm/LLVMContext.h>
+ # include <llvm/Module.h>
+ # if OSL_LLVM_VERSION == 32
+@@ -79,7 +79,7 @@
+ #include <llvm/Support/raw_ostream.h>
+ #include <llvm/Support/TargetSelect.h>
+ #include <llvm/Support/PrettyStackTrace.h>
+-#include <llvm/Analysis/Verifier.h>
++#include <llvm/IR/Verifier.h>
+ #include <llvm/Target/TargetOptions.h>
+ #include <llvm/Transforms/Scalar.h>
+ #include <llvm/Transforms/IPO.h>
