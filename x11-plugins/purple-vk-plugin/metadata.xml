@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <herd>Pidgin plugin</herd>
+  <maintainer>
+    <email>dolphinstkom@gmail.com</email>
+    <name>Komashko Stanislav</name>
+  </maintainer>
+  <longdescription>
+Pidgin plugin for vk.com social network.
+  </longdescription>
+</pkgmetadata>
