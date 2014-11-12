@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.5 2014/11/12 12:00:00 brothermechanic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-2.72b.ebuild,v 1.1 2014/10/27 20:53:30 hasufell Exp $
 
 # TODO:
 #   bundled-deps: bullet is modified
@@ -10,23 +10,27 @@ EAPI=5
 PYTHON_COMPAT=( python3_4 )
 #PATCHSET="1"
 
-inherit multilib fdo-mime gnome2-utils cmake-utils eutils python-single-r1 versionator flag-o-matic toolchain-funcs pax-utils check-reqs git-2
+inherit multilib fdo-mime gnome2-utils cmake-utils eutils python-single-r1 versionator flag-o-matic toolchain-funcs pax-utils check-reqs
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="http://www.blender.org"
 
-BLENDGIT_URI="http://git.blender.org"
-EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
-EGIT_BRANCH="gooseberry"
-BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
-BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
-BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
+case ${PV} in
+	*_p*)
+		SRC_URI="http://dev.gentoo.org/~lu_zero/${P}.tar.gz" ;;
+	*)
+		SRC_URI="http://download.blender.org/source/${P}.tar.gz" ;;
+esac
+
+if [[ -n ${PATCHSET} ]]; then
+	SRC_URI+=" http://dev.gentoo.org/~flameeyes/${PN}/${P}-patches-${PATCHSET}.tar.xz"
+fi
 
 SLOT="0"
 LICENSE="|| ( GPL-2 BL )"
 KEYWORDS="~amd64 ~x86"
 IUSE_MODULES="+cycles +openimageio +opencolorio -osl openvdb +freestyle +compositor +tomato +game-engine player +addons +contrib +X"
-IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke +oceansim"
+IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke +oceansim eltopo"
 IUSE_CODECS="+ffmpeg openexr -jpeg2k -dds -tiff -cin -redcode quicktime"
 IUSE_SYSTEM="+openmp +sse +sse2 +fftw sndfile jack +sdl -openal +nls ndof +collada -doc -debug -lzma -valgrind +buildinfo"
 IUSE_GPU="-sm_30 -sm_35 -cuda"
@@ -94,7 +98,7 @@ RDEPEND="
 	sdl? ( media-libs/libsdl[sound,joystick] )
 	sndfile? ( media-libs/libsndfile )
 	tiff? ( media-libs/tiff:0 )
-	virtual/lapack
+	eltopo? ( virtual/lapack )
 	"
 DEPEND="${RDEPEND}
 	>=dev-cpp/eigen-3.1.3:3
@@ -104,31 +108,6 @@ DEPEND="${RDEPEND}
 	)
 	nls? ( sys-devel/gettext )"
 
-
-src_unpack(){
-	git-2_src_unpack
-	unset EGIT_BRANCH EGIT_COMMIT
-	if use addons; then
-		unset EGIT_BRANCH EGIT_COMMIT
-		EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons" \
-		EGIT_REPO_URI="${BLENDER_ADDONS_URI}" \
-		git-2_src_unpack
-	fi
-		if use contrib; then
-			unset EGIT_BRANCH EGIT_COMMIT
-			EGIT_SOURCEDIR="${WORKDIR}/${P}/release/scripts/addons_contrib" \
-			EGIT_REPO_URI="${BLENDER_ADDONS_CONTRIB_URI}" \
-			git-2_src_unpack
-		fi
-		if use nls; then
-			unset EGIT_BRANCH EGIT_COMMIT
-			EGIT_SOURCEDIR="${WORKDIR}/${P}/release/datafiles/locale" \
-			EGIT_REPO_URI="${BLENDER_TRANSLATIONS_URI}" \
-			git-2_src_unpack
-		fi
-
-}	
-	
 pkg_pretend() {
 	if use openmp && ! tc-has-openmp; then
 		eerror "You are using gcc built without 'openmp' USE."
@@ -146,7 +125,27 @@ pkg_setup() {
 }
 
 src_prepare() {
-	
+	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
+		"${FILESDIR}"/02-${PN}-2.71-unbundle-colamd.patch \
+		"${FILESDIR}"/04-${PN}-2.71-unbundle-glog.patch \
+		"${FILESDIR}"/05-${PN}-2.72-unbundle-eigen3.patch \
+		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
+		"${FILESDIR}"/07-${PN}-2.70-sse2.patch \
+		"${FILESDIR}"/08-${PN}-2.71-gflags.patch \
+		"${FILESDIR}"/09-${PN}-2.72b-unbundle-minilzo.patch
+
+	epatch_user
+
+	# remove some bundled deps
+	rm -r \
+		extern/Eigen3 \
+		extern/libopenjpeg \
+		extern/glew \
+		extern/colamd \
+		extern/lzo \
+		extern/libmv/third_party/{glog,gflags} \
+		|| die
+
 	# we don't want static glew, but it's scattered across
 	# thousand files
 	# !!!CHECK THIS SED ON EVERY VERSION BUMP!!!
@@ -215,6 +214,7 @@ src_configure() {
 		-DWITH_BOOST=ON
 		-DWITH_BULLET=ON
 		-DDWITH_OPENNL=ON
+		-DWITH_MOD_CLOTH_ELTOPO=OFF
 		$(cmake-utils_use_with tomato LIBMV)
 		$(cmake-utils_use_with compositor COMPOSITOR)
 		$(cmake-utils_use_with osl CYCLES_OSL)
@@ -227,6 +227,7 @@ src_configure() {
 		$(cmake-utils_use_with oceansim MOD_OCEANSIM)
 		$(cmake-utils_use_with remesh MOD_REMESH)
 		$(cmake-utils_use_with smoke MOD_SMOKE)
+		$(cmake-utils_use_with eltopo ELTOPO)
 		$(cmake-utils_use_with buildinfo BUILDINFO)
 		$(cmake-utils_use_with !X HEADLESS)
 		$(cmake-utils_use_with lzma LZMA)

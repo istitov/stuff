@@ -1,30 +1,29 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/nvidia-cuda-toolkit/nvidia-cuda-toolkit-5.0.35-r4.ebuild,v 1.1 2013/04/20 15:04:03 zerochaos Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-util/nvidia-cuda-toolkit/nvidia-cuda-toolkit-6.5.14.ebuild,v 1.1 2014/08/21 08:56:17 jlec Exp $
 
 EAPI=5
 
-inherit cuda unpacker versionator
+inherit check-reqs cuda unpacker versionator
 
 MYD=$(get_version_component_range 1)_$(get_version_component_range 2)
 
 DESCRIPTION="NVIDIA CUDA Toolkit (compiler and friends)"
 HOMEPAGE="http://developer.nvidia.com/cuda"
 CURI="http://developer.download.nvidia.com/compute/cuda/${MYD}/rel/installers"
-# http://developer.download.nvidia.com/compute/cuda/5_5/rel/installers/cuda_5.5.22_linux_64.run
 SRC_URI="
-	amd64? ( ${CURI}/cuda_${PV}_linux_64.run )"
-#	x86? ( ${CURI}/cuda_${PV}-linux_32.run )"
+	amd64? ( ${CURI}/cuda_${PV}_linux_64.run )
+	x86? ( ${CURI}/cuda_${PV}_linux_32.run )"
 
 SLOT="0/${PV}"
-LICENSE="NVIDIA-r1"
-KEYWORDS="-* ~amd64 ~amd64-linux"
+LICENSE="NVIDIA-CUDA"
+KEYWORDS="-* ~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="debugger doc eclipse profiler"
 
 DEPEND=""
 RDEPEND="${DEPEND}
-	>=sys-devel/gcc-4.8
-	!<=x11-drivers/nvidia-drivers-270.41
+	>=sys-devel/gcc-4.9
+	>=x11-drivers/nvidia-drivers-340.24[uvm]
 	debugger? (
 		sys-libs/libtermcap-compat
 		sys-libs/ncurses[tinfo]
@@ -36,31 +35,27 @@ S="${WORKDIR}"
 
 QA_PREBUILT="opt/cuda/*"
 
-#pkg_nofetch() {
-#	einfo "NVIDIA doesn't provide direct download links yet. If you're a"
-#	einfo "registered developer, then please download ${ARCHIVE} from"
-#	einfo "https://developer.nvidia.com/rdp/cuda-55-release-candidate-installers"
-#}
+CHECKREQS_DISK_BUILD="1500M"
 
 pkg_setup() {
 	# We don't like to run cuda_pkg_setup as it depends on us
-	:
+	check-reqs_pkg_setup
 }
 
 src_unpack() {
 	unpacker
-	unpacker run_files/cuda*run
+	unpacker run_files/cuda-linux*.run
+	epatch ${FILESDIR}/${PN}-6.0-gcc49.patch
 }
 
 src_prepare() {
 	local cuda_supported_gcc
 
-	cuda_supported_gcc="4.8"
+	cuda_supported_gcc="4.9"
 
 	sed \
 		-e "s:CUDA_SUPPORTED_GCC:${cuda_supported_gcc}:g" \
 		"${FILESDIR}"/cuda-config.in > "${T}"/cuda-config || die
-
 }
 
 src_install() {
@@ -74,6 +69,9 @@ src_install() {
 		dodoc doc/pdf/*
 		dohtml -r doc/html/*
 	fi
+
+	mv doc/man/man3/{,cuda-}deprecated.3 || die
+	doman doc/man/man*/*
 
 	use debugger || remove+=" bin/cuda-gdb extras/Debugger"
 	( use profiler || use eclipse ) || remove+=" libnsight"
@@ -109,18 +107,19 @@ src_install() {
 	mv * "${ED}"${cudadir}
 
 	cat > "${T}"/99cuda <<- EOF
-		PATH=${ecudadir}/bin:${ecudadir}/libnvvp
+		PATH=${ecudadir}/bin$(use profiler && echo ":${ecudadir}/libnvvp")
 		ROOTPATH=${ecudadir}/bin
 		LDPATH=${ecudadir}/lib$(use amd64 && echo "64:${ecudadir}/lib")
 	EOF
 	doenvd "${T}"/99cuda
 
-	make_wrapper nvprof "${EPREFIX}"${cudadir}/bin/nvprof "." ${ecudadir}/lib$(use amd64 && echo "64:${ecudadir}/lib")
+	use profiler && \
+		make_wrapper nvprof "${EPREFIX}"${cudadir}/bin/nvprof "." ${ecudadir}/lib$(use amd64 && echo "64:${ecudadir}/lib")
 
 	dobin "${T}"/cuda-config
 }
 
-pkg_postinst() {
+pkg_postinst_check() {
 	local a b
 	a="$(version_sort $(cuda-config -s))"; a=( $a )
 	# greatest supported version
@@ -136,5 +135,11 @@ pkg_postinst() {
 			ewarn "--compiler-bindir=${EPREFIX}/usr/*pc-linux-gnu/gcc-bin/gcc${b}"
 			ewarn "to the nvcc compiler flags"
 			echo
+	fi
+}
+
+pkg_postinst() {
+	if [[ ${MERGE_TYPE} != binary ]]; then
+		pkg_postinst_check
 	fi
 }

@@ -1,17 +1,17 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/djv/djv-1.0.0.ebuild,v 1.0 2014/10/05 00:00:00 perestoronin Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/djv/djv-9999.ebuild,v 1.0 2014/11/12 20:00:00 brothermechanic Exp $
 
 EAPI="5"
 
-inherit cmake-utils eutils
+inherit cmake-utils eutils git-2
 
 MY_P=${PN}-${PV}
 
 DESCRIPTION="Professional movie playback and image processing software for the film and computer animation industries."
 HOMEPAGE="http://djv.sf.net"
-SRC_URI="mirror://sourceforge/${PN}/${MY_P}-Source.tar.gz"
-#	mirror://sourceforge/${PN}/${PN}-third-party-${PV}-Source.tar.gz"
+EGIT_REPO_URI="git://git.code.sf.net/p/djv/git"
+#EGIT_BRANCH=""
 
 LICENSE="GPL-2"
 SLOT="1"
@@ -39,8 +39,8 @@ src_prepare() {
 	sed -i -e "s:djvPackageThirdParty true:djvPackageThirdParty false:" CMakeLists.txt || die
 }
 
-#src_install() {
-#	cmake-utils_src_install
-#	newicon etc/X11/projector32x32.png "${PN}".png
-#	make_desktop_entry djv_view "DJV View" djv AudioVideo "MimeType=image/exr;image/openexr;image/x-exr;"
-#}
+src_install() {
+	cmake-utils_src_install
+	newicon "${FILESDIR}"/djv_view.png "${PN}".png
+	make_desktop_entry djv_view "DJV View" djv AudioVideo "MimeType=image/exr;image/openexr;image/x-exr;"
+}
