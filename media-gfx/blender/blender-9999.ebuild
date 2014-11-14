@@ -17,7 +17,7 @@ HOMEPAGE="http://www.blender.org"
 
 BLENDGIT_URI="http://git.blender.org"
 EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
-EGIT_BRANCH="gooseberry"
+#EGIT_BRANCH="gooseberry"
 BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
 BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
 BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
@@ -146,7 +146,23 @@ pkg_setup() {
 }
 
 src_prepare() {
-	
+	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
+		"${FILESDIR}"/02-${PN}-2.71-unbundle-colamd.patch \
+		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
+		"${FILESDIR}"/07-${PN}-2.70-sse2.patch \
+		"${FILESDIR}"/09-${PN}-2.72b-unbundle-minilzo.patch \
+		"${FILESDIR}"/sequencer_extra_actions-3.8.patch.bz2
+
+	epatch_user
+
+	# remove some bundled deps
+	rm -r \
+		extern/libopenjpeg \
+		extern/glew \
+		extern/colamd \
+		extern/lzo \
+		|| die
+
 	# we don't want static glew, but it's scattered across
 	# thousand files
 	# !!!CHECK THIS SED ON EVERY VERSION BUMP!!!
