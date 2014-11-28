@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/pmvs/pmvs-2.ebuild,v 0.2 2013/11/20 09:40:12 Micky53 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/pmvs/pmvs-2.ebuild,v 0.3 2014/11/20 17:40:12 brothermechanic Exp $
 
 EAPI=5
 
@@ -17,7 +17,11 @@ IUSE=""
 
 DEPEND="
 	sci-libs/clapack
-	dev-libs/libf2c"
+	dev-libs/libf2c
+	dev-libs/boost
+	sci-libs/gsl
+	virtual/blas
+	virtual/jpeg"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/pmvs-2/program/main/"
