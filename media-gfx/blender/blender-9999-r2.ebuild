@@ -8,6 +8,7 @@ PYTHON_COMPAT=( python3_4 )
 
 BLENDGIT_URI="http://git.blender.org"
 EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
+EGIT_BRANCH="master"
 BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
 BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
 BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
@@ -20,11 +21,11 @@ HOMEPAGE="http://www.blender.org/"
 LICENSE="|| ( GPL-2 BL )"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE_MODULES="+boost +cycles +openimageio +opencolorio -osl openvdb -game-engine +compositor +tomato -player +addons +contrib +X"
+IUSE_MODULES="+boost +cycles +openimageio +opencolorio -osl openvdb -game-engine +compositor +tomato -player addons contrib"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke -oceansim"
-IUSE_CODECS="+ffmpeg -dpx -dds -openexr -tiff jpeg2k -redcode quicktime"
-IUSE_SYSTEM="+buildinfo -fftw +openmp +opennl +sse2 -sndfile -jack -sdl -openal +nls -ndof -collada -doc -debug -valgrind -portable"
-IUSE_GPU="+cuda +sm_30 -sm_35 -sm_50"
+IUSE_CODECS="+ffmpeg -dpx -dds openexr -tiff jpeg2k -redcode quicktime"
+IUSE_SYSTEM="+buildinfo fftw +openmp +opennl +sse2 -sndfile -jack sdl -openal +nls -ndof collada -doc -debug -valgrind -portable"
+IUSE_GPU="+cuda -sm_30 -sm_35 -sm_50"
 IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU}"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
@@ -184,6 +185,7 @@ src_prepare() {
 	rm -r \
 		extern/libopenjpeg \
 		extern/glew \
+		extern/colamd \
 		extern/lzo \
 		|| die
 
@@ -200,7 +202,7 @@ src_prepare() {
 
 src_configure() {
 	append-flags -funsigned-char -fno-strict-aliasing -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -DWITH_OPENNL -DHAVE_STDBOOL_H
-	append-lfs-flags
+	#append-lfs-flags
 	local mycmakeargs=""
 	#CUDA Kernal Selection
 	local CUDA_ARCH=""
@@ -234,11 +236,6 @@ src_configure() {
 		mycmakeargs="${mycmakeargs}
 		-DWITH_CYCLES_CUDA=ON
 		-DWITH_CYCLES_CUDA_BINARIES=ON
-		-DCUDA_BUILD_CUBIN=ON
-		-DCUDA_SEPARABLE_COMPILATION=ON
-		-DCUDA_SDK_ROOT_DIR=/opt/cuda/sdk
-		-DCUDA_TOOLKIT_ROOT_DIR=/opt/cuda
-		-DCUDA_VERBOSE_BUILD=ON
 		-DCUDA_INCLUDES=/opt/cuda/include
 		-DCUDA_LIBRARIES=/opt/cuda/lib64
 		-DCUDA_NVCC=/opt/cuda/bin/nvcc"
@@ -275,9 +272,8 @@ src_configure() {
 		$(cmake-utils_use_with ffmpeg CODEC_FFMPEG)
 		$(cmake-utils_use_with sndfile CODEC_SNDFILE)
 		$(cmake-utils_use_with cycles CYCLES)
-		$(cmake-utils_use_with cuda WITH_CYCLES_CUDA_BINARIES)
 		$(cmake-utils_use_with osl CYCLES_OSL)
-		$(cmake-utils_use_with doc WITH_DOC_MANPAGE)
+		$(cmake-utils_use_with doc DOC_MANPAGE)
 		$(cmake-utils_use_with fftw FFTW3)
 		$(cmake-utils_use_with game-engine GAMEENGINE)
 		$(cmake-utils_use_with dpx IMAGE_CINEON)

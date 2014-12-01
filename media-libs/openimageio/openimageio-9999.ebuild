@@ -14,7 +14,7 @@ EGIT_REPO_URI="https://github.com/OpenImageIO/oiio.git"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="gif jpeg2k colorio opencv opengl python qt4 ssl tbb +truetype"
 
 RESTRICT="test" #431412
