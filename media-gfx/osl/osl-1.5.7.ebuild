@@ -1,32 +1,40 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/osl/osl-9999.ebuild,v 1.1 2013/03/04 16:11:23 brothermechanic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/osl/osl-9999.ebuild,v 1.1 2013/03/04 16:11:23 megabaks Exp $
 
 EAPI=5
 
-inherit git-2 cmake-utils
+inherit cmake-utils
+
+MY_P="OpenShadingLanguage"
+MY_PV="Release-${PV}dev"
 
 DESCRIPTION="Open Shading Language"
 HOMEPAGE="https://github.com/imageworks/OpenShadingLanguage"
-EGIT_REPO_URI="https://github.com/imageworks/OpenShadingLanguage.git"
-EGIT_BRANCH="RB-1.4"
+SRC_URI="https://github.com/imageworks/${MY_P}/archive/${MY_PV}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE="test tbb"
 
 DEPEND="
-	>=dev-libs/boost-1.49.0
+	dev-libs/boost
 	media-libs/openimageio
 	sys-devel/clang
 	sys-devel/bison
 	sys-devel/flex
-	media-libs/ilmbase
+	>=media-libs/ilmbase-2.0
 	tbb? ( dev-cpp/tbb )
 	sys-devel/llvm"
 
 RDEPEND=""
+
+S="${WORKDIR}/${MY_P}-${MY_PV}"
+
+src_prepare() {
+	epatch "${FILESDIR}"/*.patch
+}
 
 src_configure() {
 	sed 's|-Werror|-Wno-error|' -i CMakeLists.txt || die
@@ -35,7 +43,8 @@ src_configure() {
 		$(cmake-utils_use_use tbb TBB)
 		$(cmake-utils_use_build test TESTING)
 		-DUSE_EXTERNAL_PUGIXML=ON
-		-DLLVM_STATIC=0"
+		-DLLVM_STATIC=0
+		-DILMBASE_VERSION=2"
 	cmake-utils_src_configure
 }
 

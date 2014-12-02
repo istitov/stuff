@@ -3,18 +3,20 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/openimageio/openimageio-1.3.5.ebuild,v 1.3 2014/02/17 06:41:48 ssuominen Exp $
 
 EAPI=5
-
 PYTHON_COMPAT=( python2_7 )
 
-inherit cmake-utils eutils multilib python-single-r1 vcs-snapshot git-2
+inherit cmake-utils eutils multilib python-single-r1 vcs-snapshot
+
+MY_P="oiio"
+MY_PV="Release-${PV}dev"
 
 DESCRIPTION="A library for reading and writing images"
-HOMEPAGE="http://sites.google.com/site/openimageio/ http://github.com/OpenImageIO"
-EGIT_REPO_URI="https://github.com/OpenImageIO/oiio.git"
+HOMEPAGE="https://github.com/OpenImageIO"
+SRC_URI="https://github.com/OpenImageIO/oiio/archive/Release-1.5.5dev.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~ppc64 ~x86"
 IUSE="gif jpeg2k colorio opencv opengl python qt4 ssl tbb +truetype"
 
 RESTRICT="test" #431412
@@ -31,11 +33,11 @@ RDEPEND="dev-libs/boost[python?]
 	sys-libs/zlib:=
 	virtual/jpeg
 	gif? ( media-libs/giflib )
-	jpeg2k? ( >=media-libs/openjpeg-1.5:0= )
+	jpeg2k? ( media-libs/openjpeg )
 	colorio? ( >=media-libs/opencolorio-1.0.7:= )
 	opencv? (
-		>=media-libs/opencv-2.3:=
-		python? ( || ( <media-libs/opencv-2.4.8 >=media-libs/opencv-2.4.8[python,${PYTHON_USEDEP}] ) )
+		media-libs/opencv
+		python? ( || ( <media-libs/opencv-2.9.8 >=media-libs/opencv-2.9.8[python,${PYTHON_USEDEP}] ) )
 	)
 	opengl? (
 		virtual/glu
@@ -43,16 +45,16 @@ RDEPEND="dev-libs/boost[python?]
 		)
 	python? ( ${PYTHON_DEPS} )
 	qt4? (
-		dev-qt/qtcore:4
-		dev-qt/qtgui:4
-		dev-qt/qtopengl:4
+		dev-qt/qtcore
+		dev-qt/qtgui
+		dev-qt/qtopengl
 		)
 	ssl? ( dev-libs/openssl:0 )
 	tbb? ( dev-cpp/tbb )
 	truetype? ( media-libs/freetype:2= )"
 DEPEND="${RDEPEND}"
 
-S=${WORKDIR}/${P}
+S="${WORKDIR}/${P}"
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
@@ -60,14 +62,15 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}-1.3.5-openexr-2.x.patch
-	epatch "${FILESDIR}"/pugixml.patch
+	epatch "${FILESDIR}"/missing_math.h.patch
+
 	# remove bundled code to make it build
 	# https://github.com/OpenImageIO/oiio/issues/403
-	rm src/include/OpenImageIO//pugixml* || die
+#	rm */pugixml* || die
 
 	# fix man page building
 	# https://github.com/OpenImageIO/oiio/issues/404
-	use qt4 || sed -i -e '/list.*APPEND.*cli_tools.*iv/d' doc/CMakeLists.txt
+	use qt4 || sed -i -e '/list.*APPEND.*cli_tools.*iv/d' src/doc/CMakeLists.txt
 
 	use python && python_fix_shebang .
 }
@@ -82,7 +85,6 @@ src_configure() {
 		-DUSE_FIELD3D=OFF # missing in Portage
 		-DOIIO_BUILD_TESTS=OFF # as they are RESTRICTed
 		-DSTOP_ON_WARNING=OFF
-		-DUSE_EXTERNAL_PUGIXML=ON
 		$(cmake-utils_use_use truetype freetype)
 		$(cmake-utils_use_use colorio OCIO)
 		$(cmake-utils_use_use opencv)
@@ -100,4 +102,9 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
+
+	rm -rf "${ED}"/usr/share/doc
+	dodoc {CHANGES,CREDITS,README*} # src/doc/CLA-{CORPORATE,INDIVIDUAL}
+	docinto pdf
+	dodoc src/doc/*.pdf
 }

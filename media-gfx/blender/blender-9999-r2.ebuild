@@ -264,6 +264,8 @@ src_configure() {
 		-DWITH_RAYOPTIMIZATION=ON
 		-DWITH_SYSTEM_GLES=ON
 		-DWITH_BUILTIN_GLEW=OFF
+		-DLLVM_STATIC=OFF
+		-DLLVM_LIBRARY="/usr/lib"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"

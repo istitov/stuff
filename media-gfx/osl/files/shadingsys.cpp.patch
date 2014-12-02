@@ -1,0 +1,19 @@
+--- src/liboslexec/shadingsys.cpp
++++ src/liboslexec/shadingsys.cpp
+@@ -26,6 +26,8 @@
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+ 
++#include <OpenImageIO/fmath.h>
++
+ #include <vector>
+ #include <string>
+ #include <cstdio>
+@@ -46,7 +48,6 @@
+ #include <OpenImageIO/timer.h>
+ #include <OpenImageIO/filesystem.h>
+ #include <OpenImageIO/optparser.h>
+-#include <OpenImageIO/fmath.h>
+ 
+ using namespace OSL;
+ using namespace OSL::pvt;
