@@ -27,7 +27,8 @@ src_unpack(){
 }
 
 src_prepare(){
-	epatch "${FILESDIR}"/gentoo-amd64.patch
+	epatch "${FILESDIR}"/gentoo-amd64.patch \
+		"${FILESDIR}"/CZ_VER_BUILD_by_xaizek.patch
 }
 
 src_configure() {
@@ -39,6 +40,8 @@ src_configure() {
 	fi
 }
 
-rc_install() {
+src_install() {
 	dobin bin/${PN}
+	newicon res/img/icon.png "${PN}".png
+	make_desktop_entry cuda-z "Cuda-Z"
 }

@@ -1,0 +1,11 @@
+--- bld/bin/make_build_svn.pl.orig	2014-12-04 18:04:34.118143813 +0300
++++ bld/bin/make_build_svn.pl	2014-12-04 18:06:14.470139610 +0300
+@@ -36,7 +36,7 @@
+ print OUT '#define CZ_BUILD_H'."\n";
+ 
+ $line = <VER>;
+-if($line =~ /exported/) {
++if($line =~ /exported/ || $line =~ /unversioned/i) {
+ 	$svnrevision = '0';
+ 	print OUT '/* WARNING! Cannot detect SVN revision number. */'."\n";
+ 
