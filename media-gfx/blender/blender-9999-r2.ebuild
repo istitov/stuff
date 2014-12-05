@@ -21,7 +21,7 @@ HOMEPAGE="http://www.blender.org/"
 LICENSE="|| ( GPL-2 BL )"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE_MODULES="+boost +cycles +openimageio +opencolorio -osl openvdb -game-engine +compositor +tomato -player addons contrib"
+IUSE_MODULES="+boost +cycles +openimageio +opencolorio -osl openvdb -game-engine +compositor +tomato -player addons contrib -alembic"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke -oceansim"
 IUSE_CODECS="+ffmpeg -dpx -dds openexr -tiff jpeg2k -redcode quicktime"
 IUSE_SYSTEM="+buildinfo fftw +openmp +opennl +sse2 -sndfile -jack sdl -openal +nls -ndof collada -doc -debug -valgrind -portable"
@@ -89,7 +89,8 @@ DEPEND="${PYTHON_DEPS}
 	ndof? ( dev-libs/libspnav )
 	quicktime? ( media-libs/libquicktime )
 	app-arch/lzma
-	valgrind? ( dev-util/valgrind )"
+	valgrind? ( dev-util/valgrind )
+	alembic? ( media-libs/alembic )"
 
 RDEPEND="${DEPEND}
 	dev-cpp/eigen:3
@@ -314,7 +315,9 @@ src_configure() {
 		$(cmake-utils_use_with valgrind VALGRIND)
 		$(cmake-utils_use_with quicktime QUICKTIME)
 		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)
-		$(cmake-utils_use_with sse2 SSE2)"
+		$(cmake-utils_use_with sse2 SSE2)
+		$(cmake-utils_use_with alembic ALEMBIC)
+		-DWITH_HDF5=ON"
 
 	cmake-utils_src_configure
 }

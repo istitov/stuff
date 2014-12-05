@@ -1,0 +1,10 @@
+--- Extensions/PngDC/PngDC.cpp~	2012-06-04 22:51:43.000000000 +0800
++++ Extensions/PngDC/PngDC.cpp	2013-06-03 15:44:23.504076213 +0800
+@@ -20,6 +20,7 @@
+ #include "PngDC.h"
+ 
+ #include <png.h>
++#include <cstring>
+ 
+ #include <config-endian.h>
+ 

@@ -1,0 +1,1041 @@
+diff -up OpenGTL-0.9.18/CMakeLists.txt.jx OpenGTL-0.9.18/CMakeLists.txt
+--- OpenGTL-0.9.18/CMakeLists.txt.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/CMakeLists.txt	2013-05-08 15:39:25.090057193 -0400
+@@ -78,8 +78,8 @@ else(MSVC)
+   FIND_LLVM_LIBS( ${LLVM_CONFIG_EXECUTABLE} "native bitwriter linker bitreader jit interpreter support ipo" LLVM_LIBS LLVM_NATIVE_OBJECTS )
+ endif(MSVC)
+ 
+-if( NOT MSVC AND NOT (LLVM_VERSION STREQUAL "3.1" OR LLVM_VERSION STREQUAL "3.0" OR LLVM_VERSION STREQUAL "3.2svn"  OR LLVM_VERSION STREQUAL "3.2" ) ) # There is no way with MSVC to know the llvm version
+-  message(FATAL_ERROR "LLVM 3.0 or 3.1 or 3.2 is required.")
++if( NOT MSVC AND NOT (LLVM_VERSION STREQUAL "3.3svn" OR LLVM_VERSION STREQUAL "3.3" OR LLVM_VERSION STREQUAL "3.4" OR LLVM_VERSION STREQUAL "3.5.0" ) ) # There is no way with MSVC to know the llvm version
++  message(FATAL_ERROR "LLVM 3.3, 3.4 or 3.5.0 is required. You have ${LLVM_VERSION}.")
+ endif()
+ 
+ if(MSVC)
+diff -up OpenGTL-0.9.18/OpenCTL/OpenCTL/compiler/Compiler.cpp.jx OpenGTL-0.9.18/OpenCTL/OpenCTL/compiler/Compiler.cpp
+--- OpenGTL-0.9.18/OpenCTL/OpenCTL/compiler/Compiler.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenCTL/OpenCTL/compiler/Compiler.cpp	2013-05-08 15:39:25.091057197 -0400
+@@ -27,10 +27,10 @@
+ #include <climits>
+ 
+ // LLVM
+-#include <llvm/InstrTypes.h>
++#include <llvm/IR/InstrTypes.h>
+ // #include <llvm/Linker.h>
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/Module.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/Module.h>
+ // #include <llvm/Transforms/Utils/Cloning.h>
+ // Library Loader
+ #ifdef LLVM_27_OR_28
+@@ -214,7 +214,7 @@ bool Compiler::compile(bool _isStandardL
+   return success;
+ }
+ 
+-#include <llvm/ValueSymbolTable.h>
++#include <llvm/IR/ValueSymbolTable.h>
+ 
+ bool Compiler::importModule(const GTLCore::String& name)
+ {
+diff -up OpenGTL-0.9.18/OpenCTL/OpenCTL/compiler/ParserNG.cpp.jx OpenGTL-0.9.18/OpenCTL/OpenCTL/compiler/ParserNG.cpp
+--- OpenGTL-0.9.18/OpenCTL/OpenCTL/compiler/ParserNG.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenCTL/OpenCTL/compiler/ParserNG.cpp	2013-05-08 15:39:25.091057197 -0400
+@@ -19,9 +19,9 @@
+ 
+ #include "ParserNG.h"
+ 
+-#include <llvm/Constants.h>
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/Type.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/Type.h>
+ 
+ #include <GTLCore/LLVMBackend/CodeGenerator_p.h>
+ #include <GTLCore/CompilationMessage.h>
+diff -up OpenGTL-0.9.18/OpenCTL/OpenCTL/Module.cpp.jx OpenGTL-0.9.18/OpenCTL/OpenCTL/Module.cpp
+--- OpenGTL-0.9.18/OpenCTL/OpenCTL/Module.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenCTL/OpenCTL/Module.cpp	2013-05-08 15:39:25.091057197 -0400
+@@ -38,7 +38,7 @@
+ using namespace OpenCTL;
+ 
+ // LLVM
+-#include <llvm/Module.h>
++#include <llvm/IR/Module.h>
+ #include <llvm/Bitcode/ReaderWriter.h>
+ #ifdef LLVM_27_OR_28
+ #include <llvm/System/Path.h>
+@@ -47,8 +47,7 @@ using namespace OpenCTL;
+ #include <llvm/Support/Path.h>
+ #include <llvm/Support/DynamicLibrary.h>
+ #endif
+-#include <llvm/Module.h>
+-#include <llvm/LLVMContext.h>
++#include <llvm/IR/LLVMContext.h>
+ 
+ struct Module::Private {
+   Private() : moduleData(0), isStandardLibrary(false) {}
+diff -up OpenGTL-0.9.18/OpenCTL/OpenCTL/Program.cpp.jx OpenGTL-0.9.18/OpenCTL/OpenCTL/Program.cpp
+--- OpenGTL-0.9.18/OpenCTL/OpenCTL/Program.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenCTL/OpenCTL/Program.cpp	2013-05-08 15:39:25.091057197 -0400
+@@ -20,16 +20,16 @@
+ #include "Program.h"
+ 
+ // LLVM
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/Instructions.h>
+-#include <llvm/Module.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/Instructions.h>
++#include <llvm/IR/Module.h>
+ #include <llvm/Transforms/Utils/Cloning.h>
+ 
+ // Passes
+ #include <llvm/PassManager.h>
+ #include <llvm/Analysis/LoopPass.h>
+ #include <llvm/Analysis/Verifier.h>
+-#include <llvm/GlobalVariable.h>
++#include <llvm/IR/GlobalVariable.h>
+ 
+ // GTLCore
+ #include "GTLCore/Buffer.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/AST/AccessorExpression.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/AST/AccessorExpression.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/AST/AccessorExpression.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/AST/AccessorExpression.cpp	2013-05-08 15:39:25.092057201 -0400
+@@ -20,9 +20,9 @@
+ #include "AccessorExpression.h"
+ 
+ #include <llvm/ADT/ArrayRef.h>
+-#include <llvm/Constants.h>
+-#include <llvm/Function.h>
+-#include <llvm/Instructions.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/Function.h>
++#include <llvm/IR/Instructions.h>
+ 
+ #include "../LLVMBackend/CodeGenerator_p.h"
+ #include "../LLVMBackend/ExpressionResult_p.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/AST/BinaryExpression.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/AST/BinaryExpression.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/AST/BinaryExpression.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/AST/BinaryExpression.cpp	2013-05-08 15:39:25.092057201 -0400
+@@ -19,7 +19,7 @@
+ 
+ #include "BinaryExpression.h"
+ 
+-#include <llvm/Instructions.h>
++#include <llvm/IR/Instructions.h>
+ 
+ #include <GTLCore/Debug.h>
+ #include <GTLCore/LLVMBackend/CodeGenerator_p.h>
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/AST/CompoundExpression.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/AST/CompoundExpression.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/AST/CompoundExpression.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/AST/CompoundExpression.cpp	2013-05-08 15:39:25.092057201 -0400
+@@ -19,10 +19,10 @@
+ 
+ #include "CompoundExpression.h"
+ 
+-#include <llvm/Constants.h>
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/GlobalVariable.h>
+-#include <llvm/Instructions.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/GlobalVariable.h>
++#include <llvm/IR/Instructions.h>
+ 
+ #include "../LLVMBackend/CodeGenerator_p.h"
+ #include "../Debug.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/AST/ConstantCompoundExpression.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/AST/ConstantCompoundExpression.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/AST/ConstantCompoundExpression.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/AST/ConstantCompoundExpression.cpp	2013-05-08 15:39:25.092057201 -0400
+@@ -19,10 +19,10 @@
+ 
+ #include "ConstantCompoundExpression.h"
+ 
+-#include <llvm/Constants.h>
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/GlobalVariable.h>
+-#include <llvm/Instructions.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/GlobalVariable.h>
++#include <llvm/IR/Instructions.h>
+ 
+ #include "../LLVMBackend/CodeGenerator_p.h"
+ #include "../Debug.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Expression.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Expression.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Expression.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Expression.cpp	2013-05-08 15:39:25.093057205 -0400
+@@ -19,11 +19,11 @@
+ 
+ #include "Expression.h"
+ 
+-#include <llvm/Constant.h>
+-#include <llvm/Constants.h>
+-#include <llvm/Function.h>
+-#include <llvm/GlobalVariable.h>
+-#include <llvm/Instructions.h>
++#include <llvm/IR/Constant.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/Function.h>
++#include <llvm/IR/GlobalVariable.h>
++#include <llvm/IR/Instructions.h>
+ 
+ #include "GTLCore/LLVMBackend/CodeGenerator_p.h"
+ #include "GTLCore/LLVMBackend/ExpressionResult_p.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/AST/FunctionDeclaration.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/AST/FunctionDeclaration.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/AST/FunctionDeclaration.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/AST/FunctionDeclaration.cpp	2013-05-08 15:39:25.093057205 -0400
+@@ -19,10 +19,10 @@
+ 
+ #include "FunctionDeclaration.h"
+ 
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/Function.h>
+-#include <llvm/Instructions.h>
+-#include <llvm/Type.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/Function.h>
++#include <llvm/IR/Instructions.h>
++#include <llvm/IR/Type.h>
+ 
+ #include <GTLCore/LLVMBackend/CodeGenerator_p.h>
+ #include <GTLCore/LLVMBackend/ExpressionResult_p.h>
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/AST/GarbageCollectionStatement.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/AST/GarbageCollectionStatement.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/AST/GarbageCollectionStatement.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/AST/GarbageCollectionStatement.cpp	2013-05-08 15:39:25.093057205 -0400
+@@ -21,8 +21,8 @@
+ 
+ #include <stdlib.h>
+ 
+-#include <llvm/Constant.h>
+-#include <llvm/Instructions.h>
++#include <llvm/IR/Constant.h>
++#include <llvm/IR/Instructions.h>
+ 
+ #include "../Type.h"
+ #include "../LLVMBackend/CodeGenerator_p.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Statement.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Statement.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Statement.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Statement.cpp	2013-05-08 15:39:25.093057205 -0400
+@@ -21,12 +21,12 @@
+ 
+ // LLVM
+ #include <llvm/ADT/ArrayRef.h>
+-#include <llvm/BasicBlock.h>
+-#include <llvm/Constants.h>
+-#include <llvm/Function.h>
+-#include <llvm/GlobalVariable.h>
+-#include <llvm/Instructions.h>
+-#include <llvm/Module.h>
++#include <llvm/IR/BasicBlock.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/Function.h>
++#include <llvm/IR/GlobalVariable.h>
++#include <llvm/IR/Instructions.h>
++#include <llvm/IR/Module.h>
+ 
+ // GTLCore
+ #include <GTLCore/LLVMBackend/CodeGenerator_p.h>
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Tree.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Tree.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Tree.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/AST/Tree.cpp	2013-05-08 15:39:25.094057209 -0400
+@@ -19,9 +19,9 @@
+ 
+ #include "Tree.h"
+ 
+-#include <llvm/Constant.h>
+-#include <llvm/GlobalVariable.h>
+-#include <llvm/Type.h>
++#include <llvm/IR/Constant.h>
++#include <llvm/IR/GlobalVariable.h>
++#include <llvm/IR/Type.h>
+ 
+ #include "FunctionDeclaration.h"
+ 
+@@ -37,8 +37,8 @@
+ #include "GTLCore/LLVMBackend/Visitor_p.h"
+ 
+ #include "Expression.h"
+-#include <llvm/Module.h>
+-#include <llvm/DerivedTypes.h>
++#include <llvm/IR/Module.h>
++#include <llvm/IR/DerivedTypes.h>
+ 
+ using namespace GTLCore::AST;
+ 
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/Debug.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/Debug.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/Debug.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/Debug.cpp	2013-05-08 15:39:25.094057209 -0400
+@@ -22,9 +22,9 @@
+ #include <map>
+ #include <fstream>
+ 
+-#include <llvm/Module.h>
+-#include <llvm/Value.h>
+-#include <llvm/Type.h>
++#include <llvm/IR/Module.h>
++#include <llvm/IR/Value.h>
++#include <llvm/IR/Type.h>
+ #include <llvm/Support/Path.h>
+ #include <llvm/Support/raw_ostream.h>
+ 
+@@ -418,9 +418,9 @@ namespace GTLCore {
+ 
+ #ifdef OPENGTL_ENABLE_DEBUG_OUTPUT
+ 
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/Function.h>
+-#include <llvm/Type.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/Function.h>
++#include <llvm/IR/Type.h>
+ 
+ void compareFunctionParameters( llvm::Value* func, const std::vector<llvm::Value*>& params  )
+ {
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/FunctionCaller_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/FunctionCaller_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/FunctionCaller_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/FunctionCaller_p.cpp	2013-05-08 15:39:25.094057209 -0400
+@@ -21,9 +21,9 @@
+ 
+ #include <llvm/ExecutionEngine/GenericValue.h>
+ #include <llvm/ExecutionEngine/ExecutionEngine.h>
+-#include <llvm/Function.h>
+-
+-#include <llvm/DerivedTypes.h> // <- I don't understand why I need to include that file to be able to display llvm::Type on the standard output
++#include <llvm/IR/Function.h>
++#include <llvm/IR/Instructions.h>
++#include <llvm/IR/DerivedTypes.h> // <- I don't understand why I need to include that file to be able to display llvm::Type on the standard output
+ 
+ #include "VirtualMachine_p.h"
+ 
+@@ -35,7 +35,6 @@
+ #include "LLVMBackend/GenerationContext_p.h"
+ #include "ModuleData_p.h"
+ #include "LLVMBackend/CodeGenerator_p.h"
+-#include <llvm/Instructions.h>
+ #include "Type_p.h"
+ #include <GTLCore/Parameter.h>
+ #include "PrimitiveTypesTraits_p.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/Function_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/Function_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/Function_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/Function_p.cpp	2013-05-08 15:39:25.094057209 -0400
+@@ -21,9 +21,9 @@
+ 
+ #include <cstdarg>
+ 
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/Module.h>
+-#include <llvm/Type.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/Module.h>
++#include <llvm/IR/Type.h>
+ 
+ #include "Parameter.h"
+ 
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/CodeGenerator_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/CodeGenerator_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/CodeGenerator_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/CodeGenerator_p.cpp	2013-05-08 15:39:25.095057213 -0400
+@@ -19,12 +19,12 @@
+ 
+ #include "CodeGenerator_p.h"
+ 
+-#include <llvm/CallingConv.h>
+-#include <llvm/Constants.h>
+-#include <llvm/Function.h>
+-#include <llvm/Instructions.h>
+-#include <llvm/Module.h>
+-#include <llvm/Value.h>
++#include <llvm/IR/CallingConv.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/Function.h>
++#include <llvm/IR/Instructions.h>
++#include <llvm/IR/Module.h>
++#include <llvm/IR/Value.h>
+ 
+ #include "GTLCore/Debug.h"
+ #include "ExpressionResult_p.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ContextManager_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ContextManager_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ContextManager_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ContextManager_p.cpp	2013-05-08 15:39:25.095057213 -0400
+@@ -20,7 +20,7 @@
+ #include "ContextManager_p.h"
+ 
+ #include <llvm/Support/ThreadLocal.h>
+-#include <llvm/LLVMContext.h>
++#include <llvm/IR/LLVMContext.h>
+ 
+ using namespace LLVMBackend;
+ 
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ExpressionGenerationContext_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ExpressionGenerationContext_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ExpressionGenerationContext_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ExpressionGenerationContext_p.cpp	2013-05-08 15:39:25.095057213 -0400
+@@ -20,7 +20,7 @@
+ #include "ExpressionGenerationContext_p.h"
+ 
+ #include "GTLCore/Debug.h"
+-#include <llvm/BasicBlock.h>
++#include <llvm/IR/BasicBlock.h>
+ 
+ #include "GTLCore/Macros_p.h"
+ 
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ExpressionResult_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ExpressionResult_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ExpressionResult_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/ExpressionResult_p.cpp	2013-05-08 15:39:25.095057213 -0400
+@@ -19,8 +19,8 @@
+ 
+ #include "ExpressionResult_p.h"
+ 
+-#include "llvm/Constant.h"
+-#include "llvm/DerivedTypes.h"
++#include "llvm/IR/Constant.h"
++#include "llvm/IR/DerivedTypes.h"
+ 
+ #include "../Type.h"
+ #include "../Type_p.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/GenerationContext_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/GenerationContext_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/GenerationContext_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/GenerationContext_p.cpp	2013-05-08 15:39:25.096057217 -0400
+@@ -22,8 +22,8 @@
+ #include "GTLCore/ModuleData_p.h"
+ #include "GTLCore/Debug.h"
+ 
+-#include "llvm/BasicBlock.h"
+-#include "llvm/Function.h"
++#include "llvm/IR/BasicBlock.h"
++#include "llvm/IR/Function.h"
+ 
+ #include "GTLCore/AST/Statement.h"
+ 
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/Visitor_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/Visitor_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/Visitor_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/LLVMBackend/Visitor_p.cpp	2013-05-08 15:39:25.096057217 -0400
+@@ -20,12 +20,12 @@
+ #include "Visitor_p.h"
+ 
+ // LLVM
+-#include <llvm/BasicBlock.h>
+-#include <llvm/Constants.h>
+-#include <llvm/Function.h>
+-#include <llvm/Instructions.h>
+-#include <llvm/Module.h>
+-#include <llvm/GlobalVariable.h>
++#include <llvm/IR/BasicBlock.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/Function.h>
++#include <llvm/IR/Instructions.h>
++#include <llvm/IR/Module.h>
++#include <llvm/IR/GlobalVariable.h>
+ 
+ // GTLCore
+ #include "CodeGenerator_p.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/ModuleData_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/ModuleData_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/ModuleData_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/ModuleData_p.cpp	2013-05-08 15:41:21.422512114 -0400
+@@ -21,7 +21,7 @@
+ 
+ #include <sstream>
+ 
+-#include <llvm/Module.h>
++#include <llvm/IR/Module.h>
+ #include <llvm/PassManager.h>
+ #include <llvm/Target/TargetMachine.h>
+ #include <llvm/Analysis/Verifier.h>
+@@ -242,7 +242,7 @@ void ModuleData::doLink()
+   GTL_ASSERT( not m_llvmLinkedModule );
+   m_llvmLinkedModule = m_llvmModule;
+   m_llvmModule = llvm::CloneModule( m_llvmModule );
+-  llvm::Linker linker("", m_llvmLinkedModule);
++  llvm::Linker linker(m_llvmLinkedModule);
+   std::string errorMessage;
+   foreach( const llvm::Module* mod, m_linkModuleWith )
+   {
+@@ -270,18 +270,11 @@ void ModuleData::doLink()
+         hide.push_back(name);
+       }
+     }
+-    linker.LinkInModule( clone, &errorMessage );
++    linker.linkInModule( clone, &errorMessage );
+     
+     GTL_DEBUG("Linking error: " << errorMessage );
+     delete clone;
+   }
+-  foreach( const GTLCore::String& mod, m_linkModuleWithArchives )
+-  {
+-    bool v = false;
+-    linker.LinkInArchive( llvm::sys::Path( (const std::string&) mod), v);
+-  }
+-  
+-  linker.releaseModule();
+   
+   // Hide symbols
+   foreach(GTLCore::String name, hide)
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/Type.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/Type.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/Type.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/Type.cpp	2013-05-08 15:39:25.096057217 -0400
+@@ -25,7 +25,7 @@
+ 
+ #include <iostream>
+ 
+-#include <llvm/DerivedTypes.h>
++#include <llvm/IR/DerivedTypes.h>
+ 
+ #include "wrappers/StructWrap.h"
+ #include "SharedPointer.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/Type_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/Type_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/Type_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/Type_p.cpp	2013-05-08 15:39:25.097057221 -0400
+@@ -30,8 +30,8 @@
+ 
+ using namespace GTLCore;
+ 
+-#include <llvm/Type.h>
+-#include <llvm/DerivedTypes.h>
++#include <llvm/IR/Type.h>
++#include <llvm/IR/DerivedTypes.h>
+ 
+ Type::StructDataMember::Information::~Information()
+ {
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/Value_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/Value_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/Value_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/Value_p.cpp	2013-05-08 15:39:25.097057221 -0400
+@@ -19,8 +19,8 @@
+ 
+ #include "Value_p.h"
+ 
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/Type.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/Type.h>
+ 
+ #include "Debug.h"
+ #include "Value.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/VariableNG_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/VariableNG_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/VariableNG_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/VariableNG_p.cpp	2013-05-08 15:39:25.097057221 -0400
+@@ -19,8 +19,8 @@
+ 
+ #include "VariableNG_p.h"
+ 
+-#include <llvm/Constants.h>
+-#include <llvm/Instructions.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/Instructions.h>
+ 
+ #include "LLVMBackend/CodeGenerator_p.h"
+ #include "Debug.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLCore/VirtualMachine_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLCore/VirtualMachine_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/VirtualMachine_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/VirtualMachine_p.cpp	2013-05-08 15:39:25.097057221 -0400
+@@ -21,10 +21,10 @@
+ 
+ // JIT
+ #include <llvm/ExecutionEngine/ExecutionEngine.h>
+-#include <llvm/Module.h>
+-#include <llvm/DerivedTypes.h>
++#include <llvm/IR/Module.h>
++#include <llvm/IR/DerivedTypes.h>
+ #include <llvm/Target/TargetOptions.h>
+-#include <llvm/LLVMContext.h>
++#include <llvm/IR/LLVMContext.h>
+ #include <llvm/Support/CommandLine.h>
+ #include <llvm/Support/Threading.h>
+ #include <llvm/Support/ErrorHandling.h>
+@@ -48,7 +48,8 @@ struct VirtualMachine::Private {
+ VirtualMachine* VirtualMachine::Private::virtualMachine = 0;
+ int VirtualMachine::Private::optimLevel = 2;
+ 
+-void gtl_llvm_error_handler(void *user_data, const std::string& reason)
++void gtl_llvm_error_handler(void *user_data, const std::string& reason,
++			    bool gen_crash_diag)
+ {
+   GTL_ABORT(reason);
+ }
+@@ -58,11 +59,7 @@ VirtualMachine::VirtualMachine() : d(new
+ {
+   d->executionEngine = 0;
+   
+-#ifdef LLVM_27
+-  llvm::llvm_install_error_handler(&gtl_llvm_error_handler);
+-#else
+-  llvm::install_fatal_error_handler(&gtl_llvm_error_handler);
+-#endif
++  llvm::install_fatal_error_handler(gtl_llvm_error_handler);
+   
+   llvm::llvm_start_multithreaded();
+ 
+diff -up OpenGTL-0.9.18/OpenGTL/GTLFragment/Compiler_p.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLFragment/Compiler_p.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLFragment/Compiler_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLFragment/Compiler_p.cpp	2013-05-08 15:39:25.097057221 -0400
+@@ -19,7 +19,7 @@
+ 
+ #include "Compiler_p.h"
+ 
+-#include <llvm/Module.h>
++#include <llvm/IR/Module.h>
+ #include <llvm/PassManager.h>
+ 
+ #include "GTLCore/AST/Expression.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLFragment/Library.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLFragment/Library.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLFragment/Library.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLFragment/Library.cpp	2013-05-08 15:39:25.098057225 -0400
+@@ -22,9 +22,9 @@
+ 
+ #include <sstream>
+ 
+-#include <llvm/Module.h>
++#include <llvm/IR/Module.h>
+ #include <llvm/Support/DynamicLibrary.h>
+-#include <llvm/LLVMContext.h>
++#include <llvm/IR/LLVMContext.h>
+ 
+ #include "GTLCore/CompilationMessage.h"
+ #include "GTLCore/Function.h"
+diff -up OpenGTL-0.9.18/OpenGTL/GTLFragment/Wrapper.cpp.jx OpenGTL-0.9.18/OpenGTL/GTLFragment/Wrapper.cpp
+--- OpenGTL-0.9.18/OpenGTL/GTLFragment/Wrapper.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenGTL/GTLFragment/Wrapper.cpp	2013-05-08 15:39:25.098057225 -0400
+@@ -29,7 +29,7 @@
+ 
+ #include "Library.h"
+ #include <GTLCore/Function_p.h>
+-#include <llvm/Module.h>
++#include <llvm/IR/Module.h>
+ #include <GTLCore/Type_p.h>
+ 
+ using namespace GTLFragment;
+diff -up OpenGTL-0.9.18/OpenShiva/OpenShiva/CodeGenerator_p.cpp.jx OpenGTL-0.9.18/OpenShiva/OpenShiva/CodeGenerator_p.cpp
+--- OpenGTL-0.9.18/OpenShiva/OpenShiva/CodeGenerator_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenShiva/OpenShiva/CodeGenerator_p.cpp	2013-05-08 15:39:25.098057225 -0400
+@@ -21,14 +21,14 @@
+ 
+ #include <vector>
+ 
+-#include <llvm/CallingConv.h>
+-#include <llvm/Constants.h>
+-#include <llvm/Constant.h>
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/Function.h>
+-#include <llvm/Instructions.h>
+-#include <llvm/Module.h>
+-#include <llvm/Value.h>
++#include <llvm/IR/CallingConv.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/Constant.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/Function.h>
++#include <llvm/IR/Instructions.h>
++#include <llvm/IR/Module.h>
++#include <llvm/IR/Value.h>
+ 
+ #include "GTLCore/LLVMBackend/CodeGenerator_p.h"
+ #include "GTLCore/LLVMBackend/ExpressionResult_p.h"
+diff -up OpenGTL-0.9.18/OpenShiva/OpenShiva/ColorToPixelOverloadOperatorFactory_p.cpp.jx OpenGTL-0.9.18/OpenShiva/OpenShiva/ColorToPixelOverloadOperatorFactory_p.cpp
+--- OpenGTL-0.9.18/OpenShiva/OpenShiva/ColorToPixelOverloadOperatorFactory_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenShiva/OpenShiva/ColorToPixelOverloadOperatorFactory_p.cpp	2013-05-08 15:39:25.098057225 -0400
+@@ -28,13 +28,13 @@
+ #include "CodeGenerator_p.h"
+ #include <GTLFragment/wrappers/ColorWrap_p.h>
+ #include <GTLCore/Type_p.h>
+-#include <llvm/Value.h>
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/CallingConv.h>
+-#include <llvm/Module.h>
++#include <llvm/IR/Value.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/CallingConv.h>
++#include <llvm/IR/Module.h>
+ #include <GTLCore/LLVMBackend/ExpressionGenerationContext_p.h>
+ #include <GTLCore/LLVMBackend/CodeGenerator_p.h>
+-#include <llvm/Instructions.h>
++#include <llvm/IR/Instructions.h>
+ #include <GTLCore/TypesManager.h>
+ 
+ using namespace OpenShiva;
+diff -up OpenGTL-0.9.18/OpenShiva/OpenShiva/Kernel.cpp.jx OpenGTL-0.9.18/OpenShiva/OpenShiva/Kernel.cpp
+--- OpenGTL-0.9.18/OpenShiva/OpenShiva/Kernel.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenShiva/OpenShiva/Kernel.cpp	2013-05-08 15:39:25.099057228 -0400
+@@ -22,7 +22,7 @@
+ #include <sstream>
+ #include <fstream>
+ 
+-#include <llvm/Module.h>
++#include <llvm/IR/Module.h>
+ 
+ #include "GTLCore/CompilationMessage.h"
+ #include "GTLCore/Function.h"
+@@ -48,7 +48,7 @@
+ #include "wrappers/ImageWrap_p.h"
+ #include "wrappers/RegionWrap_p.h"
+ #include <GTLCore/AST/Tree.h>
+-#include <llvm/DerivedTypes.h>
++#include <llvm/IR/DerivedTypes.h>
+ 
+ using namespace OpenShiva;
+ 
+diff -up OpenGTL-0.9.18/OpenShiva/OpenShiva/PixelConvertExpressionFactory_p.cpp.jx OpenGTL-0.9.18/OpenShiva/OpenShiva/PixelConvertExpressionFactory_p.cpp
+--- OpenGTL-0.9.18/OpenShiva/OpenShiva/PixelConvertExpressionFactory_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenShiva/OpenShiva/PixelConvertExpressionFactory_p.cpp	2013-05-08 15:39:25.099057228 -0400
+@@ -19,7 +19,8 @@
+ 
+ #include "PixelConvertExpressionFactory_p.h"
+ 
+-#include <llvm/Instructions.h>
++#include <llvm/IR/Instructions.h>
++#include <llvm/IR/Function.h>
+ 
+ #include "GTLCore/Type.h"
+ #include "GTLCore/AST/ConvertExpression.h"
+@@ -34,7 +35,6 @@
+ #include <GTLCore/VariableNG_p.h>
+ #include <GTLCore/LLVMBackend/Visitor_p.h>
+ #include <GTLFragment/wrappers/ColorWrap_p.h>
+-#include <llvm/Function.h>
+ #include <GTLCore/Type_p.h>
+ 
+ using namespace OpenShiva;
+diff -up OpenGTL-0.9.18/OpenShiva/OpenShiva/PixelVisitor_p.cpp.jx OpenGTL-0.9.18/OpenShiva/OpenShiva/PixelVisitor_p.cpp
+--- OpenGTL-0.9.18/OpenShiva/OpenShiva/PixelVisitor_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenShiva/OpenShiva/PixelVisitor_p.cpp	2013-05-08 15:39:25.099057228 -0400
+@@ -20,11 +20,11 @@
+ #include "PixelVisitor_p.h"
+ 
+ // LLVM
+-#include <llvm/Constant.h>
+-#include <llvm/Constants.h>
+-#include <llvm/BasicBlock.h>
+-#include <llvm/Instructions.h>
+-#include <llvm/Function.h>
++#include <llvm/IR/Constant.h>
++#include <llvm/IR/Constants.h>
++#include <llvm/IR/BasicBlock.h>
++#include <llvm/IR/Instructions.h>
++#include <llvm/IR/Function.h>
+ 
+ #include "GTLCore/LLVMBackend/ExpressionResult_p.h"
+ #include "GTLCore/LLVMBackend/ExpressionGenerationContext_p.h"
+diff -up OpenGTL-0.9.18/OpenShiva/OpenShiva/Wrapper_p.cpp.jx OpenGTL-0.9.18/OpenShiva/OpenShiva/Wrapper_p.cpp
+--- OpenGTL-0.9.18/OpenShiva/OpenShiva/Wrapper_p.cpp.jx	2012-12-29 06:27:12.000000000 -0500
++++ OpenGTL-0.9.18/OpenShiva/OpenShiva/Wrapper_p.cpp	2013-05-08 15:39:25.099057228 -0400
+@@ -22,9 +22,9 @@
+ #include <map>
+ #include <vector>
+ 
+-#include <llvm/DerivedTypes.h>
+-#include <llvm/Function.h>
+-#include <llvm/Module.h>
++#include <llvm/IR/DerivedTypes.h>
++#include <llvm/IR/Function.h>
++#include <llvm/IR/Module.h>
+ 
+ #include "GTLCore/Function_p.h"
+ #include "GTLCore/Macros.h"
+--- OpenGTL-0.9.18/OpenCTL/OpenCTL/Module.cpp.omv~	2014-01-19 19:53:34.082204830 +0100
++++ OpenGTL-0.9.18/OpenCTL/OpenCTL/Module.cpp	2014-01-19 19:55:19.238868170 +0100
+@@ -96,7 +96,7 @@ void Module::loadFromFile(const GTLCore:
+ {
+   d->isStandardLibrary = fileName.endWith( "ctlstdlib.ctl" );
+   d->source = "";
+-  d->name = llvm::sys::Path((const std::string&)fileName).getBasename().str();
++  d->name = basename(((const std::string&)fileName).c_str());
+   std::ifstream in;
+   in.open(fileName.c_str() );
+   if(not in)
+--- OpenGTL-0.9.18/OpenCTL/OpenCTL/ModulesManager.cpp.omv~	2014-01-19 19:56:44.922198793 +0100
++++ OpenGTL-0.9.18/OpenCTL/OpenCTL/ModulesManager.cpp	2014-01-19 19:59:49.722193032 +0100
+@@ -38,6 +38,7 @@ using namespace OpenCTL;
+ 
+ #include <map>
+ #include <list>
++#include <unistd.h>
+ 
+ struct ModulesManager::Private {
+   std::map<GTLCore::String, Module*> modules;
+@@ -84,10 +85,10 @@ Module* ModulesManager::loadModule(const
+   for( std::list<GTLCore::String>::iterator it = d->directories.begin();
+        it != d->directories.end(); ++it )
+   {
+-    llvm::sys::Path path( it->c_str() );
+-    path.appendComponent( (const std::string&)sourceName);
++    std::string path( it->c_str() );
++    path += std::string("/") + (const std::string&)sourceName;
+     OCTL_DEBUG("try " << path.c_str() );
+-    if(path.exists() and path.canRead())
++    if(!access(path.c_str(), R_OK))
+     {
+       m = new Module();
+       registerModule( name, m );
+--- OpenGTL-0.9.18/OpenCTL/OpenCTL/Template.cpp.omv~	2014-01-19 20:00:10.572192284 +0100
++++ OpenGTL-0.9.18/OpenCTL/OpenCTL/Template.cpp	2014-01-19 20:03:25.718852781 +0100
+@@ -32,6 +32,8 @@
+ #include <GTLCore/Macros_p.h>
+ #include <GTLCore/SysUtils_p.h>
+ 
++#include <libgen.h>
++
+ #include "Debug.h"
+ #include "templatecompiler/GenerationContext_p.h"
+ #include "templatecompiler/TemplateAST_p.h"
+@@ -82,8 +84,10 @@ void Template::setSource(const GTLCore::
+ 
+ void Template::loadFromFile(const GTLCore::String& fileName)
+ {
++  char *tmp=strdup(fileName.c_str());
+   d->filename = fileName;
+-  d->name = llvm::sys::Path((const std::string&)d->filename).getBasename().str();
++  d->name = strdup(basename(tmp));
++  free(tmp);
+   std::ifstream in;
+   in.open(fileName.c_str() );
+   if(not in)
+--- OpenGTL-0.9.18/OpenCTL/OpenCTL/templatecompiler/TemplateParser.cpp.omv~	2014-01-19 20:03:39.625519023 +0100
++++ OpenGTL-0.9.18/OpenCTL/OpenCTL/templatecompiler/TemplateParser.cpp	2014-01-19 20:05:37.378848615 +0100
+@@ -34,6 +34,8 @@
+ #include <GTLCore/CompilationMessages.h>
+ #include <GTLCore/CompilationMessages_p.h>
+ 
++#include <unistd.h>
++
+ using namespace OpenCTL;
+ using namespace OpenCTL::TemplateAST;
+ 
+@@ -196,10 +198,11 @@ TemplateAST::Node* TemplateParser::parse
+         for( std::list<GTLCore::String>::iterator it = d->includeDirectories.begin();
+             it != d->includeDirectories.end(); ++it )
+         {
+-          llvm::sys::Path path( (const std::string&)*it );
+-          path.appendComponent( (const std::string&)sourceName);
+-          OCTL_DEBUG("try " << path.c_str() );
+-          if(path.exists() and path.canRead())
++	  GTLCore::String path( *it );
++	  path.append("/");
++          path.append(sourceName);
++          OCTL_DEBUG("try " << ((const std::string&)path).c_str() );
++          if(!access(((const std::string&)path).c_str(), R_OK))
+           {
+             std::ifstream in;
+             in.open(path.c_str() );
+--- OpenGTL-0.9.18/OpenGTL/GTLCore/Debug.cpp.omv~	2014-01-19 19:14:25.692279114 +0100
++++ OpenGTL-0.9.18/OpenGTL/GTLCore/Debug.cpp	2014-01-19 19:20:55.425600119 +0100
+@@ -111,11 +111,16 @@ Debug::Private::~Private()
+   delete m_voidStream;
+ }
+ 
++static llvm::StringRef getUserHomeDirectory() {
++  const char * home = getenv("HOME");
++  return home ? llvm::StringRef(home) : llvm::StringRef("/");
++}
++
+ void Debug::Private::readConfigFile( const String& _fileName, std::map< GTLCore::String, LibraryDebugInfo >& _destination)
+ {
+-  llvm::sys::Path path = llvm::sys::Path::GetUserHomeDirectory();
+-  path.appendComponent( (const std::string&)_fileName);
+-  if( path.exists() )
++  llvm::SmallString<128> path(getUserHomeDirectory());
++  llvm::sys::path::append(path, llvm::StringRef(_fileName));
++  if( llvm::sys::fs::exists(llvm::Twine(path)) )
+   {
+     std::ifstream in;
+     in.open(path.c_str() );
+@@ -195,7 +200,7 @@ String Debug::Private::extractFunctionNa
+ 
+ std::ostream& Debug::Private::report( std::ostream& _stream, const std::map< GTLCore::String, LibraryDebugInfo >& _informationRecords, const String& _streamName, const String& _libraryName, const String& _fileName, int _line, const String& _functionName )
+ {
+-  GTLCore::String fileName = llvm::sys::Path((const std::string&)_fileName).getLast().str();
++  GTLCore::String fileName = llvm::sys::path::filename(llvm::StringRef(_fileName)).str();
+   GTLCore::String functionName = Private::extractFunctionName( _functionName );
+   if( isEnabled( _informationRecords, _libraryName, fileName, functionName ) )
+   {
+--- OpenGTL-0.9.18/OpenGTL/GTLFragment/LibrariesManager.cpp.omv~	2014-01-19 19:51:07.425542802 +0100
++++ OpenGTL-0.9.18/OpenGTL/GTLFragment/LibrariesManager.cpp	2014-01-19 19:54:52.448869017 +0100
+@@ -33,6 +33,8 @@
+ 
+ #include <GTLCore/Macros_p.h>
+ 
++#include <unistd.h>
++
+ using namespace GTLFragment;
+ 
+ struct LibrariesManager::Private {
+@@ -90,10 +92,10 @@ Library* LibrariesManager::loadLibrary(
+     for( std::list<GTLCore::String>::iterator it = d->directories.begin();
+         it != d->directories.end(); ++it )
+     {
+-      llvm::sys::Path path( (const std::string&)*it );
+-      path.appendComponent( (const std::string&)sourceName);
++      std::string path( (const std::string&)*it );
++      path += std::string("/") + (const std::string&)sourceName;
+       GTL_DEBUG("try " << path.c_str() );
+-      if(path.exists() and path.canRead())
++      if(!access(path.c_str(), R_OK))
+       {
+         l = new Library( Library::FRAGMENT_LIBRARY, _channelsNb );
+         registerLibrary( name, l );
+--- OpenGTL-0.9.18/OpenGTL/GTLImageIO/ImageDC.cpp.omv~	2014-01-19 19:21:40.932265346 +0100
++++ OpenGTL-0.9.18/OpenGTL/GTLImageIO/ImageDC.cpp	2014-01-19 19:22:35.505596953 +0100
+@@ -65,7 +65,7 @@ bool ImageDC::canEncodeImage( const GTLC
+ 
+ GTLCore::String ImageDC::extension( const GTLCore::String& _fileName ) const
+ {
+-  GTLCore::String ext = llvm::sys::Path( (const std::string&)_fileName ).getSuffix().str();
++  GTLCore::String ext = llvm::sys::path::extension( llvm::StringRef((const std::string&)_fileName )).str();
+   return ext.toLower();
+ }
+ 
+--- OpenGTL-0.9.18/OpenGTL/GTLImageIO/ImageDCRegistry.cpp.omv~	2014-01-19 19:27:45.625587144 +0100
++++ OpenGTL-0.9.18/OpenGTL/GTLImageIO/ImageDCRegistry.cpp	2014-01-19 20:23:54.408813918 +0100
+@@ -30,6 +30,8 @@
+ #include <GTLCore/Debug.h>
+ #include "ImageDC.h"
+ 
++#include <dirent.h>
++
+ using namespace GTLImageIO;
+ 
+ struct ImageDCRegistry::Private {
+@@ -41,27 +43,25 @@ struct ImageDCRegistry::Private {
+ 
+ void ImageDCRegistry::Private::loadExtensionsIn(const GTLCore::String& _extensions)
+ {
+-  llvm::sys::Path extensionPath((const std::string&)_extensions);
+-  std::set<llvm::sys::Path> paths;
+-  std::string errMsg;
+   GTL_DEBUG("Loading extensions from " << _GTLIMAGEIO_EXTENSIONS_INSTALL_DIR_ );
+-  if( extensionPath.getDirectoryContents( paths, &errMsg))
+-  {
+-    GTL_DEBUG("Can't find exensions: " << errMsg );
+-  } else {
+-    for( std::set<llvm::sys::Path>::iterator it = paths.begin();
+-         it != paths.end(); ++it)
++  DIR *d = opendir(((const std::string&)_extensions).c_str());
++  std::string errMsg;
++  if(!d) {
++    GTL_DEBUG("Can't find exensions: " << strerror(errno) );
++  }
++
++  while(dirent *de = readdir(d)) {
++    std::string const entry = ((const std::string&)_extensions) + std::string("/") + std::string(de->d_name);
++    if(llvm::sys::path::extension(entry) == ".so" or llvm::sys::path::extension(entry) == ".dll" or llvm::sys::path::extension(entry) == ".dylib")
+     {
+-      if( it->getSuffix() == "so" or it->getSuffix() == "dll" or it->getSuffix() == "dylib")
+-      {
+-        GTL_DEBUG("Loading: " << it->str() );
+-        if( llvm::sys::DynamicLibrary::LoadLibraryPermanently( it->c_str(), &errMsg ) )
+-        {
+-          GTL_ERROR("Can't load " << it->str() << " : " << errMsg );
+-        }
++      GTL_DEBUG("Loading: " << entry);
++      if( llvm::sys::DynamicLibrary::LoadLibraryPermanently(de->d_name, &errMsg) ) {
++        GTL_ERROR("Can't load " << entry << " : " << errMsg);
+       }
+     }
+   }
++  closedir(d);
++  return;
+ }
+ 
+ ImageDCRegistry* global_instance = 0;
+--- OpenGTL-0.9.18/OpenShiva/OpenShiva/LibrariesManager.cpp.omv~	2014-01-19 20:06:25.645513758 +0100
++++ OpenGTL-0.9.18/OpenShiva/OpenShiva/LibrariesManager.cpp	2014-01-19 20:07:27.595511798 +0100
+@@ -37,6 +37,8 @@
+ #include <GTLCore/Macros_p.h>
+ #include <GTLFragment/LibrariesManager.h>
+ 
++#include <unistd.h>
++
+ using namespace OpenShiva;
+ 
+ struct LibrariesManager::Private {
+@@ -91,10 +93,10 @@ GTLFragment::Library* LibrariesManager::
+     for( std::list<GTLCore::String>::iterator it = d->directories.begin();
+         it != d->directories.end(); ++it )
+     {
+-      llvm::sys::Path path( (const std::string&)*it );
+-      path.appendComponent( (const std::string&)sourceName);
++      std::string path( (const std::string&)*it );
++      path += std::string("/") + (const std::string&)sourceName;
+       GTL_DEBUG("try " << path.c_str() );
+-      if(path.exists() and path.canRead())
++      if(!access(path.c_str(), R_OK))
+       {
+         Library* osl = new Library( Library::SHIVA_LIBRARY, _channelsNb );
+         registerLibrary( name, osl );
+--- OpenGTL-0.9.18/OpenShiva/OpenShiva/SourcesCollection.cpp.omv~	2014-01-19 20:07:53.182177655 +0100
++++ OpenGTL-0.9.18/OpenShiva/OpenShiva/SourcesCollection.cpp	2014-01-19 20:19:17.485489335 +0100
+@@ -26,6 +26,10 @@
+ #include <llvm/Support/Path.h>
+ #endif
+ 
++#include <set>
++#include <dirent.h>
++#include <sys/types.h>
++
+ #include "GTLCore/String.h"
+ #include "GTLCore/Macros_p.h"
+ #include "GTLCore/Utils_p.h"
+@@ -35,34 +39,46 @@
+ 
+ using namespace OpenShiva;
+ 
++static std::string getUserHomeDirectory() {
++  char *h = getenv("HOME");
++  return h ? h : "/";
++}
++
+ struct SourcesCollection::Private {
+   std::list< Source > kernels;
+-  void addDirectory( const llvm::sys::Path& path );
++  void addDirectory( const std::string& path );
+ };
+ 
+ 
+-void SourcesCollection::Private::addDirectory( const llvm::sys::Path& path )
++void SourcesCollection::Private::addDirectory( const std::string& path )
+ {
+-  std::set< llvm::sys::Path > content;
+-  path.getDirectoryContents( content, 0 );
+   SHIVA_DEBUG( "Looking for kernel in: " << path.c_str() );
+-  foreach( const llvm::sys::Path& path, content )
++  DIR *d = opendir(path.c_str());
++  if(!d)
++  {
++    SHIVA_DEBUG( "Can't opendir " << path.c_str() << ": " << strerror(errno));
++    return;
++  }
++  dirent *de;
++  while(de = readdir(d))
+   {
+-    SHIVA_DEBUG( "Kernel: " << path.c_str() << "?" );
+-    if( GTLCore::String( path.getSuffix() ).toLower() == "shiva" )
++    std::string p = path + std::string("/") + std::string(de->d_name);
++    SHIVA_DEBUG( "Kernel: " << p.c_str() << "?" );
++    if( GTLCore::String( llvm::sys::path::extension(p) ).toLower() == ".shiva" )
+     {
+-      SHIVA_DEBUG("Loading: " << path.c_str() );
++      SHIVA_DEBUG("Loading: " << p.c_str() );
+       Source kernel;
+-      kernel.loadFromFile( path.c_str() );
++      kernel.loadFromFile( p.c_str() );
+       kernels.push_back( kernel );
+     }
+   }
++  closedir(d);
+ }
+ 
+ SourcesCollection::SourcesCollection() : d(new Private)
+ {
+   addDirectory( _OPENSHIVA_SHIVA_KERNELS_DIR_ );
+-  addDirectory( llvm::sys::Path::GetUserHomeDirectory().str() + "/.OpenGTL/shiva/kernels" );
++  addDirectory( getUserHomeDirectory() + "/.OpenGTL/shiva/kernels" );
+ }
+ 
+ SourcesCollection::~SourcesCollection()
+@@ -72,7 +88,7 @@ SourcesCollection::~SourcesCollection()
+ 
+ void SourcesCollection::addDirectory(const GTLCore::String& directory)
+ {
+-  d->addDirectory( llvm::sys::Path( (const std::string&)directory ) );
++  d->addDirectory( (const std::string&)directory );
+ }
+ 
+ void SourcesCollection::registerSource( const Source& kernel )
