@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 LANGS="bg ca cs da de en_US es et eu fi fr gl hr hu it ja ka ko ku lt mk nl pl
 pt_BR pt sk sr sv tr zh_CN zh_TW"
 LANGSLONG="ar_SY el_GR ro_RO ru_RU sl_SI uk_UA vi_VN"
@@ -20,8 +20,9 @@ IUSE="debug +skins"
 
 DEPEND="dev-qt/qtgui:4"
 MPLAYER_USE="[libass,png,X]"
+MPV_USE="[libass,png,X,libmpv]"
 RDEPEND="${DEPEND}
-	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} )
+	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} media-video/mpv${MPV_USE} )
 	skins? ( x11-themes/smplayer-skins )"
 
 src_prepare() {
