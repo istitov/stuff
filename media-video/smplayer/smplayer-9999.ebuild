@@ -20,7 +20,7 @@ IUSE="debug +skins"
 
 DEPEND="dev-qt/qtgui:4"
 MPLAYER_USE="[libass,png,X]"
-MPV_USE="[libass,png,X,libmpv]"
+MPV_USE="[libmpv]"
 RDEPEND="${DEPEND}
 	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} media-video/mpv${MPV_USE} )
 	skins? ( x11-themes/smplayer-skins )"
