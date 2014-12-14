@@ -85,7 +85,6 @@ DEPEND="${PYTHON_DEPS}
 	jack? ( media-sound/jack-audio-connection-kit )
 	sndfile? ( media-libs/libsndfile )
 	collada? ( media-libs/opencollada )
-	cuda? ( >=dev-util/nvidia-cuda-toolkit-4.2 )
 	ndof? ( dev-libs/libspnav )
 	quicktime? ( media-libs/libquicktime )
 	app-arch/lzma

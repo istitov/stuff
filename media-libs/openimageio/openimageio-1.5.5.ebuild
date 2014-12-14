@@ -80,6 +80,7 @@ src_configure() {
 		-DLIB_INSTALL_DIR="/usr/$(get_libdir)"
 		-DBUILDSTATIC=OFF
 		-DLINKSTATIC=OFF
+		-DINSTALL_DOCS=OFF
 		$(use python && echo -DPYLIB_INSTALL_DIR="$(python_get_sitedir)")
 		-DUSE_EXTERNAL_PUGIXML=ON
 		-DUSE_FIELD3D=OFF # missing in Portage
