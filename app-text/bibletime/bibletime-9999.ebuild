@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/bibletime/bibletime.git"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="debug qt5"
+IUSE="debug"
 
 # bug 313657
 # RESTRICT="test"
@@ -20,21 +20,16 @@ IUSE="debug qt5"
 RDEPEND="
 	>=app-text/sword-1.6.0
 	>=dev-cpp/clucene-2.3.3.4
-	qt5? (
-		dev-qt/linguist-tools:5
-		dev-qt/qtcore:5
-		dev-qt/qtdbus:5
-		dev-qt/qtprintsupport:5
-		dev-qt/qtwidgets:5
-		dev-qt/qtsvg:5
-	)
-	!qt5? (
-		dev-qt/qtcore:4
-		dev-qt/qtdbus:4
-		dev-qt/qtgui:4
-		dev-qt/qtwebkit:4
-		dev-qt/qtsvg:4
-	)
+	dev-qt/linguist-tools:5
+	dev-qt/qtcore:5
+	dev-qt/qtdbus:5
+	dev-qt/qtprintsupport:5
+	dev-qt/qtwidgets:5
+	dev-qt/qtsvg:5
+	dev-qt/qtwebkit:5
+	dev-qt/qtprintsupport:5
+	dev-qt/qtxml:5
+	dev-qt/qtdbus:5
 "
 DEPEND="
 	${RDEPEND}
@@ -42,12 +37,7 @@ DEPEND="
 	dev-libs/icu:=
 	net-misc/curl
 	sys-libs/zlib
-	qt5? (
-		dev-qt/qttest:5
-	)
-	!qt5? (
-		dev-qt/qttest:4
-	)
+	dev-qt/qttest:5
 "
 
 DOCS=( ChangeLog README )
@@ -61,9 +51,5 @@ src_configure() {
 	local mycmakeargs=(
 		-DUSE_QT_WEBKIT=ON
 	)
-	if use !qt5; then
-		mycmakeargs+=(-DBT_FORCE_USE_QT4=)
-	fi
-
 	cmake-utils_src_configure
 }
