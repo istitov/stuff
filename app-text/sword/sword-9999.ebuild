@@ -3,15 +3,17 @@
 # $Header: /var/cvsroot/gentoo-x86/app-text/sword/sword-1.7.3.ebuild,v 1.1 2014/10/14 18:37:32 creffett Exp $
 
 EAPI=5
-inherit autotools eutils flag-o-matic git-2
+inherit autotools eutils flag-o-matic subversion
 
 DESCRIPTION="Library for Bible reading software"
 HOMEPAGE="http://www.crosswire.org/sword/"
-EGIT_REPO_URI="https://github.com/greg-hellings/sword.git"
+#EGIT_REPO_URI="https://github.com/greg-hellings/sword.git"
+ESVN_REPO_URI="http://crosswire.org/svn/sword/trunk"
+ESVN_REVISION=3203
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86 ~x86-fbsd ~ppc-macos"
+KEYWORDS=""
 IUSE="curl debug doc icu static-libs"
 
 RDEPEND="sys-libs/zlib
@@ -27,6 +29,7 @@ DOCS="AUTHORS CODINGSTYLE ChangeLog README"
 RESTRICT="test"	#Restricting for now, see bug 313207
 
 src_prepare() {
+	rm include/{zlib.h,zconf.h} || die
 	eautoreconf
 	sed -i \
 		-e '/FLAGS/s:-g3::' -e '/FLAGS/s:-O0::' \
@@ -52,13 +55,14 @@ src_configure() {
 		--with-zlib \
 		$(use_with icu) \
 		--with-conf \
+		--without-xz \
+		--with-bzip2 \
 		$(use_with curl)
 }
 
 src_install() {
 	insinto /usr/include
-	doins -r ${S}/include/* 
-	rm ${D}/usr/include/zlib.h ${D}/usr/include/zconf.h || die
+	doins -r ${S}/include/osisreferencelinks.h
 	default
 
 	find "${ED}" -name '*.la' -exec rm -f {} +
