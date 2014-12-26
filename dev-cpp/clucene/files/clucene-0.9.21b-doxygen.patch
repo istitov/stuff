@@ -1,0 +1,11 @@
+--- Makefile.am.old	2010-11-25 14:47:59.000000000 -0800
++++ Makefile.am	2010-11-25 14:48:11.000000000 -0800
+@@ -48,7 +48,7 @@
+ 	ncftpput -v upload.sourceforge.net /incoming @PACKAGE@-@VERSION@.tar.gz
+ 
+ doxygen:
+-	rm -fdr ./doc/html
++	rm -fr ./doc/html
+ 	doxygen Doxyfile
+ 	cp ./doc/clucene.jpg ./doc/html/clucene.jpg
+ 
