@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_4 )
 
 BLENDGIT_URI="http://git.blender.org"
 EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
-#EGIT_BRANCH="fracture_modifier"
+#EGIT_BRANCH="gooseberry"
 BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
 BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
 BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
