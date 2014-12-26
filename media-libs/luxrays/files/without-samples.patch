@@ -1,0 +1,16 @@
+--- CMakeLists.txt	2014-12-26 19:07:32.000000000 +0300
++++ CMakeLists.txt.fixed	2014-12-26 19:08:55.702211283 +0300
+@@ -124,13 +124,6 @@
+ #
+ ################################################################################
+ 
+-add_subdirectory(samples/benchsimple)
+-add_subdirectory(samples/luxcoredemo)
+-add_subdirectory(samples/luxcorescenedemo)
+-if(OPENGL_FOUND AND GLUT_FOUND AND GLEW_FOUND)
+-	add_subdirectory(samples/smallluxgpu4)
+-endif(OPENGL_FOUND AND GLUT_FOUND AND GLEW_FOUND)
+-
+ 
+ ################################################################################
+ #
