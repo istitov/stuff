@@ -3,8 +3,9 @@
 # $Header: $
 
 EAPI="5"
+PYTHON_COMPAT=( python3_4 )
 
-inherit cmake-utils flag-o-matic python mercurial
+inherit cmake-utils flag-o-matic mercurial python-single-r1
 
 DESCRIPTION="A GPL unbiased renderer."
 HOMEPAGE="http://www.luxrender.net"
@@ -22,7 +23,9 @@ RDEPEND=">=dev-libs/boost-1.43[python]
 	media-libs/libjpeg-turbo
 	media-libs/ilmbase
 	>=media-libs/freeimage-3.15.0
-	virtual/opengl"
+	media-libs/openimageio
+	virtual/opengl
+	virtual/opencl"
 DEPEND="${RDEPEND}
 	sys-devel/bison
 	sys-devel/flex
@@ -31,14 +34,20 @@ DEPEND="${RDEPEND}
 PDEPEND="blender? ( =media-plugins/luxblend25-${PV} )"
 
 src_configure() {
+	python-single-r1_pkg_setup
 	use sse2 && append-flags "-msse -msse2 -DLUX_USE_SSE"
 	use debug && append-flags -ggdb
-	
+	local mycmakeargs=""
+	mycmakeargs="${mycmakeargs}
+		  -DLUX_DOCUMENTATION=OFF
+		  -DLUXRAYS_DISABLE_OPENCL=OFF
+		  -DCMAKE_INSTALL_PREFIX=/usr"
 	cmake-utils_src_configure
 }
 
 src_install() {
 	cmake-utils_src_install
+	dobin "${CMAKE_BUILD_DIR}"/luxvr
 	dodoc AUTHORS.txt || die
 
 	# installing API(s) docs
@@ -50,7 +59,9 @@ src_install() {
 	fi
 	
 	if use blender; then
-		insinto /usr/share/blender/2.73/scripts/addons/luxrender/
-		doins "${CMAKE_BUILD_DIR}"/pylux.so || die "Couldn't install Pylux"
+		if v="/usr/share/blender/*";then
+		    insinto $v/scripts/addons/luxrender/
+		    doins "${CMAKE_BUILD_DIR}"/*.so || die "Couldn't install Pylux"
+		fi
 	fi
 }

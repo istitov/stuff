@@ -3,8 +3,9 @@
 # $Header: $
 
 EAPI="5"
+PYTHON_COMPAT=( python3_4 )
 
-inherit cmake-utils flag-o-matic mercurial
+inherit cmake-utils flag-o-matic mercurial python-single-r1
 
 DESCRIPTION="Library to accelerate the ray intersection process by using GPUs."
 HOMEPAGE="http://www.luxrender.net"
@@ -13,14 +14,15 @@ EHG_REPO_URI="http://src.luxrender.net/luxrays"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug"
+IUSE="+blender debug"
 
 DEPEND=">=dev-libs/boost-1.43
 	media-libs/freeimage
 	virtual/opencl
 	virtual/opengl"
 	
-src_prepare() {	
+src_prepare() {
+	python-single-r1_pkg_setup
 	epatch "${FILESDIR}/without-samples.patch"
 	epatch_user
 }
@@ -44,4 +46,11 @@ src_install() {
 	doins -r ${S}/include/*
 
 	dolib.a ${BUILD_DIR}/lib/*
+	
+	if use blender; then
+		if v="/usr/share/blender/*";then
+		    insinto $v/scripts/addons/luxrender/
+		    doins "${CMAKE_BUILD_DIR}"/lib/*.so || die "Couldn't install Pylux"
+		fi
+	fi
 }
