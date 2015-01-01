@@ -15,7 +15,7 @@ EHG_REVISION="v0.9.11"
 #To Do - need patch to update to v0.9.13
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 LICENSE="GPL-3 BSD"
 IUSE="doc +examples"
 
