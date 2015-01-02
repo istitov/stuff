@@ -1,0 +1,18 @@
+--- xcftools-1.0.7.orig/xcf2png.c
++++ xcftools-1.0.7/xcf2png.c
+@@ -59,7 +59,14 @@ my_error_callback(png_structp png_ptr, p
+   FatalUnexpected(_("Libpng error '%s'"),errormsg);
+ }
+ 
+-  
++#ifndef png_voidp_NULL
++#define png_voidp_NULL	NULL
++#endif
++
++#ifndef png_error_ptr_NULL
++#define png_error_ptr_NULL	NULL
++#endif
++
+ static void
+ init_output(void)
+ {

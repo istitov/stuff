@@ -1,0 +1,30 @@
+Index: xcftools-1.0.7/Makefile.in
+===================================================================
+--- xcftools-1.0.7.orig/Makefile.in	2010-12-05 12:12:02.000000000 +0100
++++ xcftools-1.0.7/Makefile.in	2010-12-05 12:12:56.000000000 +0100
+@@ -71,21 +71,21 @@
+ all: $(BINARIES) $(SCRIPTS) $(MANPAGES) po/stamp manpo/all
+ 
+ xcfinfo$e: xcfinfo.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o
+-	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
++	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
+ 
+ xcf2pnm$e: xcf2pnm.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o \
+ 	   pixels.$o flatten.$o flatspec.$o scaletab.$o table.$o
+-	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
++	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
+ 
+ xcf2png$e: xcf2png.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o \
+ 	   pixels.$o flatten.$o flatspec.$o scaletab.$o table.$o palette.$o
+-	$(CC) $(LDFLAGS) $(LIBS) -lpng $^ -o $@
++	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS) -lpng
+ 
+ xcfview: xcfview.in Makefile
+ 	sed '1s,/usr/bin/perl,@PERL@,' < $< > $@
+ 
+ testscale$e: testscale.$o
+-	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
++	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
+ 
+ install: all
+ 	for p in $(BINARIES) ; do \

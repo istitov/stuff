@@ -1,0 +1,242 @@
+Use xdg-utils instead of parsing /etc/mailcap here and trying to find an image
+viewer. Makes depencies easier for Debian.
+--- a/xcfview.in
++++ b/xcfview.in
+@@ -2,133 +2,40 @@
+ #
+ #  xcfview: a wrapper script that uses xcftools and an external viewer
+ #  to display XCF images. The external viewer is found through the
+-#  mailcap(5) database (q.v.).
++#  mailcap(5) database (q.v.) by using xdg-utils.
+ #
+ #  Written by Henning Makholm <henning@makholm.net>
+ #  Derived from the run-mailcap script by Brian White <bcwhite@pobox.com>
+ #
+-#  This script has been placed in the public domain (by both authors)
+-#
+-#  We cannot use run-mailcap as-is because we can supply the flattened
+-#  image either as PNG and PPM, and we need to find the highest-ranked
+-#  viewer that can handle _one_ of these two. If everything else is equal
+-#  we try to prefer a PNG viewer such that transparency is handled properly.
++#  In 2009 almost entirely rewritten by Jan Hauke Rahm <info@jhr-online.de>
++#  to make use of xdg-utils instead of parsing /etc/mailcap on its own
++#  That makes handling of dependencies *way* easier in Debian
+ #
++#  This script has been placed in the public domain (by both authors)
+ 
+ use strict ;
+ use warnings ;
++use File::Temp qw/ tempfile /;
+ 
+ my $debug=0;
+-my $quotedsemi = "\001" ;
+-my $quotedprct = "\002" ;
+-
+-sub ReadMailcap {
+-	my($file) = @_;
+-	my $line = "";
+-
+-	return unless -r $file;
+-
+-	print STDERR " - Reading mailcap file \"$file\"...\n" if $debug;
+-	open(MAILCAP,"<$file") || die "Error: could not read \"$file\" -- $!\n";
+-        my @mailcap ;
+-        
+-	while (<MAILCAP>) {
+-		chomp;
+-		s/^\s+// if $line;
+-		$line .= $_;
+-		next unless $line;
+-		if ($line =~ m/^\s*\#/) {
+-			$line = "";
+-			next;
+-		}
+-		if ($line =~ m/\\$/) {
+-			$line =~ s/\\$//;
+-		} else {
+-			$line =~ s/\\;/$quotedsemi/go;
+-			$line =~ s/\\%/$quotedprct/go;
+-			push @mailcap,$line;
+-			$line = "";
+-		}
+-	}
+-	close MAILCAP;
+-
+-        return @mailcap ;
+-}
+-
+-sub TempFile {
+-	my($match) = @_;
+-	my($cmd,$head,$tail,$tmpfile);
+-
+-        ($head,$tail) = split(/%s/,$1,2)
+-            if ($match =~ m/nametemplate=(.*?)\s*($|;)/);
+-
+-	$cmd  = "tempfile --mode=600";
+-	$cmd .= " --prefix $head" if $head;
+-	$cmd .= " --suffix $tail" if $tail;
+ 
+-	$tmpfile = `$cmd`;
+-	chomp($tmpfile);
++my $png_prog = `xdg-mime query default image/png`;
++my $pnm_prog = `xdg-mime query default image/x-portable-pixmap`;
+ 
+-	return $tmpfile;
+-}
+-
+-my ($useline,$usecomm,$useprogram,$usetype,@converter) ;
+-foreach my $mailcap ( $ENV{MAILCAPS} ? split(/:/,$ENV{MAILCAPS}) :
+-                      ( "$ENV{HOME}/.mailcap",
+-                        qw( /etc/mailcap
+-                            /usr/local/etc/mailcap
+-                            /usr/share/etc/mailcap
+-                            /usr/etc/mailcap
+-                            ) ) ) {
+-    foreach ( ReadMailcap($mailcap) ) {
+-        my ($type,$comm,$program,$rest)
+-            = m"^image/(png|x-portable-pixmap)\s*;\s*((\S*).*?)\s*($|;.*)"
+-            or next ;
+-        print STDERR " - checking $mailcap entry \"$_\"\n" if $debug;
+-        next if $rest =~ /;\s*needsterminal\s*($|;)/ ;
+-        next if $rest =~ /;\s*copiousoutput\s*($|;)/ ;
+-        if( $rest =~ m/;\s*test=(.*?)\s*($|;)/ ) {
+-            my $test;
+-            print STDERR " - running test: $1 " if $debug;
+-            $test   = system "$1 >/dev/null 2>&1";
+-            $test >>= 8;
+-            print STDERR " (result=$test=",($test!=0?"false":"true"),")\n"
+-                if $debug;
+-            next if $test ;
+-        }
+-        # If we get down here, we have a possible hit.
+-        if( $type ne 'png' ) {
+-            # Save for later; if there is a PNG definition for the same
+-            # command, we will prefer PNG
+-            ($useline,$usecomm,$useprogram,$usetype,@converter)
+-                = ($rest,$comm,$program,$type,"xcf2pnm","-c","'-#'")
+-                unless @converter ;
+-            next ;
+-        } else {
+-            # use this definition _unless_ we have already seen and saved
+-            # a definition for a _different_ program (which must have been PPM)
+-            ($useline,$usecomm,$useprogram,$usetype,@converter)
+-                = ($rest,$comm,$program,$type,"xcf2png")
+-                unless @converter && $comm eq $useprogram ;
+-            last ;
+-        }
+-    }
+-    last if @converter ;
+-}
+-
+-unless( @converter ) {
++my (@converter, $usecomm);
++if ($png_prog) {
++    @converter = ("xcf2png");
++    $usecomm = $png_prog;
++} elsif ($pnm_prog) {
++    @converter = ("xcf2pnm","-c","'-#'");
++    $usecomm = $pnm_prog;
++} else {
+     print STDERR "$0: No appropriate way to display PPM or PNG images in mailcap\n" ;
+     exit 1 ;
+ }
+ 
+-sub finishcomm() {
+-    $usecomm =~ s!([^%])%t!$1$usetype!g;
+-    $usecomm =~ s!%{(.*?)}!$_="'$ENV{$1}'";s/\`//g;$_!ge;
+-    $usecomm =~ s!\\(.)!$1!g;
+-    $usecomm =~ s!\'\'!\'!g;
+-    $usecomm =~ s!$quotedsemi!;!go;
+-    $usecomm =~ s!$quotedprct!%!go;
+-}
++$usecomm =~ s/\.desktop$//;
++$usecomm =~ s/\n$//;
+ 
+ # quote arguments for converter
+ for( @ARGV ) {
+@@ -137,27 +44,17 @@
+     $_ = "'$_'" ;
+ }
+ 
+-if( $usecomm =~ /[^%]%s/ ) {
+-    my $tempfile = TempFile($useline);
+-    $usecomm =~ s/([^%])%s/$1$tempfile/g ;
+-    finishcomm() ;
+-    my $retcode = 0 ;
+-    for my $comm ( join(" ",@converter,"-o",$tempfile,@ARGV),
+-                   $usecomm ) {
+-        print STDERR " - executing: $comm\n" if $debug ;
+-        my $res = system $comm;
+-        $res = int($res/256);
+-        if ($res != 0) {
+-            print STDERR "Warning: program returned non-zero exit code \#$res\n";
+-            $retcode = $res;
+-            last ;
+-        }
++my ($fh, $tempfile) = tempfile(UNLINK => 1);
++my $retcode = 0 ;
++for my $comm ( join(" ",@converter,"-o",$tempfile,@ARGV),
++	       join(" ",$usecomm,$tempfile) ) {
++    print STDERR " - executing: $comm\n" if $debug ;
++    my $res = system $comm;
++    $res = int($res/256);
++    if ($res != 0) {
++	print STDERR "Warning: program returned non-zero exit code \#$res\n";
++	$retcode = $res;
++	last ;
+     }
+-    unlink $tempfile ;
+-    exit $retcode ;
+-} else {
+-    finishcomm() ;
+-    exec( join(@converter," ",@ARGV) . " | " . $usecomm )
+-        or print STDERR "Couldn't exec pipeline: $!\n" ;
+-    exit 1 ;
+ }
++exit $retcode ;
+--- a/xcfview.10
++++ b/xcfview.10
+@@ -13,7 +13,7 @@
+ .\"
+ .\" If you use or distribute this code, I would appreciate receiving
+ .\" credit for writing it, in whichever way you find proper and customary.
+-.TH xcf2pnm 1 2006-02-12 "Xcftools" ""
++.TH xcf2pnm 1 2009-07-12 "Xcftools" ""
+ .SH NAME
+ xcfview \- display GIMP xcf files
+ .ds p xcfview
+@@ -33,9 +33,9 @@
+ or
+ .BR xcf2pnm (1)
+ (q.v.) to flatten an XCF image and then displays the flattened
+-image using a PNG or PPM viewer found using the
+-.BR mailcap (5)
+-database.
++image using a PNG or PPM viewer found using
++.BR xdg-open (1)
++from the xdg-utils package.
+ .SH OPTIONS
+ Every command-line parameter to
+ .B xcfview
+@@ -44,7 +44,7 @@
+ or
+ .B xcf2pnm
+ command.  Because it is not certain which converter will be used,
+-the options given should be ones that make sense for both of these:
++the options given should be ones that make sense for both of these.
+ .so xcfview.1i
+ .SH EXIT STATUS
+ The exit status is 0 in case of success. A nonzero exit status may
+@@ -57,7 +57,10 @@
+ .P
+ Parts of the script originate from the
+ .BR run-mailcap (1)
+-script by Brian White <bcwhite@pobox.com>.
++script by Brian White <bcwhite@pobox.com> but are superseded by the Debian
++specific changes of Jan Hauke Rahm <info@jhr-online.de> (to make use of
++xdg-utils).
+ .SH SEE ALSO
+ .BR xcf2pnm (1),
+-.BR xcf2png (1)
++.BR xcf2png (1),
++.BR xdg-open (1)

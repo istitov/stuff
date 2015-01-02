@@ -1,0 +1,16 @@
+Remove strip from Makefile.in (change made in 1.0.4-2 by bdefreese, just moving
+it to a proper patch)
+Index: xcftools-1.0.7/Makefile.in
+===================================================================
+--- xcftools-1.0.7.orig/Makefile.in
++++ xcftools-1.0.7/Makefile.in
+@@ -89,8 +89,7 @@
+ 
+ install: all
+ 	for p in $(BINARIES) ; do \
+-	  case $$p in xcfview) strip= ;; *) strip=-s ;; esac ; \
+-	  $(INSTALL_PROGRAM) $$strip $$p \
++	  $(INSTALL_PROGRAM) $$p \
+ 	    $(DESTDIR)$(bindir)/`echo $$p | $(SED) $(program_transform_name)` \
+ 	    || exit 1 ;\
+         done
