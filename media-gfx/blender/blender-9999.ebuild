@@ -1,74 +1,72 @@
+ 
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.5 2014/11/12 12:00:00 brothermechanic Exp $
-
-# TODO:
-#   bundled-deps: bullet is modified
-#   multiple python abi?
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/blender/blender-9999.ebuild,v 1.6 2014/11/30 23:00:00 brothermechanic Exp $
 
 EAPI=5
 PYTHON_COMPAT=( python3_4 )
-#PATCHSET="1"
-
-inherit multilib fdo-mime gnome2-utils cmake-utils eutils python-single-r1 versionator flag-o-matic toolchain-funcs pax-utils check-reqs git-2
-
-DESCRIPTION="3D Creation/Animation/Publishing System"
-HOMEPAGE="http://www.blender.org"
 
 BLENDGIT_URI="http://git.blender.org"
 EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
-EGIT_BRANCH="viewport_experiments"
+#EGIT_BRANCH="gooseberry"
 BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
 BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
 BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
 
-SLOT="0"
+inherit cmake-utils eutils python-single-r1 gnome2-utils fdo-mime pax-utils git-2 versionator toolchain-funcs flag-o-matic
+
+DESCRIPTION="3D Creation/Animation/Publishing System"
+HOMEPAGE="http://www.blender.org/"
+
 LICENSE="|| ( GPL-2 BL )"
+SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE_MODULES="+cycles +openimageio +opencolorio -osl openvdb +freestyle +compositor +tomato +game-engine player +addons +contrib +X"
-IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke +oceansim"
-IUSE_CODECS="+ffmpeg openexr -jpeg2k -dds -tiff -cin -redcode quicktime"
-IUSE_SYSTEM="+openmp +sse +sse2 +fftw sndfile jack +sdl -openal +nls ndof +collada -doc -debug -lzma -valgrind +buildinfo"
-IUSE_GPU="-sm_30 -sm_35 -cuda"
+IUSE_MODULES="+boost +cycles +openimageio +opencolorio -osl openvdb -game-engine +compositor +tomato -player addons contrib -alembic"
+IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke -oceansim"
+IUSE_CODECS="+ffmpeg -dpx -dds openexr -tiff jpeg2k -redcode quicktime"
+IUSE_SYSTEM="+buildinfo fftw +openmp +opennl +sse2 -sndfile -jack sdl -openal +nls -ndof collada -doc -debug -valgrind -portable"
+IUSE_GPU="+cuda -sm_30 -sm_35 -sm_50"
 IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU}"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
-	player? ( game-engine )
-	redcode? ( jpeg2k ffmpeg )
-	oceansim? ( fftw )
-	osl? ( cycles )
-	cuda? ( cycles )
-	openvdb? ( cycles )
-	cycles? ( openimageio opencolorio openexr tiff ) "
+	      cycles? ( boost )
+		cuda? ( cycles )
+		  osl? ( cycles )
+		    openvdb? ( cycles )
+		      redcode? ( ffmpeg jpeg2k )
+			player? ( game-engine )
+			  smoke? ( fftw )"
 
-RDEPEND="
-	${PYTHON_DEPS}
-	>=dev-cpp/gflags-2.1.1-r1
-	>=dev-cpp/glog-0.3.3-r1[gflags]
-	>=dev-libs/lzo-2.08:2
+LANGS="en ar bg ca cs de el es es_ES fa fi fr he hr hu id it ja ky ne nl pl pt pt_BR ru sr sr@latin sv tr uk zh_CN zh_TW"
+for X in ${LANGS} ; do
+	IUSE+=" linguas_${X}"
+	REQUIRED_USE+=" linguas_${X}? ( nls )"
+done
+
+DEPEND="${PYTHON_DEPS}
+	dev-cpp/gflags
+	dev-cpp/glog[gflags]
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
 	sci-libs/colamd
 	sci-libs/ldl
-	sys-libs/zlib
-	lzma? ( app-arch/lzma )
-	valgrind? ( dev-util/valgrind )
 	virtual/glu
 	virtual/libintl
-	ndof? (
-		app-misc/spacenavd
-		dev-libs/libspnav
-	)
-	X? ( x11-libs/libXi
-		x11-libs/libX11
-		virtual/opengl
-		>=media-libs/freetype-2.0
-		media-libs/glew
-	)
+	virtual/jpeg
+	media-libs/libpng
+	media-libs/tiff
+	media-libs/libsamplerate
+	x11-libs/libXi
+	x11-libs/libX11
+	virtual/opengl
+	media-libs/freetype
+	media-libs/glew
+	virtual/lapack
+	sys-libs/zlib
+	opencolorio? ( >=media-libs/opencolorio-1.0.8 )
+	boost? ( dev-libs/boost[threads(+)] )
+	openimageio? ( >=media-libs/openimageio-1.1.5 )
 	cycles? (
-		openimageio? ( >=media-libs/openimageio-1.1.5 )
-		opencolorio? ( >=media-libs/opencolorio-1.0.8 )
-		>=dev-libs/boost-1.44[nls?,threads(+)]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
 		osl? (
 		      >=sys-devel/llvm-3.1
@@ -76,36 +74,47 @@ RDEPEND="
 		      )
 		openvdb? ( media-gfx/openvdb )
 	)
+	sdl? ( media-libs/libsdl[sound,joystick] )
+	openexr? ( media-libs/openexr )
 	ffmpeg? (
 		>=media-video/ffmpeg-2.2[x264,xvid,mp3,encode]
 		jpeg2k? ( >=media-video/ffmpeg-2.2[x264,xvid,mp3,encode,jpeg2k] )
 	)
-	fftw? ( sci-libs/fftw:3.0 )
-	collada? ( media-libs/opencollada )
-	media-libs/libsamplerate
-	quicktime? ( media-libs/libquicktime )
-	jack? ( media-sound/jack-audio-connection-kit )
-	jpeg2k? ( media-libs/openjpeg:0 )
-	media-libs/libpng
-	virtual/jpeg
-	nls? ( virtual/libiconv )
 	openal? ( >=media-libs/openal-1.6.372 )
-	openexr? ( media-libs/openexr )
-	sdl? ( media-libs/libsdl[sound,joystick] )
+	fftw? ( sci-libs/fftw:3.0 )
+	jack? ( media-sound/jack-audio-connection-kit )
 	sndfile? ( media-libs/libsndfile )
-	tiff? ( media-libs/tiff:0 )
-	virtual/lapack
-	"
-DEPEND="${RDEPEND}
-	>=dev-cpp/eigen-3.1.3:3
-	doc? (
-		app-doc/doxygen[-nodot(-),dot(+)]
-		dev-python/sphinx
-	)
-	nls? ( sys-devel/gettext )"
+	collada? ( media-libs/opencollada )
+	ndof? ( dev-libs/libspnav )
+	quicktime? ( media-libs/libquicktime )
+	app-arch/lzma
+	valgrind? ( dev-util/valgrind )
+	alembic? ( media-libs/alembic )"
 
+RDEPEND="${DEPEND}
+	dev-cpp/eigen:3
+	nls? ( sys-devel/gettext )
+	doc? (
+		dev-python/sphinx
+		app-doc/doxygen[-nodot(-),dot(+)]
+	)"
+
+# configure internationalization only if LINGUAS have more
+# languages than 'en', otherwise must be disabled
+# A user may have en and en_US enabled. For libre/openoffice
+# as an example.
+for mylang in "${LINGUAS}" ; do
+	if [[ ${mylang} != "en" && ${mylang} != "en_US" && ${mylang} != "" ]]; then
+		DEPEND="${DEPEND}
+			sys-devel/gettext"
+		break;
+	fi
+done
+
+# S="${WORKDIR}/${PN}"
 
 src_unpack(){
+if [ "${PV}" = "9999" ];then
 	git-2_src_unpack
 	unset EGIT_BRANCH EGIT_COMMIT
 	if use addons; then
@@ -126,26 +135,43 @@ src_unpack(){
 			EGIT_REPO_URI="${BLENDER_TRANSLATIONS_URI}" \
 			git-2_src_unpack
 		fi
-
-}	
-	
-pkg_pretend() {
-	if use openmp && ! tc-has-openmp; then
-		eerror "You are using gcc built without 'openmp' USE."
-		eerror "Switch CXX to an OpenMP capable compiler."
-		die "Need openmp"
-	fi
-
-	if use doc; then
-		CHECKREQS_DISK_BUILD="4G" check-reqs_pkg_pretend
-	fi
+else
+	unpack ${A}
+fi
 }
 
 pkg_setup() {
 	python-single-r1_pkg_setup
+	enable_openmp="OFF"
+	if use openmp; then
+		if tc-has-openmp; then
+			enable_openmp="ON"
+		else
+			ewarn "You are using gcc built without 'openmp' USE."
+			ewarn "Switch CXX to an OpenMP capable compiler."
+			die "Need openmp"
+		fi
+	fi
+
+	if ! use sm_30 ! use sm_35 ! use sm_50; then
+		if use cuda; then
+			ewarn "You have not chosen a CUDA kernel. It takes an extreamly long time"
+			ewarn "to compile all the CUDA kernels. Check http://www.nvidia.com/object/cuda_gpus.htm"
+			ewarn "for your gpu and enable the matching sm_?? use flag to save time."
+		fi
+	else
+		if ! use cuda; then
+			ewarn "You have enabled a CUDA kernel (sm_??),  but you have not set"
+			ewarn "'cuda' USE. CUDA will not be compiled until you do so."
+		fi
+	fi
+	
 }
 
 src_prepare() {
+	rm -r "${WORKDIR}/${P}"/release/scripts/addons_contrib/sequencer_extra_actions/* \
+	|| die
+
 	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
 		"${FILESDIR}"/02-${PN}-2.71-unbundle-colamd.patch \
 		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
@@ -171,31 +197,14 @@ src_prepare() {
 		$(find . -type f -name "CMakeLists.txt") || die
 
 	ewarn "$(echo "Remaining bundled dependencies:";
-			( find extern -mindepth 1 -maxdepth 1 -type d; find extern/libmv/third_party -mindepth 1 -maxdepth 1 -type d; ) | sed 's|^|- |')"
-
-	# linguas cleanup
-	local i
-	if ! use nls; then
-		rm -r "${S}"/release/datafiles/locale || die
-	else
-		if [[ -n "${LINGUAS+x}" ]] ; then
-			cd "${S}"/release/datafiles/locale/po
-			for i in *.po ; do
-				mylang=${i%.po}
-				has ${mylang} ${LINGUAS} || { rm -r ${i} || die ; }
-			done
-		fi
-	fi
+			( find extern -mindepth 1 -maxdepth 1 -type d; ) | sed 's|^|- |')"
 }
 
 src_configure() {
-	# FIX: forcing '-funsigned-char' fixes an anti-aliasing issue with menu
-	# shadows, see bug #276338 for reference
-	append-flags -funsigned-char
-	append-lfs-flags
-	
+	append-flags -funsigned-char -fno-strict-aliasing -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -DWITH_OPENNL -DHAVE_STDBOOL_H
+	#append-lfs-flags
 	local mycmakeargs=""
-	#CUDA Kernel Selection
+	#CUDA Kernal Selection
 	local CUDA_ARCH=""
 	if use cuda; then
 		if use sm_30; then
@@ -212,79 +221,103 @@ src_configure() {
 				CUDA_ARCH="sm_35"
 			fi
 		fi
+		if use sm_50; then
+			if [[ -n "${CUDA_ARCH}" ]] ; then
+				CUDA_ARCH="${CUDA_ARCH};sm_50"
+			else
+				CUDA_ARCH="sm_50"
+			fi
+		fi
 
 		#If a kernel isn't selected then all of them are built by default
 		if [ -n "${CUDA_ARCH}" ] ; then
-			mycmakeargs="${mycmakeargs} -DCYCLES_CUDA_ARCH=${CUDA_ARCH}"
+			mycmakeargs="${mycmakeargs} -DCYCLES_CUDA_BINARIES_ARCH=${CUDA_ARCH}"
 		fi
-		mycmakeargs=( ${mycmakeargs}
+		mycmakeargs="${mycmakeargs}
 		-DWITH_CYCLES_CUDA=ON
 		-DWITH_CYCLES_CUDA_BINARIES=ON
 		-DCUDA_INCLUDES=/opt/cuda/include
 		-DCUDA_LIBRARIES=/opt/cuda/lib64
-		-DCUDA_NVCC=/opt/cuda/bin/nvcc )
+		-DCUDA_NVCC=/opt/cuda/bin/nvcc"
 	fi
 
+	#iconv is enabled when international is enabled
+	if use nls; then
+		for mylang in "${LINGUAS}" ; do
+			if [[ ${mylang} != "en" && ${mylang} != "en_US" && ${mylang} != "" ]]; then
+				mycmakeargs="${mycmakeargs} -DWITH_INTERNATIONAL=ON"
+				break;
+			fi
+		done
+	fi
 
-	mycmakeargs=( ${mycmakeargs}
-		-DCMAKE_INSTALL_PREFIX=/usr
-		-DWITH_BOOST=ON
+	#modified the install prefix in order to get everything to work for src_install
+	#make DESTDIR="${D}" install didn't work
+	mycmakeargs="${mycmakeargs}
+		-DCMAKE_INSTALL_PREFIX="/usr"
 		-DWITH_BULLET=ON
-		-DDWITH_OPENNL=ON
-		$(cmake-utils_use_with tomato LIBMV)
-		$(cmake-utils_use_with compositor COMPOSITOR)
+		-DWITH_CODEC_AVI=ON
+		-DWITH_COMPOSITOR=ON
+		-DWITH_FREESTYLE=ON
+		-DWITH_GHOST_XDND=ON
+		-DWITH_IMAGE_HDR=ON
+		-DWITH_RAYOPTIMIZATION=ON
+		-DWITH_SYSTEM_GLES=ON
+		-DWITH_BUILTIN_GLEW=OFF
+		-DLLVM_STATIC=OFF
+		-DLLVM_LIBRARY="/usr/lib"
+		-DPYTHON_VERSION="${EPYTHON/python/}"
+		-DPYTHON_LIBRARY="$(python_get_library_path)"
+		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
+		$(cmake-utils_use_with boost BOOST)
+		$(cmake-utils_use_with buildinfo BUILDINFO)
+		$(cmake-utils_use_with ffmpeg CODEC_FFMPEG)
+		$(cmake-utils_use_with sndfile CODEC_SNDFILE)
+		$(cmake-utils_use_with cycles CYCLES)
 		$(cmake-utils_use_with osl CYCLES_OSL)
+		$(cmake-utils_use_with doc DOC_MANPAGE)
+		$(cmake-utils_use_with fftw FFTW3)
+		$(cmake-utils_use_with game-engine GAMEENGINE)
+		$(cmake-utils_use_with dpx IMAGE_CINEON)
+		$(cmake-utils_use_with dds IMAGE_DDS)
+		$(cmake-utils_use_with openexr IMAGE_OPENEXR)
+		$(cmake-utils_use_with jpeg2k IMAGE_OPENJPEG)
+		$(cmake-utils_use_with redcode IMAGE_REDCODE)
+		$(cmake-utils_use_with tiff IMAGE_TIFF)
+		$(cmake-utils_use_with ndof INPUT_NDOF)
+		$(cmake-utils_use_with portable INSTALL_PORTABLE)
+		$(cmake-utils_use_with jack JACK)
+		$(cmake-utils_use_with jack JACK_DYNLOAD)
+		$(cmake-utils_use_with tomato LIBMV)
 		$(cmake-utils_use_with osl LLVM)
-		$(cmake-utils_use_with freestyle FREESTYLE)
-		$(cmake-utils_use_with cin IMAGE_CINEON)
 		$(cmake-utils_use_with boolean MOD_BOOLEAN)
 		$(cmake-utils_use_with decimate MOD_DECIMATE)
 		$(cmake-utils_use_with fluid MOD_FLUID)
 		$(cmake-utils_use_with oceansim MOD_OCEANSIM)
 		$(cmake-utils_use_with remesh MOD_REMESH)
 		$(cmake-utils_use_with smoke MOD_SMOKE)
-		$(cmake-utils_use_with buildinfo BUILDINFO)
-		$(cmake-utils_use_with !X HEADLESS)
-		$(cmake-utils_use_with lzma LZMA)
+		$(cmake-utils_use_with openal OPENAL)
+		$(cmake-utils_use_with collada OPENCOLLADA)
+		$(cmake-utils_use_with opencolorio OPENCOLORIO)
+		$(cmake-utils_use_with openimageio OPENIMAGEIO)
+		$(cmake-utils_use_with openmp OPENMP)
+		$(cmake-utils_use_with opennl OPENNL)
+		$(cmake-utils_use_with player PLAYER)
+		$(cmake-utils_use_with portable PYTHON_INSTALL)
+		$(cmake-utils_use_with portable PYTHON_INSTALL_NUMPY)
+		$(cmake-utils_use_with portable PYTHON_INSTALL_REQUESTS)
+		$(cmake-utils_use_with sdl SDL)
+		$(cmake-utils_use_with sdl SDL_DYNLOAD)
+		$(cmake-utils_use_with portable STATIC_LIBS)
+		$(cmake-utils_use_with debug DEBUG)
+		$(cmake-utils_use_with doc DOCS)
 		$(cmake-utils_use_with valgrind VALGRIND)
 		$(cmake-utils_use_with quicktime QUICKTIME)
 		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)
-		$(cmake-utils_use_with cycles CYCLES)
-		$(cmake-utils_use_with collada OPENCOLLADA)
-		$(cmake-utils_use_with dds IMAGE_DDS)
-		$(cmake-utils_use_with ffmpeg CODEC_FFMPEG)
-		$(cmake-utils_use_with fftw FFTW3)
-		$(cmake-utils_use_with game-engine GAMEENGINE)
-		$(cmake-utils_use_with nls INTERNATIONAL)
-		$(cmake-utils_use_with jack JACK)
-		$(cmake-utils_use_with jack JACK_DYNLOAD)
-		$(cmake-utils_use_with jpeg2k IMAGE_OPENJPEG)
-		$(cmake-utils_use_with openimageio OPENIMAGEIO)
-		$(cmake-utils_use_with openal OPENAL)
-		$(cmake-utils_use_with openexr IMAGE_OPENEXR)
-		$(cmake-utils_use_with openmp OPENMP)
-		$(cmake-utils_use_with player PLAYER)
-		$(cmake-utils_use_with redcode IMAGE_REDCODE)
-		$(cmake-utils_use_with sdl SDL)
-		$(cmake-utils_use_with sndfile CODEC_SNDFILE)
-		$(cmake-utils_use_with sse RAYOPTIMIZATION)
 		$(cmake-utils_use_with sse2 SSE2)
-		$(cmake-utils_use_with tiff IMAGE_TIFF)
-		$(cmake-utils_use_with opencolorio OPENCOLORIO)
-		$(cmake-utils_use_with ndof INPUT_NDOF)
-		$(cmake-utils_use_with debug DEBUG)
-		-DWITH_INSTALL_PORTABLE=OFF
-		-DWITH_BUILTIN_GLEW=OFF
-		-DWITH_PYTHON_INSTALL=OFF
-		-DWITH_PYTHON_INSTALL_NUMPY=OFF
-		-DWITH_STATIC_LIBS=OFF
-		-DWITH_SYSTEM_GLEW=ON
-		-DWITH_SYSTEM_OPENJPEG=ON
-		-DWITH_SYSTEM_BULLET=OFF
-		-DPYTHON_VERSION="${EPYTHON/python/}"
-		-DPYTHON_LIBRARY="$(python_get_library_path)"
-		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
-	)
+		$(cmake-utils_use_with alembic ALEMBIC)
+		-DWITH_HDF5=ON"
+
 	cmake-utils_src_configure
 }
 
