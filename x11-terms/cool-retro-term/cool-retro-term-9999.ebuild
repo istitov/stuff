@@ -4,6 +4,8 @@
 
 EAPI=5
 
+EGIT_HAS_SUBMODULES="true"
+
 inherit git-2 eutils
 
 DESCRIPTION="A good looking terminal emulator which mimics the old cathode display"
@@ -20,15 +22,15 @@ IUSE=""
 
 DEPEND="
 	dev-qt/qtquickcontrols:5
-	dev-qt/qtquickcontrols:5
 	dev-qt/qtgraphicaleffects:5
+	dev-qt/qtdeclarative:5[localstorage]
 	"
 
 RDEPEND="${DEPEND}"
 
 
 src_configure() {
-	/usr/lib64/qt5/bin/qmake INSTALL_PREFIX=/usr
+	qmake-qt5 INSTALL_PREFIX=/usr
 }
 
 src_install() {
