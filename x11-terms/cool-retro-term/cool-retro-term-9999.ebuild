@@ -21,7 +21,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="
-	dev-qt/qtquickcontrols:5
+	dev-qt/qtquickcontrols:5[widgets]
 	dev-qt/qtgraphicaleffects:5
 	dev-qt/qtdeclarative:5[localstorage]
 	"
@@ -30,7 +30,7 @@ RDEPEND="${DEPEND}"
 
 
 src_configure() {
-	qmake-qt5 INSTALL_PREFIX=/usr
+	/usr/lib/qt5/bin/qmake INSTALL_PREFIX=/usr
 }
 
 src_install() {
