@@ -20,6 +20,7 @@ KEYWORDS="~amd64 ~ppc ~x86"
 
 RDEPEND="
 		>=dev-qt/qtopengl-5.3.2
+		>=dev-qt/qtconcurrent-5.3.2
 		>=dev-qt/linguist-tools-5.3.2
 		>=media-libs/openexr-2.2.0
 		>=media-libs/glew-1.11.0
