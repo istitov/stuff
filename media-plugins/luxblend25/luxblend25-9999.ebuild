@@ -19,10 +19,8 @@ DEPEND=""
 RDEPEND=">=media-gfx/blender-2.50"
 
 src_install() {
-	if v="/usr/share/blender/*/scripts";then
-	  dodir $v/addons/
-	  cp -r "${S}"/src/luxrender "${D}"$v/addons/
-	  dodir $v/presets/
-	  cp -r "${S}"/src/presets/* "${D}"$v/presets/	  
-	fi
+	insinto /use/share/blender/2.73/scripts/addons/
+	doins -r "${S}"/src/luxrender
+	insinto /use/share/blender/2.73/scripts/presets/
+	doins -r "${S}"/src/presets/*
 }

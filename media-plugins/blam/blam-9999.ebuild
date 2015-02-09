@@ -23,8 +23,6 @@ DEPEND=""
 RDEPEND=""
 
 src_install() {
-	if v="/usr/share/blender/*";then
-	dodir $v/scripts/addons/
-	cp "${S}"/src/blam.py "${D}"$v/scripts/addons/
-	fi
+	insinto /use/share/blender/2.73/scripts/addons/
+	doins -r "${S}"/src/blam.py
 }
