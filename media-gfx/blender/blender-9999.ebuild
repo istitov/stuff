@@ -8,7 +8,9 @@ PYTHON_COMPAT=( python3_4 )
 
 BLENDGIT_URI="http://git.blender.org"
 EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
-EGIT_BRANCH="gooseberry"
+EGIT_BRANCH="master"
+#EGIT_COMMIT="2814039"
+#EGIT_COMMIT="v2.73a"
 BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
 BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
 BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
@@ -173,10 +175,8 @@ src_prepare() {
 	|| die
 
 	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
-		"${FILESDIR}"/02-${PN}-2.71-unbundle-colamd.patch \
 		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
 		"${FILESDIR}"/07-${PN}-2.70-sse2.patch \
-		"${FILESDIR}"/09-${PN}-2.72b-unbundle-minilzo.patch \
 		"${FILESDIR}"/sequencer_extra_actions-3.8.patch.bz2
 
 	epatch_user
@@ -185,8 +185,6 @@ src_prepare() {
 	rm -r \
 		extern/libopenjpeg \
 		extern/glew \
-		extern/colamd \
-		extern/lzo \
 		|| die
 
 	# we don't want static glew, but it's scattered across
@@ -316,7 +314,8 @@ src_configure() {
 		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)
 		$(cmake-utils_use_with sse2 SSE2)
 		$(cmake-utils_use_with alembic ALEMBIC)
-		-DWITH_HDF5=ON"
+		-DWITH_HDF5=ON
+		-DWITH_SYSTEM_LZO=OFF"
 
 	cmake-utils_src_configure
 }
@@ -357,10 +356,6 @@ src_install() {
 
 	# fucked up cmake will relink binary for no reason
 	emake -C "${CMAKE_BUILD_DIR}" DESTDIR="${D}" install/fast
-
-	# fix doc installdir
-	dohtml "${CMAKE_USE_DIR}"/release/text/readme.html
-	rm -rf "${ED%/}"/usr/share/doc/blender
 
 	python_fix_shebang "${ED%/}"/usr/bin/blender-thumbnailer.py
 	python_optimize "${ED%/}"/usr/share/blender/${PV}/scripts
