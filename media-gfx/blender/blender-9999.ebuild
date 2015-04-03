@@ -178,7 +178,7 @@ src_prepare() {
 		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
 		"${FILESDIR}"/07-${PN}-2.70-sse2.patch \
 		"${FILESDIR}"/sequencer_extra_actions-3.8.patch.bz2
-
+	
 	epatch_user
 
 	# remove some bundled deps
