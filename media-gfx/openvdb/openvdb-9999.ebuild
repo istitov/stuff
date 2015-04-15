@@ -16,7 +16,7 @@ EGIT_REPO_URI="https://github.com/dreamworksanimation/openvdb.git"
 
 LICENSE="MPL-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="doc"
 
 DEPEND="
