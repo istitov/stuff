@@ -32,12 +32,15 @@ DEPEND="
 
 RDEPEND="${RDEPEND}"
 
-S="${WORKDIR}/openvdb"
+S="${WORKDIR}/${P}/${PN}"
 
 PYTHON_VERSION="2.7"
 
 src_prepare() {
-	epatch "${FILESDIR}"/*.patch
+	epatch "${FILESDIR}"/fixnumpy.patch \
+		"${FILESDIR}"/fixversionnamesrc22.patch \
+		"${FILESDIR}"/use_svg.patch
+	epatch_user
 	use doc || sed 's|^DOXYGEN :=|#|;s|^EPYDOC :=|#|' -i Makefile
 	sed \
 	-e	"s|^INSTALL_DIR :=.*|INSTALL_DIR := ${D}/usr|" \
