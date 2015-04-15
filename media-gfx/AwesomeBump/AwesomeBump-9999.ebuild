@@ -11,6 +11,7 @@ inherit git-2 eutils
 DESCRIPTION="A free, open source, cross-platform video editor"
 HOMEPAGE="http://awesomebump.besaba.com/"
 EGIT_REPO_URI="https://github.com/kmkolasinski/AwesomeBump.git"
+#EGIT_COMMIT="a15b411"
 
 LICENSE="GPL-3"
 
@@ -43,6 +44,7 @@ src_install() {
 	doins -r Bin/*
 	exeinto $INST_DIR
 	doexe AwesomeBump
-	#newicon Sources/resources/logo.png "${PN}".png || die
-	#make_desktop_entry AwesomeBump
+	dobin ${FILESDIR}/AwesomeBump.sh
+	newicon Sources/resources/logo.png "${PN}".png || die
+	make_desktop_entry AwesomeBump.sh
 }
