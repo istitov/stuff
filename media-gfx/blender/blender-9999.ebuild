@@ -315,7 +315,8 @@ src_configure() {
 		$(cmake-utils_use_with sse2 SSE2)
 		$(cmake-utils_use_with alembic ALEMBIC)
 		-DWITH_HDF5=ON
-		-DWITH_SYSTEM_LZO=OFF"
+		-DWITH_SYSTEM_LZO=OFF
+		-DWITH_ALEMBIC=OFF"
 
 	cmake-utils_src_configure
 }

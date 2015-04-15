@@ -31,11 +31,5 @@ DEPEND="${RDEPEND}"
 #S="${WORKDIR}/${P}"
 
 src_prepare() {
-	autotools-multilib_src_prepare
-}
-
-src_configure() {
-	append-cppflags -I/usr/include
-	append-ldflags -L/usr/lib
-	autotools-multilib_src_configure
+	epatch "${FILESDIR}"/boost-python.patch
 }
