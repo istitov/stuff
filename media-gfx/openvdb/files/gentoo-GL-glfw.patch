@@ -1,0 +1,23 @@
+--- openvdb/viewer/Viewer.cc	2015-01-15 02:26:54.000000000 +0300
++++ openvdb/viewer/Viewer.cc.fix	2015-04-15 19:35:06.756492321 +0300
+@@ -50,7 +50,7 @@
+ 
+ #ifdef OPENVDB_USE_GLFW_3
+ //#define GLFW_INCLUDE_GLU
+-#include <GLFW/glfw3.h>
++#include <GL/glfw.h>
+ #else // if !defined(OPENVDB_USE_GLFW_3)
+ #if defined(__APPLE__) || defined(MACOSX)
+ #include <OpenGL/gl.h>
+
+--- openvdb/viewer/Camera.cc	2015-01-15 02:26:54.000000000 +0300
++++ openvdb/viewer/Camera.cc.fix	2015-04-15 19:42:45.644501972 +0300
+@@ -34,7 +34,7 @@
+ 
+ #ifdef OPENVDB_USE_GLFW_3
+ #define GLFW_INCLUDE_GLU
+-#include <GLFW/glfw3.h>
++#include <GL/glfw.h>
+ #else // if !defined(OPENVDB_USE_GLFW_3)
+ #if defined(__APPLE__) || defined(MACOSX)
+ #include <OpenGL/gl.h>
