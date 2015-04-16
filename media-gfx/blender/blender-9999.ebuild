@@ -8,9 +8,9 @@ PYTHON_COMPAT=( python3_4 )
 
 BLENDGIT_URI="http://git.blender.org"
 EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
-EGIT_BRANCH="master"
+EGIT_BRANCH="gooseberry"
 #EGIT_COMMIT="2814039"
-#EGIT_COMMIT="v2.73a"
+#EGIT_COMMIT="v2.74"
 BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
 BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
 BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
@@ -315,7 +315,8 @@ src_configure() {
 		$(cmake-utils_use_with sse2 SSE2)
 		$(cmake-utils_use_with alembic ALEMBIC)
 		-DWITH_HDF5=ON
-		-DWITH_SYSTEM_LZO=OFF"
+		-DWITH_SYSTEM_LZO=OFF
+		-DWITH_ALEMBIC=OFF"
 
 	cmake-utils_src_configure
 }
