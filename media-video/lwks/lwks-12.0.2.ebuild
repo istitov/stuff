@@ -2,13 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
 inherit unpacker gnome2-utils eutils
 
 DESCRIPTION="LightWorks video editor software.Unstable"
 HOMEPAGE="http://www.lwks.com/"
-SRC_URI="lwks-11.5.1-amd64.deb"
+SRC_URI="lwks-12.0.2-amd64.deb"
 
 RESTRICT="fetch mirror"
 
@@ -24,13 +24,13 @@ RDEPEND="
 	x11-libs/gdk-pixbuf
 	x11-libs/gtk+
 	gnome-extra/libgsf
-	virtual/jpeg
+	media-libs/jpeg:8
 	x11-libs/pango
 	media-gfx/nvidia-cg-toolkit
 	media-libs/portaudio
 	media-libs/tiff
 	sys-apps/util-linux
-	dev-libs/openssl
+	=dev-libs/openssl-1.0.1*
 	net-misc/curl
 	"
 
