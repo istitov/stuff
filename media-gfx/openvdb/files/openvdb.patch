@@ -1,0 +1,15 @@
+--- openvdb.orig/python/pyOpenVDBModule.cc
++++ openvdb/python/pyOpenVDBModule.cc
+@@ -38,6 +38,12 @@
+ #include "pyGrid.h"
+ #include "pyutil.h"
+ 
++// define PyInt_* macros for Python 3.x
++#define PyInt_Check PyLong_Check
++#define PyInt_FromLong PyLong_FromLong
++#define PyInt_AsLong PyLong_AsLong
++#define PyInt_Type PyLong_Type
++
+ namespace py = boost::python;
+ 
+ 
