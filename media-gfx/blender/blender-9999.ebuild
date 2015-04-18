@@ -8,9 +8,9 @@ PYTHON_COMPAT=( python3_4 )
 
 BLENDGIT_URI="http://git.blender.org"
 EGIT_REPO_URI="${BLENDGIT_URI}/blender.git"
-EGIT_BRANCH="gooseberry"
+#EGIT_BRANCH="gooseberry"
 #EGIT_COMMIT="2814039"
-#EGIT_COMMIT="v2.74"
+EGIT_COMMIT="v2.74"
 BLENDER_ADDONS_URI="${BLENDGIT_URI}/blender-addons.git"
 BLENDER_ADDONS_CONTRIB_URI="${BLENDGIT_URI}/blender-addons-contrib.git"
 BLENDER_TRANSLATIONS_URI="${BLENDGIT_URI}/blender-translations.git"
@@ -177,6 +177,7 @@ src_prepare() {
 	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
 		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
 		"${FILESDIR}"/07-${PN}-2.70-sse2.patch \
+		"${FILESDIR}"/cycles.patch \
 		"${FILESDIR}"/sequencer_extra_actions-3.8.patch.bz2
 	
 	epatch_user
