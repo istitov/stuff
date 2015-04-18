@@ -23,7 +23,7 @@ HOMEPAGE="http://www.blender.org/"
 LICENSE="|| ( GPL-2 BL )"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE_MODULES="+boost +cycles +openimageio +opencolorio -osl openvdb -game-engine +compositor +tomato -player addons contrib -alembic"
+IUSE_MODULES="+boost +cycles +openimageio opencolorio -osl openvdb -game-engine +compositor +tomato -player addons contrib -alembic"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke -oceansim"
 IUSE_CODECS="+ffmpeg -dpx -dds openexr -tiff jpeg2k -redcode quicktime"
 IUSE_SYSTEM="+buildinfo fftw +openmp +opennl +sse2 -sndfile -jack sdl -openal +nls -ndof collada -doc -debug -valgrind -portable"
@@ -177,7 +177,7 @@ src_prepare() {
 	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
 		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
 		"${FILESDIR}"/07-${PN}-2.70-sse2.patch \
-		"${FILESDIR}"/cycles.patch \
+		#"${FILESDIR}"/cycles.patch \
 		"${FILESDIR}"/sequencer_extra_actions-3.8.patch.bz2
 	
 	epatch_user
