@@ -8,7 +8,7 @@ inherit eutils
 
 DESCRIPTION="A Visual Structure from Motion System"
 HOMEPAGE="http://ccwu.me/vsfm/"
-SRC_URI="http://ccwu.me/vsfm/download/VisualSFM_linux_64bit.zip"
+SRC_URI="http://ccwu.me/vsfm/download/VisualSFM_linux_64bit.zip -> ${P}.zip"
 
 LICENSE="VisualSFM"
 SLOT="0"
