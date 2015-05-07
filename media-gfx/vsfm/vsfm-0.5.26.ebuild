@@ -16,7 +16,6 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="
-	media-libs/devil
 	media-libs/atlas-c++
 	sci-libs/cminpack
 	virtual/fortran
@@ -27,7 +26,7 @@ RDEPEND="${DEPEND}"
 PDEPEND="
 	media-libs/graclus
 	media-libs/pba
-	media-gfx/cmvs
+	media-gfx/pmvs
 	media-gfx/siftgpu
 	media-gfx/PoissonRecon"
 
