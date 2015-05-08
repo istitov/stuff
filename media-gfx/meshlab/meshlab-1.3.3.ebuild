@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit eutils versionator multilib qt4-r2
+inherit eutils versionator multilib
 
 DESCRIPTION="A mesh processing system"
 HOMEPAGE="http://meshlab.sourceforge.net/"
@@ -24,7 +24,8 @@ DEPEND="dev-cpp/eigen:3
 	=media-libs/lib3ds-1*
 	media-libs/openctm
 	sci-libs/levmar
-	sys-libs/libunwind"
+	sys-libs/libunwind
+	sci-libs/mpir"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/meshlab/src"
@@ -35,8 +36,8 @@ src_prepare() {
 }
 
 src_configure() {
-	eqmake4 -recursive external/external.pro
-	eqmake4 -recursive meshlab_full.pro
+	qmake -recursive external/external.pro
+	qmake -recursive meshlab_full.pro
 }
 
 src_compile() {
