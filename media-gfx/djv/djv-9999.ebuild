@@ -15,7 +15,7 @@ EGIT_REPO_URI="git://git.code.sf.net/p/djv/git"
 
 LICENSE="GPL-2"
 SLOT="1"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 # IUSE="ffmpeg jpeg png quicktime tiff qt"
 
 RDEPEND="
