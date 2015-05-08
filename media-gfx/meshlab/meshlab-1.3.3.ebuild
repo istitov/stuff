@@ -35,8 +35,8 @@ src_prepare() {
 }
 
 src_configure() {
-	eqmake4 external/external.pro
-	eqmake4 meshlab_full.pro
+	eqmake4 -recursive external/external.pro
+	eqmake4 -recursive meshlab_full.pro
 }
 
 src_compile() {

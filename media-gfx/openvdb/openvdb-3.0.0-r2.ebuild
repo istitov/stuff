@@ -46,7 +46,6 @@ src_prepare() {
 	epatch "${FILESDIR}"/pyOpenVDBModule.cc.patch
 	epatch "${FILESDIR}"/openvdb.patch
 	epatch "${FILESDIR}"/use_svg.patch
-	epatch "${FILESDIR}"/gentoo-GL-glfw.patch
 
 	use doc || sed 's|^DOXYGEN :=|#|;s|^EPYDOC :=|#|' -i Makefile
 	sed \
