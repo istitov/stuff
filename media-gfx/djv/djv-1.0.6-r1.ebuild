@@ -12,10 +12,11 @@ DESCRIPTION="Professional movie playback and image processing software for the f
 HOMEPAGE="http://djv.sf.net"
 EGIT_REPO_URI="git://git.code.sf.net/p/djv/git"
 #EGIT_BRANCH=""
+EGIT_TAG="1.0.6"
 
 LICENSE="GPL-2"
 SLOT="1"
-KEYWORDS=""
+KEYWORDS="~amd64 ~ppc ~x86"
 # IUSE="ffmpeg jpeg png quicktime tiff qt"
 
 RDEPEND="
@@ -36,9 +37,10 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}
 
-src_prepare() {
-	sed -i -e "s:djvPackageThirdParty true:djvPackageThirdParty false:" CMakeLists.txt || die
-}
+#src_prepare() {
+#	epatch "${FILESDIR}"/djvJpegPlugin.patch || die
+#	sed -i -e "s:djvPackageThirdParty true:djvPackageThirdParty false:" CMakeLists.txt || die
+#}
 
 src_install() {
 	cmake-utils_src_install
