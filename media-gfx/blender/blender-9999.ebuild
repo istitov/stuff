@@ -65,7 +65,7 @@ DEPEND="${PYTHON_DEPS}
 	media-libs/glew
 	virtual/lapack
 	sys-libs/zlib
-	opencolorio? ( <=media-libs/opencolorio-1.0.9 )
+	opencolorio? ( media-libs/opencolorio )
 	boost? ( dev-libs/boost[threads(+)] )
 	openimageio? ( >=media-libs/openimageio-1.1.5 )
 	cycles? (
