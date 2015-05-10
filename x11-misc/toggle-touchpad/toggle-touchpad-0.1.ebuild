@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
 DESCRIPTION="Toggles touchpads on/off. Supports Synaptics and Elantech touchpads"
 HOMEPAGE="http://pentoo.ch"
@@ -20,11 +20,8 @@ RDEPEND="${DEPEND} || (
 	x11-apps/xinput	)"
 
 S="${WORKDIR}"
-src_prepare() {
-	cp ""${FILESDIR}/${PN} .
-}
 
 src_install() {
 	exeinto /usr/bin
-	doexe "${PN}"
+	doexe ${FILESDIR}/${PN}
 }
