@@ -1,4 +1,4 @@
---- include/host_config.h.orig
+--- include/host_config.h
 +++ include/host_config.h
 @@ -77,11 +77,11 @@
  
