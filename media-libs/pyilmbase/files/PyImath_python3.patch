@@ -1,0 +1,196 @@
+--- PyImath/PyImathUtil.cpp
++++ PyImath/PyImathUtil.cpp
+@@ -49,11 +49,7 @@
+     PyGILState_Release(_gstate);
+ }
+ 
+-#ifdef PLATFORM_LINUX
+-// On Windows, this extern is not needed and produces a symbol mismatch at link time.
+-// We should verify that it's still needed on Linux for Python 2.6.
+-extern "C" PyThreadState *_PyThreadState_Current;
+-#endif
++PyThreadState *_PyThreadState_Current = NULL;
+ 
+ static bool
+ pyHaveLock()
+@@ -71,7 +67,7 @@
+ 
+     // If the interpreter is initialized the gil is held if the
+     // current thread's thread state is the current thread state
+-    return myThreadState != 0 && myThreadState == _PyThreadState_Current;
++    return myThreadState != NULL && myThreadState == _PyThreadState_Current;
+ }
+ 
+ PyReleaseLock::PyReleaseLock()
+--- PyImath/PyImathFixedArray.h
++++ PyImath/PyImathFixedArray.h
+@@ -240,9 +240,8 @@
+     void extract_slice_indices(PyObject *index, size_t &start, size_t &end, Py_ssize_t &step, size_t &slicelength) const
+     {
+         if (PySlice_Check(index)) {
+-            PySliceObject *slice = reinterpret_cast<PySliceObject *>(index);
+             Py_ssize_t s,e,sl;
+-            if (PySlice_GetIndicesEx(slice,_length,&s,&e,&step,&sl) == -1) {
++            if (PySlice_GetIndicesEx(index,_length,&s,&e,&step,&sl) == -1) {
+                 boost::python::throw_error_already_set();
+             }
+             // e can be -1 if the iteration is backwards with a negative slice operator [::-n] (n > 0).
+@@ -252,8 +251,8 @@
+             start = s;
+             end = e;
+             slicelength = sl;
+-        } else if (PyInt_Check(index)) {
+-            size_t i = canonical_index(PyInt_AsSsize_t(index));
++        } else if (PyLong_Check(index)) {
++            size_t i = canonical_index(PyLong_AsSsize_t(index));
+             start = i; end = i+1; step = 1; slicelength = 1;
+         } else {
+             PyErr_SetString(PyExc_TypeError, "Object is not a slice");
+--- PyImath/PyImathFixedArray2D.h
++++ PyImath/PyImathFixedArray2D.h
+@@ -193,9 +193,8 @@
+     void extract_slice_indices(PyObject *index, size_t length, size_t &start, size_t &end, Py_ssize_t &step, size_t &slicelength) const
+     {
+         if (PySlice_Check(index)) {
+-            PySliceObject *slice = reinterpret_cast<PySliceObject *>(index);
+             Py_ssize_t s, e, sl;
+-            if (PySlice_GetIndicesEx(slice,length,&s,&e,&step,&sl) == -1) {
++            if (PySlice_GetIndicesEx(index,length,&s,&e,&step,&sl) == -1) {
+                 boost::python::throw_error_already_set();
+             }
+             if (s < 0 || e < 0 || sl < 0) {
+@@ -204,8 +203,8 @@
+             start = s;
+             end = e;
+             slicelength = sl;
+-        } else if (PyInt_Check(index)) {
+-            size_t i = canonical_index(PyInt_AsSsize_t(index), length);
++        } else if (PyLong_Check(index)) {
++            size_t i = canonical_index(PyLong_AsSsize_t(index), length);
+             start = i; end = i+1; step = 1; slicelength = 1;
+         } else {
+             PyErr_SetString(PyExc_TypeError, "Object is not a slice");
+--- PyImath/PyImathFixedMatrix.h
++++ PyImath/PyImathFixedMatrix.h
+@@ -131,12 +131,11 @@
+     void extract_slice_indices(PyObject *index, Py_ssize_t &start, Py_ssize_t &end, Py_ssize_t &step, Py_ssize_t &slicelength) const
+     {
+         if (PySlice_Check(index)) {
+-            PySliceObject *slice = reinterpret_cast<PySliceObject *>(index);
+-            if (PySlice_GetIndicesEx(slice,_rows,&start,&end,&step,&slicelength) == -1) {
++            if (PySlice_GetIndicesEx(index,_rows,&start,&end,&step,&slicelength) == -1) {
+ 		    boost::python::throw_error_already_set();
+             }
+-        } else if (PyInt_Check(index)) {
+-            int i = convert_index(PyInt_AS_LONG(index));
++        } else if (PyLong_Check(index)) {
++            int i = convert_index(PyLong_AS_LONG(index));
+             start = i; end = i+1; step = 1; slicelength = 1;
+         } else {
+             PyErr_SetString(PyExc_TypeError, "Object is not a slice");
+--- PyImath/PyImathBox.cpp
++++ PyImath/PyImathBox.cpp
+@@ -191,13 +191,13 @@
+ 
+     PyObject *minObj = converter (box.min);
+     PyObject *minReprObj = PyObject_Repr (minObj);
+-    std::string minReprStr = PyString_AsString (minReprObj);
++    std::string minReprStr = PyByteArray_AsString (minReprObj);
+     Py_DECREF (minReprObj);
+     Py_DECREF (minObj);
+ 
+     PyObject *maxObj = converter (box.max);
+     PyObject *maxReprObj = PyObject_Repr (maxObj);
+-    std::string maxReprStr = PyString_AsString (maxReprObj);
++    std::string maxReprStr = PyByteArray_AsString (maxReprObj);
+     Py_DECREF (maxReprObj);
+     Py_DECREF (maxObj);
+ 
+@@ -214,13 +214,13 @@
+ 
+     PyObject *minObj = converter (box.min);
+     PyObject *minReprObj = PyObject_Repr (minObj);
+-    std::string minReprStr = PyString_AsString (minReprObj);
++    std::string minReprStr = PyByteArray_AsString (minReprObj);
+     Py_DECREF (minReprObj);
+     Py_DECREF (minObj);
+ 
+     PyObject *maxObj = converter (box.max);
+     PyObject *maxReprObj = PyObject_Repr (maxObj);
+-    std::string maxReprStr = PyString_AsString (maxReprObj);
++    std::string maxReprStr = PyByteArray_AsString (maxReprObj);
+     Py_DECREF (maxReprObj);
+     Py_DECREF (maxObj);
+ 
+--- PyImath/PyImathFixedVArray.cpp
++++ PyImath/PyImathFixedVArray.cpp
+@@ -243,9 +243,8 @@
+ {
+     if (PySlice_Check (index))
+     {
+-        PySliceObject* slice = reinterpret_cast<PySliceObject *>(index);
+         Py_ssize_t s, e, sl;
+-        if (PySlice_GetIndicesEx(slice, totalLength, &s, &e, &step, &sl) == -1)
++        if (PySlice_GetIndicesEx(index, totalLength, &s, &e, &step, &sl) == -1)
+         {
+             boost::python::throw_error_already_set();
+         }
+@@ -259,9 +259,9 @@
+         end   = e;
+         sliceLength = sl;
+     }
+-    else if (PyInt_Check (index))
++    else if (PyLong_Check (index))
+     {
+-        size_t i = canonical_index (PyInt_AsSsize_t(index), totalLength);
++        size_t i = canonical_index (PyLong_AsSsize_t(index), totalLength);
+         start = i;
+         end   = i + 1;
+         step  = 1;
+--- PyImath/PyImathLine.cpp
++++ PyImath/PyImathLine.cpp
+@@ -427,13 +427,13 @@
+ 
+     PyObject *v1Obj = V3<T>::wrap (v1);
+     PyObject *v1ReprObj = PyObject_Repr (v1Obj);
+-    std::string v1ReprStr = PyString_AsString (v1ReprObj);
++    std::string v1ReprStr = PyByteArray_AsString (v1ReprObj);
+     Py_DECREF (v1ReprObj);
+     Py_DECREF (v1Obj);
+ 
+     PyObject *v2Obj = V3<T>::wrap (v2);
+     PyObject *v2ReprObj = PyObject_Repr (v2Obj);
+-    std::string v2ReprStr = PyString_AsString (v2ReprObj);
++    std::string v2ReprStr = PyByteArray_AsString (v2ReprObj);
+     Py_DECREF (v2ReprObj);
+     Py_DECREF (v2Obj);
+ 
+--- PyImath/PyImathPlane.cpp
++++ PyImath/PyImathPlane.cpp
+@@ -195,7 +195,7 @@
+ 
+     PyObject *normalObj = V3<T>::wrap (plane.normal);
+     PyObject *normalReprObj = PyObject_Repr (normalObj);
+-    std::string normalReprStr = PyString_AsString (normalReprObj);
++    std::string normalReprStr = PyByteArray_AsString (normalReprObj);
+     Py_DECREF (normalReprObj);
+     Py_DECREF (normalObj);
+ 
+@@ -217,7 +217,7 @@
+ {
+     PyObject *normalObj = V3<float>::wrap (plane.normal);
+     PyObject *normalReprObj = PyObject_Repr (normalObj);
+-    std::string normalReprStr = PyString_AsString (normalReprObj);
++    std::string normalReprStr = PyByteArray_AsString (normalReprObj);
+     Py_DECREF (normalReprObj);
+     Py_DECREF (normalObj);
+ 
+@@ -233,7 +233,7 @@
+ {
+     PyObject *normalObj = V3<double>::wrap (plane.normal);
+     PyObject *normalReprObj = PyObject_Repr (normalObj);
+-    std::string normalReprStr = PyString_AsString (normalReprObj);
++    std::string normalReprStr = PyByteArray_AsString (normalReprObj);
+     Py_DECREF (normalReprObj);
+     Py_DECREF (normalObj);
+ 

@@ -1,0 +1,22 @@
+--- configure.ac
++++ configure.ac
+@@ -69,8 +69,8 @@
+ 
+ dnl Checks for python and boost python
+ AM_PATH_PYTHON
+-PYTHON_INC_DIR=`$PYTHON -c 'from distutils.sysconfig import *; print get_python_inc()'`
+-PYTHON_LIB_DIR=`$PYTHON -c 'from distutils.sysconfig import *; print get_config_var("LIBDIR")'`
++PYTHON_INC_DIR=`$PYTHON -c 'from distutils.sysconfig import *; print(get_python_inc())'`
++PYTHON_LIB_DIR=`$PYTHON -c 'from distutils.sysconfig import *; print(get_config_var("LIBDIR"))'`
+ LIBS="$LIBS -lpython$PYTHON_VERSION"
+ 
+ BOOST_PYTHON_CXXFLAGS="" 
+@@ -139,7 +139,7 @@
+   ;;
+ esac
+ 
+-NUMPY_CXXFLAGS=`$PYTHON -c 'from numpy.distutils.misc_util import *; import string; print string.join(@<:@"-I"+x for x in get_numpy_include_dirs()@:>@," ")'`
++NUMPY_CXXFLAGS=`$PYTHON -c 'from numpy.distutils.misc_util import *; print(str.join(" ",@<:@"-I"+x for x in get_numpy_include_dirs()@:>@))'`
+ 
+ AC_ARG_WITH([numpy],
+   [AS_HELP_STRING([--without-numpy],
