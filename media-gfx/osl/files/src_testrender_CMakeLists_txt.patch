@@ -1,0 +1,9 @@
+--- src/testrender/CMakeLists.txt
++++ dtv/testrender/CMakeLists.txt
+@@ -2,5 +2,5 @@
+ FILE(GLOB testrender_src *.cpp)
+ ADD_EXECUTABLE ( testrender ${testrender_src} )
+ LINK_ILMBASE ( testrender )
+-TARGET_LINK_LIBRARIES ( testrender oslexec oslcomp oslquery ${OPENIMAGEIO_LIBRARY} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS})
++TARGET_LINK_LIBRARIES ( testrender oslexec oslcomp oslquery ${OPENIMAGEIO_LIBRARY} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${LLVM_LIBRARY} ${LLVM_MCJIT_LIBRARY} ${EXTRA_OSLEXEC_LIBRARIES} )
+ INSTALL ( TARGETS testrender RUNTIME DESTINATION bin )

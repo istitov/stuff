@@ -1,0 +1,10 @@
+--- src/oslc/oslcmain.cpp
++++ src/oslc/oslcmain.cpp
+@@ -171,6 +171,7 @@
+             OSLCompiler compiler (&default_oslc_error_handler);
+             bool ok = compiler.compile (argv[a], args, stdoslpath());
+             if (ok) {
++                std::cout << "Default_output_filename " << compiler.output_filename() << "\n";
+                 if (!quiet)
+                     std::cout << "Compiled " << argv[a] << " -> " 
+                               << compiler.output_filename() << "\n";
