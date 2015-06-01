@@ -25,7 +25,7 @@ KEYWORDS=""
 IUSE_MODULES="+boost +cycles +openimageio opencolorio -osl openvdb -game-engine +compositor +tomato -player addons contrib -alembic"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke -oceansim"
 IUSE_CODECS="+ffmpeg -dpx -dds openexr -tiff jpeg2k -redcode quicktime"
-IUSE_SYSTEM="+buildinfo fftw +openmp +opennl +sse2 -sndfile -jack sdl -openal +nls -ndof collada -doc -debug -valgrind -portable"
+IUSE_SYSTEM="+buildinfo fftw +openmp +opennl +sse2 -sndfile -jack sdl -openal +nls -ndof collada -doc -debug -valgrind -portable +X"
 IUSE_GPU="+cuda -sm_30 -sm_35 -sm_50"
 IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU}"
 
@@ -266,6 +266,7 @@ src_configure() {
 		-DPYTHON_VERSION="${EPYTHON/python/}"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
+		$(cmake-utils_use_with X X11)
 		$(cmake-utils_use_with boost BOOST)
 		$(cmake-utils_use_with buildinfo BUILDINFO)
 		$(cmake-utils_use_with ffmpeg CODEC_FFMPEG)
