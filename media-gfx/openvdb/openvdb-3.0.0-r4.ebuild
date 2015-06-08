@@ -48,23 +48,23 @@ src_prepare() {
 	epatch "${FILESDIR}"/use_svg.patch
 
 	use doc || sed 's|^DOXYGEN :=|#|;s|^EPYDOC :=|#|' -i Makefile
-	#sed \
-	#-e	"s|^INSTALL_DIR :=.*|INSTALL_DIR := ${D}/usr|" \
-	#-e	"s|^TBB_LIB_DIR :=.*|TBB_LIB_DIR := /usr/$(get_libdir)|" \
-	#-e	"s|^PYTHON_VERSION := 2.6|PYTHON_VERSION := ${PYTHON_VERSION}|" \
-	#-e	"s|^GLFW_INCL_DIR.*|GLFW_INCL_DIR := /usr/$(get_libdir)|" \
-	#-e	"s|^GLFW_LIB_DIR :=.*|GLFW_LIB_DIR := /usr/$(get_libdir)|" \
-	#-e	"s|:= epydoc|:= pdoc|" \
-	#-e	"s|--html -o|--html --html-dir|" \
-	#-e	"s|vdb_render vdb_test|vdb_render vdb_view vdb_test|" \
-	#-i Makefile
+	sed \
+	-e	"s|^INSTALL_DIR :=.*|INSTALL_DIR := ${D}/usr|" \
+	-e	"s|^TBB_LIB_DIR :=.*|TBB_LIB_DIR := /usr/$(get_libdir)|" \
+	-e	"s|^PYTHON_VERSION := 2.6|PYTHON_VERSION := ${PYTHON_VERSION}|" \
+	-e	"s|^GLFW_INCL_DIR.*|GLFW_INCL_DIR := /usr/$(get_libdir)|" \
+	-e	"s|^GLFW_LIB_DIR :=.*|GLFW_LIB_DIR := /usr/$(get_libdir)|" \
+	-e	"s|:= epydoc|:= pdoc|" \
+	-e	"s|--html -o|--html --html-dir|" \
+	-e	"s|vdb_render vdb_test|vdb_render vdb_view vdb_test|" \
+	-i Makefile
 	
 	if ! use X; then
 		sed \
-		-e	"s|^GLFW_INCL_DIR :=|#|" \
-		-e	"s|^GLFW_LIB_DIR :=|#|" \
-		-e	"s|^GLFW_LIB :=|#|" \
-		-e	"s|^GLFW_MAJOR_VERSION :=|#|" \		
+		-e	"s/\(GLFW_INCL_DIR :=\).*/\1/" \
+		-e	"s/\(GLFW_INCL_DIR :=\).*/\1/" \
+		-e	"s/\(GLFW_INCL_DIR :=\).*/\1/" \
+		-e	"s/\(GLFW_INCL_DIR :=\).*/\1/" \		
 		-i Makefile
 	fi
 }
