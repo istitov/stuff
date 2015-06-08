@@ -17,13 +17,12 @@ SRC_URI="https://github.com/OpenImageIO/${MY_P}/archive/${MY_PV}.tar.gz -> ${P}.
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc64 ~x86"
-IUSE="gif jpeg2k colorio opencv opengl python qt ssl tbb +truetype"
+IUSE="gif jpeg2k colorio opencv opengl python qt ssl tbb +truetype ffmpeg X"
 
 RESTRICT="test" #431412
 
 RDEPEND="dev-libs/boost[python?]
 	dev-libs/pugixml:=
-	media-libs/glew:=
 	media-libs/ilmbase:=
 	media-libs/libpng:0=
 	>=media-libs/libwebp-0.2.1:=
@@ -32,6 +31,7 @@ RDEPEND="dev-libs/boost[python?]
 	sci-libs/hdf5
 	sys-libs/zlib:=
 	virtual/jpeg
+	ffmpeg? ( virtual/ffmpeg )
 	gif? ( media-libs/giflib )
 	jpeg2k? ( media-libs/openjpeg )
 	colorio? ( >=media-libs/opencolorio-1.0.7:= )
@@ -42,6 +42,7 @@ RDEPEND="dev-libs/boost[python?]
 	opengl? (
 		virtual/glu
 		virtual/opengl
+		media-libs/glew
 		)
 	python? ( ${PYTHON_DEPS} )
 	qt? (
@@ -94,6 +95,9 @@ src_configure() {
 		$(cmake-utils_use_use tbb)
 		$(cmake-utils_use_use ssl OPENSSL)
 		$(cmake-utils_use_use gif)
+		$(cmake-utils_use_use ffmpeg FFMPEG)
+		$(cmake-utils_use_use opengl OPENGL)
+		
 		)
 
 	cmake-utils_src_configure
