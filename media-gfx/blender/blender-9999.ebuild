@@ -22,11 +22,11 @@ HOMEPAGE="http://www.blender.org/"
 LICENSE="|| ( GPL-2 BL )"
 SLOT="0"
 KEYWORDS=""
-IUSE_MODULES="+boost +cycles +openimageio opencolorio -osl openvdb -game-engine +compositor +tomato -player addons contrib -alembic"
+IUSE_MODULES="+boost +cycles +openimageio opencolorio -osl openvdb -game-engine +tomato -player addons contrib -alembic"
 IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke -oceansim"
 IUSE_CODECS="+ffmpeg -dpx -dds openexr -tiff jpeg2k -redcode quicktime"
-IUSE_SYSTEM="+buildinfo fftw +openmp +opennl +sse2 -sndfile -jack sdl -openal +nls -ndof collada -doc -debug -valgrind -portable +X"
-IUSE_GPU="+cuda -sm_30 -sm_35 -sm_50"
+IUSE_SYSTEM="+buildinfo +bullet fftw +openmp +opennl +sse2 -sndfile -jack sdl -openal +nls -ndof collada -doc -debug -valgrind -portable"
+IUSE_GPU="opengl +cuda -sm_30 -sm_35 -sm_50"
 IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU}"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
@@ -35,8 +35,10 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 		  osl? ( cycles )
 		    openvdb? ( cycles )
 		      redcode? ( ffmpeg jpeg2k )
-			player? ( game-engine )
-			  smoke? ( fftw )"
+			player? ( game-engine opengl )
+			  game-engine? ( bullet opengl player )
+			    bullet? ( opengl game-engine )
+			    smoke? ( fftw )"
 
 LANGS="en ar bg ca cs de el es es_ES fa fi fr he hr hu id it ja ky ne nl pl pt pt_BR ru sr sr@latin sv tr uk zh_CN zh_TW"
 for X in ${LANGS} ; do
@@ -51,17 +53,19 @@ DEPEND="${PYTHON_DEPS}
 	dev-python/requests[${PYTHON_USEDEP}]
 	sci-libs/colamd
 	sci-libs/ldl
-	virtual/glu
 	virtual/libintl
 	virtual/jpeg
 	media-libs/libpng
 	media-libs/tiff
 	media-libs/libsamplerate
-	x11-libs/libXi
-	x11-libs/libX11
-	virtual/opengl
 	media-libs/freetype
-	media-libs/glew
+	opengl? ( 
+		virtual/opengl
+		media-libs/glew
+		virtual/glu
+		x11-libs/libXi
+		x11-libs/libX11
+	)
 	virtual/lapack
 	sys-libs/zlib
 	opencolorio? ( media-libs/opencolorio )
@@ -254,19 +258,21 @@ src_configure() {
 		-DCMAKE_INSTALL_PREFIX="/usr"
 		-DWITH_BULLET=ON
 		-DWITH_CODEC_AVI=ON
-		-DWITH_COMPOSITOR=ON
 		-DWITH_FREESTYLE=ON
-		-DWITH_GHOST_XDND=ON
 		-DWITH_IMAGE_HDR=ON
 		-DWITH_RAYOPTIMIZATION=ON
-		-DWITH_SYSTEM_GLES=ON
-		-DWITH_BUILTIN_GLEW=OFF
 		-DLLVM_STATIC=OFF
 		-DLLVM_LIBRARY="/usr/lib"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
-		$(cmake-utils_use_with X X11)
+		$(cmake-utils_use_with opengl X11)
+		$(cmake-utils_use_with opengl SYSTEM_GLES)
+		$(cmake-utils_use_with opengl SYSTEM_GLEW)
+		$(cmake-utils_use_with opengl X11_XINPUT)
+		$(cmake-utils_use_with opengl COMPOSITOR)
+		$(cmake-utils_use_with opengl GHOST_XDND)
+		$(cmake-utils_use_with bullet BULLET)
 		$(cmake-utils_use_with boost BOOST)
 		$(cmake-utils_use_with buildinfo BUILDINFO)
 		$(cmake-utils_use_with ffmpeg CODEC_FFMPEG)
@@ -304,9 +310,9 @@ src_configure() {
 		$(cmake-utils_use_with portable PYTHON_INSTALL)
 		$(cmake-utils_use_with portable PYTHON_INSTALL_NUMPY)
 		$(cmake-utils_use_with portable PYTHON_INSTALL_REQUESTS)
+		$(cmake-utils_use_with portable STATIC_LIBS)
 		$(cmake-utils_use_with sdl SDL)
 		$(cmake-utils_use_with sdl SDL_DYNLOAD)
-		$(cmake-utils_use_with portable STATIC_LIBS)
 		$(cmake-utils_use_with debug DEBUG)
 		$(cmake-utils_use_with doc DOCS)
 		$(cmake-utils_use_with valgrind VALGRIND)
