@@ -60,12 +60,10 @@ src_prepare() {
 	-i Makefile
 	
 	if ! use X; then
-		sed \
-		-e	"s/\(GLFW_INCL_DIR :=\).*/\1/" \
-		-e	"s/\(GLFW_INCL_DIR :=\).*/\1/" \
-		-e	"s/\(GLFW_INCL_DIR :=\).*/\1/" \
-		-e	"s/\(GLFW_INCL_DIR :=\).*/\1/" \		
-		-i Makefile
+		sed 's/^\(GLFW_INCL_DIR :=\).*$/\1/' -i Makefile
+		sed 's/^\(GLFW_LIB_DIR :=\).*$/\1/' -i Makefile
+		sed 's/^\(GLFW_LIB :=\).*$/\1/' -i Makefile
+		sed 's/^\(GLFW_MAJOR_VERSION :=\).*$/\1/' -i Makefile
 	fi
 }
 
