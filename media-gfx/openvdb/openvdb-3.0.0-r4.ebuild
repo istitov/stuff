@@ -64,8 +64,7 @@ src_prepare() {
 		-e	"s|^GLFW_INCL_DIR :=|#|" \
 		-e	"s|^GLFW_LIB_DIR :=|#|" \
 		-e	"s|^GLFW_LIB :=|#|" \
-		-e	"s|^GLFW_MAJOR_VERSION :=|#|" \
-		-e	"s|vdb_render vdb_test|vdb_render vdb_test|"		
+		-e	"s|^GLFW_MAJOR_VERSION :=|#|" \		
 		-i Makefile
 	fi
 }
