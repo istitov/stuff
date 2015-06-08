@@ -267,9 +267,10 @@ src_configure() {
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		$(cmake-utils_use_with opengl X11)
+		$(cmake-utils_use_with opengl X11_XF86VMODE)
+		$(cmake-utils_use_with opengl X11_XINPUT)
 		$(cmake-utils_use_with opengl SYSTEM_GLES)
 		$(cmake-utils_use_with opengl SYSTEM_GLEW)
-		$(cmake-utils_use_with opengl X11_XINPUT)
 		$(cmake-utils_use_with opengl COMPOSITOR)
 		$(cmake-utils_use_with opengl GHOST_XDND)
 		$(cmake-utils_use_with bullet BULLET)
