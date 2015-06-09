@@ -190,10 +190,10 @@ src_prepare() {
 	epatch_user
 
 	# remove some bundled deps
-	rm -r \
-		extern/libopenjpeg \
-		extern/glew \
-		|| die
+	#rm -r \
+	#	extern/libopenjpeg \
+	#	extern/glew \
+	#	|| die
 
 	# we don't want static glew, but it's scattered across
 	# thousand files
