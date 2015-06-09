@@ -341,7 +341,7 @@ src_configure() {
 		$(cmake-utils_use_with opengl SYSTEM_GLEW)
 		$(cmake-utils_use_with gles SYSTEM_GLES)
 		$(cmake-utils_use_with lzo SYSTEM_LZO)
-		-DWITH_SYSTEM_EIGEN3
+		#-DWITH_SYSTEM_EIGEN3
 		$(cmake-utils_use_with jpeg2k SYSTEM_OPENJPEG)
 		
 		$(cmake-utils_use_with opengl GLU)
