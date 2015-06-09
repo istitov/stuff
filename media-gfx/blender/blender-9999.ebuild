@@ -30,7 +30,7 @@ IUSE_CODEC="+openal sdl jack avi +ffmpeg -sndfile +quicktime"
 IUSE_COMPRESSION="-lzma +lzo"
 IUSE_MODIFIERS="+fluid +smoke +boolean +remesh oceansim +decimate"
 IUSE_MODULES="osl +openvdb +addons contrib -alembic +opennl"
-IUSE_GPU="+opengl +cuda -sm_30 -sm_35 -sm_50"
+IUSE_GPU="+opengl -gles +cuda -sm_30 -sm_35 -sm_50"
 IUSE="${IUSE_BUILD} ${IUSE_COMPILER} ${IUSE_SYSTEM} ${IUSE_IMAGE} ${IUSE_CODEC} ${IUSE_COMPRESSION} ${IUSE_MODIFIERS} ${IUSE_MODULES} ${IUSE_GPU}"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
@@ -337,12 +337,12 @@ src_configure() {
 		$(cmake-utils_use_with portable PYTHON_INSTALL_NUMPY)
 		$(cmake-utils_use_with portable PYTHON_INSTALL_REQUESTS)
 		
-		#$(cmake-utils_use_with !portable SYSTEM_BULLET)
-		$(cmake-utils_use_with !portable SYSTEM_GLEW)
-		$(cmake-utils_use_with !portable SYSTEM_GLES)
-		$(cmake-utils_use_with !portable SYSTEM_LZO)
-		$(cmake-utils_use_with !portable SYSTEM_EIGEN3)
-		$(cmake-utils_use_with !portable SYSTEM_OPENJPEG)
+		#$(cmake-utils_use_with bullet SYSTEM_BULLET)
+		$(cmake-utils_use_with opengl SYSTEM_GLEW)
+		$(cmake-utils_use_with gles SYSTEM_GLES)
+		$(cmake-utils_use_with lzo SYSTEM_LZO)
+		-DWITH_SYSTEM_EIGEN3
+		$(cmake-utils_use_with jpeg2k SYSTEM_OPENJPEG)
 		
 		$(cmake-utils_use_with opengl GLU)
 		$(cmake-utils_use_with opengl GL_PROFILE_COMPAT)
