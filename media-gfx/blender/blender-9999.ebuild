@@ -22,23 +22,22 @@ HOMEPAGE="http://www.blender.org/"
 LICENSE="|| ( GPL-2 BL )"
 SLOT="0"
 KEYWORDS=""
-IUSE_MODULES="+boost +cycles +openimageio opencolorio -osl openvdb -game-engine +tomato -player addons contrib -alembic"
-IUSE_MODIFIERS="+fluid +boolean +decimate +remesh +smoke -oceansim"
-IUSE_CODECS="+ffmpeg -dpx -dds openexr -tiff jpeg2k -redcode quicktime"
-IUSE_SYSTEM="+buildinfo +bullet fftw +openmp +opennl +sse2 -sndfile -jack sdl -openal +nls -ndof collada -doc -debug -valgrind -portable X"
-IUSE_GPU="opengl +cuda -sm_30 -sm_35 -sm_50"
-IUSE="${IUSE_MODULES} ${IUSE_MODIFIERS} ${IUSE_CODECS} ${IUSE_SYSTEM} ${IUSE_GPU}"
+IUSE_BUILD="+blender game-engine -player +bullet collada +nls -ndof +cycles freestyle +opencolorio"
+IUSE_COMPILER="+buildinfo +openmp +sse +sse2"
+IUSE_SYSTEM="X -portable -valgrind -debug -doc"
+IUSE_IMAGE="+openimageio -dpx -dds +openexr -jpeg2k -redcode tiff"
+IUSE_CODEC="+openal sdl jack avi +ffmpeg -sndfile +quicktime"
+IUSE_COMPRESSION="-lzma +lzo"
+IUSE_MODIFIERS="+fluid +smoke +boolean +remesh oceansim +decimate"
+IUSE_MODULES="osl +openvdb +addons contrib -alembic +opennl"
+IUSE_GPU="+opengl +cuda -sm_30 -sm_35 -sm_50"
+IUSE="${IUSE_BUILD} ${IUSE_COMPILER} ${IUSE_SYSTEM} ${IUSE_IMAGE} ${IUSE_CODEC} ${IUSE_COMPRESSION} ${IUSE_MODIFIERS} ${IUSE_MODULES} ${IUSE_GPU}"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
-	      cycles? ( boost )
-		cuda? ( cycles )
-		  osl? ( cycles )
-		    openvdb? ( cycles )
-		      redcode? ( ffmpeg jpeg2k )
+	            redcode? ( ffmpeg jpeg2k )
 			player? ( game-engine opengl )
 			  game-engine? ( bullet opengl player )
-			    bullet? ( opengl game-engine )
-			    smoke? ( fftw )"
+			    bullet? ( opengl )"
 
 LANGS="en ar bg ca cs de el es es_ES fa fi fr he hr hu id it ja ky ne nl pl pt pt_BR ru sr sr@latin sv tr uk zh_CN zh_TW"
 for X in ${LANGS} ; do
@@ -47,35 +46,32 @@ for X in ${LANGS} ; do
 done
 
 DEPEND="${PYTHON_DEPS}
-	dev-cpp/gflags
-	dev-cpp/glog[gflags]
+	dev-vcs/git
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
-	sci-libs/colamd
+	sys-libs/zlib
+	sci-libs/fftw:3.0
+	media-libs/freetype
+	media-libs/libpng
 	sci-libs/ldl
 	virtual/libintl
 	virtual/jpeg
-	media-libs/libpng
-	media-libs/tiff
-	media-libs/libsamplerate
-	media-libs/freetype
 	opengl? ( 
 		virtual/opengl
 		media-libs/glew
 		virtual/glu
 		x11-libs/libXi
 		x11-libs/libX11
+		x11-libs/libXxf86vm
 	)
 	X? (
 	   x11-libs/libXi
 	   x11-libs/libX11
 	)
-	virtual/lapack
-	sys-libs/zlib
 	opencolorio? ( media-libs/opencolorio )
-	boost? ( dev-libs/boost[threads(+)] )
-	openimageio? ( >=media-libs/openimageio-1.1.5 )
 	cycles? (
+		openimageio? ( >=media-libs/openimageio-1.1.5 )
+		dev-libs/boost[threads(+)]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
 		osl? (
 		      >=sys-devel/llvm-3.1
@@ -84,20 +80,25 @@ DEPEND="${PYTHON_DEPS}
 		openvdb? ( media-gfx/openvdb )
 	)
 	sdl? ( media-libs/libsdl[sound,joystick] )
+	tiff? ( media-libs/tiff )
 	openexr? ( media-libs/openexr )
 	ffmpeg? (
 		>=media-video/ffmpeg-2.2[x264,xvid,mp3,encode]
 		jpeg2k? ( >=media-video/ffmpeg-2.2[x264,xvid,mp3,encode,jpeg2k] )
 	)
 	openal? ( >=media-libs/openal-1.6.372 )
-	fftw? ( sci-libs/fftw:3.0 )
 	jack? ( media-sound/jack-audio-connection-kit )
 	sndfile? ( media-libs/libsndfile )
 	collada? ( media-libs/opencollada )
-	ndof? ( dev-libs/libspnav )
+	ndof? (
+		app-misc/spacenavd
+		dev-libs/libspnav
+	)
 	quicktime? ( media-libs/libquicktime )
 	app-arch/lzma
 	valgrind? ( dev-util/valgrind )
+	lzma? ( app-arch/lzma )
+	lzo? ( dev-libs/lzo )
 	alembic? ( media-libs/alembic )"
 
 RDEPEND="${DEPEND}
@@ -178,8 +179,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	rm -r "${WORKDIR}/${P}"/release/scripts/addons_contrib/sequencer_extra_actions/* \
-	|| die
+#	rm -r "${WORKDIR}/${P}"/release/scripts/addons_contrib/sequencer_extra_actions/* \
+#	|| die
 
 	epatch "${FILESDIR}"/01-${PN}-2.68-doxyfile.patch \
 		"${FILESDIR}"/06-${PN}-2.68-fix-install-rules.patch \
@@ -260,77 +261,94 @@ src_configure() {
 	#make DESTDIR="${D}" install didn't work
 	mycmakeargs="${mycmakeargs}
 		-DCMAKE_INSTALL_PREFIX="/usr"
-		-DWITH_BULLET=ON
-		-DWITH_CODEC_AVI=ON
-		-DWITH_FREESTYLE=ON
-		-DWITH_IMAGE_HDR=ON
-		-DWITH_RAYOPTIMIZATION=ON
-		-DLLVM_STATIC=OFF
-		-DLLVM_LIBRARY="/usr/lib"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
+		$(cmake-utils_use_with blender BLENDER)
+		$(cmake-utils_use_with game-engine GAMEENGINE)
+		$(cmake-utils_use_with player PLAYER)
+		$(cmake-utils_use_with bullet BULLET)
+		$(cmake-utils_use_with collada OPENCOLLADA)
+		-DWITH_FFTW3=ON
+		$(cmake-utils_use_with ndof INPUT_NDOF)
+		$(cmake-utils_use_with cycles CYCLES)
+		-DWITH_BULLET=ON
+		-DWITH_HDF5=ON
+		$(cmake-utils_use_with freestyle FREESTYLE)
+		$(cmake-utils_use_with opencolorio OPENCOLORIO)
+		
+		$(cmake-utils_use_with buildinfo BUILDINFO)
+		$(cmake-utils_use_with openmp OPENMP)
+		$(cmake-utils_use_with sse RAYOPTIMIZATION)
+		$(cmake-utils_use_with sse2 SSE2)
+		
 		$(cmake-utils_use_with X X11)
+		$(cmake-utils_use_with !X HEADLESS)
 		$(cmake-utils_use_with X X11_XF86VMODE)
 		$(cmake-utils_use_with X X11_XINPUT)
 		$(cmake-utils_use_with X GHOST_XDND)
-		$(cmake-utils_use_with !X HEADLESS)
-		$(cmake-utils_use_with opengl SYSTEM_GLES)
-		$(cmake-utils_use_with opengl SYSTEM_GLEW)
-		$(cmake-utils_use_with opengl GLU)
-		$(cmake-utils_use_with opengl GL_PROFILE_COMPAT)
-		$(cmake-utils_use_with opengl COMPOSITOR)
-		$(cmake-utils_use_with bullet BULLET)
-		$(cmake-utils_use_with boost BOOST)
-		$(cmake-utils_use_with buildinfo BUILDINFO)
-		$(cmake-utils_use_with ffmpeg CODEC_FFMPEG)
-		$(cmake-utils_use_with sndfile CODEC_SNDFILE)
-		$(cmake-utils_use_with cycles CYCLES)
-		$(cmake-utils_use_with osl CYCLES_OSL)
+		$(cmake-utils_use_with !X PYTHON_MODULE)
+		$(cmake-utils_use_with valgrind VALGRIND)
+		$(cmake-utils_use_with debug DEBUG)
+		$(cmake-utils_use_with debug GPU_DEBUG)
+		$(cmake-utils_use_with doc DOCS)
 		$(cmake-utils_use_with doc DOC_MANPAGE)
-		$(cmake-utils_use_with fftw FFTW3)
-		$(cmake-utils_use_with game-engine GAMEENGINE)
+		
+		$(cmake-utils_use_with openimageio OPENIMAGEIO)
 		$(cmake-utils_use_with dpx IMAGE_CINEON)
 		$(cmake-utils_use_with dds IMAGE_DDS)
+		-DWITH_IMAGE_HDR=ON
 		$(cmake-utils_use_with openexr IMAGE_OPENEXR)
 		$(cmake-utils_use_with jpeg2k IMAGE_OPENJPEG)
 		$(cmake-utils_use_with redcode IMAGE_REDCODE)
 		$(cmake-utils_use_with tiff IMAGE_TIFF)
-		$(cmake-utils_use_with ndof INPUT_NDOF)
-		$(cmake-utils_use_with portable INSTALL_PORTABLE)
+		
+		$(cmake-utils_use_with openal OPENAL)
+		$(cmake-utils_use_with sdl SDL)
+		$(cmake-utils_use_with sdl SDL_DYNLOAD)
 		$(cmake-utils_use_with jack JACK)
 		$(cmake-utils_use_with jack JACK_DYNLOAD)
-		$(cmake-utils_use_with tomato LIBMV)
-		$(cmake-utils_use_with osl LLVM)
+		$(cmake-utils_use_with avi CODEC_AVI)
+		$(cmake-utils_use_with ffmpeg CODEC_FFMPEG)
+		$(cmake-utils_use_with sndfile CODEC_SNDFILE)
+		$(cmake-utils_use_with quicktime QUICKTIME)
+		
+		$(cmake-utils_use_with lzma LZMA)
+		$(cmake-utils_use_with lzo LZO)
+		
 		$(cmake-utils_use_with boolean MOD_BOOLEAN)
-		$(cmake-utils_use_with decimate MOD_DECIMATE)
+		$(cmake-utils_use_with remesh MOD_REMESH)
 		$(cmake-utils_use_with fluid MOD_FLUID)
 		$(cmake-utils_use_with oceansim MOD_OCEANSIM)
-		$(cmake-utils_use_with remesh MOD_REMESH)
+		$(cmake-utils_use_with decimate MOD_DECIMATE)
 		$(cmake-utils_use_with smoke MOD_SMOKE)
-		$(cmake-utils_use_with openal OPENAL)
-		$(cmake-utils_use_with collada OPENCOLLADA)
-		$(cmake-utils_use_with opencolorio OPENCOLORIO)
-		$(cmake-utils_use_with openimageio OPENIMAGEIO)
-		$(cmake-utils_use_with openmp OPENMP)
-		$(cmake-utils_use_with opennl OPENNL)
-		$(cmake-utils_use_with player PLAYER)
+		
+		$(cmake-utils_use_with osl LLVM)
+		-DLLVM_STATIC=OFF
+		-DLLVM_LIBRARY="/usr/lib"
+		$(cmake-utils_use_with osl CYCLES_OSL)
+		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)
+		$(cmake-utils_use_with alembic ALEMBIC)
+		$(cmake-utils_use_with alembic STATICALEMBIC)
+		
+		$(cmake-utils_use_with portable INSTALL_PORTABLE)
+		$(cmake-utils_use_with portable STATIC_LIBS)
 		$(cmake-utils_use_with portable PYTHON_INSTALL)
 		$(cmake-utils_use_with portable PYTHON_INSTALL_NUMPY)
 		$(cmake-utils_use_with portable PYTHON_INSTALL_REQUESTS)
-		$(cmake-utils_use_with portable STATIC_LIBS)
-		$(cmake-utils_use_with sdl SDL)
-		$(cmake-utils_use_with sdl SDL_DYNLOAD)
-		$(cmake-utils_use_with debug DEBUG)
-		$(cmake-utils_use_with doc DOCS)
-		$(cmake-utils_use_with valgrind VALGRIND)
-		$(cmake-utils_use_with quicktime QUICKTIME)
-		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)
-		$(cmake-utils_use_with sse2 SSE2)
-		$(cmake-utils_use_with alembic ALEMBIC)
-		$(cmake-utils_use_with alembic STATICALEMBIC)
-		-DWITH_HDF5=ON
-		-DWITH_SYSTEM_LZO=OFF"
+		
+		#$(cmake-utils_use_with !portable SYSTEM_BULLET)
+		$(cmake-utils_use_with !portable SYSTEM_GLEW)
+		$(cmake-utils_use_with !portable SYSTEM_GLES)
+		$(cmake-utils_use_with !portable SYSTEM_LZO)
+		$(cmake-utils_use_with !portable SYSTEM_EIGEN3)
+		$(cmake-utils_use_with !portable SYSTEM_OPENJPEG)
+		
+		$(cmake-utils_use_with opengl GLU)
+		$(cmake-utils_use_with opengl GL_PROFILE_COMPAT)
+		
+		
+		$(cmake-utils_use_with opennl OPENNL)"
 
 	cmake-utils_src_configure
 }
