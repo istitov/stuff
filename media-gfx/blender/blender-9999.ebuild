@@ -23,21 +23,20 @@ LICENSE="|| ( GPL-2 BL )"
 SLOT="0"
 KEYWORDS=""
 IUSE_BUILD="+blender game-engine -player +bullet collada +nls -ndof +cycles freestyle +opencolorio"
-IUSE_COMPILER="+buildinfo +openmp +sse +sse2"
+IUSE_COMPILER="buildinfo +openmp +sse +sse2"
 IUSE_SYSTEM="X -portable -valgrind -debug -doc"
 IUSE_IMAGE="+openimageio -dpx -dds +openexr -jpeg2k -redcode tiff"
 IUSE_CODEC="+openal sdl jack avi +ffmpeg -sndfile +quicktime"
 IUSE_COMPRESSION="-lzma +lzo"
 IUSE_MODIFIERS="+fluid +smoke +boolean +remesh oceansim +decimate"
 IUSE_MODULES="osl +openvdb +addons contrib -alembic +opennl"
-IUSE_GPU="+opengl -gles +cuda -sm_30 -sm_35 -sm_50"
+IUSE_GPU="+opengl +cuda -sm_30 -sm_35 -sm_50"
 IUSE="${IUSE_BUILD} ${IUSE_COMPILER} ${IUSE_SYSTEM} ${IUSE_IMAGE} ${IUSE_CODEC} ${IUSE_COMPRESSION} ${IUSE_MODIFIERS} ${IUSE_MODULES} ${IUSE_GPU}"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	            redcode? ( ffmpeg jpeg2k )
 			player? ( game-engine opengl )
-			  game-engine? ( bullet opengl player )
-			    bullet? ( opengl )"
+			  game-engine? ( bullet opengl player )"
 
 LANGS="en ar bg ca cs de el es es_ES fa fi fr he hr hu id it ja ky ne nl pl pt pt_BR ru sr sr@latin sv tr uk zh_CN zh_TW"
 for X in ${LANGS} ; do
@@ -242,6 +241,7 @@ src_configure() {
 		mycmakeargs="${mycmakeargs}
 		-DWITH_CYCLES_CUDA=ON
 		-DWITH_CYCLES_CUDA_BINARIES=ON
+		-D
 		-DCUDA_INCLUDES=/opt/cuda/include
 		-DCUDA_LIBRARIES=/opt/cuda/lib64
 		-DCUDA_NVCC=/opt/cuda/bin/nvcc"
@@ -272,6 +272,7 @@ src_configure() {
 		-DWITH_FFTW3=ON
 		$(cmake-utils_use_with ndof INPUT_NDOF)
 		$(cmake-utils_use_with cycles CYCLES)
+		-DWITH_BOOST=ON
 		-DWITH_BULLET=ON
 		-DWITH_HDF5=ON
 		$(cmake-utils_use_with freestyle FREESTYLE)
@@ -287,10 +288,10 @@ src_configure() {
 		$(cmake-utils_use_with X X11_XF86VMODE)
 		$(cmake-utils_use_with X X11_XINPUT)
 		$(cmake-utils_use_with X GHOST_XDND)
-		$(cmake-utils_use_with !X PYTHON_MODULE)
 		$(cmake-utils_use_with valgrind VALGRIND)
 		$(cmake-utils_use_with debug DEBUG)
 		$(cmake-utils_use_with debug GPU_DEBUG)
+		$(cmake-utils_use_with debug WITH_CYCLES_DEBUG)
 		$(cmake-utils_use_with doc DOCS)
 		$(cmake-utils_use_with doc DOC_MANPAGE)
 		
@@ -337,16 +338,12 @@ src_configure() {
 		$(cmake-utils_use_with portable PYTHON_INSTALL_NUMPY)
 		$(cmake-utils_use_with portable PYTHON_INSTALL_REQUESTS)
 		
-		#$(cmake-utils_use_with bullet SYSTEM_BULLET)
 		$(cmake-utils_use_with opengl SYSTEM_GLEW)
-		$(cmake-utils_use_with gles SYSTEM_GLES)
-		$(cmake-utils_use_with lzo SYSTEM_LZO)
-		#-DWITH_SYSTEM_EIGEN3
-		$(cmake-utils_use_with jpeg2k SYSTEM_OPENJPEG)
-		
+		$(cmake-utils_use_with opengl SYSTEM_GLES)
 		$(cmake-utils_use_with opengl GLU)
 		$(cmake-utils_use_with opengl GL_PROFILE_COMPAT)
-		
+		$(cmake-utils_use_with lzo SYSTEM_LZO)
+		$(cmake-utils_use_with jpeg2k SYSTEM_OPENJPEG)
 		
 		$(cmake-utils_use_with opennl OPENNL)"
 
