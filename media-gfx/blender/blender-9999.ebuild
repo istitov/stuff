@@ -29,7 +29,7 @@ IUSE_IMAGE="+openimageio -dpx -dds +openexr -jpeg2k -redcode tiff"
 IUSE_CODEC="+openal sdl jack avi +ffmpeg -sndfile +quicktime"
 IUSE_COMPRESSION="-lzma +lzo"
 IUSE_MODIFIERS="+fluid +smoke +boolean +remesh oceansim +decimate"
-IUSE_MODULES="osl +openvdb +addons contrib -alembic +opennl"
+IUSE_MODULES="osl +openvdb +addons contrib -alembic"
 IUSE_GPU="+opengl +cuda -sm_30 -sm_35 -sm_50"
 IUSE="${IUSE_BUILD} ${IUSE_COMPILER} ${IUSE_SYSTEM} ${IUSE_IMAGE} ${IUSE_CODEC} ${IUSE_COMPRESSION} ${IUSE_MODIFIERS} ${IUSE_MODULES} ${IUSE_GPU}"
 
@@ -44,7 +44,7 @@ for X in ${LANGS} ; do
 	REQUIRED_USE+=" linguas_${X}? ( nls )"
 done
 
-DEPEND="${PYTHON_DEPS}
+RDEPEND="${PYTHON_DEPS}
 	dev-vcs/git
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
@@ -55,22 +55,21 @@ DEPEND="${PYTHON_DEPS}
 	sci-libs/ldl
 	virtual/libintl
 	virtual/jpeg
+	dev-libs/boost[threads(+)]
+	sci-libs/colamd
 	opengl? ( 
 		virtual/opengl
 		media-libs/glew
 		virtual/glu
-		x11-libs/libXi
-		x11-libs/libX11
-		x11-libs/libXxf86vm
 	)
 	X? (
 	   x11-libs/libXi
 	   x11-libs/libX11
+	   x11-libs/libXxf86vm
 	)
 	opencolorio? ( media-libs/opencolorio )
 	cycles? (
 		openimageio? ( >=media-libs/openimageio-1.1.5 )
-		dev-libs/boost[threads(+)]
 		cuda? ( dev-util/nvidia-cuda-toolkit )
 		osl? (
 		      >=sys-devel/llvm-3.1
@@ -100,27 +99,13 @@ DEPEND="${PYTHON_DEPS}
 	lzo? ( dev-libs/lzo )
 	alembic? ( media-libs/alembic )"
 
-RDEPEND="${DEPEND}
+DEPEND="${RDEPEND}
 	dev-cpp/eigen:3
 	nls? ( sys-devel/gettext )
 	doc? (
 		dev-python/sphinx
 		app-doc/doxygen[-nodot(-),dot(+)]
 	)"
-
-# configure internationalization only if LINGUAS have more
-# languages than 'en', otherwise must be disabled
-# A user may have en and en_US enabled. For libre/openoffice
-# as an example.
-for mylang in "${LINGUAS}" ; do
-	if [[ ${mylang} != "en" && ${mylang} != "en_US" && ${mylang} != "" ]]; then
-		DEPEND="${DEPEND}
-			sys-devel/gettext"
-		break;
-	fi
-done
-
-# S="${WORKDIR}/${PN}"
 
 src_unpack(){
 if [ "${PV}" = "9999" ];then
@@ -162,7 +147,7 @@ pkg_setup() {
 		fi
 	fi
 
-	if ! use sm_30 ! use sm_35 ! use sm_50; then
+	if ! use sm_30 && ! use sm_35 && ! use sm_50; then
 		if use cuda; then
 			ewarn "You have not chosen a CUDA kernel. It takes an extreamly long time"
 			ewarn "to compile all the CUDA kernels. Check http://www.nvidia.com/object/cuda_gpus.htm"
@@ -189,10 +174,11 @@ src_prepare() {
 	epatch_user
 
 	# remove some bundled deps
-	#rm -r \
-	#	extern/libopenjpeg \
-	#	extern/glew \
-	#	|| die
+	rm -r \
+		extern/libopenjpeg \
+		extern/glew \
+		extern/glew-es \
+		|| die
 
 	# we don't want static glew, but it's scattered across
 	# thousand files
@@ -203,6 +189,19 @@ src_prepare() {
 
 	ewarn "$(echo "Remaining bundled dependencies:";
 			( find extern -mindepth 1 -maxdepth 1 -type d; ) | sed 's|^|- |')"
+	# linguas cleanup
+	local i
+	if ! use nls; then
+		rm -r "${S}"/release/datafiles/locale || die
+	else
+		if [[ -n "${LINGUAS+x}" ]] ; then
+			cd "${S}"/release/datafiles/locale/po
+			for i in *.po ; do
+				mylang=${i%.po}
+				has ${mylang} ${LINGUAS} || { rm -r ${i} || die ; }
+			done
+		fi
+	fi
 }
 
 src_configure() {
@@ -247,17 +246,6 @@ src_configure() {
 		-DCUDA_NVCC=/opt/cuda/bin/nvcc"
 	fi
 
-	#iconv is enabled when international is enabled
-	if use nls; then
-		for mylang in "${LINGUAS}" ; do
-			if [[ ${mylang} != "en" && ${mylang} != "en_US" && ${mylang} != "" ]]; then
-				mycmakeargs="${mycmakeargs} -DWITH_INTERNATIONAL=ON"
-				break;
-			fi
-		done
-	fi
-
-	#modified the install prefix in order to get everything to work for src_install
 	#make DESTDIR="${D}" install didn't work
 	mycmakeargs="${mycmakeargs}
 		-DCMAKE_INSTALL_PREFIX="/usr"
@@ -270,11 +258,13 @@ src_configure() {
 		$(cmake-utils_use_with bullet BULLET)
 		$(cmake-utils_use_with collada OPENCOLLADA)
 		-DWITH_FFTW3=ON
+		$(cmake-utils_use_with nls INTERNATIONAL)
 		$(cmake-utils_use_with ndof INPUT_NDOF)
 		$(cmake-utils_use_with cycles CYCLES)
 		-DWITH_BOOST=ON
 		-DWITH_BULLET=ON
 		-DWITH_HDF5=ON
+		-DWITH_SYSTEM_EIGEN3=ON
 		$(cmake-utils_use_with freestyle FREESTYLE)
 		$(cmake-utils_use_with opencolorio OPENCOLORIO)
 		
@@ -340,12 +330,11 @@ src_configure() {
 		
 		$(cmake-utils_use_with opengl SYSTEM_GLEW)
 		$(cmake-utils_use_with opengl SYSTEM_GLES)
-		$(cmake-utils_use_with opengl GLU)
 		$(cmake-utils_use_with opengl GL_PROFILE_COMPAT)
 		$(cmake-utils_use_with lzo SYSTEM_LZO)
 		$(cmake-utils_use_with jpeg2k SYSTEM_OPENJPEG)
 		
-		$(cmake-utils_use_with opennl OPENNL)"
+		-DWITH_OPENNL=ON"
 
 	cmake-utils_src_configure
 }
