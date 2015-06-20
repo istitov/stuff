@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -23,10 +23,6 @@ RDEPEND=">=dev-libs/glib-2.26:2
 		xscreensaver? ( x11-libs/libXScrnSaver )
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}"
-
-src_prepare() {
-		epatch "${FILESDIR}"/${PN}-fix-libstrophe-check.patch
-}
 
 src_configure() {
 		econf \
