@@ -38,7 +38,7 @@ EXTRA_RDEPEND="
 "
 
 SUGGESTED_RDEPEND="
-	virtual/perl-CGI
+	dev-perl/CGI
 	>=dev-perl/CGI-FormBuilder-3.0202
 	>=dev-perl/CGI-Session-4.14
 	dev-perl/Mail-Sendmail
