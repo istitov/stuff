@@ -385,8 +385,12 @@ pkg_preinst() {
 
 pkg_postinst() {
 	elog
-	elog "Blender uses python integration. As such, may have some"
-	elog "inherit risks with running unknown python scripting."
+	elog "Blender compiles from master think by default"
+	elog "You may change a branch and a rev, for ex, in /etc/portage/env/blender"
+	elog "EGIT_COMMIT="v2.74"
+	elog "EGIT_BRANCH="master""
+	elog "and don't forget add to /etc/portage/package.env"
+	elog "media-gfx/blender blender"
 	elog
 	elog "It is recommended to change your blender temp directory"
 	elog "from /tmp to /home/user/tmp or another tmp file under your"
