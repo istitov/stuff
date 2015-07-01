@@ -46,6 +46,7 @@ RDEPEND="${PYTHON_DEPS}
 	dev-vcs/git
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
+	dev-libs/jemalloc
 	sys-libs/zlib
 	sci-libs/fftw:3.0
 	media-libs/freetype
