@@ -34,7 +34,7 @@ IUSE="${IUSE_BUILD} ${IUSE_COMPILER} ${IUSE_SYSTEM} ${IUSE_IMAGE} ${IUSE_CODEC} 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	            redcode? ( ffmpeg jpeg2k )
 			player? ( game-engine opengl )
-			  game-engine? ( bullet opengl player )"
+			  game-engine? ( bullet opengl )"
 
 LANGS="en ar bg ca cs de el es es_ES fa fi fr he hr hu id it ja ky ne nl pl pt pt_BR ru sr sr@latin sv tr uk zh_CN zh_TW"
 for X in ${LANGS} ; do
