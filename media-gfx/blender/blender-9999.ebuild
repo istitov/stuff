@@ -387,7 +387,7 @@ pkg_postinst() {
 	elog
 	elog "Blender compiles from master think by default"
 	elog "You may change a branch and a rev, for ex, in /etc/portage/env/blender"
-	elog "EGIT_COMMIT="v2.74"
+	elog "EGIT_COMMIT="v2.74""
 	elog "EGIT_BRANCH="master""
 	elog "and don't forget add to /etc/portage/package.env"
 	elog "media-gfx/blender blender"
