@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/blam/blam-9999.ebuild,v 1.1 2012/12/06 20:25:23 brothermechanic Exp $
 
-EAPI=4
+EAPI=5
 
 inherit git-2
 

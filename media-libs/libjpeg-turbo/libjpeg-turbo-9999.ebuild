@@ -4,7 +4,7 @@
 
 # http://libjpeg-turbo.svn.sourceforge.net/viewvc/libjpeg-turbo/branches/1.2.x/?view=tar
 
-EAPI=4
+EAPI=5
 
 unset _inherits
 

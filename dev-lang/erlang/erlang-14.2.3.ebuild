@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-lang/erlang/erlang-14.2.3.ebuild,v 1.1 2011/06/06 08:53:33 djc Exp $
 
-EAPI=3
+EAPI=5
 WX_GTK_VER="2.8"
 
 inherit elisp-common eutils java-pkg-opt-2 multilib versionator wxwidgets

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-cpp/clucene/Attic/clucene-0.9.21b-r1.ebuild,v 1.11 2012/10/01 11:41:11 johu dead $
 
-EAPI=3
+EAPI=5
 
 MY_P=${PN}-core-${PV}
 inherit base autotools

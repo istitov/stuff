@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-admin/eselect-opencl/eselect-opencl-1.1.0-r1.ebuild,v 1.5 2012/05/16 14:43:18 aballier Exp $
 
-EAPI=4
+EAPI=5
 CL_ABI=1.2
 
 inherit multilib

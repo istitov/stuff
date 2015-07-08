@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-editors/gobby/gobby-0.4.94.ebuild,v 1.1 2011/04/30 09:50:35 xarthisius Exp $
 
-EAPI=2
+EAPI=5
 
 inherit eutils gnome2-utils
 

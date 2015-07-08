@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/qtav/qtav-9999.ebuild,v 1.1 2013/03/04 16:11:23 brothermechanic Exp $
 
-EAPI=2
+EAPI=5
 
 inherit eutils git-2
 

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=5
 
 inherit eutils fdo-mime java-pkg-2 java-ant-2 versionator subversion
 

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sci-geosciences/googleearth/googleearth-5.1.3535.3218-r1.ebuild,v 1.9 2012/09/24 00:48:04 vapier Exp $
 
-EAPI=2
+EAPI=5
 
 inherit eutils unpacker fdo-mime versionator toolchain-funcs
 

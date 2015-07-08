@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-plugins/npapi-vlc/npapi-vlc-2.0.0.ebuild,v 1.7 2012/05/29 15:39:04 ranger Exp $
 
-EAPI=3
+EAPI=5
 
 SCM=""
 if [ "${PV%9999}" != "${PV}" ] ; then

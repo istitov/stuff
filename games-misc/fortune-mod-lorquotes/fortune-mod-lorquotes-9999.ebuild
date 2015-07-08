@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI=5
 MY_PN=${PN/mod-/}
 DESCRIPTION="The best phrases of Linux.Org.Ru members"
 HOMEPAGE="http://lorquotes.ru/,"

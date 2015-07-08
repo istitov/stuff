@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-misc/kcm-qt-graphicssystem/kcm-qt-graphicssystem-1.2.ebuild,v 1 2010/12/26 05:32:35 megabaks Exp $
 
-EAPI=3
+EAPI=5
 
 inherit eutils
 
