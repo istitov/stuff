@@ -27,14 +27,15 @@ IUSE_IMAGE="+openimageio -dpx -dds +openexr -jpeg2k -redcode tiff"
 IUSE_CODEC="+openal sdl jack avi +ffmpeg -sndfile +quicktime"
 IUSE_COMPRESSION="-lzma +lzo"
 IUSE_MODIFIERS="+fluid +smoke +boolean +remesh oceansim +decimate"
-IUSE_MODULES="osl +openvdb +addons contrib -alembic"
+IUSE_MODULES="osl +openvdb +addons contrib -alembic opensubdiv"
 IUSE_GPU="+opengl +cuda -sm_30 -sm_35 -sm_50"
 IUSE="${IUSE_BUILD} ${IUSE_COMPILER} ${IUSE_SYSTEM} ${IUSE_IMAGE} ${IUSE_CODEC} ${IUSE_COMPRESSION} ${IUSE_MODIFIERS} ${IUSE_MODULES} ${IUSE_GPU}"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	            redcode? ( ffmpeg jpeg2k )
 			player? ( game-engine opengl )
-			  game-engine? ( bullet opengl )"
+			  game-engine? ( bullet opengl )
+			    openvdb ( !osl )"
 
 LANGS="en ar bg ca cs de el es es_ES fa fi fr he hr hu id it ja ky ne nl pl pt pt_BR ru sr sr@latin sv tr uk zh_CN zh_TW"
 for X in ${LANGS} ; do
@@ -74,7 +75,7 @@ RDEPEND="${PYTHON_DEPS}
 		      >=sys-devel/llvm-3.1
 		      media-gfx/osl
 		      )
-		openvdb? ( media-gfx/openvdb )
+		openvdb? ( media-gfx/openvdb[openvdb-compression] )
 	)
 	sdl? ( media-libs/libsdl[sound,joystick] )
 	tiff? ( media-libs/tiff )
@@ -96,7 +97,8 @@ RDEPEND="${PYTHON_DEPS}
 	valgrind? ( dev-util/valgrind )
 	lzma? ( app-arch/lzma )
 	lzo? ( dev-libs/lzo )
-	alembic? ( media-libs/alembic )"
+	alembic? ( media-libs/alembic )
+	opensubdiv? ( media-libs/opensubdiv )"
 
 DEPEND="${RDEPEND}
 	dev-cpp/eigen:3
@@ -317,9 +319,11 @@ src_configure() {
 		-DLLVM_STATIC=OFF
 		-DLLVM_LIBRARY="/usr/lib"
 		$(cmake-utils_use_with osl CYCLES_OSL)
-		$(cmake-utils_use_with openvdb CYCLES_OPENVDB)
+		$(cmake-utils_use_with openvdb OPENVDB)
+		$(cmake-utils_use_with openvdb OPENVDB_BLOSC)
 		$(cmake-utils_use_with alembic ALEMBIC)
 		$(cmake-utils_use_with alembic STATICALEMBIC)
+		$(cmake-utils_use_with opensubdiv OPENSUBDIV)
 		
 		$(cmake-utils_use_with portable INSTALL_PORTABLE)
 		$(cmake-utils_use_with portable STATIC_LIBS)
