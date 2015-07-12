@@ -23,6 +23,7 @@ IUSE=""
 
 DEPEND="
 	dev-qt/qtcore:5
+	dev-qt/qtopengl:5
 	virtual/opengl
 	"
 
