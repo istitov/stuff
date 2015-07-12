@@ -11,8 +11,7 @@ inherit eutils versionator python-r1
 DESCRIPTION="Libs for the efficient manipulation of volumetric data"
 HOMEPAGE="http://www.openvdb.org"
 MY_PV="$(replace_all_version_separators '_')"
-SRC_URI="http://www.openvdb.org/download/${PN}_${MY_PV}_library.zip
-	  https://git.blender.org/gitweb/gitweb.cgi/blender.git/blob_plain/refs/heads/openvdb:/intern/openvdb/openvdb_capi.h"
+SRC_URI="http://www.openvdb.org/download/${PN}_${MY_PV}_library.zip"
 
 LICENSE="MPL-2.0"
 SLOT="0"
@@ -94,5 +93,5 @@ src_compile() {
 src_install(){
 	emake DESTDIR="${D}/usr" install
 	insinto /usr/include
-	doins ${DISTDIR}/openvdb_capi.h
+	#doins ${FILESTDIR}/openvdb_capi.h
 }
