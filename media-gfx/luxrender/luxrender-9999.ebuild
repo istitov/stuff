@@ -59,9 +59,9 @@ src_install() {
 	fi
 	
 	if use blender; then
-		if v="/usr/share/blender/*";then
-		    insinto $v/scripts/addons/luxrender/
-		    doins "${CMAKE_BUILD_DIR}"/*.so || die "Couldn't install Pylux"
+		if VER="/usr/share/blender/*";then
+		    exeinto ${VER}/scripts/addons/luxrender/
+		    doexe "${CMAKE_BUILD_DIR}"/*.so || die "Couldn't install Pylux"
 		fi
 	fi
 }

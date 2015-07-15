@@ -18,20 +18,26 @@ IUSE="+blender debug"
 
 DEPEND=">=dev-libs/boost-1.43
 	media-libs/freeimage
+	media-gfx/embree
 	virtual/opencl
 	virtual/opengl"
 	
 src_prepare() {
 	python-single-r1_pkg_setup
-	epatch "${FILESDIR}/without-samples.patch"
+#	epatch "${FILESDIR}/without-samples.patch"
 	epatch_user
 }
 
 src_configure() {
-	append-flags "-fPIC"
+	append-flags "-fPIC -msse -msse2 -DLUX_USE_SSE"
 	use debug && append-flags -ggdb
-
-	mycmakeargs=( -Wno-dev )
+	local mycmakeargs=""
+	mycmakeargs="${mycmakeargs}( -Wno-dev )"
+	
+	mycmakeargs="${mycmakeargs}
+		  -DLUX_DOCUMENTATION=OFF
+		  -DLUXRAYS_DISABLE_OPENCL=OFF
+		  -DCMAKE_INSTALL_PREFIX=/usr"
 	cmake-utils_src_configure
 }
 
@@ -48,9 +54,9 @@ src_install() {
 	dolib.a ${BUILD_DIR}/lib/*
 	
 	if use blender; then
-		if v="/usr/share/blender/*";then
-		    insinto $v/scripts/addons/luxrender/
-		    doins "${CMAKE_BUILD_DIR}"/lib/*.so || die "Couldn't install Pylux"
+		if VER="/usr/share/blender/*";then
+		    exeinto ${VER}/scripts/addons/luxrender/
+		    doexe "${CMAKE_BUILD_DIR}"/lib/*.so || die "Couldn't install Pylux"
 		fi
 	fi
 }
