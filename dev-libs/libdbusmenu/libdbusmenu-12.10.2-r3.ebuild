@@ -15,7 +15,7 @@ HOMEPAGE="http://launchpad.net/dbusmenu"
 SRC_URI="http://launchpad.net/${PN/lib}/${PV%.*}/${PV}/+download/${P}.tar.gz"
 
 LICENSE="LGPL-2.1 LGPL-3"
-SLOT="3"
+SLOT="0"
 KEYWORDS="~amd64 ~arm ~hppa ~mips ~x86"
 IUSE="debug gtk +gtk2 +introspection"
 
