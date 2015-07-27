@@ -1,0 +1,10 @@
+diff --git a/release/bin/blender-thumbnailer.py b/release/bin/blender-thumbnailer.py
+index 779c615..dbcd865 100755
+--- a/release/bin/blender-thumbnailer.py
++++ b/release/bin/blender-thumbnailer.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # ##### BEGIN GPL LICENSE BLOCK #####
+ #
