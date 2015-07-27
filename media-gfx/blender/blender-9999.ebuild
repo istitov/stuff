@@ -28,7 +28,7 @@ IUSE_CODEC="+openal sdl jack avi +ffmpeg -sndfile +quicktime"
 IUSE_COMPRESSION="-lzma +lzo"
 IUSE_MODIFIERS="+fluid +smoke +boolean +remesh oceansim +decimate"
 IUSE_MODULES="osl +openvdb +addons contrib -alembic opensubdiv"
-IUSE_GPU="+opengl +cuda -sm_30 -sm_35 -sm_50"
+IUSE_GPU="+opengl +cuda -sm_21 -sm_30 -sm_35 -sm_50"
 IUSE="${IUSE_BUILD} ${IUSE_COMPILER} ${IUSE_SYSTEM} ${IUSE_IMAGE} ${IUSE_CODEC} ${IUSE_COMPRESSION} ${IUSE_MODIFIERS} ${IUSE_MODULES} ${IUSE_GPU}"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
@@ -212,6 +212,13 @@ src_configure() {
 	#CUDA Kernal Selection
 	local CUDA_ARCH=""
 	if use cuda; then
+		if use sm_21; then
+			if [[ -n "${CUDA_ARCH}" ]] ; then
+				CUDA_ARCH="${CUDA_ARCH};sm_21"
+			else
+				CUDA_ARCH="sm_21"
+			fi
+		fi
 		if use sm_30; then
 			if [[ -n "${CUDA_ARCH}" ]] ; then
 				CUDA_ARCH="${CUDA_ARCH};sm_30"
