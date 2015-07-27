@@ -1,6 +1,6 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/opencollada/opencollada-1.2.2_p20150207.ebuild,v 1.5 2015/04/09 07:22:12 ago Exp $
+# $Header: Exp $
 
 EAPI=5
 
@@ -24,8 +24,8 @@ SLOT="0"
 
 if [[ ${PV} != *9999* ]]; then
 	#
-	# UPDATE THE COMMIT WHEN BUMPING!
-	COMMIT="ceb409cabdccda3000aa2e5c065850b8fde60b0f"
+	# Magic blender commit!
+	COMMIT="3335ac164e68b2512a40914b14c74db260e6ff7d"
 	#
 	SRC_URI="https://github.com/KhronosGroup/OpenCOLLADA/tarball/${COMMIT} -> ${P}.tar.gz"
 	KEYWORDS="amd64 ~ppc64 x86"
