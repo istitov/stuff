@@ -172,7 +172,6 @@ src_prepare() {
 		"${FILESDIR}"/07-${PN}-2.70-sse2.patch \
 		"${FILESDIR}"/sequencer_extra_actions-3.8.patch.bz2 \
 		"${FILESDIR}"/01_include_addon_contrib_in_release \
-		"${FILESDIR}"/050_thumbnailer_use_python3 \
 		"${FILESDIR}"/050_thumbnailer_use_python3
 		
 	epatch_user
