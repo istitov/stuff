@@ -1,8 +1,8 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=2
 MY_PN=${PN/mod-/}
 DESCRIPTION="The best phrases of Linux.Org.Ru members"
 HOMEPAGE="http://lorquotes.ru/,"
@@ -24,5 +24,5 @@ src_prepare(){
 }
 src_install() {
 	insinto /usr/share/fortune
-	doins  ${PN}  ${PN}.dat || die
+	doins ${PN} ${PN}.dat || die
 }
