@@ -1,10 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-plugins/gimp-luce-plugin/gimp-luce-plugin-2.0.0.ebuild,v 0.1 2013/11/25 20:30:12 brothermechanic Exp $
+# $Header: brothermechanic $
 
 EAPI="5"
 
-inherit eutils autotools
+inherit eutils
 
 DESCRIPTION="Luce for GIMP is a port of Amico Perry's Luce Photoshop plug-in."
 HOMEPAGE="http://registry.gimp.org/node/28271"
