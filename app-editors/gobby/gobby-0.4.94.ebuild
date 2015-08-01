@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-editors/gobby/gobby-0.4.94.ebuild,v 1.1 2011/04/30 09:50:35 xarthisius Exp $
+# $Header: $
 
 EAPI=5
 
@@ -16,7 +16,7 @@ IUSE="avahi doc nls gtk3"
 MY_PV=0.5
 
 RDEPEND="
-	|| ( gtk3? ( dev-cpp/gtkmm:3.0 ) dev-cpp/gtkmm:2 )
+	|| ( gtk3? ( dev-cpp/gtkmm:3.0 ) dev-cpp/gtkmm:2.4 )
 	dev-libs/libsigc++:2
 	|| ( gtk3? ( >=net-libs/libinfinity-0.4[gtk3,gtk,avahi?] ) >=net-libs/libinfinity-0.4[-gtk3,gtk,avahi?] )
 	|| ( gtk3? ( x11-libs/gtk+:3 ) x11-libs/gtk+:2 )
