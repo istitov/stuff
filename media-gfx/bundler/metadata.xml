@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>brothermechanic@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name='ceres'>Add support for <pkg>ceres</pkg>nonlinear least-squares minimizer</flag>
+	</use>
 </pkgmetadata>

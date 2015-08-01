@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>brothermechanic@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name='ispc'>Adds support for Intel SPMD Program Compiler</flag>
+	</use>
 </pkgmetadata>
