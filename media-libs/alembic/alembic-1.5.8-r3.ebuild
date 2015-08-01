@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_4 )
 
 inherit cmake-utils eutils python-single-r1
 
-DESCRIPTION="Alembic is an open framework for storing and sharing 3D geometry data that includes a C++ library, a file format, and client plugins and applications."
+DESCRIPTION="An open framework for storing and sharing 3D geometry data."
 HOMEPAGE="http://alembic.io"
 SRC_URI="https://github.com/alembic/alembic/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
