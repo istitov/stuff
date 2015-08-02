@@ -1,8 +1,8 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/glui/glui-2.36.ebuild,v 0.1 2014/12/04 09:58:36 brothermechanic Exp $
+# $Header: brothermechanic Exp $
 
-EAPI=4
+EAPI=5
 
 inherit eutils
 
@@ -10,16 +10,13 @@ DESCRIPTION="A GLUT-based C++ user interface library"
 HOMEPAGE="http://glui.sourceforge.net/"
 SRC_URI="http://downloads.sourceforge.net/glui/glui-2.36.tgz"
 
-LICENSE="GPL"
+LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="media-libs/freeglut"
-
 DEPEND="${RDEPEND}"
-
-
 
 src_compile() {
 	cd "${S}"/src
@@ -31,4 +28,3 @@ src_install() {
 	insinto /usr/include/GL
 	doins "${S}"/src/include/GL/glui* || die "Failed to install headers"
 }
-
