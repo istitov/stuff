@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: bar-overlay/x11-misk/yd-tools/yd-tools-9999.ebuild,v 1.1 2015/04/03 12:01:00 brothermechanic Exp $
 
@@ -10,7 +10,7 @@ DESCRIPTION="Panel indicator for YandexDisk CLI client for Linux"
 HOMEPAGE="https://github.com/slytomcat/yandex-disk-indicator"
 EGIT_REPO_URI="https://github.com/slytomcat/yandex-disk-indicator.git"
 
-LICENSE="GPL"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 x86"
 IUSE=""
@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	insinto /opt/yd-tools
-	doins -r fm-actions icons Yandex.Disk-indicator.desktop Yandex.Disk.desktop ya-setup 
+	doins -r fm-actions icons Yandex.Disk-indicator.desktop Yandex.Disk.desktop ya-setup
 	exeinto /opt/yd-tools
 	doexe yandexDiskIndicator.py
 	dobin build/yd-tools/usr/bin/yandex-disk-indicator
