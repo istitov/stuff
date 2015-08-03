@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -18,8 +18,8 @@ IUSE="sse2 doc debug +blender"
 
 RDEPEND=">=dev-libs/boost-1.43[python]
 	media-libs/openexr
-	media-libs/tiff
-	media-libs/libpng
+	media-libs/tiff:=
+	media-libs/libpng:=
 	media-libs/libjpeg-turbo
 	media-libs/ilmbase
 	>=media-libs/freeimage-3.15.0
@@ -57,7 +57,7 @@ src_install() {
 		dohtml html/* || die "Couldn't install API docs"
 		popd > /dev/null
 	fi
-	
+
 	if use blender; then
 		if VER="/usr/share/blender/*";then
 		    exeinto ${VER}/scripts/addons/luxrender/

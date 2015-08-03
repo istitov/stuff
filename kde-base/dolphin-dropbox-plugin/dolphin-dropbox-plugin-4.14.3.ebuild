@@ -20,4 +20,3 @@ DEPEND="$(add_kdebase_dep dolphin)"
 
 RDEPEND="${DEPEND}
 	!kde-base/dolphin-box-plugin"
-

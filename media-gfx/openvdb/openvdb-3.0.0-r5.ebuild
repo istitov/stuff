@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/openvdb/openvdb-3.0.0-r3.ebuild,v 1.4 2015/06/08 15:00:00 brothermechanic Exp $
 
@@ -57,22 +57,22 @@ src_prepare() {
 	-e	"s|--html -o|--html --html-dir|" \
 	-e	"s|vdb_render vdb_test|vdb_render vdb_view vdb_test|" \
 	-i Makefile
-	
+
 	if ! use X; then
 		sed 's/^\(GLFW_INCL_DIR :=\).*$/\1/' -i Makefile
 		sed 's/^\(GLFW_LIB_DIR :=\).*$/\1/' -i Makefile
 		sed 's/^\(GLFW_LIB :=\).*$/\1/' -i Makefile
 		sed 's/^\(GLFW_MAJOR_VERSION :=\).*$/\1/' -i Makefile
 	fi
-	
+
 	if use openvdb-compression; then
 		sed "s|^BLOSC_INCL_DIR.*|BLOSC_INCL_DIR := /usr/include|" -i Makefile
 		sed "s|^BLOSC_LIB_DIR :=.*|BLOSC_LIB_DIR := /usr/$(get_libdir)|" -i Makefile
 	fi
-	
+
 	sed "s|^CPPUNIT_INCL_DIR.*|CPPUNIT_INCL_DIR := /usr/include/cppunit|" -i Makefile
 	sed "s|^CPPUNIT_LIB_DIR :=.*|CPPUNIT_LIB_DIR := /usr/$(get_libdir)|" -i Makefile
-	
+
 }
 
 src_compile() {

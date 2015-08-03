@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/openimageio/openimageio-1.3.5.ebuild,v 1.3 2014/02/17 06:41:48 ssuominen Exp $
 
@@ -31,9 +31,9 @@ RDEPEND="dev-libs/boost[python?]
 	media-libs/tiff:0=
 	sci-libs/hdf5
 	sys-libs/zlib:=
-	virtual/jpeg
+	virtual/jpeg:=
 	gif? ( media-libs/giflib )
-	jpeg2k? ( media-libs/openjpeg )
+	jpeg2k? ( media-libs/openjpeg:= )
 	colorio? ( >=media-libs/opencolorio-1.0.7:= )
 	opencv? (
 		media-libs/opencv
@@ -45,9 +45,9 @@ RDEPEND="dev-libs/boost[python?]
 		)
 	python? ( ${PYTHON_DEPS} )
 	qt4? (
-		dev-qt/qtcore
-		dev-qt/qtgui
-		dev-qt/qtopengl
+		dev-qt/qtcore:4
+		dev-qt/qtgui:4
+		dev-qt/qtopengl:4
 		)
 	ssl? ( dev-libs/openssl:0 )
 	tbb? ( dev-cpp/tbb )

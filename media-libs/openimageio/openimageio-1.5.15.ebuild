@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/openimageio/openimageio-1.3.5.ebuild,v 1.3 2014/02/17 06:41:48 brothermechanic Exp $
 
@@ -17,7 +17,7 @@ SRC_URI="https://github.com/OpenImageIO/${MY_P}/archive/${MY_PV}.tar.gz -> ${P}.
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc64 ~x86"
-IUSE="gif jpeg2k colorio opencv opengl python qt ssl tbb +truetype ffmpeg X"
+IUSE="gif jpeg2k colorio opencv opengl python qt4 ssl tbb +truetype ffmpeg X"
 
 RESTRICT="test" #431412
 
@@ -30,10 +30,10 @@ RDEPEND="dev-libs/boost[python?]
 	media-libs/tiff:0=
 	sci-libs/hdf5
 	sys-libs/zlib:=
-	virtual/jpeg
+	virtual/jpeg:=
 	ffmpeg? ( virtual/ffmpeg )
 	gif? ( media-libs/giflib )
-	jpeg2k? ( media-libs/openjpeg )
+	jpeg2k? ( media-libs/openjpeg:= )
 	colorio? ( >=media-libs/opencolorio-1.0.7:= )
 	opencv? (
 		>=media-libs/opencv-2.3:=
@@ -45,17 +45,15 @@ RDEPEND="dev-libs/boost[python?]
 		media-libs/glew
 		)
 	python? ( ${PYTHON_DEPS} )
-	qt? (
-		dev-qt/qtcore
-		dev-qt/qtgui
-		dev-qt/qtopengl
+	qt4? (
+		dev-qt/qtcore:4
+		dev-qt/qtgui:4
+		dev-qt/qtopengl:4
 		)
 	ssl? ( dev-libs/openssl:0 )
 	tbb? ( dev-cpp/tbb )
 	truetype? ( media-libs/freetype:2= )"
 DEPEND="${RDEPEND}"
-
-S="${WORKDIR}/${P}"
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
@@ -91,14 +89,13 @@ src_configure() {
 		$(cmake-utils_use_use opengl)
 		$(cmake-utils_use_use jpeg2k OPENJPEG)
 		$(cmake-utils_use_use python)
-		$(cmake-utils_use_use qt QT)
+		$(cmake-utils_use_use qt4 QT)
 		$(cmake-utils_use_use tbb)
 		$(cmake-utils_use_use ssl OPENSSL)
 		$(cmake-utils_use_use gif)
 		$(cmake-utils_use_use ffmpeg FFMPEG)
 		$(cmake-utils_use_use opengl OPENGL)
-		
-		)
+)
 
 	cmake-utils_src_configure
 }

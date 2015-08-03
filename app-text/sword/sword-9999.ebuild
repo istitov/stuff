@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/sword/sword-1.7.3.ebuild,v 1.1 2014/10/14 18:37:32 creffett Exp $
 
@@ -62,7 +62,7 @@ src_configure() {
 
 src_install() {
 	insinto /usr/include
-	doins -r ${S}/include/osisreferencelinks.h
+	doins -r "${S}/include/osisreferencelinks.h"
 	default
 
 	find "${ED}" -name '*.la' -exec rm -f {} +

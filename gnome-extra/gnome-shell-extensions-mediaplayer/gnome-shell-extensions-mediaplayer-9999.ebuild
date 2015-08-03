@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -23,7 +23,7 @@ IUSE=""
 
 LANGS="de es fr gl he it lt nl pl pt_BR ru tr zh_CN zh_TW"
 for X in ${LANGS} ; do
-        IUSE+=" linguas_${X}"
+	IUSE+=" linguas_${X}"
 done
 
 COMMON_DEPEND="
@@ -55,11 +55,11 @@ src_prepare() {
 	gnome2_src_prepare
 
 	local lang
-        for lang in ${LANGS}; do
-                if ! use linguas_${lang}; then
-                        rm po/${lang}.po || die "failed to remove nls"
-                fi
-        done
+		for lang in ${LANGS}; do
+			if ! use linguas_${lang}; then
+				rm po/${lang}.po || die "failed to remove nls"
+			fi
+		done
 }
 
 pkg_postinst() {

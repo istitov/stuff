@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -21,7 +21,7 @@ DEPEND=">=dev-libs/boost-1.43
 	media-gfx/embree
 	virtual/opencl
 	virtual/opengl"
-	
+
 src_prepare() {
 	python-single-r1_pkg_setup
 #	epatch "${FILESDIR}/without-samples.patch"
@@ -33,7 +33,7 @@ src_configure() {
 	use debug && append-flags -ggdb
 	local mycmakeargs=""
 	mycmakeargs="${mycmakeargs}( -Wno-dev )"
-	
+
 	mycmakeargs="${mycmakeargs}
 		  -DLUX_DOCUMENTATION=OFF
 		  -DLUXRAYS_DISABLE_OPENCL=OFF
@@ -46,13 +46,13 @@ src_compile() {
 }
 
 src_install() {
-	dodoc ${S}/AUTHORS.txt
+	dodoc "${S}/AUTHORS.txt"
 
 	insinto /usr/include
-	doins -r ${S}/include/*
+	doins -r "${S}/include/*"
 
-	dolib.a ${BUILD_DIR}/lib/*
-	
+	dolib.a "${BUILD_DIR}/lib/*"
+
 	if use blender; then
 		if VER="/usr/share/blender/*";then
 		    exeinto ${VER}/scripts/addons/luxrender/

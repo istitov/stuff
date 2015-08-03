@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>brothermechanic@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name='blender'> Add support for blender</flag>
+	</use>
 </pkgmetadata>

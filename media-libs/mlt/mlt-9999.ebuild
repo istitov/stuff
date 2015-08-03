@@ -1,8 +1,8 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mlt/mlt-0.9.0.ebuild,v 1.6 2014/08/21 09:58:36 ago Exp $
+# $Header: $
 
-EAPI=4
+EAPI=5
 PYTHON_DEPEND="python? 2:2.6"
 inherit eutils toolchain-funcs multilib python git-2
 
@@ -41,8 +41,8 @@ RDEPEND="ffmpeg? ( virtual/ffmpeg[vdpau?] )
 	kde? ( kde-base/kdelibs:4
 		media-libs/libexif )
 	!media-libs/mlt++
-	lua? ( >=dev-lang/lua-5.1.4-r4 )
-	ruby? ( dev-lang/ruby )"
+	lua? ( dev-lang/lua:0 )
+	ruby? ( dev-lang/ruby:= )"
 #	sox? ( media-sound/sox )
 #	java? ( >=virtual/jre-1.5 )
 #	perl? ( dev-lang/perl )
