@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libgcrypt/libgcrypt-1.5.3.ebuild,v 1.14 2014/01/18 05:07:26 vapier Exp $
 
@@ -13,7 +13,7 @@ MY_P="${MY_PN}-${PV}"
 DESCRIPTION="General purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
 SRC_URI="mirror://gnupg/libgcrypt/${MY_P}.tar.bz2 -> ${MY_P}.tar.bz2
-	ftp://ftp.gnupg.org/gcrypt/${MY_PN}/${MY_P}.tar.bz2 -> ${MY_P}.tar.bz2"
+	mirror://ftp.gnupg.org/gcrypt/${MY_PN}/${MY_P}.tar.bz2 -> ${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2.1 MIT"
 SLOT="0/11" # subslot = soname major version
