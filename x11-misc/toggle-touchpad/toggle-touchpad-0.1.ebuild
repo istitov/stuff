@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -17,11 +17,12 @@ DEPEND=""
 # todo: find out what happens when both are installed
 RDEPEND="${DEPEND} || (
 	x11-drivers/xf86-input-synaptics
-	x11-apps/xinput	)"
+	x11-apps/xinput
+	)"
 
 S="${WORKDIR}"
 
 src_install() {
 	exeinto /usr/bin
-	doexe ${FILESDIR}/${PN}
+	doexe "${FILESDIR}/${PN}"
 }

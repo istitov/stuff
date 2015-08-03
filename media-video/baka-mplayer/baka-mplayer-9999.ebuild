@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/baka-mplayer/baka-mplayer-9999.ebuild,v 0.1 2014-12-04 13:19:13 brothermechanic Exp $
 
@@ -30,9 +30,8 @@ DEPEND="
 
 RDEPEND="${DEPEND}"
 
-
 src_prepare() {
-	/usr/lib64/qt5/bin/qmake PREFIX=${D}/usr src/Baka-MPlayer.pro
+	/usr/lib64/qt5/bin/qmake REFIX="${D}/usr src/Baka-MPlayer.pro"
 }
 
 src_install() {

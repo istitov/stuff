@@ -86,7 +86,7 @@ src_install() {
 
 	if use X;then
 		insinto "${targetdir}"/images/hicolor/16x16
-		doins -r "${T}"/status 
+		doins -r "${T}"/status
 		doicon -s 16 -c status "${T}/status"
 	fi
 
@@ -96,7 +96,6 @@ src_install() {
 		newinitd "${FILESDIR}"/dropbox.initd dropbox
 	fi
 	newconfd "${FILESDIR}"/dropbox.conf dropbox
-
 
 	dodoc "${T}"/{README,ACKNOWLEDGEMENTS}
 }

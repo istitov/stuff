@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name='librsync-bundled'>Use bundled librsync instead of system one.</flag>
+	</use>
 </pkgmetadata>

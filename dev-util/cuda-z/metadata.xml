@@ -5,6 +5,7 @@
 		<email>brothermechanic@gmail.com</email>
 	</maintainer>
 	<use>
-		<flag name='tbb'>Add support for <pkg>dev-cpp/tbb</pkg></flag>
-  </use>
+		<flag name='sm_30'>Add support for compute capability 3.0</flag>
+		<flag name='sm_35'>Add support for compute capability 3.5</flag>
+	</use>
 </pkgmetadata>

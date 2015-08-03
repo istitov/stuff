@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: media-sound/deadbeef-infobar/deadbeef-infobar-9999.ebuild,v 1 2014/03/03 21:35:34 megabaks Exp $
 
@@ -33,5 +33,4 @@ src_prepare(){
 src_install(){
 	insinto /usr/$(get_libdir)/deadbeef
 	doins vgm.so
-	dodoc COPYING
 }

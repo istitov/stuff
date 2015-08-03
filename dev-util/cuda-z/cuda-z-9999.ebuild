@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-util/cuda-z/cuda-z-9999.ebuild,v 0.1 2014/11/28 19:11:23 brothermechanic Exp $
 
@@ -33,7 +33,7 @@ src_prepare(){
 
 src_configure() {
 	if use sm_30; then
-	  eqmake4 CONFIG+=sm_30 
+	  eqmake4 CONFIG+=sm_30
 	fi
 	if use sm_35; then
 	  eqmake4 CONFIG+=sm_35
