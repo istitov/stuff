@@ -37,18 +37,18 @@ RDEPEND="
 S="${WORKDIR}"
 
 src_unpack() {
-        unpack "$A"
-        unpack ./data.tar.xz
-        cd ./usr
+	unpack $A
+	unpack ./data.tar.xz
+	cd ./usr
 }
 
 src_install() {
 	exeinto /usr/bin
-    doexe usr/bin/megasync
-    domenu usr/share/applications/megasync.desktop
-    doicon -s 16 usr/share/icons/hicolor/16x16/apps/mega.png
-    doicon -s 32 usr/share/icons/hicolor/32x32/apps/mega.png
-    doicon -s 48 usr/share/icons/hicolor/48x48/apps/mega.png
-    doicon -s 128 usr/share/icons/hicolor/128x128/apps/mega.png
-    doicon -s 256 usr/share/icons/hicolor/256x256/apps/mega.png
+	doexe usr/bin/megasync
+	domenu usr/share/applications/megasync.desktop
+	doicon -s 16 usr/share/icons/hicolor/16x16/apps/mega.png
+	doicon -s 32 usr/share/icons/hicolor/32x32/apps/mega.png
+	doicon -s 48 usr/share/icons/hicolor/48x48/apps/mega.png
+	doicon -s 128 usr/share/icons/hicolor/128x128/apps/mega.png
+	doicon -s 256 usr/share/icons/hicolor/256x256/apps/mega.png
 }
