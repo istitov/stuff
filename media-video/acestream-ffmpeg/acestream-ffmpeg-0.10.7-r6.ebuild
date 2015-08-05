@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.10.7.ebuild,v 1.10 2013/04/13 07:42:54 ago Exp $
 
@@ -39,7 +39,7 @@ RDEPEND="
 	alsa? ( media-libs/alsa-lib )
 	amr? ( media-libs/opencore-amr )
 	bzip2? ( app-arch/bzip2 )
-	cdio? ( || ( dev-libs/libcdio-paranoia <dev-libs/libcdio-0.90[-minimal] ) )
+	cdio? ( dev-libs/libcdio-paranoia )
 	celt? ( >=media-libs/celt-0.11.1 )
 	dirac? ( media-video/dirac )
 	>=media-libs/x264-0.0.20111017
