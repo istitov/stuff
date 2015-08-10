@@ -24,8 +24,6 @@ DEPEND=">=dev-libs/boost-1.43
 
 src_prepare() {
 	python-single-r1_pkg_setup
-#	epatch "${FILESDIR}/without-samples.patch"
-	epatch_user
 }
 
 src_configure() {
@@ -47,11 +45,16 @@ src_compile() {
 
 src_install() {
 	dodoc "${S}/AUTHORS.txt"
-
+	dobin "${BUILD_DIR}/bin/slg4"
 	insinto /usr/include
-	doins -r "${S}/include/*"
+	doins -r "${S}/include/luxcore"
+	doins -r "${S}/include/luxrays"
+	doins -r "${S}/include/slg"
 
-	dolib.a "${BUILD_DIR}/lib/*"
+	dolib "${BUILD_DIR}/lib/pyluxcore.so"
+	dolib.a "${BUILD_DIR}/lib/libluxcore.a"
+	dolib.a "${BUILD_DIR}/lib/libluxrays.a"
+	dolib.a "${BUILD_DIR}/lib/libsmallluxgpu.a"
 
 	if use blender; then
 		if VER="/usr/share/blender/*";then
