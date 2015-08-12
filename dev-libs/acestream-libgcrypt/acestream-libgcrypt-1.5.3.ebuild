@@ -1,6 +1,6 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgcrypt/libgcrypt-1.5.3.ebuild,v 1.14 2014/01/18 05:07:26 vapier Exp $
+# $Id$
 
 EAPI=5
 AUTOTOOLS_AUTORECONF=1

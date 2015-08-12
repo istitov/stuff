@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/siftgpu/siftgpu-0.5.400.ebuild,v 0.1 2013/11/19 11:24:12 brothermechanic Exp $
+# $Id$
 
 EAPI=5
 

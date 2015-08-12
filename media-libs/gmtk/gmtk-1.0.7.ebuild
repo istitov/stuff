@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gmtk/gmtk-1.0.6.ebuild,v 1.1 2012/04/14 15:08:33 ssuominen Exp $
+# $Id$
 
 EAPI=4
 

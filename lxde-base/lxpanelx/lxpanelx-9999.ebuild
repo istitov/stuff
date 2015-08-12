@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: lxde-base/lxpanelx/lxpanelx-9999.ebuild,v 1 2013/04/10 09:19:57 megabaks Exp $
+# $Id$
 
 EAPI="5"
 
