@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/pyilmbase/pyilmbase-2.2.0.ebuild,v 0.1 2014/12/05 16:41:48 brothermechanic Exp $
+# $Id$
 
 EAPI=5
 PYTHON_COMPAT=( python3_4 )

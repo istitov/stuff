@@ -1,6 +1,6 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/shotcut/shotcut-9999.ebuild,v 1.1 2014-08-31 13:19:13 brothermechanic Exp $
+# $Id$
 
 EAPI=5
 

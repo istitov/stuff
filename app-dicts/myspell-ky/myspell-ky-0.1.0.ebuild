@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-dicts/aspell-ky/myspell-ky-0.1.0.ebuild,v 0.2 2013/11/10 16:24:41 brothermechanic Exp $
+# $Id$
 
 EAPI=5
 

@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: x11-misc/krunner-appmenu-9999.ebuild,v 1 2012/08/31 01:55:00 megabaks Exp $
+# $Id$
 
 EAPI=4
 

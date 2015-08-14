@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: media-sound/deadbeef-fb/deadbeef-archreader-9999.ebuild,v 1 2012/09/08 02:11:35 megabaks Exp $
+# $Id$
 
 EAPI=4
 
