@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: media-sound/deadbeef-remote/deadbeef-remote-9999.ebuild,v 1 2013/04/08 21:33:35 megabaks Exp $
+# $Id$
 
 EAPI=5
 

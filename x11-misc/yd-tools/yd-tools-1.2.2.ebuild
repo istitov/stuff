@@ -1,6 +1,6 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: bar-overlay/x11-misk/yd-tools/yd-tools-9999.ebuild,v 1.1 2015/04/03 12:01:00 brothermechanic Exp $
+# $Id$
 
 EAPI=5
 

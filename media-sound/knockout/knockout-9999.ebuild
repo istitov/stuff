@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/knockout-/knockout-9999.ebuild,v 0.1 2014/08/09 15:25:23 brothermechanic Exp $
+# $Id$
 
 EAPI=4
 
