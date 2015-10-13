@@ -17,7 +17,10 @@ KEYWORDS=""
 IUSE="libnotify otr pgp +themes xscreensaver"
 
 RDEPEND=">=dev-libs/glib-2.26:2
-		>=dev-libs/libstrophe-0.8.9
+		|| (
+			dev-libs/libmesode
+			>=dev-libs/libstrophe-0.8.9
+		)
 		net-misc/curl
 		sys-libs/ncurses
 		sys-libs/readline
