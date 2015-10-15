@@ -4,11 +4,12 @@
 
 EAPI=4
 
-inherit autotools subversion
+EGIT_REPO_URI="https://github.com/gperftools/gperftools.git"
+
+inherit autotools git-2
 
 DESCRIPTION="Collection of nifty performance analysis tools."
-HOMEPAGE="https://code.google.com/p/gperftools/"
-ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk"
+HOMEPAGE="https://github.com/gperftools/gperftools"
 
 LICENSE="BSD"
 SLOT="0"
