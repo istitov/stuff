@@ -4,34 +4,27 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/pasis/libcouplet.git"
+EGIT_REPO_URI="git://github.com/boothj5/libmesode.git"
 
-inherit libtool autotools eutils git-2
+inherit autotools eutils git-2
 
-DESCRIPTION="Fork of libstrophe - a simple, lightweight C library for writing XMPP clients"
-HOMEPAGE="https://github.com/pasis/libcouplet"
+DESCRIPTION="Fork of libstrophe for use with Profanity XMPP Client"
+HOMEPAGE="https://github.com/boothj5/libmesode"
 
 LICENSE="MIT GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="doc xml"
+IUSE="doc"
 
-RDEPEND="xml? ( dev-libs/libxml2 )
-		!xml? ( dev-libs/expat )
+RDEPEND="dev-libs/expat
 		dev-libs/openssl"
 DEPEND="${RDEPEND}
-		doc? ( app-doc/doxygen )
-		virtual/pkgconfig"
+		doc? ( app-doc/doxygen )"
 
 S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
-		elibtoolize
 		eautoreconf
-}
-
-src_configure() {
-		econf $(use_with xml libxml2)
 }
 
 src_compile() {
