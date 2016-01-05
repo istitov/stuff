@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/mltframework/mlt.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 ~ppc ~ppc64 x86 ~x86-fbsd ~amd64-linux ~x86-linux"
+KEYWORDS=""
 IUSE="compressed-lumas dv debug ffmpeg frei0r gtk jack kde kdenlive libsamplerate melt
 mmx qt5 quicktime rtaudio sdl sse sse2 vorbis xine xml lua python ruby vdpau" # java perl php tcl
 IUSE="${IUSE} kernel_linux"
