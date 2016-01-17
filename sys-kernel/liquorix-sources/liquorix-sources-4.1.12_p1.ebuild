@@ -18,7 +18,7 @@ inherit kernel-2
 #detect_version
 K_NOSETEXTRAVERSION="don't_set_it"
 
-DESCRIPTION="The Liquorix Kernel Sources v3.x"
+DESCRIPTION="The Liquorix Kernel Sources v4.x"
 HOMEPAGE="http://liquorix.net/"
 LIQUORIX_VERSION="${PV/_p[0-9]*}"
 LIQUORIX_FILE="${LIQUORIX_VERSION}-1.patch${COMPRESSTYPE}"
