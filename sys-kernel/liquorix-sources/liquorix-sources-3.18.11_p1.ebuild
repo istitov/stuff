@@ -21,7 +21,7 @@ K_NOSETEXTRAVERSION="don't_set_it"
 DESCRIPTION="The Liquorix Kernel Sources v3.x"
 HOMEPAGE="http://liquorix.net/"
 LIQUORIX_VERSION="${PV/_p[0-9]*}"
-LIQUORIX_FILE="${LIQUORIX_VERSION}-1.patch${COMPRESSTYPE}"
+LIQUORIX_FILE="${LIQUORIX_VERSION}-${PV/*_p/}.patch${COMPRESSTYPE}"
 LIQUORIX_URI="http://liquorix.net/sources/${LIQUORIX_FILE}
 			  http://stuff.tazhate.com/distfiles/${LIQUORIX_FILE}"
 SRC_URI="${KERNEL_URI} ${LIQUORIX_URI}";
