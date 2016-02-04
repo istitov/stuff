@@ -10,7 +10,7 @@ MY_P=${P/graphicsm/GraphicsM}
 
 DESCRIPTION="GraphicsMagick is the swiss army knife of image processing."
 HOMEPAGE="http://www.graphicsmagick.org/"
-EHG_REPO_URI="http://graphicsmagick.hg.sourceforge.net:8000/hgroot/graphicsmagick/graphicsmagick"
+EHG_REPO_URI="http://hg.code.sf.net/p/graphicsmagick/code"
 
 LICENSE="MIT"
 SLOT="0"
@@ -38,17 +38,11 @@ DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${MY_P}"
 
-pkg_setup() {
-	if use openmp &&
-		[[ $(tc-getCC)$ == *gcc* ]] &&
-		( [[ $(gcc-major-version)$(gcc-minor-version) -lt 42 ]] ||
-			! has_version sys-devel/gcc[openmp] )
-	then
-		ewarn "You are using gcc and OpenMP is only available with gcc >= 4.2 "
-		ewarn "If you want to build fftw with OpenMP, abort now,"
-		ewarn "and switch CC to an OpenMP capable compiler"
-		epause 5
-	fi
+src_prepare() {
+	epatch "${FILESDIR}"/${PN}-1.3.19-perl.patch
+	epatch "${FILESDIR}"/${PN}-1.3.20-powerpc.patch
+	epatch_user #498942
+	eautoreconf
 }
 
 src_configure() {
@@ -97,23 +91,23 @@ src_configure() {
 }
 
 src_compile() {
-	emake || die "emake failed"
-	if use perl; then
-		emake perl-build || die "emake perl failed"
-	fi
+	default
+	use perl && emake perl-build
 }
 
 src_test() {
-	emake check || die "tests failed"
+	unset DISPLAY # some perl tests fail when DISPLAY is set
+	default
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	default
+
 	if use perl; then
-		perl -MExtUtils::MakeMaker -e 'MY->fixin(@ARGV)' PerlMagick/demo/*.pl
-		emake -C PerlMagick DESTDIR="${D}" \
-			install || die "emake perl install failed"
-		fixlocalpod
+		emake -C PerlMagick DESTDIR="${D}" install
+		find "${ED}" -type f -name perllocal.pod -exec rm -f {} +
+		find "${ED}" -depth -mindepth 1 -type d -empty -exec rm -rf {} +
 	fi
-	use doc || rm -rf "${D}"usr/share/doc/${PF}/html
+
+	find "${ED}" -name '*.la' -exec sed -i -e "/^dependency_libs/s:=.*:='':" {} +
 }
