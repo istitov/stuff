@@ -12,7 +12,7 @@ SRC_URI="https://launchpad.net/~slytomcat/+archive/ubuntu/ppa/+files/yd-tools_1.
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="net-misc/yandex-disk
@@ -20,7 +20,7 @@ RDEPEND="net-misc/yandex-disk
 	  x11-libs/libnotify
 	  x11-libs/gdk-pixbuf
 	  dev-python/gconf-python
-	  dev-libs/libappindicator:*
+	  dev-libs/libappindicator:=
 	  dev-python/pygobject:3
 	  dev-python/pyinotify"
 DEPEND="${RDEPEND}"
