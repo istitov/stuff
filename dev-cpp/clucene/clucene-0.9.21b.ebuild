@@ -5,7 +5,7 @@
 EAPI=5
 
 MY_P=${PN}-core-${PV}
-inherit base autotools
+inherit autotools
 
 DESCRIPTION="High-performance, full-featured text search engine based off of lucene in C++"
 HOMEPAGE="http://clucene.sourceforge.net/"
