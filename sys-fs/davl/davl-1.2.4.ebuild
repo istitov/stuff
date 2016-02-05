@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND=">=sys-fs/e2fsprogs-1.38
-	>=x11-libs/gtk+-2.6"
+DEPEND="sys-fs/e2fsprogs
+	x11-libs/gtk+:2"
 RDEPEND="${DEPEND}"
 
 src_compile() {
