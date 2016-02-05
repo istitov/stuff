@@ -3,10 +3,10 @@
 # $Id$
 
 EAPI=5
-inherit rpm
+inherit rpm java-pkg-2
 
 PV_RAND="5426"
-DESCRIPTION="Secure IM communicator that supports SIP, XMPP/Jabber, AIM/ICQ, Windows Live, Yahoo"
+DESCRIPTION="Secure IM communicator supporting SIP, XMPP/Jabber, AIM/ICQ, Windows Live, Yahoo"
 HOMEPAGE="https://jitsi.org/"
 SRC_URI="
 	x86? ( https://download.jitsi.org/jitsi/rpm/jitsi-${PV}-${PV_RAND}.i686.rpm )
@@ -19,7 +19,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND="|| ( virtual/jre virtual/jdk )"
 DEPEND="${RDEPEND}
 	app-arch/rpm2targz"
 
