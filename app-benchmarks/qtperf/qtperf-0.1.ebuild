@@ -17,7 +17,7 @@ IUSE="debug"
 
 DEPEND="dev-qt/qtgui:4
 		dev-qt/qtcore:4
-		dev-libs/glib"
+		dev-libs/glib:2"
 
 RDEPEND="${DEPEND}"
 
