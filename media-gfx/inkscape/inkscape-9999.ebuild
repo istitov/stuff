@@ -31,16 +31,16 @@ COMMON_DEPEND="
 	|| ( media-gfx/imagemagick[cxx] media-gfx/graphicsmagick[cxx,symlink] )
 	media-libs/fontconfig
 	media-libs/freetype:2
-	>=media-libs/libpng-1.5
+	media-libs/libpng:0
 	app-text/libwpd:0.9
 	wpg? ( app-text/libwpg:0.2 )
 	sci-libs/gsl
 	x11-libs/libXft
 	x11-libs/gtk+:2
 	>=x11-libs/pango-1.4.0
-	|| ( dev-lang/python[xml] dev-python/pyxml )
+	|| ( dev-lang/python:2.7[xml] dev-python/pyxml )
 	gnome? ( >=gnome-base/gnome-vfs-2.0 )
-	lcms? ( media-libs/lcms:0 )"
+	lcms? ( media-libs/lcms:2 )"
 
 # These only use executables provided by these packages
 # See share/extensions for more details. inkscape can tell you to
