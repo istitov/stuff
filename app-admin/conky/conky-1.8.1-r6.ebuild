@@ -25,15 +25,15 @@ DEPEND_COMMON="
 		x11-libs/libX11
 		x11-libs/libXdamage
 		x11-libs/libXext
-		audacious? ( >=media-sound/audacious-1.5 dev-libs/glib )
+		audacious? ( >=media-sound/audacious-1.5 dev-libs/glib:2 )
 		xmms2? ( media-sound/xmms2 )
 	)
 	curl? ( net-misc/curl )
 	eve? ( net-misc/curl dev-libs/libxml2 )
-	portmon? ( dev-libs/glib )
-	lua? ( >=dev-lang/lua-5.1 )
-	ncurses? ( sys-libs/ncurses )
-	rss? ( dev-libs/libxml2 net-misc/curl dev-libs/glib )
+	portmon? ( dev-libs/glib:2 )
+	lua? ( dev-lang/lua:0 )
+	ncurses? ( sys-libs/ncurses:= )
+	rss? ( dev-libs/libxml2 net-misc/curl dev-libs/glib:2 )
 	wifi? ( net-wireless/wireless-tools )
 	weather-metar? ( net-misc/curl )
 	weather-xoap? ( dev-libs/libxml2 net-misc/curl )
