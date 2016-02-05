@@ -28,8 +28,7 @@ DEPEND=">=sys-libs/glibc-2.6.1
 	>=dev-lang/tk-8.5.5
 	>=sys-libs/zlib-1.2.3-r1
 	dev-lang/python[tk]
-	dev-python/imaging
-	media-libs/lcms:0[python]
+	media-libs/lcms:2
 	gnome-extra/zenity
 	media-libs/sk1libs
 	media-gfx/sk1sdk"

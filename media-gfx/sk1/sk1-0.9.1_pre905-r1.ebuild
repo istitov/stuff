@@ -22,10 +22,9 @@ KEYWORDS="~amd64 ~x86"
 IUSE="gnome kde"
 
 DEPEND="
-	dev-lang/python
-	>=dev-lang/tcl-8.5.0
-	>=dev-lang/tk-8.5.0
-	dev-python/imaging[tk]
+	dev-lang/python:2.7
+	dev-lang/tcl:0
+	dev-lang/tk:0
 	media-libs/freetype:2
 	>=sys-libs/zlib-1.1.4
 	>=x11-libs/cairo-1.2.4
@@ -35,7 +34,7 @@ RDEPEND="${DEPEND}
 	dev-python/reportlab
 	app-text/ghostscript-gpl
 	gnome? ( gnome-extra/zenity )
-	kde? ( kde-base/kdialog )
+	kde? ( kde-apps/kdialog:4/4.14 )
 	~media-libs/sk1libs-${PV}"
 
 S="${WORKDIR}/${MY_P}"
