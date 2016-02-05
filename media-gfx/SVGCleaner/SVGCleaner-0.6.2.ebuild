@@ -24,7 +24,7 @@ IUSE=""
 
 DEPEND="
 app-arch/p7zip
->=dev-qt/qtsvg-4.6"
+dev-qt/qtsvg:4"
 RDEPEND="${DEPEND}"
 src_configure() {
 	qmake \"PREFIX="${D}"\"
