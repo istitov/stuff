@@ -9,5 +9,6 @@
 		<flag name="q8">8 bits in a pixel quantum</flag>
 		<flag name="q16">16 bits in a pixel quantum</flag>
 		<flag name="q32">32 bits in a pixel quantum</flag>
+		<flag name="webp">Enable support for webp image format</flag>
 	</use>
 </pkgmetadata>
