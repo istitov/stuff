@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="sys-libs/ncurses[unicode]"
+DEPEND="sys-libs/ncurses:=[unicode]"
 RDEPEND="${DEPEND}"
 
 src_compile()
