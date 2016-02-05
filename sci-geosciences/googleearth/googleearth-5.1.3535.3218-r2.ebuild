@@ -36,20 +36,68 @@ RDEPEND="|| ( >=sys-devel/gcc-${GCC_NEEDED}[cxx] >=sys-devel/gcc-${GCC_NEEDED}[-
 		sys-libs/zlib
 		dev-libs/glib:2
 		!qt-bundled? (
-			>=dev-qt/qtcore-4.5.3:4
-			>=dev-qt/qtgui-4.5.3:4
-			>=dev-qt/qtwebkit-4.5.3:4
+			dev-qt/qtcore:4
+			dev-qt/qtgui:4
+			dev-qt/qtwebkit:4
 		)
 		net-misc/curl
 		sci-libs/gdal
 		!mdns-bundled? ( sys-auth/nss-mdns )
 	)
 	amd64? (
-		>=app-emulation/emul-linux-x86-xlibs-20081109
-		>=app-emulation/emul-linux-x86-baselibs-20081109
-		app-emulation/emul-linux-x86-opengl
+		media-libs/fontconfig[abi_x86_32]
+		media-libs/freetype[abi_x86_32]
+		x11-libs/libICE[abi_x86_32]
+		x11-libs/libSM[abi_x86_32]
+		x11-libs/libX11[abi_x86_32]
+		x11-libs/libXScrnSaver[abi_x86_32]
+		x11-libs/libXau[abi_x86_32]
+		x11-libs/libXaw[abi_x86_32]
+		x11-libs/libXcomposite[abi_x86_32]
+		x11-libs/libXcursor[abi_x86_32]
+		x11-libs/libXdamage[abi_x86_32]
+		x11-libs/libXdmcp[abi_x86_32]
+		x11-libs/libXext[abi_x86_32]
+		x11-libs/libXfixes[abi_x86_32]
+		x11-libs/libXft[abi_x86_32]
+		x11-libs/libXi[abi_x86_32]
+		x11-libs/libXinerama[abi_x86_32]
+		x11-libs/libXmu[abi_x86_32]
+		x11-libs/libXp[abi_x86_32]
+		x11-libs/libXpm[abi_x86_32]
+		x11-libs/libXrandr[abi_x86_32]
+		x11-libs/libXrender[abi_x86_32]
+		x11-libs/libXt[abi_x86_32]
+		x11-libs/libXtst[abi_x86_32]
+		x11-libs/libXv[abi_x86_32]
+		x11-libs/libXvMC[abi_x86_32]
+		x11-libs/libXxf86dga[abi_x86_32]
+		x11-libs/libXxf86vm[abi_x86_32]
+		x11-libs/libpciaccess[abi_x86_32]
+		x11-libs/libvdpau[abi_x86_32]
+		x11-libs/libxcb[abi_x86_32]
+		x11-proto/scrnsaverproto[abi_x86_32]
+		media-libs/freeglut[abi_x86_32]
+		media-libs/glew[abi_x86_32]
+		media-libs/glu[abi_x86_32]
+		media-libs/mesa[abi_x86_32]
+		x11-libs/libdrm[abi_x86_32]
 		!qt-bundled? (
-			>=app-emulation/emul-linux-x86-qtlibs-20091231-r1
+			dev-qt/qtxmlpatterns[abi_x86_32]
+			dev-qt/qtwebkit[abi_x86_32]
+			dev-qt/qttranslations[abi_x86_32]
+			dev-qt/qttest[abi_x86_32]
+			dev-qt/qtsvg[abi_x86_32]
+			dev-qt/qtsql[abi_x86_32]
+			dev-qt/qtscript[abi_x86_32]
+			dev-qt/qtopengl[abi_x86_32]
+			dev-qt/qthelp[abi_x86_32]
+			dev-qt/qtgui[abi_x86_32]
+			dev-qt/qtdeclarative[abi_x86_32]
+			dev-qt/qtdbus[abi_x86_32]
+			dev-qt/qtcore[abi_x86_32]
+			dev-qt/qt3support[abi_x86_32]
+			dev-qt/designer
 		)
 	)
 	virtual/ttf-fonts"
