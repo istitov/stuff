@@ -14,7 +14,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-DEPEND="kde-base/okular:4"
+DEPEND="kde-apps/okular:4"
 RDEPEND="${DEPEND}"
 
 DISABLE_AUTOFORMATTING="yes"
