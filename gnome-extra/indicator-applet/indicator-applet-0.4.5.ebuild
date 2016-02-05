@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.18:2
 	>=dev-libs/dbus-glib-0.76
 	|| ( gnome-base/gnome-panel[bonobo] <gnome-base/gnome-panel-2.32 )
 	>=gnome-base/gconf-2
-	>=dev-libs/libindicator-0.4"
+	dev-libs/libindicator:="
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	nls? ( >=dev-util/intltool-0.35 )"
