@@ -3,13 +3,14 @@
 # $Id$
 
 EAPI=5
+
 EGIT_HAS_SUBMODULES="true"
 
-inherit git-2 eutils
+inherit qmake-utils eutils
 
 DESCRIPTION="A good looking terminal emulator which mimics the old cathode display"
 HOMEPAGE="https://github.com/Swordfish90/cool-retro-term"
-EGIT_REPO_URI="git://github.com/Swordfish90/cool-retro-term.git"
+SRC_URI="https://github.com/Swordfish90/${PN}/archive/v${PV}.zip -> ${P}.zip"
 
 LICENSE="GPL-3"
 
