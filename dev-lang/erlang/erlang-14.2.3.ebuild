@@ -29,14 +29,14 @@ SRC_URI="http://www.erlang.org/download/${MY_P}.tar.gz
 
 LICENSE="EPL-1.0"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris"
 IUSE="doc emacs halfword hipe java kpoll odbc smp sctp ssl tk wxwidgets"
 
 RDEPEND=">=dev-lang/perl-5.6.1
 	!<app-accessibility/speech-dispatcher-0.7.1-r1
-	ssl? ( >=dev-libs/openssl-0.9.7d )
+	ssl? ( dev-libs/openssl:= )
 	emacs? ( virtual/emacs )
-	java? ( >=virtual/jdk-1.2 )
+	java? ( virtual/jdk:= )
 	odbc? ( dev-db/unixODBC )"
 DEPEND="${RDEPEND}
 	wxwidgets? ( x11-libs/wxGTK:2.8[opengl] )
