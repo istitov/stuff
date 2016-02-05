@@ -16,8 +16,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="media-video/ffmpeg
-	media-libs/libpng
-	virtual/jpeg"
+	media-libs/libpng:0
+	virtual/jpeg:0"
 
 RDEPEND="${DEPEND}"
 
