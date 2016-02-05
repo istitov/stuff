@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 EAPI=5
@@ -19,7 +19,7 @@ patches"
 
 DEPEND="virtual/pam
 	>=net-libs/c-client-2007f-r4[topal=]
-	>=sys-libs/ncurses-5.1
+	sys-libs/ncurses:0
 	>=dev-libs/openssl-1.0
 	ldap? ( net-nds/openldap )
 	kerberos? ( app-crypt/mit-krb5 )
@@ -76,10 +76,8 @@ src_install() {
 	emake DESTDIR="${D}" install
 	doman doc/rpdump.1 doc/rpload.1
 	dodoc NOTICE README*
-
 	if use doc ; then
 		dodoc doc/brochure.txt doc/tech-notes.txt
-
 		docinto html/tech-notes
 		dohtml -r doc/tech-notes/
 	fi

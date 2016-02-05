@@ -1,4 +1,7 @@
-EAPI=4
+# Copyright 1999-2016 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id$
+EAPI=5
 
 inherit eutils flag-o-matic autotools multilib toolchain-funcs
 
@@ -7,21 +10,21 @@ HOMEPAGE="http://www.washington.edu/alpine/ http://patches.freeiz.com/alpine/"
 SRC_URI="http://repo.or.cz/alpine.git/snapshot/01170cfd3d5b6e5dfdc11c75f6e6740e8f938109.tar.gz -> ${P}.tar.gz"
 
 LICENSE="Apache-2.0"
-KEYWORDS="amd64"
+KEYWORDS="~x86 ~amd64"
 SLOT="0"
 IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads topal"
 
 DEPEND="virtual/pam
->=net-libs/c-client-2007f-r4[topal=]
->=sys-libs/ncurses-5.1
->=dev-libs/openssl-1.0.1c
-ldap? ( net-nds/openldap )
-kerberos? ( app-crypt/mit-krb5 )
-spell? ( app-text/aspell )
-topal? ( >=net-mail/topal-72 )"
+	>=net-libs/c-client-2007f-r4[topal=]
+	sys-libs/ncurses:0
+	>=dev-libs/openssl-1.0.1c
+	ldap? ( net-nds/openldap )
+	kerberos? ( app-crypt/mit-krb5 )
+	spell? ( app-text/aspell )
+	topal? ( >=net-mail/topal-72 )"
 RDEPEND="${DEPEND}
-app-misc/mime-types
-!<=net-mail/uw-imap-2004g"
+	app-misc/mime-types
+	!<=net-mail/uw-imap-2004g"
 
 pkg_setup() {
 	if use smime && use topal ; then
@@ -31,7 +34,7 @@ pkg_setup() {
 
 src_unpack() {
 	unpack ${A}
-	mv ${WORKDIR}/alpine-01170cf ${WORKDIR}/alpine-2.20.10
+	mv "${WORKDIR}/alpine-01170cf" "${WORKDIR}/${PN}"
 }
 
 src_prepare() {
@@ -77,10 +80,8 @@ src_install() {
 	dodoc NOTICE README*
 
 	if use doc ; then
-		dodoc doc/brochure.txt 
-
+		dodoc doc/brochure.txt
 		docinto html/tech-notes
 		dohtml -r doc/tech-notes/
 	fi
 }
-

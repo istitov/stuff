@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 EAPI=5
@@ -19,7 +19,7 @@ patches"
 
 DEPEND="virtual/pam
 	>=net-libs/c-client-2007f-r4[topal=]
-	>=sys-libs/ncurses-5.1
+	sys-libs/ncurses:0
 	>=dev-libs/openssl-1.0
 	ldap? ( net-nds/openldap )
 	kerberos? ( app-crypt/mit-krb5 )
