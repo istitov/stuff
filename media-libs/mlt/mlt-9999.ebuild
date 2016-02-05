@@ -4,7 +4,7 @@
 
 EAPI=5
 PYTHON_COMPAT=( python2_7 )
-USE_RUBY="ruby19"
+USE_RUBY="ruby23"
 inherit eutils toolchain-funcs multilib python-single-r1 ruby-single git-2
 
 DESCRIPTION="Open source multimedia framework for television broadcasting"
