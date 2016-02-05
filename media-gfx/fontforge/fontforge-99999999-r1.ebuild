@@ -33,9 +33,9 @@ KEYWORDS=""
 IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X capslock-for-alt freetype-bytecode freetype devicetables gb12345"
 
 RDEPEND="gif? ( >=media-libs/giflib-4.1.0-r1 )
-	jpeg? ( virtual/jpeg )
-	png? ( >=media-libs/libpng-1.2.4 )
-	tiff? ( >=media-libs/tiff-3.5.7-r1 )
+	jpeg? ( virtual/jpeg:0 )
+	png? ( media-libs/libpng:0 )
+	tiff? ( media-libs/tiff:0 )
 	truetype? ( >=media-libs/freetype-2.1.4 )
 	truetype-debugger? ( >=media-libs/freetype-2.3.8[fontforge,-bindist] )
 	svg? ( >=dev-libs/libxml2-2.6.7 )
