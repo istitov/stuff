@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-DEPEND="app-shells/bash
+DEPEND="app-shells/bash:=
 		sys-apps/portage"
 RDEPEND="${DEPEND}
 		sys-apps/gawk"
