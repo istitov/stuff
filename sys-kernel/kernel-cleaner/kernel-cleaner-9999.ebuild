@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="+parallel"
 
-KCDEPEND="app-shells/bash
+KCDEPEND="app-shells/bash:=
 	sys-apps/portage
 	sys-apps/gawk"
 DEPEND="${KCDEPEND}
