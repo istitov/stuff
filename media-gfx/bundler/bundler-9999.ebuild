@@ -15,7 +15,7 @@ HOMEPAGE="https://github.com/snavely/bundler_sfm"
 IUSE="-ceres"
 
 SLOT="0"
-KEYWORDS="amd64"
+KEYWORDS="~amd64"
 
 RDEPEND="
 	media-gfx/jhead
