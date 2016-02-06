@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/ddennedy/frei0r.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~hppa ~ppc ~x86 ~amd64-fbsd ~x86-fbsd"
+KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="doc"
 
 RDEPEND="x11-libs/cairo
