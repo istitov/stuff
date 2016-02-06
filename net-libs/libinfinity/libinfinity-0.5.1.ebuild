@@ -19,7 +19,7 @@ IUSE="avahi doc gtk server static-libs gtk3"
 RDEPEND="dev-libs/glib:2
 	dev-libs/libxml2
 	net-libs/gnutls
-	sys-libs/pam
+	virtual/pam
 	virtual/gsasl
 	avahi? ( net-dns/avahi )
 	gtk? ( || ( gtk3? ( x11-libs/gtk+:3 ) x11-libs/gtk+:2 ) )"
