@@ -50,7 +50,7 @@ COMMONDEPEND="
 	kde? (
 		|| (
 			>=kde-base/kwin-4.2.0
-			kde-base/kwin:live
+			kde-plasma/kwin
 		)
 	)
 	svg? (
