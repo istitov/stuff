@@ -7,15 +7,15 @@ EAPI="5"
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="tk(+)"
 
-inherit eutils git-2 distutils-r1
+inherit distutils-r1 eutils
 
+MY_PN="sK1"
 DESCRIPTION="sK1 vector graphics editor"
-HOMEPAGE="http://www.sk1project.org/"
-EGIT_REPO_URI="https://github.com/sk1project/sk1-tk.git"
-
+HOMEPAGE="http://www.sk1project.org"
+SRC_URI="mirror://sourceforge/project/${PN}/${PN}/${MY_PN}_v.${PV}/${PN}-${PV}.tar.gz"
 LICENSE="|| ( GPL-2 LGPL-2 )"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="
@@ -36,8 +36,7 @@ RDEPEND="${DEPEND}
 	app-text/ghostscript-gpl"
 
 src_install() {
-		distutils-r1_src_install
-		newicon src/sk1/share/images/sk1-app-icon.png sk1.png
-		make_desktop_entry ${PN} "${MY_PN}" ${PN} "Graphics;VectorGraphics;"
-
+	distutils-r1_src_install
+	newicon src/sk1/share/images/sk1-app-icon.png sk1.png
+	make_desktop_entry ${PN} "${MY_PN}" ${PN} "Graphics;VectorGraphics;"
 }
