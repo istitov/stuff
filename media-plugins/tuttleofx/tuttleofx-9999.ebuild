@@ -21,7 +21,6 @@ DEPEND="
 	media-libs/freetype
 	x11-libs/libXt
 	media-libs/lcms
-	media-libs/opengtl
 	dev-libs/libltdl:0
 	media-libs/libpng:0
 	media-libs/libcaca
@@ -38,7 +37,7 @@ DEPEND="
 	media-libs/glui
 	media-libs/glew
 	media-gfx/graphviz
-	virtual/python-imaging"
+	dev-python/pillow"
 
 RDEPEND="${DEPEND}"
 
