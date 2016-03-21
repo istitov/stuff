@@ -1,0 +1,22 @@
+commit a1bc5e82cf92647a0e51d17da50f74373e657360
+Author: Dmitry Podgorny <pasis.ua@gmail.com>
+Date:   Sun Dec 6 11:11:52 2015 +0200
+
+    sha1: don't make in-place operations
+    
+    SHA1HANDSOFF makes SHA1_Transform() use an internal buffer.
+
+diff --git a/src/sha1.c b/src/sha1.c
+index 45beefa..028d3a7 100644
+--- a/src/sha1.c
++++ b/src/sha1.c
+@@ -70,7 +70,8 @@ use SHA1_ prefix for public api
+ move public api to sha1.h
+ */
+ 
+-/* #define SHA1HANDSOFF  */
++/* Don't change user's data */
++#define SHA1HANDSOFF
+ 
+ #include <string.h>
+ 

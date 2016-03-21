@@ -4,11 +4,11 @@
 
 EAPI=4
 
-inherit eutils
+inherit autotools eutils
 
 DESCRIPTION="A simple, lightweight C library for writing XMPP clients"
 HOMEPAGE="http://strophe.im/libstrophe/"
-SRC_URI="mirror://github/metajack/${PN}/${P}-snapshot.tar.gz"
+SRC_URI="https://github.com/strophe/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT GPL-3"
 SLOT="0"
@@ -21,14 +21,11 @@ RDEPEND="xml? ( dev-libs/libxml2 )
 DEPEND="${RDEPEND}
 		doc? ( app-doc/doxygen )"
 
-S="${WORKDIR}/${P}-snapshot"
-
 src_prepare() {
-		epatch "${FILESDIR}"/${PN}-xmpp-conn-disable-tls.patch
-		epatch "${FILESDIR}"/${PN}-fix-memory-leaks.patch
-		epatch "${FILESDIR}"/${PN}-fix-memory-leak-in-logging.patch
-		epatch "${FILESDIR}"/${PN}-fix-crash-on-non-latin1.patch
-		epatch "${FILESDIR}"/${PN}-xml-escape.patch
+		epatch "${FILESDIR}"/${PN}-fix-openssl.patch
+		epatch "${FILESDIR}"/${PN}-handle-errors.patch
+		epatch "${FILESDIR}"/${PN}-sha1-in-place-op.patch
+		eautoreconf
 }
 
 src_configure() {
