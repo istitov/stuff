@@ -6,7 +6,7 @@ EAPI=4
 
 DESCRIPTION="Collection of nifty performance analysis tools."
 HOMEPAGE="https://github.com/gperftools/gperftools"
-SRC_URI="https://googledrive.com/host/0B6NtGsLhIcf7MWxMMF9JdTN3UVk/${P}.tar.gz"
+SRC_URI="https://github.com/${PN}/${PN}/releases/download/${P}/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
