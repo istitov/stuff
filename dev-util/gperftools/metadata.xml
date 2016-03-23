@@ -10,5 +10,6 @@
 		<flag name='debug'>Build versions of libs with debugalloc</flag>
 		<flag name='heap-profiler'>Build the heap profiler</flag>
 		<flag name='heap-checker'>Build the heap checker</flag>
+		<flag name='sized-delete'>C++14 sized-deallocation support</flag>
 	</use>
 </pkgmetadata>

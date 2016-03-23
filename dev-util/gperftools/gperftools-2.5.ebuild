@@ -11,7 +11,7 @@ SRC_URI="https://github.com/${PN}/${PN}/releases/download/${P}/${P}.tar.gz"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+cpu-profiler -debug heap-profiler heap-checker"
+IUSE="+cpu-profiler -debug heap-profiler heap-checker -sized-delete"
 
 RDEPEND="sys-libs/libunwind"
 DEPEND="${RDEPEND}"
@@ -21,5 +21,6 @@ src_configure() {
 		$(use_enable cpu-profiler) \
 		$(use_enable heap-profiler) \
 		$(use_enable heap-checker) \
+		$(use_enable sized-delete) \
 		$(use_enable debug debugalloc)
 }
