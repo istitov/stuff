@@ -34,7 +34,7 @@ pkg_setup() {
 
 src_unpack() {
 	unpack ${A}
-	mv "${WORKDIR}/alpine-01170cf" "${WORKDIR}/${PN}"
+	mv "${WORKDIR}/alpine-6ed1cda" "${WORKDIR}/${P}"
 }
 
 src_prepare() {
