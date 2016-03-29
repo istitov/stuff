@@ -10,7 +10,7 @@ HOMEPAGE="http://www.washington.edu/alpine/ http://patches.freeiz.com/alpine/"
 EGIT_REPO_URI="git://repo.or.cz/alpine.git"
 
 LICENSE="Apache-2.0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 SLOT="0"
 IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads topal"
 
@@ -32,10 +32,10 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
-	unpack ${A}
-	mv "${WORKDIR}/alpine-01170cf" "${WORKDIR}/${PN}"
-}
+#src_unpack() {
+#	unpack ${A}
+#	mv "${WORKDIR}/alpine-01170cf" "${WORKDIR}/${PN}"
+#}
 
 src_prepare() {
 	eautoreconf
