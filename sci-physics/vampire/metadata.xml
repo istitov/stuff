@@ -5,7 +5,7 @@
 	Simulate magnetic materials with atomic resolution from Angstroms to micrometres.
 	Whatever you need to model, vampire makes it easy for you to build, simulate, and analyse your magnetic system.
 	</longdescription>
-	<maintainer>
+	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
 </pkgmetadata>

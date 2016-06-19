@@ -4,7 +4,7 @@
 <use>
 	<flag name='vicious'>Require vicious plugin</flag>	
 </use>
-<maintainer>
+<maintainer type="person">
 	<email>root@proscript.ru</email>
 	<name>Vlasov A. I.</name>
 </maintainer>

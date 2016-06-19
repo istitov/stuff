@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <herd>ayatana</herd>
 	<use>
 	  <flag name="gtk2">Build with x11-libs/gtk+:2</flag>
 	</use>

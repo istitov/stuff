@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer>
+	<maintainer type="person">
 		<email>megagreener@gmail.com</email>
 	</maintainer>
   <use>
@@ -18,7 +18,6 @@
     </flag>
   </use>
 
-  <herd>desktop-effects</herd>
   <longdescription>
     compiz is a compositing window manager that uses 3D graphics acceleration via OpenGL.
   </longdescription>

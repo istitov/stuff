@@ -4,7 +4,7 @@
 	<longdescription lang="en">
 	OOMMF is a project in the Applied and Computational Mathematics Division (ACMD) of ITL/NIST, in close cooperation with µMAG, aimed at developing portable, extensible public domain programs and tools for micromagnetics. This code forms a completely functional micromagnetics package, with the additional capability to be extended by other programmers so that people developing new code can build on the OOMMF foundation. OOMMF is written in C++, a widely-available, object-oriented language that can produce programs with good performance as well as extensibility. For portable user interfaces, we make use of Tcl/Tk so that OOMMF operates across a wide range of Unix, Windows, and MacOSX platforms. The main contributors to OOMMF are Mike Donahue, and Don Porter.
 	</longdescription>
-	<maintainer>
+	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
 </pkgmetadata>

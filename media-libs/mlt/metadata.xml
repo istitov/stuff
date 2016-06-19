@@ -11,7 +11,7 @@
 		<flag name="rtaudio">Builds rtaudio consumer for native audio support on multiple platforms.</flag>
 		<flag name="ruby">Build SWIG bindings for Ruby</flag>
 	</use>
-	<maintainer>
+	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
 </pkgmetadata>

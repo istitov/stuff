@@ -5,8 +5,7 @@
   <flag name="emerald">Install the <pkg>x11-wm/emerald</pkg> package.</flag>
   <flag name="unsupported">Install the <pkg>x11-plugins/compiz-fusion-plugins-unsupported</pkg> package.</flag>
 </use>
-<herd>desktop-effects</herd>
-	<maintainer>
+	<maintainer type="person">
 		<email>megagreener@gmail.com</email>
 	</maintainer>
 <longdescription>
