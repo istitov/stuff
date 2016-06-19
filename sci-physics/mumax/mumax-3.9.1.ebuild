@@ -20,4 +20,3 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/3-${PV}"
 #EGO_PN="${S}/cmd/mumax3"
-

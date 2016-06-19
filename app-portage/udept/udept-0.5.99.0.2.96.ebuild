@@ -1,6 +1,6 @@
-# Copyright 2009-2014 Andrey Ovcharov <sudormrfhalt@gmail.com>
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -21,7 +21,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~mips ~sparc ~x86"
 IUSE="bash-completion"
 
-DEPEND="app-shells/bash
+DEPEND="app-shells/bash:=
 	sys-apps/portage"
 RDEPEND="${DEPEND}"
 
