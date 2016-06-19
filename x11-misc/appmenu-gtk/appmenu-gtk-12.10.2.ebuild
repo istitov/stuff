@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=4
+EAPI=5
 
 inherit eutils multilib versionator
 
@@ -13,12 +13,12 @@ SRC_URI="http://launchpad.net/${PN}/$(get_version_component_range 1-2)/${PV}/+do
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="-alpha ~amd64 -ppc64 -sparc ~x86"
-IUSE="+gtk2 gtk3"
+IUSE="+gtk gtk3"
 
 CDEPEND=""
 DEPEND="gtk3? ( || ( >=dev-libs/libdbusmenu-0.6.1[gtk] >=dev-libs/libdbusmenu-0.6.1[gtk3] )
 				x11-libs/gtk+:3[appmenu] )
-		gtk2? ( >=dev-libs/libdbusmenu-0.6.1[gtk2]
+		gtk? ( >=dev-libs/libdbusmenu-0.6.1[gtk]
 				x11-libs/gtk+:2[appmenu] )"
 RDEPEND="${DEPEND}"
 
@@ -27,7 +27,7 @@ src_prepare(){
 }
 
 src_configure(){
-	if use gtk2;then
+	if use gtk;then
 	  econf --with-gtk2
 	fi
 
@@ -40,7 +40,7 @@ src_configure(){
 }
 
 src_compile(){
-	if use gtk2;then
+	if use gtk;then
 	  emake
 	fi
 
@@ -51,7 +51,7 @@ src_compile(){
 }
 
 src_install(){
-	if use gtk2;then
+	if use gtk;then
 	  insinto /usr/$(get_libdir)/gtk-2.0/2.10.0/menuproxies/
 	  doins src/.libs/libappmenu.so
 	  mv 80appmenu appmenu_gtk2.sh
