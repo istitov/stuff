@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 PYTHON_COMPAT=( python2_7 )
 USE_RUBY="ruby23"
-inherit eutils toolchain-funcs multilib python-single-r1 ruby-single git-2
+inherit eutils toolchain-funcs multilib python-single-r1 ruby-single git-r3
 
 DESCRIPTION="Open source multimedia framework for television broadcasting"
 HOMEPAGE="http://www.mltframework.org/"
@@ -79,7 +79,7 @@ DEPEND="${COMMON_DEPEND}
 #	perl? ( ${SWIG_DEPEND} )
 #	php? ( ${SWIG_DEPEND} )
 #	tcl? ( ${SWIG_DEPEND} )
-REPEND="${COMMON_DEPEND}
+RDEPEND="${COMMON_DEPEND}
 	!media-libs/mlt++
 "
 
@@ -92,7 +92,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-0.9.8-ruby-link.patch
+	epatch "${FILESDIR}"/${PN}-6.2.0-ruby-link.patch
 
 	# respect CFLAGS LDFLAGS when building shared libraries. Bug #308873
 	for x in python lua; do
@@ -100,7 +100,7 @@ src_prepare() {
 	done
 	sed -i "/^LDFLAGS/s: += :& ${LDFLAGS} :" src/swig/ruby/build || die
 
-	epatch_user
+	default
 }
 
 src_configure() {
