@@ -52,9 +52,9 @@ DEPEND="media-libs/aalib
 		dev-libs/openssl:0
 		>=dev-libs/libebml-1.3.0
 		>=media-libs/a52dec-0.7.4
-		media-video/ffmpeg:0
+		media-video/ffmpeg
 		|| ( media-video/acestream-ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vaapi,vorbis,alsa]
-			 media-video/ffmpeg:0.10[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vorbis,alsa] )
+			 media-video/ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vorbis,alsa] )
 		sys-apps/dbus
 		media-video/dirac
 		media-libs/libdvbpsi

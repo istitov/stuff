@@ -12,7 +12,7 @@ SRC_URI="http://mjambon.com/releases/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 IUSE="doc"
 
 DEPEND="dev-lang/ocaml
