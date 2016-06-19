@@ -19,7 +19,7 @@ IUSE=""
 
 RDEPEND=">=dev-libs/dbus-glib-0.98
 	>=dev-libs/glib-2.26
-	>=dev-libs/libdbusmenu-12.10.2-r2:3[gtk2]
+	>=dev-libs/libdbusmenu-12.10.2-r2[gtk]
 	dev-libs/acestream-libindicator
 	>=x11-libs/gtk+-2.24.12:2"
 DEPEND="${RDEPEND}"
