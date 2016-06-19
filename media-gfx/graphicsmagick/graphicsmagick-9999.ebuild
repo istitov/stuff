@@ -2,9 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI="5"
-
-inherit eutils toolchain-funcs flag-o-matic perl-module mercurial
+EAPI=6
+inherit autotools toolchain-funcs mercurial
 
 MY_P=${P/graphicsm/GraphicsM}
 
@@ -15,79 +14,96 @@ EHG_REPO_URI="http://hg.code.sf.net/p/graphicsmagick/code"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="bzip2 cxx debug doc fpx imagemagick jbig jpeg jpeg2k lzma lcms modules openmp
-	perl png q8 q16 q32 svg threads tiff truetype X wmf zlib"
+IUSE="bzip2 cxx debug fpx imagemagick jbig jpeg jpeg2k lcms lzma modules openmp
+	perl png postscript q16 q32 static-libs svg threads tiff truetype webp wmf X zlib"
 
-RDEPEND="app-text/ghostscript-gpl
+RDEPEND=">=sys-devel/libtool-2.2.6b
 	bzip2? ( app-arch/bzip2 )
 	fpx? ( media-libs/libfpx )
+	imagemagick? ( !media-gfx/imagemagick )
 	jbig? ( media-libs/jbigkit )
 	jpeg? ( virtual/jpeg:0 )
-	jpeg2k? ( >=media-libs/jasper-1.701.0 )
+	jpeg2k? ( media-libs/jasper )
 	lcms? ( media-libs/lcms:2 )
+	lzma? ( app-arch/xz-utils )
 	perl? ( dev-lang/perl )
 	png? ( media-libs/libpng:0 )
+	postscript? ( app-text/ghostscript-gpl )
 	svg? ( dev-libs/libxml2 )
 	tiff? ( media-libs/tiff:0 )
-	truetype? ( media-libs/freetype:2 )
+	truetype? (
+		media-fonts/urw-fonts
+		>=media-libs/freetype-2
+		)
+	webp? ( media-libs/libwebp )
 	wmf? ( media-libs/libwmf )
-	X? ( x11-libs/libXext x11-libs/libSM )
-	imagemagick? ( !media-gfx/imagemagick )"
-
+	X? (
+		x11-libs/libSM
+		x11-libs/libXext
+		)
+	zlib? ( sys-libs/zlib )"
 DEPEND="${RDEPEND}"
 
-S="${WORKDIR}/${MY_P}"
+S=${WORKDIR}/${MY_P}
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-1.3.19-flags.patch
+	"${FILESDIR}"/${PN}-1.3.19-perl.patch
+	"${FILESDIR}"/${PN}-1.3.20-powerpc.patch
+)
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-1.3.19-perl.patch
-	epatch "${FILESDIR}"/${PN}-1.3.20-powerpc.patch
-	epatch_user #498942
+	default
 	eautoreconf
 }
 
 src_configure() {
-	local quantumDepth=16
-	use q8 && quantumDepth=8
-	use q32 && quantumDepth=32
+	local depth=8
+	use q16 && depth=16
+	use q32 && depth=32
 
-	use debug && filter-flags -fomit-frame-pointer
+	local openmp=disable
+	if use openmp && tc-has-openmp; then
+		openmp=enable
+	fi
+
 	econf \
 		--docdir="${EPREFIX}"/usr/share/doc/${PF} \
 		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html \
-		--enable-shared \
+		--${openmp}-openmp \
 		--enable-largefile \
-		--without-included-ltdl \
-		--without-frozenpaths \
-		--without-gslib \
-		--with-quantum-depth=${quantumDepth} \
-		--with-fontpath="${EPREFIX}/usr/share/fonts" \
-		--with-gs-font-dir="${EPREFIX}/usr/share/fonts/default/ghostscript" \
-		--with-windows-font-dir="${EPREFIX}/usr/share/fonts/corefonts" \
-		--with-perl-options="INSTALLDIRS=vendor" \
-		$(use_enable debug ccmalloc) \
+		--enable-shared \
+		$(use_enable static-libs static) \
 		$(use_enable debug prof) \
 		$(use_enable debug gcov) \
 		$(use_enable imagemagick magick-compat) \
-		$(use_enable openmp) \
-		$(use_with bzip2 bzlib) \
+		$(use_with threads) \
+		$(use_with modules) \
+		--with-quantum-depth=${depth} \
+		--without-frozenpaths \
 		$(use_with cxx magick-plus-plus) \
+		$(use_with perl) \
+		--with-perl-options=INSTALLDIRS=vendor \
+		$(use_with bzip2 bzlib) \
+		$(use_with postscript dps) \
 		$(use_with fpx) \
+		--without-gslib \
 		$(use_with jbig) \
+		$(use_with webp) \
 		$(use_with jpeg) \
 		$(use_with jpeg2k jp2) \
-		$(use_with lzma) \
-		--without-lcms \
 		$(use_with lcms lcms2) \
-		$(use_with modules) \
-		$(use_with perl) \
+		$(use_with lzma) \
 		$(use_with png) \
-		$(use_with svg xml) \
-		$(use_with threads) \
 		$(use_with tiff) \
 		$(use_with truetype ttf) \
 		$(use_with wmf) \
-		$(use_with X x) \
-		$(use_with zlib)
+		--with-fontpath="${EPREFIX}"/usr/share/fonts \
+		--with-gs-font-dir="${EPREFIX}"/usr/share/fonts/urw-fonts \
+		--with-windows-font-dir="${EPREFIX}"/usr/share/fonts/corefonts \
+		$(use_with svg xml) \
+		$(use_with zlib) \
+		$(use_with X x)
 }
 
 src_compile() {
