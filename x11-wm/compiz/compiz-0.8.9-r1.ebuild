@@ -12,7 +12,7 @@ SRC_URI="http://cgit.compiz.org/compiz/core/snapshot/${P}.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2.1 MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="+cairo dbus fuse gnome gconf gtk kde +svg nvidia"
 
 COMMONDEPEND="
