@@ -4,13 +4,11 @@
 
 EAPI=5
 
-inherit kde4-base
-
-MY_PN="iHateTheCashew"
+inherit git-2 kde4-base
 
 DESCRIPTION="KDE4 plasmoid. Removes the \"hand\" in upper right corner of the screen"
 HOMEPAGE="https://github.com/gustavosbarreto/plasma-ihatethecashew"
-SRC_URI="https://github.com/gustavosbarreto/plasma-ihatethecashew/archive/master.zip"
+EGIT_REPO_URI="https://github.com/gustavosbarreto/plasma-ihatethecashew.git"
 
 LICENSE="GPL-3"
 KEYWORDS=""
@@ -20,9 +18,3 @@ IUSE="debug"
 RDEPEND="
 	$(add_kdebase_dep plasma-workspace)
 "
-
-S="${WORKDIR}/${MY_PN}"
-
-#src_prepare() {
-#	epatch "${FILESDIR}"/4.6-support.patch
-#}
