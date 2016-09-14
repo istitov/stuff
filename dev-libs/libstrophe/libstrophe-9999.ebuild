@@ -14,7 +14,7 @@ HOMEPAGE="http://strophe.im/libstrophe/"
 LICENSE="MIT GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="doc xml"
+IUSE="doc -xml"
 
 RDEPEND="xml? ( dev-libs/libxml2 )
 		!xml? ( dev-libs/expat )
@@ -29,9 +29,7 @@ src_prepare() {
 }
 
 src_configure() {
-		use xml && econf $(use_with xml libxml2)
-		# workaround for building with expat support
-		use xml || econf
+		econf $(use_with xml libxml2)
 }
 
 src_compile() {
@@ -43,6 +41,7 @@ src_compile() {
 
 src_install() {
 		einstall
-		dodoc LICENSE.txt README.markdown
+		dodoc GPL-LICENSE.txt LICENSE.txt MIT-LICENSE.txt README.markdown \
+			ChangeLog
 		use doc && dohtml -r docs/html/*
 }

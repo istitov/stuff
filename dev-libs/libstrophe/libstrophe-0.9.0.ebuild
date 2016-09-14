@@ -12,8 +12,8 @@ SRC_URI="https://github.com/strophe/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE="doc xml"
+KEYWORDS="~amd64 ~arm ~x86"
+IUSE="doc -xml"
 
 RDEPEND="xml? ( dev-libs/libxml2 )
 		!xml? ( dev-libs/expat )
@@ -22,16 +22,11 @@ DEPEND="${RDEPEND}
 		doc? ( app-doc/doxygen )"
 
 src_prepare() {
-		epatch "${FILESDIR}"/${PN}-fix-openssl.patch
-		epatch "${FILESDIR}"/${PN}-handle-errors.patch
-		epatch "${FILESDIR}"/${PN}-sha1-in-place-op.patch
 		eautoreconf
 }
 
 src_configure() {
-		use xml && econf $(use_with xml libxml2)
-		# workaround for building with expat support
-		use xml || econf
+		econf $(use_with xml libxml2)
 }
 
 src_compile() {
@@ -43,5 +38,7 @@ src_compile() {
 
 src_install() {
 		einstall
+		dodoc GPL-LICENSE.txt LICENSE.txt MIT-LICENSE.txt README.markdown \
+			ChangeLog
 		use doc && dohtml -r docs/html/*
 }
