@@ -4,32 +4,24 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/strophe/libstrophe.git"
+inherit autotools eutils
 
-inherit autotools eutils git-2
-
-DESCRIPTION="A simple, lightweight C library for writing XMPP clients"
-HOMEPAGE="http://strophe.im/libstrophe/"
+DESCRIPTION="Fork of libstrophe for use with Profanity XMPP Client"
+HOMEPAGE="https://github.com/boothj5/libmesode"
+SRC_URI="https://github.com/boothj5/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT GPL-3"
 SLOT="0"
-KEYWORDS=""
-IUSE="doc -xml"
+KEYWORDS="~amd64 ~arm ~x86"
+IUSE="doc"
 
-RDEPEND="xml? ( dev-libs/libxml2 )
-		!xml? ( dev-libs/expat )
+RDEPEND="dev-libs/expat
 		dev-libs/openssl"
 DEPEND="${RDEPEND}
 		doc? ( app-doc/doxygen )"
 
-S="${WORKDIR}/${P/-/_}"
-
 src_prepare() {
 		eautoreconf
-}
-
-src_configure() {
-		econf $(use_with xml libxml2)
 }
 
 src_compile() {
