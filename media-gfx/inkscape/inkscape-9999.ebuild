@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=5
-inherit bzr gnome2 eutils flag-o-matic
+inherit bzr gnome2 cmake-utils flag-o-matic
 
 SRC_URI=""
 EBZR_REPO_URI="lp:inkscape"
@@ -15,13 +15,14 @@ HOMEPAGE="http://www.inkscape.org/"
 SLOT="0"
 LICENSE="GPL-2 LGPL-2.1"
 KEYWORDS=""
-IUSE="dia gs gnome inkjar dbus lcms nls poppler postscript python perl wmf wpg"
+IUSE="dia gs gnome dbus lcms nls poppler postscript python perl wmf wpg"
 RESTRICT="test"
 
 COMMON_DEPEND="
 	>=dev-cpp/glibmm-2.36
 	dev-cpp/gtkmm:2.4
 	>=dev-libs/boehm-gc-6.4
+	dev-libs/gdl
 	>=dev-libs/glib-2.6.5
 	>=dev-libs/libsigc++-2.0.12
 	>=dev-libs/libxml2-2.6.20
@@ -29,6 +30,7 @@ COMMON_DEPEND="
 	dev-libs/popt
 	dev-python/lxml
 	|| ( media-gfx/imagemagick[cxx] media-gfx/graphicsmagick[cxx,symlink] )
+	media-gfx/potrace
 	media-libs/fontconfig
 	media-libs/freetype:2
 	media-libs/libpng:0
@@ -63,18 +65,25 @@ DEPEND="${COMMON_DEPEND}
 src_unpack() {
 	bzr_src_unpack
 }
+
+src_prepare() {
+	# prevent writing into the real tree
+	einfo "Fixing gtk-update-icon-cache path"
+	sed -i "/gtk-update-icon-cache -f -t /d" ${S}/share/icons/application/CMakeLists.txt || die "Failed to update gtk-update-icon-cache path"
+}
+
 src_configure(){
-	sh autogen.sh || die "autogen"
-	econf \
-	$(use_with perl)\
-	$(use_with python)\
-	$(use_enable poppler poppler-cairo)\
-	$(use_with gnome gnome-vfs)\
-	$(use_with inkjar)\
-	$(use_enable wpg)\
-	$(use_enable dbus dbusapi)\
-	$(use_enable lcms)\
-	$(use_enable nls)\
+	local mycmakeargs=(
+		$(cmake-utils_use_with perl PERL)
+		$(cmake-utils_use_with python PYTHON)
+		$(cmake-utils_use_has poppler POPPLER_CAIRO)
+		$(cmake-utils_use_with gnome GNOME_VFS)
+		$(cmake-utils_use_with wpg LIBWPG)
+		$(cmake-utils_use_with dbus DBUS)
+		$(cmake-utils_use_has lcms LIBLCMS2)
+		$(cmake-utils_use_enable nls NLS)
+	)
+	cmake-utils_src_configure
 
 	DOCS="AUTHORS ChangeLog* NEWS README*"
 
