@@ -30,7 +30,8 @@ RDEPEND=">=dev-libs/glib-2.26:2
 		plugins? ( dev-lang/python )
 		xscreensaver? ( x11-libs/libXScrnSaver )
 		libnotify? ( x11-libs/libnotify )"
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+		sys-devel/autoconf-archive"
 
 S="${WORKDIR}/${P/-/_}"
 
