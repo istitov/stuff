@@ -8,7 +8,7 @@ inherit cmake-utils git-2
 DESCRIPTION="Small and fast JSON parser (and primitive memory-hungry writter) \
 for Qt."
 HOMEPAGE="http://gitorious.org/k8jsonqt"
-EGIT_REPO_URI="git://gitorious.org/+qutim-developers/${PN}qt/qutim-developers-${PN}.git"
+EGIT_REPO_URI="https://gitorious.org/+qutim-developers/${PN}qt/qutim-developers-${PN}.git"
 
 LICENSE="GPL-2"
 SLOT="2"

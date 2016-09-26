@@ -6,7 +6,7 @@ EAPI="4"
 inherit qt4-r2 git-2
 
 HOMEPAGE="http://gitorious.org/qsmmp"
-EGIT_REPO_URI="git://gitorious.org/qsmmp/${PN}.git"
+EGIT_REPO_URI="https://gitorious.org/qsmmp/${PN}.git"
 EGIT_BRANCH="qmmp-9999"
 EGIT_COMMIT="${EGIT_BRANCH}"
 
