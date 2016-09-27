@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=4
+EAPI=5
 
 EGIT_REPO_URI="git://github.com/strophe/libstrophe.git"
 
@@ -14,11 +14,12 @@ HOMEPAGE="http://strophe.im/libstrophe/"
 LICENSE="MIT GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="doc -xml"
+IUSE="doc libressl -xml"
 
 RDEPEND="xml? ( dev-libs/libxml2 )
 		!xml? ( dev-libs/expat )
-		dev-libs/openssl"
+		libressl? ( dev-libs/libressl:0= )
+		!libressl? ( dev-libs/openssl:0= )"
 DEPEND="${RDEPEND}
 		doc? ( app-doc/doxygen )"
 
