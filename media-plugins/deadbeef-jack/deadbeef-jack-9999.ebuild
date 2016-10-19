@@ -8,7 +8,7 @@ inherit eutils git-2
 
 DESCRIPTION="JACK output plugin for DeaDBeeF."
 HOMEPAGE="https://gitorious.org/deadbeef-sm-plugins/jack"
-EGIT_REPO_URI="git://gitorious.org/deadbeef-sm-plugins/jack.git"
+EGIT_REPO_URI="https://gitorious.org/deadbeef-sm-plugins/jack.git"
 
 LICENSE="MIT"
 SLOT="0"

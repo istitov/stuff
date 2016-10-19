@@ -4,7 +4,7 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://gitorious.org/dbusmenu/dbusmenu-qt.git"
+EGIT_REPO_URI="https://gitorious.org/dbusmenu/dbusmenu-qt.git"
 
 [[ ${PV} == 9999* ]] && GIT_ECLASS="git-2"
 inherit cmake-utils virtualx ${GIT_ECLASS}

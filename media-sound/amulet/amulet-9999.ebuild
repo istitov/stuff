@@ -8,7 +8,7 @@ inherit qt4-r2 git-r3
 
 DESCRIPTION="Audio converter based on flac, lame..."
 HOMEPAGE="http://gitorious.org/amulet"
-EGIT_REPO_URI="git://gitorious.org/amulet/amulet.git"
+EGIT_REPO_URI="https://gitorious.org/amulet/amulet.git"
 
 LICENSE="GPL-2"
 SLOT="0"
