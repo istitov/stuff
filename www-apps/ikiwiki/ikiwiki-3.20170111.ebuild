@@ -8,14 +8,14 @@ inherit perl-module
 
 DESCRIPTION="A wiki compiler"
 HOMEPAGE="http://ikiwiki.info/"
-SRC_URI="mirror://debian/pool/main/i/ikiwiki/${PN}_${PV}.tar.gz"
+SRC_URI="mirror://debian/pool/main/i/ikiwiki/${PN}_${PV}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="extras minimal test"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 ~x86"
 
-#S=${WORKDIR}/${PN}
+S=${WORKDIR}/${PN}-${PV}
 
 #Authen::Passphrase
 #Search::Xapian
