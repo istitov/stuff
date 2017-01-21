@@ -1,7 +1,7 @@
 <layman>
-    <overlay type="git" src="https://github.com/megabaks/stuff.git" contact="https://github.com/megabaks" status="unofficial" name="stuff">
+    <overlay type="git" src="https://github.com/istitov/stuff.git" contact="https://github.com/istitov" status="unofficial" name="stuff">
 	<link>
-	https://github.com/megabaks/stuff
+	https://github.com/istitov/stuff
 	</link>
 	<description>
 	hz
