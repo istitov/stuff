@@ -19,7 +19,7 @@ IUSE="dbus mpd taglib"
 
 LANGS="da it ko sk tr nl ca sl be zh_CN ru et sv pt_BR cs el_GR de fi ar pl uk ja es zh_TW fr"
 for X in ${LANGS} ; do
-        IUSE+=" linguas_${X}"
+	IUSE+=" linguas_${X}"
 done
 RDEPEND=">=dev-python/python-mpd-0.4.6
 	>=dev-python/pygobject-3.4.2
@@ -34,11 +34,11 @@ DOCS="CHANGELOG README.rst TODO TRANSLATORS"
 
 src_prepare() {
 	local lang
-        for lang in ${LANGS}; do
-                if ! use linguas_${lang}; then
-                        rm po/${lang}.po || die "failed to remove nls"
-                fi
-        done
+	for lang in ${LANGS}; do
+		if ! use linguas_${lang}; then
+			rm po/${lang}.po || die "failed to remove nls"
+		fi
+	done
 }
 
 src_install() {

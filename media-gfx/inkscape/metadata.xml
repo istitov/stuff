@@ -6,7 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name='dia'>Pull in <pkg>app-office/dia</pkg> for dia import extension</flag>
-		<flag name='inkjar'>Enables support for OpenOffice.org SVG jar files</flag>
 		<flag name='gs'>Enables support for the PostScript import extension</flag>
 		<flag name='poppler'>Enable libpoppler-cairo for rendering PDF preview</flag>
 		<flag name='postscript'>Add support for <pkg>media-gfx/pstoedit</pkg></flag>
