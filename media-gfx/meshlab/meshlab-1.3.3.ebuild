@@ -19,7 +19,7 @@ DEPEND="dev-cpp/eigen:3
 	dev-cpp/muParser
 	dev-qt/qtcore:4
 	dev-qt/qtopengl:4
-	media-libs/glew
+	media-libs/glew:0
 	media-libs/qhull
 	=media-libs/lib3ds-1*
 	media-libs/openctm
