@@ -18,8 +18,8 @@ KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
 IUSE="+gtk2 gtk3"
 
 CDEPEND=""
-DEPEND="gtk2? ( x11-libs/gtk+:2[overlay] )
-		gtk3? ( x11-libs/gtk+:3[overlay] )"
+DEPEND="gtk2? ( x11-libs/gtk+:2 )
+		gtk3? ( x11-libs/gtk+:3 )"
 RDEPEND="${DEPEND}"
 
 src_configure(){
