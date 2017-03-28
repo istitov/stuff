@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=5
 
@@ -8,7 +7,7 @@ DESCRIPTION="The Object Oriented MicroMagnetic Framework"
 HOMEPAGE="http://math.nist.gov/oommf/"
 SRC_URI="http://math.nist.gov/oommf/dist/${PN}12a6_20150930.tar.gz"
 
-LICENSE="OOMMF"
+LICENSE="HPND"
 KEYWORDS="~x86 ~amd64 ~arm"
 IUSE="doc"
 SLOT="1.2"
