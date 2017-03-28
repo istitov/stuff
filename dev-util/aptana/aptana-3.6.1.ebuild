@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI="5"
 inherit eutils
@@ -33,9 +32,9 @@ src_install(){
 	einfo "Installing Aptana"
 	dodir "/opt/${PN}"
 	local dest="${D}/opt/${PN}"
-	cp -pPR about_files/ configuration/ features/ plugins/ "${dest}" || die "Failed to install Files"
+	#cp -pPR about_files/ configuration/ features/ plugins/ "${dest}" || die "Failed to install Files"
 	insinto "/opt/${PN}"
-	doins libcairo-swt.so icon.xpm about.html AptanaStudio3.ini full_uninstall.txt version.txt
+	#doins libcairo-swt.so icon.xpm about.html AptanaStudio3.ini full_uninstall.txt version.txt
 	exeinto "/opt/${PN}"
 	doexe AptanaStudio3
 
