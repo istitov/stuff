@@ -7,8 +7,8 @@ inherit eutils
 
 DESCRIPTION="The leading eclipse IDE for Ajax and today's web platforms"
 HOMEPAGE="http://www.aptana.com"
-SRC_URI="x86? ( http://download.aptana.com/studio3/standalone/${PV}/linux/Aptana_Studio_3_Setup_Linux_x86_${PV}.zip )
-	amd64? ( http://download.aptana.com/studio3/standalone/${PV}/linux/Aptana_Studio_3_Setup_Linux_x86_64_${PV}.zip )"
+SRC_URI="x86? ( https://github.com/aptana/studio3/releases/download/v${PV}/Aptana_Studio_3_Setup_Linux_x86_${PV}.zip )
+	amd64? ( https://github.com/aptana/studio3/releases/download/v${PV}/Aptana_Studio_3_Setup_Linux_x86_64_${PV}.zip )"
 LICENSE="EPL-1.0"
 SLOT="3"
 KEYWORDS="amd64 x86"
@@ -17,7 +17,7 @@ IUSE=""
 
 RDEPEND="media-libs/libjpeg-turbo
 	 >=virtual/jre-1.5
-	 media-libs/libpng:1.2
+	 media-libs/libpng
 	 x11-libs/gtk+:2
 	 sys-apps/net-tools
 	"
