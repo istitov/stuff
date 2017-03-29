@@ -5,16 +5,9 @@
     <email>megagreener@gmail.com</email>
   </maintainer>
   <use>
-    <flag name="3dnowext">
-      Enable manually-optimised routines using the AMD 3DNow!Ex SIMD
-      instruction set, present in modern AMD CPUs.  (Check for
-      3dnowext in /proc/cpuinfo to know whether your CPU supports it).
-    </flag>
 	<flag name="bindist">Enforces license compatibility constraints via REQUIRED_USE.</flag>
     <flag name="cpudetection">Enables runtime CPU detection (useful for bindist, compatibility on other CPUs)</flag>
     <flag name="hardcoded-tables">Use pre-calculated tables rather than calculating them on the fly.</flag>
-    <flag name="mmxext">Enables mmx2 support</flag>
     <flag name="pic">Force shared libraries to be built as PIC (this is slower)</flag>
-    <flag name="ssse3">Faster floating point optimization for SSSE3 capable chips (Intel Core 2 and later chips)</flag>
   </use>
 </pkgmetadata>

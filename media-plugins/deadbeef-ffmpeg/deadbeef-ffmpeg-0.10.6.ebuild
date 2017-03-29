@@ -1,19 +1,18 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI="4"
 MY_P="${P#deadbeef-}"
 
 inherit eutils flag-o-matic multilib toolchain-funcs
 
-DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec."
+DESCRIPTION="Complete solution to record, convert and stream audio and video."
 HOMEPAGE="http://ffmpeg.org/"
 SRC_URI="http://ffmpeg.org/releases/${MY_P/_/-}.tar.bz2"
 
 LICENSE="GPL-2  GPL-3"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
+KEYWORDS="amd64 x86 ~amd64 ~x86"
 IUSE="bindist cpudetection gnutls +hardcoded-tables pic static-libs threads +zlib"
 
 # String for CPU features in the useflag[:configure_option] form

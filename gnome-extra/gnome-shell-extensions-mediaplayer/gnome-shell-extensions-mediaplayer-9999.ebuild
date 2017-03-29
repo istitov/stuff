@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI="5"
 GCONF_DEBUG="no"
@@ -18,7 +17,7 @@ EGIT_REPO_URI="git://github.com/eonpatapon/gnome-shell-extensions-mediaplayer.gi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS=" ~amd64 ~x86"
 IUSE=""
 
 LANGS="de es fr gl he it lt nl pl pt_BR ru tr zh_CN zh_TW"
@@ -29,7 +28,7 @@ done
 COMMON_DEPEND="
 	>=dev-libs/glib-2.26
 	>=gnome-base/gnome-desktop-2.91.6:3[introspection]
-	>=app-admin/eselect-gnome-shell-extensions-20111211"
+	>=app-eselect/eselect-gnome-shell-extensions-20111211"
 RDEPEND="${COMMON_DEPEND}
 	>=dev-libs/gjs-1.29
 	dev-libs/gobject-introspection
