@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/mltframework/mlt.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=" "
-IUSE="compressed-lumas debug ffmpeg fftw frei0r gtk jack kde kdenlive libav libsamplerate melt opengl
+IUSE="compressed-lumas debug ffmpeg fftw frei0r gtk jack kdenlive libav libsamplerate melt opengl
 cpu_flags_x86_mmx qt4 qt5 rtaudio sdl cpu_flags_x86_sse cpu_flags_x86_sse2 xine xml lua python ruby vdpau"
 # java perl php tcl vidstab
 IUSE="${IUSE} kernel_linux"
@@ -57,7 +57,6 @@ COMMON_DEPEND="
 		x11-libs/libX11
 		opengl? ( dev-qt/qtopengl:4 )
 	)
-	kde? ( kde-base/kdelibs:4 )
 	lua? ( >=dev-lang/lua-5.1.4-r4:= )
 	ruby? ( ${RUBY_DEPS} )"
 #	sox? ( media-sound/sox )
@@ -83,7 +82,7 @@ RDEPEND="${COMMON_DEPEND}
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
-	qt5? ( !qt4 ) kde? ( qt4 )
+	qt5? ( !qt4 )
 "
 
 pkg_setup() {
