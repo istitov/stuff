@@ -17,7 +17,7 @@ IUSE="bindist cpudetection gnutls +hardcoded-tables pic static-libs threads +zli
 
 # String for CPU features in the useflag[:configure_option] form
 # if :configure_option isn't set, it will use 'useflag' as configure option
-CPU_FEATURES="3dnow:amd3dnow 3dnowext:amd3dnowext altivec mmx mmxext:mmx2 ssse3 neon"
+CPU_FEATURES="cpu_flags_x86_3dnow:amd3dnow cpu_flags_x86_3dnowext:amd3dnowext altivec cpu_flags_x86_mmx:mmx cpu_flags_x86_mmxext:mmxext cpu_flags_x86_sse3:ssse3 neon"
 
 for i in ${CPU_FEATURES}; do
 	IUSE="${IUSE} ${i%:*}"
@@ -33,7 +33,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
 	gnutls? ( virtual/pkgconfig )
-	mmx? ( dev-lang/yasm )
+	cpu_flags_x86_mmx? ( dev-lang/yasm )
 "
 S=${WORKDIR}/${MY_P/_/-}
 
