@@ -6,7 +6,7 @@ EAPI=5
 inherit eutils
 
 DESCRIPTION="DeaDBeeF filebrowser plugin "
-HOMEPAGE="http://sourceforge.net/projects/deadbeef-fb/"
+HOMEPAGE="https://sourceforge.net/projects/deadbeef-fb/"
 SRC_URI="mirror://sourceforge/${PN}/${PN}_${PV}_src.tar.gz"
 
 LICENSE="GPL-2"
