@@ -4,7 +4,7 @@
 EAPI=4
 inherit cmake-utils git-2
 DESCRIPTION="Silly userspace utility to measure desktop interactivity under different loads."
-HOMEPAGE="http://github.com/pfactum/kernelat"
+HOMEPAGE="https://github.com/pfactum/kernelat"
 EGIT_REPO_URI="https://github.com/pfactum/kernelat.git"
 
 LICENSE="GPL-3"
