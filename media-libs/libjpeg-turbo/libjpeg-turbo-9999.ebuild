@@ -12,7 +12,7 @@ JPEG_ABI=8
 inherit ${_inherits} java-pkg-opt-2 libtool toolchain-funcs subversion autotools
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
-HOMEPAGE="http://libjpeg-turbo.virtualgl.org/ http://sourceforge.net/projects/libjpeg-turbo/"
+HOMEPAGE="https://libjpeg-turbo.virtualgl.org/ https://sourceforge.net/projects/libjpeg-turbo/"
 ESVN_REPO_URI="svn://svn.code.sf.net/p/libjpeg-turbo/code/trunk"
 
 LICENSE="BSD"
