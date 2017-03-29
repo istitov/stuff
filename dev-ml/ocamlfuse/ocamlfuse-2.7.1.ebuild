@@ -8,7 +8,7 @@ EGIT_REPO_URI="git://github.com/astrada/ocamlfuse.git"
 inherit oasis git-2
 
 DESCRIPTION="OCaml binding for fuse"
-HOMEPAGE="http://sourceforge.net/apps/mediawiki/ocamlfuse"
+HOMEPAGE="https://sourceforge.net/projects/ocamlfuse/"
 SRC_URI="https://github.com/astrada/${PN}/archive/v${PV}_cvs2.tar.gz"
 
 LICENSE="GPL-2"
