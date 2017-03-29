@@ -1,5 +1,6 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
+
 DESCRIPTION="JJFFE is set of recompiled replacement executables for the game Frontier: First Encounters."
 HOMEPAGE="http://jaj22.org.uk/jjffe/"
 SRC_URI="
