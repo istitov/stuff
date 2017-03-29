@@ -5,7 +5,7 @@ EAPI="5"
 inherit flag-o-matic java-pkg-2 java-ant-2
 
 DESCRIPTION="Data serialization and communication toolwork"
-HOMEPAGE="http://thrift.apache.org/about/"
+HOMEPAGE="https://thrift.apache.org/about"
 SRC_URI="mirror://apache/${PN}/${PV}/${P}.tar.gz"
 
 LICENSE="Apache-2.0"
