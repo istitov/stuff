@@ -5,8 +5,8 @@ EAPI="4"
 
 inherit qt4-r2
 
-DESCRIPTION="Vector metro (subway) map for calculating route and getting information about transport nodes."
-HOMEPAGE="http://sourceforge.net/projects/qmetro/"
+DESCRIPTION="Subway map for calculating route and getting information about transport nodes."
+HOMEPAGE="https://sourceforge.net/projects/qmetro/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.zip"
 
 LICENSE="GPL-2"
