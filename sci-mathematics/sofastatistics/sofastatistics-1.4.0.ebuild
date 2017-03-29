@@ -7,8 +7,8 @@ PYTHON_USE_WITH="sqlite"
 inherit eutils python-single-r1
 
 DESCRIPTION="SOFA is a statistics, analysis, and reporting program"
-HOMEPAGE="http://sourceforge.net/projects/sofastatistics/"
-SRC_URI="http://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download# -> ${P}.tar.gz"
+HOMEPAGE="https://sourceforge.net/projects/sofastatistics/"
+SRC_URI="https://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download# -> ${P}.tar.gz"
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
