@@ -6,7 +6,7 @@ EAPI="4"
 inherit fdo-mime gnome2-utils eutils
 
 SRC_URI="mirror://sourceforge/${PN}/${PN}-${PV}.tar.bz2
-		 http://sourceforge.net/projects/${PN}/files/${PN}-${PV}.tar.bz2/download -> ${PN}-${PV}.tar.bz2"
+		 https://sourceforge.net/projects/${PN}/files/${PN}-${PV}.tar.bz2/download -> ${PN}-${PV}.tar.bz2"
 KEYWORDS="~x86 ~amd64"
 
 DESCRIPTION="foobar2k-like music player"
