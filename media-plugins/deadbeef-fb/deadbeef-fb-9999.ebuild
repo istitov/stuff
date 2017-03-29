@@ -6,7 +6,7 @@ EAPI=4
 inherit eutils git-2 autotools
 
 DESCRIPTION="DeaDBeeF filebrowser plugin "
-HOMEPAGE="http://sourceforge.net/projects/deadbeef-fb/"
+HOMEPAGE="https://sourceforge.net/projects/deadbeef-fb/"
 EGIT_REPO_URI="git://git.code.sf.net/p/deadbeef-fb/code"
 
 LICENSE="GPL-2"

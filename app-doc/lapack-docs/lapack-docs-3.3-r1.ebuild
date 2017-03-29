@@ -4,9 +4,9 @@
 EAPI=5
 
 DESCRIPTION="Documentation reference and man pages for LAPACK implementations"
-HOMEPAGE="http://www.netlib.org/lapack/"
-SRC_URI="http://dev.gentoo.org/~bicatali/lapack-man-${PV}.tar.gz
-	http://www.netlib.org/lapack/lapackqref.ps"
+HOMEPAGE="https://www.netlib.org/lapack/"
+SRC_URI="https://dev.gentoo.org/~bicatali/lapack-man-${PV}.tar.gz
+	https://www.netlib.org/lapack/lapackqref.ps"
 
 LICENSE="BSD"
 SLOT="0"
