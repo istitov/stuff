@@ -4,7 +4,7 @@
 EAPI=4
 DESCRIPTION="Documentation reference and man pages for blas implementations"
 HOMEPAGE="http://www.netlib.org/blas/"
-SRC_URI="http://dev.gentoo.org/~bicatali/lapack-man-${PV}.tar.gz
+SRC_URI="https://dev.gentoo.org/~bicatali/lapack-man-${PV}.tar.gz
 	http://www.netlib.org/blas/blasqr.pdf
 	http://www.netlib.org/blas/blast-forum/blas-report.pdf"
 
