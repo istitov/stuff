@@ -5,7 +5,7 @@ EAPI="4"
 
 inherit eutils qt4-r2 multilib
 
-DESCRIPTION="ROSA Media Plugin"
+DESCRIPTION="ROSA Media Player Plugin is designed to use with internet browsers."
 HOMEPAGE="http://www.rosalab.ru/"
 SRC_URI="http://svn.mandriva.com/svn/packages/cooker/${PN}/current/SOURCES/${PN}-${PV}.tar.gz
 		 http://stuff.tazhate.com/distfiles/${PN}-${PV}.tar.gz"
