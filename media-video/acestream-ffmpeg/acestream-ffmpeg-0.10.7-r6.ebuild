@@ -28,7 +28,7 @@ IUSE="
 
 # String for CPU features in the useflag[:configure_option] form
 # if :configure_option isn't set, it will use 'useflag' as configure option
-CPU_FEATURES="3dnow:amd3dnow 3dnowext:amd3dnowext altivec avx mmx mmxext:mmx2 ssse3 vis neon"
+CPU_FEATURES="cpu_flags_x86_3dnow:amd3dnow cpu_flags_x86_3dnowext:amd3dnowext altivec cpu_flags_x86_avx:avx cpu_flags_x86_mmx:mmx cpu_flags_x86_mmxext:mmxext cpu_flags_x86_sse3:ssse3 vis neon"
 
 for i in ${CPU_FEATURES}; do
 	IUSE="${IUSE} ${i%:*}"
@@ -85,7 +85,7 @@ DEPEND="${RDEPEND}
 	gnutls? ( virtual/pkgconfig )
 	ieee1394? ( virtual/pkgconfig )
 	libv4l? ( virtual/pkgconfig )
-	mmx? ( dev-lang/yasm )
+	cpu_flags_x86_mmx? ( dev-lang/yasm )
 	rtmp? ( virtual/pkgconfig )
 	schroedinger? ( virtual/pkgconfig )
 	test? ( net-misc/wget )
