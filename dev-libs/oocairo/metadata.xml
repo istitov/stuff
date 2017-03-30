@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-<use></use>
-<maintainer type="person">
-	<email>root@proscript.ru</email>
-	<name>Vlasov A. I.</name>
-</maintainer>
+	<longdescription>oocairo are Lua bindings to the cairo library, allowing graphic and text rendering.</longdescription>
+	<maintainer type="person">
+		<email>root@proscript.ru</email>
+		<name>Vlasov A. I.</name>
+	</maintainer>
 </pkgmetadata>

@@ -6,7 +6,7 @@ inherit git-2
 
 EGIT_REPO_URI="git://git.naquadah.org/oocairo.git"
 
-DESCRIPTION="oocairo are Lua bindings to the cairo library, allowing graphic and text rendering."
+DESCRIPTION="oocairo are Lua bindings to the cairo library."
 HOMEPAGE="http://oocairo.naquadah.org/"
 
 LICENSE="MIT"
