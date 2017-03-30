@@ -5,7 +5,7 @@ EAPI=5
 
 inherit eutils
 
-DESCRIPTION="Collection of programs for accessing Mega service from a command line of your desktop or server."
+DESCRIPTION="Collection of programs for accessing Mega service from a command line."
 HOMEPAGE="http://megatools.megous.com/"
 SRC_URI="http://megatools.megous.com/builds/${P}.tar.gz"
 
