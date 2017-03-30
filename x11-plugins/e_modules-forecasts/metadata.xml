@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<longdescription>The forecasts gadget will display the current weather conditions plus a few days forecast.</longdescription>
 	<maintainer type="person">
 		<email>brothermechanic@gmail.com</email>
 	</maintainer>

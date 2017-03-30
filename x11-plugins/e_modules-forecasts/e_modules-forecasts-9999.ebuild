@@ -9,7 +9,7 @@ ESVN_SUB_PROJECT="E-MODULES-EXTRA"
 ESVN_URI_APPEND="${PN#e_modules-}"
 inherit enlightenment
 
-DESCRIPTION="The forecasts gadget will display the current weather conditions plus a few days forecast"
+DESCRIPTION="The forecasts gadget."
 
 IUSE=""
 
