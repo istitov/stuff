@@ -5,7 +5,7 @@ EAPI=4
 
 inherit eutils
 
-DESCRIPTION="Infobar plugin for DeadBeeF audio player. Shows lyrics and artist's biography for the current track."
+DESCRIPTION="Infobar plugin for DeadBeeF, showing lyrics."
 HOMEPAGE="https://bitbucket.org/dsimbiriatin/deadbeef-infobar/wiki/Home"
 SRC_URI="mirror://bitbucket/dsimbiriatin/${PN}/downloads/${P}.tar.gz"
 
