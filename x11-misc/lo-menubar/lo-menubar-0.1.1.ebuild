@@ -5,7 +5,7 @@ EAPI=4
 
 inherit multilib unpacker
 
-DESCRIPTION="A small plugin for LibreOffice to export the menus from the application into Unity's menubar."
+DESCRIPTION="A small plugin for LibreOffice to export the menus into Unity's menubar."
 HOMEPAGE="https://launchpad.net/lo-menubar"
 SRC_URI=" x86? (
 http://launchpadlibrarian.net/104771746/${PN}_${PV}-0ubuntu1_i386.deb )
