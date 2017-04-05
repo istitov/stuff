@@ -7,8 +7,8 @@ inherit eutils fdo-mime multilib
 
 DESCRIPTION="Watch torrent movies instantly"
 HOMEPAGE="http://popcorn.cdnjd.com/"
-SRC_URI="x86?   ( http://time4popcorn.se/Popcorn-Time-${PV}-Linux32.tar.xz )
-		 amd64? ( http://time4popcorn.se/Popcorn-Time-${PV}-Linux64.tar.xz )"
+SRC_URI="x86?   ( https://get.popcorntime.sh/build/Popcorn-Time-${PV}-Linux-32.tar.xz )
+		 amd64? ( https://get.popcorntime.sh/build/Popcorn-Time-${PV}-Linux-64.tar.xz )"
 
 LICENSE="GPL-3"
 SLOT="0"
