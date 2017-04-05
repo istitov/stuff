@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit games qt4-r2
+inherit qt4-r2
 
 DESCRIPTION="Dwarf (The)rapist for Dwarf Fortress."
 HOMEPAGE="https://github.com/splintermind/Dwarf-Therapist/"
@@ -18,16 +18,26 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="doc"
+IUSE="-qt4 qt5 -doc"
 S="${WORKDIR}/Dwarf-Therapist-${PV}"
 
 DEPEND="
-dev-qt/qtcore:4
+qt4? ( dev-qt/qtcore:4 )
+qt5? ( dev-qt/qtcore:5 )
 "
 RDEPEND="${DEPEND}"
 
+pkg_setup() {
+	if use qt4 && use qt5 ; then
+		ewarn "You can not have USE='qt4 qt5'. Assuming qt5 is more important."
+	fi
+}
 src_configure() {
-	qmake PREFIX="./2"
+	if use qt5; then
+	qmake -qt=5 \"PREFIX="${D}"\"
+	else
+	qmake -qt=4 \"PREFIX="${D}"\"
+	fi
 }
 src_install() {
 	emake install || die "Install failed"
