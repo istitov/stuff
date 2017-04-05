@@ -6,17 +6,20 @@ inherit eutils flag-o-matic autotools multilib toolchain-funcs
 
 DESCRIPTION="alpine is an easy to use text-based based mail and news client"
 HOMEPAGE="http://www.washington.edu/alpine/ http://patches.freeiz.com/alpine/"
-SRC_URI="http://repo.or.cz/alpine.git/snapshot/0e9b405ad29edbf0c1cfde0357d8b5c6353fc194.tar.gz -> ${P}.tar.gz"
+SRC_URI="
+!patches? ( http://patches.freeiz.com/alpine/release/src/${P}.tar.xz -> ${P}-clean.tar.xz )
+patches?  ( http://patches.freeiz.com/alpine/patches/${P}/${P}.tar.xz -> ${P}-patched.tar.xz )"
 
 LICENSE="Apache-2.0"
 KEYWORDS="~x86 ~amd64"
 SLOT="0"
-IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads topal"
+IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads topal
+patches"
 
 DEPEND="virtual/pam
 	>=net-libs/c-client-2007f-r4[topal=]
 	sys-libs/ncurses:0
-	>=dev-libs/openssl-1.0.1c
+	>=dev-libs/openssl-1.0
 	ldap? ( net-nds/openldap )
 	kerberos? ( app-crypt/mit-krb5 )
 	spell? ( app-text/aspell )
@@ -31,28 +34,23 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
-	unpack ${A}
-	mv "${WORKDIR}/alpine-0e9b405" "${WORKDIR}/${P}"
-}
-
 src_prepare() {
 	eautoreconf
 }
 
 src_configure() {
 	local myconf="--without-tcl
-	--with-system-pinerc=/etc/pine.conf
-	--with-system-fixed-pinerc=/etc/pine.conf.fixed"
-	#--disable-debug"
-	# fixme
-	#   --with-system-mail-directory=DIR?
+		--with-system-pinerc=/etc/pine.conf
+		--with-system-fixed-pinerc=/etc/pine.conf.fixed"
+		#--disable-debug"
+		# fixme
+		#   --with-system-mail-directory=DIR?
 
 	if use ssl; then
 		myconf+=" --with-ssl
-		--with-ssl-include-dir=/usr/include/openssl
-		--with-ssl-lib-dir=/usr/$(get_libdir)
-		--with-ssl-certs-dir=/etc/ssl/certs"
+			--with-ssl-include-dir=/usr/include/openssl
+			--with-ssl-lib-dir=/usr/$(get_libdir)
+			--with-ssl-certs-dir=/etc/ssl/certs"
 	else
 		myconf+="--without-ssl"
 	fi
@@ -75,11 +73,10 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${D}" install
-	doman doc/man1/*.1
+	doman doc/rpdump.1 doc/rpload.1
 	dodoc NOTICE README*
-
 	if use doc ; then
-		dodoc doc/brochure.txt
+		dodoc doc/brochure.txt doc/tech-notes.txt
 		docinto html/tech-notes
 		dohtml -r doc/tech-notes/
 	fi
