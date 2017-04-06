@@ -13,13 +13,15 @@ SLOT="0"
 LICENSE="LGPL-3"
 IUSE="+gtk2 gtk3"
 
-DEPEND=">=dev-lang/vala-0.11.7
+DDEPEND=">=dev-lang/vala-0.11.7
 		gtk3? (
 		  >=x11-libs/libwnck-3.2.1
 		  >=x11-libs/gtk+-3.2.1 )
-		gnome-base/libgtop
+		gnome-base/libgtop"
+DEPEND="${DDEPEND}
 		dev-util/gtk-doc"
-RDEPEND="${DEPEND}"
+
+RDEPEND="${DDEPEND}"
 
 src_unpack() {
 	unpack ${A}
