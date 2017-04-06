@@ -87,7 +87,7 @@ SRC_TEST=do
 
 src_prepare() {
 	#bug 498444 /usr/lib/plan9/lib/fortunes.index
-	addpredict "/usr/lib/plan9/lib/fortunes"
+	#addpredict "/usr/lib/plan9/lib/fortunes"
 
 	sed -i 's,lib/ikiwiki,libexec/ikiwiki,' \
 		"${S}"/{IkiWiki.pm,Makefile.PL,doc/plugins/install.mdwn} || die
