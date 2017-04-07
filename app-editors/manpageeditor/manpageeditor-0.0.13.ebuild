@@ -6,9 +6,9 @@ EAPI=5
 inherit autotools eutils fdo-mime gnome2-utils
 
 DESCRIPTION="Man Page Editor"
-HOMEPAGE="http://keithhedger.hostingsiteforfree.com/pages/manpageeditor/help.html"
+HOMEPAGE="https://sites.google.com/site/keithhedgersyard/manpageeditor"
 MY_PN="ManPageEditor"
-SRC_URI="http://keithhedger.hostingsiteforfree.com/zips/${PN}/${MY_PN}-${PV}.tar.gz
+SRC_URI="https://dl.dropboxusercontent.com/s/e882fqpz34h0h24/${MY_PN}-${PV}.tar.gz
 		 http://stuff.tazhate.com/distfiles/${MY_PN}-${PV}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
