@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
-<pkgmetadata>
-	<longdescription>Collection of programs for accessing Mega service from a command line of your desktop or server.</longdescription>
-	<maintainer type="person">
-		<email>megagreener@gmail.com</email>
-	</maintainer>
-</pkgmetadata>
