@@ -1,7 +1,7 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=5
 inherit cmake-utils git-2
 DESCRIPTION="Small defragmentation tool for reiserfs"
 HOMEPAGE="https://github.com/i-rinat/reiserfs-defrag"
