@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit git-2
+inherit git-r3
 
 DESCRIPTION="Panel indicator for YandexDisk CLI client for Linux"
 HOMEPAGE="https://github.com/slytomcat/yandex-disk-indicator"

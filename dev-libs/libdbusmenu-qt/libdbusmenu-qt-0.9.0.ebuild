@@ -5,7 +5,7 @@ EAPI=5
 
 EGIT_REPO_URI="https://gitorious.org/dbusmenu/dbusmenu-qt.git"
 
-[[ ${PV} == 9999* ]] && GIT_ECLASS="git-2"
+[[ ${PV} == 9999* ]] && GIT_ECLASS="git-r3"
 inherit cmake-utils virtualx ${GIT_ECLASS}
 
 DESCRIPTION="A library providing Qt implementation of DBusMenu specification"

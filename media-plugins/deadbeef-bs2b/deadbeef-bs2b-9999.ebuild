@@ -3,7 +3,7 @@
 
 EAPI="5"
 
-inherit eutils git-2
+inherit eutils git-r3
 
 DESCRIPTION="bs2b DSP plugin for DeaDBeeF, using libbs2b."
 HOMEPAGE="https://gitorious.org/deadbeef-sm-plugins/bs2b"

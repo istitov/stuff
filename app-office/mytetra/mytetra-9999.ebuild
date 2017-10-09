@@ -8,7 +8,7 @@ EGIT_HAS_SUBMODULES="true"
 EGIT_PROJECT="mytetra_dev"
 EGIT_REPO_URI="git://github.com/xintrea/mytetra_dev.git"
 
-inherit qt4-r2 versionator git-2
+inherit qt4-r2 versionator git-r3
 
 DESCRIPTION="Smart manager for information collecting"
 HOMEPAGE="https://github.com/xintrea/mytetra_dev"

@@ -5,7 +5,7 @@ EAPI=4
 
 EGIT_REPO_URI="git://github.com/pasis/ls-fuse.git"
 
-inherit autotools git-2
+inherit autotools git-r3
 
 DESCRIPTION="FUSE module to mount ls -lR output"
 HOMEPAGE="https://github.com/pasis/ls-fuse"

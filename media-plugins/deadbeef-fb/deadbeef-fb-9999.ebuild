@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit eutils git-2 autotools
+inherit eutils git-r3 autotools
 
 DESCRIPTION="DeaDBeeF filebrowser plugin "
 HOMEPAGE="https://sourceforge.net/projects/deadbeef-fb/"

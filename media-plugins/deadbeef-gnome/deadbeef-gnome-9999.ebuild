@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit eutils git-2
+inherit eutils git-r3
 
 DESCRIPTION="DeaDBeeF player Gnome (via DBus) multimedia keys plugin"
 HOMEPAGE="https://github.com/barthez/deadbeef-gnome-mmkeys"

@@ -6,7 +6,7 @@ EAPI="5"
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="tk(+)"
 
-inherit eutils git-2 distutils-r1
+inherit eutils git-r3 distutils-r1
 
 DESCRIPTION="sK1 vector graphics editor"
 HOMEPAGE="http://www.sk1project.org/"

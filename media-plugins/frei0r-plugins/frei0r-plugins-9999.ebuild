@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit cmake-utils multilib git-2
+inherit cmake-utils multilib git-r3
 
 DESCRIPTION="A minimalistic plugin API for video effects"
 HOMEPAGE="http://www.dyne.org/software/frei0r/"

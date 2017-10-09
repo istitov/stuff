@@ -2,13 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=4
-inherit git-2
+inherit git-r3
 DESCRIPTION="SVG Cleaner cleans up your SVG files from unnecessary data."
 HOMEPAGE="http://qt-apps.org/content/show.php?action=content&content=147974 https://github.com/RazrFalcon/SVGCleaner"
 EGIT_REPO_URI="https://github.com/RazrFalcon/SVGCleaner.git"
 
 if [[ ${PV} == *9999* ]]; then
-	inherit git-2
+	inherit git-r3
 	EGIT_REPO_URI="git://github.com/RazrFalcon/${PN}.git"
 	EGIT_BRANCH="master"
 	KEYWORDS=""

@@ -5,7 +5,7 @@ EAPI=5
 
 EGIT_REPO_URI="git://github.com/astrada/ocamlfuse.git"
 
-inherit oasis git-2
+inherit oasis git-r3
 
 DESCRIPTION="OCaml binding for fuse"
 HOMEPAGE="https://sourceforge.net/projects/ocamlfuse/"

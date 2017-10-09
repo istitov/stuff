@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit cmake-utils git-2
+inherit cmake-utils git-r3
 
 DESCRIPTION="Small and fast JSON parser (and primitive memory-hungry writter) \
 for Qt."

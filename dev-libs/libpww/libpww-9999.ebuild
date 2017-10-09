@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=4
-inherit git-2
+inherit git-r3
 DESCRIPTION="POSIX threads workers wrapper shared library"
 HOMEPAGE="https://github.com/pfactum/libpww"
 EGIT_REPO_URI="git://github.com/pfactum/libpww.git"

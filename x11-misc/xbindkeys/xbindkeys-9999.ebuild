@@ -3,7 +3,7 @@
 
 EAPI="4"
 
-inherit git-2 eutils
+inherit git-r3 eutils
 
 IUSE="tk"
 

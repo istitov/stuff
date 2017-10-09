@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit eutils qt4-r2 git-2
+inherit eutils qt4-r2 git-r3
 EGIT_REPO_URI="https://github.com/saghul/qrfcview-osx.git"
 
 DESCRIPTION="Viewer for IETF RFCs"

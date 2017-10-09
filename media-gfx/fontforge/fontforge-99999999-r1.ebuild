@@ -15,7 +15,7 @@
 EAPI="5"
 
 PYTHON_COMPAT=( python2_7 )
-inherit eutils fdo-mime python-r1 autotools git-2
+inherit eutils fdo-mime python-r1 autotools git-r3
 
 HTDOCSV="20110221"
 CIDMAPV="20090121"

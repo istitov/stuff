@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="4"
-inherit qt4-r2 git-2
+inherit qt4-r2 git-r3
 
 HOMEPAGE="http://gitorious.org/qsmmp"
 EGIT_REPO_URI="https://gitorious.org/qsmmp/${PN}.git"

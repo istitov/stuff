@@ -7,7 +7,7 @@ PYTHON_DEPEND="2:2.7 3:3.2"
 SUPPORT_PYTHON_ABIS="1"
 EGIT_HAS_SUBMODULES="y"
 
-inherit git-2
+inherit git-r3
 
 DESCRIPTION="Console based dictionary writen in pure Python"
 HOMEPAGE="https://github.com/aslpavel/maggot-dict"

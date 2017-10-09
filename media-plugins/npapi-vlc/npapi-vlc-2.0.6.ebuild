@@ -5,7 +5,7 @@ EAPI=5
 
 SCM=""
 if [ "${PV%9999}" != "${PV}" ] ; then
-	SCM=git-2
+	SCM=git-r3
 	EGIT_BOOTSTRAP=""
 	EGIT_REPO_URI="git://git.videolan.org/${PN}.git"
 fi

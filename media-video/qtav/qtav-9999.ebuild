@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit eutils git-2
+inherit eutils git-r3
 
 DESCRIPTION="media playback based on Qt, FFmpeg and Cuda"
 HOMEPAGE="https://github.com/wang-bin/QtAV"

@@ -5,7 +5,7 @@ EAPI=4
 
 EGIT_REPO_URI="git://github.com/boothj5/libmesode.git"
 
-inherit autotools eutils git-2
+inherit autotools eutils git-r3
 
 DESCRIPTION="Fork of libstrophe for use with Profanity XMPP Client"
 HOMEPAGE="https://github.com/boothj5/libmesode"

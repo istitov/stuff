@@ -4,7 +4,7 @@
 EAPI=5
 EGIT_HAS_SUBMODULES="true"
 
-inherit git-2 eutils
+inherit git-r3 eutils
 
 DESCRIPTION="A good looking terminal emulator which mimics the old cathode display"
 HOMEPAGE="https://github.com/Swordfish90/cool-retro-term"

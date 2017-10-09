@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit cmake-utils git-2
+inherit cmake-utils git-r3
 DESCRIPTION="Disk fragmentation viewer written with boost and gtkmm"
 HOMEPAGE="https://github.com/i-rinat/fragview"
 EGIT_REPO_URI="git://github.com/i-rinat/fragview.git"

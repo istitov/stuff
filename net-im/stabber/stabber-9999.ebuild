@@ -5,7 +5,7 @@ EAPI=4
 
 EGIT_REPO_URI="git://github.com/boothj5/stabber.git"
 
-inherit autotools git-2
+inherit autotools git-r3
 
 DESCRIPTION="Stubbed XMPP Server"
 HOMEPAGE="https://github.com/boothj5/stabber"

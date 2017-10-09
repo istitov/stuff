@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit eutils autotools git-2
+inherit eutils autotools git-r3
 
 DESCRIPTION="MPRIS-plugin for deadbeef"
 HOMEPAGE="https://github.com/Jerry-Ma/DeaDBeeF-MPRIS-plugin"

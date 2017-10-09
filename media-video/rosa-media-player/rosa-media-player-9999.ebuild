@@ -3,7 +3,7 @@
 
 EAPI="5"
 
-inherit eutils qt4-r2 multilib git-2
+inherit eutils qt4-r2 multilib git-r3
 
 DESCRIPTION="Multimedia player that supports most of audio and video formats."
 HOMEPAGE="http://www.rosalab.ru/"

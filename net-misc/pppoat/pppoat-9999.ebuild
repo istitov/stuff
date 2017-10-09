@@ -5,7 +5,7 @@ EAPI=5
 
 EGIT_REPO_URI="https://github.com/pasis/pppoat.git"
 
-inherit autotools eutils git-2
+inherit autotools eutils git-r3
 
 DESCRIPTION="PPP over Any Transport"
 HOMEPAGE="https://github.com/pasis/pppoat"

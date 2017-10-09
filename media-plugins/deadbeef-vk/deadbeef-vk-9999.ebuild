@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit cmake-utils git-2
+inherit cmake-utils git-r3
 
 DESCRIPTION="DeadBeef plugin for listening music from vkontakte.com"
 HOMEPAGE="https://github.com/scorpp/db-vk"

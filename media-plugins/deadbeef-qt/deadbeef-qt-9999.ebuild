@@ -3,7 +3,7 @@
 
 EAPI="5"
 
-inherit cmake-utils git-2
+inherit cmake-utils git-r3
 
 DESCRIPTION="Qt interface plugin for Deadbeef player"
 HOMEPAGE="https://github.com/redpunk231/deadbeef-qt"

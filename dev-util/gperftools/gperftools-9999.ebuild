@@ -5,7 +5,7 @@ EAPI=4
 
 EGIT_REPO_URI="https://github.com/gperftools/gperftools.git"
 
-inherit autotools git-2
+inherit autotools git-r3
 
 DESCRIPTION="Collection of nifty performance analysis tools."
 HOMEPAGE="https://github.com/gperftools/gperftools"

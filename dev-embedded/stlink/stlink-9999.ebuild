@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit git-2 flag-o-matic
+inherit git-r3 flag-o-matic
 
 DESCRIPTION="On board debugger driver for stm32-discovery boards"
 HOMEPAGE="https://github.com/burjui/stlink"

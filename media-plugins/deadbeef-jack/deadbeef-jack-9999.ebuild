@@ -3,7 +3,7 @@
 
 EAPI="5"
 
-inherit eutils git-2
+inherit eutils git-r3
 
 DESCRIPTION="JACK output plugin for DeaDBeeF."
 HOMEPAGE="https://gitorious.org/deadbeef-sm-plugins/jack"

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="1"
-inherit git-2
+inherit git-r3
 
 EGIT_REPO_URI="git://github.com/cedlemo/blingbling.git"
 
