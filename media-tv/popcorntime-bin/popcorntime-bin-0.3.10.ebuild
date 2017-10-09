@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit eutils fdo-mime multilib
+inherit eutils xdg-utils multilib
 
 DESCRIPTION="Watch torrent movies instantly"
 HOMEPAGE="http://popcorn.cdnjd.com/"
@@ -40,9 +40,9 @@ src_install() {
 }
 
 pkg_postinst() {
-	fdo-mime_desktop_database_update
+	xdg-utils_desktop_database_update
 }
 
 pkg_postrm() {
-	fdo-mime_desktop_database_update
+	xdg-utils_desktop_database_update
 }

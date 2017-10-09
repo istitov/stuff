@@ -3,7 +3,7 @@
 
 EAPI="5"
 
-inherit fdo-mime gnome2-utils git-r3 eutils
+inherit xdg-utils gnome2-utils git-r3 eutils
 
 EGIT_REPO_URI="https://github.com/Alexey-Yakovenko/deadbeef.git"
 EGIT_BRANCH="master"
@@ -163,15 +163,15 @@ pkg_postinst() {
 		einfo "enable manually freepats support for timidity via"
 		einfo "eselect timidity set --global freepats"
 	fi
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
+	xdg-utils_desktop_database_update
+	xdg-utils_mime_database_update
 	gnome2_icon_cache_update
 	gnome2_schemas_update
 }
 
 pkg_postrm() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
+	xdg-utils_desktop_database_update
+	xdg-utils_mime_database_update
 	gnome2_icon_cache_update
 	gnome2_schemas_update
 }

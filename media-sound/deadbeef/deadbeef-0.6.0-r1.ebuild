@@ -3,7 +3,7 @@
 
 EAPI="4"
 
-inherit fdo-mime gnome2-utils eutils
+inherit xdg-utils gnome2-utils eutils
 
 SRC_URI="mirror://sourceforge/${PN}/${PN}-${PV}.tar.bz2
 		 https://sourceforge.net/projects/${PN}/files/${PN}-${PV}.tar.bz2/download -> ${PN}-${PV}.tar.bz2"
@@ -158,15 +158,15 @@ pkg_postinst() {
 		einfo "enable manually freepats support for timidity via"
 		einfo "eselect timidity set --global freepats"
 	fi
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
+	xdg-utils_desktop_database_update
+	xdg-utils_mime_database_update
 	gnome2_icon_cache_update
 	gnome2_schemas_update
 }
 
 pkg_postrm() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
+	xdg-utils_desktop_database_update
+	xdg-utils_mime_database_update
 	gnome2_icon_cache_update
 	gnome2_schemas_update
 }

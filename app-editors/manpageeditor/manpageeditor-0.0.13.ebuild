@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit autotools eutils fdo-mime gnome2-utils
+inherit autotools eutils xdg-utils gnome2-utils
 
 DESCRIPTION="Man Page Editor"
 HOMEPAGE="https://sites.google.com/site/keithhedgersyard/manpageeditor"
@@ -45,13 +45,13 @@ src_install(){
 }
 
 pkg_postinst() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
+	xdg-utils_desktop_database_update
+	xdg-utils_mime_database_update
 	gnome2_icon_cache_update
 }
 
 pkg_postrm() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
+	xdg-utils_desktop_database_update
+	xdg-utils_mime_database_update
 	gnome2_icon_cache_update
 }
