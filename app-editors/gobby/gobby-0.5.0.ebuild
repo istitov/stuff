@@ -17,8 +17,8 @@ RDEPEND="dev-cpp/glibmm:2
 	gtk3? ( dev-cpp/gtkmm:3.0 )
 	!gtk3? ( dev-cpp/gtkmm:2.4 )
 	dev-libs/libsigc++:2
-	gtk3? ( >=net-libs/libinfinity-0.6[gtk3,avahi?] )
-	!gtk3? ( >=net-libs/libinfinity-0.6[gtk,avahi?] )
+	gtk3? ( net-libs/libinfinity:0/0.6[gtk3,avahi?] )
+	!gtk3? ( net-libs/libinfinity:0/0.6[gtk,avahi?] )
 	gtk3? ( x11-libs/gtk+:3 )
 	!gtk3? ( x11-libs/gtk+:2 )
 	dev-cpp/libxmlpp:2.6
