@@ -12,7 +12,7 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND="dev-libs/openssl
+DEPEND="dev-libs/openssl:0
 dev-libs/libpww
 net-libs/zeromq"
 RDEPEND="${DEPEND}"
