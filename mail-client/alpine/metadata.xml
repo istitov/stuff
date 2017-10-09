@@ -7,7 +7,6 @@
 	<use>
 		<flag name='passfile'>Adds support for caching passwords into a file between sessions</flag>
 		<flag name='smime'>Enable support for S/MIME</flag>
-		<flag name='topal'>Enable support for <pkg>net-mail/topal</pkg></flag>
-		<flag name='patches'>Apply additional pathces. See http://patches.freeiz.com/alpine/info/all.html</flag>
+		<flag name='patches'>Apply additional pathces. See http://alpine.freeiz.com/alpine/index.html</flag>
 	</use>
 </pkgmetadata>

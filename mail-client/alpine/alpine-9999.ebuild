@@ -5,36 +5,24 @@ EAPI=5
 inherit eutils flag-o-matic autotools multilib toolchain-funcs git-r3
 
 DESCRIPTION="alpine is an easy to use text-based based mail and news client"
-HOMEPAGE="http://www.washington.edu/alpine/ http://patches.freeiz.com/alpine/"
+HOMEPAGE="http://www.washington.edu/alpine/ http://alpine.freeiz.com/alpine/release/"
 EGIT_REPO_URI="git://repo.or.cz/alpine.git"
 
 LICENSE="Apache-2.0"
 KEYWORDS=""
 SLOT="0"
-IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads topal"
+IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads"
 
 DEPEND="virtual/pam
-	>=net-libs/c-client-2007f-r4[topal=]
+	>=net-libs/c-client-2007f-r4
 	sys-libs/ncurses:0
 	>=dev-libs/openssl-1.0.1c
 	ldap? ( net-nds/openldap )
 	kerberos? ( app-crypt/mit-krb5 )
-	spell? ( app-text/aspell )
-	topal? ( >=net-mail/topal-72 )"
+	spell? ( app-text/aspell )"
 RDEPEND="${DEPEND}
 	app-misc/mime-types
 	!<=net-mail/uw-imap-2004g"
-
-pkg_setup() {
-	if use smime && use topal ; then
-		ewarn "You can not have USE='smime topal'. Assuming topal is more important."
-	fi
-}
-
-#src_unpack() {
-#	unpack ${A}
-#	mv "${WORKDIR}/alpine-01170cf" "${WORKDIR}/${PN}"
-#}
 
 src_prepare() {
 	eautoreconf
@@ -65,7 +53,7 @@ src_configure() {
 		$(use_with spell interactive-spellcheck /usr/bin/aspell) \
 		$(use_enable nls) \
 		$(use_with ipv6) \
-		$(use topal || use_with smime) \
+		$(use_with smime) \
 		${myconf}
 }
 
