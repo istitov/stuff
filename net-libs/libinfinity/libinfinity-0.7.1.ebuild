@@ -1,9 +1,9 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
-inherit autotools-utils eutils versionator user
+inherit eutils versionator user
 
 MY_PV=$(get_version_component_range 1-2)
 
@@ -14,7 +14,7 @@ http://releases.0x539.de/${PN}/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0.7"
 KEYWORDS="~amd64 ~x86"
-IUSE="-avahi doc gtk +gtk3 server static-libs"
+IUSE="avahi doc gtk +gtk3 server static-libs"
 
 RDEPEND="dev-libs/glib:2
 	dev-libs/libxml2
@@ -43,7 +43,7 @@ pkg_setup() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	econf \
 		$(use_enable doc gtk-doc)
 		$(use_with gtk inftextgtk)
 		$(use_with gtk infgtk)
@@ -52,13 +52,10 @@ src_configure() {
 		$(use_with server infinoted)
 		$(use_with avahi)
 		$(use_with avahi libdaemon)
-	)
-	autotools-utils_src_configure
 }
 
 src_install() {
-	autotools-utils_src_install
-
+	emake DESTDIR="${D}" install
 	if use server ; then
 		newinitd "${FILESDIR}/infinoted.initd" infinoted
 		newconfd "${FILESDIR}/infinoted.confd" infinoted
@@ -67,7 +64,7 @@ src_install() {
 		fowners infinote:infinote /var/lib/infinote
 		fperms 770 /var/lib/infinote
 
-		dosym /usr/bin/infinoted-${MY_PV} /usr/bin/infinoted
+		dosym "${D}/usr/bin/infinoted-${MY_PV}" "${D}/usr/bin/infinoted"
 
 		elog "Add local users who should have local access to the documents"
 		elog "created by infinoted to the infinote group."
