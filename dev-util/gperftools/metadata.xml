@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-    <maintainer type="person">
-        <email>pasis.ua@gmail.com</email>
-        <name>Dmitry Podgorny</name>
-    </maintainer>
+	<maintainer type="person">
+		<email>pasis.ua@gmail.com</email>
+		<name>Dmitry Podgorny</name>
+	</maintainer>
 	<use>
 		<flag name='cpu-profiler'>Build the cpu profiler</flag>
 		<flag name='debug'>Build versions of libs with debugalloc</flag>

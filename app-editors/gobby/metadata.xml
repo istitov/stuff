@@ -6,6 +6,6 @@
 		<name>megabaks</name>
 	</maintainer>
 	<use>
-	  <flag name='gtk3'>Build with <pkg>x11-libs/gtk+</pkg>:3</flag>
+		<flag name='gtk3'>Build with <pkg>x11-libs/gtk+</pkg>:3</flag>
 	</use>
 </pkgmetadata>

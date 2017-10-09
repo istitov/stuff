@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <maintainer type="person">
-    <email>megagreener@gmail.com</email>
-  </maintainer>
-  <use>
-	<flag name="bindist">Enforces license compatibility constraints via REQUIRED_USE.</flag>
-    <flag name="cpudetection">Enables runtime CPU detection (useful for bindist, compatibility on other CPUs)</flag>
-    <flag name="hardcoded-tables">Use pre-calculated tables rather than calculating them on the fly.</flag>
-    <flag name="pic">Force shared libraries to be built as PIC (this is slower)</flag>
-  </use>
+	<maintainer type="person">
+		<email>megagreener@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="bindist">Enforces license compatibility constraints via REQUIRED_USE.</flag>
+		<flag name="cpudetection">Enables runtime CPU detection (useful for bindist, compatibility on other CPUs)</flag>
+		<flag name="hardcoded-tables">Use pre-calculated tables rather than calculating them on the fly.</flag>
+		<flag name="pic">Force shared libraries to be built as PIC (this is slower)</flag>
+	</use>
 </pkgmetadata>

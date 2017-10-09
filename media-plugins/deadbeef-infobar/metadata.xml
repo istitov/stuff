@@ -6,7 +6,7 @@
 		<email>megagreener@gmail.com</email>
 	</maintainer>
 	<use>
-	  	<flag name="gtk2">Build with <pkg>x11-libs/gtk+</pkg>:2</flag>
+		<flag name="gtk2">Build with <pkg>x11-libs/gtk+</pkg>:2</flag>
 		<flag name="gtk3">Build with <pkg>x11-libs/gtk+</pkg>:3</flag>
 	</use>
 </pkgmetadata>

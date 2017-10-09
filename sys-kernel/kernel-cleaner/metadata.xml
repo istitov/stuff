@@ -5,6 +5,6 @@
 		<email>megagreener@gmail.com</email>
 	</maintainer>
 	<use>
-	  <flag name='parallel'>Add support for <pkg>sys-process/parallel</pkg></flag>
+		<flag name='parallel'>Add support for <pkg>sys-process/parallel</pkg></flag>
 	</use>
 </pkgmetadata>
