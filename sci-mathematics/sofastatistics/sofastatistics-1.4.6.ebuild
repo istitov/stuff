@@ -27,12 +27,12 @@ DEPEND="dev-python/wxpython:2.8[${PYTHON_USEDEP}]
 		dev-python/mysql-python[${PYTHON_USEDEP}]
 		dev-python/pyxdg[${PYTHON_USEDEP}]
 		dev-python/matplotlib[wxwidgets,${PYTHON_USEDEP}]
-		dev-python/pywebkitgtk[${PYTHON_USEDEP}]
 		dev-python/pythonmagick[${PYTHON_USEDEP}]
 		media-gfx/wkhtmltopdf
 		app-text/pdftk
 		app-text/ghostscript-gpl"
 
+#		dev-python/pywebkitgtk[${PYTHON_USEDEP}]
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/sofastats-${PV}"
@@ -48,6 +48,6 @@ src_install(){
 	doexe sofa_main/*.py*
 	doexe sofa_main/*/*.py*
 	python_fix_shebang "${ED}"
-	dosym /usr/share/sofastats/start.py /usr/bin/sofastats
+	dosym "${D}/usr/share/sofastats/start.py" "${D}/usr/bin/sofastats"
 	make_desktop_entry sofastats ${PN} /usr/share/sofastats/images/sofa_32x32.ico "Science;"
 }
