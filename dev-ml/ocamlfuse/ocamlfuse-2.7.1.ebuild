@@ -18,7 +18,7 @@ IUSE=""
 
 DEPEND=">=dev-ml/camlidl-0.9.5
 	dev-lang/ocaml
-	sys-fs/fuse"
+	sys-fs/fuse:0"
 RDEPEND="${DEPEND}"
 S="${WORKDIR}/${P}-cvs~oasis1"
 
