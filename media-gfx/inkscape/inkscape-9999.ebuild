@@ -33,8 +33,8 @@ COMMON_DEPEND="
 	media-libs/fontconfig
 	media-libs/freetype:2
 	media-libs/libpng:0
-	app-text/libwpd:0.9
-	wpg? ( app-text/libwpg:0.2 )
+	app-text/libwpd:0.10
+	wpg? ( app-text/libwpg:0.3 )
 	sci-libs/gsl
 	x11-libs/libXft
 	x11-libs/gtk+:2
