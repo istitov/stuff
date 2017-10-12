@@ -49,13 +49,13 @@ src_install(){
 	if use gtk2;then
 	insinto /usr/$(get_libdir)/
 	doins os/.libs/liboverlay-scrollbar-0.2.so.0.0.${MY_PV}
-	dosym /usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0.0.${MY_PV} /usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0
+	dosym "${D}/usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0.0.${MY_PV}" "${D}/usr/$(get_libdir)/liboverlay-scrollbar-0.2.so.0"
 	fi
 
 	if use gtk3;then
 	insinto /usr/$(get_libdir)/
 	doins gtk3-hack/os/.libs/liboverlay-scrollbar3-0.2.so.0.0.${MY_PV}
-	dosym /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0.0.${MY_PV} /usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0
+	dosym "${D}/usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0.0.${MY_PV}" "${D}/usr/$(get_libdir)/liboverlay-scrollbar3-0.2.so.0"
 	fi
 
 	if use gtk3;then
