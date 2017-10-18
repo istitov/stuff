@@ -14,7 +14,9 @@ SLOT="0"
 KEYWORDS="alpha amd64 ia64 ppc ~ppc64 sparc x86 ~x86-fbsd ~ppc-macos ~x64-macos ~x86-macos"
 IUSE="debug doc examples ipv6 minimal srtp ssl"
 
-RDEPEND="srtp? ( net-libs/libsrtp )
+RDEPEND="
+	net-libs/bctoolbox
+	srtp? ( net-libs/libsrtp )
 	ssl? ( dev-libs/openssl )"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )"
