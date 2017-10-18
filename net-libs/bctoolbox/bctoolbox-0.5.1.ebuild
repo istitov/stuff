@@ -30,8 +30,8 @@ src_configure() {
 	local mycmakeargs=(
 		-DENABLE_MBEDTLS="$(usex mbedtls)"
 		-DENABLE_POLARSSL="$(usex polarssl)"
-		-DENABLE_TESTS="$(usex test)"
-		-DENABLE_TESTS_COMPONENT="$(usex test)"
+		-DENABLE_TESTS=NO
+		-DENABLE_TESTS_COMPONENT=NO
 	)
 	cmake-utils_src_configure
 }
