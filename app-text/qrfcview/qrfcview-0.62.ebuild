@@ -7,7 +7,7 @@ inherit eutils qt4-r2
 SRC_URI="https://downloads.sourceforge.net/project/${PN}.berlios/${P}.tgz"
 
 DESCRIPTION="Viewer for IETF RFCs"
-HOMEPAGE="http://qrfcview.berlios.de/"
+HOMEPAGE="https://sourceforge.net/projects/qrfcview.berlios/"
 
 LICENSE="GPL-2"
 SLOT="0"
