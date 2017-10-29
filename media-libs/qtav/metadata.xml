@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="gui">Build a video player gui</flag>
+		<flag name="cuda">Enable cuda support</flag>
+	</use>
 </pkgmetadata>
