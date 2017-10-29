@@ -5,7 +5,7 @@ EAPI=5
 
 DESCRIPTION="Atomistic simulation of magnetic nanomaterials made easy."
 HOMEPAGE="http://vampire.york.ac.uk/"
-SRC_URI="https://github.com/richard-evans/${PN}/archive/v${PV}.zip"
+SRC_URI="https://github.com/richard-evans/${PN}/archive/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 DOC_SRC_URI="http://vampire.york.ac.uk/resources/vampire-manual.pdf"
 
 LICENSE="GPL-2"
