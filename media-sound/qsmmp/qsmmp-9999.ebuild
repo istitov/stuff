@@ -1,13 +1,11 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="4"
-inherit qt4-r2 git-r3
+EAPI=6
+inherit qmake-utils git-r3
 
-HOMEPAGE="http://gitorious.org/qsmmp"
-EGIT_REPO_URI="https://gitorious.org/qsmmp/${PN}.git"
-EGIT_BRANCH="qmmp-9999"
-EGIT_COMMIT="${EGIT_BRANCH}"
+HOMEPAGE="https://github.com/ksv1986/qsmmp"
+EGIT_REPO_URI="https://github.com/ksv1986/${PN}.git"
 
 DESCRIPTION="Qsmmp is a audio player based on Qmmp. Qsmmp aimed to have native qt look."
 LICENSE="GPL-2"
