@@ -5,16 +5,24 @@ EAPI=5
 inherit cmake-utils
 DESCRIPTION="Disk fragmentation viewer written with boost and gtkmm"
 HOMEPAGE="https://github.com/i-rinat/fragview"
-SRC_URI="https://github.com/i-rinat/fragview/archive/v0.1.1.tar.gz"
+
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="git://github.com/i-rinat/fragview.git"
+	EGIT_BRANCH="master"
+	KEYWORDS=""
+else
+	SRC_URI="https://github.com/i-rinat/${PN}/archive/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	KEYWORDS="~amd64 ~x86"
+fi
 
 LICENSE="GPL-2 Boost-1.0"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="
-dev-libs/boost
-dev-cpp/gtkmm:3.0"
+	dev-libs/boost
+	dev-cpp/gtkmm:3.0"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
