@@ -3,9 +3,9 @@
 
 EAPI=5
 
-EGIT_REPO_URI="git://github.com/strophe/libstrophe.git"
+EGIT_REPO_URI="https://github.com/strophe/libstrophe.git"
 
-inherit autotools eutils git-r3
+inherit autotools git-r3
 
 DESCRIPTION="A simple, lightweight C library for writing XMPP clients"
 HOMEPAGE="http://strophe.im/libstrophe/"
@@ -21,8 +21,6 @@ RDEPEND="xml? ( dev-libs/libxml2 )
 		!libressl? ( dev-libs/openssl:0= )"
 DEPEND="${RDEPEND}
 		doc? ( app-doc/doxygen )"
-
-S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
 		eautoreconf
