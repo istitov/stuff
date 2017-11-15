@@ -5,7 +5,7 @@ EAPI=5
 
 EGIT_REPO_URI="https://github.com/pasis/pppoat.git"
 
-inherit autotools eutils git-r3
+inherit autotools git-r3
 
 DESCRIPTION="PPP over Any Transport"
 HOMEPAGE="https://github.com/pasis/pppoat"
@@ -17,8 +17,6 @@ IUSE="+xmpp"
 
 RDEPEND="xmpp? ( dev-libs/libstrophe )"
 DEPEND="${RDEPEND}"
-
-S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
 		eautoreconf

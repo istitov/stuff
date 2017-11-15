@@ -3,7 +3,7 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/boothj5/profanity.git"
+EGIT_REPO_URI="https://github.com/boothj5/profanity.git"
 
 inherit autotools git-r3
 
@@ -31,8 +31,6 @@ RDEPEND=">=dev-libs/glib-2.26:2
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}
 		sys-devel/autoconf-archive"
-
-S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
 		eautoreconf

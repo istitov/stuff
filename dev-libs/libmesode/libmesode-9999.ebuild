@@ -3,9 +3,9 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/boothj5/libmesode.git"
+EGIT_REPO_URI="https://github.com/boothj5/libmesode.git"
 
-inherit autotools eutils git-r3
+inherit autotools git-r3
 
 DESCRIPTION="Fork of libstrophe for use with Profanity XMPP Client"
 HOMEPAGE="https://github.com/boothj5/libmesode"
@@ -19,8 +19,6 @@ RDEPEND="dev-libs/expat
 		dev-libs/openssl"
 DEPEND="${RDEPEND}
 		doc? ( app-doc/doxygen )"
-
-S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
 		eautoreconf

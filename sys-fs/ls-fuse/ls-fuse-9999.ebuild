@@ -3,7 +3,7 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/pasis/ls-fuse.git"
+EGIT_REPO_URI="https://github.com/pasis/ls-fuse.git"
 
 inherit autotools git-r3
 
@@ -18,8 +18,6 @@ IUSE="-debug"
 RDEPEND="sys-fs/fuse"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
-
-S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
 	eautoreconf
