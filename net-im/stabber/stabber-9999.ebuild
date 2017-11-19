@@ -3,7 +3,7 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/boothj5/stabber.git"
+EGIT_REPO_URI="https://github.com/boothj5/stabber.git"
 
 inherit autotools git-r3
 
@@ -19,8 +19,6 @@ RDEPEND="dev-libs/expat
 		>=dev-libs/glib-2.26:2
 		net-libs/libmicrohttpd"
 DEPEND="${RDEPEND}"
-
-S="${WORKDIR}/${P/-/_}"
 
 src_prepare() {
 		eautoreconf
