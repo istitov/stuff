@@ -16,12 +16,10 @@ detect_version
 K_NOSETEXTRAVERSION="don't_set_it"
 
 DESCRIPTION="Linux kernel fork with new features, including the -ck patchset (BFS), BFQ"
-HOMEPAGE="http://pf.natalenko.name/"
+HOMEPAGE="https://pfactum.github.io/pf-kernel/"
 
-PF_VERS="1"
-PF_FILE="patch-${PV/_p*/}-pf${PV/*_p/}${COMPRESSTYPE}"
-PF_URI="http://pf.natalenko.name/sources/$(get_version_component_range 1-2)/${PF_FILE}"
-SRC_URI="${KERNEL_URI} ${PF_URI}" # \${EXPERIMENTAL_URI}
+PF_URI="https://github.com/pfactum/pf-kernel/compare/v${PV/_p*/}...v${PV/_p*/}-pf${PV/*_p/}.diff"
+SRC_URI="${KERNEL_URI} ${PF_URI}" 
 
 KEYWORDS="-* ~amd64 ~ppc ~ppc64 ~x86"
 IUSE=""
