@@ -11,7 +11,7 @@ HOMEPAGE="https://sourceforge.net/projects/sofastatistics/"
 SRC_URI="https://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download# -> ${P}.tar.gz"
 LICENSE="AGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="-amd64 -x86"
 IUSE=""
 LANGS="br ca_ES de_DE en_GB es_ES fr_FR gl_ES hr_HR it_IT mn pt_BR ru_RU sl_SI tr_TR"
 for lang in ${LANGS}; do
