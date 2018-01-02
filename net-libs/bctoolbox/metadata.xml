@@ -4,8 +4,4 @@
 	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
-	<use>
-		<flag name='polarssl'>build with polarssl</flag>
-		<flag name='mbedtls'>build with mbedtls</flag>
-	</use>
 </pkgmetadata>
