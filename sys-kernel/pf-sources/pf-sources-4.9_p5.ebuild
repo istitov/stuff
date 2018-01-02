@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="5"
@@ -19,7 +19,7 @@ DESCRIPTION="Linux kernel fork with new features, including the -ck patchset (BF
 HOMEPAGE="https://pfactum.github.io/pf-kernel/"
 
 PF_URI="https://github.com/pfactum/pf-kernel/compare/v${PV/_p*/}...v${PV/_p*/}-pf${PV/*_p/}.diff"
-SRC_URI="${KERNEL_URI} ${PF_URI}" 
+SRC_URI="${KERNEL_URI} ${PF_URI}"
 
 KEYWORDS="-* ~amd64 ~ppc ~ppc64 ~x86"
 IUSE=""
