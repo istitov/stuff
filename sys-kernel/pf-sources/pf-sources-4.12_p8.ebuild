@@ -19,7 +19,7 @@ DESCRIPTION="Linux kernel fork with new features, including the -ck patchset (BF
 HOMEPAGE="https://pfactum.github.io/pf-kernel/"
 
 PF_URI="https://github.com/pfactum/pf-kernel/compare/v${PV/_p*/}...v${PV/_p*/}-pf${PV/*_p/}.diff"
-SRC_URI="${KERNEL_URI} ${PF_URI}"
+SRC_URI="${KERNEL_URI} ${PF_URI} -> ${PV/_p*/}-pf${PV/*_p/}.diff"
 
 KEYWORDS="-* ~amd64 ~ppc ~ppc64 ~x86"
 IUSE=""
