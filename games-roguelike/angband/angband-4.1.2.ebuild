@@ -27,8 +27,6 @@ DEPEND="${RDEPEND}
 	dev-python/docutils
 	virtual/pkgconfig"
 
-PATCHES=("${FILESDIR}"/${P}-pie-gcc.patch)
-
 src_prepare() {
 	default
 
