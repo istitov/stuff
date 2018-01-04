@@ -18,8 +18,9 @@ K_NOSETEXTRAVERSION="don't_set_it"
 DESCRIPTION="Linux kernel fork with new features, including the -ck patchset (BFS), BFQ"
 HOMEPAGE="https://pfactum.github.io/pf-kernel/"
 
+PF_FILE="patch-${PV/_p*/}-pf${PV/*_p/}.diff"
 PF_URI="https://github.com/pfactum/pf-kernel/compare/v${PV/_p*/}...v${PV/_p*/}-pf${PV/*_p/}.diff"
-SRC_URI="${KERNEL_URI} ${PF_URI}"
+SRC_URI="${KERNEL_URI} ${PF_URI} -> ${PF_FILE}"
 
 KEYWORDS="-* ~amd64 ~ppc ~ppc64 ~x86"
 IUSE=""
