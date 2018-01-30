@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>dolphinstkom@gmail.com</email>
+    <name>Komashko Stanislav</name>
+  </maintainer>
+  <longdescription>
+mpDris2 provide MPRIS 2 support to mpd (Music Player Daemon). mpDris2 is run in the user session and monitors a local or distant mpd server.
+</longdescription>
+</pkgmetadata>
