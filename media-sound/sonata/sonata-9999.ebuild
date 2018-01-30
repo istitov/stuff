@@ -43,6 +43,8 @@ src_prepare() {
 src_install() {
 	distutils-r1_src_install
 	rm -rf "${D}"/usr/share/sonata
+	insinto /usr/share/pixmaps
+	newins sonata/pixmaps/sonata-large.png sonata.png
 }
 
 pkg_postinst() {
