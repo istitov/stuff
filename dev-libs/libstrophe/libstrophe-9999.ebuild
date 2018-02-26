@@ -1,7 +1,7 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 EGIT_REPO_URI="https://github.com/strophe/libstrophe.git"
 
@@ -23,6 +23,8 @@ DEPEND="${RDEPEND}
 		doc? ( app-doc/doxygen )"
 
 src_prepare() {
+		default
+
 		eautoreconf
 }
 
@@ -31,15 +33,18 @@ src_configure() {
 }
 
 src_compile() {
-		emake
+		default
+
 		if use doc; then
 			doxygen || die
 		fi
 }
 
 src_install() {
-		einstall
-		dodoc GPL-LICENSE.txt LICENSE.txt MIT-LICENSE.txt README.markdown \
-			ChangeLog
-		use doc && dohtml -r docs/html/*
+		DOCS="GPL-LICENSE.txt LICENSE.txt MIT-LICENSE.txt README.markdown ChangeLog"
+		if use doc; then
+			HTML_DOCS="docs/html/*"
+		fi
+
+		default
 }
