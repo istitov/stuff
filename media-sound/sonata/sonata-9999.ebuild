@@ -1,6 +1,5 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI="5"
 PYTHON_COMPAT=( python3_{2,3,4,5,6} )
@@ -18,9 +17,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="dbus mpd taglib"
 
-LANGS="ar be ca cs da de el_GR es et fi fr it ja ko nl pl pt_BR ru sk sl sv tr uk zh_CN zh_TW"
+LANGS="ar be ca cs da de el es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
 for X in ${LANGS} ; do
-        IUSE+=" l10n_${X}"
+	IUSE+=" l10n_${X}"
 done
 RDEPEND=">=dev-python/python-mpd-0.4.6
 	>=dev-python/pygobject-3.4.2
@@ -35,11 +34,11 @@ DOCS="CHANGELOG README.rst TODO TRANSLATORS"
 
 src_prepare() {
 	local lang
-        for lang in ${LANGS}; do
-                if ! use l10n_${lang}; then
-                        rm po/${lang}.po || die "failed to remove nls"
-                fi
-        done
+		for lang in ${LANGS}; do
+			if ! use l10n_${lang}; then
+				rm po/${lang}.po || die "failed to remove nls"
+			fi
+		done
 }
 
 src_install() {
