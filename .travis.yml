@@ -6,7 +6,7 @@ language: python
 python:
     - pypy
 env:
-    - PORTAGE_VER="2.3.24"
+    - PORTAGE_VER="2.3.27"
 before_install:
     - sudo apt-get -qq update
     - pip install lxml
@@ -31,3 +31,4 @@ before_script:
 script:
     - ./../spinner.sh "python ../portage-portage-${PORTAGE_VER}/repoman/bin/repoman full -d"
 # You can append own scripts after this line
+
