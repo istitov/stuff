@@ -151,8 +151,8 @@ src_configure() {
 	econf ${my_config}
 }
 pkg_preinst() {
-	use linguas_pt_BR || rm -f "${D}/usr/share/deadbeef/help.pt_BR.txt"
-	use linguas_ru || rm -f "${D}/usr/share/deadbeef/help.ru.txt"
+	use l10n_pt-BR || rm -f "${D}/usr/share/deadbeef/help.pt_BR.txt"
+	use l10n_ru || rm -f "${D}/usr/share/deadbeef/help.ru.txt"
 	gnome2_icon_savelist
 	gnome2_schemas_savelist
 }
