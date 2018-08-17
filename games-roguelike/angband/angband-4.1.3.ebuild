@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools eutils gnome2-utils versionator
+inherit autotools eutils gnome2-utils eapi7-ver
 
-MAJOR_PV=$(get_version_component_range 1-2)
+MAJOR_PV=$(ver_cut 1-2)
 
 DESCRIPTION="A roguelike dungeon exploration game based on the books of J.R.R. Tolkien"
 HOMEPAGE="http://rephial.org/"
