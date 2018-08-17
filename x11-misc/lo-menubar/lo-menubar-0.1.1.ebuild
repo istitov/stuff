@@ -13,7 +13,7 @@ http://launchpadlibrarian.net/104771746/${PN}_${PV}-0ubuntu1_i386.deb )
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 CDEPEND=""
