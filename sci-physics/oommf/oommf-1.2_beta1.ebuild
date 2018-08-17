@@ -8,7 +8,7 @@ HOMEPAGE="http://math.nist.gov/oommf/"
 SRC_URI="http://math.nist.gov/oommf/dist/${PN}12b1_20170927.tar.gz"
 
 LICENSE="HPND"
-KEYWORDS="~amd64 ~arm ~x86""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="doc"
 SLOT="1.2"
 
