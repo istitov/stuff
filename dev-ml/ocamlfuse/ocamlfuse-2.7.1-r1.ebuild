@@ -13,7 +13,7 @@ SRC_URI="https://github.com/astrada/${PN}/archive/v${PV}_cvs5.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=">=dev-ml/camlidl-0.9.5

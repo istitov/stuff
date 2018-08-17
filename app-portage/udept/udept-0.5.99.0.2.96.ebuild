@@ -17,7 +17,7 @@ HOMEPAGE="https://github.com/init6/udept"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~mips ~sparc ~x86"
+KEYWORDS="~amd64 ~mips ~ppc ~sparc ~x86"
 IUSE="bash-completion"
 
 DEPEND="app-shells/bash:=

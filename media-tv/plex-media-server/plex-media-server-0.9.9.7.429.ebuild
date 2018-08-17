@@ -18,7 +18,7 @@ SRC_URI=" x86? ( http://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${P
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="net-dns/avahi"

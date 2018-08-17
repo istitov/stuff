@@ -12,7 +12,7 @@ SRC_URI="http://ffmpeg.org/releases/${MY_P/_/-}.tar.bz2"
 
 LICENSE="GPL-2  GPL-3"
 SLOT="0"
-KEYWORDS="amd64 x86 ~amd64 ~x86"
+KEYWORDS="~amd64 amd64 ~x86 x86"
 IUSE="bindist cpudetection gnutls +hardcoded-tables pic static-libs threads +zlib"
 
 # String for CPU features in the useflag[:configure_option] form

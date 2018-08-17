@@ -13,7 +13,7 @@ arm? ( http://www.ancardia.com/download/${PN}_linux_arm_${PV}.tar.gz )"
 
 LICENSE="adom"
 SLOT="0"
-KEYWORDS="~x86 ~amd64 ~arm"
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE=""
 RESTRICT="strip" #bug #137340
 QA_FLAGS_IGNORED="${GAMES_BINDIR}/${PN}"
