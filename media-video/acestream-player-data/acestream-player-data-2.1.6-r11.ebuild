@@ -14,16 +14,16 @@ SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64 ~x86 "
 IUSE="pulseaudio jack portaudio avahi cddb cdda dvd aac flac lirc mad matroska modplug musepack mpeg
 		ieee1394 samba mtp ncurses libproxy speex upnp v4l vcdx"
 
-LANGS="ach af am ar ast be bg bn br ca cgg ckb co cs da de el en_GB es et eu fa ff fi fr fur ga gl he
-		hi hr hu hy id is it ja ka kk km ko lg lt lv mk ml mn ms my nb ne nl nn oc pa pl ps pt_BR pt_PT
-		ro ru si sk sl sq sr sv ta tet th tl tr uk vi wa zh_CN zh_TW zu"
+LANGS="ach af am ar ast be bg bn br ca cs da de el en-GB es et eu fa ff fi fr ga gl he
+		hi hr hu hy id is it ja ka kk km ko lt lv mk ml mn ms my nb ne nl nn oc pa pl pt-BR pt-PT
+		ro ru si sk sl sq sr sv ta th tl tr uk vi wa zh-CN zh-TW zu"
 
 for lang in ${LANGS}; do
-	IUSE+=" linguas_${lang}"
+	IUSE+=" l10n_${lang}"
 done
 
 CDEPEND=""
@@ -104,7 +104,7 @@ S="${WORKDIR}"
 src_prepare(){
 	for lang in ${LANGS};do
 		for x in ${lang};do
-			if ! use linguas_${x}; then
+			if ! use l10n_${x}; then
 				rm -rf usr/share/locale/${x}
 			fi
 		done

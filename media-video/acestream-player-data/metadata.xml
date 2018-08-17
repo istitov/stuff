@@ -7,12 +7,5 @@
 	<use>
 		<flag name='libproxy'>Use net-libs/libproxy for getting the HTTP/HTTPS/SOCKS proxy configuration</flag>
 		<flag name='vcdx'>Enables VCD with navigation via libvcdinfo (depends on cdio)</flag>
-		<flag name='linguas_ach'>unknown</flag>
-		<flag name='linguas_cgg'>unknown</flag>
-		<flag name='linguas_ckb'>unknown</flag>
-		<flag name='linguas_co'>unknown</flag>
-		<flag name='linguas_ff'>unknown</flag>
-		<flag name='linguas_fur'>unknown</flag>
-		<flag name='linguas_tet'>unknown</flag>
 	</use>
 </pkgmetadata>
