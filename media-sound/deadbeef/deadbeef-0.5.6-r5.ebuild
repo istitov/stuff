@@ -1,15 +1,15 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI="6"
 
-inherit xdg-utils gnome2-utils eutils versionator
+inherit xdg-utils gnome2-utils eutils eapi7-ver
 
-MY_PV="$(replace_version_separator 3 '-')"
+MY_PV="$(ver_rs 3 '-')"
 
 SRC_URI="mirror://sourceforge/${PN}/${PN}-${MY_PV}.tar.bz2
 		 https://sourceforge.net/projects/${PN}/files/${PN}-${MY_PV}.tar.bz2/download -> ${PN}-${MY_PV}.tar.bz2"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64 ~x86"
 
 DESCRIPTION="foobar2k-like music player"
 HOMEPAGE="http://deadbeef.sourceforge.net/"
@@ -30,11 +30,10 @@ REQUIRED_USE="
 	lastfm? ( curl )
 	|| ( alsa oss pulseaudio nullout )"
 
-LANGS="be bg bn ca cs da de el en_GB es et eu fa fi fr gl he hr hu id it ja kk km lg
-	lt nl pl pt pt_BR ro ru si_LK sk sl sr sr@latin sv te tr ug uk vi zh_CN zh_TW"
+LANGS="be bg bn ca cs da de el en-GB es et eu fa fi fr gl he hr hu id it ja kk km lt nl pl pt pt-BR ro ru si sk sl sr sr-Latn sv te tr ug uk vi zh-CN zh-TW"
 
-for lang in ${LANGS}; do
-	IUSE+=" linguas_${lang}"
+for i in ${LANGS}; do
+	IUSE="${IUSE} l10n_${i}"
 done
 
 RDEPEND="aac? ( media-libs/faad2 )
@@ -62,6 +61,7 @@ RDEPEND="aac? ( media-libs/faad2 )
 	curl? ( net-misc/curl )"
 
 DEPEND="
+	dev-libs/jansson
 	dev-util/intltool
 	${RDEPEND}"
 

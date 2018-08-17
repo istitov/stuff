@@ -1,14 +1,15 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI="6"
 
-inherit xdg-utils gnome2-utils git-r3 eutils
+inherit xdg-utils gnome2-utils eutils eapi7-ver
 
-EGIT_REPO_URI="https://github.com/Alexey-Yakovenko/deadbeef.git"
-EGIT_BRANCH="master"
+MY_PV="$(ver_rs 3 '-')"
 
-KEYWORDS=""
+SRC_URI="mirror://sourceforge/${PN}/${PN}-${MY_PV}.tar.bz2
+		 https://sourceforge.net/projects/${PN}/files/${PN}-${MY_PV}.tar.bz2/download -> ${PN}-${MY_PV}.tar.bz2"
+KEYWORDS="~amd64 ~x86"
 
 DESCRIPTION="foobar2k-like music player"
 HOMEPAGE="http://deadbeef.sourceforge.net/"
@@ -29,11 +30,10 @@ REQUIRED_USE="
 	lastfm? ( curl )
 	|| ( alsa oss pulseaudio nullout )"
 
-LANGS="be bg bn ca cs da de el en_GB es et eu fa fi fr gl he hr hu id it ja kk km lg
-	lt nl pl pt pt_BR ro ru si_LK sk sl sr sr@latin sv te tr ug uk vi zh_CN zh_TW"
+LANGS="be bg bn ca cs da de el en-GB es et eu fa fi fr gl he hr hu id it ja kk km lt nl pl pt pt-BR ro ru si sk sl sr sr-Latn sv te tr ug uk vi zh-CN zh-TW"
 
-for lang in ${LANGS}; do
-	IUSE+=" linguas_${lang}"
+for i in ${LANGS}; do
+	IUSE="${IUSE} l10n_${i}"
 done
 
 RDEPEND="aac? ( media-libs/faad2 )
@@ -67,6 +67,8 @@ DEPEND="
 
 QA_TEXTRELS="usr/lib/deadbeef/ffap.so.0.0.0"
 
+S="${WORKDIR}/${PN}-${MY_PV}"
+
 pkg_setup() {
 	if use psf || use dumb || use shn && use static ; then
 		die "ao/converter/dumb or shn plugins can't be builded statically"
@@ -74,8 +76,10 @@ pkg_setup() {
 }
 
 src_prepare() {
-	touch config.rpath
-	sh autogen.sh
+	if [[ -f autogen.sh ]];then
+		touch config.rpath
+		sh autogen.sh
+	fi
 
 	if use midi ; then
 		# set default gentoo path
@@ -84,7 +88,7 @@ src_prepare() {
 	fi
 
 	# remove unity trash
-	#TODO epatch "${FILESDIR}/desktop-2.patch"
+	#epatch "${FILESDIR}/desktop-2.patch"
 
 	for lang in ${LANGS};do
 		for x in ${lang};do
