@@ -92,11 +92,12 @@ src_prepare() {
 
 	for lang in ${LANGS};do
 		for x in ${lang};do
-			if ! use linguas_${x}; then
+			if ! use l10n_${x}; then
 				sed -e "s|^${x}$||" -i "po/LINGUAS"
 			fi
 		done
 	done
+	eapply_user
 }
 
 src_configure() {
