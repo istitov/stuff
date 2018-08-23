@@ -1,33 +1,33 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="4"
+EAPI="5"
 
 inherit git-r3 eutils
 
-IUSE="tk"
+IUSE="guile tk"
 
 DESCRIPTION="Tool for launching commands on keystrokes"
-EGIT_REPO_URI="http://git.savannah.gnu.org/cgit/xbindkeys.git"
+EGIT_REPO_URI="https://git.savannah.gnu.org/git/xbindkeys.git"
 EGIT_BRANCH="master"
 HOMEPAGE="http://www.nongnu.org/xbindkeys/xbindkeys.html"
-S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-2"
 KEYWORDS=""
 SLOT="0"
 
 RDEPEND="x11-libs/libX11
-	>=dev-scheme/guile-1.8.4[deprecated]
-	tk? ( dev-lang/tk )"
+	guile? ( >=dev-scheme/guile-1.8.4[deprecated] )
+	tk? ( dev-lang/tk:0 )"
 DEPEND="${RDEPEND}
-	x11-proto/xproto"
+	x11-base/xorg-proto"
+
+S="${WORKDIR}/${P}"
 
 src_configure() {
-	local myconf
-	use tk || myconf="${myconf} --disable-tk"
-
-	econf ${myconf} || die "configure failed"
+	econf \
+		$(use_enable tk) \
+		$(use_enable guile) || die "configure failed"
 }
 
 src_compile() {
