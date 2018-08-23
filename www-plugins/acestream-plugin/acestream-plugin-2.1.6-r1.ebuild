@@ -9,9 +9,10 @@ DESCRIPTION="ACE Stream multimedia plugin for web browsers"
 HOMEPAGE="http://torrentstream.org/"
 MY_PN="acestream-mozilla-plugin"
 SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_${PV}-1raring2_i386.deb
-				 http://stuff.tazhate.com/distfiles/${MY_PN}_${PV}-1raring2_i386.deb )
-		amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_${PV}-1raring2_amd64.deb
-				 http://stuff.tazhate.com/distfiles/${MY_PN}_${PV}-1raring2_amd64.deb )"
+		 http://stuff.tazhate.com/distfiles/${MY_PN}_${PV}-1raring2_i386.deb )
+	amd64? ( http://repo.acestream.org/ubuntu/pool/main/a/${MY_PN}/${MY_PN}_${PV}-1raring2_amd64.deb
+		 http://stuff.tazhate.com/distfiles/${MY_PN}_${PV}-1raring2_amd64.deb )"
+RESTRICT="primaryuri"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
@@ -19,7 +20,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="~media-video/acestream-player-data-${PV}
-		net-p2p/acestream-engine"
+	net-p2p/acestream-engine"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
