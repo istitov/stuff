@@ -8,6 +8,7 @@ inherit eutils
 DESCRIPTION="Simple keyboard layout indicator"
 HOMEPAGE="http://plhk.ru/"
 SRC_URI="http://plhk.ru/static/skb/${PN}-${PV}.tar.gz"
+RESTRICT="primaryuri"
 
 LICENSE="GPL-2"
 SLOT="0"
