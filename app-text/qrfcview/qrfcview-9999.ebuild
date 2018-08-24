@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit eutils qt4-r2 git-r3
+inherit eutils qmake-utils git-r3
 EGIT_REPO_URI="https://github.com/saghul/qrfcview-osx.git"
 
 DESCRIPTION="Viewer for IETF RFCs"
@@ -15,14 +15,15 @@ KEYWORDS=""
 IUSE=""
 
 RDEPEND="dev-qt/qtcore
-		dev-qt/qtgui"
+	dev-qt/qtgui"
+
 DEPEND="${RDEPEND}"
 
 src_prepare() {
-		epatch "${FILESDIR}"/${PN}-include-stdint-h.patch
+	epatch "${FILESDIR}"/${PN}-include-stdint-h.patch
 }
 
 src_install() {
-		insinto /usr/bin/
-		dobin bin/qRFCView || die
+	insinto /usr/bin/
+	dobin bin/qRFCView || die
 }
