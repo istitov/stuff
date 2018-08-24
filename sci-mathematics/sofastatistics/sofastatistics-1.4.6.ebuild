@@ -43,7 +43,7 @@ S="${WORKDIR}/sofastats-${PV}"
 
 src_install(){
 	for lang in ${LANGS};do
-		use linguas_${lang} || rm -rf "sofa_main/locale/${lang}"
+		use l10n_${lang} || rm -rf "sofa_main/locale/${lang}"
 	done
 	dodir /usr/share/sofastats
 	insinto /usr/share/sofastats
