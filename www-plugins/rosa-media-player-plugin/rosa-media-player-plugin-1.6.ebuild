@@ -3,7 +3,7 @@
 
 EAPI="4"
 
-inherit eutils qt4-r2 multilib
+inherit eutils qmake-utils multilib
 
 DESCRIPTION="ROSA Media Player Plugin is designed to use with internet browsers."
 HOMEPAGE="http://www.rosalab.ru/"

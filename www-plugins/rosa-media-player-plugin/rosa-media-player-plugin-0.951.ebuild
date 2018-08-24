@@ -3,7 +3,7 @@
 
 EAPI="4"
 
-inherit eutils qt4-r2 multilib
+inherit eutils qmake-utils multilib
 
 DESCRIPTION="ROSA Media Player Plugin is designed to use with internet browsers."
 HOMEPAGE="http://www.rosalab.ru/"
@@ -14,9 +14,12 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+mpeg +rm +wmp +divx"
+
+# Workaround: please keep it sorted syncronous
+L10Ns="ar bg ca cs de el en-GB es-419 es et eu fi fr gl hu it ja ka ko ku lt mk nl pl pt-PT pt pt-BR ro ru sk sl sr sv tr uk vi zh-CN zh-TW"
 LANGS="ar bg ca cs de el en_GB es_LA es et eu fi fr gl hu it ja ka ko ku lt mk nl pl pt_PT pt pt_BR ro ru sk sl sr sv tr uk vi zh_CN zh_TW"
-for lang in ${LANGS}; do
-	IUSE+=" linguas_${lang}"
+for lang in ${L10Ns}; do
+	IUSE+=" l10n_${lang}"
 done
 
 RDEPEND="media-video/mplayer"
@@ -67,7 +70,7 @@ src_install() {
 
 	for lang in ${LANGS};do
 	for x in ${lang};do
-	  if ! use linguas_${x}; then
+	  if ! use l10n_${x}; then
 		rm -f "$(find rosamp-plugin/translations -type f -name "rosamp_plugin_${x}*.qm")"
 	  fi
 	done
