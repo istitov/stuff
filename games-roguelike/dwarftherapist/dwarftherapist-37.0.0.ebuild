@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit qt4-r2
+inherit qmake-utils
 
 DESCRIPTION="Dwarf (The)rapist for Dwarf Fortress."
 HOMEPAGE="https://github.com/splintermind/Dwarf-Therapist/"
@@ -18,13 +18,14 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="-qt4 qt5 -doc"
+IUSE="-qt4 +qt5 -doc"
+REQUIRED_USE="^^ ( qt4 qt5 )"
+
 S="${WORKDIR}/Dwarf-Therapist-${PV}"
 
-DEPEND="
-qt4? ( dev-qt/qtcore:4 )
-qt5? ( dev-qt/qtcore:5 )
-"
+DEPEND="qt4? ( dev-qt/qtcore:4 )
+	qt5? ( dev-qt/qtcore:5 )"
+
 RDEPEND="${DEPEND}"
 
 pkg_setup() {
@@ -32,13 +33,15 @@ pkg_setup() {
 		ewarn "You can not have USE='qt4 qt5'. Assuming qt5 is more important."
 	fi
 }
+
 src_configure() {
 	if use qt5; then
-	qmake -qt=5 \"PREFIX="${D}"\"
+		eqmake5 \"PREFIX="${D}"\"
 	else
-	qmake -qt=4 \"PREFIX="${D}"\"
+		eqmake4 \"PREFIX="${D}"\"
 	fi
 }
+
 src_install() {
 	emake install || die "Install failed"
 	dodoc README.rst
