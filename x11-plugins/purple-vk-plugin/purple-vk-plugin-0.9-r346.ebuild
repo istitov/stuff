@@ -8,6 +8,7 @@ inherit cmake-utils
 DESCRIPTION="Pidgin plugin for vk.com social network"
 HOMEPAGE="https://bitbucket.org/olegoandreev/purple-vk-plugin"
 SRC_URI="https://bitbucket.org/olegoandreev/purple-vk-plugin/downloads/purple-vk-plugin-0.9+r346.tar.gz"
+RESTRICT="primaryuri"
 
 LICENSE="GPL-3"
 SLOT="0"

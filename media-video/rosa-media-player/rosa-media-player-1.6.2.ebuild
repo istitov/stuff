@@ -3,13 +3,13 @@
 
 EAPI="5"
 
-inherit eutils qt4-r2 multilib
+inherit eutils qmake-utils multilib
 
 DESCRIPTION="Multimedia player that supports most of audio and video formats."
 HOMEPAGE="http://www.rosalab.ru/"
-MY_PN="ROSA_Media_Player"
-SRC_URI="https://abf.rosalinux.ru/uxteam/${MY_PN}/archive/${MY_PN}-v${PV}.tar.gz
-		 http://stuff.tazhate.com/distfiles/${MY_PN}-v${PV}.tar.gz"
+MY_PN="rosa-media-player-devel"
+SRC_URI="https://abf.rosalinux.ru/uxteam/${MY_PN}/archive/${MY_PN}-v${PV}.tar.gz"
+#	http://stuff.tazhate.com/distfiles/${MY_PN}-v${PV}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"

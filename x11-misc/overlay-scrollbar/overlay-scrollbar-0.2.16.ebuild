@@ -8,6 +8,7 @@ inherit multilib versionator
 DESCRIPTION="Ubuntu's scrollbars"
 HOMEPAGE="https://launchpad.net/ayatana-scrollbar"
 SRC_URI="http://launchpad.net/ayatana-scrollbar/$(get_version_component_range 1-2)/${PV}/+download/${P}.tar.gz"
+RESTRICT="primaryuri"
 
 MY_PV=$(get_version_component_range 3)
 
@@ -18,7 +19,7 @@ IUSE="+gtk2 gtk3"
 
 CDEPEND=""
 DEPEND="gtk2? ( x11-libs/gtk+:2 )
-		gtk3? ( x11-libs/gtk+:3 )"
+	gtk3? ( x11-libs/gtk+:3 )"
 RDEPEND="${DEPEND}"
 
 src_configure(){

@@ -3,7 +3,7 @@
 
 EAPI="5"
 PYTHON_COMPAT=( python{2_6,2_7} )
-PYTHON_USE_WITH="sqlite"
+PYTHON_REQ_USE="sqlite"
 inherit eutils python-single-r1
 
 DESCRIPTION="SOFA is a statistics, analysis, and reporting program"
@@ -13,33 +13,37 @@ LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="-amd64 -x86"
 IUSE=""
+
+# Workaround: please keep it sorted syncronous
+L10Ns="br ca de-DE en-GB es-ES fr gl hr it mn pt-BR ru sl tr"
 LANGS="br ca_ES de_DE en_GB es_ES fr_FR gl_ES hr_HR it_IT mn pt_BR ru_RU sl_SI tr_TR"
-for lang in ${LANGS}; do
-	IUSE+=" linguas_${lang}"
+
+for lang in ${L10Ns}; do
+	IUSE+=" l10n_${lang}"
 done
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 DEPEND="dev-python/wxpython:2.8[${PYTHON_USEDEP}]
-		dev-python/psycopg:2[${PYTHON_USEDEP}]
-		dev-python/pyPdf[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
-		dev-python/mysql-python[${PYTHON_USEDEP}]
-		dev-python/pyxdg[${PYTHON_USEDEP}]
-		dev-python/matplotlib[wxwidgets,${PYTHON_USEDEP}]
-		dev-python/pythonmagick[${PYTHON_USEDEP}]
-		media-gfx/wkhtmltopdf
-		app-text/pdftk
-		app-text/ghostscript-gpl"
+	dev-python/psycopg:2[${PYTHON_USEDEP}]
+	dev-python/pyPdf[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/mysql-python[${PYTHON_USEDEP}]
+	dev-python/pyxdg[${PYTHON_USEDEP}]
+	dev-python/matplotlib[wxwidgets,${PYTHON_USEDEP}]
+	dev-python/pythonmagick[${PYTHON_USEDEP}]
+	media-gfx/wkhtmltopdf
+	app-text/pdftk
+	app-text/ghostscript-gpl"
 
-#		dev-python/pywebkitgtk[${PYTHON_USEDEP}]
+#	dev-python/pywebkitgtk[${PYTHON_USEDEP}]
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/sofastats-${PV}"
 
 src_install(){
 	for lang in ${LANGS};do
-		use linguas_${lang} || rm -rf "sofa_main/locale/${lang}"
+		use l10n_${lang} || rm -rf "sofa_main/locale/${lang}"
 	done
 	dodir /usr/share/sofastats
 	insinto /usr/share/sofastats

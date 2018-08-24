@@ -3,11 +3,11 @@
 
 EAPI="5"
 
-inherit eutils qt4-r2 multilib git-r3
+inherit eutils qmake-utils multilib git-r3
 
 DESCRIPTION="Multimedia player that supports most of audio and video formats."
 HOMEPAGE="http://www.rosalab.ru/"
-MY_PN="ROSA_Media_Player"
+MY_PN="rosa-media-player-devel"
 EGIT_REPO_URI="https://abf.rosalinux.ru/uxteam/${MY_PN}.git"
 
 LICENSE="GPL-3"

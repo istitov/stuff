@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit qt4-r2
+inherit qmake-utils
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 
 DESCRIPTION="Environment for executing and debugging Markov algorithm"

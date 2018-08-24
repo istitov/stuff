@@ -7,9 +7,9 @@ inherit multilib unpacker
 
 DESCRIPTION="A small plugin for LibreOffice to export the menus into Unity's menubar."
 HOMEPAGE="https://launchpad.net/lo-menubar"
-SRC_URI=" x86? (
-http://launchpadlibrarian.net/104771746/${PN}_${PV}-0ubuntu1_i386.deb )
-		amd64? ( http://launchpadlibrarian.net/104772046/${PN}_${PV}-0ubuntu1_amd64.deb )"
+SRC_URI=" x86? ( http://launchpadlibrarian.net/104771746/${PN}_${PV}-0ubuntu1_i386.deb )
+	amd64? ( http://launchpadlibrarian.net/104772046/${PN}_${PV}-0ubuntu1_amd64.deb )"
+RESTRICT="primaryuri"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
