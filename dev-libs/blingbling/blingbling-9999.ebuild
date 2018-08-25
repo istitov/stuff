@@ -1,10 +1,10 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="1"
+EAPI="4"
 inherit git-r3
 
-EGIT_REPO_URI="git://github.com/cedlemo/blingbling.git"
+EGIT_REPO_URI="https://github.com/cedlemo/blingbling.git"
 
 DESCRIPTION="Blingbling is a graphical widget library for Awesome Windows Manager"
 HOMEPAGE="http://awesome.naquadah.org/wiki/Blingbling"
@@ -18,10 +18,10 @@ RDEPEND="dev-lang/lua
 	x11-wm/awesome
 	dev-libs/oocairo
 	vicious? ( x11-plugins/vicious )"
+
 DEPEND="${RDEPEND}"
 
-src_install()
-{
+src_install() {
 	#echo "$P | $PV | $PN | $D"
 	insinto "/usr/share/awesome/lib/${PN}"
 	for f in `ls ./*.lua`; do
