@@ -8,7 +8,7 @@ inherit eutils xdg-utils multilib
 DESCRIPTION="Watch torrent movies instantly"
 HOMEPAGE="http://popcorn.cdnjd.com/"
 SRC_URI="x86?   ( https://get.popcorntime.sh/build/Popcorn-Time-${PV}-Linux-32.tar.xz )
-		 amd64? ( https://get.popcorntime.sh/build/Popcorn-Time-${PV}-Linux-64.tar.xz )"
+	 amd64? ( https://get.popcorntime.sh/build/Popcorn-Time-${PV}-Linux-64.tar.xz )"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -32,11 +32,9 @@ src_install() {
 	dosym /$(get_libdir)/libudev.so.1 /opt/${PN}/libudev.so.0
 	make_wrapper ${PN} ./Popcorn-Time /opt/${PN} /opt/${PN} /opt/bin
 
-	insinto /usr/share/applications
-	doins "${FILESDIR}"/${PN}.desktop
+	domenu "${FILESDIR}"/${PN}.desktop
 
-	insinto /usr/share/pixmaps
-	doins "${FILESDIR}"/${PN}.png
+	doicon -s 256 "${FILESDIR}"/${PN}.png
 }
 
 pkg_postinst() {
