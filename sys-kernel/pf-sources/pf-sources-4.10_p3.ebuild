@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="5"
-inherit readme.gentoo toolchain-funcs versionator
+inherit readme.gentoo toolchain-funcs eapi7-ver
 
 COMPRESSTYPE=".xz"
 K_USEPV="yes"
 UNIPATCH_STRICTORDER="yes"
 K_SECURITY_UNSUPPORTED="1"
 
-CKV="$(get_version_component_range 1-2)"
+CKV="$(ver_cut 1-2)"
 ETYPE="sources"
 inherit kernel-2
 detect_version
