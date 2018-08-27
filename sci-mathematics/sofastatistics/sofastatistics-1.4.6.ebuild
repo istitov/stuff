@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="5"
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python{2_7,2_6} )
 PYTHON_REQ_USE="sqlite"
 inherit eutils python-single-r1
 
@@ -24,7 +24,7 @@ done
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-DEPEND="dev-python/wxpython:2.8[${PYTHON_USEDEP}]
+DEPEND="dev-python/wxpython[${PYTHON_USEDEP}]
 	dev-python/psycopg:2[${PYTHON_USEDEP}]
 	dev-python/pyPdf[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
