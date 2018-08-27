@@ -21,7 +21,7 @@ RDEPEND="x11-libs/gtk+:2
 	lxde-base/lxmenu-data
 	!lxde-base/lxpanel
 	alsa? ( media-libs/alsa-lib )
-	libindicator? ( dev-libs/libindicator[gtk2] )
+	libindicator? ( dev-libs/libindicator:0 )
 	libfm? ( x11-libs/libfm )
 	menucache? ( lxde-base/menu-cache )"
 
