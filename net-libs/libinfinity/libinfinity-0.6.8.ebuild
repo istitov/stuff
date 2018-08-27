@@ -3,9 +3,9 @@
 
 EAPI=6
 
-inherit eutils versionator user
+inherit eutils eapi7-ver user
 
-MY_PV=$(get_version_component_range 1-2)
+MY_PV=$(ver_cut 1-2)
 
 DESCRIPTION="An implementation of the Infinote protocol written in GObject-based C"
 HOMEPAGE="https://gobby.github.io/"
