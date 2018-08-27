@@ -3,9 +3,9 @@
 
 EAPI=4
 
-inherit multilib toolchain-funcs flag-o-matic versionator
+inherit multilib toolchain-funcs flag-o-matic eapi7-ver
 
-MY_P="x264-snapshot-$(get_version_component_range 3)-2245"
+MY_P="x264-snapshot-$(ver_cut 3)-2245"
 
 DESCRIPTION="A free library for encoding X264/AVC streams"
 HOMEPAGE="http://www.videolan.org/developers/x264.html"
