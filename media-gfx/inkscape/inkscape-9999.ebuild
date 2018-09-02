@@ -39,7 +39,7 @@ COMMON_DEPEND="
 	x11-libs/libXft
 	x11-libs/gtk+:2
 	>=x11-libs/pango-1.4.0
-	|| ( dev-lang/python:2.7[xml] dev-python/pyxml )
+	dev-lang/python:2.7[xml]
 	gnome? ( >=gnome-base/gnome-vfs-2.0 )
 	lcms? ( media-libs/lcms:2 )"
 
