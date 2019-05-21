@@ -20,7 +20,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	doc? ( app-doc/doxygen )"
 
-DOCS=( AUTHORS ChangeLog README TODO )
+DOCS=( AUTHORS ChangeLog README.md TODO )
 
 src_prepare() {
 	local f=CMakeLists.txt
