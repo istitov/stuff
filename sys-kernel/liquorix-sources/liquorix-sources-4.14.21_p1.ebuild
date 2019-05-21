@@ -3,14 +3,14 @@
 
 EAPI="5"
 
-inherit versionator
+inherit eapi7-ver
 
 COMPRESSTYPE=".gz"
 K_USEPV="yes"
 UNIPATCH_STRICTORDER="yes"
 K_SECURITY_UNSUPPORTED="1"
 
-CKV="$(get_version_component_range 1-2)"
+CKV="$(ver_cut 1-2)"
 ETYPE="sources"
 
 inherit kernel-2

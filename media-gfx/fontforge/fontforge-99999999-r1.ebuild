@@ -42,7 +42,6 @@ RDEPEND="gif? ( >=media-libs/giflib-4.1.0-r1 )
 	cairo? ( >=x11-libs/cairo-1.6.4[X] )
 	pango? ( >=x11-libs/pango-1.20.3 )
 	x11-libs/libXi
-	x11-proto/inputproto
 	!media-gfx/pfaedit"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"

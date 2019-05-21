@@ -1,16 +1,16 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=6
 
-inherit multilib versionator
+inherit multilib eapi7-ver
 
 DESCRIPTION="Ubuntu's scrollbars"
 HOMEPAGE="https://launchpad.net/ayatana-scrollbar"
-SRC_URI="http://launchpad.net/ayatana-scrollbar/$(get_version_component_range 1-2)/${PV}/+download/${P}.tar.gz"
+SRC_URI="http://launchpad.net/ayatana-scrollbar/$(ver_cut 1-2)/${PV}/+download/${P}.tar.gz"
 RESTRICT="primaryuri"
 
-MY_PV=$(get_version_component_range 3)
+MY_PV=$(ver_cut 3)
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
