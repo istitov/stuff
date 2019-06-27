@@ -57,11 +57,8 @@ src_compile() {
 }
 
 src_install() {
-	#default
 	make DESTDIR="${D}" install
-	#default
 	use python && dodoc modules/pygwy/README.pygwy
-	#doins -r
 }
 
 pkg_postinst() {
