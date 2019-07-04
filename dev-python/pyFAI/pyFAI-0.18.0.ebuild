@@ -7,8 +7,8 @@ PYTHON_COMPAT=( python2_7 python3_5 python3_6 python3_7)
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="FabIO is an I/O library for images produced by 2D X-ray detectors and written in Python"
-HOMEPAGE="https://github.com/silx-kit/fabio"
+DESCRIPTION="PyFAI is a python libary for azimuthal integration of diffraction data acquired with 2D detectors"
+HOMEPAGE="https://pyfai.readthedocs.io"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
@@ -22,7 +22,6 @@ RDEPEND="
 	dev-python/PyQt5
 	dev-python/matplotlib
 	dev-python/fabio
-
 	dev-python/numpy
 	sci-libs/scipy
 	dev-python/pyopencl
@@ -30,7 +29,6 @@ RDEPEND="
 	dev-python/numexpr
 	sci-libs/fftw
 "
-#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
