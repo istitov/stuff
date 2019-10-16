@@ -5,18 +5,20 @@ EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit fdo-mime gnome2-utils python-single-r1 subversion autotools
+inherit fdo-mime gnome2-utils python-single-r1
 
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
 HOMEPAGE="http://gwyddion.net/"
-ESVN_REPO_URI="https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion"
-ESVN_PROJECT="gwyddion-code"
-ESVN_BOOTSTRAP="autogen.sh"
+SRC_URI="http://gwyddion.net/download/${PV}/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X"
+IUSE="doc fits fftw gnome nls opengl perl python ruby sourceview xml X"
+
+DEPEND="
+	sci-libs/fftw
+"
 
 RDEPEND="
 	media-libs/libpng:0=
@@ -25,6 +27,7 @@ RDEPEND="
 	x11-libs/libXmu
 	x11-libs/pango
 	fits? ( sci-libs/cfitsio )
+	fftw? ( sci-libs/fftw:3.0= )
 	gnome? ( gnome-base/gconf:2 )
 	opengl? ( virtual/opengl x11-libs/gtkglext )
 	perl? ( dev-lang/perl:= )
@@ -37,27 +40,36 @@ RDEPEND="
 	xml? ( dev-libs/libxml2:2 )"
 
 DEPEND="${RDEPEND}
-	sci-libs/fftw
 	virtual/pkgconfig
-	media-gfx/inkscape
-	media-gfx/pngcrush
-	dev-util/gtk-doc
+	doc? ( dev-util/gtk-doc )
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-src_configure() {
-	./autogen.sh
-	#./configure --prefix="${A}"
-	#default
+pkg_setup() {
+	use python && python-single-r1_pkg_setup
 }
 
-src_compile() {
-	emake
+src_configure() {
+	econf \
+		--disable-rpath \
+		--without-kde4-thumbnailer \
+		$(use_enable doc gtk-doc) \
+		$(use_enable nls) \
+		$(use_enable python pygwy) \
+		$(use_enable fits cfitsio) \
+		$(use_with perl) \
+		$(use_with python) \
+		$(use_with ruby) \
+		$(use_with fftw fftw3) \
+		$(use_with opengl gl) \
+		$(use_with sourceview gtksourceview) \
+		$(use_with xml libxml2) \
+		$(use_with X x)
 }
 
 src_install() {
-	make DESTDIR="${D}" install
+	default
 	use python && dodoc modules/pygwy/README.pygwy
 }
 
