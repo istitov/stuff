@@ -7,13 +7,13 @@ PYTHON_COMPAT=( python3_5 python3_6 python3_7)
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="HyperSpy is an open source Python library which provides tools to facilitate the interactive data analysis of multidimensional datasets"
+DESCRIPTION="HyperSpy provides tools for the interactive analysis of multidimensional datasets"
 HOMEPAGE="https://hyperspy.org/"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64 ~x86"
 IUSE="learning gui-jupyter python gui-traitsui mrcz speed tests doc"
 
 RDEPEND="
@@ -37,15 +37,14 @@ RDEPEND="
 	dev-python/numexpr
 	dev-python/sparse
 	dev-python/imageio
-
 	learning? ( sci-libs/scikits_learn )
-	mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
 	speed? ( dev-python/numba dev-python/cython )
-	tests? ( >=dev-python/pytest-3.6 dev-python/pytest-mpl >=dev-python/matplotlib-3.1 )  		doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
+	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
 "
+	#tests? ( >=dev-python/pytest-3.6 dev-python/pytest-mpl >=dev-python/matplotlib-3.1 )
+	#mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
 	#gui-jupyter? ( >=hyperspy_gui_ipywidgets-1.1.0 )
 	#gui-traitsui? ( >=hyperspy_gui_traitsui-1.1.0 )
-
 
 #dev-python/PyQt4
 
@@ -72,7 +71,6 @@ python_compile_all() {
 python_test() {
 	setup.py test
 }
-
 
 python_install_all() {
 	distutils-r1_python_install_all

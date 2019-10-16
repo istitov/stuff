@@ -7,13 +7,13 @@ PYTHON_COMPAT=( python2_7 python3_4 python3_5 python3_6 python3_7)
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="FabIO is an I/O library for images produced by 2D X-ray detectors and written in Python"
+DESCRIPTION="FabIO is an I/O library for images produced by 2D X-ray detectors"
 HOMEPAGE="https://github.com/silx-kit/fabio"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
@@ -45,7 +45,6 @@ python_compile_all() {
 python_test() {
 	setup.py test
 }
-
 
 python_install_all() {
 	distutils-r1_python_install_all

@@ -7,13 +7,13 @@ PYTHON_COMPAT=( python2_7 python3_5 python3_6 )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Python wrappers for generating CTest and submitting to CDash without a CMake build system"
+DESCRIPTION="Python wrappers for generating CTest and submitting to CDash without a CMake"
 HOMEPAGE="https://github.com/jrmadsen/pyctest"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
@@ -39,7 +39,6 @@ python_compile_all() {
 python_test() {
 	setup.py test
 }
-
 
 python_install_all() {
 	distutils-r1_python_install_all
