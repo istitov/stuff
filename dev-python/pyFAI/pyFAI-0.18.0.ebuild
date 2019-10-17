@@ -27,7 +27,7 @@ RDEPEND="
 	dev-python/pyopencl
 	dev-python/silx
 	dev-python/numexpr
-	sci-libs/fftw
+	sci-libs/fftw:3.0
 "
 
 DEPEND="${RDEPEND}
