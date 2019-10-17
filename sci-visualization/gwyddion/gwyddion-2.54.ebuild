@@ -13,7 +13,9 @@ SRC_URI="http://gwyddion.net/download/${PV}/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
+
 KEYWORDS="~amd64 ~x86"
+
 IUSE="doc fits fftw gnome nls opengl perl python ruby sourceview xml X"
 
 DEPEND="
