@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -15,8 +15,8 @@ ESVN_BOOTSTRAP="autogen.sh"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="doc fits fftw gnome nls opengl perl python ruby sourceview xml X"
+KEYWORDS="~amd64 ~x86"
+IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X"
 
 RDEPEND="
 	media-libs/libpng:0=
@@ -41,12 +41,12 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	media-gfx/inkscape
 	media-gfx/pngcrush
-	doc? ( dev-util/gtk-doc )
+	dev-util/gtk-doc
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-src_configure() { 
+src_configure() {
 	./autogen.sh
 	#./configure --prefix="${A}"
 	#default
