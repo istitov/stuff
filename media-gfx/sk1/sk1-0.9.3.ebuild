@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="5"
@@ -13,7 +13,7 @@ DESCRIPTION="sK1 vector graphics editor"
 HOMEPAGE="http://www.sk1project.org"
 SRC_URI="mirror://sourceforge/project/${PN}/${PN}/${MY_PN}_v.${PV}/${PN}-${PV}.tar.gz"
 LICENSE="|| ( GPL-2 LGPL-2 )"
-SLOT="0"
+SLOT="0.9"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
