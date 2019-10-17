@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -14,7 +14,8 @@ SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="learning gui-jupyter python gui-traitsui mrcz speed tests doc"
+#IUSE="learning gui-jupyter python gui-traitsui mrcz speed tests doc"
+IUSE="python doc"
 
 RDEPEND="
 	>=dev-python/numpy-1.10
@@ -37,14 +38,16 @@ RDEPEND="
 	dev-python/numexpr
 	dev-python/sparse
 	dev-python/imageio
-	learning? ( sci-libs/scikits_learn )
-	speed? ( dev-python/numba dev-python/cython )
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
 "
-	#tests? ( >=dev-python/pytest-3.6 dev-python/pytest-mpl >=dev-python/matplotlib-3.1 )
-	#mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
-	#gui-jupyter? ( >=hyperspy_gui_ipywidgets-1.1.0 )
-	#gui-traitsui? ( >=hyperspy_gui_traitsui-1.1.0 )
+
+	#learning? ( sci-libs/scikits_learn )
+	#speed? ( dev-python/numba dev-python/cython )
+
+	##tests? ( >=dev-python/pytest-3.6 dev-python/pytest-mpl >=dev-python/matplotlib-3.1 )
+	##mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
+	##gui-jupyter? ( >=hyperspy_gui_ipywidgets-1.1.0 )
+	##gui-traitsui? ( >=hyperspy_gui_traitsui-1.1.0 )
 
 #dev-python/PyQt4
 
