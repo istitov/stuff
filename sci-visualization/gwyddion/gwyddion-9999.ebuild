@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,16 +11,12 @@ DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
 HOMEPAGE="http://gwyddion.net/"
 ESVN_REPO_URI="https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion"
 ESVN_PROJECT="gwyddion-code"
+ESVN_BOOTSTRAP="autogen.sh"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="doc fits fftw gnome nls opengl perl python ruby sourceview xml X"
-
-DEPEND="
-	sci-libs/fftw
-	dev-ruby/narray
-"
+KEYWORDS=""
+IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X"
 
 RDEPEND="
 	media-libs/libpng:0=
@@ -29,7 +25,6 @@ RDEPEND="
 	x11-libs/libXmu
 	x11-libs/pango
 	fits? ( sci-libs/cfitsio )
-	fftw? ( sci-libs/fftw:3.0= )
 	gnome? ( gnome-base/gconf:2 )
 	opengl? ( virtual/opengl x11-libs/gtkglext )
 	perl? ( dev-lang/perl:= )
@@ -42,24 +37,28 @@ RDEPEND="
 	xml? ( dev-libs/libxml2:2 )"
 
 DEPEND="${RDEPEND}
+	sci-libs/fftw
 	virtual/pkgconfig
-	doc? ( dev-util/gtk-doc )
+	<=media-gfx/inkscape-0.92.4
+	media-gfx/pngcrush
+	dev-util/gtk-doc
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-pkg_setup() {
-	use python && python-single-r1_pkg_setup
-}
-
 src_configure() {
 	./autogen.sh
+	#./configure --prefix="${A}"
+	#default
+}
+
+src_compile() {
+	emake
 }
 
 src_install() {
-	#default
-	make
-	#use python && dodoc modules/pygwy/README.pygwy
+	make DESTDIR="${D}" install
+	use python && dodoc modules/pygwy/README.pygwy
 }
 
 pkg_postinst() {
