@@ -39,7 +39,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	sci-libs/fftw
 	virtual/pkgconfig
-	media-gfx/inkscape
+	<=media-gfx/inkscape-0.92.4
 	media-gfx/pngcrush
 	dev-util/gtk-doc
 "
