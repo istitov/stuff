@@ -15,7 +15,7 @@ ESVN_BOOTSTRAP="autogen.sh"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X"
 
 RDEPEND="
@@ -39,7 +39,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	sci-libs/fftw
 	virtual/pkgconfig
-	media-gfx/inkscape
+	<=media-gfx/inkscape-0.92.4
 	media-gfx/pngcrush
 	dev-util/gtk-doc
 "
