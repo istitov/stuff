@@ -13,7 +13,7 @@ SRC_URI="http://download.videolan.org/pub/videolan/x264/snapshots/${MY_P}.tar.bz
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~mips ppc ppc64 sparc x86"
 IUSE="10bit custom-cflags debug +interlaced pic static-libs +threads"
 
 RDEPEND=""
