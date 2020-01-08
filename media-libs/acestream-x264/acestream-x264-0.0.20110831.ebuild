@@ -18,8 +18,7 @@ IUSE="10bit custom-cflags debug +interlaced pic static-libs +threads"
 
 RDEPEND=""
 DEPEND="amd64? ( >=dev-lang/yasm-1 )
-	x86? ( >=dev-lang/yasm-1 )
-	x86-fbsd? ( >=dev-lang/yasm-1 )"
+	x86? ( >=dev-lang/yasm-1 )"
 
 S="${WORKDIR}/${MY_P}"
 
