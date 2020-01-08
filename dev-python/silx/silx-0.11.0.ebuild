@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python2_7 python3_5 python3_6 python3_7)
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="A collection of Python packages to support the development of data assessment, reduction and analysis at synchrotron radiation facilities"
+DESCRIPTION="Python packages collection for synchrotron data manipulation"
 HOMEPAGE="http://www.silx.org/"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
