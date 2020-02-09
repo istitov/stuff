@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
@@ -13,7 +13,7 @@ KEYWORDS=""
 SLOT="0"
 IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads"
 
-DEPEND="virtual/pam
+DEPEND="sys-libs/pam
 	>=net-libs/c-client-2007f-r4
 	sys-libs/ncurses:0
 	>=dev-libs/openssl-1.0.1c

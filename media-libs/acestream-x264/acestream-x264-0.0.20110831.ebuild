@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=4
@@ -13,13 +13,12 @@ SRC_URI="http://download.videolan.org/pub/videolan/x264/snapshots/${MY_P}.tar.bz
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~mips ppc ppc64 sparc x86"
 IUSE="10bit custom-cflags debug +interlaced pic static-libs +threads"
 
 RDEPEND=""
 DEPEND="amd64? ( >=dev-lang/yasm-1 )
-	x86? ( >=dev-lang/yasm-1 )
-	x86-fbsd? ( >=dev-lang/yasm-1 )"
+	x86? ( >=dev-lang/yasm-1 )"
 
 S="${WORKDIR}/${MY_P}"
 

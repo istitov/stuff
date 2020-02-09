@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="5"
@@ -16,7 +16,7 @@ EGIT_REPO_URI="https://github.com/eonpatapon/mpDris2.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~amd64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE=""
 
 LANGS="fr nl"
@@ -26,8 +26,7 @@ for lang in ${LANGS}; do
 done
 
 #DEPEND=">=dev-lang/python-2.4
-DEPEND="python_targets_python3_4? ( dev-lang/python:3.4 )
-	python_targets_python3_5? ( dev-lang/python:3.5 )
+DEPEND="python_targets_python3_5? ( dev-lang/python:3.5 )
 	python_targets_python3_6? ( dev-lang/python:3.6 )
 	>=dev-python/dbus-python-0.80
 	>=dev-python/pygobject-2.14

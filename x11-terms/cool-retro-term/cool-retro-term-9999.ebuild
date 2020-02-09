@@ -1,9 +1,11 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit qmake-utils eutils
+inherit gnome2-utils qmake-utils
+
+QTW_PN=qmltermwidget
 
 DESCRIPTION="A good looking terminal emulator which mimics the old cathode display"
 HOMEPAGE="https://github.com/Swordfish90/cool-retro-term"
@@ -23,32 +25,32 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	>=dev-qt/qtquickcontrols-5.2.0:5[widgets]
-	>=dev-qt/qtgraphicaleffects-5.2.0:5
-	>=dev-qt/qtdeclarative-5.2.0:5[localstorage]
+	dev-qt/qtdeclarative:5[localstorage]
+	dev-qt/qtgraphicaleffects:5
+	dev-qt/qtquickcontrols:5[widgets]
+	dev-qt/qtsql:5
+	dev-qt/qtwidgets:5
 "
 
 RDEPEND="${DEPEND}"
 
-src_prepare(){
-	sed -i '/qmltermwidget/d' ${PN}.pro
-	eapply_user
+src_prepare() {
+	default
+
+#	rmdir qmltermwidget || die
+#	mv "${WORKDIR}/${QTW_P}" qmltermwidget || die
 }
 
-src_configure(){
-	local myeqmakeargs=(
-		${PN}.pro
-		PREFIX="${EPREFIX}/usr"
-		DESKTOPDIR="${EPREFIX}/usr/share/applications"
-		ICONDIR="${EPREFIX}/usr/share/pixmaps"
-	)
-	eqmake5 ${myeqmakeargs[@]} || die "Failed"
+src_configure() {
+	eqmake5 PREFIX="${EPREFIX}/usr"
 }
 
-src_compile(){
-	emake INSTALL_ROOT="${D}" || die "Compilation failed"
+src_install() {
+	# default attempts to install directly to /usr
+	emake INSTALL_ROOT="${D}" install
+	doman packaging/debian/cool-retro-term.1
 }
 
-src_install(){
-	emake INSTALL_ROOT="${D}" install || die "Failed installation"
-}
+pkg_preinst() { gnome2_icon_savelist; }
+pkg_postinst() { gnome2_icon_cache_update; }
+pkg_postrm() { gnome2_icon_cache_update; }

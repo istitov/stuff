@@ -1,7 +1,7 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI="6"
 
 inherit qmake-utils eapi7-ver
 
@@ -31,6 +31,7 @@ DEPEND="${RDEPEND}"
 
 src_prepare(){
 	sed 's|/usr/local/bin|/usr/bin|' -i mytetra.pro
+	eapply_user
 }
 
 src_compile(){

@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -19,7 +19,7 @@ IUSE="avahi doc gtk +gtk3 server static-libs"
 RDEPEND="dev-libs/glib:2
 	dev-libs/libxml2
 	net-libs/gnutls
-	virtual/pam
+	sys-libs/pam
 	virtual/gsasl
 	avahi? ( net-dns/avahi )
 	gtk3? ( x11-libs/gtk+:3 )
