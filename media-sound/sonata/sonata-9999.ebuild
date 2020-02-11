@@ -36,7 +36,7 @@ src_prepare() {
 	local lang
 		for lang in ${LANGS}; do
 			if ! use l10n_${lang}; then
-				rm po/${lang}.po || die "failed to remove nls"
+				rm po/${lang/-/_}.po || die "failed to remove nls"
 			fi
 		done
 }
