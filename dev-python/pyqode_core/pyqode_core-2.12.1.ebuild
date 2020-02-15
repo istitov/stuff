@@ -7,7 +7,6 @@ PYTHON_COMPAT=( python3_5 python3_6 python3_7)
 
 inherit distutils-r1 flag-o-matic
 
-
 MYPN="${PN/pyqode_core/pyqode.core}"
 MYP="${MYPN}-${PV}"
 
@@ -21,9 +20,9 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python doc test"
 
 RDEPEND="
-    dev-python/pygments
-    dev-python/future
-    dev-python/pyqode_qt
+	dev-python/pygments
+	dev-python/future
+	dev-python/pyqode_qt
 "
 #    pyqode-uic? ( )
 #    test? ('pytest-xdist', 'pytest-cov', 'pytest-pep8', 'pytest')

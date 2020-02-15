@@ -15,14 +15,14 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 #IUSE="mrcz tests"
-IUSE="python doc +learning +gui-jupyter +speed +gui-traitsui"
+IUSE="python doc +learning +gui-jupyter +speed +gui-traitsui mrcz"
 
 RDEPEND="
 	>=dev-python/numpy-1.10
 	>=sci-libs/scipy-0.15
 	dev-python/natsort
 	>=dev-python/matplotlib-2.2.3
-	!=dev-python/numpy-1.13.0
+	!~dev-python/numpy-1.13.0
 	>=dev-python/traits-4.5.0
 	dev-python/requests
 	>=dev-python/tqdm-0.4.9
@@ -55,7 +55,6 @@ PDEPEND="
 	gui-jupyter? ( >=dev-python/hyperspy-gui-ipywidgets-1.1.0 )
 	gui-traitsui? ( >=dev-python/hyperspy-gui-traitsui-1.1.0 )
 "
-
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 

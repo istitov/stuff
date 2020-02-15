@@ -25,7 +25,6 @@ RDEPEND="
 	dev-python/link-traits
 "
 
-
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 "

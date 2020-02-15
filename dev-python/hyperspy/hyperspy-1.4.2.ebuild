@@ -22,7 +22,7 @@ RDEPEND="
 	>=sci-libs/scipy-0.15
 	dev-python/natsort
 	>=dev-python/matplotlib-2.2.3
-	!=dev-python/numpy-1.13.0
+	!~dev-python/numpy-1.13.0
 	>=dev-python/traits-4.5.0
 	dev-python/requests
 	>=dev-python/tqdm-0.4.9

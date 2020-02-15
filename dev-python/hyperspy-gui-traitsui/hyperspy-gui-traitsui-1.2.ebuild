@@ -24,7 +24,6 @@ RDEPEND="
 	>=dev-python/traitsui-6.0
 "
 
-
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 "
@@ -35,7 +34,6 @@ S="${WORKDIR}/${MYP}"
 
 python_compile() {
 	distutils-r1_python_compile
-
 }
 
 python_compile_all() {

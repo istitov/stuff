@@ -7,11 +7,10 @@ PYTHON_COMPAT=( python3_5 python3_6 python3_7)
 
 inherit distutils-r1 flag-o-matic
 
-
 MYPN="${PN/pyqode_python/pyqode.python}"
 MYP="${MYPN}-${PV}"
 
-DESCRIPTION="pyqode.python adds python support to pyQode (code completion, calltips, …)"
+DESCRIPTION="pyqode.python adds python support to pyQode (code completion, calltips, etc)"
 HOMEPAGE="https://github.com/pyQode/pyqode.python"
 SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
 
@@ -21,15 +20,14 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python doc pyqt-distutils pyqode-uic test"
 
 RDEPEND="
-    dev-python/traits
-    dev-python/docutils
-    dev-python/jedi
-    dev-python/pyflakes
-    dev-python/pycodestyle
-    dev-python/pyqode_qt
-    dev-python/pyqode_core
-    pyqt-distutils? ( dev-python/pyqt-distutils )
-
+	dev-python/traits
+	dev-python/docutils
+	dev-python/jedi
+	dev-python/pyflakes
+	dev-python/pycodestyle
+	dev-python/pyqode_qt
+	dev-python/pyqode_core
+	pyqt-distutils? ( dev-python/pyqt-distutils )
 "
 #    pyqode-uic? ( )
 #    test? ('pytest-cov', 'pytest-pep8', 'pytest')

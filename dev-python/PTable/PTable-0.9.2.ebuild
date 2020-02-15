@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_5 python3_6 python3_7)
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="PTable is a simple Python library designed to make it quick and easy to represent tabular data in visually appealing ASCII tables, originally forked from PrettyTable"
+DESCRIPTION="Represents tabular data in visually appealing ASCII tables, fork of PrettyTable"
 HOMEPAGE="https://github.com/kxxoling/PTable"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 

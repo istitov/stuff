@@ -27,12 +27,11 @@ RDEPEND="
 	dev-python/PyQt5[webkit]
 	dev-python/qtconsole
 	dev-python/autopep8
-       	dev-python/pyqode_python
-        test? ( dev-python/pytest-qt dev-python/pytest-cov )
+	dev-python/pyqode_python
 "
 
-
 DEPEND="${RDEPEND}
+	test? ( dev-python/pytest-qt dev-python/pytest-cov )
 	doc? ( dev-util/gtk-doc )
 "
 

@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_5 python3_6 python3_7)
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Contains a toolkit-independent GUI abstraction layer, which is used to support the visualization features of the Traits package"
+DESCRIPTION="Toolkit-independent GUI abstraction layer for visualization features of Traits"
 HOMEPAGE="https://docs.enthought.com/pyface/"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
@@ -17,10 +17,10 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python doc +wx +pyqt5 +pyside"
 
 RDEPEND="
-    dev-python/traits
-    pyqt5? ( dev-python/PyQt5 dev-python/pygments )
-    wx? ( >=dev-python/wxpython-2.8.10 dev-python/numpy )
-    pyside? ( >=dev-python/pyside-1.2 dev-python/pygments )
+	dev-python/traits
+	pyqt5? ( dev-python/PyQt5 dev-python/pygments )
+	wx? ( >=dev-python/wxpython-2.8.10:* dev-python/numpy )
+	pyside? ( >=dev-python/pyside-1.2 dev-python/pygments )
 "
 
 DEPEND="${RDEPEND}

@@ -10,7 +10,7 @@ inherit distutils-r1 flag-o-matic
 MYPN="${PN/pyqode_qt/pyqode.qt}"
 MYP="${MYPN}-${PV}"
 
-DESCRIPTION="pyqode.qt is a shim that let you write libraries/applications that supports both PyQt and PySide"
+DESCRIPTION="Shim that let you write applications that supports both PyQt and PySide"
 HOMEPAGE="https://github.com/pyQode/pyqode.qt"
 SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
 
@@ -20,7 +20,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python doc"
 
 RDEPEND="
-    dev-python/PyQt5
+	dev-python/PyQt5
 "
 #        You need *PyQt5* or *PyQt4* or *PySide* installed on your system to make use
 #       of pyqode.qt, obviously.
