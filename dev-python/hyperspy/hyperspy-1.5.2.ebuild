@@ -29,6 +29,7 @@ RDEPEND="
 	dev-python/sympy
 	dev-python/dill
 	>=dev-python/h5py-2.3
+	dev-python/PTable
 	>=dev-python/python-dateutil-2.5.0
 	dev-python/ipyparallel
 	>=dev-python/dask-0.18
@@ -38,6 +39,7 @@ RDEPEND="
 	dev-python/numexpr
 	dev-python/sparse
 	dev-python/imageio
+	dev-python/pyyaml
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
 	learning? ( sci-libs/scikits_learn )
 	speed? ( dev-python/numba dev-python/cython )
