@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>lebedev.vasya@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="wx">
+			To install required libraries for wx support
+		</flag>
+		<flag name="pyqt5">
+			To install required libraries for pyqt5 support
+		</flag>
+		<flag name="pyside">
+			To install required libraries for pyside support
+		</flag>
+	</use>
+</pkgmetadata>

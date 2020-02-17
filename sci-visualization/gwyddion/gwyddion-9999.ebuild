@@ -19,9 +19,12 @@ KEYWORDS=""
 IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X"
 
 RDEPEND="
+	>=dev-libs/glib-2.32
 	media-libs/libpng:0=
 	x11-libs/cairo
-	x11-libs/gtk+:2
+	dev-libs/libzip
+	>=sci-libs/fftw-3.1:3.0=
+	>=x11-libs/gtk+-2.18:2
 	x11-libs/libXmu
 	x11-libs/pango
 	fits? ( sci-libs/cfitsio )
@@ -37,9 +40,8 @@ RDEPEND="
 	xml? ( dev-libs/libxml2:2 )"
 
 DEPEND="${RDEPEND}
-	sci-libs/fftw
 	virtual/pkgconfig
-	<=media-gfx/inkscape-0.92.4
+	<=media-gfx/inkscape-0.92.4-r1
 	media-gfx/pngcrush
 	dev-util/gtk-doc
 "
@@ -48,8 +50,6 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 src_configure() {
 	./autogen.sh
-	#./configure --prefix="${A}"
-	#default
 }
 
 src_compile() {

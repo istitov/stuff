@@ -14,8 +14,8 @@ SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-#IUSE="learning gui-jupyter python gui-traitsui mrcz speed tests doc"
-IUSE="python doc"
+#IUSE="mrcz tests"
+IUSE="python doc +learning +gui-jupyter +speed +gui-traitsui mrcz"
 
 RDEPEND="
 	>=dev-python/numpy-1.10
@@ -29,6 +29,7 @@ RDEPEND="
 	dev-python/sympy
 	dev-python/dill
 	>=dev-python/h5py-2.3
+	dev-python/PTable
 	>=dev-python/python-dateutil-2.5.0
 	dev-python/ipyparallel
 	>=dev-python/dask-0.18
@@ -38,33 +39,27 @@ RDEPEND="
 	dev-python/numexpr
 	dev-python/sparse
 	dev-python/imageio
+	dev-python/pyyaml
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
+	learning? ( sci-libs/scikits_learn )
+	speed? ( dev-python/numba dev-python/cython )
 "
-
-	#learning? ( sci-libs/scikits_learn )
-	#speed? ( dev-python/numba dev-python/cython )
-
 	##tests? ( >=dev-python/pytest-3.6 dev-python/pytest-mpl >=dev-python/matplotlib-3.1 )
 	##mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
-	##gui-jupyter? ( >=hyperspy_gui_ipywidgets-1.1.0 )
-	##gui-traitsui? ( >=hyperspy_gui_traitsui-1.1.0 )
-
-#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
+"
+
+PDEPEND="
+	gui-jupyter? ( >=dev-python/hyperspy-gui-ipywidgets-1.1.0 )
+	gui-traitsui? ( >=dev-python/hyperspy-gui-traitsui-1.1.0 )
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 python_compile() {
 	distutils-r1_python_compile
-# \
-#		$(use_enable learning) \
-#		$(use_enable gui-jupyter) \
-#		$(use_enable gui-traitsui) \
-#		$(use_enable mrcz) \
-#		$(use_enable speed)
 }
 
 python_compile_all() {
