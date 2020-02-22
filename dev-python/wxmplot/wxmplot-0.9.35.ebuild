@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python2_7 python3_5 python3_6 )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="WXMPlot provides advanced wxPython widgets for plotting and image display of numerical data based on matplotlib"
+DESCRIPTION="Provides advanced wxPython widgets for plotting based on matplotlib"
 HOMEPAGE="https://newville.github.io/wxmplot/"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
@@ -41,7 +41,6 @@ python_compile_all() {
 python_test() {
 	setup.py test
 }
-
 
 python_install_all() {
 	distutils-r1_python_install_all

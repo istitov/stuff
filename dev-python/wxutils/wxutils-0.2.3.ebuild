@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="doc python"
 
 RDEPEND="
-	dev-python/wxpython
+	dev-python/wxpython:*
 "
 #dev-python/PyQt4
 
@@ -38,7 +38,6 @@ python_compile_all() {
 python_test() {
 	setup.py test
 }
-
 
 python_install_all() {
 	#setup.py install
