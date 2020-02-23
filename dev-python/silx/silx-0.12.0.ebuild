@@ -13,7 +13,7 @@ SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="doc python"
 
 RDEPEND="
@@ -28,13 +28,16 @@ RDEPEND="
 	dev-python/pyopencl
 	dev-python/mako
 "
-#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+
+#python_prepare() {
+#	rm -rf ${WORKDIR}/${P}/${PN}/third_party/_local
+#}
 
 python_compile() {
 	distutils-r1_python_compile

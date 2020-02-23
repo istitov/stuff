@@ -3,32 +3,23 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python2_7 python3_5 python3_6 )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Libary for azimuthal integration of 2D diffraction data"
-HOMEPAGE="https://pyfai.readthedocs.io"
+DESCRIPTION="A library of convenience functions for wxPython"
+HOMEPAGE="https://github.com/newville/wxutils"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
-LICENSE="MIT"
+LICENSE="BSD"
 SLOT="0"
-KEYWORDS="" #"~amd64 ~x86" #Masked because of silx
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="doc python"
 
 RDEPEND="
-	dev-python/cython
-	dev-python/h5py
-	dev-python/PyQt5
-	dev-python/matplotlib
-	dev-python/fabio
-	dev-python/numpy
-	sci-libs/scipy
-	dev-python/pyopencl
-	dev-python/silx
-	dev-python/numexpr
-	sci-libs/fftw:3.0
+	dev-python/wxpython:*
 "
+#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -49,5 +40,6 @@ python_test() {
 }
 
 python_install_all() {
+	#setup.py install
 	distutils-r1_python_install_all
 }
