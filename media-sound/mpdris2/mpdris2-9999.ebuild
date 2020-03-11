@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="5"
-PYTHON_COMPAT=( python3_{4,5,6} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit python-r1 autotools eutils git-r3
 
@@ -26,8 +26,9 @@ for lang in ${LANGS}; do
 done
 
 #DEPEND=">=dev-lang/python-2.4
-DEPEND="python_targets_python3_5? ( dev-lang/python:3.5 )
-	python_targets_python3_6? ( dev-lang/python:3.6 )
+DEPEND="python_targets_python3_6? ( dev-lang/python:3.6 )
+	python_targets_python3_7? ( dev-lang/python:3.7 )
+	python_targets_python3_8? ( dev-lang/python:3.8 )
 	>=dev-python/dbus-python-0.80
 	>=dev-python/pygobject-2.14
 	>=dev-python/python-mpd-0.3.0"
