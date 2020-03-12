@@ -40,7 +40,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
-	<=media-gfx/inkscape-0.92.4-r1
+	~media-gfx/inkscape-0.92.4
 	media-gfx/pngcrush
 	dev-util/gtk-doc
 "
