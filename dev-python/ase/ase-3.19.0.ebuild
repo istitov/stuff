@@ -7,11 +7,11 @@ PYTHON_COMPAT=( python3_5 python3_6 python3_7)
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Set of tools and Python modules for setting up, manipulating, running, visualizing and analyzing atomistic simulations"
+DESCRIPTION="Set of Python modules for atomistic simulations"
 HOMEPAGE="http://wiki.fysik.dtu.dk/ase"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
-LICENSE="LGPL"
+LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc examples test"
