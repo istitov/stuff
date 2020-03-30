@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="5"
-PYTHON_COMPAT=( python3_{2,3,4,5,6} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1 python-r1 git-r3
 
@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="dbus mpd taglib"
 
-LANGS="ar be ca cs da de el es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
+LANGS="ar be ca cs da de el-GR es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
 for X in ${LANGS} ; do
 	IUSE+=" l10n_${X}"
 done
@@ -36,7 +36,7 @@ src_prepare() {
 	local lang
 		for lang in ${LANGS}; do
 			if ! use l10n_${lang}; then
-				rm po/${lang}.po || die "failed to remove nls"
+				rm po/${lang/-/_}.po || die "failed to remove nls"
 			fi
 		done
 }
