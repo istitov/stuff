@@ -35,9 +35,10 @@ DEPEND="${RDEPEND}
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-#python_prepare() {
-#	rm -rf ${WORKDIR}/${P}/${PN}/third_party/_local
-#}
+src_unpack() {
+	default
+	rm -rf ${WORKDIR}/${P}/${PN}/third_party/_local
+}
 
 python_compile() {
 	distutils-r1_python_compile
