@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python3_{6,7} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -20,7 +20,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python doc"
 
 RDEPEND="
-	dev-python/PyQt5
+	dev-python/PyQt5[${PYTHON_USEDEP}]
 "
 #        You need *PyQt5* or *PyQt4* or *PySide* installed on your system to make use
 #       of pyqode.qt, obviously.
