@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -21,8 +21,7 @@ DEPEND="dev-python/setuptools
 	doc? ( dev-python/sphinx )
 	test? ( dev-python/numpy )"
 
-DOCS="docs/*.txt"
-#PYTHON_CFLAGS=("2.* + -fno-strict-aliasing")
+#DOCS="docs/*.txt"
 
 python_compile() {
 	distutils-r1_python_compile
