@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python3_{5,6,7} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -17,8 +17,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="+python doc"
 
 RDEPEND="
-	dev-python/nose
-	dev-python/coverage
+	dev-python/nose[${PYTHON_USEDEP}]
+	dev-python/coverage[${PYTHON_USEDEP}]
 "
 #coveralls
 
