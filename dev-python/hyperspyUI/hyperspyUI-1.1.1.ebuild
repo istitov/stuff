@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -17,21 +17,21 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python doc test"
 
 RDEPEND="
-	>=dev-python/hyperspy-1.4.1
-	>=dev-python/hyperspy-gui-traitsui-1.1.1
-	>=dev-python/traitsui-5.2.0
-	>=dev-python/pyface-6.0.0
-	>=dev-python/matplotlib-1.3
-	dev-python/traits
-	dev-python/QtPy
-	dev-python/PyQt5[webkit]
-	dev-python/qtconsole
-	dev-python/autopep8
-	dev-python/pyqode_python
+	>=dev-python/hyperspy-1.4.1[${PYTHON_USEDEP}]
+	>=dev-python/hyperspy-gui-traitsui-1.1.1[${PYTHON_USEDEP}]
+	>=dev-python/traitsui-5.2.0[${PYTHON_USEDEP}]
+	>=dev-python/pyface-6.0.0[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-1.3[${PYTHON_USEDEP}]
+	dev-python/traits[${PYTHON_USEDEP}]
+	dev-python/QtPy[${PYTHON_USEDEP}]
+	dev-python/PyQt5[webkit,${PYTHON_USEDEP}]
+	dev-python/qtconsole[${PYTHON_USEDEP}]
+	dev-python/autopep8[${PYTHON_USEDEP}]
+	dev-python/pyqode_python[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
-	test? ( dev-python/pytest-qt dev-python/pytest-cov )
+	test? ( dev-python/pytest-qt[${PYTHON_USEDEP}] dev-python/pytest-cov[${PYTHON_USEDEP}] )
 	doc? ( dev-util/gtk-doc )
 "
 
