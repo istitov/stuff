@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -20,9 +20,9 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python doc"
 
 RDEPEND="
-	>=dev-python/hyperspy-1.5
-	>=dev-python/ipywidgets-6.0
-	dev-python/link-traits
+	>=dev-python/hyperspy-1.5[${PYTHON_USEDEP}]
+	>=dev-python/ipywidgets-6.0[${PYTHON_USEDEP}]
+	dev-python/link-traits[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}

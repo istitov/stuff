@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -15,34 +15,34 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 #IUSE="mrcz tests"
-IUSE="python doc +learning +gui-jupyter +speed +gui-traitsui mrcz"
+IUSE="python doc +learning +gui-jupyter speed +gui-traitsui mrcz"
 
 RDEPEND="
-	>=dev-python/numpy-1.10
-	>=sci-libs/scipy-0.15
-	dev-python/natsort
-	>=dev-python/matplotlib-2.2.3
+	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
+	>=sci-libs/scipy-0.15[${PYTHON_USEDEP}]
+	dev-python/natsort[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-2.2.3[${PYTHON_USEDEP}]
 	!~dev-python/numpy-1.13.0
-	>=dev-python/traits-4.5.0
-	dev-python/requests
-	>=dev-python/tqdm-0.4.9
-	dev-python/sympy
-	dev-python/dill
-	>=dev-python/h5py-2.3
-	dev-python/PTable
-	>=dev-python/python-dateutil-2.5.0
-	dev-python/ipyparallel
-	>=dev-python/dask-0.18
-	>=sci-libs/scikits_image-0.13
-	>=dev-python/Pint-0.8
-	dev-python/statsmodels
-	dev-python/numexpr
-	dev-python/sparse
-	dev-python/imageio
-	dev-python/pyyaml
+	>=dev-python/traits-4.5.0[${PYTHON_USEDEP}]
+	dev-python/requests[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-0.4.9[${PYTHON_USEDEP}]
+	dev-python/sympy[${PYTHON_USEDEP}]
+	dev-python/dill[${PYTHON_USEDEP}]
+	>=dev-python/h5py-2.3[${PYTHON_USEDEP}]
+	dev-python/PTable[${PYTHON_USEDEP}]
+	>=dev-python/python-dateutil-2.5.0[${PYTHON_USEDEP}]
+	dev-python/ipyparallel[${PYTHON_USEDEP}]
+	>=dev-python/dask-0.18[${PYTHON_USEDEP}]
+	>=sci-libs/scikits_image-0.13[${PYTHON_USEDEP}]
+	>=dev-python/Pint-0.8[${PYTHON_USEDEP}]
+	dev-python/statsmodels[${PYTHON_USEDEP}]
+	dev-python/numexpr[${PYTHON_USEDEP}]
+	dev-python/sparse[${PYTHON_USEDEP}]
+	dev-python/imageio[${PYTHON_USEDEP}]
+	dev-python/pyyaml[${PYTHON_USEDEP}]
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
-	learning? ( sci-libs/scikits_learn )
-	speed? ( dev-python/numba dev-python/cython )
+	learning? ( sci-libs/scikits_learn[${PYTHON_USEDEP}] )
+	speed? ( dev-python/numba[${PYTHON_USEDEP}] dev-python/cython[${PYTHON_USEDEP}] )
 "
 	##tests? ( >=dev-python/pytest-3.6 dev-python/pytest-mpl >=dev-python/matplotlib-3.1 )
 	##mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
