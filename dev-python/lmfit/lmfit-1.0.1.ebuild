@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python3_{5,6,7,8} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -21,7 +21,6 @@ RDEPEND="
 	>=dev-python/numpy-1.10
 	>=sci-libs/scipy-0.19
 	>=dev-python/uncertainties-3.0
-	>=dev-python/six-1.10
 "
 #dev-python/PyQt4
 

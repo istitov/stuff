@@ -3,12 +3,12 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python2_7 python3_{6,7,8} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="A library for least-squares minimization and data fitting in Python"
-HOMEPAGE="https://lmfit.github.io/lmfit-py/"
+DESCRIPTION="Pyshortcuts helps to create desktop shortcuts that will run python scripts"
+HOMEPAGE="https://github.com/newville/pyshortcuts"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
@@ -17,11 +17,6 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	>=dev-python/asteval-0.9.12
-	>=dev-python/numpy-1.10
-	>=sci-libs/scipy-0.19
-	>=dev-python/uncertainties-3.0
-	>=dev-python/six-1.10
 "
 #dev-python/PyQt4
 

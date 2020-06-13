@@ -6,7 +6,7 @@ language: python
 python:
     - "3.7"
 env:
-    - PORTAGE_VER="2.3.94"
+    - PORTAGE_VER="2.3.100"
 before_install:
     - sudo apt-get -qq update
     - pip install lxml pyyaml
@@ -31,4 +31,3 @@ before_script:
 script:
     - ./../spinner.sh "python ../portage-portage-${PORTAGE_VER}/repoman/bin/repoman full -d"
 # You can append own scripts after this line
-

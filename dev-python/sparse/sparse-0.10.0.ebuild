@@ -3,27 +3,23 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8})
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Toolkit-independent GUI abstraction layer for visualization features of Traits"
-HOMEPAGE="https://docs.enthought.com/traitsui/"
+DESCRIPTION="Sparse multi-dimensional arrays for the PyData ecosystem"
+HOMEPAGE="https://github.com/pydata/sparse/"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+python doc +wx +pyqt5 +pyside +demo"
+IUSE="doc python"
 
 RDEPEND="
-	dev-python/traits
-	dev-python/six
-	>=dev-python/pyface-6.0.0[wx=,pyqt5=,pyside=]
-	wx? ( >=dev-python/wxpython-2.8.10:* dev-python/numpy )
-	pyqt5? ( dev-python/PyQt5 dev-python/pygments )
-	pyside? ( >=dev-python/pyside-1.2 dev-python/pygments )
-	demo? ( dev-python/configobj )
+	>=dev-python/numpy-1.13
+	>=sci-libs/scipy-0.19
+	>=dev-python/numba-0.39
 "
 
 DEPEND="${RDEPEND}

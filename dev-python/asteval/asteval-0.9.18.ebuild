@@ -3,20 +3,22 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Pyshortcuts helps to create desktop shortcuts that will run python scripts"
-HOMEPAGE="https://github.com/newville/pyshortcuts"
+DESCRIPTION="ASTEVAL provides a numpy-aware, safe(ish) eval function"
+HOMEPAGE="https://github.com/newville/asteval"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
-LICENSE="BSD"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
+	>=dev-python/numpy-1.6
+	dev-python/six
 "
 #dev-python/PyQt4
 
