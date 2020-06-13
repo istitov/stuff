@@ -3,7 +3,8 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python3_{6,7} )
+#python2_7 masked because of h5py
 
 inherit distutils-r1 flag-o-matic
 
@@ -13,20 +14,20 @@ SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="" #"~amd64 ~x86" #Masked because of silx
+KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	dev-python/cython
-	dev-python/h5py
-	dev-python/PyQt5
-	dev-python/matplotlib
-	dev-python/fabio
-	dev-python/numpy
-	sci-libs/scipy
-	dev-python/pyopencl
-	dev-python/silx
-	dev-python/numexpr
+	dev-python/cython[${PYTHON_USEDEP}]
+	dev-python/h5py[${PYTHON_USEDEP}]
+	dev-python/PyQt5[${PYTHON_USEDEP}]
+	dev-python/matplotlib[${PYTHON_USEDEP}]
+	dev-python/fabio[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	sci-libs/scipy[${PYTHON_USEDEP}]
+	dev-python/pyopencl[${PYTHON_USEDEP}]
+	dev-python/silx[${PYTHON_USEDEP}]
+	dev-python/numexpr[${PYTHON_USEDEP}]
 	sci-libs/fftw:3.0
 "
 
