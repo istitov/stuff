@@ -15,7 +15,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 #IUSE="mrcz tests"
-IUSE="python doc +learning +gui-jupyter +speed +gui-traitsui mrcz"
+IUSE="python doc +learning +gui-jupyter speed +gui-traitsui mrcz"
 
 RDEPEND="
 	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
