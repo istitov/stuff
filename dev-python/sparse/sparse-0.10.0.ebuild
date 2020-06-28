@@ -19,7 +19,7 @@ IUSE="doc python"
 RDEPEND="
 	>=dev-python/numpy-1.13
 	>=sci-libs/scipy-0.19
-	>=dev-python/numba-0.39
+	>=dev-python/numba-0.49
 "
 
 DEPEND="${RDEPEND}
