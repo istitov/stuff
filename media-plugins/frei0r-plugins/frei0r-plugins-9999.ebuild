@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit cmake-utils multilib git-r3
+inherit cmake multilib git-r3
 
 DESCRIPTION="A minimalistic plugin API for video effects"
 HOMEPAGE="http://www.dyne.org/software/frei0r/"
@@ -41,11 +41,11 @@ src_configure() {
 		-DWITHOUT_GAVL=OFF
 		-DWITHOUT_OPENCV=ON
 	 )
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_compile() {
-	cmake-utils_src_compile
+	cmake_src_compile
 
 	if use doc; then
 		pushd doc
@@ -55,7 +55,7 @@ src_compile() {
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	use doc && dohtml -r doc/html
 }

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit cmake-utils git-r3
+inherit cmake git-r3
 DESCRIPTION="Small defragmentation tool for reiserfs"
 HOMEPAGE="https://github.com/i-rinat/reiserfs-defrag"
 EGIT_REPO_URI="git://github.com/i-rinat/reiserfs-defrag.git"

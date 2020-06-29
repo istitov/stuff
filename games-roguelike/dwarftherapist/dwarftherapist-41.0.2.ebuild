@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="Dwarf (The)rapist for Dwarf Fortress."
 HOMEPAGE="https://github.com/Dwarf-Therapist/Dwarf-Therapist"
@@ -31,11 +31,11 @@ RDEPEND="${DEPEND}"
 
 src_configure() {
 #	emake \"PREFIX="${D}"\"
-cmake-utils_src_configure
+cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install || die "Install failed"
+	cmake_src_install || die "Install failed"
 	dodoc README.rst
 	dodoc CHANGELOG.txt
 	dodoc LICENSE.txt

@@ -4,7 +4,7 @@
 EAPI=6
 
 MY_PN="QtAV"
-inherit cmake-utils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="Multimedia playback framework based on Qt + FFmpeg"
 HOMEPAGE="https://www.qtav.org"
@@ -40,7 +40,7 @@ RDEPEND="${DEPEND}"
 PATCHES=( "${FILESDIR}/${P}-multilib.patch" )
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -54,5 +54,5 @@ src_configure() {
 		-DHAVE_VAAPI=$(usex vaapi)
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }

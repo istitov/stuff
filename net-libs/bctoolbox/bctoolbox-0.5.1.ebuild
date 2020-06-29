@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="Utilities library used by Belledonne Communications softwares"
 HOMEPAGE="https://www.linphone.org/ https://savannah.nongnu.org/projects/linphone/"
@@ -24,5 +24,5 @@ src_configure() {
 		-DENABLE_TESTS=NO
 		-DENABLE_TESTS_COMPONENT=NO
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }

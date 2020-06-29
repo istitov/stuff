@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit cmake-utils
+inherit cmake
 DESCRIPTION="Disk fragmentation viewer written with boost and gtkmm"
 HOMEPAGE="https://github.com/i-rinat/fragview"
 
@@ -30,6 +30,6 @@ src_prepare() {
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 	dodoc README.md || die "Install failed"
 }
