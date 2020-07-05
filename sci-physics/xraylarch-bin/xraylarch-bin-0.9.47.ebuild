@@ -34,7 +34,7 @@ RDEPEND="
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/psutil[${PYTHON_USEDEP}]
 	dev-python/termcolor[${PYTHON_USEDEP}]
-	dev-python/wxpython[${PYTHON_USEDEP}]
+	dev-python/wxpython:*[${PYTHON_USEDEP}]
 	dev-python/wxmplot[${PYTHON_USEDEP}]
 	dev-python/wxutils[${PYTHON_USEDEP}]
 	sci-libs/scikits_image[${PYTHON_USEDEP}]
@@ -66,7 +66,6 @@ DESTDIR="${D}"
 #python_test() {
 #	setup.py test
 #}
-
 
 python_install_all() {
 #	mkdir "${D}"/bin

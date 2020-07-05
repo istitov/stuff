@@ -3,19 +3,18 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_6 )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit distutils-r1 flag-o-matic git-r3
+inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Software for XRF data analysis"
 HOMEPAGE="https://xraypy.github.io/xraylarch"
-EGIT_REPO_URI="git://github.com/xraypy/xraylarch.git"
+SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 IUSE="doc python"
-PROVIDES_EXCLUDE="/usr/bin/larch"
 
 RDEPEND="
 	>=dev-python/numpy-1.15
@@ -51,9 +50,6 @@ DEPEND="${RDEPEND}
 #	dev-python/tomopy
 #for EPICS pyepics, psycopg2, epicsscan
 
-S="${WORKDIR}/${PN}-${PV}"
-DESTDIR="${D}"
-
 python_compile() {
 	distutils-r1_python_compile
 }
@@ -67,6 +63,5 @@ python_test() {
 }
 
 python_install_all() {
-	mkdir "${D}"/bin
 	distutils-r1_python_install_all
 }
