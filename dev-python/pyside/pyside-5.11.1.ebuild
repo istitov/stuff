@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7} )
 
-inherit cmake-utils python-r1 virtualx
+inherit cmake python-r1 virtualx
 
 DESCRIPTION="Python bindings for the Qt framework"
 HOMEPAGE="https://wiki.qt.io/Qt_for_Python"
@@ -108,7 +108,7 @@ src_prepare() {
 		sed -i -e '1iinclude(rpath.cmake)' CMakeLists.txt || die
 	fi
 
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }
 
 #		-DCMAKE_DISABLE_FIND_PACKAGE_Qt5WebKit=$(usex !webkit)
@@ -163,23 +163,23 @@ src_configure() {
 			"${mycmakeargs[@]}"
 			-DPYTHON_EXECUTABLE="${PYTHON}"
 		)
-		cmake-utils_src_configure
+		cmake_src_configure
 	}
 	python_foreach_impl configuration
 }
 
 src_compile() {
-	python_foreach_impl cmake-utils_src_compile
+	python_foreach_impl cmake_src_compile
 }
 
 src_test() {
 	local -x PYTHONDONTWRITEBYTECODE
-	python_foreach_impl virtx cmake-utils_src_test
+	python_foreach_impl virtx cmake_src_test
 }
 
 src_install() {
 	installation() {
-		cmake-utils_src_install
+		cmake_src_install
 		mv "${ED%/}"/usr/$(get_libdir)/pkgconfig/${PN}2{,-${EPYTHON}}.pc || die
 	}
 	python_foreach_impl installation

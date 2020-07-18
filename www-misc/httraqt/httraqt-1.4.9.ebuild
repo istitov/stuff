@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit l10n cmake-utils # qt4-r2
+inherit l10n cmake # qt4-r2
 
 MY_P=${PN}-${PV}
 

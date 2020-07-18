@@ -3,7 +3,7 @@
 
 EAPI="5"
 
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="Pidgin plugin for vk.com social network"
 HOMEPAGE="https://bitbucket.org/olegoandreev/purple-vk-plugin"

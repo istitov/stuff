@@ -1,9 +1,9 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="Utilities library used by Belledonne Communications softwares"
 HOMEPAGE="https://www.linphone.org/ https://savannah.nongnu.org/projects/linphone/"
@@ -24,5 +24,5 @@ src_configure() {
 		-DENABLE_TESTS=NO
 		-DENABLE_TESTS_COMPONENT=NO
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }

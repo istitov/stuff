@@ -1,10 +1,9 @@
-# Copyright 1999-2020 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 EAPI="7"
 
-inherit cmake-utils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="Elegant and simple audio converter"
 HOMEPAGE="https://github.com/aka-mccloud/amulet.git"
@@ -17,10 +16,10 @@ IUSE="flac mp3"
 
 BDEPEND="virtual/pkgconfig"
 RDEPEND="
-    flac? ( media-libs/flac )
-    mp3? ( media-sound/lame )"
+	flac? ( media-libs/flac )
+	mp3? ( media-sound/lame )"
 DEPEND="
-    media-libs/taglib
-    dev-qt/qtgui:5
-    dev-qt/qtcore:5
-    dev-qt/qtwidgets"
+	media-libs/taglib
+	dev-qt/qtgui:5
+	dev-qt/qtcore:5
+	dev-qt/qtwidgets"
