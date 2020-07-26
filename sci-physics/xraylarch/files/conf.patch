@@ -1,0 +1,10 @@
+--- a/setup.cfg	2020-02-27 18:54:57.000000000 -0000
++++ b/setup.cfg	2020-07-26 22:46:47.750975000 -0000
+@@ -5,6 +5,7 @@
+ versionfile_build = larch/_version.py
+ tag_prefix = 
+ parentdir_prefix = larch-
++unix_installdir = ${D}/usr/share/larch
+ 
+ [bdist_install]
+ universal = 0
