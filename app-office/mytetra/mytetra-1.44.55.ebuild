@@ -29,14 +29,21 @@ RDEPEND="dev-qt/qtgui:5
 
 DEPEND="${RDEPEND}"
 
-src_prepare(){
-	default
-	sed 's|/usr/local/bin|/usr/bin|' -i mytetra.pro
+#https://github.com/xintrea/mytetra_dev/issues/133 has been used
+
+src_prepare() {
+	sed 's|/usr/local/bin|/usr/bin|' -i app/app.pro
 	eapply_user
 }
 
-src_compile(){
-	qmake
+src_configure() {
+	eqmake5 -recursive
+}
+
+src_compile() {
+	emake -C "thirdParty/mimetex" -f Makefile.mimetex
+	emake -C "app" -f Makefile.app
+	emake
 }
 
 src_install() {
