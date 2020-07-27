@@ -5,6 +5,6 @@
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
   <upstream>
-    <remote-id type="github">bruceravel/demeter</remote-id>
+    <remote-id type="github">newville/ifeffit</remote-id>
   </upstream>
 </pkgmetadata>

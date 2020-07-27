@@ -24,7 +24,6 @@ DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 "
 
-
 S="${WORKDIR}/${PN}-${PV}"
 DESTDIR="${D}"
 
@@ -37,9 +36,9 @@ pkg_configure() {
 }
 
 pkg_compile() {
-	make -k
+	make
 }
 
 pkg_install() {
-	make -k install
+	make install
 }
