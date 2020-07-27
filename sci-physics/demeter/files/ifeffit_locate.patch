@@ -1,0 +1,11 @@
+--- a/DemeterBuilder.pm	2020-07-27 13:24:49.427597000 -0000
++++ b/DemeterBuilder.pm	2020-07-27 13:29:45.407625493 -0000
+@@ -283,7 +283,7 @@
+ 
+     } else {
+       ($pgplot_location, $compile_flags, $linker_flags) = (q{}, q{});
+-      $iffdir = `ifeffit -i 2>/dev/null`;
++      $iffdir = '/usr/share/ifeffit';
+       if ($iffdir =~ m{\A\s*\z}) {
+ 	print STDOUT "** Ifeffit is not available.  Install Larch to use Demeter. **\n";
+       } else {
