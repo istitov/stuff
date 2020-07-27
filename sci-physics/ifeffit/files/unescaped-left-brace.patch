@@ -1,0 +1,78 @@
+Description: Fix 'Unescaped left brace' error
+Origin: vendor
+Bug-Debian: https://bugs.debian.org/869436
+Forwarded: no
+Author: gregor herrmann <gregoa@debian.org>
+Last-Update: 2017-07-23
+
+--- a/doc/scripts/latexmk
++++ b/doc/scripts/latexmk
+@@ -1157,7 +1157,7 @@
+ 	}
+       }
+     }
+-    elsif (/\\blackandwhite{([^\001\040\011}]*)}/ || /\\colorslides{([^\001}]*)}/)
++    elsif (/\\blackandwhite\{([^\001\040\011}]*)}/ || /\\colorslides\{([^\001}]*)}/)
+     {
+       $slide_mode = 1;
+       $full_filename = $1;
+@@ -1179,7 +1179,7 @@
+ 	}
+       }
+     }
+-    elsif (/\\psfig{file=([^,}]+)/ || /\\psfig{figure=([^,}]+)/)
++    elsif (/\\psfig\{file=([^,}]+)/ || /\\psfig\{figure=([^,}]+)/)
+     {
+       $full_filename = &find_file($1,$psfigsearchpath);
+       if ($full_filename)
+@@ -1191,9 +1191,9 @@
+ 	}
+       }
+     }
+-    elsif ( /\\epsfbox{([^}]+)}/ || /\\epsfbox\[[^\]]*\]{([^}]+)}/ ||
+-	    /\\epsffile{([^}]+)}/ || /\\epsffile\[[^\]]*\]{([^}]+)}/ ||
+-	    /\\epsfig{file=([^,}]+)/ || /\\epsfig{figure=([^,}]+)/ )
++    elsif ( /\\epsfbox\{([^}]+)}/ || /\\epsfbox\[[^\]]*\]\{([^}]+)}/ ||
++	    /\\epsffile\{([^}]+)}/ || /\\epsffile\[[^\]]*\]\{([^}]+)}/ ||
++	    /\\epsfig\{file=([^,}]+)/ || /\\epsfig\{figure=([^,}]+)/ )
+     {
+       $full_filename = &find_file($1,$TEXINPUTS);
+       if ($full_filename)
+@@ -1210,7 +1210,7 @@
+       warn "	Detected landscape mode\n";
+       $landscape_mode = 1;
+     }
+-    elsif (/\\bibliography{([^}]+)}/)
++    elsif (/\\bibliography\{([^}]+)}/)
+     {
+       $bib_files = $1;
+       $bib_files =~ tr/,/ /;
+@@ -1218,7 +1218,7 @@
+       warn "	Found bibliography files [$bib_files]\n";
+       $bibtex_mode = 1;
+     }
+-    elsif (/\\psfigsearchpath{([^}]+)}/)
++    elsif (/\\psfigsearchpath\{([^}]+)}/)
+     {
+       $psfigsearchpath = $1;
+     }
+--- a/doc/scripts/FixPDFout
++++ b/doc/scripts/FixPDFout
+@@ -11,7 +11,7 @@
+     s/\\_/_/go;
+     s/\\137/_/go;
+     $line = $_;
+-    if (/\\BOOKMARK \[(.*)\]{(.*)}{(.*)}{(.*)}/ ) {
++    if (/\\BOOKMARK \[(.*)\]\{(.*)}\{(.*)}\{(.*)}/ ) {
+  	$n = $1; $x1 = $2;    $x2 = $3;	$x3 = $4;
+ 	$x2 =~ s/\{//go;  
+ 	$x2 =~ s/\}//go; 
+@@ -22,7 +22,7 @@
+ 	$x2 =~ s/ \(k\) / chi(k) /go;
+ 	$x2 =~ s/PD1OT1ptmptmmmnn//go;
+ 	$x2 =~ s/\\(\w*) //go; 
+-	$line = " \\BOOKMARK [$n]{$x1}{$x2}{$x3}"; 
++	$line = " \\BOOKMARK [$n]\{$x1}\{$x2}\{$x3}";
+      }
+     print OUT "$line\n";
+ }

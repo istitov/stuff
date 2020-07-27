@@ -1,0 +1,167 @@
+Description: Remove ifpdf definition in documentation
+ This patch is required for squeeze as the pdflatex package already
+ defines the ifpdf variable and consequently latex fails on compilation
+ of the docuementation.
+ .
+Author: Carlo Segre <segre@debian.org>
+
+--- ifeffit-1.2.11d.orig/doc/Tutorial/ifmacs_ps.tex
++++ ifeffit-1.2.11d/doc/Tutorial/ifmacs_ps.tex
+@@ -1,8 +1,10 @@
+ %%  macros for ifeffit        -*-latex-*-
+ 
+ %%  determine if this is pdflatex or latex
+- \newif\ifpdf
+- \ifx\pdfoutput\undefined{\pdffalse}\else{\pdfoutput=1 \pdftrue}\fi
++% No need for this, use the package (CUS)
++ \usepackage{ifpdf}
++% \newif\ifpdf
++% \ifx\pdfoutput\undefined{\pdffalse}\else{\pdfoutput=1 \pdftrue}\fi
+ % %%% 
+ % 
+  \ifpdf
+--- ifeffit-1.2.11d.orig/doc/Tutorial/ifmacs_pdf.tex
++++ ifeffit-1.2.11d/doc/Tutorial/ifmacs_pdf.tex
+@@ -1,8 +1,10 @@
+ %%  macros for ifeffit        -*-latex-*-
+ 
+ %%  determine if this is pdflatex or latex
+- \newif\ifpdf
+- \ifx\pdfoutput\undefined{\pdffalse}\else{\pdfoutput=1 \pdftrue}\fi
++% No need for this, use the package (CUS)
++ \usepackage{ifpdf}
++% \newif\ifpdf
++% \ifx\pdfoutput\undefined{\pdffalse}\else{\pdfoutput=1 \pdftrue}\fi
+ % %%% 
+ % 
+  \ifpdf
+--- ifeffit-1.2.11d.orig/doc/RefMan/ifmacs.tex
++++ ifeffit-1.2.11d/doc/RefMan/ifmacs.tex
+@@ -1,8 +1,10 @@
+-pho%%  macros for ifeffit        -*-latex-*-
++%%  macros for ifeffit        -*-latex-*-
+ 
+ %%  determine if this is pdflatex or latex
+- \newif\ifpdf
+- \ifx\pdfoutput\undefined{\pdffalse}\else{\pdfoutput=1 \pdftrue}\fi
++% No need for this, use the package (CUS)
++ \usepackage{ifpdf}
++% \newif\ifpdf
++% \ifx\pdfoutput\undefined{\pdffalse}\else{\pdfoutput=1 \pdftrue}\fi
+ % %%% 
+ % 
+  \ifpdf
+--- ifeffit-1.2.11d.orig/doc/RefMan/fourier.tex
++++ ifeffit-1.2.11d/doc/RefMan/fourier.tex
+@@ -170,7 +170,7 @@ functions of $k$.  The $R$-space windows
+ %%#GraphicsFile%    win_hanning  WinHanning
+ % Anatomy of the Hanning Window.
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/win_hanning.ps}
++  \includegraphics[width=4.0in]{figs/win_hanning.png}
+   \caption{ Anatomy of the Hanning Window.}\label{Fig:WinHanning}
+ \end{center} \end{figure}
+ %%#EndGraphics%
+@@ -178,7 +178,7 @@ functions of $k$.  The $R$-space windows
+ %%#GraphicsFile%    win_parzen  WinParzen
+ % Anatomy of the Parzen Window.
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/win_parzen.ps}
++  \includegraphics[width=4.0in]{figs/win_parzen.png}
+   \caption{ Anatomy of the Parzen Window.}\label{Fig:WinParzen}
+ \end{center} \end{figure}
+ %%#EndGraphics%
+@@ -186,7 +186,7 @@ functions of $k$.  The $R$-space windows
+ %%#GraphicsFile%    win_welch  WinWelch
+ % Anatomy of the Welch Window.
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/win_welch.ps}
++  \includegraphics[width=4.0in]{figs/win_welch.png}
+   \caption{ Anatomy of the Welch Window.}\label{Fig:WinWelch}
+ \end{center} \end{figure}
+ %%#EndGraphics%
+@@ -194,7 +194,7 @@ functions of $k$.  The $R$-space windows
+ %%#GraphicsFile%    win_gauss  WinGauss
+ % Anatomy of the Gauss Window.
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/win_gauss.ps}
++  \includegraphics[width=4.0in]{figs/win_gauss.png}
+   \caption{ Anatomy of the Gauss Window.}\label{Fig:WinGauss}
+ \end{center} \end{figure}
+ %%#EndGraphics%
+@@ -202,7 +202,7 @@ functions of $k$.  The $R$-space windows
+ %%#GraphicsFile%    win_kaiser  WinKaiser
+ % Anatomy of the Kaiser Window.
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/win_kaiser.ps}
++  \includegraphics[width=4.0in]{figs/win_kaiser.png}
+   \caption{ Anatomy of the Kaiser Window.}\label{Fig:WinKaiser}
+ \end{center} \end{figure}
+ %%#EndGraphics%
+@@ -210,7 +210,7 @@ functions of $k$.  The $R$-space windows
+ %%#GraphicsFile%    win_sine  WinSine
+ % Anatomy of the Sine Window.
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/win_sine.ps}
++  \includegraphics[width=4.0in]{figs/win_sine.png}
+   \caption{ Anatomy of the Sine Window.}\label{Fig:WinSine}
+ \end{center} \end{figure}
+ %%#EndGraphics%
+--- ifeffit-1.2.11d.orig/doc/RefMan/ifmacs_pdf.tex
++++ ifeffit-1.2.11d/doc/RefMan/ifmacs_pdf.tex
+@@ -1,8 +1,10 @@
+ %%  macros for ifeffit        -*-latex-*-
+ 
+ %%  determine if this is pdflatex or latex
+- \newif\ifpdf
+- \ifx\pdfoutput\undefined{\pdffalse}\else{\pdfoutput=1 \pdftrue}\fi
++% No need for this, use the package (CUS)
++ \usepackage{ifpdf}
++% \newif\ifpdf
++% \ifx\pdfoutput\undefined{\pdffalse}\else{\pdfoutput=1 \pdftrue}\fi
+ % %%% 
+ % 
+  \ifpdf
+--- ifeffit-1.2.11d.orig/doc/RefMan/.latex_type
++++ ifeffit-1.2.11d/doc/RefMan/.latex_type
+@@ -1 +1 @@
+-ps
++pdf
+--- ifeffit-1.2.11d.orig/doc/RefMan/plotting.tex
++++ ifeffit-1.2.11d/doc/RefMan/plotting.tex
+@@ -318,7 +318,7 @@ shown in Figure~\ref{Fig:PlotPoints}.  {
+ %   A selection of plotting line and points styles
+ %   for {\ifeffit}.
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/plot_styles.ps}
++  \includegraphics[width=4.0in]{figs/plot_styles.png}
+   \caption{ A selection of plotting line and points styles
+  for {\ifeffit}.}\label{Fig:PlotStyles}
+ \end{center} \end{figure}
+@@ -332,7 +332,7 @@ shown in Figure~\ref{Fig:PlotPoints}.  {
+ % types such as {\tt{style=linespoints3}} will show the same point type,
+ % joined with a solid line.
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/plot_points.ps}
++  \includegraphics[width=4.0in]{figs/plot_points.png}
+   \caption{ The plotting point types for {\ifeffit}, as produced with
+  syntax such as {\tt{style=points3}}, and so forth.  The linespoints
+  types such as {\tt{style=linespoints3}} will show the same point type,
+@@ -468,7 +468,7 @@ which will render fonts as shown in Figu
+ %  Sample of plotting text strings, fonts, and special characters
+ %   for {\ifeffit}
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/plot_fonts.ps}
++  \includegraphics[width=4.0in]{figs/plot_fonts.png}
+   \caption{ Sample of plotting text strings, fonts, and special characters
+  for {\ifeffit}}\label{Fig:PlotFonts}
+ \end{center} \end{figure}
+@@ -536,7 +536,7 @@ which completely suppresses the arrowhea
+ %   A selection of examples of plotting arrow parameters
+ %   for {\ifeffit}.
+ \begin{figure}[tb] \begin{center}
+-  \includegraphics[width=2.75in,angle=-90]{figs/plot_arrows.ps}
++  \includegraphics[width=4.0in]{figs/plot_arrows.png}
+   \caption{ A selection of examples of plotting arrow parameters
+  for {\ifeffit}.}\label{Fig:PlotArrows}
+ \end{center} \end{figure}

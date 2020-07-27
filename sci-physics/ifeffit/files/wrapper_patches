@@ -1,0 +1,267 @@
+Description: Debianize the wrapper scripts and linking to ifeffit
+ .
+Author: Carlo Segre <segre@debian.org>
+
+--- ifeffit-1.2.11d.orig/wrappers/python/Ifeffit.py
++++ ifeffit-1.2.11d/wrappers/python/Ifeffit.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++##!/usr/bin/python
+ """
+  Python interface to the IFEFFIT XAFS Analysis library
+ 
+--- ifeffit-1.2.11d.orig/wrappers/python/TkIfeffit.py
++++ ifeffit-1.2.11d/wrappers/python/TkIfeffit.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++##!/usr/bin/python
+ ###!/usr/bin/python
+ ##
+ ##  TkIfeffit: Tk widgets for GIFEFFIT
+--- ifeffit-1.2.11d.orig/wrappers/python/GIFeffit.py
++++ ifeffit-1.2.11d/wrappers/python/GIFeffit.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++##!/usr/bin/python
+ ##
+ ##  GIFEFFIT: Graphical User Interface to the IFEFFIT XAFS Analysis Library
+ ##
+--- ifeffit-1.2.11d.orig/wrappers/python/setup.py
++++ ifeffit-1.2.11d/wrappers/python/setup.py
+@@ -19,59 +19,65 @@ if (float(pyvers) < 1.5):
+     print "Error: python is too old"
+     sys.exit(1)
+ 
+-try:
+-    import distutils
+-    from distutils.core import setup, Extension
+-except:
+-    print "Error: Python distutils not found."
+-    print " please upgrade python or install the distutils module."    
+-    sys.exit(1)
+-
+-python  = sys.executable
+-pkg_site= sys.prefix
+-pkg_site= os.path.join(pkg_site, 'lib')
+-pkg_site= os.path.join(pkg_site, 'python' + pyvers)
+-pkg_site= os.path.join(pkg_site, 'site-packages')
+-
++# Don't need to check for DistUtils, TkInter and Pmw in Debian.
++# Also don't need to delete old installation since it is done
++# automagically by Debian packaging maintenance (CUS)
++import distutils
++from distutils.core import setup, Extension
++
++#try:
++#    import distutils
++#    from distutils.core import setup, Extension
++#except:
++#    print "Error: Python distutils not found."
++#    print " please upgrade python or install the distutils module."    
++#    sys.exit(1)
++#
++#python  = sys.executable
++#pkg_site= sys.prefix
++#pkg_site= os.path.join(pkg_site, 'lib')
++#pkg_site= os.path.join(pkg_site, 'python' + pyvers)
++#pkg_site= os.path.join(pkg_site, 'site-packages')
++#
+ #
+ # test Tkinter and Pmw installation
+-
+-try:
+-    import Tkinter
+-    print "Tkinter is installed. "
+-except ImportError:
+-    print " "
+-    print "  =====  WARNING   WARNING   WARNING   ====="
+-    print "  Tkinter is NOT installed, or was not found"
+-    print "  G.I.FEFFIT will not work."
+-    print " "
+-
++#
++#try:
++#    import Tkinter
++#    print "Tkinter is installed. "
++#except ImportError:
++#    print " "
++#    print "  =====  WARNING   WARNING   WARNING   ====="
++#    print "  Tkinter is NOT installed, or was not found"
++#    print "  G.I.FEFFIT will not work."
++#    print " "
++#
+ #PMW
+-installPMW = 1
+-try:
+-    import Pmw
+-    version = Pmw._version
+-    if  (version == '1.2') :
+-        installPMW = 0
+-        print "Pmw %s is installed. " % version
+-except ImportError:
+-    pass
+-
+-if ((installPMW == 1) and (setup_arg == 'install')):
+-    pmw_dir   = os.path.join(pkg_site, 'Pmw')
+-    print " Installing Pmw 1.2  to %s " % pmw_dir
+-    os.system('gunzip -c Pmw.1.2.tar.gz | tar xvf -')
+-    os.system("cp -pr Pmw %s " %  pkg_site)
+-    os.system("cp Pmw.pth %s" %  os.path.join(pkg_site,'Pmw.pth'))
+-    import compileall
+-    compileall.compile_dir(pmw_dir)
+-
++#installPMW = 1
++#try:
++#    import Pmw
++#    version = Pmw._version
++#    if  (version == '1.2') :
++#        installPMW = 0
++#        print "Pmw %s is installed. " % version
++#except ImportError:
++#    pass
++#
++#if ((installPMW == 1) and (setup_arg == 'install')):
++#    pmw_dir   = os.path.join(pkg_site, 'Pmw')
++#    print " Installing Pmw 1.2  to %s " % pmw_dir
++#    os.system('gunzip -c Pmw.1.2.tar.gz | tar xvf -')
++#    os.system("cp -pr Pmw %s " %  pkg_site)
++#    os.system("cp Pmw.pth %s" %  os.path.join(pkg_site,'Pmw.pth'))
++#    import compileall
++#    compileall.compile_dir(pmw_dir)
++#
+ # remove any old Ifeffit.py installations
+-if (setup_arg == 'install'):
+-    old_files = ('ifeffitc.so', 'Ifeffit.py', 'Ifeffit.pyc', 'GIFeffit.py',
+-                 'GIFeffit.pyc', 'TkIfeffit.py', 'TkIfeffit.pyc')
+-    for i in old_files:
+-        os.system("rm -f %s/%s" % (pkg_site,i))
++#if (setup_arg == 'install'):
++#    old_files = ('ifeffitc.so', 'Ifeffit.py', 'Ifeffit.pyc', 'GIFeffit.py',
++#                 'GIFeffit.pyc', 'TkIfeffit.py', 'TkIfeffit.pyc')
++#    for i in old_files:
++#        os.system("rm -f %s/%s" % (pkg_site,i))
+ 
+ 
+ 
+@@ -114,7 +120,8 @@ setup (name             = "Ifeffit",
+                                      libraries    = libdat['-l'],
+                                      library_dirs = libdat['-L'])],
+        py_modules       = ['Ifeffit','TkIfeffit','DataPlotter','GIFeffit'],
+-       data_files       = [(bin_dir, ['gifeffit'])]  )
++#       data_files       = [(bin_dir, ['gifeffit'])]
++       scripts		= ['gifeffit']  )
+ 
+ try:
+     f = open('iff_py_made','w')
+--- ifeffit-1.2.11d.orig/wrappers/perl/Ifeffit.pm
++++ ifeffit-1.2.11d/wrappers/perl/Ifeffit.pm
+@@ -6,12 +6,12 @@ require DynaLoader;
+ @EXPORT_OK = qw(get_scalar put_scalar get_string put_string
+ 		get_array  put_array get_echo);
+ 
+-$VERSION   = '1.3';
++$VERSION   = '1.301';
+ bootstrap Ifeffit $VERSION;
+ my $MAX_ARRAY_PTS = 16384;
+ 
+ sub ifeffit ($) {
+-    my @com = split(/\n/, $_[0]); 
++    my @com = split(/\n/, $_[0]);
+     my ($c, $ret) ;
+     foreach $c (@com) {$ret = Ifeffit::iff_exec($c); };
+     return $ret;
+@@ -27,7 +27,7 @@ sub get_scalar ($) {
+     return $val;
+ }
+ 
+-sub put_scalar ($$) { 
++sub put_scalar ($$) {
+     return (ifeffit("set $_[0] = $_[1]")) ? undef: $_[1];
+ }
+ 
+@@ -40,10 +40,12 @@ sub get_string ($) {
+ sub put_string ($$) {
+     my $inp = $_[0];
+     $inp = "\$".$inp unless ($inp =~ /^(\$)/o);
+-    return ifeffit("set $inp =  $_[1]");
++    my $str = $_[1];
++    $str = "\"" . $str . "\"" unless ($str =~ /^\".*\"$/);
++    return ifeffit("set $inp =  $str");
+ }
+ 
+-sub get_array ($) {  # note the use of MAX_ARRAY_PTS !!! 
++sub get_array ($) {  # note the use of MAX_ARRAY_PTS !!!
+     my ($ptr,$npts,$i);
+     my @arr  = ();
+     $ptr  = new_Parr($MAX_ARRAY_PTS);
+@@ -55,15 +57,15 @@ sub get_array ($) {  # note the use of M
+     return @arr;
+ }
+ 
+-sub put_array ($$) { 
++sub put_array ($$) {
+     my $npts   = $#{$_[1]} + 1;
+     my ($i,$x,$p_n,$ret,$ptr);
+-    if ($npts gt $MAX_ARRAY_PTS) { $npts = $MAX_ARRAY_PTS;}
++    if ($npts > $MAX_ARRAY_PTS) { $npts = $MAX_ARRAY_PTS;}
+     $ptr    = new_Parr($npts);
+     for ($i = 0; $i < $npts; $i++) { Parr_setitem($ptr, $i, ${$_[1]}[$i]); }
+     $p_n    = new_Pint();
+     Pint_assign($p_n, $npts);
+-    $ret = Ifeffit::iff_put_array($_[0], $p_n, $ptr); 
++    $ret = Ifeffit::iff_put_array($_[0], $p_n, $ptr);
+     delete_Pint($p_n);
+     delete_Parr($ptr);
+     return $ret;
+@@ -187,7 +189,22 @@ This gets the values of an ifeffit array
+ C<@array = get_array("my.array");>
+ 
+ which will fill the perl array B<@array> with the ifeffit array
+-I<my.array>.  
++I<my.array>.
++
++=head1 REVISION HISTORY
++
++=over 4
++
++=item 1.3
++
++Begin distributing with horae package.
++
++=item 1.3 (1)
++
++Force enclosure of string by double quotes in the put_string function.
++(Bruce Ravel 18 Feb. 2003)
++
++=back
+ 
+ =head1 AUTHOR
+ 
+@@ -201,5 +218,3 @@ PGPERL, PDL,  GNU ReadLine Library
+ 
+ 
+ =cut
+-
+-
+--- ifeffit-1.2.11d.orig/src/lib/sys.h
++++ ifeffit-1.2.11d/src/lib/sys.h
+@@ -1,7 +1,7 @@
+ c{sys.h  -*-fortran-*- 
+ c system and build specific stuff goes here
+ c to be included in iff_config.f
+-       sysdir = '/usr/local/share/ifeffit'
++       sysdir = '/usr/share/ifeffit'
+        pgdev  = '/xserve'
+        inifile= 'startup.iff  .ifeffit'
+        build = '1.2.11d'//
+--- ifeffit-1.2.11d.orig/src/lib/Makefile.in
++++ ifeffit-1.2.11d/src/lib/Makefile.in
+@@ -542,7 +542,7 @@ site_install.py: Config.mak
+ 	@echo '#  and may need some modifications.'                       >> $@
+ 	@echo '#  '                      >> $@
+ 	@echo 'bin_dir="$(bindir)"' > $@
+-	@echo 'lib_iff="-L$(prefix)/lib -lifeffit "' >> $@
++	@echo 'lib_iff="-L../../src/lib -lifeffit "' >> $@
+ 	@echo 'lib_plt="$(PGPLOT_LIBS)"'             >> $@ 
+ 	@echo 'lib_f77="$(MN_FLIBS) "'               >> $@
+ 	@echo 'inc_iff="-I../../src/lib -I$(pkgdatadir)/config"' >> $@

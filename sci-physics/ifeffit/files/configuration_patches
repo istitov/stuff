@@ -1,0 +1,94 @@
+Description: Enable correct configuration of the package for Debian.
+ .
+   * Use Debian version of readline
+   * Use libtools
+   * Use Debian installed version of pgplot5
+ .
+Author: Carlo Segre <segre@debian.org>
+
+--- a/configure.in
++++ b/configure.in
+@@ -13,13 +13,16 @@
+ 
+ AC_ISC_POSIX
+ AC_HEADER_STDC
+-AC_PROG_RANLIB
++#  change for Debian (CUS)
++#AC_PROG_RANLIB
++AC_PROG_LIBTOOL
+ AC_INCLUDES_DEFAULT
+ 
+ AC_PATH_PROGS(PERL,   perl perl5 perl5.8 perl5.6 perl5.005, NO_PERL )
+ AC_PATH_PROGS(PYTHON, python python2 python2.5 python2.4 python2.3 python2.2 python2.1, NO_PYTHON)
+ 
+-AC_CONFIG_SUBDIRS(readline) 
++# use Debian version of readline (CUS)
++#AC_CONFIG_SUBDIRS(readline)
+ 
+ ################################
+ FCLIST='gfortran g77 g95 f77 f90 xlf'
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -82,7 +82,7 @@
+ canonical_host_type = @canonical_host_type@
+ 
+ EXTRA_DIST = reconf configure
+-SUBDIRS = readline src 
++SUBDIRS = src
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+ CONFIG_HEADER = config.h
+--- a/iconf_pgplot
++++ b/iconf_pgplot
+@@ -22,7 +22,7 @@
+ for d in $pgdirs; do
+     if [ -d $d ] ; then
+        if [ -f $d/grfont.dat ]      ; then basedir=$d ; fi
+-       if [ -f $d/libpgplot_iff.a ] ; then libdir=$d  ; fi
++       if [ -f $d/libpgplot.a ] ; then libdir=$d  ; fi
+     fi 
+ done
+ 
+@@ -59,7 +59,7 @@
+ #   echo 'out:  ', $out
+ else
+   if [ -f $ffile ] ; then
+-    out="-L$libdir -lpgplot_iff"
++    out="-L$libdir -lpgplot"
+     grep " CALL PNDRIV" $ffile >/dev/null 2>&1;
+     if [  $? ] ; then out="$out -lpng -lz" ;   fi
+     grep " CALL XWDRIV" $ffile >/dev/null 2>&1;
+--- a/configure
++++ b/configure
+@@ -310,7 +310,8 @@
+ # include <unistd.h>
+ #endif"
+ 
+-ac_subdirs_all="$ac_subdirs_all readline"
++# Don't compile our own readline, use the Debian package instead (CUS)
++#ac_subdirs_all="$ac_subdirs_all readline"
+ ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CPP EGREP RANLIB ac_ct_RANLIB PERL PYTHON subdirs F77 FFLAGS ac_ct_F77 FLIBS TERMCAP_LIB ARRSIZE MN_FLIBS use_pgplot PGPLOT_LIBS pgdir LIBOBJS LTLIBOBJS'
+ ac_subst_files=''
+ 
+@@ -3446,8 +3447,8 @@
+ 
+ 
+ 
+-
+-subdirs="$subdirs readline"
++# Don't use our readline, use the Debian package instead
++#subdirs="$subdirs readline"
+ 
+ 
+ ################################
+--- a/src/cmdline/Makefile.in
++++ b/src/cmdline/Makefile.in
+@@ -87,7 +87,7 @@
+ bin_PROGRAMS = ifeffit
+ ifeffit_SOURCES = iff_shell.c ifeffit.h commands.h
+ # readline_LIB = -L$(top_srcdir)/readline -lreadline $(TERMCAP_LIB)
+-readline_LIB =  $(top_srcdir)/readline/libreadline.a $(TERMCAP_LIB)
++readline_LIB =  -lreadline $(TERMCAP_LIB)
+ ### -ltermcap
+ 
+ ifeffit_LDADD = ../lib/libifeffit.a  $(PGPLOT_LIBS) $(readline_LIB) $(MN_FLIBS)

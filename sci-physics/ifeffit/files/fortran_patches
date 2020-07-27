@@ -1,0 +1,50 @@
+Description: Patches to the FORTRAN source
+ .
+   * Enable FEFF to calculate chi
+   * Modify array dimensioning for increased capacity
+ .
+Author: Carlo Segre <segre@debian.org>
+
+--- ifeffit-1.2.11d.orig/src/feff6/feff.f
++++ ifeffit-1.2.11d/src/feff6/feff.f
+@@ -117,11 +117,11 @@ c        Dump out fbetac for central ato
+          call genfmt (ipr3, critcw, sig2g, iorder)
+       endif
+ 
+-c      if (mchi .eq. 1)  then
+-c         call echo('Calculating chi...')
+-c         call ff2chi (ipr4, critcw, s02, tk, thetad, icsig,
+-c     1        vrcorr, vicorr)
+-c      endif
++      if (mchi .eq. 1)  then
++         call echo('Calculating chi...')
++         call ff2chi (ipr4, critcw, s02, tk, thetad, icsig,
++     1        vrcorr, vicorr)
++      endif
+ 
+        call echo('Feff done.  Have a nice day.')
+        end
+--- ifeffit-1.2.11d.orig/src/lib/iff_show.f
++++ ifeffit-1.2.11d/src/lib/iff_show.f
+@@ -431,8 +431,8 @@ c
+        character*(*) s, t , messg*256
+        integer k, j, istrln
+        external istrln
+-       k = max(13, istrln(s))
+-       j = max(2, istrln(t))
++       k = min(max(13, istrln(s)),256)
++       j = min(max(2, istrln(t)), 252-k)
+        write(messg,11)  s(1:k), ' = ', t(1:j)
+        call echo(messg)
+  11    format('$',3a)
+@@ -443,8 +443,8 @@ c
+        character*(*) s, t , messg*256
+        integer    k, j, istrln
+        external istrln
+-       k = max(14, istrln(s))
+-       j = max(2, istrln(t))
++       k = min(max(14, istrln(s)), 256)
++       j = min(max(2, istrln(t)), 253-k)
+        write(messg,11)  s(1:k), ': ', t(1:j)
+        call echo(messg)
+  11    format (3a)

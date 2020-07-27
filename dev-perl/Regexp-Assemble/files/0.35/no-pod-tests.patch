@@ -1,0 +1,44 @@
+diff -Naur t/00_basic.t t/00_basic.t
+--- t/00_basic.t	2008-06-07 13:13:47.000000000 +0000
++++ t/00_basic.t	2014-09-02 23:57:16.979834142 +0000
+@@ -10,7 +10,7 @@
+ 
+ use strict;
+ 
+-eval qq{use Test::More tests => 327 };
++eval qq{use Test::More tests => 323 };
+ if( $@ ) {
+     warn "# Test::More not available, no tests performed\n";
+     print "1..1\nok 1\n";
+@@ -24,30 +24,8 @@
+ 
+ diag( "testing Regexp::Assemble v$Regexp::Assemble::VERSION" );
+ 
+-my $have_Test_Pod = do {
+-    eval { require Test::Pod; import Test::Pod };
+-    $@ ? 0 : 1;
+-};
+-
+-SKIP: {
+-    skip( 'Test::Pod not installed on this system', 3 )
+-        unless $have_Test_Pod;
+-
+-    pod_file_ok( 'Assemble.pm' );
+-    pod_file_ok( 'eg/assemble' );
+-    pod_file_ok( 'eg/debugging' );
+-}
++my $have_Test_Pod_Coverage = 0;
+ 
+-my $have_Test_Pod_Coverage = do {
+-    eval { require Test::Pod::Coverage; import Test::Pod::Coverage };
+-    $@ ? 0 : 1;
+-};
+-
+-SKIP: {
+-    skip( 'Test::Pod::Coverage not installed on this system', 1 )
+-        unless $have_Test_Pod_Coverage;
+-    pod_coverage_ok( "Regexp::Assemble", "POD coverage is go!" );
+-}
+ my $rt = Regexp::Assemble->new;
+ ok( defined($rt), 'new() defines something' );
+ is( ref($rt), 'Regexp::Assemble', 'new() returns a Regexp::Assemble object' );
