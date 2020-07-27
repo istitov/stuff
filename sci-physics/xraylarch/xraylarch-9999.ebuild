@@ -15,7 +15,6 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 IUSE="doc python"
-PROVIDES_EXCLUDE="/usr/bin/larch"
 
 RDEPEND="
 	>=dev-python/numpy-1.15[${PYTHON_USEDEP}]
