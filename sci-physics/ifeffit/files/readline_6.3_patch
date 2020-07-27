@@ -1,0 +1,13 @@
+Index: ifeffit-1.2.11d/src/cmdline/iff_shell.c
+===================================================================
+--- ifeffit-1.2.11d.orig/src/cmdline/iff_shell.c
++++ ifeffit-1.2.11d/src/cmdline/iff_shell.c
+@@ -354,7 +354,7 @@ void initialize_readline () {
+   /* Allow conditional parsing of the ~/.inputrc file. */
+   rl_readline_name = "Ifeffit";
+   /* Tell the completer that we want a crack first. */
+-  rl_attempted_completion_function = (CPPFunction *)ifeffit_completion;
++  rl_attempted_completion_function = (rl_completion_func_t *)ifeffit_completion;
+ }
+ 
+ /* Attempt to complete on the contents of TEXT.  START and END bound the
