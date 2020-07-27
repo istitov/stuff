@@ -14,6 +14,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="test"
 
 RDEPEND="
+	virtual/perl-ExtUtils-MakeMaker
 	dev-perl/PDL
 "
 

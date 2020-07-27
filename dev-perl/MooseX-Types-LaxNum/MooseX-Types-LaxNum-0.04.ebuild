@@ -16,6 +16,7 @@ RESTRICT="!test? ( test )"
 
 RDEPEND="
 	dev-perl/Moose
+	virtual/perl-ExtUtils-MakeMaker
 "
 #	dev-perl/Moose-Util-TypeConstraints
 #	dev-perl/Scalar-Util
