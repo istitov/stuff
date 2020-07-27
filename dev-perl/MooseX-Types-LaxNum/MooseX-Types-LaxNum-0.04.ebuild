@@ -22,11 +22,12 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	>=virtual/perl-ExtUtils-MakeMaker-6.420.0
-	test? (
-		dev-perl/File-Find
-		dev-perl/File-Temp
-		dev-perl/Test-Fatal
-		dev-perl/Test-More
-	)
 "
+#	test? (
+#		dev-perl/File-Find
+#		dev-perl/File-Temp
+#		dev-perl/Test-Fatal
+#		dev-perl/Test-More
+#	)
 
+SRC_TEST=do
