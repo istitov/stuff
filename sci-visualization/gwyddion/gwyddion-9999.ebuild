@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python2_7 )
 
@@ -17,6 +17,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X"
+addpredict "${EPREFIX}"/usr/share/inkscape/fonts/.uuid.TMP-XXXXXX
 
 RDEPEND="
 	>=dev-libs/glib-2.32
@@ -40,7 +41,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
-	~media-gfx/inkscape-0.92.4
+	media-gfx/inkscape
 	media-gfx/pngcrush
 	dev-util/gtk-doc
 "
