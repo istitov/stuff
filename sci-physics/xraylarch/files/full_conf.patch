@@ -1,0 +1,19 @@
+--- a/setup.conf	1970-01-01 00:00:00.000000000 -0000
++++ b/setup.conf	2020-07-27 00:10:23.228125029 -0000
+@@ -0,0 +1,16 @@
++[versioneer]
++vcs = git
++style = pep440
++versionfile_source = larch/_version.py
++versionfile_build = larch/_version.py
++tag_prefix = 
++parentdir_prefix = larch-
++unix_installdir = ${D}/usr/share/larch
++
++[bdist_install]
++universal = 0
++
++[egg_info]
++tag_build = 
++tag_date = 0
++

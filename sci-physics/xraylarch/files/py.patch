@@ -1,0 +1,15 @@
+--- a/setup.py	2020-02-25 02:26:39.000000000 -0000
++++ b/setup.py	2020-07-26 22:55:40.887693000 -0000
+@@ -153,9 +153,9 @@
+       )
+ 
+ # create desktop icons
+-if INSTALL or DEVELOP:
+-    subprocess.check_call((pjoin(sys.exec_prefix, sys.executable),
+-                           pjoin(sys.exec_prefix, bindir, larchbin), '-m'))
++#if INSTALL or DEVELOP:
++#    subprocess.check_call((pjoin(sys.exec_prefix, sys.executable),
++#                           pjoin(sys.exec_prefix, bindir, larchbin), '-m'))
+ 
+ if len(missing) > 0:
+     dl = "#%s#" % ("="*75)
