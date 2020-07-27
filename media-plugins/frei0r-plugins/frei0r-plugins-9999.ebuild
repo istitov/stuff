@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI="7"
 inherit cmake multilib git-r3
 
 DESCRIPTION="A minimalistic plugin API for video effects"
@@ -23,6 +23,7 @@ DEPEND="${RDEPEND}
 DOCS=( AUTHORS ChangeLog README.md TODO )
 
 src_prepare() {
+	default
 	local f=CMakeLists.txt
 
 	sed -i \
@@ -34,6 +35,7 @@ src_prepare() {
 	sed -i \
 		-e '/set.*CMAKE_C_FLAGS/s:"): ${CMAKE_C_FLAGS}&:' \
 		src/filter/*/${f} || die
+	cmake_src_prepare
 }
 
 src_configure() {
