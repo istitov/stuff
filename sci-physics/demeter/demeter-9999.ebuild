@@ -61,9 +61,9 @@ RDEPEND="
 	dev-perl/Graphics-GnuplotIF
 	dev-perl/Wx
 	dev-perl/Chemistry-Elements
+	dev-perl/Term-Sk
+	dev-perl/Term-Twiddle
 "
-#	dev-perl/Term-Sk
-#	dev-perl/Term-Twiddle
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -89,10 +89,10 @@ src_test() {
 }
 
 src_install() {
-	./Build --install_path lib=${D}/usr/local/lib64/perl5 \
-        	--install_path arch=${D}/usr/local/lib64/perl5 \
-		--install_path bin=${D}/bin \
-        	--install_path script=${D}/bin \
+	./Build --install_path lib="${D}"/usr/local/lib64/perl5 \
+        	--install_path arch="${D}"/usr/local/lib64/perl5 \
+		--install_path bin="${D}"/bin \
+        	--install_path script="${D}"/bin \
       		--install_path bindoc=`pwd`/man/ \
         	--install_path libdoc=`pwd`/man/ \
 		install

@@ -31,14 +31,20 @@ PATCHES=(
 	"${FILESDIR}"/configuration_patches
 )
 
-pkg_configure() {
+src_configure() {
 	default
 }
 
-pkg_compile() {
+src_compile() {
 	make
 }
 
 pkg_install() {
 	make install
+}
+
+pkg_postinst() {
+	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/share/ifeffit/config/Config.mak || die "Sed failed!"
+	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/share/ifeffit/config/TclSetup.in || die "Sed failed!"
+	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/share/ifeffit/config/Makefile.PL || die "Sed failed!"
 }
