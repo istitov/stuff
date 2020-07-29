@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 DESCRIPTION="SVG Cleaner cleans up your SVG files from unnecessary data."
 HOMEPAGE="https://github.com/RazrFalcon/SVGCleaner"
 EGIT_REPO_URI="https://github.com/RazrFalcon/SVGCleaner.git"
@@ -23,8 +23,9 @@ IUSE=""
 
 DEPEND="
 	virtual/rust
-	dev-util/cargo
+	dev-lang/rust
 "
+#dev-util/cargo#cargo (the program) being moved into dev-lang/rust,
 RDEPEND="${DEPEND}"
 
 src_compile() {
