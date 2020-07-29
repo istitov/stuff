@@ -12,7 +12,8 @@ RESTRICT="primaryuri"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
+#Masked as far as gnome-python has been removed
 IUSE=""
 
 RDEPEND="net-misc/yandex-disk
