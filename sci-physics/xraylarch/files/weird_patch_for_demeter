@@ -1,0 +1,10 @@
+--- a/larch/xmlrpc_server.py	2020-07-28 20:25:20.632965345 -0000
++++ b/larch/xmlrpc_server.py	2020-07-28 20:29:15.962988039 -0000
+@@ -349,6 +349,7 @@
+ 
+ 
+     port = int(args.port)
++    print(port)
+     command = args.command or 'status'
+     command = command.lower()
+ 

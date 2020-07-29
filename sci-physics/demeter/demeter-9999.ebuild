@@ -17,16 +17,19 @@ IUSE="doc perl"
 RDEPEND="
 	sci-physics/xraylarch
 	sci-physics/ifeffit
+	>=dev-perl/Archive-Zip-1.31
 	dev-perl/Module-Build
-	dev-perl/Capture-Tiny
+	>=dev-perl/Capture-Tiny-0.07
 	dev-perl/Config-INI
-	dev-perl/Const-Fast
+	>=dev-perl/Const-Fast-0.01
 	dev-perl/DateTime
-	dev-perl/Encoding-FixLatin
+	>=dev-perl/Encoding-FixLatin-1.04
+	dev-perl/Encoding-FixLatin-XS
 	dev-perl/File-Copy-Recursive
 	dev-perl/File-Find-Rule
 	dev-perl/File-CountLines
 	dev-perl/File-Touch
+	>=dev-perl/File-Which-1.09
 	dev-perl/File-Monitor
 	dev-perl/File-Monitor-Lite
 	dev-perl/File-Copy-Recursive
@@ -40,12 +43,12 @@ RDEPEND="
 	dev-perl/Math-Random
 	dev-perl/Math-Round
 	dev-perl/Math-Spline
-	dev-perl/Moose
-	dev-perl/MooseX-Aliases
-	dev-perl/MooseX-Types
+	>=dev-perl/Moose-2.09
+	>=dev-perl/MooseX-Aliases-0.10
+	>=dev-perl/MooseX-Types-0.31
 	dev-perl/MooseX-Types-LaxNum
-	dev-perl/PDL
-	dev-perl/PDL-Stats
+	>=dev-perl/PDL-2.4.9
+	>=dev-perl/PDL-Stats-0.5.5
 	dev-perl/Pod-POM
 	dev-perl/RPC-XML
 	dev-perl/Regexp-Assemble
@@ -59,11 +62,15 @@ RDEPEND="
 	dev-perl/XMLRPC-Lite
 	dev-perl/Pod-ProjectDocs
 	dev-perl/Graphics-GnuplotIF
-	dev-perl/Wx
+	>=dev-perl/Wx-0.86
 	dev-perl/Chemistry-Elements
+	dev-perl/Term-Sk
+	dev-perl/Term-Twiddle
+	virtual/perl-ExtUtils-CBuilder
 "
-#	dev-perl/Term-Sk
-#	dev-perl/Term-Twiddle
+#	dev-perl/Digest-SHA
+#	dev-perl/YAML-Tiny
+#	dev-perl/RPC-XML-Client
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -89,10 +96,10 @@ src_test() {
 }
 
 src_install() {
-	./Build --install_path lib=${D}/usr/local/lib64/perl5 \
-        	--install_path arch=${D}/usr/local/lib64/perl5 \
-		--install_path bin=${D}/bin \
-        	--install_path script=${D}/bin \
+	./Build --install_path lib="${D}"/usr/local/lib64/perl5 \
+        	--install_path arch="${D}"/usr/local/lib64/perl5 \
+		--install_path bin="${D}"/bin \
+        	--install_path script="${D}"/bin \
       		--install_path bindoc=`pwd`/man/ \
         	--install_path libdoc=`pwd`/man/ \
 		install
