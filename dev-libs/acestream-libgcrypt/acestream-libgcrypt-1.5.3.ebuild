@@ -16,7 +16,7 @@ SRC_URI="mirror://gnupg/libgcrypt/${MY_P}.tar.bz2 -> ${MY_P}.tar.bz2
 
 LICENSE="LGPL-2.1 MIT"
 SLOT="0/11" # subslot = soname major version
-KEYWORDS="alpha amd64 arm arm64 hppa ia64 ~m68k ~mips ppc ppc64 s390 sh sparc x86 ~ppc-aix ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="amd64 arm arm64 hppa ~m68k ~mips ppc ppc64 s390 sparc x86 ~ppc-aix ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris" #alpha, ia64 were removed due to '>=dev-libs/libgpg-error-1.8', '>=app-portage/elt-patches-20170815', '>=sys-devel/automake-1.16.1:1.16', '>=sys-devel/autoconf-2.69', '>=sys-devel/libtool-2.4'
 IUSE="static-libs"
 
 RDEPEND=">=dev-libs/libgpg-error-1.8"
