@@ -3,8 +3,8 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{5,6,7,8})
-
+PYTHON_COMPAT=( python3_{6,7,8})
+#py2_7 dropped because of sphinx
 inherit distutils-r1
 
 DESCRIPTION="Python module for calculations with uncertainties"
