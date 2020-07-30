@@ -17,12 +17,12 @@ REQUIRED_USE="|| ( ${IUSE} )"
 
 DEPEND_COMMON="
 	|| (
-		<media-sound/deadbeef[curl]
-		<media-sound/deadbeef[cover]
-		<media-sound/deadbeef[lastfm]
+		media-sound/deadbeef[curl]
+		media-sound/deadbeef[cover]
+		media-sound/deadbeef[lastfm]
 		)
-	gtk2? ( <media-sound/deadbeef[gtk2] )
-	gtk3? ( <media-sound/deadbeef[gtk3] )
+	gtk2? ( media-sound/deadbeef[gtk2] )
+	gtk3? ( media-sound/deadbeef[gtk3] )
 	dev-libs/libxml2"
 
 RDEPEND="${DEPEND_COMMON}"
