@@ -1,8 +1,8 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
-PYTHON_COMPAT=( python{2_7,2_6} )
+EAPI="7"
+PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="sqlite"
 inherit eutils python-single-r1
 
@@ -12,7 +12,7 @@ SRC_URI="https://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofas
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="-amd64 -x86"
-IUSE=""
+IUSE="python"
 
 # Workaround: please keep it sorted syncronous
 L10Ns="br ca de-DE en-GB es-ES fr gl hr it mn pt-BR ru sl tr"
@@ -24,14 +24,14 @@ done
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-DEPEND="dev-python/wxpython[${PYTHON_USEDEP}]
-	dev-python/psycopg:2[${PYTHON_USEDEP}]
-	dev-python/pyPdf[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/mysql-python[${PYTHON_USEDEP}]
-	dev-python/pyxdg[${PYTHON_USEDEP}]
-	dev-python/matplotlib[wxwidgets,${PYTHON_USEDEP}]
-	dev-python/pythonmagick[${PYTHON_USEDEP}]
+DEPEND="dev-python/wxpython[${PYTHON_SINGLE_USEDEP}]
+	dev-python/psycopg:2[${PYTHON_SINGLE_USEDEP}]
+	dev-python/pyPdf[${PYTHON_SINGLE_USEDEP}]
+	dev-python/numpy[${PYTHON_SINGLE_USEDEP}]
+	dev-python/mysql-python[${PYTHON_SINGLE_USEDEP}]
+	dev-python/pyxdg[${PYTHON_SINGLE_USEDEP}]
+	dev-python/matplotlib[wxwidgets,${PYTHON_SINGLE_USEDEP}]
+	dev-python/pythonmagick[${PYTHON_SINGLE_USEDEP}]
 	media-gfx/wkhtmltopdf
 	app-text/pdftk
 	app-text/ghostscript-gpl"
