@@ -14,13 +14,15 @@ SRC_URI=" x86? ( http://repo.acestream.org/ubuntu/pool/main/a/${PN}/${PN}_${PV}-
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 "
-IUSE="pulseaudio jack portaudio avahi cddb cdda dvd aac flac lirc mad matroska modplug musepack mpeg
-		ieee1394 samba mtp ncurses libproxy speex upnp v4l vcdx"
+KEYWORDS="~amd64 ~x86"
 
+IUSE="pulseaudio jack portaudio avahi cddb cdda dvd flac lirc mad matroska modplug musepack mpeg
+		ieee1394 samba mtp ncurses libproxy speex upnp v4l vcdx"
+#aac dropped due to ffmpeg
 LANGS="ach af am ar ast be bg bn br ca cs da de el en-GB es et eu fa ff fi fr ga gl he
 		hi hr hu hy id is it ja ka kk km ko lt lv mk ml mn ms my nb ne nl nn oc pa pl pt-BR pt-PT
-		ro ru si sk sl sq sr sv ta th tl tr uk vi wa zh-CN zh-TW zu"
+		ro ru si sk sl sq sr sv ta th tl tr uk vi zh-CN zh-TW zu"
+#wa
 
 for lang in ${LANGS}; do
 	IUSE+=" l10n_${lang}"
@@ -37,7 +39,6 @@ DEPEND="media-libs/aalib
 		net-libs/gnutls
 		media-libs/libvpx
 		media-libs/vo-aacenc
-		media-libs/schroedinger
 		media-sound/lame
 		media-libs/faac
 		dev-lang/orc
@@ -45,15 +46,15 @@ DEPEND="media-libs/aalib
 		media-libs/libgii
 		>=dev-lang/lua-5.1
 		media-libs/libshout[speex=,theora]
-		media-libs/libpng:1.2
+		media-libs/libpng
 		media-libs/alsa-lib
 		media-libs/libcaca
 		dev-libs/openssl:0
 		>=dev-libs/libebml-1.3.0
 		>=media-libs/a52dec-0.7.4
 		media-video/ffmpeg
-		|| ( media-video/acestream-ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vaapi,vorbis,alsa]
-			 media-video/ffmpeg[pulseaudio=,jack=,aac=,modplug=,ieee1394=,speex=,theora,v4l=,vorbis,alsa] )
+		|| ( media-video/acestream-ffmpeg[pulseaudio=,jack=,modplug=,ieee1394=,speex=,theora,v4l=,vaapi,vorbis,alsa]
+			 media-video/ffmpeg[pulseaudio=,jack=,modplug=,ieee1394=,speex=,theora,v4l=,vorbis,alsa] )
 		sys-apps/dbus
 		media-video/dirac
 		media-libs/libdvbpsi
@@ -78,7 +79,6 @@ DEPEND="media-libs/aalib
 		ieee1394? ( sys-libs/libraw1394 sys-libs/libavc1394 media-libs/libdc1394 )
 		mad? ( media-libs/libmad )
 		mpeg? ( media-libs/libmpeg2 media-sound/twolame )
-		aac? ( media-libs/faad2 )
 		flac? ( media-libs/flac )
 		dvd? ( media-libs/libdca media-libs/libdvdnav media-libs/libdvdread )
 		cddb? ( media-libs/libcddb )
@@ -91,12 +91,15 @@ DEPEND="media-libs/aalib
 		v4l? ( media-libs/libv4l )
 		samba? ( net-fs/samba )
 		mtp? ( media-libs/libmtp )
-		ncurses? ( sys-libs/ncurses:5 )
 		libproxy? ( net-libs/libproxy )
 		speex? ( media-libs/speex )
 		jack? ( media-sound/jack-audio-connection-kit )"
 RDEPEND="${DEPEND}"
-
+#ffmpeg[=aac]
+#		media-libs/schroedinger
+#		media-libs/libpng:1.2
+#		ncurses? ( sys-libs/ncurses:5 )
+#		aac? ( media-libs/faad2 )
 RESTRICT="strip"
 
 S="${WORKDIR}"
@@ -125,7 +128,7 @@ src_install(){
 	use mpeg || rm "${D}/usr/lib/acestreamplayer/plugins/codec/liblibmpeg2_plugin.so"
 	use speex || rm "${D}/usr/lib/acestreamplayer/plugins/codec/libspeex_plugin.so"
 	use avahi || rm "${D}/usr/lib/acestreamplayer/plugins/services_discovery/libbonjour_plugin.so"
-	use aac || rm "${D}/usr/lib/acestreamplayer/plugins/codec/libfaad_plugin.so"
+	#use aac || rm "${D}/usr/lib/acestreamplayer/plugins/codec/libfaad_plugin.so"
 	use mad || rm "${D}/usr/lib/acestreamplayer/plugins/audio_filter/libmpgatofixed32_plugin.so"
 
 	if use musepack;then
