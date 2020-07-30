@@ -28,7 +28,8 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	doc? (
 		>=app-text/gnome-doc-utils-0.9.0
-		app-text/scrollkeeper
+		app-text/scrollkeeper-dtd
+		app-text/rarian
 		)
 	nls? ( >=sys-devel/gettext-0.12.1 )"
 
