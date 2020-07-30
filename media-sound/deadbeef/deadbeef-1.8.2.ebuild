@@ -18,7 +18,7 @@ LICENSE="GPL-2
 	LGPL-2.1
 	ZLIB
 	psf? ( BSD XMAME )
-	dumb? ( DUMB-0.9.2 )
+	dumb? ( DUMB-0.9.3 )
 	shn? ( shorten )"
 SLOT="0"
 IUSE="adplug aac alac alsa psf ape cdda cover cover-imlib2 dts dumb converter curl ffmpeg flac gme
