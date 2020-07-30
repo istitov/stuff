@@ -16,7 +16,8 @@ EGIT_REPO_URI="https://github.com/eonpatapon/mpDris2.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
+# ~sparc
 IUSE=""
 
 LANGS="fr nl"

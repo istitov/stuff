@@ -20,13 +20,12 @@ IUSE="${IUSE} kernel_linux"
 
 #rtaudio will use OSS on non linux OSes
 COMMON_DEPEND="
-	ffmpeg? (
-		libav? ( media-video/libav:0=[vdpau?] )
-		!libav? ( media-video/ffmpeg:0=[vdpau?] )
-	)
+	ffmpeg? ( libav? ( media-video/libav:0=[vdpau?] )
+		  !libav? ( media-video/ffmpeg:0=[vdpau?] )
+		 )
 	xml? ( >=dev-libs/libxml2-2.5 )
 	sdl? ( >=media-libs/libsdl-1.2.10[X,opengl,video]
-		 >=media-libs/sdl-image-1.2.4 )
+		>=media-libs/sdl-image-1.2.4 )
 	libsamplerate? ( >=media-libs/libsamplerate-0.1.2 )
 	jack? ( >=media-sound/jack-audio-connection-kit-0.121.3
 		media-libs/ladspa-sdk
@@ -39,18 +38,17 @@ COMMON_DEPEND="
 	opengl? ( media-video/movit )
 	rtaudio? ( kernel_linux? ( media-libs/alsa-lib ) )
 	xine? ( >=media-libs/xine-lib-1.1.2_pre20060328-r7 )
-	qt5? (
-		dev-qt/qtcore:5
+	qt5? (	dev-qt/qtcore:5
 		dev-qt/qtgui:5
 		dev-qt/qtsvg:5
 		dev-qt/qtwidgets:5
 		dev-qt/qtxml:5
 		media-libs/libexif
 		x11-libs/libX11
-		opengl? ( dev-qt/qtopengl:5 )
-	)
+		opengl? ( dev-qt/qtopengl:5 ) )
 	lua? ( >=dev-lang/lua-5.1.4-r4:= )
-	ruby? ( ${RUBY_DEPS} )"
+	"
+#	ruby? ( ${RUBY_DEPS} )
 #	sox? ( media-sound/sox )
 #	java? ( >=virtual/jre-1.5 )
 #	perl? ( dev-lang/perl )
@@ -61,7 +59,7 @@ SWIG_DEPEND=">=dev-lang/swig-2.0"
 DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 	compressed-lumas? ( || ( media-gfx/imagemagick[png]
-			media-gfx/graphicsmagick[imagemagick,png] ) )
+				media-gfx/graphicsmagick[imagemagick,png] ) )
 	lua? ( ${SWIG_DEPEND} virtual/pkgconfig )
 	python? ( ${SWIG_DEPEND} ${PYTHON_DEPS} )
 	ruby? ( ${SWIG_DEPEND} )"
@@ -73,8 +71,7 @@ RDEPEND="${COMMON_DEPEND}
 	!media-libs/mlt++
 "
 
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
-"
+REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} ) "
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
@@ -82,7 +79,6 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}-6.2.0-ruby-link.patch
-
 	# respect CFLAGS LDFLAGS when building shared libraries. Bug #308873
 	for x in python lua; do
 		sed -i "/mlt.so/s: -lmlt++ :& ${CFLAGS} ${LDFLAGS} :" src/swig/$x/build || die

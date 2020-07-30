@@ -65,7 +65,6 @@ RDEPEND="
 	pulseaudio? ( media-sound/pulseaudio )
 	rtmp? ( >=media-video/rtmpdump-2.2f )
 	sdl? ( >=media-libs/libsdl-1.2.13-r1[sound,video] )
-	schroedinger? ( media-libs/schroedinger )
 	speex? ( >=media-libs/speex-1.2_beta3 )
 	truetype? ( media-libs/freetype:2 )
 	vaapi? ( >=x11-libs/libva-0.32 )
@@ -77,7 +76,7 @@ RDEPEND="
 	!media-libs/libpostproc
 	!media-video/ffmpeg:0.10
 	!<media-video/ffmpeg-1.2:0"
-
+#	schroedinger? ( media-libs/schroedinger )
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
 	dirac? ( virtual/pkgconfig )

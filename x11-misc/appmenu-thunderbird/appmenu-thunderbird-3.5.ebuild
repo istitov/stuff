@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 WANT_AUTOCONF="2.1"
 EBZR_REPO_URI="lp:globalmenu-extension/3.5"

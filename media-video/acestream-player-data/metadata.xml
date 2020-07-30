@@ -7,5 +7,6 @@
 	<use>
 		<flag name='libproxy'>Use net-libs/libproxy for getting the HTTP/HTTPS/SOCKS proxy configuration</flag>
 		<flag name='vcdx'>Enables VCD with navigation via libvcdinfo (depends on cdio)</flag>
+		<flag name='avahi'>avahi</flag>
 	</use>
 </pkgmetadata>
