@@ -13,16 +13,15 @@ EGIT_REPO_URI="https://github.com/mltframework/mlt.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=" "
-IUSE="compressed-lumas debug ffmpeg fftw frei0r gtk jack kdenlive libav libsamplerate melt opengl
+IUSE="compressed-lumas debug ffmpeg fftw frei0r gtk jack kdenlive libsamplerate melt opengl
 cpu_flags_x86_mmx qt5 rtaudio sdl cpu_flags_x86_sse cpu_flags_x86_sse2 xine xml lua python ruby vdpau"
 # java perl php tcl vidstab
+# libav
 IUSE="${IUSE} kernel_linux"
 
 #rtaudio will use OSS on non linux OSes
 COMMON_DEPEND="
-	ffmpeg? ( libav? ( media-video/libav:0=[vdpau?] )
-		  !libav? ( media-video/ffmpeg:0=[vdpau?] )
-		 )
+	ffmpeg? ( media-video/ffmpeg:0=[vdpau?] )
 	xml? ( >=dev-libs/libxml2-2.5 )
 	sdl? ( >=media-libs/libsdl-1.2.10[X,opengl,video]
 		>=media-libs/sdl-image-1.2.4 )
@@ -48,6 +47,9 @@ COMMON_DEPEND="
 		opengl? ( dev-qt/qtopengl:5 ) )
 	lua? ( >=dev-lang/lua-5.1.4-r4:= )
 	"
+#	ffmpeg? ( libav? ( media-video/libav:0=[vdpau?] )
+#		  !libav? ( media-video/ffmpeg:0=[vdpau?] )
+#		 )
 #	ruby? ( ${RUBY_DEPS} )
 #	sox? ( media-sound/sox )
 #	java? ( >=virtual/jre-1.5 )
