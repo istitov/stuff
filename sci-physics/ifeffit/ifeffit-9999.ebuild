@@ -30,12 +30,11 @@ DESTDIR="${D}"
 PATCHES=(
 	"${FILESDIR}"/configuration_patches
 	"${FILESDIR}"/documentation_patches
-	"${FILESDIR}"/fortran_patches
 	"${FILESDIR}"/readline_6.3_patch
 	"${FILESDIR}"/unescaped-left-brace.patch
-	"${FILESDIR}"/wrapper_patches
 )
-
+#	"${FILESDIR}"/fortran_patches
+	"${FILESDIR}"/wrapper_patches
 src_configure() {
 	./configure --with-pgplot-link="-L/usr/lib64/ -lX11 -lpgplot -lpng -lz -L/usr/lib64/pgplot -lpgplot"
 }
