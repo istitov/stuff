@@ -16,9 +16,11 @@ IUSE="doc"
 
 RDEPEND="
 	dev-perl/PGPLOT
+	sci-libs/pgplot[static-libs]
 "
-#	sci-libs/pgplot[static-libs]
-#pgplot still invisible for ifeffit. Probably, it is not a problem
+#	x11-libs/libX11[static-libs]
+#	x11-libs/libXi[static-libs]
+#	x11-libs/libXrender[static-libs]
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -35,10 +37,9 @@ PATCHES=(
 	"${FILESDIR}"/unescaped-left-brace.patch
 	"${FILESDIR}"/wrapper_patches
 )
-	#"${FILESDIR}"/ifeffit_pgplot.patch
 
 src_configure() {
-	default
+	./configure --with-pgplot-link="-L/usr/lib64/ -lX11 -lpgplot -lpng -lz -L/usr/lib64/pgplot -lpgplot"
 }
 
 src_compile() {
@@ -50,7 +51,7 @@ pkg_install() {
 }
 
 pkg_postinst() {
-	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/share/ifeffit/config/Config.mak || die "Sed failed!"
-	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/share/ifeffit/config/TclSetup.in || die "Sed failed!"
-	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/share/ifeffit/config/Makefile.PL || die "Sed failed!"
+	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/local/share/ifeffit/config/Config.mak || die "Sed failed!"
+	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/local/share/ifeffit/config/TclSetup.in || die "Sed failed!"
+	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/local/share/ifeffit/config/Makefile.PL || die "Sed failed!"
 }
