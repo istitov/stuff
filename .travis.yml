@@ -6,7 +6,7 @@ language: python
 python:
     - "3.8"
 env:
-    - PORTAGE_VER="3.0.1"
+    - PORTAGE_VER="3.0.3"
 before_install:
     - sudo apt-get -qq update
     - pip install lxml pyyaml
