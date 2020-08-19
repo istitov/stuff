@@ -3,22 +3,24 @@
 
 EAPI=6
 
-inherit autotools eutils fortran-2 git-r3
+inherit autotools eutils fortran-2
 
 DESCRIPTION="Suite of interactive programs for XAFS analysis"
 HOMEPAGE="https://github.com/newville/ifeffit"
-EGIT_REPO_URI="git://github.com/newville/ifeffit.git"
+SRC_URI="http://archive.ubuntu.com/ubuntu/pool/multiverse/${P:0:1}/${PN}/${PN}_${PV}.orig.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64"
 IUSE="doc"
 
 RDEPEND="
-	sci-libs/pgplot[static-libs]
 	dev-perl/PGPLOT
+	sci-libs/pgplot[static-libs]
 "
-#pgplot still invisible for ifeffit. Probably, it is not a problem
+#	x11-libs/libX11[static-libs]
+#	x11-libs/libXi[static-libs]
+#	x11-libs/libXrender[static-libs]
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -30,11 +32,12 @@ DESTDIR="${D}"
 PATCHES=(
 	"${FILESDIR}"/configuration_patches
 	"${FILESDIR}"/documentation_patches
+	"${FILESDIR}"/fortran_patches
 	"${FILESDIR}"/readline_6.3_patch
 	"${FILESDIR}"/unescaped-left-brace.patch
-)
-#	"${FILESDIR}"/fortran_patches
 	"${FILESDIR}"/wrapper_patches
+)
+
 src_configure() {
 	./configure --with-pgplot-link="-L/usr/lib64/ -lX11 -lpgplot -lpng -lz -L/usr/lib64/pgplot -lpgplot"
 }

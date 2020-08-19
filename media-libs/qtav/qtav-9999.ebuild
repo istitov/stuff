@@ -14,14 +14,13 @@ KEYWORDS=""
 
 LICENSE="GPL-3+ LGPL-2.1+"
 SLOT="0/1"
-IUSE="gui opengl portaudio pulseaudio vaapi cuda libav"
+IUSE="gui opengl portaudio pulseaudio vaapi cuda"
+#libav
 REQUIRED_USE="gui? ( opengl )"
 
 DEPEND="
 	dev-qt/qtcore:5
-	libav? ( x11-libs/libX11
-		media-video/libav:= )
-	!libav? ( media-video/ffmpeg:= )
+	media-video/ffmpeg:=
 	dev-qt/qtdeclarative:5
 	dev-qt/qtgui:5
 	dev-qt/qtwidgets:5
@@ -32,6 +31,10 @@ DEPEND="
 	pulseaudio? ( media-sound/pulseaudio )
 	cuda? ( dev-util/nvidia-cuda-toolkit )
 "
+#	libav? ( x11-libs/libX11
+#		media-video/libav:= )
+#	!libav? ( media-video/ffmpeg:= )
+
 RDEPEND="${DEPEND}"
 
 #S="${WORKDIR}/${MY_PN}-${PV}"

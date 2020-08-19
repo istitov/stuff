@@ -5,7 +5,7 @@
      } else {
        ($pgplot_location, $compile_flags, $linker_flags) = (q{}, q{});
 -      $iffdir = `ifeffit -i 2>/dev/null`;
-+      $iffdir = '/usr/share/ifeffit';
++      $iffdir = '/usr/local/share/ifeffit';
        if ($iffdir =~ m{\A\s*\z}) {
  	print STDOUT "** Ifeffit is not available.  Install Larch to use Demeter. **\n";
        } else {
