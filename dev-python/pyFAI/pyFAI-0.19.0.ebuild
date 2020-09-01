@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{7..9} )
 #python2_7 masked because of h5py
 
 inherit distutils-r1 flag-o-matic

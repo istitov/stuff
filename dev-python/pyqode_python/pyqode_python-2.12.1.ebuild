@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{7..8} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -27,7 +27,7 @@ RDEPEND="
 	dev-python/pycodestyle[${PYTHON_USEDEP}]
 	dev-python/pyqode_qt[${PYTHON_USEDEP}]
 	dev-python/pyqode_core[${PYTHON_USEDEP}]
-	pyqt-distutils? ( dev-python/pyqt-distutils )
+	pyqt-distutils? ( dev-python/pyqt-distutils[${PYTHON_USEDEP}] )
 "
 #    pyqode-uic? ( )
 #    test? ('pytest-cov', 'pytest-pep8', 'pytest')

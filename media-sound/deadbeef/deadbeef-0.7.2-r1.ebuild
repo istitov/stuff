@@ -168,15 +168,15 @@ pkg_postinst() {
 		einfo "enable manually freepats support for timidity via"
 		einfo "eselect timidity set --global freepats"
 	fi
-	xdg-utils_desktop_database_update
-	xdg-utils_mime_database_update
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
 	gnome2_icon_cache_update
 	gnome2_schemas_update
 }
 
 pkg_postrm() {
-	xdg-utils_desktop_database_update
-	xdg-utils_mime_database_update
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
 	gnome2_icon_cache_update
 	gnome2_schemas_update
 }
