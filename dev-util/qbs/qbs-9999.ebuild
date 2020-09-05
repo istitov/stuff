@@ -30,12 +30,12 @@ DEPEND="${RDEPEND}
 	doc? (
 		dev-qt/qdoc:5
 		dev-qt/qthelp:5
-		dev-qt/qttest:5
 	)
 	test? (
 		dev-qt/linguist-tools:5
 		dev-qt/qtdbus:5
 		dev-qt/qtdeclarative:5
+		dev-qt/qttest:5
 	)
 "
 
