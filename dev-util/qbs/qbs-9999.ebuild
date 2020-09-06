@@ -25,7 +25,6 @@ RDEPEND="
 	dev-qt/qtscript:5
 	dev-qt/qtwidgets:5
 	dev-qt/qtxml:5
-	test? ( dev-qt/qttest:5 )
 "
 DEPEND="${RDEPEND}
 	doc? (
@@ -36,6 +35,7 @@ DEPEND="${RDEPEND}
 		dev-qt/linguist-tools:5
 		dev-qt/qtdbus:5
 		dev-qt/qtdeclarative:5
+		dev-qt/qttest:5
 	)
 "
 

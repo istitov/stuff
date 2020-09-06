@@ -18,7 +18,6 @@ RDEPEND="
 	sci-libs/pgplot[static-libs]
 	dev-perl/PGPLOT
 "
-#pgplot still invisible for ifeffit. Probably, it is not a problem
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -34,7 +33,7 @@ PATCHES=(
 	"${FILESDIR}"/unescaped-left-brace.patch
 )
 #	"${FILESDIR}"/fortran_patches
-	"${FILESDIR}"/wrapper_patches
+#	"${FILESDIR}"/wrapper_patches
 src_configure() {
 	./configure --with-pgplot-link="-L/usr/lib64/ -lX11 -lpgplot -lpng -lz -L/usr/lib64/pgplot -lpgplot"
 }
