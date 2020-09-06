@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit perl-module
+inherit perl-module virtualx
 
 DESCRIPTION="Software for XAS data processing"
 HOMEPAGE="https://github.com/bruceravel/demeter"
@@ -13,7 +13,7 @@ SRC_URI="https://github.com/bruceravel/demeter/archive/${PV}.tar.gz -> ${P}.gh.t
 LICENSE="Artistic GPL-1+"
 SLOT="0"
 KEYWORDS=""
-IUSE="doc perl"
+IUSE="doc test"
 
 RDEPEND="
 	sci-physics/xraylarch
@@ -74,6 +74,7 @@ RDEPEND="
 #	dev-perl/RPC-XML-Client
 
 DEPEND="${RDEPEND}
+	test? ( x11-base/xorg-server[xvfb] )
 	doc? ( dev-util/gtk-doc )
 "
 
@@ -93,7 +94,7 @@ src_compile() {
 }
 
 src_test() {
-	test? ./Build test
+	virtx ./Build test
 }
 
 src_install() {

@@ -3,16 +3,16 @@
 
 EAPI=7
 
-inherit perl-module git-r3
+inherit perl-module git-r3 virtualx
 
 DESCRIPTION="Software for XAS data processing"
 HOMEPAGE="https://github.com/bruceravel/demeter"
-EGIT_REPO_URI="git://github.com/bruceravel/demeter.git"
+EGIT_REPO_URI="https://github.com/bruceravel/demeter.git"
 
 LICENSE="Artistic GPL-1+"
 SLOT="0"
 KEYWORDS=""
-IUSE="doc perl"
+IUSE="doc test"
 
 RDEPEND="
 	sci-physics/xraylarch
@@ -73,6 +73,7 @@ RDEPEND="
 #	dev-perl/RPC-XML-Client
 
 DEPEND="${RDEPEND}
+	test? ( x11-base/xorg-server[xvfb] )
 	doc? ( dev-util/gtk-doc )
 "
 
@@ -92,7 +93,7 @@ src_compile() {
 }
 
 src_test() {
-	test? ./Build test
+	virtx ./Build test
 }
 
 src_install() {
