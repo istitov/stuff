@@ -43,7 +43,7 @@ pkg_setup() {
 }
 
 src_configure() {
-	./configure \
+	econf \
 		$(use_enable doc gtk-doc) \
 		$(use_with gtk inftextgtk) \
 		$(use_with gtk infgtk) \
