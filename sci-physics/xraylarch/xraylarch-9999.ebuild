@@ -9,7 +9,7 @@ inherit distutils-r1 flag-o-matic git-r3
 
 DESCRIPTION="Software for XRF data analysis"
 HOMEPAGE="https://xraypy.github.io/xraylarch"
-EGIT_REPO_URI="git://github.com/xraypy/xraylarch.git"
+EGIT_REPO_URI="https://github.com/xraypy/xraylarch.git"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -73,17 +73,20 @@ PATCHES=(
 	"${FILESDIR}"/weird_patch_for_demeter
 )
 
+distutils_enable_sphinx docs
+distutils_enable_tests pytest
+
 python_compile() {
 	INSTALL_DIR="${D}"
 	distutils-r1_python_compile
+	sed -i -e 's:../examples/:./examples/:' tests/*.py || die
+	sed -i -e "s:'larch_scripts':'tests/larch_scripts':" tests/*.py || die
+	sed -i -e "s:'test_larch_plugin':'tests/test_larch_plugin':" tests/*.py || die
+	sed -i -e "s:'..', 'examples':'.', 'examples':" tests/*.py || die
 }
 
 python_compile_all() {
-	use doc && setup.py build
-}
-
-python_test() {
-	setup.py test
+	esetup.py build
 }
 
 python_install_all() {
