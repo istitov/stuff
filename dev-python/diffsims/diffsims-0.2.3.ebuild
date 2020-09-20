@@ -18,7 +18,7 @@ IUSE="doc python"
 
 RDEPEND="
 	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
-	>=sci-libs/scipy-0.15[${PYTHON_USEDEP}]
+	>=dev-python/scipy-0.15[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	>=dev-python/tqdm-0.4.9[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]

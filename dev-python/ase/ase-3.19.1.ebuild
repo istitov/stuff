@@ -19,7 +19,7 @@ PYTHON_REQ_USE="tk"
 
 RDEPEND="${PYTHON_DEPS}
 	dev-python/numpy
-	sci-libs/scipy
+	dev-python/scipy
 	dev-python/matplotlib
 	dev-python/psycopg
 	"

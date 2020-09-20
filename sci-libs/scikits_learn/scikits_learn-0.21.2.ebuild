@@ -27,7 +27,7 @@ RDEPEND="
 	dev-python/nose[${PYTHON_USEDEP}]
 	dev-python/numpy[lapack,${PYTHON_USEDEP}]
 	sci-libs/scikits[${PYTHON_USEDEP}]
-	sci-libs/scipy[${PYTHON_USEDEP}]
+	dev-python/scipy[${PYTHON_USEDEP}]
 	virtual/blas:=
 	virtual/cblas:=
 "
@@ -36,7 +36,7 @@ DEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/numpy[lapack,${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	sci-libs/scipy[${PYTHON_USEDEP}]
+	dev-python/scipy[${PYTHON_USEDEP}]
 	virtual/blas:=
 	virtual/cblas:=
 "

@@ -19,7 +19,7 @@ IUSE="python doc +learning +gui-jupyter speed +gui-traitsui mrcz"
 
 RDEPEND="
 	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
-	>=sci-libs/scipy-0.15[${PYTHON_USEDEP}]
+	>=dev-python/scipy-0.15[${PYTHON_USEDEP}]
 	dev-python/natsort[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-2.2.3[${PYTHON_USEDEP}]
 	!~dev-python/numpy-1.13.0
