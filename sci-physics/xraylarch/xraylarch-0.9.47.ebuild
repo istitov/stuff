@@ -18,7 +18,7 @@ IUSE="doc python"
 
 RDEPEND="
 	>=dev-python/numpy-1.15[${PYTHON_USEDEP}]
-	>=sci-libs/scipy-1.2[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.2[${PYTHON_USEDEP}]
 	>=dev-python/six-1.10[${PYTHON_USEDEP}]
 	>=dev-python/sqlalchemy-0.9[${PYTHON_USEDEP}]
 	>=dev-python/h5py-2.8[${PYTHON_USEDEP}]
@@ -68,19 +68,23 @@ PATCHES=(
 	"${FILESDIR}"/conf.patch
 	"${FILESDIR}"/py.patch
 	"${FILESDIR}"/weird_patch_for_demeter
+	"${FILESDIR}"/int_cromer_liberman
 )
+
+distutils_enable_sphinx docs
+distutils_enable_tests pytest
 
 python_compile() {
 	INSTALL_DIR="${D}"
 	distutils-r1_python_compile
+	sed -i -e 's:../examples/:./examples/:' tests/*.py || die
+	sed -i -e "s:'larch_scripts':'tests/larch_scripts':" tests/*.py || die
+	sed -i -e "s:'test_larch_plugin':'tests/test_larch_plugin':" tests/*.py || die
+	sed -i -e "s:'..', 'examples':'.', 'examples':" tests/*.py || die
 }
 
 python_compile_all() {
-	use doc && setup.py build
-}
-
-python_test() {
-	setup.py test
+	esetup.py build
 }
 
 python_install_all() {

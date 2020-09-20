@@ -12,11 +12,10 @@ SRC_URI="https://github.com/bruceravel/demeter/archive/${PV}.tar.gz -> ${P}.gh.t
 
 LICENSE="Artistic GPL-1+"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64"
 IUSE="doc test"
 
 RDEPEND="
-	sci-physics/xraylarch
 	sci-physics/ifeffit
 	>=dev-perl/Archive-Zip-1.31
 	dev-perl/Module-Build
@@ -69,6 +68,7 @@ RDEPEND="
 	dev-perl/Term-Twiddle
 	virtual/perl-ExtUtils-CBuilder
 "
+#	sci-physics/xraylarch
 #	dev-perl/Digest-SHA
 #	dev-perl/YAML-Tiny
 #	dev-perl/RPC-XML-Client

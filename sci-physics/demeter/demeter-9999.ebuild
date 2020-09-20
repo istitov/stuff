@@ -15,7 +15,6 @@ KEYWORDS=""
 IUSE="doc test"
 
 RDEPEND="
-	sci-physics/xraylarch
 	sci-physics/ifeffit
 	>=dev-perl/Archive-Zip-1.31
 	dev-perl/Module-Build
@@ -68,6 +67,7 @@ RDEPEND="
 	dev-perl/Term-Twiddle
 	virtual/perl-ExtUtils-CBuilder
 "
+#	sci-physics/xraylarch
 #	dev-perl/Digest-SHA
 #	dev-perl/YAML-Tiny
 #	dev-perl/RPC-XML-Client
