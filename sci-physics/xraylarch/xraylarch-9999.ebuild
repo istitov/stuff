@@ -18,7 +18,7 @@ IUSE="doc python"
 
 RDEPEND="
 	>=dev-python/numpy-1.15[${PYTHON_USEDEP}]
-	>=sci-libs/scipy-1.2[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.2[${PYTHON_USEDEP}]
 	>=dev-python/six-1.10[${PYTHON_USEDEP}]
 	>=dev-python/sqlalchemy-0.9[${PYTHON_USEDEP}]
 	>=dev-python/h5py-2.8[${PYTHON_USEDEP}]
