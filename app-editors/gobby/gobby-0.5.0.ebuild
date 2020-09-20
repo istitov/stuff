@@ -41,7 +41,7 @@ src_configure() {
 
 src_install() {
 	emake DESTDIR="${D}" install || die
-	domenu contrib/gobby-0.5.desktop
+	domenu gobby-0.5.desktop
 	doicon gobby-0.5.xpm
 }
 
