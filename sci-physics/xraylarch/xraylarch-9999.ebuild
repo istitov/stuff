@@ -71,7 +71,6 @@ PATCHES=(
 	"${FILESDIR}"/full_conf.patch
 	"${FILESDIR}"/py.patch
 	"${FILESDIR}"/weird_patch_for_demeter
-	"${FILESDIR}"/int_cromer_liberman
 )
 
 distutils_enable_sphinx docs
