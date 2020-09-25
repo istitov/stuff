@@ -15,6 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc python"
+RESTRICT=strip
 
 RDEPEND="
 	>=dev-python/numpy-1.15[${PYTHON_USEDEP}]

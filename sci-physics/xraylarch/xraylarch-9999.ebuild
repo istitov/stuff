@@ -15,6 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 IUSE="doc python"
+RESTRICT=strip
 
 RDEPEND="
 	>=dev-python/numpy-1.15[${PYTHON_USEDEP}]
@@ -71,7 +72,6 @@ PATCHES=(
 	"${FILESDIR}"/full_conf.patch
 	"${FILESDIR}"/py.patch
 	"${FILESDIR}"/weird_patch_for_demeter
-	"${FILESDIR}"/int_cromer_liberman
 )
 
 distutils_enable_sphinx docs
