@@ -18,7 +18,7 @@ IUSE="doc python"
 
 RDEPEND="
 	>=dev-python/numpy-1.8
-	>=sci-libs/scipy-0.11
+	>=dev-python/scipy-0.11
 	dev-python/setuptools
 "
 #dev-python/PyQt4
