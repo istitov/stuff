@@ -5,4 +5,8 @@
 		<email>pasis.ua@gmail.com</email>
 		<name>Dmitry Podgorny</name>
 	</maintainer>
+	<use>
+		<flag name='gtk'>Build GTK graphical UI</flag>
+		<flag name='ncurses'>Build Ncurses text UI</flag>
+	</use>
 </pkgmetadata>
