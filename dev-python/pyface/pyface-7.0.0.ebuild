@@ -20,7 +20,7 @@ RDEPEND="
 	dev-python/traits
 	pyqt5? ( dev-python/PyQt5 dev-python/pygments )
 	wx? ( >=dev-python/wxpython-2.8.10:* dev-python/numpy )
-	pyside? ( >=dev-python/pyside-1.2 dev-python/pygments )
+	pyside? ( dev-python/pyside2 dev-python/pygments )
 "
 
 DEPEND="${RDEPEND}

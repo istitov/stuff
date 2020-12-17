@@ -23,7 +23,7 @@ RDEPEND="
 	>=dev-python/six-1.10[${PYTHON_USEDEP}]
 	>=dev-python/sqlalchemy-0.9[${PYTHON_USEDEP}]
 	>=dev-python/h5py-2.8[${PYTHON_USEDEP}]
-	>=sci-libs/scikits_learn-0.18[${PYTHON_USEDEP}]
+	>=sci-libs/scikit-learn-0.18[${PYTHON_USEDEP}]
 	>=dev-python/pillow-3.4[${PYTHON_USEDEP}]
 	>=dev-python/PeakUtils-1.3.0[${PYTHON_USEDEP}]
 	>=dev-python/requests-2.1[${PYTHON_USEDEP}]
@@ -36,7 +36,7 @@ RDEPEND="
 	dev-python/wxpython:*[${PYTHON_USEDEP}]
 	dev-python/wxmplot[${PYTHON_USEDEP}]
 	dev-python/wxutils[${PYTHON_USEDEP}]
-	sci-libs/scikits_image[${PYTHON_USEDEP}]
+	sci-libs/scikit-image[${PYTHON_USEDEP}]
 	dev-python/silx[${PYTHON_USEDEP}]
 	dev-python/pytest[${PYTHON_USEDEP}]
 	dev-python/pip[${PYTHON_USEDEP}]
@@ -71,7 +71,6 @@ DESTDIR="${D}"
 PATCHES=(
 	"${FILESDIR}"/full_conf.patch
 	"${FILESDIR}"/py.patch
-	"${FILESDIR}"/weird_patch_for_demeter
 )
 
 distutils_enable_sphinx docs

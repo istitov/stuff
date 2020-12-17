@@ -33,7 +33,7 @@ RDEPEND="
 	>=dev-python/python-dateutil-2.5.0[${PYTHON_USEDEP}]
 	dev-python/ipyparallel[${PYTHON_USEDEP}]
 	>=dev-python/dask-0.18[${PYTHON_USEDEP}]
-	>=sci-libs/scikits_image-0.13[${PYTHON_USEDEP}]
+	>=sci-libs/scikit-image-0.13[${PYTHON_USEDEP}]
 	>=dev-python/Pint-0.8[${PYTHON_USEDEP}]
 	dev-python/statsmodels[${PYTHON_USEDEP}]
 	dev-python/numexpr[${PYTHON_USEDEP}]
@@ -41,7 +41,7 @@ RDEPEND="
 	dev-python/imageio[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
-	learning? ( sci-libs/scikits_learn[${PYTHON_USEDEP}] )
+	learning? ( sci-libs/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( dev-python/numba[${PYTHON_USEDEP}] dev-python/cython[${PYTHON_USEDEP}] )
 "
 	##tests? ( >=dev-python/pytest-3.6 dev-python/pytest-mpl >=dev-python/matplotlib-3.1 )
