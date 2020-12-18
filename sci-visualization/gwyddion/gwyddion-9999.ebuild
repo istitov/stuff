@@ -34,7 +34,7 @@ RDEPEND="
 	perl? ( dev-lang/perl:= )
 	python? ( ${PYTHON_DEPS}
 		dev-python/pygtk:2[${PYTHON_USEDEP}]
-		dev-python/pygments[${PYTHON_USEDEP}]
+		dev-python/pygments
 	)
 	ruby? ( dev-ruby/narray )
 	sourceview? ( x11-libs/gtksourceview:2.0 )
