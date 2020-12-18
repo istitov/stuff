@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit fdo-mime gnome2-utils python-r1 subversion autotools
+inherit xdg-utils gnome2-utils python-r1 subversion autotools
 
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
 HOMEPAGE="http://gwyddion.net/"
@@ -34,7 +34,7 @@ RDEPEND="
 	perl? ( dev-lang/perl:= )
 	python? ( ${PYTHON_DEPS}
 		dev-python/pygtk:2[${PYTHON_USEDEP}]
-		dev-python/pygments[${PYTHON_USEDEP}]
+		dev-python/pygments
 	)
 	ruby? ( dev-ruby/narray )
 	sourceview? ( x11-libs/gtksourceview:2.0 )
@@ -64,13 +64,9 @@ src_install() {
 
 pkg_postinst() {
 	use gnome && gnome2_gconf_install
-	fdo-mime_desktop_database_update
+	xdg_pkg_postinst
 }
 
 pkg_prerm() {
 	use gnome && gnome2_gconf_uninstall
-}
-
-pkg_postrm() {
-	fdo-mime_desktop_database_update
 }
