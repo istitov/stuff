@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6..9} )
+PYTHON_COMPAT=( python3_{7..9} )
 DISTUTILS_USE_SETUPTOOLS=rdepend
 inherit distutils-r1 optfeature
 
@@ -23,6 +23,7 @@ RDEPEND="
 	dev-python/pillow[${PYTHON_USEDEP}]
 	dev-python/pywavelets[${PYTHON_USEDEP}]
 	dev-python/scipy[sparse,${PYTHON_USEDEP}]
+	dev-python/tifffile[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}
 	dev-python/cython[${PYTHON_USEDEP}]
