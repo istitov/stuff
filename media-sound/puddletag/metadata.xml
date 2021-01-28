@@ -6,7 +6,7 @@
     <name>Komashko Stanislav</name>
   </maintainer>
   <longdescription>
-	Puddletag is an audio tag editor (primarily created) for GNU/Linux similar to the Windows program, Mp3tag.
+    Puddletag is an audio tag editor (primarily created) for GNU/Linux similar to the Windows program, Mp3tag.
   </longdescription>
   <use>
     <flag name="cover"> Enables editing of FLAC cover art</flag>
