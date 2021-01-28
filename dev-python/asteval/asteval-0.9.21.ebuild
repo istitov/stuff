@@ -3,12 +3,12 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_5 python3_6 )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Python wrappers for generating CTest and submitting to CDash without a CMake"
-HOMEPAGE="https://github.com/jrmadsen/pyctest"
+DESCRIPTION="ASTEVAL provides a numpy-aware, safe(ish) eval function"
+HOMEPAGE="https://github.com/newville/asteval"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
@@ -17,14 +17,14 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-
+	>=dev-python/numpy-1.6
+	dev-python/six
 "
+#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 "
-
-#The C++ compiler requires support for C++11, in particular it needs to support lambdas and std::unique_ptr
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 

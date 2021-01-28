@@ -3,13 +3,13 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_{6..9} )
 
 inherit distutils-r1
 
 DESCRIPTION="NumPy aware dynamic Python compiler using LLVM"
 HOMEPAGE="http://numba.pydata.org/"
-SRC_URI="https://github.com/${PN}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -18,8 +18,8 @@ IUSE="examples test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=dev-python/llvmlite-0.22.0[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
+	>=dev-python/llvmlite-0.33.0[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.15[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]

@@ -3,12 +3,12 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{6..9} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="ASTEVAL provides a numpy-aware, safe(ish) eval function"
-HOMEPAGE="https://github.com/newville/asteval"
+DESCRIPTION="FabIO is an I/O library for images produced by 2D X-ray detectors"
+HOMEPAGE="https://github.com/silx-kit/fabio"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
@@ -17,8 +17,14 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	>=dev-python/numpy-1.6
-	dev-python/six
+	dev-python/cython
+	dev-python/h5py
+	dev-python/lxml
+	dev-python/matplotlib
+
+	dev-python/sphinx
+	dev-python/numpy
+	dev-python/pillow
 "
 #dev-python/PyQt4
 
