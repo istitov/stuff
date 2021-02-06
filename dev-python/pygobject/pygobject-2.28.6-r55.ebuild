@@ -4,6 +4,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
+_PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 
 inherit autotools eutils gnome2 python-r1 virtualx
