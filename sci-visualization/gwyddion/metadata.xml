@@ -19,5 +19,8 @@
     <flag name="fits">
       Enable FITS image import via <pkg>sci-libs/cfitsio</pkg>
     </flag>
+    <flag name="python_targets_python2_7">
+      Enable Python-compatible libs (python2_7 only)
+    </flag>
   </use>
 </pkgmetadata>

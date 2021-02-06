@@ -33,7 +33,7 @@ RDEPEND="
 	gnome? ( gnome-base/gconf:2 )
 	opengl? ( virtual/opengl x11-libs/gtkglext )
 	perl? ( dev-lang/perl:= )
-	python? ( ${PYTHON_DEPS}
+	python? ( dev-lang/python:2.7
 		dev-python/pygtk:2[${PYTHON_USEDEP}]
 	)
 	ruby? ( dev-ruby/narray )
