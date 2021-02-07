@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python2_7 )
 _PYTHON_ALLOW_PY27=1
 PYTHON_REQ_USE="threads(+)"
 DISTUTILS_USE_SETUPTOOLS="manual"
-DISTUTILS_SINGLE_IMPL=1
+#DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_OPTIONAL=1
 inherit distutils-r1
 
@@ -35,11 +35,11 @@ PATCHES=( "${FILESDIR}/${MYPN}-1.19.1-py39.patch" )
 S="${WORKDIR}/${MYP}"
 BUILD_DIR=${S}
 src_compile() {
-	_distutils-r1_copy_egg_info
-	esetup.py build  "${build_args[@]}" "${@}"
+	python_foreach_impl _distutils-r1_copy_egg_info
+	python_foreach_impl esetup.py build  "${build_args[@]}" "${@}"
 }
 
 src_install() {
-	distutils-r1_python_install \
+	python_foreach_impl distutils-r1_python_install \
 		install_pkgconfig --pkgconfigdir="${EPREFIX}/usr/$(get_libdir)/pkgconfig"
 }

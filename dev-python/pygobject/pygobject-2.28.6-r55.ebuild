@@ -20,9 +20,8 @@ RESTRICT="!test? ( test )"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 COMMON_DEPEND=">=dev-libs/glib-2.24.0:2
-	dev-lang/python-exec:2
 	libffi? ( dev-libs/libffi:= )
-	${PYTHON_DEPS}
+	dev-lang/python:2.7
 "
 DEPEND="${COMMON_DEPEND}
 	dev-util/gtk-doc-am
