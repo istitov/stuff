@@ -10,7 +10,7 @@
 		<remote-id type="github">pypa/setuptools</remote-id>
 		<remote-id type="cpe">cpe:/a:python:setuptools</remote-id>
 	</upstream>
-		<use>
+	<use>
 		<flag name="python_targets_python2_7">
 			Enable Python-compatible libs (python2_7 only)
 		</flag>
