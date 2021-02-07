@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+_PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 USE_RUBY="ruby23"
 inherit eutils toolchain-funcs multilib python-single-r1 ruby-single git-r3
@@ -63,7 +64,7 @@ DEPEND="${COMMON_DEPEND}
 	compressed-lumas? ( || ( media-gfx/imagemagick[png]
 				media-gfx/graphicsmagick[imagemagick,png] ) )
 	lua? ( ${SWIG_DEPEND} virtual/pkgconfig )
-	python? ( ${SWIG_DEPEND} ${PYTHON_DEPS} )
+	python? ( ${SWIG_DEPEND} dev-lang/python:2.7 )
 	ruby? ( ${SWIG_DEPEND} )"
 #	java? ( ${SWIG_DEPEND} >=virtual/jdk-1.5 )
 #	perl? ( ${SWIG_DEPEND} )

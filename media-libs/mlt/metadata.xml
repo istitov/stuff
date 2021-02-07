@@ -10,6 +10,7 @@
 		<flag name="python">Build SWIG bindings for Python</flag>
 		<flag name="rtaudio">Builds rtaudio consumer for native audio support on multiple platforms.</flag>
 		<flag name="ruby">Build SWIG bindings for Ruby</flag>
+		<flag name="python_single_target_python2_7">Enable Python-compatible libs (python2_7 only)</flag>
 	</use>
 	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
