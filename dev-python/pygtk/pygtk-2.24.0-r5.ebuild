@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-
 GNOME_TARBALL_SUFFIX="bz2"
+_PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 inherit autotools flag-o-matic gnome2 python-r1 virtualx
 
@@ -18,12 +18,12 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RESTRICT="!test? ( test )"
 
-RDEPEND="${PYTHON_DEPS}
+RDEPEND="dev-lang/python:2.7
 	>=dev-libs/glib-2.8:2
 	>=x11-libs/pango-1.16
 	>=dev-libs/atk-1.12
 	>=x11-libs/gtk+-2.24:2
-	>=dev-python/pycairo-1.0.2[${PYTHON_USEDEP}]
+	dev-python/pycairo-python2[${PYTHON_USEDEP}]
 	>=dev-python/pygobject-2.26.8-r53:2[${PYTHON_USEDEP}]
 	>=gnome-base/libglade-2.5:2.0
 "

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-
+_PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 
 inherit xdg-utils gnome2-utils python-r1
@@ -33,7 +33,7 @@ RDEPEND="
 	gnome? ( gnome-base/gconf:2 )
 	opengl? ( virtual/opengl x11-libs/gtkglext )
 	perl? ( dev-lang/perl:= )
-	python? ( ${PYTHON_DEPS}
+	python? ( dev-lang/python:2.7
 		dev-python/pygtk:2[${PYTHON_USEDEP}]
 	)
 	ruby? ( dev-ruby/narray )
