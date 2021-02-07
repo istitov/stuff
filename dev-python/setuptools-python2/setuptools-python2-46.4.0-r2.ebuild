@@ -28,7 +28,7 @@ BDEPEND="
 # installing plugins apparently breaks stuff at runtime, so let's pull
 # it early
 PDEPEND="
-	>=dev-python/certifi-2016.9.26[${PYTHON_USEDEP}]
+	>=dev-python/certifi-python2-2016.9.26[${PYTHON_USEDEP}]
 	dev-python/setuptools_scm-python2[${PYTHON_USEDEP}]"
 
 # Force in-source build because build system modifies sources.
@@ -36,7 +36,7 @@ DISTUTILS_IN_SOURCE_BUILD=1
 S="${WORKDIR}/${MYP}"
 DOCS=( {CHANGES,README}.rst docs/{easy_install.txt,pkg_resources.txt,setuptools.txt} )
 
-python_prepare_all() {
+src_prepare_all() {
 	# silence the py2 warning that is awfully verbose and breaks some
 	# packages by adding unexpected output
 	# (also, we know!)
