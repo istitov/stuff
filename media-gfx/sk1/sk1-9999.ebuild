@@ -6,6 +6,11 @@ EAPI="5"
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="tk(+)"
 
+_PYTHON_ALLOW_PY27=1
+DISTUTILS_USE_SETUPTOOLS="manual"
+#DISTUTILS_SINGLE_IMPL=1
+DISTUTILS_OPTIONAL=1
+
 inherit eutils git-r3 distutils-r1
 
 DESCRIPTION="sK1 vector graphics editor"
