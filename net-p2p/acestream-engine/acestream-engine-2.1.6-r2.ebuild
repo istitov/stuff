@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-
+_PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 
 inherit multilib python-r1 unpacker

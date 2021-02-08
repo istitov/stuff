@@ -34,5 +34,6 @@
 			tables which allow fine control of kerning (etc.) at
 			small point sizes</flag>
 		<flag name="gb12345">Control whether fontforge understands the gb12345 encoding</flag>
+		<flag name="python_single_target_python2_7">Enable Python-compatible libs (python2_7 only)</flag>
 	</use>
 </pkgmetadata>

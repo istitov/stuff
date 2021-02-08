@@ -12,10 +12,10 @@
 # users. http://fontforge.sourceforge.net/faq.html#libraries. To see what
 # libraries fontforge thinks with use $ fontforge --library-status
 
-EAPI="5"
-
+EAPI="7"
+_PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
-inherit eutils xdg-utils python-r1 autotools git-r3
+inherit eutils xdg-utils python-single-r1 autotools git-r3
 
 HTDOCSV="20110221"
 CIDMAPV="20090121"
@@ -31,7 +31,8 @@ SLOT="0"
 KEYWORDS=""
 IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X capslock-for-alt freetype-bytecode freetype devicetables gb12345"
 
-RDEPEND="gif? ( >=media-libs/giflib-4.1.0-r1 )
+RDEPEND="python? ( dev-lang/python:2.7 )
+	gif? ( >=media-libs/giflib-4.1.0-r1 )
 	jpeg? ( virtual/jpeg:0 )
 	png? ( media-libs/libpng:0 )
 	tiff? ( media-libs/tiff:0 )
@@ -49,10 +50,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MY_P}"
 
 pkg_setup() {
-	if use python; then
-		python_set_active_version 2
-		python_pkg_setup
-	fi
+	python-single-r1_pkg_setup
 }
 
 src_prepare() {

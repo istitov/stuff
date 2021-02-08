@@ -4,7 +4,9 @@
 EAPI=7
 
 DISTUTILS_USE_SETUPTOOLS=no
-PYTHON_COMPAT=( python2_7 python3_{6..9} pypy3 )
+_PYTHON_ALLOW_PY27=1
+DISTUTILS_OPTIONAL=1
+PYTHON_COMPAT=( python2_7 )
 
 inherit distutils-r1
 
@@ -27,6 +29,16 @@ RDEPEND="app-misc/ca-certificates"
 distutils_enable_tests unittest
 
 src_prepare() {
+	default
 	sed -i -e "s^/etc^${EPREFIX}/etc^" certifi/core.py || die
 	distutils-r1_src_prepare
+}
+
+src_compile() {
+	python_foreach_impl _distutils-r1_copy_egg_info
+	python_foreach_impl esetup.py build  "${build_args[@]}" "${@}"
+}
+
+src_install() {
+	python_foreach_impl distutils-r1_python_install
 }

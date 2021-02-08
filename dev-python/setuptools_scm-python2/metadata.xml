@@ -10,4 +10,9 @@
 		<remote-id type="pypi">setuptools-scm</remote-id>
 		<remote-id type="github">pypa/setuptools_scm</remote-id>
 	</upstream>
+	<use>
+		<flag name="python_targets_python2_7">
+			Enable Python-compatible libs (python2_7 only)
+		</flag>
+	</use>
 </pkgmetadata>
