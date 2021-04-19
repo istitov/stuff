@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="3"
+EAPI="7"
 
 inherit autotools
 
@@ -31,6 +31,7 @@ src_unpack() {
 }
 
 src_prepare(){
+	default
 	sed -i -e 's/vapigen/vapigen-0.12/' configure.in
 	sed -i -e 's/-Werror//' configure.in
 
