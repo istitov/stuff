@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="4"
+EAPI="7"
 MY_P="${P#deadbeef-}"
 
 inherit eutils flag-o-matic multilib toolchain-funcs
