@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI="7"
 PYTHON_COMPAT=( python3_{6,7,8,9} )
 
 inherit distutils-r1 python-r1 git-r3
@@ -17,11 +17,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="dbus mpd taglib"
 
-LANGS="ar be ca cs da de el es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
-#el-GR replaced by el
+LANGS="ar be ca cs da de el_GR es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
+
 for X in ${LANGS} ; do
 	IUSE+=" l10n_${X}"
 done
+
 RDEPEND=">=dev-python/python-mpd-0.4.6
 	>=dev-python/pygobject-3.4.2
 	>=x11-libs/gtk+-3.4
@@ -40,6 +41,7 @@ src_prepare() {
 				rm po/${lang/-/_}.po || die "failed to remove nls"
 			fi
 		done
+	default
 }
 
 src_install() {
