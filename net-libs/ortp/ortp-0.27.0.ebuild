@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="4"
+EAPI="7"
 
 inherit eutils autotools
 
@@ -59,6 +59,7 @@ src_prepare() {
 	rm -f m4/libtool.m4 m4/lt*.m4 #282268
 	mkdir m4
 	eautoreconf
+	default
 }
 
 src_configure() {

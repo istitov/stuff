@@ -7,7 +7,7 @@ inherit cmake
 
 DESCRIPTION="Utilities library used by Belledonne Communications softwares"
 HOMEPAGE="https://www.linphone.org/ https://savannah.nongnu.org/projects/linphone/"
-SRC_URI="http://www.linphone.org/releases/sources/${PN}/${P}.tar.gz"
+SRC_URI="http://www.linphone.org/releases/old/sources/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
