@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="5"
-inherit readme.gentoo toolchain-funcs eapi7-ver
+inherit readme.gentoo-r1 toolchain-funcs eapi7-ver
 
 COMPRESSTYPE=".xz"
 K_USEPV="yes"
