@@ -21,12 +21,16 @@ DEPEND_COMMON="
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
-S="${WORKDIR}/deadbeef-devel"
+#S="${WORKDIR}/deadbeef-devel"
 
 src_configure() {
+	sed -i "s/errno/errorNum/g" utils.c
+	sed -i "s/gtk_css_provider_get_default/gtk_css_provider_new/g" utils.c
 	./autogen.sh
 	my_config="--disable-static
-	  --enable-gtk3"
+	  --enable-gtk3
+	  --disable-gtk2
+	"
 	econf ${my_config}
 }
 

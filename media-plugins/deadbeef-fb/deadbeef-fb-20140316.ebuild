@@ -11,7 +11,8 @@ SRC_URI="mirror://sourceforge/${PN}/${PN}_${PV}_src.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
+#~amd64 ~x86
 IUSE=""
 
 DEPEND_COMMON="
@@ -24,8 +25,11 @@ DEPEND="${DEPEND_COMMON}"
 S="${WORKDIR}/deadbeef-devel"
 
 src_configure() {
+	sed -i "s/errno/errorNum/g" utils.c
+	sed -i "s/gtk_css_provider_get_default/gtk_css_provider_new/g" utils.c
 	econf --disable-static \
 		--enable-gtk3
+		--disable-gtk2
 }
 
 src_install() {
