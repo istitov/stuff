@@ -17,7 +17,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="dbus mpd taglib"
 
-LANGS="ar be ca cs da de el_GR es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
+LANGS="ar be ca cs da de es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
+# el_GR
 
 for X in ${LANGS} ; do
 	IUSE+=" l10n_${X}"

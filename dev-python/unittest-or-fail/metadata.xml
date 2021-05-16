@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<use>
+		<flag name="python_targets_python2_7">
+			Enable Python-compatible libs (python2_7 only)
+		</flag>
+	</use>
 </pkgmetadata>
