@@ -1,9 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-
-inherit oasis
+EAPI=7
 
 OASIS_BUILD_DOCS=1
 DESCRIPTION="FUSE filesystem over Google Drive"
