@@ -23,5 +23,5 @@ RDEPEND=">=dev-ml/ocurl-0.5.3:=
 	dev-ml/ocamlfuse
 	dev-ml/ocaml-sqlite3"
 DEPEND="${RDEPEND}
-	test? ( >=dev-ml/ounit-1.1.0 )"
+	test? ( dev-ml/ounit2 )"
 DOCS=( "README.md" )

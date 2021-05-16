@@ -24,5 +24,5 @@ RDEPEND=">=dev-lang/ocaml-4.02.3:=
 	>=dev-ml/yojson-1.0.2:=
 	>=dev-ml/xmlm-1.0.2:="
 DEPEND="${RDEPEND}
-	test? ( >=dev-ml/ounit-1.1.0 )"
+	test? ( dev-ml/ounit2 )"
 DOCS=( "README.md" )
