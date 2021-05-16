@@ -12,22 +12,25 @@ EGIT_REPO_URI="git://git.code.sf.net/p/deadbeef-fb/code"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="gtk2 gtk3"
+IUSE=""
 
 DEPEND_COMMON="
-	gtk2? ( media-sound/deadbeef[gtk2] )
-	gtk3? ( media-sound/deadbeef[gtk3] )"
+	media-sound/deadbeef
+"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
-S="${WORKDIR}/deadbeef-devel"
+#S="${WORKDIR}/deadbeef-devel"
 
 src_configure() {
+	sed -i "s/errno/errorNum/g" utils.c
+	sed -i "s/gtk_css_provider_get_default/gtk_css_provider_new/g" utils.c
 	./autogen.sh
 	my_config="--disable-static
-	  $(use_enable gtk3)
-	  $(use_enable gtk2)"
+	  --enable-gtk3
+	  --disable-gtk2
+	"
 	econf ${my_config}
 }
 

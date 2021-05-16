@@ -11,12 +11,13 @@ SRC_URI="mirror://sourceforge/${PN}/${PN}_${PV}_src.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE="gtk2 gtk3"
+KEYWORDS=""
+#~amd64 ~x86
+IUSE=""
 
 DEPEND_COMMON="
-	gtk2? ( media-sound/deadbeef[gtk2] )
-	gtk3? ( media-sound/deadbeef[gtk3] )"
+	media-sound/deadbeef
+"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
@@ -24,9 +25,11 @@ DEPEND="${DEPEND_COMMON}"
 S="${WORKDIR}/deadbeef-devel"
 
 src_configure() {
+	sed -i "s/errno/errorNum/g" utils.c
+	sed -i "s/gtk_css_provider_get_default/gtk_css_provider_new/g" utils.c
 	econf --disable-static \
-		$(use_enable gtk3) \
-		$(use_enable gtk2)
+		--enable-gtk3
+		--disable-gtk2
 }
 
 src_install() {
