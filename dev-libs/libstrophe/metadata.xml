@@ -8,6 +8,5 @@
 	<use>
 		<flag name='doc'>Install doxygen documentation</flag>
 		<flag name='expat'>Use dev-libs/expat instead of dev-libs/libxml2 to parse XML</flag>
-		<flag name='libressl'>Use dev-libs/libressl instead of dev-libs/openssl</flag>
 	</use>
 </pkgmetadata>
