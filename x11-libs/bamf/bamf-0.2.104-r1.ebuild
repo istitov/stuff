@@ -15,7 +15,7 @@ SLOT="0"
 LICENSE="LGPL-3"
 IUSE="+gtk2 gtk3"
 
-DDEPEND=">=dev-lang/vala-0.11.7
+DDEPEND=">=dev-lang/vala-0.11.7:=
 	gtk3? (
 		>=x11-libs/libwnck-3.2.1
 		>=x11-libs/gtk+-3.2.1 )

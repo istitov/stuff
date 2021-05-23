@@ -16,7 +16,7 @@ IUSE="debug doc examples ipv6 minimal srtp ssl"
 
 RDEPEND="
 	net-libs/bctoolbox
-	srtp? ( net-libs/libsrtp )
+	srtp? ( net-libs/libsrtp:= )
 	ssl? ( dev-libs/openssl )"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )"

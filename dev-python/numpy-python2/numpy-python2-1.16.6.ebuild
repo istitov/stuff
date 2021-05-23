@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python2_7 )
 _PYTHON_ALLOW_PY27=1
 PYTHON_REQ_USE="threads(+)"
 DISTUTILS_USE_SETUPTOOLS="manual"
-#DISTUTILS_OPTIONAL=1
+DISTUTILS_OPTIONAL=1
 
 FORTRAN_NEEDED=lapack
 
@@ -27,8 +27,7 @@ SRC_URI="
 	)"
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
-#~alpha ~amd64 ~arm64 ~hppa ~ia64 ~mips ~ppc ~s390 ~sparc ~x86 ~ppc-macos ~x64-macos ~sparc-solaris ~x64-solaris ~x86-solaris
+KEYWORDS="~alpha ~amd64 ~arm64 ~hppa ~ia64 ~mips ~ppc ~s390 ~sparc ~x86 ~ppc-macos ~x64-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="doc lapack test"
 RESTRICT="!test? ( test )"
 
@@ -51,6 +50,7 @@ BDEPEND="
 #	)
 
 S="${WORKDIR}/${MY_PN}-${PV}"
+EPYTHON="python2.7"
 
 PATCHES=(
 	"${FILESDIR}"/${MY_PN}-1.15.4-no-hardcode-blas.patch
@@ -81,7 +81,9 @@ pc_libs() {
 		| tr ',' '\n' | sort -u | tr '\n' ',' | sed -e 's|,$||'
 }
 
-python_prepare_all() {
+src_prepare() {
+	default
+	local BUILDDIR="py2"
 	if use lapack; then
 		append-ldflags "$($(tc-getPKG_CONFIG) --libs-only-other cblas lapack)"
 		local incdir="${EPREFIX}"/usr/include
@@ -129,47 +131,37 @@ python_prepare_all() {
 	# very memory- and disk-hungry
 	sed -i -e 's:test_large_zip:_&:' numpy/lib/tests/test_io.py || die
 
-	distutils-r1_python_prepare_all
+	python_foreach_impl _distutils-r1_copy_egg_info
 }
 
-python_compile() {
+src_compile() {
 	export MAKEOPTS=-j1 #660754
 
 	local python_makeopts_jobs=""
-	python_is_python3 || python_makeopts_jobs="-j $(makeopts_jobs)"
-	distutils-r1_python_compile \
-		${python_makeopts_jobs} \
-		${NUMPY_FCONFIG}
+	python_makeopts_jobs="-j $(makeopts_jobs)"
+	python_foreach_impl esetup.py build ${python_makeopts_jobs} ${NUMPY_FCONFIG}
 }
 
+#Not sure, that it is working
 python_test() {
-	distutils_install_for_testing --single-version-externally-managed \
-		--record "${TMPDIR}/record.txt" ${NUMPY_FCONFIG}
-
-	cd "${TMPDIR}" || die
-
-	"${EPYTHON}" -c "
+	python_foreach_impl "${EPYTHON}" -c "
 import numpy, sys
 r = numpy.test(label='full', verbose=3)
 sys.exit(0 if r else 1)" || die "Tests fail with ${EPYTHON}"
 }
 
-python_install() {
-	# https://github.com/numpy/numpy/issues/16005
-	local mydistutilsargs=( build_src )
-	distutils-r1_python_install ${NUMPY_FCONFIG}
-	python_optimize
-}
+src_install() {
 
-python_install_all() {
+	local mydistutilsargs=( build_src )
+	python_foreach_impl distutils-r1_python_install ${NUMPY_FCONFIG}
+	python_foreach_impl python_optimize
+
 	local DOCS=( THANKS.txt )
 
 	if use doc; then
 		local HTML_DOCS=( "${WORKDIR}"/html/. )
 		DOCS+=( "${DISTDIR}"/${MY_PN}-{user,ref}-${DOC_PV}.pdf )
 	fi
-
-	distutils-r1_python_install_all
 
 	# Let latest version to provide f2py link
 	rm "${ED}"/usr/bin/f2py || die
