@@ -1,9 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
-
-inherit eapi7-ver
+EAPI="7"
 
 COMPRESSTYPE=".gz"
 K_USEPV="yes"
@@ -43,6 +41,7 @@ pkg_setup(){
 
 src_prepare(){
 	epatch "${DISTDIR}"/"${LIQUORIX_FILE}"
+	default
 }
 
 K_EXTRAEINFO="For more info on liquorix-sources and details on how to report problems, see: \

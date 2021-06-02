@@ -1,8 +1,8 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
-inherit readme.gentoo-r1 toolchain-funcs eapi7-ver
+EAPI="7"
+inherit readme.gentoo-r1 toolchain-funcs
 
 COMPRESSTYPE=".xz"
 K_USEPV="yes"
@@ -58,6 +58,7 @@ pkg_setup(){
 
 src_prepare(){
 	epatch "${DISTDIR}"/"${PF_FILE}"
+	default
 }
 
 src_install() {
