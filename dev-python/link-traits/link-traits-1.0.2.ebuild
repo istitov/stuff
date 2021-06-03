@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{6..9} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -20,7 +20,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python doc"
 
 RDEPEND="
-	dev-python/traits
+	dev-python/traits[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
