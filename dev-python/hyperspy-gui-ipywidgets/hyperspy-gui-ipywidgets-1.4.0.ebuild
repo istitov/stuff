@@ -3,26 +3,27 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{6..9} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Provides advanced wxPython widgets for plotting based on matplotlib"
-HOMEPAGE="https://newville.github.io/wxmplot/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+MYPN="${PN/hyperspy-gui-ipywidgets/hyperspy_gui_ipywidgets}"
+MYP="${MYPN}-${PV}"
 
-LICENSE="MIT"
+DESCRIPTION="Interactive analysis of multidimensional datasets tools"
+HOMEPAGE="https://hyperspy.org/"
+SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
+
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc python"
+IUSE="python doc"
 
 RDEPEND="
-	>=dev-python/numpy-1.12
-	>=dev-python/six-1.10
-	>=dev-python/wxpython-4.0.3
-	>=dev-python/matplotlib-2.0
+	>=dev-python/hyperspy-1.5[${PYTHON_USEDEP}]
+	>=dev-python/ipywidgets-6.0[${PYTHON_USEDEP}]
+	dev-python/link-traits[${PYTHON_USEDEP}]
 "
-#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -30,8 +31,11 @@ DEPEND="${RDEPEND}
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
+S="${WORKDIR}/${MYP}"
+
 python_compile() {
 	distutils-r1_python_compile
+
 }
 
 python_compile_all() {

@@ -3,25 +3,26 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{6..9} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Toolkit-independent GUI abstraction layer for visualization features of Traits"
-HOMEPAGE="https://docs.enthought.com/pyface/"
+DESCRIPTION="Provides advanced wxPython widgets for plotting based on matplotlib"
+HOMEPAGE="https://newville.github.io/wxmplot/"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
-LICENSE="BSD"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="python doc +wx +pyqt5 +pyside"
+IUSE="doc python"
 
 RDEPEND="
-	dev-python/traits
-	pyqt5? ( dev-python/PyQt5 dev-python/pygments )
-	wx? ( >=dev-python/wxpython-2.8.10:* dev-python/numpy )
-	pyside? ( dev-python/pyside2 dev-python/pygments )
+	>=dev-python/numpy-1.12[${PYTHON_USEDEP}]
+	>=dev-python/six-1.10[${PYTHON_USEDEP}]
+	>=dev-python/wxpython-4.0.3[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-2.0[${PYTHON_USEDEP}]
 "
+#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -31,7 +32,6 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 python_compile() {
 	distutils-r1_python_compile
-
 }
 
 python_compile_all() {

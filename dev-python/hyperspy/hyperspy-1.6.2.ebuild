@@ -1,9 +1,9 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_{7..9} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -29,7 +29,6 @@ RDEPEND="
 	dev-python/sympy[${PYTHON_USEDEP}]
 	dev-python/dill[${PYTHON_USEDEP}]
 	>=dev-python/h5py-2.3[${PYTHON_USEDEP}]
-	dev-python/PTable[${PYTHON_USEDEP}]
 	>=dev-python/python-dateutil-2.5.0[${PYTHON_USEDEP}]
 	dev-python/ipyparallel[${PYTHON_USEDEP}]
 	>=dev-python/dask-0.18[${PYTHON_USEDEP}]
@@ -40,6 +39,8 @@ RDEPEND="
 	dev-python/sparse[${PYTHON_USEDEP}]
 	dev-python/imageio[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
+	dev-python/prettytable[${PYTHON_USEDEP}]
+	!dev-python/PTable
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
 	learning? ( sci-libs/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( dev-python/numba[${PYTHON_USEDEP}] dev-python/cython[${PYTHON_USEDEP}] )

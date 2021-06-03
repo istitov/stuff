@@ -17,14 +17,14 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	dev-python/cython
-	dev-python/h5py
-	dev-python/lxml
-	dev-python/matplotlib
+	dev-python/cython[${PYTHON_USEDEP}]
+	dev-python/h5py[${PYTHON_USEDEP}]
+	dev-python/lxml[${PYTHON_USEDEP}]
+	dev-python/matplotlib[${PYTHON_USEDEP}]
 
-	dev-python/sphinx
-	dev-python/numpy
-	dev-python/pillow
+	dev-python/sphinx[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/pillow[${PYTHON_USEDEP}]
 "
 #dev-python/PyQt4
 

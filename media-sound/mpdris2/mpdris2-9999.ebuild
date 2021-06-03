@@ -27,12 +27,11 @@ for lang in ${LANGS}; do
 done
 
 #DEPEND=">=dev-lang/python-2.4
-DEPEND="python_targets_python3_7? ( dev-lang/python:3.7 )
-	python_targets_python3_8? ( dev-lang/python:3.8 )
-	python_targets_python3_9? ( dev-lang/python:3.9 )
-	>=dev-python/dbus-python-0.80
-	>=dev-python/pygobject-2.14
-	>=dev-python/python-mpd-0.3.0"
+DEPEND="
+	>=dev-python/dbus-python-0.80[${PYTHON_USEDEP}]
+	>=dev-python/pygobject-2.14[${PYTHON_USEDEP}]
+	>=dev-python/python-mpd-0.3.0[${PYTHON_USEDEP}]
+"
 
 DOCS="AUTHORS COPYING INSTALL NEWS README README.md"
 
