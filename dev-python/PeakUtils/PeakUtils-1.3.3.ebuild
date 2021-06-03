@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{6..9} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -17,9 +17,9 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	>=dev-python/numpy-1.8
-	>=dev-python/scipy-0.11
-	dev-python/setuptools
+	>=dev-python/numpy-1.8[${PYTHON_USEDEP}]
+	>=dev-python/scipy-0.11[${PYTHON_USEDEP}]
+	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 #dev-python/PyQt4
 
