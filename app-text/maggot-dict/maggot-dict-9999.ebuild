@@ -1,9 +1,9 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=7
 
-PYTHON_DEPEND="2:2.7 3:3.2"
+PYTHON_DEPEND="python2_7 python3_8"
 SUPPORT_PYTHON_ABIS="1"
 EGIT_HAS_SUBMODULES="y"
 
@@ -22,8 +22,11 @@ DEPEND=""
 RDEPEND="${DEPEND} app-shells/bash-completion"
 
 src_prepare() {
+	default
 	git submodule update --init --recursive
 	sed 's|completions||g' -i Makefile
+	#local async must be renamed!
+	#Patch is needed
 }
 
 src_install() {
