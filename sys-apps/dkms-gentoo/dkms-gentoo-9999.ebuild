@@ -7,7 +7,7 @@ inherit eutils git-r3
 
 DESCRIPTION="DKMS analog for gentoo"
 HOMEPAGE="https://github.com/megabaks/dkms-gentoo"
-EGIT_REPO_URI="git://github.com/megabaks/${PN}.git"
+EGIT_REPO_URI="https://github.com/megabaks/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
