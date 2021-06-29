@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=7
 
 inherit eutils git-r3
 
@@ -38,3 +38,4 @@ src_install() {
 	emake DESTDIR="${D}" install
 	find "${D}" -name "${PN}-${PV}" -exec rm -rf {} +
 }
+#Not compiling
