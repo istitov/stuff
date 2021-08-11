@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
-PYTHON_COMPAT=( python3_{6,7,8,9} )
+PYTHON_COMPAT=( python3_{6,7,8,9,10} )
 
 inherit distutils-r1 python-r1 git-r3
 
@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="dbus mpd taglib"
 
-LANGS="ar be ca cs da de es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
+LANGS="ar be ca cs da de el-GR es et fi fr hi it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
 # el_GR
 
 for X in ${LANGS} ; do
