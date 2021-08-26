@@ -6,7 +6,7 @@ EAPI=7
 PYTHON_COMPAT=( python3_{6..8} )
 PLOCALES="be bg el ru"
 
-inherit desktop eutils l10n python-r1 xdg-utils
+inherit desktop eutils plocale python-r1 xdg-utils
 
 DESCRIPTION="A panel indicator (GUI) for YandexDisk CLI client"
 HOMEPAGE="https://github.com/slytomcat/yandex-disk-indicator"
@@ -43,14 +43,14 @@ src_prepare() {
 	mv build/yd-tools/debian/changelog ChangeLog || die
 
 	if use nls; then
-		l10n_find_plocales_changes "translations" "yandex-disk-indicator_" ".po"
+		plocale_find_changes "translations" "yandex-disk-indicator_" ".po"
 		rm_loc() {
 			ebegin "Disable locale: ${1}"
 			rm -f translations/yandex-disk-indicator_${1}.{mo,po} || die
 			rm -f translations/{actions-,ya-setup-}${1}.lang || die
 			eend
 		}
-		l10n_for_each_disabled_locale_do rm_loc
+		plocale_for_each_disabled_locale_do rm_loc
 	else
 		for x in ${PLOCALES}; do
 			ebegin "Disable locale: ${x}"
@@ -72,7 +72,7 @@ src_install() {
 			# Remove other excluded translations
 			rm -f translations/yandex-disk-indicator_${1}.{mo,po} || die
 		}
-		l10n_for_each_locale_do do_loc
+		plocale_for_each_locale_do do_loc
 	fi
 
 	insinto "/usr/share/yd-tools" && exeinto "/usr/share/yd-tools"
