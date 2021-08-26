@@ -98,8 +98,8 @@ src_test() {
 
 src_install() {
 	perl_set_version
-	./Build --install_path lib="${D}"/usr/local/lib64/perl5/${PERL_VERSION} \
-        	--install_path arch="${D}"/usr/local/lib64/perl5/${PERL_VERSION} \
+	./Build --install_path lib="${D}"/${SITE_LIB} \
+        	--install_path arch="${D}"/${SITE_LIB} \
 		--install_path bin="${D}"/bin \
         	--install_path script="${D}"/bin \
       		--install_path bindoc=`pwd`/man/ \
