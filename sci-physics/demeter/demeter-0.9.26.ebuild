@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit perl-module virtualx
+inherit perl-module perl-functions virtualx
 
 DESCRIPTION="Software for XAS data processing"
 HOMEPAGE="https://github.com/bruceravel/demeter"
@@ -98,8 +98,9 @@ src_test() {
 }
 
 src_install() {
-	./Build --install_path lib="${D}"/usr/local/lib64/perl5 \
-        	--install_path arch="${D}"/usr/local/lib64/perl5 \
+	perl_set_version
+	./Build --install_path lib="${D}"/${SITE_LIB} \
+        	--install_path arch="${D}"/${SITE_LIB} \
 		--install_path bin="${D}"/bin \
         	--install_path script="${D}"/bin \
       		--install_path bindoc=`pwd`/man/ \

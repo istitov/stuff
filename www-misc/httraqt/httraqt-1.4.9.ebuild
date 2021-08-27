@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit l10n cmake # qt4-r2
+inherit plocale cmake # qt4-r2
 
 MY_P=${PN}-${PV}
 
