@@ -11,7 +11,7 @@ SRC_URI="mirror://apache/${PN}/${PV}/${P}.tar.gz"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+pic +cpp +c_glib csharp java erlang python perl php php_extension ruby haskell go"
+IUSE="+pic +cpp +c_glib csharp java erlang python perl php php_extension ruby go"
 
 #FIXME: java.eclassesnotused          1
 RDEPEND=">=dev-libs/boost-1.40.0
@@ -40,7 +40,6 @@ RDEPEND=">=dev-libs/boost-1.40.0
 	php? ( dev-lang/php:= )
 	php_extension? ( dev-lang/php:= )
 	ruby? ( virtual/rubygems )
-	haskell? ( dev-haskell/haskell-platform )
 	go? ( sys-devel/gcc:=[go] )
 	"
 
