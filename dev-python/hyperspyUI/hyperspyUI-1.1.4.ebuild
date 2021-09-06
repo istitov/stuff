@@ -24,7 +24,7 @@ RDEPEND="
 	>=dev-python/matplotlib-1.3[${PYTHON_USEDEP}]
 	dev-python/traits[${PYTHON_USEDEP}]
 	dev-python/QtPy[${PYTHON_USEDEP}]
-	dev-python/PyQt5[webkit,${PYTHON_USEDEP}]
+	dev-python/PyQt5[${PYTHON_USEDEP}]
 	dev-python/qtconsole[${PYTHON_USEDEP}]
 	dev-python/autopep8[${PYTHON_USEDEP}]
 	dev-python/pyqode_python[${PYTHON_USEDEP}]
