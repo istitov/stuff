@@ -28,6 +28,7 @@ RDEPEND="
 	dev-python/qtconsole[${PYTHON_USEDEP}]
 	dev-python/autopep8[${PYTHON_USEDEP}]
 	dev-python/pyqode_python[${PYTHON_USEDEP}]
+	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
