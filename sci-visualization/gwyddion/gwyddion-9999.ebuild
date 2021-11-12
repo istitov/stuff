@@ -16,7 +16,7 @@ ESVN_BOOTSTRAP="autogen.sh"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X"
+IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X +hdf5"
 addpredict "${EPREFIX}"/usr/share/inkscape/fonts/.uuid.TMP-XXXXXX
 
 RDEPEND="
@@ -28,6 +28,7 @@ RDEPEND="
 	>=x11-libs/gtk+-2.18:2
 	x11-libs/libXmu
 	x11-libs/pango
+	hdf5? ( <=sci-libs/hdf5-1.11 )
 	fits? ( sci-libs/cfitsio )
 	gnome? ( gnome-base/gconf:2 )
 	opengl? ( virtual/opengl x11-libs/gtkglext )
