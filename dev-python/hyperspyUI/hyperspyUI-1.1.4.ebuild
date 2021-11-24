@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6..9} )
+PYTHON_COMPAT=( python3_{6..8} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -24,11 +24,13 @@ RDEPEND="
 	>=dev-python/matplotlib-1.3[${PYTHON_USEDEP}]
 	dev-python/traits[${PYTHON_USEDEP}]
 	dev-python/QtPy[${PYTHON_USEDEP}]
-	dev-python/PyQt5[${PYTHON_USEDEP}]
+	>=dev-python/PyQt5-5.15.6[${PYTHON_USEDEP},widgets]
 	dev-python/qtconsole[${PYTHON_USEDEP}]
 	dev-python/autopep8[${PYTHON_USEDEP}]
 	dev-python/pyqode_python[${PYTHON_USEDEP}]
 	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
+	dev-qt/qtwebengine
+	dev-python/importlib_resources[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
