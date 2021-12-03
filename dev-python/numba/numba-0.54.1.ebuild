@@ -33,9 +33,9 @@ DISTUTILS_IN_SOURCE_BUILD=1
 distutils_enable_tests unittest
 distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx_rtd_theme
 
-PATCHES=(
-	"${FILESDIR}/${PN}-0.52.0-skip_tests.patch"
-)
+#PATCHES=(
+#	"${FILESDIR}/${PN}-0.52.0-skip_tests.patch"
+#)
 
 pkg_setup() {
 	if ! use openmp; then
