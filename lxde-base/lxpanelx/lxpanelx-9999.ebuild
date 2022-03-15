@@ -1,13 +1,14 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI="7"
 
-inherit autotools eutils subversion
+inherit autotools eutils unpacker
 
 DESCRIPTION="lxpanel fork with improved taskbar"
-HOMEPAGE="http://code.google.com/p/lxpanelx/"
-ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk/"
+HOMEPAGE="https://code.google.com/p/lxpanelx/"
+SRC_URI="https://storage.googleapis.com/google-code-archive-source/v2/code.google.com/lxpanelx/source-archive.zip"
+#ESVN_REPO_URI="https://${PN}.googlecode.com/svn/trunk/"
 
 LICENSE="GPL-2"
 KEYWORDS=""
@@ -19,6 +20,7 @@ RDEPEND="x11-libs/gtk+:2
 	x11-libs/libXmu
 	x11-libs/libXpm
 	lxde-base/lxmenu-data
+	x11-libs/gdk-pixbuf-xlib
 	!lxde-base/lxpanel
 	alsa? ( media-libs/alsa-lib )
 	libindicator? ( dev-libs/libindicator:0 )
@@ -29,9 +31,10 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	sys-devel/gettext"
 
-S="${WORKDIR}"
+S="${WORKDIR}/${PN}/trunk"
 
 src_prepare() {
+	default
 	eautoreconf
 }
 
