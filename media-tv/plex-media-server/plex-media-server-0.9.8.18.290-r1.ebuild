@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit unpacker user
 
@@ -11,10 +11,10 @@ HOMEPAGE="https://plex.tv/"
 MY_PN="plexmediaserver"
 MY_REV="11b7fdd"
 
-SRC_URI=" x86? ( http://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${PV}-${MY_REV}_i386.deb
-				 http://stuff.tazhate.com/distfiles/${MY_PN}_${PV}-${MY_REV}_i386.deb )
-		amd64? ( http://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${PV}-${MY_REV}_amd64.deb
-				 http://stuff.tazhate.com/distfiles/${MY_PN}_${PV}-${MY_REV}_amd64.deb )"
+SRC_URI=" x86? ( https://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${PV}-${MY_REV}_i386.deb
+				 https://stuff.tazhate.com/distfiles/${MY_PN}_${PV}-${MY_REV}_i386.deb )
+		amd64? ( https://downloads.plexapp.com/${PN}/${PV}-${MY_REV}/${MY_PN}_${PV}-${MY_REV}_amd64.deb
+				 https://stuff.tazhate.com/distfiles/${MY_PN}_${PV}-${MY_REV}_amd64.deb )"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
