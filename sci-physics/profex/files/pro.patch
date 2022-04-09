@@ -1,0 +1,20 @@
+--- a/profex.pro	2021-12-07 08:13:46.000000000 +0000
++++ b/profex.pro	2022-01-25 21:14:07.423407957 +0000
+@@ -1,11 +1,11 @@
+ TEMPLATE = subdirs
+-CONFIG += ordered warn_off
+-SUBDIRS = zlib \
+-    quazip \
+-    libXrdIO \
++CONFIG += ordered warn_off zlib quazip
++SUBDIRS = libXrdIO \
+     src
+-
+-src.depends = zlib quazip libXrdIO
++HEADERS += $$PWD/quazip/*.h
++SOURCES += $$PWD/quazip/*.cpp
++SOURCES += $$PWD/quazip/*.c
++src.depends = libXrdIO zlib quazip
+ 
+ # make these files show up in Qt Creator
+ OTHER_FILES += .gitignore \
