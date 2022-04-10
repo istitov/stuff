@@ -1,0 +1,16 @@
+--- a/src/src.pro	2021-12-07 08:13:54.000000000 +0000
++++ b/src/src.pro	2022-01-25 22:00:52.990344479 +0000
+@@ -34,11 +34,11 @@
+ }
+ 
+ PROFEX_LIBDIR=..
+-INCLUDEPATH += $$PROFEX_LIBDIR/../zlib $$PROFEX_LIBDIR/../quazip $$PROFEX_LIBDIR/../libXrdIO
++INCLUDEPATH += $$PROFEX_LIBDIR/../libXrdIO
+ unix:!macx {LIBS += -L$$PROFEX_LIBDIR/../libXrdIO -lxrdio}
+ macx {LIBS += -L../libXrdIO -lxrdio}
+ win32 {LIBS += -L../libXrdIO -lxrdio4}
+-LIBS += -L../lib -lquazip
++LIBS += /usr/lib64/libquazip1-qt5.so /usr/lib64/libalglib.so
+ LIBS += -L../lib -lz
+ 
+ include(tools/tools.pri)

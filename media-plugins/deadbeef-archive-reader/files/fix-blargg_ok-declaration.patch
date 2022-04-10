@@ -1,0 +1,12 @@
+#diff -ur fex/fex/blargg_common.h fex/fex/blargg_common.h
+--- a/fex/fex/blargg_common.h	2017-12-11 04:23:06.117064206 +0200
++++ b/fex/fex/blargg_common.h	2017-12-11 04:24:33.193846532 +0200
+@@ -12,7 +12,7 @@
+ typedef const char* blargg_err_t; // 0 on success, otherwise error string
+ 
+ // Success; no error
+-int const blargg_ok = 0;
++static const char* blargg_ok = 0;
+ 
+ // BLARGG_RESTRICT: equivalent to C99's restrict, where supported
+ #if __GNUC__ >= 3 || _MSC_VER >= 1100
