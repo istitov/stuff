@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{9..10} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic virtualx
 
 DESCRIPTION="Interactive analysis of multidimensional datasets tools"
 HOMEPAGE="https://hyperspy.org/"
@@ -76,7 +76,7 @@ python_compile_all() {
 }
 
 python_test() {
-	epytest
+	virtx epytest
 }
 
 python_install_all() {

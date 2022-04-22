@@ -5,7 +5,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{9..10} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic virtualx
 
 DESCRIPTION="Provides graphic user interface (GUI) for hyperspy"
 HOMEPAGE="http://hyperspy.org/hyperspyUI/"
@@ -50,7 +50,7 @@ python_compile_all() {
 }
 
 python_test() {
-	setup.py test
+	virtx epytest
 }
 
 python_install_all() {
