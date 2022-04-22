@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6..8} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit distutils-r1 flag-o-matic
 
@@ -30,7 +30,7 @@ RDEPEND="
 	dev-python/pyqode_python[${PYTHON_USEDEP}]
 	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 	dev-qt/qtwebengine
-	dev-python/importlib_resources[${PYTHON_USEDEP}]
+	dev-python/importlib_resources
 "
 
 DEPEND="${RDEPEND}

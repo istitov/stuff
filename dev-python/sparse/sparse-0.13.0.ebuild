@@ -3,25 +3,23 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{6..10} )
 
 inherit distutils-r1 flag-o-matic
 
-MYPN="${PN/hyperspy-gui-traitsui/hyperspy_gui_traitsui}"
-MYP="${MYPN}-${PV}"
+DESCRIPTION="Sparse multi-dimensional arrays for the PyData ecosystem"
+HOMEPAGE="https://github.com/pydata/sparse/"
+SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
-DESCRIPTION="Provides traitsui graphic user interface (GUI) elements for hyperspy"
-HOMEPAGE="https://hyperspy.org/"
-SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
-
-LICENSE="GPL-3"
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="python doc"
+IUSE="doc python"
 
 RDEPEND="
-	>=dev-python/hyperspy-1.5[${PYTHON_USEDEP}]
-	>=dev-python/traitsui-6.0[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.13
+	>=dev-python/scipy-0.19
+	>=dev-python/numba-0.49
 "
 
 DEPEND="${RDEPEND}
@@ -29,8 +27,6 @@ DEPEND="${RDEPEND}
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
-S="${WORKDIR}/${MYP}"
 
 python_compile() {
 	distutils-r1_python_compile

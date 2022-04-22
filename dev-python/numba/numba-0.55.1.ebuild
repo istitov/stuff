@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 
 DISTUTILS_USE_SETUPTOOLS=rdepend
 inherit optfeature multiprocessing distutils-r1
@@ -15,14 +15,14 @@ SRC_URI="https://github.com/numba/numba/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-#KEYWORDS="~amd64 ~arm ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="openmp threads"
 
 RDEPEND="
-	>=dev-python/llvmlite-0.37.0[${PYTHON_USEDEP}]
-	<dev-python/llvmlite-0.38.0
+	>=dev-python/llvmlite-0.38.0[${PYTHON_USEDEP}]
+	<dev-python/llvmlite-0.39.0
 	>=dev-python/numpy-1.17.0[${PYTHON_USEDEP}]
-	<dev-python/numpy-1.21[${PYTHON_USEDEP}]
+	<dev-python/numpy-1.22[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2019.5 )
 "
 BDEPEND="

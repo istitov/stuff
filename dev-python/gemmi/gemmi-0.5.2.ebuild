@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -30,6 +30,6 @@ DEPEND="${RDEPEND}
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 src_prepare() {
-	sed -i -e "s:USE_SYSTEM_ZLIB = False:USE_SYSTEM_ZLIB = True:" ${S}/setup.py  || die
+	sed -i -e "s:USE_SYSTEM_ZLIB = False:USE_SYSTEM_ZLIB = True:" "${S}"/setup.py  || die
 	default
 }
