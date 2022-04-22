@@ -3,9 +3,9 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6..10} )
+PYTHON_COMPAT=( python3_{9..10} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic virtualx
 
 MYPN="${PN/hyperspy-gui-ipywidgets/hyperspy_gui_ipywidgets}"
 MYP="${MYPN}-${PV}"
@@ -43,7 +43,7 @@ python_compile_all() {
 }
 
 python_test() {
-	setup.py test
+	virtx epytest
 }
 
 python_install_all() {
