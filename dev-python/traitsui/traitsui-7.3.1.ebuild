@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -17,13 +17,13 @@ KEYWORDS="~amd64 ~x86"
 IUSE="+python doc +wx +pyqt5 +pyside +demo"
 
 RDEPEND="
-	dev-python/traits
-	dev-python/six
-	>=dev-python/pyface-6.0.0[wx=,pyqt5=,pyside=]
-	wx? ( >=dev-python/wxpython-2.8.10:* dev-python/numpy )
-	pyqt5? ( dev-python/PyQt5 dev-python/pygments )
-	pyside? ( dev-python/pyside2 dev-python/pygments )
-	demo? ( dev-python/configobj )
+	dev-python/traits[${PYTHON_USEDEP}]
+	dev-python/six[${PYTHON_USEDEP}]
+	>=dev-python/pyface-6.0.0[${PYTHON_USEDEP},wx=,pyqt5=,pyside=]
+	wx? ( >=dev-python/wxpython-2.8.10:*[${PYTHON_USEDEP}] dev-python/numpy[${PYTHON_USEDEP}] )
+	pyqt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
+	pyside? ( dev-python/pyside2[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
+	demo? ( dev-python/configobj[${PYTHON_USEDEP}] )
 "
 
 DEPEND="${RDEPEND}
