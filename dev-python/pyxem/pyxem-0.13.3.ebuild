@@ -1,14 +1,14 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6..10} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="Python library for simulating diffraction"
-HOMEPAGE="https://github.com/pyxem/diffsims"
+DESCRIPTION="Python library for multi-dimensional diffraction microscopy"
+HOMEPAGE="https://pyxem.github.io"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
@@ -17,17 +17,17 @@ KEYWORDS="~amd64"
 IUSE="doc python"
 
 RDEPEND="
-	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
-	>=dev-python/scipy-0.15[${PYTHON_USEDEP}]
+	sci-libs/scikit-image[${PYTHON_USEDEP}]
+	sci-libs/scikit-learn[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
-	>=dev-python/tqdm-0.4.9[${PYTHON_USEDEP}]
+	dev-python/hyperspy[${PYTHON_USEDEP}]
+	dev-python/lmfit[${PYTHON_USEDEP}]
+	dev-python/diffsims[${PYTHON_USEDEP}]
+	dev-python/pyFAI[${PYTHON_USEDEP}]
+	dev-python/ipywidgets[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
-	dev-python/diffpy_structure[${PYTHON_USEDEP}]
-	dev-python/transforms3d[${PYTHON_USEDEP}]
-	dev-python/psutil[${PYTHON_USEDEP}]
 "
 #	>=dev-python/matplotlib-3.1.1
-#	
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
