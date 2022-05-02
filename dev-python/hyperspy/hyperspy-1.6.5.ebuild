@@ -22,6 +22,7 @@ RDEPEND="
 	>=dev-python/scipy-1.1[${PYTHON_USEDEP}]
 	dev-python/natsort[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-3.1[${PYTHON_USEDEP}]
+	<dev-python/matplotlib-3.5[${PYTHON_USEDEP}]
 	>=dev-python/traits-4.5.0[${PYTHON_USEDEP}]
 	~dev-python/pyface-7.4.1[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
