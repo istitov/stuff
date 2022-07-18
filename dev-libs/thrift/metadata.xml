@@ -27,8 +27,6 @@
 	</flag>
 	<flag name='ruby'>Enable ruby support.
 	</flag>
-	<flag name='haskell'>Enable haskell support.
-	</flag>
 	<flag name='go'>Enable go support.
 	</flag>
 	</use>
