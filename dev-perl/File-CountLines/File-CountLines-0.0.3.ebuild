@@ -1,9 +1,9 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-MODULE_AUTHOR=MORITZ
-MODULE_VERSION=v0.0.3
+EAPI=7
+DIST_AUTHOR=MORITZ
+DIST_VERSION=v0.0.3
 inherit perl-module
 
 DESCRIPTION="efficiently count the number of line breaks in a file"
