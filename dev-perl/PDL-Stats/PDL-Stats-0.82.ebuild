@@ -12,7 +12,7 @@ DESCRIPTION="A collection of statistics modules in Perl Data Language"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test"
-
+RESTRICT="!test? ( test )"
 RDEPEND="
 	virtual/perl-ExtUtils-MakeMaker
 	dev-perl/PDL
