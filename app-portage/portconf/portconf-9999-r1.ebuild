@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils git-r3
+inherit git-r3
 
 DESCRIPTION="/etc/portage cleaner"
 HOMEPAGE="https://github.com/megabaks/portconf"
