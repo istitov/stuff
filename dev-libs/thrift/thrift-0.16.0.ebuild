@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI=7
 inherit flag-o-matic java-pkg-2 java-ant-2
 
 DESCRIPTION="Data serialization and communication toolwork"
@@ -14,7 +14,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="+pic +cpp +c_glib csharp java erlang python perl php php_extension ruby go"
 
 #FIXME: java.eclassesnotused          1
-RDEPEND=">=dev-libs/boost-1.40.0
+RDEPEND=">=dev-libs/boost-1.53.0
 	virtual/yacc
 	dev-libs/openssl:=
 	cpp? (
@@ -66,13 +66,13 @@ src_configure() {
 	filter-flags -fwhole-program -fwhopr
 
 	econf \
-	        --prefix="${EPREFIX}"/usr \
-                --exec-prefix="${EPREFIX}"/usr \
-                PY_PREFIX="${EPREFIX}"/usr \
-                JAVA_PREFIX="${EPREFIX}"/usr/local/lib \
-                PHP_PREFIX="${EPREFIX}"/usr/local/lib \
-                PHP_CONFIG_PREFIX="${EPREFIX}"/etc/php.d \
-                PERL_PREFIX="${EPREFIX}"/usr/local/lib \
+		--prefix="${EPREFIX}"/usr \
+		--exec-prefix="${EPREFIX}"/usr \
+		PY_PREFIX="${EPREFIX}"/usr \
+		JAVA_PREFIX="${EPREFIX}"/usr/local/lib \
+		PHP_PREFIX="${EPREFIX}"/usr/local/lib \
+		PHP_CONFIG_PREFIX="${EPREFIX}"/etc/php.d \
+		PERL_PREFIX="${EPREFIX}"/usr/local/lib \
 		${myconf}
 }
 
