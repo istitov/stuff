@@ -9,7 +9,7 @@ HOMEPAGE="https://alpineapp.email/"
 EGIT_REPO_URI="https://repo.or.cz/alpine.git"
 
 LICENSE="Apache-2.0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 SLOT="0"
 IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads"
 
