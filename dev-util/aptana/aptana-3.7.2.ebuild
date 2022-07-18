@@ -6,11 +6,10 @@ inherit eutils
 
 DESCRIPTION="The leading eclipse IDE for Ajax and today's web platforms"
 HOMEPAGE="http://www.aptana.com"
-SRC_URI="x86? ( https://github.com/aptana/studio3/releases/download/v${PV}/studio3.linux.gtk.x86_${PV}.zip )
-	amd64? ( https://github.com/aptana/studio3/releases/download/v${PV}/studio3.linux.gtk.x86_64_${PV}.zip )"
+SRC_URI="https://github.com/aptana/studio3/releases/download/3.7.2.201807301111/aptana.studio-linux.gtk.x86_64.zip"
 LICENSE="EPL-1.0"
 SLOT="3"
-KEYWORDS="amd64 x86"
+KEYWORDS="amd64"
 RESTRICT="mirror"
 IUSE=""
 
@@ -22,19 +21,12 @@ RDEPEND="media-libs/libjpeg-turbo
 	 x11-libs/gtk+:2
 	 sys-apps/net-tools
 	"
-
-src_unpack(){
-	echo "nothing to extract"
-	unpack ${A}
-	mv "${WORKDIR}/Aptana_Studio_3" "${S}"
-	cd "${S}"
-}
-
+S=${WORKDIR}
 src_install(){
 	einfo "Installing Aptana"
 	dodir "/opt/${PN}"
 	local dest="${D}/opt/${PN}"
-	#cp -pPR about_files/ configuration/ features/ plugins/ "${dest}" || die "Failed to install Files"
+	cp -pPR ${S} "${dest}" || die "Failed to install Files"
 	insinto "/opt/${PN}"
 	#doins libcairo-swt.so icon.xpm about.html AptanaStudio3.ini full_uninstall.txt version.txt
 	exeinto "/opt/${PN}"
