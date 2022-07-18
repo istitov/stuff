@@ -1,18 +1,20 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI=7
 inherit eutils
 
 DESCRIPTION="The leading eclipse IDE for Ajax and today's web platforms"
 HOMEPAGE="http://www.aptana.com"
-SRC_URI="x86? ( https://github.com/aptana/studio3/releases/download/v${PV}/Aptana_Studio_3_Setup_Linux_x86_${PV}.zip )
-	amd64? ( https://github.com/aptana/studio3/releases/download/v${PV}/Aptana_Studio_3_Setup_Linux_x86_64_${PV}.zip )"
+SRC_URI="x86? ( https://github.com/aptana/studio3/releases/download/v${PV}/studio3.linux.gtk.x86_${PV}.zip )
+	amd64? ( https://github.com/aptana/studio3/releases/download/v${PV}/studio3.linux.gtk.x86_64_${PV}.zip )"
 LICENSE="EPL-1.0"
 SLOT="3"
 KEYWORDS="amd64 x86"
 RESTRICT="mirror"
 IUSE=""
+
+DEPEND="app-arch/unzip"
 
 RDEPEND="media-libs/libjpeg-turbo
 	 >=virtual/jre-1.5
@@ -24,8 +26,8 @@ RDEPEND="media-libs/libjpeg-turbo
 src_unpack(){
 	echo "nothing to extract"
 	unpack ${A}
-	cd "${S}"
 	mv "${WORKDIR}/Aptana_Studio_3" "${S}"
+	cd "${S}"
 }
 
 src_install(){
