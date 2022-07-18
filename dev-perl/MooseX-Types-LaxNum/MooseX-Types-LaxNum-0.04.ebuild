@@ -1,10 +1,10 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-MODULE_AUTHOR=SWEETKID
-DIST_VERSION=0.04
+DIST_AUTHOR=SWEETKID
+DIST_VERSION=${PV}
 inherit perl-module
 
 DESCRIPTION="A LaxNum type which provides the loose behavior of Moose's Num pre-2.10 "

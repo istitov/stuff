@@ -1,10 +1,10 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-MODULE_AUTHOR=DLAND
-MODULE_VERSION=${PV}
+DIST_AUTHOR=DLAND
+DIST_VERSION=${PV}
 inherit perl-module
 
 DESCRIPTION="Assemble multiple Regular Expressions into a single RE"
@@ -14,7 +14,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 RDEPEND=""
 DEPEND=""
-PATCHES=(
-	"${FILESDIR}/${MODULE_VERSION}/no-pod-tests.patch"
-)
+#PATCHES=(
+#	"${FILESDIR}/${PV}/no-pod-tests.patch"
+#)
 SRC_TEST=do

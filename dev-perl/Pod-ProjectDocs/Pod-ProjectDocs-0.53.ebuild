@@ -53,6 +53,7 @@ COMMON_DEPEND="
 #		dev-perl/Syntax-Highlight-Universal
 #	)
 #"
+#>=virtual/perl-Pod-Parser-1.320.0
 DEPEND="
 	${COMMON_DEPEND}
 "
