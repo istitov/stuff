@@ -1,13 +1,13 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI=7
 
 inherit eutils git-r3
 
 DESCRIPTION="JACK output plugin for DeaDBeeF."
-HOMEPAGE="https://gitorious.org/deadbeef-sm-plugins/jack"
-EGIT_REPO_URI="https://gitorious.org/deadbeef-sm-plugins/jack.git"
+HOMEPAGE="https://github.com/tokiclover/deadbeef-plugins-jack"
+EGIT_REPO_URI="https://github.com/tokiclover/deadbeef-plugins-jack"
 
 LICENSE="MIT"
 SLOT="0"
@@ -23,5 +23,5 @@ DEPEND="${DEPEND_COMMON}"
 
 src_install(){
 	insinto /usr/$(get_libdir)/deadbeef
-	doins jack.so
+	doins ddb_jack.so
 }

@@ -1,12 +1,12 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 inherit eutils flag-o-matic autotools multilib toolchain-funcs git-r3
 
 DESCRIPTION="alpine is an easy to use text-based based mail and news client"
-HOMEPAGE="http://www.washington.edu/alpine/ http://alpine.freeiz.com/alpine/release/"
-EGIT_REPO_URI="git://repo.or.cz/alpine.git"
+HOMEPAGE="https://alpineapp.email/"
+EGIT_REPO_URI="https://repo.or.cz/alpine.git"
 
 LICENSE="Apache-2.0"
 KEYWORDS=""
@@ -26,6 +26,7 @@ RDEPEND="${DEPEND}
 
 src_prepare() {
 	eautoreconf
+	default
 }
 
 src_configure() {
@@ -69,6 +70,8 @@ src_install() {
 	if use doc ; then
 		dodoc doc/brochure.txt
 		docinto html/tech-notes
-		dohtml -r doc/tech-notes/
+		dodoc -r doc/tech-notes/
 	fi
+
 }
+#			dohtml -r doc/tech-notes/

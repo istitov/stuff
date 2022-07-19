@@ -1,14 +1,12 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 inherit eutils flag-o-matic autotools multilib toolchain-funcs
 
 DESCRIPTION="alpine is an easy to use text-based based mail and news client"
-HOMEPAGE="http://www.washington.edu/alpine/ http://alpine.freeiz.com/alpine/release/"
-SRC_URI="
-!patches? ( http://alpine.freeiz.com/alpine/release/src/${P}.tar.xz -> ${P}-clean.tar.xz )
-patches?  ( http://alpine.freeiz.com/alpine/patches/${P}/${P}.tar.xz -> ${P}-patched.tar.xz )"
+HOMEPAGE="https://alpineapp.email/"
+SRC_URI="https://alpineapp.email/alpine/release/src/Old/${P}.tar.xz"
 
 LICENSE="Apache-2.0"
 KEYWORDS="~amd64 ~x86"
@@ -28,6 +26,7 @@ RDEPEND="${DEPEND}
 
 src_prepare() {
 	eautoreconf
+	default
 }
 
 src_configure() {
@@ -65,11 +64,13 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${D}" install
-	doman doc/rpdump.1 doc/rpload.1
 	dodoc NOTICE README*
 	if use doc ; then
 		dodoc doc/brochure.txt doc/tech-notes.txt
 		docinto html/tech-notes
-		dohtml -r doc/tech-notes/
+		dodoc -r doc/tech-notes/
 	fi
 }
+#	doman doc/rpdump.1 doc/rpload.1
+#		dohtml -r doc/tech-notes/
+

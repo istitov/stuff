@@ -9,19 +9,20 @@ unset _inherits
 
 JPEG_ABI=8
 
-inherit ${_inherits} java-pkg-opt-2 libtool toolchain-funcs subversion autotools
+inherit ${_inherits} java-pkg-opt-2 libtool toolchain-funcs subversion autotools git-r3 cmake-multilib
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
 HOMEPAGE="https://libjpeg-turbo.virtualgl.org/ https://sourceforge.net/projects/libjpeg-turbo/"
-ESVN_REPO_URI="svn://svn.code.sf.net/p/libjpeg-turbo/code/trunk"
+EGIT_REPO_URI="https://github.com/libjpeg-turbo/libjpeg-turbo"
 
 LICENSE="BSD"
-SLOT="0"
+SLOT="0/0.2"
 KEYWORDS=""
 IUSE="java static-libs"
 
 ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
-COMMON_DEPEND="!media-libs/jpeg:0"
+COMMON_DEPEND=""
+#!media-libs/jpeg:0
 RDEPEND="${COMMON_DEPEND}
 	java? ( >=virtual/jre-1.5 )"
 DEPEND="${COMMON_DEPEND}
@@ -34,13 +35,16 @@ DEPEND="${COMMON_DEPEND}
 DOCS="*.txt change.log example.c README"
 
 src_prepare() {
-	if [[ -x ./configure ]]; then
-		elibtoolize
-	else
-		eautoreconf
-	fi
 	java-pkg-opt-2_src_prepare
+	eautoreconf
+	default
 }
+
+#	if [[ -x ./configure ]]; then
+#		elibtoolize
+#	else
+#		eautoreconf
+#	fi
 
 src_configure() {
 	if use java; then
@@ -80,7 +84,7 @@ src_install() {
 		doins -r java/doc/*
 		newdoc java/README README.java
 
-		rm -rf "${ED}"usr/classes
+		rm -rf "${ED}"/usr/classes
 		java-pkg_dojar java/turbojpeg.jar
 	fi
 

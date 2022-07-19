@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit git-r3 eutils flag-o-matic
 
@@ -22,9 +22,9 @@ DEPEND_COMMON="
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
-S="${WORKDIR}/opus-${PV}"
+S="${WORKDIR}/${P}"
 
-QA_PRESTRIPPED="usr/$(get_libdir)/deadbeef/opus.so"
+#QA_PRESTRIPPED="usr/$(get_libdir)/deadbeef/opus.so"
 
 src_prepare(){
 	sed \
@@ -35,6 +35,7 @@ src_prepare(){
 	if use x86;then
 		append-cflags -D_FILE_OFFSET_BITS=64
 	fi
+	default
 }
 
 src_install() {
