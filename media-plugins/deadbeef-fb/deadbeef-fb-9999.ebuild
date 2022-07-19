@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://git.code.sf.net/p/deadbeef-fb/code"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 IUSE=""
 
 DEPEND_COMMON="
