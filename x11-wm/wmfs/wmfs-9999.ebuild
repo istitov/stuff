@@ -1,12 +1,12 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 inherit eutils git-r3
 
 DESCRIPTION="Windows Manager From Scratch"
 HOMEPAGE="https://www.wmfs.info"
-EGIT_REPO_URI="git://git.wmfs.info/wmfs.git"
+EGIT_REPO_URI="https://git.wmfs.info/wmfs.git"
 EGIT_PROJECT="wmfs"
 SRC_URI=""
 
