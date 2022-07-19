@@ -7,11 +7,11 @@ inherit eutils git-r3
 
 DESCRIPTION="DeaDBeeF filebrowser plugin "
 HOMEPAGE="https://sourceforge.net/projects/deadbeef-fb/"
-EGIT_REPO_URI="git://git.code.sf.net/p/deadbeef-fb/code"
+EGIT_REPO_URI="https://git.code.sf.net/p/deadbeef-fb/code"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND_COMMON="

@@ -3,11 +3,11 @@
 
 EAPI=7
 
-inherit eutils subversion
+inherit eutils git-r3
 
 DESCRIPTION="DeaDBeeF plugin for playing directly from RAR, 7z and Gzip archive files"
-HOMEPAGE="http://subversion.assembla.com/svn/deadbeef_vfs_archive_reader/"
-ESVN_REPO_URI="http://subversion.assembla.com/svn/deadbeef_vfs_archive_reader/trunk/src"
+HOMEPAGE="https://github.com/carlosanunes/deadbeef_vfs_archive_reader"
+EGIT_REPO_URI="https://github.com/carlosanunes/deadbeef_vfs_archive_reader"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -22,12 +22,21 @@ RDEPEND="
 DEPEND="
 	${DEPEND_COMMON}
 	"
-PATCHES=(
-	"${FILESDIR}"/fix-blargg_ok-declaration.patch
-)
+S=${WORKDIR}/${P}/src
+#PATCHES=(
+#	"${FILESDIR}"/fix-blargg_ok-declaration.patch
+#)
+
+src_prepare() {
+	./configure
+	default
+}
+
+src_compile() {
+	emake
+}
 
 src_install() {
 	insinto /usr/$(get_libdir)/deadbeef
 	doins ddb_archive_reader.so
 }
-#Not compiling
