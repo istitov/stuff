@@ -1,13 +1,13 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit eutils autotools git-r3
 
 DESCRIPTION="MPRIS-plugin for deadbeef"
 HOMEPAGE="https://github.com/Jerry-Ma/DeaDBeeF-MPRIS-plugin"
-EGIT_REPO_URI="git://github.com/Jerry-Ma/DeaDBeeF-MPRIS-plugin.git"
+EGIT_REPO_URI="https://github.com/Jerry-Ma/DeaDBeeF-MPRIS-plugin.git"
 
 LICENSE="GPL-3"
 SLOT="0"
