@@ -1,7 +1,0 @@
-move media-sound/deadbeef-archreader media-plugins/deadbeef-archreader
-move media-sound/deadbeef-fb media-plugins/deadbeef-fb
-move media-sound/deadbeef-infobar media-plugins/deadbeef-infobar
-move media-sound/deadbeef-mpris-plugin media-plugins/deadbeef-mpris-plugin
-move media-sound/deadbeef-vk media-plugins/deadbeef-vk
-move media-sound/deadbeef-remote media-plugins/deadbeef-remote
-move media-video/deadbeef-ffmpeg media-plugins/deadbeef-ffmpeg
