@@ -41,7 +41,7 @@ DEPEND="${PYTHON_DEPS}
 RDEPEND="${DEPEND}"
 
 #(?)python3-wxgtk4.0 (>= 4.0), python3-wxgtk-webview4.0 (>=4.0), libwxgtk-webview3.0-gtk3-0v5 (>=3.0),
-#(+)python3-numpy (>= 1:1.13.1),python3-xdg (>= 0.25), python3-pymysql (>= 0.7), python3-matplotlib (>= 2.1.1), wkhtmltopdf (>= 0.12.4), ghostscript (>= 9), python3-pypdf2 (>= 1.26), 
+#(+)python3-numpy (>= 1:1.13.1),python3-xdg (>= 0.25), python3-pymysql (>= 0.7), python3-matplotlib (>= 2.1.1), wkhtmltopdf (>= 0.12.4), ghostscript (>= 9), python3-pypdf2 (>= 1.26),
 #(-)python3-psycopg2 (>= 2.7.4)  imagemagick (>= 8.6.9) python3-openpyxl (>=2.4.9), python3-lxml (>=4.2.1)
 
 S="${WORKDIR}/sofastats-${PV}"

@@ -49,7 +49,7 @@ src_prepare() {
 	sed -i -e "s:../../zlib/zlib.h:/usr/include/zlib.h:" "${S}"/libXrdIO/import/*.cpp  || die
 	default
 }
-#	
+#
 src_configure() {
 	default
 	qmake -r profex.pro

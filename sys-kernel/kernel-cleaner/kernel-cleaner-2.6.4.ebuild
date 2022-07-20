@@ -3,7 +3,6 @@
 
 EAPI=7
 
-
 DESCRIPTION="Designed for remove broken kernels from /boot and source_dirs/modules_dirs"
 HOMEPAGE="https://github.com/megabaks/kernel-cleaner"
 SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"

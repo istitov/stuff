@@ -27,7 +27,7 @@ RDEPEND="
 	dev-python/psutil[${PYTHON_USEDEP}]
 "
 #	>=dev-python/matplotlib-3.1.1
-#	
+#
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
