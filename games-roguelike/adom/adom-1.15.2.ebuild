@@ -8,13 +8,13 @@ inherit edos2unix
 DESCRIPTION="Ancient Domains Of Mystery rogue-like game"
 HOMEPAGE="http://www.adom.de/"
 SRC_URI="
-x86? ( https://www.adom.de/home/download/old/${PV}/${PN}_linux_debian_32_${PV}.tar.gz )
-amd64? ( https://www.adom.de/home/download/old/${PV}/${PN}_linux_debian_64_${PV}.tar.gz )
-arm? ( https://www.adom.de/home/download/old/${PV}/${PN}_linux_arm_${PV}.tar.gz )"
+x86? ( https://www.adom.de/home/download/old/r60_${PV}/${PN}_linux_debian_32_r60_pub.tar.gz )
+amd64? ( https://www.adom.de/home/download/old/r60_${PV}/${PN}_linux_debian_64_r60_pub.tar.gz )
+arm? ( https://www.adom.de/home/download/old/r60_${PV}/${PN}_linux_arm_r60_pub.tar.gz )"
 
 LICENSE="adom"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 #~amd64 ~arm ~x86
 IUSE=""
 RESTRICT="strip" #bug #137340

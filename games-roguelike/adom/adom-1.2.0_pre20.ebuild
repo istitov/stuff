@@ -14,8 +14,7 @@ arm? ( https://www.adom.de/home/download/old/${PV}/${PN}_linux_arm_${PV}.tar.gz 
 
 LICENSE="adom"
 SLOT="0"
-KEYWORDS=""
-#~amd64 ~arm ~x86
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE=""
 RESTRICT="strip" #bug #137340
 QA_FLAGS_IGNORED="/opt/bin/adom"
