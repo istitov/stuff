@@ -17,7 +17,7 @@ EGIT_REPO_URI="https://github.com/libjpeg-turbo/libjpeg-turbo"
 
 LICENSE="BSD"
 SLOT="0/0.2"
-KEYWORDS="amd64"
+KEYWORDS=""
 IUSE="java static-libs"
 
 ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
