@@ -3,13 +3,13 @@
 
 # http://libjpeg-turbo.svn.sourceforge.net/viewvc/libjpeg-turbo/branches/1.2.x/?view=tar
 
-EAPI=7
+EAPI=8
 
 unset _inherits
 
 JPEG_ABI=8
-
-inherit ${_inherits} java-pkg-opt-2 libtool toolchain-funcs subversion autotools git-r3 cmake-multilib
+#CMAKE_ECLASS = cmake
+inherit ${_inherits} java-pkg-opt-2 libtool toolchain-funcs subversion autotools git-r3 cmake
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
 HOMEPAGE="https://libjpeg-turbo.virtualgl.org/ https://sourceforge.net/projects/libjpeg-turbo/"
@@ -17,7 +17,7 @@ EGIT_REPO_URI="https://github.com/libjpeg-turbo/libjpeg-turbo"
 
 LICENSE="BSD"
 SLOT="0/0.2"
-KEYWORDS=""
+KEYWORDS="amd64"
 IUSE="java static-libs"
 
 ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
