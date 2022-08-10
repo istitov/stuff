@@ -17,8 +17,8 @@ KEYWORDS=""
 IUSE="java static-libs cpu_flags_arm_neon"
 
 ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
-COMMON_DEPEND="!media-libs/jpeg:0
-	!media-libs/jpeg:62"
+COMMON_DEPEND=""
+
 BDEPEND=">=dev-util/cmake-3.16.5
 	amd64? ( ${ASM_DEPEND} )
 	x86? ( ${ASM_DEPEND} )
@@ -32,7 +32,7 @@ DEPEND="${COMMON_DEPEND}
 
 RDEPEND="${COMMON_DEPEND}
 	java? ( >=virtual/jre-1.8:* )"
-	
+
 MULTILIB_WRAPPED_HEADERS=( /usr/include/jconfig.h )
 
 #DOCS="*.txt change.log example.c README"
@@ -107,4 +107,3 @@ multilib_src_install_all() {
 		newdoc "${S}"/java/README README.java
 	fi
 }
-
