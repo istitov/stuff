@@ -1,41 +1,41 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 
-inherit xdg-utils gnome2-utils python-r1 subversion autotools
+inherit xdg-utils gnome2-utils python-r1
 
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
 HOMEPAGE="http://gwyddion.net/"
-ESVN_REPO_URI="https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion"
-ESVN_PROJECT="gwyddion-code"
-ESVN_BOOTSTRAP="autogen.sh"
+SRC_URI="http://gwyddion.net/download/${PV}/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
-IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X +hdf5"
-addpredict "${EPREFIX}"/usr/share/inkscape/fonts/.uuid.TMP-XXXXXX
+
+KEYWORDS="~amd64 ~x86"
+
+IUSE="doc fits fftw gnome nls opengl perl python ruby sourceview xml X +hdf5"
+
+DEPEND="
+	sci-libs/fftw
+"
 
 RDEPEND="
-	>=dev-libs/glib-2.32
 	media-libs/libpng:0=
 	x11-libs/cairo
-	dev-libs/libzip
-	>=sci-libs/fftw-3.1:3.0=
-	>=x11-libs/gtk+-2.18:2
+	x11-libs/gtk+:2
 	x11-libs/libXmu
 	x11-libs/pango
 	hdf5? ( sci-libs/hdf5 )
 	fits? ( sci-libs/cfitsio )
+	fftw? ( sci-libs/fftw:3.0= )
 	gnome? ( gnome-base/gconf:2 )
 	opengl? ( virtual/opengl x11-libs/gtkglext )
 	perl? ( dev-lang/perl:= )
 	python? ( dev-lang/python:2.7
 		dev-python/pygtk:2[${PYTHON_USEDEP}]
-		dev-python/pygments
 	)
 	ruby? ( dev-ruby/narray )
 	sourceview? ( x11-libs/gtksourceview:2.0 )
@@ -43,31 +43,52 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
-	media-gfx/inkscape
-	media-gfx/pngcrush
-	dev-util/gtk-doc
+	doc? ( dev-util/gtk-doc )
 "
-#<=sci-libs/hdf5-1.11
+
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-src_configure() {
-	./autogen.sh
+pkg_setup() {
+	use python && python-single-r1_pkg_setup
 }
 
-src_compile() {
-	emake
+src_configure() {
+	econf \
+		--disable-rpath \
+		--without-kde4-thumbnailer \
+		$(use_enable doc gtk-doc) \
+		$(use_enable nls) \
+		$(use_enable python pygwy) \
+		$(use_enable fits cfitsio) \
+		$(use_with perl) \
+		$(use_with python) \
+		$(use_with ruby) \
+		$(use_with fftw fftw3) \
+		$(use_with opengl gl) \
+		$(use_with sourceview gtksourceview) \
+		$(use_with xml libxml2) \
+		$(use_with X x)
 }
 
 src_install() {
-	make DESTDIR="${D}" install
+	default
 	use python && dodoc modules/pygwy/README.pygwy
 }
 
 pkg_postinst() {
 	use gnome && gnome2_gconf_install
 	xdg_pkg_postinst
+	xdg_desktop_database_update
+	xdg_icon_cache_update
+	xdg_mimeinfo_database_update
 }
 
 pkg_prerm() {
 	use gnome && gnome2_gconf_uninstall
+}
+
+pkg_postrm() {
+	xdg_desktop_database_update
+	xdg_icon_cache_update
+	xdg_mimeinfo_database_update
 }

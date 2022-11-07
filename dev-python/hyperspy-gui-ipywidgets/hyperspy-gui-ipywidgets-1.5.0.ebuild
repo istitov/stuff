@@ -3,29 +3,27 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6..10} )
+PYTHON_COMPAT=( python3_{9..10} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic virtualx
 
-MYPN="${PN/pyqode_core/pyqode.core}"
+MYPN="${PN/hyperspy-gui-ipywidgets/hyperspy_gui_ipywidgets}"
 MYP="${MYPN}-${PV}"
 
-DESCRIPTION="pyQode is a source code editor widget for PyQt/PySide"
-HOMEPAGE="https://github.com/pyQode/pyQode"
+DESCRIPTION="Interactive analysis of multidimensional datasets tools"
+HOMEPAGE="https://hyperspy.org/"
 SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
 
-LICENSE="MIT"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="python doc test"
+IUSE="python doc"
 
 RDEPEND="
-	dev-python/pygments[${PYTHON_USEDEP}]
-	dev-python/future
-	dev-python/pyqode_qt[${PYTHON_USEDEP}]
+	>=dev-python/hyperspy-1.5[${PYTHON_USEDEP}]
+	>=dev-python/ipywidgets-6.0[${PYTHON_USEDEP}]
+	dev-python/link-traits[${PYTHON_USEDEP}]
 "
-#    pyqode-uic? ( )
-#    test? ('pytest-xdist', 'pytest-cov', 'pytest-pep8', 'pytest')
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -45,10 +43,9 @@ python_compile_all() {
 }
 
 python_test() {
-	setup.py test
+	virtx epytest
 }
 
 python_install_all() {
 	distutils-r1_python_install_all
-	find "${D}" -name '*.pth' -delete || die
 }

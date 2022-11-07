@@ -3,29 +3,26 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6..10} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit distutils-r1 flag-o-matic
 
-MYPN="${PN/pyqode_core/pyqode.core}"
+MYPN="${PN/hyperspy-gui-traitsui/hyperspy_gui_traitsui}"
 MYP="${MYPN}-${PV}"
 
-DESCRIPTION="pyQode is a source code editor widget for PyQt/PySide"
-HOMEPAGE="https://github.com/pyQode/pyQode"
+DESCRIPTION="Provides traitsui graphic user interface (GUI) elements for hyperspy"
+HOMEPAGE="https://hyperspy.org/"
 SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
 
-LICENSE="MIT"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="python doc test"
+IUSE="python doc"
 
 RDEPEND="
-	dev-python/pygments[${PYTHON_USEDEP}]
-	dev-python/future
-	dev-python/pyqode_qt[${PYTHON_USEDEP}]
+	>=dev-python/hyperspy-1.5[${PYTHON_USEDEP}]
+	>=dev-python/traitsui-6.0[${PYTHON_USEDEP}]
 "
-#    pyqode-uic? ( )
-#    test? ('pytest-xdist', 'pytest-cov', 'pytest-pep8', 'pytest')
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -37,7 +34,6 @@ S="${WORKDIR}/${MYP}"
 
 python_compile() {
 	distutils-r1_python_compile
-
 }
 
 python_compile_all() {
@@ -50,5 +46,4 @@ python_test() {
 
 python_install_all() {
 	distutils-r1_python_install_all
-	find "${D}" -name '*.pth' -delete || die
 }
