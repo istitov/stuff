@@ -23,7 +23,7 @@ RDEPEND="
 	dev-python/traits[${PYTHON_USEDEP}]
 	dev-python/docutils[${PYTHON_USEDEP}]
 	dev-python/jedi[${PYTHON_USEDEP}]
-	dev-python/pyflakes[${PYTHON_USEDEP}]
+	~dev-python/pyflakes[${PYTHON_USEDEP}]-2.4.0
 	dev-python/pycodestyle[${PYTHON_USEDEP}]
 	dev-python/pyqode_qt[${PYTHON_USEDEP}]
 	dev-python/pyqode_core[${PYTHON_USEDEP}]
