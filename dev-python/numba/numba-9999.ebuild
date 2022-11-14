@@ -42,6 +42,7 @@ distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx_rtd_th
 #)
 
 pkg_setup() {
+	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 	if ! use openmp; then
 		export NUMBA_DISABLE_OPENMP=1 || die
 	else
@@ -56,6 +57,7 @@ pkg_setup() {
 }
 
 python_prepare_all() {
+	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 	# This conf.py only works in a git repo
 	
 	#if use doc; then
@@ -69,6 +71,7 @@ python_prepare_all() {
 }
 
 python_compile() {
+	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 	# FIXME: parallel python building fails. See Portage bug #614464 and
 	# gentoo/sci issue #1080.
 	export MAKEOPTS=-j1 || die

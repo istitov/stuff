@@ -19,8 +19,8 @@ KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="openmp threads"
 
 RDEPEND="
-	>=dev-python/llvmlite-0.38.0[${PYTHON_USEDEP}]
-	<dev-python/llvmlite-0.39.0
+	>=dev-python/llvmlite-0.39.0[${PYTHON_USEDEP}]
+	<dev-python/llvmlite-0.40.0
 	>=dev-python/numpy-1.17.0[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2019.5 )
 "

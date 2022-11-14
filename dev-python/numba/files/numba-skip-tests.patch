@@ -4,7 +4,7 @@ diff --git a/numba/tests/test_linalg.py b/numba/tests/test_linalg.py
 index 46bff63e8..53056ab23 100644
 --- a/numba/tests/test_linalg.py
 +++ b/numba/tests/test_linalg.py
-@@ -1282,6 +1282,7 @@ class TestLinalgLstsq(TestLinalgSystems):
+@@ -1402,6 +1402,7 @@
      # Suggestions for improvements are welcomed!
  
      @needs_lapack
