@@ -7,8 +7,8 @@ PYTHON_COMPAT=( python3_{7..10} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="An implementation of chunked, compressed, N-dimensional arrays for Python"
-HOMEPAGE="https://github.com/zarr-developers/zarr-python"
+DESCRIPTION="A Python package providing buffer compression and transformation codecs for use in data storage and communication applications"
+HOMEPAGE="https://github.com/zarr-developers/numcodecs"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
@@ -18,14 +18,7 @@ IUSE="doc python"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/numcodecs[${PYTHON_USEDEP}]
 "
-#asciitree==0.3.3
-#fasteners==0.18
-#numcodecs==0.10.2
-#msgpack-python==0.5.6
-#setuptools-scm==7.0.5
-#numpy==1.23.3
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
