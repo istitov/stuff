@@ -12,6 +12,7 @@ DESCRIPTION="NumPy aware dynamic Python compiler using LLVM"
 HOMEPAGE="https://numba.pydata.org/
 	https://github.com/numba"
 EGIT_REPO_URI="https://github.com/numba/numba.git"
+EGIT_CHECKOUT_DIR="${WORKDIR}"/"${PN}"-"${PV}"
 
 LICENSE="BSD"
 SLOT="0"
@@ -29,16 +30,16 @@ BDEPEND="
 	dev-python/versioneer[${PYTHON_USEDEP}]
 "
 
-S="${WORKDIR}/${PN}-${PV}"
+S="${WORKDIR}"/"${PN}"-"${PV}" 
 DESTDIR="${D}"
 
 DISTUTILS_IN_SOURCE_BUILD=1
 distutils_enable_tests unittest
 distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx_rtd_theme
 
-PATCHES=(
-	"${FILESDIR}/${PN}-skip-tests.patch"
-)
+#PATCHES=(
+#	"${FILESDIR}/${PN}-skip-tests.patch"
+#)
 
 pkg_setup() {
 	if ! use openmp; then
@@ -56,13 +57,14 @@ pkg_setup() {
 
 python_prepare_all() {
 	# This conf.py only works in a git repo
-	if use doc; then
-		git init -q || die
-		git config user.email "larry@gentoo.org" || die
-		git config user.name "Larry the Cow" || die
-		git add . || die
-		git commit -m "init" || die
-	fi
+	
+	#if use doc; then
+	#	git init -q || die
+	#	git config user.email "larry@gentoo.org" || die
+	#	git config user.name "Larry the Cow" || die
+	#	git add . || die
+	#	git commit -m "init" || die
+	#fi
 	distutils-r1_python_prepare_all
 }
 
