@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 
 PYTHON_COMPAT=( python3_{6..10} )
 
@@ -23,7 +23,7 @@ RDEPEND="
 	dev-python/traits[${PYTHON_USEDEP}]
 	dev-python/docutils[${PYTHON_USEDEP}]
 	dev-python/jedi[${PYTHON_USEDEP}]
-	dev-python/pyflakes[${PYTHON_USEDEP}]
+	~dev-python/pyflakes-2.4.0[${PYTHON_USEDEP}]
 	dev-python/pycodestyle[${PYTHON_USEDEP}]
 	dev-python/pyqode_qt[${PYTHON_USEDEP}]
 	dev-python/pyqode_core[${PYTHON_USEDEP}]

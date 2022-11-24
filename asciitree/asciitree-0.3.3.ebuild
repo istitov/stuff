@@ -1,25 +1,22 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python3_{6..10} )
+PYTHON_COMPAT=( python3_{7..10} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="library for structural biology"
-HOMEPAGE="https://project-gemmi.github.io/"
+DESCRIPTION="Draws ASCII trees"
+HOMEPAGE="http://github.com/mbr/asciitree"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
-LICENSE="MPL-2.0"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	sys-libs/zlib
-	dev-python/pybind11[${PYTHON_USEDEP}]
-	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 "
 
@@ -29,7 +26,18 @@ DEPEND="${RDEPEND}
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-src_prepare() {
-	sed -i -e "s:USE_SYSTEM_ZLIB = False:USE_SYSTEM_ZLIB = True:" "${S}"/setup.py  || die
-	default
+python_compile() {
+	distutils-r1_python_compile
+}
+
+python_compile_all() {
+	use doc && setup.py build
+}
+
+python_test() {
+	setup.py test
+}
+
+python_install_all() {
+	distutils-r1_python_install_all
 }

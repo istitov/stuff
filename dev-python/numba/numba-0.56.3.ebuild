@@ -3,16 +3,15 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{8..10} )
 
 DISTUTILS_USE_SETUPTOOLS=rdepend
-inherit optfeature multiprocessing distutils-r1 git-r3
+inherit optfeature multiprocessing distutils-r1
 
 DESCRIPTION="NumPy aware dynamic Python compiler using LLVM"
 HOMEPAGE="https://numba.pydata.org/
 	https://github.com/numba"
-EGIT_REPO_URI="https://github.com/numba/numba.git"
-EGIT_CHECKOUT_DIR="${WORKDIR}"/"${PN}"-"${PV}"
+SRC_URI="https://github.com/numba/numba/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -20,29 +19,25 @@ KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="openmp threads"
 
 RDEPEND="
-	~dev-python/llvmlite-9999[${PYTHON_USEDEP}]
+	>=dev-python/llvmlite-0.39.0[${PYTHON_USEDEP}]
+	<dev-python/llvmlite-0.40.0
 	>=dev-python/numpy-1.17.0[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2019.5 )
 "
-#<dev-python/llvmlite-0.39.0
 BDEPEND="
 	dev-python/pip[${PYTHON_USEDEP}]
 	dev-python/versioneer[${PYTHON_USEDEP}]
 "
-
-S="${WORKDIR}"/"${PN}"-"${PV}" 
-DESTDIR="${D}"
 
 DISTUTILS_IN_SOURCE_BUILD=1
 distutils_enable_tests unittest
 distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx_rtd_theme
 
 #PATCHES=(
-#	"${FILESDIR}/${PN}-skip-tests.patch"
+#	"${FILESDIR}/${PN}-0.52.0-skip_tests.patch"
 #)
 
 pkg_setup() {
-	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 	if ! use openmp; then
 		export NUMBA_DISABLE_OPENMP=1 || die
 	else
@@ -57,21 +52,18 @@ pkg_setup() {
 }
 
 python_prepare_all() {
-	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 	# This conf.py only works in a git repo
-	
-	#if use doc; then
-	#	git init -q || die
-	#	git config user.email "larry@gentoo.org" || die
-	#	git config user.name "Larry the Cow" || die
-	#	git add . || die
-	#	git commit -m "init" || die
-	#fi
+	if use doc; then
+		git init -q || die
+		git config user.email "larry@gentoo.org" || die
+		git config user.name "Larry the Cow" || die
+		git add . || die
+		git commit -m "init" || die
+	fi
 	distutils-r1_python_prepare_all
 }
 
 python_compile() {
-	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 	# FIXME: parallel python building fails. See Portage bug #614464 and
 	# gentoo/sci issue #1080.
 	export MAKEOPTS=-j1 || die
