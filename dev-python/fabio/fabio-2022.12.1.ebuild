@@ -1,31 +1,32 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 
 PYTHON_COMPAT=( python3_{6..10} )
 
 inherit distutils-r1 flag-o-matic
 
-MYPN="${PN/pyqode_core/pyqode.core}"
-MYP="${MYPN}-${PV}"
-
-DESCRIPTION="pyQode is a source code editor widget for PyQt/PySide"
-HOMEPAGE="https://github.com/pyQode/pyQode"
-SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
+DESCRIPTION="FabIO is an I/O library for images produced by 2D X-ray detectors"
+HOMEPAGE="https://github.com/silx-kit/fabio"
+SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="python doc test"
+IUSE="doc python"
 
 RDEPEND="
-	dev-python/pygments[${PYTHON_USEDEP}]
-	dev-python/future
-	dev-python/pyqode_qt[${PYTHON_USEDEP}]
+	dev-python/cython[${PYTHON_USEDEP}]
+	dev-python/h5py[${PYTHON_USEDEP}]
+	dev-python/lxml[${PYTHON_USEDEP}]
+	dev-python/matplotlib[${PYTHON_USEDEP}]
+
+	dev-python/sphinx[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/pillow[${PYTHON_USEDEP}]
 "
-#    pyqode-uic? ( )
-#    test? ('pytest-xdist', 'pytest-cov', 'pytest-pep8', 'pytest')
+#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -33,11 +34,8 @@ DEPEND="${RDEPEND}
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-S="${WORKDIR}/${MYP}"
-
 python_compile() {
 	distutils-r1_python_compile
-
 }
 
 python_compile_all() {
@@ -50,5 +48,4 @@ python_test() {
 
 python_install_all() {
 	distutils-r1_python_install_all
-	find "${D}" -name '*.pth' -delete || die
 }

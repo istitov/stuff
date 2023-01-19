@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 
 PYTHON_COMPAT=( python3_{9..10} )
 
@@ -27,12 +27,12 @@ RDEPEND="
 	>=dev-python/PyQt5-5.15.6[${PYTHON_USEDEP},widgets]
 	dev-python/qtconsole[${PYTHON_USEDEP}]
 	dev-python/autopep8[${PYTHON_USEDEP}]
-	dev-python/pyqode_python[${PYTHON_USEDEP}]
 	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 	dev-python/ipykernel[${PYTHON_USEDEP}]
 	dev-qt/qtwebengine
 	dev-python/importlib_resources
 "
+#dev-python/pyqode_python[${PYTHON_USEDEP}]
 
 DEPEND="${RDEPEND}
 	test? ( dev-python/pytest-qt[${PYTHON_USEDEP}] dev-python/pytest-cov[${PYTHON_USEDEP}] )

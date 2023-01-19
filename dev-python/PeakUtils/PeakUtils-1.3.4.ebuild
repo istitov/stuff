@@ -1,29 +1,27 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 
 PYTHON_COMPAT=( python3_{6..10} )
 
 inherit distutils-r1 flag-o-matic
 
-MYPN="${PN/pyqode_qt/pyqode.qt}"
-MYP="${MYPN}-${PV}"
-
-DESCRIPTION="Shim that let you write applications that supports both PyQt and PySide"
-HOMEPAGE="https://github.com/pyQode/pyqode.qt"
-SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
+DESCRIPTION="This package provides utilities related to the detection of peaks on 1D data."
+HOMEPAGE="https://bitbucket.org/lucashnegri/peakutils/"
+SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="python doc"
+IUSE="doc python"
 
 RDEPEND="
-	dev-python/PyQt5[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.8[${PYTHON_USEDEP}]
+	>=dev-python/scipy-0.11[${PYTHON_USEDEP}]
+	dev-python/setuptools[${PYTHON_USEDEP}]
 "
-#        You need *PyQt5* or *PyQt4* or *PySide* installed on your system to make use
-#       of pyqode.qt, obviously.
+#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -31,11 +29,8 @@ DEPEND="${RDEPEND}
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-S="${WORKDIR}/${MYP}"
-
 python_compile() {
 	distutils-r1_python_compile
-
 }
 
 python_compile_all() {
@@ -48,5 +43,4 @@ python_test() {
 
 python_install_all() {
 	distutils-r1_python_install_all
-	find "${D}" -name '*.pth' -delete || die
 }
