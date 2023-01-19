@@ -8,7 +8,7 @@ DISTUTILS_OPTIONAL=1
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="xml(+)"
 
-inherit distutils-r1
+inherit distutils-r1_py2
 
 MYPN="${PN/-python2/}"
 MYP="${MYPN}-${PV}"

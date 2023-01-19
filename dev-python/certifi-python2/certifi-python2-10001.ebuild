@@ -8,7 +8,7 @@ _PYTHON_ALLOW_PY27=1
 DISTUTILS_OPTIONAL=1
 PYTHON_COMPAT=( python2_7 )
 
-inherit distutils-r1
+inherit distutils-r1_py2
 
 MY_P=certifi-shim-${PV}
 DESCRIPTION="Thin replacement for certifi using system certificate store"
