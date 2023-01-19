@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6..8} )
+PYTHON_COMPAT=( python3_{6..10} )
 PLOCALES="be bg el ru"
 
 inherit desktop eutils plocale python-r1 xdg-utils

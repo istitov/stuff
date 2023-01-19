@@ -1,11 +1,11 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 
-inherit xdg-utils gnome2-utils python-r1 subversion autotools
+inherit xdg-utils gnome2-utils python-r1_py2 subversion autotools
 
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
 HOMEPAGE="http://gwyddion.net/"

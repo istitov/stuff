@@ -8,7 +8,7 @@ PYTHON_REQ_USE="threads(+)"
 DISTUTILS_USE_SETUPTOOLS="manual"
 #DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_OPTIONAL=1
-inherit distutils-r1
+inherit distutils-r1_py2
 
 MYPN="${PN/-python2/}"
 MYP="${MYPN}-${PV}"
