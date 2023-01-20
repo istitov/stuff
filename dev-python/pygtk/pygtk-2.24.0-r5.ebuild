@@ -1,11 +1,11 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 GNOME_TARBALL_SUFFIX="bz2"
 _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
-inherit autotools flag-o-matic gnome2 python-r1 virtualx
+inherit autotools flag-o-matic gnome2 python-r1_py2 virtualx
 
 DESCRIPTION="GTK+2 bindings for Python"
 HOMEPAGE="https://gitlab.gnome.org/Archive/pygtk"
