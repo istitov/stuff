@@ -8,7 +8,7 @@ _PYTHON_ALLOW_PY27=1
 DISTUTILS_OPTIONAL=1
 PYTHON_COMPAT=( python2_7 )
 #Please note, that the original ebuild is not supporting py2_7
-inherit distutils-r1
+inherit distutils-r1_py2
 
 DESCRIPTION="Run unittests or fail if no tests were found"
 HOMEPAGE="https://github.com/mgorny/unittest-or-fail/"
