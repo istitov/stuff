@@ -11,7 +11,7 @@ DISTUTILS_OPTIONAL=1
 
 FORTRAN_NEEDED=lapack
 
-inherit distutils-r1 flag-o-matic fortran-2 multiprocessing toolchain-funcs
+inherit distutils-r1_py2 flag-o-matic fortran-2 multiprocessing toolchain-funcs
 
 MY_PN="numpy"
 DOC_PV="1.16.6"
