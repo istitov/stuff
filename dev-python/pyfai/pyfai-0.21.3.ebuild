@@ -3,14 +3,17 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{7..10} )
 #python2_7 masked because of h5py
 
 inherit distutils-r1 flag-o-matic
 
+MYPN="${PN/fai/FAI}"
+MYP="${MYPN}-${PV}"
+
 DESCRIPTION="Libary for azimuthal integration of 2D diffraction data"
 HOMEPAGE="https://pyfai.readthedocs.io"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="mirror://pypi/${MYP:0:1}/${MYPN}/${MYP}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"

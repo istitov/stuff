@@ -11,7 +11,7 @@ DISTUTILS_USE_SETUPTOOLS="manual"
 #DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_OPTIONAL=1
 
-inherit distutils-r1 eutils xdg-utils desktop
+inherit distutils-r1_py2 eutils xdg-utils desktop
 
 MY_PN="sK1"
 DESCRIPTION="sK1 vector graphics editor"

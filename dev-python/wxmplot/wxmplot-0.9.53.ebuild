@@ -1,31 +1,28 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{7..10} )
+PYTHON_COMPAT=( python3_{6..10} )
 
 inherit distutils-r1 flag-o-matic
 
-DESCRIPTION="An implementation of chunked, compressed, N-dimensional arrays for Python"
-HOMEPAGE="https://github.com/zarr-developers/zarr-python"
+DESCRIPTION="Provides advanced wxPython widgets for plotting based on matplotlib"
+HOMEPAGE="https://newville.github.io/wxmplot/"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
-LICENSE="GPL-3"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/numcodecs[${PYTHON_USEDEP}]
-	dev-python/fasteners[${PYTHON_USEDEP}]
-	dev-python/asciitree[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.12[${PYTHON_USEDEP}]
+	>=dev-python/six-1.10[${PYTHON_USEDEP}]
+	>=dev-python/wxpython-4.0.3[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-2.0[${PYTHON_USEDEP}]
 "
-#asciitree==0.3.3
-#msgpack-python==0.5.6
-#setuptools-scm==7.0.5
-#numpy==1.23.3
+#dev-python/PyQt4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
