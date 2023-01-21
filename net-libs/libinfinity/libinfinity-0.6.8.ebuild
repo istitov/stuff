@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils user
+inherit eutils
 
 MY_PV=$(ver_cut 1-2)
 
