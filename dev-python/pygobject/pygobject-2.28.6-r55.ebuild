@@ -1,12 +1,12 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="8"
 GNOME2_LA_PUNT="yes"
 _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 
-inherit autotools eutils gnome2 python-r1 virtualx
+inherit autotools gnome2 python-r1_py2 virtualx
 #GCONF_DEBUG="no"
 DESCRIPTION="GLib's GObject library bindings for Python"
 HOMEPAGE="http://www.pygtk.org/"
@@ -34,26 +34,26 @@ RDEPEND="${COMMON_DEPEND}
 
 src_prepare() {
 	# Fix FHS compliance, see upstream bug #535524
-	epatch "${FILESDIR}/${PN}-2.28.3-fix-codegen-location.patch"
+	eapply "${FILESDIR}/${PN}-2.28.3-fix-codegen-location.patch"
 
 	# Do not build tests if unneeded, bug #226345
-	epatch "${FILESDIR}/${PN}-2.28.3-make_check.patch"
+	eapply "${FILESDIR}/${PN}-2.28.3-make_check.patch"
 
 	# Support installation for multiple Python versions, upstream bug #648292
-	epatch "${FILESDIR}/${PN}-2.28.3-support_multiple_python_versions.patch"
+	eapply "${FILESDIR}/${PN}-2.28.3-support_multiple_python_versions.patch"
 
 	# Disable tests that fail
-	epatch "${FILESDIR}/${P}-disable-failing-tests.patch"
+	eapply "${FILESDIR}/${P}-disable-failing-tests.patch"
 
 	# Disable introspection tests when we build with --disable-introspection
-	epatch "${FILESDIR}/${P}-tests-no-introspection.patch"
+	eapply "${FILESDIR}/${P}-tests-no-introspection.patch"
 
 	# Fix warning spam
-	epatch "${FILESDIR}/${P}-set_qdata.patch"
-	epatch "${FILESDIR}/${P}-gio-types-2.32.patch"
+	eapply "${FILESDIR}/${P}-set_qdata.patch"
+	eapply "${FILESDIR}/${P}-gio-types-2.32.patch"
 
 	# Fix glib-2.36 compatibility, bug #486602
-	epatch "${FILESDIR}/${P}-glib-2.36-class_init.patch"
+	eapply "${FILESDIR}/${P}-glib-2.36-class_init.patch"
 
 	sed -i \
 		-e 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' \

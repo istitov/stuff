@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit unpacker user
+inherit unpacker
 
 DESCRIPTION="PLEX media server"
 HOMEPAGE="https://plex.tv/"
@@ -21,7 +21,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND="net-dns/avahi"
+RDEPEND="
+    net-dns/avahi
+    acct-user/plex
+    acct-group/plex"
 
 QA_PRESTRIPPED="usr/lib/plexmediaserver/libavcodec.so.54
 usr/lib/plexmediaserver/Plex.Media.Server
@@ -56,7 +59,7 @@ src_install(){
 	doinitd "${FILESDIR}/pms"
 }
 
-pkg_preinst() {
-	enewgroup plex
-	enewuser plex -1 /bin/bash /var/lib/plexmediaserver plex
-}
+#pkg_preinst() {
+#	enewgroup plex
+#	enewuser plex -1 /bin/bash /var/lib/plexmediaserver plex
+#}

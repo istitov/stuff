@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils user
+inherit eutils
 
 MY_PV=$(ver_cut 1-2)
 
@@ -25,6 +25,8 @@ RDEPEND="dev-libs/glib:2
 	gtk3? ( x11-libs/gtk+:3 )
 	gtk? ( x11-libs/gtk+:2 )"
 DEPEND="${RDEPEND}
+        acct-user/infinote
+        acct-group/infinote
 	virtual/pkgconfig
 	sys-devel/gettext
 	doc? ( dev-util/gtk-doc )"
@@ -32,10 +34,10 @@ DEPEND="${RDEPEND}
 DOCS=( AUTHORS ChangeLog NEWS README.md TODO )
 
 pkg_setup() {
-	if use server ; then
-		enewgroup infinote 100
-		enewuser infinote 100 /bin/bash /var/lib/infinote infinote
-	fi
+	#if use server ; then
+	#	enewgroup infinote 100
+	#	enewuser infinote 100 /bin/bash /var/lib/infinote infinote
+	#fi
 	#
 	if use gtk && use gtk3; then
 		eerror "You can select either gtk or gtk3, but not both at the same time" && die
