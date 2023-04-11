@@ -52,7 +52,7 @@ RDEPEND="
 	dev-python/PyQt5[${PYTHON_USEDEP}]
 	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
-	dev-python/pyFAI[${PYTHON_USEDEP}]
+	dev-python/pyfai[${PYTHON_USEDEP}]
 	sci-libs/pycifrw[${PYTHON_USEDEP}]
 "
 #sphinxcontrib-bibtex #dev
