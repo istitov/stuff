@@ -52,6 +52,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 src_configure() {
 	./autogen.sh
+	sed -i -e 's:PYGTK_CODEGENDIR = /lib64/python2.7:PYGTK_CODEGENDIR = /usr/lib64/python2.7:' modules/pygwy/Makefile || die
 }
 
 src_compile() {
