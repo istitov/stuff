@@ -23,7 +23,7 @@ RDEPEND="
 	dev-python/hyperspy[${PYTHON_USEDEP}]
 	dev-python/lmfit[${PYTHON_USEDEP}]
 	dev-python/diffsims[${PYTHON_USEDEP}]
-	dev-python/pyFAI[${PYTHON_USEDEP}]
+	dev-python/pyfai[${PYTHON_USEDEP}]
 	dev-python/ipywidgets[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
 "

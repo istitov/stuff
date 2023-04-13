@@ -2,11 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
+DISTUTILS_USE_PEP517=meson-python
 PYTHON_COMPAT=( python3_{7..10} )
-#python2_7 masked because of h5py
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1
 
 DESCRIPTION="Libary for azimuthal integration of 2D diffraction data"
 HOMEPAGE="https://pyfai.readthedocs.io"
@@ -18,7 +17,6 @@ KEYWORDS="~amd64"
 IUSE="doc python"
 
 RDEPEND="
-	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/h5py[${PYTHON_USEDEP}]
 	dev-python/PyQt5[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
@@ -31,22 +29,31 @@ RDEPEND="
 	sci-libs/fftw:3.0
 "
 
-DEPEND="${RDEPEND}
+BDEPEND="
+	dev-python/cython[${PYTHON_USEDEP}]
+"
+
+DEPEND="${BDEPEND}
+	${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 "
 
+
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-python_compile() {
-	distutils-r1_python_compile
+src_prepare() {
+	sed -i 's:setuptools<60.0.0:setuptools>60.0.0:' "${WORK}"setup.py || die "Sed failed!"
+	sed -i 's:setuptools< 60.0.0:setuptools> 60.0.0:' "${WORK}"setup.py || die "Sed failed!"
+	default
 }
 
 python_compile_all() {
-	use doc && setup.py build
+	export SETUPTOOLS_PRETEND_VERSION='59.9.9'
+	esetup.py build
 }
 
 python_test() {
-	setup.py test
+	esetup.py test
 }
 
 python_install_all() {

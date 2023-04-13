@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 
 inherit distutils-r1 git-r3
 
@@ -52,7 +52,7 @@ RDEPEND="
 	dev-python/PyQt5[${PYTHON_USEDEP}]
 	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
-	dev-python/pyFAI[${PYTHON_USEDEP}]
+	dev-python/pyfai[${PYTHON_USEDEP}]
 	sci-libs/pycifrw[${PYTHON_USEDEP}]
 "
 #sphinxcontrib-bibtex #dev
@@ -70,8 +70,8 @@ DESTDIR="${D}"
 
 PATCHES=(
 	"${FILESDIR}"/full_conf.patch
-	"${FILESDIR}"/py.patch
 )
+#	"${FILESDIR}"/py.patch
 
 distutils_enable_sphinx docs
 distutils_enable_tests pytest
