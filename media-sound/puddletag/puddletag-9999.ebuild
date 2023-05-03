@@ -1,9 +1,10 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="8"
+EAPI=8
 
-PYTHON_COMPAT=( python3_{6,7,8,9} )
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{9,10,11} )
 
 inherit distutils-r1 xdg-utils git-r3
 
@@ -14,18 +15,19 @@ EGIT_REPO_URI="https://github.com/puddletag/puddletag.git"
 LICENSE="GPL-2 GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="acoustid cover"
+IUSE="acoustid cover quodlibet"
 
 DEPEND=""
-RDEPEND=">=dev-python/PyQt5-5.9.2[${PYTHON_USEDEP},svg]
-	>=dev-python/pyparsing-1.5.1[${PYTHON_USEDEP}]
-	>=media-libs/mutagen-1.21[${PYTHON_USEDEP}]
-	>=dev-python/configobj-4.7.2-r1[${PYTHON_USEDEP}]
-	acoustid? ( >=media-libs/chromaprint-0.6 )
+RDEPEND="
+	>=dev-python/configobj-5.0.6[${PYTHON_USEDEP}]
+	>=dev-python/pyparsing-3.0.9[${PYTHON_USEDEP}]
+	>=dev-python/PyQt5-5.15.6[${PYTHON_USEDEP},svg]
+	>=media-libs/mutagen-1.45.1[${PYTHON_USEDEP}]
+	acoustid? ( >=media-libs/chromaprint-1.5.0 )
 	cover? ( dev-python/pillow[${PYTHON_USEDEP}] )
-	>=dev-python/sip-4.14.2-r1:0[${PYTHON_USEDEP}]
-	>=dev-python/lxml-3.0.1[${PYTHON_USEDEP}]"
+	quodlibet? ( >=media-sound/quodlibet-4.4.0[${PYTHON_USEDEP}] )
+	>=dev-python/sip-6.6.2[${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.9.1[${PYTHON_USEDEP}]
+"
 
 DOCS=(changelog NEWS THANKS TODO)
-
-S="${S}/source"

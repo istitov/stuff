@@ -1,9 +1,10 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="8"
+EAPI=8
 
-PYTHON_COMPAT=( python3_{6,7,8,9} )
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{9,10,11} )
 
 inherit distutils-r1 xdg-utils
 
@@ -23,7 +24,7 @@ RDEPEND=">=dev-python/PyQt5-5.9.2[${PYTHON_USEDEP},svg]
 	>=dev-python/configobj-4.7.2-r1[${PYTHON_USEDEP}]
 	acoustid? ( >=media-libs/chromaprint-0.6 )
 	cover? ( dev-python/pillow[${PYTHON_USEDEP}] )
-	>=dev-python/sip-4.14.2-r1:0[${PYTHON_USEDEP}]
+	>=dev-python/sip-6.6.2[${PYTHON_USEDEP}]
 	>=dev-python/lxml-3.0.1[${PYTHON_USEDEP}]"
 
 DOCS=(changelog NEWS THANKS TODO)
