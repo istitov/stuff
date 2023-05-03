@@ -1,0 +1,20 @@
+diff --git a/sonata/version.py b/sonata/version.py
+index 6936bbf..c01aa97 100644
+--- a/sonata/version.py
++++ b/sonata/version.py
+@@ -38,10 +38,11 @@ def _version():
+         version = build_ver
+     else:
+         try:
+-            dir = os.path.dirname(__file__)
+-            version = Popen(["git", "describe", "--abbrev=4", "HEAD"],
+-                             cwd=dir, stdout=PIPE,
+-                             stderr=PIPE).communicate()[0].decode('utf-8')
++#             dir = os.path.dirname(__file__)
++#             version = Popen(["git", "describe", "--abbrev=4", "HEAD"],
++#                              cwd=dir, stdout=PIPE,
++#                              stderr=PIPE).communicate()[0].decode('utf-8')
++            version = "v1.7b2"
+             if not version:
+                 raise OSError
+         except OSError:
