@@ -5,16 +5,17 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9,10,11} )
 
-inherit python-r1 autotools git-r3
+inherit python-r1 autotools
 
 DESCRIPTION="An implementation of the MPRIS 2 interface as a client for MPD"
 HOMEPAGE="https://github.com/eonpatapon/mpDris2"
-EGIT_REPO_URI="https://github.com/eonpatapon/mpDris2.git"
+SRC_URI="https://github.com/eonpatapon/mpDris2/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
+KEYWORDS="amd64 ~ppc ~ppc64 x86"
 IUSE=""
+S="${WORKDIR}/mpDris2-${PV}"
 
 DEPEND="
 	>=dev-python/dbus-python-0.80[${PYTHON_USEDEP}]
