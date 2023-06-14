@@ -3,7 +3,7 @@
 
 EAPI=8
 DISTUTILS_USE_PEP517=meson-python
-PYTHON_COMPAT=( python3_{7..10} )
+PYTHON_COMPAT=( python3_{7..11} )
 
 inherit distutils-r1
 
