@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-
+inherit qmake-utils
 DESCRIPTION="Open source XRD and Rietveld refiniment"
 HOMEPAGE="https://www.profex-xrd.org"
 SRC_URI="https://www.profex-xrd.org/wp-content/uploads/2021/12/${P}.tar.gz"
@@ -52,7 +52,7 @@ src_prepare() {
 #
 src_configure() {
 	default
-	qmake -r profex.pro
+	eqmake5 -r profex.pro
 }
 
 src_compile() {
@@ -60,6 +60,6 @@ src_compile() {
 }
 
 src_install() {
-	dobin "${D}"/src/profex
+	dobin "${S}"/src/profex
 	default
 }
