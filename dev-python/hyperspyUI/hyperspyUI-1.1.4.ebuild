@@ -30,7 +30,7 @@ RDEPEND="
 	dev-python/pyqode_python[${PYTHON_USEDEP}]
 	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 	dev-qt/qtwebengine
-	dev-python/importlib_resources
+	dev-python/importlib-resources
 "
 
 DEPEND="${RDEPEND}
