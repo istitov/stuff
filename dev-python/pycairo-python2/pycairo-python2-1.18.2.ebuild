@@ -26,7 +26,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
 	dev-lang/python:2.7
-	>=x11-libs/cairo-1.13.1[svg]
+	x11-libs/cairo
 "
 DEPEND="${RDEPEND}"
 
