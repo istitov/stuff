@@ -9,8 +9,8 @@ inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="Toolkit-independent GUI abstraction layer for visualization features of Traits"
 HOMEPAGE="https://docs.enthought.com/pyface/"
-SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
-S=${WORKDIR}/${P^}
+SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
+S=${WORKDIR}/${P}
 
 LICENSE="BSD"
 SLOT="0"
