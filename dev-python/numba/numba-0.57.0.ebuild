@@ -21,6 +21,7 @@ IUSE="openmp threads"
 RDEPEND="
 	>=dev-python/llvmlite-0.39.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.17.0[${PYTHON_USEDEP}]
+	<dev-python/numpy-1.25[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2019.5 )
 "
 BDEPEND="
