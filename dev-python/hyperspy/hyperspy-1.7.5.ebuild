@@ -3,13 +3,14 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{9..12} )
 
-inherit distutils-r1 flag-o-matic virtualx
+inherit distutils-r1 flag-o-matic virtualx pypi
 
 DESCRIPTION="Interactive analysis of multidimensional datasets tools"
 HOMEPAGE="https://hyperspy.org/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
+S=${WORKDIR}/${P}
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -23,7 +24,7 @@ RDEPEND="
 	dev-python/natsort[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-3.1[${PYTHON_USEDEP}]
 	>=dev-python/traits-4.5.0[${PYTHON_USEDEP}]
-	~dev-python/pyface-7.4.1[${PYTHON_USEDEP}]
+	>=dev-python/pyface-7.4.1[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
 	>=dev-python/tqdm-0.4.9[${PYTHON_USEDEP}]
 	dev-python/sympy[${PYTHON_USEDEP}]

@@ -2,14 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{7..12} )
 
-PYTHON_COMPAT=( python3_{6..10} )
-
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="Toolkit-independent GUI abstraction layer for visualization features of Traits"
 HOMEPAGE="https://docs.enthought.com/pyface/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
+S=${WORKDIR}/${P}
 
 LICENSE="BSD"
 SLOT="0"

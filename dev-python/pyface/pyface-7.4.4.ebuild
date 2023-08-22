@@ -18,8 +18,8 @@ IUSE="python doc +wx +pyqt5 +pyside"
 
 RDEPEND="
 	dev-python/traits[${PYTHON_USEDEP}]
-	dev-python/importlib_resources
-	>=dev-python/importlib_metadata-3.6[${PYTHON_USEDEP}]
+	dev-python/importlib-resources
+	>=dev-python/importlib-metadata-3.6[${PYTHON_USEDEP}]
 	pyqt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
 	wx? ( >=dev-python/wxpython-2.8.10:*[${PYTHON_USEDEP}] dev-python/numpy[${PYTHON_USEDEP}] )
 	pyside? ( dev-python/pyside2[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
 
 DISTUTILS_USE_SETUPTOOLS=rdepend
 inherit optfeature multiprocessing distutils-r1
@@ -21,6 +21,7 @@ IUSE="openmp threads"
 RDEPEND="
 	>=dev-python/llvmlite-0.39.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.17.0[${PYTHON_USEDEP}]
+	<dev-python/numpy-1.25[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2019.5 )
 "
 BDEPEND="
