@@ -1,13 +1,13 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DISTUTILS_USE_PEP517=flit
 # This is a backport of importlib.resources that's present since py3.9.
 # However, the version in 3.9 is buggy, so matplotlib needs it on 3.9
 # as well.
-PYTHON_COMPAT=( pypy3 )
+PYTHON_COMPAT=( pypy3 python3_{7..9} )
 
 inherit distutils-r1 pypi
 
