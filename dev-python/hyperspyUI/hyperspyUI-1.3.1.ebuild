@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
+PYTHON_COMPAT=( python3_{10..12} )
 inherit distutils-r1 flag-o-matic virtualx pypi
 
 DESCRIPTION="Provides graphic user interface (GUI) for hyperspy"
@@ -30,9 +30,9 @@ RDEPEND="
 	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 	dev-python/ipykernel[${PYTHON_USEDEP}]
 	dev-qt/qtwebengine
-	dev-python/importlib-resources
 "
 #dev-python/pyqode_python[${PYTHON_USEDEP}]
+#	dev-python/importlib-resources
 
 DEPEND="${RDEPEND}
 	test? ( dev-python/pytest-qt[${PYTHON_USEDEP}] dev-python/pytest-cov[${PYTHON_USEDEP}] )

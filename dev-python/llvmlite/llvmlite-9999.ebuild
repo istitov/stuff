@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..12} )
 inherit distutils-r1 llvm git-r3
 
 DESCRIPTION="Python wrapper around the llvm C++ library"
@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm arm64 x86 ~amd64-linux ~x86-linux"
 IUSE="examples"
 
-LLVM_MAX_SLOT=11
+LLVM_MAX_SLOT=14
 
 RDEPEND="
 	sys-devel/llvm:${LLVM_MAX_SLOT}
