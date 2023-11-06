@@ -39,6 +39,7 @@ DEPEND="${PYTHON_DEPS}
 #	$(python_gen_cond_dep 'dev-python/pythonmagick[${PYTHON_USEDEP}]')#removed from the main tree
 #	dev-python/pywebkitgtk[${PYTHON_USEDEP}]
 RDEPEND="${DEPEND}"
+#$(python_gen_cond_dep 'dev-python/PyPDF2[${PYTHON_USEDEP}]')
 
 #(?)python3-wxgtk4.0 (>= 4.0), python3-wxgtk-webview4.0 (>=4.0), libwxgtk-webview3.0-gtk3-0v5 (>=3.0),
 #(+)python3-numpy (>= 1:1.13.1),python3-xdg (>= 0.25), python3-pymysql (>= 0.7), python3-matplotlib (>= 2.1.1), wkhtmltopdf (>= 0.12.4), ghostscript (>= 9), python3-pypdf2 (>= 1.26),
