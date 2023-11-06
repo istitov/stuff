@@ -3,8 +3,6 @@
 
 EAPI=8
 
-inherit eutils
-
 MY_PV=$(ver_cut 1-2)
 
 DESCRIPTION="An implementation of the Infinote protocol written in GObject-based C"
