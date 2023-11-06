@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils git-r3
+inherit git-r3
 
 DESCRIPTION="quick set opts per package"
 HOMEPAGE="https://github.com/megabaks/portopts"
