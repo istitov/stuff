@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils git-r3
+inherit git-r3
 
 DESCRIPTION="DKMS analog for gentoo"
 HOMEPAGE="https://github.com/megabaks/dkms-gentoo"

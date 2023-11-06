@@ -3,8 +3,6 @@
 
 EAPI=7
 
-inherit eutils
-
 DESCRIPTION="DKMS analog for gentoo"
 HOMEPAGE="https://github.com/megabaks/dkms-gentoo"
 SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
