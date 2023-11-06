@@ -1,15 +1,15 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-inherit eutils flag-o-matic autotools multilib toolchain-funcs
+EAPI=8
+inherit flag-o-matic autotools multilib toolchain-funcs
 
 DESCRIPTION="alpine is an easy to use text-based based mail and news client"
 HOMEPAGE="https://alpineapp.email/"
 SRC_URI="https://alpineapp.email/alpine/release/src/Old/${P}.tar.xz"
 
 LICENSE="Apache-2.0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 SLOT="0"
 IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads patches"
 
