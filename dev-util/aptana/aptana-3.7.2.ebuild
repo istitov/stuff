@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-inherit eutils
 
 DESCRIPTION="The leading eclipse IDE for Ajax and today's web platforms"
 HOMEPAGE="http://www.aptana.com"
