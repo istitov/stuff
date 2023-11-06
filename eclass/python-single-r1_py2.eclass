@@ -446,7 +446,7 @@ python_setup() {
 # @FUNCTION: python-single-r1_pkg_setup
 # @DESCRIPTION:
 # Runs python_setup.
-python-single-r1_pkg_setup() {
+python-single-r1_py2_pkg_setup() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	[[ ${MERGE_TYPE} != binary ]] && python_setup
