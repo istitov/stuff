@@ -3,8 +3,6 @@
 
 EAPI=7
 
-inherit eutils
-
 DESCRIPTION="Simple keyboard layout indicator"
 HOMEPAGE="http://plhk.ru/"
 SRC_URI="http://plhk.ru/static/skb/${PN}-${PV}.tar.gz"
