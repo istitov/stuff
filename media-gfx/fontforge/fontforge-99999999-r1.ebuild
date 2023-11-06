@@ -15,7 +15,7 @@
 EAPI="7"
 _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
-inherit eutils xdg-utils python-single-r1_py2 autotools git-r3
+inherit xdg-utils python-single-r1_py2 autotools git-r3
 
 HTDOCSV="20110221"
 CIDMAPV="20090121"
@@ -50,7 +50,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MY_P}"
 
 pkg_setup() {
-	python-single-r1_pkg_setup
+	python-single-r1_py2_pkg_setup
 }
 
 src_prepare() {
