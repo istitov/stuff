@@ -9,8 +9,8 @@
     Puddletag is an audio tag editor (primarily created) for GNU/Linux similar to the Windows program, Mp3tag.
   </longdescription>
   <use>
-    <flag name="cover"> Enables editing of FLAC cover art</flag>
     <flag name="acoustid">Use <pkg>media-libs/chromaprint</pkg> for acoustic fingerprinting</flag>
+    <flag name="quodlibet">Enables support for editing <pkg>media-sound/quodlibet</pkg> databases</flag>
   </use>
   <upstream>
     <remote-id type="sourceforge">puddletag</remote-id>

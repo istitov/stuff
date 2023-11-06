@@ -1,38 +1,49 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
-PYTHON_COMPAT=( python3_{6,7,8,9,10} )
+EAPI=8
 
-inherit distutils-r1 python-r1 git-r3
+PYTHON_COMPAT=( python3_{9,10,11} )
+DISTUTILS_SINGLE_IMPL=1
+DISTUTILS_USE_PEP517=setuptools
+inherit desktop distutils-r1 xdg git-r3
 
-DESCRIPTION="an elegant GTK 3 client for the Music Player Daemon"
-HOMEPAGE="https://github.com/multani/sonata"
+DESCRIPTION="Elegant GTK+ 3 client for the Music Player Daemon (MPD)"
+HOMEPAGE="https://www.nongnu.org/sonata/"
 EGIT_REPO_URI="https://github.com/multani/sonata.git"
-#EGIT_REPO_URI="git://github.com/multani/sonata.git"
-#EGIT_BRANCH="fix/57-withdrawn"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="dbus mpd taglib"
 
-LANGS="ar be ca cs da de es et fi fr hi it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
-
+LANGS="ar be ca cs da de el-GR es et fi fr hi it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
 for X in ${LANGS} ; do
 	IUSE+=" l10n_${X}"
 done
 
-RDEPEND=">=dev-python/python-mpd-0.4.6
-	>=dev-python/pygobject-3.4.2
-	>=x11-libs/gtk+-3.4
-	mpd? ( >=media-sound/mpd-0.15 )
-	dbus? ( dev-python/dbus-python )
-	taglib? ( >=dev-python/tagpy-0.93 )"
+RDEPEND="
+	$(python_gen_cond_dep '
+		dev-python/pygobject:3[${PYTHON_USEDEP}]
+		dev-python/python-mpd2[${PYTHON_USEDEP}]
+		dbus? ( dev-python/dbus-python[${PYTHON_USEDEP}] )
+		taglib? ( dev-python/tagpy[${PYTHON_USEDEP}] )
+	')
+"
+
 DEPEND="${RDEPEND}
-	virtual/pkgconfig"
+	mpd? ( media-sound/mpd )
+	x11-libs/gtk+:3"
+
+BDEPEND="virtual/pkgconfig"
 
 DOCS="CHANGELOG README.rst TODO TRANSLATORS"
+
+PATCHES=(
+	"${FILESDIR}/hot_fix_version_PEP.patch"
+)
+
+distutils_enable_tests unittest
 
 src_prepare() {
 	local lang
