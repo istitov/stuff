@@ -3,7 +3,7 @@
 
 EAPI="7"
 
-inherit eutils autotools
+inherit autotools
 
 DESCRIPTION="Open Real-time Transport Protocol (RTP, RFC3550) stack"
 HOMEPAGE="http://www.linphone.org/"
