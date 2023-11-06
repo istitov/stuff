@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils git-r3
+inherit git-r3
 
 DESCRIPTION="A DeaDBeeF plugin for playing streaming video game music using vgmstream."
 HOMEPAGE="https://github.com/johnwchadwick/deadbeef-vgmstream"

@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils git-r3
+inherit git-r3
 
 DESCRIPTION="DeaDBeeF plugin for playing directly from RAR, 7z and Gzip archive files"
 HOMEPAGE="https://github.com/carlosanunes/deadbeef_vfs_archive_reader"

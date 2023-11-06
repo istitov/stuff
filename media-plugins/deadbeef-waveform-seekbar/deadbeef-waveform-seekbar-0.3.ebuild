@@ -3,8 +3,6 @@
 
 EAPI=7
 
-inherit eutils
-
 DESCRIPTION="Waveform Seekbar plugin for DeaDBeeF audio player"
 HOMEPAGE="https://github.com/cboxdoerfer/ddb_waveform_seekbar"
 MY_PN="ddb_waveform_seekbar"

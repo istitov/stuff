@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils git-r3
+inherit git-r3
 
 DESCRIPTION="bs2b DSP plugin for DeaDBeeF, using libbs2b."
 HOMEPAGE="https://github.com/DeaDBeeF-Player/bs2b"
