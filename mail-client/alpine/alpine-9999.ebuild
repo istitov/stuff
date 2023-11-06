@@ -4,7 +4,7 @@
 EAPI=8
 inherit flag-o-matic autotools multilib toolchain-funcs git-r3
 
-DESCRIPTION="alpine is an easy to use text-based based mail and news client"
+DESCRIPTION="An easy to use text-based based mail and news client"
 HOMEPAGE="https://alpineapp.email/"
 EGIT_REPO_URI="https://repo.or.cz/alpine.git"
 
@@ -27,12 +27,15 @@ RDEPEND="${DEPEND}
 src_prepare() {
 	eautoreconf
 	default
+	tc-export CC RANLIB AR
+	export CC_FOR_BUILD="$(tc-getBUILD_CC)"
 }
 
 src_configure() {
-	local myconf="--without-tcl
-	--with-system-pinerc=/etc/pine.conf
-	--with-system-fixed-pinerc=/etc/pine.conf.fixed"
+	myconf="--without-tcl
+		--with-pthread
+		--with-system-pinerc="${EPREFIX}"/etc/pine.conf
+		--with-system-fixed-pinerc="${EPREFIX}"/etc/pine.conf.fixed"
 	#--disable-debug"
 	# fixme
 	#   --with-system-mail-directory=DIR?
@@ -59,7 +62,8 @@ src_configure() {
 }
 
 src_compile() {
-	emake AR=$(tc-getAR)
+	emake -j1 --shuffle=none AR="$(tc-getAR)" c-client
+	emake AR="$(tc-getAR)"
 }
 
 src_install() {
