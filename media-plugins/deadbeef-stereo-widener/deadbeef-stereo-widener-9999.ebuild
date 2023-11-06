@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils git-r3
+inherit git-r3
 
 DESCRIPTION="A simple stereo widener plugin for DeaDBeeF."
 HOMEPAGE="https://github.com/DeaDBeeF-Player/stereo-widener"

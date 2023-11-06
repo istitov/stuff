@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit git-r3 eutils flag-o-matic
+inherit git-r3 flag-o-matic
 
 DESCRIPTION="Ogg Opus decoder plugin for DeaDBeeF audio player."
 HOMEPAGE="https://bitbucket.org/Lithopsian/deadbeef-opus/overview"
