@@ -3,7 +3,7 @@
 
 EAPI="7"
 
-inherit autotools eutils unpacker
+inherit autotools unpacker
 
 DESCRIPTION="lxpanel fork with improved taskbar"
 HOMEPAGE="https://code.google.com/p/lxpanelx/"
