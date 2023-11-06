@@ -1,7 +1,7 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
+EAPI="8"
 
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="tk(+)"
@@ -11,7 +11,7 @@ DISTUTILS_USE_SETUPTOOLS="manual"
 #DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_OPTIONAL=1
 
-inherit eutils git-r3 distutils-r1_py2 xdg-utils desktop
+inherit git-r3 distutils-r1_py2 xdg-utils desktop
 
 DESCRIPTION="sK1 vector graphics editor"
 HOMEPAGE="http://www.sk1project.org/"
