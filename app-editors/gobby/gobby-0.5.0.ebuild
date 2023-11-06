@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils gnome2-utils toolchain-funcs
+inherit gnome2-utils toolchain-funcs
 
 DESCRIPTION="GTK-based collaborative editor"
 HOMEPAGE="https://gobby.github.io/"
