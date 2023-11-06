@@ -6,7 +6,7 @@ EAPI=7
 PYTHON_COMPAT=( python3_{6..10} )
 PLOCALES="be bg el ru"
 
-inherit desktop eutils plocale python-r1 xdg-utils
+inherit desktop plocale python-r1 xdg-utils
 
 DESCRIPTION="A panel indicator (GUI) for YandexDisk CLI client"
 HOMEPAGE="https://github.com/slytomcat/yandex-disk-indicator"
