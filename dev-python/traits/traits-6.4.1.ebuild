@@ -5,11 +5,13 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{6..12} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="Enthought Tool Suite: Explicitly typed attributes for Python"
 HOMEPAGE="https://code.enthought.com/projects/traits/ https://pypi.python.org/pypi/traits"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+
+SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
+#S=${WORKDIR}/${P}
 
 LICENSE="BSD"
 SLOT="0"
