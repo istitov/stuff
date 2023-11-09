@@ -4,7 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{7..12} )
-
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="An implementation of chunked, compressed, N-dimensional arrays for Python"
