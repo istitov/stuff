@@ -3,9 +3,9 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{9..12} )
 
-DISTUTILS_USE_SETUPTOOLS=rdepend
+#DISTUTILS_USE_SETUPTOOLS=rdepend
 inherit optfeature multiprocessing distutils-r1 git-r3
 
 DESCRIPTION="NumPy aware dynamic Python compiler using LLVM"
@@ -33,7 +33,8 @@ BDEPEND="
 S="${WORKDIR}"/"${PN}"-"${PV}" 
 DESTDIR="${D}"
 
-DISTUTILS_IN_SOURCE_BUILD=1
+#MYPV="0.1.0"
+#DISTUTILS_IN_SOURCE_BUILD=1
 distutils_enable_tests unittest
 distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx_rtd_theme
 
@@ -42,7 +43,7 @@ distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx_rtd_th
 #)
 
 pkg_setup() {
-	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
+	#export SETUPTOOLS_SCM_PRETEND_VERSION=${MYPV}
 	if ! use openmp; then
 		export NUMBA_DISABLE_OPENMP=1 || die
 	else
@@ -57,7 +58,7 @@ pkg_setup() {
 }
 
 python_prepare_all() {
-	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
+	#export SETUPTOOLS_SCM_PRETEND_VERSION=${MYPV}
 	# This conf.py only works in a git repo
 	
 	#if use doc; then
@@ -71,7 +72,7 @@ python_prepare_all() {
 }
 
 python_compile() {
-	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
+	#export SETUPTOOLS_SCM_PRETEND_VERSION=${MYPV}
 	# FIXME: parallel python building fails. See Portage bug #614464 and
 	# gentoo/sci issue #1080.
 	export MAKEOPTS=-j1 || die
