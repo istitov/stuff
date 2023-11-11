@@ -5,11 +5,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{6..10} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="Set of Python modules for atomistic simulations"
 HOMEPAGE="http://wiki.fysik.dtu.dk/ase"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="LGPL-3"
 SLOT="0"
