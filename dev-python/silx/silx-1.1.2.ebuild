@@ -5,11 +5,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{7..12})
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="Python packages collection for synchrotron data manipulation"
 HOMEPAGE="http://www.silx.org/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="MIT"
 SLOT="0"
