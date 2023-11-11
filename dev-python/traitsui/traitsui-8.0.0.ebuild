@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{6..12} )
-
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="Toolkit-independent GUI abstraction layer for visualization features of Traits"
