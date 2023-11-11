@@ -9,7 +9,7 @@ inherit distutils-r1 flag-o-matic virtualx pypi
 DESCRIPTION="Provides graphic user interface (GUI) for hyperspy"
 HOMEPAGE="http://hyperspy.org/hyperspyUI/"
 SRC_URI="$(pypi_sdist_url --no-normalize "${PN}" "${PV}")"
-S=${WORKDIR}/${P^}
+S=${WORKDIR}/${P}
 
 LICENSE="GPL-3"
 SLOT="0"
