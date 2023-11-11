@@ -5,14 +5,15 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
 
-inherit distutils-r1 flag-o-matic virtualx
+inherit distutils-r1 flag-o-matic virtualx pypi
 
 MYPN="${PN/hyperspy-gui-ipywidgets/hyperspy_gui_ipywidgets}"
 MYP="${MYPN}-${PV}"
 
 DESCRIPTION="Interactive analysis of multidimensional datasets tools"
 HOMEPAGE="https://hyperspy.org/"
-SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
+#SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${MYPN^}" "${PV}")"
 
 LICENSE="GPL-3"
 SLOT="0"
