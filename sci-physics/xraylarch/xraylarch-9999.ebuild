@@ -3,7 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..12} )
+PYTHON_COMPAT=( python3_{10..12} )
+DISTUTILS_USE_PEP517=hatchling
 
 inherit distutils-r1 git-r3
 
@@ -13,7 +14,6 @@ EGIT_REPO_URI="https://github.com/xraypy/xraylarch.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
 IUSE="doc python"
 RESTRICT=strip
 
@@ -41,7 +41,6 @@ RDEPEND="
 	dev-python/pytest[${PYTHON_USEDEP}]
 	dev-python/pip[${PYTHON_USEDEP}]
 	dev-python/xraydb[${PYTHON_USEDEP}]
-	dev-python/nose[${PYTHON_USEDEP}]
 	dev-python/pyshortcuts[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-3.0[${PYTHON_USEDEP}]
 
@@ -66,7 +65,6 @@ DEPEND="${RDEPEND}
 #for EPICS pyepics, psycopg2, epicsscan
 
 S="${WORKDIR}/${PN}-${PV}"
-DESTDIR="${D}"
 
 PATCHES=(
 	"${FILESDIR}"/full_conf.patch

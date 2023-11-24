@@ -3,13 +3,13 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..11} )
-
-inherit distutils-r1
+PYTHON_COMPAT=( python3_{10..12} )
+DISTUTILS_USE_PEP517=hatchling
+inherit distutils-r1 pypi
 
 DESCRIPTION="Software for XRF data analysis"
 HOMEPAGE="https://xraypy.github.io/xraylarch"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -41,7 +41,6 @@ RDEPEND="
 	dev-python/pytest[${PYTHON_USEDEP}]
 	dev-python/pip[${PYTHON_USEDEP}]
 	dev-python/xraydb[${PYTHON_USEDEP}]
-	dev-python/nose[${PYTHON_USEDEP}]
 	dev-python/pyshortcuts[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-3.0[${PYTHON_USEDEP}]
 
