@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Software for XRF data analysis"
 HOMEPAGE="https://xraypy.github.io/xraylarch"
-#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
