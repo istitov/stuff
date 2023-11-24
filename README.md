@@ -1,5 +1,5 @@
 # stuff
-gentoo overlay ----> `eselect repository enable **stuff**`
+gentoo overlay ----> `eselect repository enable stuff`
 
 ## Repository highlights
 **to be done.** ;-)
