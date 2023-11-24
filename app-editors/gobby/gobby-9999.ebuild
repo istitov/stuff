@@ -7,7 +7,7 @@ inherit gnome2-utils toolchain-funcs git-r3
 
 DESCRIPTION="GTK-based collaborative editor"
 HOMEPAGE="https://gobby.github.io/"
-EGIT_REPO_URI="git://github.com/gobby/gobby"
+EGIT_REPO_URI="https://github.com/gobby/gobby"
 LICENSE="GPL-2"
 SLOT="0.5"
 KEYWORDS="~amd64 ~x86"

@@ -7,7 +7,7 @@ inherit git-r3
 
 DESCRIPTION="quick set opts per package"
 HOMEPAGE="https://github.com/megabaks/portopts"
-EGIT_REPO_URI="git://github.com/megabaks/${PN}.git"
+EGIT_REPO_URI="https://github.com/megabaks/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"

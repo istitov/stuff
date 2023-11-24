@@ -7,7 +7,7 @@ inherit perl-module perl-functions virtualx
 
 DESCRIPTION="Software for XAS data processing"
 HOMEPAGE="https://github.com/bruceravel/demeter"
-#EGIT_REPO_URI="git://github.com/bruceravel/demeter.git"
+#EGIT_REPO_URI="https://github.com/bruceravel/demeter.git"
 SRC_URI="https://github.com/bruceravel/demeter/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="Artistic GPL-1+"

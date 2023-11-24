@@ -28,7 +28,6 @@ DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${PN}-${PV}"
 
-DESTDIR="${D}"
 
 PATCHES=(
 	"${FILESDIR}"/pro.patch

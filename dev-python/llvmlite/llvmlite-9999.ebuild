@@ -24,7 +24,6 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${PN}-${PV}"
-DESTDIR="${D}"
 
 src_prepare() {
 	sed -i -e '/max_python/s:3\.10:3.11:' setup.py || die
