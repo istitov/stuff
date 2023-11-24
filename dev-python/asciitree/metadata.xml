@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="pypi">asciitree</remote-id>
+		<remote-id type="github">mbr/asciitree</remote-id>
+	</upstream>
 </pkgmetadata>
