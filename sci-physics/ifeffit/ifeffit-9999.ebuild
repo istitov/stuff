@@ -11,7 +11,6 @@ EGIT_REPO_URI="git://github.com/newville/ifeffit.git"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
 IUSE="doc"
 
 RDEPEND="
@@ -24,7 +23,6 @@ DEPEND="${RDEPEND}
 "
 
 S="${WORKDIR}/${PN}-${PV}"
-DESTDIR="${D}"
 
 PATCHES=(
 	"${FILESDIR}"/configuration_patches
