@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <!--maintainer-needed-->
-  <longdescription lang="en">
+ <maintainer type="person">
+  <email>lebedev.vasya@gmail.com</email>
+ </maintainer>
+ <longdescription lang="en">
   Numba is a NumPy-aware optimizing compiler for Python. It uses the LLVM
   compiler infrastructure to compile Python syntax to machine code.
   It is aware of NumPy arrays as typed memory regions and so can

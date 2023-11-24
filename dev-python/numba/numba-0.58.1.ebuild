@@ -3,15 +3,15 @@
 
 EAPI=8
 
+DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{8..12} )
 
-DISTUTILS_USE_SETUPTOOLS=rdepend
 inherit optfeature multiprocessing distutils-r1
 
 DESCRIPTION="NumPy aware dynamic Python compiler using LLVM"
 HOMEPAGE="https://numba.pydata.org/
 	https://github.com/numba"
-SRC_URI="https://github.com/numba/numba/archive/${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/numba/numba/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"

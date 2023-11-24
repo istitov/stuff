@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
 
-#DISTUTILS_USE_SETUPTOOLS=rdepend
+DISTUTILS_USE_PEP517=setuptools
 inherit optfeature multiprocessing distutils-r1 git-r3
 
 DESCRIPTION="NumPy aware dynamic Python compiler using LLVM"
@@ -30,8 +30,7 @@ BDEPEND="
 	dev-python/versioneer[${PYTHON_USEDEP}]
 "
 
-S="${WORKDIR}"/"${PN}"-"${PV}" 
-DESTDIR="${D}"
+S="${WORKDIR}"/"${PN}"-"${PV}"
 
 #MYPV="0.1.0"
 #DISTUTILS_IN_SOURCE_BUILD=1
@@ -60,7 +59,6 @@ pkg_setup() {
 python_prepare_all() {
 	#export SETUPTOOLS_SCM_PRETEND_VERSION=${MYPV}
 	# This conf.py only works in a git repo
-	
 	#if use doc; then
 	#	git init -q || die
 	#	git config user.email "larry@gentoo.org" || die
