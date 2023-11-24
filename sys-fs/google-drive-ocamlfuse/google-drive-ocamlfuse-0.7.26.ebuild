@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc test"
-
+RESTRICT="!test? ( test )"
 RDEPEND=">=dev-ml/ocurl-0.5.3:=
 	>=dev-ml/ocamlnet-3.3.5:=
 	>=dev-ml/cryptokit-1.3.14:=

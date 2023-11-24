@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>brothermechanic@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">astrada/google-drive-ocamlfuse</remote-id>
+	</upstream>
 </pkgmetadata>
