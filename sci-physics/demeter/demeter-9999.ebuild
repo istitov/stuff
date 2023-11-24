@@ -11,7 +11,6 @@ EGIT_REPO_URI="https://github.com/bruceravel/demeter.git"
 
 LICENSE="Artistic GPL-1+"
 SLOT="0"
-KEYWORDS=""
 IUSE="doc test"
 
 RDEPEND="
@@ -78,7 +77,6 @@ DEPEND="${RDEPEND}
 "
 
 S="${WORKDIR}/${PN}-${PV}"
-DESTDIR="${D}"
 
 PATCHES=(
 	"${FILESDIR}"/ifeffit_locate.patch
