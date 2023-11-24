@@ -1,6 +1,6 @@
 # mask these imports for time being
 =sci-libs/amd-3.2.1
-=sci-libs/camd=3.2.1
+=sci-libs/camd-3.2.1
 =sci-libs/ccolamd-3.2.1
 =sci-libs/cholmod-5.0.1
 =sci-libs/colamd-3.2.1
