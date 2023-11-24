@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 
 #inherit distutils-r1 qmake-utils
 inherit cmake qmake-utils
@@ -11,7 +11,7 @@ inherit cmake qmake-utils
 DISTUTILS_EXT=1
 DESCRIPTION="Prismatic Software for STEM Simulation"
 HOMEPAGE="https://prism-em.com"
-SRC_URI="https://github.com/prism-em/prismatic/archive/refs/tags/v2.0.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/prism-em/prismatic/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -35,7 +35,7 @@ src_prepare() {
 	if use gui; then
 		sed -i -e 's:set(PRISMATIC_ENABLE_GUI 0:set(PRISMATIC_ENABLE_GUI 1:' CMakeLists.txt || die
 	fi
-	
+
 	if use gpu; then
 		sed -i -e 's:set(PRISMATIC_ENABLE_GPU 0:set(PRISMATIC_ENABLE_GPU 1:' CMakeLists.txt || die
 	fi

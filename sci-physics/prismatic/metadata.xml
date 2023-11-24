@@ -7,4 +7,9 @@
   <upstream>
     <remote-id type="github">prism-em/prismatic</remote-id>
   </upstream>
+  <use>
+    <flag name="gpu">
+      Enable support for CUDA with <pkg>dev-util/nvidia-cuda-toolkit</pkg>
+    </flag>
+  </use>
 </pkgmetadata>
