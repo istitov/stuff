@@ -7,7 +7,7 @@ inherit autotools eutils fortran-2 git-r3
 
 DESCRIPTION="Suite of interactive programs for XAFS analysis"
 HOMEPAGE="https://github.com/newville/ifeffit"
-EGIT_REPO_URI="git://github.com/newville/ifeffit.git"
+EGIT_REPO_URI="hhtps://github.com/newville/ifeffit.git"
 
 LICENSE="BSD"
 SLOT="0"
