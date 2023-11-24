@@ -1,9 +1,9 @@
 # mask these imports for time being
-sci-libs/amd
-sci-libs/camd
-sci-libs/ccolamd
-sci-libs/cholmod
-sci-libs/colamd
-sci-libs/suitesparseconfig
-sci-libs/umfpack
+sci-libs/amd::stuff
+sci-libs/camd::stuff
+sci-libs/ccolamd::stuff
+sci-libs/cholmod::stuff
+sci-libs/colamd::stuff
+sci-libs/suitesparseconfig::stuff
+sci-libs/umfpack::stuff
 
