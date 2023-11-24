@@ -3,13 +3,15 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{6..10} )
+DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( python3_{10..12} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="This package provides utilities related to the detection of peaks on 1D data."
-HOMEPAGE="https://bitbucket.org/lucashnegri/peakutils/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+HOMEPAGE="https://pypi.org/project/PeakUtils"
+#https://bitbucket.org/lucashnegri/peakutils/"
+#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"

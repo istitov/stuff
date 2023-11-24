@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="pypi">parsimonious</remote-id>
+		<remote-id type="github">erikrose/parsimonious</remote-id>
+	</upstream>
 </pkgmetadata>

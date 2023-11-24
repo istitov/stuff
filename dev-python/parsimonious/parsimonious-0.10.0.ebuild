@@ -3,6 +3,8 @@
 
 EAPI=8
 
+DISTUTILS_EXT=1
+
 DISTUTILS_USE_PEP621=hatchling
 PYTHON_COMPAT=( python3_{10..12})
 
@@ -11,10 +13,11 @@ inherit distutils-r1 pypi
 DESCRIPTION="pure-Python PEG parser"
 HOMEPAGE="https://github.com/erikrose/parsimonious/
 	https://pypi.org/project/parsimonious/"
+#S=${WORKDIR}/${P^}
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~x86 ~amd64 ~arm ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="doc"
 
 distutils_enable_tests pytest
