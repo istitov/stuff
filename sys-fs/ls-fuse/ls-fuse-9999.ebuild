@@ -1,7 +1,7 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 EGIT_REPO_URI="https://github.com/pasis/ls-fuse.git"
 
@@ -12,8 +12,8 @@ HOMEPAGE="https://github.com/pasis/ls-fuse"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS=""
-IUSE="-debug"
+IUSE="debug"
+USE="-debug"
 
 RDEPEND="sys-fs/fuse:0"
 DEPEND="${RDEPEND}
