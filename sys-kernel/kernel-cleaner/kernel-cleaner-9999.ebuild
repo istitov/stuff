@@ -11,7 +11,6 @@ EGIT_REPO_URI="https://github.com/megabaks/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
 IUSE="+parallel"
 
 KCDEPEND="app-shells/bash:=
