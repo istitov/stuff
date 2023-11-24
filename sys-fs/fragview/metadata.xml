@@ -5,6 +5,6 @@
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
 	<upstream>
-	    <remote-id type="github">i-rinat/fragview</remote-id>
+		<remote-id type="github">i-rinat/fragview</remote-id>
 	</upstream>
 </pkgmetadata>
