@@ -4,13 +4,13 @@
 EAPI=8
 
 DESCRIPTION="neat and simple webcam grabbing app"
-HOMEPAGE="http://www.sanslogic.co.uk/fswebcam/"
-SRC_URI="http://www.sanslogic.co.uk/fswebcam/files/${PN}-${PV}.tar.xz"
+HOMEPAGE="http://www.sanslogic.co.uk/fswebcam/
+https://github.com/fsphil/fswebcam/"
+SRC_URI="https://github.com/fsphil/${PN}/archive/refs/tags/${PV}.tar.gz  -> ${P}.gh.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86 "
-IUSE=""
 
 DEPEND="media-libs/gd[truetype,png,jpeg]"
 RDEPEND="${DEPEND}"
