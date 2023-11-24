@@ -5,7 +5,7 @@ EAPI=7
 
 DESCRIPTION="Open source XRD and Rietveld refiniment"
 HOMEPAGE="https://www.profex-xrd.org"
-SRC_URI="https://www.profex-xrd.org/wp-content/uploads/2017/12/bgmn-4.2.23-x86_64.tar.gz"
+SRC_URI="https://www.profex-xrd.org/wp-content/uploads/2017/12/${P}-x86_64.tar.gz"
 
 #https://www.profex-xrd.org/wp-content/uploads/2022/01/cod-220114.zip -> cod.zip
 #https://www.profex-xrd.org/wp-content/uploads/2021/08/BGMN-Templates-210815.tar.gz -> bgmn_templates.tar.gz
@@ -14,10 +14,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc test"
 
-RDEPEND=""
-
 DEPEND="${RDEPEND}"
-
+RESTRICT="!test? ( test )"
 S="${WORKDIR}/${PN}-${PV}"
 
 src_install() {
