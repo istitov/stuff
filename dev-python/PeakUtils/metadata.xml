@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="pypi">PeakUtils</remote-id>
+		<remote-id type="bitbucket">lucashnegri/peakutils</remote-id>
+	</upstream>
 </pkgmetadata>

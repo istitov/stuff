@@ -9,9 +9,12 @@ PYTHON_COMPAT=( python3_{10..12} )
 inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="This package provides utilities related to the detection of peaks on 1D data."
-HOMEPAGE="https://pypi.org/project/PeakUtils"
-#https://bitbucket.org/lucashnegri/peakutils/"
-#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+HOMEPAGE="https://pypi.org/project/PeakUtils/
+	https://bitbucket.org/lucashnegri/peakutils/"
+MYPN="${PN/peakutils/PeakUtils}"
+MYP="${MYPN}-${PV}"
+SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
+S=${WORKDIR}/${MYP}
 
 LICENSE="MIT"
 SLOT="0"
