@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <maintainer type="project">
-    <email>sci-mathematics@gentoo.org</email>
-    <name>Gentoo Mathematics Project</name>
-  </maintainer>
-  <maintainer type="project">
-    <email>python@gentoo.org</email>
-    <name>Python</name>
-  </maintainer>
-  <longdescription lang="en">
-  PyWavelets is a Python wavelet transforms module that can perform:
-  * Discrete Wavelet Transform (1D and 2D)
-  * Inverse Discrete Wavelet Transform (1D and 2D)
-  * Stationary Wavelet Transform
-  * Wavelet Packets decomposition and reconstruction
-</longdescription>
-  <upstream>
-    <remote-id type="pypi">PyWavelets</remote-id>
-    <remote-id type="github">PyWavelets/pywt</remote-id>
-  </upstream>
+    <maintainer type="project">
+        <email>sci-mathematics@gentoo.org</email>
+    </maintainer>
+    <longdescription lang="en">
+Monty is the missing complement to Python. Monty implements supplementary useful functions for Python that are not part of the standard library. Examples include useful utilities like transparent support for zipped files, useful design patterns such as singleton and cached_class, and many more.
+    </longdescription>
+    <upstream>
+        <remote-id type="pypi">monty</remote-id>
+        <remote-id type="github">materialsvirtuallab/monty</remote-id>
+    </upstream>
 </pkgmetadata>

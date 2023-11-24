@@ -8,11 +8,8 @@ DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
 
 DESCRIPTION="Monty is the missing complement to Python"
-HOMEPAGE="https://pypi.org/project/monty/"
-#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
-SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
-#S=${WORKDIR}/${P^}
-
+HOMEPAGE="https://pypi.org/project/monty/
+https://materialsvirtuallab.github.io/monty/"
 
 LICENSE="MIT"
 SLOT="0"
@@ -20,7 +17,6 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc examples test"
 RESTRICT="!test? ( test )"
 
-#RDEPEND=""
 DEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/pytest[${PYTHON_USEDEP}]
@@ -45,13 +41,6 @@ DEPEND="
 	doc? ( dev-python/sphinx[${PYTHON_USEDEP}]
 		dev-python/numpydoc[${PYTHON_USEDEP}] )
 "
-#pytorch has a single target!
-#test? (
-#		${RDEPEND} )
-##TODO
-#coveralls
-#types-orjson==3.6.2
-#dev-python/types-requests
 
 python_compile() {
 	distutils-r1_python_compile
