@@ -1,16 +1,15 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 inherit cmake
 DESCRIPTION="Disk fragmentation viewer written with boost and gtkmm"
 HOMEPAGE="https://github.com/i-rinat/fragview"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="git://github.com/i-rinat/fragview.git"
+	EGIT_REPO_URI="https://github.com/i-rinat/fragview.git"
 	EGIT_BRANCH="master"
-	KEYWORDS=""
 else
 	SRC_URI="https://github.com/i-rinat/${PN}/archive/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	KEYWORDS="~amd64 ~x86"
@@ -18,7 +17,6 @@ fi
 
 LICENSE="GPL-2 Boost-1.0"
 SLOT="0"
-IUSE=""
 
 DEPEND="
 	dev-libs/boost
