@@ -2,6 +2,9 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
-		<email>megagreener@gmail.com</email>
+		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="sourceforge">httraqt</remote-id>
+	</upstream>
 </pkgmetadata>
