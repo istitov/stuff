@@ -7,4 +7,7 @@
 	<use>
 		<flag name='parallel'>Add support for <pkg>sys-process/parallel</pkg></flag>
 	</use>
+	<upstream>
+		<remote-id type="github">megabaks/kernel-cleaner</remote-id>
+	</upstream>
 </pkgmetadata>
