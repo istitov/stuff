@@ -7,12 +7,9 @@ inherit autotools xdg-utils
 
 DESCRIPTION="Man Page Editor"
 HOMEPAGE="https://github.com/KeithDHedger/ManPageEditor"
-#HOMEPAGE="https://sites.google.com/site/keithhedgersyard/manpageeditor"
 MY_PN="ManPageEditor"
-#SRC_URI="https://dl.dropboxusercontent.com/s/e882fqpz34h0h24/${MY_PN}-${PV}.tar.gz
-#		 http://stuff.tazhate.com/distfiles/${MY_PN}-${PV}.tar.gz"
 
-SRC_URI="https://github.com/KeithDHedger/ManPageEditor/archive/refs/tags/manpageeditor-${PV}.tar.gz"
+SRC_URI="https://github.com/KeithDHedger/ManPageEditor/archive/refs/tags/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
