@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">Dwarf-Therapist/Dwarf-Therapist</remote-id>
+	</upstream>
 </pkgmetadata>
