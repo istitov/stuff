@@ -12,9 +12,9 @@ HOMEPAGE="https://github.com/Swordfish90/cool-retro-term"
 
 if [[ ${PV} == *9999* ]];then
 	inherit git-r3
-	EGIT_REPO_URI="${HOMEPAGE}"
+	EGIT_REPO_URI="https://github.com/Swordfish90/${PN}"
 else
-	SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/Swordfish90/${PN}/archive/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 	KEYWORDS="~x86 ~amd64"
 	RESTRICT="mirror"
 fi
