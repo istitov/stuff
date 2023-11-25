@@ -7,18 +7,26 @@ inherit gnome2-utils toolchain-funcs
 
 DESCRIPTION="GTK-based collaborative editor"
 HOMEPAGE="https://gobby.github.io/"
-SRC_URI="http://releases.0x539.de/${PN}/${P}.tar.gz"
+
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
+	EGIT_BRANCH="master"
+else
+	SRC_URI="https://github.com/${PN}/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
+	KEYWORDS="~amd64 ~x86"
+fi
+
 LICENSE="GPL-2"
-SLOT="0.5"
-KEYWORDS="~amd64 ~x86"
+SLOT="0"
 IUSE="avahi doc +gtk3 nls"
 
 RDEPEND="dev-cpp/glibmm:2
 	gtk3? ( dev-cpp/gtkmm:3.0 )
 	!gtk3? ( dev-cpp/gtkmm:2.4 )
 	dev-libs/libsigc++:2
-	gtk3? ( net-libs/libinfinity:0/0.6[gtk3,avahi?] )
-	!gtk3? ( net-libs/libinfinity:0/0.6[gtk,avahi?] )
+	gtk3? ( net-libs/libinfinity:0/0.7[gtk3,avahi?] )
+	!gtk3? ( net-libs/libinfinity:0/0.7[gtk,avahi?] )
 	gtk3? ( x11-libs/gtk+:3 )
 	!gtk3? ( x11-libs/gtk+:2 )
 	dev-cpp/libxmlpp:2.6

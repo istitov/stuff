@@ -2,11 +2,13 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
-		<email>megagreener@gmail.com</email>
-		<name>megabaks</name>
+		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
 	<use>
 		<flag name='avahi'>Build with <pkg>net-dns/avahi</pkg>:3</flag>
 		<flag name='gtk3'>Build with <pkg>x11-libs/gtk+</pkg>:3</flag>
 	</use>
+	<upstream>
+		<remote-id type="github">gobby/gobby</remote-id>
+	</upstream>
 </pkgmetadata>
