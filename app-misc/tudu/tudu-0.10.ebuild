@@ -4,13 +4,13 @@
 EAPI=7
 
 DESCRIPTION="Command line interface to manage hierarchical todos"
-HOMEPAGE="http://code.meskio.net/tudu"
-SRC_URI="http://code.meskio.net/tudu/${P}.tar.gz"
+HOMEPAGE="http://code.meskio.net/tudu
+	https://github.com/meskio/tudu/"
+SRC_URI="https://github.com/meskio/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 
 DEPEND="sys-libs/ncurses:="
 RDEPEND="${DEPEND}"
