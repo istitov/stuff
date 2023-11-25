@@ -11,8 +11,6 @@ EGIT_REPO_URI="https://github.com/DeaDBeeF-Player/bs2b"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 DEPEND_COMMON="
 	media-sound/deadbeef

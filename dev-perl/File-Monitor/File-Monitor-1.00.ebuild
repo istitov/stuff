@@ -11,7 +11,6 @@ DESCRIPTION="Monitor files and directories for changes"
 
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 RDEPEND="
 	dev-perl/Module-Build
 "

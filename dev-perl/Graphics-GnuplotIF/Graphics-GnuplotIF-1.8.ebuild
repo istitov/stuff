@@ -11,7 +11,6 @@ DESCRIPTION="A dynamic Perl interface to gnuplot"
 
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 RDEPEND="
 	dev-perl/Module-Build
 	sci-visualization/gnuplot

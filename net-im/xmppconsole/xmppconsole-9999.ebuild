@@ -12,7 +12,6 @@ HOMEPAGE="https://github.com/pasis/xmppconsole"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS=""
 IUSE="+gtk +ncurses"
 
 RDEPEND="dev-libs/libstrophe

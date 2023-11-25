@@ -11,5 +11,3 @@ EGIT_REPO_URI="https://github.com/euroelessar/k8json.git"
 
 LICENSE="GPL-2"
 SLOT="2"
-KEYWORDS=""
-IUSE=""

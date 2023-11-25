@@ -13,7 +13,6 @@ EGIT_BRANCH="master"
 HOMEPAGE="http://www.nongnu.org/xbindkeys/xbindkeys.html"
 
 LICENSE="GPL-2"
-KEYWORDS=""
 SLOT="0"
 
 RDEPEND="x11-libs/libX11

@@ -13,7 +13,6 @@ RESTRICT="primaryuri"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 x86"
-IUSE=""
 
 DEPEND="net-im/pidgin[ncurses]
 	>=dev-libs/libxml2-2.7

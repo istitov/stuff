@@ -15,7 +15,6 @@ ESVN_BOOTSTRAP="autogen.sh"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
 IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X +hdf5"
 addpredict "${EPREFIX}"/usr/share/inkscape/fonts/.uuid.TMP-XXXXXX
 

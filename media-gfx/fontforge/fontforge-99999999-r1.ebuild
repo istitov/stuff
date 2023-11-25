@@ -28,7 +28,6 @@ EGIT_REPO_URI="git://fontforge.git.sourceforge.net/gitroot/fontforge/fontforge"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
 IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X capslock-for-alt freetype-bytecode freetype devicetables gb12345"
 
 RDEPEND="python? ( dev-lang/python:2.7 )

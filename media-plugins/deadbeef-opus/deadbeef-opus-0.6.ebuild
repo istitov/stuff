@@ -12,7 +12,6 @@ SRC_URI="https://bitbucket.org/Lithopsian/deadbeef-opus/downloads/opus-${PV}.tar
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 
 DEPEND_COMMON="
 	media-sound/deadbeef

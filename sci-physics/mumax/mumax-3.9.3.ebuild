@@ -12,7 +12,6 @@ SRC_URI="https://github.com/${PN}/3/archive/v${PV}.zip"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE=""
 
 DEPEND=">=dev-util/nvidia-cuda-toolkit-7.5.18-r2"
 RDEPEND="${DEPEND}"

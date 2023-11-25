@@ -12,7 +12,6 @@ HOMEPAGE="http://strophe.im/libstrophe/"
 
 LICENSE="MIT GPL-3"
 SLOT="0"
-KEYWORDS=""
 IUSE="doc +expat"
 
 RDEPEND="expat? ( dev-libs/expat )

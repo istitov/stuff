@@ -10,7 +10,6 @@ DESCRIPTION="Multimedia playback framework based on Qt + FFmpeg"
 HOMEPAGE="https://www.qtav.org"
 EGIT_REPO_URI="https://github.com/wang-bin/QtAV.git"
 EGIT_BRANCH="master"
-KEYWORDS=""
 
 LICENSE="GPL-3+ LGPL-2.1+"
 SLOT="0/1"

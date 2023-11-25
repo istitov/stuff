@@ -15,8 +15,6 @@ EGIT_REPO_URI="https://github.com/aslpavel/maggot-dict.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 DEPEND=""
 RDEPEND="${DEPEND} app-shells/bash-completion"

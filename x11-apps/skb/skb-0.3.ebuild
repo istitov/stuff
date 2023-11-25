@@ -11,7 +11,6 @@ RESTRICT="primaryuri"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
-IUSE=""
 
 DEPEND_COMMON=""
 RDEPEND="

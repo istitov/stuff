@@ -11,8 +11,6 @@ EGIT_REPO_URI="https://bitbucket.org/Lithopsian/deadbeef-opus.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 DEPEND_COMMON="
 	media-sound/deadbeef

@@ -11,8 +11,6 @@ EGIT_REPO_URI="https://github.com/DeaDBeeF-Player/stereo-widener"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 DEPEND_COMMON="media-sound/deadbeef"
 

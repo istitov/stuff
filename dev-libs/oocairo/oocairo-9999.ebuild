@@ -12,8 +12,6 @@ HOMEPAGE="https://github.com/awesomeWM/oocairo"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 RDEPEND="dev-lang/lua
 	x11-libs/cairo"

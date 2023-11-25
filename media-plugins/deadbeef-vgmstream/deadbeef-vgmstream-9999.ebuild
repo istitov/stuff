@@ -11,8 +11,6 @@ EGIT_REPO_URI="https://github.com/johnwchadwick/${PN}.git"
 
 LICENSE="vgmstream"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 DEPEND_COMMON="
 	media-sound/deadbeef

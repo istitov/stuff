@@ -12,7 +12,6 @@ HOMEPAGE="https://github.com/Swordfish90/cool-retro-term"
 
 if [[ ${PV} == *9999* ]];then
 	inherit git-r3
-	KEYWORDS=""
 	EGIT_REPO_URI="${HOMEPAGE}"
 else
 	SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
@@ -22,7 +21,6 @@ fi
 
 LICENSE="GPL-3 GPL-2"
 SLOT="0"
-IUSE=""
 
 DEPEND="
 	dev-qt/qtdeclarative:5[localstorage]

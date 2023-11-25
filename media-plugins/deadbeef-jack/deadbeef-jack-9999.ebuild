@@ -11,8 +11,6 @@ EGIT_REPO_URI="https://github.com/tokiclover/deadbeef-plugins-jack"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 DEPEND_COMMON="
 	media-sound/deadbeef

@@ -10,7 +10,6 @@ HOMEPAGE="http://lorquotes.ru/,"
 LICENSE="WTFPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm ~amd64-linux ~x86-linux"
-IUSE=""
 
 RDEPEND="games-misc/fortune-mod"
 

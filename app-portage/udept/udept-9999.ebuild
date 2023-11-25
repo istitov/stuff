@@ -17,7 +17,6 @@ HOMEPAGE="https://gitlab.com/init-6/udept"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
 #~amd64 ~mips ~ppc ~sparc ~x86
 IUSE="bash-completion"
 

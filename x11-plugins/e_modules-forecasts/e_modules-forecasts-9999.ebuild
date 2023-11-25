@@ -15,7 +15,6 @@ DEPEND="x11-wm/enlightenment"
 
 RDEPEND="${DEPEND}"
 
-KEYWORDS=""
 
 src_compile() {
 	meson build

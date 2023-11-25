@@ -11,7 +11,6 @@ SRC_URI="https://storage.googleapis.com/google-code-archive-source/v2/code.googl
 #ESVN_REPO_URI="https://${PN}.googlecode.com/svn/trunk/"
 
 LICENSE="GPL-2"
-KEYWORDS=""
 SLOT="0"
 IUSE="+alsa oss plugins libfm libindicator menucache"
 RESTRICT="test"  # bug 249598

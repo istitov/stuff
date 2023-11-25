@@ -10,7 +10,6 @@ if [[ ${PV} == *9999* ]]; then
 	inherit cargo git-r3
 	EGIT_REPO_URI="https://github.com/RazrFalcon/${PN}.git"
 	EGIT_BRANCH="master"
-	KEYWORDS=""
 else
 	inherit cargo
 	SRC_URI="https://github.com/RazrFalcon/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
@@ -19,7 +18,6 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE=""
 
 DEPEND="
 	virtual/rust

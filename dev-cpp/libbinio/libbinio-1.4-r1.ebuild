@@ -12,7 +12,6 @@ SLOT="0"
 KEYWORDS="~alpha amd64 arm hppa ~mips ppc ppc64 sparc x86"
 IUSE="static-libs"
 
-RDEPEND=""
 DEPEND="sys-apps/texinfo"
 
 PATCHES=(

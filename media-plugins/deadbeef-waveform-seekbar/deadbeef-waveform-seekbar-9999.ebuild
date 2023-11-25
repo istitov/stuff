@@ -11,8 +11,6 @@ EGIT_REPO_URI="https://github.com/cboxdoerfer/ddb_waveform_seekbar.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 DEPEND_COMMON="
 	dev-db/sqlite:3

@@ -12,7 +12,6 @@ SRC_URI=""
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
 IUSE="xinerama xrandr imlib2"
 
 DEPEND="

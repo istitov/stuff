@@ -11,7 +11,6 @@ HOMEPAGE="http://awesome.naquadah.org/wiki/Blingbling"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
 IUSE="+vicious"
 
 RDEPEND="dev-lang/lua

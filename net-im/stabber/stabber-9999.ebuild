@@ -12,8 +12,6 @@ HOMEPAGE="https://github.com/profanity-im/stabber"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 RDEPEND="dev-libs/expat
 		>=dev-libs/glib-2.26:2

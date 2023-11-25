@@ -11,8 +11,6 @@ EGIT_REPO_URI="https://github.com/carlosanunes/deadbeef_vfs_archive_reader"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 DEPEND_COMMON="media-sound/deadbeef"
 

@@ -19,8 +19,6 @@ EGIT_REPO_URI="https://github.com/sk1project/sk1-tk.git"
 
 LICENSE="|| ( GPL-2 LGPL-2 )"
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 #The absence of [py2] on deps for pillow looks suspicious
 DEPEND="

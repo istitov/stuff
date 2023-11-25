@@ -12,8 +12,6 @@ HOMEPAGE="https://github.com/pasis/ipx-utils"
 
 LICENSE="ipx-utils GPL-2" # GPL-2 only for init script
 SLOT="0"
-KEYWORDS=""
-IUSE=""
 
 src_prepare() {
 	default
