@@ -10,7 +10,7 @@ HOMEPAGE="https://gobby.github.io/"
 SRC_URI="https://github.com/gobby/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz
 	http://releases.0x539.de/${PN}/${P}.tar.gz"
 LICENSE="LGPL-2.1"
-SLOT="0/0.6"
+SLOT="0.7"
 KEYWORDS="~amd64 ~x86"
 IUSE="avahi doc gtk +gtk3 server static-libs"
 
@@ -23,8 +23,8 @@ RDEPEND="dev-libs/glib:2
 	gtk3? ( x11-libs/gtk+:3 )
 	gtk? ( x11-libs/gtk+:2 )"
 DEPEND="${RDEPEND}
-        acct-user/infinote
-        acct-group/infinote
+	acct-user/infinote
+	acct-group/infinote
 	virtual/pkgconfig
 	sys-devel/gettext
 	doc? ( dev-util/gtk-doc )"
@@ -32,10 +32,10 @@ DEPEND="${RDEPEND}
 DOCS=( AUTHORS ChangeLog NEWS README.md TODO )
 
 pkg_setup() {
-	if use server ; then
-		enewgroup infinote 100
-		enewuser infinote 100 /bin/bash /var/lib/infinote infinote
-	fi
+	#if use server ; then
+	#	enewgroup infinote 100
+	#	enewuser infinote 100 /bin/bash /var/lib/infinote infinote
+	#fi
 	#
 	if use gtk && use gtk3; then
 		eerror "You can select either gtk or gtk3, but not both at the same time" && die

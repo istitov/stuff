@@ -23,8 +23,8 @@ RDEPEND="dev-libs/glib:2
 	gtk3? ( x11-libs/gtk+:3 )
 	gtk? ( x11-libs/gtk+:2 )"
 DEPEND="${RDEPEND}
-        acct-user/infinote
-        acct-group/infinote
+	acct-user/infinote
+	acct-group/infinote
 	virtual/pkgconfig
 	sys-devel/gettext
 	doc? ( dev-util/gtk-doc )"

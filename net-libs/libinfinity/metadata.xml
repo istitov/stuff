@@ -2,11 +2,14 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
-		<email>megagreener@gmail.com</email>
+		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
 	<use>
 		<flag name="avahi">Build with net-dns/avahi</flag>
 		<flag name="gtk3">Build with x11-libs/gtk+:3</flag>
 		<flag name="server">Build the infinote standalone server</flag>
 	</use>
+	<upstream>
+		<remote-id type="github">gobby/libinfinity</remote-id>
+	</upstream>
 </pkgmetadata>
