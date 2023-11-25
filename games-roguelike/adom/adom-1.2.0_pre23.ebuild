@@ -14,9 +14,7 @@ arm? ( https://www.adom.de/home/download/old/${PV}/${PN}_linux_arm_${PV}.tar.gz 
 
 LICENSE="adom"
 SLOT="0"
-KEYWORDS=""
 #~amd64 ~arm ~x86
-IUSE=""
 RESTRICT="strip" #bug #137340
 QA_FLAGS_IGNORED="/opt/bin/adom"
 
@@ -27,7 +25,7 @@ S=${WORKDIR}/${PN}
 src_install() {
 	exeinto /opt/bin
 	doexe adom
-	
+
 	insinto /etc
 	echo "${EPREFIX}"/var/lib/${PN} > adom_ds.cfg || die
 	doins adom_ds.cfg
