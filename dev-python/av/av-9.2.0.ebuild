@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{9..12} )
 inherit distutils-r1 pypi
 
 DESCRIPTION="Pythonic bindings for FFmpeg's libraries."

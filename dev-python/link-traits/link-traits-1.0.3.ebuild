@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{6..11} )
+PYTHON_COMPAT=( python3_{9..12} )
 
 inherit distutils-r1 flag-o-matic pypi
 

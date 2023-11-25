@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..11} )
+PYTHON_COMPAT=( python3_{9..12} )
 inherit distutils-r1 llvm
 
 DESCRIPTION="Python wrapper around the llvm C++ library"
