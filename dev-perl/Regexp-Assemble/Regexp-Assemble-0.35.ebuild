@@ -11,8 +11,6 @@ DESCRIPTION="Assemble multiple Regular Expressions into a single RE"
 
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-RDEPEND=""
-DEPEND=""
 #PATCHES=(
 #	"${FILESDIR}/${PV}/no-pod-tests.patch"
 #)

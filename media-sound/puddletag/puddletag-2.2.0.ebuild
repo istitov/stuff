@@ -17,7 +17,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="acoustid quodlibet"
 
-DEPEND=""
 RDEPEND="
 	>=dev-python/configobj-5.0.6[${PYTHON_USEDEP}]
 	>=dev-python/pyparsing-3.0.9[${PYTHON_USEDEP}]

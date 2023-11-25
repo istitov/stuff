@@ -11,7 +11,6 @@ LICENSE="MPL-1.1 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 x86"
 
-DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_install() {

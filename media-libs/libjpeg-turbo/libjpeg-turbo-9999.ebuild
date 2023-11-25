@@ -16,7 +16,6 @@ SLOT="0/0.2"
 IUSE="java static-libs cpu_flags_arm_neon"
 
 ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
-COMMON_DEPEND=""
 
 BDEPEND=">=dev-util/cmake-3.16.5
 	amd64? ( ${ASM_DEPEND} )

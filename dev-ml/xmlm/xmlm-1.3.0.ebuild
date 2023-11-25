@@ -15,7 +15,6 @@ KEYWORDS="~amd64 ~x86"
 IUSE="test"
 RESTRICT="!test? ( test )"
 
-RDEPEND=""
 DEPEND="${RDEPEND}
 	dev-ml/findlib
 	dev-ml/topkg:="

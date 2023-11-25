@@ -11,7 +11,5 @@ DESCRIPTION="Perl extension for working with Chemical Elements"
 
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-RDEPEND=""
-DEPEND=""
 
 SRC_TEST=do

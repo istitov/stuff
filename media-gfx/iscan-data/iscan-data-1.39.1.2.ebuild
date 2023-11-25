@@ -19,7 +19,6 @@ DEPEND="
 		dev-libs/libxslt
 		media-gfx/sane-backends
 	)"
-RDEPEND=""
 
 S="${WORKDIR}/${PN}-$(ver_cut 1-3)"
 

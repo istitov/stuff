@@ -13,7 +13,6 @@ SLOT="0"
 KEYWORDS="~amd64"
 #IUSE="doc cuda debug mpi"
 IUSE="doc"
-DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_prepare(){
