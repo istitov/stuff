@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python3_{9..12} )
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="Libary for azimuthal integration of 2D diffraction data"
+DESCRIPTION="Processing and analysis of 4D-STEM data"
 HOMEPAGE="https://github.com/py4dstem/py4DSTEM/"
 MYPN="py4DSTEM"
 MYP="${MYPN}-${PV}"
