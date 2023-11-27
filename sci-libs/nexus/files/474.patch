@@ -1,0 +1,1702 @@
+From f905c6eb430e67390aa097e992ece450ce591926 Mon Sep 17 00:00:00 2001
+From: Thomas Kjeldsen <thomas.kjeldsen@alexandra.dk>
+Date: Tue, 9 Apr 2019 14:03:45 +0200
+Subject: [PATCH 01/13] Fixed Visual Studio error: "error C2131: expression did
+ not evaluate to a constant". Array length must be compile time constant or
+ dynamically allocated.
+
+---
+ bindings/cpp/NeXusFile.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/bindings/cpp/NeXusFile.cpp b/bindings/cpp/NeXusFile.cpp
+index dfffbe4f..22ab80b1 100644
+--- a/bindings/cpp/NeXusFile.cpp
++++ b/bindings/cpp/NeXusFile.cpp
+@@ -1242,7 +1242,7 @@ void File::getAttr(const std::string& name, std::vector<std::string>& array) {
+   }
+ 
+   // get attrInfo
+-  char attr_name[name.size()+1];
++  char * attr_name = new char[name.size()+1];
+   strcpy(attr_name, name.c_str());
+ 
+   int type;
+@@ -1273,6 +1273,7 @@ void File::getAttr(const std::string& name, std::vector<std::string>& array) {
+     end = data.find(sep, start);
+   }
+   array.push_back(data.substr(start));
++  delete [] attr_name;
+ }
+ 
+ vector<AttrInfo> File::getAttrInfos() {
+
+From 14bdc31577f8c912ba7976bc2d73396ec35a03a4 Mon Sep 17 00:00:00 2001
+From: Thomas Kjeldsen <thomas.kjeldsen@alexandra.dk>
+Date: Tue, 9 Apr 2019 14:06:42 +0200
+Subject: [PATCH 02/13] Added NXReportError to dll. Resolves undefined symbol
+ in File destructor for CPP shared library.
+
+---
+ src/NeXus.def | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/NeXus.def b/src/NeXus.def
+index 1aa5772d..998bfb00 100644
+--- a/src/NeXus.def
++++ b/src/NeXus.def
+@@ -1,6 +1,7 @@
+ LIBRARY NeXus.dll
+ EXPORTS
+ NXIReportError
++NXReportError
+ NXIprintlink
+ NXMDisableErrorReporting
+ NXMEnableErrorReporting
+
+#From 7ef69d781cca4bfc206e84307b0790ad11df10fa Mon Sep 17 00:00:00 2001
+#From: Thomas Kjeldsen <thomas.kjeldsen@alexandra.dk>
+#Date: Mon, 13 May 2019 11:10:24 +0200
+#Subject: [PATCH 03/13] Fixed memory leak caused by allocation inside
+# NXIformatNeXusTime.
+#
+#---
+# src/napi5.c | 2 ++
+# 1 file changed, 2 insertions(+)
+#
+#diff --git a/src/napi5.c b/src/napi5.c
+#index 4eddc125..f364cb8c 100644
+#--- a/src/napi5.c
+#+++ b/src/napi5.c
+#@@ -440,8 +440,10 @@ NXstatus NX5open(CONSTCHAR * filename, NXaccess am, NXhandle * pHandle)
+#                 H5Gclose(root_id);
+#                 H5Fclose(pNew->iFID);
+#                 free(pNew);
+#+                free(time_buffer);
+#                 return NX_ERROR;
+#             }
+#+            free(time_buffer);
+#         }
+# 
+#         /*finally we set the NXroot NX_class attribute*/
+
+From f364f85b8a263ca2bdb96beb27031905a2dfa7ac Mon Sep 17 00:00:00 2001
+From: Stuart Prescott <stuart@debian.org>
+Date: Wed, 25 Sep 2019 00:23:05 +1000
+Subject: [PATCH 04/13] Fix paths inside jar
+
+---
+ bindings/java/CMakeLists.txt | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/bindings/java/CMakeLists.txt b/bindings/java/CMakeLists.txt
+index 8e912f05..4e4d9ccd 100644
+--- a/bindings/java/CMakeLists.txt
++++ b/bindings/java/CMakeLists.txt
+@@ -50,20 +50,20 @@ if(DEFINED Java_JAVAC_EXECUTABLE)
+              ${PROJECT_SOURCE_DIR}/bindings/java/org/nexusformat/NexusFile.java 
+              ${JAVA_TEST})
+ 
+-         SET(JAVA_CLASSES ${PROJECT_BINARY_DIR}/bindings/java/ncsa/hdf/hdflib/HDFException.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/ncsa/hdf/hdflib/HDFJavaException.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/ncsa/hdf/hdflib/HDFNotImplementedException.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/ncsa/hdf/hdflib/HDFConstants.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/ncsa/hdf/hdflib/HDFArray.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/ncsa/hdf/hdflib/HDFNativeData.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/org/nexusformat/NexusException.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/org/nexusformat/NXlink.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/org/nexusformat/NeXusFileInterface.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/org/nexusformat/AttributeEntry.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/org/nexusformat/NexusFile.class 
+-             ${PROJECT_BINARY_DIR}/bindings/java/TestJapi.class)
+-
+-        SET(EXTRA_CLASSES ${PROJECT_BINARY_DIR}/bindings/java/ncsa/hdf/hdflib/ArrayDescriptor.class)
++         SET(JAVA_CLASSES ncsa/hdf/hdflib/HDFException.class
++             ncsa/hdf/hdflib/HDFJavaException.class
++             ncsa/hdf/hdflib/HDFNotImplementedException.class
++             ncsa/hdf/hdflib/HDFConstants.class
++             ncsa/hdf/hdflib/HDFArray.class
++             ncsa/hdf/hdflib/HDFNativeData.class
++             org/nexusformat/NexusException.class
++             org/nexusformat/NXlink.class
++             org/nexusformat/NeXusFileInterface.class
++             org/nexusformat/AttributeEntry.class
++             org/nexusformat/NexusFile.class
++             TestJapi.class)
++
++        SET(EXTRA_CLASSES ncsa/hdf/hdflib/ArrayDescriptor.class)
+ 
+         SET(JNI_HEADER native/org_nexusformat_NexusFile.h)
+ 
+@@ -90,7 +90,7 @@ if(DEFINED Java_JAVAC_EXECUTABLE)
+         ADD_CUSTOM_COMMAND( 
+             OUTPUT    ${JAR_ARCHIVE}
+             COMMAND   ${Java_JAR_EXECUTABLE}
+-            ARGS      cvf ${JAR_ARCHIVE} ${JAVA_CLASSES} ${EXTRA_CLASSES}
++            ARGS      cvf ${JAR_ARCHIVE} -C ${PROJECT_BINARY_DIR}/bindings/java/ ${JAVA_CLASSES} ${EXTRA_CLASSES}
+             DEPENDS   ${EXTRA_CLASSES}
+             COMMENT   "Build JAR File"
+         )
+
+From f341a51700d2736604dd0edfd83ab449d53a4158 Mon Sep 17 00:00:00 2001
+From: Stuart Prescott <stuart@debian.org>
+Date: Wed, 25 Sep 2019 00:23:33 +1000
+Subject: [PATCH 05/13] Drop ancient cmake java detection
+
+---
+ cmake_include/FindJava.cmake | 207 -----------------------------------
+ 1 file changed, 207 deletions(-)
+ delete mode 100644 cmake_include/FindJava.cmake
+
+diff --git a/cmake_include/FindJava.cmake b/cmake_include/FindJava.cmake
+deleted file mode 100644
+index 93572ac2..00000000
+--- a/cmake_include/FindJava.cmake
++++ /dev/null
+@@ -1,207 +0,0 @@
+-# - Find Java
+-# This module finds if Java is installed and determines where the
+-# include files and libraries are. This code sets the following
+-# variables:
+-#
+-#  Java_JAVA_EXECUTABLE    = the full path to the Java runtime
+-#  Java_JAVAC_EXECUTABLE   = the full path to the Java compiler
+-#  Java_JAR_EXECUTABLE     = the full path to the Java archiver
+-#  Java_JNI_EXECUTABLE     = the full path to the Java JNI command
+-#  Java_DOC_EXECUTABLE     = the full path to the Javadoc command
+-#  Java_VERSION_STRING     = Version of the package found (java version), eg. 1.6.0_12
+-#  Java_VERSION_MAJOR      = The major version of the package found.
+-#  Java_VERSION_MINOR      = The minor version of the package found.
+-#  Java_VERSION_PATCH      = The patch version of the package found.
+-#  Java_VERSION_TWEAK      = The tweak version of the package found (after '_')
+-#  Java_VERSION            = This is set to: $major.$minor.$patch(.$tweak)
+-#
+-# The minimum required version of Java can be specified using the
+-# standard CMake syntax, e.g. FIND_PACKAGE(Java 1.5)
+-#
+-# NOTE: ${Java_VERSION} and ${Java_VERSION_STRING} are not guaranteed to be
+-# identical. For example some java version may return:
+-# Java_VERSION_STRING = 1.5.0_17
+-# and
+-# Java_VERSION        = 1.5.0.17
+-# 
+-# another example is the Java OEM, with:
+-# Java_VERSION_STRING = 1.6.0-oem
+-# and
+-# Java_VERSION        = 1.6.0
+-#
+-# For these components the following variables are set:
+-#
+-#  Java_FOUND                    - TRUE if all components are found.
+-#  Java_INCLUDE_DIRS             - Full paths to all include dirs.
+-#  Java_LIBRARIES                - Full paths to all libraries.
+-#  Java_<component>_FOUND        - TRUE if <component> is found.
+-#
+-# Example Usages:
+-#  FIND_PACKAGE(Java)
+-#  FIND_PACKAGE(Java COMPONENTS Runtime)
+-#  FIND_PACKAGE(Java COMPONENTS Development)
+-#
+-
+-#=============================================================================
+-# Copyright 2002-2009 Kitware, Inc.
+-# Copyright 2009-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+-#
+-# Distributed under the OSI-approved BSD License (the "License");
+-# see accompanying file Copyright.txt for details.
+-#
+-# This software is distributed WITHOUT ANY WARRANTY; without even the
+-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+-# See the License for more information.
+-#=============================================================================
+-# (To distribute this file outside of CMake, substitute the full
+-#  License text for the above reference.)
+-
+-# The HINTS option should only be used for values computed from the system.
+-SET(_JAVA_HINTS
+-  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\2.0;JavaHome]/bin"
+-  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.9;JavaHome]/bin"
+-  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.8;JavaHome]/bin"
+-  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.7;JavaHome]/bin"
+-  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.6;JavaHome]/bin"
+-  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.5;JavaHome]/bin"
+-  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.4;JavaHome]/bin"
+-  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.3;JavaHome]/bin"
+-  $ENV{JAVA_HOME}/bin
+-  )
+-# Hard-coded guesses should still go in PATHS. This ensures that the user
+-# environment can always override hard guesses.
+-SET(_JAVA_PATHS
+-  /usr/lib/java/bin
+-  /usr/share/java/bin
+-  /usr/local/java/bin
+-  /usr/local/java/share/bin
+-  /usr/java/j2sdk1.4.2_04
+-  /usr/lib/j2sdk1.4-sun/bin
+-  /usr/java/j2sdk1.4.2_09/bin
+-  /usr/lib/j2sdk1.5-sun/bin
+-  /opt/sun-jdk-1.5.0.04/bin
+-  )
+-FIND_PROGRAM(Java_JAVA_EXECUTABLE
+-  NAMES java
+-  HINTS ${_JAVA_HINTS}
+-  PATHS ${_JAVA_PATHS}
+-)
+-
+-IF(Java_JAVA_EXECUTABLE)
+-    EXECUTE_PROCESS(COMMAND ${Java_JAVA_EXECUTABLE} -version
+-      RESULT_VARIABLE res
+-      OUTPUT_VARIABLE var
+-      ERROR_VARIABLE var # sun-java output to stderr
+-      OUTPUT_STRIP_TRAILING_WHITESPACE
+-      ERROR_STRIP_TRAILING_WHITESPACE)
+-    IF( res )
+-      IF(${Java_FIND_REQUIRED})
+-        MESSAGE( FATAL_ERROR "Error executing java -version" )
+-      ELSE()
+-        MESSAGE( STATUS "Warning, could not run java --version")
+-      ENDIF()
+-    ELSE()
+-      # extract major/minor version and patch level from "java -version" output
+-      # Tested on linux using 
+-      # 1. Sun / Sun OEM
+-      # 2. OpenJDK 1.6
+-      # 3. GCJ 1.5
+-      # 4. Kaffe 1.4.2
+-      IF(var MATCHES "java version \"[0-9]+\\.[0-9]+\\.[0-9_.]+[oem-]*\".*")
+-        # This is most likely Sun / OpenJDK, or maybe GCJ-java compat layer
+-        STRING( REGEX REPLACE ".* version \"([0-9]+\\.[0-9]+\\.[0-9_.]+)[oem-]*\".*"
+-                "\\1" Java_VERSION_STRING "${var}" )
+-      ELSEIF(var MATCHES "java full version \"kaffe-[0-9]+\\.[0-9]+\\.[0-9_]+\".*")
+-        # Kaffe style
+-        STRING( REGEX REPLACE "java full version \"kaffe-([0-9]+\\.[0-9]+\\.[0-9_]+).*"
+-                "\\1" Java_VERSION_STRING "${var}" )
+-      ELSE()
+-        IF(NOT Java_FIND_QUIETLY)
+-          message(WARNING "regex not supported: ${var}. Please report")
+-        ENDIF(NOT Java_FIND_QUIETLY)
+-      ENDIF()
+-      STRING( REGEX REPLACE "([0-9]+).*" "\\1" Java_VERSION_MAJOR "${Java_VERSION_STRING}" )
+-      STRING( REGEX REPLACE "[0-9]+\\.([0-9]+).*" "\\1" Java_VERSION_MINOR "${Java_VERSION_STRING}" )
+-      STRING( REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" Java_VERSION_PATCH "${Java_VERSION_STRING}" )
+-      # warning tweak version can be empty:
+-      STRING( REGEX REPLACE "[0-9]+\\.[0-9]+\\.[0-9]+\\_?\\.?([0-9]*)$" "\\1" Java_VERSION_TWEAK "${Java_VERSION_STRING}" )
+-      if( Java_VERSION_TWEAK STREQUAL "" ) # check case where tweak is not defined
+-        set(Java_VERSION ${Java_VERSION_MAJOR}.${Java_VERSION_MINOR}.${Java_VERSION_PATCH})
+-      else( )
+-        set(Java_VERSION ${Java_VERSION_MAJOR}.${Java_VERSION_MINOR}.${Java_VERSION_PATCH}.${Java_VERSION_TWEAK})
+-      endif( )
+-      # display info
+-      #MESSAGE( STATUS "Java version ${Java_VERSION_STRING} configured successfully!" ) # keep me, used for debug
+-      IF(NOT Java_FIND_QUIETLY)
+-        MESSAGE( STATUS "Java version ${Java_VERSION} configured successfully!" )
+-      ENDIF(NOT Java_FIND_QUIETLY)
+-    ENDIF()
+-
+-ENDIF(Java_JAVA_EXECUTABLE)
+-
+-
+-FIND_PROGRAM(Java_JAR_EXECUTABLE
+-  NAMES jar
+-  HINTS ${_JAVA_HINTS}
+-  PATHS ${_JAVA_PATHS}
+-)
+-
+-FIND_PROGRAM(Java_JAVAC_EXECUTABLE
+-  NAMES javac
+-  HINTS ${_JAVA_HINTS}
+-  PATHS ${_JAVA_PATHS}
+-)
+-
+-FIND_PROGRAM(Java_JNI_EXECUTABLE
+-  NAMES javah
+-  HINTS ${_JAVA_HINTS}
+-  PATHS ${_JAVA_PATHS}
+-)
+-
+-FIND_PROGRAM(Java_DOC_EXECUTABLE
+-  NAMES javadoc
+-  HINTS ${_JAVA_HINTS}
+-  PATHS ${_JAVA_PATHS}
+-)
+-
+-include(FindPackageHandleStandardArgs)
+-if(Java_FIND_COMPONENTS)
+-  foreach(component ${Java_FIND_COMPONENTS})
+-    # User just want to execute some Java byte-compiled
+-    if(component STREQUAL "Runtime")
+-      find_package_handle_standard_args(Java
+-        REQUIRED_VARS Java_JAVA_EXECUTABLE
+-        VERSION_VAR Java_VERSION
+-        )
+-    elseif(component STREQUAL "Development")
+-      find_package_handle_standard_args(Java
+-        REQUIRED_VARS Java_JAVA_EXECUTABLE Java_JAR_EXECUTABLE Java_JAVAC_EXECUTABLE  Java_JNI_EXECUTABLE Java_DOC_EXECUTABLE
+-        VERSION_VAR Java_VERSION
+-        )
+-    else()
+-      message(FATAL_ERROR "Comp: ${component} is not handled")
+-    endif()
+-    set(Java_${component}_FOUND TRUE)
+-  endforeach(component)
+-else()
+-  # Check for everything
+-  find_package_handle_standard_args(Java
+-    REQUIRED_VARS Java_JAVA_EXECUTABLE Java_JAR_EXECUTABLE Java_JAVAC_EXECUTABLE Java_JNI_EXECUTABLE Java_DOC_EXECUTABLE
+-    VERSION_VAR Java_VERSION
+-    )
+-endif()
+-
+-
+-MARK_AS_ADVANCED(
+-  Java_JAVA_EXECUTABLE
+-  Java_JAR_EXECUTABLE
+-  Java_JAVAC_EXECUTABLE
+-  Java_JNI_EXECUTABLE
+-  Java_DOC_EXECUTABLE
+-  )
+-
+-# LEGACY
+-SET(JAVA_RUNTIME ${Java_JAVA_EXECUTABLE})
+-SET(JAVA_ARCHIVE ${Java_JAR_EXECUTABLE})
+-SET(JAVA_COMPILE ${Java_JAVAC_EXECUTABLE})
+-
+
+From 3b075e4ffafb1d4c570a4e97e3343a624f855786 Mon Sep 17 00:00:00 2001
+From: Stuart Prescott <stuart@debian.org>
+Date: Wed, 25 Sep 2019 00:24:04 +1000
+Subject: [PATCH 06/13] Update JNI creation to not use javah
+
+---
+ bindings/java/CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/bindings/java/CMakeLists.txt b/bindings/java/CMakeLists.txt
+index 4e4d9ccd..d3f84f96 100644
+--- a/bindings/java/CMakeLists.txt
++++ b/bindings/java/CMakeLists.txt
+@@ -97,8 +97,8 @@ if(DEFINED Java_JAVAC_EXECUTABLE)
+ 
+         ADD_CUSTOM_COMMAND( 
+             OUTPUT    ${JNI_HEADER}
+-            COMMAND   ${Java_JAVAH_EXECUTABLE}
+-            ARGS      -jni -d native -classpath . org.nexusformat.NexusFile
++            COMMAND   ${Java_JAVAC_EXECUTABLE}
++            ARGS      -h native ${PROJECT_SOURCE_DIR}/bindings/java/org/nexusformat/NexusFile.java
+             DEPENDS   ${JAR_ARCHIVE}
+             COMMENT   "Build JNI Header"
+         )
+
+From fc6160634260c9830981286cc70421fc8859bad8 Mon Sep 17 00:00:00 2001
+From: Stuart Prescott <stuart@debian.org>
+Date: Wed, 25 Sep 2019 00:24:26 +1000
+Subject: [PATCH 07/13] Add missing dependency on jni header
+
+---
+ bindings/java/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bindings/java/CMakeLists.txt b/bindings/java/CMakeLists.txt
+index d3f84f96..45e50e9a 100644
+--- a/bindings/java/CMakeLists.txt
++++ b/bindings/java/CMakeLists.txt
+@@ -113,7 +113,7 @@ if(DEFINED Java_JAVAC_EXECUTABLE)
+         )
+ 
+         ADD_CUSTOM_TARGET(NexusJavaBuild ALL echo
+-           DEPENDS   ${JAR_ARCHIVE}
++           DEPENDS   ${JAR_ARCHIVE} ${JNI_HEADER}
+         )
+         
+         ADD_CUSTOM_TARGET(NexusJavadocBuild ALL echo
+
+From 8e42ee709dea46072df71275b1d65303c27ad225 Mon Sep 17 00:00:00 2001
+From: Stuart Prescott <stuart@debian.org>
+Date: Wed, 25 Sep 2019 00:24:46 +1000
+Subject: [PATCH 08/13] Enable building java bindings
+
+---
+ CMakeLists.txt          | 8 ++++----
+ bindings/CMakeLists.txt | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8da8e14d..bb192092 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -224,10 +224,10 @@ find_package(LibXml2)
+ #find_package(PythonInterp)
+ 
+ #Find the java runtime and sdk
+-#if(ENABLE_JAVA_BINDINGS)
+-#    find_package(Java 1.6)
+-#    find_package(JNI)
+-#endif()
++if(ENABLE_JAVA)
++    find_package(Java 1.6)
++    find_package(JNI)
++endif()
+ 
+ 
+ find_library(PTHREAD pthread)
+diff --git a/bindings/CMakeLists.txt b/bindings/CMakeLists.txt
+index b0b1d27a..b1a9ac9b 100644
+--- a/bindings/CMakeLists.txt
++++ b/bindings/CMakeLists.txt
+@@ -44,9 +44,9 @@ if(ENABLE_FORTRAN90)
+ endif()
+ 
+ #add_subdirectory (idl)
+-#if (NOT(Java_JAVAC_EXECUTABLE MATCHES NOTFOUND))
+-#    add_subdirectory (java)
+-#endif ()
++if (NOT(Java_JAVAC_EXECUTABLE MATCHES NOTFOUND))
++    add_subdirectory (java)
++endif ()
+ #add_subdirectory (matlab)
+ #if (PYTHONINTERP_FOUND)
+ #    add_subdirectory (python)
+
+From 2035786434cebfb4dbf46089ad65ec777936f8d1 Mon Sep 17 00:00:00 2001
+From: Stuart Prescott <stuart@debian.org>
+Date: Mon, 9 Dec 2019 23:28:07 +1100
+Subject: [PATCH 09/13] Don't try to run tests in parallel
+
+Tests touch the same files on disks so multiple tests running at the same time
+can lead to very strange test failures.
+---
+ test/CMakeLists.txt | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
+
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index d483cde1..afd695df 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -51,10 +51,12 @@ if(WITH_HDF5)
+     add_executable(napi_test_hdf5 napi_test.c)
+     target_link_libraries(napi_test_hdf5 NeXus_Shared_Library)
+     add_test(NAME "NAPI-C-HDF5-test" COMMAND  napi_test_hdf5)
+-    
++    set_property(TEST "NAPI-C-HDF5-test" APPEND PROPERTY RUN_SERIAL TRUE)
++
+     add_executable(napi_attra_test_hdf5 napi_attra_test.c)
+     target_link_libraries(napi_attra_test_hdf5 NeXus_Shared_Library)
+     add_test(NAME "NAPI-C-HDF5-attra-test" COMMAND  napi_attra_test_hdf5)
++    set_property(TEST "NAPI-C-HDF5-attra-test" APPEND PROPERTY RUN_SERIAL TRUE)
+ 
+     if (WIN32)
+       set_property(TEST "NAPI-C-HDF5-test" "NAPI-C-HDF5-attra-test" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+@@ -66,11 +68,13 @@ if(WITH_HDF4)
+     target_link_libraries(napi_test_hdf4 NeXus_Shared_Library)
+     add_test(NAME "NAPI-C-HDF4-test"
+              COMMAND  napi_test_hdf4)
+-             
++    set_property(TEST "NAPI-C-HDF4-test" APPEND PROPERTY RUN_SERIAL TRUE)
++
+     add_executable(napi_attra_test_hdf4 napi_attra_test.c)
+     target_link_libraries(napi_attra_test_hdf4 NeXus_Shared_Library) 
+     add_test(NAME "NAPI-C-HDF4-attra-test" COMMAND  napi_attra_test_hdf4)
+     set_tests_properties("NAPI-C-HDF4-attra-test" PROPERTIES WILL_FAIL TRUE)
++    set_property(TEST "NAPI-C-HDF4-attra-test" APPEND PROPERTY RUN_SERIAL TRUE)
+ 
+     if (WIN32)
+       set_property(TEST "NAPI-C-HDF4-test" "NAPI-C-HDF4-attra-test" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+@@ -82,16 +86,19 @@ if(WITH_MXML)
+     target_link_libraries(napi_test-xml NeXus_Shared_Library)
+     add_test(NAME "NAPI-C-MXML-test"
+              COMMAND  napi_test-xml)
+-             
++    set_property(TEST "NAPI-C-MXML-test" APPEND PROPERTY RUN_SERIAL TRUE)
++
+     add_executable(napi_test-xml-table napi_test.c)
+     target_link_libraries(napi_test-xml-table NeXus_Shared_Library)
+     add_test(NAME "NAPI-C-MXML-TABLE-test"
+              COMMAND  napi_test-xml-table)
+-             
++    set_property(TEST "NAPI-C-MXML-TABLE-test" APPEND PROPERTY RUN_SERIAL TRUE)
++
+     add_executable(napi_attra_test_xml napi_attra_test.c)
+     target_link_libraries(napi_attra_test_xml NeXus_Shared_Library)
+     add_test(NAME "NAPI-C-MXML-attra-test" COMMAND napi_attra_test_xml)
+     set_tests_properties("NAPI-C-MXML-attra-test" PROPERTIES WILL_FAIL TRUE)
++    set_property(TEST "NAPI-C-MXML-attra-test" APPEND PROPERTY RUN_SERIAL TRUE)
+ 
+     if (WIN32)
+       set_property(TEST "NAPI-C-MXML-test" "NAPI-C-MXML-TABLE-test" "NAPI-C-MXML-attra-test" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+@@ -105,6 +112,7 @@ add_executable(leak_test1 leak_test1.c)
+ target_link_libraries(leak_test1 NeXus_Shared_Library)
+ add_test(NAME "NAPI-C-leak-test-1"
+          COMMAND  leak_test1)
++set_property(TEST "NAPI-C-leak-test-1" APPEND PROPERTY RUN_SERIAL TRUE)
+ if (WIN32)
+   set_property(TEST "NAPI-C-leak-test-1" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+ endif(WIN32)
+@@ -116,10 +124,11 @@ add_executable(test_nxunlimited test_nxunlimited.c)
+ target_link_libraries(test_nxunlimited  NeXus_Shared_Library)
+ add_test(NAME "NAPI-C-test-nxunlimited"
+          COMMAND  test_nxunlimited)
++set_property(TEST "NAPI-C-test-nxunlimited" APPEND PROPERTY RUN_SERIAL TRUE)
+ if (WIN32)
+   set_property(TEST "NAPI-C-test-nxunlimited" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+ endif(WIN32)
+-         
++
+ 
+ #------------------------------------------------------------------------------
+ # Add tests relevant to C++ bindings
+@@ -132,6 +141,7 @@ if(ENABLE_CXX)
+         add_executable(napi_test_cpp-hdf5 napi_test_cpp.cxx)
+         target_link_libraries(napi_test_cpp-hdf5 NeXus_CPP_Shared_Library)
+         add_test(NAME "NAPI-C++-HDF5-test" COMMAND  napi_test_cpp-hdf5)
++        set_property(TEST "NAPI-C++-HDF5-test" APPEND PROPERTY RUN_SERIAL TRUE)
+         if (WIN32)
+             set_property(TEST "NAPI-C++-HDF5-test" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+         endif(WIN32)
+@@ -141,6 +151,7 @@ if(ENABLE_CXX)
+         add_executable(napi_test_cpp-hdf4 napi_test_cpp.cxx)
+         target_link_libraries(napi_test_cpp-hdf4 NeXus_CPP_Shared_Library)
+         add_test(NAME "NAPI-C++-HDF4-test" COMMAND  napi_test_cpp-hdf4)
++        set_property(TEST "NAPI-C++-HDF4-test" APPEND PROPERTY RUN_SERIAL TRUE)
+         if (WIN32)
+             set_property(TEST "NAPI-C++-HDF4-test" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+         endif(WIN32)
+@@ -150,6 +161,7 @@ if(ENABLE_CXX)
+         add_executable(napi_test_cpp-xml napi_test_cpp.cxx)
+         target_link_libraries(napi_test_cpp-xml NeXus_CPP_Shared_Library)
+         add_test(NAME "NAPI-C++-MXML-test" COMMAND  napi_test_cpp-xml)
++        set_property(TEST "NAPI-C++-MXML-test" APPEND PROPERTY RUN_SERIAL TRUE)
+         if (WIN32)
+             set_property(TEST "NAPI-C++-MXML-test" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+         endif(WIN32)
+@@ -169,6 +181,7 @@ if(ENABLE_CXX)
+     target_link_libraries(leak_test2 NeXus_CPP_Shared_Library)
+     add_test(NAME "NAPI-C++-leak-test-2" 
+              COMMAND  leak_test2)
++    set_property(TEST "NAPI-C++-leak-test-2" APPEND PROPERTY RUN_SERIAL TRUE)
+     if (WIN32)
+       set_property(TEST "NAPI-C++-leak-test-2" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+     endif(WIN32)
+@@ -177,6 +190,7 @@ if(ENABLE_CXX)
+     target_link_libraries(leak_test3 NeXus_CPP_Shared_Library)
+     add_test(NAME "NAPI-C++-leak-test-3"
+              COMMAND  leak_test3)
++    set_property(TEST "NAPI-C++-leak-test-3" APPEND PROPERTY RUN_SERIAL TRUE)
+     if (WIN32)
+       set_property(TEST "NAPI-C++-leak-test-3" APPEND PROPERTY ENVIRONMENT "PATH=${TESTSPATH}")
+     endif(WIN32)
+@@ -191,6 +205,7 @@ if(ENABLE_FORTRAN77)
+         target_link_libraries(napif4_test NeXus_F77_Shared_Library)
+         add_test(NAME "NAPI-F77-HDF4-test"
+                  COMMAND  napif4_test)
++        set_property(TEST "NAPI-F77-HDF4-test" APPEND PROPERTY RUN_SERIAL TRUE)
+     endif()
+     
+     if(WITH_HDF5)
+@@ -198,6 +213,7 @@ if(ENABLE_FORTRAN77)
+         target_link_libraries(napif5_test NeXus_F77_Shared_Library)
+         add_test(NAME "NAPI-F77-HDF5-test"
+                  COMMAND  napif5_test)
++        set_property(TEST "NAPI-F77-HDF5-test" APPEND PROPERTY RUN_SERIAL TRUE)
+     endif()
+ 
+     if(WITH_MXML)
+@@ -205,6 +221,7 @@ if(ENABLE_FORTRAN77)
+         target_link_libraries(napif_test NeXus_F77_Shared_Library)
+         add_test(NAME "NAPI-F77-XML-test"
+                  COMMAND  napif_test)
++        set_property(TEST "NAPI-F77-XML-test" APPEND PROPERTY RUN_SERIAL TRUE)
+     endif()
+ 
+ endif()
+@@ -215,6 +232,6 @@ if(ENABLE_FORTRAN90)
+     add_executable(NXtestf90 NXtest.f90)
+     target_link_libraries(NXtestf90 NeXus_F90_Shared_Library)
+     add_test(NAME "Fortran-90-test" COMMAND  NXtestf90)
++    set_property(TEST "Fortran-90-test" APPEND PROPERTY RUN_SERIAL TRUE)
+ endif()
+ 
+-
+
+From d8719527c76c3c9d219dc121828c750d19e30751 Mon Sep 17 00:00:00 2001
+From: Bruno Martins <brunoseivam@gmail.com>
+Date: Wed, 23 Sep 2020 09:31:55 -0400
+Subject: [PATCH 10/13] Fix compatibility with Mini-XML 3.0 API
+
+---
+ applications/nxingest/nxingest_main.cpp  |   8 +-
+ applications/nxingest/nxingest_parse.cpp |  75 ++++++-----
+ applications/nxingest/nxingest_utils.cpp |   8 +-
+ src/nxio.c                               |  50 ++++---
+ src/nxxml.c                              | 160 +++++++++++------------
+ 5 files changed, 149 insertions(+), 152 deletions(-)
+
+diff --git a/applications/nxingest/nxingest_main.cpp b/applications/nxingest/nxingest_main.cpp
+index ae00432a..551d003b 100644
+--- a/applications/nxingest/nxingest_main.cpp
++++ b/applications/nxingest/nxingest_main.cpp
+@@ -43,7 +43,7 @@
+     whitespace_cb(mxml_node_t *node,        /* I - Element node */
+         	  int         where)        /* I - Open or close tag? */
+ {
+-	if (strncmp(node->value.element.name, "?xml", 4) == 0)
++	if (strncmp(mxmlGetElement(node), "?xml", 4) == 0)
+ 		return(NULL);
+ 	if (where == MXML_WS_BEFORE_OPEN )
+ 		return ("\n");
+@@ -112,11 +112,11 @@ int main (int argc, char *argv[])
+ 		outFp = fopen(outputFl, "w");
+ 		if( outFp == 0 ) throw log.set("main", "Can't open the output file!", outputFl, "", NXING_ERR_CANT_OPEN_OUTPUT);
+ 	
+-		if(inTree->type == MXML_ELEMENT  && (strncmp(inTree->value.element.name, "?xml", 4) == 0)){	
+-			outTree = mxmlNewElement(MXML_NO_PARENT,  inTree->value.element.name);
++		if(mxmlGetType(inTree) == MXML_ELEMENT  && (strncmp(mxmlGetElement(inTree), "?xml", 4) == 0)){
++			outTree = mxmlNewElement(MXML_NO_PARENT,  mxmlGetElement(inTree));
+ 		}
+ 		
+-		log.set("main", "Output Created, first tag added!", inTree->value.element.name).printLevel(NXING_LOG_DEBUG);
++		log.set("main", "Output Created, first tag added!", mxmlGetElement(inTree)).printLevel(NXING_LOG_DEBUG);
+ 		//
+ 
+ 		// Open the neXus file.
+diff --git a/applications/nxingest/nxingest_parse.cpp b/applications/nxingest/nxingest_parse.cpp
+index c0d09060..fbfd5cff 100644
+--- a/applications/nxingest/nxingest_parse.cpp
++++ b/applications/nxingest/nxingest_parse.cpp
+@@ -73,27 +73,32 @@ mxml_node_t *parseXml(mxml_node_t *inNode, mxml_node_t *topNode, mxml_node_t **o
+ 
+ 	int type_descent = MXML_DESCEND;		
+ 	const char 		*type;
++	const char 		*attName;
++	const char 		*attValue;
+ 		
+ 	while( (inNode = mxmlWalkNext(inNode, topNode, type_descent)) != NULL )
+ 	{
+ 		inNextNode = inNode; // Get the last inNode to pass back to the calling function
+-		if(inNode->type == MXML_ELEMENT)
++		if(mxmlGetType(inNode) == MXML_ELEMENT)
+ 		{
+ 			type_descent = MXML_DESCEND;
+ 
+ 			type = mxmlElementGetAttr(inNode, "type");
+ 			if(type != 0) 
+ 			{	
+-				log.set("parseXml", "Found element : ", inNode->value.element.name).printLevel(NXING_LOG_DEBUG);
++				log.set("parseXml", "Found element : ", mxmlGetElement(inNode)).printLevel(NXING_LOG_DEBUG);
+ 				if(strcmp(type, "tbl") == 0 ) // Simple table.
+ 				{
+-					log.set("parseXml", "Get new table", inNode->value.element.name).printLevel(NXING_LOG_DEBUG);
+-					outNextNode = mxmlNewElement(*outNode, inNode->value.element.name );
++					log.set("parseXml", "Get new table", mxmlGetElement(inNode)).printLevel(NXING_LOG_DEBUG);
++					outNextNode = mxmlNewElement(*outNode, mxmlGetElement(inNode) );
+ 					// add the attributes of the input node : 
+-					if(inNode->value.element.num_attrs > 1)
+-						for(int i = 0; i< inNode->value.element.num_attrs; i++)
+-							if(strcmp(inNode->value.element.attrs[i].name, "type") != 0)
+-								mxmlElementSetAttr(outNextNode, inNode->value.element.attrs[i].name, inNode->value.element.attrs[i].value);
++					if(mxmlElementGetAttrCount(inNode) > 1)
++						for(int i = 0; i< mxmlElementGetAttrCount(inNode); i++) {
++
++							attValue = mxmlElementGetAttrByIndex(inNode, i, &attName);
++							if(strcmp(attName, "type") != 0)
++								mxmlElementSetAttr(outNextNode, attName, attValue);
++						}
+ 					inNode = parseXml(inNode, inNode, &outNextNode, nx);
+ 				} 
+ 				else if(strcmp(type, "user_tbl") == 0 )	// User table. There may be several user. Need to loop over the different NXusers.
+@@ -103,50 +108,52 @@ mxml_node_t *parseXml(mxml_node_t *inNode, mxml_node_t *topNode, mxml_node_t **o
+ 					do{
+ 						userInNode = inNode;
+ 
+-						log.set("parseXml", type, "Start", inNode->value.element.name).printLevel(NXING_LOG_DEBUG);
+-						outNextNode = mxmlNewElement(*userOutNode, userInNode->value.element.name );
+-						if(userInNode->value.element.num_attrs > 1)
+-							for(int i = 0; i< userInNode->value.element.num_attrs; i++)
+-								if(strcmp(userInNode->value.element.attrs[i].name, "type") != 0)
+-									mxmlElementSetAttr(outNextNode, userInNode->value.element.attrs[i].name, userInNode->value.element.attrs[i].value);
++						log.set("parseXml", type, "Start", mxmlGetElement(inNode)).printLevel(NXING_LOG_DEBUG);
++						outNextNode = mxmlNewElement(*userOutNode, mxmlGetElement(userInNode) );
++						if(mxmlElementGetAttrCount(userInNode) > 1)
++							for(int i = 0; i< mxmlElementGetAttrCount(userInNode); i++) {
++								attValue = mxmlElementGetAttrByIndex(userInNode, i, &attName);
++								if(strcmp(attName, "type") != 0)
++									mxmlElementSetAttr(outNextNode, attName, attValue);
++							}
+ 
+-						log.set("parseXml", type, "Element added",userInNode->value.element.name).printLevel(NXING_LOG_DEBUG);
++						log.set("parseXml", type, "Element added",mxmlGetElement(userInNode)).printLevel(NXING_LOG_DEBUG);
+ 						parseXml(userInNode, topNode, &outNextNode, nx);
+-						log.set("parseXml", type, "Parsed", inNode->value.element.name).printLevel(NXING_LOG_DEBUG);
++						log.set("parseXml", type, "Parsed", mxmlGetElement(inNode)).printLevel(NXING_LOG_DEBUG);
+ 
+ 					}while(nx.nextUser() != -1); 
+ 					inNode = mxmlWalkNext(inNode, topNode, MXML_NO_DESCEND); 
+ 				}
+ 				else if(strcmp(type, "keyword_tag") == 0 ) // simple Tag record
+ 				{
+-					log.set("parseXml", type, "Read",inNode->value.element.name).printLevel(NXING_LOG_DEBUG);
++					log.set("parseXml", type, "Read",mxmlGetElement(inNode)).printLevel(NXING_LOG_DEBUG);
+ 					inNode = readKeyword(inNode, outNode, nx);
+ 					type_descent = MXML_NO_DESCEND;
+ 				}
+ 				else if(strcmp(type, "tag") == 0 ) // simple Tag record
+ 				{
+-					log.set("parseXml", type, "Read",inNode->value.element.name).printLevel(NXING_LOG_DEBUG);
++					log.set("parseXml", type, "Read",mxmlGetElement(inNode)).printLevel(NXING_LOG_DEBUG);
+ 					inNode = readRecord(inNode, outNode, nx);
+ 					type_descent = MXML_NO_DESCEND;
+ 				}
+ 				else if(strcmp(type, "param_str") == 0 ) // Parameter with a string value
+ 				{
+-					log.set("parseXml", type, "Read", inNode->value.element.name).printLevel(NXING_LOG_DEBUG);
++					log.set("parseXml", type, "Read", mxmlGetElement(inNode)).printLevel(NXING_LOG_DEBUG);
+ 					inNode = readParam(inNode, outNode, nx, STR);
+ 					type_descent = MXML_NO_DESCEND;
+ 				}
+ 				else if(strcmp(type, "param_num") == 0 ) // Parameter with a numeric value
+ 				{
+-					log.set("parseXml", type, "Read",inNode->value.element.name).printLevel(NXING_LOG_DEBUG);
++					log.set("parseXml", type, "Read",mxmlGetElement(inNode)).printLevel(NXING_LOG_DEBUG);
+ 					inNode = readParam(inNode, outNode, nx, NUM);
+ 					type_descent = MXML_NO_DESCEND;
+ 
+ 				}
+ 			}
+ 		}
+-		if(inNode->type == MXML_TEXT && strlen(inNode->value.text.string) > 0)
++		if(mxmlGetType(inNode) == MXML_TEXT && strlen(mxmlGetText(inNode, NULL)) > 0)
+ 		{
+-			log.set("parseXml", "Unexpected text (may be comments)", inNode->value.text.string).printLevel(NXING_LOG_DEBUG);
++			log.set("parseXml", "Unexpected text (may be comments)", mxmlGetText(inNode, NULL)).printLevel(NXING_LOG_DEBUG);
+ 		}
+ 	}
+ 	return (inNextNode);
+@@ -174,15 +181,15 @@ mxml_node_t * readRecord(mxml_node_t *inNode, mxml_node_t **outNode, NxClass nx)
+ 	// 
+ 	while( (inNode = mxmlWalkNext(inNode, topNode, MXML_DESCEND)) != NULL )
+ 	{
+-		if(inNode->type == MXML_ELEMENT)
++		if(mxmlGetType(inNode) == MXML_ELEMENT)
+ 		{
+-			if(strcmp(inNode->value.element.name, "icat_name") == 0) 
++			if(strcmp(mxmlGetElement(inNode), "icat_name") == 0)
+ 			{				
+ 				log.set("readRecord", "ICAT name",mxmlGetItem(inNode, name)).printLevel(NXING_LOG_DEBUG);
+ 				mxmlGetItem(inNode, name);
+ 				log.set("readRecord", "ICAT name",name).printLevel(NXING_LOG_DEBUG);
+ 			} 
+-			else if(strcmp(inNode->value.element.name, "value") == 0) 
++			else if(strcmp(mxmlGetElement(inNode), "value") == 0)
+ 			{
+ 				getValue(inNode, nx, value);
+ 			}
+@@ -209,19 +216,19 @@ mxml_node_t * readKeyword(mxml_node_t *inNode, mxml_node_t **outNode, NxClass nx
+ 	char keys[] = " ,;";
+ 
+ 	// 
+-	strcpy(keywordStr , inNode->value.element.name);
++	strcpy(keywordStr , mxmlGetElement(inNode));
+ 	
+ 	while( (inNode = mxmlWalkNext(inNode, topNode, MXML_DESCEND)) != NULL )
+ 	{
+-		if(inNode->type == MXML_ELEMENT)
++		if(mxmlGetType(inNode) == MXML_ELEMENT)
+ 		{
+-			if(strcmp(inNode->value.element.name, "icat_name") == 0) 
++			if(strcmp(mxmlGetElement(inNode), "icat_name") == 0)
+ 			{				
+ 				log.set("readRecord", "ICAT name",mxmlGetItem(inNode, name)).printLevel(NXING_LOG_DEBUG);
+ 				mxmlGetItem(inNode, name);
+ 				log.set("readRecord", "ICAT name",name).printLevel(NXING_LOG_DEBUG);
+ 			} 
+-			else if(strcmp(inNode->value.element.name, "value") == 0) 
++			else if(strcmp(mxmlGetElement(inNode), "value") == 0)
+ 			{
+ 				getValue(inNode, nx, value);
+ 			}
+@@ -289,29 +296,29 @@ mxml_node_t * readParam(mxml_node_t *inNode, mxml_node_t **outNode, NxClass nx,
+ 	
+ 	while( (inNode = mxmlWalkNext(inNode, topNode, MXML_DESCEND)) != NULL )
+ 	{
+-		if(inNode->type == MXML_ELEMENT)
++		if(mxmlGetType(inNode) == MXML_ELEMENT)
+ 		{
+-			if(strcmp(inNode->value.element.name, "icat_name") == 0) 
++			if(strcmp(mxmlGetElement(inNode), "icat_name") == 0)
+ 			{				
+ 				log.set("readParam", "ICAT name", mxmlGetItem(inNode, str)).printLevel(NXING_LOG_DEBUG);
+ 				buff = mxmlGetItem(inNode, str);					
+ 				if(buff != 0) name = buff;
+ 				else name = "";			} 
+-			else if(strcmp(inNode->value.element.name, "value") == 0) 
++			else if(strcmp(mxmlGetElement(inNode), "value") == 0)
+ 			{
+ 				log.set("readParam", "Value ", mxmlGetItem(inNode, str)).printLevel(NXING_LOG_DEBUG);
+ 				buff = getValue(inNode, nx, str);
+ 				if(buff != 0) value = buff;
+ 				else value = "";
+ 			}
+-			else if(strcmp(inNode->value.element.name, "units") == 0) 
++			else if(strcmp(mxmlGetElement(inNode), "units") == 0)
+ 			{
+ 				log.set("readParam", "Units", mxmlGetItem(inNode, str)).printLevel(NXING_LOG_DEBUG);
+ 				buff = getValue(inNode, nx, str);
+ 				if(buff != 0) units = buff;
+ 				else units = "";
+ 			} 
+-			else if(strcmp(inNode->value.element.name, "description") == 0) 
++			else if(strcmp(mxmlGetElement(inNode), "description") == 0)
+ 			{
+ 				log.set("readParam", "Description", mxmlGetItem(inNode, str)).printLevel(NXING_LOG_DEBUG);
+ 				buff = getValue(inNode, nx, str);
+diff --git a/applications/nxingest/nxingest_utils.cpp b/applications/nxingest/nxingest_utils.cpp
+index 370a3a68..f8d1b17e 100644
+--- a/applications/nxingest/nxingest_utils.cpp
++++ b/applications/nxingest/nxingest_utils.cpp
+@@ -74,9 +74,9 @@ char* mxmlGetItem(mxml_node_t *node, char* str){
+ 	topNode = node;	
+ 	
+ 	strcpy(str, "");
+-	while( (node = mxmlWalkNext(node, topNode, MXML_DESCEND)) != NULL  && node->type == MXML_TEXT)
++	while( (node = mxmlWalkNext(node, topNode, MXML_DESCEND)) != NULL  && mxmlGetType(node) == MXML_TEXT)
+ 	{
+-		strcat(str, node->value.text.string);
++		strcat(str, mxmlGetText(node, NULL));
+ 		strcat(str, " ");
+ 	}
+ 	while(strlen(str) > 0 && str[strlen(str)-1] == ' ')
+@@ -89,9 +89,9 @@ char* mxmlGetItem(mxml_node_t *node){
+ 	topNode = node;	
+ 	while( (node = mxmlWalkNext(node, topNode, MXML_DESCEND)) != NULL )
+ 	{
+-		if(node->type == MXML_TEXT && strlen(node->value.text.string) > 0)
++		if(mxmlGetType(node) == MXML_TEXT && strlen(mxmlGetText(node, NULL)) > 0)
+ 		{
+-			return node->value.text.string; 
++			return strdup(mxmlGetText(node, NULL));
+ 		}
+ 	}
+ 	return 0;
+diff --git a/src/nxio.c b/src/nxio.c
+index 80bcf9e2..090f47bf 100644
+--- a/src/nxio.c
++++ b/src/nxio.c
+@@ -319,10 +319,10 @@ int translateTypeCode(const char *code, const char* term){
+ static mxml_node_t* findDimsNode(mxml_node_t *node)
+ {
+     mxml_node_t *tnode = NULL;
+-    const char* name = node->value.element.name;
+-    if ( (node->parent != NULL) && !strcmp(node->parent->value.element.name, DATA_NODE_NAME) )
++    const char* name = mxmlGetElement(node);
++    if ( (mxmlGetParent(node) != NULL) && !strcmp(mxmlGetElement(mxmlGetParent(node)), DATA_NODE_NAME) )
+     {
+-	tnode = mxmlFindElement(node->parent->parent, node->parent->parent, DIMS_NODE_NAME, NULL, NULL, MXML_DESCEND_FIRST);
++	tnode = mxmlFindElement(mxmlGetParent(mxmlGetParent(node)), mxmlGetParent(mxmlGetParent(node)), DIMS_NODE_NAME, NULL, NULL, MXML_DESCEND_FIRST);
+ 	if (tnode != NULL)
+ 	{
+ 	    tnode = mxmlFindElement(tnode,tnode,name,NULL,NULL,MXML_DESCEND_FIRST);
+@@ -413,18 +413,18 @@ static char *getNextNumber(char *pStart, char pNumber[80]){
+ mxml_type_t nexusTypeCallback(mxml_node_t *parent){
+   const char *typeString;
+ 
+-  if(strstr(parent->value.element.name,"?xml") != NULL ||
+-     !strncmp(parent->value.element.name,"NX",2) ||
+-     !strcmp(parent->value.element.name,DATA_NODE_NAME) ||
+-     !strcmp(parent->value.element.name,DIMS_NODE_NAME)){
++  if(strstr(mxmlGetElement(parent),"?xml") != NULL ||
++     !strncmp(mxmlGetElement(parent),"NX",2) ||
++     !strcmp(mxmlGetElement(parent),DATA_NODE_NAME) ||
++     !strcmp(mxmlGetElement(parent),DIMS_NODE_NAME)){
+     return MXML_ELEMENT;
+   } else {
+     /* data nodes do not habe TYPENAME in table style but are always CUSTOM */
+-    if (parent->parent != NULL && !strcmp(parent->parent->value.element.name, DATA_NODE_NAME))
++    if (mxmlGetParent(parent) != NULL && !strcmp(mxmlGetElement(mxmlGetParent(parent)), DATA_NODE_NAME))
+     {
+ 	return MXML_CUSTOM;
+     }
+-    if (parent->parent != NULL && !strcmp(parent->parent->value.element.name, DIMS_NODE_NAME))
++    if (mxmlGetParent(parent) != NULL && !strcmp(mxmlGetElement(mxmlGetParent(parent)), DIMS_NODE_NAME))
+     {
+ 	return MXML_OPAQUE;
+     }
+@@ -453,21 +453,19 @@ int nexusLoadCallback(mxml_node_t *node, const char *buffer){
+   long address, maxAddress;
+   pNXDS dataset = NULL;
+ 
+-  parent = node->parent;
++  parent = mxmlGetParent(node);
+   analyzeDataType(parent,&rank,&type,iDim);
+-  if(iDim[0] == -1 || !strcmp(parent->parent->value.element.name, DIMS_NODE_NAME)){
++  if(iDim[0] == -1 || !strcmp(mxmlGetElement(mxmlGetParent(parent)), DIMS_NODE_NAME)){
+     iDim[0] = strlen(buffer);
+-    node->value.custom.data = strdup(buffer);
+-    node->value.custom.destroy = free;
++    mxmlSetCustom(node,strdup(buffer),free);
+     return 0;
+   } else {
+-    node->value.custom.data = createNXDataset(rank,type,iDim);
+-    dataset = (pNXDS)node->value.custom.data;
++    dataset = createNXDataset(rank,type,iDim);
+     if(dataset == NULL){
+       mxml_error("Failed to allocate custom dataset");
+       return 1;
+     }
+-    node->value.custom.destroy = destroyDataset; 
++    mxmlSetCustom(node,dataset,destroyDataset);
+   }
+ 
+   /*
+@@ -529,7 +527,7 @@ static int countDepth(mxml_node_t *node){
+   cur = node;
+   while(cur != NULL){
+     count++;
+-    cur = cur->parent;
++    cur = mxmlGetParent(cur);
+   }
+   count--;
+   return count;
+@@ -546,7 +544,7 @@ char *nexusWriteCallback(mxml_node_t *node){
+   /* this is set by nxconvert when making a definiton */
+   is_definition = (getenv("NX_IS_DEFINITION") != NULL);
+ 
+-  if (!strcmp(node->parent->parent->value.element.name, DATA_NODE_NAME))
++  if (!strcmp(mxmlGetElement(mxmlGetParent(mxmlGetParent(node))), DATA_NODE_NAME))
+   {
+ 	table_style = 1;
+   }
+@@ -562,7 +560,7 @@ char *nexusWriteCallback(mxml_node_t *node){
+   bufPtr = buffer;
+   bufsize = 1024;
+ 
+-  dataset = (pNXDS)node->value.custom.data;
++  dataset = (pNXDS)mxmlGetCustom(node);
+ 
+   /*
+     prepare indentation level
+@@ -626,16 +624,16 @@ int isDataNode(mxml_node_t *node){
+   if(mxmlElementGetAttr(node,"name") != NULL){
+     return 0;
+   }
+-  if(strcmp(node->value.element.name,"NXroot") == 0){
++  if(strcmp(mxmlGetElement(node),"NXroot") == 0){
+     return 0;
+   }
+-  if(strcmp(node->value.element.name,DIMS_NODE_NAME) == 0){
++  if(strcmp(mxmlGetElement(node),DIMS_NODE_NAME) == 0){
+     return 0;
+   }
+-  if(strcmp(node->value.element.name,DATA_NODE_NAME) == 0){
++  if(strcmp(mxmlGetElement(node),DATA_NODE_NAME) == 0){
+     return 0;
+   }
+-  if(strcmp(node->value.element.name,"NAPIlink") == 0){
++  if(strcmp(mxmlGetElement(node),"NAPIlink") == 0){
+     return 0;
+   }
+   return 1;
+@@ -669,14 +667,14 @@ const char *NXwhitespaceCallback(mxml_node_t *node, int where){
+   static char *indent = NULL;
+   int len;  
+ 
+-  if(strstr(node->value.element.name,"?xml") != NULL){
++  if(strstr(mxmlGetElement(node),"?xml") != NULL){
+     return NULL;
+   }
+-  if (node->parent != NULL && !strcmp(node->parent->value.element.name, DATA_NODE_NAME))
++  if (mxmlGetParent(node) != NULL && !strcmp(mxmlGetElement(mxmlGetParent(node)), DATA_NODE_NAME))
+   {
+     return NULL;
+   }
+-  if (where == MXML_WS_BEFORE_CLOSE && !strcmp(node->value.element.name, DATA_NODE_NAME))
++  if (where == MXML_WS_BEFORE_CLOSE && !strcmp(mxmlGetElement(node), DATA_NODE_NAME))
+   {
+     return NULL;
+   }
+diff --git a/src/nxxml.c b/src/nxxml.c
+index 95318d98..9244540b 100644
+--- a/src/nxxml.c
++++ b/src/nxxml.c
+@@ -305,7 +305,7 @@ static mxml_node_t *searchGroupLinks(pXMLNexus xmlHandle, CONSTCHAR *name,
+     linkTarget = mxmlElementGetAttr(linkNode,"target");
+     test = getLinkTarget(xmlHandle,linkTarget);
+     if(test != NULL){
+-      if(strcmp(test->value.element.name,nxclass) == 0){
++      if(strcmp(mxmlGetElement(test),nxclass) == 0){
+ 	if(strcmp(mxmlElementGetAttr(test,"name"),name) == 0){
+ 	  return test;
+ 	}
+@@ -316,7 +316,7 @@ static mxml_node_t *searchGroupLinks(pXMLNexus xmlHandle, CONSTCHAR *name,
+     */
+     linkName = mxmlElementGetAttr(linkNode,"name");
+     if(test != NULL && linkName != NULL){
+-      if(strcmp(test->value.element.name,nxclass) == 0){
++      if(strcmp(mxmlGetElement(test),nxclass) == 0){
+ 	if(strcmp(linkName, name) == 0){
+ 	  return test;
+ 	}
+@@ -437,6 +437,7 @@ NXstatus  NXXmakedatatable64 (NXhandle fid,
+   int i, ndata; 
+   char buffer[256];
+   static int64_t one = 1;
++  void *contents = NULL;
+ 
+   xmlHandle = (pXMLNexus)fid;
+   assert(xmlHandle);
+@@ -486,21 +487,16 @@ NXstatus  NXXmakedatatable64 (NXhandle fid,
+           dataNodeRoot = mxmlNewElement(current, DATA_NODE_NAME);
+       }
+       dataNode = mxmlNewElement(dataNodeRoot,name);
+-      newData = (mxml_node_t *)malloc(sizeof(mxml_node_t));
+-      if(!newData){
++      contents = createNXDataset(1,datatype,&one);
++      if(!contents){
+         NXReportError("Failed to allocate space for dataset");
+         return NX_ERROR;
+       }
+-      memset(newData,0,sizeof(mxml_node_t));
+-      mxmlAdd(dataNode, MXML_ADD_AFTER, MXML_ADD_TO_PARENT, newData);
+-      newData->type = MXML_CUSTOM;
+-/*        newData->value.custom.data = createNXDataset(rank,datatype,dimensions); */
+-      newData->value.custom.data = createNXDataset(1,datatype,&one);
+-      if(!newData->value.custom.data){
+-        NXReportError("Failed to allocate space for dataset");
++      newData = mxmlNewCustom(dataNode,contents,destroyDataset);
++      if(!newData){
++        NXReportError("Failed to allocate XML node for dataset");
+         return NX_ERROR;
+       }
+-      newData->value.custom.destroy = destroyDataset;
+   }
+   return NX_OK;
+ }
+@@ -514,6 +510,7 @@ NXstatus  NXXmakedata64 (NXhandle fid,
+   mxml_node_t *current;
+   char *typestring;
+   char buffer[256];
++  void *contents;
+ 
+ 
+   xmlHandle = (pXMLNexus)fid;
+@@ -555,20 +552,16 @@ NXstatus  NXXmakedata64 (NXhandle fid,
+     newData = mxmlNewOpaque(dataNode,"");
+     return NX_OK;
+   } else {
+-    newData = (mxml_node_t *)malloc(sizeof(mxml_node_t));
+-    if(!newData){
++    contents = createNXDataset(rank,datatype,dimensions);
++    if(!contents){
+       NXReportError("Failed to allocate space for dataset");
+       return NX_ERROR;
+     }
+-    memset(newData,0,sizeof(mxml_node_t));
+-    mxmlAdd(dataNode, MXML_ADD_AFTER, MXML_ADD_TO_PARENT, newData);
+-    newData->type = MXML_CUSTOM;
+-    newData->value.custom.data = createNXDataset(rank,datatype,dimensions);
+-    if(!newData->value.custom.data){
+-      NXReportError("Failed to allocate space for dataset");
++    newData = mxmlNewCustom(dataNode,contents,destroyDataset);
++    if(!newData){
++      NXReportError("Failed to allocate XML node for dataset");
+       return NX_ERROR;
+     }
+-    newData->value.custom.destroy = destroyDataset;
+   }
+   return NX_OK;
+ }
+@@ -587,7 +580,7 @@ static mxml_node_t *searchSDSLinks(pXMLNexus xmlHandle, CONSTCHAR *name){
+     linkTarget = mxmlElementGetAttr(linkNode,"target");
+     test = getLinkTarget(xmlHandle,linkTarget);
+     if(test != NULL){
+-      if(strcmp(test->value.element.name,name) == 0){
++      if(strcmp(mxmlGetElement(test),name) == 0){
+ 	return test;
+       }
+     }
+@@ -741,7 +734,7 @@ static mxml_node_t *findData(mxml_node_t *node){
+   mxml_node_t *baby = node;
+   
+   while( (baby = mxmlWalkNext(baby,node,MXML_DESCEND_FIRST)) != NULL){
+-    if(baby->type == MXML_OPAQUE || baby->type == MXML_CUSTOM){
++    if(mxmlGetType(baby) == MXML_OPAQUE || mxmlGetType(baby) == MXML_CUSTOM){
+       return baby;
+     }
+   }
+@@ -763,9 +756,9 @@ NXstatus  NXXputdatatable (NXhandle fid, const void *data){
+   assert(xmlHandle);
+   /* current points at the Idims node as done in NXXopendatatable */
+   current = xmlHandle->stack[xmlHandle->stackPointer].current;
+-  name = current->value.element.name;
++  name = mxmlGetElement(current);
+   /* we want to walk all Idata nodes and set name */
+-  nodeRoot =  current->parent->parent;
++  nodeRoot =  mxmlGetParent(mxmlGetParent(current));
+   dataNodeRoot = nodeRoot;
+   offset = 0;
+   for(i=0; dataNodeRoot != NULL; i++)
+@@ -778,7 +771,7 @@ NXstatus  NXXputdatatable (NXhandle fid, const void *data){
+ 	{
+ 	    userData = findData(dataNode);
+   	    assert(userData != NULL);
+-            dataset = (pNXDS)userData->value.custom.data;
++            dataset = (pNXDS)mxmlGetCustom(userData);
+             assert(dataset);
+             length = getNXDatasetByteLength(dataset);
+             memcpy(dataset->u.ptr,(char*)data + offset,length);
+@@ -815,7 +808,7 @@ NXstatus  NXXputdata (NXhandle fid, const void *data){
+   current = xmlHandle->stack[xmlHandle->stackPointer].current;
+   userData = findData(current);
+   assert(userData != NULL);
+-  if(userData->type == MXML_OPAQUE){
++  if(mxmlGetType(userData) == MXML_OPAQUE){
+     /*
+       Text data. We have to make sure that the text is \0 terminated. 
+       Some language bindings do not ensure that this is the case.
+@@ -848,7 +841,7 @@ NXstatus  NXXputdata (NXhandle fid, const void *data){
+         return NX_ERROR;
+     }
+   } else {
+-    dataset = (pNXDS)userData->value.custom.data;
++    dataset = (pNXDS)mxmlGetCustom(userData);
+     assert(dataset);
+     length = getNXDatasetByteLength(dataset);
+     memcpy(dataset->u.ptr,data,length);
+@@ -871,9 +864,9 @@ NXstatus  NXXgetdatatable (NXhandle fid, void *data){
+ 
+   /* current points at the Idims node as done in NXXopendatatable */
+   current = xmlHandle->stack[xmlHandle->stackPointer].current;
+-  name = current->value.element.name;
++  name = mxmlGetElement(current);
+   /* we want to walk all Idata nodes and set name */
+-  nodeRoot =  current->parent->parent;
++  nodeRoot =  mxmlGetParent(mxmlGetParent(current));
+   dataNodeRoot = nodeRoot;
+   offset = 0;
+   for(i=0; dataNodeRoot != NULL; i++)
+@@ -886,7 +879,7 @@ NXstatus  NXXgetdatatable (NXhandle fid, void *data){
+ 	{
+ 	    userData = findData(dataNode);
+   	    assert(userData != NULL);
+-            dataset = (pNXDS)userData->value.custom.data;
++            dataset = (pNXDS)mxmlGetCustom(userData);
+             assert(dataset);
+             length = getNXDatasetByteLength(dataset);
+             memcpy((char*)data + offset, dataset->u.ptr, length);
+@@ -923,7 +916,7 @@ NXstatus  NXXgetdata (NXhandle fid, void *data){
+   current = xmlHandle->stack[xmlHandle->stackPointer].current;
+   userData = findData(current);
+   assert(userData != NULL);
+-  if(userData->type == MXML_OPAQUE){
++  if(mxmlGetType(userData) == MXML_OPAQUE){
+     /*
+       text data
+     */
+@@ -933,13 +926,13 @@ NXstatus  NXXgetdata (NXhandle fid, void *data){
+       {
+           length *= dim[i];
+       }
+-      strncpy((char *)data,userData->value.opaque,length);
++      strncpy((char *)data,mxmlGetOpaque(userData),length);
+     } else {
+-      strcpy((char *)data,nxitrim(userData->value.opaque));
++      strcpy((char *)data,nxitrim(mxmlGetOpaque(userData)));
+     }
+ 
+   } else {
+-    dataset = (pNXDS)userData->value.custom.data;
++    dataset = (pNXDS)mxmlGetCustom(userData);
+     assert(dataset);
+     length = getNXDatasetByteLength(dataset);
+     memcpy(data,dataset->u.ptr,length);
+@@ -967,7 +960,7 @@ NXstatus  NXXgetinfo64 (NXhandle fid, int *rank,
+   current = xmlHandle->stack[xmlHandle->stackPointer].current;
+   userData = findData(current);
+   assert(userData != NULL);
+-  if(userData->type == MXML_OPAQUE){
++  if(mxmlGetType(userData) == MXML_OPAQUE){
+     /*
+       text data
+     */
+@@ -975,18 +968,18 @@ NXstatus  NXXgetinfo64 (NXhandle fid, int *rank,
+     if(attr == NULL){
+       *rank = 1;
+       *iType = NX_CHAR;
+-      dimension[0]= strlen(userData->value.opaque);
++      dimension[0]= strlen(mxmlGetOpaque(userData));
+     } else {
+       *iType = translateTypeCode(attr, "");
+       analyzeDim(attr,rank,dimension,iType);
+       if (dimension[0] == -1) /* 1D strings are NX_CHAR not NX_CHAR[] so length will not be correct */
+       {
+-        dimension[0] = strlen(userData->value.opaque);
++        dimension[0] = strlen(mxmlGetOpaque(userData));
+       }
+       
+     }
+   } else { 
+-    dataset = (pNXDS)userData->value.custom.data;
++    dataset = (pNXDS)mxmlGetCustom(userData);
+     assert(dataset);
+     myRank = getNXDatasetRank(dataset);
+     *rank = myRank;
+@@ -1111,11 +1104,11 @@ NXstatus  NXXputslab64 (NXhandle fid, const void *data,
+   current = xmlHandle->stack[xmlHandle->stackPointer].current;
+   userData = findData(current);
+   assert(userData != NULL);
+-  if(userData->type == MXML_OPAQUE){
++  if(mxmlGetType(userData) == MXML_OPAQUE){
+     NXReportError("This API does not support slabs on text data");
+     return NX_ERROR;
+   }
+-  dataset = (pNXDS)userData->value.custom.data;
++  dataset = (pNXDS)mxmlGetCustom(userData);
+   assert(dataset);
+ 
+   status = checkAndExtendDataset(current,dataset,iStart,iSize);
+@@ -1183,11 +1176,11 @@ NXstatus  NXXgetslab64 (NXhandle fid, void *data,
+   current = xmlHandle->stack[xmlHandle->stackPointer].current;
+   userData = findData(current);
+   assert(userData != NULL);
+-  if(userData->type == MXML_OPAQUE){
++  if(mxmlGetType(userData) == MXML_OPAQUE){
+     NXReportError("This API does not support slabs on text data");
+     return NX_ERROR;
+   }
+-  dataset = (pNXDS)userData->value.custom.data;
++  dataset = (pNXDS)mxmlGetCustom(userData);
+   assert(dataset);
+   slabData = makeSlabData(dataset, data, iSize);
+   if(slabData == NULL){
+@@ -1215,10 +1208,10 @@ static NXstatus  NXXsetnumberformat(NXhandle fid,
+     current = xmlHandle->stack[xmlHandle->stackPointer].current;
+     userData = findData(current);
+     assert(userData != NULL);
+-    if(userData->type == MXML_OPAQUE){
++    if(mxmlGetType(userData) == MXML_OPAQUE){
+       return NX_OK;
+     }
+-    dataset = (pNXDS)userData->value.custom.data;
++    dataset = (pNXDS)mxmlGetCustom(userData);
+     assert(dataset);
+     if(dataset->format != NULL){
+       free(dataset->format);
+@@ -1440,9 +1433,9 @@ static mxml_node_t* find_node(mxml_node_t* node, int next)
+    {
+ 	return NULL;
+    }
+-   if ( (node->parent != NULL)  && !strcmp(node->parent->value.element.name, DIMS_NODE_NAME) )
++   if ( (mxmlGetParent(node) != NULL)  && !strcmp(mxmlGetElement(mxmlGetParent(node)), DIMS_NODE_NAME) )
+    {
+-	parent_next = node->parent->next;
++	parent_next = mxmlGetNextSibling(mxmlGetParent(node));
+    }
+    else
+    {
+@@ -1450,9 +1443,9 @@ static mxml_node_t* find_node(mxml_node_t* node, int next)
+    }
+    if (next)
+    {
+-       if (node->next != NULL)
++       if (mxmlGetNextSibling(node) != NULL)
+        {
+-	    node = node->next;
++	    node = mxmlGetNextSibling(node);
+        }
+        else
+        {
+@@ -1461,19 +1454,19 @@ static mxml_node_t* find_node(mxml_node_t* node, int next)
+    }
+    while(node != NULL && !done)
+    {
+-     if ( (node->parent != NULL)  && !strcmp(node->parent->value.element.name, DIMS_NODE_NAME) )
++     if ( (mxmlGetParent(node) != NULL)  && !strcmp(mxmlGetElement(mxmlGetParent(node)), DIMS_NODE_NAME) )
+      {
+-	parent_next = node->parent->next;
++	parent_next = mxmlGetNextSibling(mxmlGetParent(node));
+      }
+      else
+      {
+         parent_next = NULL;
+      }
+-     if ( (node->type != MXML_ELEMENT) || !strcmp(node->value.element.name, DATA_NODE_NAME) )
++     if ( (mxmlGetType(node) != MXML_ELEMENT) || !strcmp(mxmlGetElement(node), DATA_NODE_NAME) )
+      {
+-	if (node->next != NULL)
++	if (mxmlGetNextSibling(node) != NULL)
+ 	{
+-	    node = node->next;
++	    node = mxmlGetNextSibling(node);
+ 	}
+ 	else
+ 	{
+@@ -1481,9 +1474,9 @@ static mxml_node_t* find_node(mxml_node_t* node, int next)
+ 	}
+ 	continue;
+      }
+-     if (!strcmp(node->value.element.name, DIMS_NODE_NAME))
++     if (!strcmp(mxmlGetElement(node), DIMS_NODE_NAME))
+      {
+-	node = node->child;
++	node = mxmlGetFirstChild(node);
+ 	continue;
+      }
+      done = 1;
+@@ -1517,7 +1510,7 @@ NXstatus  NXXgetnextentry (NXhandle fid,NXname name,
+     /*
+       initialization of search
+     */
+-      node = find_node(xmlHandle->stack[stackPtr].current->child, 0);
++      node = find_node(mxmlGetFirstChild(xmlHandle->stack[stackPtr].current), 0);
+   } else {
+     /*
+       proceed
+@@ -1529,7 +1522,7 @@ NXstatus  NXXgetnextentry (NXhandle fid,NXname name,
+   if(next == NULL){
+     return NX_EOD;
+   }
+-  if(strcmp(next->value.element.name,"NAPIlink") == 0){
++  if(strcmp(mxmlGetElement(next),"NAPIlink") == 0){
+     target = mxmlElementGetAttr(next,"target");
+     linkName = mxmlElementGetAttr(next,"name");
+     if(target == NULL){
+@@ -1544,7 +1537,7 @@ NXstatus  NXXgetnextentry (NXhandle fid,NXname name,
+   }
+ 
+   if(isDataNode(next)){
+-    strcpy(name,next->value.element.name);
++    strcpy(name,mxmlGetElement(next));
+     strcpy(nxclass,"SDS");
+     userData = findData(next);
+     if(userData == NULL){
+@@ -1553,15 +1546,15 @@ NXstatus  NXXgetnextentry (NXhandle fid,NXname name,
+       NXReportError(pBueffel);
+       return NX_ERROR;
+     }
+-    if(userData->type == MXML_OPAQUE){
++    if(mxmlGetType(userData) == MXML_OPAQUE){
+       *datatype = NX_CHAR;
+     } else {
+-      dataset = (pNXDS)userData->value.custom.data;
++      dataset = (pNXDS)mxmlGetCustom(userData);
+       assert(dataset);
+       *datatype = getNXDatasetType(dataset);
+     }
+   } else {
+-    strcpy(nxclass,next->value.element.name);
++    strcpy(nxclass,mxmlGetElement(next));
+     attname = mxmlElementGetAttr(next,"name");
+     strcpy(name,attname);
+   }
+@@ -1596,7 +1589,8 @@ NXstatus  NXXgetnextattr (NXhandle fid, NXname pName,
+   pXMLNexus xmlHandle = NULL;
+   mxml_node_t *current = NULL;
+   int stackPtr, currentAtt, nx_type;
+-  char *attVal; 
++  const char *attName;
++  const char *attVal;
+ 
+   xmlHandle = (pXMLNexus)fid;
+   assert(xmlHandle);
+@@ -1605,8 +1599,7 @@ NXstatus  NXXgetnextattr (NXhandle fid, NXname pName,
+ 
+   current = xmlHandle->stack[stackPtr].current;
+   currentAtt = xmlHandle->stack[stackPtr].currentAttribute;
+-  if(currentAtt >= 
+-     current->value.element.num_attrs ){
++  if(currentAtt >= mxmlElementGetAttrCount(current)){
+     xmlHandle->stack[stackPtr].currentAttribute = 0;
+     return NX_EOD;
+   }
+@@ -1614,8 +1607,9 @@ NXstatus  NXXgetnextattr (NXhandle fid, NXname pName,
+   /*
+     hide group name attribute
+   */
+-  if(strcmp(current->value.element.attrs[currentAtt].name,"name") == 0
+-     && !isDataNode(current) ){
++  attVal = mxmlElementGetAttrByIndex(current,currentAtt,&attName);
++
++  if(strcmp(attName,"name") == 0 && !isDataNode(current) ){
+     xmlHandle->stack[stackPtr].currentAttribute++;
+     return NXXgetnextattr(fid,pName,iLength,iType);
+   }
+@@ -1623,14 +1617,12 @@ NXstatus  NXXgetnextattr (NXhandle fid, NXname pName,
+   /*
+     hide type attribute
+   */
+-  if(strcmp(current->value.element.attrs[currentAtt].name,TYPENAME) == 0
+-     && isDataNode(current)){
++  if(strcmp(attName,TYPENAME) == 0 && isDataNode(current)){
+     xmlHandle->stack[stackPtr].currentAttribute++;
+     return NXXgetnextattr(fid,pName,iLength,iType);
+   }
+ 
+-  strcpy(pName,current->value.element.attrs[currentAtt].name);
+-  attVal = current->value.element.attrs[currentAtt].value;
++  strcpy(pName,attName);
+   nx_type = translateTypeCode((char *)attVal, ":");
+   if(nx_type < 0 || strcmp(pName,TYPENAME) == 0){
+     /*
+@@ -1680,37 +1672,37 @@ NXstatus  NXXgetgroupinfo (NXhandle fid, int *iN,
+   if(nameAtt !=  NULL){
+     strcpy(pName,nameAtt);
+   }
+-  strcpy(pClass,current->value.element.name);
++  strcpy(pClass,mxmlGetElement(current));
+ 
+ /* count all child nodes, but need to ignore DATA_NODE_NAME and
+  * descend into DIMS_NODE_NAME 
+  */
+   childCount = 0;
+-  node = current->child;
++  node = mxmlGetFirstChild(current);
+   while(node != NULL)
+   {
+-	if (!strcmp(node->value.element.name, DATA_NODE_NAME))
++	if (!strcmp(mxmlGetElement(node), DATA_NODE_NAME))
+ 	{
+ 	    ;	/* names also exist in DIMS_NODE_NAME so do nothing here */
+ 	}
+-	else if (!strcmp(node->value.element.name, DIMS_NODE_NAME))
++	else if (!strcmp(mxmlGetElement(node), DIMS_NODE_NAME))
+ 	{
+-	    child = node->child;
++	    child = mxmlGetFirstChild(node);
+ 	    while(child != NULL)
+ 	    {
+ 		/* not sure why this check is needed, but you double count otherwise */
+-		if (child->type == MXML_ELEMENT) 
++		if (mxmlGetType(child) == MXML_ELEMENT)
+ 		{
+ 		    childCount++;
+ 		}
+-		child = child->next;
++		child = mxmlGetNextSibling(child);
+ 	    }
+ 	}
+ 	else
+ 	{
+     	    childCount++;
+ 	}
+-	node = node->next;
++	node = mxmlGetNextSibling(node);
+   }
+   *iN = childCount;
+   return NX_OK;
+@@ -1739,7 +1731,7 @@ NXstatus  NXXgetattrinfo (NXhandle fid, int *iN){
+     /* group nodes (except root) have name */
+     if(mxmlElementGetAttr(current,"name") != NULL) skip=1;
+   }
+-  *iN = current->value.element.num_attrs - skip;
++  *iN = mxmlElementGetAttrCount(current) - skip;
+   return NX_OK;
+ }
+ /*================= Linking functions =================================*/
+@@ -1749,7 +1741,7 @@ static int countPathChars(mxml_node_t *path[], int stackPtr){
+ 
+   while(stackPtr >= 0) {
+     if(isDataNode(path[stackPtr])){
+-      count += strlen(path[stackPtr]->value.element.name);
++      count += strlen(mxmlGetElement(path[stackPtr]));
+     } else {
+       name = mxmlElementGetAttr(path[stackPtr],"name");
+       if(name != NULL){
+@@ -1777,7 +1769,7 @@ static char *buildPathString(mxml_node_t *path[], int stackPtr){
+   while(stackPtr >= 0) {
+     if(isDataNode(path[stackPtr])){
+       strcat(pathString,"/");
+-      strcat(pathString,path[stackPtr]->value.element.name);
++      strcat(pathString,mxmlGetElement(path[stackPtr]));
+     } else {
+       name = mxmlElementGetAttr(path[stackPtr],"name");
+       if(name != NULL){
+@@ -1809,10 +1801,10 @@ static char *findLinkPath(mxml_node_t *node){
+   current = node;
+   stackPtr = 0;
+   while(current != NULL && 
+-	strcmp(current->value.element.name,"NXroot") != 0){
++	strcmp(mxmlGetElement(current),"NXroot") != 0){
+     path[stackPtr] = current;
+     stackPtr++;
+-    current = current->parent;
++    current = mxmlGetParent(current);
+   }
+   stackPtr--;
+ 
+
+From 241a75c3296ecb7a43b7c8255eb1e5ca5decc6b3 Mon Sep 17 00:00:00 2001
+From: Bruno Martins <brunoseivam@gmail.com>
+Date: Wed, 23 Sep 2020 09:54:26 -0400
+Subject: [PATCH 11/13] Fix compatibility with libxml2
+
+---
+ applications/NXtranslate/text_xml/xml_retriever_dom.cpp | 2 ++
+ applications/NXtranslate/xml_parser.cpp                 | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/applications/NXtranslate/text_xml/xml_retriever_dom.cpp b/applications/NXtranslate/text_xml/xml_retriever_dom.cpp
+index dad5403a..1e4e46c2 100644
+--- a/applications/NXtranslate/text_xml/xml_retriever_dom.cpp
++++ b/applications/NXtranslate/text_xml/xml_retriever_dom.cpp
+@@ -1,4 +1,6 @@
+ #include <iostream>
++#define LIBXML_LEGACY_ENABLED
++#include <libxml/SAX.h>
+ #include <libxml/parser.h>
+ #include <libxml/parserInternals.h>
+ #include <stdexcept>
+diff --git a/applications/NXtranslate/xml_parser.cpp b/applications/NXtranslate/xml_parser.cpp
+index 7743874e..37188404 100644
+--- a/applications/NXtranslate/xml_parser.cpp
++++ b/applications/NXtranslate/xml_parser.cpp
+@@ -1,3 +1,5 @@
++#define LIBXML_LEGACY_ENABLED
++#include <libxml/SAX.h>
+ #include <libxml/parser.h>
+ #include <libxml/parserInternals.h>
+ #include <iostream>
+
+From 57dec8051d3bad23f5a668bbc48d2727933df2b1 Mon Sep 17 00:00:00 2001
+From: koennecke <mark.koennecke@psi.ch>
+Date: Mon, 19 Oct 2020 13:04:06 +0200
+Subject: [PATCH 12/13] Intermediate step for 4.4.4, all pull requests merged
+ and testing
+
+---
+ CMakeLists.txt                                   |  2 +-
+ Docker.ubuntu                                    | 14 ++++++++++++++
+ bindings/java/ncsa/hdf/hdflib/HDFNativeData.java |  4 +---
+ confnx                                           |  2 ++
+ src/nxxml.c                                      |  4 ++++
+ 5 files changed, 22 insertions(+), 4 deletions(-)
+ create mode 100644 Docker.ubuntu
+ create mode 100755 confnx
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d62a53af..d13382e1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -69,7 +69,7 @@ endif()
+ #-----------------------------------------------------------------------------
+ set (API_VERSION_MAJOR 4)
+ set (API_VERSION_MINOR 4)
+-set (API_VERSION_PATCH 3)
++set (API_VERSION_PATCH 4)
+ set (API_VERSION "${API_VERSION_MAJOR}.${API_VERSION_MINOR}.${API_VERSION_PATCH}")
+ set (ABI_CURRENT 1)
+ set (ABI_REVISION 0)
+diff --git a/Docker.ubuntu b/Docker.ubuntu
+new file mode 100644
+index 00000000..65c6791e
+--- /dev/null
++++ b/Docker.ubuntu
+@@ -0,0 +1,14 @@
++# Docker file for an ubuntu image for testing NAPI with an up-to-date distro
++FROM ubuntu:20.04
++
++RUN apt update && apt-get install -y \
++    gcc \
++    g++ \
++    gfortran \
++    libhdf5-dev \
++    libmxml-dev \
++    cmake \
++    default-jdk 
++
++
++CMD /bin/bash
+diff --git a/bindings/java/ncsa/hdf/hdflib/HDFNativeData.java b/bindings/java/ncsa/hdf/hdflib/HDFNativeData.java
+index 1f0b11b3..1925b644 100644
+--- a/bindings/java/ncsa/hdf/hdflib/HDFNativeData.java
++++ b/bindings/java/ncsa/hdf/hdflib/HDFNativeData.java
+@@ -120,10 +120,8 @@ public Object byteToNumber( byte[] barray, Object obj)
+      *
+      *  @param dataType  the type of the iamge data
+      *  @param datasize  the size of the image data array
+-     *  @returns         an array of 'datasize' numbers of 'dataType
++     *  @return         an array of 'datasize' numbers of 'dataType
+      *
+-     *  @see ncsa.hdf.hdfobject.HDFGR 
+-     *  @see ncsa.hdf.hdfobject.HDFSDS
+      */
+ public static Object defineDataObject(int dataType, int datasize)
+     {
+diff --git a/confnx b/confnx
+new file mode 100755
+index 00000000..5de77c9a
+--- /dev/null
++++ b/confnx
+@@ -0,0 +1,2 @@
++
++cmake ../ -DENABLE_MXML=1 -DENABLE_CXX=1 -DENABLE_FORTRAN77=1 
+diff --git a/src/nxxml.c b/src/nxxml.c
+index 9244540b..f20de250 100644
+--- a/src/nxxml.c
++++ b/src/nxxml.c
+@@ -1607,7 +1607,11 @@ NXstatus  NXXgetnextattr (NXhandle fid, NXname pName,
+   /*
+     hide group name attribute
+   */
++#ifdef MXML_MAJOR_VERSION > 2
+   attVal = mxmlElementGetAttrByIndex(current,currentAtt,&attName);
++#else 
++  attName = current->value.element.attrs[currentAtt].name
++#endif
+ 
+   if(strcmp(attName,"name") == 0 && !isDataNode(current) ){
+     xmlHandle->stack[stackPtr].currentAttribute++;
+
+From 92305328c4a6346b814519eddd2a838a78748529 Mon Sep 17 00:00:00 2001
+From: Mark Koennecke <mark.koennecke@psi.ch>
+Date: Mon, 19 Oct 2020 20:17:49 +0200
+Subject: [PATCH 13/13] XML working for both mxml 2.x and 3.x
+
+---
+ src/nxxml.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/src/nxxml.c b/src/nxxml.c
+index f20de250..47088eef 100644
+--- a/src/nxxml.c
++++ b/src/nxxml.c
+@@ -1599,18 +1599,28 @@ NXstatus  NXXgetnextattr (NXhandle fid, NXname pName,
+ 
+   current = xmlHandle->stack[stackPtr].current;
+   currentAtt = xmlHandle->stack[stackPtr].currentAttribute;
++
++#if MXML_MAJOR_VERSION == 3
+   if(currentAtt >= mxmlElementGetAttrCount(current)){
+     xmlHandle->stack[stackPtr].currentAttribute = 0;
+     return NX_EOD;
+   }
++#else
++  if(currentAtt >= 
++     current->value.element.num_attrs ){
++    xmlHandle->stack[stackPtr].currentAttribute = 0;
++    return NX_EOD;
++  }
++#endif 
+ 
+   /*
+     hide group name attribute
+   */
+-#ifdef MXML_MAJOR_VERSION > 2
++#if MXML_MAJOR_VERSION == 3
+   attVal = mxmlElementGetAttrByIndex(current,currentAtt,&attName);
+ #else 
+-  attName = current->value.element.attrs[currentAtt].name
++  attName = current->value.element.attrs[currentAtt].name;
++  attVal = current->value.element.attrs[currentAtt].value;
+ #endif
+ 
+   if(strcmp(attName,"name") == 0 && !isDataNode(current) ){
+@@ -1735,7 +1745,11 @@ NXstatus  NXXgetattrinfo (NXhandle fid, int *iN){
+     /* group nodes (except root) have name */
+     if(mxmlElementGetAttr(current,"name") != NULL) skip=1;
+   }
++#if MXML_MAJOR_VERSION == 3
+   *iN = mxmlElementGetAttrCount(current) - skip;
++#else
++  *iN = current->value.element.num_attrs - skip;
++#endif
+   return NX_OK;
+ }
+ /*================= Linking functions =================================*/
