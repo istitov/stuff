@@ -5,17 +5,27 @@ EAPI=8
 PYTHON_COMPAT=( python3_{9..12} )
 PYPI_NO_NORMALIZE=1
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 git-r3 cmake 
+inherit distutils-r1 git-r3 cmake
 
 DESCRIPTION="Tools to support the processing of materials-science data"
 HOMEPAGE="https://www.mantidproject.org/"
 #SRC_URI="https://github.com/mantidproject/mantid/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+
 EGIT_REPO_URI="https://github.com/mantidproject/mantid.git"
+EGIT_REPO_URI_SPAN="https://github.com/tcbrindle/span.git"
+EGIT_REPO_URI_MSLICE="https://github.com/mantidproject/mslice.git"
+EGIT_REPO_URI_PYSTOG="https://github.com/neutrons/pystog.git"
+EGIT_REPO_URI_GTEST="https://github.com/google/googletest.git/"
+
+#If version != 9999
 EGIT_COMMIT=v${PV}
+
+#EGIT_CLONE_TYPE="single"
+#git-r3_fetch  'scripts/ExternalInterfaces/src/mslice'
 
 LICENSE="GPL-v3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64"
 #~amd64 #work in progress
 IUSE="doc python test"
 
@@ -23,7 +33,6 @@ IUSE="doc python test"
 #libopenblas!=0.3.23,!=0.3.24,!=0.3.25
 #<dev-python/numpy-1.25[${PYTHON_USEDEP}]
 
-#sci-libs/nexus ::sciense!!!
 #???  occt
 #qt-gtk-platformtheme
 # - qt=5.15.8 # Avoid unexpected qt upgrades
@@ -101,14 +110,59 @@ DEPEND="${BDEPEND}
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
+src_unpack() {
+	git-r3_src_unpack
+	
+	EGIT_COMMIT="HEAD"
+
+	EGIT_REPO_URI=${EGIT_REPO_URI_SPAN}
+	EGIT_CHECKOUT_DIR=${WORKDIR}/${P}/_deps/span-src
+	#span-subbuild/span-populate-prefix/src/span-populate-stamp/span-populate-download
+	git-r3_src_unpack
+
+	EGIT_REPO_URI=${EGIT_REPO_URI_MSLICE}
+	EGIT_CHECKOUT_DIR=${WORKDIR}/${P}/scripts/ExternalInterfaces/src/mslice
+	git-r3_src_unpack
+
+	EGIT_REPO_URI=${EGIT_REPO_URI_PYSTOG}
+	EGIT_CHECKOUT_DIR=${WORKDIR}/${P}/new_git/pystog
+	git-r3_src_unpack
+	
+	EGIT_REPO_URI=${EGIT_REPO_URI_GTEST}
+	EGIT_CHECKOUT_DIR=${WORKDIR}/${P}/new_git/gtest
+	git-r3_src_unpack
+}
+
 src_prepare() {
-	rm -rf ${S}/buildconfig/CMake/GoogleTest.cmake || die
-	rm -rf ${S}/buildconfig/CMake/Span.cmake || die
+	#Disable GoogleTest
+	#rm -rf ${S}/buildconfig/CMake/GoogleTest.cmake || die
+	
+	#Enable GoogleTest
+	sed -i -r "s!https://github.com/google/googletest.git!$WORKDIR/$P/new_git/gtest!" buildconfig/CMake/GoogleTest.cmake || die
+	
+	#Rename opencascade and links
 	sed -i -e 's:/OpenCASCADE:/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
 	sed -i -e 's:/opt/opencascade/inc:/usr/include/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
 	sed -i -e 's:/opt/opencascade/lib64:/usr/lib64/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
-	sed -i -e 's:include(Span):#include(Span):' buildconfig/CMake/CommonSetup.cmake || die
+	
+	#Disable Span
+	#sed -i -e 's:include(Span):#include(Span):' buildconfig/CMake/CommonSetup.cmake || die
+	#rm -rf ${S}/buildconfig/CMake/Span.cmake || die
+	
+	#Let Span be, but in a local repo
+	sed -i -r "s!https://github.com/tcbrindle/span.git!$WORKDIR/$P/_deps/span-src!" buildconfig/CMake/Span.cmake || die
+	###echo 'fake timestamp' >> ${S}/_deps/span-subbuild/span-populate-prefix/src/span-populate-stamp/span-populate-gitclone-lastrun.txt || die
+	
+	#Let mslice be
+	sed -i -r "s!https://github.com/mantidproject/mslice.git!$WORKDIR/$P/scripts/ExternalInterfaces/src/mslice!" scripts/ExternalInterfaces/CMakeLists.txt || die
+	
+	#Let PyStog be
+	sed -i -r "s!https://github.com/neutrons/pystog.git!$WORKDIR/$P/new_git/pystog!" buildconfig/CMake/PyStoG.cmake || die
+	
+	#Bugfix
 	sed -iez 's:configure_package_config_file(:include(CMakePackageConfigHelpers)\nconfigure_package_config_file(:' Framework/CMakeLists.txt || die
+	
+	
 	default
 	cmake_src_prepare
 }
