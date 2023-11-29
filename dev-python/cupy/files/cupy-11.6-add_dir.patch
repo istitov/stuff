@@ -1,0 +1,35 @@
+Index: cupy-11.6.0/install/cupy_builder/install_build.py
+===================================================================
+--- cupy-11.6.0.orig/install/cupy_builder/install_build.py
++++ cupy-11.6.0/install/cupy_builder/install_build.py
+@@ -150,11 +150,15 @@ def get_compiler_setting(use_hip):
+ 
+     if rocm_path:
+         include_dirs.append(os.path.join(rocm_path, 'include'))
+-        include_dirs.append(os.path.join(rocm_path, 'include', 'hip'))
+         include_dirs.append(os.path.join(rocm_path, 'include', 'rocrand'))
+         include_dirs.append(os.path.join(rocm_path, 'include', 'hiprand'))
+         include_dirs.append(os.path.join(rocm_path, 'include', 'roctracer'))
+-        library_dirs.append(os.path.join(rocm_path, 'lib'))
++        include_dirs.append(os.path.join(rocm_path, 'include', 'hipsparse'))
++        include_dirs.append(os.path.join(rocm_path, 'include', 'hipblas'))
++        include_dirs.append(os.path.join(rocm_path, 'include', 'rocsolver'))
++        include_dirs.append(os.path.join(rocm_path, 'include', 'hipfft'))
++        library_dirs.append(os.path.join(rocm_path, 'lib64'))
++        library_dirs.append(os.path.join(rocm_path, 'lib64/roctracer'))
+ 
+     if use_hip:
+         extra_compile_args.append('-std=c++11')
+Index: cupy-11.6.0/install/cupy_builder/_compiler.py
+===================================================================
+--- cupy-11.6.0.orig/install/cupy_builder/_compiler.py
++++ cupy-11.6.0/install/cupy_builder/_compiler.py
+@@ -236,7 +236,7 @@ class DeviceCompilerUnix(DeviceCompilerB
+         compiler_so = rocm_path
+ 
+         hip_version = build.get_hip_version()
+-        postargs = ['-O2', '-fPIC', '--include', 'hip_runtime.h']
++        postargs = ['-O2', '-fPIC', '--include', 'hip/hip_runtime.h']
+         if hip_version >= 402:
+             postargs += ['--std=c++14']
+         else:
