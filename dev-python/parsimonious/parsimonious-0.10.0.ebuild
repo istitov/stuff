@@ -3,9 +3,7 @@
 
 EAPI=8
 
-DISTUTILS_EXT=1
-
-DISTUTILS_USE_PEP621=hatchling
+DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..12} )
 
 inherit distutils-r1 pypi
@@ -22,14 +20,6 @@ IUSE="doc"
 
 distutils_enable_tests pytest
 
-python_compile() {
-	use doc distutils-r1_python_compile
-}
-
 python_test() {
 	setup.py test
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
 }
