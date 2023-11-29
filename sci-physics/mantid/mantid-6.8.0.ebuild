@@ -2,10 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-PYTHON_COMPAT=( python3_{9..12} )
+#PYTHON_COMPAT=( python3_{9..12} )
+PYTHON_COMPAT=( python3_10 )
 PYPI_NO_NORMALIZE=1
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 git-r3 cmake
+inherit distutils-r1 git-r3 cmake multilib
 
 DESCRIPTION="Tools to support the processing of materials-science data"
 HOMEPAGE="https://www.mantidproject.org/"
@@ -17,15 +18,17 @@ EGIT_REPO_URI_MSLICE="https://github.com/mantidproject/mslice.git"
 EGIT_REPO_URI_PYSTOG="https://github.com/neutrons/pystog.git"
 EGIT_REPO_URI_GTEST="https://github.com/google/googletest.git/"
 
-#If version != 9999
-EGIT_COMMIT=v${PV}
+if [[ ${PV} = *9999* ]] ; then
+	EGIT_COMMIT="HEAD"
+else
+	EGIT_COMMIT=v${PV}
+fi 
 
-#EGIT_CLONE_TYPE="single"
-#git-r3_fetch  'scripts/ExternalInterfaces/src/mslice'
+EGIT_CLONE_TYPE="single"
 
 LICENSE="GPL-v3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 #~amd64 #work in progress
 IUSE="doc python test"
 
@@ -40,8 +43,6 @@ IUSE="doc python test"
 #???gxx_linux
 #libglu
 
-#nofetch - gtest
-#nofetch - span (https://github.com/tcbrindle/span)
 RDEPEND="
 	dev-libs/boost
 	dev-util/ccache
@@ -98,6 +99,7 @@ RDEPEND="
 		dev-vcs/pre-commit[${PYTHON_USEDEP}]
 	)
 "
+#	sys-devel/gcc:13[objc,objc-gc,objc++] #didbt help
 
 BDEPEND="
 	dev-util/cmake
@@ -162,6 +164,19 @@ src_prepare() {
 	#Bugfix
 	sed -iez 's:configure_package_config_file(:include(CMakePackageConfigHelpers)\nconfigure_package_config_file(:' Framework/CMakeLists.txt || die
 	
+	#Bugfix; works for gcc:13
+	sed -iez 's:#include <utility>:#include <utility>\n#include <stdint.h>:' Framework/Parallel/src/IO/Chunker.cpp || die
+	#That might be a better option... or not 
+	#sed -iez 's:#include <utility>:#include <utility>\n#include <limits.h>:' Framework/Parallel/src/IO/Chunker.cpp || die
+	#sed -ie 's!return UINT64_MAX;!std::numeric_limits<uint64_t>::max();!' Framework/Parallel/src/IO/Chunker.cpp || die
+	
+	#Bugfix; works for gcc:13
+	sed -iez 's:#include <vector>:#include <vector>\n#include <stdexcept>:' Framework/API/inc/MantidAPI/PreviewManager.h || die
+	
+	#Bugfix (Py3.11 related, does not work)
+	#sed -iez 's:#include <stdexcept>:#include <stdexcept>\n#include <internal/pycore_frame.h>\n#include <iostream>:' Framework/PythonInterface/core/src/ErrorHandling.cpp || die
+	#Bugfix
+	sed -ie 's!../lib/qt5\n\n!../lib64/qt5\n\n;!' qt/applications/workbench/CMakeLists.txt || die
 	
 	default
 	cmake_src_prepare
@@ -174,3 +189,8 @@ src_configure() {
 	python_setup
 	cmake_src_configure
 }
+
+#pkg_preinst() {
+#	rm -rf ${D}/lib64
+#	mv -R ${D}/lib ${D}/lib64
+#}
