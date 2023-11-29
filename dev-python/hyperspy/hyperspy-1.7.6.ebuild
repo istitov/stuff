@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 #IUSE="mrcz tests"
-IUSE="python doc +learning +gui-jupyter speed +gui-traitsui mrcz test"
+IUSE="cuda python doc +learning +gui-jupyter speed +gui-traitsui mrcz test"
 
 RDEPEND="
 	>=dev-python/numpy-1.17.1[${PYTHON_USEDEP}]
@@ -42,12 +42,14 @@ RDEPEND="
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/zarr[${PYTHON_USEDEP}]
 	dev-python/prettytable[${PYTHON_USEDEP}]
+	dev-python/matplotlib_scalebar[${PYTHON_USEDEP}]
 	!dev-python/PTable
 	>=dev-python/tifffile-2019.12.3[${PYTHON_USEDEP}]
 	>=dev-python/importlib-metadata-3.6[${PYTHON_USEDEP}]
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
 	learning? ( sci-libs/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( dev-python/numba[${PYTHON_USEDEP}] dev-python/cython[${PYTHON_USEDEP}] )
+	cuda? ( dev-python/cupy[${PYTHON_USEDEP}] )
 "
 	##
 	##mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
