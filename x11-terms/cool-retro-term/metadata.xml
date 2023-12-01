@@ -2,6 +2,9 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
-		<email>brothermechanic@gmail.com</email>
+		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">Swordfish90/cool-retro-term</remote-id>
+	</upstream>
 </pkgmetadata>
