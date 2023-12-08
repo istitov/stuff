@@ -19,19 +19,22 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="avahi doc +gtk3 nls"
+IUSE="avahi doc +gtk3 gtk2 nls"
+REQUIRED_USE="
+	^^ ( gtk2 gtk3 )
+	"
 
 RDEPEND="dev-cpp/glibmm:2
 	gtk3? ( dev-cpp/gtkmm:3.0 )
-	!gtk3? ( dev-cpp/gtkmm:2.4 )
+	gtk2? ( dev-cpp/gtkmm:2.4 )
 	dev-libs/libsigc++:2
-	gtk3? ( net-libs/libinfinity:0/0.7[gtk3,avahi?] )
-	!gtk3? ( net-libs/libinfinity:0/0.7[gtk,avahi?] )
+	gtk3? ( net-libs/libinfinity:0.7[gtk3,avahi?] )
+	gtk2? ( net-libs/libinfinity:0.7[gtk2,avahi?] )
 	gtk3? ( x11-libs/gtk+:3 )
-	!gtk3? ( x11-libs/gtk+:2 )
+	gtk2? ( x11-libs/gtk+:2 )
 	dev-cpp/libxmlpp:2.6
 	gtk3? ( x11-libs/gtksourceview:3.0 )
-	!gtk3? ( x11-libs/gtksourceview:2.0 )"
+	gtk2? ( x11-libs/gtksourceview:2.0 )"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	doc? (
@@ -42,9 +45,11 @@ DEPEND="${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.12.1 )"
 
 src_configure() {
+	./autogen.sh
 	econf $(use_enable doc scrollkeeper ) \
 		$(use_enable nls ) \
-		$(use_with gtk3 )
+		$(use_with gtk3 ) \
+		$(use_with gtk2 )
 }
 
 src_install() {
