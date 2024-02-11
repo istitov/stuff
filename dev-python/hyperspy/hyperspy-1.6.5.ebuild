@@ -33,7 +33,7 @@ RDEPEND="
 	>=dev-python/python-dateutil-2.5.0[${PYTHON_USEDEP}]
 	dev-python/ipyparallel[${PYTHON_USEDEP}]
 	>=dev-python/dask-0.18[${PYTHON_USEDEP}]
-	>=sci-libs/scikit-image-0.15[${PYTHON_USEDEP}]
+	>=dev-python/scikit-image-0.15[${PYTHON_USEDEP}]
 	>=dev-python/Pint-0.10[${PYTHON_USEDEP}]
 	dev-python/statsmodels[${PYTHON_USEDEP}]
 	dev-python/numexpr[${PYTHON_USEDEP}]
