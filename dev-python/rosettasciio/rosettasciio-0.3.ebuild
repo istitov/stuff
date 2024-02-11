@@ -30,6 +30,7 @@ RDEPEND="
 	dev-python/numba[${PYTHON_USEDEP}]
 	dev-python/tifffile[${PYTHON_USEDEP}]
 	dev-python/h5py[${PYTHON_USEDEP}]
+	dev-python/python-box[${PYTHON_USEDEP}]
 "
 	##
 	##mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
