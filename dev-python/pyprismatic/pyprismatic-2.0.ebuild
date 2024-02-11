@@ -26,7 +26,7 @@ S="${WORKDIR}/${MYP}"
 BUILD_DIR=${S}
 
 RDEPEND="
-	dev-util/cmake
+	dev-build/cmake
 	dev-libs/boost
 	sci-libs/fftw[threads]
 	sci-libs/hdf5[cxx]
