@@ -5,11 +5,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
 
-inherit distutils-r1 flag-o-matic virtualx
+inherit distutils-r1 flag-o-matic virtualx pypi
 
 DESCRIPTION="Interactive analysis of multidimensional datasets tools"
 HOMEPAGE="https://hyperspy.org/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
+S=${WORKDIR}/${P}
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -43,7 +44,6 @@ RDEPEND="
 	dev-python/prettytable[${PYTHON_USEDEP}]
 	!dev-python/PTable
 	>=dev-python/tifffile-2019.12.3[${PYTHON_USEDEP}]
-	>=dev-python/importlib-metadata-3.6[${PYTHON_USEDEP}]
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
 	learning? ( sci-libs/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( dev-python/numba[${PYTHON_USEDEP}] dev-python/cython[${PYTHON_USEDEP}] )
