@@ -5,11 +5,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="Toolkit-independent GUI abstraction layer for visualization features of Traits"
 HOMEPAGE="https://docs.enthought.com/pyface/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
+S=${WORKDIR}/${P}
 
 LICENSE="BSD"
 SLOT="0"
@@ -18,7 +19,6 @@ IUSE="python doc +wx +pyqt5 +pyside"
 
 RDEPEND="
 	dev-python/traits[${PYTHON_USEDEP}]
-	dev-python/importlib-resources
 	>=dev-python/importlib-metadata-3.6[${PYTHON_USEDEP}]
 	pyqt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
 	wx? ( >=dev-python/wxpython-2.8.10:*[${PYTHON_USEDEP}] dev-python/numpy[${PYTHON_USEDEP}] )

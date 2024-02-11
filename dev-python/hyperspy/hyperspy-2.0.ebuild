@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
-
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 flag-o-matic virtualx pypi
 
 DESCRIPTION="Interactive analysis of multidimensional datasets tools"
@@ -19,8 +19,13 @@ KEYWORDS="~amd64 ~x86"
 IUSE="cuda python doc +learning +gui-jupyter speed +gui-traitsui mrcz test"
 
 RDEPEND="
+	dev-python/rosettasciio[${PYTHON_USEDEP}]
+	dev-python/cloudpickle[${PYTHON_USEDEP}]
+	dev-python/pooch[${PYTHON_USEDEP}]
+	dev-python/tqdm[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.17.1[${PYTHON_USEDEP}]
-	>=dev-python/scipy-1.1[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.5[${PYTHON_USEDEP}]
 	dev-python/natsort[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-3.1[${PYTHON_USEDEP}]
 	>=dev-python/traits-4.5.0[${PYTHON_USEDEP}]
@@ -39,6 +44,7 @@ RDEPEND="
 	dev-python/numexpr[${PYTHON_USEDEP}]
 	dev-python/sparse[${PYTHON_USEDEP}]
 	dev-python/imageio[${PYTHON_USEDEP}]
+	dev-python/jinja[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/zarr[${PYTHON_USEDEP}]
 	dev-python/prettytable[${PYTHON_USEDEP}]

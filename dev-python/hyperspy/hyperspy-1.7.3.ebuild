@@ -5,11 +5,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
 
-inherit distutils-r1 flag-o-matic virtualx
+inherit distutils-r1 flag-o-matic virtualx pypi
 
 DESCRIPTION="Interactive analysis of multidimensional datasets tools"
 HOMEPAGE="https://hyperspy.org/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
+S=${WORKDIR}/${P}
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -32,7 +33,7 @@ RDEPEND="
 	>=dev-python/python-dateutil-2.5.0[${PYTHON_USEDEP}]
 	dev-python/ipyparallel[${PYTHON_USEDEP}]
 	>=dev-python/dask-0.18[${PYTHON_USEDEP}]
-	>=sci-libs/scikit-image-0.15[${PYTHON_USEDEP}]
+	>=dev-python/scikit-image-0.15[${PYTHON_USEDEP}]
 	>=dev-python/Pint-0.10[${PYTHON_USEDEP}]
 	dev-python/statsmodels[${PYTHON_USEDEP}]
 	dev-python/numexpr[${PYTHON_USEDEP}]
@@ -43,7 +44,6 @@ RDEPEND="
 	dev-python/prettytable[${PYTHON_USEDEP}]
 	!dev-python/PTable
 	>=dev-python/tifffile-2019.12.3[${PYTHON_USEDEP}]
-	>=dev-python/importlib-metadata-3.6[${PYTHON_USEDEP}]
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
 	learning? ( sci-libs/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( dev-python/numba[${PYTHON_USEDEP}] dev-python/cython[${PYTHON_USEDEP}] )

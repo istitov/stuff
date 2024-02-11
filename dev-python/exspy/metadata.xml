@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>lebedev.vasya@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="learning">
+			To install required libraries for some machine learning features
+		</flag>
+		<flag name="gui-jupyter">
+			To install required libraries to use the Jupyter widgets GUI elements
+		</flag>
+		<flag name="speed">
+			To install optional libraries that speed up some functionalities
+		</flag>
+		<flag name="mrcz">
+			To install the mrcz plugin
+		</flag>
+		<flag name="gui-traitsui">
+			To install required libraries to use the GUI elements based on traitsui
+		</flag>
+	</use>
+</pkgmetadata>

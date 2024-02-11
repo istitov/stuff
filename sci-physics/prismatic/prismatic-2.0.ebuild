@@ -20,7 +20,7 @@ IUSE="doc python debug gui gpu"
 #RESTRICT=strip
 
 RDEPEND="
-	dev-util/cmake
+	dev-build/cmake
 	dev-libs/boost
 	sci-libs/fftw[threads]
 	sci-libs/hdf5[cxx]
