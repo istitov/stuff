@@ -23,7 +23,7 @@ RDEPEND="
 	media-libs/opencv[${PYTHON_USEDEP}]
 	dev-python/pandas[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
-	>=sci-libs/scikit-image-0.18[${PYTHON_USEDEP}]
+	>=dev-python/scikit-image-0.18[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}

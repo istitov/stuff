@@ -36,7 +36,7 @@ RDEPEND="
 	dev-python/wxpython:*[${PYTHON_USEDEP}]
 	dev-python/wxmplot[${PYTHON_USEDEP}]
 	dev-python/wxutils[${PYTHON_USEDEP}]
-	sci-libs/scikit-image[${PYTHON_USEDEP}]
+	dev-python/scikit-image[${PYTHON_USEDEP}]
 	dev-python/silx[${PYTHON_USEDEP}]
 	dev-python/pytest[${PYTHON_USEDEP}]
 	dev-python/pip[${PYTHON_USEDEP}]

@@ -17,7 +17,7 @@ KEYWORDS="~amd64"
 IUSE="doc python"
 
 RDEPEND="
-	sci-libs/scikit-image[${PYTHON_USEDEP}]
+	dev-python/scikit-image[${PYTHON_USEDEP}]
 	sci-libs/scikit-learn[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/hyperspy[${PYTHON_USEDEP}]
