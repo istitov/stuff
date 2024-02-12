@@ -84,7 +84,7 @@ RDEPEND="
 "
 
 BDEPEND="
-	dev-util/cmake
+	dev-build/cmake
 	dev-util/ninja
 "
 

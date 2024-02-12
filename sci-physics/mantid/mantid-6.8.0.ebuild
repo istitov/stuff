@@ -102,7 +102,7 @@ RDEPEND="
 #	sys-devel/gcc:13[objc,objc-gc,objc++] #didbt help
 
 BDEPEND="
-	dev-util/cmake
+	dev-build/cmake
 	dev-util/ninja
 "
 
