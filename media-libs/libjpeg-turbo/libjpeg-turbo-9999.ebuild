@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # http://libjpeg-turbo.svn.sourceforge.net/viewvc/libjpeg-turbo/branches/1.2.x/?view=tar
@@ -17,7 +17,7 @@ IUSE="java static-libs cpu_flags_arm_neon"
 
 ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
 
-BDEPEND=">=dev-util/cmake-3.16.5
+BDEPEND=">=dev-build/cmake-3.16.5
 	amd64? ( ${ASM_DEPEND} )
 	x86? ( ${ASM_DEPEND} )
 	amd64-linux? ( ${ASM_DEPEND} )

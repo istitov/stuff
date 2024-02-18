@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -22,7 +22,7 @@ RDEPEND="
 	dev-python/h5py[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/hyperspy-1.5.2[${PYTHON_USEDEP}]
-	>=sci-libs/scikit-image-0.17.1[${PYTHON_USEDEP}]
+	>=dev-python/scikit-image-0.17.1[${PYTHON_USEDEP}]
 	sci-libs/scikit-learn[${PYTHON_USEDEP}]
 	>=dev-python/ase-3.17.0[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
