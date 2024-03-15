@@ -23,7 +23,7 @@ RDEPEND="
 	>=dev-python/matplotlib-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/hyperspy-1.5.2[${PYTHON_USEDEP}]
 	>=dev-python/scikit-image-0.17.1[${PYTHON_USEDEP}]
-	sci-libs/scikit-learn[${PYTHON_USEDEP}]
+	dev-python/scikit-learn[${PYTHON_USEDEP}]
 	>=dev-python/ase-3.17.0[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
 "
