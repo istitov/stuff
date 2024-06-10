@@ -29,7 +29,7 @@ RESTRICT="
 RDEPEND="
 	>=dev-libs/boost-1.65.1:=
 	dev-cpp/range-v3
-	dev-libs/crypto++:0/8.6.0
+	dev-libs/crypto++
 	dev-libs/spdlog
 	net-misc/curl:=
 	>=sys-fs/fuse-2.8.6:0

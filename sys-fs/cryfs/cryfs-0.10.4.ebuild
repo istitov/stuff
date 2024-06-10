@@ -25,7 +25,7 @@ RESTRICT="!test? ( test )"
 
 RDEPEND="
 	dev-libs/boost:=
-	>=dev-libs/crypto++-8.2.0:=
+	dev-libs/crypto++
 	net-misc/curl:=
 	>=sys-fs/fuse-2.8.6:0
 	dev-libs/openssl:=
