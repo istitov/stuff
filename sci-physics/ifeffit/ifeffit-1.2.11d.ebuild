@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit autotools eutils fortran-2
+inherit autotools fortran-2
 
 DESCRIPTION="Suite of interactive programs for XAFS analysis"
 HOMEPAGE="https://github.com/newville/ifeffit"
