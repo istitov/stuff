@@ -64,7 +64,7 @@ EPYTEST_DESELECT=(
 
 src_prepare() {
 	# fails with sqlalchemy-2.0, even though we don't use it x_x
-	sed -i -e '/RemovedIn20Warning/d' setup.cfg || die
+	#sed -i -e '/RemovedIn20Warning/d' setup.cfg || die
 	distutils-r1_src_prepare
 }
 
