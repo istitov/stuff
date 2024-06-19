@@ -35,6 +35,7 @@ RDEPEND="
 	dev-python/distributed[${PYTHON_USEDEP}]
 	dev-python/dask-labextension[${PYTHON_USEDEP}]
 	dev-python/pyFFTW[${PYTHON_USEDEP}]
+	dev-python/tabulate[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
