@@ -35,8 +35,9 @@ DEPEND="
 		>=sci-libs/hipFFT-${ROCM_VERSION}[${ROCM_USEDEP}]
 		>=sci-libs/hipRAND-${ROCM_VERSION}[${ROCM_USEDEP}]
 		>=sci-libs/rocThrust-${ROCM_VERSION}[${ROCM_USEDEP}]
-		>=sci-libs/hipSPARSE-${ROCM_VERSION}[${ROCM_USEDEP}] )"
-#	<dev-python/cython-3[${PYTHON_USEDEP}]
+		>=sci-libs/hipSPARSE-${ROCM_VERSION}[${ROCM_USEDEP}] )
+		<dev-python/cython-3[${PYTHON_USEDEP}]"
+#
 RDEPEND=">=dev-python/fastrlock-0.8.1
 	${DEPEND}"
 
