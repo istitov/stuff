@@ -21,6 +21,7 @@ RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/numcodecs[${PYTHON_USEDEP}]
 	dev-python/asciitree[${PYTHON_USEDEP}]
+	dev-python/fasteners[${PYTHON_USEDEP}]
 "
 #asciitree==0.3.3
 
