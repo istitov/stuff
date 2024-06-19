@@ -19,6 +19,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python doc +learning +gui-jupyter speed +gui-traitsui mrcz test"
 
 RDEPEND="
+	=dev-python/pillow-9.5.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.17.1[${PYTHON_USEDEP}]
 	>=dev-python/scipy-1.1[${PYTHON_USEDEP}]
 	dev-python/natsort[${PYTHON_USEDEP}]
@@ -38,7 +39,7 @@ RDEPEND="
 	dev-python/statsmodels[${PYTHON_USEDEP}]
 	dev-python/numexpr[${PYTHON_USEDEP}]
 	dev-python/sparse[${PYTHON_USEDEP}]
-	dev-python/imageio[${PYTHON_USEDEP}]
+	=dev-python/imageio-2.27.0[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/zarr[${PYTHON_USEDEP}]
 	dev-python/prettytable[${PYTHON_USEDEP}]
@@ -47,6 +48,8 @@ RDEPEND="
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
 	learning? ( dev-python/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( dev-python/numba[${PYTHON_USEDEP}] dev-python/cython[${PYTHON_USEDEP}] )
+	!dev-python/rosettasciio[${PYTHON_USEDEP}]
+	!dev-python/exspy[${PYTHON_USEDEP}]
 "
 	##
 	##mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
@@ -63,8 +66,8 @@ DEPEND="${RDEPEND}
 "
 
 PDEPEND="
-	gui-jupyter? ( >=dev-python/hyperspy-gui-ipywidgets-1.1.0 )
-	gui-traitsui? ( >=dev-python/hyperspy-gui-traitsui-1.1.0 )
+	gui-jupyter? ( <=dev-python/hyperspy-gui-ipywidgets-2.0.0 )
+	gui-traitsui? ( <=dev-python/hyperspy-gui-traitsui-2.0.0 )
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
