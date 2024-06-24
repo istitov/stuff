@@ -20,9 +20,10 @@ IUSE="doc python"
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/numcodecs[${PYTHON_USEDEP}]
+	dev-python/asciitree[${PYTHON_USEDEP}]
+	dev-python/fasteners[${PYTHON_USEDEP}]
 "
-#asciitree==0.3.3
-#fasteners==0.18
+
 #numcodecs==0.10.2
 #msgpack-python==0.5.6
 #setuptools-scm==7.0.5
