@@ -22,7 +22,7 @@ REQUIRED_USE="
 	"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64"
 DEPEND="
 	>=dev-python/cython-0.29.22[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.18.0[${PYTHON_USEDEP}]
