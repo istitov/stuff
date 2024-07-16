@@ -7,7 +7,7 @@ PYPI_PN="abtem"
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..12} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 pypi virtualx
 
 DESCRIPTION="ab initio transmission electron microscopy"
 HOMEPAGE="https://github.com/abTEM/abTEM"
@@ -15,10 +15,10 @@ HOMEPAGE="https://github.com/abTEM/abTEM"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="python"
+IUSE="python test"
 
 RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
+	<dev-python/numpy-2.0[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
@@ -36,7 +36,27 @@ RDEPEND="
 	dev-python/dask-labextension[${PYTHON_USEDEP}]
 	dev-python/pyFFTW[${PYTHON_USEDEP}]
 	dev-python/tabulate[${PYTHON_USEDEP}]
-"
+	dev-python/hypothesis[${PYTHON_USEDEP}]
 
+"
+#	dev-python/strategies[${PYTHON_USEDEP}]
 DEPEND="${RDEPEND}
 "
+
+#PATCHES=(
+#	"${FILESDIR}"/scan.patch
+#)
+
+src_prepare() {
+	#all for numpy-2.0
+	sed -i 's/\r$//' abtem/scan.py || die
+	#eapply "${FILESDIR}/scan2.patch"
+	#sed -i -e 's:import strategies :from . import strategies :' test/*.py || die
+	#sed -i -e "s:wrapped.itemset(0, x):wrapped[0] = x:" abtem/core/ensemble.py || die
+	#sed -i -e "s:artists.itemset(i, artist):artists[i] = artist:" abtem/visualize/visualizations.py || die
+	default
+}
+
+python_test() {
+	virtx epytest
+}
