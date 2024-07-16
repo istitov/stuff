@@ -14,12 +14,12 @@ SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="doc python"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/numcodecs[${PYTHON_USEDEP}]
+	>=dev-python/numcodecs-0.13.0[${PYTHON_USEDEP}]
 	dev-python/asciitree[${PYTHON_USEDEP}]
 	dev-python/fasteners[${PYTHON_USEDEP}]
 "
