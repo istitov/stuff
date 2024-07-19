@@ -1,0 +1,24 @@
+From 96e7bf6d80eed256eb0198f748c02a3a1b00703f Mon Sep 17 00:00:00 2001
+From: VasilyLebedev <lebedevv@tcd.ie>
+Date: Tue, 16 Jul 2024 18:23:00 +0100
+Subject: [PATCH] Numpy-2.0 compat: scan.py
+
+---
+ abtem/scan.py | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/abtem/scan.py b/abtem/scan.py
+index 7b808869..644dd279 100644
+--- a/abtem/scan.py
++++ b/abtem/scan.py
+@@ -270,9 +270,7 @@ def _partition_args(self, chunks=None, lazy: bool = True):
+         cumchunks = tuple(np.cumsum(chunks[0]))
+         positions = np.empty(len(chunks[0]), dtype=object)
+         for i, (start_chunk, chunk) in enumerate(zip((0,) + cumchunks, chunks[0])):
+-            positions.itemset(
+-                i, {"positions": self._positions[start_chunk : start_chunk + chunk]}
+-            )
++            positions[i] = {"positions": self._positions[start_chunk : start_chunk + chunk]}
+ 
+         if lazy:
+             positions = da.from_array(positions, chunks=1)
