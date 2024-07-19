@@ -18,7 +18,7 @@ KEYWORDS="~amd64"
 IUSE="python test"
 
 RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
+	<dev-python/numpy-2.0[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
@@ -49,11 +49,11 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	#all for numpy-2.0
-	sed -i 's/\r$//' abtem/scan.py || die
-	eapply "${FILESDIR}/scan2.patch"
-	sed -i -e 's:import strategies :from . import strategies :' test/*.py || die
-	sed -i -e "s:wrapped.itemset(0, x):wrapped[0] = x:" abtem/core/ensemble.py || die
-	sed -i -e "s:artists.itemset(i, artist):artists[i] = artist:" abtem/visualize/visualizations.py || die
+	#sed -i 's/\r$//' abtem/scan.py || die
+	#eapply "${FILESDIR}/scan2.patch"
+	#sed -i -e 's:import strategies :from . import strategies :' test/*.py || die
+	#sed -i -e "s:wrapped.itemset(0, x):wrapped[0] = x:" abtem/core/ensemble.py || die
+	#sed -i -e "s:artists.itemset(i, artist):artists[i] = artist:" abtem/visualize/visualizations.py || die
 	default
 }
 
