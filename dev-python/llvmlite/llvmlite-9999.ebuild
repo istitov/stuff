@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm arm64 x86 ~amd64-linux ~x86-linux"
 IUSE="examples"
 
-LLVM_MAX_SLOT=14
+LLVM_MAX_SLOT=18
 
 RDEPEND="
 	sys-devel/llvm:${LLVM_MAX_SLOT}
