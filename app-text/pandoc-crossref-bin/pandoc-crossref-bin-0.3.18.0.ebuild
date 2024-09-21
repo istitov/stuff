@@ -14,7 +14,6 @@ KEYWORDS="-* ~amd64"
 
 RDEPEND="
 || ( ~app-text/pandoc-bin-3.2 >=app-text/pandoc-3 )
-=dev-haskell/pandoc-types-1.23.1
 "
 
 src_install() {
