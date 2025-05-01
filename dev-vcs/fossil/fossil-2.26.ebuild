@@ -5,7 +5,7 @@ EAPI=8
 
 inherit toolchain-funcs
 
-MY_TAG="8be0372c1051043761320c8ea8669c3cf320c406e5fe18ad36b7be5f844ca73b"
+MY_TAG="1205ec86cb5508e94b90698db2900997fe5c9db62429c67ac6fdc03d59aa2782"
 
 DESCRIPTION="Simple, high-reliability, source control management, and more"
 HOMEPAGE="https://www.fossil-scm.org/home"
