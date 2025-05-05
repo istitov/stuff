@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{10..13} )
 inherit check-reqs toolchain-funcs
 inherit python-r1
 
-DRIVER_PV="570.124.06"
+DRIVER_PV="575.51.03"
 GCC_MAX_VER="14"
 CLANG_MAX_VER="19"
 
