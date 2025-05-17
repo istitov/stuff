@@ -72,8 +72,8 @@ DEPEND="${RDEPEND}
 "
 
 PDEPEND="
-	gui-jupyter? ( >=dev-python/hyperspy-gui-ipywidgets-1.1.0 )
-	gui-traitsui? ( >=dev-python/hyperspy-gui-traitsui-1.1.0 )
+	gui-jupyter? ( >=dev-python/hyperspy-gui-ipywidgets-2.0 )
+	gui-traitsui? ( >=dev-python/hyperspy-gui-traitsui-2.0 )
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
