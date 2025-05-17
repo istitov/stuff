@@ -44,7 +44,7 @@ RDEPEND="
 	dev-python/numexpr[${PYTHON_USEDEP}]
 	dev-python/sparse[${PYTHON_USEDEP}]
 	dev-python/imageio[${PYTHON_USEDEP}]
-	dev-python/jinja[${PYTHON_USEDEP}]
+	dev-python/jinja2[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/zarr[${PYTHON_USEDEP}]
 	dev-python/prettytable[${PYTHON_USEDEP}]
