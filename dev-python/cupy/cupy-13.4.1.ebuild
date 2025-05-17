@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..13} )
 ROCM_VERSION=5.1.3
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
@@ -25,8 +25,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 DEPEND="
 	>=dev-python/cython-0.29.22[${PYTHON_USEDEP}]
-	<dev-python/cython-3[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.18.0[${PYTHON_USEDEP}]
+	<dev-python/cython-3.1[${PYTHON_USEDEP}]
 	cuda? ( dev-util/nvidia-cuda-toolkit[profiler] )
 	cudnn? ( dev-libs/cudnn )
 	rocm? ( >=dev-util/hip-${ROCM_VERSION}
@@ -38,12 +38,13 @@ DEPEND="
 		>=sci-libs/rocThrust-${ROCM_VERSION}[${ROCM_USEDEP}]
 		>=sci-libs/hipSPARSE-${ROCM_VERSION}[${ROCM_USEDEP}] )
 		"
+#
 RDEPEND=">=dev-python/fastrlock-0.8.1
 	${DEPEND}"
 
 distutils_enable_tests pytest
 
-PATCHES=( "${FILESDIR}"/${PN}-11.6-add_dir.patch )
+#PATCHES=( "${FILESDIR}"/${PN}-11.6-add_dir.patch )
 
 src_prepare ()
 {

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 ROCM_VERSION=5.1.3
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
@@ -22,7 +22,7 @@ REQUIRED_USE="
 	"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 DEPEND="
 	>=dev-python/cython-0.29.22[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.18.0[${PYTHON_USEDEP}]

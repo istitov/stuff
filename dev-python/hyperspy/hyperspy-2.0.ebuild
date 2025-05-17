@@ -44,7 +44,7 @@ RDEPEND="
 	dev-python/numexpr[${PYTHON_USEDEP}]
 	dev-python/sparse[${PYTHON_USEDEP}]
 	dev-python/imageio[${PYTHON_USEDEP}]
-	dev-python/jinja[${PYTHON_USEDEP}]
+	dev-python/jinja2[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/zarr[${PYTHON_USEDEP}]
 	dev-python/prettytable[${PYTHON_USEDEP}]
@@ -72,8 +72,8 @@ DEPEND="${RDEPEND}
 "
 
 PDEPEND="
-	gui-jupyter? ( >=dev-python/hyperspy-gui-ipywidgets-1.1.0 )
-	gui-traitsui? ( >=dev-python/hyperspy-gui-traitsui-1.1.0 )
+	gui-jupyter? ( >=dev-python/hyperspy-gui-ipywidgets-2.0 )
+	gui-traitsui? ( >=dev-python/hyperspy-gui-traitsui-2.0 )
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
