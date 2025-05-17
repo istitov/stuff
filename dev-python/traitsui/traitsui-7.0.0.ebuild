@@ -21,7 +21,7 @@ RDEPEND="
 	dev-python/six
 	>=dev-python/pyface-6.0.0[wx=,pyqt5=,pyside=]
 	wx? ( >=dev-python/wxpython-2.8.10:* dev-python/numpy )
-	pyqt5? ( dev-python/PyQt5 dev-python/pygments )
+	pyqt5? ( dev-python/pyqt5 dev-python/pygments )
 	pyside? ( dev-python/pyside2 dev-python/pygments )
 	demo? ( dev-python/configobj )
 "
