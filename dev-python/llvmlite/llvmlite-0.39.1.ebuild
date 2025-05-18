@@ -4,6 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{9..12} )
+DISTUTILS_USE_PEP517=no
 inherit distutils-r1 llvm
 
 DESCRIPTION="Python wrapper around the llvm C++ library"
@@ -19,7 +20,7 @@ IUSE="examples"
 LLVM_MAX_SLOT=11
 
 RDEPEND="
-	sys-devel/llvm:${LLVM_MAX_SLOT}
+	llvm-core/llvm:${LLVM_MAX_SLOT}
 	sys-libs/zlib:0=
 "
 DEPEND="${RDEPEND}"
