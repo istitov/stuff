@@ -18,7 +18,6 @@ KEYWORDS="~amd64"
 IUSE="python test"
 
 RDEPEND="
-	<dev-python/numpy-2.0[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
@@ -46,6 +45,7 @@ DEPEND="${RDEPEND}
 #PATCHES=(
 #	"${FILESDIR}"/scan.patch
 #)
+##<dev-python/numpy-2.0[${PYTHON_USEDEP}]
 
 src_prepare() {
 	#all for numpy-2.0
