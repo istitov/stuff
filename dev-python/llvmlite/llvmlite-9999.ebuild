@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{9..12} )
 
-DISTUTILS_USE_PEP517=no
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 llvm git-r3
 
 DESCRIPTION="Python wrapper around the llvm C++ library"
@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="amd64 arm arm64 x86 ~amd64-linux ~x86-linux"
 IUSE="examples"
 
-LLVM_MAX_SLOT=18/18.1
+LLVM_MAX_SLOT=15
 
 RDEPEND="
 	llvm-core/llvm:${LLVM_MAX_SLOT}
