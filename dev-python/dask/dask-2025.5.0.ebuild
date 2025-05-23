@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 
 inherit distutils-r1
 
@@ -33,7 +33,6 @@ RDEPEND="
 	>=dev-python/pyyaml-5.3.1[${PYTHON_USEDEP}]
 	>=dev-python/toolz-0.8.2[${PYTHON_USEDEP}]
 "
-#	<dev-python/numpy-2.0[${PYTHON_USEDEP}]
 BDEPEND="
 	dev-python/toolz[${PYTHON_USEDEP}]
 	test? (
