@@ -24,10 +24,10 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 DEPEND="
-	>=dev-python/cython-0.29.22[${PYTHON_USEDEP}]
+	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.18.0[${PYTHON_USEDEP}]
-	<dev-python/cython-3.1[${PYTHON_USEDEP}]
-	cuda? ( dev-util/nvidia-cuda-toolkit[profiler] )
+	cuda? ( <dev-util/nvidia-cuda-toolkit-12.9.0[profiler]
+		<dev-libs/cudnn-9.0.9 )
 	cudnn? ( dev-libs/cudnn )
 	rocm? ( >=dev-util/hip-${ROCM_VERSION}
 		>=dev-util/roctracer-${ROCM_VERSION}
@@ -38,7 +38,7 @@ DEPEND="
 		>=sci-libs/rocThrust-${ROCM_VERSION}[${ROCM_USEDEP}]
 		>=sci-libs/hipSPARSE-${ROCM_VERSION}[${ROCM_USEDEP}] )
 		"
-#
+#dev-libs/cusparselt 
 RDEPEND=">=dev-python/fastrlock-0.8.1
 	${DEPEND}"
 
@@ -48,6 +48,10 @@ distutils_enable_tests pytest
 
 src_prepare ()
 {
+	#sed -i -e 's:_from_dict(CUDA_nccl,:#_from_dict(CUDA_nccl,:' install/cupy_builder/_features.py || die
+	#sed -i -e 's:_from_dict(CUDA_cutensor,:#_from_dict(CUDA_cutensor,:' install/cupy_builder/_features.py || die
+	#sed -i -e 's:_from_dict(CUDA_cusparselt:#_from_dict(CUDA_cusparselt:' install/cupy_builder/_features.py || die
+	#sed -i -e 's:cuda/cupy_cutensor.h:#stub/cupy_cutensor.h:' cupy_backends/cupy_cutensor.h || die
 	default
 	eprefixify cupy/cuda/compiler.py
 	use cuda && cuda_src_prepare
@@ -64,6 +68,7 @@ src_compile() {
 	elif use cuda; then
 		# specify instructions to emit
 		local target
+		#export CUPY_USE_CUDA_PYTHON=1
 		for target in ${NVPTX_TARGETS}; do
 			CUPY_NVCC_GENERATE_CODE+="arch=${target/sm/compute},code=${target};"
 		done
