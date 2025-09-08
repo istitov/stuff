@@ -13,7 +13,7 @@ K_EXP_GENPATCHES_NOUSE="1"
 # is the wanted value here, but the genpatches patch set can be bumped if it includes some
 # important fixes. src_prepare() will handle deleting the updated vanilla linux patches.
 # See https://archives.gentoo.org/gentoo-kernel/ (or subscribe to the list) to see all patches.
-K_GENPATCHES_VER="1"
+K_GENPATCHES_VER="7"
 
 # -pf patch set already sets EXTRAVERSION to kernel Makefile.
 K_NOSETEXTRAVERSION="1"
@@ -70,6 +70,10 @@ src_prepare() {
 	# When genpatches basic version is bumped, it also includes vanilla linux updates. Those are
 	# already in the -pf patch set, so need to remove the vanilla linux patches to avoid conflicts.
 	if [[ ${K_GENPATCHES_VER} -ne 1 ]]; then
+		find "${WORKDIR}"/ -type f -name '1800*patch' -delete ||
+			die "Failed to delete vanilla linux patches in src_prepare."
+		find "${WORKDIR}"/ -type f -name '1801*patch' -delete ||
+			die "Failed to delete vanilla linux patches in src_prepare."
 		find "${WORKDIR}"/ -type f -name '10*linux*patch' -delete ||
 			die "Failed to delete vanilla linux patches in src_prepare."
 	fi
