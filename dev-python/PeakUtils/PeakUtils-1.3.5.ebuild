@@ -11,10 +11,10 @@ inherit distutils-r1 pypi
 DESCRIPTION="This package provides utilities related to the detection of peaks on 1D data."
 HOMEPAGE="https://pypi.org/project/PeakUtils/
 	https://bitbucket.org/lucashnegri/peakutils/"
-MYPN="${PN/peakutils/PeakUtils}"
-MYP="${MYPN}-${PV}"
-SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
-S=${WORKDIR}/${MYP}
+#MYPN="${PN/peakutils/PeakUtils}"
+#MYP="${MYPN}-${PV}"
+#SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
+#S=${WORKDIR}/${MYP}
 
 LICENSE="MIT"
 SLOT="0"
