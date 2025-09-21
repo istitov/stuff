@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake java-pkg-opt-2
 
@@ -23,7 +23,7 @@ RDEPEND="
 	dev-libs/libxml2
 	sys-libs/readline
 	sys-libs/libtermcap-compat
-	xml? ( dev-libs/mxml )
+	xml? ( dev-libs/mxml[static-libs] )
 	hdf4? ( sci-libs/hdf )
 	hdf5? ( sci-libs/hdf5[zlib] )
 "

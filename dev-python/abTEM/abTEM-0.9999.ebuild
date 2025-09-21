@@ -4,7 +4,7 @@
 EAPI=8
 #PYPI_NO_NORMALIZE=0
 PYPI_PN="abtem"
-#DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..11} )
 
 inherit distutils-r1 git-r3

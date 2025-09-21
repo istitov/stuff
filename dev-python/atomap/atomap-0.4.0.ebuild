@@ -3,13 +3,12 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
-inherit distutils-r1 flag-o-matic pypi
+PYTHON_COMPAT=( python3_{9..11} )
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
 
 DESCRIPTION="Library for analysing atomic resolution images"
 HOMEPAGE="https://atomap.org/"
-SRC_URI="$(pypi_sdist_url --no-normalize "${PN}" "${PV}")"
-S=${WORKDIR}/${P}
 
 LICENSE="GPL-3"
 SLOT="0"

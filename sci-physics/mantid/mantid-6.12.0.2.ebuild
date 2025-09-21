@@ -3,7 +3,7 @@
 
 EAPI=8
 #PYTHON_COMPAT=( python3_{9..12} )
-PYTHON_COMPAT=( python3_10 )
+PYTHON_COMPAT=( python3_11 )
 PYPI_NO_NORMALIZE=1
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 git-r3 cmake multilib
@@ -46,7 +46,7 @@ IUSE="doc python test"
 RDEPEND="
 	dev-libs/boost
 	dev-util/ccache
-	app-doc/doxygen
+	app-text/doxygen
 	dev-cpp/eigen
 	dev-python/euphonic[${PYTHON_USEDEP}]
 	dev-python/graphviz[${PYTHON_USEDEP}]
@@ -63,14 +63,14 @@ RDEPEND="
 	dev-python/pip[${PYTHON_USEDEP}]
 	dev-libs/poco
 	dev-python/psutil[${PYTHON_USEDEP}]
-	=sci-libs/pycifrw-4.4.1[${PYTHON_USEDEP}]
-	dev-python/PyQt5[${PYTHON_USEDEP}]
+	sci-libs/pycifrw[${PYTHON_USEDEP}]
+	dev-python/pyqt5[${PYTHON_USEDEP}]
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	x11-libs/qscintilla
 	dev-qt/qtbase
 	dev-python/qtconsole[${PYTHON_USEDEP}]
-	dev-python/QtPy[${PYTHON_USEDEP}]
+	dev-python/qtpy[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
@@ -103,7 +103,7 @@ RDEPEND="
 
 BDEPEND="
 	dev-build/cmake
-	dev-util/ninja
+	dev-build/ninja
 "
 
 DEPEND="${BDEPEND}

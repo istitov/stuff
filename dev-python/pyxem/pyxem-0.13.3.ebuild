@@ -1,15 +1,14 @@
 # Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
-
-inherit distutils-r1 flag-o-matic
+PYTHON_COMPAT=( python3_{9..11} )
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
 
 DESCRIPTION="Python library for multi-dimensional diffraction microscopy"
 HOMEPAGE="https://pyxem.github.io"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -18,7 +17,7 @@ IUSE="doc python"
 
 RDEPEND="
 	dev-python/scikit-image[${PYTHON_USEDEP}]
-	sci-libs/scikit-learn[${PYTHON_USEDEP}]
+	dev-python/scikit-learn[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/hyperspy[${PYTHON_USEDEP}]
 	dev-python/lmfit[${PYTHON_USEDEP}]
@@ -26,25 +25,9 @@ RDEPEND="
 	dev-python/pyfai[${PYTHON_USEDEP}]
 	dev-python/ipywidgets[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-3.1.1[${PYTHON_USEDEP}]
 "
-#	>=dev-python/matplotlib-3.1.1
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 "
-
-python_compile() {
-	distutils-r1_python_compile
-}
-
-python_compile_all() {
-	use doc && setup.py build
-}
-
-python_test() {
-	setup.py test
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
-}

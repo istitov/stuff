@@ -3,8 +3,8 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
-DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( python3_{9..11} )
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
 
 DESCRIPTION="Software for XRF data analysis"
@@ -26,7 +26,6 @@ RDEPEND="
 	>=dev-python/pillow-3.4[${PYTHON_USEDEP}]
 	>=dev-python/PeakUtils-1.3.0[${PYTHON_USEDEP}]
 	>=dev-python/requests-2.1[${PYTHON_USEDEP}]
-	>=sci-libs/lmfit-3.4
 	>=dev-python/uncertainties-3.0.3[${PYTHON_USEDEP}]
 	>=dev-python/asteval-0.9.18[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
@@ -47,14 +46,15 @@ RDEPEND="
 	dev-python/sphinx[${PYTHON_USEDEP}]
 	dev-python/numpydoc[${PYTHON_USEDEP}]
 
-	dev-python/PyQt5[${PYTHON_USEDEP}]
-	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
+	dev-python/pyqt5[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
 	dev-python/pyfai[${PYTHON_USEDEP}]
 	sci-libs/pycifrw[${PYTHON_USEDEP}]
 "
+#	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 #sphinxcontrib-bibtex #dev
 #sphinxcontrib-argdoc #dev
+#	>=sci-libs/lmfit-3.4
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
@@ -63,29 +63,5 @@ DEPEND="${RDEPEND}
 #	dev-python/tomopy
 #for EPICS pyepics, psycopg2, epicsscan
 
-PATCHES=(
-	"${FILESDIR}"/conf.patch
-	"${FILESDIR}"/py.patch
-	"${FILESDIR}"/weird_patch_for_demeter
-	"${FILESDIR}"/int_cromer_liberman
-)
-
 distutils_enable_sphinx docs
 distutils_enable_tests pytest
-
-python_compile() {
-	INSTALL_DIR="${D}"
-	distutils-r1_python_compile
-	sed -i -e 's:../examples/:./examples/:' tests/*.py || die
-	sed -i -e "s:'larch_scripts':'tests/larch_scripts':" tests/*.py || die
-	sed -i -e "s:'test_larch_plugin':'tests/test_larch_plugin':" tests/*.py || die
-	sed -i -e "s:'..', 'examples':'.', 'examples':" tests/*.py || die
-}
-
-python_compile_all() {
-	esetup.py build
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
-}
