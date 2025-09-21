@@ -3,8 +3,8 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
-DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( python3_{9..11} )
+DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 git-r3
 
@@ -36,6 +36,7 @@ RDEPEND="
 	dev-python/wxpython:*[${PYTHON_USEDEP}]
 	dev-python/wxmplot[${PYTHON_USEDEP}]
 	dev-python/wxutils[${PYTHON_USEDEP}]
+	dev-python/lmfit[${PYTHON_USEDEP}]
 	dev-python/scikit-image[${PYTHON_USEDEP}]
 	dev-python/silx[${PYTHON_USEDEP}]
 	dev-python/pytest[${PYTHON_USEDEP}]
@@ -48,12 +49,12 @@ RDEPEND="
 	dev-python/sphinx[${PYTHON_USEDEP}]
 	dev-python/numpydoc[${PYTHON_USEDEP}]
 
-	dev-python/PyQt5[${PYTHON_USEDEP}]
-	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
+	dev-python/pyqt5[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
 	dev-python/pyfai[${PYTHON_USEDEP}]
 	sci-libs/pycifrw[${PYTHON_USEDEP}]
 "
+#	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 #sphinxcontrib-bibtex #dev
 #sphinxcontrib-argdoc #dev
 
