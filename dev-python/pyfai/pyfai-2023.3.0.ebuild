@@ -17,7 +17,7 @@ IUSE="doc python"
 
 RDEPEND="
 	dev-python/h5py[${PYTHON_USEDEP}]
-	dev-python/PyQt5[${PYTHON_USEDEP}]
+	dev-python/pyqt5[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]

@@ -4,12 +4,11 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
-
-inherit distutils-r1 flag-o-matic
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
 
 DESCRIPTION="Python packages collection for synchrotron data manipulation"
 HOMEPAGE="http://www.silx.org/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -19,7 +18,7 @@ IUSE="doc python"
 RDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/h5py[${PYTHON_USEDEP}]
-	dev-python/PyQt5[${PYTHON_USEDEP}]
+	dev-python/pyqt5[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
 	dev-python/sphinx[${PYTHON_USEDEP}]
@@ -40,18 +39,3 @@ src_unpack() {
 	rm -rf "${WORKDIR}/${P}/${PN}/third_party/_local"
 }
 
-python_compile() {
-	distutils-r1_python_compile
-}
-
-python_compile_all() {
-	use doc && setup.py build
-}
-
-python_test() {
-	setup.py test
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
-}
