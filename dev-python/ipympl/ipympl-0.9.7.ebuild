@@ -13,7 +13,7 @@ HOMEPAGE="http://matplotlib.org"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 
 IUSE=""
 RDEPEND=">=dev-python/ipykernel-4.7[${PYTHON_USEDEP}]

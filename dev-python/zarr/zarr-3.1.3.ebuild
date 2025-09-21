@@ -2,26 +2,35 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{9..12} )
+
+PYTHON_COMPAT=( python3_{9..13} )
+DISTUTILS_USE_PEP517=hatchling
 
 inherit distutils-r1 flag-o-matic pypi
 
-DESCRIPTION="Sparse multi-dimensional arrays for the PyData ecosystem"
-HOMEPAGE="https://github.com/pydata/sparse/"
+DESCRIPTION="An implementation of chunked, compressed, N-dimensional arrays for Python"
+HOMEPAGE="https://github.com/zarr-developers/zarr-python"
 #SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
-LICENSE="BSD"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	>=dev-python/numpy-1.13
-	>=dev-python/scipy-0.19
-	>=dev-python/numba-0.49
+	dev-python/numpy[${PYTHON_USEDEP}]
+	>=dev-python/numcodecs-0.13.0[${PYTHON_USEDEP}]
+	dev-python/asciitree[${PYTHON_USEDEP}]
+	dev-python/fasteners[${PYTHON_USEDEP}]
 "
+#asciitree==0.3.3
+
+#fasteners==0.18
+#numcodecs==0.10.2
+#msgpack-python==0.5.6
+#setuptools-scm==7.0.5
+#numpy==1.23.3
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )

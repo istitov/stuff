@@ -3,7 +3,7 @@
 
 EAPI=8
 PYPI_PN=${PN/-/_}
-PYPI_NO_NORMALIZE=1
+#PYPI_NO_NORMALIZE=1
 PYTHON_COMPAT=( python3_{9..12} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
@@ -14,7 +14,7 @@ HOMEPAGE="https://danporter.github.io/Dans_Diffraction/"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 IUSE="doc python"
 
 RDEPEND="

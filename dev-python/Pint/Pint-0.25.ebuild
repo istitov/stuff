@@ -2,25 +2,23 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
+DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{9..12} )
-DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 flag-o-matic
 
-MYPN="${PN/link-traits/link_traits}"
-MYP="${MYPN}-${PV}"
+inherit distutils-r1 flag-o-matic pypi
 
-DESCRIPTION="A fork to traitlets"
-HOMEPAGE="https://github.com/hyperspy/link_traits"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${MYP}.tar.gz"
+DESCRIPTION="Python package to manipulate physical units"
+HOMEPAGE="https://pint.readthedocs.io"
+#SRC_URI="$(pypi_sdist_url --no-normalize "${PN^}" "${PV}")"
+#S=${WORKDIR}/${P^}
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="python doc"
+IUSE="doc python"
 
 RDEPEND="
-	dev-python/traits[${PYTHON_USEDEP}]
+	dev-python/numpy
 "
 
 DEPEND="${RDEPEND}
@@ -29,11 +27,8 @@ DEPEND="${RDEPEND}
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-S="${WORKDIR}/${MYP}"
-
 python_compile() {
 	distutils-r1_python_compile
-
 }
 
 python_compile_all() {
