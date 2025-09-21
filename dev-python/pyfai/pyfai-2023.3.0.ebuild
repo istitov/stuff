@@ -20,7 +20,7 @@ RDEPEND="
 	dev-python/pyqt5[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
+	>=dev-python/numpy-2.3.0[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/pyopencl[${PYTHON_USEDEP}]
 	dev-python/silx[${PYTHON_USEDEP}]
@@ -44,17 +44,4 @@ src_prepare() {
 	sed -i 's:setuptools<60.0.0:setuptools>60.0.0:' "${WORK}"setup.py || die "Sed failed!"
 	sed -i 's:setuptools< 60.0.0:setuptools> 60.0.0:' "${WORK}"setup.py || die "Sed failed!"
 	default
-}
-
-python_compile_all() {
-	export SETUPTOOLS_PRETEND_VERSION='59.9.9'
-	esetup.py build
-}
-
-python_test() {
-	esetup.py test
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
 }
