@@ -2,14 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
+DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..12} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 pypi
 
 DESCRIPTION="Module for fast computation of 2D and 3D radial distribution functions"
 HOMEPAGE="https://github.com/by256/rdfpy"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -31,20 +30,4 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 python_prepare_all() {
 	rm -rf tests || die
 	distutils-r1_python_prepare_all
-}
-
-python_compile() {
-	distutils-r1_python_compile
-}
-
-python_compile_all() {
-	use doc && setup.py build
-}
-
-python_test() {
-	setup.py test
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
 }

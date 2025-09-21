@@ -2,14 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
+DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..12} )
 
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 pypi
 
 DESCRIPTION="Provides advanced wxPython widgets for plotting based on matplotlib"
 HOMEPAGE="https://newville.github.io/wxmplot/"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"

@@ -4,12 +4,11 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
-
-inherit distutils-r1 flag-o-matic
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
 
 DESCRIPTION="Pyshortcuts helps to create desktop shortcuts that will run python scripts"
 HOMEPAGE="https://github.com/newville/pyshortcuts"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -25,19 +24,3 @@ DEPEND="${RDEPEND}
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
-python_compile() {
-	distutils-r1_python_compile
-}
-
-python_compile_all() {
-	use doc && setup.py build
-}
-
-python_test() {
-	setup.py test
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
-}

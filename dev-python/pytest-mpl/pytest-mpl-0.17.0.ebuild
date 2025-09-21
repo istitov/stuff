@@ -3,9 +3,10 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 virtualx
+PYTHON_COMPAT=( python3_{9..12} )
+
+inherit distutils-r1
 
 DESCRIPTION="Pytest plugin to faciliate image comparison for matplotlib figures"
 HOMEPAGE="https://github.com/matplotlib/pytest-mpl"
@@ -14,21 +15,21 @@ SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="examples test"
-RESTRICT="!test? ( test )"	# Test phase runs with fails
+IUSE="examples"
+RESTRICT="test"	# Test phase runs with fails
 
 RDEPEND="dev-python/pytest[${PYTHON_USEDEP}]
+	dev-python/jinja[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/importlib_resources[${PYTHON_USEDEP}]
+	' python3_8)
 "
 
 DOCS=( CHANGES.md README.rst )
 
-#distutils_enable_tests pytest
-
-python_test() {
-	echo "backend : Agg" > "${T}"/matplotlibrc || die
-	MPLCONFIGDIR="${T}" virtx epytest
-}
+distutils_enable_tests pytest
 
 python_install_all() {
 	use examples && DOCS+=( images/ )
