@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_EXT=1
-#DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=setuptools
 #wait for the fix: https://github.com/pyFFTW/pyFFTW/issues/372
 PYTHON_COMPAT=( python3_{10..11} )
 inherit distutils-r1
