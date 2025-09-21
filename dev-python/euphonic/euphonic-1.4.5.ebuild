@@ -3,7 +3,7 @@
 
 EAPI=8
 PYTHON_COMPAT=( python3_11 )
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=meson-python
 inherit distutils-r1 pypi
 
 DESCRIPTION="Calculates phonon bandstructures and inelastic neutron scattering intensities"
