@@ -4,12 +4,11 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
-
-inherit distutils-r1 flag-o-matic
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
 
 DESCRIPTION="Code to convert between various geometric transformations"
 HOMEPAGE="https://github.com/matthew-brett/transforms3d"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
