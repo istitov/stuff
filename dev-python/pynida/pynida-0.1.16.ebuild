@@ -4,12 +4,11 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
-
-inherit distutils-r1 flag-o-matic
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
 
 DESCRIPTION="In-situ nanoindentation data analysis"
 HOMEPAGE="https://github.com/LebedevV/pynida"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -19,7 +18,7 @@ IUSE="doc python"
 RDEPEND="
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/PyQt5[${PYTHON_USEDEP}]
+	dev-python/pyqt5[${PYTHON_USEDEP}]
 	media-libs/opencv[${PYTHON_USEDEP}]
 	dev-python/pandas[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
@@ -31,19 +30,3 @@ DEPEND="${RDEPEND}
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
-python_compile() {
-	distutils-r1_python_compile
-}
-
-python_compile_all() {
-	use doc && setup.py build
-}
-
-python_test() {
-	setup.py test
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
-}
