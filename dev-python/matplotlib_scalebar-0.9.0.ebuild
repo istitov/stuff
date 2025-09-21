@@ -4,16 +4,16 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=hatchling
 inherit distutils-r1 pypi
 
-MYPN="${PN/_/-}"
-MYP="${MYPN}-${PV}"
+#MYPN="${PN/_/-}"
+#MYP="${MYPN}-${PV}"
 
 DESCRIPTION="Artist for matplotlib to display a scale bar"
 HOMEPAGE="https://github.com/ppinard/matplotlib-scalebar"
-SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
-S=${WORKDIR}/${MYP}
+#SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
+#S=${WORKDIR}/${MYP}
 
 LICENSE="BSD"
 SLOT="0"
