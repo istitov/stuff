@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{10..13} )
 inherit check-reqs toolchain-funcs
 inherit python-r1
 
-DRIVER_PV="580.82.07"
+DRIVER_PV="580.95.05"
 GCC_MAX_VER="14"
 CLANG_MAX_VER="19"
 
@@ -63,9 +63,9 @@ BDEPEND="
 CUDA_PATH="/opt/cuda"
 QA_PREBUILT="${CUDA_PATH#/}/*"
 
-PATCHES=(
-	"${FILESDIR}/nvidia-cuda-toolkit-glibc-2.41-r1.patch"
-)
+#PATCHES=(
+#	"${FILESDIR}/nvidia-cuda-toolkit-glibc-2.41-r1.patch"
+#)
 
 python_check_deps() {
 	python_has_version "dev-python/defusedxml[${PYTHON_USEDEP}]"
