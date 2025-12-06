@@ -3,12 +3,12 @@
 
 EAPI=8
 
+DESCRIPTION="FUSE module to mount ls -lR output"
+HOMEPAGE="https://github.com/pasis/ls-fuse"
+
 EGIT_REPO_URI="https://github.com/pasis/ls-fuse.git"
 
 inherit autotools git-r3
-
-DESCRIPTION="FUSE module to mount ls -lR output"
-HOMEPAGE="https://github.com/pasis/ls-fuse"
 
 LICENSE="GPL-3+"
 SLOT="0"

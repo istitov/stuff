@@ -3,10 +3,9 @@
 
 EAPI=8
 
-SRC_URI="https://github.com/pasis/${PN}/releases/download/${PV}/${P}.tar.bz2"
-
 DESCRIPTION="FUSE module to mount ls -lR output"
 HOMEPAGE="https://github.com/pasis/ls-fuse"
+SRC_URI="https://github.com/pasis/${PN}/releases/download/${PV}/${P}.tar.bz2"
 
 LICENSE="GPL-3+"
 SLOT="0"
