@@ -6,18 +6,17 @@ EAPI=5
 DESCRIPTION="The Object Oriented MicroMagnetic Framework"
 HOMEPAGE="http://math.nist.gov/oommf/"
 SRC_URI="http://math.nist.gov/oommf/dist/${PN}12b4_20200930.tar.gz"
+S="${WORKDIR}/${PN}"
 
 LICENSE="HPND"
+SLOT="1.2"
 KEYWORDS="~amd64 ~arm ~x86"
 IUSE="doc"
-SLOT="1.2"
 
 DEPEND="
 dev-lang/tcl:=
 dev-lang/tk:="
 RDEPEND="${DEPEND}"
-
-S="${WORKDIR}/${PN}"
 
 src_compile() {
 	tclsh oommf.tcl pimake distclean
@@ -41,7 +40,6 @@ src_install()
 	/opt/oommf/oommf.tcl
 	EOF
 
-	dodir /opt/bin
 	exeinto /opt/bin
 	doexe oommf.sh
 }
