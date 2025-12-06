@@ -70,17 +70,11 @@ src_prepare() {
 	# When genpatches basic version is bumped, it also includes vanilla linux updates. Those are
 	# already in the -pf patch set, so need to remove the vanilla linux patches to avoid conflicts.
 	if [[ ${K_GENPATCHES_VER} -ne 1 ]]; then
-#		find "${WORKDIR}"/ -type f -name '1800*patch' -delete ||
-#			die "Failed to delete vanilla linux patches in src_prepare."
-#		find "${WORKDIR}"/ -type f -name '1801*patch' -delete ||
-#			die "Failed to delete vanilla linux patches in src_prepare."
 		find "${WORKDIR}"/ -type f -name '10*linux*patch' -delete ||
 			die "Failed to delete vanilla linux patches in src_prepare."
 	fi
 
 	# kernel-2_src_prepare doesn't apply PATCHES(). Chosen genpatches are also applied here.
-#	rm "${WORKDIR}"/1740*.patch
-#	rm "${WORKDIR}"/1900*.patch
 	eapply "${WORKDIR}"/*.patch
 	default
 }

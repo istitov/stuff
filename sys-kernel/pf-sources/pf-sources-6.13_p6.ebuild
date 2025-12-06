@@ -75,7 +75,6 @@ src_prepare() {
 	fi
 
 	# kernel-2_src_prepare doesn't apply PATCHES(). Chosen genpatches are also applied here.
-	rm "${WORKDIR}"/1740*.patch
 	eapply "${WORKDIR}"/*.patch
 	default
 }
