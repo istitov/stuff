@@ -5,13 +5,13 @@ EAPI=8
 
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1 virtualx
 
 DESCRIPTION="A graphical tool for browsing / editing files in both PyTables and HDF5 formats"
 HOMEPAGE="https://vitables.org/"
-SRC_URI="https://github.com/uvemas/${PN}/archive/refs/tags/v${PV}.tar.gz"
+SRC_URI="https://github.com/uvemas/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 S="${WORKDIR}/ViTables-$(ver_cut 1-3)"
 
 LICENSE="GPL-3"
@@ -31,15 +31,6 @@ DEPEND="${RDEPEND}"
 distutils_enable_tests pytest
 
 python_prepare_all() {
-#	PATCHES=(
-#		../debian/patches/0001-vtsite.py-use-debian-doc-and-icons-paths.patch
-#		../debian/patches/0002-setup.py-no-icons-htmldocs-or-license.patch
-#		../debian/patches/0004-tests-conftest.py-prepare-the-testfile-if-necessary.patch
-#		../debian/patches/0005-Update-collection-path-for-Python-3.8.patch
-#		../debian/patches/0006-Fix-version-information-display.patch
-#		../debian/patches/0007-tests-migrate-from-nose-to-pytest.patch
-#	)
-
 	distutils-r1_python_prepare_all
 	sed -e '/QtTest/d' -i tests/test_samples.py || die
 }
