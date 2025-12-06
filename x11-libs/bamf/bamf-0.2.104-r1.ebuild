@@ -7,23 +7,21 @@ inherit autotools
 
 DESCRIPTION="BAMF Application Matching Framework"
 HOMEPAGE="https://launchpad.net/bamf"
-SRC_URI="http://launchpad.net/${PN}/0.2/0.2.104/+download/${PN}-${PV}.tar.gz"
-RESTRICT="primaryuri"
+SRC_URI="http://launchpad.net/${PN}/$(ver_cut 1-2)/${PV}/+download/${PN}-${PV}.tar.gz"
 
-KEYWORDS="~amd64 ~x86"
-SLOT="0"
 LICENSE="LGPL-3"
+SLOT="0"
+KEYWORDS="~amd64 ~x86"
 IUSE="+gtk2 gtk3"
 
-DDEPEND=">=dev-lang/vala-0.11.7:=
+RESTRICT="mirror"
+RDEPEND=">=dev-lang/vala-0.11.7:=
 	gtk3? (
 		>=x11-libs/libwnck-3.2.1
 		>=x11-libs/gtk+-3.2.1 )
 	gnome-base/libgtop"
-DEPEND="${DDEPEND}
+DEPEND="${RDEPEND}
 	dev-util/gtk-doc"
-
-RDEPEND="${DDEPEND}"
 
 src_unpack() {
 	unpack ${A}
