@@ -5,12 +5,12 @@ EAPI=5
 
 DESCRIPTION="The Object Oriented MicroMagnetic Framework"
 HOMEPAGE="http://math.nist.gov/oommf/"
-SRC_URI="http://math.nist.gov/oommf/dist/${PN}12b1_20170927.tar.gz"
+SRC_URI="http://math.nist.gov/oommf/dist/${PN}20b0_20220930.tar.gz"
 
 LICENSE="HPND"
 KEYWORDS="~amd64 ~arm ~x86"
 IUSE="doc"
-SLOT="1.2"
+SLOT="2.0"
 
 DEPEND="
 dev-lang/tcl:=
