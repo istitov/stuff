@@ -11,12 +11,9 @@ HOMEPAGE="https://www.gtk.org/"
 
 LICENSE="LGPL-2+"
 SLOT="2"
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="aqua cups examples +introspection test vim-syntax xinerama"
-REQUIRED_USE="
-	xinerama? ( !aqua )
-"
-
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x64-solaris"
+REQUIRED_USE="xinerama? ( !aqua )"
 
 # Upstream wants us to do their job:
 # https://bugzilla.gnome.org/show_bug.cgi?id=768663#c1
@@ -62,14 +59,13 @@ DEPEND="${COMMON_DEPEND}
 # in sync.
 RDEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-update-icon-cache-2
-	>=x11-themes/adwaita-icon-theme-3.14
+	x11-themes/adwaita-icon-theme
 	x11-themes/gnome-themes-standard
-	!<dev-util/gtk-builder-convert-${PV}
+	dev-util/gtk-builder-convert
 "
 # librsvg for svg icons (PDEPEND to avoid circular dep), bug #547710
 PDEPEND="
 	gnome-base/librsvg[${MULTILIB_USEDEP}]
-	x11-themes/gtk-engines-adwaita
 	vim-syntax? ( app-vim/gtk-syntax )
 "
 # docbook-4.1.2 and xsl required for man pages
@@ -108,7 +104,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.24.33-Fix-casts.patch
 	"${FILESDIR}"/gtkfilechooserdefault.c.patch
 	"${FILESDIR}"/gtkfilesystemmodel.c.patch
-	"${FILESDIR}"/gtkpathbar.c.patch	
+	"${FILESDIR}"/gtkpathbar.c.patch
 )
 
 strip_builddir() {
