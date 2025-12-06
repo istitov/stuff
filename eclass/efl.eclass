@@ -26,69 +26,69 @@ esac
 
 inherit eutils libtool flag-o-matic
 
-# @ECLASS-VARIABLE: E_CYTHON
+# @ECLASS_VARIABLE: E_CYTHON
 # @DESCRIPTION:
 # if defined, the package is Cython bindings (implies E_PYTHON)
 
 # Python support:
-# @ECLASS-VARIABLE: E_PYTHON
+# @ECLASS_VARIABLE: E_PYTHON
 # @DESCRIPTION:
 # if defined, the package is Python/distutils
 : ${E_PYTHON:=${E_CYTHON}}
 
-# @ECLASS-VARIABLE: E_PKG_IUSE
+# @ECLASS_VARIABLE: E_PKG_IUSE
 # @DESCRIPTION:
 # Use EFL_PKG_IUSE instead of IUSE for doc, examples, nls and test so that the
 # eclass can automagically add the needed dependencies and or perform the
 # required actions.
 IUSE="${E_PKG_IUSE}"
 
-# @ECLASS-VARIABLE: E_LIVE_SERVER_DEFAULT_SVN
+# @ECLASS_VARIABLE: E_LIVE_SERVER_DEFAULT_SVN
 # @DESCRIPTION:
 # Default svn repository to use.
 E_LIVE_SERVER_DEFAULT_SVN="http://svn.enlightenment.org/svn/e/trunk"
 
-# @ECLASS-VARIABLE: E_EXTERNAL
+# @ECLASS_VARIABLE: E_EXTERNAL
 # @DESCRIPTION:
 # If defined, efl.eclass will not automatically inherit subversion and do any
 # magic for it
 : ${E_EXTERNAL:=}
 
-# @ECLASS-VARIABLE: E_EXTERNAL
+# @ECLASS_VARIABLE: E_EXTERNAL
 # @DESCRIPTION:
 # If defined, efl.eclass will not automatically inherit subversion and do any
 # magic for it
 : ${E_GIT_PROJECT:=}
 
-# @ECLASS-VARIABLE: E_LIVE_OFFLINE
+# @ECLASS_VARIABLE: E_LIVE_OFFLINE
 # @DESCRIPTION:
 # Use ESCM_OFFLINE="yes" only for enlightenment packages. Usefull if you want to
 # have manual control over subversion revisions
 : ${E_LIVE_OFFLINE:=}
 
-# @ECLASS-VARIABLE: ESVN_URI_APPEND
+# @ECLASS_VARIABLE: ESVN_URI_APPEND
 # @DESCRIPTION:
 # This is addition to final default svn repo path, namely package name
 : ${ESVN_URI_APPEND:=${PN}}
 
-# @ECLASS-VARIABLE: ESVN_SUB_PROJECT
+# @ECLASS_VARIABLE: ESVN_SUB_PROJECT
 # @DESCRIPTION:
 # Sub-group into svn.enlightenment.org repository trunk
 : ${ESVN_SUB_PROJECT:=}
 
-# @ECLASS-VARIABLE: EFL_GIT_BASE_PATH
+# @ECLASS_VARIABLE: EFL_GIT_BASE_PATH
 # @DESCRIPTION:
 # Initial part of any official git repository url.
 # You may respecify it to use local mirror instead of official git server
 # Do NOT end it with slash '/'
 : ${EFL_GIT_BASE_PATH:="https://git.enlightenment.org"}
 
-# @ECLASS-VARIABLE: EFL_GIT_REPO_NAME
+# @ECLASS_VARIABLE: EFL_GIT_REPO_NAME
 # @DESCRIPTION:
 # Final part of git url, name of the repository. Default: ${PN}
 : ${EFL_GIT_REPO_NAME:=${PN}}
 
-# @ECLASS-VARIABLE: EFL_GIT_REPO_CATEGORY
+# @ECLASS_VARIABLE: EFL_GIT_REPO_CATEGORY
 # @DESCRIPTION:
 # Middle part of git url, category of the repository. Default: None
 : ${EFL_GIT_REPO_CATEGORY:=}

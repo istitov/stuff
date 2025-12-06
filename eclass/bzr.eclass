@@ -35,52 +35,52 @@ case "${EAPI:-0}" in
 		&& DEPEND=">=dev-vcs/bzr-2.0.1[sftp]" ;;
 esac
 
-# @ECLASS-VARIABLE: EBZR_STORE_DIR
+# @ECLASS_VARIABLE: EBZR_STORE_DIR
 # @DESCRIPTION:
 # The directory to store all fetched Bazaar live sources.
 : ${EBZR_STORE_DIR:=${PORTAGE_ACTUAL_DISTDIR:-${DISTDIR}}/bzr-src}
 
-# @ECLASS-VARIABLE: EBZR_UNPACK_DIR
+# @ECLASS_VARIABLE: EBZR_UNPACK_DIR
 # @DESCRIPTION:
 # The working directory where the sources are copied to.
 : ${EBZR_UNPACK_DIR:=${WORKDIR}/${P}}
 
-# @ECLASS-VARIABLE: EBZR_INIT_REPO_CMD
+# @ECLASS_VARIABLE: EBZR_INIT_REPO_CMD
 # @DESCRIPTION:
 # The Bazaar command to initialise a shared repository.
 : ${EBZR_INIT_REPO_CMD:="bzr init-repository --no-trees"}
 
-# @ECLASS-VARIABLE: EBZR_FETCH_CMD
+# @ECLASS_VARIABLE: EBZR_FETCH_CMD
 # @DESCRIPTION:
 # The Bazaar command to fetch the sources.
 : ${EBZR_FETCH_CMD:="bzr branch --no-tree"}
 
-# @ECLASS-VARIABLE: EBZR_UPDATE_CMD
+# @ECLASS_VARIABLE: EBZR_UPDATE_CMD
 # @DESCRIPTION:
 # The Bazaar command to update the sources.
 : ${EBZR_UPDATE_CMD:="bzr pull"}
 
-# @ECLASS-VARIABLE: EBZR_EXPORT_CMD
+# @ECLASS_VARIABLE: EBZR_EXPORT_CMD
 # @DESCRIPTION:
 # The Bazaar command to export a branch.
 : ${EBZR_EXPORT_CMD:="bzr export"}
 
-# @ECLASS-VARIABLE: EBZR_CHECKOUT_CMD
+# @ECLASS_VARIABLE: EBZR_CHECKOUT_CMD
 # @DESCRIPTION:
 # The Bazaar command to checkout a branch.
 : ${EBZR_CHECKOUT_CMD:="bzr checkout --lightweight -q"}
 
-# @ECLASS-VARIABLE: EBZR_REVNO_CMD
+# @ECLASS_VARIABLE: EBZR_REVNO_CMD
 # @DESCRIPTION:
 # The Bazaar command to list a revision number of the branch.
 : ${EBZR_REVNO_CMD:="bzr revno"}
 
-# @ECLASS-VARIABLE: EBZR_OPTIONS
+# @ECLASS_VARIABLE: EBZR_OPTIONS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The options passed to the fetch and update commands.
 
-# @ECLASS-VARIABLE: EBZR_REPO_URI
+# @ECLASS_VARIABLE: EBZR_REPO_URI
 # @DEFAULT_UNSET
 # @REQUIRED
 # @DESCRIPTION:
@@ -90,7 +90,7 @@ esac
 # make sure that dev-vcs/bzr was built with USE="sftp".  In EAPI 2 or
 # later, the eclass will depend on dev-vcs/bzr[sftp].
 
-# @ECLASS-VARIABLE: EBZR_INITIAL_URI
+# @ECLASS_VARIABLE: EBZR_INITIAL_URI
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The URI used for initial branching of the source repository.  If this
@@ -101,12 +101,12 @@ esac
 #
 # Normally, this variable needs not be set.
 
-# @ECLASS-VARIABLE: EBZR_BOOTSTRAP
+# @ECLASS_VARIABLE: EBZR_BOOTSTRAP
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Bootstrap script or command like autogen.sh or etc.
 
-# @ECLASS-VARIABLE: EBZR_PATCHES
+# @ECLASS_VARIABLE: EBZR_PATCHES
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # bzr.eclass can apply patches in bzr_bootstrap().  You can use regular
@@ -116,7 +116,7 @@ esac
 # Patches are searched both in ${PWD} and ${FILESDIR}.  If not found in
 # either location, the installation dies.
 
-# @ECLASS-VARIABLE: EBZR_PROJECT
+# @ECLASS_VARIABLE: EBZR_PROJECT
 # @DESCRIPTION:
 # The project name of your ebuild.  Normally, the branch will be stored
 # in the ${EBZR_STORE_DIR}/${EBZR_PROJECT} directory.
@@ -126,7 +126,7 @@ esac
 # ${EBZR_STORE_DIR}/${EBZR_PROJECT}/${EBZR_BRANCH}.
 : ${EBZR_PROJECT:=${PN}}
 
-# @ECLASS-VARIABLE: EBZR_BRANCH
+# @ECLASS_VARIABLE: EBZR_BRANCH
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The directory where to store the branch within a shared repository,
@@ -141,20 +141,20 @@ esac
 # needs not be set.  In this case, the branch will be stored in a
 # stand-alone repository directly in EBZR_PROJECT.
 
-# @ECLASS-VARIABLE: EBZR_REVISION
+# @ECLASS_VARIABLE: EBZR_REVISION
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Revision to fetch, defaults to the latest
 # (see http://bazaar-vcs.org/BzrRevisionSpec or bzr help revisionspec).
 
-# @ECLASS-VARIABLE: EBZR_OFFLINE
+# @ECLASS_VARIABLE: EBZR_OFFLINE
 # @DESCRIPTION:
 # Set this variable to a non-empty value to disable automatic updating
 # of a bzr source tree.  This is intended to be set outside the ebuild
 # by users.
 : ${EBZR_OFFLINE=${EVCS_OFFLINE}}
 
-# @ECLASS-VARIABLE: EBZR_WORKDIR_CHECKOUT
+# @ECLASS_VARIABLE: EBZR_WORKDIR_CHECKOUT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # If this variable is set to a non-empty value, EBZR_CHECKOUT_CMD will
