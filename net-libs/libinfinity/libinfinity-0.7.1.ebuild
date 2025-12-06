@@ -3,6 +3,8 @@
 
 EAPI=8
 
+inherit autotools
+
 MY_PV=$(ver_cut 1-2)
 
 DESCRIPTION="An implementation of the Infinote protocol written in GObject-based C"
@@ -12,22 +14,22 @@ SRC_URI="https://github.com/gobby/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz
 LICENSE="LGPL-2.1"
 SLOT="0.7"
 KEYWORDS="~amd64 ~x86"
-IUSE="avahi doc gtk2 +gtk3 server static-libs"
+IUSE="avahi doc gtk +gtk3 server static-libs"
 REQUIRED_USE="
-	^^ ( gtk2 gtk3 )
-	"
+exactly-one-of ( gtk gtk3 )
+"
 
 RDEPEND="dev-libs/glib:2
 	dev-libs/libxml2
 	net-libs/gnutls
 	sys-libs/pam
-	virtual/gsasl
 	avahi? ( net-dns/avahi )
 	gtk3? ( x11-libs/gtk+:3 )
-	gtk2? ( x11-libs/gtk+:2 )"
+	gtk? ( x11-libs/gtk+:2 )"
 DEPEND="${RDEPEND}
 	acct-user/infinote
 	acct-group/infinote
+	net-misc/gsasl
 	virtual/pkgconfig
 	sys-devel/gettext
 	doc? ( dev-util/gtk-doc )"
@@ -46,11 +48,11 @@ DOCS=( AUTHORS ChangeLog NEWS README.md TODO )
 #}
 
 src_configure() {
-	econf \
+	./autogen.sh \
 		$(use_enable doc gtk-doc) \
-		$(use_with gtk2 inftextgtk) \
-		$(use_with gtk2 infgtk) \
-		$(use_with gtk2 ) \
+		$(use_with gtk inftextgtk) \
+		$(use_with gtk infgtk) \
+		$(use_with gtk ) \
 		$(use_with gtk3) \
 		$(use_with server infinoted) \
 		$(use_with avahi) \

@@ -4,8 +4,9 @@
 EAPI=2
 MY_PN=${PN/mod-/}
 DESCRIPTION="The best phrases of Linux.Org.Ru members"
-HOMEPAGE="http://lorquotes.ru/,"
-#SRC_URI="http://lorquotes.ru/fortraw.php"
+HOMEPAGE="https://github.com/OlegKorchagin/lorquotes_archive"
+SRC_URI="https://raw.githubusercontent.com/OlegKorchagin/lorquotes_archive/refs/heads/main/lor"
+S=${WORKDIR}/${MY_PN}
 
 LICENSE="WTFPL-2"
 SLOT="0"
@@ -13,11 +14,9 @@ KEYWORDS="amd64 arm ~amd64-linux ~x86-linux"
 
 RDEPEND="games-misc/fortune-mod"
 
-S=${WORKDIR}/${MY_PN}
-
 src_prepare(){
-	wget -c http://lorquotes.ru/fortraw.php
-	iconv -f koi8r -t utf8 "${WORKDIR}/fortraw.php" > "${WORKDIR}/${PN}"
+
+#	wget -c $SRC_URI > "${WORKDIR}/${PN}"
 	strfile "${WORKDIR}/${PN}"
 }
 src_install() {
