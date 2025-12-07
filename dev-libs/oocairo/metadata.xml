@@ -3,7 +3,14 @@
 <pkgmetadata>
 	<longdescription>oocairo are Lua bindings to the cairo library, allowing graphic and text rendering.</longdescription>
 	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+		<name>Ivan S. Titov</name>
+	</maintainer>
+	<maintainer type="person">
 		<email>root@proscript.ru</email>
 		<name>Vlasov A. I.</name>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">awesomeWM/oocairo</remote-id>
+	</upstream>
 </pkgmetadata>
