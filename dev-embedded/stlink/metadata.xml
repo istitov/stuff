@@ -13,4 +13,7 @@
 		. STLINKv1 uses SCSI passthru commands over USB,
 		. STLINKv2 uses raw USB commands.
 	</longdescription>
+	<upstream>
+		<remote-id type="github">karlp/stlink</remote-id>
+	</upstream>
 </pkgmetadata>
