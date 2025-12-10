@@ -8,4 +8,7 @@
 	<upstream>
 		<remote-id type="sourceforge">adplug</remote-id>
 	</upstream>
+	<upstream>
+		<remote-id type="github">adplug/adplug</remote-id>
+	</upstream>
 </pkgmetadata>
