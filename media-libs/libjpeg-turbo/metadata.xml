@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">libjpeg-turbo/libjpeg-turbo</remote-id>
+	</upstream>
 </pkgmetadata>
