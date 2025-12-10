@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-<maintainer type="person"><email>fuzzyray@gentoo.org</email></maintainer>
-<longdescription>
-udept is a collection of Portage scripts, maintenance tools and analysis tools,
-written in bash and powered by the dep engine.
-</longdescription>
+	<maintainer type="person"><email>fuzzyray@gentoo.org</email></maintainer>
+	<longdescription>
+		udept is a collection of Portage scripts, maintenance tools and analysis tools,
+		written in bash and powered by the dep engine.
+	</longdescription>
+	<upstream>
+		<remote-id type="github">init-6/udept</remote-id>
+	</upstream>
 </pkgmetadata>
