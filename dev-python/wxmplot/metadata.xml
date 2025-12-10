@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="pypi">wxmplot</remote-id>
+	</upstream>
 </pkgmetadata>
