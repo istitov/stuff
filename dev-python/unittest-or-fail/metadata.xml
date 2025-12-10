@@ -6,4 +6,7 @@
 			Enable Python-compatible libs (python2_7 only)
 		</flag>
 	</use>
+	<upstream>
+		<remote-id type="github">mgorny/unittest-or-fail</remote-id>
+	</upstream>
 </pkgmetadata>
