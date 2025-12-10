@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="pypi">Ipympl</remote-id>
+	</upstream>
 </pkgmetadata>
