@@ -20,4 +20,7 @@ gnome-python, it can be used to write full featured Gnome applications.
 			Enable Python-compatible libs (python2_7 only)
 		</flag>
 	</use>
+	<upstream>
+		<remote-id type="gnome-gitlab">Archive/pygtk</remote-id>
+	</upstream>
 </pkgmetadata>
