@@ -15,4 +15,7 @@
 			To install required libraries for pyside support
 		</flag>
 	</use>
+	<upstream>
+		<remote-id type="pypi">pyface</remote-id>
+	</upstream>
 </pkgmetadata>
