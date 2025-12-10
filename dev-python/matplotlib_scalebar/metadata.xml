@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">ppinard/matplotlib-scalebar</remote-id>
+		<remote-id type="pypi">matplotlib_scalebar</remote-id>
+	</upstream>
 </pkgmetadata>
