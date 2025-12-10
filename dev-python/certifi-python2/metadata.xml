@@ -7,6 +7,7 @@
 	</maintainer>
 	<stabilize-allarches/>
 	<upstream>
+		<remote-id type="github">mgorny/certifi-shim</remote-id>
 		<remote-id type="pypi">certifi</remote-id>
 	</upstream>
 	<use>
