@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>Kelzhadant@yandex.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">aptana/studio3</remote-id>
+	</upstream>
 </pkgmetadata>
