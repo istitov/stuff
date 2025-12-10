@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>Kelzhadant@yandex.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">xintrea/mytetra_dev</remote-id>
+	</upstream>
 </pkgmetadata>
