@@ -6,4 +6,8 @@
 		<name>Jauhien Piatlicki</name>
 	</maintainer>
 	<longdescription>Utilities and convenience classes and functions for wxPython</longdescription>
+	<upstream>
+		<remote-id type="github">newville/wxutils</remote-id>
+		<remote-id type="pypi">wxutils</remote-id>
+	</upstream>
 </pkgmetadata>
