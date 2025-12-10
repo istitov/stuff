@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">sybrenjansen/mpire</remote-id>
+		<remote-id type="pypi">mpire</remote-id>
+	</upstream>
 </pkgmetadata>
