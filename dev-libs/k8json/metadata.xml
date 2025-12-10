@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">euroelessar/k8json</remote-id>
+	</upstream>
 </pkgmetadata>
