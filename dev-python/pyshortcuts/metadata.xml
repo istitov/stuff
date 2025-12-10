@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">newville/pyshortcuts</remote-id>
+		<remote-id type="pypi">pyshortcuts</remote-id>
+	</upstream>
 </pkgmetadata>
