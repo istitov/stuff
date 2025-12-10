@@ -21,4 +21,7 @@
 			To install required libraries to use the GUI elements based on traitsui
 		</flag>
 	</use>
+	<upstream>
+		<remote-id type="pypi">hyperspy</remote-id>
+	</upstream>
 </pkgmetadata>
