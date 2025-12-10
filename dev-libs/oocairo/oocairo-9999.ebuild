@@ -7,7 +7,6 @@ EAPI="8"
 DESCRIPTION="oocairo are Lua bindings to the cairo library."
 HOMEPAGE="https://github.com/awesomeWM/oocairo"
 
-
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/awesomeWM/${PN}.git"
 else
