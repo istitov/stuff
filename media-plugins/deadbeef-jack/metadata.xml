@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">tokiclover/deadbeef-plugins-jack</remote-id>
+	</upstream>
 </pkgmetadata>
