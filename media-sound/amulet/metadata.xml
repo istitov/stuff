@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <maintainer type="person">
-    <email>dolphinstkom@gmail.com</email>
-    <name>Komashko Stanislav</name>
-  </maintainer>
-  <longdescription>
-Elegant and simple audio converter
-</longdescription>
+	<maintainer type="person">
+		<email>dolphinstkom@gmail.com</email>
+		<name>Komashko Stanislav</name>
+	</maintainer>
+	<longdescription>
+		Elegant and simple audio converter
+	</longdescription>
+	<upstream>
+		<remote-id type="github">aka-mccloud/amulet.git</remote-id>
+	</upstream>
 </pkgmetadata>
