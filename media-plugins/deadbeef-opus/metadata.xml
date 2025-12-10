@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>megagreener@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="bitbucket">Lithopsian/deadbeef-opus</remote-id>
+	</upstream>
 </pkgmetadata>
