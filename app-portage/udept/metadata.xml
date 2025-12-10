@@ -7,6 +7,6 @@
 		written in bash and powered by the dep engine.
 	</longdescription>
 	<upstream>
-		<remote-id type="github">init-6/udept</remote-id>
+		<remote-id type="gitlab">init-6/udept</remote-id>
 	</upstream>
 </pkgmetadata>
