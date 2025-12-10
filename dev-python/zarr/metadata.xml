@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">zarr-developers/zarr-python</remote-id>
+		<remote-id type="pypi">Zarr</remote-id>
+	</upstream>
 </pkgmetadata>
