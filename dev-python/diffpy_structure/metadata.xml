@@ -8,4 +8,8 @@
 		<remote-id type="github">diffpy/diffpy.structure</remote-id>
 		<remote-id type="pypi">diffpy_structure</remote-id>
 	</upstream>
+	<upstream>
+		<remote-id type="github">diffpy/diffpy.structure</remote-id>
+		<remote-id type="pypi">diffpy_structure</remote-id>
+	</upstream>
 </pkgmetadata>
