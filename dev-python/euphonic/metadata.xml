@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">pace-neutrons/Euphonic</remote-id>
+		<remote-id type="pypi">euphonic</remote-id>
+	</upstream>
 </pkgmetadata>
