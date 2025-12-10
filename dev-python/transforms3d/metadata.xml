@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">matthew-brett/transforms3d</remote-id>
+		<remote-id type="pypi">transforms3d</remote-id>
+	</upstream>
 </pkgmetadata>
