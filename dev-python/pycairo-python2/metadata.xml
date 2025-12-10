@@ -10,4 +10,7 @@
 			Enable Python-compatible libs (python2_7 only)
 		</flag>
 	</use>
+	<upstream>
+		<remote-id type="github">pygobject/pycairo</remote-id>
+	</upstream>
 </pkgmetadata>
