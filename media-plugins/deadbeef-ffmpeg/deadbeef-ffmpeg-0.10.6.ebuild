@@ -31,7 +31,7 @@ RDEPEND="
 	!media-libs/libpostproc"
 
 DEPEND="${RDEPEND}
-	>=sys-devel/make-3.81
+	>=dev-build/make-3.81
 	gnutls? ( virtual/pkgconfig )
 	cpu_flags_x86_mmx? ( dev-lang/yasm )
 "

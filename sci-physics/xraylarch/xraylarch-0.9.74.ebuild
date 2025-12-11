@@ -47,7 +47,7 @@ RDEPEND="
 	dev-python/sphinx[${PYTHON_USEDEP}]
 	dev-python/numpydoc[${PYTHON_USEDEP}]
 
-	dev-python/PyQt5[${PYTHON_USEDEP}]
+	dev-python/pyqt5[${PYTHON_USEDEP}]
 	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
 	dev-python/pyfai[${PYTHON_USEDEP}]

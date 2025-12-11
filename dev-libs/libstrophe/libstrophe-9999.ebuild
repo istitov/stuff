@@ -18,7 +18,7 @@ RDEPEND="expat? ( dev-libs/expat )
 		!expat? ( dev-libs/libxml2:2 )
 		dev-libs/openssl:0="
 DEPEND="${RDEPEND}
-		doc? ( app-doc/doxygen )"
+		doc? ( app-text/doxygen )"
 
 DOCS=( GPL-LICENSE.txt LICENSE.txt MIT-LICENSE.txt README.markdown ChangeLog )
 

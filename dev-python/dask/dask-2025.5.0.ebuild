@@ -43,7 +43,7 @@ BDEPEND="
 	)
 "
 
-#	>=dev-python/importlib_metadata-4.13.0[${PYTHON_USEDEP}]
+#	>=dev-python/importlib-metadata-4.13.0[${PYTHON_USEDEP}]
 #	#dropped with py3.9
 
 distutils_enable_tests pytest

@@ -34,7 +34,7 @@ RDEPEND=">=dev-db/sqlite-3.22
 		)
 		libnotify? ( x11-libs/libnotify )"
 DEPEND="${RDEPEND}
-		sys-devel/autoconf-archive"
+		dev-build/autoconf-archive"
 
 src_prepare() {
 		default

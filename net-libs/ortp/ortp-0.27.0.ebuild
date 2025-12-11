@@ -19,7 +19,7 @@ RDEPEND="
 	srtp? ( net-libs/libsrtp:= )
 	ssl? ( dev-libs/openssl )"
 DEPEND="${RDEPEND}
-	doc? ( app-doc/doxygen )"
+	doc? ( app-text/doxygen )"
 
 src_prepare() {
 	# respect user's CFLAGS

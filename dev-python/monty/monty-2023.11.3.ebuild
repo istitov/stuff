@@ -29,7 +29,7 @@ DEPEND="
 	dev-python/flake8[${PYTHON_USEDEP}]
 	dev-python/black[${PYTHON_USEDEP}]
 	dev-python/pylint[${PYTHON_USEDEP}]
-	sci-libs/pytorch
+	sci-ml/pytorch
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/pandas[${PYTHON_USEDEP}]
 	dev-python/ruamel-yaml[${PYTHON_USEDEP}]

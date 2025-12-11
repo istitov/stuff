@@ -35,7 +35,7 @@ S="${WORKDIR}"/"${PN}"-"${PV}"
 #MYPV="0.1.0"
 #DISTUTILS_IN_SOURCE_BUILD=1
 distutils_enable_tests unittest
-distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx_rtd_theme
+distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx-rtd-theme
 
 #PATCHES=(
 #	"${FILESDIR}/${PN}-skip-tests.patch"

@@ -43,8 +43,8 @@ RDEPEND="
 	dev-python/prettytable[${PYTHON_USEDEP}]
 	!dev-python/PTable
 	>=dev-python/tifffile-2019.12.3[${PYTHON_USEDEP}]
-	>=dev-python/importlib_metadata-3.6[${PYTHON_USEDEP}]
-	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx_rtd_theme )
+	>=dev-python/importlib-metadata-3.6[${PYTHON_USEDEP}]
+	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx-rtd-theme )
 	learning? ( dev-python/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( dev-python/numba[${PYTHON_USEDEP}] dev-python/cython[${PYTHON_USEDEP}] )
 "

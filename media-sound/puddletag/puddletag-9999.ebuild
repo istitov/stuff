@@ -20,15 +20,15 @@ IUSE="acoustid quodlibet"
 RDEPEND="
 	>=dev-python/configobj-5.0.8[${PYTHON_USEDEP}]
 	>=dev-python/pyparsing-3.0.9[${PYTHON_USEDEP}]
-	>=dev-python/PyQt5-5.15.9[${PYTHON_USEDEP},svg]
+	>=dev-python/pyqt5-5.15.9[${PYTHON_USEDEP},svg]
 	>=media-libs/mutagen-1.46.0[${PYTHON_USEDEP}]
 	acoustid? (
 		>=dev-python/pyacoustid-1.2.2[${PYTHON_USEDEP}]
 		>=media-libs/chromaprint-0.5[tools] )
 	quodlibet? ( >=media-sound/quodlibet-4.4.0[${PYTHON_USEDEP}] )
-	>=dev-python/PyQt5-sip-12.11.0[${PYTHON_USEDEP}]
+	>=dev-python/pyqt5-sip-12.11.0[${PYTHON_USEDEP}]
 	>=dev-python/lxml-4.9.2[${PYTHON_USEDEP}]
-	>=dev-python/Levenshtein-0.20.9[${PYTHON_USEDEP}]
+	>=dev-python/levenshtein-0.20.9[${PYTHON_USEDEP}]
 "
 
 DOCS=(changelog NEWS THANKS TODO)

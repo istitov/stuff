@@ -18,7 +18,7 @@ RDEPEND="x11-libs/cairo
 	>=media-libs/gavl-1.2.0"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
-	doc? ( app-doc/doxygen )"
+	doc? ( app-text/doxygen )"
 
 DOCS=( AUTHORS ChangeLog README.md TODO )
 
