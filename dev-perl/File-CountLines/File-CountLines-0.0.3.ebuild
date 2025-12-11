@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
+
 DIST_AUTHOR=MORITZ
 DIST_VERSION=v0.0.3
 inherit perl-module

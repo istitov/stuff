@@ -13,6 +13,7 @@
 # libraries fontforge thinks with use $ fontforge --library-status
 
 EAPI="7"
+
 _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 inherit xdg-utils python-single-r1_py2 autotools git-r3

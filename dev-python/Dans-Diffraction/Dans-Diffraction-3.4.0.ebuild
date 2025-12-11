@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+
 PYPI_PN=${PN/-/_}
 #PYPI_NO_NORMALIZE=1
 PYTHON_COMPAT=( python3_{9..14} )

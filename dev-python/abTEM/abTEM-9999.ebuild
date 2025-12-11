@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+
 #PYPI_NO_NORMALIZE=0
 PYPI_PN="abtem"
 DISTUTILS_USE_PEP517=setuptools

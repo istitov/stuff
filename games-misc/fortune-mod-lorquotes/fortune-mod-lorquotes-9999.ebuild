@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=2
+
 MY_PN=${PN/mod-/}
 DESCRIPTION="The best phrases of Linux.Org.Ru members"
 HOMEPAGE="https://github.com/OlegKorchagin/lorquotes_archive"

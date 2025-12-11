@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+
 GNOME2_EAUTORECONF="yes"
 
 inherit flag-o-matic gnome2 multilib multilib-minimal readme.gentoo-r1 virtualx

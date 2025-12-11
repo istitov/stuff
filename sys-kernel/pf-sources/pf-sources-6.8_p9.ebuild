@@ -1,6 +1,7 @@
 # Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 EAPI=8
+
 # Define what default functions to run.
 ETYPE="sources"
 # Use genpatches but don't include the 'experimental' use flag.

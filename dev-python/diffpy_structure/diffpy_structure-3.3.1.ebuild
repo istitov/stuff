@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+
 #MYPN="${PN/_/.}"
 #MYP="${MYPN}-${PV}"
 PYTHON_COMPAT=( python3_{9..14} )

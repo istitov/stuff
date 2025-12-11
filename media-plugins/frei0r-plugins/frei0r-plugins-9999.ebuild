@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="8"
+
 inherit cmake multilib git-r3
 
 DESCRIPTION="A minimalistic plugin API for video effects"
