@@ -5,24 +5,24 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_EXT=1
 inherit distutils-r1
 #inherit cmake
 
-DISTUTILS_EXT=1
-DESCRIPTION="Prismatic Software for STEM Simulation"
-HOMEPAGE="https://prism-em.com"
-SRC_URI="https://github.com/prism-em/prismatic/archive/refs/tags/v2.0.tar.gz -> ${P}.tar.gz"
-
 MYPN="prismatic"
 MYP="${MYPN}-${PV}"
+
+DESCRIPTION="Prismatic Software for STEM Simulation"
+HOMEPAGE="https://prism-em.com"
+SRC_URI="https://github.com/prism-em/${MYPN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+
+S="${WORKDIR}/${MYP}"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc python debug gpu"
 #RESTRICT=strip
-
-S="${WORKDIR}/${MYP}"
 BUILD_DIR=${S}
 
 RDEPEND="
