@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
+PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=no
 inherit distutils-r1 llvm
 

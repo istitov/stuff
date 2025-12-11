@@ -5,7 +5,7 @@ EAPI=8
 PYPI_PN=${PN/-/_}
 PYPI_NO_NORMALIZE=0
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{8..11} )
+PYTHON_COMPAT=( python3_{9..14} )
 
 inherit distutils-r1 pypi
 

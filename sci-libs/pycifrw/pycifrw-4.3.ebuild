@@ -3,7 +3,7 @@
 
 EAPI=8
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python2_7 python3_{6..11} )
+PYTHON_COMPAT=( python2_7 python3_{9..14} )
 
 inherit distutils-r1 flag-o-matic
 

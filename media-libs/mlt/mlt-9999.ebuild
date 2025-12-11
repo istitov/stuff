@@ -5,7 +5,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
+PYTHON_COMPAT=( python3_{9..14} )
 USE_RUBY="ruby23"
 inherit cmake python-single-r1 ruby-single git-r3
 

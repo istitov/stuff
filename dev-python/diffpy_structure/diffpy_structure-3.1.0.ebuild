@@ -4,7 +4,7 @@
 EAPI=8
 MYPN="${PN/_/.}"
 MYP="${MYPN}-${PV}"
-PYTHON_COMPAT=( python3_{9..12} )
+PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 flag-o-matic pypi
 
