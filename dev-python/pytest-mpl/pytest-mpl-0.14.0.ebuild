@@ -19,7 +19,7 @@ IUSE="examples"
 RESTRICT="test"	# Test phase runs with fails
 
 RDEPEND="dev-python/pytest[${PYTHON_USEDEP}]
-	dev-python/jinja[${PYTHON_USEDEP}]
+	dev-python/jinja2[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
