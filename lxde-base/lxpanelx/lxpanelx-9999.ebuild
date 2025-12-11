@@ -10,6 +10,8 @@ HOMEPAGE="https://code.google.com/p/lxpanelx/"
 SRC_URI="https://storage.googleapis.com/google-code-archive-source/v2/code.google.com/lxpanelx/source-archive.zip"
 #ESVN_REPO_URI="https://${PN}.googlecode.com/svn/trunk/"
 
+S="${WORKDIR}/${PN}/trunk"
+
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="+alsa oss plugins libfm libindicator menucache"
@@ -29,8 +31,6 @@ RDEPEND="x11-libs/gtk+:2
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	sys-devel/gettext"
-
-S="${WORKDIR}/${PN}/trunk"
 
 src_prepare() {
 	default
