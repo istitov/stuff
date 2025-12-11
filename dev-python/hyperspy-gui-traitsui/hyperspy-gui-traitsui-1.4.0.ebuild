@@ -5,14 +5,17 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 pypi
 
 MYPN="${PN/hyperspy-gui-traitsui/hyperspy_gui_traitsui}"
 MYP="${MYPN}-${PV}"
 
 DESCRIPTION="Provides traitsui graphic user interface (GUI) elements for hyperspy"
 HOMEPAGE="https://hyperspy.org/"
-SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
+#SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${MYPN^}" "${PV}")"
+
+S="${WORKDIR}/${MYP}"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -29,8 +32,6 @@ DEPEND="${RDEPEND}
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
-S="${WORKDIR}/${MYP}"
 
 python_compile() {
 	distutils-r1_python_compile
