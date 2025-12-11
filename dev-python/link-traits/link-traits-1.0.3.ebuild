@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 flag-o-matic pypi
+inherit distutils-r1 pypi
 
 MYPN="${PN/link-traits/link_traits}"
 MYP="${MYPN}-${PV}"

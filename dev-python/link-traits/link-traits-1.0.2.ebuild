@@ -5,14 +5,15 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1 pypi
 
 MYPN="${PN/link-traits/link_traits}"
 MYP="${MYPN}-${PV}"
 
 DESCRIPTION="A fork to traitlets"
 HOMEPAGE="https://github.com/hyperspy/link_traits"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${MYP}.tar.gz"
+#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${MYP}.tar.gz"
+SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 S="${WORKDIR}/${MYP}"
 
