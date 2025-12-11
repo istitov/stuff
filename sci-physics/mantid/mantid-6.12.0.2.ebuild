@@ -22,7 +22,7 @@ if [[ ${PV} = *9999* ]] ; then
 	EGIT_COMMIT="HEAD"
 else
 	EGIT_COMMIT=v${PV}
-fi 
+fi
 
 EGIT_CLONE_TYPE="single"
 
@@ -114,7 +114,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 src_unpack() {
 	git-r3_src_unpack
-	
+
 	EGIT_COMMIT="HEAD"
 
 	EGIT_REPO_URI=${EGIT_REPO_URI_SPAN}
@@ -129,7 +129,7 @@ src_unpack() {
 	EGIT_REPO_URI=${EGIT_REPO_URI_PYSTOG}
 	EGIT_CHECKOUT_DIR=${WORKDIR}/${P}/new_git/pystog
 	git-r3_src_unpack
-	
+
 	EGIT_REPO_URI=${EGIT_REPO_URI_GTEST}
 	EGIT_CHECKOUT_DIR=${WORKDIR}/${P}/new_git/gtest
 	git-r3_src_unpack
@@ -138,46 +138,46 @@ src_unpack() {
 src_prepare() {
 	#Disable GoogleTest
 	#rm -rf ${S}/buildconfig/CMake/GoogleTest.cmake || die
-	
+
 	#Enable GoogleTest
 	sed -i -r "s!https://github.com/google/googletest.git!$WORKDIR/$P/new_git/gtest!" buildconfig/CMake/GoogleTest.cmake || die
-	
+
 	#Rename opencascade and links
 	sed -i -e 's:/OpenCASCADE:/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
 	sed -i -e 's:/opt/opencascade/inc:/usr/include/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
 	sed -i -e 's:/opt/opencascade/lib64:/usr/lib64/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
-	
+
 	#Disable Span
 	#sed -i -e 's:include(Span):#include(Span):' buildconfig/CMake/CommonSetup.cmake || die
 	#rm -rf ${S}/buildconfig/CMake/Span.cmake || die
-	
+
 	#Let Span be, but in a local repo
 	sed -i -r "s!https://github.com/tcbrindle/span.git!$WORKDIR/$P/_deps/span-src!" buildconfig/CMake/Span.cmake || die
 	###echo 'fake timestamp' >> ${S}/_deps/span-subbuild/span-populate-prefix/src/span-populate-stamp/span-populate-gitclone-lastrun.txt || die
-	
+
 	#Let mslice be
 	sed -i -r "s!https://github.com/mantidproject/mslice.git!$WORKDIR/$P/scripts/ExternalInterfaces/src/mslice!" scripts/ExternalInterfaces/CMakeLists.txt || die
-	
+
 	#Let PyStog be
 	sed -i -r "s!https://github.com/neutrons/pystog.git!$WORKDIR/$P/new_git/pystog!" buildconfig/CMake/PyStoG.cmake || die
-	
+
 	#Bugfix
 	sed -iez 's:configure_package_config_file(:include(CMakePackageConfigHelpers)\nconfigure_package_config_file(:' Framework/CMakeLists.txt || die
-	
+
 	#Bugfix; works for gcc:13
 	sed -iez 's:#include <utility>:#include <utility>\n#include <stdint.h>:' Framework/Parallel/src/IO/Chunker.cpp || die
-	#That might be a better option... or not 
+	#That might be a better option... or not
 	#sed -iez 's:#include <utility>:#include <utility>\n#include <limits.h>:' Framework/Parallel/src/IO/Chunker.cpp || die
 	#sed -ie 's!return UINT64_MAX;!std::numeric_limits<uint64_t>::max();!' Framework/Parallel/src/IO/Chunker.cpp || die
-	
+
 	#Bugfix; works for gcc:13
 	sed -iez 's:#include <vector>:#include <vector>\n#include <stdexcept>:' Framework/API/inc/MantidAPI/PreviewManager.h || die
-	
+
 	#Bugfix (Py3.11 related, does not work)
 	#sed -iez 's:#include <stdexcept>:#include <stdexcept>\n#include <internal/pycore_frame.h>\n#include <iostream>:' Framework/PythonInterface/core/src/ErrorHandling.cpp || die
 	#Bugfix
 	sed -ie 's!../lib/qt5\n\n!../lib64/qt5\n\n;!' qt/applications/workbench/CMakeLists.txt || die
-	
+
 	default
 	cmake_src_prepare
 }

@@ -77,4 +77,3 @@ src_install() {
 }
 #	doman doc/rpdump.1 doc/rpload.1
 #		dohtml -r doc/tech-notes/
-

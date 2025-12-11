@@ -38,4 +38,3 @@ src_unpack() {
 	default
 	rm -rf "${WORKDIR}/${P}/${PN}/third_party/_local"
 }
-

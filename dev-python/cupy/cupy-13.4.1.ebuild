@@ -38,7 +38,7 @@ DEPEND="
 		>=sci-libs/rocThrust-${ROCM_VERSION}[${ROCM_USEDEP}]
 		>=sci-libs/hipSPARSE-${ROCM_VERSION}[${ROCM_USEDEP}] )
 		"
-#dev-libs/cusparselt 
+#dev-libs/cusparselt
 RDEPEND=">=dev-python/fastrlock-0.8.1
 	${DEPEND}"
 

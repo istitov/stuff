@@ -22,7 +22,7 @@ RDEPEND="
 	>=dev-python/pyparsing-3.0.9[${PYTHON_USEDEP}]
 	>=dev-python/PyQt5-5.15.9[${PYTHON_USEDEP},svg]
 	>=media-libs/mutagen-1.46.0[${PYTHON_USEDEP}]
-	acoustid? ( 
+	acoustid? (
 		>=dev-python/pyacoustid-1.2.2[${PYTHON_USEDEP}]
 		>=media-libs/chromaprint-0.5[tools] )
 	quodlibet? ( >=media-sound/quodlibet-4.4.0[${PYTHON_USEDEP}] )

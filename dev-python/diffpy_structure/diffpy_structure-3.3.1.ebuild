@@ -13,7 +13,6 @@ HOMEPAGE="https://github.com/diffpy/diffpy.structure"
 #SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
 S=${WORKDIR}/${P}
 
-
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64"

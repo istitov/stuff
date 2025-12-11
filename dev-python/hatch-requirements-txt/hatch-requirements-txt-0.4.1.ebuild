@@ -22,7 +22,7 @@ dev-python/hatchling
 "
 
 DEPEND="${RDEPEND}
-        doc? ( dev-util/gtk-doc )
+	doc? ( dev-util/gtk-doc )
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"

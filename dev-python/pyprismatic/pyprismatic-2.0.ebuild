@@ -32,7 +32,7 @@ RDEPEND="
 	sci-libs/hdf5[cxx]
 "
 #FFTW (compiled with --enable-float, --enable-shared, and --enable-threads)
-#HDF5 (if self-compiling, compile with --enable-cxx)	
+#HDF5 (if self-compiling, compile with --enable-cxx)
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )

@@ -37,7 +37,6 @@ DEPEND="${BDEPEND}
 	doc? ( dev-util/gtk-doc )
 "
 
-
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 src_prepare() {

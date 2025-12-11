@@ -17,7 +17,6 @@ SLOT="0"
 KEYWORDS="amd64 ~ppc x86"
 IUSE="dbus mpd taglib"
 
-
 LANGS="ar be ca cs da de el-GR es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
 for X in ${LANGS} ; do
 	IUSE+=" l10n_${X}"
@@ -35,7 +34,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	mpd? ( media-sound/mpd )
 	x11-libs/gtk+:3"
-	
+
 BDEPEND="virtual/pkgconfig"
 
 distutils_enable_tests unittest
@@ -57,4 +56,3 @@ src_install() {
 	doicon -s 128 sonata/pixmaps/sonata.png
 	rm -r "${ED}"/usr/share/sonata || die
 }
-

@@ -16,7 +16,7 @@ DEPEND="${PYTHON_DEPS}
 		sci-libs/spglib
 		dev-python/numpy[${PYTHON_USEDEP}]
 		dev-python/scipy[${PYTHON_USEDEP}]
-	
+
 "
 #[${PYTHON_USEDEP}]
 

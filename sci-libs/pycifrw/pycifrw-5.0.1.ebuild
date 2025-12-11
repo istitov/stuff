@@ -10,7 +10,6 @@ inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="Reading and writing CIF (Crystallographic Information Format) files"
 
-
 LICENSE="ASRP"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
