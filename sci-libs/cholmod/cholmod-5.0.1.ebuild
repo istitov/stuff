@@ -11,6 +11,8 @@ DESCRIPTION="Sparse Cholesky factorization and update/downdate library"
 HOMEPAGE="https://people.engr.tamu.edu/davis/suitesparse.html"
 SRC_URI="https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/refs/tags/v${Sparse_PV}.tar.gz -> ${Sparse_P}.gh.tar.gz"
 
+S="${WORKDIR}/${Sparse_P}/${PN^^}"
+
 LICENSE="LGPL-2.1+ modify? ( GPL-2+ ) matrixops? ( GPL-2+ )"
 SLOT="0/4"
 KEYWORDS="~amd64 ~x86"
@@ -35,8 +37,6 @@ BDEPEND="doc? ( virtual/latex-base )"
 REQUIRED_USE="supernodal? ( cholesky )
 	modify? ( cholesky )
 	test? ( cholesky matrixops supernodal )"
-
-S="${WORKDIR}/${Sparse_P}/${PN^^}"
 
 pkg_pretend() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
