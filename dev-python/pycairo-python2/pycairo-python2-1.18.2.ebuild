@@ -18,6 +18,8 @@ DESCRIPTION="Python bindings for the cairo library"
 HOMEPAGE="https://www.cairographics.org/pycairo/ https://github.com/pygobject/pycairo"
 SRC_URI="https://github.com/pygobject/${MYPN}/releases/download/v${PV}/${MYP}.tar.gz"
 
+S="${WORKDIR}/${MYP}"
+
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -33,7 +35,6 @@ DEPEND="${RDEPEND}"
 
 PATCHES=( "${FILESDIR}/${MYPN}-1.19.1-py39.patch" )
 
-S="${WORKDIR}/${MYP}"
 BUILD_DIR=${S}
 src_compile() {
 	python_foreach_impl _distutils-r1_copy_egg_info
