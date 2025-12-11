@@ -19,7 +19,7 @@ SRC_URI="https://github.com/pygobject/${MYPN}/releases/download/v${PV}/${MYP}.ta
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm64 ~hppa ~ia64 ~mips ~ppc ~s390 ~sparc ~x86 ~ppc-macos ~x64-macos"
+KEYWORDS="~amd64 ~x86"
 
 IUSE="examples"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"

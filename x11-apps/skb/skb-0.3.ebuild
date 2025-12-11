@@ -10,7 +10,8 @@ S="${WORKDIR}/${PN}-${EGIT_COMMIT}"
 LICENSE="GPL-2"
 
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ppc64 ~sparc ~x86"
+KEYWORDS="~arm ~arm64 ~amd64 ~x86"
+arc ~x86"
 RESTRICT="mirror"
 
 DEPEND_COMMON=""

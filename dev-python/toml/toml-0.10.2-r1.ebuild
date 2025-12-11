@@ -24,7 +24,7 @@ SRC_URI="https://github.com/uiri/${PN}/archive/${PV}.tar.gz -> ${P}-1.gh.tar.gz
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~x64-macos ~x64-solaris"
+KEYWORDS="amd64 x86"
 
 BDEPEND="test? ( $(python_gen_cond_dep 'dev-python/numpy[${PYTHON_USEDEP}]' python3_{8..10}) )"
 

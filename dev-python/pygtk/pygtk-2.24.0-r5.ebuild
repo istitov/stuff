@@ -12,7 +12,7 @@ HOMEPAGE="https://gitlab.gnome.org/Archive/pygtk"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm64 ~hppa ~ia64 ~mips ~ppc ~sparc ~x86 ~ppc-macos ~x64-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~amd64 ~x86"
 IUSE="doc examples test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
