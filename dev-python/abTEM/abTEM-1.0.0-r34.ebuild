@@ -9,17 +9,16 @@ PYTHON_COMPAT=( python3_{9..14} )
 
 inherit distutils-r1 pypi
 
-SRC_URI="$(pypi_sdist_url "${PN,,}" "1.0.0b34")"
-
 DESCRIPTION="ab initio transmission electron microscopy"
 HOMEPAGE="https://github.com/abTEM/abTEM"
+SRC_URI="$(pypi_sdist_url "${PN,,}" "1.0.0b34")"
+
+S=${WORKDIR}/${PN,,}"-1.0.0b34"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="python"
-
-S=${WORKDIR}/${PN,,}"-1.0.0b34"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
