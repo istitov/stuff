@@ -43,7 +43,8 @@ src_prepare() {
 }
 
 #if use debug; then
-#		sed -i -e 's:set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -w:set(CMAKE_CXX_FLAGS  #"${CMAKE_CXX_FLAGS} -w -DNDEBUG:' CMakeLists.txt || die
+#		sed -i -e 's:set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -w:set(CMAKE_CXX_FLAGS
+#		#"${CMAKE_CXX_FLAGS} -w -DNDEBUG:' CMakeLists.txt || die
 #	fi
 
 src_configure() {
