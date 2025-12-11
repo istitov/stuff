@@ -11,8 +11,12 @@ DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 prefix pypi rocm cuda
 
 DESCRIPTION="CuPy: A NumPy-compatible array library accelerated by CUDA"
-SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 HOMEPAGE="https://cupy.dev/"
+SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS=""
 
 IUSE="rocm +cuda cudnn"
 REQUIRED_USE="
@@ -20,9 +24,6 @@ REQUIRED_USE="
 	cudnn? ( cuda )
 	rocm? ( ${ROCM_REQUIRED_USE} )
 	"
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS=""
 DEPEND="
 	>=dev-python/cython-0.29.22[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.18.0[${PYTHON_USEDEP}]

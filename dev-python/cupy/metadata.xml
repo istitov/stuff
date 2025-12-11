@@ -14,6 +14,5 @@
 		<flag name="cuda">Enable support for nVidia CUDA</flag>
 		<flag name="cudnn">Enable support for nVidia cuDNN library</flag>
 		<flag name="rocm">Enable AMD ROCm</flag>
-		<flag name="float19">Use float19 to fake float32, also advertised as tensor float32 by nVidia.</flag>
 	</use>
 </pkgmetadata>
