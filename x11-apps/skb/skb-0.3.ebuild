@@ -11,7 +11,6 @@ LICENSE="GPL-2"
 
 SLOT="0"
 KEYWORDS="~arm ~arm64 ~amd64 ~x86"
-arc ~x86"
 RESTRICT="mirror"
 
 DEPEND_COMMON=""
