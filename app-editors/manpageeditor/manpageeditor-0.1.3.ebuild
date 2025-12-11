@@ -11,6 +11,8 @@ MY_PN="ManPageEditor"
 
 SRC_URI="https://github.com/KeithDHedger/ManPageEditor/archive/refs/tags/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
+S="${WORKDIR}/${MY_PN}-${PN}-${PV}"
+
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -22,8 +24,6 @@ RDEPEND="
 	x11-libs/gtk+:2
 	x11-libs/gtksourceview:2.0"
 DEPEND="${RDEPEND}"
-
-S="${WORKDIR}/${MY_PN}-${PN}-${PV}"
 
 src_prepare(){
 	# fdo
