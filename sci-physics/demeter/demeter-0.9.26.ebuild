@@ -1,14 +1,16 @@
 # Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit perl-module perl-functions virtualx
+inherit perl-module virtualx
 
 DESCRIPTION="Software for XAS data processing"
 HOMEPAGE="https://github.com/bruceravel/demeter"
 #EGIT_REPO_URI="https://github.com/bruceravel/demeter.git"
 SRC_URI="https://github.com/bruceravel/demeter/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"
+
+S="${WORKDIR}/${PN}-${PV}"
 
 LICENSE="Artistic GPL-1+"
 SLOT="0"
@@ -77,8 +79,6 @@ DEPEND="${RDEPEND}
 	test? ( x11-base/xorg-server[xvfb] )
 	doc? ( dev-util/gtk-doc )
 "
-
-S="${WORKDIR}/${PN}-${PV}"
 
 PATCHES=(
 	"${FILESDIR}"/ifeffit_locate.patch
