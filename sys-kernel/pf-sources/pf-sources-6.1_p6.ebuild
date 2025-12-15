@@ -25,10 +25,10 @@ inherit kernel-2 optfeature
 detect_version
 DESCRIPTION="Linux kernel fork that includes the pf-kernel patchset and Gentoo's genpatches"
 HOMEPAGE="https://pfkernel.natalenko.name/
-	https://dev.gentoo.org/~mpagano/genpatches/"
+	https://dev.gentoo.org/~alicef/genpatches/"
 SRC_URI="https://codeberg.org/pf-kernel/linux/archive/v${PFPV}.tar.gz -> linux-${PFPV}.tar.gz
-	https://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
-	https://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz"
+	https://dev.gentoo.org/~alicef/genpatches/tarballs/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://dev.gentoo.org/~alicef/genpatches/tarballs/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz"
 S="${WORKDIR}/linux-${PFPV}"
 KEYWORDS="~amd64 ~x86"
 K_EXTRAEINFO="For more info on pf-sources and details on how to report problems,
