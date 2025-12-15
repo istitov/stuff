@@ -3,15 +3,15 @@
 
 EAPI=8
 
-#MYPN="${PN/_/.}"
+MYPN="${PN/_/.}"
 #MYP="${MYPN}-${PV}"
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 flag-o-matic pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="Crystal structure container and parsers for structure formats"
 HOMEPAGE="https://github.com/diffpy/diffpy.structure"
-#SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
+SRC_URI="https://github.com/diffpy/${MYPN}/archive/refs/tags/${PV}.tar.gz -> "${MYPN}"-"${PV}")"
 S=${WORKDIR}/${P}
 
 LICENSE="BSD"
