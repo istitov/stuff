@@ -8,19 +8,19 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} )
 LLVM_COMPAT=( 20 )
 
-inherit cmake distutils-r1 llvm-r1 git-r3
+inherit cmake distutils-r1 llvm-r1
 
 DESCRIPTION="Python wrapper around the llvm C++ library"
-HOMEPAGE="https://llvmlite.pydata.org/"
-EGIT_REPO_URI="https://github.com/numba/llvmlite.git"
+HOMEPAGE="https://github.com/numba/llvmlite"
+SRC_URI="https://github.com/numba/llvmlite/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	$(llvm_gen_dep 'llvm-core/llvm:${LLVM_SLOT}=')
 	sys-libs/zlib:0=
+	$(llvm_gen_dep 'llvm-core/llvm:${LLVM_SLOT}=')
 "
 DEPEND="${RDEPEND}"
 
