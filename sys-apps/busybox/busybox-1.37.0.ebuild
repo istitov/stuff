@@ -85,6 +85,8 @@ PATCHES=(
 
 	"${FILESDIR}"/${PN}-1.37.0-skip-dynamic-relocations.patch
 
+	"${FILESDIR}"/${PN}-1.37.0-sha-ni-fix.patch
+
 	# "${FILESDIR}"/${P}-*.patch
 )
 
