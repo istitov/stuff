@@ -1,0 +1,37 @@
+name: pkgcheck
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - '*/**.ebuild'
+      - '**/metadata.xml'
+      - 'profiles/**'
+      - 'eclass/**'
+  pull_request:
+    branches: [master, main]
+  schedule:
+    - cron: "0 6 */3 * *"  # every 3 days at 6 AM UTC
+
+jobs:
+  pkgcheck-commits:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pkgcore/pkgcheck-action@v1
+        with:
+          args: scan --net --commits
+
+  pkgcheck-full:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pkgcore/pkgcheck-action@v1
+        with:
+          args: scan --net
