@@ -3,14 +3,14 @@ name: pkgcheck
 on:
   workflow_dispatch:
   push:
-    branches: [master, main]
+    branches: [master]
     paths:
       - '*/**.ebuild'
       - '**/metadata.xml'
       - 'profiles/**'
       - 'eclass/**'
   pull_request:
-    branches: [master, main]
+    branches: [master]
   schedule:
     - cron: "0 6 */3 * *"  # every 3 days at 6 AM UTC
 
