@@ -1,6 +1,7 @@
 name: pkgcheck
 
 on:
+  workflow_dispatch:
   push:
     branches: [master, main]
     paths:
@@ -15,7 +16,7 @@ on:
 
 jobs:
   pkgcheck-commits:
-    if: github.event_name != 'schedule'
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +28,7 @@ jobs:
           args: scan --net --commits
 
   pkgcheck-full:
-    if: github.event_name == 'schedule'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
