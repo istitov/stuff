@@ -15,15 +15,15 @@ SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+python doc +wx +pyqt5 +pyside +demo"
+IUSE="+python doc +wx +pyqt6 +pyside +demo"
 
 RDEPEND="
 	dev-python/traits[${PYTHON_USEDEP}]
 	dev-python/six[${PYTHON_USEDEP}]
-	>=dev-python/pyface-6.0.0[${PYTHON_USEDEP},wx=,pyqt5=,pyside=]
+	>=dev-python/pyface-6.0.0[${PYTHON_USEDEP},wx=,pyqt6=,pyside=]
 	wx? ( >=dev-python/wxpython-2.8.10:*[${PYTHON_USEDEP}] dev-python/numpy[${PYTHON_USEDEP}] )
-	pyqt5? ( dev-python/pyqt5[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
-	pyside? ( dev-python/pyside2[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
+	pyqt6? ( dev-python/pyqt6[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
+	pyside? ( dev-python/pyside[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
 	demo? ( dev-python/configobj[${PYTHON_USEDEP}] )
 "
 
