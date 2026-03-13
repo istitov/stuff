@@ -14,9 +14,9 @@ EAPI=8
 #     https://bugreports.qt.io/browse/PYSIDE-535
 PYTHON_COMPAT=( python3_{9..14} )
 
-LLVM_COMPAT=( 15 )
+LLVM_COMPAT=( 18 )
 
-inherit cmake llvm-r1 python-r1 toolchain-funcs
+inherit cmake llvm-r2 python-r1 toolchain-funcs
 
 MY_P=pyside-setup-opensource-src-${PV}
 

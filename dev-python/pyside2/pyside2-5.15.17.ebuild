@@ -7,12 +7,14 @@ EAPI=8
 #     https://bugreports.qt.io/browse/PYSIDE-535
 PYTHON_COMPAT=( python3_{9..14} )
 
-LLVM_COMPAT=( 15 )
+LLVM_COMPAT=( 21 )
 
-inherit cmake llvm-r1 python-r1 virtualx
+inherit cmake llvm-r2 python-r1 virtualx
 
 # TODO: Add conditional support for "QtRemoteObjects" via a new "remoteobjects"
 # USE flag after an external "dev-qt/qtremoteobjects" package has been created.
+# 	Disabled due to removal of qtremoteobjects:5
+#
 # TODO: Add conditional support for apidoc generation via a new "doc" USE flag.
 # Note that doing so requires the Qt source tree, sphinx, and graphviz. Once
 # ready, pass the ${QT_SRC_DIR} variable to cmake to enable this support.
@@ -137,6 +139,7 @@ src_configure() {
 	# See COLLECT_MODULE_IF_FOUND macros in CMakeLists.txt
 	local mycmakeargs=(
 		-DBUILD_TESTS=$(usex test)
+		-DCMAKE_DISABLE_FIND_PACKAGE_Qt5RemoteObjects=TRUE
 		-DCMAKE_DISABLE_FIND_PACKAGE_Qt53DAnimation=$(usex !3d)
 		-DCMAKE_DISABLE_FIND_PACKAGE_Qt53DCore=$(usex !3d)
 		-DCMAKE_DISABLE_FIND_PACKAGE_Qt53DExtras=$(usex !3d)
