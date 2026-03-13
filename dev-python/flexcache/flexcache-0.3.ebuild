@@ -8,10 +8,8 @@ PYTHON_COMPAT=( python3_{9..14} )
 
 inherit distutils-r1 flag-o-matic pypi
 
-DESCRIPTION="Python package to manipulate physical units"
-HOMEPAGE="https://pint.readthedocs.io"
-#SRC_URI="$(pypi_sdist_url --no-normalize "${PN^}" "${PV}")"
-#S=${WORKDIR}/${P^}
+DESCRIPTION="Saves and loads to the cache a transformed versions of a source object"
+HOMEPAGE="https://github.com/hgrecco/flexcache"
 
 LICENSE="BSD"
 SLOT="0"
@@ -19,9 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/flexcache[${PYTHON_USEDEP}]
-	dev-python/flexparser[${PYTHON_USEDEP}]
+	dev-python/typing_extensions[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
