@@ -1,0 +1,77 @@
+From 4669b3370bba0a033c5903c73c26a6b45c9ffce7 Mon Sep 17 00:00:00 2001
+From: VasilyLebedev <2115578+LebedevV@users.noreply.github.com>
+Date: Fri, 13 Mar 2026 12:01:16 +0000
+Subject: [PATCH] std import added fro gaussian2D
+
+Since in hyperspy-2.4.0 gaussian2D has std for variables, it would be nice to import them for atom object
+---
+ atomap/atom_finding_refining.py |  9 +++++++++
+ atomap/atom_position.py         | 19 +++++++++++++------
+ 2 files changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/atomap/atom_finding_refining.py b/atomap/atom_finding_refining.py
+index f7559be..5daf82c 100644
+--- a/atomap/atom_finding_refining.py
++++ b/atomap/atom_finding_refining.py
+@@ -786,6 +786,15 @@ def _copy_gaussian_parameters_to_atom(atom, g):
+     atom.amplitude_gaussian = g.A.value
+     atom._gaussian_fitted = True
+ 
++    #getattr instead of g.par.std to ensure compatibility with previous hs
++    atom.pixel_x_std = getattr(g.centre_x, "std", np.nan)
++    atom.pixel_y_std = getattr(g.centre_y, "std", np.nan)    
++    atom.rotation_std = getattr(g.rotation, "std", np.nan)
++    atom.sigma_x_std = getattr(g.sigma_x, "std", np.nan)
++    atom.sigma_y_std = getattr(g.sigma_y, "std", np.nan)
++    atom.amplitude_gaussian_std = getattr(g.A, "std", np.nan)
++    atom._gaussian_fitted = True
++
+ 
+ def get_mask_slice(position_list, radius_list):
+     """Get a NumPy slice for extracting atom positions and
+diff --git a/atomap/atom_position.py b/atomap/atom_position.py
+index 7da98fa..86b96fe 100644
+--- a/atomap/atom_position.py
++++ b/atomap/atom_position.py
+@@ -72,8 +72,14 @@ def __init__(self, x, y, sigma_x=1.0, sigma_y=1.0, rotation=0.01, amplitude=1.0)
+ 
+         """
+         self.pixel_x, self.pixel_y = x, y
++        self.pixel_x_std, self.pixel_y_std = np.nan, np.nan
++        
+         self.sigma_x, self.sigma_y = sigma_x, sigma_y
++        self.sigma_x_std, self.sigma_y_std = np.nan, np.nan
++        
+         self.rotation = rotation
++        self.rotation_std = np.nan
++        
+         self.nearest_neighbor_list = None
+         self.in_atomic_plane = []
+         self._start_atom = []
+@@ -83,6 +89,7 @@ def __init__(self, x, y, sigma_x=1.0, sigma_y=1.0, rotation=0.01, amplitude=1.0)
+         self.old_pixel_x_list = []
+         self.old_pixel_y_list = []
+         self.amplitude_gaussian = amplitude
++        self.amplitude_gaussian_std = np.nan
+         self._gaussian_fitted = False
+         self.amplitude_max_intensity = 1.0
+         self.amplitude_min_intensity = 0.0
+@@ -93,12 +100,12 @@ def __repr__(self):
+         return "<%s, %s (x:%s,y:%s,sx:%s,sy:%s,r:%s,e:%s)>" % (
+             self.__class__.__name__,
+             self._tag,
+-            round(self.pixel_x, 1),
+-            round(self.pixel_y, 1),
+-            round(self.sigma_x, 1),
+-            round(self.sigma_y, 1),
+-            round(self.rotation, 1),
+-            round(self.ellipticity, 1),
++            round(self.pixel_x, 3),
++            round(self.pixel_y, 3),
++            round(self.sigma_x, 3),
++            round(self.sigma_y, 3),
++            round(self.rotation, 3),
++            round(self.ellipticity, 3),
+         )
+ 
+     @property

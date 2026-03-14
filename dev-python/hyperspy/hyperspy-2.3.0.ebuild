@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 #IUSE="mrcz tests"
-IUSE="cuda python doc +learning +gui-jupyter speed +gui-traitsui mrcz test"
+IUSE="cuda python doc +learning gui-jupyter speed gui-traitsui mrcz test"
 
 RDEPEND="
 	dev-python/cloudpickle[${PYTHON_USEDEP}]
@@ -120,6 +120,10 @@ PDEPEND="
 #    "odrpack>=0.3.1",
 #]
 
+
+PATCHES=(
+	"${FILESDIR}"/9f7e7e144ccfa399b4c447b956d3818c4f701f10.patch
+)
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
