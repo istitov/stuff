@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 flag-o-matic virtualx pypi
+inherit distutils-r1 virtualx pypi
 
 MYPN="${PN/hyperspy-gui-ipywidgets/hyperspy_gui_ipywidgets}"
 MYP="${MYPN}-${PV}"
@@ -33,20 +33,3 @@ DEPEND="${RDEPEND}
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 S="${WORKDIR}/${MYP}"
-
-python_compile() {
-	distutils-r1_python_compile
-
-}
-
-python_compile_all() {
-	use doc && setup.py build
-}
-
-python_test() {
-	virtx epytest
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
-}

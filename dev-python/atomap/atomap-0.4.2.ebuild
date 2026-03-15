@@ -32,6 +32,10 @@ DEPEND="${RDEPEND}
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
+PATCHES=(
+	"${FILESDIR}"/4669b3370bba0a033c5903c73c26a6b45c9ffce7.patch
+)
+
 python_test() {
 	epytest
 }
