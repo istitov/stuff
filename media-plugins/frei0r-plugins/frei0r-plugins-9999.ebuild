@@ -7,11 +7,11 @@ inherit cmake multilib git-r3
 
 DESCRIPTION="A minimalistic plugin API for video effects"
 HOMEPAGE="http://www.dyne.org/software/frei0r/"
-EGIT_REPO_URI="https://github.com/ddennedy/frei0r.git"
+EGIT_REPO_URI="https://github.com/dyne/frei0r.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="doc"
 
 RDEPEND="x11-libs/cairo
