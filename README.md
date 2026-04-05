@@ -1,6 +1,9 @@
 # stuff
 gentoo overlay ----> `eselect repository enable stuff`
 
+## Mirrors
+This repository is mirrored to [gitlab](https://gitlab.com/istitov/stuff) and [codeberg](https://codeberg.org/istitov/stuff).
+
 ## Repository highlights
 **to be done.** ;-)
 
