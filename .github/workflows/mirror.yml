@@ -1,0 +1,37 @@
+# .github/workflows/mirror.yml
+name: Mirror to Codeberg and GitLab
+
+on:
+  push:
+    branches: ['**']
+    tags: ['**']
+  delete: # propagate branch/tag deletions
+
+jobs:
+  mirror-codeberg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to Codeberg
+        run: |
+          git push --force --prune \
+            "https://istitov:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/istitov/stuff.git" \
+            'refs/heads/*:refs/heads/*' \
+            'refs/tags/*:refs/tags/*'
+
+  mirror-gitlab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to GitLab
+        run: |
+          git push --force --prune \
+            "https://istitov:${{ secrets.GITLAB_TOKEN }}@gitlab.com/istitov/stuff.git" \
+            'refs/heads/*:refs/heads/*' \
+            'refs/tags/*:refs/tags/*'
