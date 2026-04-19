@@ -16,7 +16,7 @@ inherit desktop distutils-r1_py2 python-r1_py2 xdg
 MY_PN="sK1"
 DESCRIPTION="sK1 vector graphics editor"
 HOMEPAGE="http://www.sk1project.org"
-SRC_URI="mirror://sourceforge/project/${PN}/${PN}/${MY_PN}_v.${PV}/${PN}-${PV}.tar.gz"
+SRC_URI="https://downloads.sourceforge.net/project/${PN}/${PN}/${MY_PN}_v.${PV}/${PN}-${PV}.tar.gz"
 LICENSE="|| ( GPL-2 LGPL-2 )"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
