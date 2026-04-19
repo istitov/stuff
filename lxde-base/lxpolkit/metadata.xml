@@ -7,4 +7,7 @@
 	<use>
 		<flag name="gtk3">Build with x11-libs/gtk+:3</flag>
 	</use>
+	<upstream>
+		<remote-id type="sourceforge">lxde</remote-id>
+	</upstream>
 </pkgmetadata>
