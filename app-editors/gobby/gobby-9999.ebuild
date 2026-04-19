@@ -22,7 +22,9 @@ RDEPEND="
 	x11-libs/gtk+:3
 	x11-libs/gtksourceview:3.0
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
+	app-text/yelp-tools
 	virtual/pkgconfig
 	nls? ( >=sys-devel/gettext-0.12.1 )
 "
