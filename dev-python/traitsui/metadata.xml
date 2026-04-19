@@ -8,6 +8,9 @@
 		<flag name="wx">
 			To install required libraries for wx support
 		</flag>
+		<flag name="pyqt6">
+			To install required libraries for pyqt6 support
+		</flag>
 		<flag name="pyside">
 			To install required libraries for pyside support
 		</flag>
