@@ -19,7 +19,7 @@ RESTRICT="!test? ( test )"
 RDEPEND="
 	sci-physics/bgmn
 	sci-libs/alglib
-	sys-libs/zlib
+	virtual/zlib
 	~dev-libs/quazip-1.2
 	dev-qt/qtdeclarative
 	dev-qt/qtcore
