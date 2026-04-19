@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=hatchling
 
-inherit distutils-r1 flag-o-matic pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="An implementation of chunked, compressed, N-dimensional arrays for Python"
 HOMEPAGE="https://github.com/zarr-developers/zarr-python"
