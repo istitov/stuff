@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools xdg-utils
+inherit autotools desktop xdg-utils
 
 DESCRIPTION="Man Page Editor"
 HOMEPAGE="https://github.com/KeithDHedger/ManPageEditor"
