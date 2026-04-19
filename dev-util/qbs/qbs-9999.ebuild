@@ -11,6 +11,7 @@ DESCRIPTION="Modern build tool for software projects"
 HOMEPAGE="https://wiki.qt.io/Qbs"
 EGIT_REPO_URI="https://code.qt.io/qbs/qbs.git"
 
+S=${WORKDIR}/${MY_P}
 LICENSE="|| ( LGPL-2.1 LGPL-3 )"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
@@ -38,8 +39,6 @@ DEPEND="${RDEPEND}
 		dev-qt/qttest:5
 	)
 "
-
-S=${WORKDIR}/${MY_P}
 
 src_prepare() {
 	default
