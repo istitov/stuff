@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools multilib toolchain-funcs
+inherit autotools toolchain-funcs
 
 DESCRIPTION="alpine is an easy to use text-based based mail and news client"
 HOMEPAGE="https://alpineapp.email/"
