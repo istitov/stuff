@@ -63,10 +63,10 @@ src_prepare() {
 
 	AT_M4DIR="m4" eautoreconf
 
-	prepare_pygtk() {
+	setup_pygtk() {
 		mkdir -p "${BUILD_DIR}" || die
 	}
-	python_foreach_impl prepare_pygtk
+	python_foreach_impl setup_pygtk
 }
 
 src_configure() {
