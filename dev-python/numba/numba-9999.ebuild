@@ -14,6 +14,7 @@ HOMEPAGE="https://numba.pydata.org/
 EGIT_REPO_URI="https://github.com/numba/numba.git"
 EGIT_CHECKOUT_DIR="${WORKDIR}"/"${PN}"-"${PV}"
 
+S="${WORKDIR}"/"${PN}"-"${PV}"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -29,8 +30,6 @@ BDEPEND="
 	dev-python/pip[${PYTHON_USEDEP}]
 	dev-python/versioneer[${PYTHON_USEDEP}]
 "
-
-S="${WORKDIR}"/"${PN}"-"${PV}"
 
 #MYPV="0.1.0"
 #DISTUTILS_IN_SOURCE_BUILD=1
