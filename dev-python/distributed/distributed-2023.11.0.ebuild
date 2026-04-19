@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="~amd64"	# pyarrow, memray no x86
 RESTRICT="test"	# Test phase runs with fails
 
-RDEPEND=">dev-python/click-8.0[${PYTHON_USEDEP}]
+RDEPEND=">dev-python/click-8.0-r0[${PYTHON_USEDEP}]
 	>=dev-python/cloudpickle-1.5.0[${PYTHON_USEDEP}]
 	>=dev-python/dask-2023.9.2[${PYTHON_USEDEP}]
 	dev-python/jinja2[${PYTHON_USEDEP}]
