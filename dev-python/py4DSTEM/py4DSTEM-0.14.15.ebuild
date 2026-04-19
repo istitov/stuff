@@ -15,7 +15,7 @@ MYP="${MYPN}-${PV}"
 SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
 S=${WORKDIR}/${MYP}
 
-LICENSE="GPL-v3"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc python"
