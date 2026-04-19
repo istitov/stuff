@@ -8,7 +8,7 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} )
 LLVM_COMPAT=( 20 )
 
-inherit cmake distutils-r1 llvm-r1 git-r3
+inherit cmake distutils-r1 git-r3 llvm-r2
 
 DESCRIPTION="Python wrapper around the llvm C++ library"
 HOMEPAGE="https://llvmlite.pydata.org/"
