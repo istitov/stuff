@@ -26,8 +26,6 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 x86"
 
-BDEPEND="test? ( $(python_gen_cond_dep 'dev-python/numpy[${PYTHON_USEDEP}]' python3_{8..10}) )"
-
 DOCS=( README.rst )
 
 distutils_enable_tests pytest
