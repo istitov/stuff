@@ -9,7 +9,7 @@ MY_P=${PN}-${PV}
 
 DESCRIPTION="Graphical user interface for HTTrack library, developed in C++ and based on Qt"
 HOMEPAGE="http://httraqt.sourceforge.net"
-SRC_URI="mirror://sourceforge/${PN}/${MY_P}.tar.gz"
+SRC_URI="https://downloads.sourceforge.net/${PN}/${MY_P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
