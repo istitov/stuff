@@ -5,6 +5,9 @@
     <email>vaapi@gentoo.org</email>
     <name>VA-API Project</name>
   </maintainer>
+  <use>
+    <flag name="glx">Enable GLX support for hardware-accelerated video on X11</flag>
+  </use>
   <upstream>
   <remote-id type="github">intel/libva</remote-id>
   </upstream>
