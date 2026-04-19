@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/eonpatapon/mpDris2.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
 DEPEND="
 	>=dev-python/dbus-python-0.80[${PYTHON_USEDEP}]
