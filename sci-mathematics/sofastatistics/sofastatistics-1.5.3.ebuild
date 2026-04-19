@@ -52,7 +52,6 @@ src_install(){
 	for lang in ${LANGS};do
 		use l10n_${lang} || rm -rf "sofa_main/locale/${lang}"
 	done
-	dodir /usr/share/sofastats
 	insinto /usr/share/sofastats
 	doins -r sofa_main/*
 	exeinto /usr/share/sofastats
