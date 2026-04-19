@@ -21,12 +21,15 @@ src_install(){
 	dosbin dkms-gentoo/dkms-gentoo
 	newinitd dkms-gentoo/dkms dkms
 
-	if ! [ -f "${ROOT}/var/lib/portage/dkms_db" ];then
-	  dodir "/var/lib/portage/"
-	  DKMS_DB="${D}/var/lib/portage/dkms_db" "${D}"/usr/sbin/dkms-gentoo --db
-	else
-	  dodir "/var/lib/portage/"
-	  cp "${ROOT}/var/lib/portage/dkms_db" "${D}/var/lib/portage/dkms_db"
+	dodir /var/lib/portage
+	DKMS_DB="${D}/var/lib/portage/dkms_db" "${D}"/usr/sbin/dkms-gentoo --db
+}
+
+pkg_preinst() {
+	# Preserve existing database across reinstalls.
+	if [[ -f "${EROOT}/var/lib/portage/dkms_db" ]]; then
+		cp "${EROOT}/var/lib/portage/dkms_db" \
+			"${D}/var/lib/portage/dkms_db" || die
 	fi
 }
 
