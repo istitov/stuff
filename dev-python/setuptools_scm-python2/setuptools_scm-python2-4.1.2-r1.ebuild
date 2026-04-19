@@ -24,7 +24,7 @@ KEYWORDS="~amd64 ~x86"
 #RESTRICT="!test? ( test )"
 
 BDEPEND="
-	!!<dev-python/setuptools_scm-2
+	!!<dev-python/setuptools-scm-2
 "
 #	test? (
 #		dev-python/pytest[${PYTHON_USEDEP}]
