@@ -14,7 +14,7 @@ MYP="${MYPN}-${PV}"
 
 DESCRIPTION="Prismatic Software for STEM Simulation"
 HOMEPAGE="https://prism-em.com"
-SRC_URI="https://github.com/prism-em/${MYPN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/prism-em/${MYPN}/archive/refs/tags/v${PV}.tar.gz -> ${MYP}.tar.gz"
 
 S="${WORKDIR}/${MYP}"
 
