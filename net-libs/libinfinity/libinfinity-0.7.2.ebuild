@@ -3,7 +3,6 @@
 
 EAPI=8
 
-inherit autotools
 
 MY_PV=$(ver_cut 1-2)
 
