@@ -34,10 +34,7 @@ QA_PREBUILT="*"
 # apt-transport-https, libfontconfig1 (>= 2.11.0), libdbus-1-3 (>= 1.6.18),
 # libstdc++6 (>= 4.8.1)
 RDEPEND="
-	|| (
-		>=app-accessibility/at-spi2-core-2.46.0:2
-		( app-accessibility/at-spi2-atk dev-libs/atk )
-	)
+	>=app-accessibility/at-spi2-core-2.46.0:2
 	app-crypt/libsecret
 	dev-libs/expat
 	dev-libs/glib
