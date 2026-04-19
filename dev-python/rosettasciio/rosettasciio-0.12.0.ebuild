@@ -40,7 +40,6 @@ RDEPEND="
 	#dev-python/scikit-image[${PYTHON_USEDEP}]
 	#dev-python/matplotlib_scalebar[${PYTHON_USEDEP}]
 
-
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 	test? ( dev-python/filelock[${PYTHON_USEDEP}]
