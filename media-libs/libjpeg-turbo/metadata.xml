@@ -6,5 +6,6 @@
 	</maintainer>
 	<upstream>
 		<remote-id type="github">libjpeg-turbo/libjpeg-turbo</remote-id>
+		<remote-id type="sourceforge">libjpeg-turbo</remote-id>
 	</upstream>
 </pkgmetadata>
