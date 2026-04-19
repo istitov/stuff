@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit plocale cmake
+inherit cmake
 
 MY_P=${PN}-${PV}
 
