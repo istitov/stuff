@@ -37,7 +37,7 @@ RDEPEND="
 	dev-python/bokeh[${PYTHON_USEDEP}]
 	dev-python/distributed[${PYTHON_USEDEP}]
 	dev-python/dask-labextension[${PYTHON_USEDEP}]
-	dev-python/pyFFTW[${PYTHON_USEDEP}]
+	dev-python/pyfftw[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}

@@ -17,7 +17,7 @@ else
 
 	SRC_URI="https://github.com/pyFFTW/pyFFTW/archive/${HASH_COMMIT}.tar.gz -> ${P}.gh.tar.gz"
 	KEYWORDS="amd64 ~arm64 ~x86"
-	S="${WORKDIR}"/${PN}-${HASH_COMMIT}
+	S="${WORKDIR}"/pyFFTW-${HASH_COMMIT}
 	PATCHES=( "${FILESDIR}/370_python312.patch" )
 
 fi

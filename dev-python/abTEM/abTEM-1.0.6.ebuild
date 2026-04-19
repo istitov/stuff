@@ -34,7 +34,7 @@ RDEPEND="
 	dev-python/bokeh[${PYTHON_USEDEP}]
 	dev-python/distributed[${PYTHON_USEDEP}]
 	dev-python/dask-labextension[${PYTHON_USEDEP}]
-	dev-python/pyFFTW[${PYTHON_USEDEP}]
+	dev-python/pyfftw[${PYTHON_USEDEP}]
 	dev-python/tabulate[${PYTHON_USEDEP}]
 	dev-python/hypothesis[${PYTHON_USEDEP}]
 	<dev-python/numpy-2.0[${PYTHON_USEDEP}]

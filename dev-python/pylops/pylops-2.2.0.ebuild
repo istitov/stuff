@@ -24,7 +24,7 @@ RDEPEND="
 	dev-python/pywavelets[${PYTHON_USEDEP}]
 "
 
-#	dev-python/pyFFTW[${PYTHON_USEDEP}] #have internal error with cython-3*
+#	dev-python/pyfftw[${PYTHON_USEDEP}] #have internal error with cython-3*
 #    "scikit-fmm",
 #    "spgl1",
 
