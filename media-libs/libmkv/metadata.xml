@@ -2,9 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <!-- maintainer-needed -->
-  <longdescription>
-    Lightweight Matroska muxer written for HandBrake.
-  </longdescription>
   <upstream>
     <remote-id type="github">saintdev/libmkv</remote-id>
   </upstream>
