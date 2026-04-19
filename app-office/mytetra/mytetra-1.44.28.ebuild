@@ -3,7 +3,6 @@
 
 EAPI="8"
 
-inherit qmake-utils
 
 DESCRIPTION="Smart manager for information collecting"
 HOMEPAGE="https://github.com/xintrea/mytetra_dev"
