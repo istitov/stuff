@@ -17,7 +17,7 @@ EGIT_CHECKOUT_DIR="${WORKDIR}"/"${PN}"-"${PV}"
 S="${WORKDIR}"/"${PN}"-"${PV}"
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="openmp threads"
 
 RDEPEND="
