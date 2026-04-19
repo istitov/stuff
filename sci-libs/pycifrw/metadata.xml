@@ -6,7 +6,8 @@
     <name>Gentoo Chemistry Project</name>
   </maintainer>
   <upstream>
-    <remote-id type="pypi">PyCifRW</remote-id>
+    <remote-id type="bitbucket">jamesrhester/pycifrw</remote-id>
     <remote-id type="github">jamesrhester/pycifrw</remote-id>
+    <remote-id type="pypi">PyCifRW</remote-id>
   </upstream>
 </pkgmetadata>
