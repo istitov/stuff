@@ -3,6 +3,8 @@
 
 EAPI=7
 
+inherit desktop
+
 DESCRIPTION="The leading eclipse IDE for Ajax and today's web platforms"
 HOMEPAGE="http://www.aptana.com"
 SRC_URI="https://github.com/aptana/studio3/releases/download/3.7.2.201807301111/aptana.studio-linux.gtk.x86_64.zip"
