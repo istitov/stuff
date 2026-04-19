@@ -11,7 +11,7 @@ DISTUTILS_OPTIONAL=1
 
 FORTRAN_NEEDED=lapack
 
-inherit distutils-r1_py2 flag-o-matic fortran-2 multiprocessing python-r1_py2 toolchain-funcs
+inherit distutils-r1_py2 flag-o-matic fortran-2 multiprocessing pypi python-r1_py2 toolchain-funcs
 
 MY_PN="numpy"
 DOC_PV="1.16.6"
@@ -19,7 +19,7 @@ DOC_PV="1.16.6"
 DESCRIPTION="Fast array and numerical python library"
 HOMEPAGE="https://www.numpy.org"
 SRC_URI="
-	mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_PN}-${PV}.zip
+	$(pypi_sdist_url "${MY_PN}" "${PV}" .zip)
 	doc? (
 		https://numpy.org/doc/$(ver_cut 1-2 ${DOC_PV})/numpy-html.zip -> numpy-html-${DOC_PV}.zip
 		https://numpy.org/doc/$(ver_cut 1-2 ${DOC_PV})/numpy-ref.pdf -> numpy-ref-${DOC_PV}.pdf
