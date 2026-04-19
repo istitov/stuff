@@ -4,6 +4,10 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<longdescription>
+		A Python package providing buffer compression and transformation
+		codecs for use in data storage and communication applications.
+	</longdescription>
 	<upstream>
 		<remote-id type="github">zarr-developers/numcodecs</remote-id>
 		<remote-id type="pypi">numcodecs</remote-id>

@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{9..14} )
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="A Python package providing buffer compression and transformation codecs for use in data storage and communication applications"
+DESCRIPTION="Compression and transformation codecs for data storage and communication"
 HOMEPAGE="https://github.com/zarr-developers/numcodecs"
 
 LICENSE="GPL-3"
