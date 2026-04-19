@@ -18,29 +18,23 @@ RDEPEND="${DEPEND}"
 src_install(){
 	insinto /etc/portage
 	doins gcc-switcher
-
-	if [ -f "${ROOT}/etc/portage/package.compilers" ];then
-	  cp "${ROOT}/etc/portage/package.compilers" "${D}/etc/portage/package.compilers"
-	elif [ -d "${ROOT}/etc/portage/package.compilers" ];then
-	  insinto /etc/portage/package.compilers
-	  doins "${FILESDIR}/package.compilers"
-	else
-	  insinto /etc/portage
-	  doins "${FILESDIR}/package.compilers"
-	fi
-
-	if [ -f "${ROOT}/etc/portage/package.compilers-full" ];then
-	  cp "${ROOT}/etc/portage/package.compilers-full" "${D}/etc/portage/package.compilers-full"
-	elif [ -d "${ROOT}/etc/portage/package.compilers-full" ];then
-	  insinto /etc/portage/package.compilers-full
-	  doins "${FILESDIR}/package.compilers-full"
-	else
-	  insinto /etc/portage
-	  doins "${FILESDIR}/package.compilers-full"
-	fi
+	doins "${FILESDIR}/package.compilers"
+	doins "${FILESDIR}/package.compilers-full"
 }
+
+pkg_preinst() {
+	# Preserve existing user config across reinstalls.
+	local f
+	for f in package.compilers package.compilers-full; do
+		if [[ -f "${EROOT}/etc/portage/${f}" ]]; then
+			cp "${EROOT}/etc/portage/${f}" "${D}/etc/portage/${f}" || die
+		fi
+	done
+}
+
 pkg_postinst() {
-	if ! grep -q gcc-switcher "${ROOT}/etc/portage/bashrc";then
-	  elog "Now you need run:\necho 'source /etc/portage/gcc-switcher' >> /etc/portage/bashrc"
+	if ! grep -q gcc-switcher "${EROOT}/etc/portage/bashrc" 2>/dev/null; then
+		elog "Now you need run:"
+		elog "echo 'source /etc/portage/gcc-switcher' >> /etc/portage/bashrc"
 	fi
 }
