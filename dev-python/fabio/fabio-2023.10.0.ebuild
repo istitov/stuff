@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=meson-python
-inherit distutils-r1 flag-o-matic pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="FabIO is an I/O library for images produced by 2D X-ray detectors"
 HOMEPAGE="https://github.com/silx-kit/fabio"
