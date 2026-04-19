@@ -43,7 +43,6 @@ RDEPEND="
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/zarr[${PYTHON_USEDEP}]
 	dev-python/prettytable[${PYTHON_USEDEP}]
-	!dev-python/PTable
 	>=dev-python/tifffile-2019.12.3[${PYTHON_USEDEP}]
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx-rtd-theme )
 	learning? ( dev-python/scikit-learn[${PYTHON_USEDEP}] )
