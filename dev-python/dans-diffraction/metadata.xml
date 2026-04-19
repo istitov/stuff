@@ -5,6 +5,6 @@
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
 	<upstream>
-		<remote-id type="pypi">Dans_Diffracion</remote-id>
+		<remote-id type="pypi">Dans-Diffraction</remote-id>
 	</upstream>
 </pkgmetadata>
