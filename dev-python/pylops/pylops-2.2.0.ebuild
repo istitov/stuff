@@ -11,7 +11,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="Linear operators to allow solving large-scale optimization problems"
 HOMEPAGE="https://github.com/PyLops/pylops"
 
-LICENSE="LGPLv3"
+LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc python"
