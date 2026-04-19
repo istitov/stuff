@@ -15,6 +15,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 IUSE="python doc test"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-python/numpy-1.13[${PYTHON_USEDEP}]
