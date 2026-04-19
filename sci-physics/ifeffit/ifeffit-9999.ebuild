@@ -9,6 +9,7 @@ DESCRIPTION="Suite of interactive programs for XAFS analysis"
 HOMEPAGE="https://github.com/newville/ifeffit"
 EGIT_REPO_URI="https://github.com/newville/ifeffit.git"
 
+S="${WORKDIR}/${PN}-${PV}"
 LICENSE="BSD"
 SLOT="0"
 IUSE="doc"
@@ -21,8 +22,6 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 "
-
-S="${WORKDIR}/${PN}-${PV}"
 
 PATCHES=(
 	"${FILESDIR}"/configuration_patches

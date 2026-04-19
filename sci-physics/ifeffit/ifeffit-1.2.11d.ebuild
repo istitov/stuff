@@ -9,6 +9,7 @@ DESCRIPTION="Suite of interactive programs for XAFS analysis"
 HOMEPAGE="https://github.com/newville/ifeffit"
 SRC_URI="http://archive.ubuntu.com/ubuntu/pool/multiverse/${P:0:1}/${PN}/${PN}_${PV}.orig.tar.gz"
 
+S="${WORKDIR}/${PN}-${PV}"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -25,8 +26,6 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
 "
-
-S="${WORKDIR}/${PN}-${PV}"
 
 PATCHES=(
 	"${FILESDIR}"/configuration_patches
