@@ -16,12 +16,11 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
+S="${WORKDIR}/Dwarf-Therapist-${PV}"
 LICENSE="MIT"
 SLOT="0"
 USE="-doc"
 IUSE="doc"
-
-S="${WORKDIR}/Dwarf-Therapist-${PV}"
 
 DEPEND="dev-qt/qtcore:5
 	dev-qt/qtdeclarative:5"
