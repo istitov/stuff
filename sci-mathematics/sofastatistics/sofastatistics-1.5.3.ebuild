@@ -58,6 +58,6 @@ src_install(){
 	doexe sofa_main/*.py*
 	doexe sofa_main/*/*.py*
 	#python_fix_shebang "${ED}"/usr/share/sofastats/*.py #shebangs in the distro have some problems
-	dosym "/usr/share/sofastats/start.py" "/usr/bin/sofastats"
+	dosym "../share/sofastats/start.py" "/usr/bin/sofastats"
 	make_desktop_entry sofastats ${PN} /usr/share/sofastats/images/sofa_32x32.ico "Science;"
 }
