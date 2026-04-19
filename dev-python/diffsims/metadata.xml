@@ -6,6 +6,6 @@
 	</maintainer>
 	<upstream>
 		<remote-id type="github">pyxem/diffsims</remote-id>
-		<remote-id type="pypi">exspy</remote-id>
+		<remote-id type="pypi">diffsims</remote-id>
 	</upstream>
 </pkgmetadata>
