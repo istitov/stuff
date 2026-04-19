@@ -14,7 +14,7 @@ SLOT="0.7"
 KEYWORDS="~amd64 ~x86"
 IUSE="avahi doc gtk +gtk3 server static-libs"
 REQUIRED_USE="
-exactly-one-of ( gtk gtk3 )
+^^ ( gtk gtk3 )
 "
 
 RDEPEND="dev-libs/glib:2
