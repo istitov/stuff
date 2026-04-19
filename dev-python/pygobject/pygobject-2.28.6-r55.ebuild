@@ -117,7 +117,8 @@ src_install() {
 
 		# Don't keep multiple copies of pygobject-codegen-2.0 script
 		prefixed_sitedir=$(python_get_sitedir)
-		dosym "${prefixed_sitedir#${EPREFIX}}/gtk-2.0/codegen/codegen.py" "/usr/lib/python-exec/${EPYTHON}/pygobject-codegen-2.0"
+		dosym "${prefixed_sitedir#${EPREFIX}}/gtk-2.0/codegen/codegen.py" \
+			"/usr/lib/python-exec/${EPYTHON}/pygobject-codegen-2.0"
 	}
 	python_foreach_impl run_in_build_dir installing
 
