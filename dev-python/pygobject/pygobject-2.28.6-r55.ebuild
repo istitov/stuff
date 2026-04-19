@@ -30,8 +30,7 @@ DEPEND="${COMMON_DEPEND}
 		media-fonts/font-cursor-misc
 		media-fonts/font-misc-misc )
 "
-RDEPEND="${COMMON_DEPEND}
-	!<dev-python/pygtk-2.23"
+RDEPEND="${COMMON_DEPEND}"
 
 src_prepare() {
 	# Fix FHS compliance, see upstream bug #535524
