@@ -5,7 +5,7 @@
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
 	<upstream>
-		<remote-id type="github">pyxem/diffsims</remote-id>
-		<remote-id type="pypi">diffsims</remote-id>
+		<remote-id type="github">py4dstem/emdfile</remote-id>
+		<remote-id type="pypi">emdfile</remote-id>
 	</upstream>
 </pkgmetadata>
