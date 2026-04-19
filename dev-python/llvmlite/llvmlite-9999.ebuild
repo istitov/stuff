@@ -20,7 +20,7 @@ KEYWORDS=""
 
 RDEPEND="
 	$(llvm_gen_dep 'llvm-core/llvm:${LLVM_SLOT}=')
-	sys-libs/zlib:0=
+	virtual/zlib
 "
 DEPEND="${RDEPEND}"
 
