@@ -16,7 +16,7 @@ EAPI="7"
 
 _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
-inherit python-single-r1_py2 autotools git-r3
+inherit python-single-r1_py2 autotools desktop git-r3
 
 HTDOCSV="20110221"
 CIDMAPV="20090121"
@@ -99,8 +99,7 @@ src_install() {
 	fi
 
 	doicon Packaging/fontforge.png || die
-	insinto /usr/share/applications
-	doins Packaging/fontforge.desktop || die
+	domenu Packaging/fontforge.desktop || die
 	insinto /usr/share/mime/application
 	doins Packaging/fontforge.xml || die
 
