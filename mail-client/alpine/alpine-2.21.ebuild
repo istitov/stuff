@@ -22,8 +22,7 @@ DEPEND="sys-libs/pam
 	kerberos? ( app-crypt/mit-krb5 )
 	spell? ( app-text/aspell )"
 RDEPEND="${DEPEND}
-	app-misc/mime-types
-	!<=net-mail/uw-imap-2004g-r9999"
+	app-misc/mime-types"
 
 src_prepare() {
 	eautoreconf
