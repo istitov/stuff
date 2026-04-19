@@ -9,14 +9,14 @@ DISTUTILS_OPTIONAL=1
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="xml(+)"
 
-inherit distutils-r1_py2 python-r1_py2 python-utils-r1_py2
+inherit distutils-r1_py2 pypi python-r1_py2 python-utils-r1_py2
 
 MYPN="${PN/-python2/}"
 MYP="${MYPN}-${PV}"
 
 DESCRIPTION="Collection of extensions to Distutils"
 HOMEPAGE="https://github.com/pypa/setuptools https://pypi.org/project/setuptools/"
-SRC_URI="mirror://pypi/${MYPN:0:1}/${MYPN}/${MYP}.zip"
+SRC_URI="$(pypi_sdist_url "${MYPN}" "${PV}" .zip)"
 
 S="${WORKDIR}/${MYP}"
 LICENSE="MIT"
