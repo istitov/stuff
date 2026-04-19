@@ -17,8 +17,6 @@ IUSE="+openmp"
 RESTRICT="mirror"
 
 DEPEND="sys-devel/gcc[openmp?]"
-RDEPEND=""
-BDEPEND=""
 
 src_configure() {
 	local mycmakeargs=(
