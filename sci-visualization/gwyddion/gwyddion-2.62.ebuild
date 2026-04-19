@@ -19,10 +19,6 @@ KEYWORDS="~amd64 ~x86"
 
 IUSE="doc fits fftw gnome nls opengl perl python ruby sourceview xml X +hdf5"
 
-DEPEND="
-	sci-libs/fftw
-"
-
 RDEPEND="
 	media-libs/libpng:0=
 	x11-libs/cairo
@@ -43,6 +39,7 @@ RDEPEND="
 	xml? ( dev-libs/libxml2:2 )"
 
 DEPEND="${RDEPEND}
+	sci-libs/fftw
 	virtual/pkgconfig
 	doc? ( dev-util/gtk-doc )
 "
