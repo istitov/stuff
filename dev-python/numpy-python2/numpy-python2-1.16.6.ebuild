@@ -25,6 +25,7 @@ SRC_URI="
 		https://numpy.org/doc/$(ver_cut 1-2 ${DOC_PV})/numpy-ref.pdf -> numpy-ref-${DOC_PV}.pdf
 		https://numpy.org/doc/$(ver_cut 1-2 ${DOC_PV})/numpy-user.pdf -> numpy-user-${DOC_PV}.pdf
 	)"
+S="${WORKDIR}/${MY_PN}-${PV}"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -49,7 +50,6 @@ BDEPEND="
 #		dev-python/pytest[${PYTHON_USEDEP}]
 #	)
 
-S="${WORKDIR}/${MY_PN}-${PV}"
 EPYTHON="python2.7"
 
 PATCHES=(
