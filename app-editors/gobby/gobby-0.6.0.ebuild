@@ -3,6 +3,8 @@
 
 EAPI=7
 
+inherit desktop
+
 DESCRIPTION="GTK-based collaborative editor"
 HOMEPAGE="https://gobby.github.io/"
 
