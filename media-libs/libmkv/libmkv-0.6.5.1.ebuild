@@ -5,9 +5,9 @@ EAPI=7
 
 inherit autotools
 
-SRC_URI="https://github.com/saintdev/libmkv/archive/${PV}.tar.gz -> ${P}.tar.gz"
 DESCRIPTION="Lightweight Matroska muxer written for HandBrake"
 HOMEPAGE="https://github.com/saintdev/libmkv"
+SRC_URI="https://github.com/saintdev/libmkv/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
