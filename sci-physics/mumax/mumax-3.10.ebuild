@@ -7,7 +7,7 @@ inherit golang-build
 EGO_PN="cmd/mumax3"
 DESCRIPTION="GPU-accelerated micromagnetic simulator"
 HOMEPAGE="http://mumax.github.io/"
-SRC_URI="https://github.com/${PN}/3/archive/v${PV}.zip"
+SRC_URI="https://github.com/${PN}/3/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
 S="${WORKDIR}/3-${PV}"
 LICENSE="GPL-3"
