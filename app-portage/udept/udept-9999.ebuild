@@ -10,7 +10,6 @@ else
 	SRC_URI="https://gitlab.com/init-6/${PN}/archive/${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 fi
 
-inherit bash-completion-r1
 
 DESCRIPTION="A Portage analysis toolkit"
 HOMEPAGE="https://gitlab.com/init-6/udept"
