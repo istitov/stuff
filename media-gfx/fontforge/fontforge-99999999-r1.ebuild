@@ -27,6 +27,7 @@ EGIT_REPO_URI="git://fontforge.git.sourceforge.net/gitroot/fontforge/fontforge"
 #	doc? ( mirror://sourceforge/fontforge/fontforge_htdocs-${HTDOCSV}.tar.bz2 )
 #	cjk? ( mirror://gentoo/cidmaps-${CIDMAPV}.tgz )"	# http://fontforge.sf.net/cidmaps.tgz
 
+S="${WORKDIR}/${MY_P}"
 LICENSE="BSD"
 SLOT="0"
 IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath truetype truetype-debugger pango type3 svg unicode +X capslock-for-alt freetype-bytecode freetype devicetables gb12345"
@@ -46,8 +47,6 @@ RDEPEND="python? ( dev-lang/python:2.7 )
 	!media-gfx/pfaedit"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
-
-S="${WORKDIR}/${MY_P}"
 
 pkg_setup() {
 	python-single-r1_py2_pkg_setup
