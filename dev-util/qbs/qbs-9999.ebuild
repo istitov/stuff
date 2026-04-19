@@ -77,7 +77,6 @@ src_configure() {
 src_test() {
 	einfo "Setting up test environment in ${T}"
 
-	export HOME=${T}
 	export LD_LIBRARY_PATH=${S}/$(get_libdir)
 	export QBS_AUTOTEST_PROFILE=testProfile
 
