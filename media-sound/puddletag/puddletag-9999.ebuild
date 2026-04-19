@@ -6,7 +6,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..14} )
 
-inherit distutils-r1 xdg-utils git-r3
+inherit distutils-r1 git-r3
 
 DESCRIPTION="Audio tag editor"
 HOMEPAGE="http://docs.puddletag.net/"
