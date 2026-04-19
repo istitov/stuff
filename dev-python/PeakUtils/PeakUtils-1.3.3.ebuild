@@ -6,7 +6,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..14} )
 
-inherit distutils-r1 flag-o-matic pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="This package provides utilities related to the detection of peaks on 1D data."
 HOMEPAGE="https://pypi.org/project/PeakUtils/
