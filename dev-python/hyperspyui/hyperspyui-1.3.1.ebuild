@@ -9,8 +9,8 @@ inherit distutils-r1 virtualx pypi
 
 DESCRIPTION="Provides graphic user interface (GUI) for hyperspy"
 HOMEPAGE="http://hyperspy.org/hyperspyUI/"
-SRC_URI="$(pypi_sdist_url --no-normalize "${PN}" "${PV}")"
-S=${WORKDIR}/${P}
+SRC_URI="$(pypi_sdist_url --no-normalize "hyperspyUI" "${PV}")"
+S=${WORKDIR}/hyperspyUI-${PV}
 
 LICENSE="GPL-3"
 SLOT="0"
