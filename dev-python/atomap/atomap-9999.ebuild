@@ -11,7 +11,6 @@ DESCRIPTION="Library for analysing atomic resolution images"
 HOMEPAGE="https://atomap.org/"
 EGIT_REPO_URI="https://github.com/atomap-dev/atomap.git"
 
-
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
