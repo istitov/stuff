@@ -29,7 +29,7 @@ RDEPEND="
 	x11-libs/gtk+:2
 	x11-libs/libXmu
 	x11-libs/pango
-	hdf5? ( <=sci-libs/hdf5-1.11 )
+	hdf5? ( <=sci-libs/hdf5-1.11-r9999 )
 	fits? ( sci-libs/cfitsio )
 	fftw? ( sci-libs/fftw:3.0= )
 	gnome? ( gnome-base/gconf:2 )
