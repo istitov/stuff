@@ -14,6 +14,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc test"
+RESTRICT="!test? ( test )"
 
 RDEPEND=">=dev-lang/ocaml-4.02.3:=
 	>=dev-ml/findlib-1.2.7:=
