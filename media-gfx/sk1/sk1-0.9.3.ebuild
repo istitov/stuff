@@ -27,7 +27,7 @@ DEPEND="
 	dev-lang/tcl:0
 	dev-lang/tk:0
 	media-libs/freetype:2
-	>=sys-libs/zlib-1.1.4
+	virtual/zlib
 	>=x11-libs/cairo-1.2.4
 	media-libs/lcms:2
 	dev-python/pycairo
