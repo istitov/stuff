@@ -9,6 +9,7 @@ DESCRIPTION="Ogg Opus decoder plugin for DeaDBeeF audio player."
 HOMEPAGE="https://bitbucket.org/Lithopsian/deadbeef-opus/overview"
 EGIT_REPO_URI="https://bitbucket.org/Lithopsian/deadbeef-opus.git"
 
+S="${WORKDIR}/${P}"
 LICENSE="GPL-2"
 SLOT="0"
 
@@ -19,8 +20,6 @@ DEPEND_COMMON="
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
-
-S="${WORKDIR}/${P}"
 
 #QA_PRESTRIPPED="usr/$(get_libdir)/deadbeef/opus.so"
 

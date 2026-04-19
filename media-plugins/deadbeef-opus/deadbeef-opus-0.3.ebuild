@@ -9,6 +9,7 @@ DESCRIPTION="Ogg Opus decoder plugin for DeaDBeeF audio player."
 HOMEPAGE="https://bitbucket.org/Lithopsian/deadbeef-opus/overview"
 SRC_URI="https://bitbucket.org/Lithopsian/deadbeef-opus/downloads/opus-${PV}.tar.gz"
 
+S="${WORKDIR}/opus-${PV}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -20,8 +21,6 @@ DEPEND_COMMON="
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
-
-S="${WORKDIR}/opus-${PV}"
 
 #QA_PRESTRIPPED="usr/$(get_libdir)/deadbeef/opus.so"
 
