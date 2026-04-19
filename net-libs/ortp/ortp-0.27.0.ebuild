@@ -85,7 +85,7 @@ src_install() {
 	dodoc AUTHORS ChangeLog NEWS README TODO
 
 	if use examples; then
-		insinto /usr/share/doc/${PF}/examples
-		doins src/tests/*.c
+		docinto examples
+		dodoc src/tests/*.c
 	fi
 }
