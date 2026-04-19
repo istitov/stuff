@@ -12,11 +12,11 @@ inherit meson xdg git-r3
 
 DESCRIPTION="E17 Module that manage the mounting of volumes"
 
+LICENSE="BSD-2"
+SLOT="0"
+
 DEPEND="x11-wm/enlightenment"
-
 RDEPEND="${DEPEND}"
-
-SLOT='0'
 
 src_compile() {
 	meson build
