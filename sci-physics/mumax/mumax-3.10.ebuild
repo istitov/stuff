@@ -9,6 +9,7 @@ DESCRIPTION="GPU-accelerated micromagnetic simulator"
 HOMEPAGE="http://mumax.github.io/"
 SRC_URI="https://github.com/${PN}/3/archive/v${PV}.zip"
 
+S="${WORKDIR}/3-${PV}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -16,5 +17,4 @@ KEYWORDS="~amd64"
 DEPEND=">=dev-util/nvidia-cuda-toolkit-7.5.18-r2"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/3-${PV}"
 #EGO_PN="${S}/cmd/mumax3"
