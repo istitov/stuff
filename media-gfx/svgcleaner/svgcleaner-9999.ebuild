@@ -41,10 +41,6 @@ EGIT_BRANCH="master"
 LICENSE="GPL-2"
 SLOT="0"
 
-DEPEND=""
-RDEPEND="${DEPEND}"
-BDEPEND=""
-
 #QA_FLAGS_IGNORED="usr/bin/${PN}"
 
 src_unpack() {

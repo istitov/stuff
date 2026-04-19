@@ -70,10 +70,6 @@ KEYWORDS="~amd64 ~x86"
 LICENSE="GPL-2"
 SLOT="0"
 
-DEPEND=""
-RDEPEND="${DEPEND}"
-BDEPEND=""
-
 #QA_FLAGS_IGNORED="usr/bin/${PN}"
 
 src_unpack() {
