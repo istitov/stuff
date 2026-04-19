@@ -11,11 +11,10 @@ DESCRIPTION="An implementation of the MPRIS 2 interface as a client for MPD"
 HOMEPAGE="https://github.com/eonpatapon/mpDris2"
 SRC_URI="https://github.com/eonpatapon/mpDris2/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 
+S="${WORKDIR}/mpDris2-${PV}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 x86"
-S="${WORKDIR}/mpDris2-${PV}"
-
 DEPEND="
 	>=dev-python/dbus-python-0.80[${PYTHON_USEDEP}]
 	>=dev-python/pygobject-2.14[${PYTHON_USEDEP}]
