@@ -11,9 +11,9 @@ inherit distutils-r1 pypi
 
 MYPN="${PN/fai/FAI}"
 MYP="${MYPN}-${PV}"
-SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
 DESCRIPTION="Libary for azimuthal integration of 2D diffraction data"
 HOMEPAGE="https://pyfai.readthedocs.io"
+SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
 
 LICENSE="MIT"
 SLOT="0"
