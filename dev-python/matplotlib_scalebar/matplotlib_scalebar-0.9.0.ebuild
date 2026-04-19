@@ -19,6 +19,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc python test"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	dev-python/matplotlib[${PYTHON_USEDEP}]
