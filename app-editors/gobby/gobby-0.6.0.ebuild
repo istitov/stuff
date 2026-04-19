@@ -3,7 +3,6 @@
 
 EAPI=7
 
-
 DESCRIPTION="GTK-based collaborative editor"
 HOMEPAGE="https://gobby.github.io/"
 
