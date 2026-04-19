@@ -16,6 +16,7 @@ DESCRIPTION="Manage versions by scm tags via setuptools"
 HOMEPAGE="https://github.com/pypa/setuptools_scm https://pypi.org/project/setuptools_scm/"
 SRC_URI="mirror://pypi/${MYPN:0:1}/${MYPN}/${MYP}.tar.gz"
 
+S="${WORKDIR}/${MYP}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -35,7 +36,6 @@ RDEPEND="
 	dev-lang/python:2.7
 	dev-python/setuptools-python2[${PYTHON_USEDEP}]
 "
-S="${WORKDIR}/${MYP}"
 src_prepare() {
 	default
 	# network access
