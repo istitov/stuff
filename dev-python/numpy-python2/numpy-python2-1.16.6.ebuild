@@ -33,7 +33,6 @@ IUSE="doc lapack test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	!<dev-python/numpy-1.17
 	lapack? (
 		virtual/cblas
 		virtual/lapack
