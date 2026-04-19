@@ -28,7 +28,7 @@ done
 RDEPEND="
 	media-libs/opencore-amr
 	gnutls? ( >=net-libs/gnutls-2.12.16 )
-	zlib? ( sys-libs/zlib )"
+	zlib? ( virtual/zlib )"
 
 DEPEND="${RDEPEND}
 	>=dev-build/make-3.81
