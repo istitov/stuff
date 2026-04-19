@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Reading and writing CIF (Crystallographic Information Format) files"
 HOMEPAGE="https://pypi.org/project/PyCifRW/ https://bitbucket.org/jamesrhester/pycifrw/wiki/Home"
-SRC_URI="https://github.com/jamesrhester/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/jamesrhester/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="ASRP"
 SLOT="0"
