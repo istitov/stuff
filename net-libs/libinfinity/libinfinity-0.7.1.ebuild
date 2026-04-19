@@ -3,63 +3,64 @@
 
 EAPI=8
 
+inherit autotools
+
 MY_PV=$(ver_cut 1-2)
 
 DESCRIPTION="An implementation of the Infinote protocol written in GObject-based C"
 HOMEPAGE="https://gobby.github.io/"
 SRC_URI="https://github.com/gobby/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz
 	http://releases.0x539.de/${PN}/${P}.tar.gz"
+
 LICENSE="LGPL-2.1"
 SLOT="0.7"
 KEYWORDS="~amd64 ~x86"
-IUSE="avahi doc gtk +gtk3 server static-libs"
-REQUIRED_USE="
-|| ( gtk gtk3 )
-"
+IUSE="avahi doc +gtk3 server static-libs"
 
-RDEPEND="dev-libs/glib:2
+RDEPEND="
+	dev-libs/glib:2
 	dev-libs/libxml2
 	net-libs/gnutls
-	sys-libs/pam
-	avahi? ( net-dns/avahi )
-	gtk3? ( x11-libs/gtk+:3 )
-	gtk? ( x11-libs/gtk+:2 )"
-DEPEND="${RDEPEND}
-	acct-user/infinote
-	acct-group/infinote
 	net-misc/gsasl
-	virtual/pkgconfig
+	sys-libs/pam
+	avahi? (
+		net-dns/avahi
+		dev-libs/libdaemon
+	)
+	gtk3? ( >=x11-libs/gtk+-3.10.0:3 )
+	server? (
+		acct-user/infinote
+		acct-group/infinote
+	)
+"
+DEPEND="${RDEPEND}"
+BDEPEND="
+	dev-util/gtk-doc
 	sys-devel/gettext
-	doc? ( dev-util/gtk-doc )"
+	virtual/pkgconfig
+"
 
 DOCS=( AUTHORS ChangeLog NEWS README.md TODO )
 
-#pkg_setup() {
-	#if use server ; then
-	#	enewgroup infinote 100
-	#	enewuser infinote 100 /bin/bash /var/lib/infinote infinote
-	#fi
-	#
-	#if use gtk && use gtk3; then
-	#	eerror "You can select either gtk or gtk3, but not both at the same time" && die
-	#fi
-#}
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
-	./autogen.sh \
+	econf \
 		$(use_enable doc gtk-doc) \
-		$(use_with gtk inftextgtk) \
-		$(use_with gtk infgtk) \
-		$(use_with gtk ) \
-		$(use_with gtk3) \
+		$(use_enable static-libs static) \
+		$(use_with gtk3 inftextgtk) \
+		$(use_with gtk3 infgtk) \
 		$(use_with server infinoted) \
 		$(use_with avahi) \
 		$(use_with avahi libdaemon)
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
-	if use server ; then
+	default
+	if use server; then
 		newinitd "${FILESDIR}/infinoted.initd" infinoted
 		newconfd "${FILESDIR}/infinoted.confd" infinoted
 
