@@ -12,6 +12,7 @@ DESCRIPTION="Library to order a sparse matrix prior to Cholesky factorization"
 HOMEPAGE="https://people.engr.tamu.edu/davis/suitesparse.html"
 SRC_URI="https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/refs/tags/v${Sparse_PV}.tar.gz -> ${Sparse_P}.gh.tar.gz"
 
+S="${WORKDIR}/${Sparse_P}/${PN^^}"
 LICENSE="BSD"
 SLOT="0/3"
 KEYWORDS="~amd64 ~x86"
@@ -21,8 +22,6 @@ RESTRICT="!test? ( test )"
 DEPEND=">=sci-libs/suitesparseconfig-${Sparse_PV}"
 RDEPEND="${DEPEND}"
 BDEPEND="doc? ( virtual/latex-base )"
-
-S="${WORKDIR}/${Sparse_P}/${PN^^}"
 
 src_configure() {
 	local mycmakeargs=(
