@@ -5,6 +5,6 @@
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
 	<upstream>
-	    <remote-id type="pypi">seekpath</remote-id>
+		<remote-id type="pypi">seekpath</remote-id>
 	</upstream>
 </pkgmetadata>
