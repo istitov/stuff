@@ -32,6 +32,7 @@ SLOT="0"
 KEYWORDS=""
 #~amd64 #work in progress
 IUSE="doc python test"
+RESTRICT="!test? ( test )"
 
 #hdf5>=1.12,<1.13
 #libopenblas!=0.3.23,!=0.3.24,!=0.3.25
