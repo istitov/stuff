@@ -32,6 +32,19 @@ BDEPEND="
 
 src_prepare() {
 	default
+	# Rename binary, automake symbols, and data paths from upstream's
+	# legacy 'gobby-0.5' suffix to match the actual package version.
+	local f
+	while read -r f; do
+		sed -i \
+			-e 's/gobby-0\.5/gobby-0.6/g' \
+			-e 's/gobby_0_5/gobby_0_6/g' "${f}" || die
+	done < <(grep -rlE 'gobby-0\.5|gobby_0_5' \
+		--include='Makefile.am' --include='*.in' --include='*.cpp' \
+		--include='*.docbook' --include='*.xml' --include='*.ui' .)
+	while read -r f; do
+		mv "${f}" "${f//gobby-0.5/gobby-0.6}" || die
+	done < <(find . -name 'gobby-0.5*' -type f)
 	eautoreconf
 }
 
@@ -41,6 +54,4 @@ src_configure() {
 
 src_install() {
 	default
-	domenu gobby-0.5.desktop
-	doicon gobby-0.5.xpm
 }
