@@ -35,12 +35,12 @@ RDEPEND="
 	dev-python/sympy[${PYTHON_USEDEP}]
 	dev-python/tqdm[${PYTHON_USEDEP}]
 	>=dev-python/traits-6.4.0[${PYTHON_USEDEP}]
-	
+
 	>=dev-python/scikit-image-0.15[${PYTHON_USEDEP}]
-	
+
 	dev-python/ipyparallel[${PYTHON_USEDEP}]
 	>=dev-python/ipython-7.0[${PYTHON_USEDEP}]
-	
+
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx-rtd-theme )
 	learning? ( dev-python/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( >=dev-python/numba-0.56.0[${PYTHON_USEDEP}]
@@ -55,25 +55,25 @@ RDEPEND="
 #	>=dev-python/pyface-7.4.1[${PYTHON_USEDEP}]
 #	dev-python/requests[${PYTHON_USEDEP}]
 
-	
+
 #	dev-python/dill[${PYTHON_USEDEP}]
 #	>=dev-python/h5py-2.3[${PYTHON_USEDEP}]
 #	>=dev-python/python-dateutil-2.5.0[${PYTHON_USEDEP}]
-#	dev-python/ipyparallel[${PYTHON_USEDEP}]	
-#	
-	
+#	dev-python/ipyparallel[${PYTHON_USEDEP}]
+#
+
 #	dev-python/statsmodels[${PYTHON_USEDEP}]
-#	
+#
 #	dev-python/sparse[${PYTHON_USEDEP}]
 #	dev-python/imageio[${PYTHON_USEDEP}]
-#	dev-python/zarr[${PYTHON_USEDEP}]	
+#	dev-python/zarr[${PYTHON_USEDEP}]
 #	dev-python/matplotlib_scalebar[${PYTHON_USEDEP}]
 #	!dev-python/PTable
 #	>=dev-python/tifffile-2019.12.3[${PYTHON_USEDEP}]
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
-	test? ( 
+	test? (
 		dev-python/pooch[${PYTHON_USEDEP}]
 		>=dev-python/pytest-3.6[${PYTHON_USEDEP}]
 		dev-python/pytest-mpl[${PYTHON_USEDEP}]
