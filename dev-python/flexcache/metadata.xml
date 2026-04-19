@@ -6,6 +6,6 @@
 	</maintainer>
 	<upstream>
 		<remote-id type="github">hgrecco/flexcache</remote-id>
-		<remote-id type="pypi">Pint</remote-id>
+		<remote-id type="pypi">flexcache</remote-id>
 	</upstream>
 </pkgmetadata>
