@@ -9,6 +9,7 @@ DESCRIPTION="DeaDBeeF plugin for playing directly from RAR, 7z and Gzip archive 
 HOMEPAGE="https://github.com/carlosanunes/deadbeef_vfs_archive_reader"
 EGIT_REPO_URI="https://github.com/carlosanunes/deadbeef_vfs_archive_reader"
 
+S=${WORKDIR}/${P}/src
 LICENSE="LGPL-2.1"
 SLOT="0"
 
@@ -20,7 +21,6 @@ RDEPEND="
 DEPEND="
 	${DEPEND_COMMON}
 	"
-S=${WORKDIR}/${P}/src
 #PATCHES=(
 #	"${FILESDIR}"/fix-blargg_ok-declaration.patch
 #)
