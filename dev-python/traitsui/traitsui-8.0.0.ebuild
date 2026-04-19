@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 flag-o-matic pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="Toolkit-independent GUI abstraction layer for visualization features of Traits"
 HOMEPAGE="https://docs.enthought.com/traitsui/"
