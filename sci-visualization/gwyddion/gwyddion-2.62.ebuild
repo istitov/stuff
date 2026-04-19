@@ -6,7 +6,7 @@ EAPI=8
 _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 
-inherit gnome2-utils python-r1_py2 xdg xdg-utils
+inherit gnome2-utils python-r1_py2 xdg
 
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
 HOMEPAGE="http://gwyddion.net/"
