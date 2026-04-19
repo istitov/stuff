@@ -32,6 +32,8 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	sys-devel/gettext"
 
+BDEPEND="app-arch/unzip"
+
 src_prepare() {
 	default
 	eautoreconf
