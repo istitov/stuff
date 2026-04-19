@@ -10,6 +10,7 @@ EGIT_REPO_URI="https://git.enlightenment.org/enlightenment/enlightenment-module-
 inherit meson xdg git-r3
 
 DESCRIPTION="The forecasts gadget written with EFL"
+HOMEPAGE="https://git.enlightenment.org/enlightenment/enlightenment-module-forecasts"
 
 LICENSE="BSD-2"
 SLOT="0"
