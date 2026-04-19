@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="HDF5 Plugins for Windows, MacOS, and Linux"
 HOMEPAGE="https://github.com/silx-kit/hdf5plugin"
 
-LICENSE="GPL-v3"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc python"
