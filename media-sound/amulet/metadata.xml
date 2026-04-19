@@ -5,9 +5,6 @@
 		<email>dolphinstkom@gmail.com</email>
 		<name>Komashko Stanislav</name>
 	</maintainer>
-	<longdescription>
-		Elegant and simple audio converter
-	</longdescription>
 	<upstream>
 		<remote-id type="github">aka-mccloud/amulet.git</remote-id>
 	</upstream>
