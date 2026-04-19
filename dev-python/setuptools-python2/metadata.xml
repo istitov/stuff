@@ -6,7 +6,6 @@
 		<name>Python</name>
 	</maintainer>
 	<upstream>
-		<remote-id type="pypi">setuptools</remote-id>
 		<remote-id type="github">pypa/setuptools</remote-id>
 		<remote-id type="cpe">cpe:/a:python:setuptools</remote-id>
 	</upstream>
