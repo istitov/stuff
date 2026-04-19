@@ -11,6 +11,7 @@ DESCRIPTION="Complete solution to record, convert and stream audio and video."
 HOMEPAGE="http://ffmpeg.org/"
 SRC_URI="http://ffmpeg.org/releases/${MY_P/_/-}.tar.bz2"
 
+S=${WORKDIR}/${MY_P/_/-}
 LICENSE="GPL-2  GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 amd64 ~x86 x86"
@@ -36,8 +37,6 @@ DEPEND="${RDEPEND}
 	gnutls? ( virtual/pkgconfig )
 	cpu_flags_x86_mmx? ( dev-lang/yasm )
 "
-S=${WORKDIR}/${MY_P/_/-}
-
 QA_TEXTRELS="usr/lib/libpostproc-deadbeef.so.52.0.100
 usr/lib/libavfilter-deadbeef.so.2.61.100
 usr/lib/libavutil-deadbeef.so.51.35.100
