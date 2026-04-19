@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="Calculates phonon bandstructures and inelastic neutron scattering intensities"
 HOMEPAGE="https://github.com/pace-neutrons/Euphonic"
 
-LICENSE="GPLv3"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc python"
