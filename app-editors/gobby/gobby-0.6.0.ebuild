@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit autotools desktop xdg
+inherit autotools xdg
 
 DESCRIPTION="GTK-based collaborative editor"
 HOMEPAGE="https://gobby.github.io/"
