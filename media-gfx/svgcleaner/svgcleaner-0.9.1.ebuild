@@ -26,10 +26,10 @@ HOMEPAGE="https://github.com/RazrFalcon/SVGCleaner"
 
 SRC_URI="https://github.com/RazrFalcon/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
 ${CARGO_CRATE_URIS}"
-KEYWORDS="~amd64 ~x86"
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="~amd64 ~x86"
 
 #QA_FLAGS_IGNORED="usr/bin/${PN}"
 
