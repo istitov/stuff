@@ -55,7 +55,6 @@ RDEPEND="
 #	>=dev-python/pyface-7.4.1[${PYTHON_USEDEP}]
 #	dev-python/requests[${PYTHON_USEDEP}]
 
-
 #	dev-python/dill[${PYTHON_USEDEP}]
 #	>=dev-python/h5py-2.3[${PYTHON_USEDEP}]
 #	>=dev-python/python-dateutil-2.5.0[${PYTHON_USEDEP}]
@@ -119,7 +118,6 @@ PDEPEND="
 #odr = [
 #    "odrpack>=0.3.1",
 #]
-
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
