@@ -7,7 +7,7 @@ inherit desktop
 
 DESCRIPTION="The leading eclipse IDE for Ajax and today's web platforms"
 HOMEPAGE="http://www.aptana.com"
-SRC_URI="https://github.com/aptana/studio3/releases/download/3.7.2.201807301111/aptana.studio-linux.gtk.x86_64.zip"
+SRC_URI="https://github.com/aptana/studio3/releases/download/${PV}.201807301111/aptana.studio-linux.gtk.x86_64.zip"
 S=${WORKDIR}
 LICENSE="EPL-1.0"
 SLOT="3"
