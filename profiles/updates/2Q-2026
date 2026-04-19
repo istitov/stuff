@@ -1,1 +1,2 @@
 move dev-python/Pint dev-python/pint
+move dev-python/PeakUtils dev-python/peakutils
