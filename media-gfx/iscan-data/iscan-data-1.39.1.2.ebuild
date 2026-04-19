@@ -8,6 +8,7 @@ inherit udev
 DESCRIPTION="Image Scan! for Linux data files"
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
 SRC_URI="http://support.epson.net/linux/src/scanner/iscan/${PN}_$(ver_rs 3 -).tar.gz"
+S="${WORKDIR}/${PN}-$(ver_cut 1-3)"
 LICENSE="GPL-2"
 SLOT="0"
 
@@ -19,8 +20,6 @@ DEPEND="
 		dev-libs/libxslt
 		media-gfx/sane-backends
 	)"
-
-S="${WORKDIR}/${PN}-$(ver_cut 1-3)"
 
 DOCS=( NEWS SUPPORTED-DEVICES KNOWN-PROBLEMS )
 
