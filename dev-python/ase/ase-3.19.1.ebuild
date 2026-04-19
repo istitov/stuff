@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 flag-o-matic
+inherit distutils-r1
 
 DESCRIPTION="Set of Python modules for atomistic simulations"
 HOMEPAGE="http://wiki.fysik.dtu.dk/ase"
