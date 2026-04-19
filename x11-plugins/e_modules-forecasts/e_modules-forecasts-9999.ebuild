@@ -7,7 +7,7 @@ EAPI=8
 #EFL_USE_GIT="yes"
 #EFL_GIT_REPO_CATEGORY="enlightenment"
 EGIT_REPO_URI="https://git.enlightenment.org/enlightenment/enlightenment-module-forecasts"
-inherit meson optfeature xdg git-r3
+inherit meson xdg git-r3
 
 DESCRIPTION="The forecasts gadget written with EFL"
 
