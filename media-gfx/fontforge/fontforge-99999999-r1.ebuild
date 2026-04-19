@@ -43,8 +43,7 @@ RDEPEND="python? ( dev-lang/python:2.7 )
 	unicode? ( >=media-libs/libuninameslist-030713 )
 	cairo? ( >=x11-libs/cairo-1.6.4[X] )
 	pango? ( >=x11-libs/pango-1.20.3 )
-	x11-libs/libXi
-	!media-gfx/pfaedit"
+	x11-libs/libXi"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
 
