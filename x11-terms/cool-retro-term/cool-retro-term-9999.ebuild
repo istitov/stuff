@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit gnome2-utils qmake-utils
+inherit qmake-utils
 
 QTW_PN=qmltermwidget
 
