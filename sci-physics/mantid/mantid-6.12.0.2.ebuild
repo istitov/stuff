@@ -141,7 +141,8 @@ src_prepare() {
 	#rm -rf ${S}/buildconfig/CMake/GoogleTest.cmake || die
 
 	#Enable GoogleTest
-	sed -i -r "s!https://github.com/google/googletest.git!$WORKDIR/$P/new_git/gtest!" buildconfig/CMake/GoogleTest.cmake || die
+	sed -i -r "s!https://github.com/google/googletest.git!$WORKDIR/$P/new_git/gtest!" \
+		buildconfig/CMake/GoogleTest.cmake || die
 
 	#Rename opencascade and links
 	sed -i -e 's:/OpenCASCADE:/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
@@ -154,16 +155,19 @@ src_prepare() {
 
 	#Let Span be, but in a local repo
 	sed -i -r "s!https://github.com/tcbrindle/span.git!$WORKDIR/$P/_deps/span-src!" buildconfig/CMake/Span.cmake || die
-	###echo 'fake timestamp' >> ${S}/_deps/span-subbuild/span-populate-prefix/src/span-populate-stamp/span-populate-gitclone-lastrun.txt || die
+	###echo 'fake timestamp' >> \
+	###	${S}/_deps/span-subbuild/span-populate-prefix/src/span-populate-stamp/span-populate-gitclone-lastrun.txt || die
 
 	#Let mslice be
-	sed -i -r "s!https://github.com/mantidproject/mslice.git!$WORKDIR/$P/scripts/ExternalInterfaces/src/mslice!" scripts/ExternalInterfaces/CMakeLists.txt || die
+	sed -i -r "s!https://github.com/mantidproject/mslice.git!$WORKDIR/$P/scripts/ExternalInterfaces/src/mslice!" \
+		scripts/ExternalInterfaces/CMakeLists.txt || die
 
 	#Let PyStog be
 	sed -i -r "s!https://github.com/neutrons/pystog.git!$WORKDIR/$P/new_git/pystog!" buildconfig/CMake/PyStoG.cmake || die
 
 	#Bugfix
-	sed -iez 's:configure_package_config_file(:include(CMakePackageConfigHelpers)\nconfigure_package_config_file(:' Framework/CMakeLists.txt || die
+	sed -iez 's:configure_package_config_file(:include(CMakePackageConfigHelpers)\nconfigure_package_config_file(:' \
+		Framework/CMakeLists.txt || die
 
 	#Bugfix; works for gcc:13
 	sed -iez 's:#include <utility>:#include <utility>\n#include <stdint.h>:' Framework/Parallel/src/IO/Chunker.cpp || die
@@ -172,10 +176,12 @@ src_prepare() {
 	#sed -ie 's!return UINT64_MAX;!std::numeric_limits<uint64_t>::max();!' Framework/Parallel/src/IO/Chunker.cpp || die
 
 	#Bugfix; works for gcc:13
-	sed -iez 's:#include <vector>:#include <vector>\n#include <stdexcept>:' Framework/API/inc/MantidAPI/PreviewManager.h || die
+	sed -iez 's:#include <vector>:#include <vector>\n#include <stdexcept>:' \
+		Framework/API/inc/MantidAPI/PreviewManager.h || die
 
 	#Bugfix (Py3.11 related, does not work)
-	#sed -iez 's:#include <stdexcept>:#include <stdexcept>\n#include <internal/pycore_frame.h>\n#include <iostream>:' Framework/PythonInterface/core/src/ErrorHandling.cpp || die
+	#sed -iez 's:#include <stdexcept>:#include <stdexcept>\n#include <internal/pycore_frame.h>\n#include <iostream>:' \
+	#	Framework/PythonInterface/core/src/ErrorHandling.cpp || die
 	#Bugfix
 	sed -ie 's!../lib/qt5\n\n!../lib64/qt5\n\n;!' qt/applications/workbench/CMakeLists.txt || die
 
