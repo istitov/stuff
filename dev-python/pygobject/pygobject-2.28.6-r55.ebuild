@@ -123,8 +123,7 @@ src_install() {
 	python_foreach_impl run_in_build_dir installing
 
 	if use examples; then
-		insinto /usr/share/doc/${PF}
-		doins -r examples
+		dodoc -r examples
 	fi
 }
 
