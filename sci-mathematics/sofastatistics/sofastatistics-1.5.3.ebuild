@@ -11,6 +11,7 @@ inherit python-single-r1 desktop
 DESCRIPTION="SOFA is a statistics, analysis, and reporting program"
 HOMEPAGE="https://sourceforge.net/projects/sofastatistics/"
 SRC_URI="https://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download# -> ${P}.tar.gz"
+S="${WORKDIR}/sofastats-${PV}"
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -45,8 +46,6 @@ RDEPEND="${DEPEND}"
 #(+)python3-numpy (>= 1:1.13.1),python3-xdg (>= 0.25), python3-pymysql (>= 0.7), python3-matplotlib (>= 2.1.1),
 #    wkhtmltopdf (>= 0.12.4), ghostscript (>= 9), python3-pypdf2 (>= 1.26),
 #(-)python3-psycopg2 (>= 2.7.4)  imagemagick (>= 8.6.9) python3-openpyxl (>=2.4.9), python3-lxml (>=4.2.1)
-
-S="${WORKDIR}/sofastats-${PV}"
 
 src_install(){
 	for lang in ${LANGS};do
