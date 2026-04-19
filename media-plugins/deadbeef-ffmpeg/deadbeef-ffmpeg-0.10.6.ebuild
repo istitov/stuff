@@ -5,7 +5,7 @@ EAPI="7"
 
 MY_P="${P#deadbeef-}"
 
-inherit flag-o-matic multilib toolchain-funcs
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video."
 HOMEPAGE="http://ffmpeg.org/"
