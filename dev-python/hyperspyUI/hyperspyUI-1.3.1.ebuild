@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..14} )
-inherit distutils-r1 flag-o-matic virtualx pypi
+inherit distutils-r1 virtualx pypi
 
 DESCRIPTION="Provides graphic user interface (GUI) for hyperspy"
 HOMEPAGE="http://hyperspy.org/hyperspyUI/"
