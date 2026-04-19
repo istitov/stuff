@@ -6,7 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name='avahi'>Build with <pkg>net-dns/avahi</pkg>:3</flag>
-		<flag name='gtk3'>Build with <pkg>x11-libs/gtk+</pkg>:3</flag>
 	</use>
 	<upstream>
 		<remote-id type="github">gobby/gobby</remote-id>
