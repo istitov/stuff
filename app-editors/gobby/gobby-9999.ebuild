@@ -8,7 +8,6 @@ inherit autotools desktop git-r3 xdg
 DESCRIPTION="GTK-based collaborative editor"
 HOMEPAGE="https://gobby.github.io/"
 EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
-EGIT_BRANCH="master"
 
 LICENSE="GPL-2"
 SLOT="0"
