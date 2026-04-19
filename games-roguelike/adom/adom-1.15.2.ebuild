@@ -12,6 +12,7 @@ x86? ( https://www.adom.de/home/download/old/r60_${PV}/${PN}_linux_debian_32_r60
 amd64? ( https://www.adom.de/home/download/old/r60_${PV}/${PN}_linux_debian_64_r60_pub.tar.gz )
 arm? ( https://www.adom.de/home/download/old/r60_${PV}/${PN}_linux_arm_r60_pub.tar.gz )"
 
+S=${WORKDIR}/${PN}
 LICENSE="adom"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
@@ -19,8 +20,6 @@ RESTRICT="strip" #bug #137340
 QA_FLAGS_IGNORED="/opt/bin/adom"
 
 DEPEND="!arm? ( >=sys-libs/ncurses-5.0[tinfo] )"
-
-S=${WORKDIR}/${PN}
 
 src_install() {
 	exeinto /opt/bin
