@@ -3,7 +3,7 @@
 
 EAPI="8"
 
-inherit cmake multilib git-r3
+inherit cmake git-r3
 
 DESCRIPTION="A minimalistic plugin API for video effects"
 HOMEPAGE="http://www.dyne.org/software/frei0r/"
