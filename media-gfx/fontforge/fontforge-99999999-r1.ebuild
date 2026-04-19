@@ -34,7 +34,7 @@ IUSE="cjk cairo doc gif debug jpeg nls pasteafter png +python tiff tilepath true
 
 RDEPEND="python? ( dev-lang/python:2.7 )
 	gif? ( >=media-libs/giflib-4.1.0-r1 )
-	jpeg? ( virtual/jpeg:0 )
+	jpeg? ( media-libs/libjpeg-turbo:= )
 	png? ( media-libs/libpng:0 )
 	tiff? ( media-libs/tiff:0 )
 	truetype? ( >=media-libs/freetype-2.1.4 )
