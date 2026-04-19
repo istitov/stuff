@@ -21,7 +21,7 @@ RDEPEND="
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	>=dev-python/tqdm-0.4.9[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
-	dev-python/diffpy_structure[${PYTHON_USEDEP}]
+	dev-python/diffpy-structure[${PYTHON_USEDEP}]
 	dev-python/transforms3d[${PYTHON_USEDEP}]
 	dev-python/psutil[${PYTHON_USEDEP}]
 "
