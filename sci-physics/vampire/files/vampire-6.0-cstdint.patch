@@ -1,0 +1,81 @@
+--- vampire-6.0-orig/hdr/atoms.hpp	2026-04-19 22:20:39.348547517 +0200
++++ vampire-6.0/hdr/atoms.hpp	2026-04-19 22:20:39.381030924 +0200
+@@ -25,6 +25,7 @@
+ #ifndef ATOMS_H_
+ #define ATOMS_H_
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 
+--- vampire-6.0-orig/hdr/create_atoms_class.hpp	2026-04-19 22:20:39.348608101 +0200
++++ vampire-6.0/hdr/create_atoms_class.hpp	2026-04-19 22:20:39.396619255 +0200
+@@ -13,6 +13,8 @@
+ #ifndef CREATE_ATOMS_CLASS_H_
+ #define CREATE_ATOMS_CLASS_H_
+ 
++#include <cstdint>
++
+ //namespace create{
+ namespace cs{
+ 
+--- vampire-6.0-orig/hdr/dipole.hpp	2026-04-19 22:20:39.360209472 +0200
++++ vampire-6.0/hdr/dipole.hpp	2026-04-19 22:20:39.411064287 +0200
+@@ -12,6 +12,7 @@
+ #define DIPOLE_H_
+ 
+ // C++ standard library headers
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 
+--- vampire-6.0-orig/hdr/mtrand.hpp	2026-04-19 22:20:39.360333072 +0200
++++ vampire-6.0/hdr/mtrand.hpp	2026-04-19 22:20:39.425784550 +0200
+@@ -45,6 +45,7 @@
+ #ifndef MTRAND_H
+ #define MTRAND_H
+ 
++#include <cstdint>
+ #include <vector>
+ #include <stdint.h>
+ 
+--- vampire-6.0-orig/hdr/sim.hpp	2026-04-19 22:20:39.360378522 +0200
++++ vampire-6.0/hdr/sim.hpp	2026-04-19 22:20:39.443968124 +0200
+@@ -26,6 +26,7 @@
+ #define SIM_H_
+ 
+ //Headers
++#include <cstdint>
+ #include <fstream>
+ #include <stdint.h>
+ #include <string>
+--- vampire-6.0-orig/hdr/vio.hpp	2026-04-19 22:20:39.360453700 +0200
++++ vampire-6.0/hdr/vio.hpp	2026-04-19 22:20:39.461266219 +0200
+@@ -25,6 +25,7 @@
+ #ifndef VIO_H_
+ #define VIO_H_
+ 
++#include <cstdint>
+ #include <fstream>
+ #include <string>
+ #include <iostream>
+--- vampire-6.0-orig/hdr/vmath.hpp	2026-04-19 22:20:39.360466360 +0200
++++ vampire-6.0/hdr/vmath.hpp	2026-04-19 22:20:39.476386559 +0200
+@@ -10,6 +10,7 @@
+ //------------------------------------------------------------------------------
+ //
+ 
++#include <cstdint>
+ #include <vector>
+ #include <cmath>
+ 
+--- vampire-6.0-orig/hdr/vmpi.hpp	2026-04-19 22:20:39.360477428 +0200
++++ vampire-6.0/hdr/vmpi.hpp	2026-04-19 22:20:39.494840635 +0200
+@@ -27,6 +27,7 @@
+ //==========================================================
+ // Includes
+ //==========================================================
++#include <cstdint>
+ #include "create.hpp"
+ #include <cstdlib>
+ #include <string>
