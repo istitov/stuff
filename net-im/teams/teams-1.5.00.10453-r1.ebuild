@@ -15,7 +15,7 @@ SRC_URI="https://packages.microsoft.com/repos/ms-teams/pool/main/t/${PN}/${PN}_$
 
 S="${WORKDIR}"
 
-LICENSE="ms-teams-pre"
+LICENSE="microsoft-proprietary"
 SLOT="0"
 KEYWORDS="-* ~amd64"
 IUSE="swiftshader system-ffmpeg"
