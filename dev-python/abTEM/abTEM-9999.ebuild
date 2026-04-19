@@ -8,7 +8,7 @@ PYPI_PN="abtem"
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..14} )
 
-inherit distutils-r1 git-r3
+inherit distutils-r1 git-r3 virtualx
 
 DESCRIPTION="ab initio transmission electron microscopy"
 HOMEPAGE="https://github.com/abTEM/abTEM"
