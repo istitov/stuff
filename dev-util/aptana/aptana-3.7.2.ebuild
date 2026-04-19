@@ -26,15 +26,15 @@ src_install(){
 	einfo "Installing Aptana"
 	dodir "/opt/${PN}"
 	local dest="${D}/opt/${PN}"
-	cp -pPR ${S} "${dest}" || die "Failed to install Files"
+	cp -pPR "${S}" "${dest}" || die "Failed to install Files"
 	insinto "/opt/${PN}"
 	#doins libcairo-swt.so icon.xpm about.html AptanaStudio3.ini full_uninstall.txt version.txt
 	exeinto "/opt/${PN}"
 	doexe AptanaStudio3
 
 	dodir /opt/bin
-	echo "#!/bin/sh" > ${T}/AptanaStudio
-	echo "/opt/${PN}/AptanaStudio3" >> ${T}/AptanaStudio
+	echo "#!/bin/sh" > "${T}"/AptanaStudio
+	echo "/opt/${PN}/AptanaStudio3" >> "${T}"/AptanaStudio
 	dobin "${T}/AptanaStudio"
 
 	make_desktop_entry "AptanaStudio" "Aptana Studio" "/opt/${PN}/icon.xpm" "Development"

@@ -41,8 +41,8 @@ src_install(){
 	doexe AptanaStudio3
 
 	dodir /opt/bin
-	echo "#!/bin/sh" > ${T}/AptanaStudio
-	echo "/opt/${PN}/AptanaStudio3" >> ${T}/AptanaStudio
+	echo "#!/bin/sh" > "${T}"/AptanaStudio
+	echo "/opt/${PN}/AptanaStudio3" >> "${T}"/AptanaStudio
 	dobin "${T}/AptanaStudio"
 
 	make_desktop_entry "AptanaStudio" "Aptana Studio" "/opt/${PN}/icon.xpm" "Development"
