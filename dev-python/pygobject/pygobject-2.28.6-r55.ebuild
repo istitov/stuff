@@ -7,7 +7,7 @@ GNOME2_LA_PUNT="yes"
 _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 
-inherit autotools gnome2 python-r1_py2
+inherit autotools gnome2 python-r1_py2 python-utils-r1_py2
 #GCONF_DEBUG="no"
 DESCRIPTION="GLib's GObject library bindings for Python"
 HOMEPAGE="http://www.pygtk.org/"
