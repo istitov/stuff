@@ -28,9 +28,7 @@ done
 RDEPEND="
 	media-libs/opencore-amr
 	gnutls? ( >=net-libs/gnutls-2.12.16 )
-	zlib? ( sys-libs/zlib )
-	!media-video/qt-faststart
-	!media-libs/libpostproc"
+	zlib? ( sys-libs/zlib )"
 
 DEPEND="${RDEPEND}
 	>=dev-build/make-3.81
