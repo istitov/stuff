@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 flag-o-matic virtualx pypi
+inherit distutils-r1 virtualx pypi
 
 DESCRIPTION="EELS and EDS analysis with the HyperSpy framework"
 HOMEPAGE="https://github.com/hyperspy/exspy"
