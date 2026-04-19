@@ -6,7 +6,7 @@ EAPI="7"
 PYTHON_COMPAT=( python3_{9..14} )
 
 PYTHON_REQ_USE="sqlite"
-inherit python-single-r1 python-utils-r1 desktop
+inherit python-single-r1 desktop
 
 DESCRIPTION="SOFA is a statistics, analysis, and reporting program"
 HOMEPAGE="https://sourceforge.net/projects/sofastatistics/"
