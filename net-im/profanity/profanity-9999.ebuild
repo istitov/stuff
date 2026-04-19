@@ -12,7 +12,7 @@ HOMEPAGE="https://profanity-im.github.io/"
 
 LICENSE="GPL-3+"
 SLOT="0"
-IUSE="gpg -gtk libnotify omemo otr plugins +themes xscreensaver"
+IUSE="gpg gtk libnotify omemo otr plugins +themes xscreensaver"
 
 RDEPEND=">=dev-db/sqlite-3.22
 		>=dev-libs/glib-2.56:2
