@@ -24,7 +24,7 @@ DESCRIPTION="postscript font editor and converter"
 HOMEPAGE="http://fontforge.sourceforge.net/"
 EGIT_REPO_URI="git://fontforge.git.sourceforge.net/gitroot/fontforge/fontforge"
 #SRC_URI="git://fontforge.git.sourceforge.net/gitroot/fontforge/fontforge
-#	doc? ( mirror://sourceforge/fontforge/fontforge_htdocs-${HTDOCSV}.tar.bz2 )
+#	doc? ( https://downloads.sourceforge.net/fontforge/fontforge_htdocs-${HTDOCSV}.tar.bz2 )
 #	cjk? ( mirror://gentoo/cidmaps-${CIDMAPV}.tgz )"	# http://fontforge.sf.net/cidmaps.tgz
 
 S="${WORKDIR}/${MY_P}"
