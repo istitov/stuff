@@ -7,7 +7,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{9..14} )
 PYPI_NO_NORMALIZE=1
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 git-r3 cmake multilib
+inherit distutils-r1 git-r3 cmake
 
 DESCRIPTION="Tools to support the processing of materials-science data"
 HOMEPAGE="https://www.mantidproject.org/"
