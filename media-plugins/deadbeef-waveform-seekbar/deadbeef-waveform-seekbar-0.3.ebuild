@@ -8,6 +8,7 @@ HOMEPAGE="https://github.com/cboxdoerfer/ddb_waveform_seekbar"
 MY_PN="ddb_waveform_seekbar"
 SRC_URI="https://github.com/cboxdoerfer/${MY_PN}/archive/v${PV}.tar.gz"
 
+S="${WORKDIR}/${MY_PN}-${PV}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -18,8 +19,6 @@ DEPEND_COMMON="
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
-
-S="${WORKDIR}/${MY_PN}-${PV}"
 
 src_compile() {
 	emake gtk3
