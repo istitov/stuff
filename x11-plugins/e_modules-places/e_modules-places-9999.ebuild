@@ -8,7 +8,7 @@ EAPI=8
 #EFL_GIT_REPO_CATEGORY="enlightenment"
 #EFL_GIT_REPO_NAME="enlightenment-module-places"
 EGIT_REPO_URI="https://git.enlightenment.org/enlightenment/enlightenment-module-places"
-inherit meson optfeature xdg git-r3
+inherit meson xdg git-r3
 
 DESCRIPTION="E17 Module that manage the mounting of volumes"
 
