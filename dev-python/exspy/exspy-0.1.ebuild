@@ -25,7 +25,7 @@ RDEPEND="
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/numexpr[${PYTHON_USEDEP}]
-	dev-python/Pint[${PYTHON_USEDEP}]
+	dev-python/pint[${PYTHON_USEDEP}]
 	dev-python/traits[${PYTHON_USEDEP}]
 "
 #pooch

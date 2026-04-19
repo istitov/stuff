@@ -21,7 +21,7 @@ IUSE="doc python"
 RDEPEND="
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/seekpath[${PYTHON_USEDEP}]
-	dev-python/Pint[${PYTHON_USEDEP}]
+	dev-python/pint[${PYTHON_USEDEP}]
 	dev-python/threadpoolctl[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/h5py[${PYTHON_USEDEP}]

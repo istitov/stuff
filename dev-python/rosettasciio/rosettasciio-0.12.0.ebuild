@@ -22,7 +22,7 @@ RDEPEND="
 	>=dev-python/dask-2022.9.2[${PYTHON_USEDEP}]
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/Pint[${PYTHON_USEDEP}]
+	dev-python/pint[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/python-box[${PYTHON_USEDEP}]
 	dev-python/h5py[${PYTHON_USEDEP}]

@@ -27,7 +27,7 @@ RDEPEND="
 	dev-python/natsort[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
-	>=dev-python/Pint-0.10[${PYTHON_USEDEP}]
+	>=dev-python/pint-0.10[${PYTHON_USEDEP}]
 	>=dev-python/rosettasciio-0.12.0[${PYTHON_USEDEP}]
 	dev-python/prettytable[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
