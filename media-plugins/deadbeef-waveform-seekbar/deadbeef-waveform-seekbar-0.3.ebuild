@@ -6,7 +6,7 @@ EAPI=7
 DESCRIPTION="Waveform Seekbar plugin for DeaDBeeF audio player"
 HOMEPAGE="https://github.com/cboxdoerfer/ddb_waveform_seekbar"
 MY_PN="ddb_waveform_seekbar"
-SRC_URI="https://github.com/cboxdoerfer/${MY_PN}/archive/v${PV}.tar.gz"
+SRC_URI="https://github.com/cboxdoerfer/${MY_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 LICENSE="GPL-2"
