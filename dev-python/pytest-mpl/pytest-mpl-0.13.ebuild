@@ -5,11 +5,11 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 virtualx
+PYPI_NO_NORMALIZE=1
+inherit distutils-r1 virtualx pypi
 
 DESCRIPTION="Pytest plugin to faciliate image comparison for matplotlib figures"
 HOMEPAGE="https://github.com/matplotlib/pytest-mpl"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
