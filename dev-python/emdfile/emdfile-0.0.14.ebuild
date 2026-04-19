@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="hdf5-based Electron Microscopy Dataset"
 HOMEPAGE="https://github.com/py4dstem/emdfile"
 
-LICENSE="GPLv3"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc python"
