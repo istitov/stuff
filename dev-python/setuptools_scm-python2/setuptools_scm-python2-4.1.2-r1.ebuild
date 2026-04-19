@@ -7,14 +7,14 @@ DISTUTILS_USE_SETUPTOOLS=manual
 PYTHON_COMPAT=( python2_7 )
 _PYTHON_ALLOW_PY27=1
 DISTUTILS_OPTIONAL=1
-inherit distutils-r1_py2 python-r1_py2 python-utils-r1_py2
+inherit distutils-r1_py2 pypi python-r1_py2 python-utils-r1_py2
 
 MYPN="${PN/-python2/}"
 MYP="${MYPN}-${PV}"
 
 DESCRIPTION="Manage versions by scm tags via setuptools"
 HOMEPAGE="https://github.com/pypa/setuptools_scm https://pypi.org/project/setuptools_scm/"
-SRC_URI="mirror://pypi/${MYPN:0:1}/${MYPN}/${MYP}.tar.gz"
+SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
 
 S="${WORKDIR}/${MYP}"
 LICENSE="MIT"
