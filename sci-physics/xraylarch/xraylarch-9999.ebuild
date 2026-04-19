@@ -12,6 +12,7 @@ DESCRIPTION="Software for XRF data analysis"
 HOMEPAGE="https://xraypy.github.io/xraylarch"
 EGIT_REPO_URI="https://github.com/xraypy/xraylarch.git"
 
+S="${WORKDIR}/${PN}-${PV}"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="doc python"
@@ -64,8 +65,6 @@ DEPEND="${RDEPEND}
 #	dev-python/pyepics
 #	dev-python/tomopy
 #for EPICS pyepics, psycopg2, epicsscan
-
-S="${WORKDIR}/${PN}-${PV}"
 
 PATCHES=(
 	"${FILESDIR}"/full_conf.patch
