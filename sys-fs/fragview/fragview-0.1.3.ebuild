@@ -4,31 +4,19 @@
 EAPI=8
 
 inherit cmake
-DESCRIPTION="Disk fragmentation viewer written with boost and gtkmm"
+
+DESCRIPTION="Disk fragmentation visualizer based on FIEMAP and FIBMAP ioctls"
 HOMEPAGE="https://github.com/i-rinat/fragview"
+SRC_URI="https://github.com/i-rinat/${PN}/archive/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 
-if [[ ${PV} == *9999* ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/i-rinat/fragview.git"
-	EGIT_BRANCH="master"
-else
-	SRC_URI="https://github.com/i-rinat/${PN}/archive/v${PV}.tar.gz -> ${PN}-${PV}.gh.tar.gz"
-	KEYWORDS="~amd64 ~x86"
-fi
-
-LICENSE="GPL-2 Boost-1.0"
+LICENSE="MIT"
 SLOT="0"
+KEYWORDS="~amd64 ~x86"
 
 DEPEND="
+	dev-cpp/glibmm:2
+	dev-cpp/gtkmm:3.0
+	dev-db/sqlite:3
 	dev-libs/boost
-	dev-cpp/gtkmm:3.0"
+"
 RDEPEND="${DEPEND}"
-
-src_prepare() {
-	epatch "${FILESDIR}/cmake-patch.patch"
-}
-
-src_install() {
-	cmake_src_install
-	dodoc README.md || die "Install failed"
-}
