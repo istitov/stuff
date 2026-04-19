@@ -94,9 +94,7 @@ DEPEND="${COMMON_DEPEND}
 #	php? ( ${SWIG_DEPEND} )
 #	tcl? ( ${SWIG_DEPEND} )
 
-RDEPEND="${COMMON_DEPEND}
-	!media-libs/mlt++
-"
+RDEPEND="${COMMON_DEPEND}"
 
 BDEPEND="
 	virtual/pkgconfig
