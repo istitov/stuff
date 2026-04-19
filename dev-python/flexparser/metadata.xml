@@ -5,6 +5,7 @@
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
 	<upstream>
+		<remote-id type="github">hgrecco/flexparser</remote-id>
 		<remote-id type="pypi">Pint</remote-id>
 	</upstream>
 </pkgmetadata>
