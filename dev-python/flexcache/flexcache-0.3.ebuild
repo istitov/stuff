@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	dev-python/typing_extensions[${PYTHON_USEDEP}]
+	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
