@@ -13,7 +13,7 @@ HOMEPAGE="https://www.mantidproject.org/"
 #SRC_URI="https://github.com/mantidproject/mantid/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 EGIT_REPO_URI="https://github.com/mantidproject/mantid.git"
 
-LICENSE="GPL-v3"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 IUSE="doc python test"

@@ -27,7 +27,7 @@ fi
 
 EGIT_CLONE_TYPE="single"
 
-LICENSE="GPL-v3"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 #~amd64 #work in progress
