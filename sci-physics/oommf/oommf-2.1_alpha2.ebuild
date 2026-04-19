@@ -32,7 +32,7 @@ src_install()
 	use doc && dodoc "./doc/userguide/userguide.pdf"
 	use doc && dodoc "./doc/progman/progman.pdf"
 	rm -rf "./doc"
-	dodoc README
+	dodoc README.md LICENSE.md
 	dodir ${oommf_dir} || die
 	mv  * "${ED}"${oommf_dir} || die
 	cat > oommf.sh <<- EOF
