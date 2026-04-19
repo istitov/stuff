@@ -23,7 +23,7 @@ DEPEND="sys-libs/pam
 	spell? ( app-text/aspell )"
 RDEPEND="${DEPEND}
 	app-misc/mime-types
-	!<=net-mail/uw-imap-2004g"
+	!<=net-mail/uw-imap-2004g-r9999"
 
 src_prepare() {
 	eautoreconf
