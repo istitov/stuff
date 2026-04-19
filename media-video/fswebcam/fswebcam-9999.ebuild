@@ -4,12 +4,14 @@
 EAPI=8
 
 inherit git-r3
-DESCRIPTION="neat and simple webcam grabbing app"
+
+DESCRIPTION="Neat and simple webcam grabbing app"
 HOMEPAGE="http://www.sanslogic.co.uk/fswebcam/
-https://github.com/fsphil/fswebcam/"
+	https://github.com/fsphil/fswebcam/"
 EGIT_REPO_URI="https://github.com/fsphil/fswebcam.git"
+
 LICENSE="GPL-2"
 SLOT="0"
 
-DEPEND="media-libs/gd"
+DEPEND="media-libs/gd[truetype,png,jpeg]"
 RDEPEND="${DEPEND}"
