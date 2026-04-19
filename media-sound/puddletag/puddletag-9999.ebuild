@@ -14,7 +14,7 @@ EGIT_REPO_URI="https://github.com/puddletag/puddletag.git"
 
 LICENSE="GPL-2 GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="acoustid quodlibet"
 
 RDEPEND="
