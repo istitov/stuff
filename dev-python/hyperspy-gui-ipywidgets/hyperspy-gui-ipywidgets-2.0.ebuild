@@ -15,6 +15,7 @@ HOMEPAGE="https://hyperspy.org/"
 #SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
 SRC_URI="$(pypi_sdist_url "${MYPN^}" "${PV}")"
 
+S="${WORKDIR}/${MYP}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -31,8 +32,6 @@ DEPEND="${RDEPEND}
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
-S="${WORKDIR}/${MYP}"
 
 python_compile() {
 	distutils-r1_python_compile
