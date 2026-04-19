@@ -26,7 +26,7 @@ RDEPEND="
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/scikit-image[${PYTHON_USEDEP}]
 	dev-python/sparse[${PYTHON_USEDEP}]
-	dev-python/matplotlib_scalebar[${PYTHON_USEDEP}]
+	dev-python/matplotlib-scalebar[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
 	dev-python/tifffile[${PYTHON_USEDEP}]
 	dev-python/h5py[${PYTHON_USEDEP}]

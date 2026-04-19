@@ -5,3 +5,4 @@ move dev-python/abTEM dev-python/abtem
 move dev-python/py4DSTEM dev-python/py4dstem
 move dev-python/hyperspyUI dev-python/hyperspyui
 move dev-python/Dans-Diffraction dev-python/dans-diffraction
+move dev-python/matplotlib_scalebar dev-python/matplotlib-scalebar

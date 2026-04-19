@@ -66,7 +66,7 @@ RDEPEND="
 #	dev-python/sparse[${PYTHON_USEDEP}]
 #	dev-python/imageio[${PYTHON_USEDEP}]
 #	dev-python/zarr[${PYTHON_USEDEP}]
-#	dev-python/matplotlib_scalebar[${PYTHON_USEDEP}]
+#	dev-python/matplotlib-scalebar[${PYTHON_USEDEP}]
 #	!dev-python/PTable
 #	>=dev-python/tifffile-2019.12.3[${PYTHON_USEDEP}]
 

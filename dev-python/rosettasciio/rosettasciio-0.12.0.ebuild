@@ -38,7 +38,7 @@ RDEPEND="
 	#	<dev-python/matplotlib-3.5[${PYTHON_USEDEP}]
 
 	#dev-python/scikit-image[${PYTHON_USEDEP}]
-	#dev-python/matplotlib_scalebar[${PYTHON_USEDEP}]
+	#dev-python/matplotlib-scalebar[${PYTHON_USEDEP}]
 
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
