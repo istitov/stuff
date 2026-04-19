@@ -17,7 +17,7 @@ HOMEPAGE="
 	https://pypi.org/project/certifi"
 SRC_URI="
 	https://github.com/mgorny/certifi-shim/archive/v${PV}.tar.gz
-		-> ${MY_P}.tar.gz"
+		-> ${MY_P}.gh.tar.gz"
 S=${WORKDIR}/${MY_P}
 
 LICENSE="CC0-1.0"
