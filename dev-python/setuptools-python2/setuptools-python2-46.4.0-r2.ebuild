@@ -18,6 +18,7 @@ DESCRIPTION="Collection of extensions to Distutils"
 HOMEPAGE="https://github.com/pypa/setuptools https://pypi.org/project/setuptools/"
 SRC_URI="mirror://pypi/${MYPN:0:1}/${MYPN}/${MYP}.zip"
 
+S="${WORKDIR}/${MYP}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -34,7 +35,6 @@ PDEPEND="
 
 # Force in-source build because build system modifies sources.
 DISTUTILS_IN_SOURCE_BUILD=1
-S="${WORKDIR}/${MYP}"
 DOCS=( {CHANGES,README}.rst docs/{easy_install.txt,pkg_resources.txt,setuptools.txt} )
 
 src_prepare_all() {
