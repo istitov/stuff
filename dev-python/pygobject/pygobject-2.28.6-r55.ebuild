@@ -66,13 +66,13 @@ src_prepare() {
 
 	python_copy_sources
 
-	prepare_shebangs() {
+	convert_shebangs() {
 		# Make a backup with unconverted shebangs to keep python_doscript happy
 		cp codegen/codegen.py pygobject-codegen-2.0
 		sed -e "s%#! \?/usr/bin/env python%#!${PYTHON}%" \
 			-i codegen/*.py || die "shebang convertion failed"
 	}
-	python_foreach_impl run_in_build_dir prepare_shebangs
+	python_foreach_impl run_in_build_dir convert_shebangs
 }
 
 src_configure() {
