@@ -16,7 +16,7 @@ EGIT_REPO_URI="https://github.com/numba/llvmlite.git"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 
 RDEPEND="
 	$(llvm_gen_dep 'llvm-core/llvm:${LLVM_SLOT}=')
