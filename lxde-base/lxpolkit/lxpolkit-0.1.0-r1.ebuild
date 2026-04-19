@@ -5,7 +5,7 @@ EAPI=4
 
 DESCRIPTION="A simple PolicyKit authentication agent"
 HOMEPAGE="http://lxde.git.sourceforge.net/git/gitweb.cgi?p=lxde/lxpolkit;a=summary http://blog.lxde.org/?p=674"
-SRC_URI="mirror://sourceforge/project/lxde/LXPolkit/${P}.tar.gz"
+SRC_URI="https://downloads.sourceforge.net/project/lxde/LXPolkit/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
