@@ -10,8 +10,8 @@ HOMEPAGE="https://alpineapp.email/"
 SRC_URI="https://alpineapp.email/alpine/release/src/Old/${P}.tar.xz"
 
 LICENSE="Apache-2.0"
-KEYWORDS="~amd64 ~x86"
 SLOT="0"
+KEYWORDS="~amd64 ~x86"
 IUSE="doc ipv6 kerberos ldap nls passfile smime spell ssl threads patches"
 
 DEPEND="sys-libs/pam
