@@ -60,5 +60,8 @@ src_compile() {
 src_install() {
 	cmake_src_install
 
-	use doc && dohtml -r doc/html
+	if use doc; then
+		docinto html
+		dodoc -r doc/html/.
+	fi
 }
