@@ -16,7 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
 RDEPEND="
-	sys-libs/zlib
+	virtual/zlib
 	dev-python/pybind11[${PYTHON_USEDEP}]
 	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
