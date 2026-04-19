@@ -11,6 +11,7 @@ EGIT_REPO_URI="https://git.enlightenment.org/enlightenment/enlightenment-module-
 inherit meson xdg git-r3
 
 DESCRIPTION="E17 Module that manage the mounting of volumes"
+HOMEPAGE="https://git.enlightenment.org/enlightenment/enlightenment-module-places"
 
 LICENSE="BSD-2"
 SLOT="0"
