@@ -69,11 +69,11 @@ src_compile() {
 	elif use cuda; then
 		local supported=() codegen=()
 		local s target ok
-	
+
 		while IFS= read -r s; do
 			supported+=( "${s}" )
-		done < <(nvcc --list-gpu-code) || die	
-	
+		done < <(nvcc --list-gpu-code) || die
+
 		for target in ${NVPTX_TARGETS}; do
 			ok=
 			for s in "${supported[@]}"; do
