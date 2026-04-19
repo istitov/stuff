@@ -13,7 +13,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="JupyterLab extension for Dask"
 HOMEPAGE="https://github.com/dask/dask-labextension"
 
-LICENSE="BSD-3"
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="python"
