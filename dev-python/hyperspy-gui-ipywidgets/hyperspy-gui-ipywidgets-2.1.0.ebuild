@@ -32,4 +32,3 @@ DEPEND="${RDEPEND}
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
