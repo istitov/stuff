@@ -11,11 +11,11 @@ inherit meson xdg git-r3
 
 DESCRIPTION="The forecasts gadget written with EFL"
 
+LICENSE="BSD-2"
+SLOT="0"
+
 DEPEND="x11-wm/enlightenment"
-
 RDEPEND="${DEPEND}"
-
-SLOT='0'
 
 src_compile() {
 	meson build
