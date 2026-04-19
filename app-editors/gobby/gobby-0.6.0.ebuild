@@ -21,7 +21,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="avahi +gtk3 gtk nls"
 REQUIRED_USE="
-	^^ ( gtk gtk3 )
+	|| ( gtk gtk3 )
 	"
 
 RDEPEND="dev-cpp/glibmm:2
