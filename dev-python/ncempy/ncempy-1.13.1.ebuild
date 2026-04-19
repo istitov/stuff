@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="openNCEM's Python Package"
 HOMEPAGE="https://github.com/ercius/openNCEM"
 
-LICENSE="GPL-v3 MIT"
+LICENSE="GPL-3 MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc python"
