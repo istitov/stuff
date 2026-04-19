@@ -15,11 +15,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc python"
 
-RDEPEND="
-"
 #dev-python/PyQt4
 
-DEPEND="${RDEPEND}
+DEPEND="
 	doc? ( dev-util/gtk-doc )
 "
 
