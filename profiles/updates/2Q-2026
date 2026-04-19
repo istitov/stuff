@@ -2,3 +2,4 @@ move dev-python/Pint dev-python/pint
 move dev-python/PeakUtils dev-python/peakutils
 move dev-python/pyFFTW dev-python/pyfftw
 move dev-python/abTEM dev-python/abtem
+move dev-python/py4DSTEM dev-python/py4dstem
