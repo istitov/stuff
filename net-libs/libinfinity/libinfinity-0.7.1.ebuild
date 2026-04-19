@@ -67,7 +67,7 @@ src_install() {
 		fowners infinote:infinote /var/lib/infinote
 		fperms 770 /var/lib/infinote
 
-		dosym "${D}/usr/bin/infinoted-${MY_PV}" "${D}/usr/bin/infinoted"
+		dosym "infinoted-${MY_PV}" "/usr/bin/infinoted"
 
 		elog "Add local users who should have local access to the documents"
 		elog "created by infinoted to the infinote group."
