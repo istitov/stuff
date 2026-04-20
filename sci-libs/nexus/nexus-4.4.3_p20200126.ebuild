@@ -22,25 +22,22 @@ REQUIRED_USE=" || ( hdf4 hdf5 xml ) "
 RDEPEND="
 	dev-libs/libxml2
 	sys-libs/readline
-	sys-libs/libtermcap-compat
-	xml? ( dev-libs/mxml[static-libs] )
 	hdf4? ( sci-libs/hdf )
 	hdf5? ( sci-libs/hdf5[zlib] )
+	xml? ( dev-libs/mxml[static-libs] )
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
 	app-text/doxygen[dot]
 "
 
-PATCHES=(
-	"${FILESDIR}"/474.patch
-)
-
 pkg_setup() {
 	java-pkg-opt-2_pkg_setup
 }
 
 src_prepare() {
+	bzcat "${FILESDIR}/474.patch.bz2" > "${T}/474.patch" || die
+	eapply "${T}/474.patch"
 	java-pkg-opt-2_src_prepare
 	cmake_src_prepare
 }
