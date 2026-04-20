@@ -12,7 +12,7 @@ MY_P=${PN}-${MY_PV}
 
 DESCRIPTION="APSW - Another Python SQLite Wrapper"
 HOMEPAGE="https://github.com/rogerbinns/apsw/"
-SRC_URI="https://github.com/rogerbinns/apsw/releases/download/${MY_PV}/${MY_P}.zip -> ${P}.zip"
+SRC_URI="https://github.com/rogerbinns/apsw/releases/download/${MY_PV}/${MY_P}.zip"
 
 S=${WORKDIR}/${MY_P}
 
