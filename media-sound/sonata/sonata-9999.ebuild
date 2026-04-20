@@ -47,6 +47,17 @@ DOCS="CHANGELOG README.rst TODO TRANSLATORS"
 
 src_prepare() {
 	default
+
+	# Upstream's version.py calls `git describe --abbrev=4`, which on
+	# any non-tag commit returns something like `1.7.0-22-gabcd` — not
+	# a PEP 440 version, so setuptools refuses to build a wheel. Force
+	# the script down the default-version path and pin it to a PEP 440
+	# compliant string.
+	sed -i \
+		-e 's|^default_version = .*|default_version = "v0.0.0.dev0"|' \
+		-e '/^ *version = Popen(/,/\.decode(.utf-8.)$/c\            raise OSError' \
+		sonata/version.py || die
+
 	local entry file flag
 	for entry in "${LANGS_MAP[@]}" ; do
 		file="${entry%%:*}"
