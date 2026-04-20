@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3
 
@@ -14,11 +14,13 @@ S="${WORKDIR}"
 LICENSE="GPL-3"
 SLOT="0"
 
-DEPEND="app-shells/bash:=
-		sys-apps/portage"
-RDEPEND="${DEPEND}
-		sys-apps/gawk"
+RDEPEND="
+	app-shells/bash:=
+	sys-apps/gawk
+	sys-apps/portage
+"
+DEPEND="${RDEPEND}"
 
-src_install(){
+src_install() {
 	dosbin *
 }
