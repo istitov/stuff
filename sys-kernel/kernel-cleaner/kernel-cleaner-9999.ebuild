@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3
 
@@ -13,19 +13,23 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE="+parallel"
 
-KCDEPEND="app-shells/bash:=
+KCDEPEND="
+	app-shells/bash:=
+	sys-apps/gawk
 	sys-apps/portage
-	sys-apps/gawk"
-DEPEND="${KCDEPEND}
-	virtual/linux-sources"
-RDEPEND="${KCDEPEND}
-	parallel? ( sys-process/parallel )"
+"
+DEPEND="
+	${KCDEPEND}
+	virtual/linux-sources
+"
+RDEPEND="
+	${KCDEPEND}
+	parallel? ( sys-process/parallel )
+"
 
 src_prepare() {
-	if ! use parallel;then
-		epatch no_parallel.patch
-	fi
 	default
+	use parallel || eapply "${S}/no_parallel.patch"
 }
 
 src_install() {
