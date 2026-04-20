@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="DKMS analog for gentoo"
 HOMEPAGE="https://github.com/megabaks/dkms-gentoo"
@@ -9,15 +9,17 @@ SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
-DEPEND="sys-apps/openrc
-		app-shells/bash
-		sys-apps/gawk
-		sys-apps/portage"
-RDEPEND="${DEPEND}"
+RDEPEND="
+	app-shells/bash
+	sys-apps/gawk
+	sys-apps/openrc
+	sys-apps/portage
+"
+DEPEND="${RDEPEND}"
 
-src_install(){
+src_install() {
 	dosbin dkms-gentoo/dkms-gentoo
 	newinitd dkms-gentoo/dkms dkms
 
@@ -34,5 +36,5 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	[ ! -f /etc/runlevels/*/dkms ] && elog "Now you need run 'rc-update add dkms boot'"
+	[[ ! -f /etc/runlevels/*/dkms ]] && elog "Now you need run 'rc-update add dkms boot'"
 }
