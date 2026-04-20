@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-    <maintainer type="person">
-        <email>pasis.ua@gmail.com</email>
-        <name>Dmitry Podgorny</name>
-    </maintainer>
-    <use>
-        <flag name='gpg'>Enable PGP support</flag>
-        <flag name='gtk'>Enable tray icon</flag>
-        <flag name='libnotify'>Enable desktop notifications support</flag>
-        <flag name='omemo'>Enable OMEMO encryption</flag>
-        <flag name='otr'>Enable Off-the-Record support (encryption)</flag>
-        <flag name='plugins'>Enable plugins support (see net-im/profanity-plugins)</flag>
-        <flag name='themes'>Install additional themes</flag>
-        <flag name='xscreensaver'>Use x11-libs/libXScrnSaver for checking idle time</flag>
-    </use>
+	<maintainer type="person">
+		<email>pasis.ua@gmail.com</email>
+		<name>Dmitry Podgorny</name>
+	</maintainer>
+	<use>
+		<flag name="gpg">Enable PGP support</flag>
+		<flag name="gtk">Enable GTK tray icons, clipboard paste and GDK Pixbuf avatar scaling</flag>
+		<flag name="libnotify">Enable desktop notifications support</flag>
+		<flag name="omemo">Enable OMEMO encryption</flag>
+		<flag name="omemo-qrcode">Enable ability to display OMEMO QR code</flag>
+		<flag name="otr">Enable Off-the-Record support (encryption)</flag>
+		<flag name="spellcheck">Enable spellchecking support via app-text/enchant</flag>
+		<flag name="xscreensaver">Use x11-libs/libXScrnSaver for checking idle time</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">profanity-im/profanity</remote-id>
+	</upstream>
 </pkgmetadata>
