@@ -1,22 +1,21 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 
 DESCRIPTION="Binary I/O stream class library"
-HOMEPAGE="http://libbinio.sourceforge.net/"
-SRC_URI="https://downloads.sourceforge.net/${PN}/${P}.tar.bz2"
+HOMEPAGE="https://github.com/adplug/libbinio"
+SRC_URI="https://github.com/adplug/${PN}/releases/download/${P}/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="static-libs"
 
-DEPEND="sys-apps/texinfo"
+BDEPEND="sys-apps/texinfo"
 
 PATCHES=(
 	"${FILESDIR}"/${P}-cstdio.patch
-	"${FILESDIR}"/${P}-texi.patch
 )
 
 src_configure() {
@@ -25,7 +24,5 @@ src_configure() {
 
 src_install() {
 	default
-
-	# package provides .pc files
-	find "${D}" -name '*.la' -delete || die
+	find "${ED}" -name '*.la' -delete || die
 }
