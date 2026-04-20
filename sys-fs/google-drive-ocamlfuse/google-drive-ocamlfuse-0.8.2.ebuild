@@ -23,6 +23,7 @@ RDEPEND="
 	dev-ml/cryptokit:=
 	dev-ml/extlib:=
 	dev-ml/ocaml-sqlite3:=
+	dev-ml/otoml:=
 	>=dev-ml/tiny_httpd-0.6:=
 "
 DEPEND="
