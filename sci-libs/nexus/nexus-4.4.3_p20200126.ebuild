@@ -15,16 +15,15 @@ S="${WORKDIR}"/code-${COMMIT}
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="cxx hdf4 +hdf5 java xml"
+IUSE="cxx hdf4 +hdf5 java"
 
-REQUIRED_USE=" || ( hdf4 hdf5 xml ) "
+REQUIRED_USE="|| ( hdf4 hdf5 )"
 
 RDEPEND="
 	dev-libs/libxml2
 	sys-libs/readline
 	hdf4? ( sci-libs/hdf )
 	hdf5? ( sci-libs/hdf5[zlib] )
-	xml? ( dev-libs/mxml[static-libs] )
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
@@ -49,7 +48,7 @@ src_configure() {
 		-DENABLE_CONTRIB=ON
 		-DENABLE_HDF4=$(usex hdf4)
 		-DENABLE_HDF5=$(usex hdf5)
-		-DENABLE_MXML=$(usex xml)
+		-DENABLE_MXML=NO
 		-DENABLE_CXX=$(usex cxx)
 		-DENABLE_FORTRAN90=NO
 		-DENABLE_FORTRAN77=NO

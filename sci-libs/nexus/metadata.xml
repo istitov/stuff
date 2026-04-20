@@ -15,7 +15,6 @@
 		analysis and visualisation of neutron, x-ray and muon data.
 		NeXus is based on HDF5.</longdescription>
 	<use>
-		<flag name="xml">Allow using the verbose XML representation of NeXus data</flag>
 		<flag name="hdf4">Support the old HDF4 representation</flag>
 		<flag name="hdf5">Support the standard representation (HDF5)</flag>
 		<flag name="java">Build the Java bindings</flag>
