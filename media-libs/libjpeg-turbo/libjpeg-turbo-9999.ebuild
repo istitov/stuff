@@ -1,47 +1,66 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# http://libjpeg-turbo.svn.sourceforge.net/viewvc/libjpeg-turbo/branches/1.2.x/?view=tar
-
 EAPI=8
 
-inherit cmake-multilib java-pkg-opt-2 git-r3
+inherit cmake-multilib git-r3 java-pkg-opt-2
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
-HOMEPAGE="https://libjpeg-turbo.virtualgl.org/ https://sourceforge.net/projects/libjpeg-turbo/"
-EGIT_REPO_URI="https://github.com/libjpeg-turbo/libjpeg-turbo"
+HOMEPAGE="https://libjpeg-turbo.org/ https://github.com/libjpeg-turbo/libjpeg-turbo"
+EGIT_REPO_URI="https://github.com/libjpeg-turbo/${PN}.git"
+SRC_URI="mirror://gentoo/libjpeg8_8d-2.debian.tar.gz"
 
-LICENSE="BSD IJG ZLIB"
+LICENSE="BSD IJG ZLIB java? ( GPL-2-with-classpath-exception )"
 SLOT="0/0.2"
-IUSE="java static-libs cpu_flags_arm_neon"
+IUSE="cpu_flags_arm_neon java static-libs test"
+RESTRICT="!test? ( test )"
 
 ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
-
-BDEPEND=">=dev-build/cmake-3.16.5
+COMMON_DEPEND="
+	!media-libs/jpeg:0
+	!media-libs/jpeg:62
+"
+DEPEND="
+	${COMMON_DEPEND}
+	java? ( >=virtual/jdk-1.8:*[-headless-awt] )
+"
+RDEPEND="
+	${COMMON_DEPEND}
+	java? ( >=virtual/jre-1.8:* )
+"
+BDEPEND="
 	amd64? ( ${ASM_DEPEND} )
 	x86? ( ${ASM_DEPEND} )
-	amd64-linux? ( ${ASM_DEPEND} )
-	x86-linux? ( ${ASM_DEPEND} )
 	x64-macos? ( ${ASM_DEPEND} )
-	x64-cygwin? ( ${ASM_DEPEND} )"
-
-DEPEND="${COMMON_DEPEND}
-	java? ( >=virtual/jdk-1.8:*[-headless-awt] )"
-
-RDEPEND="${COMMON_DEPEND}
-	java? ( >=virtual/jre-1.8:* )"
+"
 
 MULTILIB_WRAPPED_HEADERS=( /usr/include/jconfig.h )
 
-#DOCS="*.txt change.log example.c README"
+src_unpack() {
+	git-r3_src_unpack
+	# Unpack the debian extras tarball from SRC_URI.
+	unpack "${A}"
+}
 
 src_prepare() {
+	local FILE
+	ln -snf ../debian/extra/*.c . || die
+
+	for FILE in ../debian/extra/*.c; do
+		FILE=${FILE##*/}
+		cat >> CMakeLists.txt <<-EOF || die
+		add_executable(${FILE%.c} ${FILE})
+		install(TARGETS ${FILE%.c})
+		EOF
+	done
+
 	cmake_src_prepare
 	java-pkg-opt-2_src_prepare
 }
 
 multilib_src_configure() {
 	if multilib_is_native_abi && use java ; then
+		export JAVAFLAGS="$(java-pkg_javac-args)"
 		export JAVACFLAGS="$(java-pkg_javac-args)"
 		export JNI_CFLAGS="$(java-pkg_get-jni-cflags)"
 	fi
@@ -50,10 +69,10 @@ multilib_src_configure() {
 		-DCMAKE_INSTALL_DEFAULT_DOCDIR="${EPREFIX}/usr/share/doc/${PF}"
 		-DENABLE_STATIC="$(usex static-libs)"
 		-DWITH_JAVA="$(multilib_native_usex java)"
-		-DWITH_MEM_SRCDST=ON
+		-DWITH_TESTS="$(usex test)"
 	)
 
-	# Avoid ARM ABI issues by disabling SIMD for CPUs without NEON. #792810
+	# Avoid ARM ABI issues by disabling SIMD for CPUs without NEON, bug #792810
 	if use arm || use arm64; then
 		mycmakeargs+=(
 			-DWITH_SIMD=$(usex cpu_flags_arm_neon)
@@ -63,14 +82,13 @@ multilib_src_configure() {
 
 	# We should tell the test suite which floating-point flavor we are
 	# expecting: https://github.com/libjpeg-turbo/libjpeg-turbo/issues/597
-	# For now, mark loong as fp-contract.
 	if use loong; then
 		mycmakeargs+=(
 			-DFLOATTEST=fp-contract
 		)
 	fi
 
-	# mostly for Prefix, ensure that we use our yasm if installed and
+	# Mostly for Prefix, ensure that we use our yasm if installed and
 	# not pick up host-provided nasm
 	if has_version -b dev-lang/yasm && ! has_version -b dev-lang/nasm; then
 		mycmakeargs+=(
@@ -96,12 +114,14 @@ multilib_src_install_all() {
 	local -a DOCS=( README.md ChangeLog.md )
 	einstalldocs
 
-	docinto html
-	dodoc -r "${S}"/doc/html/.
+	newdoc "${WORKDIR}"/debian/changelog changelog.debian
+	dobin "${WORKDIR}"/debian/extra/exifautotran
+	doman "${WORKDIR}"/debian/extra/*.[0-9]*
 
 	if use java; then
+		newdoc java/README.md README-java.md
+
 		docinto html/java
-		dodoc -r "${S}"/java/doc/.
-		newdoc "${S}"/java/README README.java
+		dodoc -r java/doc/.
 	fi
 }
