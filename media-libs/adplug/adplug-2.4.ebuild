@@ -3,24 +3,20 @@
 
 EAPI=8
 
-inherit autotools git-r3 out-of-source
+inherit out-of-source
 
 DESCRIPTION="A free, cross-platform, hardware independent AdLib sound player library"
 HOMEPAGE="https://adplug.github.io/"
-EGIT_REPO_URI="https://github.com/adplug/${PN}.git"
+SRC_URI="https://github.com/adplug/${PN}/releases/download/${P}/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
-SLOT="0"
+SLOT="0/${PV}"
+KEYWORDS="~amd64 ~x86"
 IUSE="debug static-libs"
 
 RDEPEND=">=dev-cpp/libbinio-1.4"
 DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
-
-src_prepare() {
-	default
-	eautoreconf
-}
 
 my_src_configure() {
 	econf \
