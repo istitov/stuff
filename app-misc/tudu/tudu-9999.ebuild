@@ -3,16 +3,15 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="Command line interface to manage hierarchical todos"
 HOMEPAGE="http://code.meskio.net/tudu
 	https://github.com/meskio/tudu/"
-SRC_URI="https://github.com/meskio/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
+EGIT_REPO_URI="https://github.com/meskio/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 
 DEPEND="sys-libs/ncurses:=[unicode(+)]"
 RDEPEND="${DEPEND}"
