@@ -3,15 +3,16 @@
 
 EAPI=8
 
-inherit git-r3 qmake-utils xdg
+inherit qmake-utils xdg
 
 DESCRIPTION="Smart manager for information collecting"
 HOMEPAGE="https://github.com/xintrea/mytetra_dev"
-EGIT_REPO_URI="https://github.com/xintrea/${PN}_dev.git"
-EGIT_BRANCH="experimental"
+SRC_URI="https://github.com/xintrea/${PN}_dev/archive/v.${PV}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}_dev-v.${PV}"
 
 LICENSE="GPL-3"
 SLOT="0"
+KEYWORDS="~amd64 ~x86"
 IUSE="debug"
 
 RDEPEND="

@@ -1,0 +1,964 @@
+Make mytetra build under Qt6.
+
+Upstream claims Qt6 support via `greaterThan(QT_MAJOR_VERSION, 4)` in
+app.pro, but many source files still use APIs removed in Qt6 or rely on
+version-guarded blocks that only cover Qt4/Qt5. Fixes:
+
+* CssHelper.cpp, ScreenHelper.cpp: the local `dpi`/`size` variables were
+  only declared inside `QT_VERSION < 0x060000` blocks. Extend to Qt6.
+
+* SortHelper.h, AppConfig.h: `class QStringList;` — QStringList is a
+  `using`-alias in Qt6, forward-declaring it as a class fails. Replace
+  with `#include <QStringList>`.
+
+* LinkHelper.cpp, Editor.cpp, MetaEditor.cpp, FindScreen.cpp, Record.cpp,
+  ImageFormatter.cpp, TypefaceFormatter.cpp: `QRegExp` is unavailable in
+  QString overloads (contains/split/replace) in Qt6 even with Qt5Compat.
+  Switch call sites and declarations to `QRegularExpression`.
+
+* MetaEditor.cpp, FindScreen.cpp: `QString::SkipEmptyParts` →
+  `Qt::SkipEmptyParts` (old spelling removed in Qt6).
+
+* InfoFieldEnter.cpp, MetaEditor.cpp, RecordInfoFieldsEditor.cpp,
+  AddNewRecord.cpp, EditorMathExpressionDialog.cpp: `QLayout::setMargin(n)`
+  removed in Qt6; use `setContentsMargins(n, n, n, n)`.
+
+* EditorConfig.cpp, DatabasesManagementModel.cpp, KnownBasesConfig.cpp,
+  DataBaseConfig.cpp, AppConfigUpdater.cpp, AppConfig.cpp:
+  `QSettings::setIniCodec()` removed in Qt6 (UTF-8 is now the default).
+  Guard with a version check so Qt5 behavior is preserved.
+
+* Editor.cpp, Record.cpp, RecordTableData.cpp, KnowTreeModel.cpp,
+  RecordTablePrint.cpp: `QTextStream::setCodec()` / `QXmlStreamWriter::
+  setCodec()` removed in Qt6. Guard likewise.
+
+* RecordTableModel.cpp, ActionLogModel.cpp: `Qt::SystemLocaleDate` removed
+  in Qt6. Use `QLocale::system().toString()` which produces the same
+  formatted output.
+
+* MainWindow.cpp: `QDesktopWidget` header removed in Qt6, and
+  `QApplication::desktop()->physicalDpi{X,Y}()` replaced by
+  `QGuiApplication::primaryScreen()->physicalDotsPerInch{X,Y}()`.
+
+* PrintPreview.cpp: `QPrinter::pageRect()` requires a Unit argument in
+  Qt6; pass `QPrinter::Point` to preserve the previous behavior.
+
+* Editor.cpp: `QDateTime::toTime_t()` → `toSecsSinceEpoch()`;
+  `QTextDocument::toHtml("UTF-8")` → `toHtml()` (encoding argument
+  removed, output is always UTF-8).
+
+* EditorFindDialog.cpp: `QTextDocument::FindFlags flags=0` fails in Qt6
+  because the int→FindFlag conversion is rejected; default-construct
+  instead.
+
+* CommandRunner.h: `class QTextCodec;` forward decl fails with Qt5Compat
+  providing the definition; use a full `#include <QTextCodec>` instead.
+
+
+* TrashMonitoring.cpp, ActionLogger.cpp: additional toTime_t() sites
+  ported to toSecsSinceEpoch().
+
+* EditorTextArea.cpp, EditorToolBarAssistant.cpp, IndentSlider.cpp:
+  QPainter::HighQualityAntialiasing removed in Qt6; use Antialiasing.
+
+* RecordTablePrint.cpp: additional toHtml("UTF-8") site.
+
+* Record.cpp, TypefaceFormatter.cpp: port QRegExp loops that use
+  indexIn/cap/matchedLength to QRegularExpressionMatchIterator.
+  Drop .setMinimal(true) and pass InvertedGreedinessOption at
+  construction instead.
+
+* TypefaceFormatter.cpp: QDomDocument::setContent returns ParseResult
+  in Qt6; cast to bool explicitly.
+
+* AttachTableController.cpp: QFileDialog::DirectoryOnly -> Directory.
+
+* Downloader.h: another class QStringList; forward decl.
+
+* ShortcutManager.cpp, GlobalParameters.cpp: additional setIniCodec
+  sites, guarded with #if QT_VERSION < 0x060000.
+
+* ActionLogModel.cpp: QDateTime::fromTime_t -> fromSecsSinceEpoch.
+
+* ClipboardBranch.cpp: QMap::unite() removed in Qt6; use insert(map).
+
+* EditorMathExpressionDialog.cpp: QLabel::pixmap() returns a QPixmap
+  by value in Qt6 (not a const QPixmap *); update nullptr check and
+  pointer-style member accesses accordingly.
+
+--- a/app/src/controllers/attachTable/AttachTableController.cpp
++++ b/app/src/controllers/attachTable/AttachTableController.cpp
+@@ -376,7 +376,7 @@
+   {
+     // Диалог выбора имени директории
+     QFileDialog fileSelectDialog;
+-    fileSelectDialog.setFileMode(QFileDialog::DirectoryOnly); // Выбор директории
++    fileSelectDialog.setFileMode(QFileDialog::Directory); // Выбор директории
+     fileSelectDialog.setWindowTitle(tr("Save attaches to directory..."));
+     fileSelectDialog.setDirectory(QDir::homePath());
+ 
+--- a/app/src/libraries/ActionLogger.cpp
++++ b/app/src/libraries/ActionLogger.cpp
+@@ -387,7 +387,7 @@
+   line+="v=\"" + QString().setNum(version) +"\" ";
+ 
+   // Добавляется атрибут со временем совершения данного действия (timestamp)
+-  uint timestamp=QDateTime::currentDateTime().toTime_t();
++  uint timestamp=QDateTime::currentDateTime().toSecsSinceEpoch();
+   line+="t=\"" + QString().setNum(timestamp) +"\" ";
+ 
+   // Добавляется атрибут с именем действия
+--- a/app/src/libraries/ClipboardBranch.cpp
++++ b/app/src/libraries/ClipboardBranch.cpp
+@@ -107,7 +107,7 @@
+  QMap<QString, QString> line;
+  
+  line["parent_id"]=parent_id;
+- line.unite(branch_fields);
++ line.insert(branch_fields);
+ 
+  branchData.branch << line;
+ }
+--- a/app/src/libraries/Downloader.h
++++ b/app/src/libraries/Downloader.h
+@@ -6,7 +6,7 @@
+ #include <QNetworkAccessManager>
+ 
+ class QString;
+-class QStringList;
++#include <QStringList>
+ class QByteArray;
+ class QPushButton;
+ class QLabel;
+--- a/app/src/libraries/GlobalParameters.cpp
++++ b/app/src/libraries/GlobalParameters.cpp
+@@ -312,7 +312,9 @@
+    // родителя, то считывание из файла конфигурации работать не будет. Разобраться
+    // Вроде как это был баг одной из версий Qt, теперь считывание работает нормально
+    QScopedPointer<QSettings> conf( new QSettings(fileName, QSettings::IniFormat, this) );
++   #if QT_VERSION < 0x060000
+    conf->setIniCodec( QTextCodec::codecForName("UTF-8") );
++   #endif
+ 
+    // Если есть переменная version
+    if(conf->contains("version"))
+--- a/app/src/libraries/ShortcutManager.cpp
++++ b/app/src/libraries/ShortcutManager.cpp
+@@ -192,7 +192,9 @@
+ void ShortcutManager::initKeyTable()
+ {
+     QSettings config(configFileName, QSettings::IniFormat);
++    #if QT_VERSION < 0x060000
+     config.setIniCodec( QTextCodec::codecForName("UTF-8") );
++    #endif
+ 
+     keyTable.clear();
+ 
+@@ -252,7 +254,9 @@
+ void ShortcutManager::saveConfig(QMap<QString, Data> table)
+ {
+     QSettings config(configFileName, QSettings::IniFormat);
++    #if QT_VERSION < 0x060000
+     config.setIniCodec( QTextCodec::codecForName("UTF-8") );
++    #endif
+ 
+     foreach (QString fullActionName, table.keys()) // Перебираются наименования действий
+     {
+--- a/app/src/libraries/TrashMonitoring.cpp
++++ b/app/src/libraries/TrashMonitoring.cpp
+@@ -44,9 +44,9 @@
+         QString      fileName=fileInfoList.at(i).fileName();
+ 
+         #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+-        unsigned int fileTime=fileInfoList.at(i).birthTime().toTime_t();
++        unsigned int fileTime=fileInfoList.at(i).birthTime().toSecsSinceEpoch();
+         #else
+-        unsigned int fileTime=fileInfoList.at(i).created().toTime_t();
++        unsigned int fileTime=fileInfoList.at(i).created().toSecsSinceEpoch();
+         #endif
+ 
+         unsigned int fileSize=static_cast<unsigned int>( fileInfoList.at(i).size() );
+@@ -68,7 +68,7 @@
+ void TrashMonitoring::addFile(const QString fileName)
+ {
+  // Выясняется время создания файла берется текущее, особой точности не нужно
+- unsigned int fileTime=(QDateTime::currentDateTime()).toTime_t();
++ unsigned int fileTime=(QDateTime::currentDateTime()).toSecsSinceEpoch();
+ 
+  // Выясняется размер файла
+  QFile currentFile(m_path+"/"+fileName);
+--- a/app/src/libraries/helpers/CssHelper.cpp
++++ b/app/src/libraries/helpers/CssHelper.cpp
+@@ -38,7 +38,7 @@
+     qreal dpi=(dpiX+dpiY)/2;
+ #endif
+ 
+-#if QT_VERSION >= 0x050000 && QT_VERSION < 0x060000
++#if QT_VERSION >= 0x050000
+     qreal dpi=QApplication::screens().at(0)->physicalDotsPerInch();
+ #endif
+ 
+--- a/app/src/libraries/helpers/LinkHelper.cpp
++++ b/app/src/libraries/helpers/LinkHelper.cpp
+@@ -3,6 +3,7 @@
+ #include <QStringList>
+ #include <QProcess>
+ #include <QDesktopServices>
++#include <QRegularExpression>
+ #include <QDebug>
+ 
+ #include "LinkHelper.h"
+@@ -103,7 +104,7 @@
+ 
+ bool LinkHelper::isHrefInternal(QString href)
+ {
+-    if(href.contains(QRegExp("^"+FixedParameters::appTextId+":\\/\\/note\\/\\w+$")))
++    if(href.contains(QRegularExpression("^"+FixedParameters::appTextId+":\\/\\/note\\/\\w+$")))
+         return true;
+     else
+         return false;
+@@ -115,7 +116,7 @@
+     if(!isHrefInternal(href))
+         return "";
+ 
+-    href.replace(QRegExp("^"+FixedParameters::appTextId+":\\/\\/note\\/"), "");
++    href.replace(QRegularExpression("^"+FixedParameters::appTextId+":\\/\\/note\\/"), "");
+ 
+     return href;
+ 
+--- a/app/src/libraries/helpers/ScreenHelper.cpp
++++ b/app/src/libraries/helpers/ScreenHelper.cpp
+@@ -17,7 +17,7 @@
+   int size=(qApp->desktop()->availableGeometry()).width();
+ #endif
+ 
+-#if QT_VERSION >= 0x050000 && QT_VERSION < 0x060000
++#if QT_VERSION >= 0x050000
+   int size=(QApplication::screens().at(0)->availableGeometry()).width();
+ #endif
+ 
+@@ -31,7 +31,7 @@
+   int size=(qApp->desktop()->availableGeometry()).height();
+ #endif
+ 
+-#if QT_VERSION >= 0x050000 && QT_VERSION < 0x060000
++#if QT_VERSION >= 0x050000
+   int size=(QApplication::screens().at(0)->availableGeometry()).height();
+ #endif
+ 
+--- a/app/src/libraries/helpers/SortHelper.h
++++ b/app/src/libraries/helpers/SortHelper.h
+@@ -1,7 +1,7 @@
+ #ifndef SORTHELPER_H
+ #define SORTHELPER_H
+ 
+-class QStringList;
++#include <QStringList>
+ 
+ bool compareQStringListLen(const QStringList &list1, const QStringList &list2);
+ 
+--- a/app/src/libraries/qtSingleApplication/qtlocalpeer.cpp
++++ b/app/src/libraries/qtSingleApplication/qtlocalpeer.cpp
+@@ -48,6 +48,7 @@
+ #include "qtlocalpeer.h"
+ #include <QtCore/QCoreApplication>
+ #include <QtCore/QTime>
++#include <QRegularExpression>
+ 
+ #if defined(Q_OS_WIN)
+ #include <QtCore/QLibrary>
+@@ -82,7 +83,7 @@
+ #endif
+         prefix = id.section(QLatin1Char('/'), -1);
+     }
+-    prefix.remove(QRegExp("[^a-zA-Z]"));
++    prefix.remove(QRegularExpression("[^a-zA-Z]"));
+     prefix.truncate(6);
+ 
+     QByteArray idc = id.toUtf8();
+--- a/app/src/libraries/qtSingleApplication5/qtlocalpeer.cpp
++++ b/app/src/libraries/qtSingleApplication5/qtlocalpeer.cpp
+@@ -41,6 +41,7 @@
+ #include <QCoreApplication>
+ #include <QDataStream>
+ #include <QTime>
++#include <QRegularExpression>
+ 
+ #if defined(Q_OS_WIN)
+ #include <QLibrary>
+@@ -78,7 +79,7 @@
+ #endif
+         prefix = id.section(QLatin1Char('/'), -1);
+     }
+-    prefix.remove(QRegExp("[^a-zA-Z]"));
++    prefix.remove(QRegularExpression("[^a-zA-Z]"));
+     prefix.truncate(6);
+ 
+     QByteArray idc = id.toUtf8();
+--- a/app/src/libraries/wyedit/Editor.cpp
++++ b/app/src/libraries/wyedit/Editor.cpp
+@@ -11,6 +11,7 @@
+ #include <QtGlobal>
+ #include <QDateTime>
+ #include <QTextCursor>
++#include <QRegularExpression>
+ #include <QDebug>
+ #include <QInputDialog>
+ #include <QFileDialog>
+@@ -178,7 +179,7 @@
+     // В соль обязательно добавляется rand() на тот случай,
+     // если уже была произведена инициализация генератора
+     // хорошей криптостойкой солью
+-    long seed=rand()+datetime.toTime_t();
++    long seed=rand()+datetime.toSecsSinceEpoch();
+ 
+     // qDebug() << "Random generator init " << seed;
+     srand(seed);
+@@ -703,7 +704,7 @@
+ // Получение текста области редактирования в формате HTML
+ QString Editor::getTextarea(void)
+ {
+-  return textArea->document()->toHtml("UTF-8");
++  return textArea->document()->toHtml();
+ }
+ 
+ 
+@@ -772,8 +773,7 @@
+   qDebug() << "Write to file " << workFileName;
+ 
+   QTextStream out(&wfile);
+-  QString content=textArea->document()->toHtml("UTF-8");
+-  out.setCodec("UTF-8");
++  QString content=textArea->document()->toHtml();
+   out << content;
+ 
+   return true;
+@@ -847,7 +847,7 @@
+ 
+     // Перебираются файлы в директории
+     foreach(QString fileName, imageInDirectory)
+-      if( fileName.contains(QRegExp("\\.png$")) ) // Обрабатыватся только *.png файлы
++      if( fileName.contains(QRegularExpression("\\.png$")) ) // Обрабатыватся только *.png файлы
+         if( !imagesNames.contains(fileName) ) // Только картинки, не встречающиеся в тексте записи
+           if( !miscFields["attachFileNameList"].contains(fileName) ) // Только имена файлов, не содержащиеся в прикрепленных файлах
+           {
+@@ -894,7 +894,7 @@
+     {
+       // Иначе задана функция обратного вызова для записи текста и картинок
+ 
+-      QString content=textArea->document()->toHtml("UTF-8");
++      QString content=textArea->document()->toHtml();
+       saveCallbackFunc(qobject_cast<QObject *>(this), content);
+     }
+ 
+--- a/app/src/libraries/wyedit/EditorConfig.cpp
++++ b/app/src/libraries/wyedit/EditorConfig.cpp
+@@ -29,7 +29,9 @@
+ 
+     // Создается объект работы с конфигурацией редактора
+     conf=new QSettings(config_file_name, QSettings::IniFormat, this);
++    #if QT_VERSION < 0x060000
+     conf->setIniCodec( QTextCodec::codecForName("UTF-8") );
++    #endif
+     // conf->setPath(QSettings::IniFormat,QSettings::UserScope,file_dir);
+     // conf->setPath(QSettings::IniFormat,QSettings::SystemScope,file_dir);
+ 
+--- a/app/src/libraries/wyedit/EditorFindDialog.cpp
++++ b/app/src/libraries/wyedit/EditorFindDialog.cpp
+@@ -73,7 +73,7 @@
+ {
+   QString text=lineEdit->text();
+ 
+-  QTextDocument::FindFlags flags=0;
++  QTextDocument::FindFlags flags;
+   if(mathCase->isChecked())      flags|=QTextDocument::FindCaseSensitively;
+   if(wholeWords->isChecked())    flags|=QTextDocument::FindWholeWords;
+   if(searchBackward->isChecked())flags|=QTextDocument::FindBackward;
+--- a/app/src/libraries/wyedit/EditorMathExpressionDialog.cpp
++++ b/app/src/libraries/wyedit/EditorMathExpressionDialog.cpp
+@@ -117,7 +117,7 @@
+ // Масштабирование картинки формулы в зависимости от изменения размеров диалога
+ void EditorMathExpressionDialog::resizeEvent(QResizeEvent *event)
+ {
+-    if (imageLabel!=nullptr && imageLabel->pixmap()!=nullptr) {
++    if (imageLabel!=nullptr && !imageLabel->pixmap().isNull()) {
+         if (fitToScrollAreaCheckBox->isChecked()) {
+             // Масштабирование картинки формулы
+             pictureZoom();
+@@ -255,7 +255,7 @@
+ 
+     // Область работы с картинкой формулы
+     pictureFormulaLayout = new QVBoxLayout();
+-    pictureFormulaLayout->setMargin(5);
++    pictureFormulaLayout->setContentsMargins(5, 5, 5, 5);
+     pictureFormulaLayout->addLayout(pictureFormulaControlLayout);
+     pictureFormulaLayout->addWidget(imageScrollArea);
+ 
+@@ -273,7 +273,7 @@
+ 
+     // Область работы с текстом формулы
+     textFormulaLayout = new QVBoxLayout();
+-    textFormulaLayout->setMargin(5);
++    textFormulaLayout->setContentsMargins(5, 5, 5, 5);
+     textFormulaLayout->addLayout(textFormulaZoomLayout);
+     textFormulaLayout->addWidget(textArea);
+ 
+@@ -289,7 +289,7 @@
+ 
+     /* Сборка всех контролов */
+     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+-    mainLayout->setMargin(5);
++    mainLayout->setContentsMargins(5, 5, 5, 5);
+ 
+     // Добавление разделителя основных виджетов
+     mainLayout->addWidget(mathSplitter);
+@@ -428,8 +428,8 @@
+ // Масштабирование картинки формулы
+ void EditorMathExpressionDialog::pictureZoom()
+ {
+-    double pixHeight = imageLabel->pixmap()->height();
+-    double pixWidth = imageLabel->pixmap()->width();
++    double pixHeight = imageLabel->pixmap().height();
++    double pixWidth = imageLabel->pixmap().width();
+     double imageScrollAreaHeight = imageScrollArea->geometry().height()-10;
+     double imageScrollAreaWidth = imageScrollArea->geometry().width()-10;
+     if (pixHeight > imageScrollAreaHeight || pixWidth > imageScrollAreaWidth) {
+--- a/app/src/libraries/wyedit/EditorTextArea.cpp
++++ b/app/src/libraries/wyedit/EditorTextArea.cpp
+@@ -268,7 +268,7 @@
+     {
+         QPainter p(viewport());
+         p.setRenderHint(QPainter::Antialiasing,false);
+-        p.setRenderHint(QPainter::HighQualityAntialiasing,false);
++        p.setRenderHint(QPainter::Antialiasing,false);
+ 
+         QPen pen(Qt::darkGray);
+         pen.setStyle(Qt::SolidLine);
+@@ -346,7 +346,7 @@
+     // Поверх рисуются элементы разметки
+     QPainter p(viewport());
+     p.setRenderHint(QPainter::Antialiasing,false);
+-    p.setRenderHint(QPainter::HighQualityAntialiasing,false);
++    p.setRenderHint(QPainter::Antialiasing,false);
+ 
+     QPen pen(Qt::darkGray);
+     pen.setStyle(Qt::SolidLine);
+--- a/app/src/libraries/wyedit/EditorToolBarAssistant.cpp
++++ b/app/src/libraries/wyedit/EditorToolBarAssistant.cpp
+@@ -417,7 +417,7 @@
+     painter.begin(&pixMap);
+     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+     painter.setRenderHint(QPainter::Antialiasing);
+-    painter.setRenderHint(QPainter::HighQualityAntialiasing);
++    painter.setRenderHint(QPainter::Antialiasing);
+     painter.drawPixmap(0, 0, icon.pixmap( pixMap.size() ));
+     painter.end();
+ 
+--- a/app/src/libraries/wyedit/formatters/ImageFormatter.cpp
++++ b/app/src/libraries/wyedit/formatters/ImageFormatter.cpp
+@@ -1,4 +1,5 @@
+ #include <QTextBlock>
++#include <QRegularExpression>
+ #include <QTextFragment>
+ #include <QDebug>
+ #include <QFileDialog>
+@@ -324,7 +325,7 @@
+           qDebug() << "Find " << imageName << "\n"; // имя файла
+ 
+           // Если имя файла не является "внутренним", значит картинка еще не добавлена
+-          if(!imageName.contains(QRegExp("^image\\d{10}[a-z0-9]+.png$")))
++          if(!imageName.contains(QRegularExpression("^image\\d{10}[a-z0-9]+.png$")))
+           {
+             if(msgBox.text().length()==0)
+             {
+--- a/app/src/libraries/wyedit/formatters/TypefaceFormatter.cpp
++++ b/app/src/libraries/wyedit/formatters/TypefaceFormatter.cpp
+@@ -605,18 +605,21 @@
+ {
+     qDebug() << "In TypefaceFormatter::replaceSpacesOnlyTags(): " << htmlSimplyfier( htmlCode );
+ 
+-    QRegExp replaceSpaceTagsEx("<span[^>]*>\\s*</span>");
+-    replaceSpaceTagsEx.setMinimal(true);
++    QRegularExpression replaceSpaceTagsEx("<span[^>]*>\\s*</span>", QRegularExpression::InvertedGreedinessOption);
+ 
+     // Поиск тегов <span> с одними пробелами внутри, с запоминанием их
+     QStringList list;
+     int lastPos = 0;
+-    while( ( lastPos = replaceSpaceTagsEx.indexIn( htmlCode, lastPos ) ) != -1 )
+     {
+-        lastPos += replaceSpaceTagsEx.matchedLength();
++      QRegularExpressionMatchIterator mit = replaceSpaceTagsEx.globalMatch(htmlCode);
++      while (mit.hasNext())
++      {
++        QRegularExpressionMatch _m = mit.next();
++        // handled by globalMatch
+ 
+-        list << replaceSpaceTagsEx.cap(0);
++        list << _m.captured(0);
+         // qDebug() << "Find space only sttring: " << list.last();
++      }
+     }
+ 
+ 
+@@ -656,8 +659,7 @@
+ 
+     // В регулярных выражениях Qt кванторы по-умолчанию жадные (greedy)
+     // Поэтому напрямую регвыру указывается что кванторы должны быть ленивые
+-    QRegExp removeStyleEx("style=\".*\"");
+-    removeStyleEx.setMinimal(true);
++    QRegularExpression removeStyleEx("style=\".*\"", QRegularExpression::InvertedGreedinessOption);
+     htmlCode.replace(removeStyleEx, "style=\"margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\"");
+     // qDebug() << "After remove style: " << htmlCode;
+ 
+@@ -676,8 +678,7 @@
+     // если его сразу не убрать
+     // Код лишний, но оставляю на будущее
+     /*
+-    QRegExp removeEmptyFinishPTag("<p style=\"[^\"]*\"><br.?\\/><!--EndFragment--><\\/p>");
+-    removeEmptyFinishPTag.setMinimal(true);
++    QRegularExpression removeEmptyFinishPTag("<p style=\"[^\"]*\"><br.?\\/><!--EndFragment--><\\/p>", QRegularExpression::InvertedGreedinessOption);
+     htmlCode.replace(removeEmptyFinishPTag, "<!--EndFragment-->");
+     qDebug() << "After replace special tag EndFragment: " << htmlSimplyfier( htmlCode );
+     */
+@@ -697,8 +698,7 @@
+     {
+         // qDebug() << "L" << lineNum << " " << list[lineNum];
+ 
+-        QRegExp replacePBrP("<p.*><br.?\\/><\\/p.*>");
+-        replacePBrP.setMinimal(true);
++        QRegularExpression replacePBrP("<p.*><br.?\\/><\\/p.*>", QRegularExpression::InvertedGreedinessOption);
+         list[lineNum].replace(replacePBrP, "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; \"></p>");
+         // qDebug() << "L" << lineNum << " " << list[lineNum];
+ 
+@@ -707,12 +707,10 @@
+     htmlCode=tempHtmlCode;
+     // qDebug() << "After replace p br p: " << htmlCode;
+ 
+-    QRegExp replaceOpenHeaderEx("<[hH]\\d.*>");
+-    replaceOpenHeaderEx.setMinimal(true);
++    QRegularExpression replaceOpenHeaderEx("<[hH]\\d.*>", QRegularExpression::InvertedGreedinessOption);
+     htmlCode.replace(replaceOpenHeaderEx, "<p>");
+ 
+-    QRegExp replaceCloseHeaderEx("</[hH]\\d.*>");
+-    replaceCloseHeaderEx.setMinimal(true);
++    QRegularExpression replaceCloseHeaderEx("</[hH]\\d.*>", QRegularExpression::InvertedGreedinessOption);
+     htmlCode.replace(replaceCloseHeaderEx, "</p>");
+ 
+     QStringList chunks=htmlCode.split("<body>"); // Вместо удаления ".*<body>" через медленную регулярку
+@@ -730,8 +728,7 @@
+ // Метод, применяемый при выводе отладочной информации, чтобы проще было смотреть на код
+ QString TypefaceFormatter::htmlSimplyfier(QString htmlCode)
+ {
+-    QRegExp rx("style=\"([^\"]*)\"");
+-    rx.setMinimal(true);
++    QRegularExpression rx("style=\"([^\"]*)\"", QRegularExpression::InvertedGreedinessOption);
+     htmlCode.replace(rx, "");
+     // qDebug() << "After replace htmlSimplyfier: " << htmlCode;
+ 
+@@ -743,7 +740,7 @@
+ QString TypefaceFormatter::replaceSpaces(QString htmlCode)
+ {
+     QDomDocument doc;
+-    bool isDocParse=doc.setContent("<root>"+htmlCode+"</root>");
++    bool isDocParse = static_cast<bool>(doc.setContent("<root>"+htmlCode+"</root>"));
+ 
+     if(!isDocParse)
+     {
+@@ -1190,8 +1187,7 @@
+ 
+     // В регулярных выражениях Qt кванторы по-умолчанию жадные (greedy)
+     // Поэтому напрямую регвыру указывается что кванторы должны быть ленивые
+-    QRegExp replace_expression("<br\\s?/>");
+-    replace_expression.setMinimal(true);
++    QRegularExpression replace_expression("<br\\s?/>", QRegularExpression::InvertedGreedinessOption);
+ 
+     htmlCode.replace(replace_expression, "</p><p>");
+ 
+@@ -1340,8 +1336,7 @@
+ 
+     // Определяем, не является ли этот символ слева от курсора мягким переносом
+     QString html = textCursor.selection().toHtml();
+-    QRegExp regExp("<span\\s+style=\"(?:(?:(?:\\s*font-family:'(?:[^<]+)';)(?:\\s*font-size:(?:\\d+)pt;))|(?:(?:\\s*font-size:(?:\\d+)pt;)(?:\\s*font-family:'(?:[^<]+)';)))\">\\s*<br\\s*/\\s*>\\s*</span>");
+-    regExp.setMinimal(true);
++    QRegularExpression regExp("<span\\s+style=\"(?:(?:(?:\\s*font-family:'(?:[^<]+)';)(?:\\s*font-size:(?:\\d+)pt;))|(?:(?:\\s*font-size:(?:\\d+)pt;)(?:\\s*font-family:'(?:[^<]+)';)))\">\\s*<br\\s*/\\s*>\\s*</span>", QRegularExpression::InvertedGreedinessOption);
+     if(html.indexOf(regExp) != -1)
+     {
+         // Если это мягкий перенос - заменяем его на абзац
+@@ -1386,8 +1381,7 @@
+     if(textCursor.anchor() != 0 && textCursor.position() != 0) // Пропускаем начало документо
+     {
+         QString html = textCursor.selection().toHtml();
+-        QRegExp regExp("<span\\s+style=\"(?:(?:(?:\\s*font-family:'(?:[^<]+)';)(?:\\s*font-size:(?:\\d+)pt;))|(?:(?:\\s*font-size:(?:\\d+)pt;)(?:\\s*font-family:'(?:[^<]+)';)))\">\\s*(?:<br\\s*/\\s*>\\s*){1,}\\s*</span>");
+-        regExp.setMinimal(true);
++        QRegularExpression regExp("<span\\s+style=\"(?:(?:(?:\\s*font-family:'(?:[^<]+)';)(?:\\s*font-size:(?:\\d+)pt;))|(?:(?:\\s*font-size:(?:\\d+)pt;)(?:\\s*font-family:'(?:[^<]+)';)))\">\\s*(?:<br\\s*/\\s*>\\s*){1,}\\s*</span>", QRegularExpression::InvertedGreedinessOption);
+         if(html.indexOf(regExp) != -1)
+         {
+             // Если это мягкий перенос - заменяем его на абзац
+@@ -1403,8 +1397,7 @@
+ 
+     // Ищем мягкий перенос в качестве пустого абзаца в расширенном вправо выделении
+     QString htmlCode = textArea->textCursor().selection().toHtml();
+-    QRegExp regExp("<span\\s+style=\"(?:(?:(?:\\s*font-family:'(?:[^<]+)';)(?:\\s*font-size:(?:\\d+)pt;))|(?:(?:\\s*font-size:(?:\\d+)pt;)(?:\\s*font-family:'(?:[^<]+)';)))\">\\s*(?:<br\\s*/\\s*>\\s*){1,}\\s*</span>");
+-    regExp.setMinimal(true);
++    QRegularExpression regExp("<span\\s+style=\"(?:(?:(?:\\s*font-family:'(?:[^<]+)';)(?:\\s*font-size:(?:\\d+)pt;))|(?:(?:\\s*font-size:(?:\\d+)pt;)(?:\\s*font-family:'(?:[^<]+)';)))\">\\s*(?:<br\\s*/\\s*>\\s*){1,}\\s*</span>", QRegularExpression::InvertedGreedinessOption);
+     if(htmlCode.indexOf(regExp) != -1)
+     {
+         // Заменяем проблемный код в html
+@@ -1415,7 +1408,6 @@
+     // Теперь обрабатываем смитуацию, когда на конце строки - мягкий перенос
+     htmlCode = textArea->textCursor().selection().toHtml();
+     regExp.setPattern("(<span\\s+style=\"\\s*((?:[^<]+);\">)(?:.+)\\s*)(?:(?:<br\\s*/\\s*>\\s*){1,}\\s*)(</span>)");
+-    regExp.setMinimal(true);
+     if(htmlCode.indexOf(regExp) != -1)
+     {
+         // Удаляем в html код <br/>
+--- a/app/src/libraries/wyedit/indentslider/IndentSlider.cpp
++++ b/app/src/libraries/wyedit/indentslider/IndentSlider.cpp
+@@ -111,7 +111,7 @@
+ 
+  QPainter painter(this);
+  painter.setRenderHint(QPainter::Antialiasing,false);
+- painter.setRenderHint(QPainter::HighQualityAntialiasing,false);
++ painter.setRenderHint(QPainter::Antialiasing,false);
+ 
+  // Настраивается перо
+  QPen pen(Qt::black); //Qt::darkGray
+--- a/app/src/models/actionLog/ActionLogModel.cpp
++++ b/app/src/models/actionLog/ActionLogModel.cpp
+@@ -1,4 +1,5 @@
+-#include <QDebug>
++#include <QDebug>
++#include <QLocale>
+ #include <QDateTime>
+ #include <QCommonStyle>
+ 
+@@ -67,9 +68,9 @@
+       // Если вывод на экран, то происходит преобразование TIMESTAMP в человекочитаемый формат даты и времени
+       if(role==Qt::DisplayRole)
+       {
+-        QDateTime fieldDateTime=QDateTime::fromTime_t( element.attribute("t").toUInt() );
++        QDateTime fieldDateTime=QDateTime::fromSecsSinceEpoch( element.attribute("t").toUInt() );
+         if(mytetraConfig.getEnableCustomDateTimeFormat()==false)
+-          return fieldDateTime.toString(Qt::SystemLocaleDate);
++          return QLocale::system().toString(fieldDateTime);
+         else
+           return fieldDateTime.toString( mytetraConfig.getCustomDateTimeFormat() );
+       }
+--- a/app/src/models/appConfig/AppConfig.cpp
++++ b/app/src/models/appConfig/AppConfig.cpp
+@@ -48,7 +48,9 @@
+ 
+     // Создается указатель на объект хранилища конфигурации
+     m_conf = new QSettings(configFileName, QSettings::IniFormat, this);
++    #if QT_VERSION < 0x060000
+     m_conf->setIniCodec( QTextCodec::codecForName("UTF-8") );
++    #endif
+ 
+     // Здесь конфиг считан, и в нем уже есть начальные настройки, включая директорию корзины
+     // В этот момент еще не происходило записи конфига на диск, и следует проверить,
+--- a/app/src/models/appConfig/AppConfig.h
++++ b/app/src/models/appConfig/AppConfig.h
+@@ -7,7 +7,7 @@
+ #include <QDebug>
+ 
+ class QRect;
+-class QStringList;
++#include <QStringList>
+ 
+ // Класс, хранящий информацию о структуре конфига программы
+ // и позволяющий получить или записать значения в конфиг программы
+--- a/app/src/models/appConfig/AppConfigUpdater.cpp
++++ b/app/src/models/appConfig/AppConfigUpdater.cpp
+@@ -32,7 +32,9 @@
+ 
+     // Создается рабочий объект для работы с конфигурацией
+     conf=new QSettings(fileName, QSettings::IniFormat, this);
++    #if QT_VERSION < 0x060000
+     conf->setIniCodec( QTextCodec::codecForName("UTF-8") );
++    #endif
+     conf->setPath(QSettings::IniFormat, QSettings::UserScope,"./");
+     conf->setPath(QSettings::IniFormat, QSettings::SystemScope,"./");
+ }
+--- a/app/src/models/dataBaseConfig/DataBaseConfig.cpp
++++ b/app/src/models/dataBaseConfig/DataBaseConfig.cpp
+@@ -52,7 +52,9 @@
+   {
+    // Если файла нет, создается конфигфайл с начальным содержимым
+    QSettings tempConf(configFileName, QSettings::IniFormat);
++   #if QT_VERSION < 0x060000
+    tempConf.setIniCodec( QTextCodec::codecForName("UTF-8") );
++   #endif
+ 
+    tempConf.setValue("version", 1);
+    tempConf.setValue("crypt_mode", 0);
+@@ -65,7 +67,9 @@
+ 
+  // Создается указатель на объект хранилища конфигурации
+  conf=new QSettings(configFileName, QSettings::IniFormat, this);
++ #if QT_VERSION < 0x060000
+  conf->setIniCodec( QTextCodec::codecForName("UTF-8") );
++ #endif
+ 
+  conf->sync();
+ 
+--- a/app/src/models/databasesManagement/DatabasesManagementModel.cpp
++++ b/app/src/models/databasesManagement/DatabasesManagementModel.cpp
+@@ -116,7 +116,9 @@
+     if (confFile.exists())
+     {
+         QSettings conf(path, QSettings::IniFormat);
++        #if QT_VERSION < 0x060000
+         conf.setIniCodec( QTextCodec::codecForName("UTF-8") );
++        #endif
+ 
+         if (conf.contains("tetradir") and
+             conf.contains("trashdir"))
+--- a/app/src/models/databasesManagement/KnownBasesConfig.cpp
++++ b/app/src/models/databasesManagement/KnownBasesConfig.cpp
+@@ -46,7 +46,9 @@
+ 
+     // Создается указатель на объект хранилища конфигурации
+     m_conf=new QSettings(this->getConfigFileName(), QSettings::IniFormat,this);
++    #if QT_VERSION < 0x060000
+     m_conf->setIniCodec( QTextCodec::codecForName("UTF-8") );
++    #endif
+ 
+     m_conf->sync();
+ 
+@@ -79,7 +81,9 @@
+     {
+         // Если файла нет, создается конфигфайл с начальным содержимым
+         QSettings conf( this->getConfigFileName(), QSettings::IniFormat);
++        #if QT_VERSION < 0x060000
+         conf.setIniCodec( QTextCodec::codecForName("UTF-8") );
++        #endif
+ 
+         conf.setValue("version", 1);
+ 
+@@ -93,7 +97,9 @@
+ bool KnownBasesConfig::updateVersion_2()
+ {
+     QSettings conf(this->getConfigFileName(), QSettings::IniFormat);
++    #if QT_VERSION < 0x060000
+     conf.setIniCodec( QTextCodec::codecForName("UTF-8") );
++    #endif
+ 
+     // Повышение версии возможно только с версии 1
+     if (conf.value("version").toInt()!=1)
+--- a/app/src/models/recordTable/Record.cpp
++++ b/app/src/models/recordTable/Record.cpp
+@@ -1,4 +1,5 @@
+ #include <QObject>
++#include <QRegularExpression>
+ #include <QMessageBox>
+ #include <QXmlStreamWriter>
+ 
+@@ -546,7 +547,9 @@
+       criticalError("Cant open text file "+fileName+" for write.");
+ 
+     QTextStream out(&wfile);
++    #if QT_VERSION < 0x060000
+     out.setCodec("UTF-8");
++    #endif
+     out << iText;
+   }
+   else if(fieldList.value("crypt")=="1")
+@@ -806,16 +809,19 @@
+ 
+ 
+   // Подготавливается регулярное выражение
+-  QRegExp rx("href=\""+FixedParameters::appTextId+":\\/\\/note/(.*)\"");
+-  rx.setMinimal(true); // Регулярка делается ленивой (ленивые квантификаторы в строке регвыра в Qt не поддерживаются)
++  QRegularExpression rx("href=\""+FixedParameters::appTextId+":\\/\\/note/(.*)\"", QRegularExpression::InvertedGreedinessOption);
+ 
+   // Заполняется список идентификаторов, встречающихся во внутренних ссылках
+   QStringList internalIdList;
+   int pos = 0;
+-  while ((pos = rx.indexIn(lines, pos))!=-1)
+   {
+-    internalIdList << rx.cap(1);
+-    pos += rx.matchedLength();
++    QRegularExpressionMatchIterator mit = rx.globalMatch(lines);
++    while (mit.hasNext())
++    {
++      QRegularExpressionMatch _m = mit.next();
++    internalIdList << _m.captured(1);
++    // pos increment handled by globalMatch
++    }
+   }
+ 
+ 
+--- a/app/src/models/recordTable/RecordTableData.cpp
++++ b/app/src/models/recordTable/RecordTableData.cpp
+@@ -179,7 +179,9 @@
+             criticalError("RecordTableData::editor_save_callback() : Cant open text file "+fileName+" for write.");
+ 
+         QTextStream out(&wfile);
++        #if QT_VERSION < 0x060000
+         out.setCodec("UTF-8");
++        #endif
+         out << saveText;
+     }
+     else
+--- a/app/src/models/recordTable/RecordTableModel.cpp
++++ b/app/src/models/recordTable/RecordTableModel.cpp
+@@ -65,7 +65,7 @@
+                 // Преобразование временного штампа в дату и время
+                 QDateTime fieldDateTime=QDateTime::fromString(field, "yyyyMMddhhmmss");
+                 if(mytetraConfig.getEnableCustomDateTimeFormat()==false)
+-                    return fieldDateTime.toString(Qt::SystemLocaleDate);
++                    return QLocale::system().toString(fieldDateTime);
+                 else
+                     return fieldDateTime.toString( mytetraConfig.getCustomDateTimeFormat() );
+             }
+--- a/app/src/models/tree/KnowTreeModel.cpp
++++ b/app/src/models/tree/KnowTreeModel.cpp
+@@ -308,7 +308,9 @@
+     return false;
+   }
+   QTextStream out(&wfile);
++  #if QT_VERSION < 0x060000
+   out.setCodec("UTF-8");
++  #endif
+   out << doc.toString();
+ 
+ 
+@@ -694,7 +696,9 @@
+ 
+   // Создание объекта потоковой генерации XML-данных в файл
+   QXmlStreamWriter xmlWriter(&writeFile);
++  #if QT_VERSION < 0x060000
+   xmlWriter.setCodec("UTF-8");
++  #endif
+   xmlWriter.setAutoFormatting(true);
+   xmlWriter.setAutoFormattingIndent(1);
+ 
+--- a/app/src/views/consoleEmulator/CommandRunner.h
++++ b/app/src/views/consoleEmulator/CommandRunner.h
+@@ -6,7 +6,7 @@
+ 
+ 
+ class ConsoleEmulator;
+-class QTextCodec;
++#include <QTextCodec>
+ 
+ class CommandRunner : public QObject
+ {
+--- a/app/src/views/findInBaseScreen/FindScreen.cpp
++++ b/app/src/views/findInBaseScreen/FindScreen.cpp
+@@ -822,7 +822,7 @@
+  text.replace('?',' ');
+  text.replace('!',' ');
+ 
+- QStringList list = text.split(QRegExp("\\W+"), QString::SkipEmptyParts);
++ QStringList list = text.split(QRegularExpression("\\W+"), Qt::SkipEmptyParts);
+ 
+  return list;
+ }
+--- a/app/src/views/mainWindow/MainWindow.cpp
++++ b/app/src/views/mainWindow/MainWindow.cpp
+@@ -2,7 +2,6 @@
+ #include <QString>
+ #include <QDir>
+ #include <QString>
+-#include <QDesktopWidget>
+ #include <QMenu>
+ #include <QMenuBar>
+ #include <QPrintDialog>
+@@ -978,8 +977,8 @@
+     infoPhysicalDpi="Physical DPI (from screen): "+(QString::number( QApplication::screens().at(0)->physicalDotsPerInch(), 'f', 2 ))+"<br/>";
+ #endif
+ 
+-    infoPhysicalDpiX="Physical DPI X (from desktop): "+(QString::number( qApp->desktop()->physicalDpiX(), 'f', 2 ))+"<br/>";
+-    infoPhysicalDpiY="Physical DPI Y (from desktop): "+(QString::number( qApp->desktop()->physicalDpiY(), 'f', 2 ))+"<br/>";
++    infoPhysicalDpiX="Physical DPI X (from desktop): "+(QString::number( qApp->primaryScreen()->physicalDotsPerInchX(), 'f', 2 ))+"<br/>";
++    infoPhysicalDpiY="Physical DPI Y (from desktop): "+(QString::number( qApp->primaryScreen()->physicalDotsPerInchY(), 'f', 2 ))+"<br/>";
+ 
+     QString info=infoTargetOs+
+             infoProgramFile+
+--- a/app/src/views/printPreview/PrintPreview.cpp
++++ b/app/src/views/printPreview/PrintPreview.cpp
+@@ -62,7 +62,7 @@
+ 
+ void PrintPreview::setupPrintDoc()
+ {
+-    QSizeF page = printer.pageRect().size();
++    QSizeF page = printer.pageRect(QPrinter::Point).size();
+     page.setWidth(page.width() * view->logicalDpiX() / printer.logicalDpiX());
+     page.setHeight(page.height() * view->logicalDpiY() / printer.logicalDpiY());
+ 
+--- a/app/src/views/record/AddNewRecord.cpp
++++ b/app/src/views/record/AddNewRecord.cpp
+@@ -101,7 +101,7 @@
+ {
+   // Размещалка элементов
+   QVBoxLayout *layout=new QVBoxLayout();
+-  layout->setMargin(8);
++  layout->setContentsMargins(8, 8, 8, 8);
+   layout->setSpacing(10);
+ 
+   // Добавление элементов в размещалку
+--- a/app/src/views/record/InfoFieldEnter.cpp
++++ b/app/src/views/record/InfoFieldEnter.cpp
+@@ -86,7 +86,7 @@
+ {
+     // Размещалка элементов
+     infoFieldLayout=new QGridLayout(); // Попробовать this
+-    infoFieldLayout->setMargin(8);
++    infoFieldLayout->setContentsMargins(8, 8, 8, 8);
+     infoFieldLayout->setSpacing(10);
+ 
+     int y = -1;
+--- a/app/src/views/record/MetaEditor.cpp
++++ b/app/src/views/record/MetaEditor.cpp
+@@ -5,6 +5,7 @@
+ #include <QScrollArea>
+ #include <QSplitter>
+ #include <QtDebug>
++#include <QRegularExpression>
+ 
+ #include "MetaEditor.h"
+ 
+@@ -122,7 +123,7 @@
+  // Область текстовых меток, которые выглядят на экране как [метка1] [метка2] [метка3] ...
+  recordTagsLayout=new QHBoxLayout();
+  recordTagsLayout->setAlignment(Qt::AlignLeft);
+- recordTagsLayout->setMargin(0);
++ recordTagsLayout->setContentsMargins(0, 0, 0, 0);
+ 
+  // Область текстовых меток QHBoxLayout невозможно добавить в QScrollArea, поэтому оборачивается в виджет
+  recordTagsContainer = new QWidget();
+@@ -321,7 +322,7 @@
+ 
+ 
+  // Строка с метками разделяется на отдельные меки
+- recordTagsTextList = recordTagsText.split(QRegExp("[,;]+"), QString::SkipEmptyParts);
++ recordTagsTextList = recordTagsText.split(QRegularExpression("[,;]+"), Qt::SkipEmptyParts);
+ 
+  // В каждой метке убираются лишние пробелы по краям
+  for(int i = 0; i < recordTagsTextList.size(); ++i)
+--- a/app/src/views/record/RecordInfoFieldsEditor.cpp
++++ b/app/src/views/record/RecordInfoFieldsEditor.cpp
+@@ -72,7 +72,7 @@
+ {
+  // Размещалка элементов
+  QVBoxLayout *layout=new QVBoxLayout();
+- layout->setMargin(8);
++ layout->setContentsMargins(8, 8, 8, 8);
+  layout->setSpacing(10);
+ 
+  // Добавление элементов в размещалку
+--- a/app/src/views/recordTable/RecordTablePrint.cpp
++++ b/app/src/views/recordTable/RecordTablePrint.cpp
+@@ -180,8 +180,10 @@
+       msgBox.exec();
+     } else {
+       QTextStream stream(&file);
++      #if QT_VERSION < 0x060000
+       stream.setCodec("UTF-8");
+-      stream << textArea->document()->toHtml("UTF-8"); // Команда stream << textArea->toHtml() не подходит, так как не выствляет в заголовках charset
++      #endif
++      stream << textArea->document()->toHtml(); // Команда stream << textArea->toHtml() не подходит, так как не выствляет в заголовках charset
+       stream.flush();
+       file.close();
+     }
