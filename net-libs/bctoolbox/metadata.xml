@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="mbedtls">Use <pkg>net-libs/mbedtls</pkg> as TLS backend</flag>
+		<flag name="openssl">Use <pkg>dev-libs/openssl</pkg> as TLS backend</flag>
+	</use>
 	<upstream>
-		<remote-id type="savannah-nongnu">linphone</remote-id>
+		<remote-id type="github">BelledonneCommunications/bctoolbox</remote-id>
 	</upstream>
 </pkgmetadata>
