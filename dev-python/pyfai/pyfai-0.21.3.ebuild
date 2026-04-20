@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=meson-python
-PYTHON_COMPAT=( python3_{9..14} )
+PYTHON_COMPAT=( python3_{11..14} )
 #python2_7 masked because of h5py
 
 inherit distutils-r1 pypi

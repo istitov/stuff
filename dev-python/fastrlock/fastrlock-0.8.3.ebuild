@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="Fast, re-entrant optimistic lock implemented in Cython"
 HOMEPAGE="https://github.com/scoder/fastrlock"
 
-PYTHON_COMPAT=( python3_{9..14} )
+PYTHON_COMPAT=( python3_{11..14} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
 

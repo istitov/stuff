@@ -3,7 +3,7 @@
 
 EAPI="7"
 
-PYTHON_COMPAT=( python3_{9..14} )
+PYTHON_COMPAT=( python3_{11..14} )
 
 PYTHON_REQ_USE="sqlite"
 inherit python-single-r1 desktop

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..14} )
+PYTHON_COMPAT=( python3_{11..14} )
 
 #inherit distutils-r1 qmake-utils
 inherit cmake
