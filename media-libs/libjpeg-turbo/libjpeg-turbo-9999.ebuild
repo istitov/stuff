@@ -16,18 +16,8 @@ IUSE="cpu_flags_arm_neon java static-libs test"
 RESTRICT="!test? ( test )"
 
 ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
-COMMON_DEPEND="
-	!media-libs/jpeg:0
-	!media-libs/jpeg:62
-"
-DEPEND="
-	${COMMON_DEPEND}
-	java? ( >=virtual/jdk-1.8:*[-headless-awt] )
-"
-RDEPEND="
-	${COMMON_DEPEND}
-	java? ( >=virtual/jre-1.8:* )
-"
+DEPEND="java? ( >=virtual/jdk-1.8:*[-headless-awt] )"
+RDEPEND="java? ( >=virtual/jre-1.8:* )"
 BDEPEND="
 	amd64? ( ${ASM_DEPEND} )
 	x86? ( ${ASM_DEPEND} )
