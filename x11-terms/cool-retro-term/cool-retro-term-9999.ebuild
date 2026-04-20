@@ -3,52 +3,30 @@
 
 EAPI=8
 
-inherit qmake-utils
-
-QTW_PN=qmltermwidget
+inherit git-r3 qmake-utils xdg
 
 DESCRIPTION="A good looking terminal emulator which mimics the old cathode display"
 HOMEPAGE="https://github.com/Swordfish90/cool-retro-term"
-
-if [[ ${PV} == *9999* ]];then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/Swordfish90/${PN}"
-else
-	SRC_URI="https://github.com/Swordfish90/${PN}/archive/v${PV}.tar.gz -> ${P}.gh.tar.gz"
-	KEYWORDS="~x86 ~amd64"
-	RESTRICT="mirror"
-fi
+EGIT_REPO_URI="https://github.com/Swordfish90/${PN}"
 
 LICENSE="GPL-3 GPL-2"
 SLOT="0"
 
-DEPEND="
-	dev-qt/qtdeclarative:5[localstorage]
-	dev-qt/qtgraphicaleffects:5
-	dev-qt/qtquickcontrols:5[widgets]
-	dev-qt/qtsql:5
-	dev-qt/qtwidgets:5
+RDEPEND="
+	dev-qt/qt5compat:6
+	dev-qt/qtbase:6[concurrent,gui,network,sql,widgets]
+	dev-qt/qtdeclarative:6
+"
+DEPEND="${RDEPEND}"
+BDEPEND="
+	dev-qt/qtshadertools:6
 "
 
-RDEPEND="${DEPEND}"
-
-src_prepare() {
-	default
-
-#	rmdir qmltermwidget || die
-#	mv "${WORKDIR}/${QTW_P}" qmltermwidget || die
-}
-
 src_configure() {
-	eqmake5 PREFIX="${EPREFIX}/usr"
+	eqmake6 PREFIX="${EPREFIX}/usr"
 }
 
 src_install() {
-	# default attempts to install directly to /usr
 	emake INSTALL_ROOT="${D}" install
 	doman packaging/debian/cool-retro-term.1
 }
-
-pkg_preinst() { gnome2_icon_savelist; }
-pkg_postinst() { gnome2_icon_cache_update; }
-pkg_postrm() { gnome2_icon_cache_update; }
