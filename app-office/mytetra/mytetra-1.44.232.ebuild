@@ -22,11 +22,9 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
-PATCHES=(
-	"${FILESDIR}/${PN}-1.44.232-qt6.patch"
-)
-
 src_prepare() {
+	bzcat "${FILESDIR}/${PN}-1.44.232-qt6.patch.bz2" > "${T}/${PN}-1.44.232-qt6.patch" || die
+	eapply "${T}/${PN}-1.44.232-qt6.patch"
 	default
 	sed -i 's|/usr/local/bin|/usr/bin|' app/app.pro || die
 
