@@ -3,22 +3,30 @@
 
 EAPI=8
 
-inherit cmake
-
-MY_P=${PN}-${PV}
+inherit cmake xdg
 
 DESCRIPTION="Graphical user interface for HTTrack library, developed in C++ and based on Qt"
 HOMEPAGE="http://httraqt.sourceforge.net"
-SRC_URI="https://downloads.sourceforge.net/${PN}/${MY_P}.tar.gz"
+SRC_URI="https://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 RESTRICT="mirror"
 
-DEPEND="dev-qt/qtgui:5
-	>=www-client/httrack-3.45.4"
-RDEPEND="${DEPEND}"
+RDEPEND="
+	dev-qt/qtbase:6[dbus,gui,widgets]
+	dev-qt/qtmultimedia:6
+	>=www-client/httrack-3.45.4
+"
+DEPEND="${RDEPEND}"
+BDEPEND="
+	dev-qt/qttools:6[linguist]
+"
 
-#S="${WORKDIR}/${PN}"
-CMAKE_VERBOSE="OFF"
+src_configure() {
+	local mycmakeargs=(
+		-DUSE_QT_VERSION=6
+	)
+	cmake_src_configure
+}
