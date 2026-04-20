@@ -4,14 +4,15 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..14} )
-inherit git-r3 meson python-single-r1
+inherit meson python-single-r1
 
 DESCRIPTION="A console based XMPP client inspired by Irssi"
 HOMEPAGE="https://profanity-im.github.io"
-EGIT_REPO_URI="https://github.com/profanity-im/profanity.git"
+SRC_URI="https://github.com/profanity-im/profanity/releases/download/${PV}/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
+KEYWORDS="~amd64 ~arm64"
 IUSE="gpg gtk libnotify omemo omemo-qrcode otr python spellcheck test xscreensaver"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="
