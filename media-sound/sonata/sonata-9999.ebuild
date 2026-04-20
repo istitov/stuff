@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{9..14} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 xdg git-r3
+inherit desktop distutils-r1 git-r3 xdg
 
 DESCRIPTION="Elegant GTK+ 3 client for the Music Player Daemon (MPD)"
 HOMEPAGE="https://www.nongnu.org/sonata/"
@@ -14,13 +14,17 @@ EGIT_REPO_URI="https://github.com/multani/sonata.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
 IUSE="dbus mpd taglib"
 
-LANGS="ar be ca cs da de el-GR es et fi fr hi it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
-for X in ${LANGS} ; do
-	IUSE+=" l10n_${X}"
+LANGS_MAP=(
+	ar:ar be:be ca:ca cs:cs da:da de:de el_GR:el es:es et:et fi:fi
+	fr:fr hi:hi it:it ja:ja ko:ko nl:nl pl:pl pt_BR:pt-BR ru:ru sk:sk
+	sl:sl sv:sv tr:tr uk:uk zh_CN:zh-CN zh_TW:zh-TW
+)
+for X in "${LANGS_MAP[@]}" ; do
+	IUSE+=" l10n_${X#*:}"
 done
+unset X
 
 RDEPEND="
 	$(python_gen_cond_dep '
@@ -30,41 +34,29 @@ RDEPEND="
 		taglib? ( dev-python/tagpy[${PYTHON_USEDEP}] )
 	')
 "
-
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 	mpd? ( media-sound/mpd )
-	x11-libs/gtk+:3"
-
+	x11-libs/gtk+:3
+"
 BDEPEND="virtual/pkgconfig"
-
-DOCS="CHANGELOG README.rst TODO TRANSLATORS"
-
-PATCHES=(
-	"${FILESDIR}/hot_fix_version_PEP.patch"
-)
 
 distutils_enable_tests unittest
 
+DOCS="CHANGELOG README.rst TODO TRANSLATORS"
+
 src_prepare() {
-	local lang
-		for lang in ${LANGS}; do
-			if ! use l10n_${lang}; then
-				rm po/${lang/-/_}.po || die "failed to remove nls"
-			fi
-		done
 	default
+	local entry file flag
+	for entry in "${LANGS_MAP[@]}" ; do
+		file="${entry%%:*}"
+		flag="${entry#*:}"
+		use "l10n_${flag}" || rm "po/${file}.po" || die
+	done
 }
 
 src_install() {
 	distutils-r1_src_install
-	rm -rf "${D}"/usr/share/sonata
-	insinto /usr/share/pixmaps
-	newins sonata/pixmaps/sonata-large.png sonata.png
-}
-
-pkg_postinst() {
-	elog ""
-	elog "In order to work correctly Sonata,"
-	elog "you will need PyGObject 3.7.4 or more,"
-	elog "earlier versions may also work... but it's not recommended"
+	doicon -s 128 sonata/pixmaps/sonata.png
+	rm -r "${ED}"/usr/share/sonata || die
 }

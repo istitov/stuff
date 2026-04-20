@@ -14,13 +14,21 @@ SRC_URI="https://github.com/multani/sonata/archive/refs/tags/v${PV}.tar.gz -> ${
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="dbus mpd taglib"
 
-LANGS="ar be ca cs da de el-GR es et fi fr it ja ko nl pl pt-BR ru sk sl sv tr uk zh-CN zh-TW"
-for X in ${LANGS} ; do
-	IUSE+=" l10n_${X}"
+# Upstream .po filename -> Gentoo l10n USE flag
+# (identical except where the USE flag drops the country qualifier:
+# Greek ships as el_GR.po but Gentoo only has an `el` flag.)
+LANGS_MAP=(
+	ar:ar be:be ca:ca cs:cs da:da de:de el_GR:el es:es et:et fi:fi
+	fr:fr hi:hi it:it ja:ja ko:ko nl:nl pl:pl pt_BR:pt-BR ru:ru sk:sk
+	sl:sl sv:sv tr:tr uk:uk zh_CN:zh-CN zh_TW:zh-TW
+)
+for X in "${LANGS_MAP[@]}" ; do
+	IUSE+=" l10n_${X#*:}"
 done
+unset X
 
 RDEPEND="
 	$(python_gen_cond_dep '
@@ -30,11 +38,11 @@ RDEPEND="
 		taglib? ( dev-python/tagpy[${PYTHON_USEDEP}] )
 	')
 "
-
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 	mpd? ( media-sound/mpd )
-	x11-libs/gtk+:3"
-
+	x11-libs/gtk+:3
+"
 BDEPEND="virtual/pkgconfig"
 
 distutils_enable_tests unittest
@@ -42,13 +50,13 @@ distutils_enable_tests unittest
 DOCS="CHANGELOG README.rst TODO TRANSLATORS"
 
 src_prepare() {
-	local lang
-		for lang in ${LANGS}; do
-			if ! use l10n_${lang}; then
-				rm po/${lang/-/_}.po || die "failed to remove nls"
-			fi
-		done
 	default
+	local entry file flag
+	for entry in "${LANGS_MAP[@]}" ; do
+		file="${entry%%:*}"
+		flag="${entry#*:}"
+		use "l10n_${flag}" || rm "po/${file}.po" || die
+	done
 }
 
 src_install() {
