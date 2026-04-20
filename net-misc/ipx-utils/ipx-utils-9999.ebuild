@@ -1,16 +1,16 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-EGIT_REPO_URI="https://github.com/pasis/ipx-utils.git"
+EAPI=8
 
 inherit autotools git-r3
 
 DESCRIPTION="The IPX Utilities"
 HOMEPAGE="https://github.com/pasis/ipx-utils"
+EGIT_REPO_URI="https://github.com/pasis/${PN}.git"
 
-LICENSE="ipx-utils GPL-2" # GPL-2 only for init script
+# GPL-2 only for the init script
+LICENSE="ipx-utils GPL-2"
 SLOT="0"
 
 src_prepare() {
