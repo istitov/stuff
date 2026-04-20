@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Switch gcc's version per package"
 HOMEPAGE="https://github.com/megabaks/gcc-switcher"
@@ -9,13 +9,15 @@ SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
-DEPEND="app-shells/bash
-		sys-apps/portage"
-RDEPEND="${DEPEND}"
+RDEPEND="
+	app-shells/bash
+	sys-apps/portage
+"
+DEPEND="${RDEPEND}"
 
-src_install(){
+src_install() {
 	insinto /etc/portage
 	doins gcc-switcher
 	doins "${FILESDIR}/package.compilers"
