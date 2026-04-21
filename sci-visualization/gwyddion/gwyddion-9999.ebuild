@@ -3,73 +3,105 @@
 
 EAPI=8
 
-_PYTHON_ALLOW_PY27=1
-PYTHON_COMPAT=( python2_7 )
-
-inherit gnome2-utils python-r1_py2 subversion xdg
+inherit autotools subversion xdg
 
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
 HOMEPAGE="http://gwyddion.net/"
 ESVN_REPO_URI="https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion"
 ESVN_PROJECT="gwyddion-code"
-ESVN_BOOTSTRAP="autogen.sh"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="fits fftw gnome nls opengl perl python ruby sourceview xml X +hdf5"
-addpredict "${EPREFIX}"/usr/share/inkscape/fonts/.uuid.TMP-XXXXXX
+IUSE="bzip2 doc fits jansson hdf5 nls openexr openmp perl python ruby sourceview unique xml X zlib"
 
+# --enable-pygwy is Python 2.7 only (upstream requirement); it ships an
+# embedded pygtk at modules/pygwy/pygtk-embed so no system pygtk:2 dep
+# is needed - configure falls back to it if pkg-config can't find one.
 RDEPEND="
 	>=dev-libs/glib-2.32
-	media-libs/libpng:0=
-	x11-libs/cairo
 	dev-libs/libzip
-	>=sci-libs/fftw-3.1:3.0=
+	media-libs/libpng:0=
+	>=sci-libs/fftw-3.1:3.0=[openmp?]
+	virtual/libiconv
+	virtual/libintl
+	x11-libs/cairo
 	>=x11-libs/gtk+-2.18:2
 	x11-libs/libXmu
 	x11-libs/pango
-	hdf5? ( sci-libs/hdf5 )
-	fits? ( sci-libs/cfitsio )
-	gnome? ( gnome-base/gconf:2 )
-	opengl? ( virtual/opengl x11-libs/gtkglext )
+	bzip2? ( app-arch/bzip2 )
+	fits? ( sci-libs/cfitsio[bzip2?] )
+	jansson? ( dev-libs/jansson )
+	hdf5? ( sci-libs/hdf5:=[hl,zlib?] )
+	openexr? ( media-libs/openexr:= )
 	perl? ( dev-lang/perl:= )
-	python? ( dev-lang/python:2.7
-		dev-python/pygtk:2[${PYTHON_USEDEP}]
-		dev-python/pygments
-	)
+	python? ( dev-lang/python:2.7 )
 	ruby? ( dev-ruby/narray )
+	unique? ( dev-libs/libunique:3 )
 	sourceview? ( x11-libs/gtksourceview:2.0 )
-	xml? ( dev-libs/libxml2:2 )"
-
-DEPEND="${RDEPEND}
-	virtual/pkgconfig
+	xml? ( dev-libs/libxml2:2= )
+	zlib? ( virtual/zlib:= )
+"
+DEPEND="${RDEPEND}"
+# Building from SVN regenerates the pixmap PNGs from src/*.svg at build
+# time (release tarballs ship them pre-built), so inkscape + pngcrush
+# are hard BDEPENDs here but not for 2.70/2.71.
+BDEPEND="
 	media-gfx/inkscape
 	media-gfx/pngcrush
-	dev-util/gtk-doc
+	sys-devel/gettext
+	virtual/pkgconfig
+	doc? ( dev-util/gtk-doc )
 "
-#<=sci-libs/hdf5-1.11
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-src_configure() {
-	./autogen.sh
-	sed -i -e 's:PYGTK_CODEGENDIR = /lib64/python2.7:PYGTK_CODEGENDIR = /usr/lib64/python2.7:' \
-		modules/pygwy/Makefile || die
+PATCHES=(
+	"${FILESDIR}/${PN}-2.70-automagic.patch"
+)
+
+src_prepare() {
+	default
+	# Upstream ships config.rpath, a populated po/, and po/POTFILES.in
+	# only in release tarballs; the SVN tree expects autogen.sh to lay
+	# them down. Do the equivalent here so eautoreconf/make can
+	# succeed.
+	cp "${BROOT}"/usr/share/gettext/config.rpath . || die
+	sh utils/update-potfiles.sh || die
+	eautopoint -f
+	eautoreconf
 }
 
-src_compile() {
-	emake
+# 3D OpenGL rendering is not built: it requires deprecated GTK-2
+# x11-libs/gtkglext, which has been removed from ::gentoo.
+src_configure() {
+	# hack for bug 741840
+	use doc && export GTK_DOC_PATH=/usr/share/gtk-doc
+
+	econf \
+		--enable-maintainer-mode \
+		--disable-rpath \
+		--without-kde4-thumbnailer \
+		$(use_enable doc gtk-doc) \
+		$(use_enable openmp) \
+		$(use_enable nls) \
+		$(use_enable python pygwy) \
+		$(use_with python) \
+		$(use_with bzip2) \
+		$(use_with fits cfitsio) \
+		$(use_with hdf5) \
+		$(use_with jansson) \
+		$(use_with perl) \
+		$(use_with ruby) \
+		$(use_with openexr exr) \
+		--without-gl \
+		$(use_with sourceview gtksourceview) \
+		$(use_with unique) \
+		$(use_with xml libxml2) \
+		$(use_with X x) \
+		$(use_with zlib) \
+		--with-zip=libzip
 }
 
 src_install() {
-	make DESTDIR="${D}" install
+	default
 	use python && dodoc modules/pygwy/README.pygwy
-}
-
-pkg_postinst() {
-	use gnome && gnome2_gconf_install
-	xdg_pkg_postinst
-}
-
-pkg_prerm() {
-	use gnome && gnome2_gconf_uninstall
+	find "${ED}" -type f -name "*.la" -delete || die
 }
