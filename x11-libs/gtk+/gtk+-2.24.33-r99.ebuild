@@ -56,13 +56,11 @@ DEPEND="${COMMON_DEPEND}
 "
 
 # gtk+-2.24.8 breaks Alt key handling in <=x11-libs/vte-0.28.2:0
-# Add blocker against old gtk-builder-convert to be sure we maintain both
-# in sync.
 RDEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-update-icon-cache-2
 	>=x11-themes/adwaita-icon-theme-3.14
 	x11-themes/gnome-themes-standard
-	!<dev-util/gtk-builder-convert-${PV}
+	dev-util/gtk-builder-convert
 "
 # librsvg for svg icons (PDEPEND to avoid circular dep), bug #547710
 PDEPEND="
