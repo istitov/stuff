@@ -29,6 +29,7 @@ RDEPEND="dev-python/pytest[${PYTHON_USEDEP}]
 
 DOCS=( CHANGES.md README.rst )
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_install_all() {
