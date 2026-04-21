@@ -31,7 +31,7 @@ COMMON_DEPEND="
 	x11-misc/shared-mime-info
 
 	cups? ( >=net-print/cups-1.7.1-r2:=[${MULTILIB_USEDEP}] )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.3:= )
+	introspection? ( >=dev-libs/gobject-introspection-1.82.0-r2:= )
 	!aqua? (
 		>=x11-libs/cairo-1.12.14-r4:=[aqua?,svg(+),X,${MULTILIB_USEDEP}]
 		>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
@@ -60,13 +60,14 @@ DEPEND="${COMMON_DEPEND}
 # in sync.
 RDEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-update-icon-cache-2
-	x11-themes/adwaita-icon-theme
+	>=x11-themes/adwaita-icon-theme-3.14
 	x11-themes/gnome-themes-standard
-	dev-util/gtk-builder-convert
+	!<dev-util/gtk-builder-convert-${PV}
 "
 # librsvg for svg icons (PDEPEND to avoid circular dep), bug #547710
 PDEPEND="
 	gnome-base/librsvg[${MULTILIB_USEDEP}]
+	x11-themes/gtk-engines-adwaita
 	vim-syntax? ( app-vim/gtk-syntax )
 "
 # docbook-4.1.2 and xsl required for man pages
@@ -134,6 +135,8 @@ src_prepare() {
 	# -O3 and company cause random crashes in applications, bug #133469
 	replace-flags -O3 -O2
 	strip-flags
+	# Not compatible with C23 decls
+	append-flags -std=gnu17
 
 	if ! use test ; then
 		# don't waste time building tests
