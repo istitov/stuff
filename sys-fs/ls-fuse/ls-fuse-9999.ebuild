@@ -12,12 +12,12 @@ inherit autotools git-r3
 
 LICENSE="GPL-3+"
 SLOT="0"
+KEYWORDS=""
 IUSE="debug"
-USE="-debug"
 
 RDEPEND="sys-fs/fuse:0"
-DEPEND="${RDEPEND}
-	virtual/pkgconfig"
+DEPEND="${RDEPEND}"
+BDEPEND="virtual/pkgconfig"
 
 src_prepare() {
 	default
