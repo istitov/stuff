@@ -6,5 +6,6 @@
 	</maintainer>
 	<upstream>
 		<remote-id type="pypi">hyperspyUI</remote-id>
+		<remote-id type="github">hyperspy/hyperspyUI</remote-id>
 	</upstream>
 </pkgmetadata>
