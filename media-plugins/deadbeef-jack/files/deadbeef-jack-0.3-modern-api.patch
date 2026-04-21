@@ -1,0 +1,23 @@
+Adapt to current deadbeef API:
+  - state callback now returns ddb_playback_state_t (enum), not int
+  - ddb_waveformat_t.is_bigendian was removed
+
+--- a/ddb_jack.c
++++ b/ddb_jack.c
+@@ -334,7 +334,7 @@ static int ddb_jack_start (void)
+     return 0;
+ }
+
+-static int ddb_playback_state (void)
++static ddb_playback_state_t ddb_playback_state (void)
+ {
+     trace (__func__);
+     return ddb_client.state;
+@@ -407,7 +407,6 @@ DB_output_t plugin = {
+         .is_float = 1,
+         .channels = 2,
+         .channelmask = DDB_SPEAKER_FRONT_LEFT | DDB_SPEAKER_FRONT_RIGHT,
+-        .is_bigendian = 0,
+     },
+     .has_volume = 1,
+ };

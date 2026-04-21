@@ -18,6 +18,8 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
+PATCHES=( "${FILESDIR}"/${P}-modern-api.patch )
+
 src_install() {
 	exeinto /usr/$(get_libdir)/deadbeef
 	doexe *.so
