@@ -1,7 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: python-single-r1.eclass
+# @ECLASS: python-single-r1_py2.eclass
 # @MAINTAINER:
 # Python team <python@gentoo.org>
 # @AUTHOR:
