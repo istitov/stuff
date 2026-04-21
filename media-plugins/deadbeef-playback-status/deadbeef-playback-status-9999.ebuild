@@ -5,9 +5,9 @@ EAPI=8
 
 inherit git-r3
 
-DESCRIPTION="Waveform seekbar visualization widget for the DeaDBeeF audio player"
-HOMEPAGE="https://github.com/cboxdoerfer/ddb_waveform_seekbar"
-EGIT_REPO_URI="https://github.com/cboxdoerfer/ddb_waveform_seekbar.git"
+DESCRIPTION="Playback status widget for the DeaDBeeF audio player"
+HOMEPAGE="https://github.com/cboxdoerfer/ddb_playback_status"
+EGIT_REPO_URI="https://github.com/cboxdoerfer/ddb_playback_status.git"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -16,7 +16,6 @@ IUSE="+gtk3 gtk2"
 REQUIRED_USE="|| ( gtk2 gtk3 )"
 
 DEPEND="
-	dev-db/sqlite:3
 	media-sound/deadbeef
 	gtk2? ( x11-libs/gtk+:2 )
 	gtk3? ( x11-libs/gtk+:3 )

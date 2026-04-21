@@ -9,6 +9,6 @@
 		<flag name="gtk3">Build the GTK3 variant of the plugin</flag>
 	</use>
 	<upstream>
-		<remote-id type="github">cboxdoerfer/ddb_waveform_seekbar</remote-id>
+		<remote-id type="github">cboxdoerfer/ddb_replaygain_control</remote-id>
 	</upstream>
 </pkgmetadata>
