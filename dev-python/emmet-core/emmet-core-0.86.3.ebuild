@@ -31,7 +31,7 @@ RDEPEND="
 	>=dev-python/pydantic-2.0[${PYTHON_USEDEP}]
 	>=dev-python/pydantic-settings-2.0[${PYTHON_USEDEP}]
 	>=dev-python/pymatgen-io-validation-0.1.1[${PYTHON_USEDEP}]
-	~dev-python/pybtex-0.24[${PYTHON_USEDEP}]
+	>=dev-python/pybtex-0.24[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-3.7[${PYTHON_USEDEP}]
 	dev-python/blake3[${PYTHON_USEDEP}]
 "
