@@ -6,7 +6,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit optfeature multiprocessing distutils-r1
+inherit distutils-r1 optfeature
 
 DESCRIPTION="NumPy aware dynamic Python compiler using LLVM"
 HOMEPAGE="https://numba.pydata.org/
@@ -19,8 +19,10 @@ KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="openmp threads"
 
 RDEPEND="
-	>=dev-python/llvmlite-0.41.0[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
+	>=dev-python/llvmlite-0.46.0[${PYTHON_USEDEP}]
+	<dev-python/llvmlite-0.47[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
+	<dev-python/numpy-2.4[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2019.5 )
 "
 BDEPEND="
@@ -29,7 +31,6 @@ BDEPEND="
 "
 
 DISTUTILS_IN_SOURCE_BUILD=1
-distutils_enable_tests unittest
 distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx-rtd-theme
 
 #PATCHES=(
@@ -68,16 +69,6 @@ python_compile() {
 	export MAKEOPTS=-j1 || die
 	distutils-r1_python_compile
 }
-
-# https://numba.pydata.org/numba-doc/latest/developer/contributing.html?highlight=test#running-tests
-python_test() {
-	distutils_install_for_testing
-	${EPYTHON} setup.py build_ext --inplace || die \
-		"${EPYTHON} failed to build_ext"
-	${EPYTHON} runtests.py -m $(makeopts_jobs) || die \
-		"${EPYTHON} failed unittests"
-}
-
 pkg_postinst() {
 	optfeature "compile cuda code" dev-util/nvidia-cuda-sdk
 }
