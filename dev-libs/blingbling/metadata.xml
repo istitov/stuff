@@ -8,4 +8,7 @@
 	<email>root@proscript.ru</email>
 	<name>Vlasov A. I.</name>
 </maintainer>
+<upstream>
+	<remote-id type="github">cedlemo/blingbling</remote-id>
+</upstream>
 </pkgmetadata>
