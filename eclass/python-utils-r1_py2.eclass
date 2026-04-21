@@ -1,7 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: python-utils-r1.eclass
+# @ECLASS: python-utils-r1_py2.eclass
 # @MAINTAINER:
 # Python team <python@gentoo.org>
 # @AUTHOR:
@@ -151,14 +151,8 @@ _python_set_impls() {
 	fi
 
 	if [[ -n ${obsolete[@]} && ${EBUILD_PHASE} == setup ]]; then
-		# complain if people don't clean up old impls while touching
-		# the ebuilds recently.  use the copyright year to infer last
-		# modification
-		# NB: this check doesn't have to work reliably
-		if [[ $(head -n 1 "${EBUILD}" 2>/dev/null) == *2022* ]]; then
-			eqawarn "Please clean PYTHON_COMPAT of obsolete implementations:"
-			eqawarn "  ${obsolete[*]}"
-		fi
+		eqawarn "Please clean PYTHON_COMPAT of obsolete implementations:"
+		eqawarn "  ${obsolete[*]}"
 	fi
 
 	local supp=() unsupp=()
