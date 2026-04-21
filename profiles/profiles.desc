@@ -1,0 +1,8 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# Overlay profile list. Each entry layers the overlay's profile dir on
+# top of the matching master-tree profile for users with that profile
+# selected.
+
+amd64		default/linux/amd64/23.0/musl					dev
