@@ -3,8 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
-inherit meson-multilib python-any-r1
+inherit meson-multilib
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
