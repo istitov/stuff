@@ -1,40 +1,62 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-EGIT_REPO_URI="https://github.com/strophe/libstrophe.git"
-
-inherit autotools git-r3
+inherit autotools flag-o-matic git-r3
 
 DESCRIPTION="A simple, lightweight C library for writing XMPP clients"
-HOMEPAGE="http://strophe.im/libstrophe/"
+HOMEPAGE="https://strophe.im/libstrophe/"
+EGIT_REPO_URI="https://github.com/strophe/${PN}.git"
 
-LICENSE="MIT GPL-3"
-SLOT="0"
-IUSE="doc +expat"
+LICENSE="|| ( MIT GPL-3 )"
+# Subslot: ${SONAME}.1 to differentiate from previous versions without SONAME
+SLOT="0/0.1"
+KEYWORDS=""
+IUSE="doc expat gnutls"
 
-RDEPEND="expat? ( dev-libs/expat )
-		!expat? ( dev-libs/libxml2:2 )
-		dev-libs/openssl:0="
-DEPEND="${RDEPEND}
-		doc? ( app-text/doxygen )"
+RDEPEND="
+	expat? ( dev-libs/expat )
+	!expat? ( dev-libs/libxml2:2= )
+	gnutls? ( net-libs/gnutls:0= )
+	!gnutls? ( dev-libs/openssl:0= )
+"
+DEPEND="${RDEPEND}"
+BDEPEND="
+	virtual/pkgconfig
+	doc? ( app-text/doxygen )
+"
 
-DOCS=( GPL-LICENSE.txt LICENSE.txt MIT-LICENSE.txt README.markdown ChangeLog )
+DOCS=( ChangeLog )
 
 src_prepare() {
-		default
-		eautoreconf
+	default
+	# Release tarballs ship a generated configure; the git checkout
+	# doesn't, so regen the autotools plumbing.
+	eautoreconf
 }
 
 src_configure() {
-		econf $(use_with !expat libxml2)
+	# bug #944913
+	append-cflags -std=gnu17
+	local myeconf=(
+		--enable-tls
+		$(use_with !expat libxml2)
+		$(use_with gnutls)
+	)
+	econf "${myeconf[@]}"
 }
 
 src_compile() {
-		default
-		if use doc; then
-			doxygen || die
-			HTML_DOCS=( docs/html/* )
-		fi
+	default
+	if use doc; then
+		doxygen || die
+		HTML_DOCS=( docs/html/* )
+	fi
+}
+
+src_install() {
+	default
+	use doc && dodoc -r examples
+	find "${D}" -type f \( -name '*.la' -o -name '*.a' \) -delete || die
 }
