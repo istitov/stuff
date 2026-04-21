@@ -55,6 +55,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-qt pytest-timeout )
 distutils_enable_tests pytest
 
 python_test() {
