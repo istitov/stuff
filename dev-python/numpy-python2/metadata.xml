@@ -9,7 +9,10 @@
 		<email>python@gentoo.org</email>
 		<name>Python</name>
 	</maintainer>
-		<use>
+	<upstream>
+		<remote-id type="pypi">numpy</remote-id>
+	</upstream>
+	<use>
 		<flag name="python_targets_python2_7">
 			Enable Python-compatible libs (python2_7 only)
 		</flag>
