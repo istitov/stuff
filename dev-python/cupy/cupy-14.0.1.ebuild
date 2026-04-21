@@ -17,14 +17,18 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-IUSE="+cuda cudnn"
-REQUIRED_USE="cudnn? ( cuda )"
+IUSE="+cuda cudnn cusparselt"
+REQUIRED_USE="
+	cudnn? ( cuda )
+	cusparselt? ( cuda )
+"
 DEPEND="
 	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/fastrlock-0.8.1[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.18.0[${PYTHON_USEDEP}]
 	cuda? ( dev-util/nvidia-cuda-toolkit[profiler] )
 	cudnn? ( dev-libs/cudnn )
+	cusparselt? ( dev-libs/cusparselt )
 "
 RDEPEND="${DEPEND}"
 
@@ -39,30 +43,43 @@ src_prepare() {
 
 src_compile() {
 	if use cuda; then
-		local supported=() codegen=()
-		local s target ok
+		local targets=() a
+		if [[ -n ${NVPTX_TARGETS} ]]; then
+			targets=( ${NVPTX_TARGETS} )
+		elif [[ -n ${CUDAARCHS} ]]; then
+			for a in ${CUDAARCHS//[;,]/ }; do
+				targets+=( "sm_${a}" )
+			done
+		fi
 
-		while IFS= read -r s; do
-			supported+=( "${s}" )
-		done < <(nvcc --list-gpu-code) || die
+		if [[ ${#targets[@]} -gt 0 ]]; then
+			local supported=() codegen=()
+			local s target ok
 
-		for target in ${NVPTX_TARGETS}; do
-			ok=
-			for s in "${supported[@]}"; do
-				[[ ${s} == "${target}" ]] && ok=1 && break
+			while IFS= read -r s; do
+				supported+=( "${s}" )
+			done < <(nvcc --list-gpu-code) || die
+
+			for target in "${targets[@]}"; do
+				ok=
+				for s in "${supported[@]}"; do
+					[[ ${s} == "${target}" ]] && ok=1 && break
+				done
+
+				if [[ -n ${ok} ]]; then
+					codegen+=( "arch=${target/sm_/compute_},code=${target}" )
+				else
+					ewarn "Skipping unsupported CUDA target ${target} for toolkit $(cuda_toolkit_version)"
+				fi
 			done
 
-			if [[ -n ${ok} ]]; then
-				codegen+=( "arch=${target/sm_/compute_},code=${target}" )
-			else
-				ewarn "Skipping unsupported CUDA target ${target} for toolkit $(cuda_toolkit_version)"
-			fi
-		done
+			[[ ${#codegen[@]} -gt 0 ]] \
+				|| die "No supported CUDA targets (from NVPTX_TARGETS/CUDAARCHS)"
 
-		[[ ${#codegen[@]} -gt 0 ]] || die "No supported NVPTX_TARGETS selected"
+			local IFS=';'
+			export CUPY_NVCC_GENERATE_CODE="${codegen[*]}"
+		fi
 
-		local IFS=';'
-		export CUPY_NVCC_GENERATE_CODE="${codegen[*]}"
 		export NVCC="nvcc ${NVCCFLAGS}"
 	fi
 	distutils-r1_src_compile
