@@ -50,6 +50,7 @@ DEPEND="${RDEPEND}
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-cov )
 distutils_enable_tests pytest
 
 python_test() {

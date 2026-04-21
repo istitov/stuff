@@ -44,6 +44,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-rerunfailures )
 distutils_enable_tests pytest
 
 python_test() {

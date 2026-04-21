@@ -23,4 +23,5 @@ BDEPEND="test? (
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-asyncio pytest-repeat pytest-timeout )
 distutils_enable_tests pytest
