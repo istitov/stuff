@@ -26,3 +26,8 @@ src_prepare() {
 	default
 	./autogen.sh
 }
+
+src_install() {
+	default
+	find "${ED}" -type f -name "*.la" -delete || die
+}
