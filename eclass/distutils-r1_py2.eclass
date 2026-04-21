@@ -1,7 +1,7 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: distutils-r1.eclass
+# @ECLASS: distutils-r1_py2.eclass
 # @MAINTAINER:
 # Python team <python@gentoo.org>
 # @AUTHOR:
@@ -1838,6 +1838,11 @@ _distutils-r1_run_foreach_impl() {
 	fi
 }
 
+# @FUNCTION: distutils-r1_src_prepare
+# @DESCRIPTION:
+# The default src_prepare(). Runs python_prepare_all() if declared,
+# then python_prepare() (or default_src_prepare) for every enabled
+# Python implementation.
 distutils-r1_src_prepare() {
 	debug-print-function ${FUNCNAME} "${@}"
 	local ret=0
@@ -1861,6 +1866,11 @@ distutils-r1_src_prepare() {
 	return ${ret}
 }
 
+# @FUNCTION: distutils-r1_src_configure
+# @DESCRIPTION:
+# The default src_configure(). Runs python_configure() for every
+# enabled Python implementation (if defined) and then
+# python_configure_all() (if defined).
 distutils-r1_src_configure() {
 	debug-print-function ${FUNCNAME} "${@}"
 	local ret=0
@@ -1913,6 +1923,11 @@ _distutils-r1_post_python_compile() {
 	fi
 }
 
+# @FUNCTION: distutils-r1_src_compile
+# @DESCRIPTION:
+# The default src_compile(). Runs python_compile() for every enabled
+# Python implementation (calling distutils-r1_python_compile() by
+# default) and then python_compile_all() (if defined).
 distutils-r1_src_compile() {
 	debug-print-function ${FUNCNAME} "${@}"
 	local ret=0
@@ -1956,6 +1971,10 @@ _distutils-r1_post_python_test() {
 	fi
 }
 
+# @FUNCTION: distutils-r1_src_test
+# @DESCRIPTION:
+# The default src_test(). Runs python_test() for every enabled Python
+# implementation (if defined) and then python_test_all() (if defined).
 distutils-r1_src_test() {
 	debug-print-function ${FUNCNAME} "${@}"
 	local ret=0
@@ -2023,6 +2042,12 @@ _distutils-r1_check_namespace_pth() {
 	fi
 }
 
+# @FUNCTION: distutils-r1_src_install
+# @DESCRIPTION:
+# The default src_install(). Runs python_install() for every enabled
+# Python implementation (calling distutils-r1_python_install() by
+# default) and then python_install_all() (calling
+# distutils-r1_python_install_all() by default).
 distutils-r1_src_install() {
 	debug-print-function ${FUNCNAME} "${@}"
 	local ret=0
