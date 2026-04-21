@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="gtk2">Build the GTK2 variant of the plugin</flag>
+		<flag name="gtk3">Build the GTK3 variant of the plugin</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">danpla/ddb_copy_info</remote-id>
+	</upstream>
+</pkgmetadata>
