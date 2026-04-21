@@ -19,11 +19,17 @@
     <flag name="fits">
       Enable FITS image import via <pkg>sci-libs/cfitsio</pkg>
     </flag>
-    <flag name="python_targets_python2_7">
-      Enable Python-compatible libs (python2_7 only)
-    </flag>
     <flag name="hdf5">
       Enable hdf5 support
+    </flag>
+    <flag name="jansson">
+      Enable <pkg>dev-libs/jansson</pkg>-based JSON import/export
+    </flag>
+    <flag name="unique">
+      Enable single-instance support via <pkg>dev-libs/libunique</pkg>
+    </flag>
+    <flag name="python">
+      Enable the pygwy Python 2.7 scripting module
     </flag>
   </use>
 </pkgmetadata>
