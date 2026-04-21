@@ -3,112 +3,98 @@
 
 EAPI=8
 
-inherit qmake-utils toolchain-funcs git-r3
-
-MY_P=${PN}-${PV}
+PYTHON_COMPAT=( python3_{12..14} )
+inherit cmake flag-o-matic git-r3 python-any-r1 toolchain-funcs
 
 DESCRIPTION="Modern build tool for software projects"
-HOMEPAGE="https://wiki.qt.io/Qbs"
-EGIT_REPO_URI="https://code.qt.io/qbs/qbs.git"
+HOMEPAGE="https://doc.qt.io/qbs/"
+EGIT_REPO_URI="https://code.qt.io/qbs/qbs.git https://github.com/qbs/qbs.git"
 
-S=${WORKDIR}/${MY_P}
-LICENSE="|| ( LGPL-2.1 LGPL-3 )"
+LICENSE="|| ( LGPL-2.1 LGPL-3 ) Boost-1.0 BSD"
 SLOT="0"
 KEYWORDS=""
-IUSE="doc examples test"
+IUSE="doc test"
 RESTRICT="!test? ( test )"
 
-# see bug 581874 for the qttest dep in RDEPEND
+# uses CorePrivate wrt qtbase:=
 RDEPEND="
-	dev-qt/qtcore:5=
-	dev-qt/qtgui:5
-	dev-qt/qtnetwork:5
-	dev-qt/qtscript:5
-	dev-qt/qtwidgets:5
-	dev-qt/qtxml:5
+	dev-qt/qt5compat:6
+	dev-qt/qtbase:6=[concurrent,gui,network,widgets,xml]
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	doc? (
-		dev-qt/qdoc:5
-		dev-qt/qthelp:5
-	)
-	test? (
-		dev-qt/linguist-tools:5
-		dev-qt/qtdbus:5
-		dev-qt/qtdeclarative:5
-		dev-qt/qttest:5
+		$(python_gen_any_dep '
+			dev-python/beautifulsoup4[${PYTHON_USEDEP}]
+			dev-python/lxml[${PYTHON_USEDEP}]
+		')
+		dev-qt/qttools:6[assistant,qdoc]
 	)
 "
+
+CMAKE_SKIP_TESTS=(
+	# QBS does not inherit toolchain/flags knowledge from cmake, and
+	# while can use ${BUILD_DIR}/bin/qbs-config to improve this it
+	# remains very fickle and will fail in varied ways with clang,
+	# musl, -native-symlinks, and libc++. After consideration it feels
+	# not worth worrying about affected tests here (even if notable).
+	tst_api
+	tst_blackbox # also skips blackbox-* (intended)
+	tst_language
+)
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-2.3.1-qtver.patch
+	"${FILESDIR}"/${PN}-2.4.1-ldconfig.patch
+)
+
+python_check_deps() {
+	# _find_python_module in cmake/QbsDocumentation.cmake
+	python_has_version "dev-python/beautifulsoup4[${PYTHON_USEDEP}]" &&
+	python_has_version "dev-python/lxml[${PYTHON_USEDEP}]"
+}
+
+pkg_setup() {
+	use doc && python-any-r1_pkg_setup
+}
 
 src_prepare() {
-	default
+	cmake_src_prepare
 
-	if ! use examples; then
-		sed -i -e '/INSTALLS +=/ s:examples::' static.pro || die
-	fi
-
-	echo "SUBDIRS = $(usex test auto '')" >> tests/tests.pro
-
-	# skip several tests that fail and/or have additional deps
-	sed -i \
-		-e 's/findArchiver("7z")/""/'		`# requires p7zip, fails` \
-		-e 's/findArchiver(binaryName,.*/"";/'	`# requires zip and jar` \
-		-e 's/p\.value("nodejs\./true||&/'	`# requires nodejs, bug 527652` \
-		-e 's/\(p\.value\|m_qbsStderr\.contains\)("typescript\./true||&/' `# requires nodejs and typescript` \
-		tests/auto/blackbox/tst_blackbox.cpp || die
-
-	# requires jdk, fails, bug 585398
-	sed -i -e '/blackbox-java\.pro/ d' tests/auto/auto.pro || die
+	# test fails to build with Qt 6.10.1 since [1] and, given skipping
+	# this test either way, may as well also not build it for now
+	# [1] https://github.com/qt/qtbase/commit/7196bb00ed7
+	sed -i '/add_subdirectory(language)/d' tests/auto/CMakeLists.txt || die
 }
 
 src_configure() {
-	local myqmakeargs=(
-		qbs.pro # bug 523218
-		-recursive
-		CONFIG+=qbs_disable_rpath
-		CONFIG+=qbs_enable_project_file_updates
-		$(usex test 'CONFIG+=qbs_enable_unit_tests' '')
-		QBS_INSTALL_PREFIX="${EPREFIX}/usr"
-		QBS_LIBRARY_DIRNAME="$(get_libdir)"
+	# temporary workaround for musl-1.2.4 (bug #906929), this ideally
+	# needs fixing in qtbase as *64 usage comes from its headers' macros
+	use elibc_musl && append-lfs-flags
+
+	# tests build failure w/ gcc:14 + -O3 (bug #933187, needs looking into)
+	use test && tc-is-gcc && [[ $(gcc-major-version) -ge 14 ]] &&
+		replace-flags -O3 -O2
+
+	local mycmakeargs=(
+		-DQBS_DOC_INSTALL_DIR="${EPREFIX}"/usr/share/doc/${PF}
+		-DQBS_INSTALL_HTML_DOCS=$(usex doc)
+		-DQBS_INSTALL_MAN_PAGE=yes
+		-DQBS_INSTALL_QCH_DOCS=$(usex doc)
+		-DQBS_LIB_INSTALL_DIR="$(get_libdir)"
+		-DQT_VERSION_MAJOR=6 #931596
+		-DWITH_TESTS=$(usex test)
+		-DWITH_UNIT_TESTS=$(usex test)
 	)
-	eqmake5 "${myqmakeargs[@]}"
-}
 
-src_test() {
-	einfo "Setting up test environment in ${T}"
-
-	export LD_LIBRARY_PATH=${S}/$(get_libdir)
-	export QBS_AUTOTEST_PROFILE=testProfile
-
-	"${S}"/bin/qbs-setup-toolchains "$(tc-getCC)" testToolchain || die
-	"${S}"/bin/qbs-setup-qt "$(qt5_get_bindir)/qmake" ${QBS_AUTOTEST_PROFILE} || die
-	"${S}"/bin/qbs-config profiles.${QBS_AUTOTEST_PROFILE}.qbs.targetPlatform linux || die
-
-	einfo "Running autotests"
-
-	# simply exporting LD_LIBRARY_PATH doesn't work
-	# we have to use a custom testrunner script
-	local testrunner=${WORKDIR}/gentoo-testrunner
-	cat <<-EOF > "${testrunner}"
-	#!/bin/sh
-	export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}\${LD_LIBRARY_PATH:+:}\${LD_LIBRARY_PATH}"
-	exec "\$@"
-	EOF
-	chmod +x "${testrunner}"
-
-	emake TESTRUNNER="'${testrunner}'" check
+	cmake_src_configure
 }
 
 src_install() {
-	emake INSTALL_ROOT="${D}" install
+	local DOCS=( README.md changelogs )
+	cmake_src_install
 
-	dodoc -r changelogs
+	use !test || rm -- "${ED}"/usr/bin/{tst_*,qbs_*,clang-format-test} || die
 
-	# install documentation
-	if use doc; then
-		emake docs
-		dodoc -r doc/qbs/html
-		dodoc doc/qbs.qch
-		docompress -x /usr/share/doc/${PF}/qbs.qch
-	fi
+	docompress -x /usr/share/doc/${PF}/qbs.qch
 }
