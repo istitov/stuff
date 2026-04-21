@@ -1,0 +1,201 @@
+From df834830ced2f4ee2ae82a963fd94efbce898b0b Mon Sep 17 00:00:00 2001
+From: Steven Zeltmann <steven.zeltmann@cornell.edu>
+Date: Fri, 14 Mar 2025 10:18:28 -0400
+Subject: [PATCH 1/3] fix numpy 2 errors with: ruff check py4DSTEM --select
+ NPY201 --fix
+
+---
+ .../io/legacy/legacy13/v13_emd_classes/io.py  | 34 +++++++++----------
+ .../process/classification/featurization.py   |  2 +-
+ py4DSTEM/process/utils/elliptical_coords.py   |  4 +--
+ 3 files changed, 20 insertions(+), 20 deletions(-)
+
+diff --git a/py4DSTEM/io/legacy/legacy13/v13_emd_classes/io.py b/py4DSTEM/io/legacy/legacy13/v13_emd_classes/io.py
+index ddbea9005..0452a5854 100644
+--- a/py4DSTEM/io/legacy/legacy13/v13_emd_classes/io.py
++++ b/py4DSTEM/io/legacy/legacy13/v13_emd_classes/io.py
+@@ -127,42 +127,42 @@ def Metadata_to_h5(metadata, group):
+         # None
+         if v is None:
+             v = "_None"
+-            v = np.string_(v)  # convert to byte string
++            v = np.bytes_(v)  # convert to byte string
+             dset = grp.create_dataset(k, data=v)
+-            dset.attrs["type"] = np.string_("None")
++            dset.attrs["type"] = np.bytes_("None")
+ 
+         # strings
+         elif isinstance(v, str):
+-            v = np.string_(v)  # convert to byte string
++            v = np.bytes_(v)  # convert to byte string
+             dset = grp.create_dataset(k, data=v)
+-            dset.attrs["type"] = np.string_("string")
++            dset.attrs["type"] = np.bytes_("string")
+ 
+         # bools
+         elif isinstance(v, bool):
+             dset = grp.create_dataset(k, data=v, dtype=bool)
+-            dset.attrs["type"] = np.string_("bool")
++            dset.attrs["type"] = np.bytes_("bool")
+ 
+         # numbers
+         elif isinstance(v, Number):
+             dset = grp.create_dataset(k, data=v, dtype=type(v))
+-            dset.attrs["type"] = np.string_("number")
++            dset.attrs["type"] = np.bytes_("number")
+ 
+         # arrays
+         elif isinstance(v, np.ndarray):
+             dset = grp.create_dataset(k, data=v, dtype=v.dtype)
+-            dset.attrs["type"] = np.string_("array")
++            dset.attrs["type"] = np.bytes_("array")
+ 
+         # tuples
+         elif isinstance(v, tuple):
+             # of numbers
+             if isinstance(v[0], Number):
+                 dset = grp.create_dataset(k, data=v)
+-                dset.attrs["type"] = np.string_("tuple")
++                dset.attrs["type"] = np.bytes_("tuple")
+ 
+             # of tuples
+             elif any([isinstance(v[i], tuple) for i in range(len(v))]):
+                 dset_grp = grp.create_group(k)
+-                dset_grp.attrs["type"] = np.string_("tuple_of_tuples")
++                dset_grp.attrs["type"] = np.bytes_("tuple_of_tuples")
+                 dset_grp.attrs["length"] = len(v)
+                 for i, x in enumerate(v):
+                     dset_grp.create_dataset(str(i), data=x)
+@@ -170,7 +170,7 @@ def Metadata_to_h5(metadata, group):
+             # of arrays
+             elif isinstance(v[0], np.ndarray):
+                 dset_grp = grp.create_group(k)
+-                dset_grp.attrs["type"] = np.string_("tuple_of_arrays")
++                dset_grp.attrs["type"] = np.bytes_("tuple_of_arrays")
+                 dset_grp.attrs["length"] = len(v)
+                 for i, ar in enumerate(v):
+                     dset_grp.create_dataset(str(i), data=ar, dtype=ar.dtype)
+@@ -178,10 +178,10 @@ def Metadata_to_h5(metadata, group):
+             # of strings
+             elif isinstance(v[0], str):
+                 dset_grp = grp.create_group(k)
+-                dset_grp.attrs["type"] = np.string_("tuple_of_strings")
++                dset_grp.attrs["type"] = np.bytes_("tuple_of_strings")
+                 dset_grp.attrs["length"] = len(v)
+                 for i, s in enumerate(v):
+-                    dset_grp.create_dataset(str(i), data=np.string_(s))
++                    dset_grp.create_dataset(str(i), data=np.bytes_(s))
+ 
+             else:
+                 er = f"Metadata only supports writing tuples with numeric and array-like arguments; found type {type(v[0])}"
+@@ -192,12 +192,12 @@ def Metadata_to_h5(metadata, group):
+             # of numbers
+             if isinstance(v[0], Number):
+                 dset = grp.create_dataset(k, data=v)
+-                dset.attrs["type"] = np.string_("list")
++                dset.attrs["type"] = np.bytes_("list")
+ 
+             # of arrays
+             elif isinstance(v[0], np.ndarray):
+                 dset_grp = grp.create_group(k)
+-                dset_grp.attrs["type"] = np.string_("list_of_arrays")
++                dset_grp.attrs["type"] = np.bytes_("list_of_arrays")
+                 dset_grp.attrs["length"] = len(v)
+                 for i, ar in enumerate(v):
+                     dset_grp.create_dataset(str(i), data=ar, dtype=ar.dtype)
+@@ -205,10 +205,10 @@ def Metadata_to_h5(metadata, group):
+             # of strings
+             elif isinstance(v[0], str):
+                 dset_grp = grp.create_group(k)
+-                dset_grp.attrs["type"] = np.string_("list_of_strings")
++                dset_grp.attrs["type"] = np.bytes_("list_of_strings")
+                 dset_grp.attrs["length"] = len(v)
+                 for i, s in enumerate(v):
+-                    dset_grp.create_dataset(str(i), data=np.string_(s))
++                    dset_grp.create_dataset(str(i), data=np.bytes_(s))
+ 
+             else:
+                 er = f"Metadata only supports writing lists with numeric and array-like arguments; found type {type(v[0])}"
+@@ -490,7 +490,7 @@ def PointList_to_h5(pointlist, group):
+     # Add data
+     for f, t in zip(pointlist.fields, pointlist.types):
+         group_current_field = grp.create_dataset(f, data=pointlist.data[f])
+-        group_current_field.attrs.create("dtype", np.string_(t))
++        group_current_field.attrs.create("dtype", np.bytes_(t))
+         # group_current_field.create_dataset(
+         #    "data",
+         #    data = pointlist.data[f]
+diff --git a/py4DSTEM/process/classification/featurization.py b/py4DSTEM/process/classification/featurization.py
+index 126583413..08dd702de 100644
+--- a/py4DSTEM/process/classification/featurization.py
++++ b/py4DSTEM/process/classification/featurization.py
+@@ -967,7 +967,7 @@ def _gmm_single(x, cv, components, num_models, random_seed=None, return_all=True
+         gmm_list = []
+         gmm_labels = []
+         gmm_proba = []
+-    lowest_bic = np.infty
++    lowest_bic = np.inf
+     bic_temp = 0
+     if random_seed is None:
+         rng = np.random.RandomState(seed=42)
+diff --git a/py4DSTEM/process/utils/elliptical_coords.py b/py4DSTEM/process/utils/elliptical_coords.py
+index 97291bc20..ea72ae390 100644
+--- a/py4DSTEM/process/utils/elliptical_coords.py
++++ b/py4DSTEM/process/utils/elliptical_coords.py
+@@ -320,8 +320,8 @@ def elliptical_resample(
+ 
+     # Get (qx,qy) corresponding to the coordinates distorted by the ellipse
+     xr, yr = np.mgrid[0:Nx, 0:Ny]
+-    xr0 = xr.astype(np.float_) - qx0
+-    yr0 = yr.astype(np.float_) - qy0
++    xr0 = xr.astype(np.float64) - qx0
++    yr0 = yr.astype(np.float64) - qy0
+     xr = xr0 * np.cos(-theta) - yr0 * np.sin(-theta)
+     yr = xr0 * np.sin(-theta) + yr0 * np.cos(-theta)
+     qx = qx0 + xr * np.cos(theta) - yr * (b / a) * np.sin(theta)
+
+From bea0daba72927a4da25d00102fabad224b641f10 Mon Sep 17 00:00:00 2001
+From: Steven Zeltmann <steven.zeltmann@cornell.edu>
+Date: Fri, 14 Mar 2025 10:20:51 -0400
+Subject: [PATCH 2/3] remove numpy restriction in setup.py
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 8919e53e8..7e410e20e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,7 +23,7 @@
+     keywords="STEM,4DSTEM",
+     python_requires=">=3.10",
+     install_requires=[
+-        "numpy >= 1.19, < 2.0",
++        "numpy >= 1.19",
+         "scipy >= 1.5.2",
+         "h5py >= 3.2.0",
+         "hdf5plugin >= 4.1.3",
+
+From 23035635e0a0546cdb05bb7b49b8633ff4f6f4f2 Mon Sep 17 00:00:00 2001
+From: Steve Zeltmann <steven.zeltmann@berkeley.edu>
+Date: Fri, 14 Mar 2025 14:58:44 -0400
+Subject: [PATCH 3/3] unpin ncempy version
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 7e410e20e..8f0107324 100644
+--- a/setup.py
++++ b/setup.py
+@@ -27,7 +27,7 @@
+         "scipy >= 1.5.2",
+         "h5py >= 3.2.0",
+         "hdf5plugin >= 4.1.3",
+-        "ncempy >= 1.8.1, <= 1.11.2",
++        "ncempy >= 1.8.1",
+         "matplotlib >= 3.2.2",
+         "scikit-image >= 0.17.2",
+         "scikit-learn >= 0.23.2, < 1.5",
