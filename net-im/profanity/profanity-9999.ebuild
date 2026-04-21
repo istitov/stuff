@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 inherit git-r3 meson python-single-r1
 
 DESCRIPTION="A console based XMPP client inspired by Irssi"

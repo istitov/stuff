@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 inherit cmake flag-o-matic git-r3 python-single-r1
 
 DESCRIPTION="Open source multimedia framework for television broadcasting"
