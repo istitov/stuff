@@ -1,25 +1,25 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3
 
-DESCRIPTION="JACK output plugin for DeaDBeeF."
+DESCRIPTION="JACK output plugin for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/tokiclover/deadbeef-plugins-jack"
-EGIT_REPO_URI="https://github.com/tokiclover/deadbeef-plugins-jack"
+EGIT_REPO_URI="https://github.com/tokiclover/deadbeef-plugins-jack.git"
 
 LICENSE="MIT"
 SLOT="0"
+KEYWORDS=""
 
-DEPEND_COMMON="
+DEPEND="
 	media-sound/deadbeef
-	media-sound/jack-audio-connection-kit"
+	virtual/jack
+"
+RDEPEND="${DEPEND}"
 
-RDEPEND="${DEPEND_COMMON}"
-DEPEND="${DEPEND_COMMON}"
-
-src_install(){
-	insinto /usr/$(get_libdir)/deadbeef
-	doins ddb_jack.so
+src_install() {
+	exeinto /usr/$(get_libdir)/deadbeef
+	doexe *.so
 }

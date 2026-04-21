@@ -1,25 +1,25 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3
 
-DESCRIPTION="DeaDBeeF player Gnome (via DBus) multimedia keys plugin"
+DESCRIPTION="Gnome (DBus) multimedia-keys plugin for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/barthez/deadbeef-gnome-mmkeys"
 EGIT_REPO_URI="https://github.com/barthez/deadbeef-gnome-mmkeys.git"
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS=""
 
-DEPEND_COMMON="
+DEPEND="
+	dev-libs/glib:2
 	media-sound/deadbeef
-	dev-libs/glib:2"
+"
+RDEPEND="${DEPEND}"
 
-RDEPEND="${DEPEND_COMMON}"
-DEPEND="${DEPEND_COMMON}"
-
-src_install(){
-	insinto /usr/$(get_libdir)/deadbeef
-	doins ddb_gnome_mmkeys.so
+src_install() {
+	exeinto /usr/$(get_libdir)/deadbeef
+	doexe *.so
 }
