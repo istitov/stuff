@@ -23,4 +23,5 @@ RDEPEND="
 	>=dev-python/scipy-1.7.3[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest

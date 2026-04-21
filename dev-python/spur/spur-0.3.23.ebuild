@@ -28,6 +28,7 @@ RDEPEND="
 	<dev-python/paramiko-4[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 EPYTEST_IGNORE=(

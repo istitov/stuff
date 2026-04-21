@@ -28,6 +28,7 @@ KEYWORDS="amd64 x86"
 
 DOCS=( README.rst )
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_prepare_all() {
