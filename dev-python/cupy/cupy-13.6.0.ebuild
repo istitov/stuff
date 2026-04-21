@@ -17,14 +17,18 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-IUSE="+cuda cudnn"
-REQUIRED_USE="cudnn? ( cuda )"
+IUSE="+cuda cudnn cusparselt"
+REQUIRED_USE="
+	cudnn? ( cuda )
+	cusparselt? ( cuda )
+"
 DEPEND="
 	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/fastrlock-0.8.1[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.18.0[${PYTHON_USEDEP}]
-	cuda? ( <dev-util/nvidia-cuda-toolkit-12.9.0[profiler] )
-	cudnn? ( <dev-libs/cudnn-9.0.9 )
+	cuda? ( dev-util/nvidia-cuda-toolkit[profiler] )
+	cudnn? ( dev-libs/cudnn )
+	cusparselt? ( dev-libs/cusparselt )
 "
 RDEPEND="${DEPEND}"
 

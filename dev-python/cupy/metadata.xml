@@ -13,5 +13,6 @@
 	<use>
 		<flag name="cuda">Enable support for nVidia CUDA</flag>
 		<flag name="cudnn">Enable support for nVidia cuDNN library</flag>
+		<flag name="cusparselt">Enable support for nVidia cuSPARSELt library</flag>
 	</use>
 </pkgmetadata>
