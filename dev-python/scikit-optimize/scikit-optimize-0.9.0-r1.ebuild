@@ -31,6 +31,7 @@ PATCHES=(
 	"${FILESDIR}/${P}-scikit-learn-1.2.0.patch"
 )
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 # No such file or directory: image/logo.png
 #distutils_enable_sphinx doc \

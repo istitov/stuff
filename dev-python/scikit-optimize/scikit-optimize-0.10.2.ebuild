@@ -25,4 +25,5 @@ RDEPEND="
 	>=dev-python/scipy-0.19.1[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest

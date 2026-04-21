@@ -43,6 +43,7 @@ DEPEND="
 RDEPEND=">=dev-python/fastrlock-0.8.1
 	${DEPEND}"
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 #PATCHES=( "${FILESDIR}"/${PN}-11.6-add_dir.patch )
