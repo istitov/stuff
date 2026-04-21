@@ -47,6 +47,7 @@ BDEPEND="
 	>=dev-python/setuptools-scm-9.0[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_prepare_all() {
