@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake
 
-Sparse_PV="7.3.1"
+Sparse_PV="7.12.2"
 Sparse_P="SuiteSparse-${Sparse_PV}"
 DESCRIPTION="Constrained Column approximate minimum degree ordering algorithm"
 HOMEPAGE="https://people.engr.tamu.edu/davis/suitesparse.html"
@@ -23,8 +23,10 @@ RDEPEND="${DEPEND}"
 
 src_configure() {
 	local mycmakeargs=(
-		-DNSTATIC=ON
-		-DDEMO=$(usex test)
+		-DBUILD_SHARED_LIBS=ON
+		-DBUILD_STATIC_LIBS=OFF
+		-DBLA_VENDOR=Generic
+		-DSUITESPARSE_DEMOS=$(usex test ON OFF)
 	)
 	cmake_src_configure
 }
