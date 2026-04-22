@@ -24,6 +24,6 @@ RESTRICT="test"
 RDEPEND="
 	dev-python/beautifulsoup4[${PYTHON_USEDEP}]
 	dev-python/filelock[${PYTHON_USEDEP}]
-	dev-python/requests[socks,${PYTHON_USEDEP}]
+	dev-python/requests[socks5,${PYTHON_USEDEP}]
 	dev-python/tqdm[${PYTHON_USEDEP}]
 "
