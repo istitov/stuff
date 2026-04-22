@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    tccbox is a Python package exposing three helpers (tcc_bin_path,
+    tcc_lib_dir, tcc_include_dir) used by sasmodels/sasview to locate
+    a tiny C compiler for runtime JIT compilation of scattering
+    kernels. Upstream ships a wheel bundling a prebuilt TCC; this
+    ebuild is a source-based shim whose helpers return paths into the
+    system dev-lang/tcc install instead.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">metab0t/tccbox</remote-id>
+    <remote-id type="pypi">tccbox</remote-id>
+  </upstream>
+</pkgmetadata>
