@@ -29,7 +29,6 @@ RDEPEND="
 BDEPEND="
 	test? (
 		dev-python/beautifulsoup4[${PYTHON_USEDEP}]
-		dev-python/flaky[${PYTHON_USEDEP}]
 		dev-python/ipython-genutils[${PYTHON_USEDEP}]
 		dev-python/mock[${PYTHON_USEDEP}]
 		dev-python/networkx[${PYTHON_USEDEP}]
