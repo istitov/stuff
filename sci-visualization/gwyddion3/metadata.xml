@@ -9,7 +9,8 @@
 	is an upstream rewrite targeting GTK+ 3, still marked unstable by
 	upstream. It co-installs with the 2.x series (sci-visualization/gwyddion)
 	since the binary is renamed to gwyddion3 and all libraries have a 3
-	suffix.
+	suffix. Note: the pygwy Python scripting module is not built --
+	upstream has not yet ported it to Python 3.
 	</longdescription>
 	<use>
 		<flag name="fits">
@@ -20,9 +21,6 @@
 		</flag>
 		<flag name="json">
 			Enable <pkg>dev-libs/json-glib</pkg>-based JSON import/export
-		</flag>
-		<flag name="python">
-			Enable the pygwy Python 3 scripting module
 		</flag>
 		<flag name="webp">
 			Enable WebP image export via <pkg>media-libs/libwebp</pkg>
