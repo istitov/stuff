@@ -75,11 +75,12 @@ BDEPEND="
 # SasView's built-in fallback to its pure-Python scattering engine.
 
 src_prepare() {
-	# The sphinx hook rebuilds full HTML docs during wheel assembly and
-	# pulls in resource files from sasdata/sasmodels; we don't want any
-	# of that for a runtime install.
+	# Drop all [[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
+	# array-of-tables blocks. The range ends at the next regular table
+	# header (`[foo]`, not `[[foo]]`) so consecutive sphinx entries are
+	# handled correctly.
 	sed -i \
-		-e '/\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/,/^\[\[/{/^\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/d; /^\[\[/!d}' \
+		-e '/^\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/,/^\[[^[]/{/^\[[^[]/!d}' \
 		pyproject.toml || die
 
 	# Drop the force-include of a pre-built sas/docs/ tree; nothing
