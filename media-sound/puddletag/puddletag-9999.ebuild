@@ -21,8 +21,8 @@ RDEPEND="
 	>=dev-python/levenshtein-0.27.1[${PYTHON_USEDEP}]
 	>=dev-python/lxml-6.0.0[${PYTHON_USEDEP}]
 	>=dev-python/pyparsing-3.1.2[${PYTHON_USEDEP}]
-	>=dev-python/pyqt5-5.15.11[${PYTHON_USEDEP},svg]
-	>=dev-python/pyqt5-sip-12.15.0[${PYTHON_USEDEP}]
+	>=dev-python/pyqt6-6.10.1[${PYTHON_USEDEP},svg]
+	>=dev-python/pyqt6-sip-13.10.0[${PYTHON_USEDEP}]
 	>=dev-python/unidecode-1.4.0[${PYTHON_USEDEP}]
 	>=media-libs/mutagen-1.47.0[${PYTHON_USEDEP}]
 	acoustid? (
