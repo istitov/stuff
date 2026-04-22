@@ -17,3 +17,9 @@ net-misc/ipx-utils
 # Upstream (github.com/megabaks) dormant since 2014-02. No tagged
 # release, 9999-only. Keep but mask.
 app-portage/portopts
+
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-04-22)
+# Upstream (github.com/newville/ifeffit) deleted; legacy Fortran XAFS
+# analysis code. The author's successor, Larch, is packaged as
+# sci-physics/xraylarch. Keep but mask.
+sci-physics/ifeffit
