@@ -28,7 +28,10 @@ RESTRICT="test"
 # Carry upstream PR #712 to fix those (merged post-release on
 # 2025-03-17). scikit-learn-1.5+ was similarly unpinned upstream on
 # 2025-04-30 but has no accompanying source fixes, so runtime may
-# still hit the occasional sklearn-sensitive code path.
+# still hit the occasional sklearn-sensitive code path. The ncempy
+# upper bound is dropped here: 1.11.2 is no longer in the overlay and
+# current ncempy (1.13+) keeps the io.read() surface py4dstem actually
+# calls.
 RDEPEND="
 	>=dev-python/colorspacious-1.1.2[${PYTHON_USEDEP}]
 	>=dev-python/dask-2.3.0[${PYTHON_USEDEP}]
@@ -41,7 +44,6 @@ RDEPEND="
 	>=dev-python/matplotlib-3.2.2[${PYTHON_USEDEP}]
 	>=dev-python/mpire-2.7.1[${PYTHON_USEDEP}]
 	>=dev-python/ncempy-1.8.1[${PYTHON_USEDEP}]
-	<=dev-python/ncempy-1.11.2-r9999[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.19[${PYTHON_USEDEP}]
 	>=dev-python/pylops-2.1.0[${PYTHON_USEDEP}]
 	>=dev-python/scikit-image-0.17.2[${PYTHON_USEDEP}]
