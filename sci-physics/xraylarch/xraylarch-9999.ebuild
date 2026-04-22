@@ -50,7 +50,6 @@ RDEPEND="
 	dev-python/sphinx[${PYTHON_USEDEP}]
 	dev-python/numpydoc[${PYTHON_USEDEP}]
 
-	dev-python/pyqt5[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
 	dev-python/pyfai[${PYTHON_USEDEP}]
 	sci-libs/pycifrw[${PYTHON_USEDEP}]

@@ -18,7 +18,7 @@ HOMEPAGE="
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="qtgui wxgui"
+IUSE="wxgui"
 # Upstream tests are largely network-driven (AMCSD, MP API, XrayDB
 # remote queries) and expect the full lmfit/hyperspy/... fixtures.
 RESTRICT="test"
@@ -56,10 +56,6 @@ RDEPEND="
 	dev-python/tomli-w[${PYTHON_USEDEP}]
 	>=dev-python/uncertainties-3.2.1[${PYTHON_USEDEP}]
 	>=dev-python/xraydb-4.5.7[${PYTHON_USEDEP}]
-	qtgui? (
-		dev-python/pyqt5[${PYTHON_USEDEP}]
-		dev-python/pyqtgraph[${PYTHON_USEDEP}]
-	)
 	wxgui? (
 		>=dev-python/wxpython-4.2.2:*[${PYTHON_USEDEP}]
 		>=dev-python/wxmplot-2026.1.0[${PYTHON_USEDEP}]

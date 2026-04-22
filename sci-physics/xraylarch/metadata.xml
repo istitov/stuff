@@ -5,10 +5,6 @@
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
   <use>
-    <flag name="qtgui">
-      Build the PyQt5-based GUI tools (requires <pkg>dev-python/pyqt5</pkg>
-      and <pkg>dev-python/pyqtgraph</pkg>)
-    </flag>
     <flag name="wxgui">
       Build the wxPython-based GUI tools (requires
       <pkg>dev-python/wxpython</pkg>, <pkg>dev-python/wxmplot</pkg> and
