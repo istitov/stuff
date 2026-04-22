@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-	</maintainer>
-	<use>
-		<flag name='avahi'>Build with <pkg>net-dns/avahi</pkg>:3</flag>
-	</use>
-	<upstream>
-		<remote-id type="github">gobby/gobby</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name='avahi'>Build with <pkg>net-dns/avahi</pkg>:3</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">gobby/gobby</remote-id>
+  </upstream>
 </pkgmetadata>

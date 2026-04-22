@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <!--
 pkgcheck will flag dev-python/orjson as a DeprecatedDep: ::gentoo
 soft-deprecated orjson on 2026-04-01 (upstream abandoned, heavy
@@ -9,11 +9,12 @@ json (bytes output, native datetime/numpy), and orjson is still
 installable in ::gentoo (not masked).
 -->
 <pkgmetadata>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-	</maintainer>
-	<upstream>
-		<remote-id type="pypi">mp-api</remote-id>
-		<remote-id type="github">materialsproject/api</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="pypi">mp-api</remote-id>
+    <remote-id type="github">materialsproject/api</remote-id>
+  </upstream>
 </pkgmetadata>

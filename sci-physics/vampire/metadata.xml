@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<longdescription lang="en">
-	Simulate magnetic materials with atomic resolution from Angstroms to micrometres.
-	Whatever you need to model, vampire makes it easy for you to build, simulate, and analyse your magnetic system.
-	</longdescription>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-	</maintainer>
-	<upstream>
-		<remote-id type="github">richard-evans/vampire</remote-id>
-	</upstream>
+  <longdescription lang="en">
+  Simulate magnetic materials with atomic resolution from Angstroms to micrometres.
+  Whatever you need to model, vampire makes it easy for you to build, simulate, and analyse your magnetic system.
+  </longdescription>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="github">richard-evans/vampire</remote-id>
+  </upstream>
 </pkgmetadata>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <!--
 Local revival of x11-libs/qscintilla-2.14.1-r1 (last version with Qt5
 support). ::gentoo dropped the qt5 IUSE on 2025-05-26 (commit 33adc62b9e,
@@ -9,18 +9,19 @@ through v6.15.x (ScriptEditor.cpp inherits QsciScintilla directly).
 Emerge with USE=qt5 for mantid. Drop once mantid moves to Qt6.
 -->
 <pkgmetadata>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-	</maintainer>
-	<use>
-		<flag name="designer">Build plugin for Qt Designer</flag>
-	</use>
-	<upstream>
-		<maintainer status="active">
-			<email>phil@riverbankcomputing.com</email>
-			<name>Phil Thompson</name>
-		</maintainer>
-		<doc>https://www.riverbankcomputing.com/static/Docs/QScintilla/</doc>
-		<bugs-to>mailto:qscintilla@riverbankcomputing.com</bugs-to>
-	</upstream>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="designer">Build plugin for Qt Designer</flag>
+  </use>
+  <upstream>
+    <maintainer status="active">
+      <email>phil@riverbankcomputing.com</email>
+      <name>Phil Thompson</name>
+    </maintainer>
+    <doc>https://www.riverbankcomputing.com/static/Docs/QScintilla/</doc>
+    <bugs-to>mailto:qscintilla@riverbankcomputing.com</bugs-to>
+  </upstream>
 </pkgmetadata>

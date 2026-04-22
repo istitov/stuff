@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<longdescription lang="en">
-	mumax3 is a GPU-accelerated micromagnetic simulation program developed at the DyNaMat group of Prof. Van Waeyenberge at Ghent University. The code is written and maintained by Arne Vansteenkiste.
-	</longdescription>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-	</maintainer>
-	<upstream>
-		<remote-id type="github">mumax/3</remote-id>
-	</upstream>
+  <longdescription lang="en">
+  mumax3 is a GPU-accelerated micromagnetic simulation program developed at the DyNaMat group of Prof. Van Waeyenberge at Ghent University. The code is written and maintained by Arne Vansteenkiste.
+  </longdescription>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="github">mumax/3</remote-id>
+  </upstream>
 </pkgmetadata>

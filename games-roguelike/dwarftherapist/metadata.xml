@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-	</maintainer>
-	<use>
-		<flag name="qt5">Build against Qt5 (matches upstream sources).</flag>
-		<flag name="qt6">Build against Qt6 via a local port patch.</flag>
-	</use>
-	<upstream>
-		<remote-id type="github">Dwarf-Therapist/Dwarf-Therapist</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="qt5">Build against Qt5 (matches upstream sources).</flag>
+    <flag name="qt6">Build against Qt6 via a local port patch.</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">Dwarf-Therapist/Dwarf-Therapist</remote-id>
+  </upstream>
 </pkgmetadata>

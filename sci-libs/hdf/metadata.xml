@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <!--
 Temporary local bump of ::gentoo sci-libs/hdf (stuck at 4.2.15-r2,
 which fails to compile against gcc 15 per Gentoo bug 942866). Bump
@@ -8,10 +8,11 @@ attachment 935615. Drop this once ::gentoo lands 4.2.16+ (or 4.3.x
 once upstream self-tests pass).
 -->
 <pkgmetadata>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-	</maintainer>
-	<upstream>
-		<remote-id type="github">HDFGroup/hdf4</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="github">HDFGroup/hdf4</remote-id>
+  </upstream>
 </pkgmetadata>
