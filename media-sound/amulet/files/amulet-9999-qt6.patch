@@ -1,0 +1,311 @@
+diff --git a/AmuletConsole/CMakeLists.txt b/AmuletConsole/CMakeLists.txt
+--- a/AmuletConsole/CMakeLists.txt	2026-04-22 11:25:20.757457989 +0200
++++ b/AmuletConsole/CMakeLists.txt	2026-04-22 11:31:31.797884124 +0200
+@@ -4,7 +4,7 @@
+ 
+ set(CMAKE_AUTOMOC ON)
+ 
+-find_package(Qt5 COMPONENTS Core REQUIRED)
++find_package(Qt6 COMPONENTS Core REQUIRED)
+ 
+ set(AmuletConsole_SOURCES
+     main.cpp
+@@ -15,6 +15,6 @@
+ )
+ 
+ target_link_libraries(amulet_console
+-    Qt5::Core
++    Qt6::Core
+     amulet_core
+ )
+diff --git a/AmuletCore/CMakeLists.txt b/AmuletCore/CMakeLists.txt
+--- a/AmuletCore/CMakeLists.txt	2026-04-22 11:25:20.776629739 +0200
++++ b/AmuletCore/CMakeLists.txt	2026-04-22 11:31:31.801589222 +0200
+@@ -6,7 +6,7 @@
+ 
+ set(CMAKE_AUTOMOC ON)
+ 
+-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
++find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+ find_package(PkgConfig REQUIRED)
+ pkg_check_modules(TagLib REQUIRED IMPORTED_TARGET GLOBAL taglib)
+ 
+@@ -66,9 +66,9 @@
+ )
+ 
+ target_link_libraries(amulet_core
+-    Qt5::Core
+-    Qt5::Gui
+-    Qt5::Widgets
++    Qt6::Core
++    Qt6::Gui
++    Qt6::Widgets
+     PkgConfig::TagLib
+ )
+ 
+diff --git a/AmuletCore/converter_worker.cpp b/AmuletCore/converter_worker.cpp
+--- a/AmuletCore/converter_worker.cpp	2026-04-22 11:25:20.143370267 +0200
++++ b/AmuletCore/converter_worker.cpp	2026-04-22 11:31:31.870896872 +0200
+@@ -20,6 +20,7 @@
+  **************************************************************************/
+ 
+ #include <QDebug>
++#include <QRegularExpression>
+ #include <QFileInfo>
+ #include <QDir>
+ 
+@@ -57,14 +58,15 @@
+ 
+ QString ConverterWorker::replaceTags(QString path)
+ {
+-    QRegExp rx("[$]{1}num[(]{1}(%[\\w]+%),([\\d]+)[)]{1}");
+-    while (rx.indexIn(path) >= 0) {
+-         int num = rx.cap(2).toInt();
++    QRegularExpression rx("[$]{1}num[(]{1}(%[\\w]+%),([\\d]+)[)]{1}");
++    QRegularExpressionMatch match;
++    while ((match = rx.match(path)).hasMatch()) {
++         int num = match.captured(2).toInt();
+ 
+-         if (rx.cap(1) == "%track%")
+-             path.replace(rx.cap(0), QString("%1").arg(QString::number(tagData->track), num, '0'), Qt::CaseInsensitive);
++         if (match.captured(1) == "%track%")
++             path.replace(match.captured(0), QString("%1").arg(QString::number(tagData->track), num, '0'), Qt::CaseInsensitive);
+          else
+-             path.replace(rx.cap(0), rx.cap(1));
++             path.replace(match.captured(0), match.captured(1));
+     }
+ 
+     path.replace("%artist%", tagData->artist, Qt::CaseInsensitive);
+diff --git a/AmuletCore/converter_worker.hpp b/AmuletCore/converter_worker.hpp
+--- a/AmuletCore/converter_worker.hpp	2026-04-22 11:25:20.143370267 +0200
++++ b/AmuletCore/converter_worker.hpp	2026-04-22 11:31:31.820526847 +0200
+@@ -22,7 +22,7 @@
+ #ifndef CONVERTER_WORKER_HPP
+ #define CONVERTER_WORKER_HPP
+ 
+-#include <QLinkedList>
++#include <QList>
+ 
+ #include "AmuletCore_global.hpp"
+ 
+diff --git a/AmuletCore/plugin_loader.cpp b/AmuletCore/plugin_loader.cpp
+--- a/AmuletCore/plugin_loader.cpp	2026-04-22 11:25:20.144370282 +0200
++++ b/AmuletCore/plugin_loader.cpp	2026-04-22 11:37:04.390188774 +0200
+@@ -29,8 +29,8 @@
+ 
+ PluginLoader::PluginLoader()
+ {
+-    QStringList dirs = QString("/usr/lib64").split(':', QString::SkipEmptyParts);
+-//     QStringList dirs = QString("../AmuletPlugins").split(':', QString::SkipEmptyParts);
++    QStringList dirs = QString("/usr/lib64").split(':', Qt::SkipEmptyParts);
++//     QStringList dirs = QString("../AmuletPlugins").split(':', Qt::SkipEmptyParts);
+ 
+     foreach (QString dir, dirs) {
+         QDir pluginsDir = QDir(dir);
+diff --git a/AmuletCore/queue.cpp b/AmuletCore/queue.cpp
+--- a/AmuletCore/queue.cpp	2026-04-22 11:25:20.145370297 +0200
++++ b/AmuletCore/queue.cpp	2026-04-22 11:37:04.384392644 +0200
+@@ -19,6 +19,7 @@
+  *                                                                        *
+  **************************************************************************/
+ 
++#include <iterator>
+ #include "queue.hpp"
+ 
+ Queue::Queue(QObject * parent)
+@@ -35,7 +36,7 @@
+ 
+ void Queue::append(QueueItem item)
+ {
+-    queue.append(item);
++    queue.push_back(item);
+ }
+ 
+ QueueItemList::const_iterator Queue::begin() const
+@@ -73,7 +74,7 @@
+     QList<QueueItemList::iterator> its;
+ 
+     foreach (int index, indices)
+-        its.push_back(queue.begin() + index);
++        its.push_back(std::next(queue.begin(), index));
+ 
+     foreach (QueueItemList::iterator it, its)
+         queue.erase(it);
+diff --git a/AmuletCore/queue.hpp b/AmuletCore/queue.hpp
+--- a/AmuletCore/queue.hpp	2026-04-22 11:25:20.145370297 +0200
++++ b/AmuletCore/queue.hpp	2026-04-22 11:37:04.379977826 +0200
+@@ -23,13 +23,13 @@
+ #define QUEUE_HPP
+ 
+ #include <QObject>
+-#include <QLinkedList>
++#include <list>
+ 
+ #include "AmuletCore_global.hpp"
+ 
+ #include "queue_item.hpp"
+ 
+-typedef QLinkedList<QueueItem> QueueItemList;
++typedef std::list<QueueItem> QueueItemList;
+ 
+ class AMULETCORESHARED_EXPORT Queue : public QObject
+ {
+diff --git a/AmuletCore/worker_pool.hpp b/AmuletCore/worker_pool.hpp
+--- a/AmuletCore/worker_pool.hpp	2026-04-22 11:25:20.146370313 +0200
++++ b/AmuletCore/worker_pool.hpp	2026-04-22 11:31:31.820452595 +0200
+@@ -35,7 +35,7 @@
+     Q_OBJECT
+ 
+ private:
+-    QLinkedList<IWorker *> workerList;
++    QList<IWorker *> workerList;
+ 
+ private slots:
+     void updateProgress(int);
+diff --git a/AmuletGUI/CMakeLists.txt b/AmuletGUI/CMakeLists.txt
+--- a/AmuletGUI/CMakeLists.txt	2026-04-22 11:25:20.811380527 +0200
++++ b/AmuletGUI/CMakeLists.txt	2026-04-22 11:31:31.805376672 +0200
+@@ -8,7 +8,7 @@
+ set(CMAKE_AUTORCC ON)
+ set(CMAKE_AUTOUIC ON)
+ 
+-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
++find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+ 
+ set(AmuletGUI_SOURCES
+     about_dialog.cpp
+@@ -49,9 +49,9 @@
+ )
+ 
+ target_link_libraries(amulet
+-    Qt5::Core
+-    Qt5::Gui
+-    Qt5::Widgets
++    Qt6::Core
++    Qt6::Gui
++    Qt6::Widgets
+     amulet_core
+ )
+ 
+diff --git a/AmuletGUI/queue_model.cpp b/AmuletGUI/queue_model.cpp
+--- a/AmuletGUI/queue_model.cpp	2026-04-22 11:25:20.148370343 +0200
++++ b/AmuletGUI/queue_model.cpp	2026-04-22 11:38:14.838308000 +0200
+@@ -23,6 +23,7 @@
+ #include <QIcon>
+ #include <QSet>
+ 
++#include <iterator>
+ #include "queue_model.hpp"
+ 
+ QueueModel::QueueModel(QObject * parent)
+@@ -65,7 +66,7 @@
+     if (!index.isValid())
+         return QVariant();
+ 
+-    QueueItemList::const_iterator it = queue.begin() + index.row();
++    QueueItemList::const_iterator it = std::next(queue.begin(), index.row());
+     if (role == Qt::DisplayRole) {
+         switch (index.column()) {
+         case 0:
+diff --git a/AmuletPlugins/codec_flac/CMakeLists.txt b/AmuletPlugins/codec_flac/CMakeLists.txt
+--- a/AmuletPlugins/codec_flac/CMakeLists.txt	2026-04-22 11:25:20.723609175 +0200
++++ b/AmuletPlugins/codec_flac/CMakeLists.txt	2026-04-22 11:31:31.809314567 +0200
+@@ -7,7 +7,7 @@
+ set(CMAKE_AUTOMOC ON)
+ set(CMAKE_AUTOUIC ON)
+ 
+-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
++find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+ 
+ set(CodecFlac_SOURCES
+     codec_flac.cpp
+@@ -35,9 +35,9 @@
+ )
+ 
+ target_link_libraries(codec_flac
+-    Qt5::Core
+-    Qt5::Gui
+-    Qt5::Widgets
++    Qt6::Core
++    Qt6::Gui
++    Qt6::Widgets
+     amulet_core
+ )
+ 
+diff --git a/AmuletPlugins/codec_flac/decoder_flac.cpp b/AmuletPlugins/codec_flac/decoder_flac.cpp
+--- a/AmuletPlugins/codec_flac/decoder_flac.cpp	2026-04-22 11:25:20.156777590 +0200
++++ b/AmuletPlugins/codec_flac/decoder_flac.cpp	2026-04-22 11:31:31.870840164 +0200
+@@ -20,6 +20,7 @@
+  **************************************************************************/
+ 
+ #include <QDebug>
++#include <QRegularExpression>
+ 
+ #include "decoder_flac.hpp"
+ 
+@@ -45,10 +46,10 @@
+ void DecoderFlac::calculateProgress()
+ {
+     QString out(process->readAllStandardError());
+-    QRegExp rx("([\\d]{1,3})% complete");
+-
+-    if (rx.indexIn(out) >= 0) {
+-        completed = rx.cap(1).toInt();
++    QRegularExpression rx("([\\d]{1,3})% complete");
++    QRegularExpressionMatch match = rx.match(out);
++    if (match.hasMatch()) {
++        completed = match.captured(1).toInt();
+ 
+         emit progress(completed);
+     }
+diff --git a/AmuletPlugins/codec_lame/CMakeLists.txt b/AmuletPlugins/codec_lame/CMakeLists.txt
+--- a/AmuletPlugins/codec_lame/CMakeLists.txt	2026-04-22 11:25:20.713379021 +0200
++++ b/AmuletPlugins/codec_lame/CMakeLists.txt	2026-04-22 11:31:31.814265081 +0200
+@@ -7,7 +7,7 @@
+ set(CMAKE_AUTOMOC ON)
+ set(CMAKE_AUTOUIC ON)
+ 
+-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
++find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+ 
+ set(CodecLame_SOURCES
+     codec_lame.cpp
+@@ -35,9 +35,9 @@
+ )
+ 
+ target_link_libraries(codec_lame
+-    Qt5::Core
+-    Qt5::Gui
+-    Qt5::Widgets
++    Qt6::Core
++    Qt6::Gui
++    Qt6::Widgets
+     amulet_core
+ )
+ 
+diff --git a/AmuletPlugins/codec_lame/decoder_lame.cpp b/AmuletPlugins/codec_lame/decoder_lame.cpp
+--- a/AmuletPlugins/codec_lame/decoder_lame.cpp	2026-04-22 11:25:20.158032564 +0200
++++ b/AmuletPlugins/codec_lame/decoder_lame.cpp	2026-04-22 11:31:31.870769485 +0200
+@@ -20,6 +20,7 @@
+  **************************************************************************/
+ 
+ #include <QDebug>
++#include <QRegularExpression>
+ 
+ #include "decoder_lame.hpp"
+ 
+@@ -45,10 +46,10 @@
+ void DecoderLame::calculateProgress()
+ {
+     QString out(process->readAllStandardError());
+-    QRegExp rx("Frame#.*([\\d]+)/([\\d]+)");
+-
+-    if (rx.indexIn(out) >= 0) {
+-        completed = rx.cap(1).toInt() / rx.cap(2).toInt() * 100;
++    QRegularExpression rx("Frame#.*([\\d]+)/([\\d]+)");
++    QRegularExpressionMatch match = rx.match(out);
++    if (match.hasMatch()) {
++        completed = match.captured(1).toInt() / match.captured(2).toInt() * 100;
+ 
+         emit progress(completed);
+     }

@@ -14,12 +14,14 @@ SLOT="0"
 IUSE="flac mp3"
 
 RDEPEND="
-	dev-qt/qtcore:5
-	dev-qt/qtgui:5
-	dev-qt/qtwidgets:5
+	dev-qt/qtbase:6[gui,widgets]
 	media-libs/taglib
 	flac? ( media-libs/flac )
 	mp3? ( media-sound/lame )
 "
 DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
+
+PATCHES=(
+	"${FILESDIR}"/amulet-9999-qt6.patch
+)
