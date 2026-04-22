@@ -34,6 +34,7 @@ RDEPEND="
 	dev-python/msgpack[${PYTHON_USEDEP}]
 	dev-python/uncertainties[${PYTHON_USEDEP}]
 "
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
