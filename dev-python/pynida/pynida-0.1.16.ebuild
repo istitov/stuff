@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12,13} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
 
@@ -18,7 +18,7 @@ IUSE="doc python"
 RDEPEND="
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/pyqt5[${PYTHON_USEDEP}]
+	dev-python/pyside:6[${PYTHON_USEDEP}]
 	media-libs/opencv[${PYTHON_USEDEP}]
 	dev-python/pandas[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
@@ -30,3 +30,7 @@ DEPEND="${RDEPEND}
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+
+PATCHES=(
+	"${FILESDIR}"/pynida-0.1.16-pyside6.patch
+)
