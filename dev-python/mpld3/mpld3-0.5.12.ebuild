@@ -24,4 +24,5 @@ RDEPEND="
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
