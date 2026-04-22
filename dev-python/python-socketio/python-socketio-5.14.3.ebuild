@@ -23,4 +23,5 @@ RDEPEND="
 	>=dev-python/python-engineio-4.11.0[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
