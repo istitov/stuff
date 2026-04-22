@@ -13,3 +13,9 @@ app-portage/portopts
 # analysis code. The author's successor, Larch, is packaged as
 # sci-physics/xraylarch. Keep but mask.
 sci-physics/ifeffit
+
+# Ivan S. Titov <iiohann.s.titov@gmail.com> (2026-04-22)
+# ::gentoo qscintilla-2.14.1-r2 is Qt6-only; sci-physics/mantid needs
+# the Qt5 variant that only -r1 still provides (revived in this overlay).
+# Drop this mask once mantid moves to Qt6.
+=x11-libs/qscintilla-2.14.1-r2
