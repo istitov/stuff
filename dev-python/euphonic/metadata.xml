@@ -4,6 +4,10 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="matplotlib">Enable matplotlib-based plotting helpers</flag>
+		<flag name="phonopy-reader">Enable reading of phonopy HDF5/YAML output</flag>
+	</use>
 	<upstream>
 		<remote-id type="github">pace-neutrons/Euphonic</remote-id>
 		<remote-id type="pypi">euphonic</remote-id>
