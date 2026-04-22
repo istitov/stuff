@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="opencl">Enable OpenCL GPU-accelerated model evaluation via <pkg>dev-python/pyopencl</pkg></flag>
+    <flag name="cuda">Enable CUDA GPU-accelerated model evaluation via <pkg>dev-python/pycuda</pkg></flag>
+  </use>
+  <upstream>
+    <remote-id type="github">SasView/sasmodels</remote-id>
+    <remote-id type="pypi">sasmodels</remote-id>
+  </upstream>
+</pkgmetadata>
