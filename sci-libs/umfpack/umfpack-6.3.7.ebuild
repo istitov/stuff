@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake toolchain-funcs
 
-Sparse_PV="7.3.1"
+Sparse_PV="7.12.2"
 Sparse_P="SuiteSparse-${Sparse_PV}"
 DESCRIPTION="Unsymmetric multifrontal sparse LU factorization library"
 HOMEPAGE="https://people.engr.tamu.edu/davis/suitesparse.html"
@@ -20,8 +20,8 @@ IUSE="doc openmp test"
 RESTRICT="!test? ( test )"
 
 DEPEND=">=sci-libs/suitesparseconfig-${Sparse_PV}
-	>=sci-libs/amd-3.2.1
-	>=sci-libs/cholmod-5.0.1[openmp=]
+	>=sci-libs/amd-3.3.4
+	>=sci-libs/cholmod-5.3.4[openmp=]
 	virtual/blas"
 RDEPEND="${DEPEND}"
 BDEPEND="doc? ( virtual/latex-base )"
@@ -35,31 +35,30 @@ pkg_setup() {
 }
 
 src_configure() {
-	# Fortran is only used to compile additional demo programs that can be tested.
 	local mycmakeargs=(
-		-DNSTATIC=ON
-		-DNOPENMP=$(usex openmp OFF ON)
-		-DNFORTRAN=ON
-		-DDEMO=$(usex test)
+		-DBUILD_SHARED_LIBS=ON
+		-DBUILD_STATIC_LIBS=OFF
+		-DSUITESPARSE_USE_FORTRAN=OFF
+		-DSUITESPARSE_USE_OPENMP=$(usex openmp ON OFF)
+		-DSUITESPARSE_USE_CUDA=OFF
+		-DSUITESPARSE_USE_PYTHON=OFF
+		-DSUITESPARSE_DEMOS=$(usex test ON OFF)
+		-DBLA_VENDOR=Generic
 	)
 	cmake_src_configure
 }
 
 src_test() {
-	# Because we are not using cmake_src_test,
-	# we have to manually go to BUILD_DIR
 	cd "${BUILD_DIR}"
-	# Run demo files
-	# Other demo files have issues making them unsuitable for testing
 	./umfpack_simple || die "failed testing umfpack_simple"
 }
 
 src_install() {
 	if use doc; then
-		pushd "${S}/Doc"
+		pushd "${S}/Doc" || die
 		rm -rf *.pdf
 		emake
-		popd
+		popd || die
 		DOCS="${S}/Doc/*.pdf"
 	fi
 	cmake_src_install
