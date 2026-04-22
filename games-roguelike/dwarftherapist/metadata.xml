@@ -4,6 +4,10 @@
 	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="qt5">Build against Qt5 (matches upstream sources).</flag>
+		<flag name="qt6">Build against Qt6 via a local port patch.</flag>
+	</use>
 	<upstream>
 		<remote-id type="github">Dwarf-Therapist/Dwarf-Therapist</remote-id>
 	</upstream>
