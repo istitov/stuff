@@ -1,3 +1,3 @@
-# Raukaan Cogbrother <is_titov@yahoo.com> (2026-04-19)
+# Raukaan Cogbrother <iohann.s.titov@gmail.com> (2026-04-19)
 # GPU backends (cuda/rocm) require non-musl runtime, package is unusable here.
 dev-python/cupy

@@ -8,12 +8,12 @@
 =sci-libs/umfpack-6.2.2
 
 
-# Ivan S. Titov <is_titov@yahoo.com> (2026-04-20)
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-04-20)
 # IPX was removed from the Linux kernel in 4.18 (2018). Userspace utils
 # are only useful with the out-of-tree ipx module. Keep but mask.
 net-misc/ipx-utils
 
-# Ivan S. Titov <is_titov@yahoo.com> (2026-04-20)
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-04-20)
 # Upstream (github.com/megabaks) dormant since 2014-02. No tagged
 # release, 9999-only. Keep but mask.
 app-portage/portopts
