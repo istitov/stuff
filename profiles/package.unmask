@@ -6,3 +6,8 @@
 # ("obsolete Qt5 non-qtbase modules without revdeps"). Revived in this
 # overlay at dev-qt/qthelp-5.15.18.
 dev-qt/qthelp:5
+# dev-python/pyqt5 + pyqt5-sip: ::gentoo last-rited 2026-04-21 with
+# removal on 2026-05-21 ("PyQt5 has no more revdeps"). Still in the
+# tree for now; unmask so we can install for mantid.
+dev-python/pyqt5
+dev-python/pyqt5-sip

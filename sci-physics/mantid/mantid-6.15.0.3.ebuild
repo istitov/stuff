@@ -98,6 +98,10 @@ DEPEND="${BDEPEND}
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
+PATCHES=(
+	"${FILESDIR}/${P}-no-qt5-webwidgets.patch"
+)
+
 src_prepare() {
 	# Gentoo's opencascade installs to /usr/{include,lib64}/opencascade
 	# instead of /opt/OpenCASCADE; retarget the finder.
@@ -113,6 +117,11 @@ src_prepare() {
 	# Upstream hardcodes lib/qt5; Gentoo amd64 is lib64/qt5.
 	sed -ie 's!../lib/qt5\n\n!../lib64/qt5\n\n;!' qt/applications/workbench/CMakeLists.txt || die
 
+	# Upstream hardcodes LIB_DIR=lib in LinuxPackageScripts.cmake, which
+	# puts shared libs in /usr/lib on amd64 and trips multilib-strict.
+	sed -i -e 's|^set(LIB_DIR lib)$|set(LIB_DIR lib64)|' \
+		buildconfig/CMake/LinuxPackageScripts.cmake || die
+
 	# Gentoo's dev-libs/boost-1.90 ships CMake configs for most
 	# components except boost_system (header-only in newer Boost,
 	# no shared lib / cmake config installed). Drop `system` from
@@ -120,11 +129,29 @@ src_prepare() {
 	sed -i -e 's/COMPONENTS date_time regex serialization filesystem system/COMPONENTS date_time regex serialization filesystem/' \
 		buildconfig/CMake/CommonSetup.cmake || die
 
-	default
+	# Mantid runs `pip install --editable . --ignore-installed --no-deps`
+	# for its in-tree Python packages. Two Gentoo-specific flags are
+	# needed but pip reads them from env vars which don't survive the
+	# cmake -> ninja -> cmake-E-env chain inside portage's sandbox
+	# (verified: same env vars work through cmake -E env outside the
+	# sandbox, so something in portage's build wrapping drops PIP_*).
+	# Bake the flags into the command line instead:
+	#   --break-system-packages: defeat PEP 668's refusal to install
+	#     into a marker-tagged Python (the install only writes an
+	#     .egg-link into the build dir, doesn't touch /usr).
+	#   --no-build-isolation: use system dev-python/setuptools instead
+	#     of pip fetching its own from pypi, which the network sandbox
+	#     blocks anyway.
+	sed -i -e 's/-m pip install --editable . --ignore-installed --no-deps/& --break-system-packages --no-build-isolation/' \
+		buildconfig/CMake/PythonPackageTargetFunctions.cmake || die
+
 	cmake_src_prepare
 }
 
 src_configure() {
 	python_setup
+	local mycmakeargs=(
+		-DENABLE_DOCS=$(usex doc)
+	)
 	cmake_src_configure
 }

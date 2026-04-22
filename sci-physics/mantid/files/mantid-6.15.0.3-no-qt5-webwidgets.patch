@@ -1,0 +1,53 @@
+Don't hard-require Qt5::WebEngineWidgets or Qt5::WebKitWidgets.
+
+Gentoo last-rited dev-qt/qtwebengine:5 (5.15.16_p20241115 was the
+final tree version, dropped 2025-04-28) and dev-qt/qtwebkit long
+before that. Neither is available in ::gentoo today.
+
+The C++ side never calls QWebEngine* APIs directly -- the web widgets
+were linked only so the Python help-browser code in
+qt/python/mantidqt/mantidqt/widgets/helpwindow/ could dlopen them via
+qtpy. Those imports will fail gracefully at runtime (the fallback
+stub in helpwindowview.py already handles the absent-binding case and
+limits search).
+
+Replace the detect block with empty stubs so the C++ build proceeds
+without a web-widgets link.
+
+--- a/qt/widgets/common/CMakeLists.txt
++++ b/qt/widgets/common/CMakeLists.txt
+@@ -651,28 +651,12 @@
+   COMPONENTS Concurrent Help Network PrintSupport
+   REQUIRED
+ )
+-# Prefer WebEngineWidgets over WebkitWidgets
+-unset(Qt5_FOUND)
+-find_package(
+-  Qt5 ${QT_MIN_VERSION}
+-  COMPONENTS WebEngineWidgets
+-  QUIET
+-)
+-if(Qt5_FOUND)
+-  set(_webwidgets_tgt Qt5::WebEngineWidgets)
+-else()
+-  find_package(
+-    Qt5 ${QT_MIN_VERSION}
+-    COMPONENTS WebKitWidgets
+-    QUIET
+-  )
+-  if(Qt5_FOUND)
+-    set(_webwidgets_tgt Qt5::WebKitWidgets)
+-    set(_webengine_def USE_QTWEBKIT)
+-  else()
+-    message(FATAL_ERROR "Unable to find suitable module for web widgets. Tried: WebEnginewidgets, WebKitWidgets")
+-  endif()
+-endif()
++# Gentoo: Qt5::WebEngineWidgets and Qt5::WebKitWidgets are unavailable
++# (qtwebengine:5 and qtwebkit last-rited). Python help-browser imports
++# QtWebEngineWidgets via qtpy and handles its absence at runtime; the
++# C++ build does not touch the APIs at all.
++set(_webwidgets_tgt "")
++set(_webengine_def "")
+
+ # If not sip header is defined we need to generate one with sip-module
+ if(SIP_INCLUDE_DIR AND EXISTS ${SIP_INCLUDE_DIR}/sip.h)
