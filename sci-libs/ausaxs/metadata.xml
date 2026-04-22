@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    AUSAXS is a C++ library providing efficient fitting of atomic
+    structure files against experimental small-angle X-ray scattering
+    (SAXS) data via the Debye equation, validation of electron
+    microscopy maps against SAXS data, and (in development) rigidbody
+    optimisation. The library is loaded by SasView via its
+    <pkg>dev-python/pyausaxs</pkg> wrapper.
+  </longdescription>
+  <use>
+    <flag name="executables">Install the saxs_fitter, em_fitter and rigidbody_optimizer CLI tools</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">AUSAXS/AUSAXS</remote-id>
+  </upstream>
+</pkgmetadata>
