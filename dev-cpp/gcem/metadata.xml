@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    GCE-Math is a header-only C++ library implementing a suite of
+    mathematical functions usable at compile time via generalized
+    constant expressions (constexpr).
+  </longdescription>
+  <upstream>
+    <remote-id type="github">kthohr/gcem</remote-id>
+  </upstream>
+</pkgmetadata>
