@@ -4,6 +4,12 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="advanced">
+			Enable advanced numerical backends (llvmlite, numba, pyfftw,
+			pywavelets) for faster/large-scale operators
+		</flag>
+	</use>
 	<upstream>
 		<remote-id type="github">PyLops/pylops</remote-id>
 		<remote-id type="pypi">pylops</remote-id>
