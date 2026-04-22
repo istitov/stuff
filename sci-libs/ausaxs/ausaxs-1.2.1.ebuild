@@ -20,12 +20,24 @@ IUSE="doc executables"
 # during build. The Python bindings SasView cares about only use the
 # SANS Debye calculator which does not need the dlib minimizers, so we
 # disable DLIB entirely rather than vendoring dlib.
+#
+# Blocker on dev-python/pyausaxs:
+#
+# pyausaxs 1.0.4 (what SasView pins) expects a libausaxs.so that
+# exports test_integration, evaluate_sans_debye, fit_saxs and
+# iterative_fit_start/step/finish. AUSAXS v1.2.1's public source only
+# exposes test_integration and debye_no_ff (the rest are commented out
+# or renamed), so our from-source libausaxs.so is ABI-incompatible
+# with pyausaxs 1.0.4's ctypes bindings. Keep the two packages
+# mutually exclusive for now; this ebuild is useful on its own for
+# the saxs_fitter/em_fitter/rigidbody_optimizer CLI tools.
 RDEPEND="
 	net-misc/curl
 	dev-cpp/gcem
 	dev-cpp/backward-cpp
 	dev-cpp/cli11
 	dev-cpp/bshoshany-thread-pool
+	!dev-python/pyausaxs
 "
 DEPEND="${RDEPEND}"
 BDEPEND="doc? ( app-text/doxygen )"
