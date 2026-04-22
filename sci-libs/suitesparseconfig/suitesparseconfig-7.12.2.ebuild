@@ -31,13 +31,18 @@ pkg_setup() {
 }
 
 src_configure() {
-	# Make sure we always include the Fortran interface.
-	# It doesn't require a Fortran compiler to be present
-	# and simplifies the configuration for dependencies.
+	# The SuiteSparse 7.x option scheme; NSTATIC/NFORTRAN/NOPENMP are gone.
+	# Pin BLAS to the reference implementation (virtual/blas provides
+	# libblas.so.3) so CMake's BLAS detection does not pick up a stray
+	# Intel MKL install from /opt.
 	local mycmakeargs=(
-		-DNSTATIC=ON
-		-DNFORTRAN=OFF
-		-DNOPENMP=$(usex openmp OFF ON)
+		-DBUILD_SHARED_LIBS=ON
+		-DBUILD_STATIC_LIBS=OFF
+		-DSUITESPARSE_USE_FORTRAN=OFF
+		-DSUITESPARSE_USE_OPENMP=$(usex openmp ON OFF)
+		-DSUITESPARSE_USE_CUDA=OFF
+		-DSUITESPARSE_USE_PYTHON=OFF
+		-DBLA_VENDOR=Generic
 	)
 	cmake_src_configure
 }
