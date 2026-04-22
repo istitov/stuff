@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    SasView is an open-source application for analysing small-angle
+    scattering (SAS) data from X-ray or neutron experiments. It
+    provides data loaders, model fitting powered by
+    <pkg>dev-python/sasmodels</pkg> and <pkg>dev-python/bumps</pkg>,
+    and a Qt-based GUI for interactive exploration.
+  </longdescription>
+  <use>
+    <flag name="opencl">Enable OpenCL GPU acceleration via <pkg>dev-python/pyopencl</pkg></flag>
+  </use>
+  <upstream>
+    <remote-id type="github">SasView/sasview</remote-id>
+    <remote-id type="pypi">sasview</remote-id>
+    <bugs-to>https://github.com/SasView/sasview/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
