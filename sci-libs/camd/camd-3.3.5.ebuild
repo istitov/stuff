@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake
 
-Sparse_PV="7.3.1"
+Sparse_PV="7.12.2"
 Sparse_P="SuiteSparse-${Sparse_PV}"
 DESCRIPTION="Library to order a sparse matrix prior to Cholesky factorization"
 HOMEPAGE="https://people.engr.tamu.edu/davis/suitesparse.html"
@@ -24,8 +24,10 @@ BDEPEND="doc? ( virtual/latex-base )"
 
 src_configure() {
 	local mycmakeargs=(
-		-DNSTATIC=ON
-		-DDEMO=$(usex test)
+		-DBUILD_SHARED_LIBS=ON
+		-DBUILD_STATIC_LIBS=OFF
+		-DBLA_VENDOR=Generic
+		-DSUITESPARSE_DEMOS=$(usex test ON OFF)
 	)
 	cmake_src_configure
 }
