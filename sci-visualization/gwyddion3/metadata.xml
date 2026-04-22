@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+	</maintainer>
+	<longdescription lang="en">
+	Gwyddion is a modular program for SPM data analysis. The 3.x series
+	is an upstream rewrite targeting GTK+ 3, still marked unstable by
+	upstream. It co-installs with the 2.x series (sci-visualization/gwyddion)
+	since the binary is renamed to gwyddion3 and all libraries have a 3
+	suffix.
+	</longdescription>
+	<use>
+		<flag name="fits">
+			Enable FITS image import via <pkg>sci-libs/cfitsio</pkg>
+		</flag>
+		<flag name="hdf5">
+			Enable hdf5 support
+		</flag>
+		<flag name="json">
+			Enable <pkg>dev-libs/json-glib</pkg>-based JSON import/export
+		</flag>
+		<flag name="python">
+			Enable the pygwy Python 3 scripting module
+		</flag>
+		<flag name="webp">
+			Enable WebP image export via <pkg>media-libs/libwebp</pkg>
+		</flag>
+	</use>
+</pkgmetadata>
