@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Minimal pyausaxs stub for Gentoo. Upstream pyausaxs is a Python
+    binding for the AUSAXS C++ SAXS engine and ships only as
+    platform-specific wheels with a bundled libausaxs. SasView imports
+    pyausaxs.AUSAXS at module load time, but guards call-sites with
+    try/except and falls back to its pure-Python scattering calculator,
+    so this stub lets SasView run without the native accelerator.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">AUSAXS/pyAUSAXS</remote-id>
+    <remote-id type="pypi">pyausaxs</remote-id>
+  </upstream>
+</pkgmetadata>
