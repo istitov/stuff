@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!--
+pkgcheck will flag dev-python/orjson as a DeprecatedDep: ::gentoo
+soft-deprecated orjson on 2026-04-01 (upstream abandoned, heavy
+unsafe Rust). Warning is accepted: upstream mp-api hard-requires
+orjson in requires_dist (>=3.10,<4), it is not a drop-in for stdlib
+json (bytes output, native datetime/numpy), and orjson is still
+installable in ::gentoo (not masked).
+-->
 <pkgmetadata>
 	<maintainer type="person">
 		<email>iohann.s.titov@gmail.com</email>
