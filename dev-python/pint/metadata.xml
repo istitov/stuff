@@ -4,6 +4,9 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="numpy">Enable NumPy integration for array-valued quantities</flag>
+	</use>
 	<upstream>
 		<remote-id type="pypi">Pint</remote-id>
 	</upstream>
