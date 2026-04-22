@@ -31,10 +31,12 @@ BDEPEND="
 "
 
 src_prepare() {
-	# Same treatment as sasmodels: skip the sphinx build hook during
-	# wheel construction.
+	# Drop all [[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
+	# array-of-tables blocks and the force-include of build/docs that
+	# the sphinx hook was supposed to create.
 	sed -i \
-		-e '/\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/,/^\[\[/{/^\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/d; /^\[\[/!d}' \
+		-e '/^\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/,/^\[[^[]/{/^\[[^[]/!d}' \
+		-e '/^\[tool\.hatch\.build\.targets\.wheel\.force-include\]/,/^\[/{/build\/docs/d}' \
 		pyproject.toml || die
 	distutils-r1_src_prepare
 }
