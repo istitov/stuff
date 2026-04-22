@@ -31,7 +31,6 @@ RDEPEND="
 	speed? ( >=dev-python/numba-0.56[${PYTHON_USEDEP}] )
 	tiff? (
 		>=dev-python/tifffile-2022.7.28[${PYTHON_USEDEP}]
-		dev-python/imagecodecs[${PYTHON_USEDEP}]
 	)
 	zspy? (
 		>=dev-python/zarr-2[${PYTHON_USEDEP}]

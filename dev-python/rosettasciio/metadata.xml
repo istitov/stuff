@@ -4,6 +4,11 @@
 	<maintainer type="person">
 		<email>lebedev.vasya@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="image">Enable reading of generic image formats via imageio and Pillow</flag>
+		<flag name="speed">Enable numba JIT acceleration for selected readers</flag>
+		<flag name="zspy">Enable ZSpy (Zarr v2-based) reader/writer</flag>
+	</use>
 	<upstream>
 		<remote-id type="pypi">rosettasciio</remote-id>
 	</upstream>
