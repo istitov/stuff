@@ -18,6 +18,6 @@ RESTRICT="test mirror"
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
-	>=dev-python/spglib-1.14.1[${PYTHON_USEDEP}]
+	>=sci-libs/spglib-1.14.1[python,${PYTHON_USEDEP}]
 "
 BDEPEND="${RDEPEND}"
