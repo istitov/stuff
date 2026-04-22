@@ -43,11 +43,12 @@ BDEPEND="
 "
 
 src_prepare() {
-	# Drop hatch-sphinx hook: it tries to build full HTML docs during
-	# wheel build, which pulls in extra sphinx extensions and network
-	# resources. Runtime import does not need pre-built HTML.
+	# Drop all [[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
+	# array-of-tables blocks and the force-include of build/doc that
+	# the sphinx hook was supposed to create.
 	sed -i \
-		-e '/\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/,/^\[\[/{/^\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/d; /^\[\[/!d}' \
+		-e '/^\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/,/^\[[^[]/{/^\[[^[]/!d}' \
+		-e '/^\[tool\.hatch\.build\.targets\.wheel\.force-include\]/,/^\[/{/build\/doc/d}' \
 		pyproject.toml || die
 	distutils-r1_src_prepare
 }
