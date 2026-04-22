@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!--
+Local revival of dev-qt/qthelp:5, last-rited in ::gentoo on 2026-02-27
+and removed on 2026-03-29 ("obsolete Qt5 non-qtbase modules without
+revdeps"). We have exactly one revdep that still needs it:
+sci-physics/mantid, whose upstream has not yet migrated to Qt6 as of
+v6.15.x. Sources: upstream gentoo-mirror commit e8a034fdb4~1
+(ebuild + Manifest + qt5-build.eclass which remains in ::gentoo).
+The ebuild is otherwise unchanged; we also package.unmask this atom
+via profiles/package.unmask. Drop once mantid moves to Qt6.
+-->
+<pkgmetadata>
+	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+	</maintainer>
+	<upstream>
+		<remote-id type="kde-invent">qt/qt/qttools</remote-id>
+	</upstream>
+</pkgmetadata>
