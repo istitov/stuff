@@ -6,7 +6,7 @@ EAPI=8
 FORTRAN_NEEDED="fortran"
 inherit cmake fortran-2
 
-Sparse_PV="7.3.1"
+Sparse_PV="7.12.2"
 Sparse_P="SuiteSparse-${Sparse_PV}"
 DESCRIPTION="Library to order a sparse matrix prior to Cholesky factorization"
 HOMEPAGE="https://people.engr.tamu.edu/davis/suitesparse.html"
@@ -25,18 +25,19 @@ BDEPEND="doc? ( virtual/latex-base )"
 
 src_configure() {
 	local mycmakeargs=(
-		-DNSTATIC=ON
-		-DNFORTRAN=$(usex fortran OFF ON)
-		-DDEMO=$(usex test)
+		-DBUILD_SHARED_LIBS=ON
+		-DBUILD_STATIC_LIBS=OFF
+		-DSUITESPARSE_USE_FORTRAN=$(usex fortran ON OFF)
+		-DSUITESPARSE_DEMOS=$(usex test ON OFF)
+		-DSUITESPARSE_USE_CUDA=OFF
+		-DSUITESPARSE_USE_PYTHON=OFF
+		-DBLA_VENDOR=Generic
 	)
 	cmake_src_configure
 }
 
 src_test() {
-	# Because we are not using cmake_src_test,
-	# we have to manually go to BUILD_DIR
 	cd "${BUILD_DIR}"
-	# Run demo files
 	local demofiles=(
 		amd_demo
 		amd_l_demo
