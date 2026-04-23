@@ -10,8 +10,9 @@
   is an upstream rewrite targeting GTK+ 3, still marked unstable by
   upstream. It co-installs with the 2.x series (sci-visualization/gwyddion)
   since the binary is renamed to gwyddion3 and all libraries have a 3
-  suffix. Note: the pygwy Python scripting module is not built --
-  upstream has not yet ported it to Python 3.
+  suffix. The -r1 revision enables Python 3 scripting (pygwy) via
+  GObject Introspection and PyGObject 3; scripts use the namespaced
+  Gwyddion/GwyApp/GwyUI imports, not the 2.x 'import gwy' interface.
   </longdescription>
   <use>
     <flag name="fits">
@@ -20,8 +21,22 @@
     <flag name="hdf5">
       Enable hdf5 support
     </flag>
+    <flag name="introspection">
+      Generate GObject Introspection .gir/.typelib files so
+      Gwyddion's libraries can be consumed from bindings
+      (Python, JavaScript, Vala). Required for USE=python.
+    </flag>
     <flag name="json">
       Enable <pkg>dev-libs/json-glib</pkg>-based JSON import/export
+    </flag>
+    <flag name="python">
+      Build pygwy, the Python 3 scripting bridge. Implies USE=introspection
+      and pulls in <pkg>dev-python/pygobject</pkg>. Provides a plug-in
+      discovery path and an in-process console registered as /Python Console.
+    </flag>
+    <flag name="sourceview">
+      Use <pkg>x11-libs/gtksourceview</pkg>:4 for Python syntax
+      highlighting in the pygwy console. Implies USE=python.
     </flag>
     <flag name="webp">
       Enable WebP image export via <pkg>media-libs/libwebp</pkg>
