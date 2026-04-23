@@ -14,7 +14,7 @@ SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 IUSE="doc python"
 
 RDEPEND="
