@@ -31,7 +31,25 @@ State lives under `$XDG_STATE_HOME/stuff-nvchecker/` (default
 
 ## Setup
 
-First-time priming — run once to establish the baseline:
+### GitHub token (required — the config has ~60 GitHub entries)
+
+The GitHub API rate-limits unauthenticated requests to 60/hour per IP,
+which is trivially exceeded by this config. Create a personal access
+token (public-read scope is enough — a classic PAT with no scopes
+works, or a fine-grained token with no extra permissions) and put it
+in `~/.config/nvchecker/keyfile.toml`:
+
+```toml
+[keys]
+github = "ghp_..."
+```
+
+`run.sh` looks for that file automatically and passes it via
+`nvchecker -k` when present. Without it, most GitHub entries will
+fail with "rate limited" after the first ~60 requests and the tool
+is effectively useless for GitHub tracking.
+
+### First run
 
 ```sh
 ./scripts/nvchecker/run.sh
@@ -41,7 +59,9 @@ The first run fetches current upstream versions for every tracked
 package and exits after printing `baseline established`. No drift is
 reported because there's nothing to diff against yet.
 
-Then add a crontab entry. Weekly is fine:
+### Cron
+
+Add an entry. Weekly is fine:
 
 ```cron
 0 6 * * 0 /path/to/stuff/scripts/nvchecker/run.sh

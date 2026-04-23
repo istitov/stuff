@@ -33,6 +33,7 @@ from pathlib import Path
 
 PYPI_INHERIT_RE = re.compile(r"^\s*inherit\b.*\bpypi\b", re.MULTILINE)
 PERL_INHERIT_RE = re.compile(r"^\s*inherit\b.*\bperl-module\b", re.MULTILINE)
+PY2_INHERIT_RE = re.compile(r"^\s*inherit\b.*_py2\b", re.MULTILINE)
 PYPI_PN_RE = re.compile(r'^\s*PYPI_PN=(?:"([^"]+)"|\'([^\']+)\'|(\S+))', re.MULTILINE)
 PYPI_NORMALIZE_RE = re.compile(r'^\s*PYPI_NO_NORMALIZE=(\S+)', re.MULTILINE)
 SRC_URI_RE = re.compile(r'^SRC_URI=(?:"([^"]*)"|\'([^\']*)\')', re.MULTILINE | re.DOTALL)
@@ -97,6 +98,16 @@ def first_group(m: re.Match | None) -> str | None:
 
 
 def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str | None, egit: str | None = None) -> dict:
+    """See module docstring. Leading branches short-circuit before the
+    source-type detection."""
+    # Packages explicitly pinned to Python 2 (ebuild name ends in -python2
+    # or inherits the *_py2 eclass family). Upstream has moved past py2, so
+    # tracking upstream would produce permanent false-positive drift. The
+    # overlay's job is to freeze these at the last py2-compatible version.
+    if pkg_name.endswith("-python2") or PY2_INHERIT_RE.search(ebuild_text):
+        return {"kind": "unknown",
+                "note": "py2-pinned: upstream has moved past py2 support; "
+                        "drift tracking would produce permanent false positives"}
     """Return a dict describing how nvchecker should track this package.
 
     Keys:
@@ -151,11 +162,16 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
             if repo and owner and repo not in ("about", "settings"):
                 return {"kind": "github", "spec": f"{owner}/{repo}", "note": "from HOMEPAGE"}
 
-    # SourceForge
+    # SourceForge: nvchecker 2.x has no built-in sourceforge source; an
+    # nvchecker `regex` source against the project's RSS feed works but is
+    # entry-by-entry. Flag as unknown-with-SF-hint so a future maintainer
+    # can uncomment and hand-fill the regex.
     if src_uri:
         m = SOURCEFORGE_RE.search(src_uri)
         if m:
-            return {"kind": "sourceforge", "spec": m.group(1)}
+            return {"kind": "unknown",
+                    "note": f"sourceforge/{m.group(1)} — no built-in source in nvchecker 2.x; "
+                            "add a `regex` entry against the RSS feed if tracking is wanted"}
 
     return {"kind": "unknown", "note": "no recognizable upstream"}
 
@@ -181,7 +197,9 @@ def emit_entry(entry_name: str, classification: dict) -> list[str]:
     elif kind == "github":
         lines.append('source = "github"')
         lines.append(f'github = "{classification["spec"]}"')
-        lines.append("use_latest_release = true")
+        # use_max_tag works for any repo with tags, including projects that
+        # don't curate GitHub Releases (which use_latest_release requires).
+        lines.append("use_max_tag = true")
         if note:
             lines.append(f"# note: {note}")
     elif kind == "sourceforge":
@@ -265,7 +283,7 @@ def main() -> int:
         "",
     ]
 
-    for kind in ("pypi", "github", "sourceforge", "cpan"):
+    for kind in ("pypi", "github", "cpan"):
         if not entries_by_kind[kind]:
             continue
         out_lines.append(f"# --- {kind} ({len(entries_by_kind[kind])}) ---")
@@ -287,7 +305,7 @@ def main() -> int:
 
     # Summary to stderr so shell redirection of stdout remains clean if any
     print(f"wrote {args.out}", file=sys.stderr)
-    for kind in ("pypi", "github", "sourceforge", "cpan", "live", "unknown", "no-ebuild"):
+    for kind in ("pypi", "github", "cpan", "live", "unknown", "no-ebuild"):
         if counter[kind]:
             print(f"  {kind:14s} {counter[kind]:4d}", file=sys.stderr)
     total = sum(counter.values())

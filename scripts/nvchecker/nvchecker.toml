@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (93) ---
+# --- pypi (90) ---
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -198,10 +198,6 @@ pypi = "numcodecs"
 source = "pypi"
 pypi = "numdifftools"
 
-["dev-python/numpy-python2"]
-source = "pypi"
-pypi = "numpy-python2"
-
 ["dev-python/palettable"]
 source = "pypi"
 pypi = "palettable"
@@ -314,14 +310,6 @@ pypi = "scikit-optimize"
 source = "pypi"
 pypi = "seekpath"
 
-["dev-python/setuptools-python2"]
-source = "pypi"
-pypi = "setuptools-python2"
-
-["dev-python/setuptools_scm-python2"]
-source = "pypi"
-pypi = "setuptools_scm-python2"
-
 ["dev-python/silx"]
 source = "pypi"
 pypi = "silx"
@@ -382,343 +370,313 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (63) ---
+# --- github (60) ---
 
 ["app-editors/gobby"]
 source = "github"
 github = "gobby/gobby"
-use_latest_release = true
+use_max_tag = true
 
 ["app-editors/manpageeditor"]
 source = "github"
 github = "KeithDHedger/manpageeditor"
-use_latest_release = true
+use_max_tag = true
 
 ["app-misc/tudu"]
 source = "github"
 github = "meskio/tudu"
-use_latest_release = true
+use_max_tag = true
 
 ["app-office/mytetra"]
 source = "github"
 github = "xintrea/mytetra_dev"
-use_latest_release = true
+use_max_tag = true
 
 ["app-portage/gcc-switcher"]
 source = "github"
 github = "megabaks/gcc-switcher"
-use_latest_release = true
+use_max_tag = true
 
 ["app-portage/portconf"]
 source = "github"
 github = "megabaks/portconf"
-use_latest_release = true
+use_max_tag = true
 # note: from EGIT_REPO_URI
 
 ["app-text/pandoc-crossref-bin"]
 source = "github"
 github = "lierdakil/pandoc-crossref"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-cpp/backward-cpp"]
 source = "github"
 github = "bombela/backward-cpp"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-cpp/bshoshany-thread-pool"]
 source = "github"
 github = "bshoshany/bshoshany-thread-pool"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-cpp/gcem"]
 source = "github"
 github = "kthohr/gcem"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-cpp/libbinio"]
 source = "github"
 github = "adplug/libbinio"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-libs/oocairo"]
 source = "github"
 github = "awesomeWM/oocairo"
-use_latest_release = true
+use_max_tag = true
 # note: from HOMEPAGE
 
 ["dev-ml/gapi-ocaml"]
 source = "github"
 github = "astrada/gapi-ocaml"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-ml/ocamlfuse"]
 source = "github"
 github = "astrada/ocamlfuse"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-ml/otoml"]
 source = "github"
 github = "dmbaturin/otoml"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-python/apsw"]
 source = "github"
 github = "rogerbinns/apsw"
-use_latest_release = true
-
-["dev-python/certifi-python2"]
-source = "github"
-github = "mgorny/certifi-shim"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-python/dask"]
 source = "github"
 github = "dask/dask"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-python/distributed"]
 source = "github"
 github = "dask/distributed"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-python/llvmlite"]
 source = "github"
 github = "numba/llvmlite"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-python/locket"]
 source = "github"
 github = "mwilliamson/locket.py"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-python/numba"]
 source = "github"
 github = "numba/numba"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-python/periodictable"]
 source = "github"
 github = "python-periodictable/periodictable"
-use_latest_release = true
-
-["dev-python/pycairo-python2"]
-source = "github"
-github = "pygobject/pycairo"
-use_latest_release = true
-# note: from HOMEPAGE
+use_max_tag = true
 
 ["dev-python/spur"]
 source = "github"
 github = "mwilliamson/spur.py"
-use_latest_release = true
+use_max_tag = true
 
 ["dev-python/tccbox"]
 source = "github"
 github = "metab0t/tccbox"
-use_latest_release = true
+use_max_tag = true
 # note: from HOMEPAGE
 
 ["dev-python/toml"]
 source = "github"
 github = "uiri/toml"
-use_latest_release = true
-
-["dev-python/unittest-or-fail"]
-source = "github"
-github = "mgorny/unittest-or-fail"
-use_latest_release = true
+use_max_tag = true
 
 ["games-roguelike/dwarftherapist"]
 source = "github"
 github = "Dwarf-Therapist/Dwarf-Therapist"
-use_latest_release = true
+use_max_tag = true
 # note: from HOMEPAGE
 
 ["media-gfx/svgcleaner"]
 source = "github"
 github = "RazrFalcon/svgcleaner"
-use_latest_release = true
+use_max_tag = true
 
 ["media-gfx/viu"]
 source = "github"
 github = "atanunq/viu"
-use_latest_release = true
+use_max_tag = true
 
 ["media-libs/adplug"]
 source = "github"
 github = "adplug/adplug"
-use_latest_release = true
+use_max_tag = true
 
 ["media-libs/viuer"]
 source = "github"
 github = "atanunq/viuer"
-use_latest_release = true
+use_max_tag = true
 
 ["media-plugins/deadbeef-jack"]
 source = "github"
 github = "tokiclover/deadbeef-plugins-jack"
-use_latest_release = true
+use_max_tag = true
 
 ["media-plugins/deadbeef-waveform-seekbar"]
 source = "github"
 github = "cboxdoerfer/deadbeef-waveform-seekbar"
-use_latest_release = true
+use_max_tag = true
 
 ["media-sound/mpdris2"]
 source = "github"
 github = "eonpatapon/mpDris2"
-use_latest_release = true
+use_max_tag = true
 
 ["media-sound/puddletag"]
 source = "github"
 github = "puddletag/puddletag"
-use_latest_release = true
+use_max_tag = true
 
 ["media-sound/sonata"]
 source = "github"
 github = "multani/sonata"
-use_latest_release = true
+use_max_tag = true
 
 ["media-video/fswebcam"]
 source = "github"
 github = "fsphil/fswebcam"
-use_latest_release = true
+use_max_tag = true
 
 ["net-im/profanity"]
 source = "github"
 github = "profanity-im/profanity"
-use_latest_release = true
+use_max_tag = true
 
 ["net-libs/bctoolbox"]
 source = "github"
 github = "BelledonneCommunications/bctoolbox"
-use_latest_release = true
+use_max_tag = true
 
 ["net-libs/libinfinity"]
 source = "github"
 github = "gobby/libinfinity"
-use_latest_release = true
+use_max_tag = true
 
 ["net-libs/ortp"]
 source = "github"
 github = "BelledonneCommunications/ortp"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-libs/amd"]
 source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-libs/ausaxs"]
 source = "github"
 github = "AUSAXS/AUSAXS"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-libs/camd"]
 source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-libs/ccolamd"]
 source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-libs/cholmod"]
 source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-libs/colamd"]
 source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-libs/nexus"]
 source = "github"
 github = "nexusformat/code"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-libs/suitesparseconfig"]
 source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-libs/umfpack"]
 source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-physics/ifeffit"]
 source = "github"
 github = "newville/ifeffit"
-use_latest_release = true
+use_max_tag = true
 # note: from HOMEPAGE
 
 ["sci-physics/mantid"]
 source = "github"
 github = "mantidproject/mantid"
-use_latest_release = true
+use_max_tag = true
 # note: from EGIT_REPO_URI
 
 ["sci-physics/mumax"]
 source = "github"
 github = "mumax/3"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-physics/prismatic"]
 source = "github"
 github = "prism-em/prismatic"
-use_latest_release = true
+use_max_tag = true
 
 ["sci-physics/vampire"]
 source = "github"
 github = "richard-evans/vampire"
-use_latest_release = true
+use_max_tag = true
 
 ["sys-apps/dkms-gentoo"]
 source = "github"
 github = "megabaks/dkms-gentoo"
-use_latest_release = true
+use_max_tag = true
 
 ["sys-fs/fragview"]
 source = "github"
 github = "i-rinat/fragview"
-use_latest_release = true
+use_max_tag = true
 
 ["sys-fs/google-drive-ocamlfuse"]
 source = "github"
 github = "astrada/google-drive-ocamlfuse"
-use_latest_release = true
+use_max_tag = true
 
 ["sys-fs/ls-fuse"]
 source = "github"
 github = "pasis/ls-fuse"
-use_latest_release = true
+use_max_tag = true
 
 ["sys-kernel/kernel-cleaner"]
 source = "github"
 github = "megabaks/kernel-cleaner"
-use_latest_release = true
+use_max_tag = true
 
 ["x11-apps/skb"]
 source = "github"
 github = "polachok/skb"
-use_latest_release = true
-
-# --- sourceforge (3) ---
-
-["lxde-base/lxpolkit"]
-source = "sourceforge"
-sourceforge = "lxde"
-
-["media-gfx/sk1"]
-source = "sourceforge"
-sourceforge = "sk1"
-
-["sci-mathematics/sofastatistics"]
-source = "sourceforge"
-sourceforge = "sofastatistics"
+use_max_tag = true
 
 # --- cpan (16) ---
 
@@ -829,17 +787,26 @@ cpan = "demeter"
 # ["x11-terms/cool-retro-term"] skipped: live-only ebuild (no release tracking)
 
 # ["dev-lang/tcc"] skipped: no recognizable upstream
-# ["dev-python/pygobject"] skipped: no recognizable upstream
-# ["dev-python/pygtk"] skipped: no recognizable upstream
+# ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/numpy-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/pycairo-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/pygobject"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/pygtk"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pyprismatic"] skipped: no recognizable upstream
+# ["dev-python/setuptools-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/unittest-or-fail"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-qt/qthelp"] skipped: no recognizable upstream
 # ["dev-qt/qtwebchannel"] skipped: no recognizable upstream
 # ["dev-util/nvidia-cuda-toolkit"] skipped: no recognizable upstream
 # ["dev-vcs/fossil"] skipped: no recognizable upstream
 # ["games-roguelike/adom"] skipped: no recognizable upstream
+# ["lxde-base/lxpolkit"] skipped: sourceforge/lxde — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["media-gfx/iscan-data"] skipped: no recognizable upstream
+# ["media-gfx/sk1"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["media-plugins/deadbeef-opus"] skipped: no recognizable upstream
 # ["sci-libs/hdf"] skipped: no recognizable upstream
+# ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-physics/bgmn"] skipped: no recognizable upstream
 # ["sci-physics/oommf"] skipped: no recognizable upstream
 # ["sci-physics/profex"] skipped: no recognizable upstream
