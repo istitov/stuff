@@ -156,6 +156,16 @@ package (no released-version sibling), please say so in the
 commit body the first time you add it — it is a brittle shape
 and the next maintainer should know.
 
+### News items (GLEP 42)
+
+User-facing news items live under `metadata/news/` and are
+picked up by `eselect news` after `emerge --sync`. A reference
+template that walks through the headers and directory naming
+lives at `metadata/news/TEMPLATE/` — copy that directory and
+rename to `YYYY-MM-DD-short-slug/` when you need to ship an
+item (e.g. a breaking package drop, a migration, or a
+security-sensitive notice).
+
 ## 🤖 AI / LLM assistance
 
 AI/LLM assistance may be used on changes to this overlay —

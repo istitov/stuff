@@ -1,0 +1,49 @@
+Title: Short one-line title
+Author: Your Name <you@example.com>
+Content-Type: text/plain
+Posted: 2026-04-23
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: dev-example/fictional-package
+
+This is a GLEP 42 news-item template. It is here as a reference
+for the next real news item this overlay needs to ship. The
+directory name is `TEMPLATE/` (no YYYY-MM-DD prefix), so
+`eselect news` and Portage both skip it during news discovery
+and it never reaches users.
+
+To create a real news item:
+
+  1. Copy this directory, renaming it to
+     `YYYY-MM-DD-short-slug/`, e.g.
+     `2026-05-01-gwyddion-2x-dropped/`.
+  2. Rename `TEMPLATE.en.txt` inside the new directory to
+     match: `2026-05-01-gwyddion-2x-dropped.en.txt`.
+  3. Update the headers above (Title, Author, Posted).
+  4. Replace this body prose with the actual announcement.
+  5. Keep `Revision: 1` on first publication. Increment it
+     only if you edit an item that has already been published.
+
+Header notes:
+
+  - `Display-If-Installed` (optional, repeatable) restricts
+    display to users who have the named package atom installed.
+    Without it, the item shows to every user on sync. Prefer
+    scoping to installed packages when the news is relevant
+    only to some.
+  - `Display-If-Keyword: amd64` restricts by architecture.
+  - `Display-If-Profile: default/linux/amd64/23.0` restricts by
+    profile.
+  - Body lines should wrap at ~70 characters for readability
+    in the default `eselect news read` output.
+  - The item is signed by the maintainer's key at push time
+    (same flow as ebuild commits in this overlay) — no
+    in-repo signature is needed.
+
+Reference:
+
+  - GLEP 42: https://www.gentoo.org/glep/glep-0042.html
+  - eselect news: `man eselect-news`
+
+Remove this whole template body and the placeholder headers
+before publishing.
