@@ -1,0 +1,61 @@
+name: Package request
+description: Suggest a package that would fit this overlay.
+title: "category/pkg: package request"
+labels: ["package-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: if the package is a plausible candidate for
+        the main `::gentoo` tree, consider opening a request on
+        [Gentoo Bugzilla](https://bugs.gentoo.org/) instead — it
+        reaches more maintainers. This overlay is for packages
+        that don't fit upstream yet (unmaintained, too niche,
+        heavy binary distfiles, etc.).
+
+  - type: input
+    id: package
+    attributes:
+      label: Package name
+      description: Proposed `category/name` for the package.
+      placeholder: e.g. sci-physics/awesome-tool
+    validations:
+      required: true
+
+  - type: input
+    id: upstream
+    attributes:
+      label: Upstream URL
+      description: Link to the project's homepage or repo.
+    validations:
+      required: true
+
+  - type: input
+    id: license
+    attributes:
+      label: License
+      description: SPDX-style identifier if you know it.
+      placeholder: e.g. GPL-3+, BSD, MIT
+    validations:
+      required: false
+
+  - type: textarea
+    id: why-here
+    attributes:
+      label: Why this overlay (vs ::gentoo)?
+      description: |
+        A short note on why this fits here. Examples of good fit:
+        upstream is single-maintainer / unmaintained, the build is
+        awkward (CMake + Qt + CUDA + …), the package was dropped
+        from ::gentoo, or it's domain-specific enough that the
+        main tree wouldn't take it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Existing ebuilds elsewhere (other overlays, old ::gentoo versions), related packages already in the overlay, known packaging landmines.
+    validations:
+      required: false

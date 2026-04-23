@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Contributing guide
+    url: https://github.com/istitov/stuff/blob/master/CONTRIBUTING.md
+    about: House-style checklist, workflow, and conventions for this overlay.
+  - name: Gentoo Bugzilla
+    url: https://bugs.gentoo.org/
+    about: If the bug is in the main ::gentoo tree (not this overlay), file it here instead.

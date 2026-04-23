@@ -1,0 +1,82 @@
+name: Bug report
+description: Report a package in this overlay that fails to build, fails at runtime, or misbehaves.
+title: "category/pkg: <short summary>"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug! 🖤
+
+        Before you continue — please check
+        [CONTRIBUTING.md](https://github.com/istitov/stuff/blob/master/CONTRIBUTING.md)
+        for the short list of what to include. Bugs with an
+        `emerge --info` and a build log get triaged quickest.
+
+        If the bug is in a package from the main `::gentoo` tree
+        (not this overlay), please file it on
+        [Gentoo Bugzilla](https://bugs.gentoo.org/) instead.
+
+  - type: input
+    id: package
+    attributes:
+      label: Package
+      description: Which package is affected? Use `category/pkg-version` form.
+      placeholder: e.g. sci-libs/cholmod-5.3.4
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you try to do, and what went wrong? A single paragraph is fine.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect to happen instead? (Optional, skip if obvious.)
+    validations:
+      required: false
+
+  - type: textarea
+    id: emerge-info
+    attributes:
+      label: emerge --info
+      description: Paste the full `emerge --info` output. This is required for triage.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: build-log
+    attributes:
+      label: Build log (or relevant tail)
+      description: |
+        If this is a build failure, paste the full build log or at
+        least the last 50–100 lines. For runtime bugs, paste the
+        relevant error output. Logs larger than a few hundred lines
+        are better shared as a gist or attachment.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: upstream-bug
+    attributes:
+      label: Upstream bug report
+      description: If this is actually an upstream bug (not just the ebuild), link your report there.
+      placeholder: https://github.com/upstream/repo/issues/N
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Anything else we should know — recent USE flag changes, world file quirks, ROCm / CUDA version, etc.
+    validations:
+      required: false
