@@ -13,7 +13,7 @@ HOMEPAGE="http://zict.readthedocs.io"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 
 BDEPEND="test? (
 		dev-python/pytest-asyncio[${PYTHON_USEDEP}]
