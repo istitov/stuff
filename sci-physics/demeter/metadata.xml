@@ -4,6 +4,15 @@
   <maintainer type="person">
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
+  <longdescription lang="en">
+    As of 2026-04-22 this package is not installable from the stuff
+    overlay. Its hard RDEPEND on sci-physics/ifeffit is masked in
+    profiles/package.mask because upstream ifeffit
+    (github.com/newville/ifeffit) was deleted. Kept in the tree in
+    case ifeffit is revived or demeter is ported to use
+    sci-physics/xraylarch (Larch), the maintained modern successor
+    that is already packaged in this overlay.
+  </longdescription>
   <upstream>
     <remote-id type="github">bruceravel/demeter</remote-id>
   </upstream>
