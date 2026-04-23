@@ -11,7 +11,7 @@ DISTUTILS_USE_SETUPTOOLS="manual"
 #DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_OPTIONAL=1
 
-inherit desktop distutils-r1_py2 git-r3 python-r1_py2 xdg
+inherit desktop distutils-r1_py2 git-r3 xdg
 
 DESCRIPTION="sK1 vector graphics editor"
 HOMEPAGE="http://www.sk1project.org/"
