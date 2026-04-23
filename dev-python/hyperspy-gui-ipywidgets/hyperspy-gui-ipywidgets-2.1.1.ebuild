@@ -18,7 +18,7 @@ SRC_URI="$(pypi_sdist_url "${MYPN^}" "${PV}")"
 S="${WORKDIR}/${MYP}"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 IUSE="python doc"
 
 RDEPEND="
