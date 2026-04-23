@@ -4,6 +4,16 @@
   <maintainer type="person">
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
+  <longdescription lang="en">
+    As of 2026-04-23 the upstream GitHub repository
+    (github.com/newville/ifeffit) has been deleted; the remote-id
+    below is recorded for historical reference only and does not
+    resolve. The author's maintained successor is Larch, packaged
+    as sci-physics/xraylarch. This ebuild is masked in
+    profiles/package.mask; it remains in the tree as a revival
+    target (e.g. if a usable fork surfaces or a local Fortran
+    build is still needed by sci-physics/demeter).
+  </longdescription>
   <upstream>
     <remote-id type="github">newville/ifeffit</remote-id>
   </upstream>
