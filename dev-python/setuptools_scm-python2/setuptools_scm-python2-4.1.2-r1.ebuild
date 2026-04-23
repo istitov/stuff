@@ -7,7 +7,7 @@ DISTUTILS_USE_SETUPTOOLS=manual
 PYTHON_COMPAT=( python2_7 )
 _PYTHON_ALLOW_PY27=1
 DISTUTILS_OPTIONAL=1
-inherit distutils-r1_py2 pypi python-utils-r1_py2
+inherit distutils-r1_py2 pypi
 
 MYPN="${PN/-python2/}"
 MYP="${MYPN}-${PV}"
