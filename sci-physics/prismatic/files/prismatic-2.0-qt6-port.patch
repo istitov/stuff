@@ -1,0 +1,40 @@
+--- a/CMakeLists.txt	2021-10-12 00:47:46.000000000 +0200
++++ b/CMakeLists.txt	2026-04-24 19:18:05.736237146 +0200
+@@ -146,8 +146,8 @@
+ 
+ # find Qt modules, if building GUI
+ if (PRISMATIC_ENABLE_GUI)
+-    find_package(Qt5Widgets REQUIRED)
+-    message(Qt5Widgets_DIR = ${Qt5Widgets_DIR})
++    find_package(Qt6 REQUIRED COMPONENTS Widgets)
++    message(Qt6Widgets_DIR = ${Qt6Widgets_DIR})
+ endif (PRISMATIC_ENABLE_GUI)
+ 
+ # add preprocessor directives based on configuration
+@@ -212,7 +212,7 @@
+     set(CMAKE_AUTORCC ON)
+     set(CMAKE_INCLUDE_CURRENT_DIR on)
+     include_directories(${CMAKE_SOURCE_DIR}/Qt ${CMAKE_SOURCE_DIR}/include)
+-    include_directories(${Qt5Widgets_INCLUDE_DIRS})
++    include_directories(${Qt6Widgets_INCLUDE_DIRS})
+ 
+     if (PRISMATIC_ENABLE_GPU)
+         # build the shared CUDA library used by the GUI
+@@ -235,7 +235,7 @@
+                                 ${CUDA_SOURCE_FILES}
+ 				OPTIONS -DPRISMATIC_BUILDING_GUI)
+         target_link_libraries(prismatic-gui
+-                                Qt5::Widgets
++                                Qt6::Widgets
+                                 ${CMAKE_THREAD_LIBS_INIT}
+ #                                ${Boost_LIBRARY_DIRS}
+                                 ${FFTW_LIBRARIES}
+@@ -247,7 +247,7 @@
+                         ${SOURCE_FILES}
+                         ${GUI_SOURCE_FILES})
+         target_link_libraries(prismatic-gui
+-                                Qt5::Widgets
++                                Qt6::Widgets
+                                 ${CMAKE_THREAD_LIBS_INIT}
+ #                                ${Boost_LIBRARY_DIRS}
+                                 ${FFTW_LIBRARIES}

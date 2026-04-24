@@ -8,8 +8,21 @@
     <remote-id type="github">prism-em/prismatic</remote-id>
   </upstream>
   <use>
+    <flag name="double-precision">
+      Build with 64-bit floating point precision (default is single precision).
+    </flag>
     <flag name="gpu">
       Enable support for CUDA with <pkg>dev-util/nvidia-cuda-toolkit</pkg>
+    </flag>
+    <flag name="gui">
+      Build the graphical interface (requires either qt5 or qt6).
+    </flag>
+    <flag name="qt5">
+      Use Qt5 (<pkg>dev-qt/qtwidgets</pkg>) for the GUI. Legacy;
+      prefer qt6 for new installs.
+    </flag>
+    <flag name="qt6">
+      Use Qt6 (<pkg>dev-qt/qtbase</pkg>) for the GUI. Recommended.
     </flag>
   </use>
 </pkgmetadata>
