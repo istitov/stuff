@@ -3,29 +3,14 @@
 
 EAPI=8
 
-#E_PKG_IUSE="nls"
-#EFL_USE_GIT="yes"
-#EFL_GIT_REPO_CATEGORY="enlightenment"
-#EFL_GIT_REPO_NAME="enlightenment-module-places"
-EGIT_REPO_URI="https://git.enlightenment.org/enlightenment/enlightenment-module-places"
-inherit meson xdg git-r3
+inherit git-r3 meson xdg
 
-DESCRIPTION="E17 Module that manage the mounting of volumes"
+DESCRIPTION="E17 module: manage mounting of volumes"
 HOMEPAGE="https://git.enlightenment.org/enlightenment/enlightenment-module-places"
+EGIT_REPO_URI="https://git.enlightenment.org/enlightenment/enlightenment-module-places"
 
 LICENSE="BSD-2"
 SLOT="0"
 
-DEPEND="x11-wm/enlightenment"
+DEPEND=">=x11-wm/enlightenment-0.27"
 RDEPEND="${DEPEND}"
-
-src_compile() {
-	meson build
-	cd build
-	ninja
-}
-
-src_install() {
-	cd build
-	DESTDIR=${D} ninja install
-}
