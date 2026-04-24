@@ -6,40 +6,44 @@ EAPI=8
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
+
 inherit distutils-r1
-#inherit cmake
 
 MYPN="prismatic"
 MYP="${MYPN}-${PV}"
 
-DESCRIPTION="Prismatic Software for STEM Simulation"
+DESCRIPTION="Python bindings for the Prismatic STEM simulation framework"
 HOMEPAGE="https://prism-em.com"
 SRC_URI="https://github.com/prism-em/${MYPN}/archive/refs/tags/v${PV}.tar.gz -> ${MYP}.tar.gz"
-
 S="${WORKDIR}/${MYP}"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python debug gpu"
-#RESTRICT=strip
-BUILD_DIR=${S}
+IUSE="gpu"
 
 RDEPEND="
+	dev-libs/boost:=
+	sci-libs/fftw:3.0=[threads]
+	sci-libs/hdf5:=[cxx]
+	$(python_gen_cond_dep '
+		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-python/h5py[${PYTHON_USEDEP}]
+		dev-python/scipy[${PYTHON_USEDEP}]
+	')
+"
+DEPEND="${RDEPEND}"
+BDEPEND="
 	dev-build/cmake
-	dev-libs/boost
-	sci-libs/fftw[threads]
-	sci-libs/hdf5[cxx]
+	gpu? ( dev-util/nvidia-cuda-toolkit )
 "
-#FFTW (compiled with --enable-float, --enable-shared, and --enable-threads)
-#HDF5 (if self-compiling, compile with --enable-cxx)
 
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
+PATCHES=(
+	"${FILESDIR}/${P}-cxx17-standard.patch"
+	"${FILESDIR}/${P}-boost-bessel-qualify.patch"
+	"${FILESDIR}/${P}-complex-literal.patch"
+)
 
 python_configure_all() {
-	if use gpu; then
-	        DISTUTILS_ARGS=( --enable-gpu )
-	fi
+	use gpu && DISTUTILS_ARGS=( --enable-gpu )
 }

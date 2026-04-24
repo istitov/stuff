@@ -1,0 +1,11 @@
+--- a/src/PRISM01_calcPotential.cpp	2021-10-12 00:47:46.000000000 +0200
++++ b/src/PRISM01_calcPotential.cpp	2026-04-24 18:01:02.283283276 +0200
+@@ -359,7 +359,7 @@
+ 
+ 	Array2D<std::complex<PRISMATIC_FLOAT_PRECISION>> qyShift = zeros_ND<2,std::complex<PRISMATIC_FLOAT_PRECISION>>({{qya.get_dimj(), qya.get_dimi()}});
+ 	Array2D<std::complex<PRISMATIC_FLOAT_PRECISION>> qxShift = zeros_ND<2,std::complex<PRISMATIC_FLOAT_PRECISION>>({{qya.get_dimj(), qya.get_dimi()}});
+-	std::complex<PRISMATIC_FLOAT_PRECISION> I = 0.0 + 1.0i;
++	std::complex<PRISMATIC_FLOAT_PRECISION> I(0, 1);
+ 	PRISMATIC_FLOAT_PRECISION two = 2.0;
+ 	for(auto jj = 0; jj < qya.get_dimj(); jj++)
+ 	{

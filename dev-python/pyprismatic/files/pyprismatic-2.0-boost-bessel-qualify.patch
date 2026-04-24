@@ -1,0 +1,15 @@
+--- a/src/projectedPotential.cpp	2021-10-12 00:47:46.000000000 +0200
++++ b/src/projectedPotential.cpp	2026-04-24 18:00:55.329038828 +0200
+@@ -142,9 +142,9 @@
+ 	std::transform(r.begin(), r.end(),
+ 				   r2.begin(), potSS.begin(), [&ap, &term1, &term2](const PRISMATIC_FLOAT_PRECISION &r_t, const PRISMATIC_FLOAT_PRECISION &r2_t) {
+ 					   return term1 * (ap[0] *
+-										   cyl_bessel_k(0, 2 * pi * sqrt(ap[1]) * r_t) +
+-									   ap[2] * cyl_bessel_k(0, 2 * pi * sqrt(ap[3]) * r_t) +
+-									   ap[4] * cyl_bessel_k(0, 2 * pi * sqrt(ap[5]) * r_t)) +
++										   boost::math::cyl_bessel_k<int,PRISMATIC_FLOAT_PRECISION>(0, 2 * pi * sqrt(ap[1]) * r_t) +
++									   ap[2] * boost::math::cyl_bessel_k<int,PRISMATIC_FLOAT_PRECISION>(0, 2 * pi * sqrt(ap[3]) * r_t) +
++									   ap[4] * boost::math::cyl_bessel_k<int,PRISMATIC_FLOAT_PRECISION>(0, 2 * pi * sqrt(ap[5]) * r_t)) +
+ 							  term2 * (ap[6] / ap[7] * exp(-pow(pi, 2) / ap[7] * r2_t) +
+ 									   ap[8] / ap[9] * exp(-pow(pi, 2) / ap[9] * r2_t) +
+ 									   ap[10] / ap[11] * exp(-pow(pi, 2) / ap[11] * r2_t));
