@@ -30,13 +30,6 @@ BDEPEND="
 	dev-python/versioneer[${PYTHON_USEDEP}]
 "
 
-DISTUTILS_IN_SOURCE_BUILD=1
-distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx-rtd-theme
-
-#PATCHES=(
-#	"${FILESDIR}/${PN}-0.52.0-skip_tests.patch"
-#)
-
 pkg_setup() {
 	if ! use openmp; then
 		export NUMBA_DISABLE_OPENMP=1 || die
@@ -51,24 +44,13 @@ pkg_setup() {
 	fi
 }
 
-python_prepare_all() {
-	# This conf.py only works in a git repo
-	if use doc; then
-		git init -q || die
-		git config user.email "larry@gentoo.org" || die
-		git config user.name "Larry the Cow" || die
-		git add . || die
-		git commit -m "init" || die
-	fi
-	distutils-r1_python_prepare_all
-}
-
 python_compile() {
 	# FIXME: parallel python building fails. See Portage bug #614464 and
 	# gentoo/sci issue #1080.
 	export MAKEOPTS=-j1 || die
 	distutils-r1_python_compile
 }
+
 pkg_postinst() {
 	optfeature "compile cuda code" dev-util/nvidia-cuda-sdk
 }
