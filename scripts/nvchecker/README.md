@@ -81,18 +81,29 @@ The generator classifies each package's newest ebuild by source type:
 - `inherit pypi` or `pypi.io` SRC_URI → PyPI entry
 - `github.com/.../archive/` in SRC_URI, `EGIT_REPO_URI` pointing at
   GitHub, or a plain GitHub `HOMEPAGE` → GitHub entry
-  (`use_latest_release = true`)
+  (`use_max_tag = true`, which works for both Release-curated repos
+  and plain-tagged ones)
+- `bitbucket.org/<owner>/<repo>` → Bitbucket entry
+- `gitlab.*/<owner>/<repo>` → GitLab entry (with `host = "<instance>"`
+  set for self-hosted installs like gitlab.freedesktop.org,
+  gitlab.gnome.org, gitlab.kde.org)
 - `inherit perl-module` → CPAN entry (distribution name = `${PN}`)
-- `sourceforge.net/project/<slug>/` in SRC_URI → SourceForge entry
-- Live-only (`-9999`) ebuilds → emitted as a skip comment; there is
-  no release number to track.
-- Anything else → emitted as a skip comment with reason
-  `no recognizable upstream`.
+- `sourceforge.net/project/<slug>/` or `downloads.sourceforge.net/<slug>/`
+  → skip comment with a SourceForge hint (nvchecker 2.x has no built-in
+  `sourceforge` source; a `regex` entry against the RSS feed works if
+  tracking is wanted)
+- Live-only (`-9999`) ebuilds → skip comment; no release number to track
+- Python-2-pinned packages (ebuild name ends `-python2` or inherits
+  a `*_py2` eclass) → skip comment; upstream has moved past py2
+- `inherit qt5-build` → skip comment; tracked via ::gentoo's Qt 5
+  snapshot rather than upstream Qt release cadence
+- Anything else → skip comment of the form `custom upstream at <host>;
+  hand-add an nvchecker regex/htmlparser entry if tracking is wanted`,
+  where `<host>` is the HOMEPAGE domain (falling back to SRC_URI)
 
 Hand-edits to `nvchecker.toml` are overwritten on the next
-`generate.py` run. To pin a non-obvious upstream (e.g. GitLab,
-custom website, Bioconda), add the detection rule to `generate.py`
-so the classification survives regeneration.
+`generate.py` run. To pin a non-obvious upstream, add the detection
+rule to `generate.py` so the classification survives regeneration.
 
 ## Output shape
 

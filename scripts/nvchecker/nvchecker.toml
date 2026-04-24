@@ -370,7 +370,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (60) ---
+# --- github (61) ---
 
 ["app-editors/gobby"]
 source = "github"
@@ -482,6 +482,11 @@ use_max_tag = true
 ["dev-python/periodictable"]
 source = "github"
 github = "python-periodictable/periodictable"
+use_max_tag = true
+
+["dev-python/pyprismatic"]
+source = "github"
+github = "prism-em/pyprismatic"
 use_max_tag = true
 
 ["dev-python/spur"]
@@ -678,6 +683,21 @@ source = "github"
 github = "polachok/skb"
 use_max_tag = true
 
+# --- gitlab (1) ---
+
+["x11-libs/cairo"]
+source = "gitlab"
+gitlab = "cairo/cairo"
+host = "gitlab.freedesktop.org"
+use_max_tag = true
+
+# --- bitbucket (1) ---
+
+["media-plugins/deadbeef-opus"]
+source = "bitbucket"
+bitbucket = "Lithopsian/deadbeef-opus"
+use_max_tag = true
+
 # --- cpan (16) ---
 
 ["dev-perl/Chemistry-Elements"]
@@ -786,34 +806,31 @@ cpan = "demeter"
 # ["x11-plugins/e_modules-places"] skipped: live-only ebuild (no release tracking)
 # ["x11-terms/cool-retro-term"] skipped: live-only ebuild (no release tracking)
 
-# ["dev-lang/tcc"] skipped: no recognizable upstream
+# ["dev-lang/tcc"] skipped: custom upstream at bellard.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/numpy-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pycairo-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygobject"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygtk"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
-# ["dev-python/pyprismatic"] skipped: no recognizable upstream
 # ["dev-python/setuptools-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/unittest-or-fail"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
-# ["dev-qt/qthelp"] skipped: no recognizable upstream
-# ["dev-qt/qtwebchannel"] skipped: no recognizable upstream
-# ["dev-util/nvidia-cuda-toolkit"] skipped: no recognizable upstream
-# ["dev-vcs/fossil"] skipped: no recognizable upstream
-# ["games-roguelike/adom"] skipped: no recognizable upstream
+# ["dev-qt/qthelp"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtwebchannel"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-util/nvidia-cuda-toolkit"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["lxde-base/lxpolkit"] skipped: sourceforge/lxde — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
-# ["media-gfx/iscan-data"] skipped: no recognizable upstream
+# ["media-gfx/iscan-data"] skipped: custom upstream at download.ebz.epson.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/sk1"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
-# ["media-plugins/deadbeef-opus"] skipped: no recognizable upstream
-# ["sci-libs/hdf"] skipped: no recognizable upstream
+# ["sci-libs/hdf"] skipped: custom upstream at www.hdfgroup.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
-# ["sci-physics/bgmn"] skipped: no recognizable upstream
-# ["sci-physics/oommf"] skipped: no recognizable upstream
-# ["sci-physics/profex"] skipped: no recognizable upstream
-# ["sci-visualization/gwyddion"] skipped: no recognizable upstream
-# ["sci-visualization/gwyddion3"] skipped: no recognizable upstream
-# ["sys-kernel/pf-sources"] skipped: no recognizable upstream
-# ["www-misc/httraqt"] skipped: no recognizable upstream
-# ["x11-libs/cairo"] skipped: no recognizable upstream
-# ["x11-libs/gtk+"] skipped: no recognizable upstream
-# ["x11-libs/qscintilla"] skipped: no recognizable upstream
+# ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-physics/oommf"] skipped: custom upstream at math.nist.gov; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-physics/profex"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-visualization/gwyddion"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-visualization/gwyddion3"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sys-kernel/pf-sources"] skipped: custom upstream at pfkernel.natalenko.name; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["www-misc/httraqt"] skipped: sourceforge/httraqt — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
+# ["x11-libs/gtk+"] skipped: custom upstream at www.gtk.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["x11-libs/qscintilla"] skipped: custom upstream at www.riverbankcomputing.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted

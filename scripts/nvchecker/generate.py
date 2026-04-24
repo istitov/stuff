@@ -42,9 +42,24 @@ EGIT_REPO_URI_RE = re.compile(r'^EGIT_REPO_URI=(?:"([^"]*)"|\'([^\']*)\')', re.M
 
 GITHUB_ARCHIVE_RE = re.compile(r'https?://(?:www\.)?github\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git)?/(?:archive|releases/download)/')
 GITHUB_HOMEPAGE_RE = re.compile(r'https?://(?:www\.)?github\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git|/|$|\s)')
-SOURCEFORGE_RE = re.compile(r'https?://(?:[a-z0-9_.-]+\.)?sourceforge\.net/(?:project|projects)/([A-Za-z0-9_.-]+)')
+BITBUCKET_RE = re.compile(r'https?://(?:www\.)?bitbucket\.org/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git|/|$|\s)')
+GITLAB_RE = re.compile(r'https?://(gitlab(?:\.[A-Za-z0-9-]+)+)/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git|/|$|\s)')
+# Match both the canonical project page (sourceforge.net/project[s]/<slug>)
+# and the downloads redirector used by many ebuilds
+# (downloads.sourceforge.net/<slug>/).
+SOURCEFORGE_RE = re.compile(
+    r'https?://(?:'
+    r'(?:[a-z0-9_.-]+\.)?sourceforge\.net/(?:project|projects)/([A-Za-z0-9_.-]+)'
+    r'|downloads\.sourceforge\.net/([A-Za-z0-9_.-]+)/'
+    r')'
+)
 PYPI_URL_RE = re.compile(r'https?://(?:files\.pythonhosted\.org|pypi\.(?:io|org))/')
 CPAN_URL_RE = re.compile(r'mirror://cpan/authors/id/[A-Z]/[A-Z]{2}/[A-Z0-9]+/([A-Za-z0-9_-]+?)-v?[\d.]+(?:\.tar\.gz|\.tgz)?')
+# Extract the URL host from a SRC_URI / HOMEPAGE string, used to enrich the
+# "no recognizable upstream" skip note with a pointer to *where* the
+# maintainer should look if they want to hand-add tracking.
+URL_HOST_RE = re.compile(r'https?://([A-Za-z0-9._-]+)')
+QT5_BUILD_RE = re.compile(r"^\s*inherit\b.*\bqt5-build\b", re.MULTILINE)
 
 
 def find_newest_ebuild(pkgdir: Path) -> Path | None:
@@ -83,7 +98,13 @@ def expand_vars(text: str | None, pkg_name: str) -> str | None:
     PV and P expansion isn't attempted (we don't need the version number)."""
     if text is None:
         return None
-    for v in ("${PN}", "$PN", "${MY_PN}", "${MY_P%-*}"):
+    # Both underscored (MY_PN) and un-underscored (MYPN) forms appear in
+    # the overlay; similarly MY_P / MYP. Substituting them all with
+    # pkg_name is close enough — we're only after the URL host.
+    for v in ("${PN}", "$PN",
+              "${MY_PN}", "$MY_PN", "${MYPN}", "$MYPN",
+              "${MY_P}", "$MY_P", "${MYP}", "$MYP",
+              "${MY_P%-*}"):
         text = text.replace(v, pkg_name)
     return text
 
@@ -108,6 +129,16 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
         return {"kind": "unknown",
                 "note": "py2-pinned: upstream has moved past py2 support; "
                         "drift tracking would produce permanent false positives"}
+
+    # Qt5 component (qt5-build eclass). These live in the overlay as snapshots
+    # of ::gentoo's Qt 5 packages (eclass dropped from the main tree). Upstream
+    # for our purposes is ::gentoo, not Qt's public release cadence — tracking
+    # qt.io releases would not match the PV we ship.
+    if QT5_BUILD_RE.search(ebuild_text):
+        return {"kind": "unknown",
+                "note": "qt5-build component; tracked in ::gentoo rather than "
+                        "upstream Qt, so standalone drift tracking would not "
+                        "match the PV ebuilds ship here"}
     """Return a dict describing how nvchecker should track this package.
 
     Keys:
@@ -162,6 +193,24 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
             if repo and owner and repo not in ("about", "settings"):
                 return {"kind": "github", "spec": f"{owner}/{repo}", "note": "from HOMEPAGE"}
 
+    # Bitbucket (SRC_URI or HOMEPAGE)
+    for text in (src_uri, homepage, egit):
+        if not text:
+            continue
+        m = BITBUCKET_RE.search(text)
+        if m:
+            return {"kind": "bitbucket", "spec": f"{m.group(1)}/{m.group(2)}"}
+
+    # GitLab (gitlab.com and self-hosted instances like gitlab.freedesktop.org,
+    # gitlab.gnome.org, gitlab.kde.org). nvchecker's gitlab source takes a
+    # `host` parameter so the same classifier covers all of them.
+    for text in (src_uri, homepage, egit):
+        if not text:
+            continue
+        m = GITLAB_RE.search(text)
+        if m:
+            return {"kind": "gitlab", "spec": f"{m.group(2)}/{m.group(3)}", "host": m.group(1)}
+
     # SourceForge: nvchecker 2.x has no built-in sourceforge source; an
     # nvchecker `regex` source against the project's RSS feed works but is
     # entry-by-entry. Flag as unknown-with-SF-hint so a future maintainer
@@ -169,10 +218,30 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
     if src_uri:
         m = SOURCEFORGE_RE.search(src_uri)
         if m:
+            slug = m.group(1) or m.group(2)
             return {"kind": "unknown",
-                    "note": f"sourceforge/{m.group(1)} — no built-in source in nvchecker 2.x; "
+                    "note": f"sourceforge/{slug} — no built-in source in nvchecker 2.x; "
                             "add a `regex` entry against the RSS feed if tracking is wanted"}
 
+    # Genuinely unclassified. Include the URL host (if we can find one) so a
+    # future maintainer sees at a glance where upstream lives — that's the
+    # first thing they'd want before hand-adding an nvchecker `regex` or
+    # `htmlparser` entry. Prefer HOMEPAGE over SRC_URI: the former is the
+    # canonical project page (useful for a human setting up tracking), while
+    # the latter is often a mirror / CDN / S3 bucket that's uninformative on
+    # its own.
+    host = None
+    for text in (homepage, src_uri):
+        if not text:
+            continue
+        m = URL_HOST_RE.search(text)
+        if m:
+            host = m.group(1)
+            break
+    if host:
+        return {"kind": "unknown",
+                "note": f"custom upstream at {host}; "
+                        "hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted"}
     return {"kind": "unknown", "note": "no recognizable upstream"}
 
 
@@ -202,6 +271,19 @@ def emit_entry(entry_name: str, classification: dict) -> list[str]:
         lines.append("use_max_tag = true")
         if note:
             lines.append(f"# note: {note}")
+    elif kind == "bitbucket":
+        lines.append('source = "bitbucket"')
+        lines.append(f'bitbucket = "{classification["spec"]}"')
+        lines.append("use_max_tag = true")
+    elif kind == "gitlab":
+        lines.append('source = "gitlab"')
+        lines.append(f'gitlab = "{classification["spec"]}"')
+        # Only emit `host` for self-hosted GitLab instances; nvchecker's
+        # default is gitlab.com, so matching that is redundant.
+        host = classification.get("host")
+        if host and host != "gitlab.com":
+            lines.append(f'host = "{host}"')
+        lines.append("use_max_tag = true")
     elif kind == "sourceforge":
         lines.append('source = "sourceforge"')
         lines.append(f'sourceforge = "{classification["spec"]}"')
@@ -283,7 +365,7 @@ def main() -> int:
         "",
     ]
 
-    for kind in ("pypi", "github", "cpan"):
+    for kind in ("pypi", "github", "gitlab", "bitbucket", "cpan"):
         if not entries_by_kind[kind]:
             continue
         out_lines.append(f"# --- {kind} ({len(entries_by_kind[kind])}) ---")
@@ -305,7 +387,7 @@ def main() -> int:
 
     # Summary to stderr so shell redirection of stdout remains clean if any
     print(f"wrote {args.out}", file=sys.stderr)
-    for kind in ("pypi", "github", "cpan", "live", "unknown", "no-ebuild"):
+    for kind in ("pypi", "github", "gitlab", "bitbucket", "cpan", "live", "unknown", "no-ebuild"):
         if counter[kind]:
             print(f"  {kind:14s} {counter[kind]:4d}", file=sys.stderr)
     total = sum(counter.values())
