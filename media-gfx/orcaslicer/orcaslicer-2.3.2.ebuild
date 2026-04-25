@@ -6,7 +6,7 @@ EAPI=8
 WX_GTK_VER="3.2-gtk3"
 MY_PN="OrcaSlicer"
 
-inherit cmake wxwidgets xdg
+inherit check-reqs cmake multiprocessing wxwidgets xdg
 
 DESCRIPTION="Open-source 3D printer slicer (PrusaSlicer/Bambu Studio fork)"
 HOMEPAGE="https://orcaslicer.com/
@@ -80,6 +80,36 @@ BDEPEND="
 	sys-devel/gettext
 	virtual/pkgconfig
 "
+
+pkg_pretend() {
+	if [[ ${MERGE_TYPE} != binary ]]; then
+		# Several CGAL/Eigen-heavy translation units (CutSurface, MeshBoolean,
+		# Arrange, BuildVolume, ...) peak around 4-5 GiB of resident RAM each
+		# while cc1plus instantiates templates. Scale the requirement with
+		# MAKEOPTS jobs so the merge fails up front instead of getting OOM
+		# killed mid-link.
+		local jobs
+		jobs=$(makeopts_jobs)
+		local CHECKREQS_DISK_BUILD="12G"
+		local CHECKREQS_MEMORY="$((jobs * 4 + 2))G"
+		check-reqs_pkg_pretend
+		if (( jobs > 4 )); then
+			ewarn "MAKEOPTS=\"-j${jobs}\" will instantiate many heavy CGAL/Eigen"
+			ewarn "translation units in parallel. If cc1plus gets OOM-killed,"
+			ewarn "drop to -j4 via /etc/portage/env/${CATEGORY}/${PN}."
+		fi
+	fi
+}
+
+pkg_setup() {
+	if [[ ${MERGE_TYPE} != binary ]]; then
+		local jobs
+		jobs=$(makeopts_jobs)
+		local CHECKREQS_DISK_BUILD="12G"
+		local CHECKREQS_MEMORY="$((jobs * 4 + 2))G"
+		check-reqs_pkg_setup
+	fi
+}
 
 src_prepare() {
 	# Replace +UNKNOWN suffix with overlay tag (upstream's build_linux.sh sets
