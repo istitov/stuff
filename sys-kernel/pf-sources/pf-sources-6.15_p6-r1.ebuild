@@ -38,7 +38,8 @@ DESCRIPTION="Linux kernel fork that includes the pf-kernel patchset and Gentoo's
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 SRC_URI="https://codeberg.org/pf-kernel/linux/archive/v${PFPV}.tar.gz -> linux-${PFPV}.tar.gz
-	${GENPATCHES_URI}"
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz"
 
 S="${WORKDIR}/linux-${PFPV}"
 
