@@ -1,0 +1,47 @@
+From: stuff overlay maintainer
+Subject: Build against Boost.Process 1.86+ default v2
+
+Boost 1.86 made boost::process default to v2, which is a different API.
+OrcaSlicer still uses the v1 API (child, ipstream, pipe, search_path,
+std_in/out/err redirection operators). Define BOOST_PROCESS_VERSION=1
+to make the v1 namespace inline (so boost::process::child resolves to
+boost::process::v1::child) and switch the umbrella header to
+<boost/process/v1.hpp>, since <boost/process.hpp> in 1.86+ only pulls
+in the v2 surface.
+
+--- a/src/libslic3r/GCode/PostProcessor.cpp
++++ b/src/libslic3r/GCode/PostProcessor.cpp
+@@ -149,7 +149,8 @@
+ 
+ #include <cstdlib>   // getenv()
+ #include <sstream>
+-#include <boost/process.hpp>
++#define BOOST_PROCESS_VERSION 1
++#include <boost/process/v1.hpp>
+ 
+ namespace process = boost::process;
+ 
+--- a/src/slic3r/GUI/MediaPlayCtrl.cpp
++++ b/src/slic3r/GUI/MediaPlayCtrl.cpp
+@@ -15,7 +15,8 @@
+ #include <boost/nowide/cstdio.hpp>
+ #include <boost/nowide/utf8_codecvt.hpp>
+ #undef pid_t
+-#include <boost/process.hpp>
++#define BOOST_PROCESS_VERSION 1
++#include <boost/process/v1.hpp>
+ #ifdef __WIN32__
+ #include <boost/process/windows.hpp>
+ #else
+--- a/src/slic3r/GUI/RemovableDriveManager.cpp
++++ b/src/slic3r/GUI/RemovableDriveManager.cpp
+@@ -22,7 +22,8 @@
+ #include <pwd.h>
+ #include <boost/filesystem.hpp>
+ #include <boost/system/error_code.hpp>
+-#include <boost/process.hpp>
++#define BOOST_PROCESS_VERSION 1
++#include <boost/process/v1.hpp>
+ #endif
+ 
+ namespace Slic3r {

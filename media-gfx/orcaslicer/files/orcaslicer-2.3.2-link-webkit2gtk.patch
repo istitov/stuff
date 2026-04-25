@@ -1,0 +1,29 @@
+From: stuff overlay maintainer
+Subject: Always link webkit2gtk on Unix
+
+WebView.cpp calls webkit_javascript_result_unref() directly, so under
+ld --as-needed (the Gentoo default) the webkit2gtk-4.1 dependency must
+be on the link line. Upstream only added it under FLATPAK; do it for
+every Unix non-Apple build.
+
+--- a/src/slic3r/CMakeLists.txt
++++ b/src/slic3r/CMakeLists.txt
+@@ -787,13 +787,11 @@
+     find_package(PkgConfig REQUIRED)
+     find_package(GTK${SLIC3R_GTK} REQUIRED)
+     pkg_check_modules(LIBSECRET REQUIRED libsecret-1)
+-    if (FLATPAK)
+-        # I don't know why this is needed, but for whatever reason slic3r isn't
+-        # linking to X11 and webkit2gtk. force it.
+-        find_package(X11 REQUIRED)
+-        pkg_check_modules(webkit2gtk REQUIRED webkit2gtk-4.1)
+-        target_link_libraries(libslic3r_gui ${X11_LIBRARIES} ${webkit2gtk_LIBRARIES})
+-    endif()
++    # WebView.cpp uses webkit2gtk-4.1 symbols directly; link explicitly so
++    # ld --as-needed does not drop them.
++    find_package(X11 REQUIRED)
++    pkg_check_modules(webkit2gtk REQUIRED webkit2gtk-4.1)
++    target_link_libraries(libslic3r_gui ${X11_LIBRARIES} ${webkit2gtk_LIBRARIES})
+     target_include_directories(libslic3r_gui SYSTEM PRIVATE ${GTK${SLIC3R_GTK}_INCLUDE_DIRS} ${LIBSECRET_INCLUDE_DIRS})
+     target_link_libraries(libslic3r_gui ${GTK${SLIC3R_GTK}_LIBRARIES} fontconfig ${LIBSECRET_LIBRARIES})
+ 

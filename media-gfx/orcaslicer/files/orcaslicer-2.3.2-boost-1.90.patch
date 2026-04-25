@@ -1,0 +1,42 @@
+From: stuff overlay maintainer
+Subject: Build against Boost >= 1.89
+
+Boost::system is header-only since Boost 1.69, and the no-op shim
+library plus its CMake component config were dropped in Boost 1.89,
+so listing "system" as a required component now fails configuration.
+
+Boost.Asio also no longer transitively pulls in deadline_timer; the
+two files that use asio::deadline_timer must include the header
+explicitly.
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -583,7 +583,7 @@
+   cmake_policy(SET CMP0167 NEW)
+ endif()
+ set(Boost_NO_SYSTEM_PATHS TRUE)
+-find_package(Boost 1.83.0 REQUIRED COMPONENTS system filesystem thread log log_setup locale regex chrono atomic date_time iostreams program_options nowide)
++find_package(Boost 1.83.0 REQUIRED COMPONENTS filesystem thread log log_setup locale regex chrono atomic date_time iostreams program_options nowide)
+
+ add_library(boost_libs INTERFACE)
+ add_library(boost_headeronly INTERFACE)
+--- a/src/slic3r/Utils/Bonjour.cpp
++++ b/src/slic3r/Utils/Bonjour.cpp
+@@ -7,6 +7,7 @@
+ #include <string>
+ #include <map>
+ #include <thread>
++#include <boost/asio/deadline_timer.hpp>
+ #include <boost/endian/conversion.hpp>
+ #include <boost/date_time/posix_time/posix_time_duration.hpp>
+ #include <boost/format.hpp>
+--- a/src/slic3r/Utils/Serial.cpp
++++ b/src/slic3r/Utils/Serial.cpp
+@@ -11,6 +11,7 @@
+ #include <exception>
+ #include <stdexcept>
+
++#include <boost/asio/deadline_timer.hpp>
+ #include <boost/algorithm/string/predicate.hpp>
+ #include <boost/filesystem.hpp>
+ #include <boost/format.hpp>

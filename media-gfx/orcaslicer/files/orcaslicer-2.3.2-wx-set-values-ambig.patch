@@ -1,0 +1,19 @@
+From: stuff overlay maintainer
+Subject: Disambiguate Choice::set_values brace-init in PhysicalPrinterDialog
+
+wxWidgets 3.2 added an initializer_list<wxString> constructor to
+wxArrayString, which makes a braced initializer for Choice::set_values
+ambiguous between the std::vector<std::string> and wxArrayString
+overloads. Spell the std::vector<std::string> form explicitly.
+
+--- a/src/slic3r/GUI/PhysicalPrinterDialog.cpp
++++ b/src/slic3r/GUI/PhysicalPrinterDialog.cpp
+@@ -430,7 +430,7 @@
+     // Always fill in the "printhost_port" combo box from the config and select it.
+     {
+         Choice* choice = dynamic_cast<Choice*>(m_optgroup->get_field("printhost_port"));
+-        choice->set_values({ m_config->opt_string("printhost_port") });
++        choice->set_values(std::vector<std::string>{ m_config->opt_string("printhost_port") });
+         choice->set_selection();
+     }
+ 

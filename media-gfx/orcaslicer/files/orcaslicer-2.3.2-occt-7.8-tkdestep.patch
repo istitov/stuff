@@ -1,0 +1,23 @@
+From: stuff overlay maintainer
+Subject: Use OCCT 7.8 unified TKDESTEP library
+
+OpenCASCADE 7.8 merged the per-format STEP modules (TKSTEP, TKSTEP209,
+TKSTEPAttr, TKSTEPBase, TKXDESTEP) into a single TKDESTEP library.
+Replace the five-element list in libslic3r/CMakeLists.txt with the
+unified target so the link succeeds.
+
+--- a/src/libslic3r/CMakeLists.txt
++++ b/src/libslic3r/CMakeLists.txt
+@@ -545,11 +545,7 @@
+ find_package(draco REQUIRED)
+ 
+ set(OCCT_LIBS
+-    TKXDESTEP
+-    TKSTEP
+-    TKSTEP209
+-    TKSTEPAttr
+-    TKSTEPBase
++    TKDESTEP
+     TKXCAF
+     TKXSBase
+     TKVCAF
