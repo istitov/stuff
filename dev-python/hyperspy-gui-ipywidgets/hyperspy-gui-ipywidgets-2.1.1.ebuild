@@ -19,7 +19,6 @@ S="${WORKDIR}/${MYP}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="python doc"
 
 RDEPEND="
 	>=dev-python/hyperspy-2.3.0[${PYTHON_USEDEP}]
@@ -27,9 +26,3 @@ RDEPEND="
 	dev-python/ipympl[${PYTHON_USEDEP}]
 	dev-python/link-traits[${PYTHON_USEDEP}]
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
