@@ -13,7 +13,6 @@ HOMEPAGE="https://github.com/ercius/openNCEM"
 LICENSE="GPL-3 MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python"
 
 #install_requires=['numpy', 'scipy', 'matplotlib', 'h5py>=2.9.0']
 #'edstomo': ['glob2', 'genfire', 'hyperspy', 'scikit-image', 'ipyvolume']
@@ -31,10 +30,3 @@ RDEPEND="
 BDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
-
-DEPEND="${BDEPEND}
-	${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
