@@ -13,7 +13,6 @@ HOMEPAGE="https://github.com/pace-neutrons/Euphonic"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python"
 
 #importlib-resources - not sure if needed at all
 #            'brille': ['brille>=0.7.0']
@@ -27,9 +26,3 @@ RDEPEND="
 	dev-python/h5py[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
