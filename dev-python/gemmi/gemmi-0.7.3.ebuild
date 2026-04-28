@@ -13,7 +13,6 @@ HOMEPAGE="https://project-gemmi.github.io/"
 LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc python"
 
 RDEPEND="
 	virtual/zlib
@@ -21,9 +20,3 @@ RDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"

@@ -13,7 +13,6 @@ HOMEPAGE="https://project-gemmi.github.io/"
 LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc python"
 
 RDEPEND="
 	virtual/zlib
@@ -21,12 +20,6 @@ RDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 src_prepare() {
 	sed -i -e "s:USE_SYSTEM_ZLIB = False:USE_SYSTEM_ZLIB = True:" "${S}"/setup.py  || die
