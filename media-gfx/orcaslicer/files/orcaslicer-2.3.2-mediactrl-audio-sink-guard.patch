@@ -1,0 +1,36 @@
+From: stuff overlay maintainer
+Subject: Guard audio-sink g_object_set against backends without that property
+
+wxMediaCtrl2 reaches into wxGStreamerMediaBackend's m_playbin and
+sets audio-sink=NULL to silence audio. wx 3.2's GTK media library
+uses the higher-level gst_player_* API, so m_playbin is a
+GstPlayer wrapper rather than a classic playbin GstElement;
+GstPlayer does not expose an audio-sink property and GLib logs a
+GLib-GObject-CRITICAL on every wxMediaCtrl2 construction.
+
+Functionally the call was already a silent no-op (the property
+doesn't exist, so g_object_set() returned without changing
+anything); only the noise needs fixing. Guard the call with
+g_object_class_find_property() so the property-set is skipped
+when the backend doesn't expose it. Same behaviour, no warning.
+
+Bambu printer camera streams have no audio track, so the missing
+mute is not a real regression on the affected backends.
+
+--- a/src/slic3r/GUI/wxMediaCtrl2.cpp
++++ b/src/slic3r/GUI/wxMediaCtrl2.cpp
+@@ -43,9 +43,11 @@
+ #ifdef __LINUX__
+     /* Register only after we have created the wxMediaCtrl, since only then are we guaranteed to have fired up Gstreamer's plugin registry. */
+     auto playbin = reinterpret_cast<wxGStreamerMediaBackend *>(m_imp)->m_playbin;
+-    g_object_set (G_OBJECT (playbin),
+-                  "audio-sink", NULL,
+-                   NULL);
++    if (g_object_class_find_property(G_OBJECT_GET_CLASS(playbin), "audio-sink")) {
++        g_object_set (G_OBJECT (playbin),
++                      "audio-sink", NULL,
++                       NULL);
++    }
+     gstbambusrc_register();
+     Bind(wxEVT_MEDIA_LOADED, [this](auto & e) {
+         m_loaded = true;

@@ -37,6 +37,11 @@ PATCHES=(
 	# bad sizer/widget calls never raise; system wxGTK ships with
 	# wxDEBUG_LEVEL=1 and the modal assert dialog wedges startup.
 	"${FILESDIR}/${P}-wx-noop-assert-handler.patch"
+	# Skip g_object_set("audio-sink") when the backend lacks the
+	# property: wx 3.2's media lib wraps a GstPlayer (no audio-sink
+	# prop), so the unguarded call was a silent no-op that only ever
+	# produced a GLib-GObject-CRITICAL on every wxMediaCtrl2 ctor.
+	"${FILESDIR}/${P}-mediactrl-audio-sink-guard.patch"
 )
 
 RDEPEND="
