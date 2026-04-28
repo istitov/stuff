@@ -16,14 +16,7 @@ SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc python"
 
 RDEPEND="
 dev-python/hatchling
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
