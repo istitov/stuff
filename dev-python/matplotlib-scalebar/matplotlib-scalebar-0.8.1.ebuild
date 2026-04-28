@@ -18,7 +18,7 @@ S=${WORKDIR}/${MYP}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python test"
+IUSE="test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
@@ -26,7 +26,6 @@ RDEPEND="
 "
 
 DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
 	test? ( dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/pytest-cov[${PYTHON_USEDEP}]
 		dev-util/ruff
