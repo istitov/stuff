@@ -14,16 +14,9 @@ HOMEPAGE="https://github.com/xraypy/XrayDB"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="python doc"
 
 RDEPEND="
 	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
 	>=dev-python/scipy-0.17[${PYTHON_USEDEP}]
 	dev-python/sqlalchemy[${PYTHON_USEDEP}]
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
