@@ -8,14 +8,9 @@ PYTHON_COMPAT=( python2_7 python3_{12..14} )
 
 inherit distutils-r1 pypi
 
-#MY_PN="PyCifRW"
-#MY_P="${MY_PN}-${PV}"
-
 DESCRIPTION="Reading and writing CIF (Crystallographic Information Format) files"
 HOMEPAGE="https://pypi.org/project/PyCifRW/ https://github.com/jamesrhester/pycifrw/"
 SRC_URI="https://github.com/jamesrhester/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
-
-#S="${WORKDIR}/${MY_P}"
 
 LICENSE="ASRP"
 SLOT="0"
