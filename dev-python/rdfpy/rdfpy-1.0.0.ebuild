@@ -14,19 +14,13 @@ HOMEPAGE="https://github.com/by256/rdfpy"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc python test"
+IUSE="test"
 RESTRICT="!test? ( test )"
 RDEPEND="
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 python_prepare_all() {
 	rm -rf tests || die
