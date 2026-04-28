@@ -5,12 +5,6 @@ EAPI=8
 
 inherit autotools subversion xdg
 
-# Note: this live ebuild currently fails the install phase against
-# upstream svn trunk - pixmaps/Makefile.am lists ~300 gwy_*-24.png
-# icons that are generated only at `make dist` time and not stored
-# in svn. Configure and compile complete cleanly; the gap is on the
-# upstream packaging side. Use 2.70 / 2.71 release ebuilds for an
-# actually-installable build.
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
 HOMEPAGE="http://gwyddion.net/"
 ESVN_REPO_URI="https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion"
@@ -49,10 +43,11 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 # Building from SVN regenerates the pixmap PNGs from src/*.svg at build
-# time (release tarballs ship them pre-built), so inkscape + pngcrush
-# are hard BDEPENDs here but not for 2.70/2.71.
+# time (release tarballs ship them pre-built). We rewire the rules in
+# src_prepare to call rsvg-convert directly instead of inkscape so this
+# is a much smaller dep -- not pulled in for 2.70/2.71.
 BDEPEND="
-	media-gfx/inkscape
+	gnome-base/librsvg
 	media-gfx/pngcrush
 	sys-devel/gettext
 	virtual/pkgconfig
@@ -77,6 +72,20 @@ src_prepare() {
 	cp "${BROOT}"/usr/share/gettext/config.rpath . || die
 	sh utils/update-potfiles.sh || die
 	eautopoint -f
+
+	# Rewire pixmaps/Makefile.am to render SVGs via rsvg-convert instead
+	# of inkscape. Each rule body resolves to:
+	#   $(INKSCAPE_EXPORT) --export-width=N --export-height=N \
+	#       $(INKSCAPE_EXPORT_PNGFILE)="OUT.png" "IN.svg"
+	# After our seds it becomes:
+	#   rsvg-convert --width=N --height=N --output="OUT.png" "IN.svg"
+	sed -i \
+		-e 's|^INKSCAPE_EXPORT = .*$|INKSCAPE_EXPORT = rsvg-convert|' \
+		-e 's|^INKSCAPE_EXPORT_PNGFILE = .*$|INKSCAPE_EXPORT_PNGFILE = --output|' \
+		-e 's|--export-width=|--width=|g' \
+		-e 's|--export-height=|--height=|g' \
+		pixmaps/Makefile.am || die "rsvg-convert rewrite failed"
+
 	eautoreconf
 }
 
