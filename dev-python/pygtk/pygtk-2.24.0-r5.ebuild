@@ -49,6 +49,10 @@ PATCHES=(
 	"${FILESDIR}/${PN}-2.24.0-quartz-objc.patch"
 	# x11-libs/pango-1.44
 	"${FILESDIR}/${PN}-2.24.0-pango-1.44.patch"
+	# x11-libs/pango >= 1.50: drop further removed bindings
+	# (pango_font_metrics_new, pango_font_map_get_shape_engine_type)
+	# so generated pango.c no longer references missing symbols.
+	"${FILESDIR}/${PN}-2.24.0-pango-1.50.patch"
 )
 
 src_prepare() {
