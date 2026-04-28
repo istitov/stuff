@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit autotools xdg
+inherit autotools gnome2-utils xdg
 
 DESCRIPTION="GTK-based collaborative editor"
 HOMEPAGE="https://gobby.github.io/"
@@ -54,4 +54,19 @@ src_configure() {
 
 src_install() {
 	default
+}
+
+pkg_preinst() {
+	xdg_pkg_preinst
+	gnome2_schemas_savelist
+}
+
+pkg_postinst() {
+	xdg_pkg_postinst
+	gnome2_schemas_update
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+	gnome2_schemas_update
 }

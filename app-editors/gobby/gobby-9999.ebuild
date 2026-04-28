@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit git-r3 meson xdg
+inherit git-r3 gnome2-utils meson xdg
 
 DESCRIPTION="GTK-based collaborative editor"
 HOMEPAGE="https://gobby.github.io/"
@@ -54,4 +54,19 @@ src_configure() {
 		$(meson_use doc docs)
 	)
 	meson_src_configure
+}
+
+pkg_preinst() {
+	xdg_pkg_preinst
+	gnome2_schemas_savelist
+}
+
+pkg_postinst() {
+	xdg_pkg_postinst
+	gnome2_schemas_update
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+	gnome2_schemas_update
 }
