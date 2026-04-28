@@ -21,3 +21,15 @@ KEYWORDS="~amd64"
 RDEPEND="
 	>=dev-python/pymatgen-core-2026.3.9[${PYTHON_USEDEP}]
 "
+
+src_prepare() {
+	# Upstream split moved phase_diagram, chempot_diagram, and
+	# reaction_calculator (plus the pmg CLI) into pymatgen-core. The
+	# pymatgen 2026.3.23 sdist was cut before that split and still
+	# ships them, which collides with pymatgen-core 2026.3.9+.
+	# Drop our copies so pymatgen-core provides the canonical files.
+	sed -i -e '/^pmg = "pymatgen\.cli\.pmg:main"$/d' pyproject.toml || die
+	rm src/pymatgen/analysis/{phase_diagram,chempot_diagram,reaction_calculator}.py \
+		|| die
+	distutils-r1_src_prepare
+}
