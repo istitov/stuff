@@ -13,7 +13,6 @@ HOMEPAGE="https://github.com/LebedevV/pynida"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc python"
 
 RDEPEND="
 	dev-python/matplotlib[${PYTHON_USEDEP}]
@@ -24,12 +23,6 @@ RDEPEND="
 	dev-python/scipy[${PYTHON_USEDEP}]
 	>=dev-python/scikit-image-0.18[${PYTHON_USEDEP}]
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 PATCHES=(
 	"${FILESDIR}"/pynida-0.1.16-pyside6.patch
