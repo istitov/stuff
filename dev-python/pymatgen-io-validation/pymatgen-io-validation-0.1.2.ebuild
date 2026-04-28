@@ -29,13 +29,11 @@ RDEPEND="
 	>=dev-python/pydantic-settings-2.0.0[${PYTHON_USEDEP}]
 "
 
-python_install_all() {
-	distutils-r1_python_install_all
-
-	# Upstream's wheel installs \`examples/\` at the site-packages
-	# top level, tripping Gentoo's stray-top-level-files check.
-	local sp
-	for sp in "${ED}"/usr/lib/python*/site-packages; do
-		[[ -d ${sp}/examples ]] && rm -r "${sp}/examples" || :
-	done
+src_prepare() {
+	# Upstream ships an examples/ tree at the source root that
+	# find_packages picks up alongside pymatgen/, leaving examples/
+	# at the top of site-packages and tripping Gentoo's
+	# stray-top-level-files check.
+	rm -r examples || die
+	distutils-r1_src_prepare
 }
