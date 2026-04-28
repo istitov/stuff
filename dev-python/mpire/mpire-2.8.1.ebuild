@@ -13,7 +13,6 @@ HOMEPAGE="https://github.com/sybrenjansen/mpire"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python"
 
 RDEPEND="
 	dev-python/pygments[${PYTHON_USEDEP}]
@@ -21,10 +20,6 @@ RDEPEND="
 	dev-python/flask[${PYTHON_USEDEP}]
 	dev-python/multiprocess[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-"
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
 "
 #            'docs': ['docutils==0.17.1',
 #                     'sphinx==3.2.1',
@@ -39,5 +34,3 @@ DEPEND="${RDEPEND}
 #
 
 ##!!!dashboard to be configured; setuptools issue
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
