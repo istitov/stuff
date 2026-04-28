@@ -13,7 +13,6 @@ HOMEPAGE="https://github.com/silx-kit/hdf5plugin"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python"
 
 RDEPEND="
 	dev-python/py-cpuinfo[${PYTHON_USEDEP}]
@@ -22,10 +21,3 @@ RDEPEND="
 BDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
-
-DEPEND="${BDEPEND}
-	${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
