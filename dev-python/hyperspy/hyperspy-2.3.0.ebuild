@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 #IUSE="mrcz tests"
-IUSE="cuda python doc +learning gui-jupyter speed gui-traitsui mrcz test"
+IUSE="cuda doc +learning gui-jupyter speed gui-traitsui mrcz test"
 
 RDEPEND="
 	dev-python/cloudpickle[${PYTHON_USEDEP}]
@@ -71,7 +71,6 @@ RDEPEND="
 #	>=dev-python/tifffile-2019.12.3[${PYTHON_USEDEP}]
 
 DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
 	test? (
 		dev-python/pooch[${PYTHON_USEDEP}]
 		>=dev-python/pytest-3.6[${PYTHON_USEDEP}]
@@ -122,8 +121,6 @@ PDEPEND="
 PATCHES=(
 	"${FILESDIR}"/9f7e7e144ccfa399b4c447b956d3818c4f701f10.patch
 )
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 python_test() {
 	virtx epytest
