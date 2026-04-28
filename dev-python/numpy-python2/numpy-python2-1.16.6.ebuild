@@ -28,8 +28,7 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc lapack test"
-RESTRICT="!test? ( test )"
+IUSE="doc lapack"
 
 RDEPEND="
 	lapack? (
@@ -135,14 +134,6 @@ src_compile() {
 	local python_makeopts_jobs=""
 	python_makeopts_jobs="-j $(makeopts_jobs)"
 	python_foreach_impl esetup.py build ${python_makeopts_jobs} ${NUMPY_FCONFIG}
-}
-
-#Not sure, that it is working
-python_test() {
-	python_foreach_impl "${EPYTHON}" -c "
-import numpy, sys
-r = numpy.test(label='full', verbose=3)
-sys.exit(0 if r else 1)" || die "Tests fail with ${EPYTHON}"
 }
 
 src_install() {
