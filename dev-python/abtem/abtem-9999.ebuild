@@ -17,7 +17,6 @@ EGIT_REPO_URI="https://github.com/abTEM/abTEM"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="python"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
