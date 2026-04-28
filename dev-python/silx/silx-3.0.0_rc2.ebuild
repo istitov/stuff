@@ -18,7 +18,6 @@ S="${WORKDIR}/${PN}-${MY_PV}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python"
 
 RDEPEND="
 	>=dev-python/h5py-3[${PYTHON_USEDEP}]
@@ -47,10 +46,7 @@ BDEPEND="
 
 DEPEND="${BDEPEND}
 	${RDEPEND}
-	doc? ( dev-util/gtk-doc )
 "
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 src_unpack() {
 	default

@@ -15,7 +15,6 @@ HOMEPAGE="http://www.silx.org/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python"
 
 RDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
@@ -29,12 +28,6 @@ RDEPEND="
 	dev-python/pyopencl[${PYTHON_USEDEP}]
 	dev-python/mako[${PYTHON_USEDEP}]
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 src_unpack() {
 	default
