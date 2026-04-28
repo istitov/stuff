@@ -5,13 +5,15 @@
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
   <longdescription lang="en">
-    As of 2026-04-22 this package is not installable from the stuff
-    overlay. Its hard RDEPEND on sci-physics/ifeffit is masked in
-    profiles/package.mask because upstream ifeffit
-    (github.com/newville/ifeffit) was deleted. Kept in the tree in
-    case ifeffit is revived or demeter is ported to use
-    sci-physics/xraylarch (Larch), the maintained modern successor
-    that is already packaged in this overlay.
+    As of 2026-04-28 demeter uses sci-physics/xraylarch (Larch) as
+    its analysis backend. Upstream ifeffit
+    (github.com/newville/ifeffit) was deleted; demeter has
+    first-class Larch support via lib/Larch.pm, which drives a
+    larch_server XML-RPC daemon (shipped by xraylarch). Set
+    DEMETER_BACKEND=larch in the runtime environment to pick the
+    Larch path; some peripheral features still defer to Ifeffit per
+    upstream's todo.org "Larch v. Ifeffit problem areas", but the
+    common Athena/Artemis analysis path works.
   </longdescription>
   <upstream>
     <remote-id type="github">bruceravel/demeter</remote-id>
