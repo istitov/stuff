@@ -16,7 +16,7 @@ SLOT="0"
 IUSE="doc test"
 
 RDEPEND="
-	sci-physics/ifeffit
+	sci-physics/xraylarch
 	>=dev-perl/Archive-Zip-1.31
 	dev-perl/Module-Build
 	>=dev-perl/Capture-Tiny-0.07
