@@ -13,7 +13,6 @@ HOMEPAGE="https://pyxem.github.io"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python"
 
 RDEPEND="
 	dev-python/scikit-image[${PYTHON_USEDEP}]
@@ -26,8 +25,4 @@ RDEPEND="
 	dev-python/ipywidgets[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-3.1.1[${PYTHON_USEDEP}]
-"
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
 "
