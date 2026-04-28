@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 #IUSE="mrcz tests"
-IUSE="python doc test"
+IUSE="doc test"
 
 RDEPEND="
 	>=dev-python/dask-2022.9.2[${PYTHON_USEDEP}]
@@ -41,7 +41,6 @@ RDEPEND="
 	#dev-python/matplotlib-scalebar[${PYTHON_USEDEP}]
 
 DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
 	test? ( dev-python/filelock[${PYTHON_USEDEP}]
 		dev-python/pooch[${PYTHON_USEDEP}]
 		>=dev-python/pytest-3.6[${PYTHON_USEDEP}]
@@ -54,20 +53,6 @@ DEPEND="${RDEPEND}
 
 #hyperspy is required for tests
 
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
-python_compile() {
-	distutils-r1_python_compile
-}
-
-python_compile_all() {
-	use doc && setup.py build
-}
-
 python_test() {
 	virtx epytest
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
 }
