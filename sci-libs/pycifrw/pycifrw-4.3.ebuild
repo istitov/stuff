@@ -12,7 +12,7 @@ MY_PN="PyCifRW"
 MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Reading and writing CIF (Crystallographic Information Format) files"
-HOMEPAGE="https://pypi.org/project/PyCifRW/ https://bitbucket.org/jamesrhester/pycifrw/wiki/Home"
+HOMEPAGE="https://pypi.org/project/PyCifRW/ https://github.com/jamesrhester/pycifrw/"
 SRC_URI="https://github.com/jamesrhester/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 S="${WORKDIR}/${MY_P}"
