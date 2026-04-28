@@ -16,11 +16,5 @@ HOMEPAGE="https://github.com/erikrose/parsimonious/
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
-IUSE="doc"
-
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
-
-python_test() {
-	setup.py test
-}
