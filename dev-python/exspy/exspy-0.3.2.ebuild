@@ -18,7 +18,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 #IUSE="mrcz tests"
-IUSE="python doc test"
+IUSE="doc test"
 
 RDEPEND="
 	dev-python/hyperspy[${PYTHON_USEDEP}]
@@ -33,7 +33,6 @@ RDEPEND="
 #pooch
 
 DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
 	test? ( >=dev-python/pytest-3.6[${PYTHON_USEDEP}]
 		dev-python/pytest-mpl[${PYTHON_USEDEP}]
 		dev-python/pytest-xdist[${PYTHON_USEDEP},-test]
@@ -41,8 +40,6 @@ DEPEND="${RDEPEND}
 		dev-python/pytest-timeout[${PYTHON_USEDEP},-test]
 	)
 "
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 python_test() {
 	virtx epytest
