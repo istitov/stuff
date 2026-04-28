@@ -20,15 +20,8 @@ S="${WORKDIR}/${MYP}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="python doc"
 
 RDEPEND="
 	>=dev-python/hyperspy-2.0[${PYTHON_USEDEP}]
 	>=dev-python/traitsui-6.0[${PYTHON_USEDEP}]
 "
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
