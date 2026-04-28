@@ -32,6 +32,11 @@ PATCHES=(
 	"${FILESDIR}/${P}-occt-7.8-tkdestep.patch"
 	"${FILESDIR}/${P}-opencv-no-world.patch"
 	"${FILESDIR}/${P}-wx-set-values-ambig.patch"
+	# Silence wx assertions at runtime: upstream's bundled wx build
+	# sets wxBUILD_DEBUG_LEVEL=0 (deps/wxWidgets/wxWidgets.cmake) so
+	# bad sizer/widget calls never raise; system wxGTK ships with
+	# wxDEBUG_LEVEL=1 and the modal assert dialog wedges startup.
+	"${FILESDIR}/${P}-wx-noop-assert-handler.patch"
 )
 
 RDEPEND="

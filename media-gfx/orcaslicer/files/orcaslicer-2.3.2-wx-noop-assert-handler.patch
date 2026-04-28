@@ -1,0 +1,50 @@
+From: stuff overlay maintainer
+Subject: Install no-op wx assertion handler at GUI_App::OnInit
+
+OrcaSlicer's CMake recipe builds its bundled wxWidgets with
+wxBUILD_DEBUG_LEVEL=0, compiling out all wxASSERT macros (see
+deps/wxWidgets/wxWidgets.cmake). The AppImage and AUR builds
+take that path, so a number of bad sizer-flag and bitmap-bundle
+calls in the upstream source never raise at runtime.
+
+System x11-libs/wxGTK in ::gentoo is built with the upstream
+default wxDEBUG_LEVEL=1, so the same calls trigger wxAssert and
+wxGUIAppTraits::ShowAssertDialog. The modal dialog runs its own
+GTK event loop, during which a periodic OrcaSlicer timer fires
+into not-yet-initialised state and segfaults; we never reach the
+main window.
+
+Restore the AppImage's effective behaviour at the application
+layer by installing a no-op assertion handler at the very start
+of GUI_App::OnInit() -- the entry point wxEntry() invokes before
+any widget is constructed. This matches upstream's own choice to
+ship without runtime wx asserts.
+
+--- a/src/slic3r/GUI/GUI_App.cpp
++++ b/src/slic3r/GUI/GUI_App.cpp
+@@ -49,6 +49,7 @@
+ #include <wx/sysopt.h>
+ #include <wx/richmsgdlg.h>
+ #include <wx/log.h>
++#include <wx/debug.h>
+ #include <wx/intl.h>
+
+ #include <wx/dialog.h>
+@@ -2596,6 +2597,17 @@
+
+ bool GUI_App::OnInit()
+ {
++    // stuff overlay: silence wx assertions at runtime to match the
++    // upstream AppImage build, which compiles them out entirely via
++    // -DwxBUILD_DEBUG_LEVEL=0 in deps/wxWidgets/wxWidgets.cmake.
++    // System x11-libs/wxGTK is built with wxDEBUG_LEVEL=1, so the
++    // same upstream sizer/widget calls would otherwise raise modal
++    // assertion dialogs that block startup and segfault on the
++    // re-entrant timer event.
++    wxSetAssertHandler([](const wxString&, int, const wxString&,
++                          const wxString&, const wxString&) {
++    });
++
+     try {
+         return on_init_inner();
+     } catch (const std::exception& e) {
