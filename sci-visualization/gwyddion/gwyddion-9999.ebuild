@@ -5,6 +5,12 @@ EAPI=8
 
 inherit autotools subversion xdg
 
+# Note: this live ebuild currently fails the install phase against
+# upstream svn trunk - pixmaps/Makefile.am lists ~300 gwy_*-24.png
+# icons that are generated only at `make dist` time and not stored
+# in svn. Configure and compile complete cleanly; the gap is on the
+# upstream packaging side. Use 2.70 / 2.71 release ebuilds for an
+# actually-installable build.
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
 HOMEPAGE="http://gwyddion.net/"
 ESVN_REPO_URI="https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion"
