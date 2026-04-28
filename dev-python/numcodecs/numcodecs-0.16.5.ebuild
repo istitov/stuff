@@ -14,3 +14,15 @@ HOMEPAGE="https://github.com/zarr-developers/numcodecs"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+
+RDEPEND="
+	>=dev-python/numpy-1.24[${PYTHON_USEDEP}]
+	dev-python/typing-extensions[${PYTHON_USEDEP}]
+"
+
+BDEPEND="
+	dev-python/cython[${PYTHON_USEDEP}]
+	dev-python/py-cpuinfo[${PYTHON_USEDEP}]
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	>=dev-python/numpy-2[${PYTHON_USEDEP}]
+"
