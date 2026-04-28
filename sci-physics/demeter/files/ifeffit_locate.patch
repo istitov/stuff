@@ -1,11 +1,32 @@
---- a/DemeterBuilder.pm	2020-07-27 13:24:49.427597000 -0000
-+++ b/DemeterBuilder.pm	2020-07-27 13:29:45.407625493 -0000
-@@ -283,7 +283,7 @@
+--- a/DemeterBuilder.pm
++++ b/DemeterBuilder.pm
+@@ -283,7 +283,10 @@
  
      } else {
        ($pgplot_location, $compile_flags, $linker_flags) = (q{}, q{});
 -      $iffdir = `ifeffit -i 2>/dev/null`;
-+      $iffdir = '/usr/local/share/ifeffit';
++      # ifeffit is upstream-deleted and absent on this system; use the
++      # empty-iffdir path that prints 'Install Larch to use Demeter'
++      # and skips compiling src/ifeffit_wrap.c.
++      $iffdir = '';
        if ($iffdir =~ m{\A\s*\z}) {
  	print STDOUT "** Ifeffit is not available.  Install Larch to use Demeter. **\n";
        } else {
+@@ -326,12 +329,16 @@
+     $suffix = 'so';
+   };
+ 
+-  $self->copy_if_modified( from    => File::Spec->catfile('src',"Ifeffit.$suffix"),
++  # Skip Ifeffit XS artifacts when they were not built (ifeffit
++  # unavailable; larch backend doesn't need them).
++  if (-e File::Spec->catfile('src', "Ifeffit.$suffix")) {
++    $self->copy_if_modified( from    => File::Spec->catfile('src',"Ifeffit.$suffix"),
+ 			   to_dir  => File::Spec->catdir('blib','arch','auto','Ifeffit'),
+ 			   flatten => 1);
+   $self->copy_if_modified( from    => File::Spec->catfile('src','Ifeffit.bs'),
+ 			   to_dir  => File::Spec->catdir('blib','arch','auto','Ifeffit'),
+ 			   flatten => 1);
++  }
+ };
+ 
+ 
