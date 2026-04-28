@@ -14,7 +14,6 @@ HOMEPAGE="https://pyfai.readthedocs.io"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python"
 
 RDEPEND="
 	dev-python/h5py[${PYTHON_USEDEP}]
@@ -32,10 +31,3 @@ RDEPEND="
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 "
-
-DEPEND="${BDEPEND}
-	${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
