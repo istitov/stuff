@@ -14,7 +14,6 @@ HOMEPAGE="https://github.com/PyLops/pylops"
 LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc python"
 
 RDEPEND="
 	dev-python/scipy[${PYTHON_USEDEP}]
@@ -27,9 +26,3 @@ RDEPEND="
 #	dev-python/pyfftw[${PYTHON_USEDEP}] #have internal error with cython-3*
 #    "scikit-fmm",
 #    "spgl1",
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
