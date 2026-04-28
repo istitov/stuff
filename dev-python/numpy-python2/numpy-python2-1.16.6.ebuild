@@ -1,12 +1,11 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
+EAPI=8
 
 PYTHON_COMPAT=( python2_7 )
 _PYTHON_ALLOW_PY27=1
 PYTHON_REQ_USE="threads(+)"
-DISTUTILS_USE_SETUPTOOLS="manual"
 DISTUTILS_OPTIONAL=1
 
 FORTRAN_NEEDED=lapack
@@ -17,7 +16,7 @@ MY_PN="numpy"
 DOC_PV="1.16.6"
 
 DESCRIPTION="Fast array and numerical python library"
-HOMEPAGE="https://www.numpy.org"
+HOMEPAGE="https://numpy.org/"
 SRC_URI="
 	$(pypi_sdist_url "${MY_PN}" "${PV}" .zip)
 	doc? (
@@ -45,9 +44,6 @@ BDEPEND="
 	dev-python/setuptools-python2[${PYTHON_USEDEP}]
 	lapack? ( virtual/pkgconfig )
 "
-#	test? (
-#		dev-python/pytest[${PYTHON_USEDEP}]
-#	)
 
 EPYTHON="python2.7"
 
