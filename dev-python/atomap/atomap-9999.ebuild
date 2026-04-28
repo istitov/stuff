@@ -14,7 +14,7 @@ EGIT_REPO_URI="https://github.com/atomap-dev/atomap.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="python doc test"
+IUSE="test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
@@ -31,8 +31,6 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 "
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 PATCHES=(
 	"${FILESDIR}"/4669b3370bba0a033c5903c73c26a6b45c9ffce7.patch

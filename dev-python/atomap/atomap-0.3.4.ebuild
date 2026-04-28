@@ -13,7 +13,7 @@ HOMEPAGE="https://atomap.org/"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="python doc test"
+IUSE="test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
@@ -30,8 +30,6 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 "
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 python_test() {
 	epytest
