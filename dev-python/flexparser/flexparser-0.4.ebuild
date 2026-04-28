@@ -14,14 +14,9 @@ HOMEPAGE="https://github.com/hgrecco/flexparser"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc python"
 
 RDEPEND="
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
 
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+distutils_enable_tests pytest
