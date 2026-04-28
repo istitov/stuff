@@ -11,10 +11,6 @@ inherit distutils-r1 pypi
 DESCRIPTION="Draws ASCII trees"
 HOMEPAGE="http://github.com/mbr/asciitree"
 
-LICENSE="GPL-3"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-
-RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
-"
