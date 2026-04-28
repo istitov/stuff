@@ -21,3 +21,11 @@ KEYWORDS="~amd64 ~x86"
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
+
+src_prepare() {
+	# Upstream's [tool.setuptools.packages.find] doesn't exclude
+	# top-level scripts/, test/, docs/ (none are real Python packages
+	# but find_packages() picks them up alongside palettable/).
+	rm -r scripts test docs || die
+	distutils-r1_src_prepare
+}
