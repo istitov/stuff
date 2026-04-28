@@ -13,13 +13,8 @@ HOMEPAGE="https://github.com/newville/wxutils"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc python"
 
 RDEPEND="
 	dev-python/wxpython:*[${PYTHON_USEDEP}]
 "
 #dev-python/PyQt4
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
