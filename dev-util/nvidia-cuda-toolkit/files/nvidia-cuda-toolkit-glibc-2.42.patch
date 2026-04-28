@@ -16,10 +16,10 @@ See-Also:
 https://sourceware.org/git/?p=glibc.git;a=commit;h=77261698b4e938020a1b2032709a54d942ba330f
 Signed-off-by: Paul Zander <negril.nx+gentoo@gmail.com>
 
-diff --git a/builds/cuda_crt/targets/x86_64-linux/include/crt/math_functions.h b/builds/cuda_crt/targets/x86_64-linux/include/crt/math_functions.h
+diff --git a/builds/cuda_crt/include/crt/math_functions.h b/builds/cuda_crt/include/crt/math_functions.h
 index 50a6646..d525a86 100644
---- a/builds/cuda_crt/targets/x86_64-linux/include/crt/math_functions.h
-+++ b/builds/cuda_crt/targets/x86_64-linux/include/crt/math_functions.h
+--- a/builds/cuda_crt/include/crt/math_functions.h
++++ b/builds/cuda_crt/include/crt/math_functions.h
 @@ -626,7 +626,11 @@ extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double         __cdecl sqrt(
   *
   * \note_accuracy_double
