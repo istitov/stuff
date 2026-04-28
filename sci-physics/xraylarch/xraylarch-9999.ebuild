@@ -15,7 +15,7 @@ EGIT_REPO_URI="https://github.com/xraypy/xraylarch.git"
 S="${WORKDIR}/${PN}-${PV}"
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc python"
+IUSE="doc"
 RESTRICT=strip
 
 RDEPEND="
@@ -58,9 +58,7 @@ RDEPEND="
 #sphinxcontrib-bibtex #dev
 #sphinxcontrib-argdoc #dev
 
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
-"
+DEPEND="${RDEPEND}"
 #	dev-python/pyepics
 #	dev-python/tomopy
 #for EPICS pyepics, psycopg2, epicsscan
