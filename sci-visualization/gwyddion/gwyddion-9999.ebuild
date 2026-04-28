@@ -55,6 +55,11 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2.70-automagic.patch"
+	# Force use of the bundled pygtk-embed so the build doesn't pick up
+	# system pygtk:2 incidentally; gwyddion was the only remaining
+	# consumer of dev-python/pygtk in this overlay and the bundle is
+	# functionally complete for pygwy.
+	"${FILESDIR}/${PN}-2.70-pygwy-bundled-pygtk.patch"
 )
 
 src_prepare() {
