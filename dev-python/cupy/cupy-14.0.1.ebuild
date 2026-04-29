@@ -22,14 +22,17 @@ REQUIRED_USE="
 	cudnn? ( cuda )
 	cusparselt? ( cuda )
 "
-# Upstream 14.x dropped fastrlock (no longer imported anywhere) and
-# bumped numpy to >=2.0. setup.py also conditionally appends
-# cuda-pathfinder>=1.3.3,==1.* for non-HIP builds, but that package
-# is not yet packaged in ::gentoo or this overlay (verified 2026-04-29).
+# Upstream 14.x dropped fastrlock (no longer imported anywhere),
+# bumped numpy to >=2.0, and conditionally appends
+# cuda-pathfinder>=1.3.3,==1.* for non-HIP builds in setup.py.
 DEPEND="
 	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
-	cuda? ( dev-util/nvidia-cuda-toolkit[profiler] )
+	cuda? (
+		dev-util/nvidia-cuda-toolkit[profiler]
+		>=dev-python/cuda-pathfinder-1.3.3[${PYTHON_USEDEP}]
+		<dev-python/cuda-pathfinder-2[${PYTHON_USEDEP}]
+	)
 	cudnn? ( dev-libs/cudnn )
 	cusparselt? ( dev-libs/cusparselt )
 "
