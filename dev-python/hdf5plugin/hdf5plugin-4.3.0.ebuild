@@ -15,9 +15,9 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	dev-python/py-cpuinfo[${PYTHON_USEDEP}]
+	dev-python/h5py[${PYTHON_USEDEP}]
 "
 
 BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-python/py-cpuinfo[${PYTHON_USEDEP}]
 "
