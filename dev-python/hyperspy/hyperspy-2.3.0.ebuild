@@ -38,9 +38,6 @@ RDEPEND="
 
 	>=dev-python/scikit-image-0.15[${PYTHON_USEDEP}]
 
-	dev-python/ipyparallel[${PYTHON_USEDEP}]
-	>=dev-python/ipython-7.0[${PYTHON_USEDEP}]
-
 	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx-rtd-theme )
 	learning? ( dev-python/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( >=dev-python/numba-0.56.0[${PYTHON_USEDEP}]
