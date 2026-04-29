@@ -4,7 +4,6 @@
 EAPI=8
 
 PYPI_PN="${PN/-/.}"
-PYPI_NO_NORMALIZE=1
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
@@ -18,5 +17,13 @@ KEYWORDS="~amd64"
 
 RDEPEND="
 	>=dev-python/numpy-1.5.1[${PYTHON_USEDEP}]
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	sci-libs/pycifrw[${PYTHON_USEDEP}]
 "
+
+src_prepare() {
+	# sdist has no git info; pin dynamic version to PV.
+	sed -i -e "/^dynamic\s*=/d" \
+		-e "/^\[project\]$/a version = \"${PV}\"" \
+		pyproject.toml || die
+	distutils-r1_src_prepare
+}
