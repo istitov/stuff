@@ -17,15 +17,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
-	>=dev-python/numcodecs-0.13.0[${PYTHON_USEDEP}]
 	dev-python/asciitree[${PYTHON_USEDEP}]
 	dev-python/fasteners[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.24[${PYTHON_USEDEP}]
+	>=dev-python/numcodecs-0.10.0[${PYTHON_USEDEP}]
+	<dev-python/numcodecs-0.16[${PYTHON_USEDEP}]
 "
-#asciitree==0.3.3
-
-#fasteners==0.18
-#numcodecs==0.10.2
-#msgpack-python==0.5.6
-#setuptools-scm==7.0.5
-#numpy==1.23.3
