@@ -13,16 +13,21 @@ HOMEPAGE="https://github.com/pace-neutrons/Euphonic"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-
-#importlib-resources - not sure if needed at all
-#            'brille': ['brille>=0.7.0']
+IUSE="matplotlib phonopy-reader"
 
 RDEPEND="
-	dev-python/scipy[${PYTHON_USEDEP}]
-	dev-python/seekpath[${PYTHON_USEDEP}]
-	dev-python/pint[${PYTHON_USEDEP}]
-	dev-python/threadpoolctl[${PYTHON_USEDEP}]
-	dev-python/matplotlib[${PYTHON_USEDEP}]
-	dev-python/h5py[${PYTHON_USEDEP}]
-	dev-python/pyyaml[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.24.0[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.10[${PYTHON_USEDEP}]
+	>=dev-python/seekpath-1.1.0[${PYTHON_USEDEP}]
+	>=sci-libs/spglib-2.1.0[python,${PYTHON_USEDEP}]
+	>=dev-python/pint-0.22[${PYTHON_USEDEP}]
+	>=dev-python/threadpoolctl-3.0.0[${PYTHON_USEDEP}]
+	>=dev-python/toolz-0.12.1[${PYTHON_USEDEP}]
+	matplotlib? ( >=dev-python/matplotlib-3.8.0[${PYTHON_USEDEP}] )
+	phonopy-reader? (
+		>=dev-python/h5py-3.6.0[${PYTHON_USEDEP}]
+		>=dev-python/pyyaml-6.0[${PYTHON_USEDEP}]
+	)
 "
+DEPEND="${RDEPEND}"
