@@ -24,7 +24,7 @@ RESTRICT="test"
 RDEPEND="
 	dev-python/xraydb[${PYTHON_USEDEP}]
 	>=dev-python/sqlalchemy-2[${PYTHON_USEDEP}]
-	dev-python/pymatgen[${PYTHON_USEDEP}]
+	>=dev-python/pymatgen-2025.6.14[${PYTHON_USEDEP}]
 	>=dev-python/mp-api-0.45.8[${PYTHON_USEDEP}]
 	>=dev-python/emmet-core-0.84.9[${PYTHON_USEDEP}]
 "
