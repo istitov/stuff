@@ -18,6 +18,7 @@ REQUIRED_USE="|| ( hdf4 hdf5 )"
 
 RDEPEND="
 	dev-libs/libxml2
+	media-libs/libjpeg-turbo:=
 	sys-libs/readline
 	hdf4? ( sci-libs/hdf )
 	hdf5? ( sci-libs/hdf5[zlib] )
