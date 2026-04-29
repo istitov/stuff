@@ -1,0 +1,23 @@
+CUDA 13 changed cuCtxCreate's signature, adding a CUctxCreateParams*
+pointer as the second argument (cuCtxCreate_v4). The legacy
+cuCtxCreate_v2 with the 3-argument signature is only declared under
+__CUDA_API_VERSION_INTERNAL, so it can't be called from normal cgo.
+
+Pass NULL for the new params arg, which matches the previous default
+behaviour (no execution-affinity / no other extras).
+
+The ebuild applies this patch conditionally — only when the installed
+cuda.h ships CUctxCreateParams. On CUDA 12 the original source works
+unchanged.
+
+--- a/cuda/cu/context.go
++++ b/cuda/cu/context.go
+@@ -12,7 +12,7 @@ type Context uintptr
+ // Create a CUDA context.
+ func CtxCreate(flags uint, dev Device) Context {
+ 	var ctx C.CUcontext
+-	err := Result(C.cuCtxCreate(&ctx, C.uint(flags), C.CUdevice(dev)))
++	err := Result(C.cuCtxCreate(&ctx, nil, C.uint(flags), C.CUdevice(dev)))
+ 	if err != SUCCESS {
+ 		panic(err)
+ 	}
