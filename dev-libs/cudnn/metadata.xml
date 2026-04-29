@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-		<name>Iohann S. Titov</name>
-	</maintainer>
-	<longdescription lang="en">
-		NVIDIA cuDNN binary distribution rebuilt for the CUDA 13 ABI.
-		The ::gentoo dev-libs/cudnn ebuilds are pinned to the cuda12
-		variant of upstream's tarball, which conflicts with installs
-		that have moved to dev-util/nvidia-cuda-toolkit:0/13. This
-		ebuild fetches the parallel cuda13 tarball from NVIDIA's
-		redist mirror and lays it out under /opt/cuda/.
-	</longdescription>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Iohann S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    NVIDIA cuDNN binary distribution rebuilt for the CUDA 13 ABI.
+    The ::gentoo dev-libs/cudnn ebuilds are pinned to the cuda12
+    variant of upstream's tarball, which conflicts with installs
+    that have moved to dev-util/nvidia-cuda-toolkit:0/13. This
+    ebuild fetches the parallel cuda13 tarball from NVIDIA's
+    redist mirror and lays it out under /opt/cuda/.
+  </longdescription>
 </pkgmetadata>

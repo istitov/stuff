@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="project">
-		<email>sci@gentoo.org</email>
-		<name>Gentoo Science Project</name>
-	</maintainer>
-	<use>
-		<flag name="debugger">Install the CUDA debugger</flag>
-		<flag name="profiler">Install the NVIDIA CUDA profiler (nvprof) and the related libraries</flag>
-		<flag name="rdma">Enable infiniband support via <pkg>sys-cluster/rdma-core</pkg></flag>
-		<flag name="sanitizer">Install compute-sanitizer tool</flag>
-	</use>
+  <maintainer type="project">
+    <email>sci@gentoo.org</email>
+    <name>Gentoo Science Project</name>
+  </maintainer>
+  <use>
+    <flag name="debugger">Install the CUDA debugger</flag>
+    <flag name="profiler">Install the NVIDIA CUDA profiler (nvprof) and the related libraries</flag>
+    <flag name="rdma">Enable infiniband support via <pkg>sys-cluster/rdma-core</pkg></flag>
+    <flag name="sanitizer">Install compute-sanitizer tool</flag>
+  </use>
 </pkgmetadata>

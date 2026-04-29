@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>jauhien@gentoo.org</email>
-		<name>Jauhien Piatlicki</name>
-	</maintainer>
-	<upstream>
-		<remote-id type="github">newville/wxutils</remote-id>
-		<remote-id type="pypi">wxutils</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>jauhien@gentoo.org</email>
+    <name>Jauhien Piatlicki</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="github">newville/wxutils</remote-id>
+    <remote-id type="pypi">wxutils</remote-id>
+  </upstream>
 </pkgmetadata>

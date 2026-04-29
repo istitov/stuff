@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>pasis.ua@gmail.com</email>
-		<name>Dmitry Podgorny</name>
-	</maintainer>
-	<use>
-		<flag name='gtk'>Build GTK graphical UI</flag>
-		<flag name='ncurses'>Build Ncurses text UI</flag>
-	</use>
-	<upstream>
-		<remote-id type="github">pasis/xmppconsole</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>pasis.ua@gmail.com</email>
+    <name>Dmitry Podgorny</name>
+  </maintainer>
+  <use>
+    <flag name='gtk'>Build GTK graphical UI</flag>
+    <flag name='ncurses'>Build Ncurses text UI</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">pasis/xmppconsole</remote-id>
+  </upstream>
 </pkgmetadata>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>megagreener@gmail.com</email>
-	</maintainer>
-	<use>
-		<flag name='parallel'>Add support for <pkg>sys-process/parallel</pkg></flag>
-	</use>
-	<upstream>
-		<remote-id type="github">megabaks/kernel-cleaner</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>megagreener@gmail.com</email>
+  </maintainer>
+  <use>
+    <flag name='parallel'>Add support for <pkg>sys-process/parallel</pkg></flag>
+  </use>
+  <upstream>
+    <remote-id type="github">megabaks/kernel-cleaner</remote-id>
+  </upstream>
 </pkgmetadata>

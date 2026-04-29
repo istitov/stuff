@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-		<name>Iohann S. Titov</name>
-	</maintainer>
-	<longdescription lang="en">
-		Coherent noise (Perlin / simplex / ridged-multifractal) generation
-		library. This is the SoftFever fork used by OrcaSlicer, which
-		replaces the original autotools build with a modern CMake build.
-	</longdescription>
-	<upstream>
-		<remote-id type="github">SoftFever/Orca-deps-libnoise</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Iohann S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Coherent noise (Perlin / simplex / ridged-multifractal) generation
+    library. This is the SoftFever fork used by OrcaSlicer, which
+    replaces the original autotools build with a modern CMake build.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">SoftFever/Orca-deps-libnoise</remote-id>
+  </upstream>
 </pkgmetadata>

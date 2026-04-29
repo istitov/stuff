@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>lebedev.vasya@gmail.com</email>
-	</maintainer>
-	<use>
-		<flag name="advanced">
-			Enable advanced numerical backends (llvmlite, numba, pyfftw,
-			pywavelets) for faster/large-scale operators
-		</flag>
-	</use>
-	<upstream>
-		<remote-id type="github">PyLops/pylops</remote-id>
-		<remote-id type="pypi">pylops</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>lebedev.vasya@gmail.com</email>
+  </maintainer>
+  <use>
+    <flag name="advanced">
+      Enable advanced numerical backends (llvmlite, numba, pyfftw,
+      pywavelets) for faster/large-scale operators
+    </flag>
+  </use>
+  <upstream>
+    <remote-id type="github">PyLops/pylops</remote-id>
+    <remote-id type="pypi">pylops</remote-id>
+  </upstream>
 </pkgmetadata>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>lebedev.vasya@gmail.com</email>
-	</maintainer>
-	<upstream>
-		<remote-id type="github">ppinard/matplotlib-scalebar</remote-id>
-		<remote-id type="pypi">matplotlib_scalebar</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>lebedev.vasya@gmail.com</email>
+  </maintainer>
+  <upstream>
+    <remote-id type="github">ppinard/matplotlib-scalebar</remote-id>
+    <remote-id type="pypi">matplotlib_scalebar</remote-id>
+  </upstream>
 </pkgmetadata>

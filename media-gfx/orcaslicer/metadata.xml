@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>iohann.s.titov@gmail.com</email>
-		<name>Iohann S. Titov</name>
-	</maintainer>
-	<longdescription lang="en">
-		OrcaSlicer is an open-source slicer for fused-filament-fabrication
-		(FFF/FDM) 3D printers, forked from Bambu Studio (which itself forks
-		PrusaSlicer/Slic3r). It targets a wide range of printer ecosystems
-		and adds Orca-specific calibration tools and quality features.
-	</longdescription>
-	<use>
-		<flag name="test">Build and run unit tests</flag>
-	</use>
-	<upstream>
-		<remote-id type="github">OrcaSlicer/OrcaSlicer</remote-id>
-		<bugs-to>https://github.com/OrcaSlicer/OrcaSlicer/issues</bugs-to>
-		<doc>https://www.orcaslicer.com/wiki/</doc>
-	</upstream>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Iohann S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    OrcaSlicer is an open-source slicer for fused-filament-fabrication
+    (FFF/FDM) 3D printers, forked from Bambu Studio (which itself forks
+    PrusaSlicer/Slic3r). It targets a wide range of printer ecosystems
+    and adds Orca-specific calibration tools and quality features.
+  </longdescription>
+  <use>
+    <flag name="test">Build and run unit tests</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">OrcaSlicer/OrcaSlicer</remote-id>
+    <bugs-to>https://github.com/OrcaSlicer/OrcaSlicer/issues</bugs-to>
+    <doc>https://www.orcaslicer.com/wiki/</doc>
+  </upstream>
 </pkgmetadata>

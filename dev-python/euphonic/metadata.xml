@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>lebedev.vasya@gmail.com</email>
-	</maintainer>
-	<use>
-		<flag name="matplotlib">Enable matplotlib-based plotting helpers</flag>
-		<flag name="phonopy-reader">Enable reading of phonopy HDF5/YAML output</flag>
-	</use>
-	<upstream>
-		<remote-id type="github">pace-neutrons/Euphonic</remote-id>
-		<remote-id type="pypi">euphonic</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>lebedev.vasya@gmail.com</email>
+  </maintainer>
+  <use>
+    <flag name="matplotlib">Enable matplotlib-based plotting helpers</flag>
+    <flag name="phonopy-reader">Enable reading of phonopy HDF5/YAML output</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">pace-neutrons/Euphonic</remote-id>
+    <remote-id type="pypi">euphonic</remote-id>
+  </upstream>
 </pkgmetadata>

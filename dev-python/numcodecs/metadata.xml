@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>lebedev.vasya@gmail.com</email>
-	</maintainer>
-	<longdescription>
-		A Python package providing buffer compression and transformation
-		codecs for use in data storage and communication applications.
-	</longdescription>
-	<upstream>
-		<remote-id type="github">zarr-developers/numcodecs</remote-id>
-		<remote-id type="pypi">numcodecs</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>lebedev.vasya@gmail.com</email>
+  </maintainer>
+  <longdescription>
+    A Python package providing buffer compression and transformation
+    codecs for use in data storage and communication applications.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">zarr-developers/numcodecs</remote-id>
+    <remote-id type="pypi">numcodecs</remote-id>
+  </upstream>
 </pkgmetadata>
