@@ -27,7 +27,7 @@ RDEPEND="
 	sci-libs/fftw:3.0=[threads]
 	sci-libs/hdf5:=[cxx]
 	$(python_gen_cond_dep '
-		dev-python/numpy[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.13.0[${PYTHON_USEDEP}]
 		dev-python/h5py[${PYTHON_USEDEP}]
 		dev-python/scipy[${PYTHON_USEDEP}]
 	')
