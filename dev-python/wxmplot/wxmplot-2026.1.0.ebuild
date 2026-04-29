@@ -16,9 +16,13 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 RDEPEND="
-	>=dev-python/numpy-1.12[${PYTHON_USEDEP}]
-	>=dev-python/six-1.10[${PYTHON_USEDEP}]
-	>=dev-python/wxpython-4.0.3[${PYTHON_USEDEP}]
-	>=dev-python/matplotlib-2.0[${PYTHON_USEDEP}]
+	>=dev-python/wxpython-4.2.0:*[${PYTHON_USEDEP}]
+	>=dev-python/wxutils-2026.1.0[${PYTHON_USEDEP}]
+	dev-python/darkdetect[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-3.9.0[${PYTHON_USEDEP}]
+	dev-python/pytz[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.26[${PYTHON_USEDEP}]
+	>=dev-python/pillow-7.0[${PYTHON_USEDEP}]
+	>=dev-python/pyyaml-5.0[${PYTHON_USEDEP}]
+	>=dev-python/pyshortcuts-1.9.5[${PYTHON_USEDEP}]
 "
-#dev-python/PyQt4
