@@ -17,12 +17,14 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-IUSE="+cuda cudnn cusparselt"
-REQUIRED_USE="
-	cudnn? ( cuda )
-	cusparselt? ( cuda )
-"
-# Upstream 14.x dropped fastrlock (no longer imported anywhere),
+IUSE="+cuda"
+# Upstream 14.x split cuDNN, cuSPARSELt, and cuTENSOR integration out
+# of the main package into separate cupy-cudnn / cupy-cusparselt /
+# cupy-cutensor PyPI distributions, so the previous cudnn / cusparselt
+# USE flags here were no-ops (deps got pulled but no extension module
+# was built). Drop them rather than mislead.
+#
+# Upstream 14.x also dropped fastrlock (no longer imported anywhere),
 # bumped numpy to >=2.0, and conditionally appends
 # cuda-pathfinder>=1.3.3,==1.* for non-HIP builds in setup.py.
 DEPEND="
@@ -33,8 +35,6 @@ DEPEND="
 		>=dev-python/cuda-pathfinder-1.3.3[${PYTHON_USEDEP}]
 		<dev-python/cuda-pathfinder-2[${PYTHON_USEDEP}]
 	)
-	cudnn? ( dev-libs/cudnn )
-	cusparselt? ( dev-libs/cusparselt )
 "
 RDEPEND="${DEPEND}"
 
