@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>lebedev.vasya@gmail.com</email>
-	</maintainer>
-	<upstream>
-		<remote-id type="pypi">pyfai</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>lebedev.vasya@gmail.com</email>
+  </maintainer>
+  <use>
+    <flag name="gui">Pull in dev-python/pyside:6 for the Qt-based GUI tools (pyFAI-calib2, etc.)</flag>
+    <flag name="opencl">Pull in dev-python/pyopencl to enable OpenCL-accelerated integration kernels</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">pyfai</remote-id>
+  </upstream>
 </pkgmetadata>
