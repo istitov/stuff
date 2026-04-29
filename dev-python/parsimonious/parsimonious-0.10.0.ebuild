@@ -16,5 +16,10 @@ HOMEPAGE="https://github.com/erikrose/parsimonious/
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
+
+RDEPEND="
+	>=dev-python/regex-2022.3.15[${PYTHON_USEDEP}]
+"
+
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
