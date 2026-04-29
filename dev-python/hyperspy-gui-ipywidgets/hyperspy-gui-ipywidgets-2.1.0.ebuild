@@ -21,7 +21,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	>=dev-python/hyperspy-2.0[${PYTHON_USEDEP}]
-	>=dev-python/ipywidgets-6.0[${PYTHON_USEDEP}]
+	>=dev-python/hyperspy-2.3.0[${PYTHON_USEDEP}]
+	>=dev-python/ipywidgets-8.0[${PYTHON_USEDEP}]
+	dev-python/ipympl[${PYTHON_USEDEP}]
 	dev-python/link-traits[${PYTHON_USEDEP}]
 "
