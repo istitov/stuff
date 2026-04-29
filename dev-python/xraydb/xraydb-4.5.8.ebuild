@@ -16,7 +16,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 RDEPEND="
-	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
-	>=dev-python/scipy-0.17[${PYTHON_USEDEP}]
-	dev-python/sqlalchemy[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.19[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.6[${PYTHON_USEDEP}]
+	>=dev-python/sqlalchemy-2.0.1[${PYTHON_USEDEP}]
+	dev-python/platformdirs[${PYTHON_USEDEP}]
 "
