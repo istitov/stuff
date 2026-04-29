@@ -24,7 +24,7 @@ RESTRICT="test"
 
 RDEPEND="
 	dev-python/dask[${PYTHON_USEDEP}]
-	dev-python/distributed[${PYTHON_USEDEP}]
+	>=dev-python/distributed-1.24.1[${PYTHON_USEDEP}]
 	>=dev-python/jupyter-server-proxy-1.3.2[${PYTHON_USEDEP}]
 	>=dev-python/jupyterlab-4.0.0[${PYTHON_USEDEP}]
 	<dev-python/jupyterlab-5.0.0[${PYTHON_USEDEP}]
