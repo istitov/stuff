@@ -22,13 +22,18 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 RDEPEND="
-	dev-python/cython[${PYTHON_USEDEP}]
-	dev-python/h5py[${PYTHON_USEDEP}]
-	dev-python/lxml[${PYTHON_USEDEP}]
-	dev-python/matplotlib[${PYTHON_USEDEP}]
-
-	dev-python/sphinx[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/h5py[${PYTHON_USEDEP}]
+	dev-python/hdf5plugin[${PYTHON_USEDEP}]
+	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/pillow[${PYTHON_USEDEP}]
+	gui? (
+		dev-python/matplotlib[${PYTHON_USEDEP}]
+		dev-python/pyqt5[${PYTHON_USEDEP}]
+	)
 "
-#dev-python/PyQt4
+DEPEND="${RDEPEND}"
+BDEPEND="
+	>=dev-python/cython-0.29[${PYTHON_USEDEP}]
+"
+IUSE="gui"
