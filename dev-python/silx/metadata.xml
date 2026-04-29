@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>lebedev.vasya@gmail.com</email>
-	</maintainer>
-	<upstream>
-		<remote-id type="pypi">silx</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>lebedev.vasya@gmail.com</email>
+  </maintainer>
+  <use>
+    <flag name="gui">Build the Qt-based GUI stack (silx-view, silx.gui.*) and pull in PySide6 plus the matplotlib/pyopengl/qtawesome/qtconsole/pillow/pint/pooch/scipy/hdf5plugin/python-dateutil dependency set. Requires USE=opencl.</flag>
+    <flag name="h5pyd">Pull in dev-python/h5pyd so silx.io.h5py_utils can browse remote HSDS-served HDF5 datasets</flag>
+    <flag name="opencl">Enable the OpenCL-backed kernels in silx.opencl by pulling dev-python/pyopencl and dev-python/mako</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">silx</remote-id>
+  </upstream>
 </pkgmetadata>
