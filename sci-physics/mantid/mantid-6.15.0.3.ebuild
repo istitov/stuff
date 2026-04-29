@@ -119,11 +119,17 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 # patches.
 MY_PREFIX="/opt/mantid"
 
-PATCHES=(
-	"${FILESDIR}/${P}-no-qt5-webwidgets.patch"
-)
-
 src_prepare() {
+	# The no-qt5-webwidgets patch removes a "Prefer WebEngineWidgets
+	# over WebKitWidgets" block that fatal-errors when neither is
+	# available; the block is present in v6.15.0.3 but already gone
+	# from upstream main. Apply only when the block exists so the
+	# 9999 ebuild doesn't trip on an obsolete patch.
+	if grep -q 'Prefer WebEngineWidgets over WebkitWidgets' \
+			qt/widgets/common/CMakeLists.txt 2>/dev/null; then
+		eapply "${FILESDIR}/${PN}-no-qt5-webwidgets.patch"
+	fi
+
 	# Gentoo's opencascade installs to /usr/{include,lib64}/opencascade
 	# instead of /opt/OpenCASCADE; retarget the finder.
 	sed -i -e 's:/OpenCASCADE:/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
