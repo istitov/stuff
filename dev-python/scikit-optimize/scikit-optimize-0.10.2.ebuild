@@ -16,13 +16,18 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64"
 
+# Upstream pyproject lists `pyaml>=16.9`, but skopt's source uses
+# `import yaml` (PyYAML) — the dep is mislabelled upstream, so keep
+# dev-python/pyyaml here. matplotlib is upstream's `[plots]` extra
+# but commonly used; kept unconditional for now.
 RDEPEND="
 	>=dev-python/joblib-0.11[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-2.0.0[${PYTHON_USEDEP}]
-	>=dev-python/numpy-1.13.3[${PYTHON_USEDEP}]
-	>=dev-python/scikit-learn-0.20.0[${PYTHON_USEDEP}]
-	>=dev-python/scipy-0.19.1[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.20.3[${PYTHON_USEDEP}]
+	>=dev-python/packaging-21.3[${PYTHON_USEDEP}]
+	>=dev-python/scikit-learn-1.0.0[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.1.0[${PYTHON_USEDEP}]
 "
 
 EPYTEST_PLUGINS=()
