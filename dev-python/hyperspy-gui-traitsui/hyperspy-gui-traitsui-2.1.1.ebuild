@@ -22,6 +22,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	>=dev-python/hyperspy-2.0[${PYTHON_USEDEP}]
-	>=dev-python/traitsui-6.0[${PYTHON_USEDEP}]
+	>=dev-python/hyperspy-2.3.0[${PYTHON_USEDEP}]
+	>=dev-python/traits-6.3[${PYTHON_USEDEP}]
+	>=dev-python/traitsui-7.3[${PYTHON_USEDEP}]
 "

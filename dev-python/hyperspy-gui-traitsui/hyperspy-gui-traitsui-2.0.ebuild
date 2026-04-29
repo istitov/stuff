@@ -23,5 +23,7 @@ KEYWORDS="~amd64"
 
 RDEPEND="
 	>=dev-python/hyperspy-2.0[${PYTHON_USEDEP}]
-	>=dev-python/traitsui-6.0[${PYTHON_USEDEP}]
+	dev-python/link-traits[${PYTHON_USEDEP}]
+	>=dev-python/traits-5.0[${PYTHON_USEDEP}]
+	>=dev-python/traitsui-6.1[${PYTHON_USEDEP}]
 "
