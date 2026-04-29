@@ -59,6 +59,26 @@ src_configure() {
 		-DCHOLMOD_USE_OPENMP=$(usex openmp ON OFF)
 		-DBLA_VENDOR=Generic
 	)
+
+	# SuiteSparse defaults SUITESPARSE_CUDA_ARCHITECTURES to "52;75;80",
+	# but CUDA 13 dropped support for compute_52 (and anything below
+	# 7.5). Drop the obsolete arch when building against CUDA >= 13.
+	# Honour an explicit SUITESPARSE_CUDA_ARCHITECTURES env override
+	# regardless of CUDA version.
+	if use cuda; then
+		if [[ -n ${SUITESPARSE_CUDA_ARCHITECTURES} ]]; then
+			mycmakeargs+=(
+				-DSUITESPARSE_CUDA_ARCHITECTURES="${SUITESPARSE_CUDA_ARCHITECTURES}"
+			)
+		else
+			local cuda_ver=$(awk '/^#define CUDA_VERSION/ {print $3; exit}' \
+				"${ESYSROOT}"/opt/cuda/include/cuda.h 2>/dev/null)
+			if [[ -n ${cuda_ver} && ${cuda_ver} -ge 13000 ]]; then
+				mycmakeargs+=( -DSUITESPARSE_CUDA_ARCHITECTURES="75;80" )
+			fi
+		fi
+	fi
+
 	cmake_src_configure
 }
 
@@ -71,4 +91,26 @@ src_install() {
 		DOCS="${S}/Doc/*.pdf"
 	fi
 	cmake_src_install
+}
+
+pkg_postinst() {
+	if use cuda; then
+		local cuda_ver=$(awk '/^#define CUDA_VERSION/ {print $3; exit}' \
+			"${EROOT}"/opt/cuda/include/cuda.h 2>/dev/null)
+		if [[ -n ${cuda_ver} && ${cuda_ver} -ge 13000 ]]; then
+			elog
+			elog "Built with SUITESPARSE_CUDA_ARCHITECTURES=\"75;80\""
+			elog "(Turing + Ampere). The upstream default is \"52;75;80\","
+			elog "but CUDA 13 dropped support for compute capability < 7.5"
+			elog "so compute_52 was removed."
+			elog
+			elog "If your GPU is newer than Ampere (e.g. Hopper sm_90,"
+			elog "Ada Lovelace sm_89, Blackwell sm_100) and you want native"
+			elog "codegen for it, override before merge:"
+			elog
+			elog "    SUITESPARSE_CUDA_ARCHITECTURES=\"75;80;89;90\" \\"
+			elog "        emerge -1 sci-libs/cholmod"
+			elog
+		fi
+	fi
 }
