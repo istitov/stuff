@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Pathfinder utilities used by NVIDIA's cuda-python project to locate
+    installed CUDA components (binaries, dynamic libraries and headers)
+    at runtime. Required by cupy 14.x and other CUDA Python bindings.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">NVIDIA/cuda-python</remote-id>
+    <remote-id type="pypi">cuda-pathfinder</remote-id>
+  </upstream>
+</pkgmetadata>
