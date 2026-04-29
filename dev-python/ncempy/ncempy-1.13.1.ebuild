@@ -21,12 +21,8 @@ KEYWORDS="~amd64"
 #issue with setuptools .edstomo.Elam discovery
 
 RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
+	>=dev-python/numpy-2[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
-	dev-python/h5py[${PYTHON_USEDEP}]
+	>=dev-python/h5py-3[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
-"
-
-BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
 "
