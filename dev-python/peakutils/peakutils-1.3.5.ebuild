@@ -23,6 +23,5 @@ KEYWORDS="~amd64 ~x86"
 RDEPEND="
 	>=dev-python/numpy-1.8[${PYTHON_USEDEP}]
 	>=dev-python/scipy-0.11[${PYTHON_USEDEP}]
-	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 #dev-python/PyQt4
