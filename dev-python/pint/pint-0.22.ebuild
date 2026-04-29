@@ -17,6 +17,9 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
+IUSE="numpy"
+
 RDEPEND="
-	dev-python/numpy
+	dev-python/typing-extensions[${PYTHON_USEDEP}]
+	numpy? ( dev-python/numpy[${PYTHON_USEDEP}] )
 "

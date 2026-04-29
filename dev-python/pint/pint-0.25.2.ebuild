@@ -17,8 +17,12 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
+IUSE="numpy"
+
 RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/flexcache[${PYTHON_USEDEP}]
-	dev-python/flexparser[${PYTHON_USEDEP}]
+	>=dev-python/flexcache-0.3[${PYTHON_USEDEP}]
+	>=dev-python/flexparser-0.4[${PYTHON_USEDEP}]
+	>=dev-python/platformdirs-2.1.0[${PYTHON_USEDEP}]
+	>=dev-python/typing-extensions-4.0.0[${PYTHON_USEDEP}]
+	numpy? ( >=dev-python/numpy-1.23[${PYTHON_USEDEP}] )
 "
