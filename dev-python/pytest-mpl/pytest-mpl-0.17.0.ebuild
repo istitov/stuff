@@ -22,6 +22,7 @@ RDEPEND="dev-python/pytest[${PYTHON_USEDEP}]
 	dev-python/jinja2[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
+	dev-python/pillow[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/importlib_resources[${PYTHON_USEDEP}]
 	' python3_8)
