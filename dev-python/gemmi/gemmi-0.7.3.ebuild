@@ -16,7 +16,9 @@ KEYWORDS="~amd64 ~x86"
 
 RDEPEND="
 	virtual/zlib
-	dev-python/pybind11[${PYTHON_USEDEP}]
-	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
+"
+DEPEND="${RDEPEND}"
+BDEPEND="
+	>=dev-python/nanobind-2.4[${PYTHON_USEDEP}]
 "
