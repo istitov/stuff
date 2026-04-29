@@ -22,12 +22,16 @@ REQUIRED_USE="
 	cudnn? ( cuda )
 	cusparselt? ( cuda )
 "
+# cupy 13.x's bundled cudnn module rejects cuDNN >=9 at build time
+# ("WARNING: cuDNN <=v8970 is required" — see cupy_setup_build.py).
+# Pin <dev-libs/cudnn-9 so the dep is unsatisfiable when a newer
+# cuDNN is on the system, instead of silently building a no-op stub.
 DEPEND="
 	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/fastrlock-0.8.1[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
 	cuda? ( dev-util/nvidia-cuda-toolkit[profiler] )
-	cudnn? ( dev-libs/cudnn )
+	cudnn? ( <dev-libs/cudnn-9 )
 	cusparselt? ( dev-libs/cusparselt )
 "
 RDEPEND="${DEPEND}"
