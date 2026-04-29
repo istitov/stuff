@@ -13,8 +13,16 @@ HOMEPAGE="https://github.com/sybrenjansen/mpire"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="dashboard dill numpy"
 
+# Upstream optional-extras mapped to USE flags:
+#   dashboard -> flask (mpire/dashboard/dashboard.py)
+#   dill      -> multiprocess (try/except in context.py for dill backend)
+#   numpy     -> numpy (try/except for ndarray progress tracking)
 RDEPEND="
 	>=dev-python/pygments-2.0[${PYTHON_USEDEP}]
 	>=dev-python/tqdm-4.27[${PYTHON_USEDEP}]
+	dashboard? ( dev-python/flask[${PYTHON_USEDEP}] )
+	dill? ( dev-python/multiprocess[${PYTHON_USEDEP}] )
+	numpy? ( dev-python/numpy[${PYTHON_USEDEP}] )
 "
