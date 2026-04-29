@@ -8,9 +8,11 @@ FORTRAN_NEEDED=fortran
 inherit fortran-2 toolchain-funcs autotools flag-o-matic
 
 DESCRIPTION="General purpose library and format for storing scientific data"
-HOMEPAGE="https://www.hdfgroup.org/hdf4.html"
-SRC_URI="https://hdf-wordpress-1.s3.amazonaws.com/wp-content/uploads/manual/HDF4/HDF${PV}-2/src/${P}-2.tar.bz2"
-S="${WORKDIR}/${P}-2"
+HOMEPAGE="https://www.hdfgroup.org/hdf4.html https://github.com/HDFGroup/hdf4"
+# Upstream tag is "hdf-${MM}_${mm}_${pp}-2" with the trailing -2 being the
+# patchlevel; convert dotted PV into the underscore form on the fly.
+SRC_URI="https://github.com/HDFGroup/hdf4/archive/refs/tags/hdf-$(ver_rs 1- _)-2.tar.gz -> ${P}.gh.tar.gz"
+S="${WORKDIR}/hdf4-hdf-$(ver_rs 1- _)-2"
 
 LICENSE="NCSA-HDF"
 SLOT="0"
