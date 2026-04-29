@@ -47,7 +47,7 @@ RDEPEND="
 	dev-python/scikit-image[${PYTHON_USEDEP}]
 	dev-python/scikit-learn[${PYTHON_USEDEP}]
 	>=dev-python/scipy-1.15[${PYTHON_USEDEP}]
-	dev-python/silx[${PYTHON_USEDEP}]
+	>=dev-python/silx-0.15.2[${PYTHON_USEDEP}]
 	>=dev-python/sqlalchemy-2.0[${PYTHON_USEDEP}]
 	dev-python/sqlalchemy-utils[${PYTHON_USEDEP}]
 	dev-python/tabulate[${PYTHON_USEDEP}]
@@ -60,6 +60,7 @@ RDEPEND="
 		>=dev-python/wxpython-4.2.2:*[${PYTHON_USEDEP}]
 		>=dev-python/wxmplot-2026.1.0[${PYTHON_USEDEP}]
 		>=dev-python/wxutils-2026.1.0[${PYTHON_USEDEP}]
+		dev-python/darkdetect[${PYTHON_USEDEP}]
 	)
 "
 DEPEND="${RDEPEND}"

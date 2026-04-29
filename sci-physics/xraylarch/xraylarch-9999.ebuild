@@ -3,89 +3,64 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1 git-r3
 
-DESCRIPTION="Software for XRF data analysis"
-HOMEPAGE="https://xraypy.github.io/xraylarch"
+DESCRIPTION="Software for analysis of X-ray absorption and fluorescence data"
+HOMEPAGE="
+	https://xraypy.github.io/xraylarch/
+	https://github.com/xraypy/xraylarch/
+"
 EGIT_REPO_URI="https://github.com/xraypy/xraylarch.git"
 
-S="${WORKDIR}/${PN}-${PV}"
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc"
-RESTRICT=strip
+IUSE="wxgui"
+# Upstream tests are largely network-driven (AMCSD, MP API, XrayDB
+# remote queries) and expect the full lmfit/hyperspy/... fixtures.
+RESTRICT="test"
 
 RDEPEND="
-	>=dev-python/numpy-1.15[${PYTHON_USEDEP}]
-	>=dev-python/scipy-1.2[${PYTHON_USEDEP}]
-	>=dev-python/six-1.10[${PYTHON_USEDEP}]
-	>=dev-python/sqlalchemy-0.9[${PYTHON_USEDEP}]
-	>=dev-python/h5py-2.8[${PYTHON_USEDEP}]
-	>=dev-python/scikit-learn-0.18[${PYTHON_USEDEP}]
-	>=dev-python/pillow-3.4[${PYTHON_USEDEP}]
-	>=dev-python/peakutils-1.3.0[${PYTHON_USEDEP}]
-	>=dev-python/requests-2.1[${PYTHON_USEDEP}]
-	>=sci-libs/lmfit-3.4
-	>=dev-python/uncertainties-3.0.3[${PYTHON_USEDEP}]
-	>=dev-python/asteval-0.9.18[${PYTHON_USEDEP}]
-	dev-python/pyyaml[${PYTHON_USEDEP}]
-	dev-python/psutil[${PYTHON_USEDEP}]
-	dev-python/termcolor[${PYTHON_USEDEP}]
-	dev-python/wxpython:*[${PYTHON_USEDEP}]
-	dev-python/wxmplot[${PYTHON_USEDEP}]
-	dev-python/wxutils[${PYTHON_USEDEP}]
-	dev-python/lmfit[${PYTHON_USEDEP}]
-	dev-python/scikit-image[${PYTHON_USEDEP}]
-	dev-python/silx[${PYTHON_USEDEP}]
-	dev-python/pytest[${PYTHON_USEDEP}]
-	dev-python/pip[${PYTHON_USEDEP}]
-	dev-python/xraydb[${PYTHON_USEDEP}]
-	dev-python/pyshortcuts[${PYTHON_USEDEP}]
-	>=dev-python/matplotlib-3.0[${PYTHON_USEDEP}]
-
-	dev-python/pytest[${PYTHON_USEDEP}]
-	dev-python/sphinx[${PYTHON_USEDEP}]
-	dev-python/numpydoc[${PYTHON_USEDEP}]
-
+	dev-python/asteval[${PYTHON_USEDEP}]
+	dev-python/charset-normalizer[${PYTHON_USEDEP}]
+	dev-python/dill[${PYTHON_USEDEP}]
 	dev-python/fabio[${PYTHON_USEDEP}]
+	dev-python/h5py[${PYTHON_USEDEP}]
+	dev-python/hdf5plugin[${PYTHON_USEDEP}]
+	dev-python/imageio[${PYTHON_USEDEP}]
+	dev-python/larixite[${PYTHON_USEDEP}]
+	dev-python/lmfit[${PYTHON_USEDEP}]
+	dev-python/matplotlib[${PYTHON_USEDEP}]
+	dev-python/numdifftools[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
+	dev-python/pillow[${PYTHON_USEDEP}]
+	dev-python/pip[${PYTHON_USEDEP}]
+	dev-python/psutil[${PYTHON_USEDEP}]
 	dev-python/pyfai[${PYTHON_USEDEP}]
-	sci-libs/pycifrw[${PYTHON_USEDEP}]
+	dev-python/pyshortcuts[${PYTHON_USEDEP}]
+	dev-python/pyyaml[${PYTHON_USEDEP}]
+	dev-python/requests[${PYTHON_USEDEP}]
+	dev-python/scikit-image[${PYTHON_USEDEP}]
+	dev-python/scikit-learn[${PYTHON_USEDEP}]
+	dev-python/scipy[${PYTHON_USEDEP}]
+	dev-python/silx[${PYTHON_USEDEP}]
+	dev-python/sqlalchemy[${PYTHON_USEDEP}]
+	dev-python/sqlalchemy-utils[${PYTHON_USEDEP}]
+	dev-python/tabulate[${PYTHON_USEDEP}]
+	dev-python/termcolor[${PYTHON_USEDEP}]
+	dev-python/tomli[${PYTHON_USEDEP}]
+	dev-python/tomli-w[${PYTHON_USEDEP}]
+	dev-python/uncertainties[${PYTHON_USEDEP}]
+	dev-python/xraydb[${PYTHON_USEDEP}]
+	wxgui? (
+		dev-python/wxpython:*[${PYTHON_USEDEP}]
+		dev-python/wxmplot[${PYTHON_USEDEP}]
+		dev-python/wxutils[${PYTHON_USEDEP}]
+		dev-python/darkdetect[${PYTHON_USEDEP}]
+	)
 "
-#	dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
-#sphinxcontrib-bibtex #dev
-#sphinxcontrib-argdoc #dev
-
 DEPEND="${RDEPEND}"
-#	dev-python/pyepics
-#	dev-python/tomopy
-#for EPICS pyepics, psycopg2, epicsscan
-
-PATCHES=(
-	"${FILESDIR}"/full_conf.patch
-)
-#	"${FILESDIR}"/py.patch
-
-distutils_enable_sphinx docs
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-python_compile() {
-	INSTALL_DIR="${D}"
-	distutils-r1_python_compile
-	sed -i -e 's:../examples/:./examples/:' tests/*.py || die
-	sed -i -e "s:'larch_scripts':'tests/larch_scripts':" tests/*.py || die
-	sed -i -e "s:'test_larch_plugin':'tests/test_larch_plugin':" tests/*.py || die
-	sed -i -e "s:'..', 'examples':'.', 'examples':" tests/*.py || die
-}
-
-python_compile_all() {
-	esetup.py build
-}
-
-python_install_all() {
-	mkdir "${D}"/bin
-	distutils-r1_python_install_all
-}
+BDEPEND=">=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]"
