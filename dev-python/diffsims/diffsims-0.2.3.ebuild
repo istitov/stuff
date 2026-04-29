@@ -17,12 +17,10 @@ KEYWORDS="~amd64"
 RDEPEND="
 	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
 	>=dev-python/scipy-0.15[${PYTHON_USEDEP}]
-	dev-python/matplotlib[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-3.1.1[${PYTHON_USEDEP}]
 	>=dev-python/tqdm-0.4.9[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
-	dev-python/diffpy-structure[${PYTHON_USEDEP}]
+	>=dev-python/diffpy-structure-3.0.0[${PYTHON_USEDEP}]
 	dev-python/transforms3d[${PYTHON_USEDEP}]
 	dev-python/psutil[${PYTHON_USEDEP}]
 "
-#	>=dev-python/matplotlib-3.1.1
-#
