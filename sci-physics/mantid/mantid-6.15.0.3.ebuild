@@ -22,10 +22,15 @@ fi
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-# ~amd64 — work in progress. Build-verified through src_configure up
-# to the HDF4 probe; further configure blocked by sci-libs/hdf failing
-# to compile against gcc 15 (Gentoo bug 942866). Not a mantid-side
-# bug.
+# ~amd64 — work in progress. The earlier blocker on the HDF4 probe is
+# resolved by this overlay's sci-libs/hdf-4.2.16, which patches around
+# Gentoo bug 942866 (HDF4 vs gcc-15). Further build phases beyond
+# src_configure are still untested.
+#
+# Note: as of 6.15.x mantid has no GPU offload — the build system uses
+# only TBB + OpenMP for parallelism, and the source tree contains no
+# .cu/.cuh files or find_package(CUDA) calls. There is no `cuda` IUSE
+# to add here even when nvidia-cuda-toolkit is installed.
 IUSE="doc python test"
 RESTRICT="!test? ( test )"
 
