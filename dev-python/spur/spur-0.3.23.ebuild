@@ -25,6 +25,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
+	>=dev-python/paramiko-1.13.1[${PYTHON_USEDEP}]
 	<dev-python/paramiko-4[${PYTHON_USEDEP}]
 "
 
