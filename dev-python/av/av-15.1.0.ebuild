@@ -16,7 +16,9 @@ KEYWORDS="~amd64 ~x86"
 
 RESTRICT="test"
 
-DEPEND="media-video/ffmpeg"
+RDEPEND="media-video/ffmpeg:="
+DEPEND="${RDEPEND}"
+BDEPEND=">=dev-python/cython-3.1.0[${PYTHON_USEDEP}]"
 
 #distutils_enable_tests setup.py
 # The configuration file (or one of the modules it imports) called sys.exit()
