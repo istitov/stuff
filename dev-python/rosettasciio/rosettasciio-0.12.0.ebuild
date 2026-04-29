@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 virtualx pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="Reading and writing scientific file formats"
 HOMEPAGE="https://hyperspy.org/rosettasciio"
@@ -15,44 +15,33 @@ S=${WORKDIR}/${P}
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-#IUSE="mrcz tests"
-IUSE="doc test"
+IUSE="+hdf5 +image +speed +tiff +zspy"
 
+# Upstream pyproject.toml [project].dependencies block lists six core
+# entries unconditionally; everything else lives under named optional
+# extras. Mirror that layout so consumers can pull only what they
+# need (matches the 0.13.0 ebuild shape).
 RDEPEND="
 	>=dev-python/dask-2022.9.2[${PYTHON_USEDEP}]
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/pint[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
+	>=dev-python/pint-0.8[${PYTHON_USEDEP}]
+	>=dev-python/python-box-6[${PYTHON_USEDEP}]
+	<dev-python/python-box-8[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
-	dev-python/python-box[${PYTHON_USEDEP}]
-	dev-python/h5py[${PYTHON_USEDEP}]
-	dev-python/sparse[${PYTHON_USEDEP}]
-	dev-python/numba[${PYTHON_USEDEP}]
-	dev-python/tifffile[${PYTHON_USEDEP}]
-	dev-python/imageio[${PYTHON_USEDEP}]
-	dev-python/pillow[${PYTHON_USEDEP}]
-	<dev-python/zarr-3.0[${PYTHON_USEDEP}]
-"
-	##
-	##mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
-	#	<dev-python/matplotlib-3.5[${PYTHON_USEDEP}]
-
-	#dev-python/scikit-image[${PYTHON_USEDEP}]
-	#dev-python/matplotlib-scalebar[${PYTHON_USEDEP}]
-
-DEPEND="${RDEPEND}
-	test? ( dev-python/filelock[${PYTHON_USEDEP}]
-		dev-python/pooch[${PYTHON_USEDEP}]
-		>=dev-python/pytest-3.6[${PYTHON_USEDEP}]
-		dev-python/pytest-mpl[${PYTHON_USEDEP}]
-		dev-python/pytest-xdist[${PYTHON_USEDEP}]
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
-		dev-python/pytest-timeout[${PYTHON_USEDEP}]
+	hdf5? ( >=dev-python/h5py-3.7[${PYTHON_USEDEP}] )
+	image? (
+		>=dev-python/imageio-2.16[${PYTHON_USEDEP}]
+		>=dev-python/pillow-9.0.1[${PYTHON_USEDEP}]
+	)
+	speed? ( >=dev-python/numba-0.56[${PYTHON_USEDEP}] )
+	tiff? (
+		>=dev-python/tifffile-2022.7.28[${PYTHON_USEDEP}]
+	)
+	zspy? (
+		>=dev-python/zarr-2[${PYTHON_USEDEP}]
+		<dev-python/zarr-3[${PYTHON_USEDEP}]
+		dev-python/msgpack[${PYTHON_USEDEP}]
 	)
 "
-
-#hyperspy is required for tests
-
-python_test() {
-	virtx epytest
-}
+DEPEND="${RDEPEND}"
