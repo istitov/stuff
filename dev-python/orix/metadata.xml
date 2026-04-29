@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    orix is an open-source Python library for analysing crystal
+    orientation mapping data. It is part of the pyxem project and is
+    a runtime dependency of diffsims and pyxem.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">pyxem/orix</remote-id>
+    <remote-id type="pypi">orix</remote-id>
+  </upstream>
+</pkgmetadata>
