@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>lebedev.vasya@gmail.com</email>
-	</maintainer>
-	<upstream>
-		<remote-id type="github">sybrenjansen/mpire</remote-id>
-		<remote-id type="pypi">mpire</remote-id>
-	</upstream>
+  <maintainer type="person">
+    <email>lebedev.vasya@gmail.com</email>
+  </maintainer>
+  <use>
+    <flag name="dashboard">Pull in dev-python/flask for the optional dashboard webapp under mpire/dashboard/</flag>
+    <flag name="dill">Pull in dev-python/multiprocess so the dill-based fork backend in mpire/context.py is usable</flag>
+    <flag name="numpy">Pull in dev-python/numpy so ndarray progress tracking and array-aware helpers work without falling back to soft-import paths</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">sybrenjansen/mpire</remote-id>
+    <remote-id type="pypi">mpire</remote-id>
+  </upstream>
 </pkgmetadata>
