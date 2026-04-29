@@ -38,6 +38,17 @@ src_prepare() {
 
 	if use gpu; then
 		sed -i -e 's:set(PRISMATIC_ENABLE_GPU 0:set(PRISMATIC_ENABLE_GPU 1:' CMakeLists.txt || die
+
+		# CUDA 13 dropped sm_60 support; bump the hard-coded
+		# -arch=sm_60 in CMakeLists.txt to sm_75 only when building
+		# against CUDA >= 13. CUDA 12 still accepts sm_60, so leave
+		# it alone there.
+		local cuda_ver=$(awk '/^#define CUDA_VERSION/ {print $3; exit}' \
+			"${ESYSROOT}"/opt/cuda/include/cuda.h 2>/dev/null)
+		if [[ -n ${cuda_ver} && ${cuda_ver} -ge 13000 ]]; then
+			sed -i -e 's/-arch=sm_60 /-arch=sm_75 /' \
+				CMakeLists.txt || die
+		fi
 	fi
 	cmake_src_prepare
 }
