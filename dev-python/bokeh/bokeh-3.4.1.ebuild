@@ -18,13 +18,15 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	dev-python/jinja2[${PYTHON_USEDEP}]
-	>=dev-python/numpy-1.11.3[${PYTHON_USEDEP}]
+	>=dev-python/jinja2-2.9[${PYTHON_USEDEP}]
+	>=dev-python/contourpy-1.2[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.16[${PYTHON_USEDEP}]
 	>=dev-python/packaging-16.8[${PYTHON_USEDEP}]
+	>=dev-python/pandas-1.2[${PYTHON_USEDEP}]
 	>=dev-python/pillow-7.1.0[${PYTHON_USEDEP}]
 	>=dev-python/pyyaml-3.10[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-3.10.0[${PYTHON_USEDEP}]
-	>=dev-python/tornado-5.1[${PYTHON_USEDEP}]
+	>=dev-python/tornado-6.2[${PYTHON_USEDEP}]
+	>=dev-python/xyzservices-2021.09.1[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (
