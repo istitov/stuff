@@ -19,25 +19,22 @@ SLOT="0"
 KEYWORDS=""
 
 RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/scipy[${PYTHON_USEDEP}]
-	dev-python/matplotlib[${PYTHON_USEDEP}]
-	dev-python/numba[${PYTHON_USEDEP}]
+	dev-python/ase[${PYTHON_USEDEP}]
 	>=dev-python/dask-2022.12.1[${PYTHON_USEDEP}]
-	dev-python/zarr[${PYTHON_USEDEP}]
+	dev-python/distributed[${PYTHON_USEDEP}]
 	dev-python/ipympl[${PYTHON_USEDEP}]
 	dev-python/ipywidgets[${PYTHON_USEDEP}]
-	dev-python/jupyterlab[${PYTHON_USEDEP}]
-	dev-python/jupyterlab-widgets[${PYTHON_USEDEP}]
-	dev-python/ase[${PYTHON_USEDEP}]
-	dev-python/pillow[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-3.6[${PYTHON_USEDEP}]
+	dev-python/numba[${PYTHON_USEDEP}]
+	>=dev-python/numpy-2.0.0[${PYTHON_USEDEP}]
 	dev-python/pandas[${PYTHON_USEDEP}]
-	dev-python/bokeh[${PYTHON_USEDEP}]
-	dev-python/distributed[${PYTHON_USEDEP}]
-	dev-python/dask-labextension[${PYTHON_USEDEP}]
 	dev-python/pyfftw[${PYTHON_USEDEP}]
+	dev-python/rich[${PYTHON_USEDEP}]
+	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/tabulate[${PYTHON_USEDEP}]
-	dev-python/hypothesis[${PYTHON_USEDEP}]
+	dev-python/threadpoolctl[${PYTHON_USEDEP}]
+	dev-python/tqdm[${PYTHON_USEDEP}]
+	dev-python/zarr[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
