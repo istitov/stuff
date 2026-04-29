@@ -19,16 +19,18 @@ KEYWORDS="~amd64"
 IUSE="doc test"
 
 RDEPEND="
-	dev-python/hyperspy[${PYTHON_USEDEP}]
+	>=dev-python/hyperspy-2.0[${PYTHON_USEDEP}]
 	dev-python/dask[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/numexpr[${PYTHON_USEDEP}]
 	dev-python/pint[${PYTHON_USEDEP}]
+	dev-python/pooch[${PYTHON_USEDEP}]
+	dev-python/prettytable[${PYTHON_USEDEP}]
+	dev-python/requests[${PYTHON_USEDEP}]
 	dev-python/traits[${PYTHON_USEDEP}]
 "
-#pooch
 
 DEPEND="${RDEPEND}
 	test? ( >=dev-python/pytest-3.6[${PYTHON_USEDEP}]
