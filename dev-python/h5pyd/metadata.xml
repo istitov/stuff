@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    h5pyd presents an h5py-compatible Python API on top of the HDF
+    REST/HSDS service. Provides the dev-python/silx [h5pyd] extra
+    that lets silx browse and read remote HSDS-served HDF5 datasets.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">HDFGroup/h5pyd</remote-id>
+    <remote-id type="pypi">h5pyd</remote-id>
+  </upstream>
+</pkgmetadata>
