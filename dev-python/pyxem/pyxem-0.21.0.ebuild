@@ -16,14 +16,22 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	dev-python/scikit-image[${PYTHON_USEDEP}]
-	dev-python/scikit-learn[${PYTHON_USEDEP}]
-	dev-python/matplotlib[${PYTHON_USEDEP}]
-	dev-python/hyperspy[${PYTHON_USEDEP}]
-	dev-python/lmfit[${PYTHON_USEDEP}]
-	dev-python/diffsims[${PYTHON_USEDEP}]
-	dev-python/pyfai[${PYTHON_USEDEP}]
-	dev-python/ipywidgets[${PYTHON_USEDEP}]
+	dev-python/dask[${PYTHON_USEDEP}]
+	>=dev-python/diffsims-0.7.0[${PYTHON_USEDEP}]
+	dev-python/h5py[${PYTHON_USEDEP}]
+	>=dev-python/hyperspy-2.0[${PYTHON_USEDEP}]
+	>=dev-python/lmfit-0.9.12[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-3.7.5[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	>=dev-python/orix-0.12.1[${PYTHON_USEDEP}]
+	dev-python/pooch[${PYTHON_USEDEP}]
+	dev-python/psutil[${PYTHON_USEDEP}]
+	dev-python/pyfai[${PYTHON_USEDEP}]
+	>=dev-python/scikit-image-0.19.0[${PYTHON_USEDEP}]
+	>=dev-python/scikit-learn-1.0[${PYTHON_USEDEP}]
+	dev-python/scipy[${PYTHON_USEDEP}]
+	>dev-python/shapely-2.0.0-r0[${PYTHON_USEDEP}]
+	dev-python/transforms3d[${PYTHON_USEDEP}]
+	dev-python/ipywidgets[${PYTHON_USEDEP}]
 "
-#	>=dev-python/matplotlib-3.1.1
