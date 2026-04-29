@@ -15,14 +15,15 @@ LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 
-RDEPEND="
-	dev-python/scipy[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/llvmlite[${PYTHON_USEDEP}]
-	dev-python/numba[${PYTHON_USEDEP}]
-	dev-python/pywavelets[${PYTHON_USEDEP}]
-"
+IUSE="advanced"
 
-#	dev-python/pyfftw[${PYTHON_USEDEP}] #have internal error with cython-3*
-#    "scikit-fmm",
-#    "spgl1",
+RDEPEND="
+	>=dev-python/numpy-1.21.0[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.4.0[${PYTHON_USEDEP}]
+	advanced? (
+		dev-python/llvmlite[${PYTHON_USEDEP}]
+		dev-python/numba[${PYTHON_USEDEP}]
+		dev-python/pyfftw[${PYTHON_USEDEP}]
+		dev-python/pywavelets[${PYTHON_USEDEP}]
+	)
+"
