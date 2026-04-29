@@ -15,22 +15,6 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	dev-python/pygments[${PYTHON_USEDEP}]
-	dev-python/tqdm[${PYTHON_USEDEP}]
-	dev-python/flask[${PYTHON_USEDEP}]
-	dev-python/multiprocess[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
+	>=dev-python/pygments-2.0[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.27[${PYTHON_USEDEP}]
 "
-#            'docs': ['docutils==0.17.1',
-#                     'sphinx==3.2.1',
-#                     'sphinx-rtd-theme==0.5.0',
-#                     'sphinx-autodoc-typehints==1.11.0',
-#                     'sphinxcontrib-images==0.9.2',
-#                     'sphinx-versions==1.0.1'],
-#            'testing': ['dataclasses; python_version<"3.7"',
-#                        'multiprocess; python_version<"3.11"',
-#                        'multiprocess>=0.70.15; python_version>="3.11"',
-#                        'numpy',
-#
-
-##!!!dashboard to be configured; setuptools issue
