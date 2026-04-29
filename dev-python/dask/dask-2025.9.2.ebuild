@@ -5,8 +5,6 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
-# GitHub tarballs have no git metadata; keep setuptools-scm happy.
-export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_DASK=${PV}
 
 inherit distutils-r1
 
@@ -34,7 +32,7 @@ RDEPEND="
 	>=dev-python/toolz-0.10.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	>=dev-python/setuptools-scm-9.0[${PYTHON_USEDEP}]
+	~dev-python/versioneer-0.29[toml(+),${PYTHON_USEDEP}]
 	test? (
 		dev-python/numpy[${PYTHON_USEDEP}]
 		dev-python/pandas[${PYTHON_USEDEP}]
