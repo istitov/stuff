@@ -16,8 +16,11 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64"
 
+# Upstream [project].dependencies lists numpy>=1.17 and numba>=0.49
+# only, but the source imports scipy.sparse / scipy.sparse.csgraph
+# directly (verified 2026-04-29), so scipy stays in RDEPEND.
 RDEPEND="
-	>=dev-python/numpy-1.13
-	>=dev-python/scipy-0.19
-	>=dev-python/numba-0.49
+	>=dev-python/numpy-1.17[${PYTHON_USEDEP}]
+	>=dev-python/numba-0.49[${PYTHON_USEDEP}]
+	dev-python/scipy[${PYTHON_USEDEP}]
 "
