@@ -25,7 +25,7 @@ REQUIRED_USE="
 DEPEND="
 	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/fastrlock-0.8.1[${PYTHON_USEDEP}]
-	>=dev-python/numpy-1.18.0[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
 	cuda? ( dev-util/nvidia-cuda-toolkit[profiler] )
 	cudnn? ( dev-libs/cudnn )
 	cusparselt? ( dev-libs/cusparselt )
