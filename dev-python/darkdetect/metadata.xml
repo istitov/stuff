@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Tiny Python package that returns the host operating system's
+    light/dark theme preference. Used by wxmplot/wxutils to pick
+    matching plot styles on launch.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">albertosottile/darkdetect</remote-id>
+    <remote-id type="pypi">darkdetect</remote-id>
+  </upstream>
+</pkgmetadata>
