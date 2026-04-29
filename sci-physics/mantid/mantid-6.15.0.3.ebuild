@@ -22,10 +22,12 @@ fi
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-# ~amd64 — work in progress. The earlier blocker on the HDF4 probe is
-# resolved by this overlay's sci-libs/hdf-4.2.16, which patches around
-# Gentoo bug 942866 (HDF4 vs gcc-15). Further build phases beyond
-# src_configure are still untested.
+# ~amd64 — full src_unpack/prepare/configure/compile/install pipeline
+# now verified clean against gcc-15 + Boost-1.90 + Qt-5.15.18 + Python
+# 3.13. The earlier HDF4-probe blocker (Gentoo bug 942866) is resolved
+# by this overlay's sci-libs/hdf-4.2.16. Install lands ~178 MiB under
+# /opt/mantid/{bin,lib,lib64,plugins,instrument,scripts}; runtime
+# behaviour (workbench launch, algorithm catalog) is still untested.
 #
 # Note: as of 6.15.x mantid has no GPU offload — the build system uses
 # only TBB + OpenMP for parallelism, and the source tree contains no
@@ -60,7 +62,14 @@ RDEPEND="
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	x11-libs/qscintilla
-	dev-qt/qtbase
+	dev-qt/qtconcurrent:5
+	dev-qt/qtgui:5
+	dev-qt/qthelp:5
+	dev-qt/qtnetwork:5
+	dev-qt/qtprintsupport:5
+	dev-qt/qtsql:5
+	dev-qt/qtwidgets:5
+	dev-qt/qtxml:5
 	dev-python/qtconsole[${PYTHON_USEDEP}]
 	dev-python/qtpy[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]

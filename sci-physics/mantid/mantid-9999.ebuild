@@ -56,7 +56,14 @@ RDEPEND="
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	x11-libs/qscintilla
-	dev-qt/qtbase
+	dev-qt/qtconcurrent:5
+	dev-qt/qtgui:5
+	dev-qt/qthelp:5
+	dev-qt/qtnetwork:5
+	dev-qt/qtprintsupport:5
+	dev-qt/qtsql:5
+	dev-qt/qtwidgets:5
+	dev-qt/qtxml:5
 	dev-python/qtconsole[${PYTHON_USEDEP}]
 	dev-python/qtpy[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
