@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Waveform Seekbar plugin for DeaDBeeF audio player"
 HOMEPAGE="https://github.com/cboxdoerfer/ddb_waveform_seekbar"
