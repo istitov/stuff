@@ -53,6 +53,18 @@ src_prepare() {
 				CMakeLists.txt || die
 		fi
 	fi
+
+	# Building the prismatic-gui shared CUDA library compiles .cu
+	# files that pull in Qt6 headers. gcc-15 promotes -Wtemplate-body
+	# and -Wchanges-meaning to errors on Qt6's QHash::TryEmplaceResult
+	# (the field 'iterator' shadows the type 'iterator'). Plain g++
+	# accepts the code, but nvcc's -Werror chain bites here. Forward
+	# the suppressions through nvcc -> host gcc.
+	if use gpu && use gui; then
+		sed -i \
+			-e 's/-Xcompiler -fPIC"/-Xcompiler -fPIC -Xcompiler=-Wno-template-body -Xcompiler=-Wno-changes-meaning"/' \
+			CMakeLists.txt || die
+	fi
 }
 
 src_configure() {
