@@ -29,8 +29,11 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/matplotlib[wxwidgets,${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
-		dev-python/psycopg[${PYTHON_USEDEP}]
+		dev-python/openpyxl[${PYTHON_USEDEP}]
+		dev-python/pillow[${PYTHON_USEDEP}]
+		dev-python/pymysql[${PYTHON_USEDEP}]
 		dev-python/pypdf[${PYTHON_USEDEP}]
+		dev-python/psycopg[${PYTHON_USEDEP}]
 		dev-python/pyxdg[${PYTHON_USEDEP}]
 		dev-python/wxpython[${PYTHON_USEDEP}]
 	')
@@ -40,6 +43,15 @@ DEPEND="${RDEPEND}"
 
 pkg_setup() {
 	python-single-r1_pkg_setup
+}
+
+src_prepare() {
+	default
+	# 2026-04-29: dev-python/PyPDF2 is gone from ::gentoo; the modern
+	# fork (dev-python/pypdf) is API-compatible for PdfReader, which is
+	# all this module uses. Drop the PyPDF2 alias.
+	sed -i -e 's/import PyPDF2 as pypdf/import pypdf/' \
+		sofa_main/exporting/export_output_pdfs.py || die
 }
 
 src_install() {
