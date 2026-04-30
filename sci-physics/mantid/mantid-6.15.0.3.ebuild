@@ -60,6 +60,8 @@ RDEPEND="
 	sci-libs/pycifrw[${PYTHON_USEDEP}]
 	dev-python/pyqt5[${PYTHON_USEDEP}]
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
+	dev-python/pyvista[${PYTHON_USEDEP}]
+	dev-python/pyvistaqt[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	x11-libs/qscintilla
 	dev-qt/qtconcurrent:5
@@ -70,9 +72,11 @@ RDEPEND="
 	dev-qt/qtsql:5
 	dev-qt/qtwidgets:5
 	dev-qt/qtxml:5
+	dev-python/orsopy[${PYTHON_USEDEP}]
 	dev-python/qtconsole[${PYTHON_USEDEP}]
-	dev-python/qtpy[${PYTHON_USEDEP}]
+	dev-python/qtpy[${PYTHON_USEDEP},pyqt5]
 	dev-python/requests[${PYTHON_USEDEP}]
+	dev-python/superqt[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/sphinx[${PYTHON_USEDEP}]
