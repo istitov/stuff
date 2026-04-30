@@ -154,22 +154,43 @@ src_prepare() {
 	sed -i -e 's/COMPONENTS date_time regex serialization filesystem system/COMPONENTS date_time regex serialization filesystem/' \
 		buildconfig/CMake/CommonSetup.cmake || die
 
-	# Mantid runs `pip install --editable . --ignore-installed --no-deps`
-	# for its in-tree Python packages. Two Gentoo-specific flags are
-	# needed but pip reads them from env vars which don't survive the
-	# cmake -> ninja -> cmake-E-env chain inside portage's sandbox
-	# (verified: same env vars work through cmake -E env outside the
-	# sandbox, so something in portage's build wrapping drops PIP_*).
-	# Bake the flags into the command line instead:
-	#   --break-system-packages: defeat PEP 668's refusal to install
-	#     into a marker-tagged Python (the install only writes an
-	#     .egg-link into the build dir, doesn't touch /usr).
-	#   --no-build-isolation: use system dev-python/setuptools instead
-	#     of pip fetching its own from pypi, which the network sandbox
-	#     blocks anyway.
-	local pip_orig='-m pip install --editable . --ignore-installed --no-deps'
-	local pip_new="${pip_orig} --break-system-packages --no-build-isolation"
-	sed -i -e "s|${pip_orig}|${pip_new}|" \
+	# buildconfig/CMake/PythonPackageTargetFunctions.cmake runs pip in
+	# two places we have to fix up:
+	#
+	# (a) build-time `pip install --editable .` to drop a .egg-link in
+	#     the build dir for in-tree development. Needs the Gentoo flags
+	#     --break-system-packages (defeat PEP 668 on the marker-tagged
+	#     system Python) and --no-build-isolation (use system setuptools
+	#     instead of fetching from pypi, which the network sandbox blocks
+	#     anyway). Both flags also belong on (b).
+	#
+	# (b) install-time `pip install <SRCDIR>` invoked from an install(
+	#     CODE ...) block. Same flags as (a), plus --prefix and --root so
+	#     pip honours portage's DESTDIR. Without --root=\$ENV{DESTDIR}
+	#     the install-time pip silently fails (PEP 668) or leaks into
+	#     /usr/lib/python.../site-packages on the build host instead of
+	#     landing in ${ED}/opt/mantid/lib/python.../site-packages, which
+	#     is why the in-tree Python wrappers (mantid/__init__.py,
+	#     mantid.simpleapi, the whole workbench/ package, etc.) never
+	#     made it into the merged install.
+	#
+	# Plus: dev-python/vcs-versioning is installed system-wide and auto-
+	# hooks every setuptools build via an entry-point. Its git-based
+	# file finder (vcs_versioning/_file_finders/_git.py) runs `git
+	# rev-parse HEAD` in the source tree. Under portage's install phase
+	# pip runs as root while the source is owned by the portage build
+	# user; git refuses with "dubious ownership" and the file finder
+	# raises SystemExit, killing pip metadata generation. The finder
+	# checks SETUPTOOLS_SCM_IGNORE_DUBIOUS_OWNER and gracefully returns
+	# None if it is set, letting setuptools' default file discovery
+	# take over. SETUPTOOLS_SCM_PRETEND_VERSION isn't strictly needed
+	# here since mantid's setup.py reads MANTID_VERSION_STR directly,
+	# but we still set it to keep vcs-versioning's version-detection
+	# hook from re-entering git later.
+	sed -i \
+		-e 's|-m pip install --editable . --ignore-installed --no-deps|-m pip install --editable . --ignore-installed --no-deps --break-system-packages --no-build-isolation|' \
+		-e 's|python -m pip install ${CMAKE_CURRENT_SOURCE_DIR} --disable-pip-version-check --upgrade --no-deps --ignore-installed --no-cache-dir -vvv|python -m pip install ${CMAKE_CURRENT_SOURCE_DIR} --disable-pip-version-check --upgrade --no-deps --ignore-installed --no-cache-dir --break-system-packages --no-build-isolation --prefix=${CMAKE_INSTALL_PREFIX} --root=\\$ENV{DESTDIR} -vvv|' \
+		-e 's|MANTID_VERSION_STR=${_version_str}|MANTID_VERSION_STR=${_version_str} SETUPTOOLS_SCM_PRETEND_VERSION=${_version_str} SETUPTOOLS_SCM_IGNORE_DUBIOUS_OWNER=1|g' \
 		buildconfig/CMake/PythonPackageTargetFunctions.cmake || die
 
 	cmake_src_prepare
@@ -187,14 +208,31 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# Wire /opt/mantid into PATH, LDPATH, and PYTHONPATH via env.d.
-	# User needs `env-update && source /etc/profile` (or a new shell)
-	# after install or removal.
+	# Upstream ships two launchers shaped for conda layout:
+	#   * launch_mantidworkbench checks $CONDA_PREFIX and aborts otherwise
+	#   * launch_mantidworkbench.standalone hardcodes ${INSTALLDIR}/bin/python
+	# Neither matches a Gentoo /opt install. Drop the conda one outright
+	# and rewrite the standalone to use the system Python plus a PYTHONPATH
+	# that includes our site-packages dir.
+	rm "${ED}${MY_PREFIX}/bin/launch_mantidworkbench" || die
+	local sp_dir="${MY_PREFIX}/lib/${EPYTHON}/site-packages"
+	sed -i \
+		-e "s|\${INSTALLDIR}/bin/python|${EPYTHON}|" \
+		-e "s|LOCAL_PYTHONPATH=\${INSTALLDIR}/bin:\${INSTALLDIR}/lib:\${INSTALLDIR}/plugins|LOCAL_PYTHONPATH=${sp_dir}:\${INSTALLDIR}/bin:\${INSTALLDIR}/lib:\${INSTALLDIR}/plugins|" \
+		"${ED}${MY_PREFIX}/bin/launch_mantidworkbench.standalone" || die
+
+	# Wire /opt/mantid into PATH, LDPATH, and PYTHONPATH via env.d so
+	# `import mantid` etc. work in any shell after `env-update && source
+	# /etc/profile` (or a new shell). PYTHONPATH covers:
+	#   * site-packages — the Python wrappers (mantid, mantidqt, workbench)
+	#   * bin           — Mantid.properties (mantid resolves bin-relative
+	#                     paths from sys.path entries via _bin_dirs())
+	#   * plugins       — algorithm/qt5 .so plugins enumerated at startup
 	newenvd - 99mantid <<-EOF
 		PATH=${MY_PREFIX}/bin
 		ROOTPATH=${MY_PREFIX}/bin
 		LDPATH=${MY_PREFIX}/lib
-		PYTHONPATH=${MY_PREFIX}/bin
+		PYTHONPATH=${sp_dir}:${MY_PREFIX}/bin:${MY_PREFIX}/plugins
 	EOF
 }
 
