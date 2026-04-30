@@ -74,7 +74,7 @@ RDEPEND="
 	dev-qt/qtxml:5
 	dev-python/orsopy[${PYTHON_USEDEP}]
 	dev-python/qtconsole[${PYTHON_USEDEP}]
-	dev-python/qtpy[${PYTHON_USEDEP},pyqt5]
+	dev-python/qtpy[${PYTHON_USEDEP},pyqt5(-)]
 	dev-python/requests[${PYTHON_USEDEP}]
 	dev-python/superqt[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
