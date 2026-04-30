@@ -16,18 +16,25 @@ EGIT_REPO_URI="https://github.com/mantidproject/mantid.git"
 if [[ ${PV} = *9999* ]] ; then
 	EGIT_COMMIT="HEAD"
 else
-	EGIT_COMMIT=v${PV}
+	# Mantid tags drop Gentoo's underscore in prerelease components:
+	# PV 6.15.0.4_rc1 -> tag v6.15.0.4rc1.
+	EGIT_COMMIT=v${PV/_/}
 fi
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 # ~amd64 — full src_unpack/prepare/configure/compile/install pipeline
-# now verified clean against gcc-15 + Boost-1.90 + Qt-5.15.18 + Python
-# 3.13. The earlier HDF4-probe blocker (Gentoo bug 942866) is resolved
-# by this overlay's sci-libs/hdf-4.2.16. Install lands ~178 MiB under
-# /opt/mantid/{bin,lib,lib64,plugins,instrument,scripts}; runtime
-# behaviour (workbench launch, algorithm catalog) is still untested.
+# verified clean against gcc-15 + Boost-1.90 + Qt-5.15.18 + Python 3.13.
+# The earlier HDF4-probe blocker (Gentoo bug 942866) is resolved by this
+# overlay's sci-libs/hdf-4.2.16. Install lands ~226 MiB under
+# /opt/mantid/{bin,lib,lib64,plugins,instrument,scripts}; workbench
+# launches under QT_API=pyqt5 (see pkg_postinst). Bumped from 6.15.0.3
+# to 6.15.0.4rc1: the older tag hard-imported QtWebEngineWidgets at
+# workbench startup, and ::gentoo dropped both PyQtWebEngine and
+# dev-qt/qtwebengine:5 along with its Qt5 deprecation. Upstream removed
+# all WebEngine usage in 6.15.0.4rc1 (and HEAD), making the package
+# launchable again on a Qt5-only Gentoo install.
 #
 # Note: as of 6.15.x mantid has no GPU offload — the build system uses
 # only TBB + OpenMP for parallelism, and the source tree contains no
