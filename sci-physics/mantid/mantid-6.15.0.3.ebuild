@@ -251,4 +251,22 @@ pkg_postinst() {
 	elog "PATH, LDPATH, and PYTHONPATH are wired up via /etc/env.d/99mantid."
 	elog "Run 'env-update && source /etc/profile' or start a new shell"
 	elog "before invoking mantid."
+	elog
+	elog "Mantid is Qt5-only. QtPy defaults to PyQt6 in ::gentoo, which"
+	elog "is missing Qt5-era widgets mantid relies on. Set QT_API=pyqt5"
+	elog "in the environment when launching. The full invocation:"
+	elog
+	elog "    env QT_API=pyqt5 \\"
+	elog "        LD_PRELOAD=/usr/lib64/libtbbmalloc_proxy.so.2 \\"
+	elog "        PYTHONPATH=${MY_PREFIX}/lib/${EPYTHON}/site-packages:${MY_PREFIX}/bin:${MY_PREFIX}/plugins \\"
+	elog "        ${MY_PREFIX}/bin/workbench"
+	elog
+	elog "After 'env-update && source /etc/profile' the PYTHONPATH and"
+	elog "LD_PRELOAD pieces simplify to:"
+	elog
+	elog "    QT_API=pyqt5 ${MY_PREFIX}/bin/workbench"
+	elog
+	elog "(LD_PRELOAD of libtbbmalloc_proxy is a perf optimisation; the"
+	elog "shipped launcher ${MY_PREFIX}/bin/launch_mantidworkbench.standalone"
+	elog "sets it for you and is the recommended entry point.)"
 }
