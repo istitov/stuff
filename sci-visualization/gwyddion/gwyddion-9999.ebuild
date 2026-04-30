@@ -14,9 +14,12 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="bzip2 doc fits jansson hdf5 nls openexr openmp perl python ruby sourceview unique xml X zlib"
 
-# --enable-pygwy is Python 2.7 only (upstream requirement); it ships an
-# embedded pygtk at modules/pygwy/pygtk-embed so no system pygtk:2 dep
-# is needed - configure falls back to it if pkg-config can't find one.
+# --enable-pygwy is Python 2.7 only (upstream requirement). pygwy's
+# C bindings need the python gobject/gtk/gtk.gdk modules at runtime;
+# the bundled modules/pygwy/pygtk-embed only ships build-time headers
+# and codegen, not the runtime CPython bindings, so system pygtk:2
+# (which pulls pygobject:2 and pycairo-python2) is required for a
+# working 'import gwy'.
 RDEPEND="
 	>=dev-libs/glib-2.32
 	dev-libs/libzip
@@ -34,7 +37,12 @@ RDEPEND="
 	hdf5? ( sci-libs/hdf5:=[hl,zlib?] )
 	openexr? ( media-libs/openexr:= )
 	perl? ( dev-lang/perl:= )
-	python? ( dev-lang/python:2.7 )
+	python? (
+		dev-lang/python:2.7
+		dev-python/pygtk:2
+		dev-python/pygobject:2
+		dev-python/pycairo-python2
+	)
 	ruby? ( dev-ruby/narray )
 	unique? ( dev-libs/libunique:3 )
 	sourceview? ( x11-libs/gtksourceview:2.0 )
@@ -56,11 +64,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2.70-automagic.patch"
-	# Force use of the bundled pygtk-embed so the build doesn't pick up
-	# system pygtk:2 incidentally; gwyddion was the only remaining
-	# consumer of dev-python/pygtk in this overlay and the bundle is
-	# functionally complete for pygwy.
-	"${FILESDIR}/${PN}-2.70-pygwy-bundled-pygtk.patch"
 )
 
 src_prepare() {
