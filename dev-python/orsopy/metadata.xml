@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    orsopy is the support library of the Open Reflectometry Standards
+    Organization (ORSO). It provides Python tooling for the ORSO file
+    formats (.ort/.orb), an SLD database, and helpers for reflectometry
+    metadata. Pulled in by sci-physics/mantid for ORSO-format save algorithms.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">reflectivity/orsopy</remote-id>
+    <remote-id type="pypi">orsopy</remote-id>
+  </upstream>
+</pkgmetadata>
