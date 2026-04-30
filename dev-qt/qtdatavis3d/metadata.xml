@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    QtDataVisualization is an OpenGL-based 3D scatter, surface and bar
+    viewer Qt module. Deprecated upstream as of Qt 6.6 in favour of
+    QtGraphs but still shipped by Qt through 6.10. ::gentoo dropped the
+    module during the Qt6 import; this overlay re-adds it because
+    sci-physics/sasview's Shape2SAS calculator unconditionally imports
+    PySide6.QtDataVisualization.
+  </longdescription>
+  <upstream>
+    <remote-id type="cpe">cpe:/a:qt:qt</remote-id>
+  </upstream>
+</pkgmetadata>
