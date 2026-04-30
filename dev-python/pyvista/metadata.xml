@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    PyVista is a streamlined Pythonic interface to VTK for 3D plotting,
+    mesh analysis and scientific visualisation. Pulled in by
+    sci-physics/mantid for the workbench instrument view.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">pyvista/pyvista</remote-id>
+    <remote-id type="pypi">pyvista</remote-id>
+  </upstream>
+</pkgmetadata>
