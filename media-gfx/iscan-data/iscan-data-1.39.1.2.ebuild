@@ -7,7 +7,11 @@ inherit udev
 
 DESCRIPTION="Image Scan! for Linux data files"
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
-SRC_URI="http://support.epson.net/linux/src/scanner/iscan/${PN}_$(ver_rs 3 -).tar.gz"
+# Upstream Epson removed this tarball (HTTP 403) and the Gentoo
+# distfiles mirror never had it (HTTP 404). Verified 2026-05-02. The
+# Wayback Machine still serves the byte-identical 2019 snapshot;
+# the `if_` token returns raw bytes (no archive-page rewriting).
+SRC_URI="https://web.archive.org/web/20191023164257if_/http://support.epson.net/linux/src/scanner/iscan/${PN}_$(ver_rs 3 -).tar.gz"
 S="${WORKDIR}/${PN}-$(ver_cut 1-3)"
 LICENSE="GPL-2"
 SLOT="0"
