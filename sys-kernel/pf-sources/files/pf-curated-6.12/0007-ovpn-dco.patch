@@ -1,0 +1,332 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.12] ovpn-dco: OpenVPN data-channel-offload (ovpn-dco)
+
+Re-cut from natalenko's pf-kernel branch ovpn-dco-6.12 (tip 3b22e80a75a7)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.12 LTS slot. Source: codeberg.org/pf-kernel/linux.
+
+OpenVPN's in-kernel data-channel offload module — accelerates ChaCha20-
+Poly1305 / AES-GCM tunneled packets via crypto-api primitives instead of
+userspace crypto. New branch on 6.12.
+---
+diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+index 9920b3a68e..e4ed0090f7 100644
+--- a/drivers/net/Kconfig
++++ b/drivers/net/Kconfig
+@@ -115,6 +115,19 @@ config WIREGUARD_DEBUG
+ 
+ 	  Say N here unless you know what you're doing.
+ 
++config OVPN_DCO_V2
++	tristate "OpenVPN data channel offload (reloaded)"
++	depends on NET && INET
++	select NET_UDP_TUNNEL
++	select DST_CACHE
++	select CRYPTO
++	select CRYPTO_AES
++	select CRYPTO_GCM
++	select CRYPTO_CHACHA20POLY1305
++	help
++	  This module enhances the performance of the OpenVPN userspace software
++	  by offloading the data channel processing to kernelspace.
++
+ config EQUALIZER
+ 	tristate "EQL (serial line load balancing) support"
+ 	help
+diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+index 13743d0e83..0998f91d54 100644
+--- a/drivers/net/Makefile
++++ b/drivers/net/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_IPVLAN) += ipvlan/
+ obj-$(CONFIG_IPVTAP) += ipvlan/
+ obj-$(CONFIG_DUMMY) += dummy.o
+ obj-$(CONFIG_WIREGUARD) += wireguard/
++obj-$(CONFIG_OVPN_DCO_V2) += ovpn-dco/
+ obj-$(CONFIG_EQUALIZER) += eql.o
+ obj-$(CONFIG_IFB) += ifb.o
+ obj-$(CONFIG_MACSEC) += macsec.o
+diff --git a/include/net/netlink.h b/include/net/netlink.h
+index db6af20728..2dc671c977 100644
+--- a/include/net/netlink.h
++++ b/include/net/netlink.h
+@@ -469,6 +469,7 @@ struct nla_policy {
+ 	.max = _len						\
+ }
+ #define NLA_POLICY_MIN_LEN(_len)	NLA_POLICY_MIN(NLA_BINARY, _len)
++#define NLA_POLICY_MAX_LEN(_len)	NLA_POLICY_MAX(NLA_BINARY, _len)
+ 
+ /**
+  * struct nl_info - netlink source information
+diff --git a/include/uapi/linux/ovpn_dco.h b/include/uapi/linux/ovpn_dco.h
+new file mode 100644
+index 0000000000..73e19b591c
+--- /dev/null
++++ b/include/uapi/linux/ovpn_dco.h
+@@ -0,0 +1,256 @@
++/* SPDX-License-Identifier: (GPL-2.0-only WITH Linux-syscall-note) OR MIT */
++/*
++ *  OpenVPN data channel accelerator
++ *
++ *  Copyright (C) 2019-2023 OpenVPN, Inc.
++ *
++ *  Author:	James Yonan <james@openvpn.net>
++ *		Antonio Quartulli <antonio@openvpn.net>
++ */
++
++#ifndef _UAPI_LINUX_OVPN_DCO_H_
++#define _UAPI_LINUX_OVPN_DCO_H_
++
++#define OVPN_NL_NAME "ovpn-dco-v2"
++
++#define OVPN_NL_MULTICAST_GROUP_PEERS "peers"
++
++/**
++ * enum ovpn_nl_commands - supported netlink commands
++ */
++enum ovpn_nl_commands {
++	/**
++	 * @OVPN_CMD_UNSPEC: unspecified command to catch errors
++	 */
++	OVPN_CMD_UNSPEC = 0,
++
++	/**
++	 * @OVPN_CMD_NEW_PEER: Configure peer with its crypto keys
++	 */
++	OVPN_CMD_NEW_PEER,
++
++	/**
++	 * @OVPN_CMD_SET_PEER: Tweak parameters for an existing peer
++	 */
++	OVPN_CMD_SET_PEER,
++
++	/**
++	 * @OVPN_CMD_DEL_PEER: Remove peer from internal table
++	 */
++	OVPN_CMD_DEL_PEER,
++
++	OVPN_CMD_NEW_KEY,
++
++	OVPN_CMD_SWAP_KEYS,
++
++	OVPN_CMD_DEL_KEY,
++
++	/**
++	 * @OVPN_CMD_GET_PEER: Retrieve the status of a peer or all peers
++	 */
++	OVPN_CMD_GET_PEER,
++};
++
++enum ovpn_cipher_alg {
++	/**
++	 * @OVPN_CIPHER_ALG_NONE: No encryption - reserved for debugging only
++	 */
++	OVPN_CIPHER_ALG_NONE = 0,
++	/**
++	 * @OVPN_CIPHER_ALG_AES_GCM: AES-GCM AEAD cipher with any allowed key size
++	 */
++	OVPN_CIPHER_ALG_AES_GCM,
++	/**
++	 * @OVPN_CIPHER_ALG_CHACHA20_POLY1305: ChaCha20Poly1305 AEAD cipher
++	 */
++	OVPN_CIPHER_ALG_CHACHA20_POLY1305,
++};
++
++enum ovpn_del_peer_reason {
++	__OVPN_DEL_PEER_REASON_FIRST,
++	OVPN_DEL_PEER_REASON_TEARDOWN = __OVPN_DEL_PEER_REASON_FIRST,
++	OVPN_DEL_PEER_REASON_USERSPACE,
++	OVPN_DEL_PEER_REASON_EXPIRED,
++	OVPN_DEL_PEER_REASON_TRANSPORT_ERROR,
++	OVPN_DEL_PEER_REASON_TRANSPORT_DISCONNECT,
++	__OVPN_DEL_PEER_REASON_AFTER_LAST
++};
++
++enum ovpn_key_slot {
++	__OVPN_KEY_SLOT_FIRST,
++	OVPN_KEY_SLOT_PRIMARY = __OVPN_KEY_SLOT_FIRST,
++	OVPN_KEY_SLOT_SECONDARY,
++	__OVPN_KEY_SLOT_AFTER_LAST,
++};
++
++enum ovpn_netlink_attrs {
++	OVPN_ATTR_UNSPEC = 0,
++	OVPN_ATTR_IFINDEX,
++	OVPN_ATTR_NEW_PEER,
++	OVPN_ATTR_SET_PEER,
++	OVPN_ATTR_DEL_PEER,
++	OVPN_ATTR_NEW_KEY,
++	OVPN_ATTR_SWAP_KEYS,
++	OVPN_ATTR_DEL_KEY,
++	OVPN_ATTR_GET_PEER,
++
++	__OVPN_ATTR_AFTER_LAST,
++	OVPN_ATTR_MAX = __OVPN_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_key_dir_attrs {
++	OVPN_KEY_DIR_ATTR_UNSPEC = 0,
++	OVPN_KEY_DIR_ATTR_CIPHER_KEY,
++	OVPN_KEY_DIR_ATTR_NONCE_TAIL,
++
++	__OVPN_KEY_DIR_ATTR_AFTER_LAST,
++	OVPN_KEY_DIR_ATTR_MAX = __OVPN_KEY_DIR_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_new_key_attrs {
++	OVPN_NEW_KEY_ATTR_UNSPEC = 0,
++	OVPN_NEW_KEY_ATTR_PEER_ID,
++	OVPN_NEW_KEY_ATTR_KEY_SLOT,
++	OVPN_NEW_KEY_ATTR_KEY_ID,
++	OVPN_NEW_KEY_ATTR_CIPHER_ALG,
++	OVPN_NEW_KEY_ATTR_ENCRYPT_KEY,
++	OVPN_NEW_KEY_ATTR_DECRYPT_KEY,
++
++	__OVPN_NEW_KEY_ATTR_AFTER_LAST,
++	OVPN_NEW_KEY_ATTR_MAX = __OVPN_NEW_KEY_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_del_key_attrs {
++	OVPN_DEL_KEY_ATTR_UNSPEC = 0,
++	OVPN_DEL_KEY_ATTR_PEER_ID,
++	OVPN_DEL_KEY_ATTR_KEY_SLOT,
++
++	__OVPN_DEL_KEY_ATTR_AFTER_LAST,
++	OVPN_DEL_KEY_ATTR_MAX = __OVPN_DEL_KEY_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_swap_keys_attrs {
++	OVPN_SWAP_KEYS_ATTR_UNSPEC = 0,
++	OVPN_SWAP_KEYS_ATTR_PEER_ID,
++
++	__OVPN_SWAP_KEYS_ATTR_AFTER_LAST,
++	OVPN_SWAP_KEYS_ATTR_MAX = __OVPN_SWAP_KEYS_ATTR_AFTER_LAST - 1,
++
++};
++
++enum ovpn_netlink_new_peer_attrs {
++	OVPN_NEW_PEER_ATTR_UNSPEC = 0,
++	OVPN_NEW_PEER_ATTR_PEER_ID,
++	OVPN_NEW_PEER_ATTR_SOCKADDR_REMOTE,
++	OVPN_NEW_PEER_ATTR_SOCKET,
++	OVPN_NEW_PEER_ATTR_IPV4,
++	OVPN_NEW_PEER_ATTR_IPV6,
++	OVPN_NEW_PEER_ATTR_LOCAL_IP,
++
++	__OVPN_NEW_PEER_ATTR_AFTER_LAST,
++	OVPN_NEW_PEER_ATTR_MAX = __OVPN_NEW_PEER_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_set_peer_attrs {
++	OVPN_SET_PEER_ATTR_UNSPEC = 0,
++	OVPN_SET_PEER_ATTR_PEER_ID,
++	OVPN_SET_PEER_ATTR_KEEPALIVE_INTERVAL,
++	OVPN_SET_PEER_ATTR_KEEPALIVE_TIMEOUT,
++
++	__OVPN_SET_PEER_ATTR_AFTER_LAST,
++	OVPN_SET_PEER_ATTR_MAX = __OVPN_SET_PEER_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_del_peer_attrs {
++	OVPN_DEL_PEER_ATTR_UNSPEC = 0,
++	OVPN_DEL_PEER_ATTR_REASON,
++	OVPN_DEL_PEER_ATTR_PEER_ID,
++
++	__OVPN_DEL_PEER_ATTR_AFTER_LAST,
++	OVPN_DEL_PEER_ATTR_MAX = __OVPN_DEL_PEER_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_get_peer_attrs {
++	OVPN_GET_PEER_ATTR_UNSPEC = 0,
++	OVPN_GET_PEER_ATTR_PEER_ID,
++
++	__OVPN_GET_PEER_ATTR_AFTER_LAST,
++	OVPN_GET_PEER_ATTR_MAX = __OVPN_GET_PEER_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_get_peer_response_attrs {
++	OVPN_GET_PEER_RESP_ATTR_UNSPEC = 0,
++	OVPN_GET_PEER_RESP_ATTR_PEER_ID,
++	OVPN_GET_PEER_RESP_ATTR_SOCKADDR_REMOTE,
++	OVPN_GET_PEER_RESP_ATTR_IPV4,
++	OVPN_GET_PEER_RESP_ATTR_IPV6,
++	OVPN_GET_PEER_RESP_ATTR_LOCAL_IP,
++	OVPN_GET_PEER_RESP_ATTR_LOCAL_PORT,
++	OVPN_GET_PEER_RESP_ATTR_KEEPALIVE_INTERVAL,
++	OVPN_GET_PEER_RESP_ATTR_KEEPALIVE_TIMEOUT,
++	OVPN_GET_PEER_RESP_ATTR_VPN_RX_BYTES,
++	OVPN_GET_PEER_RESP_ATTR_VPN_TX_BYTES,
++	OVPN_GET_PEER_RESP_ATTR_VPN_RX_PACKETS,
++	OVPN_GET_PEER_RESP_ATTR_VPN_TX_PACKETS,
++	OVPN_GET_PEER_RESP_ATTR_LINK_RX_BYTES,
++	OVPN_GET_PEER_RESP_ATTR_LINK_TX_BYTES,
++	OVPN_GET_PEER_RESP_ATTR_LINK_RX_PACKETS,
++	OVPN_GET_PEER_RESP_ATTR_LINK_TX_PACKETS,
++
++	__OVPN_GET_PEER_RESP_ATTR_AFTER_LAST,
++	OVPN_GET_PEER_RESP_ATTR_MAX = __OVPN_GET_PEER_RESP_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_peer_stats_attrs {
++	OVPN_PEER_STATS_ATTR_UNSPEC = 0,
++	OVPN_PEER_STATS_BYTES,
++	OVPN_PEER_STATS_PACKETS,
++
++	__OVPN_PEER_STATS_ATTR_AFTER_LAST,
++	OVPN_PEER_STATS_ATTR_MAX = __OVPN_PEER_STATS_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_peer_attrs {
++	OVPN_PEER_ATTR_UNSPEC = 0,
++	OVPN_PEER_ATTR_PEER_ID,
++	OVPN_PEER_ATTR_SOCKADDR_REMOTE,
++	OVPN_PEER_ATTR_IPV4,
++	OVPN_PEER_ATTR_IPV6,
++	OVPN_PEER_ATTR_LOCAL_IP,
++	OVPN_PEER_ATTR_KEEPALIVE_INTERVAL,
++	OVPN_PEER_ATTR_KEEPALIVE_TIMEOUT,
++	OVPN_PEER_ATTR_ENCRYPT_KEY,
++	OVPN_PEER_ATTR_DECRYPT_KEY,
++	OVPN_PEER_ATTR_RX_STATS,
++	OVPN_PEER_ATTR_TX_STATS,
++
++	__OVPN_PEER_ATTR_AFTER_LAST,
++	OVPN_PEER_ATTR_MAX = __OVPN_PEER_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_netlink_packet_attrs {
++	OVPN_PACKET_ATTR_UNSPEC = 0,
++	OVPN_PACKET_ATTR_PACKET,
++	OVPN_PACKET_ATTR_PEER_ID,
++
++	__OVPN_PACKET_ATTR_AFTER_LAST,
++	OVPN_PACKET_ATTR_MAX = __OVPN_PACKET_ATTR_AFTER_LAST - 1,
++};
++
++enum ovpn_ifla_attrs {
++	IFLA_OVPN_UNSPEC = 0,
++	IFLA_OVPN_MODE,
++
++	__IFLA_OVPN_AFTER_LAST,
++	IFLA_OVPN_MAX = __IFLA_OVPN_AFTER_LAST - 1,
++};
++
++enum ovpn_mode {
++	__OVPN_MODE_FIRST = 0,
++	OVPN_MODE_P2P = __OVPN_MODE_FIRST,
++	OVPN_MODE_MP,
++
++	__OVPN_MODE_AFTER_LAST,
++};
++
++#endif /* _UAPI_LINUX_OVPN_DCO_H_ */
+diff --git a/include/uapi/linux/udp.h b/include/uapi/linux/udp.h
+index 1a0fe8b151..f8aaf46bd4 100644
+--- a/include/uapi/linux/udp.h
++++ b/include/uapi/linux/udp.h
+@@ -43,5 +43,6 @@ struct udphdr {
+ #define UDP_ENCAP_GTP1U		5 /* 3GPP TS 29.060 */
+ #define UDP_ENCAP_RXRPC		6
+ #define TCP_ENCAP_ESPINTCP	7 /* Yikes, this is really xfrm encap types. */
++#define UDP_ENCAP_OVPNINUDP	100 /* transport layer */
+ 
+ #endif /* _UAPI_LINUX_UDP_H */

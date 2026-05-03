@@ -1,0 +1,324 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.12] amd-pstate: AMD-pstate enhancements + x86 topology hooks
+
+Re-cut from natalenko's pf-kernel branch amd-pstate-6.12 (tip 01f72a790c8e)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.12 LTS slot. Source: codeberg.org/pf-kernel/linux.
+
+AMD-pstate-related changes plus the x86 topology bookkeeping
+(arch/x86/include/asm/topology.h + cpu/debugfs.c + cpu/topology_common.c)
+that amd-pstate depends on. Topology files also appear in amd-rapl-6.12's
+touch set with identical hunks; assigned to amd-pstate.
+---
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+index 210a808b74..412423c54f 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -251,9 +251,7 @@ performance supported in `AMD CPPC Performance Capability <perf_cap_>`_).
+ In some ASICs, the highest CPPC performance is not the one in the ``_CPC``
+ table, so we need to expose it to sysfs. If boost is not active, but
+ still supported, this maximum frequency will be larger than the one in
+-``cpuinfo``. On systems that support preferred core, the driver will have
+-different values for some cores than others and this will reflect the values
+-advertised by the platform at bootup.
++``cpuinfo``.
+ This attribute is read-only.
+ 
+ ``amd_pstate_lowest_nonlinear_freq``
+diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+index 92f3664dd9..fd41103ad3 100644
+--- a/arch/x86/include/asm/topology.h
++++ b/arch/x86/include/asm/topology.h
+@@ -114,6 +114,12 @@ enum x86_topology_domains {
+ 	TOPO_MAX_DOMAIN,
+ };
+ 
++enum x86_topology_cpu_type {
++	TOPO_CPU_TYPE_PERFORMANCE,
++	TOPO_CPU_TYPE_EFFICIENCY,
++	TOPO_CPU_TYPE_UNKNOWN,
++};
++
+ struct x86_topology_system {
+ 	unsigned int	dom_shifts[TOPO_MAX_DOMAIN];
+ 	unsigned int	dom_size[TOPO_MAX_DOMAIN];
+@@ -149,6 +155,9 @@ extern unsigned int __max_threads_per_core;
+ extern unsigned int __num_threads_per_package;
+ extern unsigned int __num_cores_per_package;
+ 
++const char *get_topology_cpu_type_name(struct cpuinfo_x86 *c);
++enum x86_topology_cpu_type get_topology_cpu_type(struct cpuinfo_x86 *c);
++
+ static inline unsigned int topology_max_packages(void)
+ {
+ 	return __max_logical_packages;
+diff --git a/arch/x86/kernel/cpu/debugfs.c b/arch/x86/kernel/cpu/debugfs.c
+index 3baf3e4358..10719aba62 100644
+--- a/arch/x86/kernel/cpu/debugfs.c
++++ b/arch/x86/kernel/cpu/debugfs.c
+@@ -22,6 +22,7 @@ static int cpu_debug_show(struct seq_file *m, void *p)
+ 	seq_printf(m, "die_id:              %u\n", c->topo.die_id);
+ 	seq_printf(m, "cu_id:               %u\n", c->topo.cu_id);
+ 	seq_printf(m, "core_id:             %u\n", c->topo.core_id);
++	seq_printf(m, "cpu_type:            %s\n", get_topology_cpu_type_name(c));
+ 	seq_printf(m, "logical_pkg_id:      %u\n", c->topo.logical_pkg_id);
+ 	seq_printf(m, "logical_die_id:      %u\n", c->topo.logical_die_id);
+ 	seq_printf(m, "llc_id:              %u\n", c->topo.llc_id);
+diff --git a/arch/x86/kernel/cpu/topology_common.c b/arch/x86/kernel/cpu/topology_common.c
+index 9a6069e713..8277c64f88 100644
+--- a/arch/x86/kernel/cpu/topology_common.c
++++ b/arch/x86/kernel/cpu/topology_common.c
+@@ -3,6 +3,7 @@
+ 
+ #include <xen/xen.h>
+ 
++#include <asm/intel-family.h>
+ #include <asm/apic.h>
+ #include <asm/processor.h>
+ #include <asm/smp.h>
+@@ -27,6 +28,36 @@ void topology_set_dom(struct topo_scan *tscan, enum x86_topology_domains dom,
+ 	}
+ }
+ 
++enum x86_topology_cpu_type get_topology_cpu_type(struct cpuinfo_x86 *c)
++{
++	if (c->x86_vendor == X86_VENDOR_INTEL) {
++		switch (c->topo.intel_type) {
++		case INTEL_CPU_TYPE_ATOM: return TOPO_CPU_TYPE_EFFICIENCY;
++		case INTEL_CPU_TYPE_CORE: return TOPO_CPU_TYPE_PERFORMANCE;
++		}
++	}
++	if (c->x86_vendor == X86_VENDOR_AMD) {
++		switch (c->topo.amd_type) {
++		case 0:	return TOPO_CPU_TYPE_PERFORMANCE;
++		case 1:	return TOPO_CPU_TYPE_EFFICIENCY;
++		}
++	}
++
++	return TOPO_CPU_TYPE_UNKNOWN;
++}
++
++const char *get_topology_cpu_type_name(struct cpuinfo_x86 *c)
++{
++	switch (get_topology_cpu_type(c)) {
++	case TOPO_CPU_TYPE_PERFORMANCE:
++		return "performance";
++	case TOPO_CPU_TYPE_EFFICIENCY:
++		return "efficiency";
++	default:
++		return "unknown";
++	}
++}
++
+ static unsigned int __maybe_unused parse_num_cores_legacy(struct cpuinfo_x86 *c)
+ {
+ 	struct {
+@@ -87,6 +118,7 @@ static void parse_topology(struct topo_scan *tscan, bool early)
+ 		.cu_id			= 0xff,
+ 		.llc_id			= BAD_APICID,
+ 		.l2c_id			= BAD_APICID,
++		.cpu_type		= TOPO_CPU_TYPE_UNKNOWN,
+ 	};
+ 	struct cpuinfo_x86 *c = tscan->c;
+ 	struct {
+@@ -132,6 +164,8 @@ static void parse_topology(struct topo_scan *tscan, bool early)
+ 	case X86_VENDOR_INTEL:
+ 		if (!IS_ENABLED(CONFIG_CPU_SUP_INTEL) || !cpu_parse_topology_ext(tscan))
+ 			parse_legacy(tscan);
++		if (c->cpuid_level >= 0x1a)
++			c->topo.cpu_type = cpuid_eax(0x1a);
+ 		break;
+ 	case X86_VENDOR_HYGON:
+ 		if (IS_ENABLED(CONFIG_CPU_SUP_HYGON))
+diff --git a/drivers/cpufreq/amd-pstate-trace.h b/drivers/cpufreq/amd-pstate-trace.h
+index 35f38ae67f..8d692415d9 100644
+--- a/drivers/cpufreq/amd-pstate-trace.h
++++ b/drivers/cpufreq/amd-pstate-trace.h
+@@ -32,7 +32,6 @@ TRACE_EVENT(amd_pstate_perf,
+ 		 u64 aperf,
+ 		 u64 tsc,
+ 		 unsigned int cpu_id,
+-		 bool changed,
+ 		 bool fast_switch
+ 		 ),
+ 
+@@ -44,7 +43,6 @@ TRACE_EVENT(amd_pstate_perf,
+ 		aperf,
+ 		tsc,
+ 		cpu_id,
+-		changed,
+ 		fast_switch
+ 		),
+ 
+@@ -57,7 +55,6 @@ TRACE_EVENT(amd_pstate_perf,
+ 		__field(unsigned long long, aperf)
+ 		__field(unsigned long long, tsc)
+ 		__field(unsigned int, cpu_id)
+-		__field(bool, changed)
+ 		__field(bool, fast_switch)
+ 		),
+ 
+@@ -70,11 +67,10 @@ TRACE_EVENT(amd_pstate_perf,
+ 		__entry->aperf = aperf;
+ 		__entry->tsc = tsc;
+ 		__entry->cpu_id = cpu_id;
+-		__entry->changed = changed;
+ 		__entry->fast_switch = fast_switch;
+ 		),
+ 
+-	TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu freq=%llu mperf=%llu aperf=%llu tsc=%llu cpu_id=%u changed=%s fast_switch=%s",
++	TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu freq=%llu mperf=%llu aperf=%llu tsc=%llu cpu_id=%u fast_switch=%s",
+ 		  (unsigned long)__entry->min_perf,
+ 		  (unsigned long)__entry->target_perf,
+ 		  (unsigned long)__entry->capacity,
+@@ -83,11 +79,55 @@ TRACE_EVENT(amd_pstate_perf,
+ 		  (unsigned long long)__entry->aperf,
+ 		  (unsigned long long)__entry->tsc,
+ 		  (unsigned int)__entry->cpu_id,
+-		  (__entry->changed) ? "true" : "false",
+ 		  (__entry->fast_switch) ? "true" : "false"
+ 		 )
+ );
+ 
++TRACE_EVENT(amd_pstate_epp_perf,
++
++	TP_PROTO(unsigned int cpu_id,
++		 unsigned int highest_perf,
++		 unsigned int epp,
++		 unsigned int min_perf,
++		 unsigned int max_perf,
++		 bool boost
++		 ),
++
++	TP_ARGS(cpu_id,
++		highest_perf,
++		epp,
++		min_perf,
++		max_perf,
++		boost),
++
++	TP_STRUCT__entry(
++		__field(unsigned int, cpu_id)
++		__field(unsigned int, highest_perf)
++		__field(unsigned int, epp)
++		__field(unsigned int, min_perf)
++		__field(unsigned int, max_perf)
++		__field(bool, boost)
++		),
++
++	TP_fast_assign(
++		__entry->cpu_id = cpu_id;
++		__entry->highest_perf = highest_perf;
++		__entry->epp = epp;
++		__entry->min_perf = min_perf;
++		__entry->max_perf = max_perf;
++		__entry->boost = boost;
++		),
++
++	TP_printk("cpu%u: [%u<->%u]/%u, epp=%u, boost=%u",
++		  (unsigned int)__entry->cpu_id,
++		  (unsigned int)__entry->min_perf,
++		  (unsigned int)__entry->max_perf,
++		  (unsigned int)__entry->highest_perf,
++		  (unsigned int)__entry->epp,
++		  (bool)__entry->boost
++		 )
++);
++
+ #endif /* _AMD_PSTATE_TRACE_H */
+ 
+ /* This part must be outside protection */
+diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
+index f66701514d..3a0a380c35 100644
+--- a/drivers/cpufreq/amd-pstate-ut.c
++++ b/drivers/cpufreq/amd-pstate-ut.c
+@@ -207,7 +207,6 @@ static void amd_pstate_ut_check_freq(u32 index)
+ 	int cpu = 0;
+ 	struct cpufreq_policy *policy = NULL;
+ 	struct amd_cpudata *cpudata = NULL;
+-	u32 nominal_freq_khz;
+ 
+ 	for_each_possible_cpu(cpu) {
+ 		policy = cpufreq_cpu_get(cpu);
+@@ -215,34 +214,33 @@ static void amd_pstate_ut_check_freq(u32 index)
+ 			break;
+ 		cpudata = policy->driver_data;
+ 
+-		nominal_freq_khz = cpudata->nominal_freq*1000;
+-		if (!((cpudata->max_freq >= nominal_freq_khz) &&
+-			(nominal_freq_khz > cpudata->lowest_nonlinear_freq) &&
++		if (!((cpudata->max_freq >= cpudata->nominal_freq) &&
++			(cpudata->nominal_freq > cpudata->lowest_nonlinear_freq) &&
+ 			(cpudata->lowest_nonlinear_freq > cpudata->min_freq) &&
+ 			(cpudata->min_freq > 0))) {
+ 			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
+ 			pr_err("%s cpu%d max=%d >= nominal=%d > lowest_nonlinear=%d > min=%d > 0, the formula is incorrect!\n",
+-				__func__, cpu, cpudata->max_freq, nominal_freq_khz,
++				__func__, cpu, cpudata->max_freq, cpudata->nominal_freq,
+ 				cpudata->lowest_nonlinear_freq, cpudata->min_freq);
+ 			goto skip_test;
+ 		}
+ 
+-		if (cpudata->min_freq != policy->min) {
++		if (cpudata->lowest_nonlinear_freq != policy->min) {
+ 			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
+-			pr_err("%s cpu%d cpudata_min_freq=%d policy_min=%d, they should be equal!\n",
+-				__func__, cpu, cpudata->min_freq, policy->min);
++			pr_err("%s cpu%d cpudata_lowest_nonlinear_freq=%d policy_min=%d, they should be equal!\n",
++				__func__, cpu, cpudata->lowest_nonlinear_freq, policy->min);
+ 			goto skip_test;
+ 		}
+ 
+ 		if (cpudata->boost_supported) {
+ 			if ((policy->max == cpudata->max_freq) ||
+-					(policy->max == nominal_freq_khz))
++					(policy->max == cpudata->nominal_freq))
+ 				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
+ 			else {
+ 				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
+ 				pr_err("%s cpu%d policy_max=%d should be equal cpu_max=%d or cpu_nominal=%d !\n",
+ 					__func__, cpu, policy->max, cpudata->max_freq,
+-					nominal_freq_khz);
++					cpudata->nominal_freq);
+ 				goto skip_test;
+ 			}
+ 		} else {
+diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
+index cd573bc6b6..9747e3be6c 100644
+--- a/drivers/cpufreq/amd-pstate.h
++++ b/drivers/cpufreq/amd-pstate.h
+@@ -57,7 +57,6 @@ struct amd_aperf_mperf {
+  * @hw_prefcore: check whether HW supports preferred core featue.
+  * 		  Only when hw_prefcore and early prefcore param are true,
+  * 		  AMD P-State driver supports preferred core featue.
+- * @epp_policy: Last saved policy used to set energy-performance preference
+  * @epp_cached: Cached CPPC energy-performance preference value
+  * @policy: Cpufreq policy value
+  * @cppc_cap1_cached Cached MSR_AMD_CPPC_CAP1 register value
+@@ -94,13 +93,11 @@ struct amd_cpudata {
+ 	bool	hw_prefcore;
+ 
+ 	/* EPP feature related attributes*/
+-	s16	epp_policy;
+ 	s16	epp_cached;
+ 	u32	policy;
+ 	u64	cppc_cap1_cached;
+ 	bool	suspended;
+ 	s16	epp_default;
+-	bool	boost_state;
+ };
+ 
+ /*
+diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
+index dd4682857c..23698d0f4b 100644
+--- a/tools/arch/x86/include/asm/cpufeatures.h
++++ b/tools/arch/x86/include/asm/cpufeatures.h
+@@ -472,7 +472,7 @@
+ #define X86_FEATURE_BHI_CTRL		(21*32+ 2) /* BHI_DIS_S HW control available */
+ #define X86_FEATURE_CLEAR_BHB_HW	(21*32+ 3) /* BHI_DIS_S HW control enabled */
+ #define X86_FEATURE_CLEAR_BHB_LOOP_ON_VMEXIT (21*32+ 4) /* Clear branch history at vmexit using SW loop */
+-#define X86_FEATURE_FAST_CPPC		(21*32 + 5) /* AMD Fast CPPC */
++#define X86_FEATURE_AMD_FAST_CPPC		(21*32 + 5) /* AMD Fast CPPC */
+ 
+ /*
+  * BUG word(s)
