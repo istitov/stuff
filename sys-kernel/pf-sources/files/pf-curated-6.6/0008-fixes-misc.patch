@@ -1,0 +1,43 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.6] fixes: miscellaneous fixes (sparsemem numa_fill_memblks + user_namespace)
+
+Re-cut from natalenko's pf-kernel branch fixes-6.6 (tip 1ac495700f1f)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.6 LTS slot. Source: codeberg.org/pf-kernel/linux.
+
+Two-file fixes branch contribution: numa_fill_memblks() declaration
+in arch/x86/include/asm/sparsemem.h (a NUMA backport that crosses
+multiple natalenko branches but resolves to identical hunks), and a
+user_namespace.c tweak.
+---
+diff --git a/arch/x86/include/asm/sparsemem.h b/arch/x86/include/asm/sparsemem.h
+index 64df897c0ee..1be13b2dfe8 100644
+--- a/arch/x86/include/asm/sparsemem.h
++++ b/arch/x86/include/asm/sparsemem.h
+@@ -37,6 +37,8 @@ extern int phys_to_target_node(phys_addr_t start);
+ #define phys_to_target_node phys_to_target_node
+ extern int memory_add_physaddr_to_nid(u64 start);
+ #define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
++extern int numa_fill_memblks(u64 start, u64 end);
++#define numa_fill_memblks numa_fill_memblks
+ #endif
+ #endif /* __ASSEMBLY__ */
+ 
+diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+index 1d8e47bed3f..fec01d016a3 100644
+--- a/kernel/user_namespace.c
++++ b/kernel/user_namespace.c
+@@ -22,6 +22,13 @@
+ #include <linux/bsearch.h>
+ #include <linux/sort.h>
+ 
++/* sysctl */
++#ifdef CONFIG_USER_NS_UNPRIVILEGED
++int unprivileged_userns_clone = 1;
++#else
++int unprivileged_userns_clone;
++#endif
++
+ static struct kmem_cache *user_ns_cachep __read_mostly;
+ static DEFINE_MUTEX(userns_state_mutex);
+ 
