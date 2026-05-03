@@ -1,0 +1,1127 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.19] fixes: natalenko's stable-backport fixes
+
+Re-cut from natalenko's pf-kernel branch fixes-6.19 (tip 6be50b4c52b6)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.19 (now-EOL stable) slot. Source: codeberg.org/pf-kernel/linux.
+
+Stable-backport-style fixes natalenko cherry-picked into 6.19. Smaller
+than 7.0's fixes (19 vs 152 files); 6.19 had less time before EOL.
+---
+diff --git a/Documentation/netlink/specs/ovpn.yaml b/Documentation/netlink/specs/ovpn.yaml
+index 1b91045cee..b0c782e59a 100644
+--- a/Documentation/netlink/specs/ovpn.yaml
++++ b/Documentation/netlink/specs/ovpn.yaml
+@@ -43,7 +43,8 @@ attribute-sets:
+         type: u32
+         doc: >-
+           The unique ID of the peer in the device context. To be used to
+-          identify peers during operations for a specific device
++          identify peers during operations for a specific device.
++          Also used to match packets received from this peer.
+         checks:
+           max: 0xFFFFFF
+       -
+@@ -160,6 +161,16 @@ attribute-sets:
+         name: link-tx-packets
+         type: uint
+         doc: Number of packets transmitted at the transport level
++      -
++        name: tx-id
++        type: u32
++        doc: >-
++          The ID value used when transmitting packets to this peer. This
++          way outgoing packets can have a different ID than incoming ones.
++          Useful in multipeer-to-multipeer connections, where each peer
++          will advertise the tx-id to be used on the link.
++        checks:
++          max: 0xFFFFFF
+   -
+     name: peer-new-input
+     subset-of: peer
+@@ -188,6 +199,8 @@ attribute-sets:
+         name: keepalive-interval
+       -
+         name: keepalive-timeout
++      -
++        name: tx-id
+   -
+     name: peer-set-input
+     subset-of: peer
+@@ -214,6 +227,8 @@ attribute-sets:
+         name: keepalive-interval
+       -
+         name: keepalive-timeout
++      -
++        name: tx-id
+   -
+     name: peer-del-input
+     subset-of: peer
+@@ -502,6 +517,12 @@ operations:
+             - ifindex
+             - keyconf
+ 
++    -
++      name: peer-float-ntf
++      doc: Notification about a peer floating (changing its remote UDP endpoint)
++      notify: peer-get
++      mcgrp: peers
++
+ mcast-groups:
+   list:
+     -
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index 40399c26e6..2b12583d57 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -26,10 +26,10 @@ MODULE_PARM_DESC(size_limit_mb, "Max size of a dmabuf, in megabytes. Default is
+ 
+ struct udmabuf {
+ 	pgoff_t pagecount;
+-	struct folio **folios;
++	struct page **pages;
+ 
+ 	/**
+-	 * Unlike folios, pinned_folios is only used for unpin.
++	 * Unlike pages, pinned_folios is only used for unpin.
+ 	 * So, nr_pinned is not the same to pagecount, the pinned_folios
+ 	 * only set each folio which already pinned when udmabuf_create.
+ 	 * Note that, since a folio may be pinned multiple times, each folio
+@@ -41,7 +41,6 @@ struct udmabuf {
+ 
+ 	struct sg_table *sg;
+ 	struct miscdevice *device;
+-	pgoff_t *offsets;
+ };
+ 
+ static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
+@@ -55,8 +54,7 @@ static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
+ 	if (pgoff >= ubuf->pagecount)
+ 		return VM_FAULT_SIGBUS;
+ 
+-	pfn = folio_pfn(ubuf->folios[pgoff]);
+-	pfn += ubuf->offsets[pgoff] >> PAGE_SHIFT;
++	pfn = page_to_pfn(ubuf->pages[pgoff]);
+ 
+ 	ret = vmf_insert_pfn(vma, vmf->address, pfn);
+ 	if (ret & VM_FAULT_ERROR)
+@@ -73,8 +71,7 @@ static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
+ 		if (WARN_ON(pgoff >= ubuf->pagecount))
+ 			break;
+ 
+-		pfn = folio_pfn(ubuf->folios[pgoff]);
+-		pfn += ubuf->offsets[pgoff] >> PAGE_SHIFT;
++		pfn = page_to_pfn(ubuf->pages[pgoff]);
+ 
+ 		/**
+ 		 * If the below vmf_insert_pfn() fails, we do not return an
+@@ -109,22 +106,11 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
+ static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
+ {
+ 	struct udmabuf *ubuf = buf->priv;
+-	struct page **pages;
+ 	void *vaddr;
+-	pgoff_t pg;
+ 
+ 	dma_resv_assert_held(buf->resv);
+ 
+-	pages = kvmalloc_array(ubuf->pagecount, sizeof(*pages), GFP_KERNEL);
+-	if (!pages)
+-		return -ENOMEM;
+-
+-	for (pg = 0; pg < ubuf->pagecount; pg++)
+-		pages[pg] = folio_page(ubuf->folios[pg],
+-				       ubuf->offsets[pg] >> PAGE_SHIFT);
+-
+-	vaddr = vm_map_ram(pages, ubuf->pagecount, -1);
+-	kvfree(pages);
++	vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
+ 	if (!vaddr)
+ 		return -EINVAL;
+ 
+@@ -146,22 +132,18 @@ static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
+ {
+ 	struct udmabuf *ubuf = buf->priv;
+ 	struct sg_table *sg;
+-	struct scatterlist *sgl;
+-	unsigned int i = 0;
+ 	int ret;
+ 
+ 	sg = kzalloc(sizeof(*sg), GFP_KERNEL);
+ 	if (!sg)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	ret = sg_alloc_table(sg, ubuf->pagecount, GFP_KERNEL);
++	ret = sg_alloc_table_from_pages(sg, ubuf->pages, ubuf->pagecount, 0,
++					ubuf->pagecount << PAGE_SHIFT,
++					GFP_KERNEL);
+ 	if (ret < 0)
+ 		goto err_alloc;
+ 
+-	for_each_sg(sg->sgl, sgl, ubuf->pagecount, i)
+-		sg_set_folio(sgl, ubuf->folios[i], PAGE_SIZE,
+-			     ubuf->offsets[i]);
+-
+ 	ret = dma_map_sgtable(dev, sg, direction, 0);
+ 	if (ret < 0)
+ 		goto err_map;
+@@ -207,12 +189,8 @@ static void unpin_all_folios(struct udmabuf *ubuf)
+ 
+ static __always_inline int init_udmabuf(struct udmabuf *ubuf, pgoff_t pgcnt)
+ {
+-	ubuf->folios = kvmalloc_array(pgcnt, sizeof(*ubuf->folios), GFP_KERNEL);
+-	if (!ubuf->folios)
+-		return -ENOMEM;
+-
+-	ubuf->offsets = kvcalloc(pgcnt, sizeof(*ubuf->offsets), GFP_KERNEL);
+-	if (!ubuf->offsets)
++	ubuf->pages = kvmalloc_array(pgcnt, sizeof(*ubuf->pages), GFP_KERNEL);
++	if (!ubuf->pages)
+ 		return -ENOMEM;
+ 
+ 	ubuf->pinned_folios = kvmalloc_array(pgcnt,
+@@ -227,8 +205,7 @@ static __always_inline int init_udmabuf(struct udmabuf *ubuf, pgoff_t pgcnt)
+ static __always_inline void deinit_udmabuf(struct udmabuf *ubuf)
+ {
+ 	unpin_all_folios(ubuf);
+-	kvfree(ubuf->offsets);
+-	kvfree(ubuf->folios);
++	kvfree(ubuf->pages);
+ }
+ 
+ static void release_udmabuf(struct dma_buf *buf)
+@@ -346,8 +323,8 @@ static long udmabuf_pin_folios(struct udmabuf *ubuf, struct file *memfd,
+ 		ubuf->pinned_folios[nr_pinned++] = folios[cur_folio];
+ 
+ 		for (; subpgoff < fsize; subpgoff += PAGE_SIZE) {
+-			ubuf->folios[upgcnt] = folios[cur_folio];
+-			ubuf->offsets[upgcnt] = subpgoff;
++			ubuf->pages[upgcnt] = folio_page(folios[cur_folio],
++						subpgoff >> PAGE_SHIFT);
+ 			++upgcnt;
+ 
+ 			if (++cur_pgcnt >= pgcnt)
+diff --git a/drivers/net/ovpn/crypto_aead.c b/drivers/net/ovpn/crypto_aead.c
+index 2cca759fef..629d0abbe9 100644
+--- a/drivers/net/ovpn/crypto_aead.c
++++ b/drivers/net/ovpn/crypto_aead.c
+@@ -36,6 +36,104 @@ static int ovpn_aead_encap_overhead(const struct ovpn_crypto_key_slot *ks)
+ 		crypto_aead_authsize(ks->encrypt);	/* Auth Tag */
+ }
+ 
++/**
++ * ovpn_aead_crypto_tmp_size - compute the size of a temporary object containing
++ *			       an AEAD request structure with extra space for SG
++ *			       and IV.
++ * @tfm: the AEAD cipher handle
++ * @nfrags: the number of fragments in the skb
++ *
++ * This function calculates the size of a contiguous memory block that includes
++ * the initialization vector (IV), the AEAD request, and an array of scatterlist
++ * entries. For alignment considerations, the IV is placed first, followed by
++ * the request, and then the scatterlist.
++ * Additional alignment is applied according to the requirements of the
++ * underlying structures.
++ *
++ * Return: the size of the temporary memory that needs to be allocated
++ */
++static unsigned int ovpn_aead_crypto_tmp_size(struct crypto_aead *tfm,
++					      const unsigned int nfrags)
++{
++	unsigned int len = OVPN_NONCE_SIZE;
++
++	DEBUG_NET_WARN_ON_ONCE(crypto_aead_ivsize(tfm) != OVPN_NONCE_SIZE);
++
++	/* min size for a buffer of ivsize, aligned to alignmask */
++	len += crypto_aead_alignmask(tfm) & ~(crypto_tfm_ctx_alignment() - 1);
++	/* round up to the next multiple of the crypto ctx alignment */
++	len = ALIGN(len, crypto_tfm_ctx_alignment());
++
++	/* reserve space for the AEAD request */
++	len += sizeof(struct aead_request) + crypto_aead_reqsize(tfm);
++	/* round up to the next multiple of the scatterlist alignment */
++	len = ALIGN(len, __alignof__(struct scatterlist));
++
++	/* add enough space for nfrags + 2 scatterlist entries */
++	len += array_size(sizeof(struct scatterlist), nfrags + 2);
++	return len;
++}
++
++/**
++ * ovpn_aead_crypto_tmp_iv - retrieve the pointer to the IV within a temporary
++ *			     buffer allocated using ovpn_aead_crypto_tmp_size
++ * @aead: the AEAD cipher handle
++ * @tmp: a pointer to the beginning of the temporary buffer
++ *
++ * This function retrieves a pointer to the initialization vector (IV) in the
++ * temporary buffer. If the AEAD cipher specifies an IV size, the pointer is
++ * adjusted using the AEAD's alignment mask to ensure proper alignment.
++ *
++ * Returns: a pointer to the IV within the temporary buffer
++ */
++static u8 *ovpn_aead_crypto_tmp_iv(struct crypto_aead *aead, void *tmp)
++{
++	return likely(crypto_aead_ivsize(aead)) ?
++		      PTR_ALIGN((u8 *)tmp, crypto_aead_alignmask(aead) + 1) :
++		      tmp;
++}
++
++/**
++ * ovpn_aead_crypto_tmp_req - retrieve the pointer to the AEAD request structure
++ *			      within a temporary buffer allocated using
++ *			      ovpn_aead_crypto_tmp_size
++ * @aead: the AEAD cipher handle
++ * @iv: a pointer to the initialization vector in the temporary buffer
++ *
++ * This function computes the location of the AEAD request structure that
++ * immediately follows the IV in the temporary buffer and it ensures the request
++ * is aligned to the crypto transform context alignment.
++ *
++ * Returns: a pointer to the AEAD request structure
++ */
++static struct aead_request *ovpn_aead_crypto_tmp_req(struct crypto_aead *aead,
++						     const u8 *iv)
++{
++	return (void *)PTR_ALIGN(iv + crypto_aead_ivsize(aead),
++				 crypto_tfm_ctx_alignment());
++}
++
++/**
++ * ovpn_aead_crypto_req_sg - locate the scatterlist following the AEAD request
++ *			     within a temporary buffer allocated using
++ *			     ovpn_aead_crypto_tmp_size
++ * @aead: the AEAD cipher handle
++ * @req: a pointer to the AEAD request structure in the temporary buffer
++ *
++ * This function computes the starting address of the scatterlist that is
++ * allocated immediately after the AEAD request structure. It aligns the pointer
++ * based on the alignment requirements of the scatterlist structure.
++ *
++ * Returns: a pointer to the scatterlist
++ */
++static struct scatterlist *ovpn_aead_crypto_req_sg(struct crypto_aead *aead,
++						   struct aead_request *req)
++{
++	return (void *)ALIGN((unsigned long)(req + 1) +
++			     crypto_aead_reqsize(aead),
++			     __alignof__(struct scatterlist));
++}
++
+ int ovpn_aead_encrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+ 		      struct sk_buff *skb)
+ {
+@@ -45,6 +143,7 @@ int ovpn_aead_encrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+ 	struct scatterlist *sg;
+ 	int nfrags, ret;
+ 	u32 pktid, op;
++	void *tmp;
+ 	u8 *iv;
+ 
+ 	ovpn_skb_cb(skb)->peer = peer;
+@@ -71,13 +170,17 @@ int ovpn_aead_encrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+ 	if (unlikely(nfrags + 2 > (MAX_SKB_FRAGS + 2)))
+ 		return -ENOSPC;
+ 
+-	/* sg may be required by async crypto */
+-	ovpn_skb_cb(skb)->sg = kmalloc(sizeof(*ovpn_skb_cb(skb)->sg) *
+-				       (nfrags + 2), GFP_ATOMIC);
+-	if (unlikely(!ovpn_skb_cb(skb)->sg))
++	/* allocate temporary memory for iv, sg and req */
++	tmp = kmalloc(ovpn_aead_crypto_tmp_size(ks->encrypt, nfrags),
++		      GFP_ATOMIC);
++	if (unlikely(!tmp))
+ 		return -ENOMEM;
+ 
+-	sg = ovpn_skb_cb(skb)->sg;
++	ovpn_skb_cb(skb)->crypto_tmp = tmp;
++
++	iv = ovpn_aead_crypto_tmp_iv(ks->encrypt, tmp);
++	req = ovpn_aead_crypto_tmp_req(ks->encrypt, iv);
++	sg = ovpn_aead_crypto_req_sg(ks->encrypt, req);
+ 
+ 	/* sg table:
+ 	 * 0: op, wire nonce (AD, len=OVPN_OP_SIZE_V2+OVPN_NONCE_WIRE_SIZE),
+@@ -105,13 +208,6 @@ int ovpn_aead_encrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+ 	if (unlikely(ret < 0))
+ 		return ret;
+ 
+-	/* iv may be required by async crypto */
+-	ovpn_skb_cb(skb)->iv = kmalloc(OVPN_NONCE_SIZE, GFP_ATOMIC);
+-	if (unlikely(!ovpn_skb_cb(skb)->iv))
+-		return -ENOMEM;
+-
+-	iv = ovpn_skb_cb(skb)->iv;
+-
+ 	/* concat 4 bytes packet id and 8 bytes nonce tail into 12 bytes
+ 	 * nonce
+ 	 */
+@@ -122,7 +218,7 @@ int ovpn_aead_encrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+ 	memcpy(skb->data, iv, OVPN_NONCE_WIRE_SIZE);
+ 
+ 	/* add packet op as head of additional data */
+-	op = ovpn_opcode_compose(OVPN_DATA_V2, ks->key_id, peer->id);
++	op = ovpn_opcode_compose(OVPN_DATA_V2, ks->key_id, peer->tx_id);
+ 	__skb_push(skb, OVPN_OPCODE_SIZE);
+ 	BUILD_BUG_ON(sizeof(op) != OVPN_OPCODE_SIZE);
+ 	*((__force __be32 *)skb->data) = htonl(op);
+@@ -130,12 +226,6 @@ int ovpn_aead_encrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+ 	/* AEAD Additional data */
+ 	sg_set_buf(sg, skb->data, OVPN_AAD_SIZE);
+ 
+-	req = aead_request_alloc(ks->encrypt, GFP_ATOMIC);
+-	if (unlikely(!req))
+-		return -ENOMEM;
+-
+-	ovpn_skb_cb(skb)->req = req;
+-
+ 	/* setup async crypto operation */
+ 	aead_request_set_tfm(req, ks->encrypt);
+ 	aead_request_set_callback(req, 0, ovpn_encrypt_post, skb);
+@@ -156,6 +246,7 @@ int ovpn_aead_decrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+ 	struct aead_request *req;
+ 	struct sk_buff *trailer;
+ 	struct scatterlist *sg;
++	void *tmp;
+ 	u8 *iv;
+ 
+ 	payload_offset = OVPN_AAD_SIZE + tag_size;
+@@ -184,13 +275,17 @@ int ovpn_aead_decrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+ 	if (unlikely(nfrags + 2 > (MAX_SKB_FRAGS + 2)))
+ 		return -ENOSPC;
+ 
+-	/* sg may be required by async crypto */
+-	ovpn_skb_cb(skb)->sg = kmalloc(sizeof(*ovpn_skb_cb(skb)->sg) *
+-				       (nfrags + 2), GFP_ATOMIC);
+-	if (unlikely(!ovpn_skb_cb(skb)->sg))
++	/* allocate temporary memory for iv, sg and req */
++	tmp = kmalloc(ovpn_aead_crypto_tmp_size(ks->decrypt, nfrags),
++		      GFP_ATOMIC);
++	if (unlikely(!tmp))
+ 		return -ENOMEM;
+ 
+-	sg = ovpn_skb_cb(skb)->sg;
++	ovpn_skb_cb(skb)->crypto_tmp = tmp;
++
++	iv = ovpn_aead_crypto_tmp_iv(ks->decrypt, tmp);
++	req = ovpn_aead_crypto_tmp_req(ks->decrypt, iv);
++	sg = ovpn_aead_crypto_req_sg(ks->decrypt, req);
+ 
+ 	/* sg table:
+ 	 * 0: op, wire nonce (AD, len=OVPN_OPCODE_SIZE+OVPN_NONCE_WIRE_SIZE),
+@@ -213,24 +308,11 @@ int ovpn_aead_decrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+ 	/* append auth_tag onto scatterlist */
+ 	sg_set_buf(sg + ret + 1, skb->data + OVPN_AAD_SIZE, tag_size);
+ 
+-	/* iv may be required by async crypto */
+-	ovpn_skb_cb(skb)->iv = kmalloc(OVPN_NONCE_SIZE, GFP_ATOMIC);
+-	if (unlikely(!ovpn_skb_cb(skb)->iv))
+-		return -ENOMEM;
+-
+-	iv = ovpn_skb_cb(skb)->iv;
+-
+ 	/* copy nonce into IV buffer */
+ 	memcpy(iv, skb->data + OVPN_OPCODE_SIZE, OVPN_NONCE_WIRE_SIZE);
+ 	memcpy(iv + OVPN_NONCE_WIRE_SIZE, ks->nonce_tail_recv,
+ 	       OVPN_NONCE_TAIL_SIZE);
+ 
+-	req = aead_request_alloc(ks->decrypt, GFP_ATOMIC);
+-	if (unlikely(!req))
+-		return -ENOMEM;
+-
+-	ovpn_skb_cb(skb)->req = req;
+-
+ 	/* setup async crypto operation */
+ 	aead_request_set_tfm(req, ks->decrypt);
+ 	aead_request_set_callback(req, 0, ovpn_decrypt_post, skb);
+@@ -273,7 +355,11 @@ static struct crypto_aead *ovpn_aead_init(const char *title,
+ 		goto error;
+ 	}
+ 
+-	/* basic AEAD assumption */
++	/* basic AEAD assumption
++	 * all current algorithms use OVPN_NONCE_SIZE.
++	 * ovpn_aead_crypto_tmp_size and ovpn_aead_encrypt/decrypt
++	 * expect this.
++	 */
+ 	if (crypto_aead_ivsize(aead) != OVPN_NONCE_SIZE) {
+ 		pr_err("%s IV size must be %d\n", title, OVPN_NONCE_SIZE);
+ 		ret = -EINVAL;
+diff --git a/drivers/net/ovpn/netlink-gen.c b/drivers/net/ovpn/netlink-gen.c
+index ecbe9dcf4f..2147cec7c2 100644
+--- a/drivers/net/ovpn/netlink-gen.c
++++ b/drivers/net/ovpn/netlink-gen.c
+@@ -16,6 +16,10 @@ static const struct netlink_range_validation ovpn_a_peer_id_range = {
+ 	.max	= 16777215ULL,
+ };
+ 
++static const struct netlink_range_validation ovpn_a_peer_tx_id_range = {
++	.max	= 16777215ULL,
++};
++
+ static const struct netlink_range_validation ovpn_a_keyconf_peer_id_range = {
+ 	.max	= 16777215ULL,
+ };
+@@ -51,7 +55,7 @@ const struct nla_policy ovpn_keydir_nl_policy[OVPN_A_KEYDIR_NONCE_TAIL + 1] = {
+ 	[OVPN_A_KEYDIR_NONCE_TAIL] = NLA_POLICY_EXACT_LEN(OVPN_NONCE_TAIL_SIZE),
+ };
+ 
+-const struct nla_policy ovpn_peer_nl_policy[OVPN_A_PEER_LINK_TX_PACKETS + 1] = {
++const struct nla_policy ovpn_peer_nl_policy[OVPN_A_PEER_TX_ID + 1] = {
+ 	[OVPN_A_PEER_ID] = NLA_POLICY_FULL_RANGE(NLA_U32, &ovpn_a_peer_id_range),
+ 	[OVPN_A_PEER_REMOTE_IPV4] = { .type = NLA_BE32, },
+ 	[OVPN_A_PEER_REMOTE_IPV6] = NLA_POLICY_EXACT_LEN(16),
+@@ -75,13 +79,14 @@ const struct nla_policy ovpn_peer_nl_policy[OVPN_A_PEER_LINK_TX_PACKETS + 1] = {
+ 	[OVPN_A_PEER_LINK_TX_BYTES] = { .type = NLA_UINT, },
+ 	[OVPN_A_PEER_LINK_RX_PACKETS] = { .type = NLA_UINT, },
+ 	[OVPN_A_PEER_LINK_TX_PACKETS] = { .type = NLA_UINT, },
++	[OVPN_A_PEER_TX_ID] = NLA_POLICY_FULL_RANGE(NLA_U32, &ovpn_a_peer_tx_id_range),
+ };
+ 
+ const struct nla_policy ovpn_peer_del_input_nl_policy[OVPN_A_PEER_ID + 1] = {
+ 	[OVPN_A_PEER_ID] = NLA_POLICY_FULL_RANGE(NLA_U32, &ovpn_a_peer_id_range),
+ };
+ 
+-const struct nla_policy ovpn_peer_new_input_nl_policy[OVPN_A_PEER_KEEPALIVE_TIMEOUT + 1] = {
++const struct nla_policy ovpn_peer_new_input_nl_policy[OVPN_A_PEER_TX_ID + 1] = {
+ 	[OVPN_A_PEER_ID] = NLA_POLICY_FULL_RANGE(NLA_U32, &ovpn_a_peer_id_range),
+ 	[OVPN_A_PEER_REMOTE_IPV4] = { .type = NLA_BE32, },
+ 	[OVPN_A_PEER_REMOTE_IPV6] = NLA_POLICY_EXACT_LEN(16),
+@@ -94,9 +99,10 @@ const struct nla_policy ovpn_peer_new_input_nl_policy[OVPN_A_PEER_KEEPALIVE_TIME
+ 	[OVPN_A_PEER_LOCAL_IPV6] = NLA_POLICY_EXACT_LEN(16),
+ 	[OVPN_A_PEER_KEEPALIVE_INTERVAL] = { .type = NLA_U32, },
+ 	[OVPN_A_PEER_KEEPALIVE_TIMEOUT] = { .type = NLA_U32, },
++	[OVPN_A_PEER_TX_ID] = NLA_POLICY_FULL_RANGE(NLA_U32, &ovpn_a_peer_tx_id_range),
+ };
+ 
+-const struct nla_policy ovpn_peer_set_input_nl_policy[OVPN_A_PEER_KEEPALIVE_TIMEOUT + 1] = {
++const struct nla_policy ovpn_peer_set_input_nl_policy[OVPN_A_PEER_TX_ID + 1] = {
+ 	[OVPN_A_PEER_ID] = NLA_POLICY_FULL_RANGE(NLA_U32, &ovpn_a_peer_id_range),
+ 	[OVPN_A_PEER_REMOTE_IPV4] = { .type = NLA_BE32, },
+ 	[OVPN_A_PEER_REMOTE_IPV6] = NLA_POLICY_EXACT_LEN(16),
+@@ -108,6 +114,7 @@ const struct nla_policy ovpn_peer_set_input_nl_policy[OVPN_A_PEER_KEEPALIVE_TIME
+ 	[OVPN_A_PEER_LOCAL_IPV6] = NLA_POLICY_EXACT_LEN(16),
+ 	[OVPN_A_PEER_KEEPALIVE_INTERVAL] = { .type = NLA_U32, },
+ 	[OVPN_A_PEER_KEEPALIVE_TIMEOUT] = { .type = NLA_U32, },
++	[OVPN_A_PEER_TX_ID] = NLA_POLICY_FULL_RANGE(NLA_U32, &ovpn_a_peer_tx_id_range),
+ };
+ 
+ /* OVPN_CMD_PEER_NEW - do */
+diff --git a/drivers/net/ovpn/netlink-gen.h b/drivers/net/ovpn/netlink-gen.h
+index b230158077..67cd85f861 100644
+--- a/drivers/net/ovpn/netlink-gen.h
++++ b/drivers/net/ovpn/netlink-gen.h
+@@ -18,10 +18,10 @@ extern const struct nla_policy ovpn_keyconf_del_input_nl_policy[OVPN_A_KEYCONF_S
+ extern const struct nla_policy ovpn_keyconf_get_nl_policy[OVPN_A_KEYCONF_CIPHER_ALG + 1];
+ extern const struct nla_policy ovpn_keyconf_swap_input_nl_policy[OVPN_A_KEYCONF_PEER_ID + 1];
+ extern const struct nla_policy ovpn_keydir_nl_policy[OVPN_A_KEYDIR_NONCE_TAIL + 1];
+-extern const struct nla_policy ovpn_peer_nl_policy[OVPN_A_PEER_LINK_TX_PACKETS + 1];
++extern const struct nla_policy ovpn_peer_nl_policy[OVPN_A_PEER_TX_ID + 1];
+ extern const struct nla_policy ovpn_peer_del_input_nl_policy[OVPN_A_PEER_ID + 1];
+-extern const struct nla_policy ovpn_peer_new_input_nl_policy[OVPN_A_PEER_KEEPALIVE_TIMEOUT + 1];
+-extern const struct nla_policy ovpn_peer_set_input_nl_policy[OVPN_A_PEER_KEEPALIVE_TIMEOUT + 1];
++extern const struct nla_policy ovpn_peer_new_input_nl_policy[OVPN_A_PEER_TX_ID + 1];
++extern const struct nla_policy ovpn_peer_set_input_nl_policy[OVPN_A_PEER_TX_ID + 1];
+ 
+ int ovpn_nl_pre_doit(const struct genl_split_ops *ops, struct sk_buff *skb,
+ 		     struct genl_info *info);
+diff --git a/drivers/net/ovpn/netlink.c b/drivers/net/ovpn/netlink.c
+index c7f3824376..291e2e5bb4 100644
+--- a/drivers/net/ovpn/netlink.c
++++ b/drivers/net/ovpn/netlink.c
+@@ -305,6 +305,12 @@ static int ovpn_nl_peer_modify(struct ovpn_peer *peer, struct genl_info *info,
+ 		dst_cache_reset(&peer->dst_cache);
+ 	}
+ 
++	/* In a multipeer-to-multipeer setup we may have asymmetric peer IDs,
++	 * that is peer->id might be different from peer->tx_id.
++	 */
++	if (attrs[OVPN_A_PEER_TX_ID])
++		peer->tx_id = nla_get_u32(attrs[OVPN_A_PEER_TX_ID]);
++
+ 	if (attrs[OVPN_A_PEER_VPN_IPV4]) {
+ 		rehash = true;
+ 		peer->vpn_addrs.ipv4.s_addr =
+@@ -326,8 +332,8 @@ static int ovpn_nl_peer_modify(struct ovpn_peer *peer, struct genl_info *info,
+ 	}
+ 
+ 	netdev_dbg(peer->ovpn->dev,
+-		   "modify peer id=%u endpoint=%pIScp VPN-IPv4=%pI4 VPN-IPv6=%pI6c\n",
+-		   peer->id, &ss,
++		   "modify peer id=%u tx_id=%u endpoint=%pIScp VPN-IPv4=%pI4 VPN-IPv6=%pI6c\n",
++		   peer->id, peer->tx_id, &ss,
+ 		   &peer->vpn_addrs.ipv4.s_addr, &peer->vpn_addrs.ipv6);
+ 
+ 	spin_unlock_bh(&peer->lock);
+@@ -373,6 +379,7 @@ int ovpn_nl_peer_new_doit(struct sk_buff *skb, struct genl_info *info)
+ 	}
+ 
+ 	peer_id = nla_get_u32(attrs[OVPN_A_PEER_ID]);
++
+ 	peer = ovpn_peer_new(ovpn, peer_id);
+ 	if (IS_ERR(peer)) {
+ 		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+@@ -572,6 +579,9 @@ static int ovpn_nl_send_peer(struct sk_buff *skb, const struct genl_info *info,
+ 	if (nla_put_u32(skb, OVPN_A_PEER_ID, peer->id))
+ 		goto err;
+ 
++	if (nla_put_u32(skb, OVPN_A_PEER_TX_ID, peer->tx_id))
++		goto err;
++
+ 	if (peer->vpn_addrs.ipv4.s_addr != htonl(INADDR_ANY))
+ 		if (nla_put_in_addr(skb, OVPN_A_PEER_VPN_IPV4,
+ 				    peer->vpn_addrs.ipv4.s_addr))
+@@ -1061,8 +1071,8 @@ err:
+ 
+ int ovpn_nl_key_swap_doit(struct sk_buff *skb, struct genl_info *info)
+ {
++	struct nlattr *attrs[OVPN_A_KEYCONF_MAX + 1];
+ 	struct ovpn_priv *ovpn = info->user_ptr[0];
+-	struct nlattr *attrs[OVPN_A_PEER_MAX + 1];
+ 	struct ovpn_peer *peer;
+ 	u32 peer_id;
+ 	int ret;
+@@ -1203,6 +1213,88 @@ err_free_msg:
+ 	return ret;
+ }
+ 
++/**
++ * ovpn_nl_peer_float_notify - notify userspace about peer floating
++ * @peer: the floated peer
++ * @ss: sockaddr representing the new remote endpoint
++ *
++ * Return: 0 on success or a negative error code otherwise
++ */
++int ovpn_nl_peer_float_notify(struct ovpn_peer *peer,
++			      const struct sockaddr_storage *ss)
++{
++	struct ovpn_socket *sock;
++	struct sockaddr_in6 *sa6;
++	struct sockaddr_in *sa;
++	struct sk_buff *msg;
++	struct nlattr *attr;
++	int ret = -EMSGSIZE;
++	void *hdr;
++
++	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
++	if (!msg)
++		return -ENOMEM;
++
++	hdr = genlmsg_put(msg, 0, 0, &ovpn_nl_family, 0,
++			  OVPN_CMD_PEER_FLOAT_NTF);
++	if (!hdr) {
++		ret = -ENOBUFS;
++		goto err_free_msg;
++	}
++
++	if (nla_put_u32(msg, OVPN_A_IFINDEX, peer->ovpn->dev->ifindex))
++		goto err_cancel_msg;
++
++	attr = nla_nest_start(msg, OVPN_A_PEER);
++	if (!attr)
++		goto err_cancel_msg;
++
++	if (nla_put_u32(msg, OVPN_A_PEER_ID, peer->id))
++		goto err_cancel_msg;
++
++	if (ss->ss_family == AF_INET) {
++		sa = (struct sockaddr_in *)ss;
++		if (nla_put_in_addr(msg, OVPN_A_PEER_REMOTE_IPV4,
++				    sa->sin_addr.s_addr) ||
++		    nla_put_net16(msg, OVPN_A_PEER_REMOTE_PORT, sa->sin_port))
++			goto err_cancel_msg;
++	} else if (ss->ss_family == AF_INET6) {
++		sa6 = (struct sockaddr_in6 *)ss;
++		if (nla_put_in6_addr(msg, OVPN_A_PEER_REMOTE_IPV6,
++				     &sa6->sin6_addr) ||
++		    nla_put_u32(msg, OVPN_A_PEER_REMOTE_IPV6_SCOPE_ID,
++				sa6->sin6_scope_id) ||
++		    nla_put_net16(msg, OVPN_A_PEER_REMOTE_PORT, sa6->sin6_port))
++			goto err_cancel_msg;
++	} else {
++		ret = -EAFNOSUPPORT;
++		goto err_cancel_msg;
++	}
++
++	nla_nest_end(msg, attr);
++	genlmsg_end(msg, hdr);
++
++	rcu_read_lock();
++	sock = rcu_dereference(peer->sock);
++	if (!sock) {
++		ret = -EINVAL;
++		goto err_unlock;
++	}
++	genlmsg_multicast_netns(&ovpn_nl_family, sock_net(sock->sk), msg,
++				0, OVPN_NLGRP_PEERS, GFP_ATOMIC);
++	rcu_read_unlock();
++
++	return 0;
++
++err_unlock:
++	rcu_read_unlock();
++err_cancel_msg:
++	genlmsg_cancel(msg, hdr);
++err_free_msg:
++	nlmsg_free(msg);
++	return ret;
++}
++
+ /**
+  * ovpn_nl_key_swap_notify - notify userspace peer's key must be renewed
+  * @peer: the peer whose key needs to be renewed
+diff --git a/drivers/net/ovpn/netlink.h b/drivers/net/ovpn/netlink.h
+index 8615dfc3c4..11ee7c6818 100644
+--- a/drivers/net/ovpn/netlink.h
++++ b/drivers/net/ovpn/netlink.h
+@@ -13,6 +13,8 @@ int ovpn_nl_register(void);
+ void ovpn_nl_unregister(void);
+ 
+ int ovpn_nl_peer_del_notify(struct ovpn_peer *peer);
++int ovpn_nl_peer_float_notify(struct ovpn_peer *peer,
++			      const struct sockaddr_storage *ss);
+ int ovpn_nl_key_swap_notify(struct ovpn_peer *peer, u8 key_id);
+ 
+ #endif /* _NET_OVPN_NETLINK_H_ */
+diff --git a/drivers/net/ovpn/peer.c b/drivers/net/ovpn/peer.c
+index 4bfcab0c86..b67ab2cb53 100644
+--- a/drivers/net/ovpn/peer.c
++++ b/drivers/net/ovpn/peer.c
+@@ -61,7 +61,7 @@ void ovpn_peer_keepalive_set(struct ovpn_peer *peer, u32 interval, u32 timeout)
+ 	/* now that interval and timeout have been changed, kick
+ 	 * off the worker so that the next delay can be recomputed
+ 	 */
+-	mod_delayed_work(system_wq, &peer->ovpn->keepalive_work, 0);
++	mod_delayed_work(system_percpu_wq, &peer->ovpn->keepalive_work, 0);
+ }
+ 
+ /**
+@@ -99,7 +99,11 @@ struct ovpn_peer *ovpn_peer_new(struct ovpn_priv *ovpn, u32 id)
+ 	if (!peer)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	/* in the default case TX and RX IDs are the same.
++	 * the user may set a different TX ID via netlink
++	 */
+ 	peer->id = id;
++	peer->tx_id = id;
+ 	peer->ovpn = ovpn;
+ 
+ 	peer->vpn_addrs.ipv4.s_addr = htonl(INADDR_ANY);
+@@ -287,6 +291,8 @@ void ovpn_peer_endpoints_update(struct ovpn_peer *peer, struct sk_buff *skb)
+ 
+ 	spin_unlock_bh(&peer->lock);
+ 
++	ovpn_nl_peer_float_notify(peer, &ss);
++
+ 	/* rehashing is required only in MP mode as P2P has one peer
+ 	 * only and thus there is no hashtable
+ 	 */
+diff --git a/drivers/net/ovpn/peer.h b/drivers/net/ovpn/peer.h
+index a1423f2b09..328401570c 100644
+--- a/drivers/net/ovpn/peer.h
++++ b/drivers/net/ovpn/peer.h
+@@ -21,7 +21,8 @@
+  * struct ovpn_peer - the main remote peer object
+  * @ovpn: main openvpn instance this peer belongs to
+  * @dev_tracker: reference tracker for associated dev
+- * @id: unique identifier
++ * @id: unique identifier, used to match incoming packets
++ * @tx_id: identifier to be used in TX packets
+  * @vpn_addrs: IP addresses assigned over the tunnel
+  * @vpn_addrs.ipv4: IPv4 assigned to peer on the tunnel
+  * @vpn_addrs.ipv6: IPv6 assigned to peer on the tunnel
+@@ -64,6 +65,7 @@ struct ovpn_peer {
+ 	struct ovpn_priv *ovpn;
+ 	netdevice_tracker dev_tracker;
+ 	u32 id;
++	u32 tx_id;
+ 	struct {
+ 		struct in_addr ipv4;
+ 		struct in6_addr ipv6;
+diff --git a/drivers/net/ovpn/pktid.c b/drivers/net/ovpn/pktid.c
+index 2f29049897..f1c243b844 100644
+--- a/drivers/net/ovpn/pktid.c
++++ b/drivers/net/ovpn/pktid.c
+@@ -65,7 +65,7 @@ int ovpn_pktid_recv(struct ovpn_pktid_recv *pr, u32 pkt_id, u32 pkt_time)
+ 	if (likely(pkt_id == pr->id + 1)) {
+ 		/* well-formed ID sequence (incremented by 1) */
+ 		pr->base = REPLAY_INDEX(pr->base, -1);
+-		pr->history[pr->base / 8] |= (1 << (pr->base % 8));
++		__set_bit(pr->base, pr->history);
+ 		if (pr->extent < REPLAY_WINDOW_SIZE)
+ 			++pr->extent;
+ 		pr->id = pkt_id;
+@@ -77,14 +77,14 @@ int ovpn_pktid_recv(struct ovpn_pktid_recv *pr, u32 pkt_id, u32 pkt_time)
+ 			unsigned int i;
+ 
+ 			pr->base = REPLAY_INDEX(pr->base, -delta);
+-			pr->history[pr->base / 8] |= (1 << (pr->base % 8));
++			__set_bit(pr->base, pr->history);
+ 			pr->extent += delta;
+ 			if (pr->extent > REPLAY_WINDOW_SIZE)
+ 				pr->extent = REPLAY_WINDOW_SIZE;
+ 			for (i = 1; i < delta; ++i) {
+ 				unsigned int newb = REPLAY_INDEX(pr->base, i);
+ 
+-				pr->history[newb / 8] &= ~BIT(newb % 8);
++				__clear_bit(newb, pr->history);
+ 			}
+ 		} else {
+ 			pr->base = 0;
+@@ -103,14 +103,11 @@ int ovpn_pktid_recv(struct ovpn_pktid_recv *pr, u32 pkt_id, u32 pkt_time)
+ 			if (pkt_id > pr->id_floor) {
+ 				const unsigned int ri = REPLAY_INDEX(pr->base,
+ 								     delta);
+-				u8 *p = &pr->history[ri / 8];
+-				const u8 mask = (1 << (ri % 8));
+ 
+-				if (*p & mask) {
++				if (__test_and_set_bit(ri, pr->history)) {
+ 					ret = -EINVAL;
+ 					goto out;
+ 				}
+-				*p |= mask;
+ 			} else {
+ 				ret = -EINVAL;
+ 				goto out;
+diff --git a/drivers/net/ovpn/pktid.h b/drivers/net/ovpn/pktid.h
+index 0262d026d1..21845f353b 100644
+--- a/drivers/net/ovpn/pktid.h
++++ b/drivers/net/ovpn/pktid.h
+@@ -34,7 +34,7 @@ struct ovpn_pktid_xmit {
+  */
+ struct ovpn_pktid_recv {
+ 	/* "sliding window" bitmask of recent packet IDs received */
+-	u8 history[REPLAY_WINDOW_BYTES];
++	DECLARE_BITMAP(history, REPLAY_WINDOW_SIZE);
+ 	/* bit position of deque base in history */
+ 	unsigned int base;
+ 	/* extent (in bits) of deque in history */
+diff --git a/drivers/net/ovpn/skb.h b/drivers/net/ovpn/skb.h
+index 64430880f1..4fb7ea0254 100644
+--- a/drivers/net/ovpn/skb.h
++++ b/drivers/net/ovpn/skb.h
+@@ -18,12 +18,19 @@
+ #include <linux/socket.h>
+ #include <linux/types.h>
+ 
++/**
++ * struct ovpn_cb - ovpn skb control block
++ * @peer: the peer this skb was received from/sent to
++ * @ks: the crypto key slot used to encrypt/decrypt this skb
++ * @crypto_tmp: pointer to temporary memory used for crypto operations
++ *		containing the IV, the scatter gather list and the aead request
++ * @payload_offset: offset in the skb where the payload starts
++ * @nosignal: whether this skb should be sent with the MSG_NOSIGNAL flag (TCP)
++ */
+ struct ovpn_cb {
+ 	struct ovpn_peer *peer;
+ 	struct ovpn_crypto_key_slot *ks;
+-	struct aead_request *req;
+-	struct scatterlist *sg;
+-	u8 *iv;
++	void *crypto_tmp;
+ 	unsigned int payload_offset;
+ 	bool nosignal;
+ };
+diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
+index ca2a84e867..da165554c8 100644
+--- a/fs/smb/client/cifsencrypt.c
++++ b/fs/smb/client/cifsencrypt.c
+@@ -25,6 +25,7 @@
+ #include <crypto/aead.h>
+ #include <crypto/arc4.h>
+ #include <crypto/md5.h>
++#include <crypto/utils.h>
+ #include <crypto/sha2.h>
+ 
+ static int cifs_sig_update(struct cifs_calc_sig_ctx *ctx,
+@@ -232,7 +233,7 @@ int cifs_verify_signature(struct smb_rqst *rqst,
+ /*	cifs_dump_mem("what we think it should be: ",
+ 		      what_we_think_sig_should_be, 16); */
+ 
+-	if (memcmp(server_response_sig, what_we_think_sig_should_be, 8))
++	if (crypto_memneq(server_response_sig, what_we_think_sig_should_be, 8))
+ 		return -EACCES;
+ 	else
+ 		return 0;
+diff --git a/fs/smb/client/smb2transport.c b/fs/smb/client/smb2transport.c
+index 8b9000a831..81be2b226e 100644
+--- a/fs/smb/client/smb2transport.c
++++ b/fs/smb/client/smb2transport.c
+@@ -20,6 +20,7 @@
+ #include <linux/highmem.h>
+ #include <crypto/aead.h>
+ #include <crypto/sha2.h>
++#include <crypto/utils.h>
+ #include "cifsglob.h"
+ #include "cifsproto.h"
+ #include "smb2proto.h"
+@@ -617,7 +618,8 @@ smb2_verify_signature(struct smb_rqst *rqst, struct TCP_Server_Info *server)
+ 	if (rc)
+ 		return rc;
+ 
+-	if (memcmp(server_response_sig, shdr->Signature, SMB2_SIGNATURE_SIZE)) {
++	if (crypto_memneq(server_response_sig, shdr->Signature,
++			  SMB2_SIGNATURE_SIZE)) {
+ 		cifs_dbg(VFS, "sign fail cmd 0x%x message id 0x%llx\n",
+ 			shdr->Command, shdr->MessageId);
+ 		return -EACCES;
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 8c66284a91..603b8db64d 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -979,7 +979,8 @@ static inline void iommu_flush_iotlb_all(struct iommu_domain *domain)
+ static inline void iommu_iotlb_sync(struct iommu_domain *domain,
+ 				  struct iommu_iotlb_gather *iotlb_gather)
+ {
+-	if (domain->ops->iotlb_sync)
++	if (domain->ops->iotlb_sync &&
++	    likely(iotlb_gather->start < iotlb_gather->end))
+ 		domain->ops->iotlb_sync(domain, iotlb_gather);
+ 
+ 	iommu_iotlb_gather_init(iotlb_gather);
+diff --git a/include/uapi/linux/ovpn.h b/include/uapi/linux/ovpn.h
+index 959b41def6..06690090a1 100644
+--- a/include/uapi/linux/ovpn.h
++++ b/include/uapi/linux/ovpn.h
+@@ -55,6 +55,7 @@ enum {
+ 	OVPN_A_PEER_LINK_TX_BYTES,
+ 	OVPN_A_PEER_LINK_RX_PACKETS,
+ 	OVPN_A_PEER_LINK_TX_PACKETS,
++	OVPN_A_PEER_TX_ID,
+ 
+ 	__OVPN_A_PEER_MAX,
+ 	OVPN_A_PEER_MAX = (__OVPN_A_PEER_MAX - 1)
+@@ -100,6 +101,7 @@ enum {
+ 	OVPN_CMD_KEY_SWAP,
+ 	OVPN_CMD_KEY_SWAP_NTF,
+ 	OVPN_CMD_KEY_DEL,
++	OVPN_CMD_PEER_FLOAT_NTF,
+ 
+ 	__OVPN_CMD_MAX,
+ 	OVPN_CMD_MAX = (__OVPN_CMD_MAX - 1)
+diff --git a/mm/slab.h b/mm/slab.h
+index e767aa7e91..d5da2f69e2 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -55,6 +55,14 @@ struct freelist_counters {
+ 					 * that the slab was corrupted
+ 					 */
+ 					unsigned frozen:1;
++#ifdef CONFIG_64BIT
++					/*
++					 * Some optimizations use free bits in 'counters' field
++					 * to save memory. In case ->stride field is not available,
++					 * such optimizations are disabled.
++					 */
++					unsigned short stride;
++#endif
+ 				};
+ 			};
+ 		};
+@@ -281,9 +289,12 @@ struct kmem_cache {
+ #define SLAB_SUPPORTS_SYSFS 1
+ void sysfs_slab_unlink(struct kmem_cache *s);
+ void sysfs_slab_release(struct kmem_cache *s);
++int sysfs_slab_alias(struct kmem_cache *s, const char *name);
+ #else
+ static inline void sysfs_slab_unlink(struct kmem_cache *s) { }
+ static inline void sysfs_slab_release(struct kmem_cache *s) { }
++static inline int sysfs_slab_alias(struct kmem_cache *s, const char *name)
++							{ return 0; }
+ #endif
+ 
+ void *fixup_red_left(struct kmem_cache *s, void *p);
+@@ -400,11 +411,6 @@ extern void create_boot_cache(struct kmem_cache *, const char *name,
+ 			unsigned int useroffset, unsigned int usersize);
+ 
+ int slab_unmergeable(struct kmem_cache *s);
+-struct kmem_cache *find_mergeable(unsigned size, unsigned align,
+-		slab_flags_t flags, const char *name, void (*ctor)(void *));
+-struct kmem_cache *
+-__kmem_cache_alias(const char *name, unsigned int size, unsigned int align,
+-		   slab_flags_t flags, void (*ctor)(void *));
+ 
+ slab_flags_t kmem_cache_flags(slab_flags_t flags, const char *name);
+ 
+@@ -502,6 +508,24 @@ bool slab_in_kunit_test(void);
+ static inline bool slab_in_kunit_test(void) { return false; }
+ #endif
+ 
++/*
++ * slub is about to manipulate internal object metadata.  This memory lies
++ * outside the range of the allocated object, so accessing it would normally
++ * be reported by kasan as a bounds error.  metadata_access_enable() is used
++ * to tell kasan that these accesses are OK.
++ */
++static inline void metadata_access_enable(void)
++{
++	kasan_disable_current();
++	kmsan_disable_current();
++}
++
++static inline void metadata_access_disable(void)
++{
++	kmsan_enable_current();
++	kasan_enable_current();
++}
++
+ #ifdef CONFIG_SLAB_OBJ_EXT
+ 
+ /*
+@@ -509,10 +533,26 @@ static inline bool slab_in_kunit_test(void) { return false; }
+  * associated with a slab.
+  * @slab: a pointer to the slab struct
+  *
+- * Returns a pointer to the object extension vector associated with the slab,
+- * or NULL if no such vector has been associated yet.
++ * Returns the address of the object extension vector associated with the slab,
++ * or zero if no such vector has been associated yet.
++ * Do not dereference the return value directly; use get/put_slab_obj_exts()
++ * pair and slab_obj_ext() to access individual elements.
++ *
++ * Example usage:
++ *
++ * obj_exts = slab_obj_exts(slab);
++ * if (obj_exts) {
++ *         get_slab_obj_exts(obj_exts);
++ *         obj_ext = slab_obj_ext(slab, obj_exts, obj_to_index(s, slab, obj));
++ *         // do something with obj_ext
++ *         put_slab_obj_exts(obj_exts);
++ * }
++ *
++ * Note that the get/put semantics does not involve reference counting.
++ * Instead, it updates kasan/kmsan depth so that accesses to slabobj_ext
++ * won't be reported as access violations.
+  */
+-static inline struct slabobj_ext *slab_obj_exts(struct slab *slab)
++static inline unsigned long slab_obj_exts(struct slab *slab)
+ {
+ 	unsigned long obj_exts = READ_ONCE(slab->obj_exts);
+ 
+@@ -525,7 +565,62 @@ static inline struct slabobj_ext *slab_obj_exts(struct slab *slab)
+ 		       obj_exts != OBJEXTS_ALLOC_FAIL, slab_page(slab));
+ 	VM_BUG_ON_PAGE(obj_exts & MEMCG_DATA_KMEM, slab_page(slab));
+ #endif
+-	return (struct slabobj_ext *)(obj_exts & ~OBJEXTS_FLAGS_MASK);
++
++	return obj_exts & ~OBJEXTS_FLAGS_MASK;
++}
++
++static inline void get_slab_obj_exts(unsigned long obj_exts)
++{
++	VM_WARN_ON_ONCE(!obj_exts);
++	metadata_access_enable();
++}
++
++static inline void put_slab_obj_exts(unsigned long obj_exts)
++{
++	metadata_access_disable();
++}
++
++#ifdef CONFIG_64BIT
++static inline void slab_set_stride(struct slab *slab, unsigned short stride)
++{
++	slab->stride = stride;
++}
++static inline unsigned short slab_get_stride(struct slab *slab)
++{
++	return slab->stride;
++}
++#else
++static inline void slab_set_stride(struct slab *slab, unsigned short stride)
++{
++	VM_WARN_ON_ONCE(stride != sizeof(struct slabobj_ext));
++}
++static inline unsigned short slab_get_stride(struct slab *slab)
++{
++	return sizeof(struct slabobj_ext);
++}
++#endif
++
++/*
++ * slab_obj_ext - get the pointer to the slab object extension metadata
++ * associated with an object in a slab.
++ * @slab: a pointer to the slab struct
++ * @obj_exts: a pointer to the object extension vector
++ * @index: an index of the object
++ *
++ * Returns a pointer to the object extension associated with the object.
++ * Must be called within a section covered by get/put_slab_obj_exts().
++ */
++static inline struct slabobj_ext *slab_obj_ext(struct slab *slab,
++					       unsigned long obj_exts,
++					       unsigned int index)
++{
++	struct slabobj_ext *obj_ext;
++
++	VM_WARN_ON_ONCE(obj_exts != slab_obj_exts(slab));
++
++	obj_ext = (struct slabobj_ext *)(obj_exts +
++					 slab_get_stride(slab) * index);
++	return kasan_reset_tag(obj_ext);
+ }
+ 
+ int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
+@@ -533,11 +628,22 @@ int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
+ 
+ #else /* CONFIG_SLAB_OBJ_EXT */
+ 
+-static inline struct slabobj_ext *slab_obj_exts(struct slab *slab)
++static inline unsigned long slab_obj_exts(struct slab *slab)
++{
++	return 0;
++}
++
++static inline struct slabobj_ext *slab_obj_ext(struct slab *slab,
++					       unsigned long obj_exts,
++					       unsigned int index)
+ {
+ 	return NULL;
+ }
+ 
++static inline void slab_set_stride(struct slab *slab, unsigned int stride) { }
++static inline unsigned int slab_get_stride(struct slab *slab) { return 0; }
++
++
+ #endif /* CONFIG_SLAB_OBJ_EXT */
+ 
+ static inline enum node_stat_item cache_vmstat_idx(struct kmem_cache *s)
+@@ -550,7 +656,7 @@ static inline enum node_stat_item cache_vmstat_idx(struct kmem_cache *s)
+ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
+ 				  gfp_t flags, size_t size, void **p);
+ void __memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+-			    void **p, int objects, struct slabobj_ext *obj_exts);
++			    void **p, int objects, unsigned long obj_exts);
+ #endif
+ 
+ void kvfree_rcu_cb(struct rcu_head *head);
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index 65de88cdf4..580b5ad293 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -2274,7 +2274,8 @@ void __init init_mm_internals(void)
+ {
+ 	int ret __maybe_unused;
+ 
+-	mm_percpu_wq = alloc_workqueue("mm_percpu_wq", WQ_MEM_RECLAIM, 0);
++	mm_percpu_wq = alloc_workqueue("mm_percpu_wq",
++				       WQ_MEM_RECLAIM | WQ_PERCPU, 0);
+ 
+ #ifdef CONFIG_SMP
+ 	ret = cpuhp_setup_state_nocalls(CPUHP_MM_VMSTAT_DEAD, "mm/vmstat:dead",
+diff --git a/tools/testing/selftests/net/ovpn/ovpn-cli.c b/tools/testing/selftests/net/ovpn/ovpn-cli.c
+index 0f3babf19f..7178abae1b 100644
+--- a/tools/testing/selftests/net/ovpn/ovpn-cli.c
++++ b/tools/testing/selftests/net/ovpn/ovpn-cli.c
+@@ -1516,6 +1516,9 @@ static int ovpn_handle_msg(struct nl_msg *msg, void *arg)
+ 	case OVPN_CMD_PEER_DEL_NTF:
+ 		fprintf(stdout, "received CMD_PEER_DEL_NTF\n");
+ 		break;
++	case OVPN_CMD_PEER_FLOAT_NTF:
++		fprintf(stdout, "received CMD_PEER_FLOAT_NTF\n");
++		break;
+ 	case OVPN_CMD_KEY_SWAP_NTF:
+ 		fprintf(stdout, "received CMD_KEY_SWAP_NTF\n");
+ 		break;
