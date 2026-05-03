@@ -1,0 +1,423 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.2] fixes: miscellaneous fixes
+
+Re-cut from natalenko's pf-kernel branch fixes-6.2 (tip 98d21385731f)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.2 (orphan/EOL) slot. Source: codeberg.org/pf-kernel/linux.
+
+Stable-backport-style fixes (9 files; the bulk is huge — 2163 — but most files are gentoo-sources-covered already).
+---
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index b808be7763..6e696c6b70 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -343,9 +343,10 @@ static int emit_call(u8 **pprog, void *func, void *ip)
+ 
+ static int emit_rsb_call(u8 **pprog, void *func, void *ip)
+ {
++	void *adjusted_ip;
+ 	OPTIMIZER_HIDE_VAR(func);
+-	x86_call_depth_emit_accounting(pprog, func);
+-	return emit_patch(pprog, func, ip, 0xE8);
++	adjusted_ip = (u8 *)ip + x86_call_depth_emit_accounting(pprog, func);
++	return emit_patch(pprog, func, adjusted_ip, 0xE8);
+ }
+ 
+ static int emit_jump(u8 **pprog, void *func, void *ip)
+diff --git a/fs/btrfs/btrfs_inode.h b/fs/btrfs/btrfs_inode.h
+index 195c09e206..1367bbc6c0 100644
+--- a/fs/btrfs/btrfs_inode.h
++++ b/fs/btrfs/btrfs_inode.h
+@@ -532,6 +532,7 @@ ssize_t btrfs_do_encoded_write(struct kiocb *iocb, struct iov_iter *from,
+ ssize_t btrfs_dio_read(struct kiocb *iocb, struct iov_iter *iter,
+ 		       size_t done_before);
+ struct iomap_dio *btrfs_dio_write(struct kiocb *iocb, struct iov_iter *iter,
++				  struct btrfs_ordered_extent **ordered_extent,
+ 				  size_t done_before);
+ 
+ extern const struct dentry_operations btrfs_dentry_operations;
+diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
+index af046d2230..7b5dd01772 100644
+--- a/fs/btrfs/file.c
++++ b/fs/btrfs/file.c
+@@ -1465,6 +1465,7 @@ static ssize_t btrfs_direct_write(struct kiocb *iocb, struct iov_iter *from)
+ 	ssize_t err;
+ 	unsigned int ilock_flags = 0;
+ 	struct iomap_dio *dio;
++	struct btrfs_ordered_extent *ordered_extent = NULL;
+ 
+ 	if (iocb->ki_flags & IOCB_NOWAIT)
+ 		ilock_flags |= BTRFS_ILOCK_TRY;
+@@ -1526,7 +1527,7 @@ relock:
+ 	 * got -EFAULT, faulting in the pages before the retry.
+ 	 */
+ 	from->nofault = true;
+-	dio = btrfs_dio_write(iocb, from, written);
++	dio = btrfs_dio_write(iocb, from, &ordered_extent, written);
+ 	from->nofault = false;
+ 
+ 	/*
+@@ -1569,6 +1570,14 @@ relock:
+ 			goto relock;
+ 		}
+ 	}
++	/*
++	 * We can't loop back to btrfs_dio_write, so we can drop the cached
++	 * ordered extent. Typically btrfs_dio_iomap_end will run and put the
++	 * ordered_extent, but this is needed to clean up in case of an error
++	 * path breaking out of iomap_iter before the final iomap_end call.
++	 */
++	if (ordered_extent)
++		btrfs_put_ordered_extent(ordered_extent);
+ 
+ 	/*
+ 	 * If 'err' is -ENOTBLK or we have not written all data, then it means
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index 98a800b8bd..cdee2bf7ce 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -81,6 +81,7 @@ struct btrfs_dio_data {
+ 	struct extent_changeset *data_reserved;
+ 	bool data_space_reserved;
+ 	bool nocow_done;
++	struct btrfs_ordered_extent *ordered;
+ };
+ 
+ struct btrfs_dio_private {
+@@ -7131,6 +7132,7 @@ out:
+ }
+ 
+ static struct extent_map *btrfs_create_dio_extent(struct btrfs_inode *inode,
++						  struct btrfs_dio_data *dio_data,
+ 						  const u64 start,
+ 						  const u64 len,
+ 						  const u64 orig_start,
+@@ -7141,7 +7143,7 @@ static struct extent_map *btrfs_create_dio_extent(struct btrfs_inode *inode,
+ 						  const int type)
+ {
+ 	struct extent_map *em = NULL;
+-	int ret;
++	struct btrfs_ordered_extent *ordered;
+ 
+ 	if (type != BTRFS_ORDERED_NOCOW) {
+ 		em = create_io_em(inode, start, len, orig_start, block_start,
+@@ -7151,18 +7153,21 @@ static struct extent_map *btrfs_create_dio_extent(struct btrfs_inode *inode,
+ 		if (IS_ERR(em))
+ 			goto out;
+ 	}
+-	ret = btrfs_add_ordered_extent(inode, start, len, len, block_start,
+-				       block_len, 0,
+-				       (1 << type) |
+-				       (1 << BTRFS_ORDERED_DIRECT),
+-				       BTRFS_COMPRESS_NONE);
+-	if (ret) {
++	ordered = btrfs_alloc_ordered_extent(inode, start, len, len,
++					     block_start, block_len, 0,
++					     (1 << type) |
++					     (1 << BTRFS_ORDERED_DIRECT),
++					     BTRFS_COMPRESS_NONE);
++	if (IS_ERR(ordered)) {
+ 		if (em) {
+ 			free_extent_map(em);
+ 			btrfs_drop_extent_map_range(inode, start,
+ 						    start + len - 1, false);
+ 		}
+-		em = ERR_PTR(ret);
++		em = ERR_PTR(PTR_ERR(ordered));
++	} else {
++		ASSERT(!dio_data->ordered);
++		dio_data->ordered = ordered;
+ 	}
+  out:
+ 
+@@ -7170,6 +7175,7 @@ static struct extent_map *btrfs_create_dio_extent(struct btrfs_inode *inode,
+ }
+ 
+ static struct extent_map *btrfs_new_extent_direct(struct btrfs_inode *inode,
++						  struct btrfs_dio_data *dio_data,
+ 						  u64 start, u64 len)
+ {
+ 	struct btrfs_root *root = inode->root;
+@@ -7185,7 +7191,8 @@ static struct extent_map *btrfs_new_extent_direct(struct btrfs_inode *inode,
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
+-	em = btrfs_create_dio_extent(inode, start, ins.offset, start,
++	em = btrfs_create_dio_extent(inode, dio_data,
++				     start, ins.offset, start,
+ 				     ins.objectid, ins.offset, ins.offset,
+ 				     ins.offset, BTRFS_ORDERED_REGULAR);
+ 	btrfs_dec_block_group_reservations(fs_info, ins.objectid);
+@@ -7530,7 +7537,7 @@ static int btrfs_get_blocks_direct_write(struct extent_map **map,
+ 		}
+ 		space_reserved = true;
+ 
+-		em2 = btrfs_create_dio_extent(BTRFS_I(inode), start, len,
++		em2 = btrfs_create_dio_extent(BTRFS_I(inode), dio_data, start, len,
+ 					      orig_start, block_start,
+ 					      len, orig_block_len,
+ 					      ram_bytes, type);
+@@ -7572,7 +7579,7 @@ static int btrfs_get_blocks_direct_write(struct extent_map **map,
+ 			goto out;
+ 		space_reserved = true;
+ 
+-		em = btrfs_new_extent_direct(BTRFS_I(inode), start, len);
++		em = btrfs_new_extent_direct(BTRFS_I(inode), dio_data, start, len);
+ 		if (IS_ERR(em)) {
+ 			ret = PTR_ERR(em);
+ 			goto out;
+@@ -7676,6 +7683,17 @@ static int btrfs_dio_iomap_begin(struct inode *inode, loff_t start,
+ 		}
+ 	}
+ 
++	if (dio_data->ordered) {
++		ASSERT(write);
++		em = btrfs_get_extent(BTRFS_I(inode), NULL, 0,
++				      dio_data->ordered->file_offset,
++				      dio_data->ordered->bytes_left);
++		if (IS_ERR(em)) {
++			ret = PTR_ERR(em);
++			goto err;
++		}
++		goto map_iomap;
++	}
+ 	memset(dio_data, 0, sizeof(*dio_data));
+ 
+ 	/*
+@@ -7817,6 +7835,7 @@ static int btrfs_dio_iomap_begin(struct inode *inode, loff_t start,
+ 	else
+ 		free_extent_state(cached_state);
+ 
++map_iomap:
+ 	/*
+ 	 * Translate extent map information to iomap.
+ 	 * We trim the extents (and move the addr) even though iomap code does
+@@ -7874,13 +7893,25 @@ static int btrfs_dio_iomap_end(struct inode *inode, loff_t pos, loff_t length,
+ 	if (submitted < length) {
+ 		pos += submitted;
+ 		length -= submitted;
+-		if (write)
+-			btrfs_mark_ordered_io_finished(BTRFS_I(inode), NULL,
+-						       pos, length, false);
+-		else
++		if (write) {
++			if (submitted == 0) {
++				btrfs_mark_ordered_io_finished(BTRFS_I(inode),
++							       NULL, pos,
++							       length, false);
++				btrfs_put_ordered_extent(dio_data->ordered);
++				dio_data->ordered = NULL;
++			}
++		} else {
+ 			unlock_extent(&BTRFS_I(inode)->io_tree, pos,
+ 				      pos + length - 1, NULL);
++		}
+ 		ret = -ENOTBLK;
++	} else {
++		/* On the last bio, release our cached ordered_extent. */
++		if (write) {
++			btrfs_put_ordered_extent(dio_data->ordered);
++			dio_data->ordered = NULL;
++		}
+ 	}
+ 
+ 	if (write)
+@@ -8163,19 +8194,24 @@ static const struct iomap_dio_ops btrfs_dio_ops = {
+ 
+ ssize_t btrfs_dio_read(struct kiocb *iocb, struct iov_iter *iter, size_t done_before)
+ {
+-	struct btrfs_dio_data data;
++	struct btrfs_dio_data data = { 0 };
+ 
+ 	return iomap_dio_rw(iocb, iter, &btrfs_dio_iomap_ops, &btrfs_dio_ops,
+ 			    IOMAP_DIO_PARTIAL, &data, done_before);
+ }
+ 
+ struct iomap_dio *btrfs_dio_write(struct kiocb *iocb, struct iov_iter *iter,
++				  struct btrfs_ordered_extent **ordered_extent,
+ 				  size_t done_before)
+ {
+-	struct btrfs_dio_data data;
++	struct btrfs_dio_data dio_data = { .ordered = *ordered_extent };
++	struct iomap_dio *dio;
+ 
+-	return __iomap_dio_rw(iocb, iter, &btrfs_dio_iomap_ops, &btrfs_dio_ops,
+-			    IOMAP_DIO_PARTIAL, &data, done_before);
++	dio =  __iomap_dio_rw(iocb, iter, &btrfs_dio_iomap_ops, &btrfs_dio_ops,
++			      IOMAP_DIO_PARTIAL, &dio_data, done_before);
++	if (!IS_ERR_OR_NULL(dio))
++		*ordered_extent = dio_data.ordered;
++	return dio;
+ }
+ 
+ static int btrfs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+diff --git a/fs/btrfs/ordered-data.c b/fs/btrfs/ordered-data.c
+index 57d8c72737..202238f6d5 100644
+--- a/fs/btrfs/ordered-data.c
++++ b/fs/btrfs/ordered-data.c
+@@ -160,14 +160,16 @@ static inline struct rb_node *tree_search(struct btrfs_ordered_inode_tree *tree,
+  * @compress_type:   Compression algorithm used for data.
+  *
+  * Most of these parameters correspond to &struct btrfs_file_extent_item. The
+- * tree is given a single reference on the ordered extent that was inserted.
++ * tree is given a single reference on the ordered extent that was inserted, and
++ * the returned pointer is given a second reference.
+  *
+- * Return: 0 or -ENOMEM.
++ * Return: the new ordered extent or ERR_PTR(-ENOMEM).
+  */
+-int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+-			     u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
+-			     u64 disk_num_bytes, u64 offset, unsigned flags,
+-			     int compress_type)
++struct btrfs_ordered_extent *btrfs_alloc_ordered_extent(
++			struct btrfs_inode *inode, u64 file_offset,
++			u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
++			u64 disk_num_bytes, u64 offset, unsigned long flags,
++			int compress_type)
+ {
+ 	struct btrfs_root *root = inode->root;
+ 	struct btrfs_fs_info *fs_info = root->fs_info;
+@@ -181,7 +183,7 @@ int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+ 		/* For nocow write, we can release the qgroup rsv right now */
+ 		ret = btrfs_qgroup_free_data(inode, NULL, file_offset, num_bytes);
+ 		if (ret < 0)
+-			return ret;
++			return ERR_PTR(ret);
+ 		ret = 0;
+ 	} else {
+ 		/*
+@@ -190,11 +192,11 @@ int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+ 		 */
+ 		ret = btrfs_qgroup_release_data(inode, file_offset, num_bytes);
+ 		if (ret < 0)
+-			return ret;
++			return ERR_PTR(ret);
+ 	}
+ 	entry = kmem_cache_zalloc(btrfs_ordered_extent_cache, GFP_NOFS);
+ 	if (!entry)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	entry->file_offset = file_offset;
+ 	entry->num_bytes = num_bytes;
+@@ -256,6 +258,32 @@ int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+ 	btrfs_mod_outstanding_extents(inode, 1);
+ 	spin_unlock(&inode->lock);
+ 
++	/* One ref for the returned entry to match semantics of lookup. */
++	refcount_inc(&entry->refs);
++
++	return entry;
++}
++
++/*
++ * Add a new btrfs_ordered_extent for the range, but drop the reference instead
++ * of returning it to the caller.
++ */
++int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
++			     u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
++			     u64 disk_num_bytes, u64 offset, unsigned long flags,
++			     int compress_type)
++{
++	struct btrfs_ordered_extent *ordered;
++
++	ordered = btrfs_alloc_ordered_extent(inode, file_offset, num_bytes,
++					     ram_bytes, disk_bytenr,
++					     disk_num_bytes, offset, flags,
++					     compress_type);
++
++	if (IS_ERR(ordered))
++		return PTR_ERR(ordered);
++	btrfs_put_ordered_extent(ordered);
++
+ 	return 0;
+ }
+ 
+diff --git a/fs/btrfs/ordered-data.h b/fs/btrfs/ordered-data.h
+index 89f82b78f5..eb67500df8 100644
+--- a/fs/btrfs/ordered-data.h
++++ b/fs/btrfs/ordered-data.h
+@@ -179,9 +179,14 @@ void btrfs_mark_ordered_io_finished(struct btrfs_inode *inode,
+ bool btrfs_dec_test_ordered_pending(struct btrfs_inode *inode,
+ 				    struct btrfs_ordered_extent **cached,
+ 				    u64 file_offset, u64 io_size);
++struct btrfs_ordered_extent *btrfs_alloc_ordered_extent(
++			struct btrfs_inode *inode, u64 file_offset,
++			u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
++			u64 disk_num_bytes, u64 offset, unsigned long flags,
++			int compress_type);
+ int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+ 			     u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
+-			     u64 disk_num_bytes, u64 offset, unsigned flags,
++			     u64 disk_num_bytes, u64 offset, unsigned long flags,
+ 			     int compress_type);
+ void btrfs_add_ordered_sum(struct btrfs_ordered_extent *entry,
+ 			   struct btrfs_ordered_sum *sum);
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index 45f09bec02..87b20e2ee2 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -148,6 +148,8 @@ static inline void set_userns_rlimit_max(struct user_namespace *ns,
+ 
+ #ifdef CONFIG_USER_NS
+ 
++extern int unprivileged_userns_clone;
++
+ static inline struct user_namespace *get_user_ns(struct user_namespace *ns)
+ {
+ 	if (ns)
+@@ -181,6 +183,8 @@ extern bool current_in_userns(const struct user_namespace *target_ns);
+ struct ns_common *ns_get_owner(struct ns_common *ns);
+ #else
+ 
++#define unprivileged_userns_clone 0
++
+ static inline struct user_namespace *get_user_ns(struct user_namespace *ns)
+ {
+ 	return &init_user_ns;
+diff --git a/init/Kconfig b/init/Kconfig
+index 44e90b28a3..e0fa7d9f97 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1253,6 +1253,22 @@ config USER_NS
+ 
+ 	  If unsure, say N.
+ 
++config USER_NS_UNPRIVILEGED
++	bool "Allow unprivileged users to create namespaces"
++	default y
++	depends on USER_NS
++	help
++	  When disabled, unprivileged users will not be able to create
++	  new namespaces. Allowing users to create their own namespaces
++	  has been part of several recent local privilege escalation
++	  exploits, so if you need user namespaces but are
++	  paranoid^Wsecurity-conscious you want to disable this.
++
++	  This setting can be overridden at runtime via the
++	  kernel.unprivileged_userns_clone sysctl.
++
++	  If unsure, say Y.
++
+ config PID_NS
+ 	bool "PID Namespaces"
+ 	default y
+diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+index 54211dbd51..16ca0c1516 100644
+--- a/kernel/user_namespace.c
++++ b/kernel/user_namespace.c
+@@ -22,6 +22,13 @@
+ #include <linux/bsearch.h>
+ #include <linux/sort.h>
+ 
++/* sysctl */
++#ifdef CONFIG_USER_NS_UNPRIVILEGED
++int unprivileged_userns_clone = 1;
++#else
++int unprivileged_userns_clone;
++#endif
++
+ static struct kmem_cache *user_ns_cachep __read_mostly;
+ static DEFINE_MUTEX(userns_state_mutex);
+ 
