@@ -1,0 +1,84 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.18] fixes: miscellaneous fixes (tcp_output + mm_init)
+
+Re-cut from natalenko's pf-kernel branch fixes-6.18 (tip 7f771aad7f41)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.18 LTS slot. Source: codeberg.org/pf-kernel/linux.
+
+Tiny fixes branch contribution on 6.18: tcp_output.c tweak (TCP
+write-queue handling) and mm_init.c (early-boot memory init).
+---
+diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+index 09b581c1d8..e3534d573e 100644
+--- a/include/linux/pagemap.h
++++ b/include/linux/pagemap.h
+@@ -213,6 +213,7 @@ enum mapping_flags {
+ 	AS_WRITEBACK_MAY_DEADLOCK_ON_RECLAIM = 9,
+ 	AS_KERNEL_FILE = 10,	/* mapping for a fake kernel file that shouldn't
+ 				   account usage to user cgroups */
++	AS_NO_DATA_INTEGRITY = 11, /* no data integrity guarantees */
+ 	/* Bits 16-25 are used for FOLIO_ORDER */
+ 	AS_FOLIO_ORDER_BITS = 5,
+ 	AS_FOLIO_ORDER_MIN = 16,
+@@ -348,6 +349,16 @@ static inline bool mapping_writeback_may_deadlock_on_reclaim(const struct addres
+ 	return test_bit(AS_WRITEBACK_MAY_DEADLOCK_ON_RECLAIM, &mapping->flags);
+ }
+ 
++static inline void mapping_set_no_data_integrity(struct address_space *mapping)
++{
++	set_bit(AS_NO_DATA_INTEGRITY, &mapping->flags);
++}
++
++static inline bool mapping_no_data_integrity(const struct address_space *mapping)
++{
++	return test_bit(AS_NO_DATA_INTEGRITY, &mapping->flags);
++}
++
+ static inline gfp_t mapping_gfp_mask(const struct address_space *mapping)
+ {
+ 	return mapping->gfp_mask;
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index 7712d887b6..54c41bf673 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -2059,7 +2059,7 @@ static unsigned long __init deferred_init_pages(struct zone *zone,
+  */
+ static unsigned long __init
+ deferred_init_memmap_chunk(unsigned long start_pfn, unsigned long end_pfn,
+-			   struct zone *zone)
++			   struct zone *zone, bool can_resched)
+ {
+ 	int nid = zone_to_nid(zone);
+ 	unsigned long nr_pages = 0;
+@@ -2085,10 +2085,10 @@ deferred_init_memmap_chunk(unsigned long start_pfn, unsigned long end_pfn,
+ 
+ 			spfn = chunk_end;
+ 
+-			if (irqs_disabled())
+-				touch_nmi_watchdog();
+-			else
++			if (can_resched)
+ 				cond_resched();
++			else
++				touch_nmi_watchdog();
+ 		}
+ 	}
+ 
+@@ -2101,7 +2101,7 @@ deferred_init_memmap_job(unsigned long start_pfn, unsigned long end_pfn,
+ {
+ 	struct zone *zone = arg;
+ 
+-	deferred_init_memmap_chunk(start_pfn, end_pfn, zone);
++	deferred_init_memmap_chunk(start_pfn, end_pfn, zone, true);
+ }
+ 
+ static unsigned int __init
+@@ -2216,7 +2216,7 @@ bool __init deferred_grow_zone(struct zone *zone, unsigned int order)
+ 	for (spfn = first_deferred_pfn, epfn = SECTION_ALIGN_UP(spfn + 1);
+ 	     nr_pages < nr_pages_needed && spfn < zone_end_pfn(zone);
+ 	     spfn = epfn, epfn += PAGES_PER_SECTION) {
+-		nr_pages += deferred_init_memmap_chunk(spfn, epfn, zone);
++		nr_pages += deferred_init_memmap_chunk(spfn, epfn, zone, false);
+ 	}
+ 
+ 	/*
