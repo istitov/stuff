@@ -27,3 +27,11 @@ src_prepare() {
 		pyproject.toml || die
 	distutils-r1_src_prepare
 }
+
+python_install_all() {
+	distutils-r1_python_install_all
+	# Drop legacy pkgutil-style namespace stub so multiple
+	# diffpy.* distributions coexist via PEP 420 implicit namespace.
+	find "${ED}" -path '*/site-packages/diffpy/__init__.py' -delete || die
+	find "${ED}" -path '*/site-packages/diffpy/__pycache__/__init__.*' -delete || die
+}
