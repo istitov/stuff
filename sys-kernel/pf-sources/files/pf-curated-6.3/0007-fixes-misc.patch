@@ -1,0 +1,298 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.3] fixes: miscellaneous fixes
+
+Re-cut from natalenko's pf-kernel branch fixes-6.3 (tip 7e35c638a6b8)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.3 (orphan/EOL) slot. Source: codeberg.org/pf-kernel/linux.
+
+Stable-backport-style fixes (10 files).
+---
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 1056bbf55b..212bfd1517 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -343,9 +343,10 @@ static int emit_call(u8 **pprog, void *func, void *ip)
+ 
+ static int emit_rsb_call(u8 **pprog, void *func, void *ip)
+ {
++	void *adjusted_ip;
+ 	OPTIMIZER_HIDE_VAR(func);
+-	x86_call_depth_emit_accounting(pprog, func);
+-	return emit_patch(pprog, func, ip, 0xE8);
++	adjusted_ip = (u8 *)ip + x86_call_depth_emit_accounting(pprog, func);
++	return emit_patch(pprog, func, adjusted_ip, 0xE8);
+ }
+ 
+ static int emit_jump(u8 **pprog, void *func, void *ip)
+diff --git a/fs/btrfs/btrfs_inode.h b/fs/btrfs/btrfs_inode.h
+index 9dc2162280..6b1003f64e 100644
+--- a/fs/btrfs/btrfs_inode.h
++++ b/fs/btrfs/btrfs_inode.h
+@@ -516,6 +516,7 @@ ssize_t btrfs_do_encoded_write(struct kiocb *iocb, struct iov_iter *from,
+ ssize_t btrfs_dio_read(struct kiocb *iocb, struct iov_iter *iter,
+ 		       size_t done_before);
+ struct iomap_dio *btrfs_dio_write(struct kiocb *iocb, struct iov_iter *iter,
++				  struct btrfs_ordered_extent **ordered_extent,
+ 				  size_t done_before);
+ 
+ extern const struct dentry_operations btrfs_dentry_operations;
+diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
+index 5cc5a1faae..ec5c535590 100644
+--- a/fs/btrfs/file.c
++++ b/fs/btrfs/file.c
+@@ -1465,6 +1465,7 @@ static ssize_t btrfs_direct_write(struct kiocb *iocb, struct iov_iter *from)
+ 	ssize_t err;
+ 	unsigned int ilock_flags = 0;
+ 	struct iomap_dio *dio;
++	struct btrfs_ordered_extent *ordered_extent = NULL;
+ 
+ 	if (iocb->ki_flags & IOCB_NOWAIT)
+ 		ilock_flags |= BTRFS_ILOCK_TRY;
+@@ -1526,7 +1527,7 @@ relock:
+ 	 * got -EFAULT, faulting in the pages before the retry.
+ 	 */
+ 	from->nofault = true;
+-	dio = btrfs_dio_write(iocb, from, written);
++	dio = btrfs_dio_write(iocb, from, &ordered_extent, written);
+ 	from->nofault = false;
+ 
+ 	/*
+@@ -1569,6 +1570,14 @@ relock:
+ 			goto relock;
+ 		}
+ 	}
++	/*
++	 * We can't loop back to btrfs_dio_write, so we can drop the cached
++	 * ordered extent. Typically btrfs_dio_iomap_end will run and put the
++	 * ordered_extent, but this is needed to clean up in case of an error
++	 * path breaking out of iomap_iter before the final iomap_end call.
++	 */
++	if (ordered_extent)
++		btrfs_put_ordered_extent(ordered_extent);
+ 
+ 	/*
+ 	 * If 'err' is -ENOTBLK or we have not written all data, then it means
+diff --git a/fs/btrfs/ordered-data.c b/fs/btrfs/ordered-data.c
+index 6c24b69e2d..1848d0d1a9 100644
+--- a/fs/btrfs/ordered-data.c
++++ b/fs/btrfs/ordered-data.c
+@@ -160,14 +160,16 @@ static inline struct rb_node *tree_search(struct btrfs_ordered_inode_tree *tree,
+  * @compress_type:   Compression algorithm used for data.
+  *
+  * Most of these parameters correspond to &struct btrfs_file_extent_item. The
+- * tree is given a single reference on the ordered extent that was inserted.
++ * tree is given a single reference on the ordered extent that was inserted, and
++ * the returned pointer is given a second reference.
+  *
+- * Return: 0 or -ENOMEM.
++ * Return: the new ordered extent or ERR_PTR(-ENOMEM).
+  */
+-int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+-			     u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
+-			     u64 disk_num_bytes, u64 offset, unsigned flags,
+-			     int compress_type)
++struct btrfs_ordered_extent *btrfs_alloc_ordered_extent(
++			struct btrfs_inode *inode, u64 file_offset,
++			u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
++			u64 disk_num_bytes, u64 offset, unsigned long flags,
++			int compress_type)
+ {
+ 	struct btrfs_root *root = inode->root;
+ 	struct btrfs_fs_info *fs_info = root->fs_info;
+@@ -181,7 +183,7 @@ int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+ 		/* For nocow write, we can release the qgroup rsv right now */
+ 		ret = btrfs_qgroup_free_data(inode, NULL, file_offset, num_bytes);
+ 		if (ret < 0)
+-			return ret;
++			return ERR_PTR(ret);
+ 		ret = 0;
+ 	} else {
+ 		/*
+@@ -190,11 +192,11 @@ int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+ 		 */
+ 		ret = btrfs_qgroup_release_data(inode, file_offset, num_bytes);
+ 		if (ret < 0)
+-			return ret;
++			return ERR_PTR(ret);
+ 	}
+ 	entry = kmem_cache_zalloc(btrfs_ordered_extent_cache, GFP_NOFS);
+ 	if (!entry)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	entry->file_offset = file_offset;
+ 	entry->num_bytes = num_bytes;
+@@ -256,6 +258,32 @@ int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+ 	btrfs_mod_outstanding_extents(inode, 1);
+ 	spin_unlock(&inode->lock);
+ 
++	/* One ref for the returned entry to match semantics of lookup. */
++	refcount_inc(&entry->refs);
++
++	return entry;
++}
++
++/*
++ * Add a new btrfs_ordered_extent for the range, but drop the reference instead
++ * of returning it to the caller.
++ */
++int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
++			     u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
++			     u64 disk_num_bytes, u64 offset, unsigned long flags,
++			     int compress_type)
++{
++	struct btrfs_ordered_extent *ordered;
++
++	ordered = btrfs_alloc_ordered_extent(inode, file_offset, num_bytes,
++					     ram_bytes, disk_bytenr,
++					     disk_num_bytes, offset, flags,
++					     compress_type);
++
++	if (IS_ERR(ordered))
++		return PTR_ERR(ordered);
++	btrfs_put_ordered_extent(ordered);
++
+ 	return 0;
+ }
+ 
+diff --git a/fs/btrfs/ordered-data.h b/fs/btrfs/ordered-data.h
+index eb40cb39f8..18007f9c00 100644
+--- a/fs/btrfs/ordered-data.h
++++ b/fs/btrfs/ordered-data.h
+@@ -178,9 +178,14 @@ void btrfs_mark_ordered_io_finished(struct btrfs_inode *inode,
+ bool btrfs_dec_test_ordered_pending(struct btrfs_inode *inode,
+ 				    struct btrfs_ordered_extent **cached,
+ 				    u64 file_offset, u64 io_size);
++struct btrfs_ordered_extent *btrfs_alloc_ordered_extent(
++			struct btrfs_inode *inode, u64 file_offset,
++			u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
++			u64 disk_num_bytes, u64 offset, unsigned long flags,
++			int compress_type);
+ int btrfs_add_ordered_extent(struct btrfs_inode *inode, u64 file_offset,
+ 			     u64 num_bytes, u64 ram_bytes, u64 disk_bytenr,
+-			     u64 disk_num_bytes, u64 offset, unsigned flags,
++			     u64 disk_num_bytes, u64 offset, unsigned long flags,
+ 			     int compress_type);
+ void btrfs_add_ordered_sum(struct btrfs_ordered_extent *entry,
+ 			   struct btrfs_ordered_sum *sum);
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index 45f09bec02..87b20e2ee2 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -148,6 +148,8 @@ static inline void set_userns_rlimit_max(struct user_namespace *ns,
+ 
+ #ifdef CONFIG_USER_NS
+ 
++extern int unprivileged_userns_clone;
++
+ static inline struct user_namespace *get_user_ns(struct user_namespace *ns)
+ {
+ 	if (ns)
+@@ -181,6 +183,8 @@ extern bool current_in_userns(const struct user_namespace *target_ns);
+ struct ns_common *ns_get_owner(struct ns_common *ns);
+ #else
+ 
++#define unprivileged_userns_clone 0
++
+ static inline struct user_namespace *get_user_ns(struct user_namespace *ns)
+ {
+ 	return &init_user_ns;
+diff --git a/include/media/dvb_frontend.h b/include/media/dvb_frontend.h
+index e7c44870f2..367d538121 100644
+--- a/include/media/dvb_frontend.h
++++ b/include/media/dvb_frontend.h
+@@ -686,7 +686,10 @@ struct dtv_frontend_properties {
+  * @id:			Frontend ID
+  * @exit:		Used to inform the DVB core that the frontend
+  *			thread should exit (usually, means that the hardware
+- *			got disconnected.
++ *			got disconnected).
++ * @remove_mutex:	mutex that avoids a race condition between a callback
++ *			called when the hardware is disconnected and the
++ *			file_operations of dvb_frontend.
+  */
+ 
+ struct dvb_frontend {
+@@ -704,6 +707,7 @@ struct dvb_frontend {
+ 	int (*callback)(void *adapter_priv, int component, int cmd, int arg);
+ 	int id;
+ 	unsigned int exit;
++	struct mutex remove_mutex;
+ };
+ 
+ /**
+diff --git a/init/Kconfig b/init/Kconfig
+index c88bb30a8b..32ba96d940 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1249,6 +1249,22 @@ config USER_NS
+ 
+ 	  If unsure, say N.
+ 
++config USER_NS_UNPRIVILEGED
++	bool "Allow unprivileged users to create namespaces"
++	default y
++	depends on USER_NS
++	help
++	  When disabled, unprivileged users will not be able to create
++	  new namespaces. Allowing users to create their own namespaces
++	  has been part of several recent local privilege escalation
++	  exploits, so if you need user namespaces but are
++	  paranoid^Wsecurity-conscious you want to disable this.
++
++	  This setting can be overridden at runtime via the
++	  kernel.unprivileged_userns_clone sysctl.
++
++	  If unsure, say Y.
++
+ config PID_NS
+ 	bool "PID Namespaces"
+ 	default y
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 1c240d2c99..2971581a27 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -81,6 +81,9 @@
+ #ifdef CONFIG_RT_MUTEXES
+ #include <linux/rtmutex.h>
+ #endif
++#ifdef CONFIG_USER_NS
++#include <linux/user_namespace.h>
++#endif
+ 
+ /* shared constants to be used in various sysctls */
+ const int sysctl_vals[] = { 0, 1, 2, 3, 4, 100, 200, 1000, 3000, INT_MAX, 65535, -1 };
+@@ -1645,6 +1648,15 @@ static struct ctl_table kern_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec,
+ 	},
++#ifdef CONFIG_USER_NS
++	{
++		.procname	= "unprivileged_userns_clone",
++		.data		= &unprivileged_userns_clone,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++	},
++#endif
+ #ifdef CONFIG_PROC_SYSCTL
+ 	{
+ 		.procname	= "tainted",
+diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+index 1d8e47bed3..fec01d016a 100644
+--- a/kernel/user_namespace.c
++++ b/kernel/user_namespace.c
+@@ -22,6 +22,13 @@
+ #include <linux/bsearch.h>
+ #include <linux/sort.h>
+ 
++/* sysctl */
++#ifdef CONFIG_USER_NS_UNPRIVILEGED
++int unprivileged_userns_clone = 1;
++#else
++int unprivileged_userns_clone;
++#endif
++
+ static struct kmem_cache *user_ns_cachep __read_mostly;
+ static DEFINE_MUTEX(userns_state_mutex);
+ 
