@@ -1,0 +1,195 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.4] cpu: x86 uarches Kconfig + syscall.tbl additions
+
+Re-cut from natalenko's pf-kernel branch cpu-6.4 (tip ad957f7ecc59)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.4 slot. Source: codeberg.org/pf-kernel/linux.
+
+---
+diff --git a/Documentation/arch/x86/topology.rst b/Documentation/arch/x86/topology.rst
+index 7f58010ea8..9de14f3f77 100644
+--- a/Documentation/arch/x86/topology.rst
++++ b/Documentation/arch/x86/topology.rst
+@@ -33,6 +33,7 @@ historical nature and should be cleaned up.
+ The topology of a system is described in the units of:
+ 
+     - packages
++    - cluster
+     - cores
+     - threads
+ 
+@@ -90,6 +91,22 @@ Package-related topology information in the kernel:
+         Cache. In general, it is a number identifying an LLC uniquely on the
+         system.
+ 
++Clusters
++========
++A cluster consists of threads of one or more cores sharing the same L2 cache.
++
++Cluster-related topology information in the kernel:
++
++  - cluster_id:
++
++    A per-CPU variable containing:
++
++      - Upper bits extracted from the APIC ID.  CPUs which have the same value
++        in these bits share an L2 and have the same cluster_id.
++
++        CPUs for which cluster information is unavailable will show 65535
++        (BAD_APICID) as the cluster_id.
++
+ Cores
+ =====
+ A core consists of 1 or more threads. It does not matter whether the threads
+@@ -125,6 +142,11 @@ Thread-related topology information in the kernel:
+ 
+     The number of online threads is also printed in /proc/cpuinfo "siblings."
+ 
++  - topology_cluster_cpumask():
++
++    The cpumask contains all online threads in the cluster to which a thread
++    belongs.
++
+   - topology_sibling_cpumask():
+ 
+     The cpumask contains all online threads in the core to which a thread
+@@ -138,6 +160,10 @@ Thread-related topology information in the kernel:
+ 
+     The physical package ID to which a thread belongs.
+ 
++  - topology_cluster_id();
++
++    The ID of the cluster to which a thread belongs.
++
+   - topology_core_id();
+ 
+     The ID of the core to which a thread belongs. It is also printed in /proc/cpuinfo
+diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+index 52e6e7ed4f..f000cc16d1 100644
+--- a/arch/x86/events/rapl.c
++++ b/arch/x86/events/rapl.c
+@@ -343,14 +343,15 @@ static int rapl_pmu_event_init(struct perf_event *event)
+ 	if (event->cpu < 0)
+ 		return -EINVAL;
+ 
+-	event->event_caps |= PERF_EV_CAP_READ_ACTIVE_PKG;
+-
+ 	if (!cfg || cfg >= NR_RAPL_DOMAINS + 1)
+ 		return -EINVAL;
+ 
+ 	cfg = array_index_nospec((long)cfg, NR_RAPL_DOMAINS + 1);
+ 	bit = cfg - 1;
+ 
++	if (bit != PERF_RAPL_PP0)
++		event->event_caps |= PERF_EV_CAP_READ_ACTIVE_PKG;
++
+ 	/* check event supported */
+ 	if (!(rapl_cntr_mask & (1 << bit)))
+ 		return -EINVAL;
+@@ -363,7 +364,15 @@ static int rapl_pmu_event_init(struct perf_event *event)
+ 	pmu = cpu_to_rapl_pmu(event->cpu);
+ 	if (!pmu)
+ 		return -EINVAL;
+-	event->cpu = pmu->cpu;
++
++	/*
++	 * FIXME: RAPL PMU considers events are uncore and MSRs can be read from
++	 * the first available CPU of the die. But this is not true for energy-cores
++	 * event. Therefore as a workaround don't consider pmu->cpu here for PERF_RAPL_PP0.
++	 */
++	if (event->event_caps & PERF_EV_CAP_READ_ACTIVE_PKG)
++		event->cpu = pmu->cpu;
++
+ 	event->pmu_private = pmu;
+ 	event->hw.event_base = rapl_msrs[bit].msr;
+ 	event->hw.config = cfg;
+@@ -537,7 +546,7 @@ static struct perf_msr intel_rapl_spr_msrs[] = {
+  * - want to use same event codes across both architectures
+  */
+ static struct perf_msr amd_rapl_msrs[] = {
+-	[PERF_RAPL_PP0]  = { 0, &rapl_events_cores_group, 0, false, 0 },
++	[PERF_RAPL_PP0]  = { MSR_AMD_CORE_ENERGY_STATUS, &rapl_events_cores_group, test_msr, false, RAPL_MSR_MASK },
+ 	[PERF_RAPL_PKG]  = { MSR_AMD_PKG_ENERGY_STATUS,  &rapl_events_pkg_group,   test_msr, false, RAPL_MSR_MASK },
+ 	[PERF_RAPL_RAM]  = { 0, &rapl_events_ram_group,   0, false, 0 },
+ 	[PERF_RAPL_PP1]  = { 0, &rapl_events_gpu_group,   0, false, 0 },
+@@ -764,7 +773,8 @@ static struct rapl_model model_spr = {
+ };
+ 
+ static struct rapl_model model_amd_hygon = {
+-	.events		= BIT(PERF_RAPL_PKG),
++	.events		= BIT(PERF_RAPL_PP0) |
++			  BIT(PERF_RAPL_PKG),
+ 	.msr_power_unit = MSR_AMD_RAPL_POWER_UNIT,
+ 	.rapl_msrs      = amd_rapl_msrs,
+ };
+diff --git a/arch/x86/include/asm/cacheinfo.h b/arch/x86/include/asm/cacheinfo.h
+index ce9685fc78..2034cd556c 100644
+--- a/arch/x86/include/asm/cacheinfo.h
++++ b/arch/x86/include/asm/cacheinfo.h
+@@ -7,6 +7,7 @@ extern unsigned int memory_caching_control;
+ #define CACHE_MTRR 0x01
+ #define CACHE_PAT  0x02
+ 
++void cacheinfo_topoext_init_l2c_id(struct cpuinfo_x86 *c, int cpu);
+ void cacheinfo_amd_init_llc_id(struct cpuinfo_x86 *c, int cpu);
+ void cacheinfo_hygon_init_llc_id(struct cpuinfo_x86 *c, int cpu);
+ 
+diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
+index 4063e89912..947a1f2727 100644
+--- a/arch/x86/kernel/cpu/cacheinfo.c
++++ b/arch/x86/kernel/cpu/cacheinfo.c
+@@ -659,6 +659,42 @@ static int find_num_cache_leaves(struct cpuinfo_x86 *c)
+ 	return i;
+ }
+ 
++void cacheinfo_topoext_init_l2c_id(struct cpuinfo_x86 *c, int cpu)
++{
++	u32 eax, ebx, ecx, edx, num_sharing_cache;
++	int i = 0, bits;
++
++	/* Check if L2 cache identifiers exists. */
++	if (!cpuid_ecx(0x80000006))
++		return;
++
++	while (true) {
++		u32 level;
++
++		cpuid_count(0x8000001d, i, &eax, &ebx, &ecx, &edx);
++		if (!eax)
++			return;
++
++		/*
++		 * Check if the current leaf is for L2 cache using
++		 * eax[7:5] used to describe the cache level.
++		 */
++		level = (eax >> 5) & 0x7;
++		if (level == 2)
++			break;
++
++		++i;
++	}
++
++	/*
++	 * L2 ID is calculated from the number of threads
++	 * sharing the L2 cache.
++	 */
++	num_sharing_cache = ((eax >> 14) & 0xfff) + 1;
++	bits = get_count_order(num_sharing_cache);
++	per_cpu(cpu_l2c_id, cpu) = c->apicid >> bits;
++}
++
+ void cacheinfo_amd_init_llc_id(struct cpuinfo_x86 *c, int cpu)
+ {
+ 	/*
+diff --git a/arch/x86/kernel/cpu/hygon.c b/arch/x86/kernel/cpu/hygon.c
+index 5a2962c492..cb0025b4a2 100644
+--- a/arch/x86/kernel/cpu/hygon.c
++++ b/arch/x86/kernel/cpu/hygon.c
+@@ -89,6 +89,7 @@ static void hygon_get_topology(struct cpuinfo_x86 *c)
+ 		/* Socket ID is ApicId[6] for these processors. */
+ 		c->phys_proc_id = c->apicid >> APICID_SOCKET_ID_BIT;
+ 
++		cacheinfo_topoext_init_l2c_id(c, cpu);
+ 		cacheinfo_hygon_init_llc_id(c, cpu);
+ 	} else if (cpu_has(c, X86_FEATURE_NODEID_MSR)) {
+ 		u64 value;

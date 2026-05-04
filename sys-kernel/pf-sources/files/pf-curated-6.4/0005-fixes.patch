@@ -1,0 +1,164 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.4] fixes: miscellaneous fixes
+
+Re-cut from natalenko's pf-kernel branch fixes-6.4 (tip 472bae48c76f)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.4 slot. Source: codeberg.org/pf-kernel/linux.
+
+---
+diff --git a/Documentation/sphinx/kfigure.py b/Documentation/sphinx/kfigure.py
+index cefdbb7e75..13e885bbd4 100644
+--- a/Documentation/sphinx/kfigure.py
++++ b/Documentation/sphinx/kfigure.py
+@@ -309,7 +309,7 @@ def convert_image(img_node, translator, src_fname=None):
+     if dst_fname:
+         # the builder needs not to copy one more time, so pop it if exists.
+         translator.builder.images.pop(img_node['uri'], None)
+-        _name = dst_fname[len(translator.builder.outdir) + 1:]
++        _name = dst_fname[len(str(translator.builder.outdir)) + 1:]
+ 
+         if isNewer(dst_fname, src_fname):
+             kernellog.verbose(app,
+diff --git a/drivers/firmware/sysfb.c b/drivers/firmware/sysfb.c
+index 3c197db42c..16e4a2e90f 100644
+--- a/drivers/firmware/sysfb.c
++++ b/drivers/firmware/sysfb.c
+@@ -34,6 +34,22 @@
+ #include <linux/screen_info.h>
+ #include <linux/sysfb.h>
+ 
++static int skip_simpledrm;
++
++static int __init simpledrm_disable(char *opt)
++{
++	if (!opt)
++                return -EINVAL;
++
++	get_option(&opt, &skip_simpledrm);
++
++	if (skip_simpledrm)
++		pr_info("The simpledrm driver will not be probed\n");
++
++	return 0;
++}
++early_param("nvidia-drm.modeset", simpledrm_disable);
++
+ static struct platform_device *pd;
+ static DEFINE_MUTEX(disable_lock);
+ static bool disabled;
+@@ -85,7 +101,7 @@ static __init int sysfb_init(void)
+ 
+ 	/* try to create a simple-framebuffer device */
+ 	compatible = sysfb_parse_mode(si, &mode);
+-	if (compatible) {
++	if (compatible && !skip_simpledrm) {
+ 		pd = sysfb_create_simplefb(si, &mode);
+ 		if (!IS_ERR(pd))
+ 			goto unlock_mutex;
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+index 440fc0869a..30d4c6fd95 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+@@ -398,6 +398,18 @@ static int dm_crtc_helper_atomic_check(struct drm_crtc *crtc,
+ 		return -EINVAL;
+ 	}
+ 
++	/*
++	 * Only allow async flips for fast updates that don't change the FB
++	 * pitch, the DCC state, rotation, etc.
++	 */
++	if (crtc_state->async_flip &&
++	    dm_crtc_state->update_type != UPDATE_TYPE_FAST) {
++		drm_dbg_atomic(crtc->dev,
++			       "[CRTC:%d:%s] async flips are only supported for fast updates\n",
++			       crtc->base.id, crtc->name);
++		return -EINVAL;
++	}
++
+ 	/* In some use cases, like reset, no stream is attached */
+ 	if (!dm_crtc_state->stream)
+ 		return 0;
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index 45f09bec02..87b20e2ee2 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -148,6 +148,8 @@ static inline void set_userns_rlimit_max(struct user_namespace *ns,
+ 
+ #ifdef CONFIG_USER_NS
+ 
++extern int unprivileged_userns_clone;
++
+ static inline struct user_namespace *get_user_ns(struct user_namespace *ns)
+ {
+ 	if (ns)
+@@ -181,6 +183,8 @@ extern bool current_in_userns(const struct user_namespace *target_ns);
+ struct ns_common *ns_get_owner(struct ns_common *ns);
+ #else
+ 
++#define unprivileged_userns_clone 0
++
+ static inline struct user_namespace *get_user_ns(struct user_namespace *ns)
+ {
+ 	return &init_user_ns;
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index bfe53e8355..c64fa2b70a 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -80,6 +80,9 @@
+ #ifdef CONFIG_RT_MUTEXES
+ #include <linux/rtmutex.h>
+ #endif
++#ifdef CONFIG_USER_NS
++#include <linux/user_namespace.h>
++#endif
+ 
+ /* shared constants to be used in various sysctls */
+ const int sysctl_vals[] = { 0, 1, 2, 3, 4, 100, 200, 1000, 3000, INT_MAX, 65535, -1 };
+@@ -1623,6 +1626,15 @@ static struct ctl_table kern_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec,
+ 	},
++#ifdef CONFIG_USER_NS
++	{
++		.procname	= "unprivileged_userns_clone",
++		.data		= &unprivileged_userns_clone,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++	},
++#endif
+ #ifdef CONFIG_PROC_SYSCTL
+ 	{
+ 		.procname	= "tainted",
+diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+index 1d8e47bed3..fec01d016a 100644
+--- a/kernel/user_namespace.c
++++ b/kernel/user_namespace.c
+@@ -22,6 +22,13 @@
+ #include <linux/bsearch.h>
+ #include <linux/sort.h>
+ 
++/* sysctl */
++#ifdef CONFIG_USER_NS_UNPRIVILEGED
++int unprivileged_userns_clone = 1;
++#else
++int unprivileged_userns_clone;
++#endif
++
+ static struct kmem_cache *user_ns_cachep __read_mostly;
+ static DEFINE_MUTEX(userns_state_mutex);
+ 
+diff --git a/net/bridge/br_stp_if.c b/net/bridge/br_stp_if.c
+index 75204d36d7..b659626827 100644
+--- a/net/bridge/br_stp_if.c
++++ b/net/bridge/br_stp_if.c
+@@ -201,6 +201,9 @@ int br_stp_set_enabled(struct net_bridge *br, unsigned long val,
+ {
+ 	ASSERT_RTNL();
+ 
++	if (!net_eq(dev_net(br->dev), &init_net))
++		NL_SET_ERR_MSG_MOD(extack, "STP does not work in non-root netns");
++
+ 	if (br_mrp_enabled(br)) {
+ 		NL_SET_ERR_MSG_MOD(extack,
+ 				   "STP can't be enabled if MRP is already enabled");
