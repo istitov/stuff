@@ -1,0 +1,745 @@
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [pf-curated-6.15] ovpn-dco: OpenVPN data-channel-offload
+
+Re-cut from natalenko's pf-kernel branch ovpn-dco-6.15 (tip 576d02a107df)
+as a single bulk diff, restricted to the files this overlay's curation
+kept on the 6.15 slot. Source: codeberg.org/pf-kernel/linux.
+
+---
+diff --git a/Documentation/netlink/specs/ovpn.yaml b/Documentation/netlink/specs/ovpn.yaml
+new file mode 100644
+index 0000000000..ba76426a54
+--- /dev/null
++++ b/Documentation/netlink/specs/ovpn.yaml
+@@ -0,0 +1,508 @@
++# SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
++#
++# Author: Antonio Quartulli <antonio@openvpn.net>
++#
++# Copyright (c) 2024-2025, OpenVPN Inc.
++#
++
++name: ovpn
++
++protocol: genetlink
++
++doc: Netlink protocol to control OpenVPN network devices
++
++definitions:
++  -
++    type: const
++    name: nonce-tail-size
++    value: 8
++  -
++    type: enum
++    name: cipher-alg
++    entries: [ none, aes-gcm, chacha20-poly1305 ]
++  -
++    type: enum
++    name: del-peer-reason
++    entries:
++      - teardown
++      - userspace
++      - expired
++      - transport-error
++      - transport-disconnect
++  -
++    type: enum
++    name: key-slot
++    entries: [ primary, secondary ]
++
++attribute-sets:
++  -
++    name: peer
++    attributes:
++      -
++        name: id
++        type: u32
++        doc: >-
++          The unique ID of the peer in the device context. To be used to identify
++          peers during operations for a specific device
++        checks:
++          max: 0xFFFFFF
++      -
++        name: remote-ipv4
++        type: u32
++        doc: The remote IPv4 address of the peer
++        byte-order: big-endian
++        display-hint: ipv4
++      -
++        name: remote-ipv6
++        type: binary
++        doc: The remote IPv6 address of the peer
++        display-hint: ipv6
++        checks:
++          exact-len: 16
++      -
++        name: remote-ipv6-scope-id
++        type: u32
++        doc: The scope id of the remote IPv6 address of the peer (RFC2553)
++      -
++        name: remote-port
++        type: u16
++        doc: The remote port of the peer
++        byte-order: big-endian
++        checks:
++          min: 1
++      -
++        name: socket
++        type: u32
++        doc: The socket to be used to communicate with the peer
++      -
++        name: socket-netnsid
++        type: s32
++        doc: The ID of the netns the socket assigned to this peer lives in
++      -
++        name: vpn-ipv4
++        type: u32
++        doc: The IPv4 address assigned to the peer by the server
++        byte-order: big-endian
++        display-hint: ipv4
++      -
++        name: vpn-ipv6
++        type: binary
++        doc: The IPv6 address assigned to the peer by the server
++        display-hint: ipv6
++        checks:
++          exact-len: 16
++      -
++        name: local-ipv4
++        type: u32
++        doc: The local IPv4 to be used to send packets to the peer (UDP only)
++        byte-order: big-endian
++        display-hint: ipv4
++      -
++        name: local-ipv6
++        type: binary
++        doc: The local IPv6 to be used to send packets to the peer (UDP only)
++        display-hint: ipv6
++        checks:
++          exact-len: 16
++      -
++        name: local-port
++        type: u16
++        doc: The local port to be used to send packets to the peer (UDP only)
++        byte-order: big-endian
++        checks:
++          min: 1
++      -
++        name: keepalive-interval
++        type: u32
++        doc: >-
++          The number of seconds after which a keep alive message is sent to the
++          peer
++      -
++        name: keepalive-timeout
++        type: u32
++        doc: >-
++          The number of seconds from the last activity after which the peer is
++          assumed dead
++      -
++        name: del-reason
++        type: u32
++        doc: The reason why a peer was deleted
++        enum: del-peer-reason
++      -
++        name: vpn-rx-bytes
++        type: uint
++        doc: Number of bytes received over the tunnel
++      -
++        name: vpn-tx-bytes
++        type: uint
++        doc: Number of bytes transmitted over the tunnel
++      -
++        name: vpn-rx-packets
++        type: uint
++        doc: Number of packets received over the tunnel
++      -
++        name: vpn-tx-packets
++        type: uint
++        doc: Number of packets transmitted over the tunnel
++      -
++        name: link-rx-bytes
++        type: uint
++        doc: Number of bytes received at the transport level
++      -
++        name: link-tx-bytes
++        type: uint
++        doc: Number of bytes transmitted at the transport level
++      -
++        name: link-rx-packets
++        type: uint
++        doc: Number of packets received at the transport level
++      -
++        name: link-tx-packets
++        type: uint
++        doc: Number of packets transmitted at the transport level
++  -
++    name: peer-new-input
++    subset-of: peer
++    attributes:
++      -
++        name: id
++      -
++        name: remote-ipv4
++      -
++        name: remote-ipv6
++      -
++        name: remote-ipv6-scope-id
++      -
++        name: remote-port
++      -
++        name: socket
++      -
++        name: vpn-ipv4
++      -
++        name: vpn-ipv6
++      -
++        name: local-ipv4
++      -
++        name: local-ipv6
++      -
++        name: keepalive-interval
++      -
++        name: keepalive-timeout
++  -
++    name: peer-set-input
++    subset-of: peer
++    attributes:
++      -
++        name: id
++      -
++        name: remote-ipv4
++      -
++        name: remote-ipv6
++      -
++        name: remote-ipv6-scope-id
++      -
++        name: remote-port
++      -
++        name: vpn-ipv4
++      -
++        name: vpn-ipv6
++      -
++        name: local-ipv4
++      -
++        name: local-ipv6
++      -
++        name: keepalive-interval
++      -
++        name: keepalive-timeout
++  -
++    name: peer-del-input
++    subset-of: peer
++    attributes:
++      -
++        name: id
++  -
++    name: keyconf
++    attributes:
++      -
++        name: peer-id
++        type: u32
++        doc: >-
++          The unique ID of the peer in the device context. To be used to
++          identify peers during key operations
++        checks:
++          max: 0xFFFFFF
++      -
++        name: slot
++        type: u32
++        doc: The slot where the key should be stored
++        enum: key-slot
++      -
++        name: key-id
++        doc: >-
++          The unique ID of the key in the peer context. Used to fetch the
++          correct key upon decryption
++        type: u32
++        checks:
++          max: 7
++      -
++        name: cipher-alg
++        type: u32
++        doc: The cipher to be used when communicating with the peer
++        enum: cipher-alg
++      -
++        name: encrypt-dir
++        type: nest
++        doc: Key material for encrypt direction
++        nested-attributes: keydir
++      -
++        name: decrypt-dir
++        type: nest
++        doc: Key material for decrypt direction
++        nested-attributes: keydir
++  -
++    name: keydir
++    attributes:
++      -
++        name: cipher-key
++        type: binary
++        doc: The actual key to be used by the cipher
++        checks:
++          max-len: 256
++      -
++        name: nonce-tail
++        type: binary
++        doc: >-
++          Random nonce to be concatenated to the packet ID, in order to
++          obtain the actual cipher IV
++        checks:
++          exact-len: nonce-tail-size
++
++  -
++    name: keyconf-get
++    subset-of: keyconf
++    attributes:
++      -
++        name: peer-id
++      -
++        name: slot
++      -
++        name: key-id
++      -
++        name: cipher-alg
++  -
++    name: keyconf-swap-input
++    subset-of: keyconf
++    attributes:
++      -
++        name: peer-id
++  -
++    name: keyconf-del-input
++    subset-of: keyconf
++    attributes:
++      -
++        name: peer-id
++      -
++        name: slot
++  -
++    name: ovpn
++    attributes:
++      -
++        name: ifindex
++        type: u32
++        doc: Index of the ovpn interface to operate on
++      -
++        name: peer
++        type: nest
++        doc: >-
++          The peer object containing the attributed of interest for the specific
++          operation
++        nested-attributes: peer
++      -
++        name: keyconf
++        type: nest
++        doc: Peer specific cipher configuration
++        nested-attributes: keyconf
++  -
++    name: ovpn-peer-new-input
++    subset-of: ovpn
++    attributes:
++      -
++        name: ifindex
++      -
++        name: peer
++        nested-attributes: peer-new-input
++  -
++    name: ovpn-peer-set-input
++    subset-of: ovpn
++    attributes:
++      -
++        name: ifindex
++      -
++        name: peer
++        nested-attributes: peer-set-input
++  -
++    name: ovpn-peer-del-input
++    subset-of: ovpn
++    attributes:
++      -
++        name: ifindex
++      -
++        name: peer
++        nested-attributes: peer-del-input
++  -
++    name: ovpn-keyconf-get
++    subset-of: ovpn
++    attributes:
++      -
++        name: ifindex
++      -
++        name: keyconf
++        nested-attributes: keyconf-get
++  -
++    name: ovpn-keyconf-swap-input
++    subset-of: ovpn
++    attributes:
++      -
++        name: ifindex
++      -
++        name: keyconf
++        nested-attributes: keyconf-swap-input
++  -
++    name: ovpn-keyconf-del-input
++    subset-of: ovpn
++    attributes:
++      -
++        name: ifindex
++      -
++        name: keyconf
++        nested-attributes: keyconf-del-input
++
++operations:
++  list:
++    -
++      name: peer-new
++      attribute-set: ovpn-peer-new-input
++      flags: [ admin-perm ]
++      doc: Add a remote peer
++      do:
++        pre: ovpn-nl-pre-doit
++        post: ovpn-nl-post-doit
++        request:
++          attributes:
++            - ifindex
++            - peer
++    -
++      name: peer-set
++      attribute-set: ovpn-peer-set-input
++      flags: [ admin-perm ]
++      doc: modify a remote peer
++      do:
++        pre: ovpn-nl-pre-doit
++        post: ovpn-nl-post-doit
++        request:
++          attributes:
++            - ifindex
++            - peer
++    -
++      name: peer-get
++      attribute-set: ovpn
++      flags: [ admin-perm ]
++      doc: Retrieve data about existing remote peers (or a specific one)
++      do:
++        pre: ovpn-nl-pre-doit
++        post: ovpn-nl-post-doit
++        request:
++          attributes:
++            - ifindex
++            - peer
++        reply:
++          attributes:
++            - peer
++      dump:
++        request:
++          attributes:
++            - ifindex
++        reply:
++          attributes:
++            - peer
++    -
++      name: peer-del
++      attribute-set: ovpn-peer-del-input
++      flags: [ admin-perm ]
++      doc: Delete existing remote peer
++      do:
++        pre: ovpn-nl-pre-doit
++        post: ovpn-nl-post-doit
++        request:
++          attributes:
++            - ifindex
++            - peer
++    -
++      name: peer-del-ntf
++      doc: Notification about a peer being deleted
++      notify: peer-get
++      mcgrp: peers
++
++    -
++      name: key-new
++      attribute-set: ovpn
++      flags: [ admin-perm ]
++      doc: Add a cipher key for a specific peer
++      do:
++        pre: ovpn-nl-pre-doit
++        post: ovpn-nl-post-doit
++        request:
++          attributes:
++            - ifindex
++            - keyconf
++    -
++      name: key-get
++      attribute-set: ovpn-keyconf-get
++      flags: [ admin-perm ]
++      doc: Retrieve non-sensitive data about peer key and cipher
++      do:
++        pre: ovpn-nl-pre-doit
++        post: ovpn-nl-post-doit
++        request:
++          attributes:
++            - ifindex
++            - keyconf
++        reply:
++          attributes:
++            - keyconf
++    -
++      name: key-swap
++      attribute-set: ovpn-keyconf-swap-input
++      flags: [ admin-perm ]
++      doc: Swap primary and secondary session keys for a specific peer
++      do:
++        pre: ovpn-nl-pre-doit
++        post: ovpn-nl-post-doit
++        request:
++          attributes:
++            - ifindex
++            - keyconf
++    -
++      name: key-swap-ntf
++      notify: key-get
++      doc: >-
++        Notification about key having exhausted its IV space and requiring
++        renegotiation
++      mcgrp: peers
++    -
++      name: key-del
++      attribute-set: ovpn-keyconf-del-input
++      flags: [ admin-perm ]
++      doc: Delete cipher key for a specific peer
++      do:
++        pre: ovpn-nl-pre-doit
++        post: ovpn-nl-post-doit
++        request:
++          attributes:
++            - ifindex
++            - keyconf
++
++mcast-groups:
++  list:
++    -
++      name: peers
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dd844ac8d9..6a3311f6c4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18339,6 +18339,18 @@ F:	arch/openrisc/
+ F:	drivers/irqchip/irq-ompic.c
+ F:	drivers/irqchip/irq-or1k-*
+ 
++OPENVPN DATA CHANNEL OFFLOAD
++M:	Antonio Quartulli <antonio@openvpn.net>
++R:	Sabrina Dubroca <sd@queasysnail.net>
++L:	openvpn-devel@lists.sourceforge.net (subscribers-only)
++L:	netdev@vger.kernel.org
++S:	Supported
++T:	git https://github.com/OpenVPN/ovpn-net-next.git
++F:	Documentation/netlink/specs/ovpn.yaml
++F:	drivers/net/ovpn/
++F:	include/uapi/linux/ovpn.h
++F:	tools/testing/selftests/net/ovpn/
++
+ OPENVSWITCH
+ M:	Aaron Conole <aconole@redhat.com>
+ M:	Eelco Chaudron <echaudro@redhat.com>
+diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+index 271520510b..b29628d46b 100644
+--- a/drivers/net/Kconfig
++++ b/drivers/net/Kconfig
+@@ -115,6 +115,21 @@ config WIREGUARD_DEBUG
+ 
+ 	  Say N here unless you know what you're doing.
+ 
++config OVPN
++	tristate "OpenVPN data channel offload"
++	depends on NET && INET
++	depends on IPV6 || !IPV6
++	select DST_CACHE
++	select NET_UDP_TUNNEL
++	select CRYPTO
++	select CRYPTO_AES
++	select CRYPTO_GCM
++	select CRYPTO_CHACHA20POLY1305
++	select STREAM_PARSER
++	help
++	  This module enhances the performance of the OpenVPN userspace software
++	  by offloading the data channel processing to kernelspace.
++
+ config EQUALIZER
+ 	tristate "EQL (serial line load balancing) support"
+ 	help
+diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+index 75333251a0..73bc63ecd6 100644
+--- a/drivers/net/Makefile
++++ b/drivers/net/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_IPVLAN) += ipvlan/
+ obj-$(CONFIG_IPVTAP) += ipvlan/
+ obj-$(CONFIG_DUMMY) += dummy.o
+ obj-$(CONFIG_WIREGUARD) += wireguard/
++obj-$(CONFIG_OVPN) += ovpn/
+ obj-$(CONFIG_EQUALIZER) += eql.o
+ obj-$(CONFIG_IFB) += ifb.o
+ obj-$(CONFIG_MACSEC) += macsec.o
+diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+index 318386cc5b..3ad2d5d980 100644
+--- a/include/uapi/linux/if_link.h
++++ b/include/uapi/linux/if_link.h
+@@ -1986,4 +1986,19 @@ enum {
+ 
+ #define IFLA_DSA_MAX	(__IFLA_DSA_MAX - 1)
+ 
++/* OVPN section */
++
++enum ovpn_mode {
++	OVPN_MODE_P2P,
++	OVPN_MODE_MP,
++};
++
++enum {
++	IFLA_OVPN_UNSPEC,
++	IFLA_OVPN_MODE,
++	__IFLA_OVPN_MAX,
++};
++
++#define IFLA_OVPN_MAX	(__IFLA_OVPN_MAX - 1)
++
+ #endif /* _UAPI_LINUX_IF_LINK_H */
+diff --git a/include/uapi/linux/ovpn.h b/include/uapi/linux/ovpn.h
+new file mode 100644
+index 0000000000..680d1522dc
+--- /dev/null
++++ b/include/uapi/linux/ovpn.h
+@@ -0,0 +1,109 @@
++/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause) */
++/* Do not edit directly, auto-generated from: */
++/*	Documentation/netlink/specs/ovpn.yaml */
++/* YNL-GEN uapi header */
++
++#ifndef _UAPI_LINUX_OVPN_H
++#define _UAPI_LINUX_OVPN_H
++
++#define OVPN_FAMILY_NAME	"ovpn"
++#define OVPN_FAMILY_VERSION	1
++
++#define OVPN_NONCE_TAIL_SIZE	8
++
++enum ovpn_cipher_alg {
++	OVPN_CIPHER_ALG_NONE,
++	OVPN_CIPHER_ALG_AES_GCM,
++	OVPN_CIPHER_ALG_CHACHA20_POLY1305,
++};
++
++enum ovpn_del_peer_reason {
++	OVPN_DEL_PEER_REASON_TEARDOWN,
++	OVPN_DEL_PEER_REASON_USERSPACE,
++	OVPN_DEL_PEER_REASON_EXPIRED,
++	OVPN_DEL_PEER_REASON_TRANSPORT_ERROR,
++	OVPN_DEL_PEER_REASON_TRANSPORT_DISCONNECT,
++};
++
++enum ovpn_key_slot {
++	OVPN_KEY_SLOT_PRIMARY,
++	OVPN_KEY_SLOT_SECONDARY,
++};
++
++enum {
++	OVPN_A_PEER_ID = 1,
++	OVPN_A_PEER_REMOTE_IPV4,
++	OVPN_A_PEER_REMOTE_IPV6,
++	OVPN_A_PEER_REMOTE_IPV6_SCOPE_ID,
++	OVPN_A_PEER_REMOTE_PORT,
++	OVPN_A_PEER_SOCKET,
++	OVPN_A_PEER_SOCKET_NETNSID,
++	OVPN_A_PEER_VPN_IPV4,
++	OVPN_A_PEER_VPN_IPV6,
++	OVPN_A_PEER_LOCAL_IPV4,
++	OVPN_A_PEER_LOCAL_IPV6,
++	OVPN_A_PEER_LOCAL_PORT,
++	OVPN_A_PEER_KEEPALIVE_INTERVAL,
++	OVPN_A_PEER_KEEPALIVE_TIMEOUT,
++	OVPN_A_PEER_DEL_REASON,
++	OVPN_A_PEER_VPN_RX_BYTES,
++	OVPN_A_PEER_VPN_TX_BYTES,
++	OVPN_A_PEER_VPN_RX_PACKETS,
++	OVPN_A_PEER_VPN_TX_PACKETS,
++	OVPN_A_PEER_LINK_RX_BYTES,
++	OVPN_A_PEER_LINK_TX_BYTES,
++	OVPN_A_PEER_LINK_RX_PACKETS,
++	OVPN_A_PEER_LINK_TX_PACKETS,
++
++	__OVPN_A_PEER_MAX,
++	OVPN_A_PEER_MAX = (__OVPN_A_PEER_MAX - 1)
++};
++
++enum {
++	OVPN_A_KEYCONF_PEER_ID = 1,
++	OVPN_A_KEYCONF_SLOT,
++	OVPN_A_KEYCONF_KEY_ID,
++	OVPN_A_KEYCONF_CIPHER_ALG,
++	OVPN_A_KEYCONF_ENCRYPT_DIR,
++	OVPN_A_KEYCONF_DECRYPT_DIR,
++
++	__OVPN_A_KEYCONF_MAX,
++	OVPN_A_KEYCONF_MAX = (__OVPN_A_KEYCONF_MAX - 1)
++};
++
++enum {
++	OVPN_A_KEYDIR_CIPHER_KEY = 1,
++	OVPN_A_KEYDIR_NONCE_TAIL,
++
++	__OVPN_A_KEYDIR_MAX,
++	OVPN_A_KEYDIR_MAX = (__OVPN_A_KEYDIR_MAX - 1)
++};
++
++enum {
++	OVPN_A_IFINDEX = 1,
++	OVPN_A_PEER,
++	OVPN_A_KEYCONF,
++
++	__OVPN_A_MAX,
++	OVPN_A_MAX = (__OVPN_A_MAX - 1)
++};
++
++enum {
++	OVPN_CMD_PEER_NEW = 1,
++	OVPN_CMD_PEER_SET,
++	OVPN_CMD_PEER_GET,
++	OVPN_CMD_PEER_DEL,
++	OVPN_CMD_PEER_DEL_NTF,
++	OVPN_CMD_KEY_NEW,
++	OVPN_CMD_KEY_GET,
++	OVPN_CMD_KEY_SWAP,
++	OVPN_CMD_KEY_SWAP_NTF,
++	OVPN_CMD_KEY_DEL,
++
++	__OVPN_CMD_MAX,
++	OVPN_CMD_MAX = (__OVPN_CMD_MAX - 1)
++};
++
++#define OVPN_MCGRP_PEERS	"peers"
++
++#endif /* _UAPI_LINUX_OVPN_H */
+diff --git a/include/uapi/linux/udp.h b/include/uapi/linux/udp.h
+index d85d671dee..edca3e4303 100644
+--- a/include/uapi/linux/udp.h
++++ b/include/uapi/linux/udp.h
+@@ -43,5 +43,6 @@ struct udphdr {
+ #define UDP_ENCAP_GTP1U		5 /* 3GPP TS 29.060 */
+ #define UDP_ENCAP_RXRPC		6
+ #define TCP_ENCAP_ESPINTCP	7 /* Yikes, this is really xfrm encap types. */
++#define UDP_ENCAP_OVPNINUDP	8 /* OpenVPN traffic */
+ 
+ #endif /* _UAPI_LINUX_UDP_H */
+diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+index f60ec8b0f8..3e812187e1 100644
+--- a/net/ipv6/af_inet6.c
++++ b/net/ipv6/af_inet6.c
+@@ -715,6 +715,7 @@ const struct proto_ops inet6_stream_ops = {
+ #endif
+ 	.set_rcvlowat	   = tcp_set_rcvlowat,
+ };
++EXPORT_SYMBOL_GPL(inet6_stream_ops);
+ 
+ const struct proto_ops inet6_dgram_ops = {
+ 	.family		   = PF_INET6,
