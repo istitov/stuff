@@ -46,10 +46,14 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 # Vanilla 6.1 from kernel.org + Gentoo's genpatches (stable + non-stable)
 # + our curated pf delta. The codeberg pf-kernel tarball is intentionally
 # not fetched — its content is replaced by the much smaller curated
-# patch in files/.
+# patch series, hosted in the stuff overlay's sister "extra-stuff" repo
+# (https://github.com/istitov/extra-stuff) to keep this overlay's files/
+# tree small. The tag in the URL pins an immutable snapshot; bumping
+# patches means a new tag suffix (-r70-1, -r70-2, ...).
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
-	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz"
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz"
 
 S="${WORKDIR}/linux-${SHPV}"
 
@@ -86,9 +90,11 @@ src_prepare() {
 	# numbered series of per-feature patches re-cut from natalenko's
 	# pf-kernel branches (codeberg.org/pf-kernel/linux). Filename order
 	# is apply order; each patch's header explains which natalenko
-	# branch + tip SHA it was derived from. See pkg_postinst for the
+	# branch + tip SHA it was derived from. The series ships in a
+	# tarball from extra-stuff (see SRC_URI); unpack drops it at
+	# ${WORKDIR}/pf-curated-${SHPV}/. See pkg_postinst for the
 	# kept/dropped breakdown.
-	eapply "${FILESDIR}/pf-curated-6.1"/*.patch
+	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
 }
