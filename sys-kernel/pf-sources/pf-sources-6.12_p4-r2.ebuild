@@ -39,7 +39,8 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 SRC_URI="https://codeberg.org/pf-kernel/linux/archive/v${PFPV}.tar.gz -> linux-${PFPV}.tar.gz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
-	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz"
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-cves-cumulative-${SHPV}-r2-0/sys-kernel/pf-sources/pf-cves-cumulative-${SHPV}.tar.xz -> pf-cves-cumulative-${SHPV}-r2-0.tar.xz"
 
 S="${WORKDIR}/linux-${PFPV}"
 
@@ -86,7 +87,7 @@ src_prepare() {
 	# cumulative diff (v6.12 → v6.12.85 over the 4 affected crypto
 	# files) instead — picks up the CVE fix together with other
 	# algif_aead/af_alg fixes from 6.12.X stable.
-	eapply "${FILESDIR}/cve-2026-31431-algif_aead-cumulative-6.12.patch"
+	eapply "${WORKDIR}/pf-cves-cumulative-6.12/cve-2026-31431-algif_aead-cumulative-6.12.patch"
 
 	# CVE-2026-43037 + CVE-2026-43038 — twin IPv6 cb[] type-confusion
 	# fixes (Eric Dumazet, 20260326155138.2429480-1):
@@ -96,7 +97,7 @@ src_prepare() {
 	# situation as 31431 — carry a cumulative v6.12 → v6.12.85 diff
 	# restricted to net/ipv6/ip6_tunnel.c + net/ipv6/icmp.c. Same
 	# window as the crypto cumulative for consistency.
-	eapply "${FILESDIR}/cve-2026-43037-43038-cumulative-6.12.patch"
+	eapply "${WORKDIR}/pf-cves-cumulative-6.12/cve-2026-43037-43038-cumulative-6.12.patch"
 
 	default
 }
