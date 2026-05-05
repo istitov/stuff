@@ -49,51 +49,15 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 # We pin individual patch URLs in SRC_URI so the Manifest captures their
 # byte hashes — if alicef edits a patch in place, fetch will fail loudly
 # rather than silently change behaviour.
-GENPATCHES_TRUNK="https://dev.gentoo.org/~alicef/genpatches/trunk/${SHPV}"
-
-# linux-stable backport chain (1000_…1015_) covers 6.4.1 through 6.4.16.
-GENPATCHES_STABLE=(
-	1000_linux-${SHPV}.1.patch
-	1001_linux-${SHPV}.2.patch
-	1002_linux-${SHPV}.3.patch
-	1003_linux-${SHPV}.4.patch
-	1004_linux-${SHPV}.5.patch
-	1005_linux-${SHPV}.6.patch
-	1006_linux-${SHPV}.7.patch
-	1007_linux-${SHPV}.8.patch
-	1008_linux-${SHPV}.9.patch
-	1009_linux-${SHPV}.10.patch
-	1010_linux-${SHPV}.11.patch
-	1011_linux-${SHPV}.12.patch
-	1012_linux-${SHPV}.13.patch
-	1013_linux-${SHPV}.14.patch
-	1014_linux-${SHPV}.15.patch
-	1015_linux-${SHPV}.16.patch
-)
-
-# Non-stable genpatches additions (xattr, link-restrictions, BT, BPF,
-# libressl, distro Kconfig, CPU-opt selector, etc.).
-GENPATCHES_EXTRA=(
-	1500_XATTR_USER_PREFIX.patch
-	1510_fs-enable-link-security-restrictions-by-default.patch
-	1700_sparc-address-warray-bound-warnings.patch
-	1805_mm-disable-CONFIG-PER-VMA-LOCK-by-def.patch
-	2000_BT-Check-key-sizes-only-if-Secure-Simple-Pairing-enabled.patch
-	2900_tmp513-Fix-build-issue-by-selecting-CONFIG_REG.patch
-	2910_bfp-mark-get-entry-ip-as--maybe-unused.patch
-	2920_sign-file-patch-for-libressl.patch
-	3000_Support-printing-firmware-info.patch
-	4567_distro-Gentoo-Kconfig.patch
-	5010_enable-cpu-optimizations-universal.patch
-)
-
-GENPATCHES_PATCHES=( "${GENPATCHES_STABLE[@]}" "${GENPATCHES_EXTRA[@]}" )
-
-SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz"
-for _patch in "${GENPATCHES_PATCHES[@]}"; do
-	SRC_URI+=" ${GENPATCHES_TRUNK}/${_patch}"
-done
-unset _patch
+# Per-slot snapshot of alicef's genpatches trunk for this branch,
+# bundled into pf-genpatches-${SHPV}.tar.xz on the sister overlay
+# extra-stuff (https://github.com/istitov/extra-stuff). Pinned by
+# tag (-r70-0) so the URL is immutable; refreshing the snapshot
+# means a new tag suffix. The original alicef trunk dir is a live
+# working dir, so this bundle is the durable reference.
+SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-0/sys-kernel/pf-sources/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-0.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz"
 
 S="${WORKDIR}/linux-${SHPV}"
 
@@ -114,24 +78,16 @@ pkg_setup() {
 }
 
 src_unpack() {
-	# Vanilla kernel.org tarball unpacks to linux-${SHPV} directly.
-	unpack linux-${SHPV}.tar.xz
-
-	# Stage individual genpatches into WORKDIR for src_prepare's eapply
-	# glob to pick up.
-	local p
-	for p in "${GENPATCHES_PATCHES[@]}"; do
-		cp "${DISTDIR}/${p}" "${WORKDIR}/" || die "Failed to stage ${p}"
-	done
+	unpack ${A}
 }
 
 src_prepare() {
 	# Apply the genpatches stack (stable backports + non-stable additions).
-	eapply "${WORKDIR}"/*.patch
+	eapply "${WORKDIR}/pf-genpatches-${SHPV}"/*.patch
 
 	# Curated pf-kernel delta on top of gentoo-sources state.
 	# See pkg_postinst for the kept/dropped breakdown.
-	eapply "${FILESDIR}/pf-curated-6.4"/*.patch
+	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
 }

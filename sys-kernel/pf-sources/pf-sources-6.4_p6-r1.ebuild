@@ -18,11 +18,12 @@ DESCRIPTION="Linux kernel fork that includes the pf-kernel patchset and Gentoo's
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Genpatches sourced per-patch from alicef's live trunk dir; bundled
-# tarballs for this branch were pruned from gentoo distfiles after
-# gentoo-sources stopped carrying 6.4 (kernel.org-EOL Aug 2023). The
-# trunk dir still holds the final-state patch files.
-GENPATCHES_TRUNK="https://dev.gentoo.org/~alicef/genpatches/trunk/${SHPV}"
+# Genpatches for this branch live only in alicef's trunk dir (no
+# release tarball was ever cut). To pin immutable bytes we bundle
+# the trunk patches into pf-genpatches-${SHPV}.tar.xz on extra-stuff
+# and reuse the same tarball as the -r70 slot. GENPATCHES_PATCHES
+# below selects the subset this -r1 ebuild needs (no stable
+# backports — pf-kernel's codeberg base already includes them).
 GENPATCHES_PATCHES=(
 	1500_XATTR_USER_PREFIX.patch
 	1510_fs-enable-link-security-restrictions-by-default.patch
@@ -35,11 +36,8 @@ GENPATCHES_PATCHES=(
 	4567_distro-Gentoo-Kconfig.patch
 )
 
-SRC_URI="https://codeberg.org/pf-kernel/linux/archive/v${PFPV}.tar.gz -> linux-${PFPV}.tar.gz"
-for _patch in "${GENPATCHES_PATCHES[@]}"; do
-	SRC_URI+=" ${GENPATCHES_TRUNK}/${_patch}"
-done
-unset _patch
+SRC_URI="https://codeberg.org/pf-kernel/linux/archive/v${PFPV}.tar.gz -> linux-${PFPV}.tar.gz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-0/sys-kernel/pf-sources/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-0.tar.xz"
 
 S="${WORKDIR}/linux-${PFPV}"
 KEYWORDS="~amd64 ~x86"
@@ -57,12 +55,12 @@ pkg_setup() {
 src_unpack() {
 	# Codeberg-hosted pf-sources include full kernel sources; override
 	# kernel-2_src_unpack() to avoid its tarball-naming magic.
-	unpack linux-${PFPV}.tar.gz
+	unpack linux-${PFPV}.tar.gz pf-genpatches-${SHPV}-r70-0.tar.xz
 	mv linux linux-${PFPV} || die "Failed to move source directory"
 	# Stage individual genpatches into WORKDIR for src_prepare to apply.
 	local p
 	for p in "${GENPATCHES_PATCHES[@]}"; do
-		cp "${DISTDIR}/${p}" "${WORKDIR}/" || die "Failed to stage ${p}"
+		cp "${WORKDIR}/pf-genpatches-${SHPV}/${p}" "${WORKDIR}/" || die "Failed to stage ${p}"
 	done
 }
 src_prepare() {
