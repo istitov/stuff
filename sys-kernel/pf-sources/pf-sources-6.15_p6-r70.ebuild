@@ -41,7 +41,8 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
-	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz"
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz"
 
 S="${WORKDIR}/linux-${SHPV}"
 
@@ -70,7 +71,7 @@ src_prepare() {
 
 	# Curated pf-kernel delta on top of gentoo-sources state.
 	# See pkg_postinst for the kept/dropped breakdown.
-	eapply "${FILESDIR}/pf-curated-6.15"/*.patch
+	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
 }
