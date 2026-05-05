@@ -39,7 +39,8 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 SRC_URI="https://codeberg.org/pf-kernel/linux/archive/v${PFPV}.tar.gz -> linux-${PFPV}.tar.gz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
-	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz"
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-cves-surgical-r1-0/sys-kernel/pf-sources/pf-cves-surgical.tar.xz -> pf-cves-surgical-r1-0.tar.xz"
 
 S="${WORKDIR}/linux-${PFPV}"
 
@@ -83,20 +84,20 @@ src_prepare() {
 	# a664bf3d603d (2026-03-26) reverting the 2017 in-place
 	# optimization. pf-kernel branches off Linux GA only and never
 	# picks up linux-stable, so 6.17-pfN ships unpatched 6.17.0 source.
-	eapply "${FILESDIR}/cve-2026-31431-algif_aead-revert-out-of-place.patch"
+	eapply "${WORKDIR}/pf-cves-surgical/cve-2026-31431-algif_aead-revert-out-of-place.patch"
 
 	# CVE-2026-43037 — IPv6 tunnel ip4ip6_err() stack overflow via
 	# inet6_skb_parm/inet_skb_parm cb[] reuse on cloned skb. Mainline
 	# fix 2edfa31769a4 clears IPCB(skb2) and adds minimal IPv4 header
 	# validation. 6.17 has no linux-stable continuation; pf-kernel
 	# 6.17.0 is the relevant base. Same GA-only gap as 31431.
-	eapply "${FILESDIR}/cve-2026-43037-ip6_tunnel-clear-skb-cb.patch"
+	eapply "${WORKDIR}/pf-cves-surgical/cve-2026-43037-ip6_tunnel-clear-skb-cb.patch"
 
 	# CVE-2026-43038 — IPv6 ICMP ip6_err_gen_icmpv6_unreach() OOB read
 	# via the same cb[] type-confusion pattern, reachable via forged
 	# ICMPv4 error with CIPSO option. Mainline fix 86ab3e55673a clears
 	# IP6CB(skb2). Same orphan-slot caveat.
-	eapply "${FILESDIR}/cve-2026-43038-icmpv6-clear-skb-cb.patch"
+	eapply "${WORKDIR}/pf-cves-surgical/cve-2026-43038-icmpv6-clear-skb-cb.patch"
 
 	default
 }
