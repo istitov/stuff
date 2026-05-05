@@ -9,7 +9,8 @@ inherit autotools python-single-r1 xdg
 
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis (3.x unstable)"
 HOMEPAGE="https://gwyddion.net/"
-SRC_URI="https://gwyddion.net/download/${PV}/gwyddion-${PV}.tar.xz -> ${PN}-${PV}.tar.xz"
+SRC_URI="https://gwyddion.net/download/${PV}/gwyddion-${PV}.tar.xz -> ${PN}-${PV}.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/${PN}-${PV}-pygwy-r1-0/sci-visualization/${PN}/${PN}-${PV}-pygwy.tar.xz -> ${PN}-${PV}-pygwy-r1-0.tar.xz"
 S="${WORKDIR}/gwyddion-${PV}"
 
 LICENSE="GPL-2"
@@ -68,15 +69,13 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# The three pygwy patches are stored as .patch.bz2 to keep the git
-	# tree small (stage-A is 586 KiB of dead-code removal). eapply in
-	# EAPI 8 does not auto-decompress, unlike the older epatch eclass;
-	# decompress to ${T} and append to PATCHES so default handles them.
-	local f decompressed
-	for f in "${FILESDIR}/${PN}-${PV}"-pygwy-stage-*.patch.bz2; do
-		decompressed="${T}/$(basename "${f%.bz2}")"
-		bunzip2 -kc "${f}" > "${decompressed}" || die
-		PATCHES+=( "${decompressed}" )
+	# The three pygwy stage patches ship in a tarball from the sister
+	# overlay extra-stuff (see SRC_URI). unpack drops them at
+	# ${WORKDIR}/${PN}-${PV}-pygwy/. Pinning is via tag in SRC_URI; bumping
+	# patches means a new tag suffix (-r1-1, -r1-2, ...).
+	local f
+	for f in "${WORKDIR}/${PN}-${PV}-pygwy"/${PN}-${PV}-pygwy-stage-*.patch; do
+		PATCHES+=( "${f}" )
 	done
 	default
 	eautoreconf
