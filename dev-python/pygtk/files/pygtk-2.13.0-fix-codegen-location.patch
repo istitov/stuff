@@ -5,7 +5,7 @@
  # package), but we want to preserve compatibility with times codegen
  # was in PyGTK, not PyGObject.
 -codegendir=${datadir}/pygobject/2.0/codegen
-+codegendir=${pyexecdir}/gtk-2.0/codegen
++codegendir=${libdir}/python2.7/site-packages/gtk-2.0/codegen
  
  Name: PyGTK
  Description: Python bindings for GTK+ and related libraries

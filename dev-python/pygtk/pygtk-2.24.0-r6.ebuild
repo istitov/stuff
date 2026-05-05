@@ -36,9 +36,18 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-	# Fix declaration of codegen in .pc
-	"${FILESDIR}/${PN}-2.13.0-fix-codegen-location.patch"
+	# Order matters: the codegen-location patch references ${libdir}
+	# in pygtk-2.0.pc, and libdir-pc is what adds ${libdir} to the
+	# .pc template, so libdir-pc must apply first.
 	"${FILESDIR}/${PN}-2.14.1-libdir-pc.patch"
+	# codegendir set to ${libdir}/python2.7/site-packages/gtk-2.0/codegen.
+	# Earlier revisions of this patch routed through ${pyexecdir},
+	# which embeds ${PYTHON_EXEC_PREFIX} as a literal in the .pc and
+	# pkg-config substitutes it to empty, yielding /lib64/... — broken
+	# on split-usr setups where /lib64 isn't a symlink to /usr/lib64.
+	# ${libdir} resolves to a literal /usr/lib64 (or /usr/lib on x86)
+	# regardless of usr-merge state. 2026-05-05.
+	"${FILESDIR}/${PN}-2.13.0-fix-codegen-location.patch"
 	# Fix leaks of Pango objects
 	"${FILESDIR}/${PN}-2.24.0-fix-leaks.patch"
 	# Fail when tests are failing, bug #391307
