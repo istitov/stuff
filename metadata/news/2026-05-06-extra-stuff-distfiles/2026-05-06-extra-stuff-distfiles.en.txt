@@ -1,0 +1,53 @@
+Title: Patch tarballs now hosted on extra-stuff sister repo
+Author: Ivan S. Titov <iohann.s.titov@gmail.com>
+Posted: 2026-05-06
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: sys-kernel/pf-sources
+Display-If-Installed: sci-visualization/gwyddion3
+
+You are running an ebuild from the stuff overlay whose patch tarballs
+are now fetched from a sister GitHub repository, "extra-stuff"
+(https://github.com/istitov/extra-stuff), instead of being shipped
+in the overlay's own files/ tree.
+
+== Why ==
+
+A handful of packages in the stuff overlay carry substantial patches:
+
+  * sys-kernel/pf-sources -r70 ebuilds — a curated subset of
+    natalenko's pf-kernel patchset, ~150 KiB to ~1 MiB per slot.
+  * sys-kernel/pf-sources orphan-slot -r70 + -r1 ebuilds — a per-slot
+    snapshot of alicef's genpatches trunk dir, ~700 KiB to ~1.1 MiB
+    per slot. The trunk dir at dev.gentoo.org is a live working
+    directory, not a release archive; the snapshot pins immutable
+    bytes for these branches.
+  * sci-visualization/gwyddion3-3.9-r1 — three pygwy stage patches
+    (~600 KiB uncompressed).
+
+Hosting these in the overlay's files/ tree pushed pkgcheck size
+limits and bloated every clone. Bundled as tarballs on extra-stuff
+and pinned to immutable git tags, they are fetched on demand at
+emerge time.
+
+== No user action required ==
+
+extra-stuff is purely a distfile host — it is NOT a Gentoo overlay.
+You do not need to register it with eselect repository. Portage
+fetches the tarballs as part of the normal install flow, and
+verifies them against BLAKE2B + SHA512 hashes pinned in each
+affected package's Manifest. If extra-stuff bytes ever changed in
+place, the hash mismatch would block the install.
+
+== Bumping patches ==
+
+Tarball revisions are tagged with a numeric suffix (-r70-0 today,
+-r70-1 next time, ...). When a tarball's contents need to change,
+the new bundle is published under a new tag and the affected
+ebuild's SRC_URI is updated to point to it. Older tarballs stay
+reachable for users still on older ebuild revisions.
+
+== References ==
+
+  * extra-stuff repo: https://github.com/istitov/extra-stuff
+  * stuff overlay:    https://github.com/istitov/stuff

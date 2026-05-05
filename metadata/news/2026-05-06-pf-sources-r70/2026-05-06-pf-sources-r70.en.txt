@@ -1,0 +1,77 @@
+Title: pf-sources: -r70 curated patch design and tracking commitment
+Author: Ivan S. Titov <iohann.s.titov@gmail.com>
+Posted: 2026-05-06
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: =sys-kernel/pf-sources-6.1_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.2_p7-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.3_p5-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.4_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.5_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.6_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.7_p7-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.8_p9-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.9_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.10_p4-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.11_p4-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.12_p4-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.13_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.14_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.15_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.16_p5-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.17_p4-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.18_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.19_p5-r70
+Display-If-Installed: =sys-kernel/pf-sources-7.0_p2-r70
+
+You are running a pf-sources -r70 ebuild. This news item explains the
+-r70 design and the tracking commitment for your branch.
+
+== Design ==
+
+The pf-sources -r70 ebuilds in this overlay track linux-stable via
+Gentoo's genpatches, with a curated subset of natalenko's pf-kernel
+patchset on top. CVE-2026-31431 (the "Copy Fail" algif_aead LPE) and
+other linux-stable-fixed CVEs are picked up via the genpatches stable
+chain on every -r70 — no separate patch is needed. This is
+fundamentally different from the unrevisioned and -r1 / -r2 pf-sources
+ebuilds, which apply natalenko's full patchset to vanilla v6.X.0 with
+no linux-stable backports.
+
+For each -r70 slot, the curated subset retains pf features that are
+genuinely additive (BBRv3, x86 ISA-level helpers, zstd library
+updates, DDCCI / DDCCI-backlight, AMD-pstate enhancements,
+syscall.tbl additions, mm/include hooks) and drops pf changes that
+conflict with linux-stable backports or that gentoo-sources has
+already addressed (kernel/sched core/fair/rt, top-level
+arch/x86/Kconfig, "minor fixes" already landed in stable).
+
+Each -r70 ebuild's pkg_postinst message lists exactly which pf
+features are retained on that slot and which are dropped, with
+reasons.
+
+== Tracking commitment by branch ==
+
+  * Active branches (currently 6.18, 6.19, 7.0) — while natalenko
+    continues to ship pf releases and linux-stable continues to ship
+    point releases, the -r70 is re-cut on each genpatches bump. The
+    curated pf delta usually carries forward; the gentoo-sources base
+    shifts.
+
+  * LTS branches (currently 6.1, 6.6, 6.12) — natalenko has moved on
+    but linux-stable continues for years. The pf delta is frozen at
+    the last pf release for the branch; the -r70 is regenerated
+    against each new genpatches release for the lifetime of
+    upstream's stable maintenance.
+
+  * EOL branches (the 14 non-LTS slots 6.2-6.5, 6.7-6.11, 6.13-6.17)
+    — linux-stable has stopped. The -r70 is frozen at the last
+    genpatches release on that branch. No further updates; future
+    security work happens on a still-active branch.
+
+== References ==
+
+  * Per-slot retained / dropped breakdown: each -r70 ebuild's
+    pkg_postinst message.
+  * https://pfkernel.natalenko.name/
+  * https://dev.gentoo.org/~alicef/genpatches/

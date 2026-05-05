@@ -1,0 +1,71 @@
+Title: pf-sources: CVE-2026-31431 Copy Fail surgical and cumulative patches
+Author: Ivan S. Titov <iohann.s.titov@gmail.com>
+Posted: 2026-05-06
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: =sys-kernel/pf-sources-6.1_p6-r2
+Display-If-Installed: =sys-kernel/pf-sources-6.6_p6-r2
+Display-If-Installed: =sys-kernel/pf-sources-6.12_p4-r2
+Display-If-Installed: =sys-kernel/pf-sources-6.16_p5-r1
+Display-If-Installed: =sys-kernel/pf-sources-6.17_p4-r1
+Display-If-Installed: =sys-kernel/pf-sources-6.18_p6-r1
+Display-If-Installed: =sys-kernel/pf-sources-6.19_p5-r1
+
+You are running a pf-sources revision that carries the
+CVE-2026-31431 ("Copy Fail") fix. This news item describes what the
+patch does, why two forms exist, and what other CVEs the LTS form
+incidentally covers.
+
+== CVE-2026-31431 ==
+
+Copy Fail is a local privilege escalation in the kernel's algif_aead
+crypto socket family. The vulnerable code path miscopies the
+Authenticated Associated Data (AAD) buffer when the in-place AAD path
+is taken on a request whose source and destination addresses overlap
+in a specific way. CVSS 7.8 (local, low complexity, no privileges
+needed beyond AF_ALG socket access).
+
+The upstream fix is a revert of the commit that introduced the
+in-place AAD path (mainline upstream commit a664bf3d603d). Linux 7.0
+GA (General Availability — the .0 release tree, before any
+linux-stable point releases are applied) shipped after this revert
+and is not vulnerable.
+
+== Two patch forms ==
+
+Two forms ship in this overlay:
+
+  * Surgical revert (pf-sources-6.16_p5-r1, -6.17_p4-r1, -6.18_p6-r1,
+    -6.19_p5-r1) — the upstream revert applied directly to v6.X.0 +
+    pf. Four files, 315 lines. Cleanest form; matches mainline
+    behavior exactly.
+
+  * Cumulative LTS (pf-sources-6.1_p6-r2, -6.6_p6-r2, -6.12_p4-r2) —
+    the surgical revert's context did not match v6.X.0 + pf on the
+    LTS branches because linux-stable's pre-revert backports diverged
+    too much. Instead, this form is a cumulative diff over the same
+    four files, computed as v6.X.0 -> v6.X.{latest stable} restricted
+    to the affected paths. Around 600-720 lines depending on branch.
+
+The choice of form is driven entirely by whether the surgical
+revert's context matches v6.X.0 + pf — never by ergonomics.
+
+== Incidental coverage on the LTS form ==
+
+Because the LTS cumulative diff carries the full linux-stable history
+of the affected files between v6.X.0 and the latest stable release at
+the time the patch was cut, it incidentally covers two more CVEs that
+landed in those files:
+
+  * CVE-2026-43043 — af_alg scatterwalk NULL-deref.
+  * CVE-2026-23060 — authencesn NULL-deref denial-of-service.
+
+The surgical-form revisions (6.16 through 6.19) do NOT incidentally
+cover these; they target only the CVE-2026-31431 commit.
+
+== References ==
+
+  * https://www.cve.org/CVERecord?id=CVE-2026-31431
+  * https://www.cve.org/CVERecord?id=CVE-2026-43043
+  * https://www.cve.org/CVERecord?id=CVE-2026-23060
+  * https://copy.fail/

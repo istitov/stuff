@@ -1,0 +1,81 @@
+Title: pf-sources changes — CVE-2026-31431 fixes, -r70 ebuilds, GA-only phase-out
+Author: Ivan S. Titov <iohann.s.titov@gmail.com>
+Posted: 2026-05-06
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: sys-kernel/pf-sources
+
+This news item is for all pf-sources users in the stuff overlay.
+Three further news items, displayed only to specific revision
+cohorts, cover the technical details:
+
+  * "pf-sources: -r70 curated patch design" — for users on -r70.
+  * "pf-sources: CVE-2026-31431 Copy Fail patches" — for users on the
+    affected -r1 / -r2 ebuilds.
+  * "Patch tarballs now hosted on extra-stuff sister repo" — for
+    users on -r70 ebuilds, the trunk-pinned -r1 ebuilds, and
+    sci-visualization/gwyddion3-3.9-r1.
+
+== Background: CVE-2026-31431 "Copy Fail" ==
+
+Copy Fail (CVE-2026-31431, CVSS 7.8) is a local privilege escalation
+in the kernel's algif_aead crypto socket family. Linux 7.0 GA (General
+Availability — the .0 release tree, before any linux-stable point
+releases are applied) shipped with the upstream revert that fixes it;
+every released branch from 6.1 through 6.19 was vulnerable until
+backports landed in linux-stable. The pf-kernel patchset is GA-only by
+design (natalenko ships only the .0 source tree, never the subsequent
+linux-stable point releases), so pf-sources ebuilds at v6.X.0 + pf-only
+are vulnerable to this and to many other linux-stable-fixed CVEs.
+
+== What changed in the overlay ==
+
+Three classes of revision now exist for pf-sources:
+
+  * Unrevisioned ebuilds (e.g. pf-sources-6.18_p6) remain GA-only:
+    natalenko's pf-kernel patchset on top of vanilla v6.X.0. For
+    6.16-6.19 these are still vulnerable to Copy Fail; for 7.0_p1 /
+    7.0_p2 they are naturally clean (Linux 7.0 GA postdates the
+    upstream revert).
+
+  * -r1 / -r2 ebuilds add the surgical or cumulative CVE-2026-31431
+    patch on top of natalenko's pf patchset. -r1 carries the surgical
+    revert (used where v6.X.0 + pf matches mainline context); -r2 is
+    the cumulative LTS form (used on 6.1, 6.6, 6.12 where the
+    surgical context did not match).
+
+  * -r70 ebuilds are a fundamentally different design. Instead of
+    fetching pf-kernel's GA-only sourcetree, -r70 builds vanilla
+    linux-X.Y.tar.xz + Gentoo's genpatches (which include the full
+    linux-stable backport chain) and applies a *curated subset* of
+    natalenko's pf-kernel delta on top. CVE-2026-31431 is fixed via
+    genpatches' linux-stable chain on every -r70. Each -r70's
+    pkg_postinst message lists which pf features are retained on that
+    slot and which are dropped, with reasons.
+
+== GA-only ebuild phase-out ==
+
+The four still-vulnerable GA-only ebuilds enter a 30-day lastrite
+cycle:
+
+  * sys-kernel/pf-sources-6.16_p5
+  * sys-kernel/pf-sources-6.17_p4
+  * sys-kernel/pf-sources-6.18_p6
+  * sys-kernel/pf-sources-6.19_p5
+
+These are added to profiles/package.mask on 2026-05-06 and unkeyworded
+(KEYWORDS="") on 2026-06-05. The ebuilds themselves remain in tree as a
+recovery path. Users currently on one of these versions should switch
+to the matching -r1 (verbatim natalenko + surgical CVE patch) or -r70
+(curated + linux-stable tracking) ebuild before 2026-06-05.
+
+7.0_p1 and 7.0_p2 are not in this phase-out — they are naturally
+CVE-clean and remain available while 7.0 is an actively-tracked
+branch.
+
+== References ==
+
+  * https://www.cve.org/CVERecord?id=CVE-2026-31431
+  * https://copy.fail/
+  * https://pfkernel.natalenko.name/
+  * https://dev.gentoo.org/~alicef/genpatches/
