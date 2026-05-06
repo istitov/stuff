@@ -10,7 +10,7 @@ inherit cmake rocm
 DESCRIPTION="Wrapper of rocPRIM or CUB for GPU parallel primitives"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipcub"
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/hipcub.tar.gz -> hipcub-${PV}.tar.gz"
-S="${WORKDIR}/hipcub"
+S="${WORKDIR}"
 
 LICENSE="BSD"
 SLOT="0/$(ver_cut 1-2)"
