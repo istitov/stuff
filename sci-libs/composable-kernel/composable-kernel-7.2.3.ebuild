@@ -15,7 +15,7 @@ DESCRIPTION="High Performance Composable Kernel for AMD GPUs"
 HOMEPAGE="https://github.com/ROCm/composable_kernel"
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/composablekernel.tar.gz -> ${P}.tar.gz
 	test? ( https://github.com/google/googletest/archive/${GTEST_COMMIT}.tar.gz -> ${GTEST_FILE} )"
-S="${WORKDIR}/composablekernel"
+S="${WORKDIR}"
 
 LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
