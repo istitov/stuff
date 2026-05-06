@@ -94,6 +94,27 @@ PATCHES=(
 
 QA_FLAGS_IGNORED="usr/lib.*/libhiprtc-builtins.*"
 
+src_unpack() {
+	# rocm 7.2.3 release-asset tarballs unpack flat; restore the clr/, hip/,
+	# hip-tests/ wrapping directories the rest of the ebuild expects.
+	mkdir -p "${WORKDIR}/clr" || die
+	pushd "${WORKDIR}/clr" >/dev/null || die
+	unpack "rocm-clr-${PV}.tar.gz"
+	popd >/dev/null || die
+
+	mkdir -p "${WORKDIR}/hip" || die
+	pushd "${WORKDIR}/hip" >/dev/null || die
+	unpack "${P}.tar.gz"
+	popd >/dev/null || die
+
+	if use test; then
+		mkdir -p "${WORKDIR}/hip-tests" || die
+		pushd "${WORKDIR}/hip-tests" >/dev/null || die
+		unpack "hip-tests-${PV}.tar.gz"
+		popd >/dev/null || die
+	fi
+}
+
 hip_test_wrapper() {
 	local CMAKE_USE_DIR="${TEST_S}"
 	local BUILD_DIR="${TEST_S}_build"
