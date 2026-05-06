@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Kokoros is a Rust implementation of the Kokoro-82M text-to-speech
+    model. Provides the `koko` CLI and an OpenAI-compatible HTTP server
+    used as the kokoro:cpu backend by sci-ml/lemonade.
+
+    Tracks upstream lucasjinreal/Kokoros directly. The lemonade-sdk
+    fork only diverges in CI infrastructure plus a bundled espeak-ng-data
+    copy that ::gentoo already provides via app-accessibility/espeak-ng,
+    so source-build users get the same binary either way.
+
+    Runtime model files (kokoro-v1.0.onnx + voices-v1.0.bin) are not
+    bundled — see pkg_postinst for a quick fetch recipe.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">lucasjinreal/Kokoros</remote-id>
+    <bugs-to>https://github.com/lucasjinreal/Kokoros/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
