@@ -9,7 +9,7 @@ inherit cmake fortran-2 rocm
 DESCRIPTION="ROCm BLAS marshalling library"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblas"
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/hipblas.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/hipblas"
+S="${WORKDIR}"
 
 REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
