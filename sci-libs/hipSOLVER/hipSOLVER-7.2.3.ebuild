@@ -10,7 +10,7 @@ inherit cmake rocm
 DESCRIPTION="CU / ROCM agnostic marshalling library for LAPACK routines on the GPU"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipsolver"
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/hipsolver.tar.gz -> hipsolver-${PV}.tar.gz"
-S="${WORKDIR}/hipsolver"
+S="${WORKDIR}"
 
 REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
