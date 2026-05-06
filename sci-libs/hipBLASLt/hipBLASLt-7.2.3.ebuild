@@ -94,6 +94,20 @@ pkg_pretend() {
 	fi
 }
 
+src_unpack() {
+	# rocm 7.2.3 release-asset tarballs unpack flat; restore the hipblaslt/
+	# and origami/ wrapping directories the ebuild expects.
+	mkdir -p "${WORKDIR}/hipblaslt" || die
+	pushd "${WORKDIR}/hipblaslt" >/dev/null || die
+	unpack "hipblaslt-${PV}.tar.gz"
+	popd >/dev/null || die
+
+	mkdir -p "${WORKDIR}/origami" || die
+	pushd "${WORKDIR}/origami" >/dev/null || die
+	unpack "origami-${PV}.tar.gz"
+	popd >/dev/null || die
+}
+
 src_prepare() {
 	local shebangs=($(grep -rl "#!/usr/bin/env python3" tensilelite/Tensile || die))
 	python_fix_shebang -q "${shebangs[@]}"
