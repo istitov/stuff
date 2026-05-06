@@ -36,6 +36,15 @@ PATCHES=(
 	"${FILESDIR}/${PN}-6.2.4-fix-lib-version.patch"
 )
 
+src_unpack() {
+	# rocm 7.2.3 release-asset tarball unpacks flat; restore the clr/ wrapping
+	# directory the rest of the ebuild expects.
+	mkdir -p "${WORKDIR}/clr" || die
+	pushd "${WORKDIR}/clr" >/dev/null || die
+	unpack "rocm-clr-${PV}.tar.gz"
+	popd >/dev/null || die
+}
+
 src_prepare() {
 	# Compatibility with CMake < 3.10 will be removed
 	sed -e "/cmake_minimum_required/ s/3\.5/3.10/" \
