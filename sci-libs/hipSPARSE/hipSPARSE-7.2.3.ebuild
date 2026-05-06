@@ -32,7 +32,7 @@ http://sparse-files.engr.tamu.edu/MM/HB/nos6.tar.gz -> rocSPARSE_nos6.tar.gz
 http://sparse-files.engr.tamu.edu/MM/HB/nos7.tar.gz -> rocSPARSE_nos7.tar.gz
 http://sparse-files.engr.tamu.edu/MM/DNVS/shipsec1.tar.gz -> rocSPARSE_shipsec1.tar.gz
 )"
-S="${WORKDIR}/hipsparse"
+S="${WORKDIR}"
 
 LICENSE="MIT"
 SLOT="0"/$(ver_cut 1-2)
