@@ -1,0 +1,33 @@
+Fix scoped-enum lookup of std::memory_order under C++20 strict mode.
+
+Upstream uses std::memory_order::memory_order_seq_cst — the unscoped
+enumerator name "memory_order_seq_cst" leaked from the C++11/14/17
+unscoped-enum form. In C++20 std::memory_order became a scoped enum
+class with members named "seq_cst", "relaxed", "acquire", "release",
+etc.; "memory_order_seq_cst" is no longer a valid member.
+
+Recent g++ defaults to C++20+, so the shim TUs fail to compile.
+Switch to the scoped form which is valid under both C++17 and C++20.
+
+--- a/src/shim/umq/dbg_hwq.cpp
++++ b/src/shim/umq/dbg_hwq.cpp
+@@ -91,7 +91,7 @@
+   *m_dbg_umq_comp_ptr = 0;
+
+   /* Issue mfence instruction to make sure all writes to the slot before is done */
+-  std::atomic_thread_fence(std::memory_order::memory_order_seq_cst);
++  std::atomic_thread_fence(std::memory_order::seq_cst);
+   m_dbg_umq_hdr->write_index++;
+
+   shim_debug("dbg umq: submit cmd widx: %lu ridx: %lu",
+--- a/src/shim/umq/hwq.cpp
++++ b/src/shim/umq/hwq.cpp
+@@ -213,7 +213,7 @@
+   hdr->common_header.type = HOST_QUEUE_PACKET_TYPE_VENDOR_SPECIFIC;
+
+   // Issue mfence instruction to make sure all writes to the slot before is done.
+-  std::atomic_thread_fence(std::memory_order::memory_order_seq_cst);
++  std::atomic_thread_fence(std::memory_order::seq_cst);
+   // Indicates the slot is ready for processing by uC.
+   // Must be the last step after pkt is filled up.
+   uint64_t wi = m_umq_hdr->write_index++;
