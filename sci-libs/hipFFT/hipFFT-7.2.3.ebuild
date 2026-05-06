@@ -10,7 +10,7 @@ inherit cmake rocm
 DESCRIPTION="CU / ROCM agnostic hip FFT implementation"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipfft"
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/hipfft.tar.gz -> hipfft-${PV}.tar.gz"
-S="${WORKDIR}/hipfft"
+S="${WORKDIR}"
 
 REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
