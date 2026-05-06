@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <maintainer type="person"><email>fuzzyray@gentoo.org</email></maintainer>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
   <longdescription>
     udept is a collection of Portage scripts, maintenance tools and analysis tools,
     written in bash and powered by the dep engine.
   </longdescription>
   <upstream>
-    <remote-id type="gitlab">init-6/udept</remote-id>
+    <remote-id type="github">istitov/udept</remote-id>
   </upstream>
 </pkgmetadata>
