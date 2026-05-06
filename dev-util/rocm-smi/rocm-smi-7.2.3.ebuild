@@ -18,7 +18,7 @@ if [[ ${PV} == *9999 ]] ; then
 else
 	SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/rocm-${PV}/rocm-smi-lib.tar.gz -> rocm-smi-${PV}.tar.gz"
 	KEYWORDS="~amd64"
-	S="${WORKDIR}/rocm-smi-lib"
+	S="${WORKDIR}"
 fi
 
 LICENSE="MIT"
