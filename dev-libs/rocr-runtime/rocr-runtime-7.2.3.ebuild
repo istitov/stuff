@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]] ; then
 	S="${WORKDIR}/${P}"
 else
 	SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/rocm-${PV}/${PN}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}/${PN}"
+	S="${WORKDIR}"
 	KEYWORDS="~amd64"
 fi
 
