@@ -1,7 +1,7 @@
-Title: pf-sources: CVE-2026-31431 Copy Fail surgical and cumulative patches
+Title: pf-sources: CVE-2026-31431, CVE-2026-43037, and CVE-2026-43038 patched
 Author: Ivan S. Titov <iohann.s.titov@gmail.com>
 Posted: 2026-05-06
-Revision: 1
+Revision: 2
 News-Item-Format: 2.0
 Display-If-Installed: =sys-kernel/pf-sources-6.1_p6-r2
 Display-If-Installed: =sys-kernel/pf-sources-6.6_p6-r2
@@ -11,61 +11,81 @@ Display-If-Installed: =sys-kernel/pf-sources-6.17_p4-r1
 Display-If-Installed: =sys-kernel/pf-sources-6.18_p6-r1
 Display-If-Installed: =sys-kernel/pf-sources-6.19_p5-r1
 
-You are running a pf-sources revision that carries the
-CVE-2026-31431 ("Copy Fail") fix. This news item describes what the
-patch does, why two forms exist, and what other CVEs the LTS form
-incidentally covers.
+You are running a pf-sources revision that carries fixes for
+three CVEs. This news item describes each fix, why two patch
+forms exist (-r1 surgical vs -r2 cumulative LTS), and what
+incidental coverage the cumulative form provides.
 
-== CVE-2026-31431 ==
+Revision 2 of this item adds documentation of CVE-2026-43037
+and CVE-2026-43038, which were already in these ebuilds at
+first publication but were missing from revision 1.
 
-Copy Fail is a local privilege escalation in the kernel's algif_aead
-crypto socket family. The vulnerable code path miscopies the
-Authenticated Associated Data (AAD) buffer when the in-place AAD path
-is taken on a request whose source and destination addresses overlap
-in a specific way. CVSS 7.8 (local, low complexity, no privileges
-needed beyond AF_ALG socket access).
+== The three CVEs ==
 
-The upstream fix is a revert of the commit that introduced the
-in-place AAD path (mainline upstream commit a664bf3d603d). Linux 7.0
-GA (General Availability — the .0 release tree, before any
-linux-stable point releases are applied) shipped after this revert
-and is not vulnerable.
+CVE-2026-31431 ("Copy Fail", CVSS 7.8) — local privilege
+escalation in the algif_aead crypto socket family. The
+vulnerable code path miscopies the Authenticated Associated
+Data (AAD) buffer when the in-place AAD path is taken on a
+request whose source and destination addresses overlap in a
+specific way. Upstream fix reverts the commit that introduced
+the in-place AAD path (mainline a664bf3d603d).
+
+CVE-2026-43037 (CVSS 9.8) — stack OOB write in
+ip6_tunnel.c::ip4ip6_err() via inet6_skb_parm / inet_skb_parm
+cb[] reuse on a cloned skb. Mainline fix 2edfa31769a4 clears
+IPCB(skb2) and adds minimal IPv4 header validation.
+
+CVE-2026-43038 (CVSS 9.8) — OOB read in
+icmp.c::ip6_err_gen_icmpv6_unreach() via the same cb[]
+type-confusion pattern, reachable via a forged ICMPv4 error
+with a CIPSO option. Mainline fix 86ab3e55673a clears
+IP6CB(skb2).
+
+Linux 7.0 GA (the .0 release before any linux-stable point
+releases are applied) shipped after all three fixes and is
+not vulnerable.
 
 == Two patch forms ==
 
-Two forms ship in this overlay:
-
-  * Surgical revert (pf-sources-6.16_p5-r1, -6.17_p4-r1, -6.18_p6-r1,
-    -6.19_p5-r1) — the upstream revert applied directly to v6.X.0 +
-    pf. Four files, 315 lines. Cleanest form; matches mainline
-    behavior exactly.
-
-  * Cumulative LTS (pf-sources-6.1_p6-r2, -6.6_p6-r2, -6.12_p4-r2) —
-    the surgical revert's context did not match v6.X.0 + pf on the
-    LTS branches because linux-stable's pre-revert backports diverged
-    too much. Instead, this form is a cumulative diff over the same
-    four files, computed as v6.X.0 -> v6.X.{latest stable} restricted
-    to the affected paths. Around 600-720 lines depending on branch.
-
 The choice of form is driven entirely by whether the surgical
-revert's context matches v6.X.0 + pf — never by ergonomics.
+patch's context matches v6.X.0 + pf — never by ergonomics.
+
+  * Surgical (pf-sources-6.16_p5-r1, -6.17_p4-r1, -6.18_p6-r1,
+    -6.19_p5-r1) — the three upstream patches applied directly
+    to v6.X.0 + pf:
+      cve-2026-31431-algif_aead-revert-out-of-place.patch
+      cve-2026-43037-ip6_tunnel-clear-skb-cb.patch
+      cve-2026-43038-icmpv6-clear-skb-cb.patch
+
+  * Cumulative LTS (pf-sources-6.1_p6-r2, -6.6_p6-r2,
+    -6.12_p4-r2) — the surgical patches' context did not match
+    v6.X.0 + pf on the LTS branches because linux-stable's
+    pre-fix backports had diverged too much. Instead this form
+    ships two cumulative diffs over the affected files,
+    computed as v6.X.0 -> v6.X.{latest stable} restricted to
+    the relevant paths:
+      cve-2026-31431-algif_aead-cumulative-<branch>.patch
+      cve-2026-43037-43038-cumulative-<branch>.patch
 
 == Incidental coverage on the LTS form ==
 
-Because the LTS cumulative diff carries the full linux-stable history
-of the affected files between v6.X.0 and the latest stable release at
-the time the patch was cut, it incidentally covers two more CVEs that
+Because the cumulative diffs carry the full linux-stable
+history of the affected files between v6.X.0 and the latest
+stable release at the time the patches were cut, the
+algif_aead cumulative incidentally covers two more CVEs that
 landed in those files:
 
   * CVE-2026-43043 — af_alg scatterwalk NULL-deref.
   * CVE-2026-23060 — authencesn NULL-deref denial-of-service.
 
-The surgical-form revisions (6.16 through 6.19) do NOT incidentally
-cover these; they target only the CVE-2026-31431 commit.
+The surgical -r1 revisions do NOT incidentally cover these;
+they target only the named CVE commits.
 
 == References ==
 
   * https://www.cve.org/CVERecord?id=CVE-2026-31431
+  * https://www.cve.org/CVERecord?id=CVE-2026-43037
+  * https://www.cve.org/CVERecord?id=CVE-2026-43038
   * https://www.cve.org/CVERecord?id=CVE-2026-43043
   * https://www.cve.org/CVERecord?id=CVE-2026-23060
   * https://copy.fail/
