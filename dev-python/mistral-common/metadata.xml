@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="image">Pull in media-libs/opencv for image-tokenization support (mistral_common[image] extra)</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">mistral_common</remote-id>
+    <remote-id type="github">mistralai/mistral-common</remote-id>
+    <bugs-to>https://github.com/mistralai/mistral-common/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
