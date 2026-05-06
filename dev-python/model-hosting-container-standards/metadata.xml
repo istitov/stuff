@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="pypi">model-hosting-container-standards</remote-id>
+    <remote-id type="github">aws/sagemaker-hosting-toolkit</remote-id>
+    <bugs-to>https://github.com/aws/sagemaker-hosting-toolkit/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
