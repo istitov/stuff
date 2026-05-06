@@ -47,7 +47,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${P}-automagic.patch"
+	"${FILESDIR}/${PN}-automagic.patch"
 )
 
 src_prepare() {

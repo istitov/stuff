@@ -61,7 +61,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-${PV}-automagic.patch"
+	"${FILESDIR}/${PN}-automagic.patch"
 )
 
 pkg_setup() {
