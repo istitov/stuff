@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="ROCclr runtime implementation for non-AMD HIP platforms, like NVIDIA"
 HOMEPAGE="https://github.com/ROCm/rocm-systems/tree/develop/projects/hipother"
 SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/rocm-${PV}/${PN}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}"
+S="${WORKDIR}"
 
 LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
