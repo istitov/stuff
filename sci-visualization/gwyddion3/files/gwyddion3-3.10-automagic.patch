@@ -1,0 +1,18 @@
+Add --with-exr toggle so USE=-openexr actually disables detection.
+
+Upstream auto-enables OpenEXR whenever a C++ compiler is available,
+which turns USE=-openexr into a no-op on Gentoo. Wrap the probe in a
+GWY_WITH option defaulting to $have_cxx, matching the upstream pattern
+for cfitsio/webp/json-glib.
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -581,7 +581,7 @@
+ # OpenEXR 2.x+
+ # Optional.  Used for HDR greyscale OpenEXR pixmap import/export. Only try to
+ # enable if we have a C++ compiler because it is a C++ library.
+-enable_exr=$have_cxx
++GWY_WITH([exr],,[build with OpenEXR support],[$have_cxx])
+ if test "x$enable_exr" != xno; then
+   PKG_CHECK_MODULES(EXR, [OpenEXR >= 2.0],
+                     [AC_DEFINE(HAVE_EXR,1,
