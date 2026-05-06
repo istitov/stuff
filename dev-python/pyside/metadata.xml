@@ -20,6 +20,7 @@
     <flag name="concurrent">Build QtConcurrent module</flag>
     <flag name="core">Build QtCore module, if disable then only shiboken will be built</flag>
     <flag name="datavis">Build QtDataVisualization module (deprecated upstream as of Qt 6.6 in favour of QtGraphs; resurrected for sci-physics/sasview)</flag>
+    <flag name="graphs">Build QtGraphs and QtGraphsWidgets modules (the modern successor to QtDataVisualization)</flag>
     <flag name="designer">Build QtDesigner and QtUiTools modules</flag>
     <flag name="gles2-only">Build QtGui "QOpenGL*" classes</flag>
     <flag name="gui">Build QtGui module</flag>
