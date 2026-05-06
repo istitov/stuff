@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="gui">Install the optional Qt-based GGUF editor GUI</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">gguf</remote-id>
+    <remote-id type="github">ggml-org/llama.cpp</remote-id>
+    <bugs-to>https://github.com/ggml-org/llama.cpp/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
