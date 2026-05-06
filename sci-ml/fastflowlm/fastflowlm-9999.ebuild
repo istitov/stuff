@@ -19,9 +19,15 @@ LICENSE="MIT FastFlowLM-Binary"
 SLOT="0"
 # No KEYWORDS for live ebuild.
 
+# Cargo (inside tokenizers-cpp/rust) fetches crates at build time —
+# same as the tagged ebuilds, hence both PROPERTIES=live + RESTRICT.
+PROPERTIES="live"
+RESTRICT="network-sandbox"
+
 BDEPEND="
 	>=dev-build/cmake-3.22
 	dev-build/ninja
+	|| ( dev-lang/rust dev-lang/rust-bin )
 "
 RDEPEND="
 	dev-util/xrt
@@ -69,6 +75,11 @@ pkg_postinst() {
 	elog "  flm run llama3.2:3b   # chat with it"
 	elog ""
 	elog "Models stored in ~/.config/flm/ (override: FLM_MODEL_PATH)."
+	elog ""
+	elog "Ensure memlock is unlimited.  If 'ulimit -l' is not 'unlimited',"
+	elog "add to /etc/security/limits.d/99-amdxdna.conf:"
+	elog "  *  soft  memlock  unlimited"
+	elog "  *  hard  memlock  unlimited"
 	elog ""
 	elog "Run 'env-update && source /etc/profile' to pick up library paths."
 	elog ""

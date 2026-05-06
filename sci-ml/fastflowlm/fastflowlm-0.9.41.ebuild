@@ -43,7 +43,7 @@ RESTRICT="network-sandbox"
 BDEPEND="
 	>=dev-build/cmake-3.22
 	dev-build/ninja
-	virtual/rust
+	|| ( dev-lang/rust dev-lang/rust-bin )
 "
 RDEPEND="
 	dev-util/xrt
