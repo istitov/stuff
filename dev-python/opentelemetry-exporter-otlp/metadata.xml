@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="pypi">opentelemetry-exporter-otlp</remote-id>
+    <remote-id type="github">open-telemetry/opentelemetry-python</remote-id>
+    <bugs-to>https://github.com/open-telemetry/opentelemetry-python/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
