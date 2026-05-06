@@ -1,0 +1,43 @@
+Title: stuff overlay: active maintenance resumed, AI-assisted workflow disclosed
+Author: Ivan S. Titov <iohann.s.titov@gmail.com>
+Posted: 2026-05-06
+Revision: 1
+News-Item-Format: 2.0
+
+After a prolonged time of dormancy, this overlay is under
+active maintenance again. This news item summarises about a
+month of work.
+
+== What has changed ==
+
+  * Per-package audits — pkgcheck cleanups, dated rationale
+    for suppressions, metadata.xml normalization.
+  * Version handling — keep last-of-each-major for rollback;
+    drop versions whose upstream caps don't solve against
+    ::gentoo rather than relax the cap.
+  * sys-kernel/pf-sources -r70 GA-based slots — see the
+    separate news item dated 2026-05-06.
+  * Sister distfile repo at github.com/istitov/extra-stuff
+    for bundled patches that would otherwise hit pkgcheck's
+    SizeViolation in the main overlay.
+
+== AI / LLM assistance ==
+
+AI-assisted work begins with commit 075ff35d (2026-04-19);
+the last fully-human commit is d0e1aa01 (2026-04-18) — a
+clean before/after boundary for review or bisect.
+
+The maintainer uses LLM tooling for mechanical work; every
+commit is human-reviewed before landing, and the maintainer
+bears responsibility for correctness. Full policy and PR
+disclosure expectation: CONTRIBUTING.md, "🤖 AI / LLM
+assistance".
+
+Regressions, or anything that looks LLM-generated and wrong:
+file at github.com/istitov/stuff/issues with the failing
+emerge log.
+
+== References ==
+
+  * README.md — overlay highlights and design choices.
+  * CONTRIBUTING.md — house-style checklist and AI/LLM policy.
