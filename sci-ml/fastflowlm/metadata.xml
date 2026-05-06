@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+		<name>Ivan S. Titov</name>
+	</maintainer>
+	<longdescription lang="en">
+		FastFlowLM (FLM) is a lightweight LLM inference runtime purpose-built
+		for AMD Ryzen AI NPUs (XDNA2 architecture). It provides an Ollama-style
+		CLI and OpenAI-compatible server API for running language models entirely
+		on the NPU with no GPU or CPU compute required.
+
+		Supported hardware: Ryzen AI 300-series (Strix Point, Strix Halo),
+		400-series (Gorgon Point), and Z2 Extreme. XDNA1 (Ryzen AI 7000/8000)
+		is NOT supported.
+
+		The orchestration code and CLI are MIT-licensed. NPU compute kernels
+		(xclbins) are proprietary binaries, free for commercial use under
+		$10M annual company revenue.
+	</longdescription>
+	<upstream>
+		<remote-id type="github">FastFlowLM/FastFlowLM</remote-id>
+		<bugs-to>https://github.com/FastFlowLM/FastFlowLM/issues</bugs-to>
+		<doc>https://fastflowlm.com/docs/</doc>
+	</upstream>
+</pkgmetadata>
+
