@@ -88,6 +88,25 @@ pkg_pretend() {
 	fi
 }
 
+src_unpack() {
+	# rocm 7.2.3 release-asset tarballs unpack flat; restore the hipsparselt/,
+	# origami/, hipblaslt/ wrapping directories the ebuild expects.
+	mkdir -p "${WORKDIR}/hipsparselt" || die
+	pushd "${WORKDIR}/hipsparselt" >/dev/null || die
+	unpack "hipsparselt-${PV}.tar.gz"
+	popd >/dev/null || die
+
+	mkdir -p "${WORKDIR}/origami" || die
+	pushd "${WORKDIR}/origami" >/dev/null || die
+	unpack "origami-${PV}.tar.gz"
+	popd >/dev/null || die
+
+	mkdir -p "${WORKDIR}/hipblaslt" || die
+	pushd "${WORKDIR}/hipblaslt" >/dev/null || die
+	unpack "hipblaslt-${PV}.tar.gz"
+	popd >/dev/null || die
+}
+
 src_prepare() {
 	rocm_use_clang
 
