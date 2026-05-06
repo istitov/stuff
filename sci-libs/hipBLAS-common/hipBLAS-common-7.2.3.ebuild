@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Common files shared by hipBLAS and hipBLASLt"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblas-common"
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/hipblas-common.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/hipblas-common"
+S="${WORKDIR}"
 
 LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
