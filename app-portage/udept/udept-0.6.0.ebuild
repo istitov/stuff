@@ -3,14 +3,13 @@
 
 EAPI=8
 
-inherit autotools git-r3
-
 DESCRIPTION="A Portage analysis toolkit, written in bash"
 HOMEPAGE="https://github.com/istitov/udept"
-EGIT_REPO_URI="https://github.com/istitov/${PN}.git"
+SRC_URI="https://github.com/istitov/udept/releases/download/${PV}/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
+KEYWORDS="~amd64 ~x86"
 IUSE="+bash-completion"
 
 RDEPEND="
@@ -21,13 +20,6 @@ RDEPEND="
 BDEPEND=">=app-shells/bash-4.2:0"
 
 DOCS=( ChangeLog README.md )
-
-src_prepare() {
-	default
-	# Live tree doesn't ship the release-tarball-generated autotools
-	# bootstrap (configure, Makefile.in, COPYING via automake --add-missing).
-	eautoreconf
-}
 
 src_configure() {
 	econf $(use_enable bash-completion)

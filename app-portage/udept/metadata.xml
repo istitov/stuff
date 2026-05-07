@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <maintainer type="person">
-    <email>iohann.s.titov@gmail.com</email>
-    <name>Ivan S. Titov</name>
-  </maintainer>
-  <longdescription>
-    udept is a collection of Portage scripts, maintenance tools and analysis tools,
-    written in bash and powered by the dep engine.
-  </longdescription>
-  <upstream>
-    <remote-id type="github">istitov/udept</remote-id>
-  </upstream>
+	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+		<name>Ivan S. Titov</name>
+	</maintainer>
+	<longdescription lang="en">
+		A Portage analysis toolkit. dep reads Portage's on-disk databases
+		directly and answers questions about installed and available
+		packages: dependencies, reverse dependencies, virtuals, contents,
+		owners. It can also clean the world file, drop redundant entries
+		from /etc/portage, and identify unused ebuilds in an overlay.
+		Implemented as a single bash script; shells out to portageq for
+		environment resolution.
+	</longdescription>
+	<use>
+		<flag name="bash-completion">
+			Install the bash-completion script for the
+			<pkg>app-shells/bash-completion</pkg> framework.
+		</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">istitov/udept</remote-id>
+	</upstream>
 </pkgmetadata>
