@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    vLLM is a fast and easy-to-use library for LLM inference and
+    serving. Provides a Python API and an OpenAI-compatible HTTP server.
+
+    First-cycle stuff-overlay packaging is built with
+    VLLM_TARGET_DEVICE=empty — Python entrypoints import cleanly and
+    the OpenAI-compatible API surface is exposed, but backend kernels
+    fail at first model load. USE flags for cpu/cuda/rocm targets are
+    planned in subsequent cycles once the missing deps (torchaudio,
+    numba, flashinfer, etc.) are packaged.
+  </longdescription>
+  <upstream>
+    <remote-id type="pypi">vllm</remote-id>
+    <remote-id type="github">vllm-project/vllm</remote-id>
+    <bugs-to>https://github.com/vllm-project/vllm/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
