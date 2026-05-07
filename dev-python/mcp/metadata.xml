@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="cli">Install the optional MCP CLI (pulls dev-python/typer + python-dotenv)</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">mcp</remote-id>
+    <remote-id type="github">modelcontextprotocol/python-sdk</remote-id>
+    <bugs-to>https://github.com/modelcontextprotocol/python-sdk/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
