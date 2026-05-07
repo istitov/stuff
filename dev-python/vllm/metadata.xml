@@ -9,13 +9,19 @@
     vLLM is a fast and easy-to-use library for LLM inference and
     serving. Provides a Python API and an OpenAI-compatible HTTP server.
 
-    First-cycle stuff-overlay packaging is built with
-    VLLM_TARGET_DEVICE=empty — Python entrypoints import cleanly and
-    the OpenAI-compatible API surface is exposed, but backend kernels
-    fail at first model load. USE flags for cpu/cuda/rocm targets are
-    planned in subsequent cycles once the missing deps (torchaudio,
-    numba, flashinfer, etc.) are packaged.
+    USE=cpu flips the build to VLLM_TARGET_DEVICE=cpu and pulls
+    torchaudio + numba so inference runs on CPU. Default (USE=-cpu)
+    builds with VLLM_TARGET_DEVICE=empty — Python entrypoints import
+    cleanly, backend kernels fail at first model load (useful if you
+    only want the API surface for development).
+
+    USE flags for cuda/rocm targets are planned in subsequent cycles
+    once the missing deps (flashinfer/tilelang for cuda; amd-quark py
+    3.13/3.14 for rocm) are sorted.
   </longdescription>
+  <use>
+    <flag name="cpu">Build for CPU inference (VLLM_TARGET_DEVICE=cpu); pull torchaudio + numba</flag>
+  </use>
   <upstream>
     <remote-id type="pypi">vllm</remote-id>
     <remote-id type="github">vllm-project/vllm</remote-id>

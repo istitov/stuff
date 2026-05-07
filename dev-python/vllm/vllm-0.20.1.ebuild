@@ -18,18 +18,29 @@ HOMEPAGE="
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="cpu"
 
-# First-cycle landing strategy: build with VLLM_TARGET_DEVICE=empty so
-# only common.txt deps are required and no per-device CMake C++
-# extensions are compiled. The Python entrypoints (`vllm.LLM`,
-# `vllm serve …`, the OpenAI-compatible HTTP API surface) all import
-# cleanly; backend kernels fail at first model-load.
+# USE=cpu (default off): build with VLLM_TARGET_DEVICE=cpu so the
+# Python entrypoints can actually drive inference on CPU hardware.
+# Pulls torchaudio + numba (vllm's cpu.txt also lists intel-openmp on
+# x86_64, but Intel ships it as a proprietary blob — we omit it; vllm
+# falls back to the pthreads OpenMP shipped with sci-libs/openblas etc.)
 #
-# Future cycles: USE flags for cpu / cuda / rocm that flip the env var
-# and pull in the per-device requirements. cpu needs torchaudio, numba
-# and intel-openmp (Intel-proprietary, x86_64-only); rocm needs
-# amd-quark which excludes Python 3.13/3.14; cuda needs the
-# flashinfer/tilelang/apache-tvm-ffi stack we don't have.
+# CAVEAT for USE=cpu: the link step inherits ::gentoo sci-ml/pytorch's
+# public TorchConfig.cmake link interface, which exports MKL's MPI/
+# cluster libs (libmkl_scalapack_ilp64, libmkl_cdft_core,
+# libmkl_intel_thread, libmkl_blacs_intelmpi_ilp64). On hosts with a
+# partial Intel oneAPI install these links fail. Workarounds: build
+# pytorch with USE=-mkl, or install the full MKL/MPI stack. This is a
+# sci-ml/pytorch packaging issue, not a vllm one.
+#
+# USE=-cpu (default): build with VLLM_TARGET_DEVICE=empty — Python
+# entrypoints import cleanly, backend kernels fail at first model-load.
+# Useful if you only want the API surface for development.
+#
+# Future cycles: USE flags for cuda / rocm. cuda needs the
+# flashinfer/tilelang/apache-tvm-ffi stack we don't have; rocm needs
+# amd-quark which currently excludes Python 3.13/3.14.
 RDEPEND="
 	dev-python/regex[${PYTHON_USEDEP}]
 	dev-python/cachetools[${PYTHON_USEDEP}]
@@ -90,6 +101,10 @@ RDEPEND="
 	>=dev-python/opentelemetry-exporter-otlp-1.27.0[${PYTHON_USEDEP}]
 	>=dev-python/opentelemetry-semantic-conventions-ai-0.4.1[${PYTHON_USEDEP}]
 	~sci-ml/pytorch-2.11.0[${PYTHON_USEDEP}]
+	cpu? (
+		~sci-ml/torchaudio-2.11.0
+		>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
+	)
 "
 BDEPEND="
 	>=dev-build/cmake-3.26.1
@@ -102,9 +117,26 @@ BDEPEND="
 	~sci-ml/pytorch-2.11.0[${PYTHON_USEDEP}]
 "
 
+# Tests need a model+inference setup; not wired up here.
+# CPU build fetches oneDNN v3.10 from GitHub via CMake FetchContent;
+# allow network at build time (matches the kokoros/lemonade pattern).
+RESTRICT="
+	test
+	cpu? ( network-sandbox )
+"
+
+PATCHES=(
+	"${FILESDIR}/${P}-cpu-system-libgomp.patch"
+)
+
 # Pretend the version so setuptools-scm doesn't probe git.
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
-export VLLM_TARGET_DEVICE=empty
 
-# Tests need a model+inference setup; not wired up here.
-RESTRICT="test"
+src_configure() {
+	if use cpu; then
+		export VLLM_TARGET_DEVICE=cpu
+	else
+		export VLLM_TARGET_DEVICE=empty
+	fi
+	distutils-r1_src_configure
+}

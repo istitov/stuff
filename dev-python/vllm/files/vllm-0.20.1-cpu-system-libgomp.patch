@@ -1,0 +1,31 @@
+Allow CMake to find system libgomp when PyTorch doesn't bundle one.
+
+::gentoo's sci-ml/pytorch is built against the system gcc and uses the
+system libgomp via gcc's own /usr/lib/gcc/x86_64-pc-linux-gnu/$ver/
+runtime directory, not via a torch.libs/-style bundle. The upstream
+vllm_prepare_torch_gomp_shim() helper probes torch.libs/ + torch/lib/
+for libgomp*.so* and returns empty when it doesn't find one;
+find_library(... NO_DEFAULT_PATH REQUIRED) then dies because the only
+search path it had was empty.
+
+Drop NO_DEFAULT_PATH and add the standard gcc-runtime locations as
+explicit HINTS so CMake can find /usr/lib/gcc/.../libgomp.so even when
+the shim dir is empty. PyPI-wheel pytorch installations still hit the
+shim dir first since PATHS is searched before HINTS.
+
+--- a/cmake/cpu_extension.cmake
++++ b/cmake/cpu_extension.cmake
+@@ -32,8 +32,12 @@ else()
+     find_library(OPEN_MP
+         NAMES gomp
+         PATHS ${VLLM_TORCH_GOMP_SHIM_DIR}
+-        NO_DEFAULT_PATH
++        HINTS
++            /usr/lib/gcc/x86_64-pc-linux-gnu/16
++            /usr/lib/gcc/x86_64-pc-linux-gnu/15
++            /usr/lib/gcc/x86_64-pc-linux-gnu/14
++            /usr/lib/gcc/x86_64-pc-linux-gnu/13
+         REQUIRED
+     )
+     # Set LD_LIBRARY_PATH to include the shim dir at build time to use the same libgomp as PyTorch
+     if (OPEN_MP)
