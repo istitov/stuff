@@ -28,6 +28,9 @@ S="${WORKDIR}/cuda-python-${PV}/cuda_bindings"
 LICENSE="NVIDIA-CUDA"
 SLOT="0"
 KEYWORDS="~amd64"
+# NVIDIA-CUDA is an EULA license — distfile must not be mirrored,
+# resulting binpkgs must not be redistributed.
+RESTRICT="bindist mirror"
 
 # build_hooks.py reads /opt/cuda headers via pyclibrary and generates
 # Cython sources; cython is pinned to 3.2.x by upstream's build-system
