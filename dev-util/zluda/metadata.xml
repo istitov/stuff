@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    ZLUDA is a drop-in replacement for the CUDA runtime on AMD GPUs. It
+    provides libcuda.so and libnvidia-ml.so implementations that translate
+    CUDA driver API calls and PTX kernels to the AMD ROCm/HIP runtime,
+    letting unmodified CUDA applications run on supported AMD hardware.
+
+    Linux use is opt-in via LD_LIBRARY_PATH (or LD_AUDIT) so that ZLUDA's
+    libcuda doesn't shadow nvidia-drivers' libcuda for users who have both
+    installed; see pkg_postinst for the invocation patterns. Builds against
+    the bundled LLVM 17 submodule via the llvm_zluda crate, and requires a
+    working HIP/ROCm toolchain at runtime.
+
+    Upstream itself recommends pre-release builds and warns that the
+    project is under heavy development; this live ebuild tracks the
+    master branch.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">vosen/ZLUDA</remote-id>
+    <bugs-to>https://github.com/vosen/ZLUDA/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
