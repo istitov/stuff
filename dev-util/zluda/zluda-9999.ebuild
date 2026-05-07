@@ -40,12 +40,17 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
-# runtime: AMD ROCm/HIP stack. ext/{hip_runtime-sys,amd_comgr-sys,rocblas-sys}
-# are the workspace members that link against these.
+# runtime: AMD ROCm/HIP stack. The cdylibs we install link against these via
+# ext/* sys-crates: hip_runtime-sys → libamdhip64; amd_comgr-sys → libamd_comgr;
+# rocblas-sys → librocblas (zluda_blas); hipblaslt-sys → libhipblaslt
+# (zluda_blaslt); rocsparse-sys → librocsparse (zluda_sparse). zluda_fft is a
+# pure stub today and adds no extra dep.
 RDEPEND="
 	dev-util/hip
 	dev-libs/rocm-comgr
 	sci-libs/rocBLAS
+	sci-libs/hipBLASLt
+	sci-libs/rocSPARSE
 "
 DEPEND="${RDEPEND}"
 
@@ -56,6 +61,19 @@ src_compile() {
 	# the libnvcuda.so → libcuda.so{,.1} symlinks declared in
 	# zluda/Cargo.toml's [package.metadata.zluda].linux_symlinks.
 	cargo xtask --release || die "cargo xtask --release failed"
+
+	# Math-library replacements (cuFFT / cuBLAS / cuBLASLt / cuSPARSE) live
+	# in the workspace but aren't default-members, so xtask skips them. Build
+	# them here so /opt/zluda can satisfy the corresponding libcufft.so.12 /
+	# libcublas.so.12 / etc. lookups when a CUDA app is run with
+	# LD_LIBRARY_PATH=/opt/zluda. Note: there is no zluda_curand crate, so
+	# applications that use cuRAND (e.g. mumax3 with thermal noise) still
+	# fall through to the NVIDIA stub or fail.
+	local extra_pkgs=( zluda_fft zluda_blas zluda_blaslt zluda_sparse )
+	local p
+	for p in "${extra_pkgs[@]}"; do
+		cargo build --release --package "${p}" || die "cargo build ${p} failed"
+	done
 }
 
 src_install() {
@@ -83,6 +101,32 @@ src_install() {
 	dosym libnvml.so "${zdir}/libnvidia-ml.so.1"
 	# LD_AUDIT entry point (extension-less filename per quick_start.md).
 	dosym libzluda_ld.so "${zdir}/zluda_ld"
+
+	# Math-library cdylibs + their versioned-soname symlinks (see each
+	# crate's [package.metadata.zluda].linux_symlinks).
+	doins target/release/libcufft.so
+	dosym libcufft.so "${zdir}/libcufft.so.10"
+	dosym libcufft.so "${zdir}/libcufft.so.11"
+	dosym libcufft.so "${zdir}/libcufft.so.12"
+
+	doins target/release/libcublas.so
+	dosym libcublas.so "${zdir}/libcublas.so.11"
+	dosym libcublas.so "${zdir}/libcublas.so.12"
+	dosym libcublas.so "${zdir}/libcublas.so.13"
+
+	# zluda_blaslt's [lib].name = "cublaslt" (lowercase), so the real
+	# cdylib is libcublaslt.so; libcublasLt.so (capital L) is one of the
+	# linux_symlinks pointing at it, matching NVIDIA's filename casing.
+	doins target/release/libcublaslt.so
+	dosym libcublaslt.so "${zdir}/libcublasLt.so"
+	dosym libcublaslt.so "${zdir}/libcublasLt.so.11"
+	dosym libcublaslt.so "${zdir}/libcublasLt.so.12"
+	dosym libcublaslt.so "${zdir}/libcublasLt.so.13"
+
+	doins target/release/libcusparse.so
+	dosym libcusparse.so "${zdir}/libcusparse.so.10"
+	dosym libcusparse.so "${zdir}/libcusparse.so.11"
+	dosym libcusparse.so "${zdir}/libcusparse.so.12"
 
 	dodoc README.md
 }
