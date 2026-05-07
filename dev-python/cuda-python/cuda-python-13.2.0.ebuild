@@ -24,6 +24,9 @@ S="${WORKDIR}"
 LICENSE="NVIDIA-CUDA"
 SLOT="0"
 KEYWORDS="~amd64"
+# NVIDIA-CUDA is an EULA license — distfile must not be mirrored,
+# resulting binpkgs must not be redistributed.
+RESTRICT="bindist mirror"
 
 # Trivial meta-wheel — empty package whose entire purpose is to pull
 # cuda-bindings + cuda-pathfinder via runtime deps. Source is just
