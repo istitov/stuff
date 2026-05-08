@@ -18,7 +18,10 @@ HOMEPAGE="
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="cpu"
+IUSE="cpu cuda"
+# VLLM_TARGET_DEVICE is single-valued; cpu and cuda paths are
+# mutually exclusive. Default (neither) → empty target.
+REQUIRED_USE="?? ( cpu cuda )"
 
 # USE=cpu (default off): build with VLLM_TARGET_DEVICE=cpu so the
 # Python entrypoints can actually drive inference on CPU hardware.
@@ -26,21 +29,42 @@ IUSE="cpu"
 # x86_64, but Intel ships it as a proprietary blob — we omit it; vllm
 # falls back to the pthreads OpenMP shipped with sci-libs/openblas etc.)
 #
-# CAVEAT for USE=cpu: the link step inherits ::gentoo sci-ml/pytorch's
-# public TorchConfig.cmake link interface, which exports MKL's MPI/
-# cluster libs (libmkl_scalapack_ilp64, libmkl_cdft_core,
-# libmkl_intel_thread, libmkl_blacs_intelmpi_ilp64). On hosts with a
-# partial Intel oneAPI install these links fail. Workarounds: build
-# pytorch with USE=-mkl, or install the full MKL/MPI stack. This is a
-# sci-ml/pytorch packaging issue, not a vllm one.
+# CAVEAT (historical): ::gentoo sci-ml/pytorch's caffe2::mkl public
+# link interface used to drag MKL's MPI / cluster libs (scalapack,
+# cdft, blacs_intelmpi) and Intel-OpenMP threading (intel_thread)
+# into every consumer link, breaking the build on hosts without
+# Intel Cluster Edition + Compiler. We pin >=sci-ml/caffe2-2.11.0-r90
+# below — this overlay's r90 fork ships a scrub patch on
+# cmake/public/mkl.cmake that filters those libs and forces
+# gnu_thread. Drop the pin once an equivalent upstream fix lands.
 #
-# USE=-cpu (default): build with VLLM_TARGET_DEVICE=empty — Python
-# entrypoints import cleanly, backend kernels fail at first model-load.
-# Useful if you only want the API surface for development.
+# USE=cuda: build with VLLM_TARGET_DEVICE=cuda. Pulls torchaudio +
+# torchvision + numba and the full Tier-0..5 CUDA stack (flashinfer
+# + tilelang + nvidia-cutlass-dsl + cuda-bindings + nvidia-cudnn-
+# frontend + ...). Compiles the _C / _moe_C / _vllm_fa* CUDA C++
+# extensions in setup.py via nvcc and the system CUDA toolkit at
+# /opt/cuda. CMAKE_CUDA_HOST_COMPILER is pinned to the gcc-15 slot
+# below — CUDA 13.2's nvcc rejects __GNUC__>15 via host_config.h
+# (see feedback_cuda_13_host_compiler_gcc_15.md). FetchContent of
+# CUTLASS / spdlog / etc. happens during the vllm CMake build, so
+# RESTRICT="cuda? ( network-sandbox )" mirrors the cpu? pattern.
 #
-# Future cycles: USE flags for cuda / rocm. cuda needs the
-# flashinfer/tilelang/apache-tvm-ffi stack we don't have; rocm needs
-# amd-quark which currently excludes Python 3.13/3.14.
+# CAVEAT (historical): same MKL-MPI link pollution as USE=cpu —
+# ::gentoo sci-ml/pytorch with USE=mkl exported MKL MPI / cluster
+# libs in its public link interface, breaking the cumem_allocator
+# extension's link step on partial-MKL hosts. Fixed by the
+# >=sci-ml/caffe2-2.11.0-r90 pin below: this overlay's r90 fork
+# scrubs those libs from caffe2::mkl. Without that pin, all 339
+# CUDA-compiled objects (_C / _moe_C / _vllm_fa2/3 extensions)
+# would still build cleanly but the final cumem_allocator link
+# would fail with "cannot find -lmkl_scalapack_ilp64".
+#
+# USE=-cpu -cuda (default): build with VLLM_TARGET_DEVICE=empty —
+# Python entrypoints import cleanly, backend kernels fail at first
+# model-load. Useful if you only want the API surface for development.
+#
+# rocm path remains future work (amd-quark currently excludes Python
+# 3.13/3.14, and ROCm-specific kernels aren't packaged).
 RDEPEND="
 	dev-python/regex[${PYTHON_USEDEP}]
 	dev-python/cachetools[${PYTHON_USEDEP}]
@@ -102,8 +126,20 @@ RDEPEND="
 	>=dev-python/opentelemetry-semantic-conventions-ai-0.4.1[${PYTHON_USEDEP}]
 	~sci-ml/pytorch-2.11.0[${PYTHON_USEDEP}]
 	cpu? (
+		>=sci-ml/caffe2-2.11.0-r90
 		~sci-ml/torchaudio-2.11.0
 		>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
+	)
+	cuda? (
+		>=sci-ml/caffe2-2.11.0-r90
+		~sci-ml/torchaudio-2.11.0
+		~sci-ml/torchvision-0.26.0[${PYTHON_USEDEP}]
+		>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
+		~dev-python/flashinfer-python-0.6.8_p1[${PYTHON_USEDEP}]
+		dev-python/tilelang[${PYTHON_USEDEP}]
+		>=dev-python/fastsafetensors-0.2.2[${PYTHON_USEDEP}]
+		>=dev-python/quack-kernels-0.3.3[${PYTHON_USEDEP}]
+		dev-util/nvidia-cuda-toolkit:=
 	)
 "
 BDEPEND="
@@ -115,14 +151,21 @@ BDEPEND="
 	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
 	dev-python/jinja2[${PYTHON_USEDEP}]
 	~sci-ml/pytorch-2.11.0[${PYTHON_USEDEP}]
+	cuda? (
+		dev-util/nvidia-cuda-toolkit:=
+		dev-python/apache-tvm-ffi[${PYTHON_USEDEP}]
+	)
 "
 
 # Tests need a model+inference setup; not wired up here.
-# CPU build fetches oneDNN v3.10 from GitHub via CMake FetchContent;
-# allow network at build time (matches the kokoros/lemonade pattern).
+# CPU build fetches oneDNN v3.10 from GitHub via CMake FetchContent.
+# CUDA build similarly uses FetchContent for CUTLASS / spdlog / etc.
+# during the _C / _moe_C / _vllm_fa* extension compile. Both paths
+# need the network-sandbox bypass. # verified 2026-05-07.
 RESTRICT="
 	test
 	cpu? ( network-sandbox )
+	cuda? ( network-sandbox )
 "
 
 PATCHES=(
@@ -133,7 +176,28 @@ PATCHES=(
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 
 src_configure() {
-	if use cpu; then
+	if use cuda; then
+		export VLLM_TARGET_DEVICE=cuda
+		# CUDA 13.2's nvcc rejects gcc>15 via crt/host_config.h; this
+		# host's active gcc is 16. Pin nvcc's host compiler to the
+		# gcc-15 slot. See feedback_cuda_13_host_compiler_gcc_15.md
+		# for the rationale and broader applicability.
+		export CUDAHOSTCXX=/usr/bin/x86_64-pc-linux-gnu-g++-15
+		export CMAKE_ARGS+=" -DCMAKE_CUDA_HOST_COMPILER=${CUDAHOSTCXX}"
+
+		# vllm's heavy CUDA template instantiations
+		# (paged_attention_v*, layernorm_quant_kernels, w8a8/fp8/...)
+		# can each peak at 3-4 GiB during cudafe++. With ninja's
+		# default 24-way parallelism this OOM-kills on a 31 GiB host
+		# (cudafe++ dies with SIGKILL, "[code=9]"). MAX_JOBS is the
+		# env var vllm's setup.py reads to throttle the CMake build;
+		# CMAKE_BUILD_PARALLEL_LEVEL backs it up for direct cmake
+		# --build invocations. Tune this per-host: 31 GiB → 4-6,
+		# 54 GiB → 8-10, 128 GiB → ~16. # verified 2026-05-07 against
+		# 0.20.1 with MAX_JOBS=4 on this 31 GiB host.
+		export MAX_JOBS=4
+		export CMAKE_BUILD_PARALLEL_LEVEL=4
+	elif use cpu; then
 		export VLLM_TARGET_DEVICE=cpu
 	else
 		export VLLM_TARGET_DEVICE=empty

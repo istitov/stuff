@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="pypi">flashinfer-python</remote-id>
+    <remote-id type="github">flashinfer-ai/flashinfer</remote-id>
+    <bugs-to>https://github.com/flashinfer-ai/flashinfer/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
