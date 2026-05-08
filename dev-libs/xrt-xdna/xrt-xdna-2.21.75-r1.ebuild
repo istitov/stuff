@@ -30,8 +30,10 @@ else
 	submodules["xrt/src/runtime_src/core/common/aiebu"]=https://github.com/Xilinx/aiebu.git@9065273e0c0a4ac5930fff904ac245cf38dd3087
 	submodules["xrt/src/runtime_src/core/common/elf"]=https://github.com/serge1/ELFIO.git@f849001fc229c2598f8557e0df22866af194ef98
 
+	# Same upstream archive as dev-libs/xdna-driver; share the distfile name
+	# to avoid a MatchingChksums hit and let users hardlink/dedup distdir.
 	SRC_URI="
-		https://github.com/amd/xdna-driver/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
+		https://github.com/amd/xdna-driver/archive/refs/tags/${PV}.tar.gz -> xdna-driver-${PV}.tar.gz
 		https://github.com/Xilinx/VTD/raw/${VTD_HASH}/archive/strx/xrt_smi_strx.a -> xrt_smi_strx-${VTD_HASH:0:8}.a
 		https://github.com/Xilinx/VTD/raw/${VTD_HASH}/archive/phx/xrt_smi_phx.a -> xrt_smi_phx-${VTD_HASH:0:8}.a
 		https://github.com/Xilinx/VTD/raw/${VTD_HASH}/archive/npu3/xrt_smi_npu3.a -> xrt_smi_npu3-${VTD_HASH:0:8}.a
