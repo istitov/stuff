@@ -202,6 +202,9 @@ src_configure() {
 			-DHIP_PLATFORM="amd"
 			-DOpenGL_GL_PREFERENCE="GLVND"
 			-DUSE_PROF_API=OFF
+			# clr 7.2.3 dropped its find_package(NUMA), so cmake silently
+			# ignores these; kept aligned with ::gentoo in case upstream
+			# restores NUMA detection — verified inert 2026-05-08.
 			-DCMAKE_DISABLE_FIND_PACKAGE_NUMA="$(usex !numa)"
 			-DCMAKE_REQUIRE_FIND_PACKAGE_NUMA="$(usex numa)"
 		)
