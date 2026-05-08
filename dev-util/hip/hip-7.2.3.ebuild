@@ -38,7 +38,7 @@ fi
 
 LICENSE="MIT"
 
-IUSE="debug +hip opencl test video_cards_amdgpu video_cards_nvidia"
+IUSE="debug +hip numa opencl test video_cards_amdgpu video_cards_nvidia"
 
 # many tests are broken; also tests run against installed version, not built one
 RESTRICT="test"
@@ -57,6 +57,7 @@ DEPEND="
 	video_cards_nvidia? ( dev-libs/hipother:${SLOT} )
 	x11-base/xorg-proto
 	virtual/opengl[X]
+	numa? ( sys-process/numactl )
 "
 BDEPEND="
 	video_cards_amdgpu? (
@@ -201,6 +202,8 @@ src_configure() {
 			-DHIP_PLATFORM="amd"
 			-DOpenGL_GL_PREFERENCE="GLVND"
 			-DUSE_PROF_API=OFF
+			-DCMAKE_DISABLE_FIND_PACKAGE_NUMA="$(usex !numa)"
+			-DCMAKE_REQUIRE_FIND_PACKAGE_NUMA="$(usex numa)"
 		)
 	elif use video_cards_nvidia; then
 		mycmakeargs+=(
