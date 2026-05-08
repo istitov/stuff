@@ -74,5 +74,14 @@ src_configure() {
 		-DPRISMATIC_ENABLE_GPU=$(usex gpu 1 0)
 		-DPRISMATIC_ENABLE_DOUBLE_PRECISION=$(usex double-precision 1 0)
 	)
+
+	# CUDA 13's host_config.h refuses gcc>15. When gcc-15 is installed
+	# alongside a newer active gcc, point nvcc at g++-15 explicitly so
+	# the build doesn't depend on which slot gcc-config has selected.
+	if use gpu; then
+		local g15=/usr/bin/x86_64-pc-linux-gnu-g++-15
+		[[ -x ${g15} ]] && mycmakeargs+=( -DCUDA_HOST_COMPILER="${g15}" )
+	fi
+
 	cmake_src_configure
 }
