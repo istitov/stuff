@@ -95,7 +95,6 @@ RDEPEND="
 	onednn? ( sci-ml/oneDNN )
 	opencl? ( virtual/opencl )
 	qnnpack? (
-		!sci-libs/QNNPACK
 		sci-ml/gemmlowp
 		dev-libs/pthreadpool
 	)
