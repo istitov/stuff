@@ -5,8 +5,9 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
+ROCM_VERSION=7.2
 
-inherit distutils-r1 pypi
+inherit distutils-r1 pypi rocm
 
 DESCRIPTION="High-throughput, memory-efficient inference and serving engine for LLMs"
 HOMEPAGE="
@@ -18,10 +19,13 @@ HOMEPAGE="
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="cpu cuda"
-# VLLM_TARGET_DEVICE is single-valued; cpu and cuda paths are
-# mutually exclusive. Default (neither) → empty target.
-REQUIRED_USE="?? ( cpu cuda )"
+IUSE="cpu cuda rocm"
+# VLLM_TARGET_DEVICE is single-valued; cpu, cuda, and rocm paths are
+# mutually exclusive. Default (none) → empty target.
+REQUIRED_USE="
+	?? ( cpu cuda rocm )
+	rocm? ( || ( ${ROCM_REQUIRED_USE} ) )
+"
 
 # USE=cpu (default off): build with VLLM_TARGET_DEVICE=cpu so the
 # Python entrypoints can actually drive inference on CPU hardware.
@@ -59,12 +63,35 @@ REQUIRED_USE="?? ( cpu cuda )"
 # would still build cleanly but the final cumem_allocator link
 # would fail with "cannot find -lmkl_scalapack_ilp64".
 #
-# USE=-cpu -cuda (default): build with VLLM_TARGET_DEVICE=empty —
-# Python entrypoints import cleanly, backend kernels fail at first
-# model-load. Useful if you only want the API surface for development.
+# USE=rocm: build with VLLM_TARGET_DEVICE=rocm. Pulls torchaudio +
+# torchvision + numba + the runai-streamer/tensorizer/conch-triton
+# trio from upstream's requirements/rocm.txt, plus the HIP libs that
+# vllm's CMake `enable_language(HIP)` and the linked libtorch_hip
+# resolve at link time (hipBLAS / hipBLASLt / hipFFT / hipRAND /
+# hipSOLVER / hipSPARSE / hipCUB). Compiles the _C / _moe_C / _rocm_C
+# extensions and csrc/rocm/*.cu via hipcc and the system ROCm
+# toolchain at /opt/rocm. Inherits sci-ml/caffe2's MKL-MPI scrub
+# (>=2.11.0-r90) — same link-pollution caveat as the cuda path.
+# PYTORCH_ROCM_ARCH is derived from AMDGPU_TARGETS via rocm.eclass's
+# get_amdgpu_flags. FetchContent of CK / spdlog / etc. happens during
+# the vllm CMake build, hence RESTRICT="rocm? ( network-sandbox )".
 #
-# rocm path remains future work (amd-quark currently excludes Python
-# 3.13/3.14, and ROCm-specific kernels aren't packaged).
+# amd-quark (in requirements/rocm.txt as "for Quark quantization on
+# ROCm") is deliberately omitted from RDEPEND: no direct `import` from
+# vllm core code, only used by vllm.model_executor.layers.quantization.
+# quark internals when Quark-quantized models are loaded.
+# dev-python/amd-quark-bin in this overlay caps PYTHON_COMPAT at
+# 3.{11,12}, which would block vllm on 3.13/3.14. Users wanting Quark
+# quantization install amd-quark-bin separately.
+# Build-verified on this host's gfx1150 (Strix Point iGPU) on
+# 2026-05-08 with caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt]
+# and AMDGPU_TARGETS=gfx1150 — three HIP extensions (_C.abi3.so,
+# _moe_C.abi3.so, _rocm_C.abi3.so) link cleanly and import in CPython.
+# # verified 2026-05-08.
+#
+# USE=-cpu -cuda -rocm (default): build with VLLM_TARGET_DEVICE=empty
+# — Python entrypoints import cleanly, backend kernels fail at first
+# model-load. Useful if you only want the API surface for development.
 RDEPEND="
 	dev-python/regex[${PYTHON_USEDEP}]
 	dev-python/cachetools[${PYTHON_USEDEP}]
@@ -141,6 +168,24 @@ RDEPEND="
 		>=dev-python/quack-kernels-0.3.3[${PYTHON_USEDEP}]
 		dev-util/nvidia-cuda-toolkit:=
 	)
+	rocm? (
+		>=sci-ml/caffe2-2.11.0-r90
+		~sci-ml/torchaudio-2.11.0
+		~sci-ml/torchvision-0.26.0[${PYTHON_USEDEP}]
+		>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
+		~dev-python/conch-triton-kernels-1.2.1[${PYTHON_USEDEP}]
+		>=dev-python/runai-model-streamer-bin-0.15.7[${PYTHON_USEDEP}]
+		~dev-python/tensorizer-2.10.1[${PYTHON_USEDEP}]
+		>=dev-util/amdsmi-7.0.2[${PYTHON_USEDEP}]
+		>=dev-util/hip-7.2:=
+		>=sci-libs/hipBLAS-7.2:=
+		>=sci-libs/hipBLASLt-7.2:=
+		>=sci-libs/hipFFT-7.2:=
+		>=sci-libs/hipRAND-7.2:=
+		>=sci-libs/hipSOLVER-7.2:=
+		>=sci-libs/hipSPARSE-7.2:=
+		>=sci-libs/hipCUB-7.2:=
+	)
 "
 BDEPEND="
 	>=dev-build/cmake-3.26.1
@@ -155,6 +200,10 @@ BDEPEND="
 		dev-util/nvidia-cuda-toolkit:=
 		dev-python/apache-tvm-ffi[${PYTHON_USEDEP}]
 	)
+	rocm? (
+		>=dev-util/hip-7.2:=
+		>=dev-util/hipcc-7.2:=
+	)
 "
 
 # Tests need a model+inference setup; not wired up here.
@@ -166,6 +215,7 @@ RESTRICT="
 	test
 	cpu? ( network-sandbox )
 	cuda? ( network-sandbox )
+	rocm? ( network-sandbox )
 "
 
 PATCHES=(
@@ -199,6 +249,16 @@ src_configure() {
 		export CMAKE_BUILD_PARALLEL_LEVEL=4
 	elif use cpu; then
 		export VLLM_TARGET_DEVICE=cpu
+	elif use rocm; then
+		export VLLM_TARGET_DEVICE=rocm
+		# rocm.eclass turns AMDGPU_TARGETS into a semicolon-joined
+		# list. vllm's CMakeLists reads PYTORCH_ROCM_ARCH and feeds
+		# it to enable_language(HIP). Same MAX_JOBS throttle as the
+		# cuda branch — HIP template instantiation in csrc/rocm/
+		# (skinny_gemms, attention) hits comparable peak RSS.
+		export PYTORCH_ROCM_ARCH=$(get_amdgpu_flags)
+		export MAX_JOBS=4
+		export CMAKE_BUILD_PARALLEL_LEVEL=4
 	else
 		export VLLM_TARGET_DEVICE=empty
 	fi
