@@ -13,7 +13,9 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	S="${WORKDIR}/${P}/projects/rocr-runtime/libhsakmt"
 else
-	SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/rocm-${PV}/rocr-runtime.tar.gz -> ${P}.tar.gz"
+	# Same upstream archive as dev-libs/rocr-runtime; share the distfile name
+	# to avoid a MatchingChksums hit and let users hardlink/dedup distdir.
+	SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/rocm-${PV}/rocr-runtime.tar.gz -> rocr-runtime-${PV}.tar.gz"
 	S="${WORKDIR}/libhsakmt"
 	KEYWORDS="~amd64"
 fi
