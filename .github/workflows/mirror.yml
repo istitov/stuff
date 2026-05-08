@@ -7,6 +7,14 @@ on:
     tags: ['**']
   delete: # propagate branch/tag deletions
 
+# Serialize all mirror runs. Each job rewrites the destination's complete
+# ref-set with `--force --prune`, so two concurrent jobs (even on different
+# branches) can race and the later one can clobber the earlier's view. Full
+# serialization is slower but correct.
+concurrency:
+  group: mirror
+  cancel-in-progress: false
+
 jobs:
   mirror-codeberg:
     runs-on: ubuntu-latest
@@ -17,9 +25,18 @@ jobs:
 
       - name: Push to Codeberg
         run: |
+          set -euo pipefail
+          # actions/checkout@v4 with fetch-depth: 0 fetches remote branches
+          # into refs/remotes/origin/* and only creates a local head for the
+          # triggering ref. Push from remote-tracking refs so every branch
+          # reaches the mirror — pushing 'refs/heads/*:refs/heads/*' would
+          # only carry the triggering branch and `--prune` would delete the
+          # rest on the destination. Strip refs/remotes/origin/HEAD if
+          # present so we don't push a refs/heads/HEAD onto the mirror.
+          git symbolic-ref --delete refs/remotes/origin/HEAD 2>/dev/null || true
           git push --force --prune \
             "https://istitov:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/istitov/stuff.git" \
-            'refs/heads/*:refs/heads/*' \
+            'refs/remotes/origin/*:refs/heads/*' \
             'refs/tags/*:refs/tags/*'
 
   mirror-gitlab:
@@ -31,7 +48,10 @@ jobs:
 
       - name: Push to GitLab
         run: |
+          set -euo pipefail
+          # See refspec rationale in the Codeberg job above.
+          git symbolic-ref --delete refs/remotes/origin/HEAD 2>/dev/null || true
           git push --force --prune \
             "https://istitov:${{ secrets.GITLAB_TOKEN }}@gitlab.com/istitov/stuff.git" \
-            'refs/heads/*:refs/heads/*' \
+            'refs/remotes/origin/*:refs/heads/*' \
             'refs/tags/*:refs/tags/*'
