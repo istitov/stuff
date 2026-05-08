@@ -13,7 +13,7 @@ jobs:
       contents: read
       issues: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -62,7 +62,7 @@ jobs:
       # have been reviewed (bumped, dropped, or confirmed still current).
       - name: File dusty report as issue
         if: steps.scan.outputs.count != '0'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           REPORT_PATH: ${{ steps.scan.outputs.report_path }}
           DUSTY_COUNT: ${{ steps.scan.outputs.count }}
