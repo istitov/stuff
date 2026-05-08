@@ -11,14 +11,22 @@ EGIT_REPO_URI="https://github.com/istitov/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="+bash-completion"
+IUSE="+bash-completion test"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=app-shells/bash-4.2:0
 	>=sys-apps/portage-2.3.0
 	bash-completion? ( app-shells/bash-completion )
 "
-BDEPEND=">=app-shells/bash-4.2:0"
+BDEPEND="
+	>=app-shells/bash-4.2:0
+	test? (
+		dev-util/bats
+		dev-util/bats-support
+		dev-util/bats-assert
+	)
+"
 
 DOCS=( ChangeLog README.md )
 
