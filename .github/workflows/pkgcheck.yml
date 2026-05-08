@@ -7,12 +7,23 @@ on:
     paths:
       - '*/**.ebuild'
       - '**/metadata.xml'
+      - '**/Manifest'
       - 'profiles/**'
       - 'eclass/**'
+      - 'licenses/**'
+      - '.github/workflows/pkgcheck.yml'
   pull_request:
     branches: [master]
   schedule:
     - cron: "0 6 */3 * *"  # every 3 days at 6 AM UTC
+
+# Cancel in-progress runs of the same workflow + ref + event when a newer
+# trigger arrives. Scope by event_name so that a push to master doesn't
+# cancel a concurrently-running scheduled --net scan (different
+# coverage); only same-event-type runs collapse onto each other.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
 
 jobs:
   pkgcheck-pr:
@@ -25,7 +36,7 @@ jobs:
 
       - uses: pkgcore/pkgcheck-action@v1
         with:
-          args: scan --commits
+          args: --commits origin/${{ github.base_ref }}
 
   pkgcheck-push:
     # Skip branch-creation pushes (github.event.before is all zeros then,
@@ -39,9 +50,24 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Resolve the base ref pkgcheck should diff against. Normally this is
+      # github.event.before — the previous tip of the pushed branch. After a
+      # force-push, that SHA may be unreachable (GC'd) or not in this clone;
+      # fall back to HEAD~1 so the run still scans at least the new tip.
+      - id: base
+        run: |
+          set -euo pipefail
+          before='${{ github.event.before }}'
+          if git cat-file -e "${before}^{commit}" 2>/dev/null; then
+            echo "ref=${before}" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::${before} unreachable (force-push?), falling back to HEAD~1"
+            echo "ref=HEAD~1" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: pkgcore/pkgcheck-action@v1
         with:
-          args: scan --commits ${{ github.event.before }}
+          args: --commits ${{ steps.base.outputs.ref }}
 
   pkgcheck-full:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -54,7 +80,7 @@ jobs:
 
       - uses: pkgcore/pkgcheck-action@v1
         with:
-          args: scan --net
+          args: --net
 
       # Turn a failing scheduled run into a visible issue rather than a
       # silent red dot in the Actions tab. On failure, find an existing
@@ -105,3 +131,41 @@ jobs:
               });
               core.info(`Opened new failure issue #${created.data.number}`);
             }
+
+      # When a scheduled run passes and a pkgcheck-failure issue is still
+      # open from a prior failure, close it. Without this, a single
+      # transient --net flake leaves the issue open indefinitely.
+      - name: Auto-close pkgcheck-failure issue on success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const LABEL = 'pkgcheck-failure';
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: LABEL,
+              state: 'open',
+              per_page: 1,
+            });
+
+            if (existing.length === 0) {
+              core.info('No open pkgcheck-failure issue; nothing to close.');
+              return;
+            }
+
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing[0].number,
+              body: `Scheduled \`pkgcheck scan --net\` run passed: ${runUrl}\n\nAuto-closing.`,
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing[0].number,
+              state: 'closed',
+              state_reason: 'completed',
+            });
+            core.info(`Auto-closed #${existing[0].number}`);
