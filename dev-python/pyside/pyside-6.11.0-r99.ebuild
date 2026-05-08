@@ -42,7 +42,12 @@ if [[ ${PV} == *.9999 ]]; then
 else
 	SRC_URI="https://download.qt.io/official_releases/QtForPython/${PN}6/PySide6-${PV}-src/${MY_P}.tar.xz"
 	S="${WORKDIR}/${MY_P}"
-	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86"
+	# Narrowed from upstream ::gentoo's broad KEYWORDS: dev-qt/qtdatavis3d
+	# (overlay-only) and dev-qt/qtgraphs (::gentoo) at 6.11.0 are ~amd64-only,
+	# so claiming the wider arch set produced unsolvable dep trees on every
+	# non-amd64 profile (pkgcheck NonsolvableDepsInStable). Verified
+	# 2026-05-09.
+	KEYWORDS="~amd64"
 fi
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 )"
