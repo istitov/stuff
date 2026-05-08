@@ -221,8 +221,6 @@ RDEPEND="
 	websockets? ( =dev-qt/qtwebsockets-${QT_PV} )
 	webview? ( =dev-qt/qtwebview-${QT_PV} )
 	!dev-python/pyside:0
-	!dev-python/shiboken6
-	!dev-python/pyside6-tools
 "
 
 DEPEND="${RDEPEND}
@@ -458,8 +456,10 @@ python_compile() {
 	export PYTHONPATH="${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/package:${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/install/lib/${EPYTHON}/site-packages:${PYTHONPATH}"
 
 	# Copy shiboken6_generator files to shiboken6 package so we can reuse the shiboken-target-path
-	rsync -ur "${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-2))/${pyside_build_dir}/package/shiboken6_generator/"* "${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/package/shiboken6/" || die
-	ln -s shiboken6 "${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/package/shiboken6_generator" || die
+	local prev_pkg="${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-2))/${pyside_build_dir}/package"
+	local cur_pkg="${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/package"
+	rsync -ur "${prev_pkg}/shiboken6_generator/"* "${cur_pkg}/shiboken6/" || die
+	ln -s shiboken6 "${cur_pkg}/shiboken6_generator" || die
 
 	# If no pyside modules enabled, build just shiboken
 	if [[ ${#ENABLED_QT_MODULES[@]} -gt 0 ]]; then
