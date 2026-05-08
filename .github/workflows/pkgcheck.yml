@@ -30,11 +30,11 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - uses: pkgcore/pkgcheck-action@v1
+      - uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
         with:
           args: --commits origin/${{ github.base_ref }}
 
@@ -46,7 +46,7 @@ jobs:
       github.event.before != '0000000000000000000000000000000000000000'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -65,7 +65,7 @@ jobs:
             echo "ref=HEAD~1" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: pkgcore/pkgcheck-action@v1
+      - uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
         with:
           args: --commits ${{ steps.base.outputs.ref }}
 
@@ -76,9 +76,9 @@ jobs:
       contents: read
       issues: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: pkgcore/pkgcheck-action@v1
+      - uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
         with:
           args: --net
 
@@ -88,7 +88,7 @@ jobs:
       # open a new one.
       - name: Surface scheduled-run failure as issue
         if: failure()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const LABEL = 'pkgcheck-failure';
@@ -137,7 +137,7 @@ jobs:
       # transient --net flake leaves the issue open indefinitely.
       - name: Auto-close pkgcheck-failure issue on success
         if: success()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const LABEL = 'pkgcheck-failure';
