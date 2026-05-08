@@ -29,13 +29,14 @@ REQUIRED_USE="?? ( cpu cuda )"
 # x86_64, but Intel ships it as a proprietary blob — we omit it; vllm
 # falls back to the pthreads OpenMP shipped with sci-libs/openblas etc.)
 #
-# CAVEAT for USE=cpu: the link step inherits ::gentoo sci-ml/pytorch's
-# public TorchConfig.cmake link interface, which exports MKL's MPI/
-# cluster libs (libmkl_scalapack_ilp64, libmkl_cdft_core,
-# libmkl_intel_thread, libmkl_blacs_intelmpi_ilp64). On hosts with a
-# partial Intel oneAPI install these links fail. Workarounds: build
-# pytorch with USE=-mkl, or install the full MKL/MPI stack. This is a
-# sci-ml/pytorch packaging issue, not a vllm one.
+# CAVEAT (historical): ::gentoo sci-ml/pytorch's caffe2::mkl public
+# link interface used to drag MKL's MPI / cluster libs (scalapack,
+# cdft, blacs_intelmpi) and Intel-OpenMP threading (intel_thread)
+# into every consumer link, breaking the build on hosts without
+# Intel Cluster Edition + Compiler. We pin >=sci-ml/caffe2-2.11.0-r90
+# below — this overlay's r90 fork ships a scrub patch on
+# cmake/public/mkl.cmake that filters those libs and forces
+# gnu_thread. Drop the pin once an equivalent upstream fix lands.
 #
 # USE=cuda: build with VLLM_TARGET_DEVICE=cuda. Pulls torchaudio +
 # torchvision + numba and the full Tier-0..5 CUDA stack (flashinfer
@@ -48,18 +49,15 @@ REQUIRED_USE="?? ( cpu cuda )"
 # CUTLASS / spdlog / etc. happens during the vllm CMake build, so
 # RESTRICT="cuda? ( network-sandbox )" mirrors the cpu? pattern.
 #
-# CAVEAT for USE=cuda: same MKL-MPI link pollution as USE=cpu — when
-# ::gentoo sci-ml/pytorch is built with USE=mkl, its public
-# TorchConfig.cmake link interface exports MKL's MPI/cluster libs
-# (libmkl_scalapack_ilp64, libmkl_cdft_core, libmkl_intel_thread,
-# libmkl_blacs_intelmpi_ilp64). The cumem_allocator extension link
-# step pulls those in unconditionally and fails with "cannot find
-# -lmkl_scalapack_ilp64" etc. on hosts with only partial Intel oneAPI
-# (MKL but no MKL-MPI). Workarounds: build pytorch with USE=-mkl, or
-# install the full Intel MKL+MPI stack. This is a sci-ml/pytorch
-# packaging issue, not a vllm one. The 339 CUDA-compiled objects
-# (all _C / _moe_C / _vllm_fa2/3 extensions) build cleanly under
-# the gcc-15 host pin.
+# CAVEAT (historical): same MKL-MPI link pollution as USE=cpu —
+# ::gentoo sci-ml/pytorch with USE=mkl exported MKL MPI / cluster
+# libs in its public link interface, breaking the cumem_allocator
+# extension's link step on partial-MKL hosts. Fixed by the
+# >=sci-ml/caffe2-2.11.0-r90 pin below: this overlay's r90 fork
+# scrubs those libs from caffe2::mkl. Without that pin, all 339
+# CUDA-compiled objects (_C / _moe_C / _vllm_fa2/3 extensions)
+# would still build cleanly but the final cumem_allocator link
+# would fail with "cannot find -lmkl_scalapack_ilp64".
 #
 # USE=-cpu -cuda (default): build with VLLM_TARGET_DEVICE=empty —
 # Python entrypoints import cleanly, backend kernels fail at first
@@ -128,10 +126,12 @@ RDEPEND="
 	>=dev-python/opentelemetry-semantic-conventions-ai-0.4.1[${PYTHON_USEDEP}]
 	~sci-ml/pytorch-2.11.0[${PYTHON_USEDEP}]
 	cpu? (
+		>=sci-ml/caffe2-2.11.0-r90
 		~sci-ml/torchaudio-2.11.0
 		>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 	)
 	cuda? (
+		>=sci-ml/caffe2-2.11.0-r90
 		~sci-ml/torchaudio-2.11.0
 		~sci-ml/torchvision-0.26.0[${PYTHON_USEDEP}]
 		>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
