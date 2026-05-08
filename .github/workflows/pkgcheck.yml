@@ -80,7 +80,11 @@ jobs:
 
       - uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
         with:
-          args: --net
+          # --timeout 30 (vs the 5s default) absorbs slow-but-alive
+          # mirrors (codeberg, dev.gentoo.org, university hosts) that
+          # otherwise turn into spurious DeadUrl findings on a single
+          # GHA runner.
+          args: --net --timeout 30
 
       # Turn a failing scheduled run into a visible issue rather than a
       # silent red dot in the Actions tab. On failure, find an existing
