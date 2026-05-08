@@ -19,14 +19,14 @@ jobs:
   mirror-codeberg:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Push to Codeberg
         run: |
           set -euo pipefail
-          # actions/checkout@v4 with fetch-depth: 0 fetches remote branches
+          # actions/checkout@v5 with fetch-depth: 0 fetches remote branches
           # into refs/remotes/origin/* and only creates a local head for the
           # triggering ref. Push from remote-tracking refs so every branch
           # reaches the mirror — pushing 'refs/heads/*:refs/heads/*' would
@@ -42,7 +42,7 @@ jobs:
   mirror-gitlab:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
