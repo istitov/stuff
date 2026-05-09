@@ -10,7 +10,8 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Enthought Tool Suite: Explicitly typed attributes for Python"
 HOMEPAGE="
-	https://code.enthought.com/projects/traits/
+	https://github.com/enthought/traits
+	https://docs.enthought.com/traits/
 	https://pypi.org/project/traits/
 "
 SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"

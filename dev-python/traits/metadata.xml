@@ -6,5 +6,6 @@
   </maintainer>
   <upstream>
     <remote-id type="pypi">Traits</remote-id>
+    <remote-id type="github">enthought/traits</remote-id>
   </upstream>
 </pkgmetadata>
