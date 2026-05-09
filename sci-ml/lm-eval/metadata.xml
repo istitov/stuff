@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="api">Wire dependencies for OpenAI/HF Inference / generic HTTP API model backends</flag>
+    <flag name="sentencepiece">Pull sci-ml/sentencepiece for tasks that tokenise via SentencePiece</flag>
+    <flag name="statsmodels">Pull dev-python/statsmodels for the discrim_eval task family</flag>
+    <flag name="vllm">Wire dev-python/vllm for the vLLM model backend</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">lm-eval</remote-id>
+    <remote-id type="github">EleutherAI/lm-evaluation-harness</remote-id>
+  </upstream>
+</pkgmetadata>
