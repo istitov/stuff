@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    smart_open opens cloud-storage paths (S3, GCS, Azure, HTTP) and
+    compressed local files (gzip / bzip2 / zstandard) via the same
+    file-like interface as the builtin open(). Optional cloud backends
+    not pulled by default; they're behind PyPI extras. Direct dep
+    of dev-python/weasel.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">piskvorky/smart_open</remote-id>
+    <remote-id type="pypi">smart-open</remote-id>
+  </upstream>
+</pkgmetadata>
