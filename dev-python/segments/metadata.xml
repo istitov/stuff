@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Unicode-segmentation library for linguistic processing — IPA
+    tokenization, CLPA-style profiles. Direct dep of
+    dev-python/phonemizer-fork in the kokoro chain.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">cldf/segments</remote-id>
+    <remote-id type="pypi">segments</remote-id>
+  </upstream>
+</pkgmetadata>
