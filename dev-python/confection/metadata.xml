@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Configuration system used by ExplosionAI's spaCy / thinc stack —
+    typed, validated, with overlay/inherit semantics for ML pipeline
+    configs. Direct dep of dev-python/{thinc,weasel,spacy}.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/confection</remote-id>
+    <remote-id type="pypi">confection</remote-id>
+  </upstream>
+</pkgmetadata>
