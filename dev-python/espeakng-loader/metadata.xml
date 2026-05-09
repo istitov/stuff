@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Gentoo-specific thin replacement for the upstream espeakng-loader
+    package on PyPI. Upstream ships pre-built wheels with a bundled
+    libespeak-ng.so binary per platform — Gentoo-hostile vendoring.
+    This ebuild installs a hand-written module exposing the same
+    four-function API (get_library_path / get_data_path /
+    load_library / make_library_available) but returns system paths
+    from app-accessibility/espeak-ng.
+
+    Used by dev-python/misaki[en] in the kokoro chain.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">thewh1teagle/espeakng-loader</remote-id>
+    <remote-id type="pypi">espeakng-loader</remote-id>
+  </upstream>
+</pkgmetadata>
