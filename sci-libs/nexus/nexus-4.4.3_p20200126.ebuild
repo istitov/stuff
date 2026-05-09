@@ -6,7 +6,7 @@ EAPI=8
 inherit cmake java-pkg-opt-2
 
 DESCRIPTION="Data format for neutron and x-ray scattering data"
-HOMEPAGE="http://nexusformat.org/"
+HOMEPAGE="https://nexusformat.org/"
 COMMIT=5b803b3a0014bd9759b3d846da3cd3c1cfafd7d5
 SRC_URI="https://github.com/nexusformat/code/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
 
