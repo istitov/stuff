@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    pipcl is a small Python packaging-helpers library used by Artifex
+    projects (mupdf, PyMuPDF). It complements setuptools/pip-build with
+    operations needed for the mupdf source tree's wheel-building flow.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">ArtifexSoftware/pipcl</remote-id>
+    <remote-id type="pypi">pipcl</remote-id>
+  </upstream>
+</pkgmetadata>
