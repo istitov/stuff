@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Self-contained Cython wrapper around the BLIS linear-algebra
+    library, with a vendored BLIS source tree built at install time.
+    Used by dev-python/thinc for matrix multiplication on CPU. Note:
+    distinct from sci-libs/blis (the standalone C library); upstream
+    explicitly vendors to control performance characteristics.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/cython-blis</remote-id>
+    <remote-id type="pypi">blis</remote-id>
+  </upstream>
+</pkgmetadata>
