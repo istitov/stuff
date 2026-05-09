@@ -4,7 +4,10 @@
 EAPI=8
 
 DESCRIPTION="Open source XRD and Rietveld refinement engine"
-HOMEPAGE="https://www.profex-xrd.org https://www.bgmn.de/"
+# www.bgmn.de serves only http (no TLS at all on :443 as of 2026-05-09);
+# leave that one as http to silence pkgcheck SSLCertificateError without
+# pretending it has https.
+HOMEPAGE="https://www.profex-xrd.org http://www.bgmn.de/"
 SRC_URI="https://www.profex-xrd.org/wp-content/uploads/2022/10/${P}-x86_64.tar.gz"
 S="${WORKDIR}/${PN}-${PV}"
 
