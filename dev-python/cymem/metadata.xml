@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Cython memory pool for tying C-level allocation lifetimes to
+    Python objects (RAII-style). Building block for the spaCy /
+    thinc / preshed stack.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/cymem</remote-id>
+    <remote-id type="pypi">cymem</remote-id>
+  </upstream>
+</pkgmetadata>
