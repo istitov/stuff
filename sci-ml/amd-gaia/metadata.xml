@@ -16,6 +16,7 @@
   </longdescription>
   <use>
     <flag name="api">Install FastAPI / uvicorn HTTP-server bindings (gaia.api)</flag>
+    <flag name="audio">Pull sci-ml/pytorch for the gaia.audio module (Whisper ASR / Kokoro TTS prereq; upstream's audio extra also lists torchvision/torchaudio but gaia code never imports them)</flag>
     <flag name="mcp">Install Model Context Protocol client/server support (gaia.mcp)</flag>
     <flag name="eval">Install evaluation harness deps (anthropic, scikit-learn, reportlab) for gaia.eval benchmarks</flag>
   </use>
