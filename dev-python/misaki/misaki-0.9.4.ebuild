@@ -3,11 +3,8 @@
 
 EAPI=8
 
-DISTUTILS_USE_PEP517=setuptools
-DISTUTILS_SINGLE_IMPL=1
-# Upstream caps requires-python<3.13 — verify if newer Python works
-# before relaxing. py3_12 is the only solving target on our overlay.
-PYTHON_COMPAT=( python3_12 )
+DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( python3_{12..13} )
 
 inherit distutils-r1 pypi
 
@@ -27,22 +24,24 @@ KEYWORDS="~amd64"
 # don't have.
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/addict[${PYTHON_SINGLE_USEDEP}]
-	dev-python/regex[${PYTHON_SINGLE_USEDEP}]
-	dev-python/num2words[${PYTHON_SINGLE_USEDEP}]
-	dev-python/phonemizer-fork[${PYTHON_SINGLE_USEDEP}]
-	dev-python/spacy[${PYTHON_SINGLE_USEDEP}]
-	dev-python/spacy-curated-transformers[${PYTHON_SINGLE_USEDEP}]
+	dev-python/addict[${PYTHON_USEDEP}]
+	dev-python/espeakng-loader[${PYTHON_USEDEP}]
+	dev-python/num2words[${PYTHON_USEDEP}]
+	dev-python/phonemizer-fork[${PYTHON_USEDEP}]
+	dev-python/regex[${PYTHON_USEDEP}]
+	dev-python/spacy[${PYTHON_USEDEP}]
+	dev-python/spacy-curated-transformers[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
 
-pkg_postinst() {
-	elog "misaki[en] requires the espeakng-loader package which isn't"
-	elog "in this overlay yet (defers Gentoo-specific packaging — the"
-	elog "PyPI wheel ships a bundled libespeak-ng.so binary)."
-	elog ""
-	elog "Until espeakng-loader lands, misaki's English G2P pipeline"
-	elog "may fall back to phonemizer-fork's direct espeak-ng path —"
-	elog "ensure app-accessibility/espeak-ng is installed."
+src_prepare() {
+	# Cap-relax (per feedback_cap_relax_recipe.md). Upstream commit
+	# fba12365 (2025-08-11, "Enable Python 3.13 (#85)") relaxes the
+	# requires-python cap from <3.13 to <3.14 — a one-line pyproject
+	# change with no code edits, confirming py3.13 works as-is. The
+	# 0.9.4 PyPI release predates that commit; the sed below applies
+	# the same change verified 2026-05-09.
+	sed -i 's|>=3.8, <3.13|>=3.8, <3.14|' pyproject.toml || die
+	distutils-r1_src_prepare
 }
