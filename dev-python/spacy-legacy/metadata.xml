@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Houses pre-3.0 versions of spaCy's registered architectures so that
+    older configs continue to load. Direct dep of dev-python/spacy.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/spacy-legacy</remote-id>
+    <remote-id type="pypi">spacy-legacy</remote-id>
+  </upstream>
+</pkgmetadata>
