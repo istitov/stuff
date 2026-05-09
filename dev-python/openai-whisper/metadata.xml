@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    OpenAI's Whisper speech-recognition model: end-to-end multilingual
+    automatic-speech-recognition + translation, trained on 680k hours of
+    weakly-supervised audio. The Python implementation ships transcribe()
+    / detect_language() / load_model() APIs over a PyTorch backend.
+    Imports as plain "whisper"; conflicts with dev-python/whisper
+    (Graphite round-robin DB — same name, unrelated upstream).
+
+    The Triton fastpath (triton&gt;=2 from upstream's optional dep) is not
+    pulled here; it would speed up long-form decoding but isn't packaged
+    on this overlay yet. Functional fallback is pure-PyTorch.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">openai/whisper</remote-id>
+    <remote-id type="pypi">openai-whisper</remote-id>
+  </upstream>
+</pkgmetadata>
