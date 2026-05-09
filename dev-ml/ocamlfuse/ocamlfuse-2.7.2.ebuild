@@ -9,7 +9,7 @@ DESCRIPTION="OCaml binding for fuse"
 HOMEPAGE="
 	https://sourceforge.net/projects/ocamlfuse/
 	https://github.com/astrada/ocamlfuse
-	https://opam.ocaml.org/packages/ocamlfuse
+	https://opam.ocaml.org/packages/ocamlfuse/
 "
 SRC_URI="https://github.com/astrada/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
