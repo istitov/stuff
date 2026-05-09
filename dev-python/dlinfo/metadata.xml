@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Thin Python wrapper around libc's dlinfo(3) — query the path of a
+    loaded shared object given a handle from ctypes.CDLL. Used by
+    dev-python/phonemizer-fork to locate the espeak-ng library at
+    runtime.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">fphammerle/python-dlinfo</remote-id>
+    <remote-id type="pypi">dlinfo</remote-id>
+  </upstream>
+</pkgmetadata>
