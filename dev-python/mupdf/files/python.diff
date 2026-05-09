@@ -1,0 +1,48 @@
+--- a/setup.py
++++ b/setup.py
+@@ -311,8 +311,6 @@ def build():
+     use_swig = get_flag('MUPDF_SETUP_USE_SWIG', True)
+ 
+     b = ''
+-    if not windows():
+-        b = 'm'     # Build C library.
+     if use_clang_python:
+         b += '0'    # Build C++ source.
+     b += '1'        # Build C++ library (also contains C library on Windows).
+@@ -356,8 +354,6 @@ def build():
+                 ]
+     else:
+         names = [
+-                pipcl.get_soname(f'{build_dir()}/libmupdf.so'),     # C.
+-                pipcl.get_soname(f'{build_dir()}/libmupdfcpp.so'),  # C++.
+                 f'{build_dir()}/_mupdf.so',                         # Python internals.
+                 f'{build_dir()}/mupdf.py',                          # Python.
+                 ]
+--- a/scripts/wrap/__main__.py
++++ b/scripts/wrap/__main__.py
+@@ -1095,7 +1095,7 @@ def get_so_version( build_dirs):
+     major = get_v('FZ_VERSION_MAJOR')
+     minor = get_v('FZ_VERSION_MINOR')
+     patch = get_v('FZ_VERSION_PATCH')
+-    return f'.{minor}.{patch}'
++    return f'.{major}.{minor}.{patch}'
+ 
+ 
+ def _get_m_command( build_dirs, j=None, make=None, m_target=None, m_vars=None):
+@@ -1366,7 +1366,7 @@ def link_l_flags(sos):
+     ret = jlib.link_l_flags( sos)
+     r = os.environ.get('LDFLAGS')
+     if r:
+-        ret += f' {r}'
++        ret += f' -L. {r}'
+     return ret
+ 
+ 
+@@ -2194,7 +2194,6 @@ def build( build_dirs, swig_command, arg
+                                 {o_file}
+                                 {build_dirs.cpp_flags}
+                                 -shared
+-                                {flags_link}
+                                 {link_l_flags( sos)}
+                             ''')
+                             )
