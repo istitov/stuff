@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+  Local fork of ::gentoo dev-perl/PGPLOT-2.280.0 to add
+  -std=gnu89 in src_configure. ::gentoo's ebuild uses
+  perl-module's defaults, which on gcc 16 (-std=gnu23) reject the
+  K&amp;R prototypes in pgfun.c. Drop the -r99 once ::gentoo lands
+  an equivalent fix.
+  </longdescription>
+  <upstream>
+    <remote-id type="cpan">PGPLOT</remote-id>
+    <remote-id type="cpan-module">PGPLOT</remote-id>
+  </upstream>
+</pkgmetadata>
