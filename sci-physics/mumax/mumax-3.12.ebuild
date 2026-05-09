@@ -6,7 +6,7 @@ EAPI=8
 inherit go-module
 
 DESCRIPTION="GPU-accelerated micromagnetic simulator"
-HOMEPAGE="http://mumax.github.io/"
+HOMEPAGE="https://mumax.github.io/"
 SRC_URI="https://github.com/${PN}/3/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
 S="${WORKDIR}/3-${PV}"
