@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Thinc is the NN library underneath ExplosionAI's spaCy. Functional
+    layer-as-callable abstractions, custom autograd, and config-driven
+    model assembly. Direct dep of dev-python/spacy.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/thinc</remote-id>
+    <remote-id type="pypi">thinc</remote-id>
+  </upstream>
+</pkgmetadata>
