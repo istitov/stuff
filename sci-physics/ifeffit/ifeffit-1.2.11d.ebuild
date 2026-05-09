@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit fortran-2
+inherit flag-o-matic fortran-2
 
 DESCRIPTION="Suite of interactive programs for XAFS analysis"
 HOMEPAGE="https://sourceforge.net/projects/ifeffit/"
@@ -37,6 +37,13 @@ PATCHES=(
 )
 
 src_configure() {
+	# src/cmdline/iff_shell.c uses K&R prototypes (e.g. `char *stripwhite()`
+	# then defined with arguments). gcc 16's default (-std=gnu23) treats
+	# the empty `()` as `(void)` and rejects the definitions with
+	# 'conflicting types'. Pin to gnu89 so K&R survives. verified
+	# 2026-05-09.
+	append-cflags -std=gnu89
+
 	./configure --with-pgplot-link="-L/usr/lib64/ -lX11 -lpgplot -lpng -lz -L/usr/lib64/pgplot -lpgplot"
 }
 

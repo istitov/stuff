@@ -5,14 +5,13 @@
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
   <longdescription lang="en">
-    As of 2026-04-23 the upstream GitHub repository
-    (github.com/newville/ifeffit) has been deleted. The author's
-    maintained successor is Larch, packaged as sci-physics/xraylarch.
-    This ebuild is masked in profiles/package.mask; it remains in
-    the tree as a revival target (e.g. if a usable fork surfaces or
-    a local Fortran build is still needed by sci-physics/demeter).
-    The sourceforge remote-id below points at the original project
-    page that predates the github move.
+    Upstream's GitHub repository (github.com/newville/ifeffit) was
+    deleted on 2026-04-23; the author's maintained successor is
+    Larch, packaged as sci-physics/xraylarch. This ebuild ships
+    1.2.11d.orig.tar.gz as preserved in the Ubuntu archive (the
+    only host that still serves it; SourceForge's files area stops
+    at 1.2.11c). The sourceforge remote-id below points at the
+    original project page that predates the github move.
   </longdescription>
   <upstream>
     <remote-id type="sourceforge">ifeffit</remote-id>
