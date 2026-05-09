@@ -34,7 +34,7 @@ SLOT="0"
 CPU_FLAGS_X86=( avx avx2 f16c )
 
 # wmma USE explained here: https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
-IUSE="curl openblas +openmp blis rocm cuda opencl openssl vulkan flexiblas wmma examples"
+IUSE="openblas +openmp blis rocm cuda opencl openssl vulkan flexiblas wmma examples"
 
 REQUIRED_USE="
 	?? (
@@ -47,10 +47,8 @@ REQUIRED_USE="
 	)
 "
 
-# curl is needed for pulling models from huggingface
 # numpy is used by convert_hf_to_gguf.py
 CDEPEND="
-	curl? ( net-misc/curl:= )
 	openblas? ( sci-libs/openblas:= )
 	openmp? ( llvm-runtimes/openmp:= )
 	blis? ( sci-libs/blis:= )
@@ -77,7 +75,7 @@ RDEPEND="${CDEPEND}
 	opencl? ( dev-libs/opencl-icd-loader )
 	vulkan? ( media-libs/vulkan-loader )
 "
-BDEPEND="media-libs/shaderc"
+BDEPEND="vulkan? ( media-libs/shaderc )"
 
 pkg_setup() {
 	if use rocm; then
@@ -108,9 +106,7 @@ src_configure() {
 		-DCMAKE_SKIP_BUILD_RPATH=ON
 		-DGGML_NATIVE=0	# don't set march
 		-DGGML_RPC=ON
-		-DLLAMA_CURL=$(usex curl)
 		-DLLAMA_OPENSSL=$(usex openssl)
-		-DBUILD_NUMBER="1"
 		-DGENTOO_REMOVE_CMAKE_BLAS_HACK=ON
 		-DGGML_CUDA=$(usex cuda)
 		-DGGML_OPENCL=$(usex opencl)
