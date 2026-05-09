@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    num2words converts integers and floats into their written-form
+    representation across 40+ languages, currency-aware. Direct dep
+    of dev-python/misaki for English G2P preprocessing.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">savoirfairelinux/num2words</remote-id>
+    <remote-id type="pypi">num2words</remote-id>
+  </upstream>
+</pkgmetadata>
