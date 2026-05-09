@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Faiss is a library for efficient similarity search and clustering of
+    dense vectors. It contains algorithms that search in sets of vectors
+    of any size, up to ones that possibly do not fit in RAM. It also
+    contains supporting code for evaluation and parameter tuning. Faiss
+    is written in C++ with complete wrappers for Python — installed
+    here under USE=python via SWIG-generated bindings. The PyPI
+    distribution is named "faiss-cpu"; the Python import name is
+    plain "faiss".
+  </longdescription>
+  <use>
+    <flag name="python">Build the SWIG-generated Python bindings (import faiss)</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">facebookresearch/faiss</remote-id>
+    <remote-id type="pypi">faiss-cpu</remote-id>
+  </upstream>
+</pkgmetadata>
