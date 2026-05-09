@@ -6,7 +6,7 @@ EAPI=8
 inherit autotools subversion xdg
 
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
-HOMEPAGE="http://gwyddion.net/"
+HOMEPAGE="https://gwyddion.net/"
 ESVN_REPO_URI="https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion"
 ESVN_PROJECT="gwyddion-code"
 

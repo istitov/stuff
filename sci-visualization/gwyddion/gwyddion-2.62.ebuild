@@ -6,8 +6,8 @@ EAPI=8
 inherit autotools flag-o-matic xdg
 
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis"
-HOMEPAGE="http://gwyddion.net/"
-SRC_URI="http://gwyddion.net/download/${PV}/${P}.tar.xz"
+HOMEPAGE="https://gwyddion.net/"
+SRC_URI="https://gwyddion.net/download/${PV}/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
