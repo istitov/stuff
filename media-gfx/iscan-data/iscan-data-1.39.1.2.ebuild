@@ -6,7 +6,12 @@ EAPI=8
 inherit udev
 
 DESCRIPTION="Image Scan! for Linux data files"
-HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
+# Epson took the whole download.ebz.epson.net portal offline (HTTP 403
+# on every path, verified 2026-05-10). The Wayback snapshot preserves
+# the original landing page; pointing HOMEPAGE there matches what we
+# did for SRC_URI and gives users a working reference for what this
+# package was packaged from.
+HOMEPAGE="https://web.archive.org/web/20191230072555/http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
 # Upstream Epson removed this tarball (HTTP 403) and the Gentoo
 # distfiles mirror never had it (HTTP 404). Verified 2026-05-02. The
 # Wayback Machine still serves the byte-identical 2019 snapshot;
