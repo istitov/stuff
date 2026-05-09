@@ -13,7 +13,7 @@ MY_WHEEL="${PN//-/_}-${PV}-py3-none-any.whl"
 DESCRIPTION="NVIDIA CUTLASS Python DSL — metapackage for libs-base + libs-cu13"
 HOMEPAGE="
 	https://github.com/NVIDIA/cutlass
-	https://docs.nvidia.com/cutlass/media/docs/python/
+	https://docs.nvidia.com/cutlass/
 	https://pypi.org/project/nvidia-cutlass-dsl/
 "
 SRC_URI="
