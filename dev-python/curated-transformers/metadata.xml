@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Curated transformer models for spaCy — slim PyTorch-only set of
+    pretrained transformer architectures (BERT, RoBERTa, etc.). Direct
+    dep of dev-python/spacy-curated-transformers in the kokoro chain.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/curated-transformers</remote-id>
+    <remote-id type="pypi">curated-transformers</remote-id>
+  </upstream>
+</pkgmetadata>
