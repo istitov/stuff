@@ -9,7 +9,10 @@ PYTHON_COMPAT=( python3_{12..14} )
 inherit distutils-r1 pypi
 
 DESCRIPTION="Python library for multi-dimensional diffraction microscopy"
-HOMEPAGE="https://pyxem.github.io"
+HOMEPAGE="
+	https://github.com/pyxem/pyxem
+	https://pypi.org/project/pyxem/
+"
 
 LICENSE="GPL-3"
 SLOT="0"

@@ -6,5 +6,6 @@
   </maintainer>
   <upstream>
     <remote-id type="pypi">pyxem</remote-id>
+    <remote-id type="github">pyxem/pyxem</remote-id>
   </upstream>
 </pkgmetadata>
