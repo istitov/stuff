@@ -7,7 +7,7 @@ inherit cmake
 
 DESCRIPTION="NPU-first LLM runtime for AMD Ryzen AI (XDNA2) processors"
 HOMEPAGE="
-	https://www.fastflowlm.com/
+	https://fastflowlm.com/
 	https://github.com/FastFlowLM/FastFlowLM
 "
 
