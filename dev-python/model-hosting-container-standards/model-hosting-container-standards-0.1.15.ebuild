@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Python toolkit for standardized model hosting container implementations"
 HOMEPAGE="
-	https://github.com/aws/sagemaker-hosting-toolkit
+	https://github.com/aws/model-hosting-container-standards
 	https://pypi.org/project/model-hosting-container-standards/
 "
 

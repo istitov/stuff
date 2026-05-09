@@ -7,7 +7,7 @@
   </maintainer>
   <upstream>
     <remote-id type="pypi">model-hosting-container-standards</remote-id>
-    <remote-id type="github">aws/sagemaker-hosting-toolkit</remote-id>
-    <bugs-to>https://github.com/aws/sagemaker-hosting-toolkit/issues</bugs-to>
+    <remote-id type="github">aws/model-hosting-container-standards</remote-id>
+    <bugs-to>https://github.com/aws/model-hosting-container-standards/issues</bugs-to>
   </upstream>
 </pkgmetadata>
