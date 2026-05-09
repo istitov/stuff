@@ -6,7 +6,7 @@ EAPI=8
 inherit git-r3 toolchain-funcs
 
 DESCRIPTION="Command line interface to manage hierarchical todos"
-HOMEPAGE="http://code.meskio.net/tudu
+HOMEPAGE="https://code.meskio.net/tudu/
 	https://github.com/meskio/tudu/"
 EGIT_REPO_URI="https://github.com/meskio/${PN}.git"
 
