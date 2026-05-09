@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Tools for working with IETF BCP 47 / RFC 5646 language codes:
+    parse, normalize, look up names, query language properties.
+    Transitive dep of dev-python/spacy via dev-python/weasel.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">georgkrause/langcodes</remote-id>
+    <remote-id type="pypi">langcodes</remote-id>
+  </upstream>
+</pkgmetadata>
