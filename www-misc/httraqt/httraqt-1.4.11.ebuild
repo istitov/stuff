@@ -6,7 +6,7 @@ EAPI=8
 inherit cmake xdg
 
 DESCRIPTION="Graphical user interface for HTTrack library, developed in C++ and based on Qt"
-HOMEPAGE="http://httraqt.sourceforge.net"
+HOMEPAGE="https://httraqt.sourceforge.net/"
 SRC_URI="https://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
