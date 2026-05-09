@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+  Local fork of ::gentoo sci-libs/pgplot-5.2.2-r9 to add
+  -std=gnu89 in src_configure. ::gentoo's ebuild builds with the
+  compiler default, which on gcc 16 (-std=gnu23) rejects K&amp;R
+  prototypes in drivers/figdisp_comm.c. Drop the -r99 once
+  ::gentoo lands an equivalent fix.
+  </longdescription>
+</pkgmetadata>
