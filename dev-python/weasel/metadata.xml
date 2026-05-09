@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Project-management tooling extracted from ExplosionAI's spaCy —
+    spaCy's `project` subcommand workflow as a standalone library.
+    Direct dep of dev-python/spacy.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/weasel</remote-id>
+    <remote-id type="pypi">weasel</remote-id>
+  </upstream>
+</pkgmetadata>
