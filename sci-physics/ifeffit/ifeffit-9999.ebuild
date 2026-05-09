@@ -6,7 +6,7 @@ EAPI=8
 inherit fortran-2 git-r3
 
 DESCRIPTION="Suite of interactive programs for XAFS analysis"
-HOMEPAGE="https://github.com/newville/ifeffit"
+HOMEPAGE="https://sourceforge.net/projects/ifeffit/"
 EGIT_REPO_URI="https://github.com/newville/ifeffit.git"
 
 S="${WORKDIR}/${PN}-${PV}"

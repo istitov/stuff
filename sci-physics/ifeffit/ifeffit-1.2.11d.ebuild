@@ -6,8 +6,8 @@ EAPI=8
 inherit fortran-2
 
 DESCRIPTION="Suite of interactive programs for XAFS analysis"
-HOMEPAGE="https://github.com/newville/ifeffit"
-SRC_URI="http://archive.ubuntu.com/ubuntu/pool/multiverse/${P:0:1}/${PN}/${PN}_${PV}.orig.tar.gz"
+HOMEPAGE="https://sourceforge.net/projects/ifeffit/"
+SRC_URI="https://archive.ubuntu.com/ubuntu/pool/multiverse/${P:0:1}/${PN}/${PN}_${PV}.orig.tar.gz"
 
 S="${WORKDIR}/${PN}-${PV}"
 LICENSE="BSD"
