@@ -8,7 +8,7 @@ FORTRAN_NEEDED=fortran
 inherit fortran-2 toolchain-funcs autotools flag-o-matic
 
 DESCRIPTION="General purpose library and format for storing scientific data"
-HOMEPAGE="https://www.hdfgroup.org/hdf4.html https://github.com/HDFGroup/hdf4"
+HOMEPAGE="https://www.hdfgroup.org/solutions/hdf4/ https://github.com/HDFGroup/hdf4"
 SRC_URI="https://github.com/HDFGroup/hdf4/archive/refs/tags/hdf${PV}.tar.gz -> ${P}.gh.tar.gz"
 S="${WORKDIR}/hdf4-hdf${PV}"
 
