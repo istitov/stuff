@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Stdlib supplement and helpers used across the pymatgen family"
 HOMEPAGE="
-	https://github.com/materialsvirtuallab/monty/
+	https://github.com/materialyzeai/monty/
 	https://pypi.org/project/monty/
 "
 
