@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Cython-compiled tokenizer building blocks for spaCy's curated-
+    transformers integration. Slim WordPiece / SentencePiece / BBPE.
+    Direct dep of dev-python/spacy-curated-transformers.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/curated-tokenizers</remote-id>
+    <remote-id type="pypi">curated-tokenizers</remote-id>
+  </upstream>
+</pkgmetadata>
