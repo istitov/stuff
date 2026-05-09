@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Text-to-phoneme converter; calls out to espeak-ng / Festival /
+    MBROLA backends. Direct dep of dev-python/misaki[en] in the
+    kokoro chain. Re-published fork of bootphon/phonemizer.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">bootphon/phonemizer</remote-id>
+    <remote-id type="pypi">phonemizer-fork</remote-id>
+  </upstream>
+</pkgmetadata>
