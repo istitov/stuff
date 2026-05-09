@@ -7,7 +7,7 @@
   </maintainer>
   <upstream>
     <remote-id type="pypi">llguidance</remote-id>
-    <remote-id type="github">microsoft/llguidance</remote-id>
-    <bugs-to>https://github.com/microsoft/llguidance/issues</bugs-to>
+    <remote-id type="github">guidance-ai/llguidance</remote-id>
+    <bugs-to>https://github.com/guidance-ai/llguidance/issues</bugs-to>
   </upstream>
 </pkgmetadata>

@@ -337,9 +337,9 @@ CRATES="
 
 inherit cargo distutils-r1 pypi
 
-DESCRIPTION="Microsoft's low-level guidance library: grammar-constrained LLM generation"
+DESCRIPTION="Low-level guidance library: grammar-constrained LLM generation"
 HOMEPAGE="
-	https://github.com/microsoft/llguidance
+	https://github.com/guidance-ai/llguidance
 	https://pypi.org/project/llguidance/
 "
 SRC_URI+="
