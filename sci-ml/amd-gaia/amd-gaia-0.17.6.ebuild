@@ -19,8 +19,15 @@ KEYWORDS="~amd64"
 IUSE="+api audio +mcp eval image talk ui"
 
 # ui implies api: upstream's ui extra restates fastapi/uvicorn/python-
-# multipart on top of its own RAG deps. Saving the dup via REQUIRED_USE.
-REQUIRED_USE="ui? ( api )"
+# multipart on top of its own RAG deps.
+# talk requires python3_12: dev-python/kokoro and dev-python/misaki are
+# both single-impl py3.12 (upstream caps requires-python<3.13). The
+# ASR side (openai-whisper / sounddevice) is multi-impl, but pulling
+# the full talk extra forces the py3.12 carve-out at build time.
+REQUIRED_USE="
+	ui? ( api )
+	talk? ( python_targets_python3_12 )
+"
 
 # Upstream pytest config marks tests as needing a live Lemonade server,
 # Docker, the Gmail API, and other integration targets that aren't
@@ -65,6 +72,9 @@ RDEPEND="
 	talk? (
 		dev-python/openai-whisper[${PYTHON_USEDEP}]
 		dev-python/sounddevice[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-python/kokoro[${PYTHON_USEDEP}]
+		' python3_12)
 	)
 	ui? (
 		>=dev-python/httpx-0.27.0[${PYTHON_USEDEP}]
@@ -107,9 +117,9 @@ pkg_postinst() {
 	elog "  audio  — sci-ml/pytorch (gaia code doesn't touch torchvision/"
 	elog "           torchaudio despite upstream's audio extra listing them)"
 	elog "  image  — dev-python/term-image"
-	elog "  talk   — dev-python/openai-whisper + dev-python/sounddevice;"
-	elog "           gaia.talk's Kokoro TTS half is unavailable until the"
-	elog "           kokoro chain (kokoro + misaki + spacy + ...) lands."
+	elog "  talk   — dev-python/openai-whisper + dev-python/sounddevice +"
+	elog "           dev-python/kokoro (single-impl py3.12 — talk forces"
+	elog "           python_targets_python3_12 via REQUIRED_USE)."
 	elog "  ui     — full RAG-over-PDFs web frontend (faiss + sentence-"
 	elog "           transformers + PyMuPDF + pypdf + safetensors + keyring);"
 	elog "           implies +api"
