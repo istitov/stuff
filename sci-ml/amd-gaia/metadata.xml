@@ -17,8 +17,10 @@
   <use>
     <flag name="api">Install FastAPI / uvicorn HTTP-server bindings (gaia.api)</flag>
     <flag name="audio">Pull sci-ml/pytorch for the gaia.audio module (Whisper ASR / Kokoro TTS prereq; upstream's audio extra also lists torchvision/torchaudio but gaia code never imports them)</flag>
-    <flag name="mcp">Install Model Context Protocol client/server support (gaia.mcp)</flag>
     <flag name="eval">Install evaluation harness deps (anthropic, scikit-learn, reportlab) for gaia.eval benchmarks</flag>
+    <flag name="image">Pull dev-python/term-image for terminal-rendered image output (gaia.image)</flag>
+    <flag name="mcp">Install Model Context Protocol client/server support (gaia.mcp)</flag>
+    <flag name="talk">Pull openai-whisper (ASR) + sounddevice (audio I/O) for gaia.talk's voice pipeline; the Kokoro TTS half is unavailable until that chain lands and is not pulled by this flag</flag>
   </use>
   <upstream>
     <remote-id type="github">amd/gaia</remote-id>

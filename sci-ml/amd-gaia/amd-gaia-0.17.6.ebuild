@@ -16,7 +16,7 @@ S="${WORKDIR}/gaia-${PV}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+api audio +mcp eval"
+IUSE="+api audio +mcp eval image talk"
 
 # Upstream pytest config marks tests as needing a live Lemonade server,
 # Docker, the Gmail API, and other integration targets that aren't
@@ -55,6 +55,13 @@ RDEPEND="
 	audio? (
 		sci-ml/pytorch[${PYTHON_USEDEP}]
 	)
+	image? (
+		dev-python/term-image[${PYTHON_USEDEP}]
+	)
+	talk? (
+		dev-python/openai-whisper[${PYTHON_USEDEP}]
+		dev-python/sounddevice[${PYTHON_USEDEP}]
+	)
 	mcp? (
 		>=dev-python/mcp-1.1.0[${PYTHON_USEDEP}]
 		dev-python/starlette[${PYTHON_USEDEP}]
@@ -81,14 +88,18 @@ pkg_postinst() {
 	elog ""
 	elog "  export OPENAI_BASE_URL=http://localhost:8000/api/v1"
 	elog ""
+	elog "Extras supported via USE flags:"
+	elog "  audio  — sci-ml/pytorch (gaia code doesn't touch torchvision/"
+	elog "           torchaudio despite upstream's audio extra listing them)"
+	elog "  image  — dev-python/term-image"
+	elog "  talk   — dev-python/openai-whisper + dev-python/sounddevice;"
+	elog "           gaia.talk's Kokoro TTS half is unavailable until the"
+	elog "           kokoro chain (kokoro + misaki + spacy + ...) lands."
+	elog ""
 	elog "Extras still not built (deps not all in tree):"
 	elog "  ui     — needs PyMuPDF (4nykey overlay or fork chain)"
-	elog "  talk   — sounddevice + openai-whisper landed; kokoro chain"
-	elog "           (kokoro + misaki + spacy + ...) deferred"
-	elog "  image  — term-image (paused on pillow cap mismatch)"
 	elog "  blender — bpy (Blender Python module — heavy)"
 	elog ""
-	elog "USE=audio is supported (pulls sci-ml/pytorch only; gaia code"
-	elog "doesn't touch torchvision/torchaudio despite upstream's extra)."
-	elog "Use the upstream pip install if you need an extra flavour."
+	elog "Use the upstream pip install if you need an extra flavour we"
+	elog "haven't packaged yet."
 }
