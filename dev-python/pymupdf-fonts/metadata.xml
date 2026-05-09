@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Optional CJK and other supplementary fonts for PyMuPDF that aren't
+    bundled with the base distribution. PyMuPDF auto-discovers these at
+    runtime if installed.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">pymupdf/pymupdf-fonts</remote-id>
+    <remote-id type="pypi">pymupdf-fonts</remote-id>
+  </upstream>
+</pkgmetadata>
