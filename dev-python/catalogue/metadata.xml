@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    catalogue is a small library that provides decorator-based function
+    registries: register a callable under a string key, look it up
+    later from anywhere. Used as a building block by ExplosionAI's
+    spaCy / thinc stack.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/catalogue</remote-id>
+    <remote-id type="pypi">catalogue</remote-id>
+  </upstream>
+</pkgmetadata>
