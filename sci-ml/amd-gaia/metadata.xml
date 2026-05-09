@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    GAIA is AMD's open-source agent framework for local AI agents on
+    Ryzen AI hardware (NPU + iGPU). It orchestrates LLM-driven workflows
+    over any OpenAI-compatible inference endpoint, with built-in
+    integrations for Docker, Jira, code-search, RAG, MCP servers, and
+    Whisper / Kokoro voice pipelines. The reference local backend is
+    Lemonade Server (sci-ml/lemonade); GAIA itself is hardware-agnostic
+    so long as the upstream LLM API is OpenAI-compatible.
+  </longdescription>
+  <use>
+    <flag name="api">Install FastAPI / uvicorn HTTP-server bindings (gaia.api)</flag>
+    <flag name="mcp">Install Model Context Protocol client/server support (gaia.mcp)</flag>
+    <flag name="eval">Install evaluation harness deps (anthropic, scikit-learn, reportlab) for gaia.eval benchmarks</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">amd/gaia</remote-id>
+    <remote-id type="pypi">amd-gaia</remote-id>
+  </upstream>
+</pkgmetadata>
