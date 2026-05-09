@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    G2P (grapheme-to-phoneme) engine designed for Kokoro TTS models.
+    English support pulls in spaCy + spacy-curated-transformers for
+    sentence segmentation, plus phonemizer-fork as the espeak-ng
+    bridge. Direct dep of dev-python/kokoro.
+
+    Capped at python_requires&lt;3.13 by upstream — single-impl py3.12
+    in this overlay until that cap is verified stale.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">hexgrad/misaki</remote-id>
+    <remote-id type="pypi">misaki</remote-id>
+  </upstream>
+</pkgmetadata>
