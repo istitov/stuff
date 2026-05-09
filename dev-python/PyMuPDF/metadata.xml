@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    PyMuPDF is a high-level Python interface for the MuPDF library —
+    PDF manipulation, text extraction, page rendering, OCR (with
+    Tesseract), form/widget editing, and image embedding. Used as the
+    document-loader half of sci-ml/amd-gaia's ui extra (RAG over PDFs).
+
+    Builds against system app-text/mupdf via dev-python/mupdf, not the
+    bundled copy in the upstream tarball.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">pymupdf/pymupdf</remote-id>
+    <remote-id type="pypi">PyMuPDF</remote-id>
+  </upstream>
+</pkgmetadata>
