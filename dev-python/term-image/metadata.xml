@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Display still and animated images in the terminal — supports the
+    Kitty graphics protocol, iTerm2 inline-image protocol, sixel, and
+    Unicode-block-character fallback. Library + small CLI; the library
+    surface is what consumers like sci-ml/amd-gaia's image extra
+    integrate against.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">AnonymouX47/term-image</remote-id>
+    <remote-id type="pypi">term-image</remote-id>
+  </upstream>
+</pkgmetadata>
