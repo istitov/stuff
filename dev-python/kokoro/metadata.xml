@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Kokoro lightweight TTS Python interface — wraps the Kokoro family
+    of small open-weight neural TTS models (24 kHz). The downstream
+    consumer for sci-ml/amd-gaia[talk]'s TTS half (which is currently
+    deferred-but-functional via this package).
+
+    Capped at python_requires&lt;3.13 by upstream; single-impl py3.12
+    in this overlay until that cap is verified stale.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">hexgrad/kokoro</remote-id>
+    <remote-id type="pypi">kokoro</remote-id>
+  </upstream>
+</pkgmetadata>
