@@ -6,8 +6,8 @@ EAPI=8
 inherit git-r3
 
 DESCRIPTION="A DeaDBeeF plugin for playing streaming video game music using vgmstream."
-HOMEPAGE="https://github.com/johnwchadwick/deadbeef-vgmstream"
-EGIT_REPO_URI="https://github.com/johnwchadwick/${PN}.git"
+HOMEPAGE="https://github.com/jchv/deadbeef-vgmstream"
+EGIT_REPO_URI="https://github.com/jchv/${PN}.git"
 
 LICENSE="vgmstream"
 SLOT="0"

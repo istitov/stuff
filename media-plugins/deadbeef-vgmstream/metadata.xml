@@ -5,6 +5,6 @@
     <email>megagreener@gmail.com</email>
   </maintainer>
   <upstream>
-    <remote-id type="github">johnwchadwick/deadbeef-vgmstream</remote-id>
+    <remote-id type="github">jchv/deadbeef-vgmstream</remote-id>
   </upstream>
 </pkgmetadata>
