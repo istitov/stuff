@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    A small Dict subclass that lets nested keys be accessed via dot
+    notation: d.foo.bar instead of d['foo']['bar']. Direct dep of
+    dev-python/misaki.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">mewwts/addict</remote-id>
+    <remote-id type="pypi">addict</remote-id>
+  </upstream>
+</pkgmetadata>
