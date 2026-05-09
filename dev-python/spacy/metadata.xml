@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    spaCy is an industrial-strength Natural Language Processing library
+    in Python — tokenization, named-entity recognition, part-of-speech
+    tagging, dependency parsing, sentence segmentation, lemmatization,
+    word vectors. Built on top of dev-python/thinc (NN layer). Direct
+    dep of dev-python/misaki[en] for English G2P sentence segmentation
+    in the kokoro chain.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/spacy</remote-id>
+    <remote-id type="pypi">spacy</remote-id>
+  </upstream>
+</pkgmetadata>
