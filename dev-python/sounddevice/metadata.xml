@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    python-sounddevice provides Python bindings to the PortAudio library
+    via CFFI, exposing simple functions to play and record arrays of
+    sound data. Supports blocking and callback APIs, device enumeration,
+    duplex streams, and (optionally) NumPy buffer interop.
+  </longdescription>
+  <use>
+    <flag name="numpy">Pull in dev-python/numpy for NumPy-array sound buffers</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">spatialaudio/python-sounddevice</remote-id>
+    <remote-id type="pypi">sounddevice</remote-id>
+  </upstream>
+</pkgmetadata>
