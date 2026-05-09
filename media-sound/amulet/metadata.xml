@@ -6,6 +6,6 @@
     <name>Komashko Stanislav</name>
   </maintainer>
   <upstream>
-    <remote-id type="github">aka-mccloud/amulet.git</remote-id>
+    <remote-id type="github">aka-mccloud/amulet</remote-id>
   </upstream>
 </pkgmetadata>
