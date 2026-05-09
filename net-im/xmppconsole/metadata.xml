@@ -10,6 +10,6 @@
     <flag name='ncurses'>Build Ncurses text UI</flag>
   </use>
   <upstream>
-    <remote-id type="github">pasis/xmppconsole</remote-id>
+    <remote-id type="github">xmppo/xmppconsole</remote-id>
   </upstream>
 </pkgmetadata>

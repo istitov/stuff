@@ -6,8 +6,8 @@ EAPI=8
 inherit autotools git-r3
 
 DESCRIPTION="A tool for XMPP hackers"
-HOMEPAGE="https://github.com/pasis/xmppconsole"
-EGIT_REPO_URI="https://github.com/pasis/${PN}.git"
+HOMEPAGE="https://github.com/xmppo/xmppconsole"
+EGIT_REPO_URI="https://github.com/xmppo/${PN}.git"
 
 LICENSE="GPL-3+"
 SLOT="0"
