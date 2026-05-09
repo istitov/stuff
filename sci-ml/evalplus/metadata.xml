@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="perf">Pull dev-python/cirron and dev-python/pympler for the evalperf-style perf-counter evaluation</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">evalplus</remote-id>
+    <remote-id type="github">evalplus/evalplus</remote-id>
+  </upstream>
+</pkgmetadata>
