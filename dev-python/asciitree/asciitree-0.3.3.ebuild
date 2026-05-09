@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 inherit distutils-r1 pypi
 
 DESCRIPTION="Draws ASCII trees"
-HOMEPAGE="http://github.com/mbr/asciitree"
+HOMEPAGE="https://github.com/mbr/asciitree"
 
 LICENSE="MIT"
 SLOT="0"
