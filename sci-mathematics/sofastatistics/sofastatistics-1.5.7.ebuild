@@ -10,7 +10,7 @@ inherit desktop python-single-r1
 
 DESCRIPTION="SOFA is a statistics, analysis, and reporting program"
 HOMEPAGE="https://www.sofastatistics.com/ https://sourceforge.net/projects/sofastatistics/"
-SRC_URI="https://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download -> ${P}.tar.gz"
 S="${WORKDIR}/sofastats-${PV}"
 
 LICENSE="AGPL-3"
