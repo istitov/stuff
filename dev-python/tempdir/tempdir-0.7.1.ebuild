@@ -9,10 +9,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 inherit distutils-r1 pypi
 
 DESCRIPTION="Temporary directory context manager (auto-clean wrapper around mkdtemp)"
-HOMEPAGE="
-	https://bitbucket.org/another_thomas/tempdir
-	https://pypi.org/project/tempdir/
-"
+HOMEPAGE="https://pypi.org/project/tempdir/"
 
 LICENSE="MIT"
 SLOT="0"
