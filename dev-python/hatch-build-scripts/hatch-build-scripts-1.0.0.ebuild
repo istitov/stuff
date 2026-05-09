@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Hatch plugin to run build scripts and bundle their artifacts"
 HOMEPAGE="
-	https://github.com/mkniewallner/hatch-build-scripts
+	https://github.com/rmorshea/hatch-build-scripts
 	https://pypi.org/project/hatch-build-scripts/
 "
 

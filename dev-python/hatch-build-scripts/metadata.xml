@@ -6,7 +6,7 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <upstream>
-    <remote-id type="github">mkniewallner/hatch-build-scripts</remote-id>
+    <remote-id type="github">rmorshea/hatch-build-scripts</remote-id>
     <remote-id type="pypi">hatch-build-scripts</remote-id>
   </upstream>
 </pkgmetadata>
