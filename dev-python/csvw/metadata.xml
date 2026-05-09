@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Python implementation of the W3C CSV-on-the-Web standard —
+    schema-aware CSV reading/writing with metadata, validation, and
+    RDF mapping. Direct dep of dev-python/segments in the kokoro
+    chain (transitive of phonemizer-fork → misaki[en] → kokoro).
+  </longdescription>
+  <upstream>
+    <remote-id type="github">cldf/csvw</remote-id>
+    <remote-id type="pypi">csvw</remote-id>
+  </upstream>
+</pkgmetadata>
