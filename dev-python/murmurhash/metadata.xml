@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Cython bindings for the MurmurHash2 fast non-cryptographic hash.
+    Used by spaCy / thinc / preshed for low-collision string interning.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/murmurhash</remote-id>
+    <remote-id type="pypi">murmurhash</remote-id>
+  </upstream>
+</pkgmetadata>
