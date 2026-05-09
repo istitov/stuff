@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    spaCy pipeline components for the curated-transformers PyTorch
+    transformer architectures. Direct dep of dev-python/misaki[en]
+    in the kokoro chain.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/spacy-curated-transformers</remote-id>
+    <remote-id type="pypi">spacy-curated-transformers</remote-id>
+  </upstream>
+</pkgmetadata>
