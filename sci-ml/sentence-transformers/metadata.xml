@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Sentence-Transformers (SBERT) provides sentence, image, and code
+    embeddings via Transformer networks for semantic search, clustering,
+    semantic textual similarity, and retrieval-augmented generation.
+    Bundled training utilities support fine-tuning on contrastive
+    losses; bundled inference utilities cover bi-encoders, cross-
+    encoders (rerankers), and sparse encoders. Embedding-based RAG
+    pipelines downstream — including sci-ml/amd-gaia's ui module and
+    most LLM-orchestration frameworks — depend on this library.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">huggingface/sentence-transformers</remote-id>
+    <remote-id type="pypi">sentence-transformers</remote-id>
+  </upstream>
+</pkgmetadata>
