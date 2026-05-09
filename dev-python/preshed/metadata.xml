@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Cython hash table specialized for pre-hashed integer keys —
+    skips a hash step on lookup at the cost of trusting the caller.
+    Used by spaCy / thinc as a low-overhead interning structure.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">explosion/preshed</remote-id>
+    <remote-id type="pypi">preshed</remote-id>
+  </upstream>
+</pkgmetadata>
