@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 inherit distutils-r1 pypi
 
 DESCRIPTION="Powerful, accurate, and easy-to-use Python library for colorspace conversions"
-HOMEPAGE="https://colorspacious.readthedocs.org"
+HOMEPAGE="https://colorspacious.readthedocs.io/"
 
 LICENSE="MIT"
 SLOT="0"
