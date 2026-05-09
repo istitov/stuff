@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Pre-built ROCm SDK distribution from the AMD ROCm/TheRock super-project.
+    TheRock bundles all ROCm subprojects (rocm-runtime, HIP, LLVM-with-AMD,
+    rocBLAS, hipBLAS, rocFFT, hipFFT, rocSPARSE, rocSOLVER, MIOpen, RCCL,
+    composable_kernel, rocWMMA, rocPRIM, rocThrust, profilers) at newer
+    commit SHAs than the latest tagged ROCm release, with hardware
+    enablement for newer gfx targets that haven't yet landed in tagged
+    ROCm. This package wraps the per-target Linux tarball into /opt/
+    therock-bin so it coexists with a system ROCm installed in /usr.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">ROCm/TheRock</remote-id>
+  </upstream>
+</pkgmetadata>
