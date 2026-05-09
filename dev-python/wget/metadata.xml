@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="pypi">wget</remote-id>
+  </upstream>
+  <longdescription>
+    Pure-python download utility. Provides a small wget.py module
+    with a CLI; not related to net-misc/wget (the GNU wget binary).
+  </longdescription>
+</pkgmetadata>
