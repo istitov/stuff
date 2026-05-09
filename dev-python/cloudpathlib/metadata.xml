@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    pathlib-style API for AWS S3, Azure Blob, and Google Cloud Storage
+    URIs. Direct dep of dev-python/weasel for fetching pretrained
+    spaCy assets from cloud-hosted bundles.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">drivendataorg/cloudpathlib</remote-id>
+    <remote-id type="pypi">cloudpathlib</remote-id>
+  </upstream>
+</pkgmetadata>
