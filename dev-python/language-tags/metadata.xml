@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Python version of the language-tags JavaScript project — IETF
+    BCP 47 / RFC 5646 language-tag parsing and validation. Direct dep
+    of dev-python/csvw.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">OnroerendErfgoed/language-tags</remote-id>
+    <remote-id type="pypi">language-tags</remote-id>
+  </upstream>
+</pkgmetadata>
