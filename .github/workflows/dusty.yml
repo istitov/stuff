@@ -58,8 +58,12 @@ jobs:
               | sort -u
           )
 
+          # metadata.xml-only commits (e.g. overlay-wide normalization
+          # sweeps) don't reflect package-level maintenance, so exclude
+          # them from the last-touch lookup. Ebuild/Manifest/files/**
+          # changes still count.
           for pkg in "${pkgs[@]}"; do
-            last_ts=$(git log -1 --format=%ct -- "$pkg" || true)
+            last_ts=$(git log -1 --format=%ct -- "$pkg" ":(exclude)$pkg/metadata.xml" || true)
             [[ -z "$last_ts" ]] && continue
             if (( last_ts < threshold )); then
               age_days=$(( (now - last_ts) / 86400 ))
@@ -137,10 +141,10 @@ jobs:
               `| ------- | ------------ | ---- |`,
               ...rows,
               ``,
-              `Last-touched is determined by \`git log -1 --format=%ct -- <pkg>\``,
-              `over the full repo history, so any commit affecting the package`,
-              `directory (ebuild, metadata.xml, Manifest, patches) counts as a`,
-              `touch.`,
+              `Last-touched excludes metadata.xml-only commits, so an ebuild,`,
+              `Manifest, or files/** change counts but an overlay-wide`,
+              `metadata.xml normalization sweep does not. Determined via`,
+              `\`git log -1 -- <pkg> :(exclude)<pkg>/metadata.xml\`.`,
               ``,
               `Run log: ${runUrl}`,
               ``,
