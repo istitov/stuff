@@ -124,16 +124,33 @@ Each line is `<category/pkg> <old> -> <new>`. Use it as a worklist
 for the next round of bumps; run `emerge --ask =<atom>` locally to
 test before committing.
 
+## CI runner
+
+The same `nvchecker.toml` is also consumed by a weekly GitHub Actions
+job at `.github/workflows/nvchecker.yml`, firing on Mondays at 06:00
+UTC. The CI variant builds its baseline from current ebuild PVs (via
+`tree_baseline.py`) rather than persisting last week's upstream
+snapshot, so it answers a different question:
+
+| Runner | Baseline | Question answered |
+| ------ | -------- | ----------------- |
+| local cron (`run.sh`) | last run's upstream snapshot | "what changed upstream since last week?" |
+| CI (`nvchecker.yml`) | current ebuild PVs (`tree_baseline.py`) | "what does upstream have that we don't ship?" |
+
+The two can coexist — the local runner's state lives in
+`$XDG_STATE_HOME` outside the repo and doesn't touch CI in any way.
+CI emits the drift list as a 30-day workflow artifact and (in later
+phases) will gate auto-PR creation on a conservative
+auto-bumpability predicate.
+
 ## Design notes
 
-- **No GitHub Actions**: this intentionally runs on your machine, not
-  in CI. Keeps Actions minutes free, avoids bot commits, and the
-  solo-maintainer workflow doesn't need cross-machine visibility.
-- **No state in the repo**: `old_ver.json` / `new_ver.json` live in
-  `$XDG_STATE_HOME`. The only thing version-controlled is the
-  generated config and the scripts.
-- **Silent on success**: cron mails on non-empty stdout, so a clean
-  week doesn't fill your inbox.
+- **No state in the repo**: `old_ver.json` / `new_ver.json` for the
+  local runner live in `$XDG_STATE_HOME`; CI runs are entirely
+  stateless against the worktree. The only thing version-controlled
+  is the generated config and the scripts.
+- **Silent on success (local)**: cron mails on non-empty stdout, so a
+  clean week doesn't fill your inbox.
 - **Transient network failures don't mail**: `run.sh` does not pass
   `--failures` to `nvchecker`, so a flaky PyPI response during one
-  run doesn't turn into a false drift report.
+  run doesn't turn into a false drift report. Same convention in CI.
