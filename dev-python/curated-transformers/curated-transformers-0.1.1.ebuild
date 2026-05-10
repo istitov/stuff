@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
 
@@ -27,7 +28,7 @@ KEYWORDS="~amd64"
 # 2.x line, which wants thinc 9.x — incompatible with our spacy 3.8.
 RDEPEND="
 	${PYTHON_DEPS}
-	sci-ml/pytorch[${PYTHON_USEDEP}]
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
