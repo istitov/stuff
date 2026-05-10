@@ -9,8 +9,7 @@ MY_PN="OrcaSlicer"
 inherit check-reqs cmake multiprocessing wxwidgets xdg
 
 DESCRIPTION="Open-source 3D printer slicer (PrusaSlicer/Bambu Studio fork)"
-HOMEPAGE="https://orcaslicer.com/
-	https://github.com/SoftFever/OrcaSlicer
+HOMEPAGE="https://www.orcaslicer.com/
 	https://github.com/OrcaSlicer/OrcaSlicer"
 SRC_URI="https://github.com/OrcaSlicer/OrcaSlicer/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
