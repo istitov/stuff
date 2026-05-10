@@ -4,6 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=flit
 inherit distutils-r1 pypi
 
@@ -16,8 +17,10 @@ KEYWORDS="~amd64"
 RESTRICT="test mirror"
 
 RDEPEND="
-	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/scipy[${PYTHON_USEDEP}]
-	>=sci-libs/spglib-1.14.1[python,${PYTHON_USEDEP}]
+	>=sci-libs/spglib-1.14.1[python,${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-python/scipy[${PYTHON_USEDEP}]
+	')
 "
 BDEPEND="${RDEPEND}"
