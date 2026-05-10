@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -19,13 +20,17 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	>=sci-ml/pytorch-1.7.0[${PYTHON_USEDEP}]
-	>=sci-ml/transformers-4.45.0[${PYTHON_USEDEP}]
-	>=dev-python/pydantic-2.0[${PYTHON_USEDEP}]
-	dev-python/loguru[${PYTHON_USEDEP}]
+	>=sci-ml/pytorch-1.7.0[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/transformers-4.45.0[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/pydantic-2.0[${PYTHON_USEDEP}]
+		dev-python/loguru[${PYTHON_USEDEP}]
+	')
 "
 BDEPEND="
-	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+	')
 "
 
 # setuptools-scm derives the version from git tags; the sdist bundles
