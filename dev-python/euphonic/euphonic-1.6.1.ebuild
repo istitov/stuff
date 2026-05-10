@@ -4,6 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
 inherit distutils-r1 pypi
@@ -17,18 +18,20 @@ KEYWORDS="~amd64"
 IUSE="matplotlib phonopy-reader"
 
 RDEPEND="
-	dev-python/packaging[${PYTHON_USEDEP}]
-	>=dev-python/numpy-1.24.0[${PYTHON_USEDEP}]
-	>=dev-python/scipy-1.10[${PYTHON_USEDEP}]
-	>=dev-python/seekpath-2.2.1[${PYTHON_USEDEP}]
-	>=sci-libs/spglib-2.1.0[python,${PYTHON_USEDEP}]
-	>=dev-python/pint-0.22[${PYTHON_USEDEP}]
-	>=dev-python/threadpoolctl-3.0.0[${PYTHON_USEDEP}]
-	>=dev-python/toolz-0.12.1[${PYTHON_USEDEP}]
-	matplotlib? ( >=dev-python/matplotlib-3.8.0[${PYTHON_USEDEP}] )
-	phonopy-reader? (
-		>=dev-python/h5py-3.6.0[${PYTHON_USEDEP}]
-		>=dev-python/pyyaml-6.0[${PYTHON_USEDEP}]
-	)
+	>=sci-libs/spglib-2.1.0[python,${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/seekpath-2.2.1[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/packaging[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.24.0[${PYTHON_USEDEP}]
+		>=dev-python/scipy-1.10[${PYTHON_USEDEP}]
+		>=dev-python/pint-0.22[${PYTHON_USEDEP}]
+		>=dev-python/threadpoolctl-3.0.0[${PYTHON_USEDEP}]
+		>=dev-python/toolz-0.12.1[${PYTHON_USEDEP}]
+		matplotlib? ( >=dev-python/matplotlib-3.8.0[${PYTHON_USEDEP}] )
+		phonopy-reader? (
+			>=dev-python/h5py-3.6.0[${PYTHON_USEDEP}]
+			>=dev-python/pyyaml-6.0[${PYTHON_USEDEP}]
+		)
+	')
 "
 DEPEND="${RDEPEND}"
