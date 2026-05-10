@@ -4,7 +4,7 @@
 EAPI=8
 
 DESCRIPTION="Neat and simple webcam grabbing app"
-HOMEPAGE="http://www.sanslogic.co.uk/fswebcam/
+HOMEPAGE="https://www.sanslogic.co.uk/fswebcam/
 	https://github.com/fsphil/fswebcam/"
 SRC_URI="https://github.com/fsphil/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.gh.tar.gz"
 

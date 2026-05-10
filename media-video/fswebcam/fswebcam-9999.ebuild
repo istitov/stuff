@@ -6,7 +6,7 @@ EAPI=8
 inherit git-r3
 
 DESCRIPTION="Neat and simple webcam grabbing app"
-HOMEPAGE="http://www.sanslogic.co.uk/fswebcam/
+HOMEPAGE="https://www.sanslogic.co.uk/fswebcam/
 	https://github.com/fsphil/fswebcam/"
 EGIT_REPO_URI="https://github.com/fsphil/fswebcam.git"
 
