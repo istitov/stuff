@@ -21,11 +21,11 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      # actions/checkout@v5 with fetch-depth: 0 fetches remote branches
+      # actions/checkout@v6 with fetch-depth: 0 fetches remote branches
       # into refs/remotes/origin/* and only creates a local head for the
       # triggering ref. The pushes below use 'refs/remotes/origin/*:refs/heads/*'
       # so every branch reaches the mirror — pushing 'refs/heads/*:refs/heads/*'

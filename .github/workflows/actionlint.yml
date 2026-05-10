@@ -28,7 +28,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       # Pin Go rather than relying on ubuntu-latest's pre-installed
       # version. actionlint v1.7.12 needs Go >= 1.25 (originally

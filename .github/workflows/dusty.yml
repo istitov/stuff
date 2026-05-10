@@ -29,7 +29,7 @@ jobs:
       contents: read
       issues: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -112,7 +112,7 @@ jobs:
       # have been reviewed (bumped, dropped, or confirmed still current).
       - name: File dusty report as issue
         if: steps.scan.outputs.count != '0' && inputs.dry_run != 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           REPORT_PATH: ${{ steps.scan.outputs.report_path }}
           DUSTY_COUNT: ${{ steps.scan.outputs.count }}
@@ -189,7 +189,7 @@ jobs:
       # bumped or dropped.
       - name: Auto-close dusty-packages issue when none remain
         if: steps.scan.outputs.count == '0' && inputs.dry_run != 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const LABEL = 'dusty-packages';

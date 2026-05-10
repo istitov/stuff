@@ -19,7 +19,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       # setup-python's built-in pip cache keys against the requirements
       # file's hash, so cached wheels survive across runs and only
