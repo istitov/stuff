@@ -11,6 +11,8 @@ on:
       - 'profiles/**'
       - 'eclass/**'
       - 'licenses/**'
+      - 'metadata/layout.conf'
+      - 'metadata/pkgcheck.conf'
       - '.github/workflows/pkgcheck.yml'
   pull_request:
     branches: [master]
@@ -173,3 +175,55 @@ jobs:
               state_reason: 'completed',
             });
             core.info(`Auto-closed #${existing[0].number}`);
+
+  # metadata/{layout,pkgcheck}.conf shape pkgcheck's behavior repo-wide.
+  # The diff jobs run --commits, so a config-only push or PR produces a
+  # misleading green tick: the diff scope is just the config file, no
+  # ebuilds get scanned, the suppression's actual effect is never
+  # validated. This job runs a full repo scan (no --commits, no --net)
+  # when those files appear in the diff. --net is omitted on purpose:
+  # suppression mechanics don't depend on URL liveness, the 3-day
+  # scheduled cron covers that. Result: config-only changes get
+  # validated immediately under the new config rather than waiting up
+  # to three days for the next --net run.
+  pkgcheck-config-validate:
+    if: >
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'push' &&
+       github.event.before != '0000000000000000000000000000000000000000')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Resolve diff base the same way the diff jobs do (PR target
+      # branch on PR; event.before with HEAD~1 fallback on push), then
+      # check whether the diff touches a metadata/*.conf file. If yes,
+      # the next step runs the full scan; if no, it skips and the job
+      # passes as a no-op.
+      - id: detect
+        run: |
+          set -euo pipefail
+          if [[ '${{ github.event_name }}' == 'pull_request' ]]; then
+            base='origin/${{ github.base_ref }}'
+          else
+            before='${{ github.event.before }}'
+            if git cat-file -e "${before}^{commit}" 2>/dev/null; then
+              base="${before}"
+            else
+              echo "::warning::${before} unreachable (force-push?), falling back to HEAD~1"
+              base="HEAD~1"
+            fi
+          fi
+          if git diff --name-only "${base}" HEAD \
+              | grep -qE '^metadata/(layout|pkgcheck)\.conf$'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.detect.outputs.run == 'true'
+        uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
+        with:
+          args: ''
