@@ -34,7 +34,7 @@ SLOT="0"
 CPU_FLAGS_X86=( avx avx2 f16c )
 
 # wmma USE explained here: https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
-IUSE="openblas +openmp blis rocm cuda opencl openssl vulkan flexiblas wmma examples"
+IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples"
 
 REQUIRED_USE="
 	?? (
