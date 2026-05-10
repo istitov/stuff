@@ -8,7 +8,7 @@ DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
 
 DESCRIPTION="Reading and writing scientific file formats"
-HOMEPAGE="https://hyperspy.org/rosettasciio"
+HOMEPAGE="https://hyperspy.org/rosettasciio/"
 
 LICENSE="GPL-3"
 SLOT="0"

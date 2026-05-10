@@ -8,7 +8,7 @@ DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
 
 DESCRIPTION="Reading and writing scientific file formats"
-HOMEPAGE="https://hyperspy.org/rosettasciio"
+HOMEPAGE="https://hyperspy.org/rosettasciio/"
 SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
 S=${WORKDIR}/${P}
 
