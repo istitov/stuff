@@ -10,7 +10,7 @@ PYTHON_COMPAT=( python2_7 )
 inherit autotools gnome2 python-r1_py2
 #GCONF_DEBUG="no"
 DESCRIPTION="GLib's GObject library bindings for Python"
-HOMEPAGE="http://www.pygtk.org/"
+HOMEPAGE="https://pygobject.gnome.org"
 
 LICENSE="LGPL-2.1+"
 SLOT="2"
