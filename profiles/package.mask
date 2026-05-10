@@ -58,5 +58,5 @@ app-portage/portopts
 =sys-kernel/pf-sources-6.16_p5-r70
 =sys-kernel/pf-sources-6.17_p4-r70
 =sys-kernel/pf-sources-6.18_p6-r70
-=sys-kernel/pf-sources-6.19_p5-r70
-=sys-kernel/pf-sources-7.0_p2-r70
+=sys-kernel/pf-sources-6.19_p5-r71
+=sys-kernel/pf-sources-7.0_p2-r71
