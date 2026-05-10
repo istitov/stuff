@@ -6,8 +6,8 @@ EAPI=8
 inherit git-r3
 
 DESCRIPTION="Gnome (DBus) multimedia-keys plugin for the DeaDBeeF audio player"
-HOMEPAGE="https://github.com/barthez/deadbeef-gnome-mmkeys"
-EGIT_REPO_URI="https://github.com/barthez/deadbeef-gnome-mmkeys.git"
+HOMEPAGE="https://github.com/zhanghai/deadbeef-gnome-mmkeys"
+EGIT_REPO_URI="https://github.com/zhanghai/deadbeef-gnome-mmkeys.git"
 
 LICENSE="GPL-2"
 SLOT="0"

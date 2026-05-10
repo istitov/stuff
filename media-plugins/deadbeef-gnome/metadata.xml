@@ -5,6 +5,6 @@
     <email>megagreener@gmail.com</email>
   </maintainer>
   <upstream>
-    <remote-id type="github">barthez/deadbeef-gnome-mmkeys</remote-id>
+    <remote-id type="github">zhanghai/deadbeef-gnome-mmkeys</remote-id>
   </upstream>
 </pkgmetadata>
