@@ -31,14 +31,13 @@ jobs:
       - uses: actions/checkout@v5
 
       # Pin Go rather than relying on ubuntu-latest's pre-installed
-      # version. actionlint v1.7.12 needs Go >= 1.21; the runner image
-      # currently ships a newer one, but pre-installed versions drift
-      # with runner-image updates and a silent break here would be hard
-      # to attribute. Bump if actionlint or other Go tooling raises the
-      # floor.
+      # version. actionlint v1.7.12 needs Go >= 1.25 (originally
+      # mis-read as 1.21); pin to '1.25' so GOTOOLCHAIN='auto' doesn't
+      # have to fetch a newer toolchain on every run. Bump if
+      # actionlint raises its floor again.
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.25'
 
       # Pinned to a specific release rather than @latest so an upstream
       # actionlint update that adds new rules can't break CI without us
