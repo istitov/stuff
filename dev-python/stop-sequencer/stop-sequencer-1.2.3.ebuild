@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 # upstream sdist filename uses dash, eclass would normalise to underscore
 PYPI_NO_NORMALIZE=1
@@ -22,7 +23,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
-	>=sci-ml/transformers-4.3.0[${PYTHON_USEDEP}]
+	>=sci-ml/transformers-4.3.0[${PYTHON_SINGLE_USEDEP}]
 "
 
 src_prepare() {
