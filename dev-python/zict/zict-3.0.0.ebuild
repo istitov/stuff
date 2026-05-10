@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 inherit distutils-r1 pypi
 
 DESCRIPTION="Mutable mapping tools"
-HOMEPAGE="http://zict.readthedocs.io"
+HOMEPAGE="https://zict.readthedocs.io"
 
 LICENSE="BSD"
 SLOT="0"
