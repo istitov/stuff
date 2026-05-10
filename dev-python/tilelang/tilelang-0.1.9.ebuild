@@ -25,6 +25,7 @@ KEYWORDS="~amd64"
 # 2026-05-07 against 0.1.9.
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	sci-mathematics/z3[python,${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/apache-tvm-ffi[${PYTHON_USEDEP}]
 		dev-python/cloudpickle[${PYTHON_USEDEP}]
@@ -33,7 +34,6 @@ RDEPEND="
 		dev-python/psutil[${PYTHON_USEDEP}]
 		>=dev-python/tqdm-4.62.3[${PYTHON_USEDEP}]
 		>=dev-python/typing-extensions-4.10[${PYTHON_USEDEP}]
-		sci-mathematics/z3[python,${PYTHON_USEDEP}]
 	')
 	python_single_target_python3_11? ( dev-python/torch-c-dlpack-ext[${PYTHON_SINGLE_USEDEP}] )
 	python_single_target_python3_12? ( dev-python/torch-c-dlpack-ext[${PYTHON_SINGLE_USEDEP}] )
