@@ -1,4 +1,4 @@
-name: actionlint
+name: Workflow lint
 
 on:
   workflow_dispatch:

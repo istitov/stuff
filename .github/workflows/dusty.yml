@@ -1,4 +1,4 @@
-name: dusty-packages
+name: Dusty packages
 
 on:
   workflow_dispatch:

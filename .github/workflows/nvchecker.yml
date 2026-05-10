@@ -1,4 +1,4 @@
-name: nvchecker-drift
+name: Upstream version drift
 
 on:
   workflow_dispatch:

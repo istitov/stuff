@@ -7,7 +7,7 @@ eselect repository enable stuff
 emerge --sync stuff
 ```
 
-[![pkgcheck](https://github.com/istitov/stuff/actions/workflows/pkgcheck.yml/badge.svg)](https://github.com/istitov/stuff/actions/workflows/pkgcheck.yml)
+[![Package checks](https://github.com/istitov/stuff/actions/workflows/pkgcheck.yml/badge.svg)](https://github.com/istitov/stuff/actions/workflows/pkgcheck.yml)
 
 ## Mirrors
 
