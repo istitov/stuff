@@ -7,7 +7,7 @@
   </maintainer>
   <stabilize-allarches/>
   <upstream>
-    <remote-id type="github">pypa/setuptools_scm</remote-id>
+    <remote-id type="github">pypa/setuptools-scm</remote-id>
     <remote-id type="pypi">setuptools_scm</remote-id>
   </upstream>
   <use>
