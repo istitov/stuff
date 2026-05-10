@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -19,7 +20,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	>=dev-python/pymatgen-core-2026.4.16[${PYTHON_USEDEP}]
+	>=dev-python/pymatgen-core-2026.4.16[${PYTHON_SINGLE_USEDEP}]
 "
 
 src_prepare() {
