@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -25,12 +26,14 @@ KEYWORDS="~amd64"
 RESTRICT="test"
 
 RDEPEND="
-	>=dev-python/pymatgen-2022.3.7[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-3.7.4.1[${PYTHON_USEDEP}]
-	>=dev-python/requests-2.23.0[${PYTHON_USEDEP}]
-	>=dev-python/monty-2024.12.10[${PYTHON_USEDEP}]
-	>=dev-python/emmet-core-0.86.3[${PYTHON_USEDEP}]
-	dev-python/boto3[${PYTHON_USEDEP}]
-	>=dev-python/orjson-3.10[${PYTHON_USEDEP}]
-	<dev-python/orjson-4[${PYTHON_USEDEP}]
+	>=dev-python/pymatgen-2022.3.7[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/emmet-core-0.86.3[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/typing-extensions-3.7.4.1[${PYTHON_USEDEP}]
+		>=dev-python/requests-2.23.0[${PYTHON_USEDEP}]
+		>=dev-python/monty-2024.12.10[${PYTHON_USEDEP}]
+		dev-python/boto3[${PYTHON_USEDEP}]
+		>=dev-python/orjson-3.10[${PYTHON_USEDEP}]
+		<dev-python/orjson-4[${PYTHON_USEDEP}]
+	')
 "
