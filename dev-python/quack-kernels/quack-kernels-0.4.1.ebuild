@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -24,11 +25,13 @@ KEYWORDS="~amd64"
 # pull via dev-python/nvidia-cutlass-dsl on this overlay; no USE
 # flag needed. # verified 2026-05-07 against 0.3.3.
 RDEPEND="
-	>=dev-python/nvidia-cutlass-dsl-4.4.2[${PYTHON_USEDEP}]
-	>=dev-python/apache-tvm-ffi-0.1.6[${PYTHON_USEDEP}]
-	<dev-python/apache-tvm-ffi-0.2[${PYTHON_USEDEP}]
-	dev-python/torch-c-dlpack-ext[${PYTHON_USEDEP}]
-	dev-python/einops[${PYTHON_USEDEP}]
-	sci-ml/pytorch[${PYTHON_USEDEP}]
+	dev-python/torch-c-dlpack-ext[${PYTHON_SINGLE_USEDEP}]
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/nvidia-cutlass-dsl-4.4.2[${PYTHON_USEDEP}]
+		>=dev-python/apache-tvm-ffi-0.1.6[${PYTHON_USEDEP}]
+		<dev-python/apache-tvm-ffi-0.2[${PYTHON_USEDEP}]
+		dev-python/einops[${PYTHON_USEDEP}]
+	')
 "
 DEPEND="${RDEPEND}"
