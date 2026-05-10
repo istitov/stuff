@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 xdg
 
@@ -18,19 +19,21 @@ KEYWORDS="~amd64 ~x86"
 IUSE="acoustid quodlibet"
 
 RDEPEND="
-	>=dev-python/configobj-5.0.9[${PYTHON_USEDEP}]
-	>=dev-python/levenshtein-0.27.1[${PYTHON_USEDEP}]
-	>=dev-python/lxml-6.0.0[${PYTHON_USEDEP}]
-	>=dev-python/pyparsing-3.1.2[${PYTHON_USEDEP}]
-	>=dev-python/pyqt6-6.10.1[${PYTHON_USEDEP},svg]
-	>=dev-python/pyqt6-sip-13.10.0[${PYTHON_USEDEP}]
-	>=dev-python/unidecode-1.4.0[${PYTHON_USEDEP}]
-	>=media-libs/mutagen-1.47.0[${PYTHON_USEDEP}]
-	acoustid? (
-		>=dev-python/pyacoustid-1.3.0[${PYTHON_USEDEP}]
-		>=media-libs/chromaprint-0.5[tools]
-	)
-	quodlibet? ( >=media-sound/quodlibet-4.4.0[${PYTHON_USEDEP}] )
+	$(python_gen_cond_dep '
+		>=dev-python/configobj-5.0.9[${PYTHON_USEDEP}]
+		>=dev-python/levenshtein-0.27.1[${PYTHON_USEDEP}]
+		>=dev-python/lxml-6.0.0[${PYTHON_USEDEP}]
+		>=dev-python/pyparsing-3.1.2[${PYTHON_USEDEP}]
+		>=dev-python/pyqt6-6.10.1[${PYTHON_USEDEP},svg]
+		>=dev-python/pyqt6-sip-13.10.0[${PYTHON_USEDEP}]
+		>=dev-python/unidecode-1.4.0[${PYTHON_USEDEP}]
+		>=media-libs/mutagen-1.47.0[${PYTHON_USEDEP}]
+		acoustid? (
+			>=dev-python/pyacoustid-1.3.0[${PYTHON_USEDEP}]
+		)
+	')
+	acoustid? ( >=media-libs/chromaprint-0.5[tools] )
+	quodlibet? ( >=media-sound/quodlibet-4.4.0[${PYTHON_SINGLE_USEDEP}] )
 "
 
 DOCS=( changelog NEWS THANKS TODO )
