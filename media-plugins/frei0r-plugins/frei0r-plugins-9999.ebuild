@@ -6,7 +6,7 @@ EAPI="8"
 inherit cmake git-r3
 
 DESCRIPTION="A minimalistic plugin API for video effects"
-HOMEPAGE="http://www.dyne.org/software/frei0r/"
+HOMEPAGE="https://dyne.org/software/frei0r/"
 EGIT_REPO_URI="https://github.com/dyne/frei0r.git"
 
 LICENSE="GPL-2"
