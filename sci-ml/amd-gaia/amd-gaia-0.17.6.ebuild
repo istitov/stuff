@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
 
@@ -41,55 +42,61 @@ RESTRICT="test"
 # unused torchvision/torchaudio. RDEPEND on sci-ml/pytorch alone.
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/aiohttp[${PYTHON_USEDEP}]
-	dev-python/openai[${PYTHON_USEDEP}]
-	dev-python/pillow[${PYTHON_USEDEP}]
-	>=dev-python/pydantic-2.9.2[${PYTHON_USEDEP}]
-	dev-python/python-dotenv[${PYTHON_USEDEP}]
-	dev-python/requests[${PYTHON_USEDEP}]
-	dev-python/rich[${PYTHON_USEDEP}]
-	>=dev-python/watchdog-2.1.0[${PYTHON_USEDEP}]
-	sci-ml/accelerate[${PYTHON_USEDEP}]
-	sci-ml/transformers[${PYTHON_USEDEP}]
-	api? (
-		>=dev-python/fastapi-0.115.0[${PYTHON_USEDEP}]
-		>=dev-python/python-multipart-0.0.9[${PYTHON_USEDEP}]
-		>=dev-python/uvicorn-0.32.0[${PYTHON_USEDEP}]
-	)
+	sci-ml/accelerate[${PYTHON_SINGLE_USEDEP}]
+	sci-ml/transformers[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/aiohttp[${PYTHON_USEDEP}]
+		dev-python/openai[${PYTHON_USEDEP}]
+		dev-python/pillow[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-2.9.2[${PYTHON_USEDEP}]
+		dev-python/python-dotenv[${PYTHON_USEDEP}]
+		dev-python/requests[${PYTHON_USEDEP}]
+		dev-python/rich[${PYTHON_USEDEP}]
+		>=dev-python/watchdog-2.1.0[${PYTHON_USEDEP}]
+		api? (
+			>=dev-python/fastapi-0.115.0[${PYTHON_USEDEP}]
+			>=dev-python/python-multipart-0.0.9[${PYTHON_USEDEP}]
+			>=dev-python/uvicorn-0.32.0[${PYTHON_USEDEP}]
+		)
+		image? (
+			dev-python/term-image[${PYTHON_USEDEP}]
+		)
+		talk? (
+			dev-python/sounddevice[${PYTHON_USEDEP}]
+		)
+		ui? (
+			>=dev-python/httpx-0.27.0[${PYTHON_USEDEP}]
+			>=dev-python/keyring-24.0.0[${PYTHON_USEDEP}]
+			<dev-python/keyring-26[${PYTHON_USEDEP}]
+			>=dev-python/psutil-5.9.0[${PYTHON_USEDEP}]
+			dev-python/PyMuPDF[${PYTHON_USEDEP}]
+			dev-python/pypdf[${PYTHON_USEDEP}]
+			sci-ml/safetensors[${PYTHON_USEDEP}]
+		)
+		mcp? (
+			>=dev-python/mcp-1.1.0[${PYTHON_USEDEP}]
+			dev-python/starlette[${PYTHON_USEDEP}]
+			dev-python/uvicorn[${PYTHON_USEDEP}]
+		)
+		eval? (
+			dev-python/anthropic[${PYTHON_USEDEP}]
+			dev-python/beautifulsoup4[${PYTHON_USEDEP}]
+			dev-python/numpy[${PYTHON_USEDEP}]
+			dev-python/pypdf[${PYTHON_USEDEP}]
+			dev-python/reportlab[${PYTHON_USEDEP}]
+			>=dev-python/scikit-learn-1.5.0[${PYTHON_USEDEP}]
+		)
+	')
 	audio? (
-		sci-ml/pytorch[${PYTHON_USEDEP}]
-	)
-	image? (
-		dev-python/term-image[${PYTHON_USEDEP}]
+		sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	)
 	talk? (
-		dev-python/kokoro[${PYTHON_USEDEP}]
-		dev-python/openai-whisper[${PYTHON_USEDEP}]
-		dev-python/sounddevice[${PYTHON_USEDEP}]
+		dev-python/kokoro[${PYTHON_SINGLE_USEDEP}]
+		dev-python/openai-whisper[${PYTHON_SINGLE_USEDEP}]
 	)
 	ui? (
-		>=dev-python/httpx-0.27.0[${PYTHON_USEDEP}]
-		>=dev-python/keyring-24.0.0[${PYTHON_USEDEP}]
-		<dev-python/keyring-26[${PYTHON_USEDEP}]
-		>=dev-python/psutil-5.9.0[${PYTHON_USEDEP}]
-		dev-python/PyMuPDF[${PYTHON_USEDEP}]
-		dev-python/pypdf[${PYTHON_USEDEP}]
 		sci-libs/faiss[python]
-		sci-ml/safetensors[${PYTHON_USEDEP}]
-		sci-ml/sentence-transformers[${PYTHON_USEDEP}]
-	)
-	mcp? (
-		>=dev-python/mcp-1.1.0[${PYTHON_USEDEP}]
-		dev-python/starlette[${PYTHON_USEDEP}]
-		dev-python/uvicorn[${PYTHON_USEDEP}]
-	)
-	eval? (
-		dev-python/anthropic[${PYTHON_USEDEP}]
-		dev-python/beautifulsoup4[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
-		dev-python/pypdf[${PYTHON_USEDEP}]
-		dev-python/reportlab[${PYTHON_USEDEP}]
-		>=dev-python/scikit-learn-1.5.0[${PYTHON_USEDEP}]
+		sci-ml/sentence-transformers[${PYTHON_SINGLE_USEDEP}]
 	)
 "
 
