@@ -12,7 +12,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="Parse Python docstrings in reST, Google and Numpydoc formats"
 HOMEPAGE="
 	https://github.com/rr-/docstring_parser
-	https://pypi.org/project/docstring_parser/
+	https://pypi.org/project/docstring-parser/
 "
 
 LICENSE="MIT"

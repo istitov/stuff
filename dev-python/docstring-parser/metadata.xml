@@ -7,6 +7,6 @@
   </maintainer>
   <upstream>
     <remote-id type="github">rr-/docstring_parser</remote-id>
-    <remote-id type="pypi">docstring_parser</remote-id>
+    <remote-id type="pypi">docstring-parser</remote-id>
   </upstream>
 </pkgmetadata>
