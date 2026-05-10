@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -19,11 +20,15 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	>=dev-python/pyvista-0.39.0[${PYTHON_USEDEP}]
-	>=dev-python/qtpy-1.9.0[${PYTHON_USEDEP}]
+	>=dev-python/pyvista-0.39.0[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/qtpy-1.9.0[${PYTHON_USEDEP}]
+	')
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	')
 "
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
