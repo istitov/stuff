@@ -42,6 +42,7 @@ IUSE="api sentencepiece statsmodels vllm"
 RDEPEND="
 	>=sci-ml/datasets-2.16.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/evaluate-0.4.0[${PYTHON_SINGLE_USEDEP}]
+	vllm? ( >=dev-python/vllm-0.4.2[${PYTHON_SINGLE_USEDEP}] )
 	$(python_gen_cond_dep '
 		dev-python/dill[${PYTHON_USEDEP}]
 		dev-python/jinja2[${PYTHON_USEDEP}]
@@ -65,6 +66,5 @@ RDEPEND="
 		)
 		sentencepiece? ( >=sci-ml/sentencepiece-0.1.98[${PYTHON_USEDEP}] )
 		statsmodels? ( dev-python/statsmodels[${PYTHON_USEDEP}] )
-		vllm? ( >=dev-python/vllm-0.4.2[${PYTHON_USEDEP}] )
 	')
 "
