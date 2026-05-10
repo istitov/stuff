@@ -11,7 +11,7 @@ inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="Model Context Protocol SDK"
 HOMEPAGE="
-	https://modelcontextprotocol.io/
+	https://modelcontextprotocol.io/docs/getting-started/intro
 	https://github.com/modelcontextprotocol/python-sdk
 	https://pypi.org/project/mcp/
 "
