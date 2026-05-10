@@ -76,9 +76,11 @@ jobs:
           sort -rn -o "$report" "$report"
 
           count=$(wc -l < "$report")
-          echo "count=$count"         >> "$GITHUB_OUTPUT"
-          echo "report_path=$report"  >> "$GITHUB_OUTPUT"
-          echo "threshold=$threshold_days" >> "$GITHUB_OUTPUT"
+          {
+            echo "count=$count"
+            echo "report_path=$report"
+            echo "threshold=$threshold_days"
+          } >> "$GITHUB_OUTPUT"
 
       # Dry-run preview: print what the workflow would file or close, then
       # skip the issue-tracker steps below. Triggered via
