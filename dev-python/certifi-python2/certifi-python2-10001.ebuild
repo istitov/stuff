@@ -13,10 +13,10 @@ inherit distutils-r1_py2
 MY_P=certifi-shim-${PV}
 DESCRIPTION="Thin replacement for certifi using system certificate store"
 HOMEPAGE="
-	https://github.com/mgorny/certifi-shim
+	https://github.com/projg2/certifi-shim
 	https://pypi.org/project/certifi"
 SRC_URI="
-	https://github.com/mgorny/certifi-shim/archive/v${PV}.tar.gz
+	https://github.com/projg2/certifi-shim/archive/v${PV}.tar.gz
 		-> ${MY_P}.gh.tar.gz"
 S=${WORKDIR}/${MY_P}
 
