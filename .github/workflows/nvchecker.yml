@@ -21,17 +21,22 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      # setup-python's built-in pip cache keys against the requirements
+      # file's hash, so cached wheels survive across runs and only
+      # invalidate on a deliberate version bump. Saves ~30s per weekly
+      # run (the lxml/structlog/aiohttp transitive deps are the slow
+      # part). The pinned version lives in scripts/nvchecker/
+      # requirements.txt — same supply-chain discipline as the
+      # pkgcheck-action SHA pin and actionlint@v1.7.12, with the side
+      # benefit that Dependabot's pip ecosystem can scan it.
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
+          cache: 'pip'
+          cache-dependency-path: 'scripts/nvchecker/requirements.txt'
 
-      # Pin exactly rather than floating, same supply-chain discipline
-      # as the pkgcheck-action SHA pin and actionlint@v1.7.12. An
-      # upstream behavioral change (logger format, nvcmp exit codes,
-      # source-type semantics) could silently break the pipeline; bump
-      # deliberately when the time comes.
       - name: Install nvchecker
-        run: pip install --user nvchecker==2.20
+        run: pip install --user -r scripts/nvchecker/requirements.txt
 
       # nvchecker's GitHub source needs a token to avoid the 60-req/hour
       # unauthenticated rate limit (this config has ~60 GitHub entries,
