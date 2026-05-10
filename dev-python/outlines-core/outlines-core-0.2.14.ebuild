@@ -276,7 +276,7 @@ inherit cargo distutils-r1 pypi
 DESCRIPTION="Structured text generation core engine in Rust"
 HOMEPAGE="
 	https://github.com/dottxt-ai/outlines-core
-	https://pypi.org/project/outlines_core/
+	https://pypi.org/project/outlines-core/
 "
 SRC_URI+="
 	${CARGO_CRATE_URIS}
