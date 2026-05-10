@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -22,9 +23,11 @@ KEYWORDS="~amd64"
 RESTRICT="test"
 
 RDEPEND="
-	dev-python/xraydb[${PYTHON_USEDEP}]
-	>=dev-python/sqlalchemy-2[${PYTHON_USEDEP}]
-	>=dev-python/pymatgen-2025.6.14[${PYTHON_USEDEP}]
-	>=dev-python/mp-api-0.45.8[${PYTHON_USEDEP}]
-	>=dev-python/emmet-core-0.84.9[${PYTHON_USEDEP}]
+	>=dev-python/pymatgen-2025.6.14[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/mp-api-0.45.8[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/emmet-core-0.84.9[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/xraydb[${PYTHON_USEDEP}]
+		>=dev-python/sqlalchemy-2[${PYTHON_USEDEP}]
+	')
 "
