@@ -14,9 +14,14 @@ EAPI=8
 
 ETYPE="sources"
 
-# Track the latest 6.19.X linux-stable via genpatches. Match
-# gentoo-sources-6.19.14's K_GENPATCHES_VER.
-K_GENPATCHES_VER="13"
+# Track the latest 6.19.X linux-stable via genpatches. K=11 carries
+# 1001..1011 = stable 6.19.2 through 6.19.12. K=12 and K=13 were
+# briefly published by alicef and then withdrawn — they only survive
+# in our Manifest as orphan hashes; the original -r70 was authored
+# against K=13 (stable 6.19.14). Pinning to K=11 is a real regression
+# of two linux-stable point releases, but it's the only K still
+# fetchable. Bump back up if alicef catches up. verified 2026-05-10.
+K_GENPATCHES_VER="11"
 
 # Curated pf delta sets EXTRAVERSION via the patch itself.
 K_NOSETEXTRAVERSION="1"
@@ -103,8 +108,8 @@ pkg_postinst() {
 	elog ""
 	elog "6.19 is the youngest active branch; pf hasn't had time to accumulate"
 	elog "many 'minor fixes' that overlap with stable, so the curated subset"
-	elog "is small (34 files / ~4k lines) and applies with zero conflicts on a"
-	elog "fresh gentoo-sources-6.19.14 tree."
+	elog "is small (34 files / ~4k lines) and applies with normal-fuzz only"
+	elog "on a fresh gentoo-sources-6.19.X tree."
 	elog ""
 	elog "Curated pf features RETAINED from natalenko's patchset:"
 	elog "  * BBRv3 TCP congestion control (net/ipv4/tcp_bbr* and helpers)"
