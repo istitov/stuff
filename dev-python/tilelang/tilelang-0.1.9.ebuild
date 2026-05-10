@@ -6,6 +6,7 @@ EAPI=8
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=scikit-build-core
 PYTHON_COMPAT=( python3_{11..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -23,24 +24,28 @@ KEYWORDS="~amd64"
 # that with python_targets_python3_{11..13} guards. # verified
 # 2026-05-07 against 0.1.9.
 RDEPEND="
-	dev-python/apache-tvm-ffi[${PYTHON_USEDEP}]
-	dev-python/cloudpickle[${PYTHON_USEDEP}]
-	dev-python/ml-dtypes[${PYTHON_USEDEP}]
-	>=dev-python/numpy-1.23.5[${PYTHON_USEDEP}]
-	dev-python/psutil[${PYTHON_USEDEP}]
-	sci-ml/pytorch[${PYTHON_USEDEP}]
-	>=dev-python/tqdm-4.62.3[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-4.10[${PYTHON_USEDEP}]
-	sci-mathematics/z3[python,${PYTHON_USEDEP}]
-	python_targets_python3_11? ( dev-python/torch-c-dlpack-ext[${PYTHON_USEDEP}] )
-	python_targets_python3_12? ( dev-python/torch-c-dlpack-ext[${PYTHON_USEDEP}] )
-	python_targets_python3_13? ( dev-python/torch-c-dlpack-ext[${PYTHON_USEDEP}] )
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/apache-tvm-ffi[${PYTHON_USEDEP}]
+		dev-python/cloudpickle[${PYTHON_USEDEP}]
+		dev-python/ml-dtypes[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.23.5[${PYTHON_USEDEP}]
+		dev-python/psutil[${PYTHON_USEDEP}]
+		>=dev-python/tqdm-4.62.3[${PYTHON_USEDEP}]
+		>=dev-python/typing-extensions-4.10[${PYTHON_USEDEP}]
+		sci-mathematics/z3[python,${PYTHON_USEDEP}]
+	')
+	python_single_target_python3_11? ( dev-python/torch-c-dlpack-ext[${PYTHON_SINGLE_USEDEP}] )
+	python_single_target_python3_12? ( dev-python/torch-c-dlpack-ext[${PYTHON_SINGLE_USEDEP}] )
+	python_single_target_python3_13? ( dev-python/torch-c-dlpack-ext[${PYTHON_SINGLE_USEDEP}] )
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
-	>=dev-python/cython-3.1[${PYTHON_USEDEP}]
 	>=dev-util/patchelf-0.17.2
 	dev-util/nvidia-cuda-toolkit:=
+	$(python_gen_cond_dep '
+		>=dev-python/cython-3.1[${PYTHON_USEDEP}]
+	')
 "
 
 # Upstream pyproject.toml caps z3-solver at <4.15.5 — ::gentoo carries
