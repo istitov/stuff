@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -24,11 +25,13 @@ KEYWORDS="~amd64"
 # incompatible with our 3.8.x stack.
 RDEPEND="
 	${PYTHON_DEPS}
-	>=dev-python/curated-transformers-0.1.0[${PYTHON_USEDEP}]
-	<dev-python/curated-transformers-0.2[${PYTHON_USEDEP}]
-	>=dev-python/curated-tokenizers-0.0.9[${PYTHON_USEDEP}]
-	<dev-python/curated-tokenizers-0.1[${PYTHON_USEDEP}]
-	>=sci-ml/pytorch-1.12.0[${PYTHON_USEDEP}]
+	>=dev-python/curated-transformers-0.1.0[${PYTHON_SINGLE_USEDEP}]
+	<dev-python/curated-transformers-0.2[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/pytorch-1.12.0[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/curated-tokenizers-0.0.9[${PYTHON_USEDEP}]
+		<dev-python/curated-tokenizers-0.1[${PYTHON_USEDEP}]
+	')
 "
 DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
