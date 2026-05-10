@@ -11,9 +11,9 @@ PYTHON_COMPAT=( python2_7 )
 inherit distutils-r1_py2
 
 DESCRIPTION="Run unittests or fail if no tests were found"
-HOMEPAGE="https://github.com/mgorny/unittest-or-fail/"
+HOMEPAGE="https://github.com/projg2/unittest-or-fail/"
 SRC_URI="
-	https://github.com/mgorny/unittest-or-fail/archive/v${PV}.tar.gz
+	https://github.com/projg2/unittest-or-fail/archive/v${PV}.tar.gz
 		-> ${P}.tar.gz"
 
 LICENSE="BSD-2"
