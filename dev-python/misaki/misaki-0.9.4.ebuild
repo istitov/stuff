@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{12..13} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -24,13 +25,15 @@ KEYWORDS="~amd64"
 # don't have.
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/addict[${PYTHON_USEDEP}]
-	dev-python/espeakng-loader[${PYTHON_USEDEP}]
-	dev-python/num2words[${PYTHON_USEDEP}]
-	dev-python/phonemizer-fork[${PYTHON_USEDEP}]
-	dev-python/regex[${PYTHON_USEDEP}]
-	dev-python/spacy[${PYTHON_USEDEP}]
-	dev-python/spacy-curated-transformers[${PYTHON_USEDEP}]
+	dev-python/spacy-curated-transformers[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/addict[${PYTHON_USEDEP}]
+		dev-python/espeakng-loader[${PYTHON_USEDEP}]
+		dev-python/num2words[${PYTHON_USEDEP}]
+		dev-python/phonemizer-fork[${PYTHON_USEDEP}]
+		dev-python/regex[${PYTHON_USEDEP}]
+		dev-python/spacy[${PYTHON_USEDEP}]
+	')
 "
 DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
