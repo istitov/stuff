@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=no
 PYTHON_COMPAT=( python3_{11,12} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
 
@@ -42,20 +43,22 @@ KEYWORDS="-* ~amd64"
 # export will fail with ImportError, but the PyTorch-only quantization
 # paths vllm normally invokes don't need them.
 RDEPEND="
-	sci-ml/evaluate[${PYTHON_USEDEP}]
-	dev-python/joblib[${PYTHON_USEDEP}]
+	sci-ml/evaluate[${PYTHON_SINGLE_USEDEP}]
 	app-alternatives/ninja
-	dev-python/numpy[${PYTHON_USEDEP}]
-	~sci-ml/onnx-1.18.0[${PYTHON_USEDEP}]
-	dev-python/pandas[${PYTHON_USEDEP}]
-	dev-python/plotly[${PYTHON_USEDEP}]
-	dev-python/protobuf[${PYTHON_USEDEP}]
-	dev-python/pydantic[${PYTHON_USEDEP}]
-	dev-python/rich[${PYTHON_USEDEP}]
-	dev-python/scipy[${PYTHON_USEDEP}]
-	sci-ml/sentencepiece[${PYTHON_USEDEP}]
-	dev-python/tqdm[${PYTHON_USEDEP}]
-	dev-python/zstandard[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/joblib[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		~sci-ml/onnx-1.18.0[${PYTHON_USEDEP}]
+		dev-python/pandas[${PYTHON_USEDEP}]
+		dev-python/plotly[${PYTHON_USEDEP}]
+		dev-python/protobuf[${PYTHON_USEDEP}]
+		dev-python/pydantic[${PYTHON_USEDEP}]
+		dev-python/rich[${PYTHON_USEDEP}]
+		dev-python/scipy[${PYTHON_USEDEP}]
+		sci-ml/sentencepiece[${PYTHON_USEDEP}]
+		dev-python/tqdm[${PYTHON_USEDEP}]
+		dev-python/zstandard[${PYTHON_USEDEP}]
+	')
 "
 
 src_unpack() {
@@ -64,9 +67,6 @@ src_unpack() {
 }
 
 src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+	python_setup
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${MY_WHEEL}" || die
 }
