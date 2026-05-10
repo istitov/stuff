@@ -6,6 +6,13 @@ on:
     # Quarterly: 06:00 UTC on the 1st of Jan / Apr / Jul / Oct.
     - cron: "0 6 1 */3 *"
 
+# Serialize concurrent runs (e.g. a manual workflow_dispatch fired during
+# the scheduled cron). Issue creation is roughly idempotent but the report
+# would land twice; let one finish before the other starts.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   dusty-report:
     runs-on: ubuntu-latest
