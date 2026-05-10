@@ -1,0 +1,42 @@
+name: actionlint
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/**'
+      - '.github/actionlint.yaml'
+      - '.github/actionlint.yml'
+  pull_request:
+    branches: [master]
+    paths:
+      - '.github/workflows/**'
+      - '.github/actionlint.yaml'
+      - '.github/actionlint.yml'
+
+# Cancel an in-progress lint when a newer commit on the same ref arrives;
+# the lint is idempotent and the latest commit's result subsumes earlier
+# ones.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # Pinned to a specific release rather than @latest so an upstream
+      # actionlint update that adds new rules can't break CI without us
+      # having reviewed the diff. Bump manually like the pkgcheck-action
+      # SHA pin in pkgcheck.yml. Go's module proxy + go.sum gives a
+      # supply-chain story without third-party action deps.
+      - name: Install actionlint
+        run: go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
+
+      # actionlint auto-detects .github/workflows/*.yml when no paths are
+      # given.
+      - name: Run actionlint
+        run: actionlint -color
