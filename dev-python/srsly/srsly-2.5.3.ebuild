@@ -7,14 +7,13 @@ DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
 PYTHON_COMPAT=( python3_{12..14} )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Modern high-performance serialization utilities for Python"
 HOMEPAGE="
 	https://github.com/explosion/srsly
 	https://pypi.org/project/srsly/
 "
-SRC_URI="https://files.pythonhosted.org/packages/source/${PN::1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
