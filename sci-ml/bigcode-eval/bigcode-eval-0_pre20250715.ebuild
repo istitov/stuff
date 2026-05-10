@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
 
@@ -24,15 +25,20 @@ KEYWORDS="~amd64"
 # Core deps from requirements.txt at HEAD. pyext is listed but not actually
 # imported in any .py source (only by ds1000 adapter at runtime via dynamic
 # code generation, which is broken on Py3.11+ regardless), so we drop it.
+#
+# single-impl: the entire sci-ml/* stack here is SINGLE_IMPL; only the two
+# dev-python/* helpers are multi-impl, wrapped via python_gen_cond_dep.
 RDEPEND="
-	dev-python/mosestokenizer[${PYTHON_USEDEP}]
-	>=dev-python/fsspec-2023.12.2[${PYTHON_USEDEP}]
-	>=sci-ml/accelerate-0.13.2[${PYTHON_USEDEP}]
-	>=sci-ml/datasets-2.6.1[${PYTHON_USEDEP}]
-	>=sci-ml/evaluate-0.3.0[${PYTHON_USEDEP}]
-	>=sci-ml/huggingface_hub-0.11.1[${PYTHON_USEDEP}]
-	>=sci-ml/transformers-4.25.1[${PYTHON_USEDEP}]
-	sci-ml/pytorch[${PYTHON_USEDEP}]
+	>=sci-ml/accelerate-0.13.2[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/datasets-2.6.1[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/evaluate-0.3.0[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/huggingface_hub-0.11.1[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/transformers-4.25.1[${PYTHON_SINGLE_USEDEP}]
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/mosestokenizer[${PYTHON_USEDEP}]
+		>=dev-python/fsspec-2023.12.2[${PYTHON_USEDEP}]
+	')
 "
 
 src_prepare() {
