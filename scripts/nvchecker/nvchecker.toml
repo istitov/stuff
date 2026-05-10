@@ -8,11 +8,27 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (90) ---
+# --- pypi (179) ---
 
 ["dev-python/abtem"]
 source = "pypi"
 pypi = "abtem"
+
+["dev-python/amd-quark-bin"]
+source = "pypi"
+pypi = "amd-quark-bin"
+
+["dev-python/anthropic"]
+source = "pypi"
+pypi = "anthropic"
+
+["dev-python/apache-tvm-ffi"]
+source = "pypi"
+pypi = "apache-tvm-ffi"
+
+["dev-python/arro3-core"]
+source = "pypi"
+pypi = "arro3-core"
 
 ["dev-python/asciitree"]
 source = "pypi"
@@ -34,6 +50,10 @@ pypi = "av"
 source = "pypi"
 pypi = "bidict"
 
+["dev-python/blis"]
+source = "pypi"
+pypi = "blis"
+
 ["dev-python/bokeh"]
 source = "pypi"
 pypi = "bokeh"
@@ -41,6 +61,10 @@ pypi = "bokeh"
 ["dev-python/bumps"]
 source = "pypi"
 pypi = "bumps"
+
+["dev-python/cirron"]
+source = "pypi"
+pypi = "Cirron"
 
 ["dev-python/colorspacious"]
 source = "pypi"
@@ -50,17 +74,65 @@ pypi = "colorspacious"
 source = "pypi"
 pypi = "columnize"
 
+["dev-python/compressed-tensors"]
+source = "pypi"
+pypi = "compressed-tensors"
+
+["dev-python/conch-triton-kernels"]
+source = "pypi"
+pypi = "conch-triton-kernels"
+
+["dev-python/confection"]
+source = "pypi"
+pypi = "confection"
+
+["dev-python/cuda-python"]
+source = "pypi"
+pypi = "cuda-python"
+
 ["dev-python/cupy"]
 source = "pypi"
 pypi = "cupy"
+
+["dev-python/curated-tokenizers"]
+source = "pypi"
+pypi = "curated-tokenizers"
+
+["dev-python/curated-transformers"]
+source = "pypi"
+pypi = "curated-transformers"
+
+["dev-python/cyclopts"]
+source = "pypi"
+pypi = "cyclopts"
+
+["dev-python/cymem"]
+source = "pypi"
+pypi = "cymem"
 
 ["dev-python/dans-diffraction"]
 source = "pypi"
 pypi = "dans_diffraction"
 
+["dev-python/darkdetect"]
+source = "pypi"
+pypi = "darkdetect"
+
 ["dev-python/dask-labextension"]
 source = "pypi"
 pypi = "${PN/-/_}"
+
+["dev-python/dataproperty"]
+source = "pypi"
+pypi = "dataproperty"
+
+["dev-python/deltalake"]
+source = "pypi"
+pypi = "deltalake"
+
+["dev-python/depyf"]
+source = "pypi"
+pypi = "depyf"
 
 ["dev-python/diffpy-structure"]
 source = "pypi"
@@ -74,9 +146,17 @@ pypi = "${PN/-/.}"
 source = "pypi"
 pypi = "diffsims"
 
+["dev-python/docstring-parser"]
+source = "pypi"
+pypi = "docstring_parser"
+
 ["dev-python/donfig"]
 source = "pypi"
 pypi = "donfig"
+
+["dev-python/einops"]
+source = "pypi"
+pypi = "einops"
 
 ["dev-python/emdfile"]
 source = "pypi"
@@ -98,9 +178,29 @@ pypi = "exspy"
 source = "pypi"
 pypi = "fabio"
 
+["dev-python/fastapi"]
+source = "pypi"
+pypi = "fastapi"
+
 ["dev-python/fastrlock"]
 source = "pypi"
 pypi = "fastrlock"
+
+["dev-python/fastsafetensors"]
+source = "pypi"
+pypi = "fastsafetensors"
+
+["dev-python/fire"]
+source = "pypi"
+pypi = "fire"
+
+["dev-python/flashinfer-cubin"]
+source = "pypi"
+pypi = "flashinfer-cubin"
+
+["dev-python/flashinfer-python"]
+source = "pypi"
+pypi = "flashinfer-python"
 
 ["dev-python/flexcache"]
 source = "pypi"
@@ -117,6 +217,14 @@ pypi = "gdown"
 ["dev-python/gemmi"]
 source = "pypi"
 pypi = "gemmi"
+
+["dev-python/gguf"]
+source = "pypi"
+pypi = "gguf"
+
+["dev-python/google-ai-generativelanguage"]
+source = "pypi"
+pypi = "google_ai_generativelanguage"
 
 ["dev-python/google-crc32c"]
 source = "pypi"
@@ -138,6 +246,10 @@ pypi = "hatch-sphinx"
 source = "pypi"
 pypi = "hdf5plugin"
 
+["dev-python/httpx-sse"]
+source = "pypi"
+pypi = "httpx-sse"
+
 ["dev-python/hyperspy"]
 source = "pypi"
 pypi = "hyperspy"
@@ -154,9 +266,21 @@ pypi = "hyperspy-gui-traitsui"
 source = "pypi"
 pypi = "hyperspyui"
 
+["dev-python/interegular"]
+source = "pypi"
+pypi = "interegular"
+
 ["dev-python/ipympl"]
 source = "pypi"
 pypi = "ipympl"
+
+["dev-python/jiter"]
+source = "pypi"
+pypi = "jiter"
+
+["dev-python/kokoro"]
+source = "pypi"
+pypi = "kokoro"
 
 ["dev-python/larixite"]
 source = "pypi"
@@ -166,13 +290,45 @@ pypi = "larixite"
 source = "pypi"
 pypi = "link-traits"
 
+["dev-python/llguidance"]
+source = "pypi"
+pypi = "llguidance"
+
+["dev-python/lm-format-enforcer"]
+source = "pypi"
+pypi = "lm-format-enforcer"
+
 ["dev-python/matplotlib-scalebar"]
 source = "pypi"
 pypi = "matplotlib-scalebar"
 
+["dev-python/mbstrdecoder"]
+source = "pypi"
+pypi = "mbstrdecoder"
+
+["dev-python/mcp"]
+source = "pypi"
+pypi = "mcp"
+
+["dev-python/misaki"]
+source = "pypi"
+pypi = "misaki"
+
+["dev-python/mistral-common"]
+source = "pypi"
+pypi = "mistral_common"
+
+["dev-python/model-hosting-container-standards"]
+source = "pypi"
+pypi = "model-hosting-container-standards"
+
 ["dev-python/monty"]
 source = "pypi"
 pypi = "monty"
+
+["dev-python/mosestokenizer"]
+source = "pypi"
+pypi = "mosestokenizer"
 
 ["dev-python/mp-api"]
 source = "pypi"
@@ -186,9 +342,17 @@ pypi = "mpire"
 source = "pypi"
 pypi = "mpld3"
 
+["dev-python/murmurhash"]
+source = "pypi"
+pypi = "murmurhash"
+
 ["dev-python/ncempy"]
 source = "pypi"
 pypi = "ncempy"
+
+["dev-python/nltk"]
+source = "pypi"
+pypi = "nltk"
 
 ["dev-python/numcodecs"]
 source = "pypi"
@@ -197,6 +361,38 @@ pypi = "numcodecs"
 ["dev-python/numdifftools"]
 source = "pypi"
 pypi = "numdifftools"
+
+["dev-python/nvidia-cutlass-dsl"]
+source = "pypi"
+pypi = "nvidia-cutlass-dsl"
+
+["dev-python/openai"]
+source = "pypi"
+pypi = "openai"
+
+["dev-python/openai-harmony"]
+source = "pypi"
+pypi = "openai-harmony"
+
+["dev-python/openfile"]
+source = "pypi"
+pypi = "openfile"
+
+["dev-python/opentelemetry-semantic-conventions-ai"]
+source = "pypi"
+pypi = "opentelemetry-semantic-conventions-ai"
+
+["dev-python/orix"]
+source = "pypi"
+pypi = "orix"
+
+["dev-python/orsopy"]
+source = "pypi"
+pypi = "orsopy"
+
+["dev-python/outlines-core"]
+source = "pypi"
+pypi = "outlines_core"
 
 ["dev-python/palettable"]
 source = "pypi"
@@ -210,13 +406,33 @@ pypi = "parsimonious"
 source = "pypi"
 pypi = "partd"
 
+["dev-python/partial-json-parser"]
+source = "pypi"
+pypi = "partial-json-parser"
+
 ["dev-python/peakutils"]
 source = "pypi"
 pypi = "peakutils"
 
+["dev-python/phonemizer-fork"]
+source = "pypi"
+pypi = "phonemizer-fork"
+
 ["dev-python/pint"]
 source = "pypi"
 pypi = "pint"
+
+["dev-python/preshed"]
+source = "pypi"
+pypi = "preshed"
+
+["dev-python/prometheus-fastapi-instrumentator"]
+source = "pypi"
+pypi = "prometheus-fastapi-instrumentator"
+
+["dev-python/pubchempy"]
+source = "pypi"
+pypi = "pubchempy"
 
 ["dev-python/py4dstem"]
 source = "pypi"
@@ -226,9 +442,21 @@ pypi = "py4dstem"
 source = "pypi"
 pypi = "pyausaxs"
 
+["dev-python/pybase64"]
+source = "pypi"
+pypi = "pybase64"
+
+["dev-python/pyclibrary"]
+source = "pypi"
+pypi = "pyclibrary"
+
 ["dev-python/pycuda"]
 source = "pypi"
 pypi = "pycuda"
+
+["dev-python/pydantic-extra-types"]
+source = "pypi"
+pypi = "pydantic-extra-types"
 
 ["dev-python/pyface"]
 source = "pypi"
@@ -258,6 +486,10 @@ pypi = "pymatgen-core"
 source = "pypi"
 pypi = "pymatgen-io-validation"
 
+["dev-python/pympler"]
+source = "pypi"
+pypi = "pympler"
+
 ["dev-python/pynida"]
 source = "pypi"
 pypi = "pynida"
@@ -274,6 +506,10 @@ pypi = "pyqode-python"
 source = "pypi"
 pypi = "pyshortcuts"
 
+["dev-python/pytablewriter"]
+source = "pypi"
+pypi = "pytablewriter"
+
 ["dev-python/pytest-mpl"]
 source = "pypi"
 pypi = "pytest-mpl"
@@ -282,17 +518,49 @@ pypi = "pytest-mpl"
 source = "pypi"
 pypi = "python-socketio"
 
+["dev-python/pyvista"]
+source = "pypi"
+pypi = "pyvista"
+
+["dev-python/pyvistaqt"]
+source = "pypi"
+pypi = "pyvistaqt"
+
 ["dev-python/pyxem"]
 source = "pypi"
 pypi = "pyxem"
+
+["dev-python/qtpy"]
+source = "pypi"
+pypi = "QtPy"
+
+["dev-python/quack-kernels"]
+source = "pypi"
+pypi = "quack-kernels"
 
 ["dev-python/rdfpy"]
 source = "pypi"
 pypi = "rdfpy"
 
+["dev-python/rich-rst"]
+source = "pypi"
+pypi = "rich-rst"
+
 ["dev-python/rosettasciio"]
 source = "pypi"
 pypi = "rosettasciio"
+
+["dev-python/rouge-score"]
+source = "pypi"
+pypi = "rouge_score"
+
+["dev-python/runai-model-streamer-bin"]
+source = "pypi"
+pypi = "runai-model-streamer-bin"
+
+["dev-python/sacrebleu"]
+source = "pypi"
+pypi = "sacrebleu"
 
 ["dev-python/sasdata"]
 source = "pypi"
@@ -306,6 +574,10 @@ pypi = "sasmodels"
 source = "pypi"
 pypi = "scikit-optimize"
 
+["dev-python/scooby"]
+source = "pypi"
+pypi = "scooby"
+
 ["dev-python/seekpath"]
 source = "pypi"
 pypi = "seekpath"
@@ -314,6 +586,10 @@ pypi = "seekpath"
 source = "pypi"
 pypi = "silx"
 
+["dev-python/spacy-curated-transformers"]
+source = "pypi"
+pypi = "spacy-curated-transformers"
+
 ["dev-python/sparse"]
 source = "pypi"
 pypi = "sparse"
@@ -321,6 +597,50 @@ pypi = "sparse"
 ["dev-python/sqlalchemy-utils"]
 source = "pypi"
 pypi = "sqlalchemy-utils"
+
+["dev-python/srsly"]
+source = "pypi"
+pypi = "srsly"
+
+["dev-python/sse-starlette"]
+source = "pypi"
+pypi = "sse-starlette"
+
+["dev-python/stop-sequencer"]
+source = "pypi"
+pypi = "stop-sequencer"
+
+["dev-python/tabledata"]
+source = "pypi"
+pypi = "tabledata"
+
+["dev-python/tempdir"]
+source = "pypi"
+pypi = "tempdir"
+
+["dev-python/tensorizer"]
+source = "pypi"
+pypi = "tensorizer"
+
+["dev-python/thinc"]
+source = "pypi"
+pypi = "thinc"
+
+["dev-python/tiktoken"]
+source = "pypi"
+pypi = "tiktoken"
+
+["dev-python/tilelang"]
+source = "pypi"
+pypi = "tilelang"
+
+["dev-python/toolwrapper"]
+source = "pypi"
+pypi = "toolwrapper"
+
+["dev-python/torch-c-dlpack-ext"]
+source = "pypi"
+pypi = "torch-c-dlpack-ext"
 
 ["dev-python/traits"]
 source = "pypi"
@@ -334,6 +654,30 @@ pypi = "traitsui"
 source = "pypi"
 pypi = "transforms3d"
 
+["dev-python/typepy"]
+source = "pypi"
+pypi = "typepy"
+
+["dev-python/uctools"]
+source = "pypi"
+pypi = "uctools"
+
+["dev-python/vllm"]
+source = "pypi"
+pypi = "vllm"
+
+["dev-python/weasel"]
+source = "pypi"
+pypi = "weasel"
+
+["dev-python/wget"]
+source = "pypi"
+pypi = "wget"
+
+["dev-python/word2number"]
+source = "pypi"
+pypi = "word2number"
+
 ["dev-python/wxmplot"]
 source = "pypi"
 pypi = "wxmplot"
@@ -341,6 +685,10 @@ pypi = "wxmplot"
 ["dev-python/wxutils"]
 source = "pypi"
 pypi = "wxutils"
+
+["dev-python/xgrammar"]
+source = "pypi"
+pypi = "xgrammar"
 
 ["dev-python/xraydb"]
 source = "pypi"
@@ -362,6 +710,14 @@ pypi = "zict"
 source = "pypi"
 pypi = "pycifrw"
 
+["sci-ml/evalplus"]
+source = "pypi"
+pypi = "evalplus"
+
+["sci-ml/lm-eval"]
+source = "pypi"
+pypi = "lm_eval"
+
 ["sci-physics/sasview"]
 source = "pypi"
 pypi = "sasview"
@@ -370,7 +726,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (61) ---
+# --- github (147) ---
 
 ["app-editors/gobby"]
 source = "github"
@@ -403,10 +759,23 @@ github = "megabaks/portconf"
 use_max_tag = true
 # note: from EGIT_REPO_URI
 
+["app-portage/udept"]
+source = "github"
+github = "istitov/udept"
+use_max_tag = true
+
 ["app-text/pandoc-crossref-bin"]
 source = "github"
 github = "lierdakil/pandoc-crossref"
 use_max_tag = true
+
+["dev-build/rocm-cmake"]
+source = "github"
+github = "ROCm/rocm-cmake"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
 
 ["dev-cpp/backward-cpp"]
 source = "github"
@@ -428,9 +797,80 @@ source = "github"
 github = "adplug/libbinio"
 use_max_tag = true
 
+["dev-libs/hipother"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
 ["dev-libs/oocairo"]
 source = "github"
 github = "awesomeWM/oocairo"
+use_max_tag = true
+# note: from HOMEPAGE
+
+["dev-libs/rccl"]
+source = "github"
+github = "ROCm/rccl"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["dev-libs/rocm-comgr"]
+source = "github"
+github = "ROCm/llvm-project"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["dev-libs/rocm-core"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["dev-libs/rocm-device-libs"]
+source = "github"
+github = "ROCm/llvm-project"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
+
+["dev-libs/rocm-opencl-runtime"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["dev-libs/rocr-runtime"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
+
+["dev-libs/roct-thunk-interface"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
+
+["dev-libs/xdna-driver"]
+source = "github"
+github = "amd/xdna-driver"
+use_max_tag = true
+# note: from HOMEPAGE
+
+["dev-libs/xrt-xdna"]
+source = "github"
+github = "amd/xdna-driver"
 use_max_tag = true
 # note: from HOMEPAGE
 
@@ -449,9 +889,44 @@ source = "github"
 github = "dmbaturin/otoml"
 use_max_tag = true
 
+["dev-python/PyMuPDF"]
+source = "github"
+github = "pymupdf/PyMuPDF"
+use_max_tag = true
+
+["dev-python/addict"]
+source = "github"
+github = "mewwts/addict"
+use_max_tag = true
+
 ["dev-python/apsw"]
 source = "github"
 github = "rogerbinns/apsw"
+use_max_tag = true
+
+["dev-python/catalogue"]
+source = "github"
+github = "explosion/catalogue"
+use_max_tag = true
+
+["dev-python/cloudpathlib"]
+source = "github"
+github = "drivendataorg/cloudpathlib"
+use_max_tag = true
+
+["dev-python/csvw"]
+source = "github"
+github = "cldf/csvw"
+use_max_tag = true
+
+["dev-python/cuda-bindings"]
+source = "github"
+github = "NVIDIA/cuda-python"
+use_max_tag = true
+
+["dev-python/cuda-pathfinder"]
+source = "github"
+github = "NVIDIA/cuda-python"
 use_max_tag = true
 
 ["dev-python/dask"]
@@ -464,6 +939,43 @@ source = "github"
 github = "dask/distributed"
 use_max_tag = true
 
+["dev-python/dlinfo"]
+source = "github"
+github = "fphammerle/dlinfo"
+use_max_tag = true
+
+["dev-python/espeakng-loader"]
+source = "github"
+github = "thewh1teagle/espeakng-loader"
+use_max_tag = true
+# note: from HOMEPAGE
+
+["dev-python/google-generativeai"]
+source = "github"
+github = "google-gemini/deprecated-generative-ai-python"
+use_max_tag = true
+
+["dev-python/h5pyd"]
+source = "github"
+github = "HDFGroup/h5pyd"
+use_max_tag = true
+
+["dev-python/jsonlines"]
+source = "github"
+github = "wbolster/jsonlines"
+use_max_tag = true
+# note: from HOMEPAGE
+
+["dev-python/langcodes"]
+source = "github"
+github = "georgkrause/langcodes"
+use_max_tag = true
+
+["dev-python/language-tags"]
+source = "github"
+github = "OnroerendErfgoed/language-tags"
+use_max_tag = true
+
 ["dev-python/llvmlite"]
 source = "github"
 github = "numba/llvmlite"
@@ -474,9 +986,61 @@ source = "github"
 github = "mwilliamson/locket.py"
 use_max_tag = true
 
+["dev-python/num2words"]
+source = "github"
+github = "savoirfairelinux/num2words"
+use_max_tag = true
+
 ["dev-python/numba"]
 source = "github"
 github = "numba/numba"
+use_max_tag = true
+
+["dev-python/nvidia-cudnn-frontend"]
+source = "github"
+github = "NVIDIA/cudnn-frontend"
+use_max_tag = true
+
+["dev-python/nvidia-cutlass-dsl-libs-base"]
+source = "github"
+github = "NVIDIA/cutlass"
+use_max_tag = true
+# note: from HOMEPAGE
+
+["dev-python/nvidia-cutlass-dsl-libs-cu13"]
+source = "github"
+github = "NVIDIA/cutlass"
+use_max_tag = true
+# note: from HOMEPAGE
+
+["dev-python/openai-whisper"]
+source = "github"
+github = "openai/openai-whisper"
+use_max_tag = true
+
+["dev-python/opentelemetry-exporter-otlp"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+
+["dev-python/opentelemetry-exporter-otlp-proto-common"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+
+["dev-python/opentelemetry-exporter-otlp-proto-grpc"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+
+["dev-python/opentelemetry-exporter-otlp-proto-http"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+
+["dev-python/opentelemetry-proto"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
 
 ["dev-python/periodictable"]
@@ -484,9 +1048,49 @@ source = "github"
 github = "python-periodictable/periodictable"
 use_max_tag = true
 
+["dev-python/pipcl"]
+source = "github"
+github = "ArtifexSoftware/pipcl"
+use_max_tag = true
+
+["dev-python/pymupdf-fonts"]
+source = "github"
+github = "pymupdf/pymupdf-fonts"
+use_max_tag = true
+
 ["dev-python/pyprismatic"]
 source = "github"
 github = "prism-em/pyprismatic"
+use_max_tag = true
+
+["dev-python/segments"]
+source = "github"
+github = "cldf/segments"
+use_max_tag = true
+
+["dev-python/smart-open"]
+source = "github"
+github = "piskvorky/smart-open"
+use_max_tag = true
+
+["dev-python/sounddevice"]
+source = "github"
+github = "spatialaudio/python-sounddevice"
+use_max_tag = true
+
+["dev-python/spacy"]
+source = "github"
+github = "explosion/spacy"
+use_max_tag = true
+
+["dev-python/spacy-legacy"]
+source = "github"
+github = "explosion/spacy-legacy"
+use_max_tag = true
+
+["dev-python/spacy-loggers"]
+source = "github"
+github = "explosion/spacy-loggers"
 use_max_tag = true
 
 ["dev-python/spur"]
@@ -500,16 +1104,101 @@ github = "metab0t/tccbox"
 use_max_tag = true
 # note: from HOMEPAGE
 
+["dev-python/term-image"]
+source = "github"
+github = "AnonymouX47/term-image"
+use_max_tag = true
+
 ["dev-python/toml"]
 source = "github"
 github = "uiri/toml"
 use_max_tag = true
+
+["dev-python/wasabi"]
+source = "github"
+github = "explosion/wasabi"
+use_max_tag = true
+
+["dev-util/bats-assert"]
+source = "github"
+github = "bats-core/bats-assert"
+use_max_tag = true
+
+["dev-util/bats-support"]
+source = "github"
+github = "bats-core/bats-support"
+use_max_tag = true
+
+["dev-util/hip"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
+
+["dev-util/hipcc"]
+source = "github"
+github = "ROCm/llvm-project"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
+
+["dev-util/hipify-clang"]
+source = "github"
+github = "ROCm/HIPIFY"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["dev-util/rocm-smi"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
+
+["dev-util/rocm_bandwidth_test"]
+source = "github"
+github = "ROCm/rocm_bandwidth_test"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["dev-util/rocminfo"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
+
+["dev-util/therock-bin"]
+source = "github"
+github = "ROCm/TheRock"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
+
+["dev-util/xrt"]
+source = "github"
+github = "Xilinx/XRT"
+use_max_tag = true
+# note: from HOMEPAGE
 
 ["games-roguelike/dwarftherapist"]
 source = "github"
 github = "Dwarf-Therapist/Dwarf-Therapist"
 use_max_tag = true
 # note: from HOMEPAGE
+
+["media-gfx/orcaslicer"]
+source = "github"
+github = "OrcaSlicer/OrcaSlicer"
+use_max_tag = true
 
 ["media-gfx/svgcleaner"]
 source = "github"
@@ -524,6 +1213,16 @@ use_max_tag = true
 ["media-libs/adplug"]
 source = "github"
 github = "adplug/adplug"
+use_max_tag = true
+
+["media-libs/draco"]
+source = "github"
+github = "google/draco"
+use_max_tag = true
+
+["media-libs/libnoise"]
+source = "github"
+github = "SoftFever/Orca-deps-libnoise"
 use_max_tag = true
 
 ["media-libs/viuer"]
@@ -611,10 +1310,148 @@ source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
 use_max_tag = true
 
+["sci-libs/composable-kernel"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/faiss"]
+source = "github"
+github = "facebookresearch/faiss"
+use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+
+["sci-libs/hdf"]
+source = "github"
+github = "HDFGroup/hdf4"
+use_max_tag = true
+
+["sci-libs/hipBLAS"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/hipBLAS-common"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/hipBLASLt"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/hipCUB"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/hipFFT"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/hipRAND"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/hipSOLVER"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/hipSPARSE"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/hipsparselt"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/miopen"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
 ["sci-libs/nexus"]
 source = "github"
 github = "nexusformat/code"
 use_max_tag = true
+
+["sci-libs/rocBLAS"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from HOMEPAGE
+
+["sci-libs/rocFFT"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/rocPRIM"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/rocRAND"]
+source = "github"
+github = "ROCm/rocRAND"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/rocSOLVER"]
+source = "github"
+github = "ROCm/rocSOLVER"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/rocSPARSE"]
+source = "github"
+github = "ROCm/rocSPARSE"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+
+["sci-libs/rocThrust"]
+source = "github"
+github = "ROCm/rocThrust"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
 
 ["sci-libs/suitesparseconfig"]
 source = "github"
@@ -626,16 +1463,52 @@ source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
 use_max_tag = true
 
-["sci-physics/ifeffit"]
+["sci-misc/llama-cpp"]
 source = "github"
-github = "newville/ifeffit"
+github = "ggml-org/llama.cpp"
 use_max_tag = true
 # note: from HOMEPAGE
+
+["sci-ml/amd-gaia"]
+source = "github"
+github = "amd/gaia"
+use_max_tag = true
+
+["sci-ml/bigcode-eval"]
+source = "github"
+github = "bigcode-project/bigcode-evaluation-harness"
+use_max_tag = true
+
+["sci-ml/caffe2"]
+source = "github"
+github = "pytorch/caffe2"
+use_max_tag = true
+
+["sci-ml/fastflowlm"]
+source = "github"
+github = "FastFlowLM/FastFlowLM"
+use_max_tag = true
+
+["sci-ml/lemonade"]
+source = "github"
+github = "lemonade-sdk/lemonade"
+use_max_tag = true
+
+["sci-ml/sentence-transformers"]
+source = "github"
+github = "huggingface/sentence-transformers"
+use_max_tag = true
+
+["sci-ml/torchaudio"]
+source = "github"
+github = "pytorch/audio"
+use_max_tag = true
 
 ["sci-physics/mantid"]
 source = "github"
 github = "mantidproject/mantid"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]{1,3}\.[0-9]{1,4}(\.[0-9]+)?(_rc[0-9]+)?$'
 # note: from EGIT_REPO_URI
 
 ["sci-physics/mumax"]
@@ -683,14 +1556,6 @@ source = "github"
 github = "polachok/skb"
 use_max_tag = true
 
-# --- gitlab (1) ---
-
-["x11-libs/cairo"]
-source = "gitlab"
-gitlab = "cairo/cairo"
-host = "gitlab.freedesktop.org"
-use_max_tag = true
-
 # --- bitbucket (1) ---
 
 ["media-plugins/deadbeef-opus"]
@@ -698,7 +1563,7 @@ source = "bitbucket"
 bitbucket = "Lithopsian/deadbeef-opus"
 use_max_tag = true
 
-# --- cpan (16) ---
+# --- cpan (17) ---
 
 ["dev-perl/Chemistry-Elements"]
 source = "cpan"
@@ -744,6 +1609,10 @@ cpan = "MooseX-Types-LaxNum"
 source = "cpan"
 cpan = "PDL-Stats"
 
+["dev-perl/PGPLOT"]
+source = "cpan"
+cpan = "PGPLOT"
+
 ["dev-perl/Pod-ProjectDocs"]
 source = "cpan"
 cpan = "Pod-ProjectDocs"
@@ -767,10 +1636,10 @@ cpan = "demeter"
 # --- skipped ---
 
 # ["app-portage/portopts"] skipped: live-only ebuild (no release tracking)
-# ["app-portage/udept"] skipped: live-only ebuild (no release tracking)
 # ["dev-libs/blingbling"] skipped: live-only ebuild (no release tracking)
 # ["dev-libs/libstrophe"] skipped: live-only ebuild (no release tracking)
 # ["dev-util/qbs"] skipped: live-only ebuild (no release tracking)
+# ["dev-util/zluda"] skipped: live-only ebuild (no release tracking)
 # ["games-misc/fortune-mod-lorquotes"] skipped: live-only ebuild (no release tracking)
 # ["media-libs/libjpeg-turbo"] skipped: live-only ebuild (no release tracking)
 # ["media-libs/mlt"] skipped: live-only ebuild (no release tracking)
@@ -802,30 +1671,35 @@ cpan = "demeter"
 # ["net-im/stabber"] skipped: live-only ebuild (no release tracking)
 # ["net-im/xmppconsole"] skipped: live-only ebuild (no release tracking)
 # ["net-misc/ipx-utils"] skipped: live-only ebuild (no release tracking)
+# ["sci-ml/kokoros"] skipped: live-only ebuild (no release tracking)
 # ["x11-plugins/e_modules-forecasts"] skipped: live-only ebuild (no release tracking)
 # ["x11-plugins/e_modules-places"] skipped: live-only ebuild (no release tracking)
 # ["x11-terms/cool-retro-term"] skipped: live-only ebuild (no release tracking)
 
 # ["dev-lang/tcc"] skipped: custom upstream at bellard.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["dev-libs/cudnn"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/cuda-tile-bin"] skipped: custom upstream at pypi.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["dev-python/mupdf"] skipped: custom upstream at mupdf.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/numpy-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pycairo-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygobject"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygtk"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/pyside"] skipped: custom upstream at wiki.qt.io; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/setuptools-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/unittest-or-fail"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-qt/qtdatavis3d"] skipped: no recognizable upstream
 # ["dev-qt/qthelp"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtwebchannel"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-util/nvidia-cuda-toolkit"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["lxde-base/lxpolkit"] skipped: sourceforge/lxde — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
-# ["media-gfx/iscan-data"] skipped: custom upstream at download.ebz.epson.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["media-gfx/sk1"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
-# ["sci-libs/hdf"] skipped: custom upstream at www.hdfgroup.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-physics/ifeffit"] skipped: custom upstream at sourceforge.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/oommf"] skipped: custom upstream at math.nist.gov; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/profex"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-visualization/gwyddion"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted

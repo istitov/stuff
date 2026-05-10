@@ -62,6 +62,54 @@ URL_HOST_RE = re.compile(r'https?://([A-Za-z0-9._-]+)')
 QT5_BUILD_RE = re.compile(r"^\s*inherit\b.*\bqt5-build\b", re.MULTILINE)
 
 
+# Per-github-repo overrides emitted alongside `use_max_tag = true`.
+#
+# The default github classification (`use_max_tag = true` with no filter) picks
+# the lexicographic-numeric max across every tag in the repo. That falls over
+# when the repo carries:
+#   - non-semver release tags that interleave with semver (e.g. ROCm's
+#     `rocm-X.Y.Z` releases vs TheRock's `YYYYMMDD-NN` nightlies on the
+#     same monorepo);
+#   - a single very old tag that wins numeric-tuple compare (e.g.
+#     facebookresearch/faiss `v20180223` outranking `v1.14.x`);
+#   - a date-versioned nightly tag scheme that runs in parallel with
+#     normal releases (e.g. mantid's `vX.Y.YYYYMMDD.HHMM` nightlies vs
+#     `vX.Y.Z` releases).
+#
+# Each entry is `(spec_pattern, overrides)` where overrides contains
+# `include_regex` (filter applied to the raw tag before max-selection) and
+# optionally `prefix` (stripped after selection so drift reports show clean
+# version numbers).
+GITHUB_TAG_FILTERS: list[tuple[re.Pattern, dict]] = [
+    # ROCm org: every project under ROCm/* uses `rocm-X.Y.Z` for stable
+    # releases. Without this filter, max-tag picks up TheRock-style nightly
+    # `YYYYMMDD-NN` tags or `X.Ybeta` previews from the monorepos.
+    # nvchecker applies include_regex via re.fullmatch, so the pattern must
+    # cover the whole tag — `^rocm-` alone matches only the 5-char prefix.
+    (re.compile(r"^ROCm/.+"),
+     {"include_regex": r"rocm-[0-9]+\.[0-9]+\.[0-9]+", "prefix": "rocm-"}),
+
+    # facebookresearch/faiss has an ancient `v20180223` single-segment tag
+    # that lexicographically beats `v1.14.x` semver releases.
+    (re.compile(r"^facebookresearch/faiss$"),
+     {"include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$"}),
+
+    # mantidproject/mantid runs `vX.Y.YYYYMMDD.HHMM` nightly tags alongside
+    # `vX.Y.Z(.W)(_rcN)?` releases; restrict to the release form (≤3 digits
+    # in the second/third segments rules out the 8-digit YYYYMMDD).
+    (re.compile(r"^mantidproject/mantid$"),
+     {"include_regex": r"^v[0-9]+\.[0-9]{1,3}\.[0-9]{1,4}(\.[0-9]+)?(_rc[0-9]+)?$"}),
+]
+
+
+def github_tag_filter(spec: str) -> dict | None:
+    """Return per-repo include_regex / prefix override for `spec`, if any."""
+    for pat, override in GITHUB_TAG_FILTERS:
+        if pat.fullmatch(spec):
+            return override
+    return None
+
+
 def find_newest_ebuild(pkgdir: Path) -> Path | None:
     """Return the newest non-live ebuild, or the live one if that's all there is."""
     released = []
@@ -269,6 +317,18 @@ def emit_entry(entry_name: str, classification: dict) -> list[str]:
         # use_max_tag works for any repo with tags, including projects that
         # don't curate GitHub Releases (which use_latest_release requires).
         lines.append("use_max_tag = true")
+        # Per-repo include_regex / prefix overrides for repos whose tag
+        # history breaks naive max-tag selection — see GITHUB_TAG_FILTERS.
+        override = github_tag_filter(classification["spec"])
+        if override:
+            if "include_regex" in override:
+                # TOML literal string ('...'): no backslash escaping, so the
+                # regex's '\.' etc. survive as-is. Patterns are kept free of
+                # single quotes in GITHUB_TAG_FILTERS so the literal-string
+                # form works without further quoting.
+                lines.append(f"include_regex = '{override['include_regex']}'")
+            if "prefix" in override:
+                lines.append(f'prefix = "{override["prefix"]}"')
         if note:
             lines.append(f"# note: {note}")
     elif kind == "bitbucket":
