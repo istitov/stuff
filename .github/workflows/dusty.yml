@@ -2,6 +2,11 @@ name: dusty-packages
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Print the report to logs without filing/commenting on the issue tracker.'
+        type: boolean
+        default: false
   schedule:
     # Quarterly: 06:00 UTC on the 1st of Jan / Apr / Jul / Oct.
     - cron: "0 6 1 */3 *"
@@ -63,12 +68,36 @@ jobs:
           echo "report_path=$report"  >> "$GITHUB_OUTPUT"
           echo "threshold=$threshold_days" >> "$GITHUB_OUTPUT"
 
+      # Dry-run preview: print what the workflow would file or close, then
+      # skip the issue-tracker steps below. Triggered via
+      # `gh workflow run dusty.yml -f dry_run=true` (or the UI checkbox);
+      # `inputs.dry_run` resolves to the empty string on schedule, so
+      # cron-driven runs always go through the live path.
+      - name: Print dry-run preview
+        if: inputs.dry_run == 'true'
+        env:
+          REPORT_PATH: ${{ steps.scan.outputs.report_path }}
+          DUSTY_COUNT: ${{ steps.scan.outputs.count }}
+          THRESHOLD_DAYS: ${{ steps.scan.outputs.threshold }}
+        run: |
+          set -euo pipefail
+          echo "DRY RUN — issue tracker will not be touched."
+          echo "Threshold: ${THRESHOLD_DAYS} days"
+          echo "Count:     ${DUSTY_COUNT}"
+          if [[ "${DUSTY_COUNT}" == "0" ]]; then
+            echo "Action that would fire: auto-close any open dusty-packages issue."
+          else
+            echo "Action that would fire: file/append a dusty-packages report."
+            echo "--- TSV (age_days, last_touched, package) ---"
+            cat "${REPORT_PATH}"
+          fi
+
       # Turn the scan results into a rolling `dusty-packages` issue.
       # If one is already open, append this quarter's report as a comment;
       # otherwise, open a fresh issue. Close it when the listed packages
       # have been reviewed (bumped, dropped, or confirmed still current).
       - name: File dusty report as issue
-        if: steps.scan.outputs.count != '0'
+        if: steps.scan.outputs.count != '0' && inputs.dry_run != 'true'
         uses: actions/github-script@v8
         env:
           REPORT_PATH: ${{ steps.scan.outputs.report_path }}
@@ -145,7 +174,7 @@ jobs:
       # until manually closed even after every listed package has been
       # bumped or dropped.
       - name: Auto-close dusty-packages issue when none remain
-        if: steps.scan.outputs.count == '0'
+        if: steps.scan.outputs.count == '0' && inputs.dry_run != 'true'
         uses: actions/github-script@v8
         with:
           script: |
