@@ -23,7 +23,7 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="api sentencepiece statsmodels vllm"
+IUSE="+api sentencepiece statsmodels vllm"
 
 # Core deps from pyproject.toml [project.dependencies] at v0.4.11.
 # Optional [project.optional-dependencies] groups are wired as USE flags
