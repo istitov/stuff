@@ -14,7 +14,7 @@ GCC_MAX_VER="15"
 CLANG_MAX_VER="20"
 
 DESCRIPTION="NVIDIA CUDA Toolkit (compiler and friends)"
-HOMEPAGE="https://developer.nvidia.com/cuda-zone"
+HOMEPAGE="https://developer.nvidia.com/cuda"
 SRC_URI="
 	amd64? (
 		https://developer.download.nvidia.com/compute/cuda/${PV}/local_installers/cuda_${PV}_${DRIVER_PV}_linux.run
