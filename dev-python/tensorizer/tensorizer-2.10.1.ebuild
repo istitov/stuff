@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -19,12 +20,14 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	>=sci-ml/pytorch-1.9.0[${PYTHON_USEDEP}]
-	>=dev-python/numpy-1.19.5[${PYTHON_USEDEP}]
-	>=dev-python/protobuf-3.19.5[${PYTHON_USEDEP}]
-	>=dev-python/psutil-5.9.4[${PYTHON_USEDEP}]
-	>=dev-python/boto3-1.26.0[${PYTHON_USEDEP}]
-	>=dev-python/redis-4.5.5[${PYTHON_USEDEP}]
-	>=dev-python/hiredis-2.2.0[${PYTHON_USEDEP}]
-	>=dev-python/libnacl-2.1.0[${PYTHON_USEDEP}]
+	>=sci-ml/pytorch-1.9.0[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/numpy-1.19.5[${PYTHON_USEDEP}]
+		>=dev-python/protobuf-3.19.5[${PYTHON_USEDEP}]
+		>=dev-python/psutil-5.9.4[${PYTHON_USEDEP}]
+		>=dev-python/boto3-1.26.0[${PYTHON_USEDEP}]
+		>=dev-python/redis-4.5.5[${PYTHON_USEDEP}]
+		>=dev-python/hiredis-2.2.0[${PYTHON_USEDEP}]
+		>=dev-python/libnacl-2.1.0[${PYTHON_USEDEP}]
+	')
 "
