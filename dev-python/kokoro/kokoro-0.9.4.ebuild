@@ -24,9 +24,9 @@ RDEPEND="
 	sci-ml/huggingface_hub[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/transformers[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/misaki-0.9.4[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/loguru[${PYTHON_USEDEP}]
-		>=dev-python/misaki-0.9.4[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
 	')
 "
