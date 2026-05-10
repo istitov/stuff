@@ -122,6 +122,12 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "include_regex": r"^cuda-pathfinder-v[0-9]+\.[0-9]+\.[0-9]+$",
         "prefix": "cuda-pathfinder-v",
     },
+    # NVIDIA/cudnn-frontend has an ancient `v8.1.0-beta` tag (from the
+    # C++ library's earlier numbering) that lexicographically beats the
+    # current Python-package `v1.X.Y` line. Strict-anchored semver only.
+    "dev-python/nvidia-cudnn-frontend": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
 }
 
 
