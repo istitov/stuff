@@ -35,7 +35,7 @@ jobs:
       # mis-read as 1.21); pin to '1.25' so GOTOOLCHAIN='auto' doesn't
       # have to fetch a newer toolchain on every run. Bump if
       # actionlint raises its floor again.
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: '1.25'
 
