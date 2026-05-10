@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=standalone
 PYTHON_COMPAT=( python3_{11..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -27,11 +28,13 @@ KEYWORDS="~amd64"
 # BDEPEND defensively — cheap, and avoids a surprise on hosts that
 # rebuild after a torch downgrade. # verified 2026-05-07 against 0.1.5.
 RDEPEND="
-	sci-ml/pytorch[${PYTHON_USEDEP}]
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
-	dev-python/apache-tvm-ffi[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/apache-tvm-ffi[${PYTHON_USEDEP}]
+	')
 "
 
 python_install_all() {
