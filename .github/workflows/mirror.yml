@@ -7,51 +7,59 @@ on:
     tags: ['**']
   delete: # propagate branch/tag deletions
 
-# Serialize all mirror runs. Each job rewrites the destination's complete
-# ref-set with `--force --prune`, so two concurrent jobs (even on different
-# branches) can race and the later one can clobber the earlier's view. Full
-# serialization is slower but correct.
+# Serialize all mirror runs. The push below rewrites the destination's
+# complete ref-set with `--force --prune`, so two concurrent jobs (even on
+# different branches) can race and the later one can clobber the earlier's
+# view. Full serialization is slower but correct.
 concurrency:
   group: mirror
   cancel-in-progress: false
 
 jobs:
-  mirror-codeberg:
+  mirror:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
+      # actions/checkout@v5 with fetch-depth: 0 fetches remote branches
+      # into refs/remotes/origin/* and only creates a local head for the
+      # triggering ref. The pushes below use 'refs/remotes/origin/*:refs/heads/*'
+      # so every branch reaches the mirror — pushing 'refs/heads/*:refs/heads/*'
+      # would only carry the triggering branch and `--prune` would delete
+      # the rest on the destination. Strip refs/remotes/origin/HEAD if
+      # present so we don't push a refs/heads/HEAD onto the mirror.
+      - name: Strip refs/remotes/origin/HEAD
+        run: git symbolic-ref --delete refs/remotes/origin/HEAD 2>/dev/null || true
+
+      # Push steps use `continue-on-error: true` so a transient failure on
+      # one destination doesn't block the other (failure isolation). The
+      # final step re-raises the job exit if either push failed (failure
+      # visibility — keeps the workflow visibly red on partial success).
       - name: Push to Codeberg
+        id: codeberg
+        continue-on-error: true
         run: |
           set -euo pipefail
-          # actions/checkout@v5 with fetch-depth: 0 fetches remote branches
-          # into refs/remotes/origin/* and only creates a local head for the
-          # triggering ref. Push from remote-tracking refs so every branch
-          # reaches the mirror — pushing 'refs/heads/*:refs/heads/*' would
-          # only carry the triggering branch and `--prune` would delete the
-          # rest on the destination. Strip refs/remotes/origin/HEAD if
-          # present so we don't push a refs/heads/HEAD onto the mirror.
-          git symbolic-ref --delete refs/remotes/origin/HEAD 2>/dev/null || true
           git push --force --prune \
             "https://istitov:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/istitov/stuff.git" \
             'refs/remotes/origin/*:refs/heads/*' \
             'refs/tags/*:refs/tags/*'
 
-  mirror-gitlab:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
       - name: Push to GitLab
+        id: gitlab
+        continue-on-error: true
         run: |
           set -euo pipefail
-          # See refspec rationale in the Codeberg job above.
-          git symbolic-ref --delete refs/remotes/origin/HEAD 2>/dev/null || true
           git push --force --prune \
             "https://istitov:${{ secrets.GITLAB_TOKEN }}@gitlab.com/istitov/stuff.git" \
             'refs/remotes/origin/*:refs/heads/*' \
             'refs/tags/*:refs/tags/*'
+
+      - name: Re-raise on partial failure
+        if: steps.codeberg.outcome == 'failure' || steps.gitlab.outcome == 'failure'
+        run: |
+          echo "Codeberg: ${{ steps.codeberg.outcome }}"
+          echo "GitLab:   ${{ steps.gitlab.outcome }}"
+          exit 1
