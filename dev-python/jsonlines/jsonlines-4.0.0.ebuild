@@ -29,4 +29,5 @@ RESTRICT="mirror"
 
 RDEPEND="dev-python/attrs[${PYTHON_USEDEP}]"
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
