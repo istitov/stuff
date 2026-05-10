@@ -1,0 +1,111 @@
+name: nvchecker-drift
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly: Mondays at 06:00 UTC.
+    - cron: "0 6 * * 1"
+
+# Serialize concurrent runs. A manual workflow_dispatch fired during the
+# scheduled cron would race the upstream fetches and produce a half-fresh
+# baseline; let one finish before the other starts.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  drift-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install nvchecker
+        run: pip install --user nvchecker
+
+      # nvchecker's GitHub source needs a token to avoid the 60-req/hour
+      # unauthenticated rate limit (this config has ~60 GitHub entries,
+      # which trivially saturates that). The default GITHUB_TOKEN gets
+      # 1000 req/hour, which is plenty.
+      - name: Configure github keyfile
+        env:
+          NV_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.config/nvchecker
+          # Write via printf with -- so the token (Bearer-format) isn't
+          # interpreted by the shell. The here-doc form risks the token
+          # accidentally being echoed by `set -x` or similar.
+          {
+            printf '[keys]\n'
+            printf 'github = "%s"\n' "${NV_GH_TOKEN}"
+          } > ~/.config/nvchecker/keyfile.toml
+          chmod 600 ~/.config/nvchecker/keyfile.toml
+
+      # Baseline is "current ebuild PVs", not "last week's upstream
+      # snapshot". See scripts/nvchecker/tree_baseline.py for the
+      # framing — CI cares about drift relative to the tree, not
+      # relative to time.
+      - name: Generate baseline from tree
+        id: baseline
+        run: |
+          set -euo pipefail
+          baseline="$RUNNER_TEMP/old_ver.json"
+          python3 scripts/nvchecker/tree_baseline.py > "$baseline"
+          entries=$(python3 -c "import json,sys;print(len(json.load(open('${baseline}'))['data']))")
+          echo "Baseline entries: ${entries}"
+          echo "entries=${entries}" >> "$GITHUB_OUTPUT"
+
+      # nvchecker reads oldver/newver paths from a [__config__] section,
+      # which the committed nvchecker.toml deliberately omits (so it
+      # doesn't bake a user-specific path into the repo). Compose a
+      # per-run config that prepends [__config__] to the committed file.
+      - name: Compose run config
+        run: |
+          set -euo pipefail
+          {
+            printf '[__config__]\n'
+            printf 'oldver = "%s/old_ver.json"\n' "$RUNNER_TEMP"
+            printf 'newver = "%s/new_ver.json"\n' "$RUNNER_TEMP"
+            printf '\n'
+            cat scripts/nvchecker/nvchecker.toml
+          } > "$RUNNER_TEMP/run.toml"
+
+      # -l error silences the per-entry INFO noise. No --failures: a
+      # transient PyPI/GitHub error on one entry shouldn't fail the
+      # whole job (the affected entry just won't appear in newver).
+      - name: Run nvchecker (fetch upstream)
+        run: |
+          set -euo pipefail
+          ~/.local/bin/nvchecker \
+            -c "$RUNNER_TEMP/run.toml" \
+            -k ~/.config/nvchecker/keyfile.toml \
+            -l error --logger pretty
+
+      - name: Diff with nvcmp
+        id: drift
+        run: |
+          set -euo pipefail
+          drift_out="$RUNNER_TEMP/drift.txt"
+          # nvcmp exits non-zero if anything drifted; that's normal here.
+          ~/.local/bin/nvcmp -c "$RUNNER_TEMP/run.toml" > "$drift_out" 2>&1 || true
+          count=$(wc -l < "$drift_out")
+          echo "Drift entries: ${count}"
+          echo "count=${count}" >> "$GITHUB_OUTPUT"
+          echo "::group::drift report"
+          cat "$drift_out"
+          echo "::endgroup::"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nvchecker-drift-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/drift.txt
+            ${{ runner.temp }}/new_ver.json
+            ${{ runner.temp }}/old_ver.json
+          retention-days: 30
