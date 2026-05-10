@@ -28,43 +28,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pkgcheck-pr:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
-        with:
-          args: --commits origin/${{ github.base_ref }}
-
-  pkgcheck-push:
-    # Skip branch-creation pushes (github.event.before is all zeros then,
-    # which pkgcheck cannot resolve).
+  # Diff scan: PR target branch on pull_request, previous-tip on push.
+  # Skip branch-creation pushes (github.event.before is all zeros then,
+  # which pkgcheck cannot resolve as a base ref).
+  pkgcheck-diff:
     if: >
-      github.event_name == 'push' &&
-      github.event.before != '0000000000000000000000000000000000000000'
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'push' &&
+       github.event.before != '0000000000000000000000000000000000000000')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      # Resolve the base ref pkgcheck should diff against. Normally this is
-      # github.event.before — the previous tip of the pushed branch. After a
-      # force-push, that SHA may be unreachable (GC'd) or not in this clone;
-      # fall back to HEAD~1 so the run still scans at least the new tip.
+      # Resolve the base ref pkgcheck should diff against:
+      #   pull_request → origin/<base branch>
+      #   push         → github.event.before (previous tip)
+      # On push, github.event.before may be unreachable after a force-push
+      # (GC'd or not in this clone); fall back to HEAD~1 so the run still
+      # scans at least the new tip.
       - id: base
         run: |
           set -euo pipefail
-          before='${{ github.event.before }}'
-          if git cat-file -e "${before}^{commit}" 2>/dev/null; then
-            echo "ref=${before}" >> "$GITHUB_OUTPUT"
+          if [[ '${{ github.event_name }}' == 'pull_request' ]]; then
+            echo "ref=origin/${{ github.base_ref }}" >> "$GITHUB_OUTPUT"
           else
-            echo "::warning::${before} unreachable (force-push?), falling back to HEAD~1"
-            echo "ref=HEAD~1" >> "$GITHUB_OUTPUT"
+            before='${{ github.event.before }}'
+            if git cat-file -e "${before}^{commit}" 2>/dev/null; then
+              echo "ref=${before}" >> "$GITHUB_OUTPUT"
+            else
+              echo "::warning::${before} unreachable (force-push?), falling back to HEAD~1"
+              echo "ref=HEAD~1" >> "$GITHUB_OUTPUT"
+            fi
           fi
 
       - uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
