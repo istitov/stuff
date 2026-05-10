@@ -6,7 +6,7 @@ EAPI=8
 inherit edos2unix
 
 DESCRIPTION="Ancient Domains Of Mystery rogue-like game"
-HOMEPAGE="http://www.adom.de/"
+HOMEPAGE="https://www.adom.de/"
 SRC_URI="
 x86? ( https://www.adom.de/home/download/old/${PV}/${PN}_linux_debian_32_${PV}.tar.gz )
 amd64? ( https://www.adom.de/home/download/old/${PV}/${PN}_linux_debian_64_${PV}.tar.gz )
