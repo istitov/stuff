@@ -102,8 +102,38 @@ GITHUB_TAG_FILTERS: list[tuple[re.Pattern, dict]] = [
 ]
 
 
-def github_tag_filter(spec: str) -> dict | None:
-    """Return per-repo include_regex / prefix override for `spec`, if any."""
+# Per-package overrides keyed on cat/pkg, applied when one repo's tag scheme
+# is heterogeneous and a single repo-wide filter can't cover all of its
+# Python sub-packages. Wins over GITHUB_TAG_FILTERS when both match.
+#
+# NVIDIA/cuda-python is a monorepo housing several Python packages, each
+# with its own tag scheme on the same git repo:
+#   * cuda-bindings    -> v<PV>           (bare semver, the umbrella's tag)
+#   * cuda-pathfinder  -> cuda-pathfinder-v<PV>
+#   * cuda-python (umbrella sdist) is on PyPI -> already classified as pypi.
+# Without per-package filters, both sub-packages share `NVIDIA/cuda-python`
+# as github spec and max-tag picks the umbrella's `v<latest>`, false-positive
+# for cuda-pathfinder (whose actual upstream version is much lower).
+GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
+    "dev-python/cuda-bindings": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    "dev-python/cuda-pathfinder": {
+        "include_regex": r"^cuda-pathfinder-v[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "cuda-pathfinder-v",
+    },
+}
+
+
+def github_tag_filter(spec: str, entry_name: str | None = None) -> dict | None:
+    """Return include_regex / prefix override for this entry, if any.
+
+    Per-package overrides (GITHUB_TAG_FILTERS_BY_PKG) win when both match —
+    a monorepo's per-sub-package tag scheme is more specific than a
+    repo-wide pattern.
+    """
+    if entry_name and entry_name in GITHUB_TAG_FILTERS_BY_PKG:
+        return GITHUB_TAG_FILTERS_BY_PKG[entry_name]
     for pat, override in GITHUB_TAG_FILTERS:
         if pat.fullmatch(spec):
             return override
@@ -319,7 +349,9 @@ def emit_entry(entry_name: str, classification: dict) -> list[str]:
         lines.append("use_max_tag = true")
         # Per-repo include_regex / prefix overrides for repos whose tag
         # history breaks naive max-tag selection — see GITHUB_TAG_FILTERS.
-        override = github_tag_filter(classification["spec"])
+        # Per-package overrides (GITHUB_TAG_FILTERS_BY_PKG) take precedence
+        # for monorepos with heterogeneous sub-package tag schemes.
+        override = github_tag_filter(classification["spec"], entry_name)
         if override:
             if "include_regex" in override:
                 # TOML literal string ('...'): no backslash escaping, so the
