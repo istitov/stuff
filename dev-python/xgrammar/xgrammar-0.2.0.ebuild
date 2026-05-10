@@ -6,6 +6,7 @@ EAPI=8
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=scikit-build-core
 PYTHON_COMPAT=( python3_{11..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -25,14 +26,18 @@ KEYWORDS="~amd64"
 # triton isn't packaged in ::gentoo or here yet — vllm + xgrammar's
 # grammar-matching paths we exercise don't require it. # verified 2026-05-10
 RDEPEND="
-	>=dev-python/apache-tvm-ffi-0.1.9[${PYTHON_USEDEP}]
-	dev-python/pydantic[${PYTHON_USEDEP}]
-	>=sci-ml/pytorch-1.10.0[${PYTHON_USEDEP}]
-	>=sci-ml/transformers-4.38.0[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-4.9.0[${PYTHON_USEDEP}]
+	>=sci-ml/pytorch-1.10.0[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/transformers-4.38.0[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/apache-tvm-ffi-0.1.9[${PYTHON_USEDEP}]
+		dev-python/pydantic[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		>=dev-python/typing-extensions-4.9.0[${PYTHON_USEDEP}]
+	')
 "
 BDEPEND="
-	>=dev-python/nanobind-2.5.0[${PYTHON_USEDEP}]
 	>=dev-build/cmake-3.18
+	$(python_gen_cond_dep '
+		>=dev-python/nanobind-2.5.0[${PYTHON_USEDEP}]
+	')
 "
