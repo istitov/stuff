@@ -23,19 +23,27 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+api sentencepiece statsmodels vllm"
+IUSE="+api math sentencepiece statsmodels vllm"
 
 # Core deps from pyproject.toml [project.dependencies] at v0.4.11.
 # Optional [project.optional-dependencies] groups are wired as USE flags
 # only where every dep is reachable in our overlay set:
 #  api          -> aiohttp, requests, tenacity, tqdm, tiktoken
+#  math         -> sympy, antlr4-python3-runtime==4.11.*, math-verify
 #  sentencepiece-> sentencepiece
 #  statsmodels  -> upstream "discrim_eval" extra (statsmodels)
 #  vllm         -> vllm
-# Other extras (hf, math, ifeval, multilingual, ruler, wandb, japanese,
+# Other extras (hf, ifeval, multilingual, ruler, wandb, japanese,
 # longbench, libra, ipex, gptq, gptqmodel, optimum, sparsify, audiolm_qwen,
 # unitxt, zeno, ibm_watsonx_ai, acpbench) gate on packages we do not
 # currently carry; users wanting them must `pip install lm_eval[<extra>]`.
+#
+# math: at lm_eval 0.4.11, lm_eval/tasks/minerva_math/utils.py asserts
+#   version("antlr4-python3-runtime").startswith("4.11")
+# at task-load, so the antlr4-4.11* pin is load-bearing, not advisory
+# (verified upstream 2026-05-11). We carry the older
+# antlr4-python3-runtime-4.11.0 alongside ::gentoo's 4.13.2 for this;
+# flipping USE=math triggers the downgrade.
 #
 # single-impl: sci-ml/{datasets,evaluate} are SINGLE_IMPL; rest of stack is
 # multi-impl, wrapped via python_gen_cond_dep.
@@ -63,6 +71,11 @@ RDEPEND="
 			dev-python/tenacity[${PYTHON_USEDEP}]
 			dev-python/tiktoken[${PYTHON_USEDEP}]
 			dev-python/tqdm[${PYTHON_USEDEP}]
+		)
+		math? (
+			=dev-python/antlr4-python3-runtime-4.11*[${PYTHON_USEDEP}]
+			>=dev-python/sympy-1.12[${PYTHON_USEDEP}]
+			~dev-python/math-verify-0.9.0[${PYTHON_USEDEP}]
 		)
 		sentencepiece? ( >=sci-ml/sentencepiece-0.1.98[${PYTHON_USEDEP}] )
 		statsmodels? ( dev-python/statsmodels[${PYTHON_USEDEP}] )

@@ -7,6 +7,7 @@
   </maintainer>
   <use>
     <flag name="api">Wire dependencies for OpenAI/HF Inference / generic HTTP API model backends</flag>
+    <flag name="math">Enable math-grading tasks (minerva_math, leaderboard math, hendrycks_math, etc.) — parses LaTeX answers and verifies symbolic equality between predicted and ground-truth solutions</flag>
     <flag name="sentencepiece">Pull sci-ml/sentencepiece for tasks that tokenise via SentencePiece</flag>
     <flag name="statsmodels">Pull dev-python/statsmodels for the discrim_eval task family</flag>
     <flag name="vllm">Wire dev-python/vllm for the vLLM model backend</flag>
