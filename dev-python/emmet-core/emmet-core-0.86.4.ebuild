@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
@@ -26,14 +27,16 @@ KEYWORDS="~amd64"
 RESTRICT="test"
 
 RDEPEND="
-	>=dev-python/pymatgen-2024.6.10[${PYTHON_USEDEP}]
-	>=dev-python/monty-2024.2.2[${PYTHON_USEDEP}]
-	>=dev-python/pydantic-2.0[${PYTHON_USEDEP}]
-	>=dev-python/pydantic-settings-2.0[${PYTHON_USEDEP}]
-	>=dev-python/pymatgen-io-validation-0.1.1[${PYTHON_USEDEP}]
-	>=dev-python/pybtex-0.24[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-3.7[${PYTHON_USEDEP}]
-	dev-python/blake3[${PYTHON_USEDEP}]
-	dev-python/inflect[${PYTHON_USEDEP}]
-	dev-python/pubchempy[${PYTHON_USEDEP}]
+	>=dev-python/pymatgen-2024.6.10[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/pymatgen-io-validation-0.1.1[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/monty-2024.2.2[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-2.0[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-settings-2.0[${PYTHON_USEDEP}]
+		>=dev-python/pybtex-0.24[${PYTHON_USEDEP}]
+		>=dev-python/typing-extensions-3.7[${PYTHON_USEDEP}]
+		dev-python/blake3[${PYTHON_USEDEP}]
+		dev-python/inflect[${PYTHON_USEDEP}]
+		dev-python/pubchempy[${PYTHON_USEDEP}]
+	')
 "
