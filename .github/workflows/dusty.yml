@@ -7,6 +7,10 @@ on:
         description: 'Print the report to logs without filing/commenting on the issue tracker.'
         type: boolean
         default: false
+      threshold_days:
+        description: 'Days untouched before a package is reported as dusty. Empty = default (60).'
+        type: number
+        default: 60
   schedule:
     # Quarterly: 06:00 UTC on the 1st of Jan / Apr / Jul / Oct.
     - cron: "0 6 1 */3 *"
@@ -31,10 +35,14 @@ jobs:
 
       - name: Scan for dusty packages
         id: scan
+        env:
+          # Empty on schedule (input resolves to '' there) → bash default of
+          # 60 applies. workflow_dispatch sends the input value directly.
+          INPUT_THRESHOLD_DAYS: ${{ inputs.threshold_days }}
         run: |
           set -euo pipefail
 
-          threshold_days=60
+          threshold_days="${INPUT_THRESHOLD_DAYS:-60}"
           now=$(date +%s)
           threshold=$(( now - threshold_days * 24 * 3600 ))
 
