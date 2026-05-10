@@ -25,6 +25,7 @@ IUSE="perf"
 RDEPEND="
 	>=sci-ml/datasets-2.21.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.43.0[${PYTHON_SINGLE_USEDEP}]
+	dev-python/stop-sequencer[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/anthropic[${PYTHON_USEDEP}]
 		dev-python/appdirs[${PYTHON_USEDEP}]
@@ -35,7 +36,6 @@ RDEPEND="
 		>=dev-python/openai-1.11.1[${PYTHON_USEDEP}]
 		>=dev-python/psutil-5.9.0[${PYTHON_USEDEP}]
 		>=dev-python/rich-12.3.0[${PYTHON_USEDEP}]
-		dev-python/stop-sequencer[${PYTHON_USEDEP}]
 		dev-python/tempdir[${PYTHON_USEDEP}]
 		>=dev-python/termcolor-2.0.0[${PYTHON_USEDEP}]
 		>=dev-python/tqdm-4.56.0[${PYTHON_USEDEP}]
