@@ -138,3 +138,43 @@ jobs:
               });
               core.info(`Opened new dusty-packages issue #${created.data.number}`);
             }
+
+      # When a scheduled run reports zero dusty packages and a
+      # dusty-packages issue is still open from a prior quarter, append an
+      # "all clear" comment and auto-close. Without this, the issue lives
+      # until manually closed even after every listed package has been
+      # bumped or dropped.
+      - name: Auto-close dusty-packages issue when none remain
+        if: steps.scan.outputs.count == '0'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const LABEL = 'dusty-packages';
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: LABEL,
+              state: 'open',
+              per_page: 1,
+            });
+
+            if (existing.length === 0) {
+              core.info('No open dusty-packages issue; nothing to close.');
+              return;
+            }
+
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing[0].number,
+              body: `Quarterly scan reports zero dusty packages: ${runUrl}\n\nAuto-closing.`,
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing[0].number,
+              state: 'closed',
+              state_reason: 'completed',
+            });
+            core.info(`Auto-closed #${existing[0].number}`);
