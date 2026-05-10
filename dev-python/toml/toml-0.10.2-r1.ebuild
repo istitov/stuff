@@ -17,7 +17,7 @@ HOMEPAGE="
 "
 SRC_URI="https://github.com/uiri/${PN}/archive/${PV}.tar.gz -> ${P}-1.gh.tar.gz
 	test? (
-		https://github.com/BurntSushi/toml-test/archive/${TOML_TEST_VER}.tar.gz
+		https://github.com/toml-lang/toml-test/archive/${TOML_TEST_VER}.tar.gz
 			-> toml-test-${TOML_TEST_VER}.tar.gz
 	)
 "
