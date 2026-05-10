@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=no
 PYTHON_COMPAT=( python3_{11..14} )
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
 
@@ -33,9 +34,11 @@ KEYWORDS="-* ~amd64"
 # yet, so they're deferred — vllm's local-file model loading still
 # works without them.
 RDEPEND="
-	dev-python/humanize[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
-	>=sci-ml/pytorch-2.0.0[${PYTHON_USEDEP}]
+	>=sci-ml/pytorch-2.0.0[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/humanize[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+	')
 "
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/runai_model_streamer/libstreamer/*"
@@ -46,10 +49,6 @@ src_unpack() {
 }
 
 src_install() {
-	local impl_lib_dir
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+	python_setup
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${MY_WHEEL}" || die
 }
