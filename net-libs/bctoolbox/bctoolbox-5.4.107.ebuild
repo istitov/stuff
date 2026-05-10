@@ -6,7 +6,7 @@ EAPI=8
 inherit cmake
 
 DESCRIPTION="Utilities library used by Belledonne Communications projects"
-HOMEPAGE="https://gitlab.linphone.org/BC/public/bctoolbox"
+HOMEPAGE="https://github.com/BelledonneCommunications/bctoolbox"
 SRC_URI="https://github.com/BelledonneCommunications/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
