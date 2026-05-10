@@ -25,8 +25,13 @@ jobs:
         with:
           python-version: '3.13'
 
+      # Pin exactly rather than floating, same supply-chain discipline
+      # as the pkgcheck-action SHA pin and actionlint@v1.7.12. An
+      # upstream behavioral change (logger format, nvcmp exit codes,
+      # source-type semantics) could silently break the pipeline; bump
+      # deliberately when the time comes.
       - name: Install nvchecker
-        run: pip install --user nvchecker
+        run: pip install --user nvchecker==2.20
 
       # nvchecker's GitHub source needs a token to avoid the 60-req/hour
       # unauthenticated rate limit (this config has ~60 GitHub entries,
