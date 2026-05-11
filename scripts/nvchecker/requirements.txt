@@ -1,1 +1,2 @@
 nvchecker==2.20
+packaging>=21
