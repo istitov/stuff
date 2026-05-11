@@ -830,7 +830,7 @@ prefix = "v"
 source = "github"
 github = "adplug/libbinio"
 use_max_tag = true
-include_regex = '^libbinio-[0-9]+\.[0-9]+'
+include_regex = '^libbinio-\d+\.\d+$'
 prefix = "libbinio-"
 
 ["dev-libs/hipother"]
@@ -1268,7 +1268,7 @@ prefix = "v"
 source = "github"
 github = "adplug/adplug"
 use_max_tag = true
-include_regex = '^adplug-[0-9]+\.[0-9]+'
+include_regex = '^adplug-\d+\.\d+(?:\.\d+)?$'
 prefix = "adplug-"
 
 ["media-libs/draco"]

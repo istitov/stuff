@@ -134,16 +134,18 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "dev-python/nvidia-cudnn-frontend": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
-    # adplug/adplug releases are tagged as `adplug-X.Y` (not bare `X.Y` or
-    # `vX.Y`), alongside winamp-* plugin tags.  Strip the `adplug-` prefix
-    # so the returned version matches the plain Portage PV.
+    # adplug/adplug releases are tagged as `adplug-X.Y` (with an optional
+    # third segment, e.g. `adplug-2.3.3`), alongside winamp-* plugin tags.
+    # Anchor with `$` so we don't accidentally include suffix-bearing tags
+    # like `-beta` or `-rc1` if any ever show up.
     "media-libs/adplug": {
-        "include_regex": r"^adplug-[0-9]+\.[0-9]+",
+        "include_regex": r"^adplug-\d+\.\d+(?:\.\d+)?$",
         "prefix": "adplug-",
     },
-    # adplug/libbinio: same release-tag convention (`libbinio-X.Y.Z`).
+    # adplug/libbinio: same release-tag convention (`libbinio-X.Y`); the
+    # repo also has a stray "start" tag that the anchor keeps out.
     "dev-cpp/libbinio": {
-        "include_regex": r"^libbinio-[0-9]+\.[0-9]+",
+        "include_regex": r"^libbinio-\d+\.\d+$",
         "prefix": "libbinio-",
     },
     # xintrea/mytetra_dev uses `v.X.Y.Z` (note the dot after v) rather than
