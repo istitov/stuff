@@ -23,18 +23,19 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+api math sentencepiece statsmodels vllm"
+IUSE="+api ifeval math sentencepiece statsmodels vllm"
 
 # Core deps from pyproject.toml [project.dependencies] at v0.4.11.
 # Optional [project.optional-dependencies] groups are wired as USE flags
 # only where every dep is reachable in our overlay set:
 #  api          -> aiohttp, requests, tenacity, tqdm, tiktoken
+#  ifeval       -> langdetect, immutabledict, nltk>=3.9.1
 #  math         -> sympy, antlr4-python3-runtime==4.11.*, math-verify
 #  sentencepiece-> sentencepiece
 #  statsmodels  -> upstream "discrim_eval" extra (statsmodels)
 #  vllm         -> vllm
-# Other extras (hf, ifeval, multilingual, ruler, wandb, japanese,
-# longbench, libra, ipex, gptq, gptqmodel, optimum, sparsify, audiolm_qwen,
+# Other extras (hf, multilingual, ruler, wandb, japanese, longbench,
+# libra, ipex, gptq, gptqmodel, optimum, sparsify, audiolm_qwen,
 # unitxt, zeno, ibm_watsonx_ai, acpbench) gate on packages we do not
 # currently carry; users wanting them must `pip install lm_eval[<extra>]`.
 #
@@ -44,6 +45,16 @@ IUSE="+api math sentencepiece statsmodels vllm"
 # (verified upstream 2026-05-11). We carry the older
 # antlr4-python3-runtime-4.11.0 alongside ::gentoo's 4.13.2 for this;
 # flipping USE=math triggers the downgrade.
+#
+# ifeval: at lm_eval 0.4.11, lm_eval/tasks/leaderboard/ifeval/
+# instructions_util.py asserts nltk>=3.9.1 at module import (older
+# nltk has a remote-code-exec via `punkt`, see EleutherAI/lm-
+# evaluation-harness#2210 and nltk/nltk#3266), so the >=nltk-3.9.1
+# bound is load-bearing, not advisory (verified upstream 2026-05-11).
+# The task also auto-downloads the punkt_tab tokenizer at the same
+# import — users on offline hosts should seed ~/nltk_data ahead of
+# time (a bare TaskManager() that loads leaderboard_ifeval is enough
+# to trigger the fetch; not gated on actually running an eval).
 #
 # single-impl: sci-ml/{datasets,evaluate} are SINGLE_IMPL; rest of stack is
 # multi-impl, wrapped via python_gen_cond_dep.
@@ -71,6 +82,11 @@ RDEPEND="
 			dev-python/tenacity[${PYTHON_USEDEP}]
 			dev-python/tiktoken[${PYTHON_USEDEP}]
 			dev-python/tqdm[${PYTHON_USEDEP}]
+		)
+		ifeval? (
+			dev-python/langdetect[${PYTHON_USEDEP}]
+			dev-python/immutabledict[${PYTHON_USEDEP}]
+			>=dev-python/nltk-3.9.1[${PYTHON_USEDEP}]
 		)
 		math? (
 			=dev-python/antlr4-python3-runtime-4.11*[${PYTHON_USEDEP}]

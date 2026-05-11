@@ -7,6 +7,7 @@
   </maintainer>
   <use>
     <flag name="api">Wire dependencies for OpenAI/HF Inference / generic HTTP API model backends</flag>
+    <flag name="ifeval">Enable instruction-following evaluation tasks (leaderboard_ifeval and friends) — checks generated text against structural constraints like length limits, language hints, and required keywords. Auto-downloads the NLTK punkt_tab tokenizer at task-load time (not deferred until eval); seed ~/nltk_data ahead of time on offline hosts.</flag>
     <flag name="math">Enable math-grading tasks (minerva_math, leaderboard math, hendrycks_math, etc.) — parses LaTeX answers and verifies symbolic equality between predicted and ground-truth solutions</flag>
     <flag name="sentencepiece">Pull sci-ml/sentencepiece for tasks that tokenise via SentencePiece</flag>
     <flag name="statsmodels">Pull dev-python/statsmodels for the discrim_eval task family</flag>
