@@ -55,6 +55,10 @@ SOURCEFORGE_RE = re.compile(
     r')'
 )
 PYPI_URL_RE = re.compile(r'https?://(?:files\.pythonhosted\.org|pypi\.(?:io|org))/')
+# Captures the project name from a canonical PyPI project URL in HOMEPAGE,
+# used to redirect tracking to PyPI when an ebuild has no SRC_URI to hint at
+# the upstream source (e.g. wheel-only upstreams or hand-written replacements).
+PYPI_PROJECT_URL_RE = re.compile(r'https?://pypi\.org/(?:project|pypi)/([A-Za-z0-9_.-]+)')
 CPAN_URL_RE = re.compile(r'mirror://cpan/authors/id/[A-Z]/[A-Z]{2}/[A-Z0-9]+/([A-Za-z0-9_-]+?)-v?[\d.]+(?:\.tar\.gz|\.tgz)?')
 # Extract the URL host from a SRC_URI / HOMEPAGE string, used to enrich the
 # "no recognizable upstream" skip note with a pointer to *where* the
@@ -158,10 +162,15 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "dev-python/numba": {
         "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+$",
     },
-    # explosion/spacy publishes 4.0.0.devN tags for the unreleased next major.
-    # We intentionally track the stable 3.x line (kokoro chain dependency).
+    # explosion/spacy switched its release-tag format from `vX.Y.Z` to
+    # `release-vX.Y.Z` somewhere around the 3.7 → 3.8 transition.  Matching
+    # only `v[…]` (the older form) picks 3.7.5 as max because the 3.8.x tags
+    # carry the longer prefix.  Match the current scheme and strip it.  We
+    # intentionally track the stable 3.x line for the kokoro chain — there
+    # are also 4.0.0.devN tags that this filter excludes.
     "dev-python/spacy": {
-        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+        "include_regex": r"^release-v[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "release-v",
     },
     "dev-python/spacy-legacy": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
@@ -399,6 +408,18 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
         m = GITHUB_HOMEPAGE_RE.search(egit)
         if m:
             return {"kind": "github", "spec": f"{m.group(1)}/{m.group(2)}", "note": "from EGIT_REPO_URI"}
+
+    # PyPI via HOMEPAGE: catches ebuilds with no SRC_URI but a canonical PyPI
+    # project URL in HOMEPAGE — wheel-only upstreams or hand-written
+    # replacements that should still track the upstream PyPI version.
+    # Checked before HOMEPAGE-GitHub: when an ebuild lists both a GitHub repo
+    # and a PyPI page in HOMEPAGE, the PyPI URL is the more reliable upstream
+    # signal (the linked GitHub repo can be a fork, mirror, or carry stray
+    # non-semver tags that break max-tag selection).
+    if homepage:
+        m = PYPI_PROJECT_URL_RE.search(homepage)
+        if m:
+            return {"kind": "pypi", "spec": m.group(1), "note": "from HOMEPAGE PyPI URL"}
 
     # GitHub via HOMEPAGE (no download URL — best-effort)
     if homepage:

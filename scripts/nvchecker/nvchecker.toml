@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (179) ---
+# --- pypi (184) ---
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -86,6 +86,10 @@ pypi = "confection"
 source = "pypi"
 pypi = "cuda-python"
 
+["dev-python/cuda-tile-bin"]
+source = "pypi"
+pypi = "cuda-tile"
+
 ["dev-python/cupy"]
 source = "pypi"
 pypi = "cupy"
@@ -161,6 +165,10 @@ pypi = "emdfile"
 ["dev-python/emmet-core"]
 source = "pypi"
 pypi = "emmet-core"
+
+["dev-python/espeakng-loader"]
+source = "pypi"
+pypi = "espeakng-loader"
 
 ["dev-python/euphonic"]
 source = "pypi"
@@ -274,6 +282,10 @@ pypi = "ipympl"
 source = "pypi"
 pypi = "jiter"
 
+["dev-python/jsonlines"]
+source = "pypi"
+pypi = "jsonlines"
+
 ["dev-python/kokoro"]
 source = "pypi"
 pypi = "kokoro"
@@ -369,6 +381,14 @@ pypi = "numdifftools"
 ["dev-python/nvidia-cutlass-dsl"]
 source = "pypi"
 pypi = "nvidia-cutlass-dsl"
+
+["dev-python/nvidia-cutlass-dsl-libs-base"]
+source = "pypi"
+pypi = "nvidia-cutlass-dsl-libs-base"
+
+["dev-python/nvidia-cutlass-dsl-libs-cu13"]
+source = "pypi"
+pypi = "nvidia-cutlass-dsl-libs-cu13"
 
 ["dev-python/openai"]
 source = "pypi"
@@ -726,7 +746,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (135) ---
+# --- github (131) ---
 
 ["app-editors/gobby"]
 source = "github"
@@ -979,13 +999,6 @@ github = "dask/distributed"
 use_max_tag = true
 prefix = "v"
 
-["dev-python/espeakng-loader"]
-source = "github"
-github = "thewh1teagle/espeakng-loader"
-use_max_tag = true
-prefix = "v"
-# note: from HOMEPAGE
-
 ["dev-python/google-generativeai"]
 source = "github"
 github = "google-gemini/deprecated-generative-ai-python"
@@ -997,13 +1010,6 @@ source = "github"
 github = "HDFGroup/h5pyd"
 use_max_tag = true
 prefix = "v"
-
-["dev-python/jsonlines"]
-source = "github"
-github = "wbolster/jsonlines"
-use_max_tag = true
-prefix = "v"
-# note: from HOMEPAGE
 
 ["dev-python/langcodes"]
 source = "github"
@@ -1049,20 +1055,6 @@ github = "NVIDIA/cudnn-frontend"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
-
-["dev-python/nvidia-cutlass-dsl-libs-base"]
-source = "github"
-github = "NVIDIA/cutlass"
-use_max_tag = true
-prefix = "v"
-# note: from HOMEPAGE
-
-["dev-python/nvidia-cutlass-dsl-libs-cu13"]
-source = "github"
-github = "NVIDIA/cutlass"
-use_max_tag = true
-prefix = "v"
-# note: from HOMEPAGE
 
 ["dev-python/openai-whisper"]
 source = "github"
@@ -1140,8 +1132,8 @@ prefix = "v"
 source = "github"
 github = "explosion/spacy"
 use_max_tag = true
-include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
-prefix = "v"
+include_regex = '^release-v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "release-v"
 
 ["dev-python/spacy-legacy"]
 source = "github"
@@ -1732,7 +1724,6 @@ cpan = "Term-Twiddle"
 # ["dev-libs/cudnn"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/amd-quark-bin"] skipped: AMD internal wheel distribution; not on public PyPI
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
-# ["dev-python/cuda-tile-bin"] skipped: custom upstream at pypi.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/dlinfo"] skipped: fphammerle/dlinfo has no GitHub release tags
 # ["dev-python/mupdf"] skipped: custom upstream at mupdf.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/numpy-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives

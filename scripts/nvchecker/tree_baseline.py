@@ -107,7 +107,22 @@ def main() -> int:
         if not released:
             continue
         released.sort(key=lambda pair: _pv_sort_key(pair[0]))
-        newest_pv = released[-1][0]
+        newest_pv, newest_eb = released[-1]
+        # For perl-module ebuilds, read DIST_VERSION directly from the ebuild
+        # rather than parsing the filename's PV.  Gentoo's perl eclass munges
+        # upstream CPAN versions (e.g. "v0.0.3" → "0.0.3", "2.35" → "2.350.0")
+        # to fit Portage version semantics; the CPAN source returns the raw
+        # upstream string, so using the munged PV produces permanent
+        # false-positive drift.  DIST_VERSION holds the original CPAN value.
+        if conf.get("source") == "cpan":
+            try:
+                ebuild_text = newest_eb.read_text(errors="replace")
+                m = re.search(r'^\s*DIST_VERSION=(?:"([^"]+)"|\'([^\']+)\'|(\S+))',
+                              ebuild_text, re.MULTILINE)
+                if m:
+                    newest_pv = next(g for g in m.groups() if g is not None)
+            except OSError:
+                pass
         # Strip Portage revision suffix (-rN) — nvchecker tracks upstream
         # version numbers, not our in-overlay revision bumps.
         newest_pv = re.sub(r'-r\d+$', '', newest_pv)
