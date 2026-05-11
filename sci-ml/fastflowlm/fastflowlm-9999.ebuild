@@ -33,6 +33,11 @@ RDEPEND="
 	dev-util/xrt
 	dev-libs/xdna-driver
 	dev-libs/xrt-xdna
+	media-video/ffmpeg:=
+	net-misc/curl:=
+	dev-libs/boost:=
+	sci-libs/fftw:3.0=
+	sys-libs/readline:=
 "
 DEPEND="${RDEPEND}"
 
