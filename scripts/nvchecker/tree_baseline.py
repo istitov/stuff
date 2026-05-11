@@ -114,13 +114,20 @@ def main() -> int:
         # to fit Portage version semantics; the CPAN source returns the raw
         # upstream string, so using the munged PV produces permanent
         # false-positive drift.  DIST_VERSION holds the original CPAN value.
+        #
+        # Many perl ebuilds set DIST_VERSION=${PV} (bash expansion to PV), which
+        # would be no-op anyway — skip those, since their captured value would
+        # be the literal string "${PV}".  Only use DIST_VERSION when it carries
+        # a real version literal that differs from PV.
         if conf.get("source") == "cpan":
             try:
                 ebuild_text = newest_eb.read_text(errors="replace")
                 m = re.search(r'^\s*DIST_VERSION=(?:"([^"]+)"|\'([^\']+)\'|(\S+))',
                               ebuild_text, re.MULTILINE)
                 if m:
-                    newest_pv = next(g for g in m.groups() if g is not None)
+                    dv = next(g for g in m.groups() if g is not None)
+                    if "$" not in dv:
+                        newest_pv = dv
             except OSError:
                 pass
         # Strip Portage revision suffix (-rN) — nvchecker tracks upstream
