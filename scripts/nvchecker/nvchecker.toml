@@ -120,7 +120,7 @@ pypi = "darkdetect"
 
 ["dev-python/dask-labextension"]
 source = "pypi"
-pypi = "${PN/-/_}"
+pypi = "dask_labextension"
 
 ["dev-python/dataproperty"]
 source = "pypi"
@@ -136,11 +136,11 @@ pypi = "depyf"
 
 ["dev-python/diffpy-structure"]
 source = "pypi"
-pypi = "${PN/-/.}"
+pypi = "diffpy.structure"
 
 ["dev-python/diffpy-utils"]
 source = "pypi"
-pypi = "${PN/-/.}"
+pypi = "diffpy.utils"
 
 ["dev-python/diffsims"]
 source = "pypi"

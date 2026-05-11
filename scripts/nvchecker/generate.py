@@ -258,6 +258,26 @@ def strip_comments(text: str) -> str:
     return "\n".join(out)
 
 
+def expand_pypi_pn(spec: str, pkg_name: str) -> str:
+    """Expand bash ${PN/…/…} parameter substitutions captured from PYPI_PN=.
+
+    Ebuild authors often write PYPI_PN="${PN/-/_}" or PYPI_PN="${PN/-/.}".
+    Emitting the literal bash expression into the TOML produces an invalid
+    URL at nvchecker runtime.  Evaluate the substitution here instead.
+    """
+    if not spec.startswith("${PN"):
+        return spec
+    if spec in ("${PN}", "$PN"):
+        return pkg_name
+    # ${PN/old/new} (first) or ${PN//old/new} (global)
+    m = re.match(r'^\$\{PN(//?)([^/}]+)/([^}]*)\}$', spec)
+    if m:
+        global_replace = m.group(1) == "//"
+        old, new = m.group(2), m.group(3)
+        return pkg_name.replace(old, new) if global_replace else pkg_name.replace(old, new, 1)
+    return spec
+
+
 def expand_vars(text: str | None, pkg_name: str) -> str | None:
     """Best-effort expansion of the bash variables that commonly appear in
     SRC_URI / HOMEPAGE, so the URL-matching regexes can traverse them.
@@ -315,7 +335,10 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
     # PyPI: if inherit pypi is present
     if PYPI_INHERIT_RE.search(ebuild_text):
         pn_override = first_group(PYPI_PN_RE.search(ebuild_text))
-        name = pn_override if pn_override else pkg_name
+        if pn_override:
+            name = expand_pypi_pn(pn_override, pkg_name)
+        else:
+            name = pkg_name
         return {"kind": "pypi", "spec": name}
 
     # PyPI via SRC_URI
