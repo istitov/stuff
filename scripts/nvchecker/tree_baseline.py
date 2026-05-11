@@ -13,12 +13,11 @@ one persists last week's upstream snapshot as the baseline and reports
 upstream has now," which is the right framing for CI-driven bump
 detection (drift relative to the tree, not relative to time).
 
-Lexical sort is used to pick the newest ebuild — same heuristic as
-generate.py:find_newest_ebuild. It's correct for most PVs and degrades
-gracefully for edge cases (1.10.0 sorts as < 1.9.0 lexically, so a
-package at 1.10.0 would falsely report drift to upstream's 1.10.0 once
-the wrong baseline pointed at 1.9.0). Phase 2 will swap in a proper
-PMS-aware sort if the false-positive rate matters.
+Versioned sort order: packaging.version.Version is used after normalising
+Portage-specific suffixes (_pN, _rcN, _alphaN, _betaN, _preN, -rN) to
+their PEP 440 equivalents.  Versions that still can't be parsed fall back
+to a tuple-of-int-parts key so multi-digit segments (e.g. 0.100.0 vs
+0.86.0) always rank correctly.
 """
 
 from __future__ import annotations
@@ -28,6 +27,47 @@ import re
 import sys
 import tomllib
 from pathlib import Path
+
+try:
+    from packaging.version import Version, InvalidVersion
+    _HAVE_PACKAGING = True
+except ImportError:
+    _HAVE_PACKAGING = False
+
+
+_PORTAGE_TO_PEP440 = [
+    (re.compile(r'-r\d+$'),       r''),
+    (re.compile(r'_p(\d+)$'),     r'.post\1'),
+    (re.compile(r'_rc(\d+)$'),    r'rc\1'),
+    (re.compile(r'_alpha(\d+)$'), r'a\1'),
+    (re.compile(r'_beta(\d+)$'),  r'b\1'),
+    (re.compile(r'_pre\d*$'),     r'.dev0'),
+]
+
+
+def _pv_sort_key(pv: str) -> tuple:
+    """Return a sort key for a Portage PV that handles multi-digit segments.
+
+    Normalises Portage suffixes to PEP 440 and uses packaging.version if
+    available; falls back to a tuple-of-(int-or-str) parts otherwise.
+    """
+    normalized = pv
+    for pat, repl in _PORTAGE_TO_PEP440:
+        normalized = pat.sub(repl, normalized)
+    if _HAVE_PACKAGING:
+        try:
+            return (0, Version(normalized), pv)
+        except InvalidVersion:
+            pass
+    # Fallback: split on separators and compare numerically where possible.
+    parts = re.split(r'[.\-_]', normalized)
+    int_parts: list[tuple[int, int | str]] = []
+    for p in parts:
+        try:
+            int_parts.append((0, int(p)))
+        except ValueError:
+            int_parts.append((1, p))
+    return (1, tuple(int_parts), pv)
 
 
 def main() -> int:
@@ -53,11 +93,10 @@ def main() -> int:
         pkgdir = overlay_root / cat / pkg
         if not pkgdir.is_dir():
             continue
-        # Newest non-live ebuild by lexical sort. Live ebuilds are
-        # marked by an all-9s PV: the standard 9999, revision-bumped
-        # 9999-rN, snapshot conventions like 999999, or dotted variants
-        # like 9.9999. Strip the revision and check whether what's left
-        # is all 9s ignoring dots.
+        # Newest non-live ebuild.  Live ebuilds are marked by an all-9s PV:
+        # the standard 9999, revision-bumped 9999-rN, snapshot conventions
+        # like 999999, or dotted variants like 9.9999.  Strip the revision
+        # suffix and check whether what remains is all 9s ignoring dots.
         released = []
         for eb in pkgdir.glob(f"{pkg}-*.ebuild"):
             pv = eb.stem[len(pkg) + 1:]
@@ -67,14 +106,18 @@ def main() -> int:
             released.append((pv, eb))
         if not released:
             continue
-        released.sort()
+        released.sort(key=lambda pair: _pv_sort_key(pair[0]))
         newest_pv = released[-1][0]
         # Strip Portage revision suffix (-rN) — nvchecker tracks upstream
         # version numbers, not our in-overlay revision bumps.
         newest_pv = re.sub(r'-r\d+$', '', newest_pv)
-        # Normalize Portage post-release suffix (_pN) to PEP 440 form
-        # (.postN) so pypi-sourced entries compare without spurious drift.
-        # Limit to 4 digits: longer suffixes are snapshot dates (YYYYMMDD).
+        # Strip date-based snapshot suffix (_pYYYYMMDD or similar long numeric
+        # suffixes) — these are in-overlay snapshot markers that have no
+        # counterpart in the upstream tag, so emit just the base version.
+        newest_pv = re.sub(r'_p\d{5,}$', '', newest_pv)
+        # Normalize Portage post-release suffix (_pN with 1-4 digits) to PEP
+        # 440 form (.postN) so pypi-sourced entries compare without spurious
+        # drift.  Applied after the long-suffix strip above.
         newest_pv = re.sub(r'_p(\d{1,4})$', r'.post\1', newest_pv)
         data[entry] = {"version": newest_pv}
 

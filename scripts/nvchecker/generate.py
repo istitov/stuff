@@ -176,6 +176,14 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "include_regex": r"^hdf4-[0-9]+\.[0-9]+\.[0-9]+$",
         "prefix": "hdf4-",
     },
+    # Xilinx/XRT tags are date-prefixed: `YYYYMM.MAJOR.MINOR.PATCH`.  The
+    # overlay ebuild carries only MAJOR.MINOR.PATCH (e.g. 2.21.75).  Strip
+    # the 6-digit date prefix so the extracted version is comparable.
+    "dev-util/xrt": {
+        "include_regex": r"^[0-9]{6}\.[0-9]+\.[0-9]+\.[0-9]+$",
+        "from_pattern": r"^[0-9]{6}\.(.+)$",
+        "to_pattern": r"\1",
+    },
     # lierdakil/pandoc-crossref publishes alpha/rc tags for next releases;
     # restrict to stable tags (3- or 4-part version, with optional trailing
     # letter like `0.3.23a`, but no hyphenated pre-release suffixes).
