@@ -36,6 +36,7 @@ PERL_INHERIT_RE = re.compile(r"^\s*inherit\b.*\bperl-module\b", re.MULTILINE)
 PY2_INHERIT_RE = re.compile(r"^\s*inherit\b.*_py2\b", re.MULTILINE)
 PYPI_PN_RE = re.compile(r'^\s*PYPI_PN=(?:"([^"]+)"|\'([^\']+)\'|(\S+))', re.MULTILINE)
 PYPI_NORMALIZE_RE = re.compile(r'^\s*PYPI_NO_NORMALIZE=(\S+)', re.MULTILINE)
+MY_PN_RE = re.compile(r'^\s*MY_PN=(?:"([^"]+)"|\'([^\']+)\'|(\S+))', re.MULTILINE)
 SRC_URI_RE = re.compile(r'^SRC_URI=(?:"([^"]*)"|\'([^\']*)\')', re.MULTILINE | re.DOTALL)
 HOMEPAGE_RE = re.compile(r'^HOMEPAGE=(?:"([^"]*)"|\'([^\']*)\')', re.MULTILINE | re.DOTALL)
 EGIT_REPO_URI_RE = re.compile(r'^EGIT_REPO_URI=(?:"([^"]*)"|\'([^\']*)\')', re.MULTILINE)
@@ -129,14 +130,17 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "dev-python/nvidia-cudnn-frontend": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
-    # adplug/adplug repo also carries winamp-* tags (winamp plugin builds)
-    # that sort higher than the plain version number tags (w > digit in ASCII).
+    # adplug/adplug releases are tagged as `adplug-X.Y` (not bare `X.Y` or
+    # `vX.Y`), alongside winamp-* plugin tags.  Strip the `adplug-` prefix
+    # so the returned version matches the plain Portage PV.
     "media-libs/adplug": {
-        "include_regex": r"^\d+\.\d+",
+        "include_regex": r"^adplug-[0-9]+\.[0-9]+",
+        "prefix": "adplug-",
     },
-    # adplug/libbinio: same org, restrict to digit-starting version tags.
+    # adplug/libbinio: same release-tag convention (`libbinio-X.Y.Z`).
     "dev-cpp/libbinio": {
-        "include_regex": r"^\d+\.\d+",
+        "include_regex": r"^libbinio-[0-9]+\.[0-9]+",
+        "prefix": "libbinio-",
     },
     # xintrea/mytetra_dev uses `v.X.Y.Z` (note the dot after v) rather than
     # the standard `vX.Y.Z`; from_pattern strips the `v.` prefix so the
@@ -170,11 +174,13 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "net-libs/ortp": {
         "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+$",
     },
-    # HDFGroup/hdf4 carries ancient `v42r4`-style tags (HDF 4.2 release 4)
-    # alongside modern `hdf4-X.Y.Z` release tags; restrict to the latter.
+    # HDFGroup/hdf4 tags use the format `hdfX.Y.Z` (e.g. `hdf4.3.1`) for
+    # modern releases; older `hdf-4_2_16-2`-style tags used underscores and
+    # a dash separator — both are excluded by requiring `hdf[0-9]`.  Strip
+    # the `hdf` prefix to get a plain dotted version comparable to the PV.
     "sci-libs/hdf": {
-        "include_regex": r"^hdf4-[0-9]+\.[0-9]+\.[0-9]+$",
-        "prefix": "hdf4-",
+        "include_regex": r"^hdf[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "hdf",
     },
     # Xilinx/XRT tags are date-prefixed: `YYYYMM.MAJOR.MINOR.PATCH`.  The
     # overlay ebuild carries only MAJOR.MINOR.PATCH (e.g. 2.21.75).  Strip
@@ -210,6 +216,19 @@ SKIP_PKGS: dict[str, str] = {
     "sci-libs/cholmod": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
     "sci-libs/colamd":  "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
     "sci-libs/umfpack": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
+    # Repositories confirmed to have no release tags (GitHub /git/refs/tags → 404).
+    "dev-python/pyprismatic":              "prism-em/pyprismatic has no GitHub release tags",
+    "dev-python/dlinfo":                   "fphammerle/dlinfo has no GitHub release tags",
+    "x11-apps/skb":                        "polachok/skb has no GitHub release tags",
+    "media-plugins/deadbeef-waveform-seekbar": "cboxdoerfer/deadbeef-waveform-seekbar has no GitHub release tags",
+    "dev-python/tccbox":                   "metab0t/tccbox has no GitHub release tags (private or untagged)",
+    "sci-ml/caffe2":                       "pytorch/caffe2 repo has no tags; caffe2 was absorbed into pytorch/pytorch",
+    # Upstreams that are gone or use non-public distribution channels.
+    "sci-physics/demeter":                 "Demeter removed from CPAN; no public upstream tracking possible",
+    "dev-python/amd-quark-bin":            "AMD internal wheel distribution; not on public PyPI",
+    "dev-python/runai-model-streamer-bin": "Run:ai internal distribution; not on public PyPI",
+    # Nightly / CDN-sourced package with no comparable GitHub tag scheme.
+    "dev-util/therock-bin":                "tracks ROCm nightlies via AMD CDN; GitHub tag scheme is incompatible",
 }
 
 
@@ -278,20 +297,28 @@ def expand_pypi_pn(spec: str, pkg_name: str) -> str:
     return spec
 
 
-def expand_vars(text: str | None, pkg_name: str) -> str | None:
+def expand_vars(text: str | None, pkg_name: str, my_pn: str | None = None) -> str | None:
     """Best-effort expansion of the bash variables that commonly appear in
     SRC_URI / HOMEPAGE, so the URL-matching regexes can traverse them.
-    PV and P expansion isn't attempted (we don't need the version number)."""
+    PV and P expansion isn't attempted (we don't need the version number).
+
+    my_pn is the parsed value of MY_PN= from the ebuild, if present.  Without
+    it, ${MY_PN} would expand to pkg_name, which is wrong for packages that set
+    MY_PN to a different string (e.g. openai-whisper sets MY_PN="whisper",
+    smart-open sets MY_PN="smart_open").
+    """
     if text is None:
         return None
-    # Both underscored (MY_PN) and un-underscored (MYPN) forms appear in
-    # the overlay; similarly MY_P / MYP. Substituting them all with
-    # pkg_name is close enough — we're only after the URL host.
-    for v in ("${PN}", "$PN",
-              "${MY_PN}", "$MY_PN", "${MYPN}", "$MYPN",
-              "${MY_P}", "$MY_P", "${MYP}", "$MYP",
-              "${MY_P%-*}"):
-        text = text.replace(v, pkg_name)
+    my_pn_repl = my_pn if my_pn is not None else pkg_name
+    for v, repl in [
+        ("${PN}", pkg_name), ("$PN", pkg_name),
+        ("${MY_PN}", my_pn_repl), ("$MY_PN", my_pn_repl),
+        ("${MYPN}", my_pn_repl), ("$MYPN", my_pn_repl),
+        ("${MY_P}", my_pn_repl), ("$MY_P", my_pn_repl),
+        ("${MYP}", my_pn_repl), ("$MYP", my_pn_repl),
+        ("${MY_P%-*}", my_pn_repl),
+    ]:
+        text = text.replace(v, repl)
     return text
 
 
@@ -489,6 +516,7 @@ def emit_entry(entry_name: str, classification: dict) -> list[str]:
         lines.append('source = "bitbucket"')
         lines.append(f'bitbucket = "{classification["spec"]}"')
         lines.append("use_max_tag = true")
+        lines.append('prefix = "v"')
     elif kind == "gitlab":
         lines.append('source = "gitlab"')
         lines.append(f'gitlab = "{classification["spec"]}"')
@@ -564,9 +592,10 @@ def main() -> int:
                 continue
 
             text = strip_comments(ebuild.read_text(errors="replace"))
-            homepage = expand_vars(first_group(HOMEPAGE_RE.search(text)), pkg_dir.name)
-            src_uri = expand_vars(first_group(SRC_URI_RE.search(text)), pkg_dir.name)
-            egit = expand_vars(first_group(EGIT_REPO_URI_RE.search(text)), pkg_dir.name)
+            my_pn = first_group(MY_PN_RE.search(text))
+            homepage = expand_vars(first_group(HOMEPAGE_RE.search(text)), pkg_dir.name, my_pn)
+            src_uri = expand_vars(first_group(SRC_URI_RE.search(text)), pkg_dir.name, my_pn)
+            egit = expand_vars(first_group(EGIT_REPO_URI_RE.search(text)), pkg_dir.name, my_pn)
 
             cls = classify(pkg_dir.name, text, homepage, src_uri, egit)
             entries_by_kind[cls["kind"]].append((entry_name, str(ebuild), cls))

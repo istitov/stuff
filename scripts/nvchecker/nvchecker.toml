@@ -8,15 +8,11 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (181) ---
+# --- pypi (179) ---
 
 ["dev-python/abtem"]
 source = "pypi"
 pypi = "abtem"
-
-["dev-python/amd-quark-bin"]
-source = "pypi"
-pypi = "amd-quark-bin"
 
 ["dev-python/anthropic"]
 source = "pypi"
@@ -562,10 +558,6 @@ pypi = "rosettasciio"
 source = "pypi"
 pypi = "rouge_score"
 
-["dev-python/runai-model-streamer-bin"]
-source = "pypi"
-pypi = "runai-model-streamer-bin"
-
 ["dev-python/sacrebleu"]
 source = "pypi"
 pypi = "sacrebleu"
@@ -734,7 +726,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (142) ---
+# --- github (135) ---
 
 ["app-editors/gobby"]
 source = "github"
@@ -744,7 +736,7 @@ prefix = "v"
 
 ["app-editors/manpageeditor"]
 source = "github"
-github = "KeithDHedger/manpageeditor"
+github = "KeithDHedger/ManPageEditor"
 use_max_tag = true
 prefix = "v"
 
@@ -804,7 +796,7 @@ prefix = "v"
 
 ["dev-cpp/bshoshany-thread-pool"]
 source = "github"
-github = "bshoshany/bshoshany-thread-pool"
+github = "bshoshany/thread-pool"
 use_max_tag = true
 prefix = "v"
 
@@ -818,8 +810,8 @@ prefix = "v"
 source = "github"
 github = "adplug/libbinio"
 use_max_tag = true
-include_regex = '^\d+\.\d+'
-prefix = "v"
+include_regex = '^libbinio-[0-9]+\.[0-9]+'
+prefix = "libbinio-"
 
 ["dev-libs/hipother"]
 source = "github"
@@ -987,12 +979,6 @@ github = "dask/distributed"
 use_max_tag = true
 prefix = "v"
 
-["dev-python/dlinfo"]
-source = "github"
-github = "fphammerle/dlinfo"
-use_max_tag = true
-prefix = "v"
-
 ["dev-python/espeakng-loader"]
 source = "github"
 github = "thewh1teagle/espeakng-loader"
@@ -1080,7 +1066,7 @@ prefix = "v"
 
 ["dev-python/openai-whisper"]
 source = "github"
-github = "openai/openai-whisper"
+github = "openai/whisper"
 use_max_tag = true
 prefix = "v"
 
@@ -1132,12 +1118,6 @@ github = "pymupdf/pymupdf-fonts"
 use_max_tag = true
 prefix = "v"
 
-["dev-python/pyprismatic"]
-source = "github"
-github = "prism-em/pyprismatic"
-use_max_tag = true
-prefix = "v"
-
 ["dev-python/segments"]
 source = "github"
 github = "cldf/segments"
@@ -1146,7 +1126,7 @@ prefix = "v"
 
 ["dev-python/smart-open"]
 source = "github"
-github = "piskvorky/smart-open"
+github = "piskvorky/smart_open"
 use_max_tag = true
 prefix = "v"
 
@@ -1181,13 +1161,6 @@ source = "github"
 github = "mwilliamson/spur.py"
 use_max_tag = true
 prefix = "v"
-
-["dev-python/tccbox"]
-source = "github"
-github = "metab0t/tccbox"
-use_max_tag = true
-prefix = "v"
-# note: from HOMEPAGE
 
 ["dev-python/term-image"]
 source = "github"
@@ -1265,14 +1238,6 @@ include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
 # note: from HOMEPAGE
 
-["dev-util/therock-bin"]
-source = "github"
-github = "ROCm/TheRock"
-use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
-# note: from HOMEPAGE
-
 ["dev-util/xrt"]
 source = "github"
 github = "Xilinx/XRT"
@@ -1311,8 +1276,8 @@ prefix = "v"
 source = "github"
 github = "adplug/adplug"
 use_max_tag = true
-include_regex = '^\d+\.\d+'
-prefix = "v"
+include_regex = '^adplug-[0-9]+\.[0-9]+'
+prefix = "adplug-"
 
 ["media-libs/draco"]
 source = "github"
@@ -1335,12 +1300,6 @@ prefix = "v"
 ["media-plugins/deadbeef-jack"]
 source = "github"
 github = "tokiclover/deadbeef-plugins-jack"
-use_max_tag = true
-prefix = "v"
-
-["media-plugins/deadbeef-waveform-seekbar"]
-source = "github"
-github = "cboxdoerfer/deadbeef-waveform-seekbar"
 use_max_tag = true
 prefix = "v"
 
@@ -1418,8 +1377,8 @@ prefix = "v"
 source = "github"
 github = "HDFGroup/hdf4"
 use_max_tag = true
-include_regex = '^hdf4-[0-9]+\.[0-9]+\.[0-9]+$'
-prefix = "hdf4-"
+include_regex = '^hdf[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "hdf"
 
 ["sci-libs/hipBLAS"]
 source = "github"
@@ -1572,12 +1531,6 @@ github = "bigcode-project/bigcode-evaluation-harness"
 use_max_tag = true
 prefix = "v"
 
-["sci-ml/caffe2"]
-source = "github"
-github = "pytorch/caffe2"
-use_max_tag = true
-prefix = "v"
-
 ["sci-ml/fastflowlm"]
 source = "github"
 github = "FastFlowLM/FastFlowLM"
@@ -1658,20 +1611,15 @@ github = "megabaks/kernel-cleaner"
 use_max_tag = true
 prefix = "v"
 
-["x11-apps/skb"]
-source = "github"
-github = "polachok/skb"
-use_max_tag = true
-prefix = "v"
-
 # --- bitbucket (1) ---
 
 ["media-plugins/deadbeef-opus"]
 source = "bitbucket"
 bitbucket = "Lithopsian/deadbeef-opus"
 use_max_tag = true
+prefix = "v"
 
-# --- cpan (17) ---
+# --- cpan (16) ---
 
 ["dev-perl/Chemistry-Elements"]
 source = "cpan"
@@ -1737,10 +1685,6 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-["sci-physics/demeter"]
-source = "cpan"
-cpan = "demeter"
-
 # --- skipped ---
 
 # ["app-portage/portopts"] skipped: live-only ebuild (no release tracking)
@@ -1786,24 +1730,31 @@ cpan = "demeter"
 
 # ["dev-lang/tcc"] skipped: custom upstream at bellard.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-libs/cudnn"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["dev-python/amd-quark-bin"] skipped: AMD internal wheel distribution; not on public PyPI
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/cuda-tile-bin"] skipped: custom upstream at pypi.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["dev-python/dlinfo"] skipped: fphammerle/dlinfo has no GitHub release tags
 # ["dev-python/mupdf"] skipped: custom upstream at mupdf.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/numpy-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pycairo-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygobject"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygtk"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/pyprismatic"] skipped: prism-em/pyprismatic has no GitHub release tags
 # ["dev-python/pyside"] skipped: custom upstream at wiki.qt.io; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["dev-python/runai-model-streamer-bin"] skipped: Run:ai internal distribution; not on public PyPI
 # ["dev-python/setuptools-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/tccbox"] skipped: metab0t/tccbox has no GitHub release tags (private or untagged)
 # ["dev-python/unittest-or-fail"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-qt/qtdatavis3d"] skipped: no recognizable upstream
 # ["dev-qt/qthelp"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtwebchannel"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-util/nvidia-cuda-toolkit"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["dev-util/therock-bin"] skipped: tracks ROCm nightlies via AMD CDN; GitHub tag scheme is incompatible
 # ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["media-plugins/deadbeef-waveform-seekbar"] skipped: cboxdoerfer/deadbeef-waveform-seekbar has no GitHub release tags
 # ["sci-libs/amd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/camd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/ccolamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
@@ -1812,7 +1763,9 @@ cpan = "demeter"
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-libs/umfpack"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
+# ["sci-ml/caffe2"] skipped: pytorch/caffe2 repo has no tags; caffe2 was absorbed into pytorch/pytorch
 # ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-physics/demeter"] skipped: Demeter removed from CPAN; no public upstream tracking possible
 # ["sci-physics/ifeffit"] skipped: custom upstream at sourceforge.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/oommf"] skipped: custom upstream at math.nist.gov; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/profex"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
@@ -1820,5 +1773,6 @@ cpan = "demeter"
 # ["sci-visualization/gwyddion3"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sys-kernel/pf-sources"] skipped: custom upstream at pfkernel.natalenko.name; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["www-misc/httraqt"] skipped: sourceforge/httraqt — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
+# ["x11-apps/skb"] skipped: polachok/skb has no GitHub release tags
 # ["x11-libs/gtk+"] skipped: custom upstream at www.gtk.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["x11-libs/qscintilla"] skipped: custom upstream at www.riverbankcomputing.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
