@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (179) ---
+# --- pypi (181) ---
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -286,6 +286,10 @@ pypi = "kokoro"
 source = "pypi"
 pypi = "larixite"
 
+["dev-python/latex2sympy2-extended"]
+source = "pypi"
+pypi = "latex2sympy2_extended"
+
 ["dev-python/link-traits"]
 source = "pypi"
 pypi = "link-traits"
@@ -297,6 +301,10 @@ pypi = "llguidance"
 ["dev-python/lm-format-enforcer"]
 source = "pypi"
 pypi = "lm-format-enforcer"
+
+["dev-python/math-verify"]
+source = "pypi"
+pypi = "math_verify"
 
 ["dev-python/matplotlib-scalebar"]
 source = "pypi"
@@ -726,48 +734,59 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (147) ---
+# --- github (142) ---
 
 ["app-editors/gobby"]
 source = "github"
 github = "gobby/gobby"
 use_max_tag = true
+prefix = "v"
 
 ["app-editors/manpageeditor"]
 source = "github"
 github = "KeithDHedger/manpageeditor"
 use_max_tag = true
+prefix = "v"
 
 ["app-misc/tudu"]
 source = "github"
 github = "meskio/tudu"
 use_max_tag = true
+prefix = "v"
 
 ["app-office/mytetra"]
 source = "github"
 github = "xintrea/mytetra_dev"
 use_max_tag = true
+include_regex = '^v\.\d+\.\d+\.\d+$'
+from_pattern = '^v\.(.+)$'
+to_pattern = '\1'
 
 ["app-portage/gcc-switcher"]
 source = "github"
 github = "megabaks/gcc-switcher"
 use_max_tag = true
+prefix = "v"
 
 ["app-portage/portconf"]
 source = "github"
 github = "megabaks/portconf"
 use_max_tag = true
+prefix = "v"
 # note: from EGIT_REPO_URI
 
 ["app-portage/udept"]
 source = "github"
 github = "istitov/udept"
 use_max_tag = true
+prefix = "v"
 
 ["app-text/pandoc-crossref-bin"]
 source = "github"
 github = "lierdakil/pandoc-crossref"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+[0-9a-z.]*$'
+prefix = "v"
 
 ["dev-build/rocm-cmake"]
 source = "github"
@@ -781,21 +800,26 @@ prefix = "rocm-"
 source = "github"
 github = "bombela/backward-cpp"
 use_max_tag = true
+prefix = "v"
 
 ["dev-cpp/bshoshany-thread-pool"]
 source = "github"
 github = "bshoshany/bshoshany-thread-pool"
 use_max_tag = true
+prefix = "v"
 
 ["dev-cpp/gcem"]
 source = "github"
 github = "kthohr/gcem"
 use_max_tag = true
+prefix = "v"
 
 ["dev-cpp/libbinio"]
 source = "github"
 github = "adplug/libbinio"
 use_max_tag = true
+include_regex = '^\d+\.\d+'
+prefix = "v"
 
 ["dev-libs/hipother"]
 source = "github"
@@ -808,6 +832,7 @@ prefix = "rocm-"
 source = "github"
 github = "awesomeWM/oocairo"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["dev-libs/rccl"]
@@ -866,64 +891,82 @@ prefix = "rocm-"
 source = "github"
 github = "amd/xdna-driver"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["dev-libs/xrt-xdna"]
 source = "github"
 github = "amd/xdna-driver"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["dev-ml/gapi-ocaml"]
 source = "github"
 github = "astrada/gapi-ocaml"
 use_max_tag = true
+prefix = "v"
 
 ["dev-ml/ocamlfuse"]
 source = "github"
 github = "astrada/ocamlfuse"
 use_max_tag = true
+prefix = "v"
 
 ["dev-ml/otoml"]
 source = "github"
 github = "dmbaturin/otoml"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/PyMuPDF"]
 source = "github"
 github = "pymupdf/PyMuPDF"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/addict"]
 source = "github"
 github = "mewwts/addict"
 use_max_tag = true
+prefix = "v"
+
+["dev-python/antlr4-python3-runtime"]
+source = "github"
+github = "antlr/antlr4"
+use_max_tag = true
+prefix = "v"
 
 ["dev-python/apsw"]
 source = "github"
 github = "rogerbinns/apsw"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/catalogue"]
 source = "github"
 github = "explosion/catalogue"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/cloudpathlib"]
 source = "github"
 github = "drivendataorg/cloudpathlib"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/csvw"]
 source = "github"
 github = "cldf/csvw"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/cuda-bindings"]
 source = "github"
 github = "NVIDIA/cuda-python"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["dev-python/cuda-pathfinder"]
 source = "github"
@@ -936,202 +979,245 @@ prefix = "cuda-pathfinder-v"
 source = "github"
 github = "dask/dask"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/distributed"]
 source = "github"
 github = "dask/distributed"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/dlinfo"]
 source = "github"
 github = "fphammerle/dlinfo"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/espeakng-loader"]
 source = "github"
 github = "thewh1teagle/espeakng-loader"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["dev-python/google-generativeai"]
 source = "github"
 github = "google-gemini/deprecated-generative-ai-python"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/h5pyd"]
 source = "github"
 github = "HDFGroup/h5pyd"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/jsonlines"]
 source = "github"
 github = "wbolster/jsonlines"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["dev-python/langcodes"]
 source = "github"
 github = "georgkrause/langcodes"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/language-tags"]
 source = "github"
 github = "OnroerendErfgoed/language-tags"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/llvmlite"]
 source = "github"
 github = "numba/llvmlite"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["dev-python/locket"]
 source = "github"
 github = "mwilliamson/locket.py"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/num2words"]
 source = "github"
 github = "savoirfairelinux/num2words"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/numba"]
 source = "github"
 github = "numba/numba"
 use_max_tag = true
+include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["dev-python/nvidia-cudnn-frontend"]
 source = "github"
 github = "NVIDIA/cudnn-frontend"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["dev-python/nvidia-cutlass-dsl-libs-base"]
 source = "github"
 github = "NVIDIA/cutlass"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["dev-python/nvidia-cutlass-dsl-libs-cu13"]
 source = "github"
 github = "NVIDIA/cutlass"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["dev-python/openai-whisper"]
 source = "github"
 github = "openai/openai-whisper"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/opentelemetry-exporter-otlp"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/opentelemetry-exporter-otlp-proto-common"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/opentelemetry-exporter-otlp-proto-grpc"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/opentelemetry-exporter-otlp-proto-http"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/opentelemetry-proto"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/periodictable"]
 source = "github"
 github = "python-periodictable/periodictable"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/pipcl"]
 source = "github"
 github = "ArtifexSoftware/pipcl"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/pymupdf-fonts"]
 source = "github"
 github = "pymupdf/pymupdf-fonts"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/pyprismatic"]
 source = "github"
 github = "prism-em/pyprismatic"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/segments"]
 source = "github"
 github = "cldf/segments"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/smart-open"]
 source = "github"
 github = "piskvorky/smart-open"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/sounddevice"]
 source = "github"
 github = "spatialaudio/python-sounddevice"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/spacy"]
 source = "github"
 github = "explosion/spacy"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["dev-python/spacy-legacy"]
 source = "github"
 github = "explosion/spacy-legacy"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["dev-python/spacy-loggers"]
 source = "github"
 github = "explosion/spacy-loggers"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/spur"]
 source = "github"
 github = "mwilliamson/spur.py"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/tccbox"]
 source = "github"
 github = "metab0t/tccbox"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["dev-python/term-image"]
 source = "github"
 github = "AnonymouX47/term-image"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/toml"]
 source = "github"
 github = "uiri/toml"
 use_max_tag = true
+prefix = "v"
 
 ["dev-python/wasabi"]
 source = "github"
 github = "explosion/wasabi"
 use_max_tag = true
+prefix = "v"
 
 ["dev-util/bats-assert"]
 source = "github"
 github = "bats-core/bats-assert"
 use_max_tag = true
+prefix = "v"
 
 ["dev-util/bats-support"]
 source = "github"
 github = "bats-core/bats-support"
 use_max_tag = true
+prefix = "v"
 
 ["dev-util/hip"]
 source = "github"
@@ -1191,128 +1277,126 @@ prefix = "rocm-"
 source = "github"
 github = "Xilinx/XRT"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["games-roguelike/dwarftherapist"]
 source = "github"
 github = "Dwarf-Therapist/Dwarf-Therapist"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["media-gfx/orcaslicer"]
 source = "github"
 github = "OrcaSlicer/OrcaSlicer"
 use_max_tag = true
+prefix = "v"
 
 ["media-gfx/svgcleaner"]
 source = "github"
 github = "RazrFalcon/svgcleaner"
 use_max_tag = true
+prefix = "v"
 
 ["media-gfx/viu"]
 source = "github"
 github = "atanunq/viu"
 use_max_tag = true
+prefix = "v"
 
 ["media-libs/adplug"]
 source = "github"
 github = "adplug/adplug"
 use_max_tag = true
+include_regex = '^\d+\.\d+'
+prefix = "v"
 
 ["media-libs/draco"]
 source = "github"
 github = "google/draco"
 use_max_tag = true
+prefix = "v"
 
 ["media-libs/libnoise"]
 source = "github"
 github = "SoftFever/Orca-deps-libnoise"
 use_max_tag = true
+prefix = "v"
 
 ["media-libs/viuer"]
 source = "github"
 github = "atanunq/viuer"
 use_max_tag = true
+prefix = "v"
 
 ["media-plugins/deadbeef-jack"]
 source = "github"
 github = "tokiclover/deadbeef-plugins-jack"
 use_max_tag = true
+prefix = "v"
 
 ["media-plugins/deadbeef-waveform-seekbar"]
 source = "github"
 github = "cboxdoerfer/deadbeef-waveform-seekbar"
 use_max_tag = true
+prefix = "v"
 
 ["media-sound/mpdris2"]
 source = "github"
 github = "eonpatapon/mpDris2"
 use_max_tag = true
+prefix = "v"
 
 ["media-sound/puddletag"]
 source = "github"
 github = "puddletag/puddletag"
 use_max_tag = true
+prefix = "v"
 
 ["media-sound/sonata"]
 source = "github"
 github = "multani/sonata"
 use_max_tag = true
+prefix = "v"
 
 ["media-video/fswebcam"]
 source = "github"
 github = "fsphil/fswebcam"
 use_max_tag = true
+prefix = "v"
 
 ["net-im/profanity"]
 source = "github"
 github = "profanity-im/profanity"
 use_max_tag = true
+prefix = "v"
 
 ["net-libs/bctoolbox"]
 source = "github"
 github = "BelledonneCommunications/bctoolbox"
 use_max_tag = true
+include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["net-libs/libinfinity"]
 source = "github"
 github = "gobby/libinfinity"
 use_max_tag = true
+prefix = "v"
 
 ["net-libs/ortp"]
 source = "github"
 github = "BelledonneCommunications/ortp"
 use_max_tag = true
-
-["sci-libs/amd"]
-source = "github"
-github = "DrTimothyAldenDavis/SuiteSparse"
-use_max_tag = true
+include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["sci-libs/ausaxs"]
 source = "github"
 github = "AUSAXS/AUSAXS"
 use_max_tag = true
-
-["sci-libs/camd"]
-source = "github"
-github = "DrTimothyAldenDavis/SuiteSparse"
-use_max_tag = true
-
-["sci-libs/ccolamd"]
-source = "github"
-github = "DrTimothyAldenDavis/SuiteSparse"
-use_max_tag = true
-
-["sci-libs/cholmod"]
-source = "github"
-github = "DrTimothyAldenDavis/SuiteSparse"
-use_max_tag = true
-
-["sci-libs/colamd"]
-source = "github"
-github = "DrTimothyAldenDavis/SuiteSparse"
-use_max_tag = true
+prefix = "v"
 
 ["sci-libs/composable-kernel"]
 source = "github"
@@ -1326,11 +1410,14 @@ source = "github"
 github = "facebookresearch/faiss"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["sci-libs/hdf"]
 source = "github"
 github = "HDFGroup/hdf4"
 use_max_tag = true
+include_regex = '^hdf4-[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "hdf4-"
 
 ["sci-libs/hipBLAS"]
 source = "github"
@@ -1406,6 +1493,7 @@ prefix = "rocm-"
 source = "github"
 github = "nexusformat/code"
 use_max_tag = true
+prefix = "v"
 
 ["sci-libs/rocBLAS"]
 source = "github"
@@ -1461,104 +1549,118 @@ prefix = "rocm-"
 source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
 use_max_tag = true
-
-["sci-libs/umfpack"]
-source = "github"
-github = "DrTimothyAldenDavis/SuiteSparse"
-use_max_tag = true
+prefix = "v"
 
 ["sci-misc/llama-cpp"]
 source = "github"
 github = "ggml-org/llama.cpp"
 use_max_tag = true
+prefix = "v"
 # note: from HOMEPAGE
 
 ["sci-ml/amd-gaia"]
 source = "github"
 github = "amd/gaia"
 use_max_tag = true
+prefix = "v"
 
 ["sci-ml/bigcode-eval"]
 source = "github"
 github = "bigcode-project/bigcode-evaluation-harness"
 use_max_tag = true
+prefix = "v"
 
 ["sci-ml/caffe2"]
 source = "github"
 github = "pytorch/caffe2"
 use_max_tag = true
+prefix = "v"
 
 ["sci-ml/fastflowlm"]
 source = "github"
 github = "FastFlowLM/FastFlowLM"
 use_max_tag = true
+prefix = "v"
 
 ["sci-ml/lemonade"]
 source = "github"
 github = "lemonade-sdk/lemonade"
 use_max_tag = true
+prefix = "v"
 
 ["sci-ml/sentence-transformers"]
 source = "github"
 github = "huggingface/sentence-transformers"
 use_max_tag = true
+prefix = "v"
 
 ["sci-ml/torchaudio"]
 source = "github"
 github = "pytorch/audio"
 use_max_tag = true
+prefix = "v"
 
 ["sci-physics/mantid"]
 source = "github"
 github = "mantidproject/mantid"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]{1,3}\.[0-9]{1,4}(\.[0-9]+)?(_rc[0-9]+)?$'
+prefix = "v"
 # note: from EGIT_REPO_URI
 
 ["sci-physics/mumax"]
 source = "github"
 github = "mumax/3"
 use_max_tag = true
+prefix = "v"
 
 ["sci-physics/prismatic"]
 source = "github"
 github = "prism-em/prismatic"
 use_max_tag = true
+prefix = "v"
 
 ["sci-physics/vampire"]
 source = "github"
 github = "richard-evans/vampire"
 use_max_tag = true
+prefix = "v"
 
 ["sys-apps/dkms-gentoo"]
 source = "github"
 github = "megabaks/dkms-gentoo"
 use_max_tag = true
+prefix = "v"
 
 ["sys-fs/fragview"]
 source = "github"
 github = "i-rinat/fragview"
 use_max_tag = true
+prefix = "v"
 
 ["sys-fs/google-drive-ocamlfuse"]
 source = "github"
 github = "astrada/google-drive-ocamlfuse"
 use_max_tag = true
+prefix = "v"
 
 ["sys-fs/ls-fuse"]
 source = "github"
 github = "pasis/ls-fuse"
 use_max_tag = true
+prefix = "v"
 
 ["sys-kernel/kernel-cleaner"]
 source = "github"
 github = "megabaks/kernel-cleaner"
 use_max_tag = true
+prefix = "v"
 
 ["x11-apps/skb"]
 source = "github"
 github = "polachok/skb"
 use_max_tag = true
+prefix = "v"
 
 # --- bitbucket (1) ---
 
@@ -1700,7 +1802,13 @@ cpan = "demeter"
 # ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-libs/amd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
+# ["sci-libs/camd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
+# ["sci-libs/ccolamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
+# ["sci-libs/cholmod"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
+# ["sci-libs/colamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-libs/umfpack"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/ifeffit"] skipped: custom upstream at sourceforge.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted

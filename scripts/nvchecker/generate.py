@@ -115,6 +115,7 @@ GITHUB_TAG_FILTERS: list[tuple[re.Pattern, dict]] = [
 # as github spec and max-tag picks the umbrella's `v<latest>`, false-positive
 # for cuda-pathfinder (whose actual upstream version is much lower).
 GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
+    # NVIDIA monorepo sub-packages
     "dev-python/cuda-bindings": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
@@ -128,6 +129,79 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "dev-python/nvidia-cudnn-frontend": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
+    # adplug/adplug repo also carries winamp-* tags (winamp plugin builds)
+    # that sort higher than the plain version number tags (w > digit in ASCII).
+    "media-libs/adplug": {
+        "include_regex": r"^\d+\.\d+",
+    },
+    # adplug/libbinio: same org, restrict to digit-starting version tags.
+    "dev-cpp/libbinio": {
+        "include_regex": r"^\d+\.\d+",
+    },
+    # xintrea/mytetra_dev uses `v.X.Y.Z` (note the dot after v) rather than
+    # the standard `vX.Y.Z`; from_pattern strips the `v.` prefix so the
+    # returned version matches the plain-number Portage PV.
+    "app-office/mytetra": {
+        "include_regex": r"^v\.\d+\.\d+\.\d+$",
+        "from_pattern": r"^v\.(.+)$",
+        "to_pattern": r"\1",
+    },
+    # numba/llvmlite and numba/numba publish development tags (v0.48.0dev0,
+    # 0.66.0dev0) that sort above the latest stable release.
+    "dev-python/llvmlite": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    "dev-python/numba": {
+        "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    # explosion/spacy publishes 4.0.0.devN tags for the unreleased next major.
+    # We intentionally track the stable 3.x line (kokoro chain dependency).
+    "dev-python/spacy": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    "dev-python/spacy-legacy": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    # BelledonneCommunications repos tag alpha/rc releases; restrict to
+    # the plain three-part numeric form for stable-only signals.
+    "net-libs/bctoolbox": {
+        "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    "net-libs/ortp": {
+        "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    # HDFGroup/hdf4 carries ancient `v42r4`-style tags (HDF 4.2 release 4)
+    # alongside modern `hdf4-X.Y.Z` release tags; restrict to the latter.
+    "sci-libs/hdf": {
+        "include_regex": r"^hdf4-[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "hdf4-",
+    },
+    # lierdakil/pandoc-crossref publishes alpha/rc tags for next releases;
+    # restrict to stable tags (3- or 4-part version, with optional trailing
+    # letter like `0.3.23a`, but no hyphenated pre-release suffixes).
+    "app-text/pandoc-crossref-bin": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+[0-9a-z.]*$",
+    },
+}
+
+
+# Packages explicitly excluded from drift tracking because their GitHub
+# source cannot produce version numbers comparable to the per-component
+# Portage PVs.  Each maps to a human-readable skip reason emitted as a
+# comment in the generated config.
+#
+# SuiteSparse is a monorepo tagged with the bundle version (e.g. v7.12.2),
+# but each sub-library (AMD, CAMD, CHOLMOD, …) ships its own component
+# version (3.3.4, 3.3.5, 5.3.4, …).  Comparing the monorepo tag against
+# a component PV always produces false drift.  Use sci-libs/suitesparseconfig
+# as the canary — it ships the bundle version directly.
+SKIP_PKGS: dict[str, str] = {
+    "sci-libs/amd":     "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
+    "sci-libs/camd":    "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
+    "sci-libs/ccolamd": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
+    "sci-libs/cholmod": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
+    "sci-libs/colamd":  "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
+    "sci-libs/umfpack": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
 }
 
 
@@ -367,6 +441,17 @@ def emit_entry(entry_name: str, classification: dict) -> list[str]:
                 lines.append(f"include_regex = '{override['include_regex']}'")
             if "prefix" in override:
                 lines.append(f'prefix = "{override["prefix"]}"')
+            elif "from_pattern" not in override:
+                # No explicit prefix or from/to transform: apply the default
+                # v-strip so upstream tags (v1.2.3) compare cleanly against
+                # Portage PVs (1.2.3), which never carry a "v" prefix.
+                lines.append('prefix = "v"')
+            if "from_pattern" in override:
+                lines.append(f"from_pattern = '{override['from_pattern']}'")
+            if "to_pattern" in override:
+                lines.append(f"to_pattern = '{override['to_pattern']}'")
+        else:
+            lines.append('prefix = "v"')
         if note:
             lines.append(f"# note: {note}")
     elif kind == "bitbucket":
@@ -427,6 +512,13 @@ def main() -> int:
                 continue
 
             entry_name = f"{cat_dir.name}/{pkg_dir.name}"
+
+            if entry_name in SKIP_PKGS:
+                cls = {"kind": "unknown", "note": SKIP_PKGS[entry_name]}
+                entries_by_kind["unknown"].append((entry_name, str(pkg_dir), cls))
+                counter["unknown"] += 1
+                continue
+
             ebuild = find_newest_ebuild(pkg_dir)
             if ebuild is None:
                 counter["no-ebuild"] += 1

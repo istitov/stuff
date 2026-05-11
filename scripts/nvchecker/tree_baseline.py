@@ -24,6 +24,7 @@ PMS-aware sort if the false-positive rate matters.
 from __future__ import annotations
 
 import json
+import re
 import sys
 import tomllib
 from pathlib import Path
@@ -68,6 +69,13 @@ def main() -> int:
             continue
         released.sort()
         newest_pv = released[-1][0]
+        # Strip Portage revision suffix (-rN) — nvchecker tracks upstream
+        # version numbers, not our in-overlay revision bumps.
+        newest_pv = re.sub(r'-r\d+$', '', newest_pv)
+        # Normalize Portage post-release suffix (_pN) to PEP 440 form
+        # (.postN) so pypi-sourced entries compare without spurious drift.
+        # Limit to 4 digits: longer suffixes are snapshot dates (YYYYMMDD).
+        newest_pv = re.sub(r'_p(\d{1,4})$', r'.post\1', newest_pv)
         data[entry] = {"version": newest_pv}
 
     out = {"version": 2, "data": data}
