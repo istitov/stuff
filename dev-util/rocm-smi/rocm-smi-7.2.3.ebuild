@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} python3_13t )
+PYTHON_COMPAT=( python3_{12..14} python3_13t )
 
 inherit cmake linux-info optfeature python-r1
 
