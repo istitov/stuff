@@ -1,0 +1,29 @@
+Strip the wheel-deployment RPATH from the Linux build.
+
+MakeLib.cmake sets `-rpath,$ORIGIN:$ORIGIN/../extra` on every BornAgain
+library so the manylinux wheel layout can dlopen vendored deps from
+`bornagain/lib/extra/`. For distro packaging the libs land in /usr/lib64/
+alongside system Qt/cerf/etc., so `$ORIGIN/../extra` resolves to nothing
+and Portage's RUNPATH QA check flags it. Remove the Linux RPATH; the macOS
+@loader_path setup is left intact for upstream-style builds.
+
+verified 2026-05-14 against bornagain-23.0.
+
+--- a/cmake/BornAgain/MakeLib.cmake
++++ b/cmake/BornAgain/MakeLib.cmake
+@@ -68,10 +68,11 @@
+
+     # Set runtime-location of library dependencies
+     # See our deployment paper (Nejati et al 2024) for explanation.
+-    if(LINUX)
+-        set(link_flags "-Wl,--disable-new-dtags,-rpath,\$ORIGIN:\$ORIGIN/../extra")
+-        set_target_properties(${lib} PROPERTIES LINK_FLAGS ${link_flags})
+-    elseif(APPLE)
++    # NOTE: the original Linux block sets RPATH=$ORIGIN:$ORIGIN/../extra so
++    # the wheel layout can dlopen vendored .so files from .../bornagain/lib/extra.
++    # Distro packaging installs to /usr/lib64/ with system libs, so the
++    # bundled-extra rpath is removed (it would trip RUNPATH QA checks).
++    if(APPLE)
+         target_link_options(${lib} PRIVATE
+             "-Wl,-rpath,@loader_path,-rpath,@loader_path/extra")
+     endif()

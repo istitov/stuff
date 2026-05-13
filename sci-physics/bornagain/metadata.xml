@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    BornAgain is a software package to simulate and fit small-angle
+    scattering experiments (X-ray and neutron) at grazing-incidence
+    geometry (GISAS / GISANS) and specular reflectivity. It implements
+    the distorted-wave Born approximation, supports sample structures
+    built from layered media with embedded particles, and runs from a
+    Qt6 GUI or a Python scripting interface.
+  </longdescription>
+  <use>
+    <flag name="gui">Build the BornAgain Qt6 graphical interface</flag>
+    <flag name="tiff">Read/write detector images as TIFF (via media-libs/tiff)</flag>
+  </use>
+  <upstream>
+    <remote-id type="gitlab">mlz/bornagain</remote-id>
+  </upstream>
+</pkgmetadata>

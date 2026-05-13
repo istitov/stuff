@@ -1,0 +1,34 @@
+Skip the pip/wheel/auditwheel configure check.
+
+PyDependences.cmake hard-fails configure if pip / wheel (and auditwheel
+on Linux) aren't importable, on the assumption that BA_PY_PACK=ON means
+the user will run the ba_wheel target. Distro packaging keeps BA_PY_PACK=ON
+to get the assembled ${CMAKE_BINARY_DIR}/py/src/bornagain/ tree (init +
+SWIG .py files + POST_BUILD-copied .so files) but never invokes ba_wheel
+— the .py files get installed directly into Python site-packages and the
+.so files are symlinked from /usr/lib64/. So the wheel-build tooling
+check is gratuitous on Gentoo.
+
+verified 2026-05-14 against bornagain-23.0.
+
+--- a/cmake/multipython/PyDependences.cmake
++++ b/cmake/multipython/PyDependences.cmake
+@@ -13,14 +13,10 @@
+ # check presence of some Python modules
+ message(STATUS "Searching required Python packages...")
+ set(py_packages "")
+-if (BA_PY_PACK)
+-    # Python packages needed for building the BornAgain wheel
+-    list(APPEND py_packages "pip;wheel")
+-    if(LINUX)
+-        # on Linux, `auditwheel` is needed to produce 'manylinux' wheels repair (PEP 599)
+-        list(APPEND py_packages "auditwheel")
+-    endif()
+-endif()
++# Wheel-build Python packages (pip / wheel / auditwheel) are only used by
++# the ba_wheel custom target, which distro packagers don't invoke — they
++# consume the assembled ${CMAKE_BINARY_DIR}/py/src/bornagain/ tree directly.
++# Skipping the check here keeps BA_PY_PACK=ON usable without a wheel toolchain.
+
+ if (BA_TESTS)
+     # Python packages needed for tests

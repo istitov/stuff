@@ -1,0 +1,67 @@
+Use libcerf C variant (cerf::cerf) instead of cerfcpp.
+
+Gentoo's sci-libs/libcerf is built with CERF_CPP=OFF, producing libcerf.so
+(C variant) but not libcerfcpp.so. Switching BornAgain's two cerfcx call
+sites to use the C ABI via a small std::complex<-> _Complex bridge avoids
+the need to fork libcerf to also build the C++ variant — std::complex<double>
+and _Complex double have identical memory layout on every supported ABI.
+
+verified 2026-05-14 against bornagain-23.0 + libcerf-2.5.
+
+--- a/cmake/BornAgain/FindLibraries.cmake
++++ b/cmake/BornAgain/FindLibraries.cmake
+@@ -46,10 +46,10 @@
+
+ list(APPEND BA_Dependencies "${GSL_LIBRARIES}")
+
+-find_package(cerf CONFIG REQUIRED COMPONENTS shared CXX)
+-get_property(Cerf_LIBRARIES TARGET cerf::cerfcpp PROPERTY LOCATION)
+-message(STATUS "cerf: C++ version = ${cerf_VERSION}, lib=${Cerf_LIBRARIES}")
+-set(cerf_target cerf::cerfcpp)
++find_package(cerf CONFIG REQUIRED COMPONENTS shared C)
++get_property(Cerf_LIBRARIES TARGET cerf::cerf PROPERTY LOCATION)
++message(STATUS "cerf: C version = ${cerf_VERSION}, lib=${Cerf_LIBRARIES}")
++set(cerf_target cerf::cerf)
+
+ list(APPEND BA_Dependencies "${Cerf_LIBRARIES}")
+
+--- a/Sim/Computation/RoughMultiLayerContribution.cpp
++++ b/Sim/Computation/RoughMultiLayerContribution.cpp
+@@ -20,7 +20,8 @@
+ #include "Sample/Interface/Roughness.h"
+ #include "Sample/Multilayer/Layer.h"
+ #include "Sample/Multilayer/Sample.h"
+-#include <cerf.h>
++#include <cerf.h>      // libcerf C variant: cerfcx takes/returns double _Complex
++#include <cstring>
+ #include <numbers>
+
+ using std::numbers::pi;
+@@ -37,13 +38,25 @@
+
+ namespace {
+
++// Bridge std::complex<double> <-> double _Complex for the libcerf C ABI.
++// Layout is identical (two adjacent doubles, real then imag) on every
++// supported platform, so a bitwise copy round-trips losslessly.
++inline complex_t cerfcx_cxx(complex_t z)
++{
++    double _Complex cz;
++    std::memcpy(&cz, &z, sizeof(cz));
++    const double _Complex cr = ::cerfcx(cz);
++    complex_t r;
++    std::memcpy(&r, &cr, sizeof(r));
++    return r;
++}
+ complex_t h_above(complex_t z)
+ {
+-    return 0.5 * cerfcx(-mul_I(z) / std::sqrt(2.0));
++    return 0.5 * cerfcx_cxx(-mul_I(z) / std::sqrt(2.0));
+ }
+ complex_t h_below(complex_t z)
+ {
+-    return 0.5 * cerfcx(mul_I(z) / std::sqrt(2.0));
++    return 0.5 * cerfcx_cxx(mul_I(z) / std::sqrt(2.0));
+ }
+
+ complex_t get_refractive_term(const ReSample& re_sample, size_t i_layer, double wavelength)

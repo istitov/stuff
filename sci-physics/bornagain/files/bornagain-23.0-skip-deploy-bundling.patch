@@ -1,0 +1,26 @@
+Disable the install-time Qt-plugin + .so bundling step.
+
+App/CMakeLists.txt installs a CMake script (FixPack.cmake) that runs
+deploy/linux/adjust_pkg_linux.sh at install time. The script greps
+ldd output for cerf/Qt/svg/icu/etc. shared libraries and copies them
+plus a curated set of Qt plugins (platforms/imageformats/xcbgl) into
+the install tree — appropriate for the manylinux wheel + AppImage
+deliverables upstream ships, but obviously wrong on distro packaging
+where Qt and friends come from system packages (and where /usr/plugins/
+isn't writable from inside the sandbox).
+
+verified 2026-05-14 against bornagain-23.0.
+
+--- a/App/CMakeLists.txt
++++ b/App/CMakeLists.txt
+@@ -134,7 +134,6 @@
+ endif()
+
+ # execute package-fixing script before CPack builds the final package file
+-configure_file(${CMAKE_SOURCE_DIR}/cmake/configurables/FixPack.cmake.in
+-    ${BUILD_VAR_DIR}/FixPack.cmake @ONLY)
+-
+-install(SCRIPT ${BUILD_VAR_DIR}/FixPack.cmake)
++# (skipped: the script bundles Qt plugins + system .so dependencies into the
++# install tree for the upstream redistributable, which is wrong for distro
++# packaging where Qt and friends come from system packages.)

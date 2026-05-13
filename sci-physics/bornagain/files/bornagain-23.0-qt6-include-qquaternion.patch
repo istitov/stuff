@@ -1,0 +1,19 @@
+Add missing #include <QQuaternion>.
+
+Qt6 dropped transitive includes that Qt5 used to provide, so the bare
+`QQuaternion` reference in PlottableBody's transform() signature now
+fails to compile (incomplete type). Adding the explicit include fixes
+the build without rippling through call sites.
+
+verified 2026-05-14 against bornagain-23.0 + dev-qt/qtbase:6 6.10.3.
+
+--- a/Img3D/Model/PlottableBody.h
++++ b/Img3D/Model/PlottableBody.h
+@@ -19,6 +19,7 @@
+ #include "Img3D/Model/Geometry_inc.h"
+ #include "Img3D/Type/FloatVector3D.h"
+ #include <QColor>
++#include <QQuaternion>
+ #include <QMatrix4x4>
+
+ namespace Img3D {
