@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 
 # *.bc / *.dll under llvm_zluda/src/device-libs are git-lfs blobs and the
 # llvm_zluda build.rs panics if it sees lfs stubs.
