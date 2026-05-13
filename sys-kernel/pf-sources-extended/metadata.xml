@@ -5,8 +5,15 @@
     <email>iohann.s.titov@gmail.com</email>
     <name>Ivan S. Titov</name>
   </maintainer>
+  <longdescription>
+    Linux kernel built on the gentoo-sources base (vanilla kernel +
+    Gentoo genpatches for linux-stable tracking) with a curated subset
+    of natalenko's pf-kernel patchset applied on top: BBRv3, x86 ISA
+    levels, v4l2loopback, AMD-pstate enhancements, and related
+    features. Coverage of pf features varies per kernel slot — see
+    each ebuild's elog output for slot-specific details.
+  </longdescription>
   <upstream>
-    <remote-id type="codeberg">pf-kernel/linux</remote-id>
     <remote-id type="github">istitov/extra-stuff</remote-id>
     <remote-id type="gitlab">istitov/extra-stuff</remote-id>
     <remote-id type="codeberg">istitov/extra-stuff</remote-id>

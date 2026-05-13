@@ -3,16 +3,6 @@
 
 EAPI=8
 
-# This revision is fundamentally different from pf-sources-6.13_p6-r1.
-# Instead of fetching pf-kernel/codeberg's GA-only sourcetree (Linux 6.13.0
-# + pf patchset, no linux-stable updates), it builds on top of vanilla
-# 6.13.tar.xz + Gentoo genpatches (sourced per-patch from alicef's live
-# trunk dir, since release tarballs were never cut for the 6.13 branch),
-# then applies a *curated* subset of natalenko's pf-kernel delta on top.
-# See pkg_postinst for what's preserved versus what's dropped and why.
-# The slot's pretend version stays "6.13_p6" so this ebuild remains
-# drop-in-replaceable for users on the existing pf-sources slot.
-#
 # 6.13 is a non-LTS kernel that reached end-of-life upstream (linux-stable
 # stopped at 6.13.12). The trunk-pinned patches captured here track
 # stable all the way to 6.13.12 — full coverage for this EOL branch.
@@ -55,28 +45,29 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 # Per-slot snapshot of alicef's genpatches trunk for this branch,
 # bundled into pf-genpatches-${SHPV}.tar.xz on the sister overlay
 # extra-stuff (https://github.com/istitov/extra-stuff). Pinned by
-# tag (-r70-0) so the URL is immutable; refreshing the snapshot
+# tag (-r70-1) so the URL is immutable; refreshing the snapshot
 # means a new tag suffix. The original alicef trunk dir is a live
 # working dir, so this bundle is the durable reference.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-0/sys-kernel/pf-sources/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-0.tar.xz
-	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-0/sys-kernel/pf-sources/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-0.tar.xz
-	https://gitlab.com/istitov/extra-stuff/-/raw/pf-genpatches-${SHPV}-r70-0/sys-kernel/pf-sources/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-0.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz
-	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz
-	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz"
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz"
 
 S="${WORKDIR}/linux-${SHPV}"
 
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
-K_EXTRAEINFO="For more info on pf-sources and details on how to report problems,
+K_EXTRAEINFO="For more info on pf-kernel and details on how to report problems,
 	see: ${HOMEPAGE}."
 
 pkg_setup() {
 	ewarn ""
 	ewarn "${PN} is *not* supported by the Gentoo Kernel Project in any way."
-	ewarn "If you need support, please contact the pf developers directly."
+	ewarn "If you need support, please create an issue at"
+	ewarn "https://github.com/istitov/stuff/issues"
 	ewarn "Do *not* open bugs in Gentoo's bugzilla unless you have issues with"
 	ewarn "the ebuilds. Thank you."
 	ewarn ""
@@ -99,7 +90,7 @@ pkg_postinst() {
 	kernel-2_pkg_postinst
 
 	elog ""
-	elog "This revision (-r70) is the gentoo-sources-based pf-sources variant."
+	elog "This is the gentoo-sources-based pf-sources-extended kernel."
 	elog "It tracks linux-stable through 6.13.12 (full upstream coverage — 6.13"
 	elog "ended at .12) via alicef's genpatches trunk AND keeps a curated"
 	elog "subset of natalenko's pf-kernel delta on top. 6.13 is an EOL non-LTS"

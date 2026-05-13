@@ -3,16 +3,6 @@
 
 EAPI=8
 
-# This revision is fundamentally different from pf-sources-6.15_p6-r1.
-# Instead of fetching pf-kernel/codeberg's GA-only sourcetree (Linux 6.15.0
-# + pf patchset, no linux-stable updates), it builds on top of the same
-# vanilla 6.15.tar.xz + Gentoo genpatches stack that gentoo-sources used
-# while 6.15 was still maintained, then applies a *curated* subset of
-# natalenko's pf-kernel delta on top. See pkg_postinst for what's preserved
-# versus what's dropped and why. The slot's pretend version stays
-# "6.15_p6" so this ebuild remains drop-in-replaceable for users on the
-# existing pf-sources slot.
-#
 # 6.15 is a non-LTS kernel that reached end-of-life upstream (linux-stable
 # stopped at 6.15.12). genpatches' last bundle for this branch (-13)
 # tracks stable through 6.15.11 — one stable release short of upstream
@@ -42,21 +32,22 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz
-	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz
-	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz"
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz"
 
 S="${WORKDIR}/linux-${SHPV}"
 
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
-K_EXTRAEINFO="For more info on pf-sources and details on how to report problems,
+K_EXTRAEINFO="For more info on pf-kernel and details on how to report problems,
 	see: ${HOMEPAGE}."
 
 pkg_setup() {
 	ewarn ""
 	ewarn "${PN} is *not* supported by the Gentoo Kernel Project in any way."
-	ewarn "If you need support, please contact the pf developers directly."
+	ewarn "If you need support, please create an issue at"
+	ewarn "https://github.com/istitov/stuff/issues"
 	ewarn "Do *not* open bugs in Gentoo's bugzilla unless you have issues with"
 	ewarn "the ebuilds. Thank you."
 	ewarn ""
@@ -83,7 +74,7 @@ pkg_postinst() {
 	kernel-2_pkg_postinst
 
 	elog ""
-	elog "This revision (-r70) is the gentoo-sources-based pf-sources variant."
+	elog "This is the gentoo-sources-based pf-sources-extended kernel."
 	elog "It tracks linux-stable through 6.15.11 via Gentoo's genpatches AND"
 	elog "keeps a curated subset of natalenko's pf-kernel delta on top. 6.15"
 	elog "is an EOL non-LTS branch (linux-stable ended at 6.15.12, one"

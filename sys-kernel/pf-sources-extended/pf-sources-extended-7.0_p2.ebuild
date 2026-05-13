@@ -3,15 +3,6 @@
 
 EAPI=8
 
-# This revision is fundamentally different from pf-sources-7.0_p2.
-# Instead of fetching pf-kernel/codeberg's GA-only sourcetree (Linux 7.0.0
-# + pf patchset, no linux-stable updates), it builds on top of the same
-# vanilla 7.0.tar.xz + Gentoo genpatches stack that gentoo-sources uses,
-# then applies a *curated* subset of natalenko's pf-kernel delta on top.
-# See pkg_postinst for what's preserved versus what's dropped and why.
-# The slot's pretend version stays "7.0_p2" so this ebuild remains
-# drop-in-replaceable for users on the existing pf-sources slot.
-
 ETYPE="sources"
 
 # Track the latest 7.0.X linux-stable via genpatches. genpatches-7.0-4
@@ -21,9 +12,8 @@ K_GENPATCHES_VER="4"
 # Curated pf delta sets EXTRAVERSION via the patch itself.
 K_NOSETEXTRAVERSION="1"
 
-# pf-sources has historically carried K_SECURITY_UNSUPPORTED. Even with
-# linux-stable now baked in (which closes the largest gap), we keep the
-# flag because the curated pf delta is not covered by Gentoo's security
+# K_SECURITY_UNSUPPORTED is set because the curated pf delta is not
+# covered by Gentoo's security
 # team — bugs in the pf-specific portions (BBRv3, x86 ISA levels, AESNI
 # crypto, v4l2loopback, DDCCI) need to be reported to natalenko or the
 # overlay maintainers.
@@ -43,21 +33,22 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v7.x/linux-${SHPV}.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz
-	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz
-	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-0/sys-kernel/pf-sources/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-0.tar.xz"
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz"
 
 S="${WORKDIR}/linux-${SHPV}"
 
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
-K_EXTRAEINFO="For more info on pf-sources and details on how to report problems,
+K_EXTRAEINFO="For more info on pf-kernel and details on how to report problems,
 	see: ${HOMEPAGE}."
 
 pkg_setup() {
 	ewarn ""
 	ewarn "${PN} is *not* supported by the Gentoo Kernel Project in any way."
-	ewarn "If you need support, please contact the pf developers directly."
+	ewarn "If you need support, please create an issue at"
+	ewarn "https://github.com/istitov/stuff/issues"
 	ewarn "Do *not* open bugs in Gentoo's bugzilla unless you have issues with"
 	ewarn "the ebuilds. Thank you."
 	ewarn ""
@@ -88,7 +79,7 @@ pkg_postinst() {
 	kernel-2_pkg_postinst
 
 	elog ""
-	elog "This revision (-r70) is the gentoo-sources-based pf-sources variant."
+	elog "This is the gentoo-sources-based pf-sources-extended kernel."
 	elog "It tracks linux-stable (7.0.X) via Gentoo's genpatches AND keeps a"
 	elog "curated subset of natalenko's pf-kernel delta on top. CVE backports"
 	elog "now arrive automatically with each gentoo-sources stable bump."
