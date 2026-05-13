@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 ROCM_VERSION=6.1
 inherit python-single-r1 cmake cuda flag-o-matic prefix rocm toolchain-funcs
 
