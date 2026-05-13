@@ -40,7 +40,9 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 SRC_URI="https://codeberg.org/pf-kernel/linux/archive/v${PFPV}.tar.gz -> linux-${PFPV}.tar.gz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/pf-cves-surgical-r1-0/sys-kernel/pf-sources/pf-cves-surgical.tar.xz -> pf-cves-surgical-r1-0.tar.xz"
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-cves-surgical-r1-0/sys-kernel/pf-sources/pf-cves-surgical.tar.xz -> pf-cves-surgical-r1-0.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-cves-surgical-r1-0/sys-kernel/pf-sources/pf-cves-surgical.tar.xz -> pf-cves-surgical-r1-0.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/pf-cves-surgical-r1-0/sys-kernel/pf-sources/pf-cves-surgical.tar.xz -> pf-cves-surgical-r1-0.tar.xz"
 
 S="${WORKDIR}/linux-${PFPV}"
 

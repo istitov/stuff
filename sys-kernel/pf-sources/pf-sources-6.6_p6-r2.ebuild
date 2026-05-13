@@ -30,7 +30,9 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 SRC_URI="https://codeberg.org/pf-kernel/linux/archive/v${PFPV}.tar.gz -> linux-${PFPV}.tar.gz
 	https://dev.gentoo.org/~alicef/genpatches/tarballs/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
 	https://dev.gentoo.org/~alicef/genpatches/tarballs/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/pf-cves-cumulative-${SHPV}-r2-0/sys-kernel/pf-sources/pf-cves-cumulative-${SHPV}.tar.xz -> pf-cves-cumulative-${SHPV}-r2-0.tar.xz"
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-cves-cumulative-${SHPV}-r2-0/sys-kernel/pf-sources/pf-cves-cumulative-${SHPV}.tar.xz -> pf-cves-cumulative-${SHPV}-r2-0.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-cves-cumulative-${SHPV}-r2-0/sys-kernel/pf-sources/pf-cves-cumulative-${SHPV}.tar.xz -> pf-cves-cumulative-${SHPV}-r2-0.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/pf-cves-cumulative-${SHPV}-r2-0/sys-kernel/pf-sources/pf-cves-cumulative-${SHPV}.tar.xz -> pf-cves-cumulative-${SHPV}-r2-0.tar.xz"
 S="${WORKDIR}/linux-${PFPV}"
 KEYWORDS="~amd64 ~x86"
 K_EXTRAEINFO="For more info on pf-sources and details on how to report problems,
