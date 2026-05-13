@@ -1,0 +1,80 @@
+Title: sys-kernel: pf-sources curated-patchset model relocated to pf-sources-extended
+Author: Ivan S. Titov <iohann.s.titov@gmail.com>
+Posted: 2026-05-13
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: =sys-kernel/pf-sources-6.1_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.2_p7-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.3_p5-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.4_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.5_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.6_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.7_p7-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.8_p9-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.9_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.10_p4-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.11_p4-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.12_p4-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.13_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.14_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.15_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.16_p5-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.17_p4-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.18_p6-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.19_p5-r70
+Display-If-Installed: =sys-kernel/pf-sources-6.19_p5-r71
+Display-If-Installed: =sys-kernel/pf-sources-7.0_p2-r70
+Display-If-Installed: =sys-kernel/pf-sources-7.0_p2-r71
+
+The pf-sources ebuilds that combine a vanilla kernel.org tarball with
+Gentoo genpatches and a curated subset of the pf-kernel patchset (the
+"-r70" / "-r71" model) have been moved to a new package:
+
+    sys-kernel/pf-sources-extended
+
+The new package covers the same kernel branches under simplified version
+names — the -r70/-r71 revision suffix is dropped because the package
+name now differentiates the model.
+
+== What to do ==
+
+sys-kernel/pf-sources-extended carries KEYWORDS="" and must be explicitly
+accepted. Add it to /etc/portage/package.accept_keywords:
+
+    =sys-kernel/pf-sources-extended-X.Y_pZ **
+
+The old and new ebuilds both install to /usr/src/linux-X.Y-pfZ/, so
+unmerge the old atom first to avoid a file-collision abort:
+
+    emerge --unmerge =sys-kernel/pf-sources-X.Y_pZ-rN
+    emerge -av =sys-kernel/pf-sources-extended-X.Y_pZ
+
+where X.Y_pZ matches your current pf-sources version (e.g. 7.0_p2).
+The ebuilds are functionally identical; only the package name changed.
+Your running kernel and /lib/modules/X.Y-pfZ/ are unaffected — only
+the source tree under /usr/src/ is briefly removed and reinstalled.
+
+== Background ==
+
+sys-kernel/pf-sources retains its two original models:
+
+  * active (no -rY): fetches pf-kernel's sourcetree from Codeberg
+    (vX.Y-pfN — vanilla GA plus pf patchset; pf-kernel deliberately
+    omits linux-stable) and layers Gentoo genpatches on top, which
+    bring linux-stable updates into the build.
+
+  * CVE-backported (-r1/-r2): same base as the active model plus a
+    set of hand-applied surgical CVE backports for security fixes
+    pf-kernel hasn't picked up. Intended for slots kept in long-term
+    use.
+
+sys-kernel/pf-sources-extended is the curated-patchset model: vanilla
+kernel.org tarball + Gentoo genpatches + a hand-curated subset of
+natalenko's pf-kernel delta (BBRv3, x86 ISA-level helpers, v4l2loopback,
+AMD-pstate enhancements, and related features). See the existing news
+item "2026-05-06-pf-sources-r70" for the full design rationale.
+
+== References ==
+
+  * https://pfkernel.natalenko.name/
+  * https://dev.gentoo.org/~alicef/genpatches/
