@@ -35,7 +35,6 @@ RDEPEND="
 		>=dev-python/tqdm-4.62.3[${PYTHON_USEDEP}]
 		>=dev-python/typing-extensions-4.10[${PYTHON_USEDEP}]
 	')
-	python_single_target_python3_11? ( dev-python/torch-c-dlpack-ext[${PYTHON_SINGLE_USEDEP}] )
 	python_single_target_python3_12? ( dev-python/torch-c-dlpack-ext[${PYTHON_SINGLE_USEDEP}] )
 	python_single_target_python3_13? ( dev-python/torch-c-dlpack-ext[${PYTHON_SINGLE_USEDEP}] )
 "
