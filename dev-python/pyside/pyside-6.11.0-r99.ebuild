@@ -16,7 +16,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 # LLVM-22 support should be present in 6.11.1
 # https://github.com/qtproject/pyside-pyside-setup/commit/291ef13ec8352ff2890b1c5d149e44fdd5f49da1
 LLVM_COMPAT=( {18..21} )
