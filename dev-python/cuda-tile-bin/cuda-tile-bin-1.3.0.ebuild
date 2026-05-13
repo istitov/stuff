@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=no
 # Upstream wheels stop at cp313 (requires-python = "<3.14,>=3.10").
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{12..13} )
 
 inherit distutils-r1
 
@@ -18,7 +18,6 @@ HOMEPAGE="
 	https://pypi.org/project/cuda-tile/
 "
 SRC_URI="
-	python_targets_python3_11? ( ${MY_BASE}/c5/2d/8b416239413bf11d17d42ccee43258f3787da13bcea7b2e42e8bbf04b3da/${MY_PN//-/_}-${MY_PV}-cp311-cp311-manylinux2014_x86_64.whl )
 	python_targets_python3_12? ( ${MY_BASE}/40/76/84cb68be463c827bf79da9fa0aa5140838de6455ef6f438bbe0ffa75d378/${MY_PN//-/_}-${MY_PV}-cp312-cp312-manylinux2014_x86_64.whl )
 	python_targets_python3_13? ( ${MY_BASE}/35/20/e1daea2dc4e094290ba727750f8342095ae857ff3ba4f81c489f48688613/${MY_PN//-/_}-${MY_PV}-cp313-cp313-manylinux2014_x86_64.whl )
 "
