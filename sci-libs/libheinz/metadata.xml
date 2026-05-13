@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Header-only C++ library providing common geometry primitives (3D
+    vectors, rotations, complex helpers) shared by MLZ scientific
+    software (libformfactor, BornAgain, Steca).
+  </longdescription>
+  <upstream>
+    <remote-id type="gitlab">mlz/libheinz</remote-id>
+  </upstream>
+</pkgmetadata>
