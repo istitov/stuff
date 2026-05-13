@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=no
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
 
@@ -17,7 +17,6 @@ HOMEPAGE="
 	https://pypi.org/project/nvidia-cutlass-dsl-libs-base/
 "
 SRC_URI="
-	python_targets_python3_11? ( ${MY_BASE}/a4/36/2c2b3fc81a45a1bbbdcfd10c6d9793fd28848e6fefa6d4ed7c7c477f7d2a/${MY_PN}-${PV}-cp311-cp311-manylinux_2_28_x86_64.whl )
 	python_targets_python3_12? ( ${MY_BASE}/c3/8b/2c187400d85f7d2acb328f20499b7b05745dca8485cf6ad247d5f2b434cf/${MY_PN}-${PV}-cp312-cp312-manylinux_2_28_x86_64.whl )
 	python_targets_python3_13? ( ${MY_BASE}/1c/79/0dca3b465711ffb4c44b4252940cc5f51d2d4905e405707e5c6c2a83d3d6/${MY_PN}-${PV}-cp313-cp313-manylinux_2_28_x86_64.whl )
 	python_targets_python3_14? ( ${MY_BASE}/04/c6/5aaa2dff6dfc615a83687df4462a91dad2ac1af85d6a9c91d9a6b9760a02/${MY_PN}-${PV}-cp314-cp314-manylinux_2_28_x86_64.whl )
