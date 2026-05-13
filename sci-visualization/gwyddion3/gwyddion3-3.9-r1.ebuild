@@ -10,7 +10,9 @@ inherit autotools python-single-r1 xdg
 DESCRIPTION="Framework for Scanning Mode Microscopy data analysis (3.x unstable)"
 HOMEPAGE="https://gwyddion.net/"
 SRC_URI="https://gwyddion.net/download/${PV}/gwyddion-${PV}.tar.xz -> ${PN}-${PV}.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/${PN}-${PV}-pygwy-r1-0/sci-visualization/${PN}/${PN}-${PV}-pygwy.tar.xz -> ${PN}-${PV}-pygwy-r1-0.tar.xz"
+	https://raw.githubusercontent.com/istitov/extra-stuff/${PN}-${PV}-pygwy-r1-0/sci-visualization/${PN}/${PN}-${PV}-pygwy.tar.xz -> ${PN}-${PV}-pygwy-r1-0.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/${PN}-${PV}-pygwy-r1-0/sci-visualization/${PN}/${PN}-${PV}-pygwy.tar.xz -> ${PN}-${PV}-pygwy-r1-0.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/${PN}-${PV}-pygwy-r1-0/sci-visualization/${PN}/${PN}-${PV}-pygwy.tar.xz -> ${PN}-${PV}-pygwy-r1-0.tar.xz"
 S="${WORKDIR}/gwyddion-${PV}"
 
 LICENSE="GPL-2"
