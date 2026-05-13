@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Computes Fourier shape transforms (form factors) of polyhedral and
+    prismatic bodies for the BornAgain small-angle scattering simulator
+    and other MLZ scientific tools.
+  </longdescription>
+  <upstream>
+    <remote-id type="gitlab">mlz/libformfactor</remote-id>
+  </upstream>
+</pkgmetadata>
