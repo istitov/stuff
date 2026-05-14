@@ -42,4 +42,9 @@
       Enable WebP image export via <pkg>media-libs/libwebp</pkg>
     </flag>
   </use>
+  <upstream>
+    <remote-id type="github">istitov/extra-stuff</remote-id>
+    <remote-id type="gitlab">istitov/extra-stuff</remote-id>
+    <remote-id type="codeberg">istitov/extra-stuff</remote-id>
+  </upstream>
 </pkgmetadata>
