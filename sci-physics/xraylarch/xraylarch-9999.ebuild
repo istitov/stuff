@@ -18,16 +18,22 @@ EGIT_REPO_URI="https://github.com/xraypy/xraylarch.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="wxgui"
 # Upstream tests are largely network-driven (AMCSD, MP API, XrayDB
 # remote queries) and expect the full lmfit/hyperspy/... fixtures.
 RESTRICT="test"
 
+# The wx stack (wxpython/wxmplot/wxutils/darkdetect) is needed at runtime
+# even for non-GUI use: larch/plot/__init__.py unconditionally imports
+# wxmplot_xafsplots, which imports larch.wxlib.plotter once wxpython is
+# detectable — and that does an unguarded `from wxmplot import ...`.
+# So gating on a wxgui USE flag would silently break `larch` whenever
+# wxpython is installed for any reason. Pull the whole stack always.
 RDEPEND="
 	dev-python/larixite[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/asteval[${PYTHON_USEDEP}]
 		dev-python/charset-normalizer[${PYTHON_USEDEP}]
+		dev-python/darkdetect[${PYTHON_USEDEP}]
 		dev-python/dill[${PYTHON_USEDEP}]
 		dev-python/fabio[${PYTHON_USEDEP}]
 		dev-python/h5py[${PYTHON_USEDEP}]
@@ -56,13 +62,10 @@ RDEPEND="
 		dev-python/tomli[${PYTHON_USEDEP}]
 		dev-python/tomli-w[${PYTHON_USEDEP}]
 		dev-python/uncertainties[${PYTHON_USEDEP}]
+		dev-python/wxmplot[${PYTHON_USEDEP}]
+		dev-python/wxpython:*[${PYTHON_USEDEP}]
+		dev-python/wxutils[${PYTHON_USEDEP}]
 		dev-python/xraydb[${PYTHON_USEDEP}]
-		wxgui? (
-			dev-python/wxpython:*[${PYTHON_USEDEP}]
-			dev-python/wxmplot[${PYTHON_USEDEP}]
-			dev-python/wxutils[${PYTHON_USEDEP}]
-			dev-python/darkdetect[${PYTHON_USEDEP}]
-		)
 	')
 "
 DEPEND="${RDEPEND}"

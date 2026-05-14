@@ -19,16 +19,22 @@ HOMEPAGE="
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="wxgui"
 # Upstream tests are largely network-driven (AMCSD, MP API, XrayDB
 # remote queries) and expect the full lmfit/hyperspy/... fixtures.
 RESTRICT="test"
 
+# The wx stack (wxpython/wxmplot/wxutils/darkdetect) is needed at runtime
+# even for non-GUI use: larch/plot/__init__.py unconditionally imports
+# wxmplot_xafsplots, which imports larch.wxlib.plotter once wxpython is
+# detectable — and that does an unguarded `from wxmplot import ...`.
+# So gating on a wxgui USE flag would silently break `larch` whenever
+# wxpython is installed for any reason. Pull the whole stack always.
 RDEPEND="
 	>=dev-python/larixite-2025.5.1[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/asteval-1.0.7[${PYTHON_USEDEP}]
 		dev-python/charset-normalizer[${PYTHON_USEDEP}]
+		dev-python/darkdetect[${PYTHON_USEDEP}]
 		dev-python/dill[${PYTHON_USEDEP}]
 		dev-python/fabio[${PYTHON_USEDEP}]
 		>=dev-python/h5py-3.13[${PYTHON_USEDEP}]
@@ -57,13 +63,10 @@ RDEPEND="
 		dev-python/tomli[${PYTHON_USEDEP}]
 		dev-python/tomli-w[${PYTHON_USEDEP}]
 		>=dev-python/uncertainties-3.2.1[${PYTHON_USEDEP}]
+		>=dev-python/wxmplot-2026.1.0[${PYTHON_USEDEP}]
+		>=dev-python/wxpython-4.2.2:*[${PYTHON_USEDEP}]
+		>=dev-python/wxutils-2026.1.0[${PYTHON_USEDEP}]
 		>=dev-python/xraydb-4.5.7[${PYTHON_USEDEP}]
-		wxgui? (
-			>=dev-python/wxpython-4.2.2:*[${PYTHON_USEDEP}]
-			>=dev-python/wxmplot-2026.1.0[${PYTHON_USEDEP}]
-			>=dev-python/wxutils-2026.1.0[${PYTHON_USEDEP}]
-			dev-python/darkdetect[${PYTHON_USEDEP}]
-		)
 	')
 "
 DEPEND="${RDEPEND}"
