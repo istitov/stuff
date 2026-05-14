@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="blas">Enable OpenBLAS-accelerated matrix operations via the BLAS backend</flag>
+    <flag name="cuda">Enable NVIDIA CUDA GPU backend</flag>
+    <flag name="ffmpeg">Enable audio transcoding via media-video/ffmpeg (allows non-WAV input)</flag>
+    <flag name="hip">Build a HIP (ROCm) backend</flag>
+    <flag name="opencl">Enable OpenCL GPU backend via sci-libs/clblast</flag>
+    <flag name="sdl2">Build and install example applications that use media-libs/libsdl2</flag>
+    <flag name="vulkan">Enable Vulkan GPU backend</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ggml-org/whisper.cpp</remote-id>
+  </upstream>
+</pkgmetadata>
