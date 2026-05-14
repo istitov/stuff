@@ -20,43 +20,13 @@ app-portage/portopts
 # ebuilds ship vanilla v6.X.0 + pf without linux-stable backports, so
 # the upstream revert that fixes the bug never reaches them. Migrate
 # to the same slot's -r1 ebuild (verbatim natalenko + surgical CVE
-# patch) or -r70 (curated pf delta on top of gentoo-sources, tracking
-# linux-stable). Mask is part of a 30-day lastrite cycle; ebuilds
-# stay in tree as a recovery path with KEYWORDS="" from 2026-06-05.
+# patch) or to sys-kernel/pf-sources-extended (curated pf delta on top
+# of gentoo-sources, tracking linux-stable). Mask is part of a 30-day
+# lastrite cycle; ebuilds stay in tree as a recovery path with
+# KEYWORDS="" from 2026-06-05.
 # See news item 2026-05-06-pf-sources-changes for context.
 =sys-kernel/pf-sources-6.16_p5
 =sys-kernel/pf-sources-6.17_p4
 =sys-kernel/pf-sources-6.18_p6
 =sys-kernel/pf-sources-6.19_p5
 
-# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-05-06)
-# Experimental pf-sources design: applies a *curated subset* of
-# natalenko's pf-kernel patchset on top of vanilla kernel.org +
-# Gentoo's genpatches (linux-stable + extras), instead of building
-# on pf-kernel's GA-only sourcetree like the other pf-sources
-# ebuilds. The curation is the overlay maintainer's judgment, not
-# natalenko's, and the combination is not validated upstream.
-# Curation was done with LLM (Claude) assistance. Each -r70 ebuild's
-# pkg_postinst lists the slot-specific retained/dropped pf delta.
-# Unmask to opt in; otherwise pick the slot's unrev'd / -r1 / -r2
-# ebuild for natalenko's full patchset.
-=sys-kernel/pf-sources-6.1_p6-r70
-=sys-kernel/pf-sources-6.2_p7-r70
-=sys-kernel/pf-sources-6.3_p5-r70
-=sys-kernel/pf-sources-6.4_p6-r70
-=sys-kernel/pf-sources-6.5_p6-r70
-=sys-kernel/pf-sources-6.6_p6-r70
-=sys-kernel/pf-sources-6.7_p7-r70
-=sys-kernel/pf-sources-6.8_p9-r70
-=sys-kernel/pf-sources-6.9_p6-r70
-=sys-kernel/pf-sources-6.10_p4-r70
-=sys-kernel/pf-sources-6.11_p4-r70
-=sys-kernel/pf-sources-6.12_p4-r70
-=sys-kernel/pf-sources-6.13_p6-r70
-=sys-kernel/pf-sources-6.14_p6-r70
-=sys-kernel/pf-sources-6.15_p6-r70
-=sys-kernel/pf-sources-6.16_p5-r70
-=sys-kernel/pf-sources-6.17_p4-r70
-=sys-kernel/pf-sources-6.18_p6-r70
-=sys-kernel/pf-sources-6.19_p5-r71
-=sys-kernel/pf-sources-7.0_p2-r71
