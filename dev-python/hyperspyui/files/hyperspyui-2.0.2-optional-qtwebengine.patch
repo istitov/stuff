@@ -1,0 +1,49 @@
+Make QtWebEngineWidgets import optional.
+
+Upstream imports qtpy.QtWebEngineWidgets unconditionally before
+QCoreApplication construction to work around QTBUG-46720 (the binding
+needs to be loaded before the Qt app is up, or off-screen rendering
+breaks). The module is only actually used by the EELS-database plugin
+(hyperspyui/plugins/eelsdb.py).
+
+::gentoo's dev-python/qtpy[webengine] route works, but pulls
+pyqt6-webengine + qtwebengine — substantial chromium-derived weight
+for users who don't need EELSDB lookups. PluginManager.discover()
+already catches arbitrary exceptions from plugin imports, so wrapping
+the eager import in try/except lets EELSDB self-disable gracefully
+when WebEngine isn't installed; users who want it can simply install
+dev-python/pyqt6-webengine and restart.
+
+The same pattern is applied to tests/conftest.py for consistency,
+though the test path isn't exercised by the Gentoo ebuild.
+
+--- a/hyperspyui/__main__.py
++++ b/hyperspyui/__main__.py
+@@ -115,7 +115,12 @@
+     # QtWebEngineWidgets must be imported before a QCoreApplication instance
+     # is created (used in eelsdb plugin)
+     # Avoid a bug in Qt: https://bugreports.qt.io/browse/QTBUG-46720
+-    from qtpy import QtWebEngineWidgets  # noqa: F401
++    # Gentoo: WebEngine is optional - the eelsdb plugin self-disables
++    # via PluginManager.discover()'s exception handler when absent.
++    try:
++        from qtpy import QtWebEngineWidgets  # noqa: F401
++    except ImportError:
++        pass
+
+     # Need to set early to make QSettings accessible
+     QCoreApplication.setApplicationName("HyperSpyUI")
+--- a/hyperspyui/tests/conftest.py
++++ b/hyperspyui/tests/conftest.py
+@@ -12,7 +12,10 @@
+ # QtWebEngineWidgets must be imported before a QCoreApplication instance
+ # is created (used in eelsdb plugin)
+ # Avoid a bug in Qt: https://bugreports.qt.io/browse/QTBUG-46720
+-from qtpy import QtWebEngineWidgets  # noqa: F401
++try:
++    from qtpy import QtWebEngineWidgets  # noqa: F401
++except ImportError:
++    pass
+
+ QCoreApplication = QtCore.QCoreApplication
+ QSettings = QtCore.QSettings

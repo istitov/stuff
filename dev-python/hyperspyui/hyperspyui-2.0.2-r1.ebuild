@@ -10,6 +10,10 @@ export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_HYPERSPYUI=${PV}
 
 inherit distutils-r1 pypi virtualx
 
+PATCHES=(
+	"${FILESDIR}/${P}-optional-qtwebengine.patch"
+)
+
 DESCRIPTION="Qt GUI for hyperspy - multidimensional data analysis"
 HOMEPAGE="
 	https://hyperspy.org/hyperspyUI/
@@ -24,10 +28,12 @@ KEYWORDS="~amd64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 
-# Upstream 2.0.2 moved PyQt5 and PyQtWebEngine into an optional
-# [pyqt] extra - qtpy detects whichever Qt Python binding is present
-# (pyqt6/pyside6/pyqt5), so leave the Qt binding as a runtime-user
-# choice rather than hard-forcing the deprecated pyqt5 stack.
+# Upstream's [pyqt] extra pulls PyQt5 + PyQtWebEngine, but PyQt5 stack is
+# deprecated in ::gentoo (no PyQt5-WebEngine ebuild). qtpy with gui+widgets
+# is enough for the main app; the EELS-database plugin needs WebEngine but
+# self-disables when it's absent (see optional-qtwebengine patch). Users
+# who want EELSDB add dev-python/pyqt6-webengine themselves (or set
+# qtpy[webengine] in package.use). Reported 2026-05-14.
 RDEPEND="
 	>=dev-python/autopep8-1.5.0[${PYTHON_USEDEP}]
 	>=dev-python/exspy-0.3.1[${PYTHON_USEDEP}]
@@ -42,7 +48,7 @@ RDEPEND="
 	>=dev-python/pyqode-core-4.0.10[${PYTHON_USEDEP}]
 	>=dev-python/pyqode-python-4.0.2[${PYTHON_USEDEP}]
 	>=dev-python/qtconsole-5.2.0[${PYTHON_USEDEP}]
-	dev-python/qtpy[${PYTHON_USEDEP}]
+	dev-python/qtpy[${PYTHON_USEDEP},gui,widgets]
 	dev-python/traits[${PYTHON_USEDEP}]
 	>=dev-python/traitsui-5.2.0[${PYTHON_USEDEP}]
 "
