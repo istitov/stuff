@@ -210,6 +210,40 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
 }
 
 
+# Packages whose nvchecker source needs to be hand-crafted because the
+# classifier can't reach the right upstream from SRC_URI / HOMEPAGE alone.
+# Each value is a dict of nvchecker keys emitted verbatim under the entry.
+#
+# pf-sources / pf-sources-extended: HOMEPAGE points at pfkernel.natalenko.name
+# (no machine-readable release feed) and SRC_URI lists extra-stuff distfile
+# mirrors (our own, not upstream).  The actual release feed is pf-kernel/linux
+# on Codeberg, tagged `vX.Y-pfN`.  Both flavors share the same upstream tag
+# scheme.  from_pattern/to_pattern rewrite the tag to Portage-comparable
+# `X.Y_pN` form.
+SPECIAL_SOURCES: dict[str, dict[str, object]] = {
+    "sys-kernel/pf-sources": {
+        "source": "gitea",
+        "host": "codeberg.org",
+        "gitea": "pf-kernel/linux",
+        "use_max_tag": True,
+        "include_regex": r"^v\d+\.\d+-pf\d+$",
+        "prefix": "v",
+        "from_pattern": r"^(\d+\.\d+)-pf(\d+)$",
+        "to_pattern": r"\1_p\2",
+    },
+    "sys-kernel/pf-sources-extended": {
+        "source": "gitea",
+        "host": "codeberg.org",
+        "gitea": "pf-kernel/linux",
+        "use_max_tag": True,
+        "include_regex": r"^v\d+\.\d+-pf\d+$",
+        "prefix": "v",
+        "from_pattern": r"^(\d+\.\d+)-pf(\d+)$",
+        "to_pattern": r"\1_p\2",
+    },
+}
+
+
 # Packages explicitly excluded from drift tracking because their GitHub
 # source cannot produce version numbers comparable to the per-component
 # Portage PVs.  Each maps to a human-readable skip reason emitted as a
@@ -498,6 +532,18 @@ def emit_entry(entry_name: str, classification: dict) -> list[str]:
     if kind == "unknown":
         return [f"# {quoted} skipped: {note or 'no recognizable upstream'}"]
 
+    if kind == "special":
+        lines = [quoted]
+        for key, val in classification["spec"].items():
+            if isinstance(val, bool):
+                lines.append(f"{key} = {'true' if val else 'false'}")
+            elif key in ("include_regex", "from_pattern", "to_pattern"):
+                # TOML literal string preserves regex backslashes as-is.
+                lines.append(f"{key} = '{val}'")
+            else:
+                lines.append(f'{key} = "{val}"')
+        return lines
+
     lines = [quoted]
     if kind == "pypi":
         lines.append('source = "pypi"')
@@ -601,6 +647,12 @@ def main() -> int:
                 counter["unknown"] += 1
                 continue
 
+            if entry_name in SPECIAL_SOURCES:
+                cls = {"kind": "special", "spec": SPECIAL_SOURCES[entry_name]}
+                entries_by_kind["special"].append((entry_name, str(pkg_dir), cls))
+                counter["special"] += 1
+                continue
+
             ebuild = find_newest_ebuild(pkg_dir)
             if ebuild is None:
                 counter["no-ebuild"] += 1
@@ -638,7 +690,7 @@ def main() -> int:
         "",
     ]
 
-    for kind in ("pypi", "github", "gitlab", "bitbucket", "cpan"):
+    for kind in ("pypi", "github", "gitlab", "bitbucket", "cpan", "special"):
         if not entries_by_kind[kind]:
             continue
         out_lines.append(f"# --- {kind} ({len(entries_by_kind[kind])}) ---")
@@ -660,7 +712,7 @@ def main() -> int:
 
     # Summary to stderr so shell redirection of stdout remains clean if any
     print(f"wrote {args.out}", file=sys.stderr)
-    for kind in ("pypi", "github", "gitlab", "bitbucket", "cpan", "live", "unknown", "no-ebuild"):
+    for kind in ("pypi", "github", "gitlab", "bitbucket", "cpan", "special", "live", "unknown", "no-ebuild"):
         if counter[kind]:
             print(f"  {kind:14s} {counter[kind]:4d}", file=sys.stderr)
     total = sum(counter.values())

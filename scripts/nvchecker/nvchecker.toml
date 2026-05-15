@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (184) ---
+# --- pypi (185) ---
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -289,6 +289,10 @@ pypi = "jsonlines"
 ["dev-python/kokoro"]
 source = "pypi"
 pypi = "kokoro"
+
+["dev-python/langdetect"]
+source = "pypi"
+pypi = "langdetect"
 
 ["dev-python/larixite"]
 source = "pypi"
@@ -746,7 +750,13 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (131) ---
+# --- github (132) ---
+
+["app-accessibility/whisper-cpp"]
+source = "github"
+github = "ggml-org/whisper.cpp"
+use_max_tag = true
+prefix = "v"
 
 ["app-editors/gobby"]
 source = "github"
@@ -782,10 +792,9 @@ prefix = "v"
 
 ["app-portage/portconf"]
 source = "github"
-github = "megabaks/portconf"
+github = "istitov/portconf"
 use_max_tag = true
 prefix = "v"
-# note: from EGIT_REPO_URI
 
 ["app-portage/udept"]
 source = "github"
@@ -1677,6 +1686,28 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
+# --- special (2) ---
+
+["sys-kernel/pf-sources"]
+source = "gitea"
+host = "codeberg.org"
+gitea = "pf-kernel/linux"
+use_max_tag = true
+include_regex = '^v\d+\.\d+-pf\d+$'
+prefix = "v"
+from_pattern = '^(\d+\.\d+)-pf(\d+)$'
+to_pattern = '\1_p\2'
+
+["sys-kernel/pf-sources-extended"]
+source = "gitea"
+host = "codeberg.org"
+gitea = "pf-kernel/linux"
+use_max_tag = true
+include_regex = '^v\d+\.\d+-pf\d+$'
+prefix = "v"
+from_pattern = '^(\d+\.\d+)-pf(\d+)$'
+to_pattern = '\1_p\2'
+
 # --- skipped ---
 
 # ["app-portage/portopts"] skipped: live-only ebuild (no release tracking)
@@ -1751,26 +1782,20 @@ cpan = "Term-Twiddle"
 # ["sci-libs/ccolamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/cholmod"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/colamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
+# ["sci-libs/libformfactor"] skipped: custom upstream at jugit.fz-juelich.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-libs/libheinz"] skipped: custom upstream at jugit.fz-juelich.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-libs/umfpack"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-ml/caffe2"] skipped: pytorch/caffe2 repo has no tags; caffe2 was absorbed into pytorch/pytorch
 # ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-physics/bornagain"] skipped: custom upstream at bornagainproject.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/demeter"] skipped: Demeter removed from CPAN; no public upstream tracking possible
 # ["sci-physics/ifeffit"] skipped: custom upstream at sourceforge.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/oommf"] skipped: custom upstream at math.nist.gov; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/profex"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-visualization/gwyddion"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-visualization/gwyddion3"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-["sys-kernel/pf-sources"]
-source = "gitea"
-host = "codeberg.org"
-gitea = "pf-kernel/linux"
-use_max_tag = true
-include_regex = '^v\d+\.\d+-pf\d+$'
-prefix = "v"
-from_pattern = '^(\d+\.\d+)-pf(\d+)$'
-to_pattern = '\1_p\2'
 # ["www-misc/httraqt"] skipped: sourceforge/httraqt — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["x11-apps/skb"] skipped: polachok/skb has no GitHub release tags
 # ["x11-libs/gtk+"] skipped: custom upstream at www.gtk.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
