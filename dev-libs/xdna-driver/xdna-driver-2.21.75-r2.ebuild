@@ -30,10 +30,7 @@ else
 	# ebuild xdna-driver-<version>.ebuild info
 	declare -Ag FIRMWARES=(
 		[1502_00/npu.sbin.1.5.5.391]=npu.dev.sbin
-		[17f1_10/npu.sbin.1.1.0.206]=npu.dev.sbin
-		[17f1_10/cert.sbin.1.0.0.28]=cert.dev.sbin
-		[17f2_10/npu.sbin.1.1.0.206]=npu.dev.sbin
-		[17f2_10/cert.sbin.1.0.0.28]=cert.dev.sbin
+		[17f0_00/npu.sbin.0.7.22.185]=npu.dev.sbin
 		[17f0_10/1.7_npu.sbin.1.1.2.64]=npu.dev.sbin
 		[17f0_11/1.7_npu.sbin.1.1.2.65]=npu.dev.sbin
 	)
@@ -121,6 +118,7 @@ src_prepare() {
 	sed -e "s/-Werror//" -i Kbuild || die
 
 	pushd "${WORKDIR}/${P}" || die
+	eapply "${FILESDIR}/${PN}-2.21.75-llvm-support.patch"
 	eapply "${FILESDIR}/${PN}-2.21.75-try-compile-config.patch"
 	popd || die
 
