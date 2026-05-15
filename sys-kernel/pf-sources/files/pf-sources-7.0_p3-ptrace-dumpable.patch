@@ -1,0 +1,100 @@
+ptrace: cache user-dumpable across mm teardown (Qualys advisory)
+
+Backport of torvalds mainline commit 31e62c2ebbfd ("ptrace: slightly
+saner 'get_dumpable()' logic"), authored 2026-05-13 by Linus Torvalds
+in response to a Qualys Security Advisory.
+
+ptrace_may_access() consults the dumpable flag to decide whether the
+traditional drop-capabilities model applies to a tracer. The flag
+lives on the mm_struct, but ptrace_may_access() is also called against
+tasks that have no mm — kernel threads, and userspace tasks past
+exit_mm(). The previous logic simply allowed access in those cases
+(the `if (mm && ...)` skipped the check entirely when mm was NULL),
+defeating dumpable's hardening for any task that had already torn
+down its mm.
+
+The fix caches the user-dumpable state on the task_struct as a single
+bit at exit_mm() time, so later mm-less access checks fall back on
+the cached value. Tracers without CAP_SYS_PTRACE in init_user_ns get
+the same denial they would have got while mm was still attached.
+
+pf-sources branches off Linux GA only — natalenko backported the fix
+into fixes-7.1 (cherry-pick 2254ada8a0a2 on 2026-05-15) but as of
+audit date it is NOT in fixes-7.0, so v7.0-pf3 ships unpatched. Also
+not in linux-7.0.y stable as of 2026-05-15 (linux-7.0.7 branch tip
+still carries the pre-refactor `mm = task->mm;` form), and pf-sources
+deletes genpatches' 10*linux*patch series in src_prepare so a K_GENPATCHES_VER
+bump cannot route the fix in either. Apply surgically.
+
+Drop on whichever lands first: a future v7.0-pfN that includes this
+cherry-pick, or a future genpatches bump after linux-stable picks it up.
+
+verified 2026-05-15 against pf-sources-7.0_p3 (pf-7.0-pf3 tarball +
+genpatches-7.0-4 extras applied).
+
+Upstream-Status: Backport [mainline 31e62c2ebbfd, not yet in stable]
+
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1002,6 +1002,9 @@ struct task_struct {
+ 	unsigned			sched_rt_mutex:1;
+ #endif
+
++	/* Save user-dumpable when mm goes away */
++	unsigned			user_dumpable:1;
++
+ 	/* Bit to tell TOMOYO we're in execve(): */
+ 	unsigned			in_execve:1;
+ 	unsigned			in_iowait:1;
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -571,6 +571,7 @@ static void exit_mm(void)
+ 	 */
+ 	smp_mb__after_spinlock();
+ 	local_irq_disable();
++	current->user_dumpable = (get_dumpable(mm) == SUID_DUMP_USER);
+ 	current->mm = NULL;
+ 	membarrier_update_current_mm(NULL);
+ 	enter_lazy_tlb(mm, current);
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -272,11 +272,24 @@ static bool ptrace_has_cap(struct user_namespace *ns, unsigned int mode)
+ 	return ns_capable(ns, CAP_SYS_PTRACE);
+ }
+
++static bool task_still_dumpable(struct task_struct *task, unsigned int mode)
++{
++	struct mm_struct *mm = task->mm;
++	if (mm) {
++		if (get_dumpable(mm) == SUID_DUMP_USER)
++			return true;
++		return ptrace_has_cap(mm->user_ns, mode);
++	}
++
++	if (task->user_dumpable)
++		return true;
++	return ptrace_has_cap(&init_user_ns, mode);
++}
++
+ /* Returns 0 on success, -errno on denial. */
+ static int __ptrace_may_access(struct task_struct *task, unsigned int mode)
+ {
+ 	const struct cred *cred = current_cred(), *tcred;
+-	struct mm_struct *mm;
+ 	kuid_t caller_uid;
+ 	kgid_t caller_gid;
+
+@@ -337,11 +350,8 @@ static int __ptrace_may_access(struct task_struct *task, unsigned int mode)
+ 	 * Pairs with a write barrier in commit_creds().
+ 	 */
+ 	smp_rmb();
+-	mm = task->mm;
+-	if (mm &&
+-	    ((get_dumpable(mm) != SUID_DUMP_USER) &&
+-	     !ptrace_has_cap(mm->user_ns, mode)))
+-	    return -EPERM;
++	if (!task_still_dumpable(task, mode))
++		return -EPERM;
+
+ 	return security_ptrace_access_check(task, mode);
+ }
