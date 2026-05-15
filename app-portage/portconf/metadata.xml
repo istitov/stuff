@@ -2,9 +2,31 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <maintainer type="person">
-    <email>megagreener@gmail.com</email>
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
   </maintainer>
+  <longdescription lang="en">
+    portconf manages and cleans up /etc/portage configuration:
+    sorts and deduplicates USE-flag and keyword entries, removes
+    invalid or globally-defined flags, prunes not-found / not-
+    installed atoms, manages timestamped backup tarballs of the
+    config tree, detects and removes unused overlays + stale
+    dep-cache, and regenerates the world file.  Implemented as a
+    single bash script; shells out to eix, qatom, qlist, agrep,
+    emerge, and eselect.  Originally written by megabaks (2012-2014);
+    fork maintained by istitov since 2026.
+  </longdescription>
+  <use>
+    <flag name="bash-completion">
+      Install the bash-completion script for the
+      <pkg>app-shells/bash-completion</pkg> framework.
+    </flag>
+    <flag name="zsh-completion">
+      Install the zsh completion function (_portconf) into
+      <pkg>app-shells/zsh</pkg>'s site-functions directory.
+    </flag>
+  </use>
   <upstream>
-    <remote-id type="github">megabaks/portconf</remote-id>
+    <remote-id type="github">istitov/portconf</remote-id>
   </upstream>
 </pkgmetadata>
