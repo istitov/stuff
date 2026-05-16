@@ -10,7 +10,7 @@ SRC_URI="https://github.com/istitov/udept/releases/download/${PV}/${P}.tar.xz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+bash-completion"
+IUSE="+bash-completion +zsh-completion"
 
 RDEPEND="
 	>=app-shells/bash-4.2:0
@@ -22,5 +22,7 @@ BDEPEND=">=app-shells/bash-4.2:0"
 DOCS=( ChangeLog README.md )
 
 src_configure() {
-	econf $(use_enable bash-completion)
+	econf \
+		$(use_enable bash-completion) \
+		$(use_enable zsh-completion)
 }

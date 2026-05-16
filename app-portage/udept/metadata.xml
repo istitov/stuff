@@ -19,6 +19,10 @@
 			Install the bash-completion script for the
 			<pkg>app-shells/bash-completion</pkg> framework.
 		</flag>
+		<flag name="zsh-completion">
+			Install the zsh completion function into
+			/usr/share/zsh/site-functions.
+		</flag>
 	</use>
 	<upstream>
 		<remote-id type="github">istitov/udept</remote-id>

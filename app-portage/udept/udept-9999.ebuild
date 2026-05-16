@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/istitov/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="+bash-completion test"
+IUSE="+bash-completion +zsh-completion test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
@@ -38,5 +38,7 @@ src_prepare() {
 }
 
 src_configure() {
-	econf $(use_enable bash-completion)
+	econf \
+		$(use_enable bash-completion) \
+		$(use_enable zsh-completion)
 }
