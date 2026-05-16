@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    ONNX Runtime is Microsoft's cross-platform machine learning inference
+    and training accelerator. Provides a C/C++/Python API plus optional
+    execution providers for CPU, NVIDIA CUDA, AMD ROCm, OpenVINO, DirectML,
+    CoreML, and others. Reads ONNX-format models and dispatches operators
+    to whichever provider is registered.
+
+    USE=python builds the Python bindings (numpy + flatbuffers + sympy +
+    coloredlogs); USE=test pulls dev-cpp/gtest for the C++ test suite.
+
+    Forked from ::guru @ same version; ebuild + 3 patches (relax
+    flatbuffers dep, drop -Werror, use system libraries instead of
+    vendored copies) imported verbatim. Eigen3 is still fetched as a
+    specific gitlab archive commit because upstream onnxruntime's CMake
+    requires Eigen features post-3.4.0 not yet in a tagged release.
+  </longdescription>
+  <upstream>
+    <bugs-to>https://github.com/microsoft/onnxruntime/issues</bugs-to>
+    <doc>https://onnxruntime.ai/docs/</doc>
+    <remote-id type="github">microsoft/onnxruntime</remote-id>
+    <remote-id type="gitlab">libeigen/eigen</remote-id>
+  </upstream>
+</pkgmetadata>
