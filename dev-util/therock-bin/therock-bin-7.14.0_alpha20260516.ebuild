@@ -3,7 +3,7 @@
 
 EAPI=8
 
-DESCRIPTION="ROCm SDK pre-built distribution from TheRock"
+DESCRIPTION="ROCm SDK pre-built distribution from TheRock (AMDGPU_TARGETS-selected)"
 HOMEPAGE="https://github.com/ROCm/TheRock"
 
 # Upstream version pattern is ${BASE}a${DATE} (e.g. 7.14.0a20260516);
