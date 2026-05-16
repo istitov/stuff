@@ -116,8 +116,10 @@ pkg_postinst() {
 	elog ""
 	elog "If you specifically need pf-kernel's full patchset, install"
 	elog "pf-sources-6.10_p4-r1 instead — it stays GA-frozen and ships"
-	elog "natalenko's patchset verbatim, at the cost of missing all fourteen"
-	elog "linux-stable releases (6.10.1-6.10.14) that this revision applies."
+	elog "natalenko's patchset verbatim, missing the bulk of the fourteen"
+	elog "linux-stable releases (6.10.1-6.10.14) that this revision applies;"
+	elog "r1 still ships surgical CVE backports for the most severe"
+	elog "vulnerabilities from that range."
 	elog ""
 
 	optfeature "userspace KSM helper" sys-process/uksmd

@@ -123,9 +123,10 @@ pkg_postinst() {
 	elog ""
 	elog "If you specifically need pf-kernel's full patchset (including ISA"
 	elog "Kconfig + scheduler), install pf-sources-6.11_p4-r1 instead — it"
-	elog "stays GA-frozen and ships natalenko's patchset verbatim, at the cost"
-	elog "of missing all eleven linux-stable releases (6.11.1-6.11.11) that"
-	elog "this revision applies."
+	elog "stays GA-frozen and ships natalenko's patchset verbatim, missing"
+	elog "the bulk of the eleven linux-stable releases (6.11.1-6.11.11) that"
+	elog "this revision applies; r1 still ships surgical CVE backports for"
+	elog "the most severe vulnerabilities from that range."
 	elog ""
 
 	optfeature "userspace KSM helper" sys-process/uksmd

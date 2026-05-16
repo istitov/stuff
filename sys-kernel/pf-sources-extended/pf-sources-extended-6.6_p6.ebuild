@@ -124,8 +124,9 @@ pkg_postinst() {
 	elog "If you specifically need pf-kernel's full scheduler heuristics,"
 	elog "futex2 extensions, or the pre-rewrite SMB stack, install"
 	elog "pf-sources-6.6_p6-r2 instead — it stays GA-frozen and ships"
-	elog "natalenko's patchset verbatim, at the cost of missing linux-stable"
-	elog "security fixes."
+	elog "natalenko's patchset verbatim, instead of the full linux-stable"
+	elog "flow; r2 still ships surgical CVE backports for high-impact"
+	elog "vulnerabilities."
 	elog ""
 
 	optfeature "userspace KSM helper" sys-process/uksmd

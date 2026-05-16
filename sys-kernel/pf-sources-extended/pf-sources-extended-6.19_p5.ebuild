@@ -124,8 +124,9 @@ pkg_postinst() {
 	elog ""
 	elog "If you specifically need pf-kernel's full scheduler tuning or"
 	elog "futex2 extensions, install pf-sources-6.19_p5-r1 instead — it"
-	elog "stays GA-frozen and ships natalenko's patchset verbatim, at the"
-	elog "cost of missing linux-stable security fixes."
+	elog "stays GA-frozen and ships natalenko's patchset verbatim, instead"
+	elog "of the full linux-stable flow; r1 still ships surgical CVE"
+	elog "backports for high-impact vulnerabilities."
 	elog ""
 
 	optfeature "userspace KSM helper" sys-process/uksmd
