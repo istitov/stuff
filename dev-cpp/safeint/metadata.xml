@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    SafeInt is a header-only C++ template class library that provides
+    integer overflow guards on arithmetic operations. Originally
+    Microsoft-internal, now MIT-licensed at github.com/dcleblanc/SafeInt.
+
+    Used as a build-time dep of sci-libs/onnxruntime (graph compiler's
+    index arithmetic) and the broader sentencepiece / protobuf stacks.
+
+    Forked from ::guru @ same version; ebuild + 4 patches (install
+    rules, optional/broken tests, strip -O3) imported verbatim.
+  </longdescription>
+  <upstream>
+    <bugs-to>https://github.com/dcleblanc/SafeInt/issues</bugs-to>
+    <remote-id type="github">dcleblanc/SafeInt</remote-id>
+  </upstream>
+</pkgmetadata>
