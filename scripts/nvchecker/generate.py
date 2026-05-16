@@ -290,6 +290,8 @@ SKIP_PKGS: dict[str, str] = {
     # Intentional version pins — upstream advances but a consumer in the
     # tree hard-asserts on a specific version range.
     "dev-python/antlr4-python3-runtime":   "pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')",
+    # Snapshots ahead of upstream's only tag.
+    "sci-ml/bigcode-eval":                 "we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind",
 }
 
 

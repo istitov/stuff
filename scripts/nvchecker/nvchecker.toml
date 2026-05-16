@@ -750,7 +750,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (131) ---
+# --- github (130) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1520,12 +1520,6 @@ github = "amd/gaia"
 use_max_tag = true
 prefix = "v"
 
-["sci-ml/bigcode-eval"]
-source = "github"
-github = "bigcode-project/bigcode-evaluation-harness"
-use_max_tag = true
-prefix = "v"
-
 ["sci-ml/fastflowlm"]
 source = "github"
 github = "FastFlowLM/FastFlowLM"
@@ -1792,6 +1786,7 @@ to_pattern = '\1_p\2'
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-libs/umfpack"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
+# ["sci-ml/bigcode-eval"] skipped: we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind
 # ["sci-ml/caffe2"] skipped: pytorch/caffe2 repo has no tags; caffe2 was absorbed into pytorch/pytorch
 # ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/bornagain"] skipped: custom upstream at bornagainproject.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
