@@ -19,12 +19,85 @@ Auto-mirrored on every push:
 
 ## Highlights
 
+### AMD Ryzen-AI / NPU stack
+
+NPU-first LLM tooling for AMD Ryzen AI (XDNA2). Application layer plus
+the driver and runtime it needs:
+
+- [`sci-ml/fastflowlm`](https://fastflowlm.com/) — NPU-first LLM runtime
+  (chat, model pull).
+- [`sci-ml/lemonade`](https://lemonade-server.ai/) — AMD Lemonade SDK.
+- [`sci-ml/kokoros`](https://github.com/lucasjinreal/Kokoros) — Kokoro
+  TTS server (Rust + Python).
+- [`sci-ml/amd-gaia`](https://github.com/amd/gaia) — AMD GAIA stack
+  with `api / audio / eval / image / mcp / talk / ui` USE flags.
+- [`dev-libs/xdna-driver`](https://github.com/amd/xdna-driver),
+  `dev-libs/xrt-xdna`, [`dev-util/xrt`](https://github.com/Xilinx/XRT)
+  — NPU driver and the XDNA-extended Xilinx Runtime.
+
+### Speech / audio ML stack
+
+ASR, speaker diarization, and audio DSP packages:
+
+- [`app-accessibility/whisper-cpp`](https://github.com/ggml-org/whisper.cpp)
+  — Whisper.cpp offline ASR.
+- [`sci-ml/sherpa-onnx`](https://k2-fsa.github.io/sherpa/onnx/) +
+  `sci-ml/sherpa-onnx-bin` — Next-gen-Kaldi ONNX ASR / TTS / speaker-id
+  (source build and prebuilt-wheel flavour).
+- [`sci-ml/pyannote-audio`](https://github.com/pyannote/pyannote-audio)
+  plus the `pyannote-{pipeline,metrics,database,core}` chain and
+  [`sci-ml/pyannoteai-sdk`](https://github.com/pyannote/pyannoteAI-python-sdk) — speaker-diarization
+  toolkit.
+- `sci-ml/torch-audiomentations` + `sci-ml/torch-pitch-shift` +
+  [`sci-ml/asteroid-filterbanks`](https://github.com/asteroid-team/asteroid-filterbanks)
+  + [`sci-ml/julius`](https://github.com/adefossez/julius) — neural-net
+  friendly audio DSP / augmentation building blocks.
+
+### PyTorch / ONNX ecosystem additions
+
+General-purpose ML infrastructure not covered by `::gentoo`,
+pulled in alongside the speech stack above and broadly useful on
+their own:
+
+- [`sci-ml/lightning`](https://lightning.ai/) + `sci-ml/lightning-utilities`
+  — PyTorch Lightning training framework.
+- [`sci-ml/torchmetrics`](https://github.com/Lightning-AI/torchmetrics)
+  — metric collection for PyTorch training loops.
+- [`sci-ml/pytorch-metric-learning`](https://github.com/KevinMusgrave/pytorch-metric-learning)
+  — embedding / metric-learning utilities.
+- [`sci-ml/torchcodec`](https://github.com/pytorch/torchcodec) — PyTorch
+  video / audio decoder.
+- [`sci-libs/onnxruntime`](https://onnxruntime.ai/) 1.26.0,
+  [`sci-libs/dlpack`](https://github.com/dmlc/dlpack),
+  [`dev-cpp/safeint`](https://github.com/dcleblanc/SafeInt) — the ONNX
+  inference engine plus its in-memory tensor-exchange / overflow-safe-int
+  building blocks.
+- [`dev-python/optuna`](https://optuna.org/) — hyperparameter
+  optimization.
+
+### ROCm 7.2.3
+
+Local bumps of the [ROCm](https://rocm.docs.amd.com/) 7.2 stable line
+ahead of `::gentoo`'s 7.2.0:
+`dev-libs/rocm-{core,comgr,device-libs,opencl-runtime}`, `dev-libs/rccl`,
+`dev-libs/hipother`, `dev-build/rocm-cmake`,
+`dev-util/{hip,hipcc,hipify-clang,rocm-smi,rocminfo,rocm_bandwidth_test}`,
+`sci-libs/{hipBLAS,hipBLAS-common,hipBLASLt,hipCUB,hipFFT,hipRAND,hipSOLVER,hipSPARSE,hipsparselt,composable-kernel,miopen,rocBLAS,rocFFT,rocPRIM,rocRAND,rocSOLVER,rocSPARSE,rocThrust}`.
+
+[`dev-util/therock-bin`](https://github.com/ROCm/TheRock) is a
+/opt-installed ROCm SDK that pulls AMD's nightly TheRock build for a
+per-host `AMDGPU_TARGETS`. Coexists with the /usr ROCm above; an
+nvchecker regex source on AMD's CDN tracks new nightlies.
+
 ### HyperSpy / 4D-STEM electron-microscopy stack
 
-A full HyperSpy ecosystem that is not in `::gentoo`:
+A full [HyperSpy](https://hyperspy.org) ecosystem that is not in `::gentoo`:
 
 `hyperspy`, `hyperspyui`, `hyperspy-gui-traitsui`, `hyperspy-gui-ipywidgets`,
-`rosettasciio`, `emdfile`, `ncempy`, `exspy`, `atomap`, `pyxem`, `py4dstem`.
+[`rosettasciio`](https://hyperspy.org/rosettasciio/), `emdfile`, `ncempy`,
+`exspy`, [`atomap`](https://atomap.org/),
+[`pyxem`](https://github.com/pyxem/pyxem),
+[`py4dstem`](https://github.com/py4dstem/py4DSTEM).
 
 Packaging follows upstream's split into a core (`hyperspy`) plus GUI backends
 and per-domain extensions (`exspy` for EELS/EDS, `atomap` for atomic-column
@@ -33,20 +106,25 @@ for I/O).
 
 ### SANS / SAXS / XAFS analysis
 
-- `sci-physics/mantid` — SANS reduction and analysis. Installs under
-  `/opt/mantid` and keeps building against the current `::gentoo` by carrying
-  a few local deps (see *Qt5 revivals* below).
-- `sci-physics/sasview` + `dev-python/sasmodels` + `dev-python/bumps` +
-  `dev-python/periodictable` — SAS modeling and fitting.
-- `sci-libs/ausaxs` + `dev-python/pyausaxs` — AUSAXS solvent-scattering
-  calculator and its Python bindings.
-- `sci-physics/xraylarch` — XAFS analysis; modern replacement for the
-  discontinued `ifeffit`.
-- `sci-physics/demeter` — classic Athena/Artemis XAFS GUIs (Perl).
+- [`sci-physics/mantid`](https://www.mantidproject.org/) — SANS reduction
+  and analysis. Installs under `/opt/mantid` and keeps building against
+  the current `::gentoo` by carrying a few local deps (see *Qt5 revivals*
+  below).
+- [`sci-physics/sasview`](https://www.sasview.org/) + `dev-python/sasmodels`
+  + `dev-python/bumps` + `dev-python/periodictable` — SAS modeling and
+  fitting.
+- [`sci-libs/ausaxs`](https://github.com/AUSAXS/AUSAXS) +
+  [`dev-python/pyausaxs`](https://github.com/AUSAXS/pyAUSAXS) — AUSAXS
+  solvent-scattering calculator and its Python bindings.
+- [`sci-physics/xraylarch`](https://xraypy.github.io/xraylarch/) — XAFS
+  analysis; modern replacement for the discontinued `ifeffit`.
+- [`sci-physics/demeter`](https://github.com/bruceravel/demeter) —
+  classic Athena/Artemis XAFS GUIs (Perl).
 
 ### DeaDBeeF plugin collection
 
-Twenty-six `media-plugins/deadbeef-*` packages, covering audio format
+Twenty-six [`media-plugins/deadbeef-*`](https://deadbeef.sourceforge.io/)
+packages, covering audio format
 support (`opus`, `vgmstream`, `vfs-rar`, `archive-reader`, `bs2b`),
 visualization (`spectrogram`, `musical-spectrum`, `vu-meter`, `dr-meter`,
 `waveform-seekbar`), playback/session control
@@ -56,47 +134,13 @@ integration (`gnome`, `statusnotifier`, `discord-presence`) and output
 plumbing (`jack`, `pulse2`, `stereo-widener`, `copy-info`,
 `customizable-toolbar`).
 
-`media-plugins/deadbeef-jack` carries a local patch tracking DeaDBeeF's
-modernized C API; `deadbeef-archive-reader` has a build fix.
-
 ### Micromagnetism
 
-`sci-physics/mumax` (GPU finite-difference, Go + CUDA), `sci-physics/oommf`
-(Tcl/Tk reference implementation), and `sci-physics/vampire` (atomistic spin
+[`sci-physics/mumax`](https://mumax.github.io/) (GPU finite-difference,
+Go + CUDA), [`sci-physics/oommf`](https://math.nist.gov/oommf/) (Tcl/Tk
+reference implementation), and
+[`sci-physics/vampire`](https://vampire.york.ac.uk/) (atomistic spin
 dynamics).
-
-### AMD Ryzen-AI / NPU stack
-
-NPU-first LLM tooling for AMD Ryzen AI (XDNA2). Application layer plus
-the driver and runtime it needs:
-
-- `sci-ml/fastflowlm` — NPU-first LLM runtime (chat, model pull).
-- `sci-ml/lemonade` — AMD Lemonade SDK.
-- `sci-ml/kokoros` — Kokoro TTS server (Rust + Python).
-- `sci-ml/amd-gaia` — AMD GAIA stack with `api / audio / eval / image /
-  mcp / talk / ui` USE flags.
-- `dev-libs/xdna-driver`, `dev-libs/xrt-xdna`, `dev-util/xrt` — NPU
-  driver and the XDNA-extended Xilinx Runtime.
-
-The consumer chain pins `dev-python/spacy` 3.8.x and `dev-python/thinc`
-8.3.x; bumping past these breaks kokoro.
-
-### ROCm 7.2.3
-
-Local bumps of the ROCm 7.2 stable line ahead of `::gentoo`'s 7.2.0:
-`dev-libs/rocm-{core,comgr,device-libs,opencl-runtime}`, `dev-libs/rccl`,
-`dev-libs/hipother`, `dev-build/rocm-cmake`,
-`dev-util/{hip,hipcc,hipify-clang,rocm-smi,rocminfo,rocm_bandwidth_test}`,
-`sci-libs/{hipBLAS,hipBLAS-common,hipBLASLt,hipCUB,hipFFT,hipRAND,hipSOLVER,hipSPARSE,hipsparselt,composable-kernel,miopen,rocBLAS,rocFFT,rocPRIM,rocRAND,rocSOLVER,rocSPARSE,rocThrust}`.
-
-`sci-libs/hipsparselt` and (currently) `dev-libs/rccl` block on gfx1150;
-rccl recovery depends on upstream gfx1151 enablement reaching a tagged
-release.
-
-`dev-util/therock-bin` is a /opt-installed ROCm SDK pinned to a
-gfx1150 nightly. Coexists with the /usr ROCm above; gives gfx1150 /
-Ryzen-AI APU users a working stack ahead of stable releases that
-include the relevant enablement.
 
 ## Design choices
 
@@ -154,28 +198,47 @@ These masks will lift once mantid finishes its own Qt6 port upstream.
 
 ## Also here
 
-- **XMPP clients** — `net-im/profanity`, `net-im/stabber`,
-  `net-im/xmppconsole`, `dev-libs/libstrophe`.
-- **Collaborative editing** — `app-editors/gobby`, `net-libs/libinfinity`,
-  `acct-{group,user}/infinote`.
-- **Kernel / low-level** — `sys-kernel/pf-sources`, `sys-apps/dkms-gentoo`,
-  `sys-kernel/kernel-cleaner`.
-- **Visualization** — `sci-visualization/gwyddion`,
+- **XMPP clients** — [`net-im/profanity`](https://profanity-im.github.io/),
+  `net-im/stabber`, `net-im/xmppconsole`, `dev-libs/libstrophe`.
+- **Collaborative editing** — [`app-editors/gobby`](https://gobby.github.io/),
+  `net-libs/libinfinity`, `acct-{group,user}/infinote`.
+- **Kernel / low-level** —
+  [`sys-kernel/pf-sources`](https://pfkernel.natalenko.name/),
+  [`sys-kernel/flex-sources`](https://codeberg.org/pf-kernel/linux)
+  (pf-kernel's "flex" sibling spine, tracking pre-release upstream
+  kernels), `sys-apps/dkms-gentoo`, `sys-kernel/kernel-cleaner`.
+- **Visualization** —
+  [`sci-visualization/gwyddion`](https://gwyddion.net/),
   `sci-visualization/gwyddion3`.
-- **Crystallography / atomistic** — `sci-physics/bgmn`, `sci-physics/profex`,
-  `sci-physics/prismatic`, `sci-libs/nexus`, `sci-libs/pycifrw`.
-- **SuiteSparse imports** — `sci-libs/{amd,camd,cholmod,colamd,ccolamd,`
-  `umfpack,suitesparseconfig}`.
-- **Retro / fun** — `x11-terms/cool-retro-term`,
-  `games-roguelike/adom`, `games-roguelike/dwarftherapist`,
+- **Crystallography / atomistic** —
+  [`sci-physics/bgmn`](http://www.bgmn.de/),
+  [`sci-physics/profex`](http://www.profex-xrd.org/),
+  [`sci-physics/prismatic`](https://prism-em.com/),
+  [`sci-libs/nexus`](https://www.nexusformat.org/),
+  `sci-libs/pycifrw`.
+- **SuiteSparse imports** —
+  [`sci-libs/{amd,camd,cholmod,colamd,ccolamd,umfpack,suitesparseconfig}`](https://people.engr.tamu.edu/davis/suitesparse.html).
+- **Retro / fun** —
+  [`x11-terms/cool-retro-term`](https://github.com/Swordfish90/cool-retro-term),
+  [`games-roguelike/adom`](https://www.adom.de/),
+  [`games-roguelike/dwarftherapist`](https://github.com/Dwarf-Therapist/Dwarf-Therapist),
   `games-misc/fortune-mod-lorquotes`.
-- **Niche tools** — `dev-lang/tcc`, `dev-vcs/fossil`, `app-office/mytetra`,
-  `app-misc/tudu`, `sys-fs/google-drive-ocamlfuse`,
-  `app-text/pandoc-crossref-bin`.
-- **CUDA / generic ML inference** — `dev-python/cuda-bindings`,
+- **Niche tools** — [`dev-lang/tcc`](https://repo.or.cz/w/tinycc.git),
+  [`dev-vcs/fossil`](https://fossil-scm.org/),
+  [`app-office/mytetra`](http://webhamster.ru/site/page/index/articles/projectcode/138),
+  `app-misc/tudu`,
+  [`sys-fs/google-drive-ocamlfuse`](https://github.com/astrada/google-drive-ocamlfuse),
+  [`app-text/pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref),
+  [`app-portage/portconf`](https://github.com/istitov/portconf)
+  (`/etc/portage` cleaner; forked to istitov + bumped to 2.0.0 in
+  this overlay).
+- **CUDA / generic ML inference** —
+  [`dev-python/cuda-bindings`](https://github.com/NVIDIA/cuda-python),
   `dev-python/cuda-python`, `dev-python/cuda-pathfinder`,
-  `dev-python/cuda-tile-bin`, `dev-python/pycuda`,
-  `dev-util/nvidia-cuda-toolkit`, `dev-python/vllm`.
+  `dev-python/cuda-tile-bin`,
+  [`dev-python/pycuda`](https://documen.tician.de/pycuda/),
+  [`dev-util/nvidia-cuda-toolkit`](https://developer.nvidia.com/cuda-toolkit),
+  [`dev-python/vllm`](https://github.com/vllm-project/vllm).
 - **Masked but kept**: `net-misc/ipx-utils` (IPX removed from Linux in 4.18),
   `app-portage/portopts` (upstream dormant since 2014). Each mask in
   `profiles/package.mask` carries a comment explaining why and when it
