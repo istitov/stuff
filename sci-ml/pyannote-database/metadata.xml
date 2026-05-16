@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="cli">Install the pyannote-database command-line tool (pulls dev-python/typer)</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">pyannote.database</remote-id>
+    <remote-id type="github">pyannote/pyannote-database</remote-id>
+    <bugs-to>https://github.com/pyannote/pyannote-database/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
