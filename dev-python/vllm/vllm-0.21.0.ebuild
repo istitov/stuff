@@ -94,6 +94,15 @@ REQUIRED_USE="
 # USE=-cpu -cuda -rocm (default): build with VLLM_TARGET_DEVICE=empty
 # — Python entrypoints import cleanly, backend kernels fail at first
 # model-load. Useful if you only want the API surface for development.
+#
+# media-libs/opencv lower bound: upstream requirements/common.txt says
+# opencv-python-headless >=4.13.0, ::gentoo tops at 4.12.0.  The full
+# cv2 surface vllm imports — resize, cvtColor, COLOR_BGR2RGB,
+# CAP_PROP_FRAME_COUNT/FPS/FRAME_WIDTH/FRAME_HEIGHT, VideoCapture incl.
+# the 3-arg bytes+backend form, VideoWriter, VideoWriter_fourcc,
+# videoio_registry submodule — is present in 4.12.0; the 4.13 lower
+# bound upstream is wheel-publication churn, not an API extension.
+# # verified 2026-05-16 against media-libs/opencv-4.12.0-r1[python].
 RDEPEND="
 	~sci-ml/pytorch-2.11.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.56.0[${PYTHON_SINGLE_USEDEP}]
