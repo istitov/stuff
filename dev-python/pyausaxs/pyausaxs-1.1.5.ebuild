@@ -27,24 +27,21 @@ KEYWORDS="~amd64"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# Blocker on sci-libs/ausaxs:
-#
-# pyausaxs bundles a prebuilt libausaxs.so inside the wheel. In 1.0.4
-# that library exposed test_integration, evaluate_sans_debye,
-# fit_saxs, iterative_fit_start/step/finish as extern "C" symbols,
-# while AUSAXS v1.2.1's public source tree exposed only test_integration
-# and debye_no_ff — so a from-source libausaxs.so built from
-# sci-libs/ausaxs could not satisfy pyausaxs's ctypes lookups and
-# the init failed, dropping SasView onto its pure-Python fallback.
-#
-# 1.1.3 has not been re-verified against the current sci-libs/ausaxs
-# symbol set (2026-04-24). Keep the mutual-exclusion blocker as a
-# conservative default; drop it only after confirming that the
-# bundled libausaxs.so symbols are a subset of what sci-libs/ausaxs
-# provides.
+# Coexists with sci-libs/ausaxs.  pyausaxs.loader.find_lib_path()
+# always returns the bundled .so via an absolute pkg_resources path
+# (verified 2026-05-16 against 1.1.{3,4,5} — identical loader.py),
+# and ctypes.CDLL with an absolute path doesn't consult ldconfig, so
+# sci-libs/ausaxs's /usr/lib64/libausaxs.so is invisible at runtime.
+# Empirically tested: with /usr/lib64/libausaxs.so staged from a
+# from-source 1.2.3 build, all six ctypes-wired symbols
+# (test_integration, evaluate_sans_debye, fit_saxs, iterative_fit_
+# {start,step,finish}) still resolved from the bundled copy and
+# `debye_no_ff` (only in the system .so) remained absent — proving
+# the bundled .so is the one loaded.  The historical blocker (which
+# was correct for 1.0.4's now-discontinued loader behavior) is no
+# longer load-bearing at 1.1.x.
 RDEPEND="
 	${PYTHON_DEPS}
-	!sci-libs/ausaxs
 	>=dev-python/py-cpuinfo-8.0.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.20.0[${PYTHON_USEDEP}]
 	>=dev-python/scipy-1.10[${PYTHON_USEDEP}]
