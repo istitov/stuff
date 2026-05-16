@@ -21,23 +21,27 @@ IUSE="doc executables"
 # SANS Debye calculator which does not need the dlib minimizers, so we
 # disable DLIB entirely rather than vendoring dlib.
 #
-# Blocker on dev-python/pyausaxs:
-#
-# pyausaxs 1.0.4 (what SasView pins) expects a libausaxs.so that
-# exports test_integration, evaluate_sans_debye, fit_saxs and
-# iterative_fit_start/step/finish. AUSAXS v1.2.1's public source only
-# exposes test_integration and debye_no_ff (the rest are commented out
-# or renamed), so our from-source libausaxs.so is ABI-incompatible
-# with pyausaxs 1.0.4's ctypes bindings. Keep the two packages
-# mutually exclusive for now; this ebuild is useful on its own for
-# the saxs_fitter/em_fitter/rigidbody_optimizer CLI tools.
+# Coexists with dev-python/pyausaxs.  pyausaxs bundles its own prebuilt
+# libausaxs.so inside the wheel and loads it via ctypes.CDLL with an
+# absolute path (pkg_resources.files("pyausaxs").joinpath(
+# "resources/libausaxs.so")) — that path doesn't go through ldconfig,
+# so our /usr/lib64/libausaxs.so is invisible at runtime even though
+# both files share the libausaxs.so SONAME.  Empirically verified
+# 2026-05-16: with both libraries on disk, pyausaxs's six ctypes-wired
+# symbols still resolve from the bundled .so and the system .so's
+# `debye_no_ff` (which the bundled copy doesn't export) is absent in
+# the loaded image.  Symbol sets remain divergent — the from-source
+# 1.2.3 ABI exposes ~44 C symbols (cli_*, molecule_*, pdb_*, fit_*,
+# iterative_fit_init/evaluate, …) while pyausaxs's bundled copy
+# exposes exactly the 6 SasView calls.  This ebuild is useful on its
+# own for the saxs_fitter / em_fitter / rigidbody_optimizer CLI tools
+# and for direct C/C++ consumers.
 RDEPEND="
 	net-misc/curl
 	dev-cpp/gcem
 	dev-cpp/backward-cpp
 	dev-cpp/cli11
 	dev-cpp/bshoshany-thread-pool
-	!dev-python/pyausaxs
 "
 DEPEND="${RDEPEND}"
 BDEPEND="doc? ( app-text/doxygen )"
