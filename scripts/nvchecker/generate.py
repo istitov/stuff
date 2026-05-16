@@ -241,6 +241,19 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "from_pattern": r"^(\d+\.\d+)-pf(\d+)$",
         "to_pattern": r"\1_p\2",
     },
+    # flex-sources tracks the sibling "flex" spine of the same pf-kernel repo
+    # (vX.Y-flexN tags).  Same gitea source, different tag-filter regex; the
+    # ebuild PV format mirrors pf-sources so the rewrite target is the same.
+    "sys-kernel/flex-sources": {
+        "source": "gitea",
+        "host": "codeberg.org",
+        "gitea": "pf-kernel/linux",
+        "use_max_tag": True,
+        "include_regex": r"^v\d+\.\d+-flex\d+$",
+        "prefix": "v",
+        "from_pattern": r"^(\d+\.\d+)-flex(\d+)$",
+        "to_pattern": r"\1_p\2",
+    },
 }
 
 
