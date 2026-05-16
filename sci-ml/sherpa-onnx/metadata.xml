@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="cuda">Build the NVIDIA CUDA backend (requires CUDA Toolkit; nvcc is pinned to gcc-15 on this host)</flag>
+    <flag name="portaudio">Build the example CLI tools that record/play audio (portaudio is vendored + statically linked by upstream cmake)</flag>
+    <flag name="python">Build and install the Python bindings (pybind11) into site-packages</flag>
+    <flag name="tts">Build text-to-speech support (pulls vendored espeak-ng-for-piper at build time)</flag>
+    <flag name="websocket">Build the WebSocket server and client examples</flag>
+  </use>
+  <longdescription>
+    sherpa-onnx is a speech-stack toolkit from the k2-fsa project:
+    speech-to-text, text-to-speech, speaker diarization, voice activity
+    detection, source separation, and keyword spotting, all running on
+    ONNX Runtime (no PyTorch dependency).
+
+    Source build against system sci-libs/onnxruntime. For the prebuilt
+    -bin alternative (faster install, ships upstream's manylinux wheels)
+    see sci-ml/sherpa-onnx-bin.
+
+    The CMake build vendors a dozen small deps (eigen, asio, cargs, json,
+    kaldi-{decoder,native-fbank,fst}, openfst, kissfft, simple-sentencepiece,
+    hclust-cpp, optionally espeak-ng + piper-phonemize + portaudio +
+    websocketpp + pybind11) via FetchContent. The ebuild pre-fetches them
+    all via SRC_URI and stages into ${S} for the cmake fallback paths;
+    no network access during build.
+
+    Runtime model files for each task (ASR, diarization, TTS, etc.) live
+    upstream — see https://k2-fsa.github.io/sherpa/onnx/pretrained_models/
+  </longdescription>
+  <upstream>
+    <remote-id type="github">k2-fsa/sherpa-onnx</remote-id>
+    <remote-id type="gitlab">libeigen/eigen</remote-id>
+    <bugs-to>https://github.com/k2-fsa/sherpa-onnx/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
