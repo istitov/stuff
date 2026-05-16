@@ -254,6 +254,20 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "from_pattern": r"^(\d+\.\d+)-flex(\d+)$",
         "to_pattern": r"\1_p\2",
     },
+    # therock-bin tracks gfx1150 nightlies on AMD's CDN
+    # (rocm.nightlies.amd.com).  ROCm/TheRock's github tags are
+    # `rocm-X.Y.Z` releases which don't map to the gfx1150
+    # tarball naming, so we scrape the CDN's tarball/ listing
+    # for the highest `therock-dist-linux-gfx1150-X.Y.ZaYYYYMMDD`
+    # entry and rewrite the trailing `aYYYYMMDD` to PMS-valid
+    # `_alphaYYYYMMDD`.
+    "dev-util/therock-bin": {
+        "source": "regex",
+        "url": "https://rocm.nightlies.amd.com/tarball/",
+        "regex": r"therock-dist-linux-gfx1150-(\d+\.\d+\.\d+a\d+)\.tar\.gz",
+        "from_pattern": r"^(\d+\.\d+\.\d+)a(\d+)$",
+        "to_pattern": r"\1_alpha\2",
+    },
 }
 
 
@@ -286,7 +300,6 @@ SKIP_PKGS: dict[str, str] = {
     "dev-python/amd-quark-bin":            "AMD internal wheel distribution; not on public PyPI",
     "dev-python/runai-model-streamer-bin": "Run:ai internal distribution; not on public PyPI",
     # Nightly / CDN-sourced package with no comparable GitHub tag scheme.
-    "dev-util/therock-bin":                "tracks ROCm nightlies via AMD CDN; GitHub tag scheme is incompatible",
     # Intentional version pins — upstream advances but a consumer in the
     # tree hard-asserts on a specific version range.
     "dev-python/antlr4-python3-runtime":   "pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')",
@@ -555,7 +568,7 @@ def emit_entry(entry_name: str, classification: dict) -> list[str]:
         for key, val in classification["spec"].items():
             if isinstance(val, bool):
                 lines.append(f"{key} = {'true' if val else 'false'}")
-            elif key in ("include_regex", "from_pattern", "to_pattern"):
+            elif key in ("include_regex", "from_pattern", "to_pattern", "regex"):
                 # TOML literal string preserves regex backslashes as-is.
                 lines.append(f"{key} = '{val}'")
             else:

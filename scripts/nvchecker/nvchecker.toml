@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (185) ---
+# --- pypi (184) ---
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -570,10 +570,6 @@ pypi = "quack-kernels"
 source = "pypi"
 pypi = "rdfpy"
 
-["dev-python/rich-rst"]
-source = "pypi"
-pypi = "rich-rst"
-
 ["dev-python/rosettasciio"]
 source = "pypi"
 pypi = "rosettasciio"
@@ -750,7 +746,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (130) ---
+# --- github (131) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1110,6 +1106,12 @@ prefix = "v"
 ["dev-python/pymupdf-fonts"]
 source = "github"
 github = "pymupdf/pymupdf-fonts"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/rich-rst"]
+source = "github"
+github = "wasi-master/rich-rst"
 use_max_tag = true
 prefix = "v"
 
@@ -1674,7 +1676,14 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (3) ---
+# --- special (4) ---
+
+["dev-util/therock-bin"]
+source = "regex"
+url = "https://rocm.nightlies.amd.com/tarball/"
+regex = 'therock-dist-linux-gfx1150-(\d+\.\d+\.\d+a\d+)\.tar\.gz'
+from_pattern = '^(\d+\.\d+\.\d+)a(\d+)$'
+to_pattern = '\1_alpha\2'
 
 ["sys-kernel/flex-sources"]
 source = "gitea"
@@ -1771,7 +1780,6 @@ to_pattern = '\1_p\2'
 # ["dev-qt/qthelp"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtwebchannel"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-util/nvidia-cuda-toolkit"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["dev-util/therock-bin"] skipped: tracks ROCm nightlies via AMD CDN; GitHub tag scheme is incompatible
 # ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
