@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="pypi">pyannoteai-sdk</remote-id>
+    <remote-id type="github">pyannote/pyannoteAI-python-sdk</remote-id>
+    <bugs-to>https://github.com/pyannote/pyannoteAI-python-sdk/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
