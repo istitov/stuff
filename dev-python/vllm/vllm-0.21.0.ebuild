@@ -84,14 +84,12 @@ REQUIRED_USE="
 # dev-python/amd-quark-bin in this overlay caps PYTHON_COMPAT at
 # 3.{11,12}, which would block vllm on 3.13/3.14. Users wanting Quark
 # quantization install amd-quark-bin separately.
-# gfx1150 (Strix Point iGPU) rocm build was verified for 0.20.1 on
-# 2026-05-08 with caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt]
-# and AMDGPU_TARGETS=gfx1150 — three HIP extensions (_C.abi3.so,
-# _moe_C.abi3.so, _rocm_C.abi3.so) linked cleanly and imported in CPython.
-# 0.21.0 not re-verified on rocm — only USE=-cpu -cuda -rocm (default)
-# was build-checked at bump time, and 0.21.0's rocm.txt adds tilelang
-# as a hard runtime dep (see the rocm? group below).
-# # verified 2026-05-08 for 0.20.1 ONLY.
+# gfx1150 (Strix Point iGPU) rocm build verified on
+# caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt] with
+# AMDGPU_TARGETS=gfx1150.  Both runs produced four working HIP
+# extensions (_C, _moe_C, _rocm_C, cumem_allocator) and a clean
+# `import vllm` from the install tree.
+# # verified 2026-05-08 for 0.20.1, 2026-05-16 for 0.21.0.
 #
 # USE=-cpu -cuda -rocm (default): build with VLLM_TARGET_DEVICE=empty
 # — Python entrypoints import cleanly, backend kernels fail at first
