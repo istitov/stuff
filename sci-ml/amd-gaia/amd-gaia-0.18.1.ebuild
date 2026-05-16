@@ -64,6 +64,8 @@ RDEPEND="
 		)
 		talk? (
 			dev-python/sounddevice[${PYTHON_USEDEP}]
+			dev-python/soundfile[${PYTHON_USEDEP}]
+			dev-python/psutil[${PYTHON_USEDEP}]
 		)
 		ui? (
 			>=dev-python/httpx-0.27.0[${PYTHON_USEDEP}]
