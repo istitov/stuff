@@ -10,11 +10,23 @@ ROCM_VERSION=7.2
 
 inherit distutils-r1 pypi rocm
 
+# Commit pinned by cmake/external_projects/vllm_flash_attn.cmake (GIT_TAG).
+# Pre-staged so we can patch out FA3's unconditional-build quirk before
+# vllm's CMake FetchContent reaches it.  Bump in lockstep with vllm
+# bumps that change the pin.
+VLLM_FA_COMMIT="f5bc33cfc02c744d24a2e9d50e6db656de40611c"
+
 DESCRIPTION="High-throughput, memory-efficient inference and serving engine for LLMs"
 HOMEPAGE="
 	https://github.com/vllm-project/vllm
 	https://docs.vllm.ai/
 	https://pypi.org/project/vllm/
+"
+SRC_URI+="
+	cuda? (
+		https://github.com/vllm-project/flash-attention/archive/${VLLM_FA_COMMIT}.tar.gz
+			-> vllm-flash-attn-${VLLM_FA_COMMIT:0:7}.gh.tar.gz
+	)
 "
 
 LICENSE="Apache-2.0"
@@ -293,9 +305,29 @@ RESTRICT="
 # Pretend the version so setuptools-scm doesn't probe git.
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 
+src_prepare() {
+	distutils-r1_src_prepare
+
+	if use cuda; then
+		# Pre-stage vllm-flash-attn and apply our FA3-only-when-archs
+		# patch before vllm's CMake FetchContent reaches it.  vllm
+		# honours VLLM_FLASH_ATTN_SRC_DIR (set in src_configure) and
+		# skips the git fetch when the dir already exists.
+		local fa_dir="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
+		[[ -d ${fa_dir} ]] || die "expected ${fa_dir} from SRC_URI unpack"
+		pushd "${fa_dir}" >/dev/null || die
+		eapply -p0 \
+			"${FILESDIR}/vllm-flash-attn-${VLLM_FA_COMMIT:0:7}-fa3-only-when-archs.patch"
+		popd >/dev/null || die
+	fi
+}
+
 src_configure() {
 	if use cuda; then
 		export VLLM_TARGET_DEVICE=cuda
+		# Point vllm's cmake FetchContent at our pre-staged + patched
+		# flash-attention source instead of re-fetching from github.
+		export VLLM_FLASH_ATTN_SRC_DIR="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
 		# CUDA 13.2's nvcc rejects gcc>15 via crt/host_config.h; this
 		# host's active gcc is 16. Pin nvcc's host compiler to the
 		# gcc-15 slot. See feedback_cuda_13_host_compiler_gcc_15.md
@@ -316,8 +348,12 @@ src_configure() {
 		# at bump time but the heavy instantiations (paged_attention,
 		# layernorm_quant, w8a8/fp8) are unchanged, so MAX_JOBS=4 stays
 		# a conservative default. # verified 2026-05-07 against 0.20.1.
-		export MAX_JOBS=4
-		export CMAKE_BUILD_PARALLEL_LEVEL=4
+		#
+		# Caller-overridable so users on smaller/larger hosts can adjust
+		# without ebuild-edit (e.g. MAX_JOBS=2 emerge … on a 16 GiB
+		# host).
+		export MAX_JOBS="${MAX_JOBS:-4}"
+		export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-${MAX_JOBS}}"
 	elif use cpu; then
 		export VLLM_TARGET_DEVICE=cpu
 	elif use rocm; then
