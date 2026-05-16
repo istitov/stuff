@@ -6,13 +6,19 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="A beautiful reStructuredText renderer for the rich library"
 HOMEPAGE="
 	https://github.com/wasi-master/rich-rst
 	https://pypi.org/project/rich-rst/
 "
+# Upstream's 2.0.x PyPI sdist omits tests/conftest.py (fixture
+# definitions) plus tests/test_sphinx_{directives,roles}.py and
+# tests/test_tables.py — MANIFEST.in misses them.  Pull the github
+# archive instead so the bundled-in-repo test suite runs.
+SRC_URI="https://github.com/wasi-master/rich-rst/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
+S="${WORKDIR}/${PN}-${PV}"
 
 # Bundled docutils subset (BSD-2 + public-domain) in rich_rst/_vendor/;
 # upstream vendored to remove GPL code from the dep tree.  See
@@ -26,12 +32,6 @@ RDEPEND="
 	>=dev-python/pygments-2.0.0[${PYTHON_USEDEP}]
 "
 
-# Upstream's 2.0.x PyPI sdist omits tests/conftest.py (where the
-# `make_visitor` and `render_text` fixtures are defined) and the
-# tests/{test_sphinx_directives,test_sphinx_roles,test_tables}.py
-# files — present at the github v2.0.1 tag, missing from MANIFEST.in.
-# All 763 collected tests ERROR at setup with "fixture 'make_visitor'
-# not found".  Switch SRC_URI to the github archive (or wait for an
-# upstream MANIFEST.in fix) before re-enabling.  # verified
-# 2026-05-16 against the PyPI sdist.
-RESTRICT="test"
+EPYTEST_PLUGINS=()
+
+distutils_enable_tests pytest
