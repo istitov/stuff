@@ -18,8 +18,6 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# guru's ebuild fetched from GitHub for npm-driven mock-server tests;
-# we strip that and use the PyPI sdist directly.
 RDEPEND="
 	>=dev-python/anyio-3.5.0[${PYTHON_USEDEP}]
 	>=dev-python/distro-1.7.0[${PYTHON_USEDEP}]
