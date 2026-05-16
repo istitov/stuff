@@ -41,3 +41,32 @@ BDEPEND="
 		>=dev-python/nanobind-2.5.0[${PYTHON_USEDEP}]
 	')
 "
+
+python_install_all() {
+	distutils-r1_python_install_all
+
+	# FIXME: workaround, not proper fix.
+	# xgrammar/load_binding.py calls tvm_ffi's load_lib_module without
+	# passing extra_lib_paths, so tvm_ffi searches only its own lib/
+	# dirs and a few PATH entries. The .so installed at xgrammar/
+	# libxgrammar_bindings.so is invisible to that search. Symlink it
+	# into tvm_ffi's lib/ so the lookup succeeds. Upstream wheel works
+	# only by accident (their wheel layout differs from a normal
+	# site-packages install). # verified 2026-05-16 against 0.2.0:
+	# without this symlink, `from vllm import LLM` dies during
+	# xgrammar module init.
+	#
+	# Upstream-able fix: patch xgrammar/load_binding.py to pass
+	# `extra_lib_paths=[Path(__file__).parent]` to load_lib_module —
+	# self-contained inside xgrammar's package boundary, no
+	# cross-package symlink dance. Switch to that pattern (and ship
+	# the patch in files/) when there's appetite for a maintained
+	# patch rather than this dosym workaround.  Also remove the
+	# symlink risk: a hypothetical future apache-tvm-ffi shipping its
+	# own libxgrammar_bindings.so would collide here.
+	local sp
+	sp=$(${EPYTHON} -c 'import sysconfig; print(sysconfig.get_path("purelib"))') || die
+	local tvm_lib="${ED}${sp}/tvm_ffi/lib"
+	dodir "${tvm_lib#${ED}}"
+	dosym "${sp}/xgrammar/libxgrammar_bindings.so" "${tvm_lib#${ED}}/libxgrammar_bindings.so"
+}
