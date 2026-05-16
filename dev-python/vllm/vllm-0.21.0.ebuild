@@ -84,6 +84,26 @@ REQUIRED_USE="
 # dev-python/amd-quark-bin in this overlay caps PYTHON_COMPAT at
 # 3.{11,12}, which would block vllm on 3.13/3.14. Users wanting Quark
 # quantization install amd-quark-bin separately.
+#
+# Upstream requirements/cuda.txt pins nvidia-cutlass-dsl==4.4.2 and
+# tilelang==0.1.9 exactly; flashinfer-python-0.6.8_p1 in this overlay
+# already enforces ~4.4.2 transitively but we restate it on the vllm
+# side so portage can't pick a newer cutlass-dsl if the flashinfer
+# pin is ever relaxed. nvidia-cudnn-frontend cap (>=1.13.0,<1.19.0)
+# lives on the flashinfer-python ebuild — vllm has zero direct
+# cudnn_frontend imports; the cap is for flashinfer's internal use.
+# # verified 2026-05-16 against vllm-0.21.0 cuda.txt.
+#
+# tokenspeed-mla (in requirements/cuda.txt at ==0.1.2 with the comment
+# "for faster mla with spec decode") is deliberately omitted from
+# cuda?'s RDEPEND for similar reasons: all imports in vllm core are
+# lazy and gated by try/except with a clear pip-install hint, the
+# kernels are Blackwell SM100/SM103-only (irrelevant on Ampere/Hopper
+# hosts), and the package transitively pulls tokenspeed-triton — a
+# Triton vendor-fork we'd otherwise have to package as a hard build
+# dep for a backend most users never enable. Users on Blackwell with
+# DeepSeek R1 + spec decode install tokenspeed-mla separately.
+# # verified 2026-05-16: vllm imports clean without it.
 # gfx1150 (Strix Point iGPU) rocm build verified on
 # caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt] with
 # AMDGPU_TARGETS=gfx1150.  Both runs produced four working HIP
@@ -177,11 +197,12 @@ RDEPEND="
 		~sci-ml/torchaudio-2.11.0
 		~sci-ml/torchvision-0.26.0[${PYTHON_SINGLE_USEDEP}]
 		~dev-python/flashinfer-python-0.6.8_p1[${PYTHON_SINGLE_USEDEP}]
-		dev-python/tilelang[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/tilelang-0.1.9[${PYTHON_SINGLE_USEDEP}]
 		>=dev-python/quack-kernels-0.3.3[${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			>=dev-python/fastsafetensors-0.2.2[${PYTHON_USEDEP}]
+			~dev-python/nvidia-cutlass-dsl-4.4.2[${PYTHON_USEDEP}]
 		')
 		dev-util/nvidia-cuda-toolkit:=
 	)
@@ -207,22 +228,26 @@ RDEPEND="
 		>=sci-libs/hipCUB-7.2:=
 	)
 "
+# Upstream pyproject.toml caps setuptools at <81.0.0; dropped from
+# BDEPEND because (a) gentoo only ships 79.0.1 + 82.0.1 (nothing in
+# the 80.x/81.x line), and downgrading to 79.0.1 fights pkg-resources-
+# 81.0.0 (which has !<setuptools-82 and is pulled in by html5lib /
+# opcodes / python-xlib among others); and (b) vllm's setup.py uses
+# only the standard setuptools surface (Extension, setup, build_ext)
+# — no pkg_resources imports, no setuptools.command.* removed in 81+.
+# Cap re-evaluate on bump. # verified 2026-05-16 against setup.py.
 BDEPEND="
 	>=dev-build/cmake-3.26.1
 	app-alternatives/ninja
 	~sci-ml/pytorch-2.11.0[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/setuptools-77.0.3[${PYTHON_USEDEP}]
-		<dev-python/setuptools-81.0.0[${PYTHON_USEDEP}]
 		>=dev-python/setuptools-scm-8.0[${PYTHON_USEDEP}]
 		>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
 		dev-python/jinja2[${PYTHON_USEDEP}]
 	')
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
-		$(python_gen_cond_dep '
-			dev-python/apache-tvm-ffi[${PYTHON_USEDEP}]
-		')
 	)
 	rocm? (
 		>=dev-util/hip-7.2:=
