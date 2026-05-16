@@ -30,3 +30,9 @@ app-portage/portopts
 =sys-kernel/pf-sources-6.18_p6
 =sys-kernel/pf-sources-6.19_p5
 
+
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-05-16)
+# Two-minor-lines-back; retained as a recovery ebuild but blocked from
+# default install. Drop after a few months of 0.7.x being stable, or
+# remove this mask if 0.5.x rollback becomes relevant again.
+=app-portage/udept-0.5.99.0.2.96
