@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (184) ---
+# --- pypi (201) ---
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -410,6 +410,10 @@ pypi = "openfile"
 source = "pypi"
 pypi = "opentelemetry-semantic-conventions-ai"
 
+["dev-python/optuna"]
+source = "pypi"
+pypi = "optuna"
+
 ["dev-python/orix"]
 source = "pypi"
 pypi = "orix"
@@ -453,6 +457,10 @@ pypi = "pint"
 ["dev-python/preshed"]
 source = "pypi"
 pypi = "preshed"
+
+["dev-python/primepy"]
+source = "pypi"
+pypi = "primePy"
 
 ["dev-python/prometheus-fastapi-instrumentator"]
 source = "pypi"
@@ -730,13 +738,73 @@ pypi = "zict"
 source = "pypi"
 pypi = "pycifrw"
 
+["sci-ml/asteroid-filterbanks"]
+source = "pypi"
+pypi = "asteroid-filterbanks"
+
 ["sci-ml/evalplus"]
 source = "pypi"
 pypi = "evalplus"
 
+["sci-ml/julius"]
+source = "pypi"
+pypi = "julius"
+
+["sci-ml/lightning"]
+source = "pypi"
+pypi = "lightning"
+
+["sci-ml/lightning-utilities"]
+source = "pypi"
+pypi = "lightning-utilities"
+
 ["sci-ml/lm-eval"]
 source = "pypi"
 pypi = "lm_eval"
+
+["sci-ml/pyannote-audio"]
+source = "pypi"
+pypi = "pyannote.audio"
+
+["sci-ml/pyannote-core"]
+source = "pypi"
+pypi = "pyannote.core"
+
+["sci-ml/pyannote-database"]
+source = "pypi"
+pypi = "pyannote.database"
+
+["sci-ml/pyannote-metrics"]
+source = "pypi"
+pypi = "pyannote.metrics"
+
+["sci-ml/pyannote-pipeline"]
+source = "pypi"
+pypi = "pyannote.pipeline"
+
+["sci-ml/pyannoteai-sdk"]
+source = "pypi"
+pypi = "pyannoteai-sdk"
+
+["sci-ml/pytorch-metric-learning"]
+source = "pypi"
+pypi = "pytorch-metric-learning"
+
+["sci-ml/sherpa-onnx-bin"]
+source = "pypi"
+pypi = "sherpa-onnx-bin"
+
+["sci-ml/torch-audiomentations"]
+source = "pypi"
+pypi = "torch-audiomentations"
+
+["sci-ml/torch-pitch-shift"]
+source = "pypi"
+pypi = "torch-pitch-shift"
+
+["sci-ml/torchmetrics"]
+source = "pypi"
+pypi = "torchmetrics"
 
 ["sci-physics/sasview"]
 source = "pypi"
@@ -746,7 +814,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (131) ---
+# --- github (136) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -837,6 +905,12 @@ github = "adplug/libbinio"
 use_max_tag = true
 include_regex = '^libbinio-\d+\.\d+$'
 prefix = "libbinio-"
+
+["dev-cpp/safeint"]
+source = "github"
+github = "dcleblanc/SafeInt"
+use_max_tag = true
+prefix = "v"
 
 ["dev-libs/hipother"]
 source = "github"
@@ -1363,6 +1437,12 @@ use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
 
+["sci-libs/dlpack"]
+source = "github"
+github = "dmlc/dlpack"
+use_max_tag = true
+prefix = "v"
+
 ["sci-libs/faiss"]
 source = "github"
 github = "facebookresearch/faiss"
@@ -1453,6 +1533,12 @@ github = "nexusformat/code"
 use_max_tag = true
 prefix = "v"
 
+["sci-libs/onnxruntime"]
+source = "github"
+github = "microsoft/onnxruntime"
+use_max_tag = true
+prefix = "v"
+
 ["sci-libs/rocBLAS"]
 source = "github"
 github = "ROCm/rocm-libraries"
@@ -1540,9 +1626,21 @@ github = "huggingface/sentence-transformers"
 use_max_tag = true
 prefix = "v"
 
+["sci-ml/sherpa-onnx"]
+source = "github"
+github = "k2-fsa/sherpa-onnx"
+use_max_tag = true
+prefix = "v"
+
 ["sci-ml/torchaudio"]
 source = "github"
 github = "pytorch/audio"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/torchcodec"]
+source = "github"
+github = "pytorch/torchcodec"
 use_max_tag = true
 prefix = "v"
 
