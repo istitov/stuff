@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="cli">Install the pyannote-audio command-line tool (pulls dev-python/typer)</flag>
+  </use>
+  <longdescription>
+    pyannote.audio is a deep-learning toolkit for speaker diarization,
+    voice activity detection, overlapped speech detection, and speaker
+    embedding. The Python package alone does not include any pretrained
+    models; running pretrained pipelines such as
+    pyannote/speaker-diarization-3.1 requires accepting the model terms
+    on HuggingFace and authenticating with a HuggingFace token.
+  </longdescription>
+  <upstream>
+    <remote-id type="pypi">pyannote.audio</remote-id>
+    <remote-id type="github">pyannote/pyannote-audio</remote-id>
+    <bugs-to>https://github.com/pyannote/pyannote-audio/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
