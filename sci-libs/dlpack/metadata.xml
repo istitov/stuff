@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    DLPack is an in-memory tensor exchange format used to share tensor
+    data zero-copy between ML frameworks (PyTorch, TensorFlow, ONNX
+    Runtime, CuPy, JAX, etc.). Header-only library plus a small CMake
+    install footprint.
+
+    Build-time dep of sci-libs/onnxruntime[python]; also pulled by
+    parts of the JAX and CuPy stacks when packaged from source.
+
+    Forked from ::guru @ same version; ebuild + 1 doc-warnings patch
+    imported verbatim.
+  </longdescription>
+  <upstream>
+    <bugs-to>https://github.com/dmlc/dlpack/issues</bugs-to>
+    <doc>https://dmlc.github.io/dlpack/</doc>
+    <remote-id type="github">dmlc/dlpack</remote-id>
+  </upstream>
+</pkgmetadata>
