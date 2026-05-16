@@ -1,0 +1,14 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# Bundle AMDGPU_TARGETS values introduced for AMD's TheRock SDK
+# (dev-util/therock-bin) on top of ::gentoo's canonical per-arch
+# list.  Each entry maps to a fat tarball produced by AMD's nightly
+# pipeline that bundles every gfx target in the bundle name.
+
+gfx101X-dgpu - TheRock fat-bundle: RDNA1 discrete GPUs (gfx1010/1011/1012; Radeon RX 5700/5600/5500)
+gfx103X-all - TheRock fat-bundle: RDNA2 (gfx1030/1031/1032/1033/1034/1035/1036; RX 6000, Steam Deck OLED, RDNA2 APUs)
+gfx110X-all - TheRock fat-bundle: RDNA3 discrete GPUs (gfx1100/1101/1102/1103; RX 7900/7800/7700/7600)
+gfx120X-all - TheRock fat-bundle: RDNA4 discrete GPUs (gfx1200/1201; RX 9070/9060/9050)
+gfx94X-dcgpu - TheRock fat-bundle: CDNA3 datacenter (gfx940/941/942; Instinct MI300A/X)
+gfx950-dcgpu - TheRock fat-bundle: CDNA4 datacenter (gfx950; Instinct MI350X/355X)
