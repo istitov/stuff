@@ -111,6 +111,20 @@ REQUIRED_USE="
 # `import vllm` from the install tree.
 # # verified 2026-05-08 for 0.20.1, 2026-05-16 for 0.21.0.
 #
+# RTX A4500 Laptop (sm_86 Ampere) cuda build verified on
+# caffe2-2.11.0-r90 + CUDA-13.2 + CUDAHOSTCXX=g++-15 + MAX_JOBS=4.
+# Pre-FA3-skip baseline: ~2h30m wallclock, 339 CUDA template files
+# (FA3 .cu compiled at nvcc's default arch — wasted on Ampere).
+# Post-FA3-skip (next commit, files/vllm-flash-attn-...-fa3-only-
+# when-archs.patch): ~1h35m wallclock, 144 CUDA template files.
+# Peak ~14 GiB RSS in either case (16 GiB free headroom on 31 GiB
+# host).  Smoke test in both shapes: `from vllm import LLM`
+# succeeds, torch.cuda.is_available() True, torch reports "NVIDIA
+# RTX A4500 Laptop GPU"; FA2 kernels build for sm_80+PTX (forward-
+# compat with sm_86); FA3 (Hopper) does NOT build on sm_86 in the
+# post-patch shape (FA3_AVAILABLE=False at runtime, vllm picks FA2).
+# # verified 2026-05-17 for 0.21.0 on sm_86 + CUDA 13.2 (both shapes).
+#
 # USE=-cpu -cuda -rocm (default): build with VLLM_TARGET_DEVICE=empty
 # — Python entrypoints import cleanly, backend kernels fail at first
 # model-load. Useful if you only want the API surface for development.
