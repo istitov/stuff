@@ -84,11 +84,14 @@ REQUIRED_USE="
 # dev-python/amd-quark-bin in this overlay caps PYTHON_COMPAT at
 # 3.{11,12}, which would block vllm on 3.13/3.14. Users wanting Quark
 # quantization install amd-quark-bin separately.
-# Build-verified on this host's gfx1150 (Strix Point iGPU) on
+# gfx1150 (Strix Point iGPU) rocm build was verified for 0.20.1 on
 # 2026-05-08 with caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt]
 # and AMDGPU_TARGETS=gfx1150 — three HIP extensions (_C.abi3.so,
-# _moe_C.abi3.so, _rocm_C.abi3.so) link cleanly and import in CPython.
-# # verified 2026-05-08.
+# _moe_C.abi3.so, _rocm_C.abi3.so) linked cleanly and imported in CPython.
+# 0.21.0 not re-verified on rocm — only USE=-cpu -cuda -rocm (default)
+# was build-checked at bump time, and 0.21.0's rocm.txt adds tilelang
+# as a hard runtime dep (see the rocm? group below).
+# # verified 2026-05-08 for 0.20.1 ONLY.
 #
 # USE=-cpu -cuda -rocm (default): build with VLLM_TARGET_DEVICE=empty
 # — Python entrypoints import cleanly, backend kernels fail at first
@@ -224,7 +227,8 @@ BDEPEND="
 # CPU build fetches oneDNN v3.10 from GitHub via CMake FetchContent.
 # CUDA build similarly uses FetchContent for CUTLASS / spdlog / etc.
 # during the _C / _moe_C / _vllm_fa* extension compile. Both paths
-# need the network-sandbox bypass. # verified 2026-05-07.
+# need the network-sandbox bypass. # verified 2026-05-07 against
+# 0.20.1; 0.21.0's FetchContent set wasn't re-audited at bump time.
 RESTRICT="
 	test
 	cpu? ( network-sandbox )
@@ -260,8 +264,11 @@ src_configure() {
 		# env var vllm's setup.py reads to throttle the CMake build;
 		# CMAKE_BUILD_PARALLEL_LEVEL backs it up for direct cmake
 		# --build invocations. Tune this per-host: 31 GiB → 4-6,
-		# 54 GiB → 8-10, 128 GiB → ~16. # verified 2026-05-07 against
-		# 0.20.1 with MAX_JOBS=4 on this 31 GiB host.
+		# 54 GiB → 8-10, 128 GiB → ~16. The OOM threshold was measured
+		# against 0.20.1; 0.21.0's CUDA template set wasn't re-profiled
+		# at bump time but the heavy instantiations (paged_attention,
+		# layernorm_quant, w8a8/fp8) are unchanged, so MAX_JOBS=4 stays
+		# a conservative default. # verified 2026-05-07 against 0.20.1.
 		export MAX_JOBS=4
 		export CMAKE_BUILD_PARALLEL_LEVEL=4
 	elif use cpu; then
