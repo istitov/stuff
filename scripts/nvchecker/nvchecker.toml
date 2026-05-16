@@ -750,7 +750,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (132) ---
+# --- github (131) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -949,12 +949,6 @@ prefix = "v"
 ["dev-python/addict"]
 source = "github"
 github = "mewwts/addict"
-use_max_tag = true
-prefix = "v"
-
-["dev-python/antlr4-python3-runtime"]
-source = "github"
-github = "antlr/antlr4"
 use_max_tag = true
 prefix = "v"
 
@@ -1764,6 +1758,7 @@ to_pattern = '\1_p\2'
 # ["dev-lang/tcc"] skipped: custom upstream at bellard.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-libs/cudnn"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/amd-quark-bin"] skipped: AMD internal wheel distribution; not on public PyPI
+# ["dev-python/antlr4-python3-runtime"] skipped: pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/dlinfo"] skipped: fphammerle/dlinfo has no GitHub release tags
 # ["dev-python/mupdf"] skipped: custom upstream at mupdf.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted

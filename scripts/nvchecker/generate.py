@@ -287,6 +287,9 @@ SKIP_PKGS: dict[str, str] = {
     "dev-python/runai-model-streamer-bin": "Run:ai internal distribution; not on public PyPI",
     # Nightly / CDN-sourced package with no comparable GitHub tag scheme.
     "dev-util/therock-bin":                "tracks ROCm nightlies via AMD CDN; GitHub tag scheme is incompatible",
+    # Intentional version pins — upstream advances but a consumer in the
+    # tree hard-asserts on a specific version range.
+    "dev-python/antlr4-python3-runtime":   "pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')",
 }
 
 
