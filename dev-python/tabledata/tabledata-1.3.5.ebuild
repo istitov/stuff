@@ -19,8 +19,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
-	dev-python/dataproperty[${PYTHON_USEDEP}]
-	dev-python/typepy[${PYTHON_USEDEP}]
+	>=dev-python/dataproperty-1.0.2[${PYTHON_USEDEP}]
+	>=dev-python/typepy-1.2.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
