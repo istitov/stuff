@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    sherpa-onnx is a speech-stack toolkit from the k2-fsa project:
+    speech-to-text, text-to-speech, speaker diarization, voice activity
+    detection, source separation, and keyword spotting, all running on
+    ONNX Runtime (no PyTorch dependency). Suited to CPU-only deployment
+    and embedded targets.
+
+    This -bin ebuild ships upstream's manylinux wheels (sherpa-onnx-core
+    for the C++ shared libraries plus a per-CPython-ABI wheel for the
+    Python bindings). Runtime model files are not bundled — see the
+    post-install message for download pointers.
+  </longdescription>
+  <upstream>
+    <remote-id type="pypi">sherpa-onnx</remote-id>
+    <remote-id type="github">k2-fsa/sherpa-onnx</remote-id>
+    <bugs-to>https://github.com/k2-fsa/sherpa-onnx/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
