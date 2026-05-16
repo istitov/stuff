@@ -169,6 +169,7 @@ RDEPEND="
 		dev-python/einops[${PYTHON_USEDEP}]
 		~dev-python/depyf-0.20.0[${PYTHON_USEDEP}]
 		dev-python/cloudpickle[${PYTHON_USEDEP}]
+		dev-python/uvloop[${PYTHON_USEDEP}]
 		dev-python/watchfiles[${PYTHON_USEDEP}]
 		dev-python/python-json-logger[${PYTHON_USEDEP}]
 		dev-python/pybase64[${PYTHON_USEDEP}]
