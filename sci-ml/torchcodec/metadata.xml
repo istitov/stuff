@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="cuda">Build the NVIDIA CUDA decoding/encoding backend (libnpp + libnvrtc)</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">torchcodec</remote-id>
+    <remote-id type="github">pytorch/torchcodec</remote-id>
+    <bugs-to>https://github.com/pytorch/torchcodec/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
