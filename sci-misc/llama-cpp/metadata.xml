@@ -16,5 +16,8 @@
     <flag name="openblas">Build an OpenBLAS backend</flag>
     <flag name="opencl">Build an OpenCL backend, so far only works on Adreno and Intel GPUs</flag>
     <flag name="openssl">Use openssl to support HTTPS</flag>
+    <flag name="webui">Build the embedded llama-server web UI. Fetches
+    prebuilt assets from the upstream Hugging Face bucket at configure
+    time; disable for a server binary with only the HTTP API.</flag>
   </use>
 </pkgmetadata>
