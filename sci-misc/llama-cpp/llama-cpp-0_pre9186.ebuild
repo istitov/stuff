@@ -31,7 +31,11 @@ SRC_URI+="
 
 LICENSE="MIT"
 SLOT="0"
-CPU_FLAGS_X86=( avx avx2 f16c )
+# ggml also exposes GGML_AVX_VNNI / GGML_AVX512_VNNI / GGML_AVX512_BF16
+# (default OFF in cmake). They are NOT wired here — Gentoo has no standard
+# cpu_flags_x86_avx_vnni / avx512_vnni / avx512_bf16 USE flags. Sapphire
+# Rapids and later miss those kernels; would need custom USE flags.
+CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
 # wmma USE explained here: https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
 IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples +webui"
@@ -131,6 +135,17 @@ src_configure() {
 		# avoid clashing with whisper.cpp
 		-DCMAKE_INSTALL_LIBDIR="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
 		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
+	)
+
+	mycmakeargs+=(
+		-DGGML_SSE42=$(usex cpu_flags_x86_sse4_2)
+		-DGGML_AVX=$(usex cpu_flags_x86_avx)
+		-DGGML_AVX2=$(usex cpu_flags_x86_avx2)
+		-DGGML_BMI2=$(usex cpu_flags_x86_bmi2)
+		-DGGML_F16C=$(usex cpu_flags_x86_f16c)
+		-DGGML_FMA=$(usex cpu_flags_x86_fma3)
+		-DGGML_AVX512=$(usex cpu_flags_x86_avx512f)
+		-DGGML_AVX512_VBMI=$(usex cpu_flags_x86_avx512vbmi)
 	)
 
 	if use openblas ; then
