@@ -14,12 +14,11 @@ HOMEPAGE="https://github.com/PyLops/pylops"
 LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-
 IUSE="advanced"
 
 RDEPEND="
 	>=dev-python/numpy-1.21.0[${PYTHON_USEDEP}]
-	>=dev-python/scipy-1.4.0[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.11.0[${PYTHON_USEDEP}]
 	advanced? (
 		dev-python/llvmlite[${PYTHON_USEDEP}]
 		dev-python/numba[${PYTHON_USEDEP}]
@@ -27,3 +26,4 @@ RDEPEND="
 		dev-python/pywavelets[${PYTHON_USEDEP}]
 	)
 "
+DEPEND="${RDEPEND}"
