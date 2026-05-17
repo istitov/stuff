@@ -31,10 +31,14 @@ SRC_URI+="
 
 LICENSE="MIT"
 SLOT="0"
-CPU_FLAGS_X86=( avx avx2 f16c )
+# ggml also exposes GGML_AVX_VNNI / GGML_AVX512_VNNI / GGML_AVX512_BF16
+# (default OFF in cmake). They are NOT wired here — Gentoo has no standard
+# cpu_flags_x86_avx_vnni / avx512_vnni / avx512_bf16 USE flags. Sapphire
+# Rapids and later miss those kernels; would need custom USE flags.
+CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
 # wmma USE explained here: https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
-IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples"
+IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples sycl"
 
 REQUIRED_USE="
 	?? (
@@ -48,6 +52,15 @@ REQUIRED_USE="
 "
 
 # numpy is used by convert_hf_to_gguf.py
+#
+# USE=sycl additionally needs a -fsycl-capable C++ compiler (Intel icpx
+# from oneAPI, or clang++ with SYCL patches) — not expressible as a
+# Portage dep; pkg_setup warns if icpx is absent from PATH.  cmake also
+# auto-detects dev-libs/level-zero (faster device-memory path) and
+# sci-ml/oneDNN (oneDNN-accelerated kernels) and silently disables each
+# if missing — install separately for full performance.
+# UNTESTED 2026-05-17: the sycl USE=path has not been end-to-end built
+# on this overlay; revisit on first user report.
 CDEPEND="
 	openblas? ( sci-libs/openblas:= )
 	openmp? ( llvm-runtimes/openmp:= )
@@ -61,6 +74,7 @@ CDEPEND="
 		)
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
+	sycl? ( sci-libs/mkl:= )
 	openssl? ( dev-libs/openssl:= )
 "
 DEPEND="${CDEPEND}
@@ -78,6 +92,15 @@ RDEPEND="${CDEPEND}
 BDEPEND="vulkan? ( media-libs/shaderc )"
 
 pkg_setup() {
+	# No reliable way to test the system C++ compiler for SYCL support
+	# from an ebuild — cmake's check_cxx_compiler_flag(-fsycl) decides at
+	# configure time. icpx is the common SYCL toolchain; absence usually
+	# means oneAPI isn't installed and the build will fatal-error.
+	if use sycl && ! type -P icpx &>/dev/null; then
+		ewarn "USE=sycl: Intel icpx (from oneAPI) is not on PATH. If your"
+		ewarn "system clang++ has -fsycl support, ignore this; otherwise"
+		ewarn "install oneAPI before continuing or cmake will fatal-error."
+	fi
 	if use rocm; then
 		linux-info_pkg_setup
 		if linux-info_get_any_version && linux_config_exists; then
@@ -111,13 +134,26 @@ src_configure() {
 		-DLLAMA_BUILD_COMMIT="b${PV#0_pre}"
 		-DGENTOO_REMOVE_CMAKE_BLAS_HACK=ON
 		-DGGML_CUDA=$(usex cuda)
+		-DGGML_CUDA_NCCL=OFF
 		-DGGML_OPENCL=$(usex opencl)
 		-DGGML_OPENMP=$(usex openmp)
 		-DGGML_VULKAN=$(usex vulkan)
+		-DGGML_SYCL=$(usex sycl)
 
 		# avoid clashing with whisper.cpp
 		-DCMAKE_INSTALL_LIBDIR="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
 		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
+	)
+
+	mycmakeargs+=(
+		-DGGML_SSE42=$(usex cpu_flags_x86_sse4_2)
+		-DGGML_AVX=$(usex cpu_flags_x86_avx)
+		-DGGML_AVX2=$(usex cpu_flags_x86_avx2)
+		-DGGML_BMI2=$(usex cpu_flags_x86_bmi2)
+		-DGGML_F16C=$(usex cpu_flags_x86_f16c)
+		-DGGML_FMA=$(usex cpu_flags_x86_fma3)
+		-DGGML_AVX512=$(usex cpu_flags_x86_avx512f)
+		-DGGML_AVX512_VBMI=$(usex cpu_flags_x86_avx512vbmi)
 	)
 
 	if use openblas ; then
