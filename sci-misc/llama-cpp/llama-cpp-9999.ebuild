@@ -34,7 +34,14 @@ SLOT="0"
 CPU_FLAGS_X86=( avx avx2 f16c )
 
 # wmma USE explained here: https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
-IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples"
+IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples +webui"
+
+# The embedded server web UI no longer ships in the source tarball as of
+# upstream PR #22937 (~b9163): cmake provisions assets at configure time
+# from a Hugging Face bucket (or a local npm build). Enabling 'webui'
+# allows that network fetch.
+PROPERTIES="webui? ( live )"
+RESTRICT="webui? ( network-sandbox )"
 
 REQUIRED_USE="
 	?? (
@@ -103,6 +110,11 @@ src_configure() {
 		-DLLAMA_BUILD_TESTS=OFF
 		-DLLAMA_BUILD_EXAMPLES=$(usex examples)
 		-DLLAMA_BUILD_SERVER=ON
+		# tools/ui/CMakeLists.txt guards on OR, so both the new and the
+		# legacy option names must be set, otherwise the default-ON
+		# legacy alias wins and the webui asset provisioning runs anyway.
+		-DLLAMA_BUILD_UI=$(usex webui)
+		-DLLAMA_BUILD_WEBUI=$(usex webui)
 		-DCMAKE_SKIP_BUILD_RPATH=ON
 		-DGGML_NATIVE=0	# don't set march
 		-DGGML_RPC=ON
