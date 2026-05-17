@@ -23,6 +23,7 @@ RDEPEND="
 	>=dev-python/docstring-parser-0.15[${PYTHON_USEDEP}]
 	>=dev-python/rich-13.6.0[${PYTHON_USEDEP}]
 	>=dev-python/rich-rst-1.3.1[${PYTHON_USEDEP}]
+	<dev-python/rich-rst-2.0.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
