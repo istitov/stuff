@@ -38,7 +38,7 @@ SLOT="0"
 CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
 # wmma USE explained here: https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
-IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples +webui"
+IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples +webui sycl"
 
 # The embedded server web UI no longer ships in the source tarball as of
 # upstream PR #22937 (~b9163): cmake provisions assets at configure time
@@ -59,6 +59,15 @@ REQUIRED_USE="
 "
 
 # numpy is used by convert_hf_to_gguf.py
+#
+# USE=sycl additionally needs a -fsycl-capable C++ compiler (Intel icpx
+# from oneAPI, or clang++ with SYCL patches) — not expressible as a
+# Portage dep; pkg_setup warns if icpx is absent from PATH.  cmake also
+# auto-detects dev-libs/level-zero (faster device-memory path) and
+# sci-ml/oneDNN (oneDNN-accelerated kernels) and silently disables each
+# if missing — install separately for full performance.
+# UNTESTED 2026-05-17: the sycl USE=path has not been end-to-end built
+# on this overlay; revisit on first user report.
 CDEPEND="
 	openblas? ( sci-libs/openblas:= )
 	openmp? ( llvm-runtimes/openmp:= )
@@ -72,6 +81,7 @@ CDEPEND="
 		)
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
+	sycl? ( sci-libs/mkl:= )
 	openssl? ( dev-libs/openssl:= )
 "
 DEPEND="${CDEPEND}
@@ -89,6 +99,15 @@ RDEPEND="${CDEPEND}
 BDEPEND="vulkan? ( media-libs/shaderc )"
 
 pkg_setup() {
+	# No reliable way to test the system C++ compiler for SYCL support
+	# from an ebuild — cmake's check_cxx_compiler_flag(-fsycl) decides at
+	# configure time. icpx is the common SYCL toolchain; absence usually
+	# means oneAPI isn't installed and the build will fatal-error.
+	if use sycl && ! type -P icpx &>/dev/null; then
+		ewarn "USE=sycl: Intel icpx (from oneAPI) is not on PATH. If your"
+		ewarn "system clang++ has -fsycl support, ignore this; otherwise"
+		ewarn "install oneAPI before continuing or cmake will fatal-error."
+	fi
 	if use rocm; then
 		linux-info_pkg_setup
 		if linux-info_get_any_version && linux_config_exists; then
@@ -131,6 +150,7 @@ src_configure() {
 		-DGGML_OPENCL=$(usex opencl)
 		-DGGML_OPENMP=$(usex openmp)
 		-DGGML_VULKAN=$(usex vulkan)
+		-DGGML_SYCL=$(usex sycl)
 
 		# avoid clashing with whisper.cpp
 		-DCMAKE_INSTALL_LIBDIR="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
