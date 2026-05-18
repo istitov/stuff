@@ -12,7 +12,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="The deep learning framework to pretrain and finetune AI models"
 HOMEPAGE="
 	https://lightning.ai/
-	https://github.com/Lightning-AI/lightning
+	https://github.com/Lightning-AI/pytorch-lightning
 	https://pypi.org/project/lightning/
 "
 

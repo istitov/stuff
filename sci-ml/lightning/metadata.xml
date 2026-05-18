@@ -7,7 +7,7 @@
   </maintainer>
   <upstream>
     <remote-id type="pypi">lightning</remote-id>
-    <remote-id type="github">Lightning-AI/lightning</remote-id>
+    <remote-id type="github">Lightning-AI/pytorch-lightning</remote-id>
     <bugs-to>https://github.com/Lightning-AI/pytorch-lightning/issues</bugs-to>
   </upstream>
 </pkgmetadata>
