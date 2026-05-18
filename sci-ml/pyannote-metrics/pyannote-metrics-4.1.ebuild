@@ -13,7 +13,7 @@ DESCRIPTION="Reproducible evaluation, diagnostic, and error analysis for speaker
 HOMEPAGE="
 	https://pyannote.github.io/pyannote-metrics/
 	https://github.com/pyannote/pyannote-metrics
-	https://pypi.org/project/pyannote.metrics/
+	https://pypi.org/project/pyannote-metrics/
 "
 
 LICENSE="MIT"

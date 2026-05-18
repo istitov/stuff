@@ -6,7 +6,7 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <upstream>
-    <remote-id type="pypi">pyannote.metrics</remote-id>
+    <remote-id type="pypi">pyannote-metrics</remote-id>
     <remote-id type="github">pyannote/pyannote-metrics</remote-id>
     <bugs-to>https://github.com/pyannote/pyannote-metrics/issues</bugs-to>
   </upstream>
