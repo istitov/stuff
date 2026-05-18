@@ -10,7 +10,7 @@
   </use>
   <upstream>
     <remote-id type="pypi">torchcodec</remote-id>
-    <remote-id type="github">pytorch/torchcodec</remote-id>
-    <bugs-to>https://github.com/pytorch/torchcodec/issues</bugs-to>
+    <remote-id type="github">meta-pytorch/torchcodec</remote-id>
+    <bugs-to>https://github.com/meta-pytorch/torchcodec/issues</bugs-to>
   </upstream>
 </pkgmetadata>

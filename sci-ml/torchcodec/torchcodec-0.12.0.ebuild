@@ -12,11 +12,11 @@ inherit distutils-r1
 
 DESCRIPTION="Decode/encode video and audio into PyTorch tensors via FFmpeg"
 HOMEPAGE="
-	https://github.com/pytorch/torchcodec
+	https://github.com/meta-pytorch/torchcodec
 	https://pypi.org/project/torchcodec/
 "
 SRC_URI="
-	https://github.com/pytorch/torchcodec/archive/refs/tags/v${PV}.tar.gz
+	https://github.com/meta-pytorch/torchcodec/archive/refs/tags/v${PV}.tar.gz
 		-> ${P}.gh.tar.gz
 "
 
