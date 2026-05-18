@@ -19,7 +19,7 @@
   </longdescription>
   <upstream>
     <bugs-to>https://github.com/dmlc/dlpack/issues</bugs-to>
-    <doc>https://dmlc.github.io/dlpack/</doc>
+    <doc>https://dmlc.github.io/dlpack/latest/</doc>
     <remote-id type="github">dmlc/dlpack</remote-id>
   </upstream>
 </pkgmetadata>
