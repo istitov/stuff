@@ -3,10 +3,10 @@ wrote /mnt/common/2/Public/stuff-claude/stuff/scripts/nvchecker/nvchecker.toml
   github          136
   bitbucket         1
   cpan             16
-  special           4
+  special           3
   live             40
   unknown          50
-  total           448
+  total           447
 pe (pypi, github, sourceforge)
 # followed by commented-out skip entries (live-only ebuilds,
 # packages with no detectable upstream). To track a skipped
@@ -1780,7 +1780,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (4) ---
+# --- special (3) ---
 
 ["dev-util/therock-bin"]
 source = "regex"
@@ -1788,16 +1788,6 @@ url = "https://rocm.nightlies.amd.com/tarball/"
 regex = 'therock-dist-linux-gfx1150-(\d+\.\d+\.\d+a\d+)\.tar\.gz'
 from_pattern = '^(\d+\.\d+\.\d+)a(\d+)$'
 to_pattern = '\1_alpha\2'
-
-["sys-kernel/flex-sources"]
-source = "gitea"
-host = "codeberg.org"
-gitea = "pf-kernel/linux"
-use_max_tag = true
-include_regex = '^v\d+\.\d+-flex\d+$'
-prefix = "v"
-from_pattern = '^(\d+\.\d+)-flex(\d+)$'
-to_pattern = '\1_p\2'
 
 ["sys-kernel/pf-sources"]
 source = "gitea"
