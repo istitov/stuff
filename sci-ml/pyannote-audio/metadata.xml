@@ -17,7 +17,7 @@
     on HuggingFace and authenticating with a HuggingFace token.
   </longdescription>
   <upstream>
-    <remote-id type="pypi">pyannote.audio</remote-id>
+    <remote-id type="pypi">pyannote-audio</remote-id>
     <remote-id type="github">pyannote/pyannote-audio</remote-id>
     <bugs-to>https://github.com/pyannote/pyannote-audio/issues</bugs-to>
   </upstream>

@@ -14,7 +14,7 @@ DESCRIPTION="State-of-the-art speaker diarization toolkit (PyTorch)"
 HOMEPAGE="
 	https://github.com/pyannote/pyannote-audio
 	https://pyannote.github.io/
-	https://pypi.org/project/pyannote.audio/
+	https://pypi.org/project/pyannote-audio/
 "
 
 LICENSE="MIT"
