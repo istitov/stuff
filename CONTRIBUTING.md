@@ -87,7 +87,9 @@ single commit — it makes reverts and bisects painful.
 
 CI (`.github/workflows/pkgcheck.yml`) will re-run
 `pkgcheck scan --commits` on push and PR. A separate 3-day cron
-runs `pkgcheck scan` repo-wide with `--net`.
+runs `pkgcheck scan` repo-wide. URL-liveness checks
+(`pkgcheck scan --net`) are not part of CI — run them locally if
+you change an upstream URL.
 
 ## 🧩 Conventions
 
