@@ -15,11 +15,11 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Convert LaTeX math to SymPy expressions"
 # Upstream pyproject.toml's Project-URL still points to OrangeX4 (the repo
-# this fork was originally adapted from), but the actual _extended fork
-# code lives at huggingface/latex2sympy2_extended; carry both for credit.
+# this fork was originally adapted from); that repo was deleted 2026-05-x
+# (HTTP 404 verified 2026-05-18), so only the live huggingface fork + PyPI
+# remain.
 HOMEPAGE="
 	https://github.com/huggingface/latex2sympy2_extended
-	https://github.com/OrangeX4/latex2sympy2
 	https://pypi.org/project/latex2sympy2-extended/
 "
 
