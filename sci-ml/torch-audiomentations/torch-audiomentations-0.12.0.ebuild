@@ -11,7 +11,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Fast, differentiable, GPU-friendly audio augmentations for PyTorch"
 HOMEPAGE="
-	https://github.com/asteroid-team/torch-audiomentations
+	https://github.com/iver56/torch-audiomentations
 	https://pypi.org/project/torch-audiomentations/
 "
 

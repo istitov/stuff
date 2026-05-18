@@ -7,7 +7,7 @@
   </maintainer>
   <upstream>
     <remote-id type="pypi">torch-audiomentations</remote-id>
-    <remote-id type="github">asteroid-team/torch-audiomentations</remote-id>
-    <bugs-to>https://github.com/asteroid-team/torch-audiomentations/issues</bugs-to>
+    <remote-id type="github">iver56/torch-audiomentations</remote-id>
+    <bugs-to>https://github.com/iver56/torch-audiomentations/issues</bugs-to>
   </upstream>
 </pkgmetadata>
