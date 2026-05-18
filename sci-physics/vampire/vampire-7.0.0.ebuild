@@ -6,7 +6,7 @@ EAPI=8
 inherit toolchain-funcs
 
 DESCRIPTION="Atomistic simulation of magnetic nanomaterials"
-HOMEPAGE="https://vampire.york.ac.uk/"
+HOMEPAGE="https://www-users.york.ac.uk/~rfle500/research/vampire/"
 SRC_URI="https://github.com/richard-evans/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 # 2026-04-29: USE=doc disabled because vampire.york.ac.uk presents a
 # broken SSL chain (Sectigo intermediate not reachable from a default
