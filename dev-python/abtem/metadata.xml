@@ -6,6 +6,6 @@
   </maintainer>
   <upstream>
     <remote-id type="github">abTEM/abTEM</remote-id>
-    <remote-id type="pypi">abtem</remote-id>
+    <remote-id type="pypi">abTEM</remote-id>
   </upstream>
 </pkgmetadata>

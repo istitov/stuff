@@ -11,7 +11,7 @@ inherit distutils-r1 pypi virtualx
 DESCRIPTION="ab initio transmission electron microscopy"
 HOMEPAGE="
 	https://github.com/abTEM/abTEM/
-	https://pypi.org/project/abtem/
+	https://pypi.org/project/abTEM/
 "
 
 LICENSE="GPL-3"
