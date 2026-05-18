@@ -43,7 +43,7 @@ SRC_URI="
 	https://github.com/k2-fsa/kaldifst/archive/refs/tags/v1.8.0.tar.gz
 		-> kaldifst-1.8.0.tar.gz
 	portaudio? (
-		http://files.portaudio.com/archives/pa_stable_v190700_20210406.tgz
+		https://files.portaudio.com/archives/pa_stable_v190700_20210406.tgz
 	)
 	python? (
 		https://github.com/pybind/pybind11/archive/refs/tags/v3.0.0.tar.gz
