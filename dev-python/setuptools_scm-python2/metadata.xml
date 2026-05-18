@@ -8,7 +8,7 @@
   <stabilize-allarches/>
   <upstream>
     <remote-id type="github">pypa/setuptools-scm</remote-id>
-    <remote-id type="pypi">setuptools_scm</remote-id>
+    <remote-id type="pypi">setuptools-scm</remote-id>
   </upstream>
   <use>
     <flag name="python_targets_python2_7">

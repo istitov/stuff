@@ -13,7 +13,7 @@ MYPN="${PN/-python2/}"
 MYP="${MYPN}-${PV}"
 
 DESCRIPTION="Manage versions by scm tags via setuptools"
-HOMEPAGE="https://github.com/pypa/setuptools-scm https://pypi.org/project/setuptools_scm/"
+HOMEPAGE="https://github.com/pypa/setuptools-scm https://pypi.org/project/setuptools-scm/"
 SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
 
 S="${WORKDIR}/${MYP}"
