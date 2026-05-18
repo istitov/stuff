@@ -5,6 +5,6 @@
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
   <upstream>
-    <remote-id type="pypi">scikit_optimize</remote-id>
+    <remote-id type="pypi">scikit-optimize</remote-id>
   </upstream>
 </pkgmetadata>
