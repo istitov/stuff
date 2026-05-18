@@ -11,9 +11,9 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Data structures for temporal segments with attached labels"
 HOMEPAGE="
-	http://pyannote.github.io/pyannote-core/
+	https://pyannote.github.io/pyannote-core/
 	https://github.com/pyannote/pyannote-core
-	https://pypi.org/project/pyannote.core/
+	https://pypi.org/project/pyannote-core/
 "
 
 LICENSE="MIT"

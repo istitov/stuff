@@ -6,7 +6,7 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <upstream>
-    <remote-id type="pypi">pyannote.core</remote-id>
+    <remote-id type="pypi">pyannote-core</remote-id>
     <remote-id type="github">pyannote/pyannote-core</remote-id>
     <bugs-to>https://github.com/pyannote/pyannote-core/issues</bugs-to>
   </upstream>
