@@ -207,6 +207,21 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "app-text/pandoc-crossref-bin": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+[0-9a-z.]*$",
     },
+    # ggml-org/llama.cpp tags its builds as `b<N>` (e.g. b9209), not semver.
+    # The repo also carries old `gguf-v<X>.<Y>` and `master-<sha>` style refs.
+    # Match only the 4+ digit build-number form (current N is ~9200, so 4-digit
+    # is a tight fit; broaden if upstream ever resets the counter) and rewrite
+    # to the `0_pre<N>` PV the overlay's ebuilds use, so drift compares cleanly
+    # without falling back to tracking master's HEAD commit.
+    #
+    # Sort risk: nvchecker uses awesomeversion which compares `b<N>` strings
+    # by extracting the numeric portion, so b9999 → b10000 should still pick
+    # the latter correctly. Worth re-verifying when N actually crosses 5 digits.
+    "sci-misc/llama-cpp": {
+        "include_regex": r"^b[0-9]{4,}$",
+        "from_pattern": r"^b([0-9]+)$",
+        "to_pattern": r"0_pre\1",
+    },
 }
 
 
