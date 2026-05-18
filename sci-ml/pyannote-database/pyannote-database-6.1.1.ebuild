@@ -12,7 +12,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="Reproducible experimental protocols for multimedia databases"
 HOMEPAGE="
 	https://github.com/pyannote/pyannote-database
-	https://pypi.org/project/pyannote.database/
+	https://pypi.org/project/pyannote-database/
 "
 
 LICENSE="MIT"
