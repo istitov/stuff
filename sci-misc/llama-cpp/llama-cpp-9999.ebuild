@@ -39,6 +39,7 @@ CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
 # wmma USE explained here: https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
 IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples +webui sycl"
+IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
 # The embedded server web UI no longer ships in the source tarball as of
 # upstream PR #22937 (~b9163): cmake provisions assets at configure time
