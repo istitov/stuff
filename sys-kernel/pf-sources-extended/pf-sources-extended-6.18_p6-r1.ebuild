@@ -6,8 +6,8 @@ EAPI=8
 ETYPE="sources"
 
 # Track the latest 6.18.X linux-stable via genpatches. Match
-# gentoo-sources-6.18.26's K_GENPATCHES_VER.
-K_GENPATCHES_VER="26"
+# gentoo-sources-6.18.33's K_GENPATCHES_VER. verified 2026-05-24.
+K_GENPATCHES_VER="37"
 
 # Curated pf delta sets EXTRAVERSION via the patch itself.
 K_NOSETEXTRAVERSION="1"
@@ -35,14 +35,18 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 
 # Vanilla 6.18 from kernel.org + Gentoo's genpatches (stable + non-stable)
 # + our curated pf delta. The codeberg pf-kernel tarball is intentionally
-# not fetched — its content is replaced by the much smaller curated
-# patch in files/.
+# not fetched — its content is replaced by the much smaller curated bundle
+# hosted in the stuff overlay's sister 'extra-stuff' repo.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
+	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
-	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
-	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz"
+	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-2/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-2.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-2/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-2.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-2/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-2.tar.xz"
 
 S="${WORKDIR}/linux-${SHPV}"
 
@@ -76,12 +80,10 @@ src_prepare() {
 	# is the entire point of this revision.
 	eapply "${WORKDIR}"/*.patch
 
-	# Curated pf-kernel delta on top of gentoo-sources state, as a
-	# numbered series of per-feature patches re-cut from natalenko's
-	# pf-kernel branches (codeberg.org/pf-kernel/linux). Filename order
-	# is apply order; each patch's header explains which natalenko
-	# branch + tip SHA it was derived from. See pkg_postinst for the
-	# kept/dropped breakdown.
+	# Curated pf-kernel delta on top of gentoo-sources state (r70-2).
+	# Numbered series of per-feature patches re-cut against the 6.18.33
+	# base; BBR3 (0002) re-cut 2026-05-24 because K=37's 1032 patch
+	# changed tcp_bbr.c/tcp.h/tcp_output.c context. See pkg_postinst.
 	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
