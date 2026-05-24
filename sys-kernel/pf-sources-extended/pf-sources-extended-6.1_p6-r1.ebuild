@@ -6,8 +6,8 @@ EAPI=8
 ETYPE="sources"
 
 # Track the latest 6.1.X linux-stable via genpatches. Match
-# gentoo-sources-6.1.170's K_GENPATCHES_VER.
-K_GENPATCHES_VER="180"
+# gentoo-sources-6.1.174's K_GENPATCHES_VER. verified 2026-05-24.
+K_GENPATCHES_VER="189"
 
 # Curated pf delta sets EXTRAVERSION via the patch itself.
 K_NOSETEXTRAVERSION="1"
@@ -41,8 +41,12 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 # tree small. The tag in the URL pins an immutable snapshot; bumping
 # patches means a new tag suffix (-r70-1, -r70-2, ...).
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
+	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
 	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz"
