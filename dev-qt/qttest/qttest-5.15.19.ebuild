@@ -14,8 +14,6 @@ inherit qt5-build
 
 DESCRIPTION="Unit testing library for the Qt5 framework"
 
-IUSE=""
-
 RDEPEND="=dev-qt/qtcore-${QT5_PV}*:5="
 DEPEND="${RDEPEND}
 	test? (

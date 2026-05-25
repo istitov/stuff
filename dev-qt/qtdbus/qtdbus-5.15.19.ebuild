@@ -13,8 +13,6 @@ inherit qt5-build
 
 DESCRIPTION="Qt5 module for inter-process communication over the D-Bus protocol"
 
-IUSE=""
-
 DEPEND="
 	=dev-qt/qtcore-${QT5_PV}*:5=
 	sys-apps/dbus

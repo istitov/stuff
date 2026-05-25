@@ -11,7 +11,5 @@ inherit qt5-build
 
 DESCRIPTION="Translation files for the Qt5 framework"
 
-IUSE=""
-
 DEPEND="=dev-qt/qtcore-${QT5_PV}*"
 BDEPEND="=dev-qt/linguist-tools-${QT5_PV}*"

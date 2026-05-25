@@ -13,8 +13,6 @@ inherit qt5-build
 
 DESCRIPTION="Implementation of SAX and DOM for the Qt5 framework"
 
-IUSE=""
-
 RDEPEND="=dev-qt/qtcore-${QT5_PV}*:5="
 DEPEND="${RDEPEND}
 	test? ( =dev-qt/qtnetwork-${QT5_PV}* )
