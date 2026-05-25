@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <maintainer type="project">
-    <email>qt@gentoo.org</email>
-    <name>Gentoo Qt Project</name>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
   </maintainer>
   <use>
     <flag name="qml">Build QML/QtQuick bindings and imports</flag>
@@ -13,6 +13,10 @@
     <doc>https://doc.qt.io/</doc>
     <remote-id type="github">qt/qtwebchannel</remote-id>
     <remote-id type="kde-invent">qt/qt/qtwebchannel</remote-id>
+    <remote-id type="github">istitov/extra-stuff</remote-id>
+    <remote-id type="gitlab">istitov/extra-stuff</remote-id>
+    <remote-id type="codeberg">istitov/extra-stuff</remote-id>
+
   </upstream>
   <slots>
     <subslots>
