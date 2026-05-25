@@ -109,6 +109,12 @@ src_install() {
 	exec /opt/fastflowlm/bin/flm "$@"
 	EOF
 
+	# Helper that patches HuggingFace Whisper config.json so FLM's
+	# decoder-only LM_Config validator doesn't crash on it. Idempotent;
+	# user runs once after `flm pull whisper-v3:turbo`.
+	# Upstream bug: https://github.com/FastFlowLM/FastFlowLM/issues/545
+	newbin "${FILESDIR}/flm-patch-whisper" flm-patch-whisper
+
 	newenvd - 99fastflowlm <<-'EOF'
 	LDPATH="/opt/fastflowlm/lib"
 	PATH="/opt/fastflowlm/bin"
@@ -132,5 +138,16 @@ pkg_postinst() {
 	elog "  *  soft  memlock  unlimited"
 	elog "  *  hard  memlock  unlimited"
 	elog ""
+	ewarn ""
+	ewarn "Whisper ASR models (whisper-v3:turbo, ...) crash flm at startup"
+	ewarn "until their config.json is patched: FLM's LM_Config validator"
+	ewarn "asserts on decoder-only LM-shape fields that HuggingFace Whisper"
+	ewarn "configs don't carry."
+	ewarn "Upstream bug: https://github.com/FastFlowLM/FastFlowLM/issues/545"
+	ewarn ""
+	ewarn "After 'flm pull whisper-v3:turbo' (or any Whisper model), run"
+	ewarn "    flm-patch-whisper"
+	ewarn "to patch the downloaded config.json idempotently."
+	ewarn ""
 	elog "Run 'env-update && source /etc/profile' to pick up paths."
 }

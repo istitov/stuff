@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Patch HuggingFace Whisper config.json in-place for FastFlowLM compat.
+
+FastFlowLM's LM_Config validator (src/include/lm_config.hpp:121-125)
+asserts on five decoder-only LM-shape fields:
+
+    hidden_size, intermediate_size, num_attention_heads,
+    num_hidden_layers, num_key_value_heads
+
+HuggingFace's Whisper config.json carries the encoder-decoder
+equivalents instead:
+
+    d_model, encoder_ffn_dim, encoder_attention_heads, encoder_layers
+
+so any `flm pull whisper-v3:turbo` (and any subsequent `flm list`,
+`flm serve --asr 1 ...`, etc.) crashes:
+
+    flm: …/lm_config.hpp:121: Assertion `this->hidden_size > 0' failed.
+
+This script walks ~/.config/flm/models/* (honoring $FLM_MODEL_PATH),
+finds every Whisper config that's missing the decoder-only fields,
+and adds them with values mapped from the encoder-* keys. It's
+idempotent — configs that already carry hidden_size are left alone.
+
+Upstream bug: https://github.com/FastFlowLM/FastFlowLM/issues/545
+
+Drop this helper from the overlay once upstream merges a real fix.
+"""
+import json
+import os
+import pathlib
+import sys
+
+
+def main() -> int:
+    root = pathlib.Path(
+        os.environ.get("FLM_MODEL_PATH", os.path.expanduser("~/.config/flm"))
+    ) / "models"
+    if not root.is_dir():
+        print(f"flm-patch-whisper: model root not found: {root}", file=sys.stderr)
+        return 1
+
+    patched = 0
+    already = 0
+    for cfg in sorted(root.glob("*/config.json")):
+        try:
+            data = json.loads(cfg.read_text())
+        except Exception as exc:
+            print(f"  {cfg}: cannot parse ({exc})", file=sys.stderr)
+            continue
+        if data.get("model_type") != "whisper":
+            continue
+        if "hidden_size" in data:
+            already += 1
+            continue
+        data["hidden_size"] = data.get("d_model", 0)
+        data["intermediate_size"] = data.get("encoder_ffn_dim", 0)
+        data["num_attention_heads"] = data.get("encoder_attention_heads", 0)
+        data["num_hidden_layers"] = data.get("encoder_layers", 0)
+        data["num_key_value_heads"] = data.get("encoder_attention_heads", 0)
+        cfg.write_text(json.dumps(data, indent=2) + "\n")
+        print(f"  patched: {cfg}")
+        patched += 1
+
+    print(f"flm-patch-whisper: patched {patched}, already-patched {already}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
