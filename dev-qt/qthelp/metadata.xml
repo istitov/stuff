@@ -17,5 +17,9 @@ via profiles/package.unmask. Drop once mantid moves to Qt6.
   </maintainer>
   <upstream>
     <remote-id type="kde-invent">qt/qt/qttools</remote-id>
+    <remote-id type="github">istitov/extra-stuff</remote-id>
+    <remote-id type="gitlab">istitov/extra-stuff</remote-id>
+    <remote-id type="codeberg">istitov/extra-stuff</remote-id>
+
   </upstream>
 </pkgmetadata>
