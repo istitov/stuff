@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!--
+Local revival of dev-qt/qttranslations:5, last-rited in ::gentoo on 2026-05-15
+for removal 2026-06-30 (bug #948836, qt5 EOL). Picked up at
+v5.15.19-lts-lgpl with KDE Qt5 Patch Collection applied via the
+stuff overlay's qt5-build.eclass + extra-stuff bundles. Part of
+the non-qtbase qt5 split set in the qt5 overlay import.
+-->
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <stabilize-allarches/>
+  <upstream>
+    <bugs-to>https://qt-project.atlassian.net/</bugs-to>
+    <doc>https://doc.qt.io/</doc>
+    <remote-id type="github">qt/qttranslations</remote-id>    <remote-id type="kde-invent">qt/qt/qttranslations</remote-id>
+    <remote-id type="github">istitov/extra-stuff</remote-id>
+    <remote-id type="gitlab">istitov/extra-stuff</remote-id>
+    <remote-id type="codeberg">istitov/extra-stuff</remote-id>
+  </upstream>
+  <slots>
+    <subslots>
+      Must only be used by packages that are known to use private parts of the Qt API.
+    </subslots>
+  </slots>
+</pkgmetadata>
