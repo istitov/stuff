@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!--
+Local revival of dev-qt/qtgui:5, last-rited in ::gentoo on 2026-05-15
+for removal 2026-06-30 (bug #948836, qt5 EOL). Picked up at
+v5.15.19-lts-lgpl with KDE Qt5 Patch Collection applied via the
+stuff overlay's qt5-build.eclass + extra-stuff bundles. Part of
+the qtbase split-package set in the qt5 overlay import.
+-->
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="eglfs">Build the EGL Full Screen/Single Surface platform plugin</flag>
+    <flag name="evdev">Enable support for input devices via evdev</flag>
+    <flag name="ibus">Build the IBus input method plugin</flag>
+    <flag name="libinput">Enable support for input devices via <pkg>dev-libs/libinput</pkg></flag>
+    <flag name="linuxfb">Enable Linux framebuffer support for embedded devices</flag>
+    <flag name="tslib">Enable support for touchscreen devices via <pkg>x11-libs/tslib</pkg></flag>
+    <flag name="tuio">Build plugin to receive touch events over the TUIO protocol</flag>
+    <flag name="wayland">Provide <pkg>dev-qt/qtwayland</pkg> to ensure Qt applications can be run as Wayland clients</flag>
+    <flag name="X">Build the XCB platform plugin and enable X11 integration</flag>
+  </use>
+  <upstream>
+    <bugs-to>https://qt-project.atlassian.net/</bugs-to>
+    <doc>https://doc.qt.io/</doc>    <remote-id type="kde-invent">qt/qt/qtbase</remote-id>
+    <remote-id type="github">istitov/extra-stuff</remote-id>
+    <remote-id type="gitlab">istitov/extra-stuff</remote-id>
+    <remote-id type="codeberg">istitov/extra-stuff</remote-id>
+  </upstream>
+  <slots>
+    <subslots>
+      Must only be used by packages that are known to use private parts of the Qt API.
+    </subslots>
+  </slots>
+</pkgmetadata>
