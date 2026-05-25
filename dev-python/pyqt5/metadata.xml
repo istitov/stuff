@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!--
+Local revival of dev-python/pyqt5, treecleaned from ::gentoo on
+2026-05-21 (bug #950282, Qt5 deprecation). Carried here for consumers
+that still need the Qt5 Python bindings: sci-physics/mantid (Qt5 GUI
+through v6.15.x), dev-python/fabio, dev-python/qtpy[pyqt5]. Solves
+against the slot:5 stack revived under dev-qt/ at v5.15.19-lts-lgpl
+with KDE Qt5 Patch Collection. Drop once consumers migrate to Qt6.
+-->
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="dbus">Build bindings for the QtDBus module</flag>
+    <flag name="declarative">Build bindings for the QtQml and QtQuick modules and enable the qmlscene plugin</flag>
+    <flag name="gui">Build bindings for the QtGui module</flag>
+    <flag name="multimedia">Build bindings for the QtMultimedia module</flag>
+    <flag name="network">Build bindings for the QtNetwork module</flag>
+    <flag name="opengl">Build bindings for the QtOpenGL module</flag>
+    <flag name="printsupport">Build bindings for the QtPrintSupport module</flag>
+    <flag name="sql">Build bindings for the QtSql module</flag>
+    <flag name="svg">Build bindings for the QtSvg module</flag>
+    <flag name="testlib">Build bindings for the QtTest module</flag>
+    <flag name="widgets">Build bindings for the QtWidgets module</flag>
+    <flag name="x11extras">Build bindings for the QtX11Extras module</flag>
+  </use>
+  <upstream>
+    <maintainer status="active">
+      <email>phil@riverbankcomputing.com</email>
+      <name>Phil Thompson</name>
+    </maintainer>
+    <doc>https://www.riverbankcomputing.com/static/Docs/PyQt5/</doc>
+    <bugs-to>mailto:pyqt@riverbankcomputing.com</bugs-to>
+    <remote-id type="pypi">PyQt5</remote-id>
+  </upstream>
+</pkgmetadata>
