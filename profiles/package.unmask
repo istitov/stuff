@@ -4,10 +4,42 @@
 #
 # dev-qt/qthelp:5: ::gentoo last-rited 2026-02-27, removed 2026-03-29
 # ("obsolete Qt5 non-qtbase modules without revdeps"). Revived in this
-# overlay at dev-qt/qthelp-5.15.18.
+# overlay at dev-qt/qthelp-5.15.{18,19}.
 dev-qt/qthelp:5
 # dev-python/pyqt5 + pyqt5-sip: ::gentoo last-rited 2026-04-21 with
 # removal on 2026-05-21 ("PyQt5 has no more revdeps"). Still in the
 # tree for now; unmask so we can install for mantid.
 dev-python/pyqt5
 dev-python/pyqt5-sip
+
+# ::gentoo masked the entire dev-qt slot:5 set on 2026-05-15 (bug
+# #948836) for removal on 2026-06-30. This overlay continues the slot
+# at v5.15.19-lts-lgpl with KDE Qt5 Patch Collection applied via the
+# qt5-build.eclass. The mask uses bare ":5" so it catches our 5.15.19
+# ebuilds too; unmask the whole set so users on this overlay can
+# install/upgrade.
+
+# qtbase split set (gentoo bug #948836)
+dev-qt/qtconcurrent:5
+dev-qt/qtcore:5
+dev-qt/qtdbus:5
+dev-qt/qtgui:5
+dev-qt/qtnetwork:5
+dev-qt/qtopengl:5
+dev-qt/qtprintsupport:5
+dev-qt/qtsql:5
+dev-qt/qttest:5
+dev-qt/qtwidgets:5
+dev-qt/qtxml:5
+
+# Non-qtbase qt5 modules (gentoo bugs #948836, #964253)
+dev-qt/linguist-tools:5
+dev-qt/qtdeclarative:5
+dev-qt/qtgraphicaleffects:5
+dev-qt/qtmultimedia:5
+dev-qt/qtquickcontrols:5
+dev-qt/qtquickcontrols2:5
+dev-qt/qtsvg:5
+dev-qt/qttranslations:5
+dev-qt/qtwayland:5
+dev-qt/qtx11extras:5
