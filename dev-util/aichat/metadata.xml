@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    aichat is an all-in-one LLM CLI written in Rust. It provides a
+    Chat-REPL, shell assistant, RAG-over-files, and an agent/tools
+    framework, talking to OpenAI, Anthropic, Gemini, Ollama, Groq, and
+    many OpenAI-compatible local servers (llama.cpp, vllm, lemonade,
+    llama-swap). Single static binary, dual-licensed Apache-2.0 / MIT.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">sigoden/aichat</remote-id>
+  </upstream>
+</pkgmetadata>
