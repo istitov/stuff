@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    rtk (Rust Token Killer) is a CLI proxy that reduces LLM token
+    consumption by filtering and compressing the output of common
+    developer commands (cargo, npm, pytest, etc.) before it reaches
+    your LLM session. Single Rust binary, no runtime dependencies.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">rtk-ai/rtk</remote-id>
+  </upstream>
+</pkgmetadata>
