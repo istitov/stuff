@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!--
+Local revival of dev-python/pyqt5-sip, treecleaned from ::gentoo on
+2026-05-21 (bug #950282) alongside dev-python/pyqt5. Kept here as the
+runtime sip extension for dev-python/pyqt5, which several stuff/
+consumers still need (sci-physics/mantid, dev-python/fabio,
+dev-python/qtpy[pyqt5]). Drop alongside dev-python/pyqt5 once those
+migrate to Qt6.
+-->
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <bugs-to>https://github.com/Python-SIP/sip/issues</bugs-to>
+    <remote-id type="pypi">PyQt5-sip</remote-id>
+  </upstream>
+</pkgmetadata>
