@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!--
+Adopted from ::guru's mail-client/tutanota-desktop-bin-335.260310.0
+with the ${optdir} symlink target fixed (${install_dir} was meant).
+-->
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Tutanota is a desktop email client focused on secure and privacy-oriented
+    communication. It offers end-to-end encryption for emails, calendars, and
+    contacts, with built-in support for encrypted messaging between users.
+    Packaged as a -bin from upstream's AppImage release: the signed AppImage
+    is verified against tuta's public key, extracted, and installed under
+    /opt/tutanota-desktop with a desktop entry and icon set.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">tutao/tutanota</remote-id>
+    <bugs-to>https://github.com/tutao/tutanota/issues</bugs-to>
+    <changelog>https://github.com/tutao/tutanota/releases</changelog>
+  </upstream>
+</pkgmetadata>
