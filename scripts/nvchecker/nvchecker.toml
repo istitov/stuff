@@ -826,7 +826,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (143) ---
+# --- github (144) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1366,6 +1366,13 @@ github = "Dwarf-Therapist/Dwarf-Therapist"
 use_max_tag = true
 prefix = "v"
 # note: from HOMEPAGE
+
+["mail-client/tutanota-desktop-bin"]
+source = "github"
+github = "tutao/tutanota"
+use_max_tag = true
+include_regex = '^tutanota-desktop-release-\d+\.\d+\.\d+$'
+prefix = "tutanota-desktop-release-"
 
 ["media-gfx/orcaslicer"]
 source = "github"

@@ -139,6 +139,17 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "www-apps/hollama": {
         "prefix": "",
     },
+    # tutao/tutanota is a monorepo with multiple parallel release tag
+    # families published on the same day: tutanota-release-*,
+    # tutanota-desktop-release-*, tutanota-android-release-*,
+    # tutanota-ios-release-*, tuta-calendar-{android,ios}-release-*.
+    # PV format is MAJOR.YYMMDD.MINOR (e.g. 348.260519.0). Filter to
+    # desktop-only and strip the family prefix so the value compares
+    # against the ebuild PV cleanly.
+    "mail-client/tutanota-desktop-bin": {
+        "include_regex": r"^tutanota-desktop-release-\d+\.\d+\.\d+$",
+        "prefix": "tutanota-desktop-release-",
+    },
     # adplug/adplug releases are tagged as `adplug-X.Y` (with an optional
     # third segment, e.g. `adplug-2.3.3`), alongside winamp-* plugin tags.
     # Anchor with `$` so we don't accidentally include suffix-bearing tags
