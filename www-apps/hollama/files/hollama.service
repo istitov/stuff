@@ -1,0 +1,33 @@
+[Unit]
+Description=Hollama — minimal LLM chat UI (SvelteKit + Node)
+Documentation=https://github.com/fmaclen/hollama
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+ExecStart=/usr/bin/hollama
+Restart=on-failure
+RestartSec=5s
+
+# Hardening — hollama has no server-side persistence (state lives in
+# the user's browser localStorage) so DynamicUser + read-only fs is
+# safe to lock down hard.
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

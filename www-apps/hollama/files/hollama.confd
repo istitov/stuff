@@ -1,0 +1,17 @@
+# Defaults for the hollama service. Used by both the openrc init
+# script and the /usr/bin/hollama launcher; the systemd unit ignores
+# HOLLAMA_USER / HOLLAMA_GROUP and runs under DynamicUser=yes.
+
+# Listening interface. Loopback-only by default. Hollama has no
+# built-in auth — chat state lives in the user's browser localStorage
+# so no server-side data leaks, but anyone with network reach can use
+# your local LLM endpoints through it. Set to 0.0.0.0 only after
+# you've thought about who can route to this host.
+HOLLAMA_HOST="127.0.0.1"
+
+# Listening port.
+HOLLAMA_PORT="4173"
+
+# (openrc only — systemd uses DynamicUser=yes)
+HOLLAMA_USER="nobody"
+HOLLAMA_GROUP="nobody"

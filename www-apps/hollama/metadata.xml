@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Hollama is a minimal LLM chat UI that runs entirely in the
+    browser — all conversation state is stored in the browser's
+    localStorage, no server-side database. It talks to Ollama
+    natively and to any OpenAI-compatible HTTP endpoint, so it
+    pairs cleanly with this overlay's local-LLM backends
+    (sci-misc/llama-cpp, sci-misc/llama-swap, sci-ml/lemonade,
+    dev-python/vllm).
+
+    Packaged as a SvelteKit Node bundle (`PUBLIC_ADAPTER=docker-node`)
+    served by /usr/bin/hollama; systemd unit and openrc init.d
+    scripts shipped under /etc/. Defaults to loopback-only.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">fmaclen/hollama</remote-id>
+  </upstream>
+</pkgmetadata>

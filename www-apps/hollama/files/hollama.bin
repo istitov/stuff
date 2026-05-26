@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Hollama launcher — sources /etc/conf.d/hollama for HOLLAMA_PORT /
+# HOLLAMA_HOST then execs the SvelteKit Node bundle under /opt/hollama.
+
+set -euo pipefail
+
+if [[ -r /etc/conf.d/hollama ]]; then
+	# shellcheck disable=SC1091
+	. /etc/conf.d/hollama
+fi
+
+# Precedence: env > conf.d > hardcoded default. This is the reverse
+# of a naive read because sourcing conf.d unconditionally overwrites
+# any pre-set PORT/HOST; the ${PORT:-${HOLLAMA_PORT:-…}} chain pins
+# the env value first when it's set, falls back to conf.d, then to
+# the upstream-default 4173 / 127.0.0.1.
+export PORT="${PORT:-${HOLLAMA_PORT:-4173}}"
+export HOST="${HOST:-${HOLLAMA_HOST:-127.0.0.1}}"
+
+exec node /opt/hollama/build/index.js "$@"

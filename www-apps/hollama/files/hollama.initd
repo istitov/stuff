@@ -1,0 +1,27 @@
+#!/sbin/openrc-run
+# Hollama — minimal LLM chat UI (SvelteKit + Node)
+# Defaults sourced from /etc/conf.d/hollama.
+
+: "${HOLLAMA_USER:=nobody}"
+: "${HOLLAMA_GROUP:=nobody}"
+: "${HOLLAMA_PORT:=4173}"
+: "${HOLLAMA_HOST:=127.0.0.1}"
+
+command="/usr/bin/hollama"
+command_user="${HOLLAMA_USER}:${HOLLAMA_GROUP}"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}.log"
+
+depend() {
+	need net
+	use logger
+}
+
+start_pre() {
+	checkpath -f -m 0640 -o "${HOLLAMA_USER}:${HOLLAMA_GROUP}" \
+		"${output_log}"
+	export PORT="${HOLLAMA_PORT}"
+	export HOST="${HOLLAMA_HOST}"
+}
