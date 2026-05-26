@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (201) ---
+# --- pypi (204) ---
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -406,6 +406,10 @@ pypi = "openai-harmony"
 source = "pypi"
 pypi = "openfile"
 
+["dev-python/opentelemetry-semantic-conventions"]
+source = "pypi"
+pypi = "opentelemetry-semantic-conventions"
+
 ["dev-python/opentelemetry-semantic-conventions-ai"]
 source = "pypi"
 pypi = "opentelemetry-semantic-conventions-ai"
@@ -537,6 +541,14 @@ pypi = "pyqode-core"
 ["dev-python/pyqode-python"]
 source = "pypi"
 pypi = "pyqode-python"
+
+["dev-python/pyqt5"]
+source = "pypi"
+pypi = "PyQt5"
+
+["dev-python/pyqt5-sip"]
+source = "pypi"
+pypi = "pyqt5-sip"
 
 ["dev-python/pyshortcuts"]
 source = "pypi"
@@ -814,7 +826,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (136) ---
+# --- github (143) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1135,6 +1147,12 @@ github = "openai/whisper"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/opentelemetry-api"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/opentelemetry-exporter-otlp"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
@@ -1160,6 +1178,12 @@ use_max_tag = true
 prefix = "v"
 
 ["dev-python/opentelemetry-proto"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/opentelemetry-sdk"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
@@ -1251,6 +1275,18 @@ github = "explosion/wasabi"
 use_max_tag = true
 prefix = "v"
 
+["dev-util/aichat"]
+source = "github"
+github = "sigoden/aichat"
+use_max_tag = true
+prefix = "v"
+
+["dev-util/argc"]
+source = "github"
+github = "sigoden/argc"
+use_max_tag = true
+prefix = "v"
+
 ["dev-util/bats-assert"]
 source = "github"
 github = "bats-core/bats-assert"
@@ -1308,6 +1344,12 @@ use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
 # note: from HOMEPAGE
+
+["dev-util/rtk"]
+source = "github"
+github = "rtk-ai/rtk"
+use_max_tag = true
+prefix = "v"
 
 ["dev-util/xrt"]
 source = "github"
@@ -1604,6 +1646,13 @@ from_pattern = '^b([0-9]+)$'
 to_pattern = '0_pre\1'
 # note: from HOMEPAGE
 
+["sci-misc/llama-swap"]
+source = "github"
+github = "mostlygeek/llama-swap"
+use_max_tag = true
+prefix = "v"
+# note: from HOMEPAGE
+
 ["sci-ml/amd-gaia"]
 source = "github"
 github = "amd/gaia"
@@ -1701,6 +1750,12 @@ source = "github"
 github = "megabaks/kernel-cleaner"
 use_max_tag = true
 prefix = "v"
+
+["www-apps/hollama"]
+source = "github"
+github = "fmaclen/hollama"
+use_max_tag = true
+prefix = ""
 
 # --- bitbucket (1) ---
 
@@ -1866,9 +1921,30 @@ to_pattern = '\1_p\2'
 # ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/tccbox"] skipped: metab0t/tccbox has no GitHub release tags (private or untagged)
 # ["dev-python/unittest-or-fail"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-qt/linguist-tools"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtconcurrent"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtcore"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtdatavis3d"] skipped: no recognizable upstream
+# ["dev-qt/qtdbus"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtdeclarative"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtgraphicaleffects"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtgui"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qthelp"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtmultimedia"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtnetwork"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtopengl"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtprintsupport"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtquickcontrols"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtquickcontrols2"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtsql"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtsvg"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qttest"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qttranslations"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtwayland"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtwebchannel"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtwidgets"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtx11extras"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtxml"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-util/nvidia-cuda-toolkit"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted

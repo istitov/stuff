@@ -134,6 +134,11 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "dev-python/nvidia-cudnn-frontend": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
+    # fmaclen/hollama tags are bare (`0.35.4`), no v prefix. Default
+    # v-strip would silently shadow every release.
+    "www-apps/hollama": {
+        "prefix": "",
+    },
     # adplug/adplug releases are tagged as `adplug-X.Y` (with an optional
     # third segment, e.g. `adplug-2.3.3`), alongside winamp-* plugin tags.
     # Anchor with `$` so we don't accidentally include suffix-bearing tags
