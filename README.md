@@ -35,6 +35,34 @@ the driver and runtime it needs:
   `dev-libs/xrt-xdna`, [`dev-util/xrt`](https://github.com/Xilinx/XRT)
   — NPU driver and the XDNA-extended Xilinx Runtime.
 
+### Local LLM tooling
+
+Backend-agnostic servers, model-swap proxy, CLI clients, and web UI.
+Pairs with `fastflowlm` / `lemonade` above as well as `vllm` and any
+other OpenAI-compatible endpoint:
+
+- [`sci-misc/llama-cpp`](https://github.com/ggml-org/llama.cpp) —
+  llama.cpp server / runtime. Bundled web UI provisioned at configure
+  time (default on; disable with `USE=-webui`).
+- [`sci-misc/llama-swap`](https://github.com/mostlygeek/llama-swap) —
+  Go HTTP proxy that lifecycle-manages multiple inference backends and
+  routes OpenAI/Anthropic-compatible requests to the right one. Optional
+  embedded Svelte UI via `USE=ui`; vendored Go modules on extra-stuff.
+- [`www-apps/hollama`](https://github.com/fmaclen/hollama) — Minimal
+  chat UI (SvelteKit + Node, browser-localStorage state, no
+  server-side persistence). Talks to Ollama natively and any
+  OpenAI-compatible endpoint. systemd unit + openrc service files;
+  loopback-only by default.
+- [`dev-util/aichat`](https://github.com/sigoden/aichat) — All-in-one
+  LLM CLI (Chat-REPL, shell assistant, RAG, agents); multi-provider,
+  single Rust binary.
+- [`dev-util/rtk`](https://github.com/rtk-ai/rtk) — "Rust Token Killer"
+  CLI proxy that filters dev-command output (cargo, npm, pytest, …)
+  before it reaches your LLM session, cutting token consumption.
+- [`dev-util/argc`](https://github.com/sigoden/argc) — Bash CLI
+  framework + Argcfile.sh task runner; infrastructure for sigoden's
+  tooling cluster.
+
 ### Speech / audio ML stack
 
 ASR, speaker diarization, and audio DSP packages:
@@ -167,19 +195,40 @@ Expected `pkgcheck` warnings from this corner (`UnderscoreInUseFlag`,
 `PythonMismatchedPackageName`, `RequiredUseDefaults`) are suppressed globally
 in `metadata/pkgcheck.conf` with a comment explaining why.
 
-### Qt5 revivals for mantid
+### Qt5 revival mirror
 
-`::gentoo` finished its Qt5→Qt6 migration for `x11-libs/qscintilla` and
-`dev-qt/qthelp`, but `sci-physics/mantid` is still a Qt5 consumer
-upstream. To keep mantid working, this overlay revives two packages from
-`::gentoo`'s attic:
+`::gentoo` last-rited the entire `dev-qt:5` set on 2026-05-15
+(bug #948836) and started treecleaning Qt5 consumers
+(`dev-python/pyqt5` went 2026-05-21). `sci-physics/mantid` and a few
+other consumers will need Qt5 through 2026 at minimum, so this overlay
+carries the full slot:5 set at **v5.15.19-lts-lgpl** with the
+[KDE Qt5 Patch Collection](https://invent.kde.org/qt/qt) applied via
+the local `qt5-build.eclass`.
 
-- `x11-libs/qscintilla-2.14.1-r1` (the last Qt5-compatible slot), with
-  `=x11-libs/qscintilla-2.14.1-r2` (Qt6-only) masked in
+- **23 `dev-qt/*` packages at 5.15.19** — `linguist-tools`,
+  `qtconcurrent`, `qtcore`, `qtdbus`, `qtdeclarative`,
+  `qtgraphicaleffects`, `qtgui`, `qthelp`, `qtmultimedia`, `qtnetwork`,
+  `qtopengl`, `qtprintsupport`, `qtquickcontrols`, `qtquickcontrols2`,
+  `qtsql`, `qtsvg`, `qttest`, `qttranslations`, `qtwayland`,
+  `qtwebchannel`, `qtwidgets`, `qtx11extras`, `qtxml`. All keyworded
+  `~arch` (qtwebchannel limited to `~amd64 ~x86` per upstream's
+  narrower keyword history). `dev-qt/qthelp` and `dev-qt/qtwebchannel`
+  keep their pre-import 5.15.18 ebuilds alongside; the other 21 ship
+  5.15.19 only.
+- **`dev-python/pyqt5` + `dev-python/pyqt5-sip`** — revived at
+  PyPI-latest after `::gentoo`'s treeclean.
+- **`x11-libs/qscintilla-2.14.1-r1`** (the last Qt5-compatible slot),
+  with `=x11-libs/qscintilla-2.14.1-r2` (Qt6-only) masked in
   `profiles/package.mask`.
-- `dev-qt/qthelp-5.15.18`.
+- **KDE Qt5 Patch Collection bundles** mirrored to
+  [extra-stuff](https://github.com/istitov/extra-stuff) as signed-tag-pinned
+  `.tar.xz` distfiles; the eclass fans the SRC_URI out across the
+  github / codeberg / gitlab raw URLs.
+- **`profiles/package.unmask`** overrides `::gentoo`'s bare `dev-qt/*:5`
+  masks so these ebuilds stay installable for overlay users.
 
-These masks will lift once mantid finishes its own Qt6 port upstream.
+Drop the mirror once mantid finishes its Qt6 port and the other
+consumers follow.
 
 ### Other targeted fixes kept in-tree
 
