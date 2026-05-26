@@ -1,0 +1,150 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+CRATES="
+	aho-corasick@1.1.4
+	anstyle@1.0.14
+	anyhow@1.0.102
+	assert_cmd@2.2.2
+	assert_fs@1.1.3
+	autocfg@1.5.0
+	base64@0.22.1
+	bitflags@2.11.1
+	bstr@1.12.1
+	cfg-if@1.0.4
+	console@0.16.3
+	convert_case@0.11.0
+	crossbeam-deque@0.8.6
+	crossbeam-epoch@0.9.18
+	crossbeam-utils@0.8.21
+	difflib@0.4.0
+	dirs-sys@0.5.0
+	dirs@6.0.0
+	doc-comment@0.3.4
+	either@1.15.0
+	encode_unicode@1.0.0
+	equivalent@1.0.2
+	errno@0.3.14
+	fastrand@2.4.1
+	float-cmp@0.10.0
+	foldhash@0.1.5
+	futures-core@0.3.32
+	futures-macro@0.3.32
+	futures-task@0.3.32
+	futures-timer@3.0.3
+	futures-util@0.3.32
+	getrandom@0.2.17
+	getrandom@0.4.2
+	glob@0.3.3
+	globset@0.4.18
+	globwalk@0.9.1
+	hashbrown@0.15.5
+	hashbrown@0.17.1
+	heck@0.5.0
+	hermit-abi@0.5.2
+	id-arena@2.3.0
+	ignore@0.4.25
+	indexmap@2.14.0
+	insta@1.47.2
+	itoa@1.0.18
+	leb128fmt@0.1.0
+	libc@0.2.186
+	libredox@0.1.16
+	linux-raw-sys@0.12.1
+	log@0.4.29
+	memchr@2.8.0
+	natord@1.0.9
+	nom@8.0.0
+	normalize-line-endings@0.3.0
+	num-traits@0.2.19
+	num_cpus@1.17.0
+	once_cell@1.21.4
+	option-ext@0.2.0
+	path-absolutize@3.1.1
+	path-dedot@3.1.1
+	pin-project-lite@0.2.17
+	predicates-core@1.0.10
+	predicates-tree@1.0.13
+	predicates@3.1.4
+	prettyplease@0.2.37
+	proc-macro-crate@3.5.0
+	proc-macro2@1.0.106
+	quote@1.0.45
+	r-efi@6.0.0
+	redox_users@0.5.2
+	regex-automata@0.4.14
+	regex-syntax@0.8.10
+	regex@1.12.3
+	relative-path@1.9.3
+	roff@1.1.1
+	rstest@0.26.1
+	rstest_macros@0.26.1
+	rustc_version@0.4.1
+	rustix@1.1.4
+	same-file@1.0.6
+	semver@1.0.28
+	serde@1.0.228
+	serde_core@1.0.228
+	serde_derive@1.0.228
+	serde_json@1.0.149
+	shell-words@1.1.1
+	similar@2.7.0
+	slab@0.4.12
+	smawk@0.3.2
+	syn@2.0.117
+	tempfile@3.27.0
+	termtree@0.5.1
+	textwrap@0.16.2
+	thiserror-impl@2.0.18
+	thiserror@2.0.18
+	threadpool@1.8.1
+	toml_datetime@1.1.1+spec-1.1.0
+	toml_edit@0.25.11+spec-1.1.0
+	toml_parser@1.1.2+spec-1.1.0
+	unicode-ident@1.0.24
+	unicode-linebreak@0.1.5
+	unicode-segmentation@1.13.2
+	unicode-width@0.2.2
+	unicode-xid@0.2.6
+	wait-timeout@0.2.1
+	walkdir@2.5.0
+	wasi@0.11.1+wasi-snapshot-preview1
+	wasip2@1.0.3+wasi-0.2.9
+	wasip3@0.4.0+wasi-0.3.0-rc-2026-01-06
+	wasm-encoder@0.244.0
+	wasm-metadata@0.244.0
+	wasmparser@0.244.0
+	which@8.0.2
+	winapi-util@0.1.11
+	windows-link@0.2.1
+	windows-sys@0.61.2
+	winnow@1.0.3
+	wit-bindgen-core@0.51.0
+	wit-bindgen-rust-macro@0.51.0
+	wit-bindgen-rust@0.51.0
+	wit-bindgen@0.51.0
+	wit-bindgen@0.57.1
+	wit-component@0.244.0
+	wit-parser@0.244.0
+	zmij@1.0.21
+"
+
+RUST_MIN_VER="1.87.0"
+inherit cargo
+
+DESCRIPTION="Bash CLI framework + command runner (argcfile / Argcfile.sh)"
+HOMEPAGE="
+	https://github.com/sigoden/argc
+"
+SRC_URI="
+	https://github.com/sigoden/argc/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
+	${CARGO_CRATE_URIS}
+"
+
+# Apache-2.0 / MIT dual-licensed at the project root. Per Gentoo
+# convention, leave the choice to the consumer via || ( ).
+LICENSE="|| ( Apache-2.0 MIT )"
+SLOT="0"
+KEYWORDS="~amd64"
