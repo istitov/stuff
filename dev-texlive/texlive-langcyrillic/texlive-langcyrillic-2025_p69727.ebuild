@@ -1,0 +1,129 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-langcyrillic.r69727
+	babel-belarusian.r49022
+	babel-bulgarian.r31902
+	babel-russian.r57376
+	babel-serbian.r64571
+	babel-serbianc.r64588
+	babel-ukrainian.r56674
+	churchslavonic.r67474
+	cmcyr.r68681
+	cyrillic.r71408
+	cyrillic-bin.r62517
+	cyrplain.r45692
+	disser.r43417
+	eskd.r15878
+	eskdx.r29235
+	gost.r76790
+	hyphen-belarusian.r73410
+	hyphen-bulgarian.r73410
+	hyphen-churchslavonic.r73410
+	hyphen-mongolian.r74203
+	hyphen-russian.r73410
+	hyphen-serbian.r73410
+	hyphen-ukrainian.r73410
+	lcyw.r15878
+	lh.r15878
+	lhcyr.r77050
+	mnhyphn.r69727
+	mongolian-babel.r15878
+	montex.r29349
+	numnameru.r44895
+	ruhyphen.r21081
+	russ.r25209
+	serbian-apostrophe.r23799
+	serbian-date-lat.r23446
+	serbian-def-cyr.r23734
+	serbian-lig.r53127
+	t2.r47870
+	ukrhyph.r21081
+	xecyrmongolian.r53160
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	babel-belarusian.doc.r49022
+	babel-bulgarian.doc.r31902
+	babel-russian.doc.r57376
+	babel-serbian.doc.r64571
+	babel-serbianc.doc.r64588
+	babel-ukrainian.doc.r56674
+	churchslavonic.doc.r67474
+	cmcyr.doc.r68681
+	cyrillic.doc.r71408
+	cyrillic-bin.doc.r62517
+	disser.doc.r43417
+	eskd.doc.r15878
+	eskdx.doc.r29235
+	gost.doc.r76790
+	lcyw.doc.r15878
+	lh.doc.r15878
+	lshort-bulgarian.doc.r77050
+	lshort-mongol.doc.r15878
+	lshort-russian.doc.r55643
+	lshort-ukr.doc.r55643
+	mnhyphn.doc.r69727
+	mongolian-babel.doc.r15878
+	montex.doc.r29349
+	mpman-ru.doc.r15878
+	numnameru.doc.r44895
+	pst-eucl-translation-bg.doc.r19296
+	russ.doc.r25209
+	serbian-apostrophe.doc.r23799
+	serbian-date-lat.doc.r23446
+	serbian-def-cyr.doc.r23734
+	serbian-lig.doc.r53127
+	t2.doc.r47870
+	texlive-ru.doc.r58426
+	texlive-sr.doc.r54594
+	ukrhyph.doc.r21081
+	xecyrmongolian.doc.r53160
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	babel-belarusian.source.r49022
+	babel-bulgarian.source.r31902
+	babel-russian.source.r57376
+	babel-serbian.source.r64571
+	babel-serbianc.source.r64588
+	babel-ukrainian.source.r56674
+	cyrillic.source.r71408
+	disser.source.r43417
+	eskd.source.r15878
+	gost.source.r76790
+	lcyw.source.r15878
+	lh.source.r15878
+	lhcyr.source.r77050
+	mongolian-babel.source.r15878
+	ruhyphen.source.r21081
+	xecyrmongolian.source.r53160
+"
+
+# Transitional pin: TL_PV anchors the eclass-derived texlive-core
+# dep to TL2024 until app-text/texlive-core-2025 lands here.
+TL_PV=2024
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive Cyrillic"
+
+LICENSE="GPL-1+ GPL-2 LPPL-1.3 LPPL-1.3c MIT TeX-other-free public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-basic-2024
+	>=dev-texlive/texlive-latex-2024
+"
+RDEPEND="
+	${COMMON_DEPEND}
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
+
+TEXLIVE_MODULE_BINSCRIPTS="
+	texmf-dist/scripts/texlive-extra/rubibtex.sh
+	texmf-dist/scripts/texlive-extra/rumakeindex.sh
+"
