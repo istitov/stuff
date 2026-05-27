@@ -826,7 +826,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (144) ---
+# --- github (145) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1404,6 +1404,13 @@ source = "github"
 github = "google/draco"
 use_max_tag = true
 prefix = "v"
+
+["media-libs/libde265"]
+source = "github"
+github = "strukturag/libde265"
+use_max_tag = true
+prefix = "v"
+# note: from HOMEPAGE
 
 ["media-libs/libnoise"]
 source = "github"
