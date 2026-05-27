@@ -267,15 +267,18 @@ texlive-common_append_to_src_uri() {
 		# bumps).
 		SRC_URI+=" ${tl_uri[*]/#/${CTAN_MIRROR_URL%/}/systems/texlive/tlnet/archive/}"
 
-		# dev-texlive PVs are <year>_p<rev>; split-package PVs are
-		# <upstream-ver>_p<YYYYMMDD>. Extract the four-digit TL year
-		# in both cases.
+		# Three PV shapes touch the TL year:
+		#   dev-texlive/*       : '2025_pNNNNN'      year at PV start
+		#   dev-libs/{kpathsea,ptexenc}, app-text/dvisvgm:
+		#                       : '6.4.1_p20250308'  year in YYYYMMDD after _p
+		#   app-text/dvipsk     : '2025.03.08_pNNNNN' year at PV start
+		# Pick the first 20XX-style four-digit run from PV. Reach for
+		# 19XX too to keep historical kpathsea bumps working.
 		local tl_year
-		if [[ ${CATEGORY} == dev-texlive ]]; then
-			tl_year=${PV%%_*}
+		if [[ ${PV} =~ (19|20)[0-9]{2} ]]; then
+			tl_year=${BASH_REMATCH[0]}
 		else
-			local pv_after_p=${PV#*_p}
-			tl_year=${pv_after_p:0:4}
+			tl_year=${PV%%_*}
 		fi
 		local tl_historic="https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${tl_year}/tlnet-final/archive/"
 		SRC_URI+=" ${tl_uri[*]/#/${tl_historic}}"
