@@ -267,7 +267,16 @@ texlive-common_append_to_src_uri() {
 		# bumps).
 		SRC_URI+=" ${tl_uri[*]/#/${CTAN_MIRROR_URL%/}/systems/texlive/tlnet/archive/}"
 
-		local tl_year=${PV%%_*}
+		# dev-texlive PVs are <year>_p<rev>; split-package PVs are
+		# <upstream-ver>_p<YYYYMMDD>. Extract the four-digit TL year
+		# in both cases.
+		local tl_year
+		if [[ ${CATEGORY} == dev-texlive ]]; then
+			tl_year=${PV%%_*}
+		else
+			local pv_after_p=${PV#*_p}
+			tl_year=${pv_after_p:0:4}
+		fi
 		local tl_historic="https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${tl_year}/tlnet-final/archive/"
 		SRC_URI+=" ${tl_uri[*]/#/${tl_historic}}"
 
