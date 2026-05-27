@@ -47,6 +47,7 @@ CMAKE_USE_DIR="${S}/src"
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="/opt/fastflowlm"
+		-DCMAKE_XCLBIN_PREFIX="/opt/fastflowlm/share/flm"
 		-DFLM_VERSION="${PV}"
 		-DNPU_VERSION="32.0.203.304"
 	)

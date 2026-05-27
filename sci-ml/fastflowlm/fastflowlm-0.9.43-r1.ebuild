@@ -11,9 +11,10 @@ HOMEPAGE="
 	https://github.com/FastFlowLM/FastFlowLM
 "
 
-# Submodule commit pins. tokenizers-cpp bumped from 0.9.39's acbdc5a;
-# its nested sentencepiece + msgpack pins still match 0.9.39's.
-TOKENIZERS_CPP_COMMIT="34885cfd7b9ef27b859c28a41e71413dd31926f5"
+# Submodule commit pins. tokenizers-cpp reverted to acbdc5a in 0.9.43
+# (0.9.42 had bumped to 34885cf); nested sentencepiece + msgpack pins
+# at acbdc5a still match the existing values.
+TOKENIZERS_CPP_COMMIT="acbdc5a27ae01ba74cda756f94da698d40f11dfe"
 SENTENCEPIECE_COMMIT="11051e3b73b3a6222a52acd720e39805dc7545ab"
 MSGPACK_COMMIT="092bc69b6e815980bce7808595c914dd3a29f905"
 
@@ -85,11 +86,19 @@ src_prepare() {
 }
 
 src_configure() {
-	# FLM_VERSION + NPU_VERSION are set by the linux-default cmake preset
-	# upstream; we set them here directly. NPU_VERSION on Linux only
-	# satisfies a CMake guard (it's the Windows NPU driver version).
+	# FLM_VERSION + NPU_VERSION + CMAKE_XCLBIN_PREFIX are set by the
+	# linux-default cmake preset upstream; we set them here directly
+	# because we don't drive the build via the preset. NPU_VERSION on
+	# Linux only satisfies a CMake guard (it's the Windows NPU driver
+	# version). CMAKE_XCLBIN_PREFIX must match the install rule
+	# (DESTINATION share/flm at src/CMakeLists.txt:345): without it the
+	# runtime's find_xclbin_path() falls back to dirname(/proc/self/exe)
+	# and looks for xclbins under bin/ instead of share/flm/ (#269).
+	# verified 2026-05-27 against fastflowlm-0.9.43 src/CMakeLists.txt
+	# (byte-identical to 0.9.42)
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="/opt/fastflowlm"
+		-DCMAKE_XCLBIN_PREFIX="/opt/fastflowlm/share/flm"
 		-DFLM_VERSION="${PV}"
 		-DNPU_VERSION="32.0.203.304"
 	)
