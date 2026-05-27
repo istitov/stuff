@@ -1,0 +1,204 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-latex.r77034
+	ae.r15878
+	amscls.r77677
+	amsmath.r78116
+	atbegshi.r77677
+	atveryend.r77677
+	auxhook.r77677
+	babel.r77821
+	babel-english.r77677
+	babelbib.r76790
+	bigintcalc.r77677
+	bitset.r77677
+	bookmark.r77677
+	carlisle.r59577
+	colortbl.r77677
+	epstopdf-pkg.r77677
+	etexcmds.r78116
+	fancyhdr.r78116
+	firstaid.r76740
+	fix2col.r38770
+	geometry.r77677
+	gettitlestring.r77677
+	graphics.r75374
+	graphics-cfg.r41448
+	grfext.r77677
+	hopatch.r65491
+	hycolor.r77677
+	hypcap.r77677
+	hyperref.r77677
+	intcalc.r77677
+	kvdefinekeys.r77677
+	kvoptions.r77677
+	kvsetkeys.r77677
+	l3backend.r76924
+	l3kernel.r77438
+	l3packages.r76637
+	latex.r76924
+	latex-bin.r77033
+	latex-fonts.r28888
+	latex-lab.r76739
+	latexconfig.r68923
+	letltxmacro.r77677
+	ltxcmds.r77677
+	ltxmisc.r75878
+	mfnfss.r77677
+	mptopdf.r78011
+	natbib.r77677
+	oberdiek.r71916
+	pagesel.r77677
+	pdfescape.r77677
+	pdftexcmds.r77677
+	pslatex.r67469
+	psnfss.r77677
+	pspicture.r15878
+	refcount.r77677
+	rerunfilecheck.r77677
+	stringenc.r77677
+	tools.r76708
+	uniquecounter.r77677
+	url.r77677
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	ae.doc.r15878
+	amscls.doc.r77677
+	amsmath.doc.r78116
+	atbegshi.doc.r77677
+	atveryend.doc.r77677
+	auxhook.doc.r77677
+	babel.doc.r77821
+	babel-english.doc.r77677
+	babelbib.doc.r76790
+	bigintcalc.doc.r77677
+	bitset.doc.r77677
+	bookmark.doc.r77677
+	carlisle.doc.r59577
+	colortbl.doc.r77677
+	epstopdf-pkg.doc.r77677
+	etexcmds.doc.r78116
+	fancyhdr.doc.r78116
+	firstaid.doc.r76740
+	fix2col.doc.r38770
+	geometry.doc.r77677
+	gettitlestring.doc.r77677
+	graphics.doc.r75374
+	graphics-cfg.doc.r41448
+	grfext.doc.r77677
+	hopatch.doc.r65491
+	hycolor.doc.r77677
+	hypcap.doc.r77677
+	hyperref.doc.r77677
+	intcalc.doc.r77677
+	kvdefinekeys.doc.r77677
+	kvoptions.doc.r77677
+	kvsetkeys.doc.r77677
+	l3backend.doc.r76924
+	l3kernel.doc.r77438
+	l3packages.doc.r76637
+	latex.doc.r76924
+	latex-bin.doc.r77033
+	latex-fonts.doc.r28888
+	latex-lab.doc.r76739
+	letltxmacro.doc.r77677
+	ltxcmds.doc.r77677
+	mfnfss.doc.r77677
+	mptopdf.doc.r78011
+	natbib.doc.r77677
+	oberdiek.doc.r71916
+	pagesel.doc.r77677
+	pdfescape.doc.r77677
+	pdftexcmds.doc.r77677
+	psnfss.doc.r77677
+	pspicture.doc.r15878
+	refcount.doc.r77677
+	rerunfilecheck.doc.r77677
+	stringenc.doc.r77677
+	tools.doc.r76708
+	uniquecounter.doc.r77677
+	url.doc.r77677
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	ae.source.r15878
+	amscls.source.r77677
+	amsmath.source.r78116
+	atbegshi.source.r77677
+	atveryend.source.r77677
+	auxhook.source.r77677
+	babel.source.r77821
+	babel-english.source.r77677
+	bigintcalc.source.r77677
+	bitset.source.r77677
+	bookmark.source.r77677
+	carlisle.source.r59577
+	colortbl.source.r77677
+	epstopdf-pkg.source.r77677
+	etexcmds.source.r78116
+	fancyhdr.source.r78116
+	firstaid.source.r76740
+	fix2col.source.r38770
+	geometry.source.r77677
+	gettitlestring.source.r77677
+	graphics.source.r75374
+	grfext.source.r77677
+	hopatch.source.r65491
+	hycolor.source.r77677
+	hypcap.source.r77677
+	hyperref.source.r77677
+	intcalc.source.r77677
+	kvdefinekeys.source.r77677
+	kvoptions.source.r77677
+	kvsetkeys.source.r77677
+	l3backend.source.r76924
+	l3kernel.source.r77438
+	l3packages.source.r76637
+	latex.source.r76924
+	latex-lab.source.r76739
+	letltxmacro.source.r77677
+	ltxcmds.source.r77677
+	mfnfss.source.r77677
+	natbib.source.r77677
+	oberdiek.source.r71916
+	pagesel.source.r77677
+	pdfescape.source.r77677
+	pdftexcmds.source.r77677
+	pslatex.source.r67469
+	psnfss.source.r77677
+	pspicture.source.r15878
+	refcount.source.r77677
+	rerunfilecheck.source.r77677
+	stringenc.source.r77677
+	tools.source.r76708
+	uniquecounter.source.r77677
+"
+
+# Transitional pin: TL_PV anchors the eclass-derived texlive-core
+# dep to TL2024 until app-text/texlive-core-2025 lands here.
+TL_PV=2024
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive LaTeX fundamental packages"
+
+LICENSE="GPL-2 LPPL-1.0 LPPL-1.3 LPPL-1.3c public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-basic-2024
+"
+RDEPEND="
+	${COMMON_DEPEND}
+	!<dev-texlive/texlive-latexrecommended-2023
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
+
+TEXLIVE_MODULE_BINSCRIPTS="
+	texmf-dist/scripts/context/perl/mptopdf.pl
+"
