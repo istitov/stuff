@@ -177,7 +177,6 @@ DEPEND="
 	${COMMON_DEPEND}
 "
 
-# !<dev-texlive/texlive-langother-2023 see https://bugs.gentoo.org/928307
 RDEPEND="
 	${COMMON_DEPEND}
 	virtual/perl-Getopt-Long
@@ -189,10 +188,6 @@ RDEPEND="
 		dev-lang/tk
 		dev-perl/Tk
 	)
-	!<dev-texlive/texlive-basic-2023
-	!<dev-texlive/texlive-mathscience-2023
-	!<dev-texlive/texlive-langother-2023
-	!<dev-texlive/texlive-music-2023
 "
 
 BUILDDIR="${WORKDIR}/${P}_build"

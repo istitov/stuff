@@ -114,7 +114,6 @@ RDEPEND="
 "
 DEPEND="
 	${COMMON_DEPEND}
-	!!<dev-texlive/texlive-latexextra-2023
 "
 
 TEXLIVE_MODULE_BINSCRIPTS="

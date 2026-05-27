@@ -189,7 +189,6 @@ COMMON_DEPEND="
 "
 RDEPEND="
 	${COMMON_DEPEND}
-	!<dev-texlive/texlive-latexrecommended-2023
 "
 DEPEND="
 	${COMMON_DEPEND}
