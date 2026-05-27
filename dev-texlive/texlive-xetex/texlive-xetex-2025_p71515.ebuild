@@ -105,9 +105,9 @@ LICENSE="Apache-2.0 CC-BY-4.0 CC-BY-SA-4.0 GPL-1+ GPL-3 LGPL-2+ LPPL-1.2 LPPL-1.
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=app-text/texlive-core-2024[xetex]
-	>=dev-texlive/texlive-basic-2024
-	>=dev-texlive/texlive-latex-2024
+	>=app-text/texlive-core-2025[xetex]
+	>=dev-texlive/texlive-basic-2025
+	>=dev-texlive/texlive-latex-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

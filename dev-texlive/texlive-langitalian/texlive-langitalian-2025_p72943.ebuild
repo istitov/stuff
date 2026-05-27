@@ -53,7 +53,7 @@ LICENSE="FDL-1.1+ GPL-1+ LGPL-2+ LPPL-1.3 LPPL-1.3c TeX-other-free"
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-basic-2024
+	>=dev-texlive/texlive-basic-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

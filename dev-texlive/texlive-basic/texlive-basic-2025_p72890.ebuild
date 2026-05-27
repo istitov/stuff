@@ -84,11 +84,11 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 COMMON_DEPEND="
-	>=app-text/texlive-core-2024[luajittex?]
+	>=app-text/texlive-core-2025[luajittex?]
 "
 RDEPEND="
 	${COMMON_DEPEND}
-	>=app-text/dvipsk-2024.03.11_p70015
+	>=app-text/dvipsk-2025.03.08_p73850
 "
 DEPEND="
 	${COMMON_DEPEND}

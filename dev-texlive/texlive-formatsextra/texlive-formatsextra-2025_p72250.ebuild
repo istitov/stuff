@@ -57,14 +57,14 @@ LICENSE="GPL-1+ GPL-2+ GPL-3 LPPL-1.3c MIT TeX TeX-other-free public-domain"
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-basic-2024
-	>=dev-texlive/texlive-latex-2024
+	>=dev-texlive/texlive-basic-2025
+	>=dev-texlive/texlive-latex-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}
 "
 DEPEND="
 	${COMMON_DEPEND}
-	>=dev-texlive/texlive-latexrecommended-2024
-	>=dev-texlive/texlive-plaingeneric-2024
+	>=dev-texlive/texlive-latexrecommended-2025
+	>=dev-texlive/texlive-plaingeneric-2025
 "

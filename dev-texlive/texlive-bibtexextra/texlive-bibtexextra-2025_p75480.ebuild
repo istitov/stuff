@@ -375,7 +375,7 @@ LICENSE="Artistic Artistic-2 BSD-4 CC-BY-SA-3.0 CC-BY-SA-4.0 GPL-1 GPL-1+ GPL-2 
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-latex-2024
+	>=dev-texlive/texlive-latex-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

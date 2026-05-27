@@ -209,7 +209,7 @@ LICENSE="Apache-2.0 Artistic BSD BSD-2 FDL-1.1+ GPL-1+ GPL-2 GPL-3 GPL-3+ LPPL-1
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-basic-2024
+	>=dev-texlive/texlive-basic-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

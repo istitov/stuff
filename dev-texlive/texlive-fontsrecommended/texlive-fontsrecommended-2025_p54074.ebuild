@@ -80,7 +80,7 @@ LICENSE="BSD GPL-1+ GPL-2 LPPL-1.3 LPPL-1.3c OFL-1.1 TeX TeX-other-free public-d
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-basic-2024
+	>=dev-texlive/texlive-basic-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

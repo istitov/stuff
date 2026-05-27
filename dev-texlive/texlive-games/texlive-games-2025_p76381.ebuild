@@ -155,7 +155,7 @@ LICENSE="Apache-2.0 CC-BY-1.0 CC-BY-4.0 CC-BY-SA-4.0 GPL-1+ LGPL-2.1 LGPL-3 LPPL
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-latex-2024
+	>=dev-texlive/texlive-latex-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

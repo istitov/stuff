@@ -262,14 +262,14 @@ LICENSE="BSD CC-BY-SA-3.0 CC-BY-SA-4.0 EUPL-1.2 FDL-1.1+ GPL-2 GPL-3 GPL-3+ LPPL
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-basic-2024
+	>=dev-texlive/texlive-basic-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}
 "
 DEPEND="
 	${COMMON_DEPEND}
-	>=app-text/texlive-core-2024
+	>=app-text/texlive-core-2025
 "
 
 TEXLIVE_MODULE_BINSCRIPTS="

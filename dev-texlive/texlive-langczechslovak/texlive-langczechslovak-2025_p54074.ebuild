@@ -39,14 +39,14 @@ LICENSE="GPL-1+ LPPL-1.3 LPPL-1.3c TeX-other-free"
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-basic-2024
-	>=dev-texlive/texlive-latex-2024
+	>=dev-texlive/texlive-basic-2025
+	>=dev-texlive/texlive-latex-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}
-	>=app-text/texlive-core-2024[xetex]
+	>=app-text/texlive-core-2025[xetex]
 "
 DEPEND="
 	${COMMON_DEPEND}
-	>=dev-texlive/texlive-luatex-2024
+	>=dev-texlive/texlive-luatex-2025
 "

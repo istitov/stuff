@@ -703,8 +703,8 @@ LICENSE="Apache-2.0 BSD BSD-2 CC-BY-4.0 CC-BY-SA-3.0 CC-BY-SA-4.0 GPL-1+ GPL-2 G
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-fontsrecommended-2024
-	>=dev-texlive/texlive-latex-2024
+	>=dev-texlive/texlive-fontsrecommended-2025
+	>=dev-texlive/texlive-latex-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

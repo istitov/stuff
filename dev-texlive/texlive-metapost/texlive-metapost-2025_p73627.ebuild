@@ -130,7 +130,7 @@ LICENSE="CC-BY-SA-4.0 EUPL-1.2 GPL-1+ GPL-2+ GPL-3+ LGPL-2+ LPPL-1.3 LPPL-1.3c M
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-basic-2024
+	>=dev-texlive/texlive-basic-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

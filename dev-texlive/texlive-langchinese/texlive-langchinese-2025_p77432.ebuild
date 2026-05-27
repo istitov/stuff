@@ -86,7 +86,7 @@ LICENSE="FDL-1.1+ GPL-1+ GPL-3+ LGPL-2+ LPPL-1.3 LPPL-1.3c MIT TeX TeX-other-fre
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-langcjk-2024
+	>=dev-texlive/texlive-langcjk-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

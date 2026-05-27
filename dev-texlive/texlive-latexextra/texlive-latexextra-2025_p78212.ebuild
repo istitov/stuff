@@ -4077,8 +4077,8 @@ LICENSE="Apache-2.0 Artistic BSD BSD-2 CC-BY-2.0 CC-BY-4.0 CC-BY-SA-3.0 CC-BY-SA
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-latexrecommended-2024
-	>=dev-texlive/texlive-pictures-2024
+	>=dev-texlive/texlive-latexrecommended-2025
+	>=dev-texlive/texlive-pictures-2025
 	dev-perl/Spreadsheet-ParseExcel
 "
 RDEPEND="
@@ -4091,8 +4091,8 @@ PDEPEND="
 "
 DEPEND="
 	${COMMON_DEPEND}
-	>=dev-texlive/texlive-basic-2024
-	>=dev-texlive/texlive-latex-2024
+	>=dev-texlive/texlive-basic-2025
+	>=dev-texlive/texlive-latex-2025
 "
 
 TEXLIVE_MODULE_BINSCRIPTS="

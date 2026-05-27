@@ -161,7 +161,7 @@ LICENSE="GPL-1+ GPL-2 LPPL-1.0 LPPL-1.2 LPPL-1.3 LPPL-1.3c"
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-latex-2024
+	>=dev-texlive/texlive-latex-2025
 	doc? ( app-text/sword )
 "
 RDEPEND="

@@ -823,7 +823,7 @@ LICENSE="Apache-2.0 BSD BSD-2 CC-BY-1.0 CC-BY-4.0 CC-BY-SA-4.0 CC0-1.0 FDL-1.1+ 
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-basic-2024
+	>=dev-texlive/texlive-basic-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

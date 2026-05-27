@@ -58,8 +58,8 @@ LICENSE="BSD GPL-2 GPL-3 LPPL-1.3 LPPL-1.3c MIT TeX"
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=app-text/texlive-core-2024[cjk]
-	>=dev-texlive/texlive-basic-2024
+	>=app-text/texlive-core-2025[cjk]
+	>=dev-texlive/texlive-basic-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}

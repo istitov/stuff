@@ -62,7 +62,7 @@ LICENSE="BSD BSD-2 GPL-1+ GPL-2 GPL-3 MIT TeX-other-free public-domain"
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-basic-2024
+	>=dev-texlive/texlive-basic-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}
@@ -70,7 +70,7 @@ RDEPEND="
 "
 DEPEND="
 	${COMMON_DEPEND}
-	>=app-text/texlive-core-2024[xetex]
+	>=app-text/texlive-core-2025[xetex]
 "
 
 TEXLIVE_MODULE_BINSCRIPTS="

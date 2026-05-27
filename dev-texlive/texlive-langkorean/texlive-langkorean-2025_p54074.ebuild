@@ -40,7 +40,7 @@ LICENSE="FDL-1.1+ GPL-1+ GPL-2 LPPL-1.3 LPPL-1.3c OFL-1.1 TeX-other-free public-
 SLOT="0"
 KEYWORDS="~amd64"
 COMMON_DEPEND="
-	>=dev-texlive/texlive-langcjk-2024
+	>=dev-texlive/texlive-langcjk-2025
 "
 RDEPEND="
 	${COMMON_DEPEND}
