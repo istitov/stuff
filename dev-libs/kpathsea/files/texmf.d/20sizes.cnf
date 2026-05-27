@@ -1,0 +1,133 @@
+%  Part 3: Array and other sizes for TeX, Metafont, etc.
+%
+% If you want to change some of these sizes only for a certain TeX
+% variant, the usual dot notation works, e.g.,
+% main_memory.hugetex = 20000000
+%
+% If a change here appears to be ignored, try redumping the format file.
+
+% Memory. Must be less than 8,000,000 total.
+%
+% main_memory is relevant only to initex, extra_mem_* only to non-ini.
+% Thus, have to redump the .fmt file after changing main_memory; to add
+% to existing fmt files, increase extra_mem_*.  (To get an idea of how
+% much, try \tracingstats=2 in your TeX source file;
+% web2c/tests/memtest.tex might also be interesting.)
+%
+% To increase space for boxes (as might be needed by, e.g., PiCTeX),
+% increase extra_mem_bot.
+%
+% For some xy-pic samples, you may need as much as 700000 words of memory.
+% For the vast majority of documents, 60000 or less will do.
+%
+main_memory = 5000000 % words of inimemory available; also applies to inimf&mp
+extra_mem_top = 0     % extra high memory for chars, tokens, etc.
+extra_mem_bot = 0     % extra low memory for boxes, glue, breakpoints, etc.
+
+% ConTeXt needs lots of memory.
+extra_mem_top.context = 2000000
+extra_mem_bot.context = 4000000
+
+% Words of font info for TeX (total size of all TFM files, approximately).
+% Must be >= 20000 and <= 147483647 (without tex.ch changes).
+font_mem_size = 8000000
+
+% Total number of fonts. Must be >= 50 and <= 9000 (without tex.ch changes).
+font_max = 9000
+
+% Extra space for the hash table of control sequences.
+hash_extra = 600000
+
+% Max number of characters in all strings, including all error messages,
+% help texts, font names, control sequences.  These values apply to TeX.
+pool_size = 6250000
+% Minimum pool space after TeX's own strings; must be at least
+% 25000 less than pool_size, but doesn't need to be nearly that large.
+string_vacancies = 90000
+% Maximum number of strings.
+max_strings = 500000
+% min pool space left after loading .fmt
+pool_free = 47500
+
+% Buffer size.  TeX uses the buffer to contain input lines, but macro
+% expansion works by writing material into the buffer and reparsing the
+% line.  As a consequence, certain constructs require the buffer to be
+% very large, even though most documents can be handled with a small value.
+buf_size = 200000
+
+% Hyphenation trie.  The maximum possible is 4194303 (ssup_trie_size in
+% the sources), but we don't need that much.  The value here suffices
+% for all known free hyphenation patterns to be loaded simultaneously
+% (as TeX Live does).
+%
+trie_size = 1100000
+
+hyph_size = 8191        % prime number of hyphenation exceptions, >610, <32767.
+                        % http://primes.utm.edu/curios/page.php/8191.html
+nest_size = 500         % simultaneous semantic levels (e.g., groups)
+max_in_open = 15        % simultaneous input files and error insertions, 
+                        % also applies to MetaPost
+param_size = 10000      % simultaneous macro parameters, also applies to MP
+save_size  = 80000     % for saving values outside current group
+stack_size = 5000       % simultaneous input sources
+
+% These are Omega-specific.
+ocp_buf_size = 500000   % character buffers for ocp filters.
+ocp_stack_size = 10000  % stacks for ocp computations.
+ocp_list_size = 1000    % control for multiple ocps.
+
+% These work best if they are the same as the I/O buffer size, but it
+% doesn't matter much.  Must be a multiple of 8.
+dvi_buf_size = 16384 % TeX
+gf_buf_size = 16384  % MF
+
+% It's probably inadvisable to change these. At any rate, we must have:
+% 45 < error_line      < 255;
+% 30 < half_error_line < error_line - 15;
+% 60 <= max_print_line;
+% These apply to TeX, Metafont, and MetaPost.
+error_line = 79
+half_error_line = 50
+max_print_line = 79
+
+% Metafont only.
+screen_width.mf = 1664
+screen_depth.mf = 1200
+
+% BibTeX only (max_strings also determines hash_size and hash_prime).
+ent_str_size = 500
+glob_str_size = 200000
+max_strings.bibtex  = 200000
+max_strings.bibtex8 = 200000
+max_strings.bibtexu = 200000
+max_strings.pbibtex = 200000
+max_strings.upbibtex= 200000
+
+% GFtype only.
+line_length.gftype = 500
+max_rows.gftype = 8191
+max_cols.gftype = 8191
+
+% Guess input encoding (SJIS vs. Unicode, etc.) in pTeX and friends?
+% Default is 1, to guess. Used on Windows only.
+guess_input_kanji_encoding = 1
+
+% command_line_encoding
+%
+% This variable is used on Windows only, and affects 4 TeX engines:
+% uptex, euptex, pdftex, xetex, and 2 drivers: dvips, [x]dvipdfmx.
+% Several applications also are affected by the variable:
+% dvi2tty.exe, disdvi.exe, dvibook.exe, dviconcat.exe, dviselect.exe,
+% dvitodvi.exe, and dvidvi.exe.
+% Only values utf8 or utf-8 are meaningful. Other values are simply
+% ignored. If file names in sources and DVI or XDV files are ASCII
+% only, the value of command_line_encoding is irrelevant.
+% If command_line_encoding = utf8 or command_line_encoding = utf-8,
+% file names in sources and DVI or XDV files are assumed to be UTF-8.
+% Default is utf-8, from 2019-07-24, to assume UTF-8 file names.
+% In order to switch off the function, define an environment variable:
+% set command_line_encoding=none
+% or write a line:
+% command_line_encoding = none
+% in a texmf.cnf prefered, for example $TEXMFLOCAL/web2c/texmf.cnf.
+command_line_encoding = utf-8

@@ -1,0 +1,103 @@
+%  Part 1: Search paths and directories.
+
+% This is the parent directory of our several trees, i.e.,
+% /usr/local/texlive/YYYY in the original TeX Live distribution.
+%
+% All trees must be organized according to the TeX Directory Structure
+% (http://tug.org/tds), or files may not be found.
+%
+% Redistributors will probably want $SELFAUTODIR/share, i.e., /usr/share.
+% Kpathsea sets SELFAUTOLOC (the directory with the binary),
+% SELFAUTODIR (its parent), and SELFAUTOPARENT (its grandparent).
+TEXMFROOT = $SELFAUTODIR/share
+
+% The main tree of distributed packages and programs:
+TEXMFDIST = $TEXMFROOT/texmf-dist
+
+% We used to have a separate /texmf tree with some core programs and files.
+% Keep the variable name.
+TEXMFMAIN = $TEXMFDIST
+
+% The Gentoo site tree
+TEXMFSITE = $TEXMFROOT/texmf-site
+
+% Local additions to the distribution trees.
+TEXMFLOCAL = $TEXMFROOT/../local/share/texmf
+
+% TEXMFSYSVAR, where *-sys store cached runtime data.
+TEXMFSYSVAR = $SELFAUTOPARENT/var/lib/texmf
+
+% TEXMFSYSCONFIG, where *-sys store configuration data.
+TEXMFSYSCONFIG = $SELFAUTOPARENT/etc/texmf
+
+% Per-user texmf tree(s) -- organized per the TDS, as usual.  To define
+% more than one per-user tree, set this to a list of directories in
+% braces, as described above.  (This used to be HOMETEXMF.)  ~ expands
+% to %USERPROFILE% on Windows, $HOME otherwise.
+TEXMFHOME = ~/texmf
+
+% TEXMFVAR, where texconfig/updmap/fmtutil store cached runtime data.
+TEXMFVAR = ~/.texlive/texmf-var
+
+% TEXMFCONFIG, where texconfig/updmap/fmtutil store configuration data.
+TEXMFCONFIG = ~/.texlive/texmf-config
+
+% This is the value manipulated by tlmgr's auxtrees subcommand in the
+% root texmf.cnf. Kpathsea warns about a literally empty string for a
+% value, hence the empty braces.
+TEXMFAUXTREES = {}
+
+% List all the texmf trees. For an explanation of what they are, see the
+% TeX Live manual.
+%
+% For texconfig to work properly, TEXMFCONFIG and TEXMFVAR should be named
+% explicitly and before other trees.
+% 
+% TEXMFLOCAL precedes TEXMFDIST because locally-installed versions
+% should take precedence over distribution files -- although it is
+% generally a source of confusion to have different versions of a
+% package installed, whatever the trees, so try to avoid it.
+% 
+% The odd-looking $TEXMFAUXTREES$TEXMF... construct is so that if no auxtree is
+% ever defined (the 99% common case), no extra elements will be added to
+% the search paths. tlmgr takes care to end any value with a trailing comma.
+TEXMF = {$TEXMFAUXTREES$TEXMFCONFIG,$TEXMFVAR,$TEXMFHOME,!!$TEXMFLOCAL,!!$TEXMFSYSCONFIG,!!$TEXMFSYSVAR,!!$TEXMFSITE,!!$TEXMFDIST}
+
+% Where to look for ls-R files.  There need not be an ls-R in the
+% directories in this path, but if there is one, Kpathsea will use it.
+% By default, this is only the !! elements of TEXMF, so that mktexlsr
+% does not create ls-R files in the non-!! elements -- because if an
+% ls-R is present, it will be used, and the disk will not be searched.
+% This is arguably a bug in kpathsea.
+TEXMFDBS = {!!$TEXMFLOCAL,!!$TEXMFSYSCONFIG,!!$TEXMFSYSVAR,!!$TEXMFSITE,!!$TEXMFDIST}
+
+% The system trees.  These are the trees that are shared by all users.
+% If a tree appears in this list, the mktex* scripts will use
+% VARTEXFONTS for generated files, if the original tree isn't writable;
+% otherwise the current working directory is used.
+SYSTEXMF = $TEXMFSYSVAR;$TEXMFLOCAL;$TEXMFSITE;$TEXMFDIST
+
+% First writable tree here is used by Lua(La)TeX for the font cache.
+% LuaLaTeX uses the value here, while ConTeXt uses the same variable but
+% from texmfcnf.lua; therefore the two values should be kept in sync.
+% (As should everything else in texmf.cnf <-> texmfcnf.lua.)
+TEXMFCACHE = $TEXMFSYSVAR;$TEXMFVAR
+
+% We use GLOBALVARTEXFONTS in order to always be able to search in the global
+% font cache even if VARTEXFONTS is overridden.
+GLOBALVARTEXFONTS = $SELFAUTOPARENT/var/cache/fonts
+
+% Where generated fonts may be written.  This tree is used when the sources
+% were found in a system tree and either that tree wasn't writable, or the
+% varfonts feature was enabled in MT_FEATURES in mktex.cnf.
+VARTEXFONTS = $GLOBALVARTEXFONTS
+
+% On some systems, there will be a system tree which contains all the font
+% files that may be created as well as the formats.  For example
+%   TEXMFVAR = /var/lib/texmf
+% is used in many distros.  In this case, set VARTEXFONTS like this
+%VARTEXFONTS = $TEXMFVAR/fonts
+% and do not mention it in TEXMFDBS (but _do_ mention TEXMFVAR).
+%
+% Remove $VARTEXFONTS from TEXMFDBS if the VARTEXFONTS directory is below
+% one of the TEXMF directories (avoids overlapping ls-R files).
