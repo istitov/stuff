@@ -1,0 +1,37 @@
+# /etc/conf.d/fastflowlm
+# Configuration for the FastFlowLM (FLM) OpenRC service.
+
+# REQUIRED. Local user the daemon runs as. Must have NPU access
+# (the amdxdna kernel stack is typically world-accessible via
+# /dev/accel/accel0; if you restricted permissions, add this user
+# to the relevant group). The service refuses to start if unset.
+FLM_USER=""
+
+# Main chat-side model loaded at startup. List available models
+# with `flm list`. Default is the smallest qwen3 (NPU-fastest).
+#FLM_MODEL="qwen3:0.6b"
+
+# Listener address. FLM defaults to 127.0.0.1; leave FLM_PORT
+# empty to use FLM's deterministic default port (verify with
+# `flm port`).
+#FLM_HOST="127.0.0.1"
+#FLM_PORT=""
+
+# Co-loaded sidecars on the NPU. 1 enables, 0 disables.
+#   FLM_ASR=1   — Whisper-V3 Turbo for STT
+#   FLM_EMBED=1 — embed-gemma:300m for embeddings
+# Both can run alongside the chat model without unloading.
+#FLM_ASR="1"
+#FLM_EMBED="1"
+
+# Power mode: powersaver, balanced, performance, turbo.
+# performance is the sane default; turbo runs the NPU harder.
+#FLM_PMODE="performance"
+
+# Log file (opened by supervise-daemon as root before drop-priv).
+#FLM_LOG="/var/log/flm.log"
+
+# Extra CLI args appended before the model tag. Examples:
+#   -c 8192                  # context length
+#   --quiet
+#FLM_EXTRA_OPTS=""

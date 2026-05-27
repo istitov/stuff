@@ -1,0 +1,50 @@
+#!/sbin/openrc-run
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+description="FastFlowLM NPU runtime — OpenAI-compatible LLM server on XDNA2."
+
+# Set FLM_USER in /etc/conf.d/fastflowlm. No default — the service
+# refuses to start until it's configured.
+: ${FLM_USER:=}
+: ${FLM_MODEL:=qwen3:0.6b}
+: ${FLM_HOST:=127.0.0.1}
+: ${FLM_PORT:=}
+: ${FLM_ASR:=1}
+: ${FLM_EMBED:=1}
+: ${FLM_PMODE:=performance}
+: ${FLM_LOG:=/var/log/flm.log}
+: ${FLM_EXTRA_OPTS:=}
+
+supervisor="supervise-daemon"
+command="/usr/bin/flm"
+output_log="${FLM_LOG}"
+error_log="${FLM_LOG}"
+respawn_delay=5
+respawn_max=0
+
+# FLM mlocks NPU buffers — memlock must be unlimited.
+rc_ulimit="-l unlimited"
+
+depend() {
+	need net
+	after net
+}
+
+start_pre() {
+	if [ -z "${FLM_USER}" ]; then
+		eerror "FLM_USER is not set in /etc/conf.d/fastflowlm."
+		eerror "Set it to the local user that owns the FLM model cache."
+		return 1
+	fi
+	if ! getent passwd "${FLM_USER}" > /dev/null; then
+		eerror "User '${FLM_USER}' not found on this system."
+		return 1
+	fi
+	local args="serve --host ${FLM_HOST} --pmode ${FLM_PMODE} -a ${FLM_ASR} -e ${FLM_EMBED}"
+	[ -n "${FLM_PORT}" ] && args="${args} --port ${FLM_PORT}"
+	[ -n "${FLM_EXTRA_OPTS}" ] && args="${args} ${FLM_EXTRA_OPTS}"
+	args="${args} ${FLM_MODEL}"
+	command_args="${args}"
+	command_user="${FLM_USER}:${FLM_USER}"
+}

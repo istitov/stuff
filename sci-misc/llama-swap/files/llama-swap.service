@@ -1,0 +1,34 @@
+[Unit]
+Description=LLM model swapping proxy (user %i)
+Documentation=https://github.com/mostlygeek/llama-swap
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=%i
+Group=%i
+# LLAMA_SWAP_CONFIG must be supplied via /etc/default/llama-swap@%i; we
+# don't default it to e.g. %h/.config/llama-swap.yaml because systemd's
+# %h resolves to /root for system-manager units, and hardcoding /home/%i
+# would assume a passwd layout this overlay can't promise.
+EnvironmentFile=/etc/default/llama-swap@%i
+Environment="LLAMA_SWAP_LISTEN=127.0.0.1:8080"
+Environment="LLAMA_SWAP_EXTRA_OPTS="
+ExecStart=/usr/bin/llama-swap --config ${LLAMA_SWAP_CONFIG} --listen ${LLAMA_SWAP_LISTEN} ${LLAMA_SWAP_EXTRA_OPTS}
+Restart=always
+RestartSec=5s
+
+# Defense-in-depth hardening. ProtectSystem=full leaves /home and /var
+# writable, so backends llama-swap spawns (llama.cpp et al.) can still
+# write to user caches under ~/.cache/.
+NoNewPrivileges=true
+PrivateTmp=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+ProtectSystem=full
+ProtectControlGroups=true
+
+[Install]
+WantedBy=multi-user.target

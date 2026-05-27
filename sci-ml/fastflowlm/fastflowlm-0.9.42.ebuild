@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake systemd
 
 DESCRIPTION="NPU-first LLM runtime for AMD Ryzen AI (XDNA2) processors"
 HOMEPAGE="
@@ -34,6 +34,7 @@ S="${WORKDIR}/FastFlowLM-${PV}"
 LICENSE="MIT FastFlowLM-Binary"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="openrc systemd"
 
 # Cargo (inside tokenizers-cpp/rust) fetches crates at build time.
 # Proper GURU submission would require pre-vendored crates via cargo.eclass.
@@ -120,21 +121,49 @@ src_install() {
 	PATH="/opt/fastflowlm/bin"
 	FLM_CONFIG_PATH="/opt/fastflowlm/share/flm/model_list.json"
 	EOF
+
+	if use openrc; then
+		newinitd "${FILESDIR}/${PN}.initd" "${PN}"
+		newconfd "${FILESDIR}/${PN}.confd" "${PN}"
+	fi
+	if use systemd; then
+		systemd_newunit "${FILESDIR}/${PN}.service" "${PN}@.service"
+	fi
 }
 
 pkg_postinst() {
 	elog ""
 	elog "FastFlowLM ${PV} installed to /opt/fastflowlm."
 	elog ""
-	elog "Quick start:"
+	elog "Quick start (manual):"
 	elog "  flm validate          # verify NPU stack"
 	elog "  flm pull llama3.2:3b  # download a model"
 	elog "  flm run llama3.2:3b   # chat with it"
 	elog ""
+	if use openrc; then
+		elog "OpenRC service (supervise-daemon; rlimit_memlock=unlimited set):"
+		elog "  edit /etc/conf.d/fastflowlm and set FLM_USER (required)"
+		elog "  other tunables (model, sidecars, port) have safe defaults"
+		elog "  rc-service fastflowlm start"
+		elog "  rc-update add fastflowlm default     # auto-start at boot"
+		elog ""
+	fi
+	if use systemd; then
+		elog "systemd template service (one instance per user, mlock unlimited):"
+		elog "  optionally create /etc/default/fastflowlm@<user> to override"
+		elog "    FLM_MODEL / FLM_HOST / FLM_PORT / FLM_PMODE / FLM_ASR /"
+		elog "    FLM_EMBED / FLM_EXTRA_OPTS"
+		elog "  systemctl enable --now fastflowlm@<user>.service"
+		elog ""
+	fi
 	elog "Models stored in ~/.config/flm/ (override: FLM_MODEL_PATH)."
 	elog ""
-	elog "Ensure memlock is unlimited.  If 'ulimit -l' is not 'unlimited',"
-	elog "add to /etc/security/limits.d/99-amdxdna.conf:"
+	elog "Ensure memlock is unlimited for INTERACTIVE 'flm run' use too."
+	if use openrc || use systemd; then
+		elog "(The installed service unit already sets memlock to unlimited.)"
+	fi
+	elog "If 'ulimit -l' is not 'unlimited' in your shell, add to"
+	elog "/etc/security/limits.d/99-amdxdna.conf:"
 	elog "  *  soft  memlock  unlimited"
 	elog "  *  hard  memlock  unlimited"
 	elog ""

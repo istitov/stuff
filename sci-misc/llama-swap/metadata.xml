@@ -13,6 +13,10 @@
     all resident in GPU/NPU memory.
   </longdescription>
   <use>
+    <flag name="openrc">Install OpenRC init.d/conf.d files for a
+    supervise-daemon-managed service</flag>
+    <flag name="systemd">Install a systemd template service unit
+    (llama-swap@.service)</flag>
     <flag name="ui">Build and embed the Svelte web UI (pulls
     <pkg>net-libs/nodejs</pkg>; runs npm at build time, requires
     network access during compile).</flag>

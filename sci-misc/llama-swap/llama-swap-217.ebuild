@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit go-module
+inherit go-module systemd
 
 DESCRIPTION="Reliable LLM model swapping proxy for llama.cpp / vllm / etc."
 HOMEPAGE="
@@ -26,7 +26,7 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="ui"
+IUSE="openrc systemd ui"
 
 BDEPEND="
 	>=dev-lang/go-1.26.1
@@ -77,6 +77,14 @@ src_install() {
 	insinto /usr/share/${PN}
 	doins config.example.yaml
 
+	if use openrc; then
+		newinitd "${FILESDIR}/${PN}.initd" "${PN}"
+		newconfd "${FILESDIR}/${PN}.confd" "${PN}"
+	fi
+	if use systemd; then
+		systemd_newunit "${FILESDIR}/${PN}.service" "${PN}@.service"
+	fi
+
 	einstalldocs
 }
 
@@ -84,11 +92,26 @@ pkg_postinst() {
 	elog ""
 	elog "llama-swap ${PV} installed."
 	elog ""
-	elog "Quick start:"
+	elog "Quick start (manual):"
 	elog "  cp /usr/share/${PN}/config.example.yaml ~/.config/llama-swap.yaml"
 	elog "  edit ~/.config/llama-swap.yaml to register your local llm servers"
 	elog "  llama-swap --config ~/.config/llama-swap.yaml --listen :8080"
 	elog ""
+	if use openrc; then
+		elog "OpenRC service (supervise-daemon; auto-restart on crash):"
+		elog "  edit /etc/conf.d/llama-swap and set LLAMA_SWAP_USER (required)"
+		elog "  rc-service llama-swap start"
+		elog "  rc-update add llama-swap default      # auto-start at boot"
+		elog ""
+	fi
+	if use systemd; then
+		elog "systemd template service (one instance per user):"
+		elog "  create /etc/default/llama-swap@<user> with at least"
+		elog "    LLAMA_SWAP_CONFIG=/path/to/llama-swap.yaml"
+		elog "  (LLAMA_SWAP_LISTEN / LLAMA_SWAP_EXTRA_OPTS are optional)"
+		elog "  systemctl enable --now llama-swap@<user>.service"
+		elog ""
+	fi
 	if ! use ui; then
 		elog "Web UI disabled (USE=-ui). API still works; emerge with"
 		elog "USE=ui to enable the embedded Svelte interface (pulls in"

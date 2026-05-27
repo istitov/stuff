@@ -1,0 +1,24 @@
+# /etc/conf.d/llama-swap
+# Configuration for the llama-swap OpenRC service.
+
+# REQUIRED. Local user the daemon runs as. Must own (or be able to
+# read) the config file and any model paths referenced inside it.
+# The service refuses to start if this is unset.
+LLAMA_SWAP_USER=""
+
+# Path to the llama-swap YAML config. Leave empty to auto-derive
+# from LLAMA_SWAP_USER's home: ${HOME}/.config/llama-swap.yaml
+#LLAMA_SWAP_CONFIG=""
+
+# Listener address. Use 127.0.0.1:PORT for localhost-only (default),
+# or :PORT for all interfaces (only if you also configure auth/TLS).
+#LLAMA_SWAP_LISTEN="127.0.0.1:8080"
+
+# Log file (opened by supervise-daemon as root before drop-priv;
+# readable by anyone with default umask).
+#LLAMA_SWAP_LOG="/var/log/llama-swap.log"
+
+# Extra CLI args appended to the command line. Examples:
+#   --watch-config           # auto-reload on config edits
+#   --log-level debug
+#LLAMA_SWAP_EXTRA_OPTS=""

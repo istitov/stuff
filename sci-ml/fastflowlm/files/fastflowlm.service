@@ -1,0 +1,41 @@
+[Unit]
+Description=FastFlowLM NPU runtime (user %i)
+Documentation=https://github.com/FastFlowLM/FastFlowLM
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=%i
+Group=%i
+EnvironmentFile=-/etc/default/fastflowlm@%i
+Environment="FLM_MODEL=qwen3:0.6b"
+Environment="FLM_HOST=127.0.0.1"
+Environment="FLM_PORT="
+Environment="FLM_PMODE=performance"
+Environment="FLM_ASR=1"
+Environment="FLM_EMBED=1"
+Environment="FLM_EXTRA_OPTS="
+# FLM mlocks NPU buffers — memlock must be unlimited.
+LimitMEMLOCK=infinity
+# The conditional --port flag and positional model argument need shell
+# parameter expansion; $$ escapes the dollar so systemd passes the
+# literal $ through to /bin/sh, which then expands.
+ExecStart=/bin/sh -c 'exec /usr/bin/flm serve --host "$$FLM_HOST" $${FLM_PORT:+--port "$$FLM_PORT"} --pmode "$$FLM_PMODE" -a "$$FLM_ASR" -e "$$FLM_EMBED" $$FLM_EXTRA_OPTS "$$FLM_MODEL"'
+Restart=always
+RestartSec=5s
+
+# Defense-in-depth hardening. Deliberately conservative: ProtectSystem=full
+# (not strict) keeps /home writable for ~/.config/flm/ model cache.
+# ProtectKernelTunables and MemoryDenyWriteExecute omitted because flm's
+# NPU power-mode handling may touch /sys/ and the XDNA path may use JIT;
+# revisit once empirically verified safe.
+NoNewPrivileges=true
+PrivateTmp=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

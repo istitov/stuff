@@ -19,6 +19,10 @@
 		(xclbins) are proprietary binaries, free for commercial use under
 		$10M annual company revenue.
 	</longdescription>
+	<use>
+		<flag name="openrc">Install OpenRC init.d/conf.d files for a supervise-daemon-managed service</flag>
+		<flag name="systemd">Install a systemd template service unit (fastflowlm@.service)</flag>
+	</use>
 	<upstream>
 		<remote-id type="github">FastFlowLM/FastFlowLM</remote-id>
 		<bugs-to>https://github.com/FastFlowLM/FastFlowLM/issues</bugs-to>

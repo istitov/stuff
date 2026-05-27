@@ -1,0 +1,52 @@
+#!/sbin/openrc-run
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+description="LLM model swapping proxy for llama.cpp / vllm / etc."
+
+# Set LLAMA_SWAP_USER in /etc/conf.d/llama-swap. No default — the
+# service refuses to start until it's configured.
+: ${LLAMA_SWAP_USER:=}
+: ${LLAMA_SWAP_CONFIG:=}
+: ${LLAMA_SWAP_LISTEN:=127.0.0.1:8080}
+: ${LLAMA_SWAP_LOG:=/var/log/llama-swap.log}
+: ${LLAMA_SWAP_EXTRA_OPTS:=}
+
+supervisor="supervise-daemon"
+command="/usr/bin/llama-swap"
+output_log="${LLAMA_SWAP_LOG}"
+error_log="${LLAMA_SWAP_LOG}"
+respawn_delay=5
+respawn_max=0
+
+depend() {
+	need net
+	after net
+}
+
+start_pre() {
+	if [ -z "${LLAMA_SWAP_USER}" ]; then
+		eerror "LLAMA_SWAP_USER is not set in /etc/conf.d/llama-swap."
+		eerror "Set it to the local user that owns the llama-swap config."
+		return 1
+	fi
+	if ! getent passwd "${LLAMA_SWAP_USER}" > /dev/null; then
+		eerror "User '${LLAMA_SWAP_USER}' not found on this system."
+		return 1
+	fi
+	if [ -z "${LLAMA_SWAP_CONFIG}" ]; then
+		local home
+		home="$(getent passwd "${LLAMA_SWAP_USER}" | cut -d: -f6)"
+		LLAMA_SWAP_CONFIG="${home}/.config/llama-swap.yaml"
+	fi
+	if [ ! -r "${LLAMA_SWAP_CONFIG}" ]; then
+		eerror "Config '${LLAMA_SWAP_CONFIG}' is not readable."
+		eerror "Default search path is \${HOME}/.config/llama-swap.yaml,"
+		eerror "auto-derived from LLAMA_SWAP_USER='${LLAMA_SWAP_USER}'."
+		eerror "To use a different path, set LLAMA_SWAP_CONFIG in"
+		eerror "/etc/conf.d/llama-swap."
+		return 1
+	fi
+	command_args="--config ${LLAMA_SWAP_CONFIG} --listen ${LLAMA_SWAP_LISTEN} ${LLAMA_SWAP_EXTRA_OPTS}"
+	command_user="${LLAMA_SWAP_USER}:${LLAMA_SWAP_USER}"
+}
