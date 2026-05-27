@@ -826,7 +826,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (145) ---
+# --- github (146) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1360,6 +1360,16 @@ from_pattern = '^[0-9]{6}\.(.+)$'
 to_pattern = '\1'
 # note: from HOMEPAGE
 
+["dev-util/zluda"]
+source = "github"
+github = "vosen/ZLUDA"
+use_max_tag = true
+include_regex = '^v[0-9]+(?:-preview\.[0-9]+|(?:\.[0-9]+)+)$'
+prefix = "v"
+from_pattern = '^([0-9]+)-preview\.([0-9]+)$'
+to_pattern = '\1_pre\2'
+# note: from EGIT_REPO_URI
+
 ["games-roguelike/dwarftherapist"]
 source = "github"
 github = "Dwarf-Therapist/Dwarf-Therapist"
@@ -1880,7 +1890,6 @@ to_pattern = '\1_p\2'
 # ["dev-libs/blingbling"] skipped: live-only ebuild (no release tracking)
 # ["dev-libs/libstrophe"] skipped: live-only ebuild (no release tracking)
 # ["dev-util/qbs"] skipped: live-only ebuild (no release tracking)
-# ["dev-util/zluda"] skipped: live-only ebuild (no release tracking)
 # ["games-misc/fortune-mod-lorquotes"] skipped: live-only ebuild (no release tracking)
 # ["media-libs/libjpeg-turbo"] skipped: live-only ebuild (no release tracking)
 # ["media-libs/mlt"] skipped: live-only ebuild (no release tracking)
