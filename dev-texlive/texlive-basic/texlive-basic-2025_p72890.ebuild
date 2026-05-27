@@ -75,14 +75,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 
 TEXLIVE_MODULE_OPTIONAL_ENGINE="luajittex"
 
-# Pin texlive-module.eclass's auto-derived texlive-core dep to 2024.
-# Without TL_PV the eclass emits >=app-text/texlive-core-${PV%%_*}, i.e.
-# >=...-2025, which we don't yet ship. TL2025 collection-basic texmf
-# data is engine-ABI compatible with TL2024 binaries (no new pdftex or
-# luatex primitives appear in this collection's contents). Drop TL_PV
-# once app-text/texlive-core-2025 lands in this overlay.
-TL_PV=2024
-
 inherit texlive-module
 
 DESCRIPTION="TeXLive Essential programs and files"

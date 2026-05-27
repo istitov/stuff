@@ -254,10 +254,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 "
 # Removed in target tlpdb: cloze.source
 
-# Transitional pin: TL_PV anchors the eclass-derived texlive-core
-# dep to TL2024 until app-text/texlive-core-2025 lands here.
-TL_PV=2024
-
 inherit prefix texlive-module
 
 DESCRIPTION="TeXLive LuaTeX packages"

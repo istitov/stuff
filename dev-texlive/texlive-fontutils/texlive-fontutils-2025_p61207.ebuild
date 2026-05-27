@@ -36,10 +36,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	metatype1.source.r37105
 "
 
-# Transitional pin: TL_PV anchors the eclass-derived texlive-core
-# dep to TL2024 until app-text/texlive-core-2025 lands here.
-TL_PV=2024
-
 inherit texlive-module
 
 DESCRIPTION="TeXLive Graphics and font utilities"
