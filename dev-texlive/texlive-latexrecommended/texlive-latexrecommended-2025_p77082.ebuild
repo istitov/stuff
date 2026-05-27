@@ -1,0 +1,229 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-latexrecommended.r77082
+	anysize.r77677
+	attachfile2.r77677
+	booktabs.r77677
+	breqn.r77677
+	caption.r77677
+	cite.r77677
+	cmap.r77677
+	crop.r77677
+	ctable.r77677
+	eso-pic.r77677
+	etoolbox.r77677
+	euenc.r19795
+	euler.r77677
+	everysel.r57489
+	everyshi.r77677
+	extsizes.r78116
+	fancybox.r77677
+	fancyref.r77677
+	fancyvrb.r77677
+	filehook.r77677
+	float.r77677
+	fontspec.r77677
+	footnotehyper.r77677
+	fp.r77677
+	grffile.r78116
+	hologo.r77677
+	index.r77677
+	infwarerr.r77677
+	jknapltx.r19440
+	koma-script.r77575
+	l3experimental.r76637
+	latexbug.r78116
+	lineno.r77890
+	listings.r77677
+	lwarp.r78120
+	mathspec.r77677
+	mathtools.r77677
+	mdwtools.r15878
+	memoir.r77677
+	metalogo.r77677
+	microtype.r78231
+	newfloat.r77677
+	ntgclass.r77239
+	parskip.r77677
+	pdfcolfoot.r77677
+	pdflscape.r77677
+	pdfmanagement-testphase.r77467
+	pdfpages.r77677
+	polyglossia.r76990
+	psfrag.r15878
+	ragged2e.r77677
+	rcs.r15878
+	sansmath.r77677
+	section.r20180
+	seminar.r77677
+	sepnum.r20186
+	setspace.r77677
+	subfig.r77677
+	textcase.r77677
+	thumbpdf.r62518
+	translator.r77677
+	typehtml.r17134
+	ucharcat.r38907
+	underscore.r77677
+	unicode-math.r77677
+	xcolor.r77677
+	xfrac.r77677
+	xkeyval.r77677
+	xltxtra.r77677
+	xunicode.r77677
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	anysize.doc.r77677
+	attachfile2.doc.r77677
+	booktabs.doc.r77677
+	breqn.doc.r77677
+	caption.doc.r77677
+	cite.doc.r77677
+	cmap.doc.r77677
+	crop.doc.r77677
+	ctable.doc.r77677
+	eso-pic.doc.r77677
+	etoolbox.doc.r77677
+	euenc.doc.r19795
+	euler.doc.r77677
+	everysel.doc.r57489
+	everyshi.doc.r77677
+	extsizes.doc.r78116
+	fancybox.doc.r77677
+	fancyref.doc.r77677
+	fancyvrb.doc.r77677
+	filehook.doc.r77677
+	float.doc.r77677
+	fontspec.doc.r77677
+	footnotehyper.doc.r77677
+	fp.doc.r77677
+	grffile.doc.r78116
+	hologo.doc.r77677
+	index.doc.r77677
+	infwarerr.doc.r77677
+	jknapltx.doc.r19440
+	l3experimental.doc.r76637
+	latexbug.doc.r78116
+	lineno.doc.r77890
+	listings.doc.r77677
+	lwarp.doc.r78120
+	mathspec.doc.r77677
+	mathtools.doc.r77677
+	mdwtools.doc.r15878
+	memoir.doc.r77677
+	metalogo.doc.r77677
+	microtype.doc.r78231
+	newfloat.doc.r77677
+	ntgclass.doc.r77239
+	parskip.doc.r77677
+	pdfcolfoot.doc.r77677
+	pdflscape.doc.r77677
+	pdfmanagement-testphase.doc.r77467
+	pdfpages.doc.r77677
+	polyglossia.doc.r76990
+	psfrag.doc.r15878
+	ragged2e.doc.r77677
+	rcs.doc.r15878
+	sansmath.doc.r77677
+	section.doc.r20180
+	seminar.doc.r77677
+	sepnum.doc.r20186
+	setspace.doc.r77677
+	subfig.doc.r77677
+	textcase.doc.r77677
+	thumbpdf.doc.r62518
+	translator.doc.r77677
+	typehtml.doc.r17134
+	ucharcat.doc.r38907
+	underscore.doc.r77677
+	unicode-math.doc.r77677
+	xcolor.doc.r77677
+	xfrac.doc.r77677
+	xkeyval.doc.r77677
+	xltxtra.doc.r77677
+	xunicode.doc.r77677
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	attachfile2.source.r77677
+	booktabs.source.r77677
+	breqn.source.r77677
+	caption.source.r77677
+	crop.source.r77677
+	ctable.source.r77677
+	eso-pic.source.r77677
+	euenc.source.r19795
+	euler.source.r77677
+	everysel.source.r57489
+	everyshi.source.r77677
+	fancyref.source.r77677
+	filehook.source.r77677
+	float.source.r77677
+	fontspec.source.r77677
+	footnotehyper.source.r77677
+	grffile.source.r78116
+	hologo.source.r77677
+	index.source.r77677
+	infwarerr.source.r77677
+	l3experimental.source.r76637
+	latexbug.source.r78116
+	listings.source.r77677
+	lwarp.source.r78120
+	mathtools.source.r77677
+	mdwtools.source.r15878
+	memoir.source.r77677
+	metalogo.source.r77677
+	microtype.source.r78231
+	newfloat.source.r77677
+	ntgclass.source.r77239
+	parskip.source.r77677
+	pdfcolfoot.source.r77677
+	pdflscape.source.r77677
+	pdfmanagement-testphase.source.r77467
+	pdfpages.source.r77677
+	psfrag.source.r15878
+	ragged2e.source.r77677
+	rcs.source.r15878
+	subfig.source.r77677
+	textcase.source.r77677
+	typehtml.source.r17134
+	ucharcat.source.r38907
+	unicode-math.source.r77677
+	xcolor.source.r77677
+	xfrac.source.r77677
+	xkeyval.source.r77677
+	xltxtra.source.r77677
+"
+
+# Transitional pin: TL_PV anchors the eclass-derived texlive-core
+# dep to TL2024 until app-text/texlive-core-2025 lands here.
+TL_PV=2024
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive LaTeX recommended packages"
+
+LICENSE="CC0-1.0 GPL-1+ LPPL-1.2 LPPL-1.3 LPPL-1.3a LPPL-1.3c MIT TeX-other-free public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-latex-2024
+"
+RDEPEND="
+	${COMMON_DEPEND}
+"
+PDEPEND="
+	>=dev-tex/latex-beamer-3.71
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
+
+TEXLIVE_MODULE_BINSCRIPTS="
+	texmf-dist/scripts/attachfile2/pdfatfi.pl
+	texmf-dist/scripts/lwarp/lwarpmk.lua
+	texmf-dist/scripts/thumbpdf/thumbpdf.pl
+"
