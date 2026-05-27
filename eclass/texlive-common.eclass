@@ -255,10 +255,22 @@ texlive-common_append_to_src_uri() {
 		done
 	else
 		local texlive_ge_2023_devs=( flow )
-		local tl_mirror="${CTAN_MIRROR_URL%/}/systems/texlive/tlnet/archive/"
 
 		tl_uri=( "${tl_uri[@]/%/.${tl_pkgext}}" )
-		SRC_URI+=" ${tl_uri[*]/#/${tl_mirror}}"
+
+		# CTAN's tlnet/ holds only the CURRENT TL release; frozen years
+		# move under historic/<year>/tlnet-final/. Both layouts are
+		# emitted as parallel sources so the Manifest's hash pin selects
+		# the file regardless of which mirror serves it. flow's
+		# ::gentoo dev mirror is kept as the third fallback (carries TL
+		# years tracked by ::gentoo; won't have TL>=2025 until ::gentoo
+		# bumps).
+		SRC_URI+=" ${tl_uri[*]/#/${CTAN_MIRROR_URL%/}/systems/texlive/tlnet/archive/}"
+
+		local tl_year=${PV%%_*}
+		local tl_historic="https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${tl_year}/tlnet-final/archive/"
+		SRC_URI+=" ${tl_uri[*]/#/${tl_historic}}"
+
 		for tl_dev in "${texlive_ge_2023_devs[@]}"; do
 			SRC_URI+=" ${tl_uri[*]/#/${tl_2023_uri_prefix/@dev@/${tl_dev}}}"
 		done
