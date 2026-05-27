@@ -1,0 +1,173 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-games.r76381
+	bartel-chess-fonts.r78116
+	chess.r78116
+	chess-problem-diagrams.r78116
+	chessboard.r78116
+	chessfss.r78116
+	chinesechess.r78116
+	crossword.r78222
+	crosswrd.r16896
+	customdice.r64089
+	egameps.r15878
+	gamebook.r24714
+	gamebooklib.r67772
+	go.r78116
+	hanoi.r25019
+	havannah.r36348
+	hexboard.r62102
+	hexgame.r15878
+	hmtrump.r54512
+	horoscop.r56021
+	jeuxcartes.r76966
+	jigsaw.r71923
+	labyrinth.r33454
+	logicpuzzle.r78116
+	mahjong.r76924
+	maze.r76924
+	musikui.r47472
+	nimsticks.r64118
+	onedown.r69067
+	othello.r15878
+	othelloboard.r23714
+	pas-crosswords.r32313
+	playcards.r67342
+	psgo.r78116
+	quizztex.r75977
+	realtranspose.r76924
+	reverxii.r63753
+	rouequestions.r67670
+	rpgicons.r78149
+	rubik.r46791
+	schwalbe-chess.r78116
+	scrabble.r77114
+	sgame.r30959
+	skak.r78116
+	skaknew.r78116
+	soup.r50815
+	sudoku.r78116
+	sudokubundle.r78116
+	tangramtikz.r75123
+	thematicpuzzle.r75984
+	trivialpursuit.r76152
+	twoxtwogame.r70423
+	wargame.r72903
+	weiqi.r78116
+	wordle.r72059
+	xq.r78116
+	xskak.r78116
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	bartel-chess-fonts.doc.r78116
+	chess.doc.r78116
+	chess-problem-diagrams.doc.r78116
+	chessboard.doc.r78116
+	chessfss.doc.r78116
+	chinesechess.doc.r78116
+	crossword.doc.r78222
+	crosswrd.doc.r16896
+	customdice.doc.r64089
+	egameps.doc.r15878
+	gamebook.doc.r24714
+	gamebooklib.doc.r67772
+	go.doc.r78116
+	havannah.doc.r36348
+	hexboard.doc.r62102
+	hexgame.doc.r15878
+	hmtrump.doc.r54512
+	horoscop.doc.r56021
+	jeuxcartes.doc.r76966
+	jigsaw.doc.r71923
+	labyrinth.doc.r33454
+	logicpuzzle.doc.r78116
+	mahjong.doc.r76924
+	maze.doc.r76924
+	musikui.doc.r47472
+	nimsticks.doc.r64118
+	onedown.doc.r69067
+	othello.doc.r15878
+	othelloboard.doc.r23714
+	pas-crosswords.doc.r32313
+	playcards.doc.r67342
+	psgo.doc.r78116
+	quizztex.doc.r75977
+	realtranspose.doc.r76924
+	reverxii.doc.r63753
+	rouequestions.doc.r67670
+	rpgicons.doc.r78149
+	rubik.doc.r46791
+	schwalbe-chess.doc.r78116
+	scrabble.doc.r77114
+	sgame.doc.r30959
+	skak.doc.r78116
+	skaknew.doc.r78116
+	soup.doc.r50815
+	sudoku.doc.r78116
+	sudokubundle.doc.r78116
+	tangramtikz.doc.r75123
+	thematicpuzzle.doc.r75984
+	trivialpursuit.doc.r76152
+	twoxtwogame.doc.r70423
+	wargame.doc.r72903
+	weiqi.doc.r78116
+	wordle.doc.r72059
+	xq.doc.r78116
+	xskak.doc.r78116
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	chess-problem-diagrams.source.r78116
+	chessboard.source.r78116
+	chessfss.source.r78116
+	crossword.source.r78222
+	crosswrd.source.r16896
+	customdice.source.r64089
+	gamebook.source.r24714
+	gamebooklib.source.r67772
+	go.source.r78116
+	havannah.source.r36348
+	hexboard.source.r62102
+	horoscop.source.r56021
+	mahjong.source.r76924
+	nimsticks.source.r64118
+	onedown.source.r69067
+	realtranspose.source.r76924
+	reverxii.source.r63753
+	rubik.source.r46791
+	schwalbe-chess.source.r78116
+	soup.source.r50815
+	sudoku.source.r78116
+	sudokubundle.source.r78116
+	wargame.source.r72903
+	weiqi.source.r78116
+	xskak.source.r78116
+"
+
+# Transitional pin: TL_PV anchors the eclass-derived texlive-core
+# dep to TL2024 until app-text/texlive-core-2025 lands here.
+TL_PV=2024
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive Games typesetting"
+
+LICENSE="Apache-2.0 CC-BY-1.0 CC-BY-4.0 CC-BY-SA-4.0 GPL-1+ LGPL-2.1 LGPL-3 LPPL-1.2 LPPL-1.3 LPPL-1.3c MIT TeX-other-free public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-latex-2024
+"
+RDEPEND="
+	${COMMON_DEPEND}
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
+
+TEXLIVE_MODULE_BINSCRIPTS="
+	texmf-dist/scripts/rubik/rubikrotation.pl
+"
