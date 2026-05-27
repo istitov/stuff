@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 # *.bc / *.dll under llvm_zluda/src/device-libs are git-lfs blobs and the
 # llvm_zluda build.rs panics if it sees lfs stubs.
@@ -40,14 +40,19 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
-# runtime: AMD ROCm/HIP stack. The cdylibs we install link against these via
-# ext/* sys-crates: hip_runtime-sys → libamdhip64; amd_comgr-sys → libamd_comgr;
-# rocblas-sys → librocblas (zluda_blas); hipblaslt-sys → libhipblaslt
-# (zluda_blaslt); rocsparse-sys → librocsparse (zluda_sparse). zluda_fft is a
-# pure stub today and adds no extra dep.
+# runtime: AMD ROCm/HIP stack. cdylibs we install link these via ext/*
+# sys-crates (verified 2026-05-27 against upstream master @ v6-preview.73):
+#   zluda         → hip_runtime-sys → libamdhip64 (+ statically-bundled lz4)
+#   zluda_ml      → rocm_smi-sys    → librocm_smi64
+#   zluda_blas    → rocblas-sys     → librocblas    (+ libamdhip64)
+#   zluda_blaslt  → hipblaslt-sys   → libhipblaslt  (+ libamdhip64)
+#   zluda_sparse  → rocsparse-sys   → librocsparse
+#   zluda_fft     → stub, no extra dep
+# LLVM is bundled in-tree via ext/llvm-project since upstream fc204af
+# ("Build and distribute LLVM", #555); libamd_comgr is no longer linked.
 RDEPEND="
 	dev-util/hip
-	dev-libs/rocm-comgr
+	dev-util/rocm-smi
 	sci-libs/rocBLAS
 	sci-libs/hipBLASLt
 	sci-libs/rocSPARSE
