@@ -152,20 +152,20 @@ DEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-2.5.1-unbundle_fmt.patch
-	"${FILESDIR}"/${PN}-2.5.1-unbundle_kineto.patch
-	"${FILESDIR}"/${PN}-2.8.0-unbundle_pocketfft.patch
-	"${FILESDIR}"/${PN}-2.5.1-cudnn_include_fix.patch
-	"${FILESDIR}"/${PN}-2.4.0-cpp-httplib.patch
-	"${FILESDIR}"/${PN}-2.5.1-glog-0.6.0.patch
-	"${FILESDIR}"/${PN}-2.7.0-glog-0.7.1.patch
-	"${FILESDIR}"/${P}-aotriton-fixes.patch
-	"${FILESDIR}"/${PN}-2.8.0-rocm-minus-flash.patch
-	"${FILESDIR}"/${P}-rocm-distributed-link.patch
-	"${FILESDIR}"/${PN}-2.9.1-torch_cpu.patch
-	"${FILESDIR}"/${PN}-2.10.0-gentoo.patch
-	"${FILESDIR}"/${PN}-2.11.0-mimalloc.patch
-	"${FILESDIR}"/${P}-removekineto-pr178960.patch
+	"${FILESDIR}"/${PN}-2.5.1-unbundle_fmt.patch.xz
+	"${FILESDIR}"/${PN}-2.5.1-unbundle_kineto.patch.xz
+	"${FILESDIR}"/${PN}-2.8.0-unbundle_pocketfft.patch.xz
+	"${FILESDIR}"/${PN}-2.5.1-cudnn_include_fix.patch.xz
+	"${FILESDIR}"/${PN}-2.4.0-cpp-httplib.patch.xz
+	"${FILESDIR}"/${PN}-2.5.1-glog-0.6.0.patch.xz
+	"${FILESDIR}"/${PN}-2.7.0-glog-0.7.1.patch.xz
+	"${FILESDIR}"/${P}-aotriton-fixes.patch.xz
+	"${FILESDIR}"/${PN}-2.8.0-rocm-minus-flash.patch.xz
+	"${FILESDIR}"/${P}-rocm-distributed-link.patch.xz
+	"${FILESDIR}"/${PN}-2.9.1-torch_cpu.patch.xz
+	"${FILESDIR}"/${PN}-2.10.0-gentoo.patch.xz
+	"${FILESDIR}"/${PN}-2.11.0-mimalloc.patch.xz
+	"${FILESDIR}"/${P}-removekineto-pr178960.patch.xz
 
 	# stuff overlay only: scrub MKL MPI / cluster libs and force GNU
 	# OpenMP threading in caffe2::mkl's public link interface so that
@@ -174,7 +174,7 @@ PATCHES=(
 	# Edition, no Intel Compiler / libiomp5). Drop when an equivalent
 	# upstream fix lands. # verified 2026-05-08 against 2.11.0;
 	# cmake/public/mkl.cmake context identical at 2.12.0.
-	"${FILESDIR}"/${P}-mkl-public-scrub.patch
+	"${FILESDIR}"/${P}-mkl-public-scrub.patch.xz
 )
 
 src_prepare() {
@@ -251,7 +251,7 @@ src_prepare() {
 
 		# Bug 959808: fix for gfx101x targets
 		pushd "${WORKDIR}/composable_kernel-${CK_COMMIT}" > /dev/null || die
-		eapply "${FILESDIR}"/composable-kernel-7fe50dc-expand-isa.patch
+		eapply "${FILESDIR}"/composable-kernel-7fe50dc-expand-isa.patch.xz
 		popd > /dev/null || die
 
 		# Workaround for libc++ issue https://github.com/llvm/llvm-project/issues/100802
