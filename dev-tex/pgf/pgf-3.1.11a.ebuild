@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -21,7 +21,7 @@ RDEPEND="dev-texlive/texlive-latexrecommended"
 
 # ADJUST ON BUMPS: The date of the according release tag. See also
 # upstream's build.lua
-PGF_VERSION_DATE="2023-01-15"
+PGF_VERSION_DATE="2025-08-29"
 
 src_install() {
 	einstalldocs
