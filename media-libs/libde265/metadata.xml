@@ -7,7 +7,9 @@
   </maintainer>
   <use>
     <flag name="dec265">Enable build of the dec265 example decoder program</flag>
+    <flag name="enc265">Enable build of the enc265 example encoder program; live ebuild only, upstream strips this directory from release tarballs</flag>
     <flag name="sdl">Enable video output of dec265 via <pkg>media-libs/libsdl2</pkg></flag>
+    <flag name="tools">Install upstream-internal development tools (bjoentegaard, block-rate-estim, gen-enc-table, rd-curves, tests, yuv-distortion); live ebuild only, not intended for end users</flag>
   </use>
   <upstream>
     <remote-id type="github">strukturag/libde265</remote-id>
