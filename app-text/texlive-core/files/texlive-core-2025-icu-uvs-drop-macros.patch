@@ -1,0 +1,35 @@
+ICU 75 removed the underscored UVS_* Unicode Variation Selector API
+(UVS_combine_code / UVS_get_codepoint_length / UVS_get_codepoint_in_sequence)
+in favor of the camelCase UVS* names that ICU exposed alongside them,
+then ICU 78 removed the camelCase names too — variation-selector
+handling is no longer part of the public ICU API. TL2025's upTeX
+wrappers in kanji.h defined the camelCase names as macros expanding to
+the underscored ones, so both build paths fail against modern ICU.
+
+Replace the macros with no-op stubs returning 0. This unblocks the
+texlive-core compile on ICU>=75 at the cost of upTeX losing
+variation-selector handling. With USE=-cjk (default in this overlay)
+the affected upTeX binaries (updvitype, uppltotf, uptftopl) are
+built but not installed; with USE=cjk the binaries install but
+variation-selector codepoints render as plain glyphs.
+
+A proper fix would re-implement VS lookup against ICU's
+StandardizedVariants table directly (uchar.h Variation_Selector
+property), or vendor a small data table — both larger than this
+overlay's scope. Filed upstream awaiting feedback.
+
+--- a/texk/web2c/uptexdir/kanji.h
++++ b/texk/web2c/uptexdir/kanji.h
+@@ -71,9 +71,9 @@
+ #define inputline2(fp,buff,pos,size) input_line2(fp,buff,NULL,pos,size,NULL)
+ #endif
+ #define ptencconvfirstline(pos,limit,buff,size) ptenc_conv_first_line(pos,limit,buff,size)
+-#define UVScombinecode(ucv,uvs) UVS_combine_code(ucv,uvs)
+-#define UVSgetcodepointlength(ucv) UVS_get_codepoint_length(ucv)
+-#define UVSgetcodepointinsequence(ucv,n) UVS_get_codepoint_in_sequence(ucv,n)
++static inline int UVScombinecode(int ucv, int uvs) { (void)ucv; (void)uvs; return 0; }
++static inline int UVSgetcodepointlength(int ucv) { (void)ucv; return 0; }
++static inline int UVSgetcodepointinsequence(int ucv, int n) { (void)ucv; (void)n; return 0; }
+ #define ptencucsto8bitcode(enc,uch) ptenc_ucs_to_8bit_code(enc,uch)
+ #define ptenc8bitcodetoucs(enc,ech) ptenc_8bit_code_to_ucs(enc,ech)
+
