@@ -1,0 +1,173 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-langeuropean.r73414
+	armtex.r69418
+	babel-albanian.r77677
+	babel-bosnian.r77677
+	babel-breton.r77470
+	babel-croatian.r77677
+	babel-danish.r77677
+	babel-dutch.r77677
+	babel-estonian.r38064
+	babel-finnish.r77677
+	babel-friulan.r77677
+	babel-hungarian.r77586
+	babel-icelandic.r51551
+	babel-irish.r77677
+	babel-kurmanji.r30279
+	babel-latin.r76176
+	babel-latvian.r71108
+	babel-lithuanian.r66513
+	babel-macedonian.r39587
+	babel-norsk.r77677
+	babel-occitan.r39608
+	babel-piedmontese.r30282
+	babel-romanian.r77677
+	babel-romansh.r77677
+	babel-samin.r77677
+	babel-scottish.r77677
+	babel-slovenian.r77677
+	babel-swedish.r77677
+	babel-turkish.r51560
+	babel-welsh.r77677
+	finbib.r76790
+	hrlatex.r18020
+	huaz.r77576
+	hulipsum.r77317
+	hyphen-croatian.r73410
+	hyphen-danish.r73410
+	hyphen-dutch.r73410
+	hyphen-estonian.r73410
+	hyphen-finnish.r73410
+	hyphen-friulan.r73410
+	hyphen-hungarian.r73410
+	hyphen-icelandic.r73410
+	hyphen-irish.r73410
+	hyphen-kurmanji.r73410
+	hyphen-latin.r73410
+	hyphen-latvian.r73410
+	hyphen-lithuanian.r73410
+	hyphen-macedonian.r73410
+	hyphen-norwegian.r73410
+	hyphen-occitan.r73410
+	hyphen-piedmontese.r73410
+	hyphen-romanian.r73410
+	hyphen-romansh.r74115
+	hyphen-slovenian.r73410
+	hyphen-swedish.r73410
+	hyphen-turkish.r73410
+	hyphen-uppersorbian.r73410
+	hyphen-welsh.r73410
+	lithuanian.r66461
+	nevelok.r39029
+	rojud.r56895
+	swebib.r76924
+	turkmen.r77677
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	armtex.doc.r69418
+	babel-albanian.doc.r77677
+	babel-bosnian.doc.r77677
+	babel-breton.doc.r77470
+	babel-croatian.doc.r77677
+	babel-danish.doc.r77677
+	babel-dutch.doc.r77677
+	babel-estonian.doc.r38064
+	babel-finnish.doc.r77677
+	babel-friulan.doc.r77677
+	babel-hungarian.doc.r77586
+	babel-icelandic.doc.r51551
+	babel-irish.doc.r77677
+	babel-kurmanji.doc.r30279
+	babel-latin.doc.r76176
+	babel-latvian.doc.r71108
+	babel-lithuanian.doc.r66513
+	babel-macedonian.doc.r39587
+	babel-norsk.doc.r77677
+	babel-occitan.doc.r39608
+	babel-piedmontese.doc.r30282
+	babel-romanian.doc.r77677
+	babel-romansh.doc.r77677
+	babel-samin.doc.r77677
+	babel-scottish.doc.r77677
+	babel-slovenian.doc.r77677
+	babel-swedish.doc.r77677
+	babel-turkish.doc.r51560
+	babel-welsh.doc.r77677
+	gloss-occitan.doc.r52593
+	hrlatex.doc.r18020
+	huaz.doc.r77576
+	hulipsum.doc.r77317
+	hyphen-hungarian.doc.r73410
+	kaytannollista-latexia.doc.r77555
+	lithuanian.doc.r66461
+	lshort-dutch.doc.r15878
+	lshort-estonian.doc.r39323
+	lshort-finnish.doc.r15878
+	lshort-slovenian.doc.r77050
+	lshort-turkish.doc.r15878
+	nevelok.doc.r39029
+	rojud.doc.r56895
+	swebib.doc.r76924
+	turkmen.doc.r77677
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	babel-albanian.source.r77677
+	babel-bosnian.source.r77677
+	babel-breton.source.r77470
+	babel-croatian.source.r77677
+	babel-danish.source.r77677
+	babel-dutch.source.r77677
+	babel-estonian.source.r38064
+	babel-finnish.source.r77677
+	babel-friulan.source.r77677
+	babel-icelandic.source.r51551
+	babel-irish.source.r77677
+	babel-kurmanji.source.r30279
+	babel-latin.source.r76176
+	babel-latvian.source.r71108
+	babel-lithuanian.source.r66513
+	babel-macedonian.source.r39587
+	babel-norsk.source.r77677
+	babel-occitan.source.r39608
+	babel-piedmontese.source.r30282
+	babel-romanian.source.r77677
+	babel-romansh.source.r77677
+	babel-samin.source.r77677
+	babel-scottish.source.r77677
+	babel-slovenian.source.r77677
+	babel-swedish.source.r77677
+	babel-turkish.source.r51560
+	babel-welsh.source.r77677
+	gloss-occitan.source.r52593
+	hrlatex.source.r18020
+	hulipsum.source.r77317
+	hyphen-turkish.source.r73410
+	nevelok.source.r39029
+	turkmen.source.r77677
+"
+
+# Transitional pin: TL_PV anchors the eclass-derived texlive-core
+# dep to TL2024 until app-text/texlive-core-2025 lands here.
+TL_PV=2024
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive Other European languages"
+
+LICENSE="CC-BY-SA-4.0 GPL-1+ GPL-2 LPPL-1.2 LPPL-1.3 LPPL-1.3c TeX-other-free public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-basic-2024
+"
+RDEPEND="
+	${COMMON_DEPEND}
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
