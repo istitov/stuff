@@ -16,9 +16,9 @@ else
 	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86"
 fi
 
-LICENSE="LGPL-3+ dec265? ( MIT ) enc265? ( MIT ) tools? ( GPL-3+ )"
+LICENSE="LGPL-3+ dec265? ( MIT )"
 SLOT="0"
-IUSE="dec265 enc265 sdl tools"
+IUSE="dec265 sdl"
 
 RDEPEND="
 	dec265? (
@@ -28,19 +28,23 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 multilib_src_configure() {
+	# The release tarball intentionally omits enc265/ and dev-tools/ per
+	# upstream commit 8b305cb ('remove en265 and dev-tools from distribution
+	# tarball'). ENABLE_ENCODER and ENABLE_INTERNAL_DEVELOPMENT_TOOLS are
+	# pinned OFF; enabling them via cmake would fail at add_subdirectory.
 	# sherlock265 (Qt visual inspector) needs media-libs/libvideogfx (not
-	# in ::gentoo) or media-libs/libswscale; force-disabled. Verified
-	# 2026-05-26 against v1.1.0 CMakeLists.txt.
+	# in ::gentoo) or media-libs/libswscale; force-disabled.
+	# Verified 2026-05-26 against v1.1.0 release tarball.
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=ON
 		-DENABLE_SIMD=ON
+		-DENABLE_ENCODER=OFF
+		-DENABLE_INTERNAL_DEVELOPMENT_TOOLS=OFF
 		-DENABLE_SHERLOCK265=OFF
 		-DUSE_IWYU=OFF
 		-DWITH_FUZZERS=OFF
 		-DENABLE_DECODER=$(multilib_native_usex dec265)
-		-DENABLE_ENCODER=$(multilib_native_usex enc265)
 		-DENABLE_SDL=$(multilib_native_usex sdl)
-		-DENABLE_INTERNAL_DEVELOPMENT_TOOLS=$(multilib_native_usex tools)
 	)
 	cmake_src_configure
 }
