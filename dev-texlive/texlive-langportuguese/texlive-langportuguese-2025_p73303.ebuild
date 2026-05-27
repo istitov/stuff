@@ -1,0 +1,54 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-langportuguese.r73303
+	babel-portuges.r77677
+	feupphdteses.r30962
+	hyphen-portuguese.r74203
+	numberpt.r76924
+	ordinalpt.r15878
+	ptlatexcommands.r67125
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	babel-portuges.doc.r77677
+	beamer-tut-pt.doc.r15878
+	cursolatex.doc.r24139
+	feupphdteses.doc.r30962
+	latex-via-exemplos.doc.r77105
+	latexcheat-ptbr.doc.r15878
+	lshort-portuguese.doc.r55643
+	numberpt.doc.r76924
+	ordinalpt.doc.r15878
+	ptlatexcommands.doc.r67125
+	xypic-tut-pt.doc.r15878
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	babel-portuges.source.r77677
+	numberpt.source.r76924
+	ordinalpt.source.r15878
+	ptlatexcommands.source.r67125
+"
+
+# Transitional pin: TL_PV anchors the eclass-derived texlive-core
+# dep to TL2024 until app-text/texlive-core-2025 lands here.
+TL_PV=2024
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive Portuguese"
+
+LICENSE="GPL-1+ GPL-2+ LPPL-1.3 LPPL-1.3c MIT public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-basic-2024
+"
+RDEPEND="
+	${COMMON_DEPEND}
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
