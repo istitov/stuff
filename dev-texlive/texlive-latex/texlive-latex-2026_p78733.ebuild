@@ -1,0 +1,199 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-latex.r78733
+	ae.r15878
+	amscls.r77682
+	amsmath.r78101
+	atbegshi.r77682
+	atveryend.r77682
+	auxhook.r77682
+	babel.r79084
+	babel-english.r77682
+	babelbib.r76790
+	bigintcalc.r77682
+	bitset.r77682
+	bookmark.r79129
+	carlisle.r59577
+	colortbl.r78947
+	epstopdf-pkg.r77682
+	etexcmds.r78101
+	fancyhdr.r78348
+	firstaid.r76740
+	fix2col.r78931
+	geometry.r78315
+	gettitlestring.r77682
+	graphics.r78282
+	graphics-cfg.r41448
+	grfext.r77682
+	hopatch.r65491
+	hycolor.r77682
+	hypcap.r77682
+	hyperref.r78811
+	intcalc.r77682
+	kvdefinekeys.r77682
+	kvoptions.r77682
+	kvsetkeys.r77682
+	l3backend.r78544
+	l3kernel.r79124
+	l3packages.r76637
+	latex.r76924
+	latex-bin.r78282
+	latex-fonts.r28888
+	latex-lab.r76739
+	latexconfig.r68923
+	letltxmacro.r77682
+	ltxcmds.r77682
+	ltxmisc.r75878
+	mfnfss.r77682
+	mptopdf.r78843
+	natbib.r77682
+	oberdiek.r78992
+	pagesel.r77682
+	pdfescape.r77682
+	pdftexcmds.r77682
+	pslatex.r67469
+	psnfss.r77682
+	pspicture.r15878
+	refcount.r77682
+	rerunfilecheck.r77682
+	stringenc.r77682
+	tools.r76708
+	uniquecounter.r77682
+	url.r77682
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	ae.doc.r15878
+	amscls.doc.r77682
+	amsmath.doc.r78101
+	atbegshi.doc.r77682
+	atveryend.doc.r77682
+	auxhook.doc.r77682
+	babel.doc.r79084
+	babel-english.doc.r77682
+	babelbib.doc.r76790
+	bigintcalc.doc.r77682
+	bitset.doc.r77682
+	bookmark.doc.r79129
+	carlisle.doc.r59577
+	colortbl.doc.r78947
+	epstopdf-pkg.doc.r77682
+	etexcmds.doc.r78101
+	fancyhdr.doc.r78348
+	firstaid.doc.r76740
+	fix2col.doc.r78931
+	geometry.doc.r78315
+	gettitlestring.doc.r77682
+	graphics.doc.r78282
+	graphics-cfg.doc.r41448
+	grfext.doc.r77682
+	hopatch.doc.r65491
+	hycolor.doc.r77682
+	hypcap.doc.r77682
+	hyperref.doc.r78811
+	intcalc.doc.r77682
+	kvdefinekeys.doc.r77682
+	kvoptions.doc.r77682
+	kvsetkeys.doc.r77682
+	l3backend.doc.r78544
+	l3kernel.doc.r79124
+	l3packages.doc.r76637
+	latex.doc.r76924
+	latex-bin.doc.r78282
+	latex-fonts.doc.r28888
+	latex-lab.doc.r76739
+	letltxmacro.doc.r77682
+	ltxcmds.doc.r77682
+	mfnfss.doc.r77682
+	mptopdf.doc.r78843
+	natbib.doc.r77682
+	oberdiek.doc.r78992
+	pagesel.doc.r77682
+	pdfescape.doc.r77682
+	pdftexcmds.doc.r77682
+	psnfss.doc.r77682
+	pspicture.doc.r15878
+	refcount.doc.r77682
+	rerunfilecheck.doc.r77682
+	stringenc.doc.r77682
+	tools.doc.r76708
+	uniquecounter.doc.r77682
+	url.doc.r77682
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	ae.source.r15878
+	amscls.source.r77682
+	amsmath.source.r78101
+	atbegshi.source.r77682
+	atveryend.source.r77682
+	auxhook.source.r77682
+	babel.source.r79084
+	babel-english.source.r77682
+	bigintcalc.source.r77682
+	bitset.source.r77682
+	bookmark.source.r79129
+	carlisle.source.r59577
+	colortbl.source.r78947
+	epstopdf-pkg.source.r77682
+	etexcmds.source.r78101
+	fancyhdr.source.r78348
+	firstaid.source.r76740
+	fix2col.source.r78931
+	geometry.source.r78315
+	gettitlestring.source.r77682
+	graphics.source.r78282
+	grfext.source.r77682
+	hopatch.source.r65491
+	hycolor.source.r77682
+	hypcap.source.r77682
+	hyperref.source.r78811
+	intcalc.source.r77682
+	kvdefinekeys.source.r77682
+	kvoptions.source.r77682
+	kvsetkeys.source.r77682
+	l3backend.source.r78544
+	l3kernel.source.r79124
+	l3packages.source.r76637
+	latex.source.r76924
+	latex-lab.source.r76739
+	letltxmacro.source.r77682
+	ltxcmds.source.r77682
+	mfnfss.source.r77682
+	natbib.source.r77682
+	oberdiek.source.r78992
+	pagesel.source.r77682
+	pdfescape.source.r77682
+	pdftexcmds.source.r77682
+	pslatex.source.r67469
+	psnfss.source.r77682
+	pspicture.source.r15878
+	refcount.source.r77682
+	rerunfilecheck.source.r77682
+	stringenc.source.r77682
+	tools.source.r76708
+	uniquecounter.source.r77682
+"
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive LaTeX fundamental packages"
+
+LICENSE="GPL-2 LPPL-1.0 LPPL-1.3 LPPL-1.3c public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-basic-2026
+"
+RDEPEND="
+	${COMMON_DEPEND}
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
+
+TEXLIVE_MODULE_BINSCRIPTS="
+	texmf-dist/scripts/context/perl/mptopdf.pl
+"
