@@ -1,0 +1,37 @@
+Look up formfactor IMPORTED_LOCATION via IMPORTED_CONFIGURATIONS.
+
+Upstream FindLibraries.cmake hardcodes IMPORTED_LOCATION_RELEASE +
+IMPORTED_LOCATION_NOCONFIG fallbacks, which fails on distro packages
+where libformfactor was built with CMAKE_BUILD_TYPE=RelWithDebInfo (the
+Gentoo cmake.eclass default — its target file declares
+IMPORTED_LOCATION_RELWITHDEBINFO instead). Walk the IMPORTED_CONFIGURATIONS
+list and pick the first non-empty location; this handles any cmake-eclass
+choice without needing to coordinate build types between consumer and
+producer.
+
+24.0 namespaces the imported target (formfactor::formfactor) and bumps the
+required version to 0.4; otherwise the fix is unchanged from 23.0.
+
+verified 2026-05-28 against bornagain-24.0 + libformfactor-0.4.0 built RelWithDebInfo.
+
+--- a/cmake/BornAgain/FindLibraries.cmake
++++ b/cmake/BornAgain/FindLibraries.cmake
+@@ -25,7 +25,17 @@
+
+ find_package(formfactor 0.4 REQUIRED CONFIG)
+ # absolute path is needed for deployment in Python wheel
+-get_target_property(formfactor_LIBRARIES formfactor::formfactor IMPORTED_LOCATION_RELEASE)
++# Iterate over whichever configurations the consumer-side libformfactor
++# was packaged with (Release / NOCONFIG / RelWithDebInfo / ...) rather than
++# hardcoding RELEASE+NOCONFIG; matters for distro packages built with
++# CMAKE_BUILD_TYPE=RelWithDebInfo (the Gentoo cmake.eclass default).
++get_target_property(_ff_imported_configs formfactor::formfactor IMPORTED_CONFIGURATIONS)
++foreach(_ff_cfg ${_ff_imported_configs})
++    get_target_property(formfactor_LIBRARIES formfactor::formfactor IMPORTED_LOCATION_${_ff_cfg})
++    if(formfactor_LIBRARIES)
++        break()
++    endif()
++endforeach()
+ if(NOT formfactor_LIBRARIES)
+     get_target_property(formfactor_LIBRARIES formfactor::formfactor IMPORTED_LOCATION_NOCONFIG)
+ endif()

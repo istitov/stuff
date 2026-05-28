@@ -1,0 +1,72 @@
+Use libcerf C variant (cerf::cerf) instead of cerfcpp.
+
+Gentoo's sci-libs/libcerf is built with CERF_CPP=OFF, producing libcerf.so
+(C variant) but not libcerfcpp.so. Switching BornAgain's two cerfcx call
+sites to use the C ABI via a small std::complex<-> _Complex bridge avoids
+the need to fork libcerf to also build the C++ variant — std::complex<double>
+and _Complex double have identical memory layout on every supported ABI.
+
+The roughness-scattering call sites moved from Sim/Computation/
+RoughMultiLayerContribution.cpp (23.0) to Sim/Evaluate/
+EvaluateRoughnessScattering.cpp (24.0), and h_above/h_below were renamed
+hAbove/hBelow; otherwise the fix is unchanged.
+
+verified 2026-05-28 against bornagain-24.0 + libcerf-2.5.
+
+--- a/cmake/BornAgain/FindLibraries.cmake
++++ b/cmake/BornAgain/FindLibraries.cmake
+@@ -46,10 +46,10 @@
+
+ list(APPEND BA_Dependencies "${GSL_LIBRARIES}")
+
+-find_package(cerf CONFIG REQUIRED COMPONENTS shared CXX)
+-get_property(Cerf_LIBRARIES TARGET cerf::cerfcpp PROPERTY LOCATION)
+-message(STATUS "cerf: C++ version = ${cerf_VERSION}, lib=${Cerf_LIBRARIES}")
+-set(cerf_target cerf::cerfcpp)
++find_package(cerf CONFIG REQUIRED COMPONENTS shared C)
++get_property(Cerf_LIBRARIES TARGET cerf::cerf PROPERTY LOCATION)
++message(STATUS "cerf: C version = ${cerf_VERSION}, lib=${Cerf_LIBRARIES}")
++set(cerf_target cerf::cerf)
+
+ list(APPEND BA_Dependencies "${Cerf_LIBRARIES}")
+
+--- a/Sim/Evaluate/EvaluateRoughnessScattering.cpp
++++ b/Sim/Evaluate/EvaluateRoughnessScattering.cpp
+@@ -23,7 +23,8 @@
+ #include "Sample/Multilayer/RoughnessUtil.h"
+ #include "Sample/Multilayer/Slice.h"
+ #include "Sample/Sample/Sample.h"
+-#include <cerf.h>
++#include <cerf.h>      // libcerf C variant: cerfcx takes/returns double _Complex
++#include <cstring>
+ #include <numbers>
+
+ using std::numbers::pi;
+@@ -40,13 +41,25 @@
+
+ namespace {
+
++// Bridge std::complex<double> <-> double _Complex for the libcerf C ABI.
++// Layout is identical (two adjacent doubles, real then imag) on every
++// supported platform, so a bitwise copy round-trips losslessly.
++inline complex_t cerfcx_cxx(complex_t z)
++{
++    double _Complex cz;
++    std::memcpy(&cz, &z, sizeof(cz));
++    const double _Complex cr = ::cerfcx(cz);
++    complex_t r;
++    std::memcpy(&r, &cr, sizeof(r));
++    return r;
++}
+ complex_t hAbove(complex_t z)
+ {
+-    return 0.5 * cerfcx(-mul_I(z) / std::sqrt(2.0));
++    return 0.5 * cerfcx_cxx(-mul_I(z) / std::sqrt(2.0));
+ }
+ complex_t hBelow(complex_t z)
+ {
+-    return 0.5 * cerfcx(mul_I(z) / std::sqrt(2.0));
++    return 0.5 * cerfcx_cxx(mul_I(z) / std::sqrt(2.0));
+ }
+
+ complex_t refractiveTerm(const ReSample& re_sample, size_t i_layer, double wavelength)
