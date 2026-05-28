@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (204) ---
+# --- pypi (202) ---
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -406,10 +406,6 @@ pypi = "openai-harmony"
 source = "pypi"
 pypi = "openfile"
 
-["dev-python/opentelemetry-semantic-conventions"]
-source = "pypi"
-pypi = "opentelemetry-semantic-conventions"
-
 ["dev-python/opentelemetry-semantic-conventions-ai"]
 source = "pypi"
 pypi = "opentelemetry-semantic-conventions-ai"
@@ -746,10 +742,6 @@ pypi = "zarr"
 source = "pypi"
 pypi = "zict"
 
-["sci-libs/pycifrw"]
-source = "pypi"
-pypi = "pycifrw"
-
 ["sci-ml/asteroid-filterbanks"]
 source = "pypi"
 pypi = "asteroid-filterbanks"
@@ -826,7 +818,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (146) ---
+# --- github (148) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1184,6 +1176,12 @@ use_max_tag = true
 prefix = "v"
 
 ["dev-python/opentelemetry-sdk"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/opentelemetry-semantic-conventions"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
@@ -1602,6 +1600,12 @@ prefix = "v"
 ["sci-libs/onnxruntime"]
 source = "github"
 github = "microsoft/onnxruntime"
+use_max_tag = true
+prefix = "v"
+
+["sci-libs/pycifrw"]
+source = "github"
+github = "jamesrhester/pycifrw"
 use_max_tag = true
 prefix = "v"
 

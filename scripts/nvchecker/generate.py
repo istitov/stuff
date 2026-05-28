@@ -474,6 +474,21 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
         spec:  provider-specific string (pypi name, owner/repo, project)
         note:  optional human-readable explanation
     """
+    # A GitHub archive/release URL in SRC_URI wins over `inherit pypi`.
+    # The pypi eclass auto-generates a files.pythonhosted.org SRC_URI, so an
+    # explicit github .../archive/ (or releases/download) URL is a deliberate
+    # fetch override — the upstream we track is the GitHub repo+tag, not the
+    # eclass's PyPI package. e.g. dev-python/opentelemetry-semantic-conventions
+    # inherits pypi but fetches the open-telemetry/opentelemetry-python
+    # monorepo at v${PV}, while its PyPI sub-package uses an unrelated 0.Xb0
+    # beta scheme that would never resolve to our PV. Only SRC_URI counts
+    # here, not HOMEPAGE: a HOMEPAGE listing both github and pypi still
+    # prefers pypi (see the HOMEPAGE-PyPI branch below).
+    if src_uri:
+        m = GITHUB_ARCHIVE_RE.search(src_uri)
+        if m:
+            return {"kind": "github", "spec": f"{m.group(1)}/{m.group(2)}"}
+
     # PyPI: if inherit pypi is present
     if PYPI_INHERIT_RE.search(ebuild_text):
         pn_override = first_group(PYPI_PN_RE.search(ebuild_text))
