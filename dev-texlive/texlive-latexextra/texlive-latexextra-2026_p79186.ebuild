@@ -4272,8 +4272,10 @@ COMMON_DEPEND="
 	>=dev-texlive/texlive-pictures-2026
 	dev-perl/Spreadsheet-ParseExcel
 "
+# realscripts relocated from texlive-xetex in TL2026 (verified 2026-05-28)
 RDEPEND="
 	${COMMON_DEPEND}
+	!<dev-texlive/texlive-xetex-2026
 "
 PDEPEND="
 	>=dev-tex/glossaries-4.55
