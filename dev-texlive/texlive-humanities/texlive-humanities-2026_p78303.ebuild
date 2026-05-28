@@ -1,0 +1,203 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-humanities.r78303
+	adtrees.r51618
+	bibleref.r75257
+	bibleref-lds.r25526
+	bibleref-mouth.r25527
+	bibleref-parse.r22054
+	covington.r77216
+	diadia.r37656
+	dramatist.r35866
+	dvgloss.r29103
+	ecltree.r15878
+	edfnotes.r21540
+	edmac.r72250
+	eledform.r38114
+	eledmac.r45418
+	expex.r77682
+	expex-glossonly.r69914
+	gb4e.r77682
+	gb4e-next.r72692
+	gmverse.r29803
+	interlinear.r72106
+	jura.r15878
+	juraabbrev.r15878
+	juramisc.r15878
+	jurarsp.r15878
+	langnames.r69101
+	ledmac.r41811
+	lexikon.r17364
+	lexref.r36026
+	ling-macros.r42268
+	linguex.r77682
+	liturg.r15878
+	metrix.r76924
+	nnext.r56575
+	opbible.r77161
+	parallel.r77682
+	parrun.r15878
+	phonrule.r43963
+	plari.r15878
+	play.r15878
+	poemscol.r56082
+	poetry.r77682
+	poetrytex.r76924
+	qobitree.r15878
+	qtree.r15878
+	reledmac.r78286
+	rrgtrees.r27322
+	rtklage.r15878
+	screenplay.r27223
+	screenplay-pkg.r44965
+	sides.r76924
+	stage.r62929
+	textglos.r30788
+	thalie.r65249
+	tree-dvips.r21751
+	verse.r77682
+	xyling.r15878
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	adtrees.doc.r51618
+	bibleref.doc.r75257
+	bibleref-lds.doc.r25526
+	bibleref-mouth.doc.r25527
+	bibleref-parse.doc.r22054
+	covington.doc.r77216
+	diadia.doc.r37656
+	dramatist.doc.r35866
+	dvgloss.doc.r29103
+	ecltree.doc.r15878
+	edfnotes.doc.r21540
+	edmac.doc.r72250
+	eledform.doc.r38114
+	eledmac.doc.r45418
+	expex.doc.r77682
+	expex-glossonly.doc.r69914
+	gb4e.doc.r77682
+	gb4e-next.doc.r72692
+	gmverse.doc.r29803
+	interlinear.doc.r72106
+	jura.doc.r15878
+	juraabbrev.doc.r15878
+	juramisc.doc.r15878
+	jurarsp.doc.r15878
+	langnames.doc.r69101
+	ledmac.doc.r41811
+	lexikon.doc.r17364
+	lexref.doc.r36026
+	ling-macros.doc.r42268
+	linguex.doc.r77682
+	liturg.doc.r15878
+	metrix.doc.r76924
+	nnext.doc.r56575
+	opbible.doc.r77161
+	parallel.doc.r77682
+	parrun.doc.r15878
+	phonrule.doc.r43963
+	plari.doc.r15878
+	play.doc.r15878
+	poemscol.doc.r56082
+	poetry.doc.r77682
+	poetrytex.doc.r76924
+	qobitree.doc.r15878
+	qtree.doc.r15878
+	reledmac.doc.r78286
+	rrgtrees.doc.r27322
+	rtklage.doc.r15878
+	screenplay.doc.r27223
+	screenplay-pkg.doc.r44965
+	sides.doc.r76924
+	stage.doc.r62929
+	textglos.doc.r30788
+	thalie.doc.r65249
+	theatre.doc.r79121
+	tree-dvips.doc.r21751
+	verse.doc.r77682
+	xyling.doc.r15878
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	bibleref.source.r75257
+	bibleref-lds.source.r25526
+	bibleref-mouth.source.r25527
+	dramatist.source.r35866
+	dvgloss.source.r29103
+	edfnotes.source.r21540
+	eledform.source.r38114
+	eledmac.source.r45418
+	jura.source.r15878
+	juraabbrev.source.r15878
+	jurarsp.source.r15878
+	langnames.source.r69101
+	ledmac.source.r41811
+	liturg.source.r15878
+	metrix.source.r76924
+	nnext.source.r56575
+	parallel.source.r77682
+	parrun.source.r15878
+	plari.source.r15878
+	play.source.r15878
+	poemscol.source.r56082
+	poetry.source.r77682
+	poetrytex.source.r76924
+	reledmac.source.r78286
+	rrgtrees.source.r27322
+	screenplay.source.r27223
+	stage.source.r62929
+	textglos.source.r30788
+	verse.source.r77682
+"
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive Humanities packages"
+
+LICENSE="GPL-1+ GPL-2 LPPL-1.0 LPPL-1.2 LPPL-1.3 LPPL-1.3c"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-latex-2026
+	doc? ( app-text/sword )
+"
+RDEPEND="
+	${COMMON_DEPEND}
+	!<dev-texlive/texlive-formatsextra-2024
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
+BDEPEND="
+	doc? ( virtual/pkgconfig )
+"
+
+TEXLIVE_MODULE_BINSCRIPTS="
+	texmf-dist/scripts/diadia/diadia.lua
+"
+
+src_prepare() {
+	default
+
+	if use doc; then
+		pushd texmf-dist/doc/luatex/opbible &> /dev/null || die
+
+		# https://github.com/olsak/OpBible/pull/1
+		eapply "${FILESDIR}"/${PN}-2023-opbible-improve-Makefile-respect-user-flags.patch
+		# Remove the binary, so that it is rebuild.
+		rm txs-gen/mod2tex || die
+
+		popd &> /dev/null || die
+	fi
+}
+
+src_compile() {
+	if use doc; then
+		emake -C texmf-dist/doc/luatex/opbible/txs-gen
+	fi
+
+	texlive-module_src_compile
+}
