@@ -784,9 +784,11 @@ COMMON_DEPEND="
 	>=dev-texlive/texlive-fontsrecommended-2026
 	>=dev-texlive/texlive-latex-2026
 "
+# quantikz relocated from texlive-pictures in TL2025 (verified 2026-05-28)
 RDEPEND="
 	${COMMON_DEPEND}
 	!<dev-texlive/texlive-latexextra-2024
+	!<dev-texlive/texlive-pictures-2025
 "
 DEPEND="
 	${COMMON_DEPEND}
