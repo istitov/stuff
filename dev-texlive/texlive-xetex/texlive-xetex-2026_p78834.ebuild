@@ -116,8 +116,16 @@ COMMON_DEPEND="
 	>=dev-texlive/texlive-basic-2026
 	>=dev-texlive/texlive-latex-2026
 "
+# Block pre-move collection versions so a TL2025->TL2026 upgrade can't
+# collide on files relocated into texlive-xetex (verified 2026-05-28):
+#   ctex (from langchinese), xecjk (from langcjk),
+#   xetex-devanagari (from langother), shtthesis (from publishers)
 RDEPEND="
 	${COMMON_DEPEND}
+	!<dev-texlive/texlive-langchinese-2026
+	!<dev-texlive/texlive-langcjk-2026
+	!<dev-texlive/texlive-langother-2026
+	!<dev-texlive/texlive-publishers-2026
 "
 DEPEND="
 	${COMMON_DEPEND}
