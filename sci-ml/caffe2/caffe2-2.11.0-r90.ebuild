@@ -179,6 +179,21 @@ PATCHES=(
 )
 
 src_prepare() {
+	# files/*.patch ship xz-compressed to stay under pkgcheck's 50K
+	# TotalSizeViolation cap; eapply(1) does not decompress, so expand
+	# every files/ patch into ${T} and repoint PATCHES (and the
+	# composable-kernel patch below) at the plain-text copies.
+	local p b i
+	mkdir "${T}"/patches || die
+	for p in "${FILESDIR}"/*.patch.xz; do
+		b=${p##*/}
+		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
+	done
+	for i in "${!PATCHES[@]}"; do
+		b=${PATCHES[i]##*/}
+		PATCHES[i]="${T}/patches/${b%.xz}"
+	done
+
 	if use cuda && ( use flash || use memefficient ); then
 		mv "${WORKDIR}"/${FLASH_P}/* third_party/${FLASH_PN}/ || die
 	fi
@@ -252,7 +267,7 @@ src_prepare() {
 
 		# Bug 959808: fix for gfx101x targets
 		pushd "${WORKDIR}/composable_kernel-${CK_COMMIT}" > /dev/null || die
-		eapply "${FILESDIR}"/composable-kernel-7fe50dc-expand-isa.patch.xz
+		eapply "${T}"/patches/composable-kernel-7fe50dc-expand-isa.patch
 		popd > /dev/null || die
 
 		if tc-is-clang; then
