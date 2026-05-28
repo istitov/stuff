@@ -351,6 +351,14 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
 # version (3.3.4, 3.3.5, 5.3.4, …).  Comparing the monorepo tag against
 # a component PV always produces false drift.  Use sci-libs/suitesparseconfig
 # as the canary — it ships the bundle version directly.
+# Shared skip reason for the TeX Live release components (block at the end of
+# SKIP_PKGS). They share one upstream cadence — the annual TL release — so the
+# reason is factored out rather than repeated per atom.
+_TL_SKIP = (
+    "TeX Live release component — PV tracks the annual TL release + tlpdb SVN "
+    "revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream"
+)
+
 SKIP_PKGS: dict[str, str] = {
     "sci-libs/amd":     "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
     "sci-libs/camd":    "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
@@ -375,6 +383,64 @@ SKIP_PKGS: dict[str, str] = {
     "dev-python/antlr4-python3-runtime":   "pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')",
     # Snapshots ahead of upstream's only tag.
     "sci-ml/bigcode-eval":                 "we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind",
+    # --- TeX Live (imported from the texlive-stuff overlay 2026-05-28) ---
+    # The dev-texlive/* collections and the core/split build components are
+    # versioned by the TL release + tlpdb SVN revision and bumped as a set via
+    # the tlpdb regenerator, not from any per-package upstream. The standalone
+    # tools that DO have independent upstreams (dev-tex/{biber,biblatex,pgf,
+    # latex-beamer,minted,latex2pydata}, app-text/dvisvgm, dev-python/
+    # latexrestricted) are auto-tracked normally and intentionally absent here.
+    "dev-texlive/texlive-basic":           _TL_SKIP,
+    "dev-texlive/texlive-bibtexextra":     _TL_SKIP,
+    "dev-texlive/texlive-binextra":        _TL_SKIP,
+    "dev-texlive/texlive-context":         _TL_SKIP,
+    "dev-texlive/texlive-fontsextra":      _TL_SKIP,
+    "dev-texlive/texlive-fontsrecommended": _TL_SKIP,
+    "dev-texlive/texlive-fontutils":       _TL_SKIP,
+    "dev-texlive/texlive-formatsextra":    _TL_SKIP,
+    "dev-texlive/texlive-games":           _TL_SKIP,
+    "dev-texlive/texlive-humanities":      _TL_SKIP,
+    "dev-texlive/texlive-langarabic":      _TL_SKIP,
+    "dev-texlive/texlive-langchinese":     _TL_SKIP,
+    "dev-texlive/texlive-langcjk":         _TL_SKIP,
+    "dev-texlive/texlive-langcyrillic":    _TL_SKIP,
+    "dev-texlive/texlive-langczechslovak": _TL_SKIP,
+    "dev-texlive/texlive-langenglish":     _TL_SKIP,
+    "dev-texlive/texlive-langeuropean":    _TL_SKIP,
+    "dev-texlive/texlive-langfrench":      _TL_SKIP,
+    "dev-texlive/texlive-langgerman":      _TL_SKIP,
+    "dev-texlive/texlive-langgreek":       _TL_SKIP,
+    "dev-texlive/texlive-langitalian":     _TL_SKIP,
+    "dev-texlive/texlive-langjapanese":    _TL_SKIP,
+    "dev-texlive/texlive-langkorean":      _TL_SKIP,
+    "dev-texlive/texlive-langother":       _TL_SKIP,
+    "dev-texlive/texlive-langpolish":      _TL_SKIP,
+    "dev-texlive/texlive-langportuguese":  _TL_SKIP,
+    "dev-texlive/texlive-langspanish":     _TL_SKIP,
+    "dev-texlive/texlive-latex":           _TL_SKIP,
+    "dev-texlive/texlive-latexextra":      _TL_SKIP,
+    "dev-texlive/texlive-latexrecommended": _TL_SKIP,
+    "dev-texlive/texlive-luatex":          _TL_SKIP,
+    "dev-texlive/texlive-mathscience":     _TL_SKIP,
+    "dev-texlive/texlive-metapost":        _TL_SKIP,
+    "dev-texlive/texlive-music":           _TL_SKIP,
+    "dev-texlive/texlive-pictures":        _TL_SKIP,
+    "dev-texlive/texlive-plaingeneric":    _TL_SKIP,
+    "dev-texlive/texlive-pstricks":        _TL_SKIP,
+    "dev-texlive/texlive-publishers":      _TL_SKIP,
+    "dev-texlive/texlive-xetex":           _TL_SKIP,
+    "app-text/texlive-core":               _TL_SKIP,
+    "app-text/dvipsk":                     _TL_SKIP,
+    "app-text/ttf2pk2":                    _TL_SKIP,
+    "app-text/ps2pkm":                     _TL_SKIP,
+    "dev-libs/kpathsea":                   _TL_SKIP,
+    "dev-libs/ptexenc":                    _TL_SKIP,
+    "dev-tex/bibtexu":                     _TL_SKIP,
+    # Ship with TeX Live but have an independent (awkward) upstream — skipped for
+    # now; add an nvchecker regex/htmlparser entry if independent drift is wanted.
+    "dev-tex/latexmk":                     "TL-shipped; upstream personal.psu.edu has no tag scheme — add an htmlparser tracker for independent drift",
+    "dev-tex/glossaries":                  "TL-shipped; CTAN upstream — add a regex/htmlparser tracker for independent drift",
+    "dev-tex/tex4ht":                      "engine bootstrapped from svn.gnu.org.ua trunk via bin/bootstrap-tex4ht.sh; SVN-revision versioned, no upstream tags",
 }
 
 

@@ -818,7 +818,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (148) ---
+# --- github (156) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -867,6 +867,12 @@ prefix = "v"
 ["app-portage/udept"]
 source = "github"
 github = "istitov/udept"
+use_max_tag = true
+prefix = "v"
+
+["app-text/dvisvgm"]
+source = "github"
+github = "mgieseki/dvisvgm"
 use_max_tag = true
 prefix = "v"
 
@@ -1100,6 +1106,12 @@ github = "OnroerendErfgoed/language-tags"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/latexrestricted"]
+source = "github"
+github = "gpoore/latexrestricted"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/llvmlite"]
 source = "github"
 github = "numba/llvmlite"
@@ -1270,6 +1282,43 @@ prefix = "v"
 ["dev-python/wasabi"]
 source = "github"
 github = "explosion/wasabi"
+use_max_tag = true
+prefix = "v"
+
+["dev-tex/biber"]
+source = "github"
+github = "plk/biber"
+use_max_tag = true
+prefix = "v"
+
+["dev-tex/biblatex"]
+source = "github"
+github = "plk/biblatex"
+use_max_tag = true
+prefix = "v"
+# note: from HOMEPAGE
+
+["dev-tex/latex-beamer"]
+source = "github"
+github = "josephwright/beamer"
+use_max_tag = true
+prefix = "v"
+
+["dev-tex/latex2pydata"]
+source = "github"
+github = "gpoore/latex2pydata"
+use_max_tag = true
+prefix = "v"
+
+["dev-tex/minted"]
+source = "github"
+github = "gpoore/minted"
+use_max_tag = true
+prefix = "v"
+
+["dev-tex/pgf"]
+source = "github"
+github = "pgf-tikz/pgf"
 use_max_tag = true
 prefix = "v"
 
@@ -1963,7 +2012,13 @@ to_pattern = '\1_p\2'
 # ["x11-plugins/e_modules-places"] skipped: live-only ebuild (no release tracking)
 # ["x11-terms/cool-retro-term"] skipped: live-only ebuild (no release tracking)
 
+# ["app-text/dvipsk"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["app-text/ps2pkm"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["app-text/texlive-core"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["app-text/ttf2pk2"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["dev-lang/tcc"] skipped: custom upstream at bellard.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["dev-libs/kpathsea"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-libs/ptexenc"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["dev-python/amd-quark-bin"] skipped: AMD internal wheel distribution; not on public PyPI
 # ["dev-python/antlr4-python3-runtime"] skipped: pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
@@ -2004,6 +2059,49 @@ to_pattern = '\1_p\2'
 # ["dev-qt/qtwidgets"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtx11extras"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtxml"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-tex/bibtexu"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-tex/glossaries"] skipped: TL-shipped; CTAN upstream — add a regex/htmlparser tracker for independent drift
+# ["dev-tex/latexmk"] skipped: TL-shipped; upstream personal.psu.edu has no tag scheme — add an htmlparser tracker for independent drift
+# ["dev-tex/tex4ht"] skipped: engine bootstrapped from svn.gnu.org.ua trunk via bin/bootstrap-tex4ht.sh; SVN-revision versioned, no upstream tags
+# ["dev-texlive/texlive-basic"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-bibtexextra"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-binextra"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-context"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-fontsextra"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-fontsrecommended"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-fontutils"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-formatsextra"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-games"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-humanities"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langarabic"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langchinese"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langcjk"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langcyrillic"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langczechslovak"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langenglish"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langeuropean"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langfrench"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langgerman"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langgreek"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langitalian"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langjapanese"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langkorean"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langother"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langpolish"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langportuguese"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-langspanish"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-latex"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-latexextra"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-latexrecommended"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-luatex"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-mathscience"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-metapost"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-music"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-pictures"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-plaingeneric"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-pstricks"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-publishers"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["dev-texlive/texlive-xetex"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
