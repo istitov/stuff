@@ -367,6 +367,17 @@ TEXLIVE_MODULE_CONTENTS="
 	yinit-otf.r40207
 	ysabeau.r77677
 	zlmtt.r77677
+	arsenal-math.r77677
+	bahaistar.r76351
+	fontawesome6.r77677
+	fontawesome7.r76735
+	fontawesomescaled.r75980
+	juliamono.r77677
+	luciole.r77677
+	lydtype.r76924
+	monaspace-otf.r77677
+	pennstander-otf.r77677
+	splentinex.r77677
 "
 # Removed in target tlpdb: gentium-tug
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -727,6 +738,17 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	yinit-otf.doc.r40207
 	ysabeau.doc.r77677
 	zlmtt.doc.r77677
+	arsenal-math.doc.r77677
+	bahaistar.doc.r76351
+	fontawesome6.doc.r77677
+	fontawesome7.doc.r76735
+	fontawesomescaled.doc.r75980
+	juliamono.doc.r77677
+	luciole.doc.r77677
+	lydtype.doc.r76924
+	monaspace-otf.doc.r77677
+	pennstander-otf.doc.r77677
+	splentinex.doc.r77677
 "
 # Removed in target tlpdb: gentium-tug.doc
 TEXLIVE_MODULE_SRC_CONTENTS="

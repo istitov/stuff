@@ -37,7 +37,6 @@ TEXLIVE_MODULE_CONTENTS="
 	lua-typo.r77682
 	lua-uca.r74807
 	lua-ul.r77682
-	lua-uni-algos.r76195
 	lua-visual-debug.r78797
 	lua-widow-control.r77682
 	luaaddplot.r72350
@@ -111,6 +110,20 @@ TEXLIVE_MODULE_CONTENTS="
 	typewriter.r73877
 	uninormalize.r78101
 	yamlvars.r73922
+	char2path.r76924
+	countwords.r78714
+	fancymag.r75720
+	farbe.r75449
+	kkluaverb.r77516
+	kkran.r78190
+	kksymbols.r78727
+	lua-list-hyphen.r79160
+	luahyperbolic.r78431
+	luakeyval.r76992
+	lualineno.r77766
+	luatex-type-definitions.r75890
+	parstat.r77123
+	seatingchart.r76924
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	addliga.doc.r78793
@@ -145,7 +158,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	lua-typo.doc.r77682
 	lua-uca.doc.r74807
 	lua-ul.doc.r77682
-	lua-uni-algos.doc.r76195
 	lua-visual-debug.doc.r78797
 	lua-widow-control.doc.r77682
 	luaaddplot.doc.r72350
@@ -219,6 +231,20 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	typewriter.doc.r73877
 	uninormalize.doc.r78101
 	yamlvars.doc.r73922
+	char2path.doc.r76924
+	countwords.doc.r78714
+	fancymag.doc.r75720
+	farbe.doc.r75449
+	kkluaverb.doc.r77516
+	kkran.doc.r78190
+	kksymbols.doc.r78727
+	lua-list-hyphen.doc.r79160
+	luahyperbolic.doc.r78431
+	luakeyval.doc.r76992
+	lualineno.doc.r77766
+	luatex-type-definitions.doc.r75890
+	parstat.doc.r77123
+	seatingchart.doc.r76924
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	chickenize.source.r78415
@@ -251,6 +277,10 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	placeat.source.r45145
 	semesterplannerlua.source.r71322
 	texfindpkg.source.r72937
+	char2path.source.r76924
+	countwords.source.r78714
+	fancymag.source.r75720
+	lua-list-hyphen.source.r79160
 "
 # Removed in target tlpdb: cloze.source
 

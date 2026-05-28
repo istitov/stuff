@@ -36,6 +36,7 @@ TEXLIVE_MODULE_CONTENTS="
 	songs.r51494
 	undar-digitacion.r69742
 	xpiano.r77677
+	fretplot.r76337
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	abc.doc.r41157
@@ -70,6 +71,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	songs.doc.r51494
 	undar-digitacion.doc.r69742
 	xpiano.doc.r77677
+	fretplot.doc.r76337
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	abc.source.r41157

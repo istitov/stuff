@@ -147,7 +147,6 @@ TEXLIVE_MODULE_CONTENTS="
 	pxpic.r77682
 	qcircuit.r48400
 	qrcode.r77682
-	quantikz.r67206
 	randbild.r15878
 	randomwalk.r76924
 	realhats.r66924
@@ -265,6 +264,29 @@ TEXLIVE_MODULE_CONTENTS="
 	xistercian.r77682
 	xpicture.r28770
 	xypic.r78101
+	bootstrapicons.r76502
+	corasdiagram.r78538
+	eurion.r78823
+	forest-ext.r78931
+	hawkdraw.r79166
+	keisennote.r77255
+	lua-tikz3dtools.r79147
+	lucide-icons.r78995
+	na-fancyborders.r78966
+	na-tikzornament.r79019
+	na-urmborder.r78937
+	open-everyday-symbols.r75127
+	openmoji.r77186
+	optikz.r77916
+	qrcodetikz.r76924
+	sneaker.r78609
+	svg-animate.r78851
+	tikz-cookingsymbols.r75636
+	tikz-sections.r79148
+	tikz-shields.r76593
+	tikzbrickfigurines.r76088
+	tikzfxgraph.r77050
+	vexillology.r77381
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	adigraph.doc.r70422
@@ -409,7 +431,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pxpic.doc.r77682
 	qcircuit.doc.r48400
 	qrcode.doc.r77682
-	quantikz.doc.r67206
 	randbild.doc.r15878
 	randomwalk.doc.r76924
 	realhats.doc.r66924
@@ -527,6 +548,29 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xistercian.doc.r77682
 	xpicture.doc.r28770
 	xypic.doc.r78101
+	bootstrapicons.doc.r76502
+	corasdiagram.doc.r78538
+	eurion.doc.r78823
+	forest-ext.doc.r78931
+	hawkdraw.doc.r79166
+	keisennote.doc.r77255
+	lua-tikz3dtools.doc.r79147
+	lucide-icons.doc.r78995
+	na-fancyborders.doc.r78966
+	na-tikzornament.doc.r79019
+	na-urmborder.doc.r78937
+	open-everyday-symbols.doc.r75127
+	openmoji.doc.r77186
+	optikz.doc.r77916
+	qrcodetikz.doc.r76924
+	sneaker.doc.r78609
+	svg-animate.doc.r78851
+	tikz-cookingsymbols.doc.r75636
+	tikz-sections.doc.r79148
+	tikz-shields.doc.r76593
+	tikzbrickfigurines.doc.r76088
+	tikzfxgraph.doc.r77050
+	vexillology.doc.r77381
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	aobs-tikz.source.r70952
@@ -605,6 +649,13 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	venndiagram.source.r47952
 	xistercian.source.r77682
 	xpicture.source.r28770
+	forest-ext.source.r78931
+	na-fancyborders.source.r78966
+	na-tikzornament.source.r79019
+	na-urmborder.source.r78937
+	qrcodetikz.source.r76924
+	svg-animate.source.r78851
+	vexillology.source.r77381
 "
 
 inherit texlive-module

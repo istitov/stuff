@@ -58,7 +58,10 @@ TEXLIVE_MODULE_CONTENTS="
 	vntex.r62837
 	wnri.r22459
 	wnri-latex.r22338
-	xetex-devanagari.r34296
+	fonts-arundina.r78421
+	hyphen-hebrew.r74032
+	hyphen-vietnamese.r74032
+	tuzuk.r74620
 "
 # Removed in target tlpdb: padauk
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -110,7 +113,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	vntex.doc.r62837
 	wnri.doc.r22459
 	wnri-latex.doc.r22338
-	xetex-devanagari.doc.r34296
+	fonts-arundina.doc.r78421
+	tuzuk.doc.r74620
 "
 # Removed in target tlpdb: padauk.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
@@ -141,6 +145,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	thaispec.source.r77682
 	vntex.source.r62837
 	wnri-latex.source.r22338
+	fonts-arundina.source.r78421
+	tuzuk.source.r74620
 "
 
 inherit texlive-module

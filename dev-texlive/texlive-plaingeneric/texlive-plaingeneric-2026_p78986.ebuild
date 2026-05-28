@@ -117,6 +117,15 @@ TEXLIVE_MODULE_CONTENTS="
 	xlop.r77682
 	yax.r54080
 	zztex.r55862
+	eoldef.r76050
+	measurebox.r75139
+	pdftoolbox.r74832
+	plain-grid.r78986
+	plain-widow.r75230
+	stretchy.r75140
+	tokmap.r75599
+	tokstools.r78736
+	visualtoks.r76207
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	abbr.doc.r77161
@@ -219,6 +228,15 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xlop.doc.r77682
 	yax.doc.r54080
 	zztex.doc.r55862
+	eoldef.doc.r76050
+	measurebox.doc.r75139
+	pdftoolbox.doc.r74832
+	plain-grid.doc.r78986
+	plain-widow.doc.r75230
+	stretchy.doc.r75140
+	tokmap.doc.r75599
+	tokstools.doc.r78736
+	visualtoks.doc.r76207
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	advice.source.r70688

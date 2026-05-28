@@ -61,6 +61,8 @@ TEXLIVE_MODULE_CONTENTS="
 	tree-dvips.r21751
 	verse.r77677
 	xyling.r15878
+	linguistix.r77571
+	liturgy-cw.r76053
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	adtrees.doc.r51618
@@ -120,6 +122,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tree-dvips.doc.r21751
 	verse.doc.r77677
 	xyling.doc.r15878
+	linguistix.doc.r77571
+	liturgy-cw.doc.r76053
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	bibleref.source.r75257
@@ -151,6 +155,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	stage.source.r62929
 	textglos.source.r30788
 	verse.source.r77677
+	linguistix.source.r77571
+	liturgy-cw.source.r76053
 "
 
 inherit texlive-module

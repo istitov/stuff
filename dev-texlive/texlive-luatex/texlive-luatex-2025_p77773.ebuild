@@ -37,7 +37,6 @@ TEXLIVE_MODULE_CONTENTS="
 	lua-typo.r77677
 	lua-uca.r74807
 	lua-ul.r77677
-	lua-uni-algos.r76195
 	lua-visual-debug.r77207
 	lua-widow-control.r77677
 	luaaddplot.r72350
@@ -111,6 +110,17 @@ TEXLIVE_MODULE_CONTENTS="
 	typewriter.r73877
 	uninormalize.r78116
 	yamlvars.r73922
+	char2path.r76924
+	fancymag.r75720
+	farbe.r75449
+	kkluaverb.r77516
+	kkran.r78196
+	kksymbols.r78145
+	luakeyval.r76992
+	lualineno.r77773
+	luatex-type-definitions.r75890
+	parstat.r77123
+	seatingchart.r76924
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	addliga.doc.r50912
@@ -145,7 +155,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	lua-typo.doc.r77677
 	lua-uca.doc.r74807
 	lua-ul.doc.r77677
-	lua-uni-algos.doc.r76195
 	lua-visual-debug.doc.r77207
 	lua-widow-control.doc.r77677
 	luaaddplot.doc.r72350
@@ -219,6 +228,17 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	typewriter.doc.r73877
 	uninormalize.doc.r78116
 	yamlvars.doc.r73922
+	char2path.doc.r76924
+	fancymag.doc.r75720
+	farbe.doc.r75449
+	kkluaverb.doc.r77516
+	kkran.doc.r78196
+	kksymbols.doc.r78145
+	luakeyval.doc.r76992
+	lualineno.doc.r77773
+	luatex-type-definitions.doc.r75890
+	parstat.doc.r77123
+	seatingchart.doc.r76924
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	chickenize.source.r57325
@@ -251,6 +271,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	placeat.source.r45145
 	semesterplannerlua.source.r71322
 	texfindpkg.source.r72937
+	char2path.source.r76924
+	fancymag.source.r75720
 "
 # Removed in target tlpdb: cloze.source
 

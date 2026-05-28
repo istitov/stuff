@@ -14,6 +14,7 @@ TEXLIVE_MODULE_CONTENTS="
 	itnumpar.r78793
 	layaureo.r19087
 	verifica.r75682
+	attinormativi.r79075
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	amsldoc-it.doc.r45662
@@ -33,6 +34,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	psfrag-italian.doc.r15878
 	texlive-it.doc.r58653
 	verifica.doc.r75682
+	attinormativi.doc.r79075
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	antanilipsum.source.r77161
@@ -43,6 +45,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	itnumpar.source.r78793
 	layaureo.source.r19087
 	verifica.source.r75682
+	attinormativi.source.r79075
 "
 
 inherit texlive-module

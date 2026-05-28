@@ -92,6 +92,8 @@ TEXLIVE_MODULE_CONTENTS="
 	web.r73848
 	xindex.r77848
 	xpdfopen.r65952
+	runtexfile.r76526
+	show-pdf-tags.r77604
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	a2ping.doc.r52964
@@ -182,6 +184,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	web.doc.r73848
 	xindex.doc.r77848
 	xpdfopen.doc.r65952
+	runtexfile.doc.r76526
+	show-pdf-tags.doc.r77604
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	adhocfilelist.source.r29349

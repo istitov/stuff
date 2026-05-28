@@ -147,7 +147,6 @@ TEXLIVE_MODULE_CONTENTS="
 	pxpic.r77677
 	qcircuit.r48400
 	qrcode.r77677
-	quantikz.r67206
 	randbild.r15878
 	randomwalk.r76924
 	realhats.r66924
@@ -265,6 +264,20 @@ TEXLIVE_MODULE_CONTENTS="
 	xistercian.r77677
 	xpicture.r28770
 	xypic.r78116
+	bootstrapicons.r76502
+	forest-ext.r78040
+	keisennote.r77255
+	lua-tikz3dtools.r77677
+	lucide-icons.r77188
+	open-everyday-symbols.r75127
+	openmoji.r77186
+	optikz.r77919
+	qrcodetikz.r76924
+	tikz-cookingsymbols.r75636
+	tikz-shields.r76593
+	tikzbrickfigurines.r76088
+	tikzfxgraph.r77050
+	vexillology.r77381
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	adigraph.doc.r70422
@@ -409,7 +422,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pxpic.doc.r77677
 	qcircuit.doc.r48400
 	qrcode.doc.r77677
-	quantikz.doc.r67206
 	randbild.doc.r15878
 	randomwalk.doc.r76924
 	realhats.doc.r66924
@@ -527,6 +539,20 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xistercian.doc.r77677
 	xpicture.doc.r28770
 	xypic.doc.r78116
+	bootstrapicons.doc.r76502
+	forest-ext.doc.r78040
+	keisennote.doc.r77255
+	lua-tikz3dtools.doc.r77677
+	lucide-icons.doc.r77188
+	open-everyday-symbols.doc.r75127
+	openmoji.doc.r77186
+	optikz.doc.r77919
+	qrcodetikz.doc.r76924
+	tikz-cookingsymbols.doc.r75636
+	tikz-shields.doc.r76593
+	tikzbrickfigurines.doc.r76088
+	tikzfxgraph.doc.r77050
+	vexillology.doc.r77381
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	aobs-tikz.source.r70952
@@ -605,6 +631,9 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	venndiagram.source.r47952
 	xistercian.source.r77677
 	xpicture.source.r28770
+	forest-ext.source.r78040
+	qrcodetikz.source.r76924
+	vexillology.source.r77381
 "
 
 inherit texlive-module

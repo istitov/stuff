@@ -29,6 +29,8 @@ TEXLIVE_MODULE_CONTENTS="
 	zhmetrics-uptex.r40728
 	zhnumber.r77677
 	zhspacing.r41145
+	luatex-cn.r78200
+	lxgw-fonts.r77677
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	arphic.doc.r15878
@@ -65,6 +67,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	zhmetrics-uptex.doc.r40728
 	zhnumber.doc.r77677
 	zhspacing.doc.r41145
+	luatex-cn.doc.r78200
+	lxgw-fonts.doc.r77677
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	ctex.source.r77677
@@ -76,6 +80,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	zhlipsum.source.r54994
 	zhmetrics.source.r22207
 	zhnumber.source.r77677
+	lxgw-fonts.source.r77677
 "
 
 inherit texlive-module

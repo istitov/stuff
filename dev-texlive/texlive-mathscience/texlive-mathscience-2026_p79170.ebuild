@@ -278,6 +278,40 @@ TEXLIVE_MODULE_CONTENTS="
 	yquant.r77263
 	ytableau.r77682
 	zx-calculus.r70647
+	aspen.r78984
+	bracealign.r77682
+	broydensolve.r76924
+	bussproofs-colorful.r77507
+	chempid.r78673
+	dnsrecord.r78328
+	fits-astro.r78624
+	fodot.r76255
+	freemath.r76930
+	glmatrix.r78601
+	hideproofs.r75712
+	intexgral.r77252
+	linkedthm.r75860
+	logictools.r76924
+	lua-regression.r74969
+	mohelper.r78603
+	mystyletau.r78620
+	numodel-bundle.r79158
+	orbitals.r79170
+	physics3.r77682
+	quantikz.r67206
+	quantum-chemistry-bonn.r78362
+	quantumcubemodel.r78909
+	query-astro.r78766
+	quickderivs.r78510
+	qworld.r75910
+	register-transfer-level.r78780
+	seqcalc.r77561
+	statementsp.r78574
+	tensormatrix.r76005
+	tensorstyles.r78864
+	tkz-interval.r76924
+	transition-metals.r79082
+	zeckendorf.r77682
 "
 # Removed in target tlpdb: thmlist
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -553,6 +587,40 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	yquant.doc.r77263
 	ytableau.doc.r77682
 	zx-calculus.doc.r70647
+	aspen.doc.r78984
+	bracealign.doc.r77682
+	broydensolve.doc.r76924
+	bussproofs-colorful.doc.r77507
+	chempid.doc.r78673
+	dnsrecord.doc.r78328
+	fits-astro.doc.r78624
+	fodot.doc.r76255
+	freemath.doc.r76930
+	glmatrix.doc.r78601
+	hideproofs.doc.r75712
+	intexgral.doc.r77252
+	linkedthm.doc.r75860
+	logictools.doc.r76924
+	lua-regression.doc.r74969
+	mohelper.doc.r78603
+	mystyletau.doc.r78620
+	numodel-bundle.doc.r79158
+	orbitals.doc.r79170
+	physics3.doc.r77682
+	quantikz.doc.r67206
+	quantum-chemistry-bonn.doc.r78362
+	quantumcubemodel.doc.r78909
+	query-astro.doc.r78766
+	quickderivs.doc.r78510
+	qworld.doc.r75910
+	register-transfer-level.doc.r78780
+	seqcalc.doc.r77561
+	statementsp.doc.r78574
+	tensormatrix.doc.r76005
+	tensorstyles.doc.r78864
+	tkz-interval.doc.r76924
+	transition-metals.doc.r79082
+	zeckendorf.doc.r77682
 "
 # Removed in target tlpdb: thmlist.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
@@ -693,6 +761,16 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	yhmath.source.r77682
 	youngtab.source.r77682
 	ytableau.source.r77682
+	bracealign.source.r77682
+	fits-astro.source.r78624
+	glmatrix.source.r78601
+	hideproofs.source.r75712
+	intexgral.source.r77252
+	numodel-bundle.source.r79158
+	physics3.source.r77682
+	query-astro.source.r78766
+	tensorstyles.source.r78864
+	zeckendorf.source.r77682
 "
 
 inherit texlive-module

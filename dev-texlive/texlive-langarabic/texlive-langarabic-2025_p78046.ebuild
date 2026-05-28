@@ -34,6 +34,9 @@ TEXLIVE_MODULE_CONTENTS="
 	tram.r29803
 	xepersian.r77677
 	xepersian-hm.r77677
+	awami.r76980
+	fariscovernew.r78046
+	mohe-book.r74912
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	alkalami.doc.r44497
@@ -67,6 +70,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xepersian.doc.r77677
 	xepersian-hm.doc.r77677
 	xindy-persian.doc.r59013
+	awami.doc.r76980
+	fariscovernew.doc.r78046
+	mohe-book.doc.r74912
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	arabluatex.source.r67201

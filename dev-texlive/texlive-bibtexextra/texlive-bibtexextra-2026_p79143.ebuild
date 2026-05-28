@@ -168,6 +168,11 @@ TEXLIVE_MODULE_CONTENTS="
 	windycity.r67011
 	xcite.r77682
 	zootaxa-bst.r76790
+	bibbreeze.r76924
+	biblatex-abs-annote.r78770
+	biblatex-ams.r78803
+	biblatex-greifswald.r79143
+	citeright.r75480
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	amsrefs.doc.r78101
@@ -316,6 +321,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	windycity.doc.r67011
 	xcite.doc.r77682
 	zootaxa-bst.doc.r76790
+	bibbreeze.doc.r76924
+	biblatex-abs-annote.doc.r78770
+	biblatex-ams.doc.r78803
+	biblatex-greifswald.doc.r79143
+	citeright.doc.r75480
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	amsrefs.source.r78101

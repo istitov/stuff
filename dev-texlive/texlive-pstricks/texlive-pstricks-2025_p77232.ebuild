@@ -115,6 +115,12 @@ TEXLIVE_MODULE_CONTENTS="
 	uml.r17476
 	vaucanson-g.r15878
 	vocaltract.r25629
+	pst-fourbarlinkage.r77161
+	pst-gears.r77113
+	pst-kepler.r77232
+	pst-massspring.r77131
+	pst-nutation.r77145
+	pst-sphericaltrochoid.r77173
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	auto-pst-pdf.doc.r77677
@@ -229,6 +235,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	uml.doc.r17476
 	vaucanson-g.doc.r15878
 	vocaltract.doc.r25629
+	pst-fourbarlinkage.doc.r77161
+	pst-gears.doc.r77113
+	pst-kepler.doc.r77232
+	pst-massspring.doc.r77131
+	pst-nutation.doc.r77145
+	pst-sphericaltrochoid.doc.r77173
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	auto-pst-pdf.source.r77677

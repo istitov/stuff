@@ -302,6 +302,24 @@ TEXLIVE_MODULE_CONTENTS="
 	yazd-thesis.r61719
 	yb-book.r74649
 	york-thesis.r23348
+	abntexto-uece.r76157
+	aeskwadraat.r75506
+	cqjtuthesis.r77776
+	deutschesmuseum.r77887
+	dlrg-templates.r74633
+	fhj-script.r78176
+	hustvisual.r76924
+	iacrj.r77823
+	jsonresume.r77560
+	jyu-chem-thesis.r77889
+	maine-thesis.r77208
+	modernnewspaper.r77279
+	ou-tma.r76460
+	pats-resume.r74532
+	phimisci.r76924
+	retosmatematicos.r76358
+	rwth-ci.r77893
+	sysuthesis.r77677
 "
 # Removed in target tlpdb: afparticle
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -602,6 +620,24 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	yazd-thesis.doc.r61719
 	yb-book.doc.r74649
 	york-thesis.doc.r23348
+	abntexto-uece.doc.r76157
+	aeskwadraat.doc.r75506
+	cqjtuthesis.doc.r77776
+	deutschesmuseum.doc.r77887
+	dlrg-templates.doc.r74633
+	fhj-script.doc.r78176
+	hustvisual.doc.r76924
+	iacrj.doc.r77823
+	jsonresume.doc.r77560
+	jyu-chem-thesis.doc.r77889
+	maine-thesis.doc.r77208
+	modernnewspaper.doc.r77279
+	ou-tma.doc.r76460
+	pats-resume.doc.r74532
+	phimisci.doc.r76924
+	retosmatematicos.doc.r76358
+	rwth-ci.doc.r77893
+	sysuthesis.doc.r77677
 "
 # Removed in target tlpdb: afparticle.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
@@ -758,6 +794,15 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	yathesis.source.r70511
 	yb-book.source.r74649
 	york-thesis.source.r23348
+	aeskwadraat.source.r75506
+	deutschesmuseum.source.r77887
+	fhj-script.source.r78176
+	hustvisual.source.r76924
+	maine-thesis.source.r77208
+	ou-tma.source.r76460
+	phimisci.source.r76924
+	rwth-ci.source.r77893
+	sysuthesis.source.r77677
 "
 # Removed in target tlpdb: afparticle.source
 

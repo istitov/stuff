@@ -1577,6 +1577,62 @@ TEXLIVE_MODULE_CONTENTS="
 	zugferd.r76924
 	zwgetfdate.r15878
 	zwpagelayout.r63074
+	afperpack.r77050
+	beamer-reveal.r77678
+	beamer-theme-albi.r74899
+	beamer-varbox.r76296
+	beamertheme-bilkent-econ.r76561
+	beamertheme-cleaneasy.r74971
+	beamertheme-csh.r76967
+	beamertheme-durham.r78116
+	beamertheme-spectrum.r77777
+	cistercian.r77677
+	elegantbook.r78198
+	elegantnote.r78198
+	elegantpaper.r78198
+	enumsub.r75967
+	envelope-letter.r76175
+	essaykit.r77253
+	figureversions.r75069
+	fixtounicode.r78119
+	futharksymb.r76480
+	glossaries-ukrainian.r77154
+	isosigns.r76196
+	ktbox.r76524
+	latex-tagging-status.r77801
+	lecturenotes.r74699
+	leporello.r76924
+	longtwocolumn.r75852
+	makegobbler.r78194
+	memoize-ext.r78222
+	metacapture.r77822
+	milestonetimeline.r78179
+	minted-code.r76529
+	modernruler.r77700
+	multinotes.r75610
+	novabeamer-theme.r76924
+	onepgnote.r75332
+	panda.r78116
+	paramcalc.r77518
+	pkginfograb.r77338
+	rainbowbrackets.r75976
+	secretx.r77296
+	slixte.r76913
+	switch.r77050
+	tablericons.r77184
+	tabular2.r76924
+	terminalcode.r76729
+	tokglobalstack.r77964
+	tokgroupmark.r77963
+	traffic-light-protocol.r76924
+	ullrcorners.r75278
+	vscodeicons.r76927
+	xmeaning.r77128
+	xpeekahead.r77050
+	xsipa.r76924
+	xstacks.r77986
+	xstix2.r78230
+	xtufte.r76952
 "
 # Removed in target tlpdb: isosafety, litebook, litesolution
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -3144,6 +3200,62 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	zugferd.doc.r76924
 	zwgetfdate.doc.r15878
 	zwpagelayout.doc.r63074
+	afperpack.doc.r77050
+	beamer-reveal.doc.r77678
+	beamer-theme-albi.doc.r74899
+	beamer-varbox.doc.r76296
+	beamertheme-bilkent-econ.doc.r76561
+	beamertheme-cleaneasy.doc.r74971
+	beamertheme-csh.doc.r76967
+	beamertheme-durham.doc.r78116
+	beamertheme-spectrum.doc.r77777
+	cistercian.doc.r77677
+	elegantbook.doc.r78198
+	elegantnote.doc.r78198
+	elegantpaper.doc.r78198
+	enumsub.doc.r75967
+	envelope-letter.doc.r76175
+	essaykit.doc.r77253
+	figureversions.doc.r75069
+	fixtounicode.doc.r78119
+	futharksymb.doc.r76480
+	glossaries-ukrainian.doc.r77154
+	isosigns.doc.r76196
+	ktbox.doc.r76524
+	latex-tagging-status.doc.r77801
+	lecturenotes.doc.r74699
+	leporello.doc.r76924
+	longtwocolumn.doc.r75852
+	makegobbler.doc.r78194
+	memoize-ext.doc.r78222
+	metacapture.doc.r77822
+	milestonetimeline.doc.r78179
+	minted-code.doc.r76529
+	modernruler.doc.r77700
+	multinotes.doc.r75610
+	novabeamer-theme.doc.r76924
+	onepgnote.doc.r75332
+	panda.doc.r78116
+	paramcalc.doc.r77518
+	pkginfograb.doc.r77338
+	rainbowbrackets.doc.r75976
+	secretx.doc.r77296
+	slixte.doc.r76913
+	switch.doc.r77050
+	tablericons.doc.r77184
+	tabular2.doc.r76924
+	terminalcode.doc.r76729
+	tokglobalstack.doc.r77964
+	tokgroupmark.doc.r77963
+	traffic-light-protocol.doc.r76924
+	ullrcorners.doc.r75278
+	vscodeicons.doc.r76927
+	xmeaning.doc.r77128
+	xpeekahead.doc.r77050
+	xsipa.doc.r76924
+	xstacks.doc.r77986
+	xstix2.doc.r78230
+	xtufte.doc.r76952
 "
 # Removed in target tlpdb: isosafety.doc, litebook.doc, litesolution.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
@@ -4067,6 +4179,24 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	zref-clever.source.r77677
 	zref-vario.source.r77677
 	zugferd.source.r76924
+	beamer-reveal.source.r77678
+	beamer-varbox.source.r76296
+	enumsub.source.r75967
+	essaykit.source.r77253
+	figureversions.source.r75069
+	fixtounicode.source.r78119
+	glossaries-ukrainian.source.r77154
+	longtwocolumn.source.r75852
+	makegobbler.source.r78194
+	memoize-ext.source.r78222
+	milestonetimeline.source.r78179
+	multinotes.source.r75610
+	paramcalc.source.r77518
+	secretx.source.r77296
+	tabular2.source.r76924
+	traffic-light-protocol.source.r76924
+	ullrcorners.source.r75278
+	xmeaning.source.r77128
 "
 
 inherit optfeature texlive-module

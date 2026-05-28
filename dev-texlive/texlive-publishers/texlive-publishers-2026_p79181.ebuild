@@ -212,7 +212,6 @@ TEXLIVE_MODULE_CONTENTS="
 	seuthesix.r40088
 	sfee.r70718
 	shortmathj.r76790
-	shtthesis.r62441
 	smflatex.r58910
 	soton.r16215
 	sphdthesis.r34374
@@ -302,6 +301,41 @@ TEXLIVE_MODULE_CONTENTS="
 	yazd-thesis.r61719
 	yb-book.r79179
 	york-thesis.r23348
+	abntexto-uece.r76157
+	aeskwadraat.r75506
+	bibleref-sbl.r78602
+	ciad-beamertheme.r79091
+	cqjtuthesis.r77769
+	delvierre.r78550
+	deutschesmuseum.r77878
+	dlrg-templates.r74633
+	fhj-script.r78168
+	gia-handout.r78927
+	hustvisual.r76924
+	iacrj.r77813
+	iptconf.r79181
+	jouthesis.r78319
+	jsonresume.r77560
+	jyu-chem-thesis.r77876
+	maine-thesis.r77208
+	modernnewspaper.r77279
+	nxtlatex.r78768
+	onlinebrief24.r78738
+	ou-tma.r76460
+	pats-resume.r74532
+	phimisci.r78451
+	retosmatematicos.r76358
+	rwth-ci.r78586
+	sblarticle.r78599
+	sblbook.r78598
+	sblfonts.r78916
+	sblidx.r78596
+	sblreport.r78595
+	screenwriter.r78965
+	spim-phdthesisthemes.r79121
+	sysuthesis.r77646
+	utbmciad-report.r79121
+	uvlhighlight.r78690
 "
 # Removed in target tlpdb: afparticle
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -513,7 +547,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	seuthesix.doc.r40088
 	sfee.doc.r70718
 	shortmathj.doc.r76790
-	shtthesis.doc.r62441
 	smflatex.doc.r58910
 	soton.doc.r16215
 	sphdthesis.doc.r34374
@@ -602,6 +635,41 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	yazd-thesis.doc.r61719
 	yb-book.doc.r79179
 	york-thesis.doc.r23348
+	abntexto-uece.doc.r76157
+	aeskwadraat.doc.r75506
+	bibleref-sbl.doc.r78602
+	ciad-beamertheme.doc.r79091
+	cqjtuthesis.doc.r77769
+	delvierre.doc.r78550
+	deutschesmuseum.doc.r77878
+	dlrg-templates.doc.r74633
+	fhj-script.doc.r78168
+	gia-handout.doc.r78927
+	hustvisual.doc.r76924
+	iacrj.doc.r77813
+	iptconf.doc.r79181
+	jouthesis.doc.r78319
+	jsonresume.doc.r77560
+	jyu-chem-thesis.doc.r77876
+	maine-thesis.doc.r77208
+	modernnewspaper.doc.r77279
+	nxtlatex.doc.r78768
+	onlinebrief24.doc.r78738
+	ou-tma.doc.r76460
+	pats-resume.doc.r74532
+	phimisci.doc.r78451
+	retosmatematicos.doc.r76358
+	rwth-ci.doc.r78586
+	sblarticle.doc.r78599
+	sblbook.doc.r78598
+	sblfonts.doc.r78916
+	sblidx.doc.r78596
+	sblreport.doc.r78595
+	screenwriter.doc.r78965
+	spim-phdthesisthemes.doc.r79121
+	sysuthesis.doc.r77646
+	utbmciad-report.doc.r79121
+	uvlhighlight.doc.r78690
 "
 # Removed in target tlpdb: afparticle.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
@@ -758,6 +826,23 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	yathesis.source.r79025
 	yb-book.source.r79179
 	york-thesis.source.r23348
+	aeskwadraat.source.r75506
+	bibleref-sbl.source.r78602
+	deutschesmuseum.source.r77878
+	fhj-script.source.r78168
+	hustvisual.source.r76924
+	iptconf.source.r79181
+	maine-thesis.source.r77208
+	nxtlatex.source.r78768
+	ou-tma.source.r76460
+	phimisci.source.r78451
+	rwth-ci.source.r78586
+	sblarticle.source.r78599
+	sblbook.source.r78598
+	sblfonts.source.r78916
+	sblidx.source.r78596
+	sblreport.source.r78595
+	sysuthesis.source.r77646
 "
 # Removed in target tlpdb: afparticle.source
 

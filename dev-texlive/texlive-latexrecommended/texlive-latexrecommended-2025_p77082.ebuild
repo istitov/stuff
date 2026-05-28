@@ -15,7 +15,6 @@ TEXLIVE_MODULE_CONTENTS="
 	crop.r77677
 	ctable.r77677
 	eso-pic.r77677
-	etoolbox.r77677
 	euenc.r19795
 	euler.r77677
 	everysel.r57489
@@ -75,6 +74,8 @@ TEXLIVE_MODULE_CONTENTS="
 	xkeyval.r77677
 	xltxtra.r77677
 	xunicode.r77677
+	ltx-talk.r77959
+	lua-unicode-math.r77677
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	anysize.doc.r77677
@@ -87,7 +88,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	crop.doc.r77677
 	ctable.doc.r77677
 	eso-pic.doc.r77677
-	etoolbox.doc.r77677
 	euenc.doc.r19795
 	euler.doc.r77677
 	everysel.doc.r57489
@@ -146,6 +146,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xkeyval.doc.r77677
 	xltxtra.doc.r77677
 	xunicode.doc.r77677
+	ltx-talk.doc.r77959
+	lua-unicode-math.doc.r77677
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	attachfile2.source.r77677
@@ -196,6 +198,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xfrac.source.r77677
 	xkeyval.source.r77677
 	xltxtra.source.r77677
+	ltx-talk.source.r77959
+	lua-unicode-math.source.r77677
 "
 
 inherit texlive-module

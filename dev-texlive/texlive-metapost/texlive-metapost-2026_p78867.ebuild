@@ -54,6 +54,7 @@ TEXLIVE_MODULE_CONTENTS="
 	suanpan.r15878
 	textpath.r15878
 	threeddice.r20675
+	mp-gears.r78918
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	automata.doc.r19717
@@ -105,6 +106,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	suanpan.doc.r15878
 	textpath.doc.r15878
 	threeddice.doc.r20675
+	mp-gears.doc.r78918
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	emp.source.r23483

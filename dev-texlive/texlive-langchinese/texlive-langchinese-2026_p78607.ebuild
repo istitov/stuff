@@ -8,7 +8,6 @@ TEXLIVE_MODULE_CONTENTS="
 	arphic.r15878
 	arphic-ttf.r42675
 	cns.r45677
-	ctex.r77682
 	exam-zh.r76834
 	fandol.r37889
 	fduthesis.r67231
@@ -29,6 +28,8 @@ TEXLIVE_MODULE_CONTENTS="
 	zhmetrics-uptex.r40728
 	zhnumber.r77682
 	zhspacing.r41145
+	luatex-cn.r78192
+	lxgw-fonts.r79004
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	arphic.doc.r15878
@@ -37,7 +38,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	asymptote-faq-zh-cn.doc.r15878
 	asymptote-manual-zh-cn.doc.r15878
 	cns.doc.r45677
-	ctex.doc.r77682
 	ctex-faq.doc.r15878
 	exam-zh.doc.r76834
 	fandol.doc.r37889
@@ -65,9 +65,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	zhmetrics-uptex.doc.r40728
 	zhnumber.doc.r77682
 	zhspacing.doc.r41145
+	luatex-cn.doc.r78192
+	lxgw-fonts.doc.r79004
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
-	ctex.source.r77682
 	fduthesis.source.r67231
 	hanzibox.source.r77682
 	njurepo.source.r50492
@@ -76,6 +77,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	zhlipsum.source.r54994
 	zhmetrics.source.r22207
 	zhnumber.source.r77682
+	lxgw-fonts.source.r79004
 "
 
 inherit texlive-module

@@ -1369,7 +1369,6 @@ TEXLIVE_MODULE_CONTENTS="
 	tabulary.r77682
 	tagging.r77682
 	tagpair.r42138
-	tagpdf.r79038
 	talk.r76392
 	tamefloats.r27345
 	tangocolors.r66733
@@ -1575,6 +1574,90 @@ TEXLIVE_MODULE_CONTENTS="
 	zugferd.r79162
 	zwgetfdate.r15878
 	zwpagelayout.r63074
+	afperpack.r77050
+	aliascnt.r78321
+	beamer-reveal.r78638
+	beamer-theme-albi.r74899
+	beamer-varbox.r78996
+	beamertheme-bilkent-econ.r76561
+	beamertheme-cleaneasy.r74971
+	beamertheme-csh.r76967
+	beamertheme-durham.r78101
+	beamertheme-geode.r79040
+	beamertheme-spectrum.r77770
+	beamertheme-westlake.r78290
+	booktabstabular.r78551
+	boustrophedon.r79090
+	cistercian.r77682
+	clawxiv.r78742
+	cleveref-icelandic.r78578
+	dirtreex.r78824
+	elegantbook.r78872
+	elegantnote.r78191
+	elegantpaper.r78191
+	enumsub.r75967
+	envelope-letter.r76175
+	essaykit.r77253
+	figureversions.r75069
+	fixtounicode.r78112
+	fox-listings.r78465
+	fundus-suetterlin.r79131
+	futharksymb.r78514
+	glossaries-ukrainian.r77154
+	infufrgs.r78436
+	isosigns.r76196
+	ktbox.r76524
+	latex-tagging-status.r77788
+	lecturenotes.r74699
+	leporello.r76924
+	longtwocolumn.r75852
+	ltmermaid.r79002
+	lucide-admonitions.r78847
+	makegobbler.r78189
+	memoize-ext.r78512
+	metacapture.r77812
+	metaphor.r78632
+	milestonetimeline.r78165
+	minted-code.r76529
+	modernruler.r79059
+	multinotes.r75610
+	na-cover.r78994
+	na-list.r79186
+	novabeamer-theme.r76924
+	onepgnote.r75332
+	page-canons.r79093
+	panda.r78101
+	paramcalc.r77518
+	pkginfograb.r77338
+	printcolormanager.r79127
+	pyjupyter.r78632
+	rainbowbrackets.r75976
+	realscripts.r77682
+	secretx.r77296
+	simplesystemtex.r78503
+	simplex.r78263
+	slixte.r76913
+	smartnotes.r78610
+	spotxcolor.r78546
+	styleitems.r78427
+	switch.r77050
+	tablericons.r78730
+	tabular2.r78431
+	tabularht.r79121
+	terminalcode.r76729
+	tokglobalstack.r77947
+	tokgroupmark.r77946
+	traffic-light-protocol.r76924
+	ullrcorners.r75278
+	user-persona.r78798
+	vscodeicons.r76927
+	xmeaning.r77128
+	xpeekahead.r77050
+	xsipa.r76924
+	xstacks.r77979
+	xstix2.r78229
+	xtufte.r76952
+	zebra.r79085
 "
 # Removed in target tlpdb: fundus-sueterlin, zebra-goodies
 # Removed in target tlpdb: isosafety, litebook, litesolution
@@ -2937,7 +3020,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tabulary.doc.r77682
 	tagging.doc.r77682
 	tagpair.doc.r42138
-	tagpdf.doc.r79038
 	talk.doc.r76392
 	tamefloats.doc.r27345
 	tangocolors.doc.r66733
@@ -3141,6 +3223,90 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	zugferd.doc.r79162
 	zwgetfdate.doc.r15878
 	zwpagelayout.doc.r63074
+	afperpack.doc.r77050
+	aliascnt.doc.r78321
+	beamer-reveal.doc.r78638
+	beamer-theme-albi.doc.r74899
+	beamer-varbox.doc.r78996
+	beamertheme-bilkent-econ.doc.r76561
+	beamertheme-cleaneasy.doc.r74971
+	beamertheme-csh.doc.r76967
+	beamertheme-durham.doc.r78101
+	beamertheme-geode.doc.r79040
+	beamertheme-spectrum.doc.r77770
+	beamertheme-westlake.doc.r78290
+	booktabstabular.doc.r78551
+	boustrophedon.doc.r79090
+	cistercian.doc.r77682
+	clawxiv.doc.r78742
+	cleveref-icelandic.doc.r78578
+	dirtreex.doc.r78824
+	elegantbook.doc.r78872
+	elegantnote.doc.r78191
+	elegantpaper.doc.r78191
+	enumsub.doc.r75967
+	envelope-letter.doc.r76175
+	essaykit.doc.r77253
+	figureversions.doc.r75069
+	fixtounicode.doc.r78112
+	fox-listings.doc.r78465
+	fundus-suetterlin.doc.r79131
+	futharksymb.doc.r78514
+	glossaries-ukrainian.doc.r77154
+	infufrgs.doc.r78436
+	isosigns.doc.r76196
+	ktbox.doc.r76524
+	latex-tagging-status.doc.r77788
+	lecturenotes.doc.r74699
+	leporello.doc.r76924
+	longtwocolumn.doc.r75852
+	ltmermaid.doc.r79002
+	lucide-admonitions.doc.r78847
+	makegobbler.doc.r78189
+	memoize-ext.doc.r78512
+	metacapture.doc.r77812
+	metaphor.doc.r78632
+	milestonetimeline.doc.r78165
+	minted-code.doc.r76529
+	modernruler.doc.r79059
+	multinotes.doc.r75610
+	na-cover.doc.r78994
+	na-list.doc.r79186
+	novabeamer-theme.doc.r76924
+	onepgnote.doc.r75332
+	page-canons.doc.r79093
+	panda.doc.r78101
+	paramcalc.doc.r77518
+	pkginfograb.doc.r77338
+	printcolormanager.doc.r79127
+	pyjupyter.doc.r78632
+	rainbowbrackets.doc.r75976
+	realscripts.doc.r77682
+	secretx.doc.r77296
+	simplesystemtex.doc.r78503
+	simplex.doc.r78263
+	slixte.doc.r76913
+	smartnotes.doc.r78610
+	spotxcolor.doc.r78546
+	styleitems.doc.r78427
+	switch.doc.r77050
+	tablericons.doc.r78730
+	tabular2.doc.r78431
+	tabularht.doc.r79121
+	terminalcode.doc.r76729
+	tokglobalstack.doc.r77947
+	tokgroupmark.doc.r77946
+	traffic-light-protocol.doc.r76924
+	ullrcorners.doc.r75278
+	user-persona.doc.r78798
+	vscodeicons.doc.r76927
+	xmeaning.doc.r77128
+	xpeekahead.doc.r77050
+	xsipa.doc.r76924
+	xstacks.doc.r77979
+	xstix2.doc.r78229
+	xtufte.doc.r76952
+	zebra.doc.r79085
 "
 # Removed in target tlpdb: fundus-sueterlin.doc, zebra-goodies.doc
 # Removed in target tlpdb: isosafety.doc, litebook.doc, litesolution.doc
@@ -3957,7 +4123,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	tabularborder.source.r17885
 	tabularew.source.r15878
 	tabulary.source.r77682
-	tagpdf.source.r79038
 	talk.source.r76392
 	tangocolors.source.r66733
 	tcldoc.source.r22018
@@ -4063,6 +4228,35 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	zref-clever.source.r77682
 	zref-vario.source.r77682
 	zugferd.source.r79162
+	aliascnt.source.r78321
+	beamer-reveal.source.r78638
+	beamer-varbox.source.r78996
+	beamertheme-westlake.source.r78290
+	booktabstabular.source.r78551
+	boustrophedon.source.r79090
+	clawxiv.source.r78742
+	enumsub.source.r75967
+	essaykit.source.r77253
+	figureversions.source.r75069
+	fixtounicode.source.r78112
+	fundus-suetterlin.source.r79131
+	glossaries-ukrainian.source.r77154
+	longtwocolumn.source.r75852
+	makegobbler.source.r78189
+	memoize-ext.source.r78512
+	milestonetimeline.source.r78165
+	multinotes.source.r75610
+	na-cover.source.r78994
+	na-list.source.r79186
+	paramcalc.source.r77518
+	realscripts.source.r77682
+	secretx.source.r77296
+	tabular2.source.r78431
+	tabularht.source.r79121
+	traffic-light-protocol.source.r76924
+	ullrcorners.source.r75278
+	xmeaning.source.r77128
+	zebra.source.r79085
 "
 # Removed in target tlpdb: fundus-sueterlin.source, zebra-goodies.source
 

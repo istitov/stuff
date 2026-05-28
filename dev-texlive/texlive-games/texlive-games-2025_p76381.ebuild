@@ -61,6 +61,11 @@ TEXLIVE_MODULE_CONTENTS="
 	wordle.r72059
 	xq.r78116
 	xskak.r78116
+	eigo.r78116
+	mathador.r76924
+	multi-sudoku.r78116
+	pgf-go.r78116
+	tictactoe.r75712
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	bartel-chess-fonts.doc.r78116
@@ -118,6 +123,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	wordle.doc.r72059
 	xq.doc.r78116
 	xskak.doc.r78116
+	eigo.doc.r78116
+	mathador.doc.r76924
+	multi-sudoku.doc.r78116
+	pgf-go.doc.r78116
+	tictactoe.doc.r75712
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	chess-problem-diagrams.source.r78116
@@ -145,6 +155,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	wargame.source.r72903
 	weiqi.source.r78116
 	xskak.source.r78116
+	tictactoe.source.r75712
 "
 
 inherit texlive-module

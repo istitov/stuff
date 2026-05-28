@@ -21,7 +21,6 @@ TEXLIVE_MODULE_CONTENTS="
 	na-position.r55559
 	philokalia.r45356
 	ptext.r77682
-	realscripts.r77682
 	simple-resume-cv.r43057
 	simple-thesis-dissertation.r43058
 	tetragonos.r49732
@@ -46,6 +45,10 @@ TEXLIVE_MODULE_CONTENTS="
 	xetexko.r77682
 	xevlna.r77682
 	zbmath-review-template.r59693
+	ctex.r77682
+	shtthesis.r62441
+	xecjk.r77682
+	xetex-devanagari.r34296
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	arabxetex.doc.r77682
@@ -64,7 +67,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	na-position.doc.r55559
 	philokalia.doc.r45356
 	ptext.doc.r77682
-	realscripts.doc.r77682
 	simple-resume-cv.doc.r43057
 	simple-thesis-dissertation.doc.r43058
 	tetragonos.doc.r49732
@@ -87,14 +89,19 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xetexko.doc.r77682
 	xevlna.doc.r77682
 	zbmath-review-template.doc.r59693
+	ctex.doc.r77682
+	shtthesis.doc.r62441
+	xecjk.doc.r77682
+	xetex-devanagari.doc.r34296
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	arabxetex.source.r77682
 	fixlatvian.source.r21631
 	fontbook.source.r23608
 	philokalia.source.r45356
-	realscripts.source.r77682
 	xespotcolor.source.r77682
+	ctex.source.r77682
+	xecjk.source.r77682
 "
 
 inherit font texlive-module

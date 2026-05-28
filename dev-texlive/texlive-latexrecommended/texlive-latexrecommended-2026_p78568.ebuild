@@ -15,7 +15,6 @@ TEXLIVE_MODULE_CONTENTS="
 	crop.r77682
 	ctable.r77682
 	eso-pic.r77682
-	etoolbox.r77682
 	euenc.r19795
 	euler.r77682
 	everysel.r57489
@@ -74,6 +73,8 @@ TEXLIVE_MODULE_CONTENTS="
 	xkeyval.r77682
 	xltxtra.r77682
 	xunicode.r77682
+	ltx-talk.r78858
+	lua-unicode-math.r78498
 "
 # Removed in target tlpdb: pdfmanagement-testphase
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -87,7 +88,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	crop.doc.r77682
 	ctable.doc.r77682
 	eso-pic.doc.r77682
-	etoolbox.doc.r77682
 	euenc.doc.r19795
 	euler.doc.r77682
 	everysel.doc.r57489
@@ -145,6 +145,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xkeyval.doc.r77682
 	xltxtra.doc.r77682
 	xunicode.doc.r77682
+	ltx-talk.doc.r78858
+	lua-unicode-math.doc.r78498
 "
 # Removed in target tlpdb: pdfmanagement-testphase.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
@@ -195,6 +197,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xfrac.source.r77682
 	xkeyval.source.r77682
 	xltxtra.source.r77682
+	ltx-talk.source.r78858
+	lua-unicode-math.source.r78498
 "
 # Removed in target tlpdb: pdfmanagement-testphase.source
 

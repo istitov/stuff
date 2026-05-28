@@ -64,6 +64,10 @@ TEXLIVE_MODULE_CONTENTS="
 	tools.r76708
 	uniquecounter.r77682
 	url.r77682
+	etoolbox.r77682
+	lua-uni-algos.r76195
+	pdfmanagement.r79164
+	tagpdf.r79038
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	ae.doc.r15878
@@ -122,6 +126,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tools.doc.r76708
 	uniquecounter.doc.r77682
 	url.doc.r77682
+	etoolbox.doc.r77682
+	lua-uni-algos.doc.r76195
+	pdfmanagement.doc.r79164
+	tagpdf.doc.r79038
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	ae.source.r15878
@@ -175,6 +183,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	stringenc.source.r77682
 	tools.source.r76708
 	uniquecounter.source.r77682
+	pdfmanagement.source.r79164
+	tagpdf.source.r79038
 "
 
 inherit texlive-module

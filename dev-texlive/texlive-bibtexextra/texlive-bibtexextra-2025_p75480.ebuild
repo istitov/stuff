@@ -168,6 +168,8 @@ TEXLIVE_MODULE_CONTENTS="
 	windycity.r67011
 	xcite.r77677
 	zootaxa-bst.r76790
+	bibbreeze.r76924
+	citeright.r75480
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	amsrefs.doc.r78116
@@ -316,6 +318,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	windycity.doc.r67011
 	xcite.doc.r77677
 	zootaxa-bst.doc.r76790
+	bibbreeze.doc.r76924
+	citeright.doc.r75480
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	amsrefs.source.r78116

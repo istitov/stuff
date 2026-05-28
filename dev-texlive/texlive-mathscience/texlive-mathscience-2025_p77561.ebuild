@@ -278,6 +278,26 @@ TEXLIVE_MODULE_CONTENTS="
 	yquant.r77263
 	ytableau.r77677
 	zx-calculus.r70647
+	aspen.r78116
+	bracealign.r77677
+	broydensolve.r76924
+	bussproofs-colorful.r77507
+	fodot.r76255
+	freemath.r76930
+	hideproofs.r75712
+	intexgral.r77252
+	linkedthm.r75860
+	logictools.r76924
+	lua-regression.r74969
+	physics3.r77677
+	quantikz.r67206
+	quantum-chemistry-bonn.r76924
+	quantumcubemodel.r77308
+	qworld.r75910
+	seqcalc.r77561
+	tensormatrix.r76005
+	tkz-interval.r76924
+	zeckendorf.r77677
 "
 # Removed in target tlpdb: thmlist
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -553,6 +573,26 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	yquant.doc.r77263
 	ytableau.doc.r77677
 	zx-calculus.doc.r70647
+	aspen.doc.r78116
+	bracealign.doc.r77677
+	broydensolve.doc.r76924
+	bussproofs-colorful.doc.r77507
+	fodot.doc.r76255
+	freemath.doc.r76930
+	hideproofs.doc.r75712
+	intexgral.doc.r77252
+	linkedthm.doc.r75860
+	logictools.doc.r76924
+	lua-regression.doc.r74969
+	physics3.doc.r77677
+	quantikz.doc.r67206
+	quantum-chemistry-bonn.doc.r76924
+	quantumcubemodel.doc.r77308
+	qworld.doc.r75910
+	seqcalc.doc.r77561
+	tensormatrix.doc.r76005
+	tkz-interval.doc.r76924
+	zeckendorf.doc.r77677
 "
 # Removed in target tlpdb: thmlist.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
@@ -693,6 +733,11 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	yhmath.source.r77677
 	youngtab.source.r77677
 	ytableau.source.r77677
+	bracealign.source.r77677
+	hideproofs.source.r75712
+	intexgral.source.r77252
+	physics3.source.r77677
+	zeckendorf.source.r77677
 "
 
 inherit texlive-module

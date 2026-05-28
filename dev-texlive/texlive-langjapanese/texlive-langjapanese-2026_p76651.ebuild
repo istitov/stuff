@@ -64,6 +64,7 @@ TEXLIVE_MODULE_CONTENTS="
 	wadalab.r42428
 	zxjafbfont.r77682
 	zxjatype.r77682
+	luwa-ul.r77595
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	ascmac.doc.r53411
@@ -130,6 +131,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	wadalab.doc.r42428
 	zxjafbfont.doc.r77682
 	zxjatype.doc.r77682
+	luwa-ul.doc.r77595
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	ascmac.source.r53411

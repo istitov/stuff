@@ -43,6 +43,8 @@ TEXLIVE_MODULE_CONTENTS="
 	t2.r47870
 	ukrhyph.r21081
 	xecyrmongolian.r53160
+	babel-kazakh.r78969
+	hyphen-kazakh.r78069
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	babel-belarusian.doc.r49022
@@ -81,6 +83,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	texlive-sr.doc.r54594
 	ukrhyph.doc.r21081
 	xecyrmongolian.doc.r53160
+	babel-kazakh.doc.r78969
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-belarusian.source.r49022
@@ -99,6 +102,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	mongolian-babel.source.r15878
 	ruhyphen.source.r21081
 	xecyrmongolian.source.r53160
+	hyphen-kazakh.source.r78069
 "
 
 inherit texlive-module

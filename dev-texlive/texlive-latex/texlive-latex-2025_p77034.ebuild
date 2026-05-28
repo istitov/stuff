@@ -64,6 +64,8 @@ TEXLIVE_MODULE_CONTENTS="
 	tools.r76708
 	uniquecounter.r77677
 	url.r77677
+	etoolbox.r77677
+	lua-uni-algos.r76195
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	ae.doc.r15878
@@ -122,6 +124,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tools.doc.r76708
 	uniquecounter.doc.r77677
 	url.doc.r77677
+	etoolbox.doc.r77677
+	lua-uni-algos.doc.r76195
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	ae.source.r15878

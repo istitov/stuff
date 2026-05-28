@@ -26,6 +26,7 @@ TEXLIVE_MODULE_CONTENTS="
 	udesoftec.r57866
 	uhrzeit.r79121
 	umlaute.r15878
+	fragoli.r76924
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	apalike-german.doc.r76790
@@ -72,6 +73,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	uhrzeit.doc.r79121
 	umlaute.doc.r15878
 	voss-mathcol.doc.r79121
+	fragoli.doc.r76924
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-german.source.r78737

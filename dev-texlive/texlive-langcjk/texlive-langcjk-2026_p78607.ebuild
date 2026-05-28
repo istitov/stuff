@@ -19,7 +19,6 @@ TEXLIVE_MODULE_CONTENTS="
 	norasi-c90.r60831
 	pxtatescale.r77682
 	xcjk2uni.r54958
-	xecjk.r77682
 	zitie.r77682
 	zxjafont.r77682
 "
@@ -34,7 +33,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	jfmutil.doc.r60987
 	pxtatescale.doc.r77682
 	xcjk2uni.doc.r54958
-	xecjk.doc.r77682
 	zitie.doc.r77682
 	zxjafont.doc.r77682
 "
@@ -47,7 +45,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	garuda-c90.source.r60832
 	norasi-c90.source.r60831
 	xcjk2uni.source.r54958
-	xecjk.source.r77682
 "
 
 inherit texlive-module
