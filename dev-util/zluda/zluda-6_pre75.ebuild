@@ -18,7 +18,7 @@ HOMEPAGE="https://github.com/vosen/ZLUDA"
 
 EGIT_REPO_URI="https://github.com/vosen/ZLUDA.git"
 # Pin to the upstream preview tag. Bump = rename the .ebuild file; the
-# substitution converts e.g. 6_pre73 -> v6-preview.73.
+# substitution converts e.g. 6_pre75 -> v6-preview.75.
 EGIT_COMMIT="v${PV/_pre/-preview.}"
 EGIT_SUBMODULES=( '*' )
 
@@ -49,7 +49,7 @@ BDEPEND="
 "
 
 # runtime: AMD ROCm/HIP stack. cdylibs we install link these via ext/*
-# sys-crates (verified 2026-05-27 against v6-preview.73):
+# sys-crates (verified 2026-05-28 via ldd against the v6-preview.75 install):
 #   zluda         -> hip_runtime-sys -> libamdhip64 (+ statically-bundled lz4)
 #   zluda_ml      -> rocm_smi-sys    -> librocm_smi64
 #   zluda_blas    -> rocblas-sys     -> librocblas    (+ libamdhip64)
