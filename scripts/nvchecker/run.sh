@@ -74,11 +74,35 @@ if $first_run; then
     echo "future runs will report drift."
 else
     drift="$(nvcmp -c "$RUN_CFG" 2>&1 || true)"
-    if [[ -n "$drift" ]]; then
-        echo "stuff overlay — nvchecker drift report"
+
+    # Surface entries that produced no version in BOTH this run and the
+    # previous one. nvchecker logs the empty-filter case ('include_regex
+    # matched no versions') at WARNING, below our -l error threshold, so an
+    # upstream tag-scheme pivot that empties a filter would otherwise fail
+    # silently (no version => no drift => looks up-to-date forever). The
+    # detector is a set difference over verfile keys: source-agnostic and
+    # needing no log parsing. Requiring a miss in two consecutive runs drops
+    # transient fetch/rate-limit blips; $NEW/$OLD are still this run / last
+    # run here (rotation happens below).
+    silent="$(python3 "$HERE/silent_entries.py" "$CONFIG" "$NEW" "$OLD" 2>/dev/null || true)"
+
+    if [[ -n "$drift" || -n "$silent" ]]; then
+        echo "stuff overlay — nvchecker report"
         echo "run: $(date -Iseconds)"
-        echo
-        printf '%s\n' "$drift"
+        if [[ -n "$drift" ]]; then
+            echo
+            echo "== version drift =="
+            printf '%s\n' "$drift"
+        fi
+        if [[ -n "$silent" ]]; then
+            echo
+            echo "== no version for 2+ consecutive runs =="
+            echo "Likely an upstream tag-scheme pivot that silently emptied the"
+            echo "entry's include_regex — re-check the filter in generate.py:"
+            while IFS= read -r atom; do
+                echo "  $atom"
+            done <<<"$silent"
+        fi
     fi
     # Silent when clean — cron only mails when stdout is non-empty.
 fi

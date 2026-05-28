@@ -286,17 +286,24 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "from_pattern": r"^(\d+\.\d+)-pf(\d+)$",
         "to_pattern": r"\1_p\2",
     },
-    # therock-bin tracks gfx1150 nightlies on AMD's CDN
+    # therock-bin tracks AMD's nightly ROCm SDK tarballs on the CDN
     # (rocm.nightlies.amd.com).  ROCm/TheRock's github tags are
-    # `rocm-X.Y.Z` releases which don't map to the gfx1150
-    # tarball naming, so we scrape the CDN's tarball/ listing
-    # for the highest `therock-dist-linux-gfx1150-X.Y.ZaYYYYMMDD`
-    # entry and rewrite the trailing `aYYYYMMDD` to PMS-valid
-    # `_alphaYYYYMMDD`.
+    # `rocm-X.Y.Z` releases which don't map to the nightly
+    # tarball naming, so we scrape the CDN's tarball/ listing for the
+    # highest `therock-dist-linux-<arch>-X.Y.ZaYYYYMMDD` entry and
+    # rewrite the trailing `aYYYYMMDD` to PMS-valid `_alphaYYYYMMDD`.
+    #
+    # The arch token is matched generically (`[a-z0-9X-]+` covers
+    # gfx1150, gfx101X-dgpu, gfx950-dcgpu, …) rather than pinned to a
+    # single arch: the package is multi-arch via amdgpu_targets_* USE
+    # flags and every arch publishes the same nightly version, so any
+    # arch is a valid version canary.  Pinning one arch would go silent
+    # if AMD ever dropped that specific target from the matrix while the
+    # package stayed trackable via the others.
     "dev-util/therock-bin": {
         "source": "regex",
         "url": "https://rocm.nightlies.amd.com/tarball/",
-        "regex": r"therock-dist-linux-gfx1150-(\d+\.\d+\.\d+a\d+)\.tar\.gz",
+        "regex": r"therock-dist-linux-[a-z0-9X-]+-(\d+\.\d+\.\d+a\d+)\.tar\.gz",
         "from_pattern": r"^(\d+\.\d+\.\d+)a(\d+)$",
         "to_pattern": r"\1_alpha\2",
     },

@@ -1860,7 +1860,7 @@ cpan = "Term-Twiddle"
 ["dev-util/therock-bin"]
 source = "regex"
 url = "https://rocm.nightlies.amd.com/tarball/"
-regex = 'therock-dist-linux-gfx1150-(\d+\.\d+\.\d+a\d+)\.tar\.gz'
+regex = 'therock-dist-linux-[a-z0-9X-]+-(\d+\.\d+\.\d+a\d+)\.tar\.gz'
 from_pattern = '^(\d+\.\d+\.\d+)a(\d+)$'
 to_pattern = '\1_alpha\2'
 
