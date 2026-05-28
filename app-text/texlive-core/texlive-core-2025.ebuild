@@ -87,7 +87,6 @@ TL_CORE_EXTRA_DOC_CONTENTS="
 TEXLIVE_MODULE_BINSCRIPTS="
 	texmf-dist/scripts/extractbb/extractbb.lua
 	texmf-dist/scripts/m-tx/m-tx.lua
-	texmf-dist/scripts/texlive/extractbb.lua
 	texmf-dist/scripts/texlive/fmtutil-sys.sh
 	texmf-dist/scripts/texlive/fmtutil-user.sh
 	texmf-dist/scripts/texlive/fmtutil.pl
