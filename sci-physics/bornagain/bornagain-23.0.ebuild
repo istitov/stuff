@@ -26,8 +26,8 @@ DEPEND="
 	sci-libs/fftw:3.0=
 	sci-libs/gsl:=
 	sci-libs/libcerf:=
-	>=sci-libs/libformfactor-0.3.0
-	>=sci-libs/libheinz-2.0.0
+	>=sci-libs/libformfactor-0.3.0 <sci-libs/libformfactor-0.4
+	>=sci-libs/libheinz-2.0.0 <sci-libs/libheinz-3
 	virtual/zlib:=
 	app-arch/bzip2:=
 	gui? (
