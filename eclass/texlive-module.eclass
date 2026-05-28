@@ -140,9 +140,14 @@ texlive-module_src_unpack() {
 	local RELOC_TARGET=texmf-dist
 
 	sed -n -e 's:\s*RELOC/::p' tlpkg/tlpobj/* > "${T}/reloclist" || die
+	# An all-non-relocatable collection (every package ships files already
+	# under texmf-dist/, e.g. the script-only texlive-binextra in TL2025)
+	# yields an empty reloclist. Guard mkdir/mv so they are not invoked
+	# with no operands; the already-in-place files need no relocation.
+	# Divergence from ::gentoo's eclass — preserve across eclass syncs.
 	sed -e 's/\/[^/]*$//' -e "s:^:${RELOC_TARGET}/:" "${T}/reloclist" |
 		sort -u |
-		xargs mkdir -p || die
+		xargs --no-run-if-empty mkdir -p || die
 	local i dir="" files=()
 	while read -r i; do
 		if [[ ${RELOC_TARGET}/${i%/*} != "${dir}" ]]; then
@@ -154,7 +159,7 @@ texlive-module_src_unpack() {
 		# collect files with same destination dir
 		files+=( "${i}" )
 	done < "${T}/reloclist"
-	mv "${files[@]}" "${dir}" || die
+	[[ ${#files[@]} -gt 0 ]] && { mv "${files[@]}" "${dir}" || die; }
 }
 
 # @FUNCTION: texlive-module_add_format
