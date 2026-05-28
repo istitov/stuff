@@ -39,7 +39,7 @@ RDEPEND="
 DOCS=( changelog NEWS THANKS TODO )
 
 src_prepare() {
-	zcat "${FILESDIR}"/puddletag-2.5.0-pyqt6.patch.gz > "${T}"/pyqt6.patch || die
+	xzcat "${FILESDIR}"/puddletag-2.5.0-pyqt6.patch.xz > "${T}"/pyqt6.patch || die
 	eapply "${T}"/pyqt6.patch
 	distutils-r1_src_prepare
 }
