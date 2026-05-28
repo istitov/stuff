@@ -26,7 +26,6 @@ TEXLIVE_MODULE_CONTENTS="
 	context-visualcounter.r47085
 	jmn.r45751
 	context-animation.r75386
-	luajittex.r73848
 "
 # Removed in target tlpdb: context-companion-fonts, context-texlive
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -51,7 +50,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	context-vim.doc.r62071
 	context-visualcounter.doc.r47085
 	context-animation.doc.r75386
-	luajittex.doc.r73848
 "
 # Removed in target tlpdb: context-companion-fonts.doc, context-texlive.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
