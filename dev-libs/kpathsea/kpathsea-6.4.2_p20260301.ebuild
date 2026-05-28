@@ -9,16 +9,16 @@ MY_SOURCE_FILE="texlive-${PV#*_p}-source.tar.xz"
 
 DESCRIPTION="Path searching library for TeX-related files"
 HOMEPAGE="https://tug.org/texlive/"
-# 2025 hardcoded in the historic URL because PV's "_p<YYYYMMDD>" date
+# 2026 hardcoded in the historic URL because PV's "_p<YYYYMMDD>" date
 # format makes the four-digit year non-trivial to extract via Portage
-# parameter expansion at SRC_URI time. Bump on TL2026 adoption.
+# parameter expansion at SRC_URI time. Bump on TL2027 adoption.
 SRC_URI="
 	https://mirrors.ctan.org/systems/texlive/Source/${MY_SOURCE_FILE}
-	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/${MY_SOURCE_FILE}
+	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2026/${MY_SOURCE_FILE}
 	https://dev.gentoo.org/~flow/distfiles/texlive/${MY_SOURCE_FILE}
 "
 
-TL_REVISION=75425
+TL_REVISION=77861
 EXTRA_TL_MODULES="kpathsea.r${TL_REVISION}"
 EXTRA_TL_DOC_MODULES="kpathsea.doc.r${TL_REVISION}"
 
@@ -38,7 +38,7 @@ IUSE="doc static-libs"
 TEXMF_PATH=/usr/share/texmf-dist
 
 # c23 patch dropped: backport from TL trunk r74888 (Apr 2025) is already
-# in TL2025 source (kpathsea revision 75425 > 74888). musl patch kept;
+# in TL2025 source (kpathsea revision 77861 > 74888). musl patch kept;
 # still applicable to TL2025 getopt.[ch] shipped here.
 PATCHES=(
 	"${FILESDIR}"/kpathsea-getopt-musl.patch
