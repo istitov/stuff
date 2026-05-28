@@ -84,9 +84,13 @@ TL_CORE_EXTRA_DOC_CONTENTS="
 # source? ( ) USE-conditional block in SRC_URI is also omitted (an empty
 # 'source? ( )' is unparseable).
 
+# TL2026 dropped m-tx.lua from linked_scripts. The M-Tx engine is now
+# the compiled prepmx binary (m-tx.ARCH, built via --enable-m-tx,
+# installed as /usr/bin/prepmx); the old m-tx.lua orchestrator is
+# demoted to a doc file under doc/generic/m-tx/. No script to wrap, so
+# it is gone from BINSCRIPTS.
 TEXLIVE_MODULE_BINSCRIPTS="
 	texmf-dist/scripts/extractbb/extractbb.lua
-	texmf-dist/scripts/m-tx/m-tx.lua
 	texmf-dist/scripts/texlive/fmtutil-sys.sh
 	texmf-dist/scripts/texlive/fmtutil-user.sh
 	texmf-dist/scripts/texlive/fmtutil.pl
