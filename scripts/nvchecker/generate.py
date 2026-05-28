@@ -307,6 +307,20 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "from_pattern": r"^(\d+\.\d+\.\d+)a(\d+)$",
         "to_pattern": r"\1_alpha\2",
     },
+    # nvidia-cuda-toolkit ships as an NVIDIA-hosted .run installer under
+    # developer.download.nvidia.com (no github/pypi feed), so the classifier
+    # can't reach an upstream version and would skip it — which is why a
+    # 13.3.0 release went unnoticed while we shipped 13.2.1. NVIDIA's redist
+    # directory is the cleanest machine-readable version list: one
+    # redistrib_<X.Y.Z>.json per CUDA release. Scrape the listing and let
+    # max-selection pick the newest; the capture is already PV-shaped
+    # (X.Y.Z), and the older 11.x/12.x manifests sort below the current
+    # 13.x so they don't interfere.
+    "dev-util/nvidia-cuda-toolkit": {
+        "source": "regex",
+        "url": "https://developer.download.nvidia.com/compute/cuda/redist/",
+        "regex": r"redistrib_(\d+\.\d+\.\d+)\.json",
+    },
 }
 
 
