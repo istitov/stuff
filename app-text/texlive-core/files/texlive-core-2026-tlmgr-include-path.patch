@@ -1,0 +1,22 @@
+TL2026 restructured tlmgr.pl's BEGIN block (the non-Windows branch is
+now an explicit `else {...}` and the statement order changed), so
+gentoo-tex-patches-6's fix-perl-include-path-of-tlmgr.patch no longer
+applies. This is the same one-line fix against the TL2026 context:
+tlmgr installs its Perl modules under /usr/share/tlpkg/TeXLive/ but
+resolves @INC relative to $Master = "$Master/../.." which lands at
+/usr/share/texmf-dist/tlpkg, not /usr/share/tlpkg. Add one more `..`.
+
+Bug: https://bugs.gentoo.org/832139
+Bug: https://bugs.gentoo.org/263194
+
+--- a/texk/texlive/linked_scripts/texlive/tlmgr.pl
++++ b/texk/texlive/linked_scripts/texlive/tlmgr.pl
+@@ -58,7 +58,7 @@
+   } else {
+     $Master =~ s,/*[^/]*$,,;
+     $bindir = $Master;
+-    $Master = "$Master/../..";
++    $Master = "$Master/../../..";
+     $kpsewhichname = "kpsewhich";
+     $ENV{"PATH"} = "$bindir:$ENV{PATH}";
+   }

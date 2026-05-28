@@ -3,7 +3,7 @@
 
 EAPI=8
 
-TL_SOURCE_VERSION=20250308
+TL_SOURCE_VERSION=20260301
 inherit branding flag-o-matic toolchain-funcs libtool texlive-common
 
 MY_P=${PN%-core}-${TL_SOURCE_VERSION}-source
@@ -23,58 +23,58 @@ SRC_URI="
 # Macros that are not a part of texlive-sources or or pulled in from collection-binextra
 # but still needed for other packages during installation.
 TL_CORE_EXTRA_CONTENTS="
-	autosp.r69814
-	axodraw2.r77677
-	chktex.r78222
+	autosp.r77851
+	axodraw2.r77682
+	chktex.r78219
 	detex.r70015
 	dvi2tty.r66186
 	dvidvi.r75712
 	dviljk.r66186
-	dvipdfmx.r76377
+	dvipdfmx.r78409
 	dvipos.r66186
-	extractbb.r73916
+	extractbb.r77855
 	gsftopk.r52851
-	hyphen-base.r74125
+	hyphen-base.r78076
 	lacheck.r75712
-	m-tx.r75301
+	m-tx.r78106
 	makeindex.r75712
 	pmx.r75301
 	texdoctk.r62186
-	texlive-scripts.r78221
-	texlive-scripts-extra.r76585
-	texlive.infra.r76780
+	texlive-scripts.r79188
+	texlive-scripts-extra.r78162
+	texlive.infra.r78313
 	tpic2pdftex.r75712
-	upmendex.r78116
+	upmendex.r77845
 	velthuis.r66186
 	vlna.r73908
-	xindy.r65958
+	xindy.r78957
 	xml2pmx.r57972
 "
 TL_CORE_EXTRA_DOC_CONTENTS="
-	autosp.doc.r69814
-	axodraw2.doc.r77677
-	chktex.doc.r78222
+	autosp.doc.r77851
+	axodraw2.doc.r77682
+	chktex.doc.r78219
 	detex.doc.r70015
 	dvi2tty.doc.r66186
 	dvidvi.doc.r75712
 	dviljk.doc.r66186
-	dvipdfmx.doc.r76377
+	dvipdfmx.doc.r78409
 	dvipos.doc.r66186
-	extractbb.doc.r73916
+	extractbb.doc.r77855
 	gsftopk.doc.r52851
 	lacheck.doc.r75712
-	m-tx.doc.r75301
+	m-tx.doc.r78106
 	makeindex.doc.r75712
 	pmx.doc.r75301
 	texdoctk.doc.r62186
-	texlive-scripts.doc.r78221
-	texlive-scripts-extra.doc.r76585
-	texlive.infra.doc.r76780
+	texlive-scripts.doc.r79188
+	texlive-scripts-extra.doc.r78162
+	texlive.infra.doc.r78313
 	tpic2pdftex.doc.r75712
-	upmendex.doc.r78116
+	upmendex.doc.r77845
 	velthuis.doc.r66186
 	vlna.doc.r73908
-	xindy.doc.r65958
+	xindy.doc.r78957
 	xml2pmx.doc.r57972
 "
 # TL_CORE_EXTRA_SRC_CONTENTS: axodraw2.source was the only TL2024 entry
@@ -217,8 +217,15 @@ src_prepare() {
 		-e "s,/usr/include /usr/local/include.*echo \$KPATHSEA_INCLUDES.*,${TL_KPATHSEA_INCLUDES}\"," \
 		texk/web2c/configure || die
 
+	# gentoo-tex-patches-6 is cut against TL2024. Its
+	# fix-perl-include-path-of-tlmgr.patch no longer applies to TL2026's
+	# restructured tlmgr.pl BEGIN block; drop it from the batch and apply
+	# the TL2026-context equivalent below. The other six patches still
+	# apply cleanly (verified 2026-05-28).
 	local patch_dir="${WORKDIR}/tex-patches-${GENTOO_TEX_PATCHES_NUM}"
+	rm "${patch_dir}/fix-perl-include-path-of-tlmgr.patch" || die
 	eapply "${patch_dir}"
+	eapply "${FILESDIR}/texlive-core-2026-tlmgr-include-path.patch"
 
 	# ICU 75+ removed the underscored UVS_* names that upTeX's
 	# kanji.h macros redirected to; drop the macros so the
@@ -313,6 +320,11 @@ src_configure() {
 		--disable-tex4htk
 		--disable-cjkutils
 		--disable-xdvik
+		# xdvipsk is new in TL2026 and defaults on; its man/ Makefile
+		# hard-depends on the in-tree ../../kpathsea/paths.h, which a
+		# --with-system-kpathsea build never generates, so it breaks
+		# the build. ::gentoo doesn't ship xdvipsk; disable it.
+		--disable-xdvipsk
 		--enable-luatex
 		--disable-dvisvgm
 		--disable-ps2eps
