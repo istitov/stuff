@@ -191,8 +191,13 @@ KEYWORDS="~amd64"
 COMMON_DEPEND="
 	>=dev-texlive/texlive-basic-2025
 "
+# Block pre-move collection versions so a TL2024->TL2025 upgrade can't
+# collide on files relocated into texlive-latex (verified 2026-05-28):
+#   etoolbox (from latexrecommended), lua-uni-algos (from luatex)
 RDEPEND="
 	${COMMON_DEPEND}
+	!<dev-texlive/texlive-latexrecommended-2025
+	!<dev-texlive/texlive-luatex-2025
 "
 DEPEND="
 	${COMMON_DEPEND}
