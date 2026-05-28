@@ -15,7 +15,9 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 
-DEPEND=">=sci-libs/libheinz-2.0.0"
+# Built against the libheinz 2.x API; cap below 3 so the libheinz-4.0
+# co-release of libformfactor-0.4.0 / bornagain-24.0 can't be pulled in here.
+DEPEND=">=sci-libs/libheinz-2.0.0 <sci-libs/libheinz-3"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
