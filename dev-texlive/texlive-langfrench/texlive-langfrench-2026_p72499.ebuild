@@ -1,0 +1,120 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-langfrench.r72499
+	aeguill.r15878
+	annee-scolaire.r76924
+	babel-basque.r77682
+	babel-french.r78251
+	basque-book.r32924
+	basque-date.r26477
+	bib-fr.r76790
+	bibleref-french.r75246
+	cahierprof.r76102
+	couleurs-fr.r78637
+	droit-fr.r39802
+	e-french.r79121
+	facture.r67538
+	frenchmath.r71205
+	frletter.r15878
+	frpseudocode.r79121
+	hyphen-basque.r78069
+	hyphen-french.r78069
+	impnattypo.r78251
+	letgut.r78543
+	mafr.r15878
+	matapli.r76924
+	panneauxroute.r73069
+	profcollege.r79140
+	proflabo.r63147
+	proflycee.r78521
+	profsio.r79121
+	tabvar.r63921
+	tdsfrmath.r15878
+	variations.r15878
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	aeguill.doc.r15878
+	annee-scolaire.doc.r76924
+	apprendre-a-programmer-en-tex.doc.r76790
+	apprends-latex.doc.r19306
+	babel-basque.doc.r77682
+	babel-french.doc.r78251
+	basque-book.doc.r32924
+	basque-date.doc.r26477
+	bib-fr.doc.r76790
+	bibleref-french.doc.r75246
+	booktabs-fr.doc.r79121
+	cahierprof.doc.r76102
+	couleurs-fr.doc.r78637
+	droit-fr.doc.r39802
+	e-french.doc.r79121
+	epslatex-fr.doc.r19440
+	expose-expl3-dunkerque-2019.doc.r76924
+	facture.doc.r67538
+	faq-fr.doc.r79121
+	faq-fr-gutenberg.doc.r79121
+	formation-latex-ul.doc.r70507
+	frenchmath.doc.r71205
+	frletter.doc.r15878
+	frpseudocode.doc.r79121
+	impatient-fr.doc.r54080
+	impnattypo.doc.r78251
+	l2tabu-french.doc.r31315
+	latex2e-help-texinfo-fr.doc.r64228
+	letgut.doc.r78543
+	lshort-french.doc.r23332
+	mafr.doc.r15878
+	matapli.doc.r76924
+	panneauxroute.doc.r73069
+	profcollege.doc.r79140
+	proflabo.doc.r63147
+	proflycee.doc.r78521
+	profsio.doc.r79121
+	tabvar.doc.r63921
+	tdsfrmath.doc.r15878
+	texlive-fr.doc.r78031
+	translation-array-fr.doc.r79121
+	translation-dcolumn-fr.doc.r79121
+	translation-natbib-fr.doc.r25105
+	translation-tabbing-fr.doc.r24228
+	variations.doc.r15878
+	visualfaq-fr.doc.r71053
+	visualtikz.doc.r54080
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	annee-scolaire.source.r76924
+	babel-basque.source.r77682
+	babel-french.source.r78251
+	basque-book.source.r32924
+	basque-date.source.r26477
+	bibleref-french.source.r75246
+	facture.source.r67538
+	formation-latex-ul.source.r70507
+	frenchmath.source.r71205
+	hyphen-basque.source.r78069
+	impnattypo.source.r78251
+	letgut.source.r78543
+	tabvar.source.r63921
+	tdsfrmath.source.r15878
+"
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive French"
+
+LICENSE="CC-BY-4.0 CC-BY-SA-2.0 CC-BY-SA-3.0 CC-BY-SA-4.0 CC0-1.0 FDL-1.1+ GPL-1+ LPPL-1.0 LPPL-1.2 LPPL-1.3 LPPL-1.3c TeX-other-free public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-basic-2026
+"
+RDEPEND="
+	${COMMON_DEPEND}
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
