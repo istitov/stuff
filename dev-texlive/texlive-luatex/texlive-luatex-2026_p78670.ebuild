@@ -1,0 +1,285 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-luatex.r78670
+	addliga.r78793
+	addtoluatexpath.r73424
+	auto-pst-pdf-lua.r77682
+	barracuda.r63708
+	bezierplot.r72750
+	blopentype.r69080
+	checkcites.r73120
+	chickenize.r78415
+	chinese-jfm.r57758
+	cloze.r75681
+	combofont.r78793
+	cstypo.r41986
+	ctablestack.r78101
+	ekdosis.r69568
+	emoji.r77682
+	emojicite.r76924
+	enigma.r29802
+	gitinfo-lua.r78348
+	ideavault.r74773
+	innerscript.r75161
+	interpreter.r78415
+	kanaparser.r48052
+	ligtype.r78793
+	linebreaker.r77682
+	longmath.r78632
+	lparse.r78101
+	lt3luabridge.r76924
+	lua-placeholders.r79056
+	lua-tinyyaml.r73671
+	lua-typo.r77682
+	lua-uca.r74807
+	lua-ul.r77682
+	lua-uni-algos.r76195
+	lua-visual-debug.r78797
+	lua-widow-control.r77682
+	luaaddplot.r72350
+	luacas.r67247
+	luacensor.r71922
+	luacode.r78415
+	luacolor.r77682
+	luacomplex.r68883
+	luagcd.r76790
+	luahttp.r67348
+	luahyphenrules.r78101
+	luaimageembed.r50788
+	luaindex.r25882
+	luainputenc.r77682
+	luakeys.r78101
+	lualatex-math.r77682
+	lualatex-truncate.r78632
+	lualibs.r78415
+	lualinalg.r76924
+	luamathalign.r77682
+	luamaths.r76924
+	luamml.r78219
+	luamodulartables.r68893
+	luamplib.r79161
+	luaoptions.r79068
+	luaotfload.r74324
+	luapackageloader.r54779
+	luaplot.r68918
+	luaprogtable.r56113
+	luaquotes.r65652
+	luarandom.r78101
+	luaset.r76924
+	luatex85.r77682
+	luatexbase.r77682
+	luatexko.r78005
+	luatextra.r77682
+	luatruthtable.r78415
+	luavlna.r77682
+	luaxml.r78101
+	lutabulartools.r73345
+	minim.r73816
+	minim-math.r73816
+	minim-mp.r78415
+	minim-pdf.r77682
+	minim-xmp.r73816
+	newpax.r78945
+	nodetree.r76924
+	odsfile.r78415
+	optex.r79102
+	pdfarticle.r51127
+	pdfextra.r65184
+	penlight.r73362
+	penlightplus.r74000
+	piton.r79137
+	placeat.r45145
+	plantuml.r75196
+	pyluatex.r78739
+	scikgtex.r66764
+	selnolig.r77682
+	semesterplannerlua.r71322
+	showhyphenation.r77682
+	showkerning.r78632
+	spacekern.r78632
+	spelling.r73571
+	stricttex.r56320
+	sympycalc.r73069
+	tango.r71825
+	texfindpkg.r72937
+	truthtable.r68300
+	tsvtemplate.r65333
+	typewriter.r73877
+	uninormalize.r78101
+	yamlvars.r73922
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	addliga.doc.r78793
+	addtoluatexpath.doc.r73424
+	auto-pst-pdf-lua.doc.r77682
+	barracuda.doc.r63708
+	bezierplot.doc.r72750
+	blopentype.doc.r69080
+	checkcites.doc.r73120
+	chickenize.doc.r78415
+	chinese-jfm.doc.r57758
+	cloze.doc.r75681
+	combofont.doc.r78793
+	cstypo.doc.r41986
+	ctablestack.doc.r78101
+	ekdosis.doc.r69568
+	emoji.doc.r77682
+	emojicite.doc.r76924
+	enigma.doc.r29802
+	gitinfo-lua.doc.r78348
+	ideavault.doc.r74773
+	innerscript.doc.r75161
+	interpreter.doc.r78415
+	kanaparser.doc.r48052
+	ligtype.doc.r78793
+	linebreaker.doc.r77682
+	longmath.doc.r78632
+	lparse.doc.r78101
+	lt3luabridge.doc.r76924
+	lua-placeholders.doc.r79056
+	lua-tinyyaml.doc.r73671
+	lua-typo.doc.r77682
+	lua-uca.doc.r74807
+	lua-ul.doc.r77682
+	lua-uni-algos.doc.r76195
+	lua-visual-debug.doc.r78797
+	lua-widow-control.doc.r77682
+	luaaddplot.doc.r72350
+	luacas.doc.r67247
+	luacensor.doc.r71922
+	luacode.doc.r78415
+	luacolor.doc.r77682
+	luacomplex.doc.r68883
+	luagcd.doc.r76790
+	luahttp.doc.r67348
+	luahyphenrules.doc.r78101
+	luaimageembed.doc.r50788
+	luaindex.doc.r25882
+	luainputenc.doc.r77682
+	luakeys.doc.r78101
+	lualatex-math.doc.r77682
+	lualatex-truncate.doc.r78632
+	lualibs.doc.r78415
+	lualinalg.doc.r76924
+	luamathalign.doc.r77682
+	luamaths.doc.r76924
+	luamml.doc.r78219
+	luamodulartables.doc.r68893
+	luamplib.doc.r79161
+	luaoptions.doc.r79068
+	luaotfload.doc.r74324
+	luapackageloader.doc.r54779
+	luaplot.doc.r68918
+	luaprogtable.doc.r56113
+	luaquotes.doc.r65652
+	luarandom.doc.r78101
+	luaset.doc.r76924
+	luatex85.doc.r77682
+	luatexbase.doc.r77682
+	luatexko.doc.r78005
+	luatextra.doc.r77682
+	luatruthtable.doc.r78415
+	luavlna.doc.r77682
+	luaxml.doc.r78101
+	lutabulartools.doc.r73345
+	minim.doc.r73816
+	minim-math.doc.r73816
+	minim-mp.doc.r78415
+	minim-pdf.doc.r77682
+	minim-xmp.doc.r73816
+	newpax.doc.r78945
+	nodetree.doc.r76924
+	odsfile.doc.r78415
+	optex.doc.r79102
+	pdfarticle.doc.r51127
+	pdfextra.doc.r65184
+	penlight.doc.r73362
+	penlightplus.doc.r74000
+	piton.doc.r79137
+	placeat.doc.r45145
+	plantuml.doc.r75196
+	pyluatex.doc.r78739
+	scikgtex.doc.r66764
+	selnolig.doc.r77682
+	semesterplannerlua.doc.r71322
+	showhyphenation.doc.r77682
+	showkerning.doc.r78632
+	spacekern.doc.r78632
+	spelling.doc.r73571
+	stricttex.doc.r56320
+	sympycalc.doc.r73069
+	tango.doc.r71825
+	texfindpkg.doc.r72937
+	truthtable.doc.r68300
+	tsvtemplate.doc.r65333
+	typewriter.doc.r73877
+	uninormalize.doc.r78101
+	yamlvars.doc.r73922
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	chickenize.source.r78415
+	ctablestack.source.r78101
+	ekdosis.source.r69568
+	innerscript.source.r75161
+	lt3luabridge.source.r76924
+	lua-typo.source.r77682
+	lua-uca.source.r74807
+	lua-ul.source.r77682
+	lua-widow-control.source.r77682
+	luaaddplot.source.r72350
+	luacode.source.r78415
+	luacolor.source.r77682
+	luaindex.source.r25882
+	luainputenc.source.r77682
+	lualatex-math.source.r77682
+	lualatex-truncate.source.r78632
+	lualibs.source.r78415
+	luamathalign.source.r77682
+	luamml.source.r78219
+	luamplib.source.r79161
+	luaotfload.source.r74324
+	luatex85.source.r77682
+	luatexbase.source.r77682
+	luatextra.source.r77682
+	newpax.source.r78945
+	nodetree.source.r76924
+	piton.source.r79137
+	placeat.source.r45145
+	semesterplannerlua.source.r71322
+	texfindpkg.source.r72937
+"
+# Removed in target tlpdb: cloze.source
+
+inherit prefix texlive-module
+
+DESCRIPTION="TeXLive LuaTeX packages"
+
+LICENSE="BSD CC-BY-SA-3.0 CC-BY-SA-4.0 EUPL-1.2 FDL-1.1+ GPL-2 GPL-3 GPL-3+ LPPL-1.3 LPPL-1.3c MIT OFL-1.1 TeX-other-free public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-basic-2026
+"
+RDEPEND="
+	${COMMON_DEPEND}
+"
+DEPEND="
+	${COMMON_DEPEND}
+	>=app-text/texlive-core-2026
+"
+
+TEXLIVE_MODULE_BINSCRIPTS="
+	texmf-dist/scripts/checkcites/checkcites.lua
+	texmf-dist/scripts/luaotfload/luaotfload-tool.lua
+	texmf-dist/scripts/texfindpkg/texfindpkg.lua
+"
+
+src_prepare() {
+	default
+	# https://bugs.gentoo.org/865203
+	hprefixify texmf-dist/tex/luatex/luaotfload/luaotfload-database.lua
+}
