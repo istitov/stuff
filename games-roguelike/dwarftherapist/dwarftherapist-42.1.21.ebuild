@@ -48,7 +48,7 @@ src_prepare() {
 		find src CMakeLists.txt -type f \
 			\( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' -o -name '*.ui' -o -name 'CMakeLists.txt' \) \
 			-exec sed -i 's/\r$//' {} + || die
-		zcat "${FILESDIR}"/dwarftherapist-42.1.21-qt6.patch.gz > "${T}"/qt6.patch || die
+		xzcat "${FILESDIR}"/dwarftherapist-42.1.21-qt6.patch.xz > "${T}"/qt6.patch || die
 		eapply "${T}"/qt6.patch
 	fi
 	cmake_src_prepare
