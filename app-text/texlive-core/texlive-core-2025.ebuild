@@ -468,7 +468,11 @@ src_install() {
 	rm "${ED}${TEXMF_PATH}/web2c/fmtutil.cnf" || die
 
 	if use cjk; then
-		rm "${ED}/usr/bin/"{,u}ptex || die
+		# Drop the standalone ptex/uptex engines; Gentoo keeps only the
+		# extended euptex (the ptex/uptex *names* are provided as symlinks
+		# by texlive-langjapanese). Use -f so a TL release that no longer
+		# installs a standalone ptex binary does not abort the install.
+		rm -f "${ED}/usr/bin/"{,u}ptex || die
 	fi
 
 	if ! use xindy; then
