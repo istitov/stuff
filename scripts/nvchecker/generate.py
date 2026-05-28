@@ -45,6 +45,12 @@ GITHUB_ARCHIVE_RE = re.compile(r'https?://(?:www\.)?github\.com/([A-Za-z0-9_.-]+
 GITHUB_HOMEPAGE_RE = re.compile(r'https?://(?:www\.)?github\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git|/|$|\s)')
 BITBUCKET_RE = re.compile(r'https?://(?:www\.)?bitbucket\.org/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git|/|$|\s)')
 GITLAB_RE = re.compile(r'https?://(gitlab(?:\.[A-Za-z0-9-]+)+)/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git|/|$|\s)')
+# GitLab archive download: https://<host>/<group>[/<subgroup>…]/<project>/-/archive/<ref>/…
+# The `/-/` reserved-path separator is GitLab-specific and hostname-agnostic,
+# so this catches self-hosted instances whose hostname doesn't start with
+# "gitlab" (e.g. jugit.fz-juelich.de) and so slip past GITLAB_RE above. group(1)
+# is the host, group(2) the full project path (subgroups included).
+GITLAB_ARCHIVE_RE = re.compile(r'https?://([^/]+)/(.+?)/-/archive/')
 # Match both the canonical project page (sourceforge.net/project[s]/<slug>)
 # and the downloads redirector used by many ebuilds
 # (downloads.sourceforge.net/<slug>/).
@@ -321,6 +327,17 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "url": "https://developer.download.nvidia.com/compute/cuda/redist/",
         "regex": r"redistrib_(\d+\.\d+\.\d+)\.json",
     },
+    # dev-libs/cudnn, like the toolkit, is an NVIDIA-hosted artifact with no
+    # github/pypi feed. Its redist directory lists one redistrib_<ver>.json per
+    # release. The 9.x manifests are 3-part (redistrib_9.17.1.json) while our PV
+    # carries a 4th build component (9.17.1.4) resolved at bump time, so we
+    # track the 3-part release signal. The 3-part regex also excludes the older
+    # 8.x 4-part manifests (redistrib_8.5.0.96.json), which sort below 9.x anyway.
+    "dev-libs/cudnn": {
+        "source": "regex",
+        "url": "https://developer.download.nvidia.com/compute/cudnn/redist/",
+        "regex": r"redistrib_(\d+\.\d+\.\d+)\.json",
+    },
 }
 
 
@@ -502,6 +519,16 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
         m = GITHUB_ARCHIVE_RE.search(src_uri)
         if m:
             return {"kind": "github", "spec": f"{m.group(1)}/{m.group(2)}"}
+
+    # A GitLab archive download in SRC_URI (any host) is likewise a deliberate
+    # fetch override. The `/-/archive/` path is GitLab-specific, so this reaches
+    # self-hosted instances (jugit.fz-juelich.de, …) that GITLAB_RE's
+    # hostname-based match misses — e.g. sci-libs/libformfactor fetches
+    # jugit.fz-juelich.de/mlz/libformfactor/-/archive/v${PV}/...
+    if src_uri:
+        m = GITLAB_ARCHIVE_RE.search(src_uri)
+        if m:
+            return {"kind": "gitlab", "spec": m.group(2), "host": m.group(1)}
 
     # PyPI: if inherit pypi is present
     if PYPI_INHERIT_RE.search(ebuild_text):
@@ -694,6 +721,9 @@ def emit_entry(entry_name: str, classification: dict) -> list[str]:
         if host and host != "gitlab.com":
             lines.append(f'host = "{host}"')
         lines.append("use_max_tag = true")
+        # GitLab release tags are conventionally v-prefixed (v1.2.3); strip so
+        # they compare cleanly against Portage PVs, as github/bitbucket do.
+        lines.append('prefix = "v"')
     elif kind == "sourceforge":
         lines.append('source = "sourceforge"')
         lines.append(f'sourceforge = "{classification["spec"]}"')

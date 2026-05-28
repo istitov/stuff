@@ -1785,6 +1785,29 @@ github = "fmaclen/hollama"
 use_max_tag = true
 prefix = ""
 
+# --- gitlab (3) ---
+
+["sci-libs/libformfactor"]
+source = "gitlab"
+gitlab = "mlz/libformfactor"
+host = "jugit.fz-juelich.de"
+use_max_tag = true
+prefix = "v"
+
+["sci-libs/libheinz"]
+source = "gitlab"
+gitlab = "mlz/libheinz"
+host = "jugit.fz-juelich.de"
+use_max_tag = true
+prefix = "v"
+
+["sci-physics/bornagain"]
+source = "gitlab"
+gitlab = "mlz/bornagain"
+host = "jugit.fz-juelich.de"
+use_max_tag = true
+prefix = "v"
+
 # --- bitbucket (1) ---
 
 ["media-plugins/deadbeef-opus"]
@@ -1859,7 +1882,12 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (4) ---
+# --- special (5) ---
+
+["dev-libs/cudnn"]
+source = "regex"
+url = "https://developer.download.nvidia.com/compute/cudnn/redist/"
+regex = 'redistrib_(\d+\.\d+\.\d+)\.json'
 
 ["dev-util/nvidia-cuda-toolkit"]
 source = "regex"
@@ -1936,7 +1964,6 @@ to_pattern = '\1_p\2'
 # ["x11-terms/cool-retro-term"] skipped: live-only ebuild (no release tracking)
 
 # ["dev-lang/tcc"] skipped: custom upstream at bellard.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["dev-libs/cudnn"] skipped: custom upstream at developer.nvidia.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/amd-quark-bin"] skipped: AMD internal wheel distribution; not on public PyPI
 # ["dev-python/antlr4-python3-runtime"] skipped: pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
@@ -1986,15 +2013,12 @@ to_pattern = '\1_p\2'
 # ["sci-libs/ccolamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/cholmod"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/colamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
-# ["sci-libs/libformfactor"] skipped: custom upstream at jugit.fz-juelich.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["sci-libs/libheinz"] skipped: custom upstream at jugit.fz-juelich.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-libs/umfpack"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-ml/bigcode-eval"] skipped: we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind
 # ["sci-ml/caffe2"] skipped: pytorch/caffe2 repo has no tags; caffe2 was absorbed into pytorch/pytorch
 # ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["sci-physics/bornagain"] skipped: custom upstream at bornagainproject.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/demeter"] skipped: Demeter removed from CPAN; no public upstream tracking possible
 # ["sci-physics/ifeffit"] skipped: custom upstream at sourceforge.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/oommf"] skipped: custom upstream at math.nist.gov; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
