@@ -1,0 +1,225 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-latexrecommended.r78568
+	anysize.r77682
+	attachfile2.r77682
+	booktabs.r77682
+	breqn.r77682
+	caption.r77682
+	cite.r77682
+	cmap.r77682
+	crop.r77682
+	ctable.r77682
+	eso-pic.r77682
+	etoolbox.r77682
+	euenc.r19795
+	euler.r77682
+	everysel.r57489
+	everyshi.r77682
+	extsizes.r78101
+	fancybox.r77682
+	fancyref.r77682
+	fancyvrb.r78721
+	filehook.r77682
+	float.r77682
+	fontspec.r77682
+	footnotehyper.r77682
+	fp.r77682
+	grffile.r78101
+	hologo.r78580
+	index.r77682
+	infwarerr.r77682
+	jknapltx.r19440
+	koma-script.r77575
+	l3experimental.r79165
+	latexbug.r79083
+	lineno.r78315
+	listings.r77682
+	lwarp.r78111
+	mathspec.r77682
+	mathtools.r78251
+	mdwtools.r15878
+	memoir.r77682
+	metalogo.r77682
+	microtype.r78228
+	newfloat.r77682
+	ntgclass.r77239
+	parskip.r77682
+	pdfcolfoot.r77682
+	pdflscape.r77682
+	pdfpages.r78558
+	polyglossia.r78740
+	psfrag.r15878
+	ragged2e.r77682
+	rcs.r15878
+	sansmath.r77682
+	section.r20180
+	seminar.r77682
+	sepnum.r20186
+	setspace.r77682
+	subfig.r77682
+	textcase.r77682
+	thumbpdf.r62518
+	translator.r77682
+	typehtml.r17134
+	ucharcat.r78415
+	underscore.r77682
+	unicode-math.r78251
+	xcolor.r77682
+	xfrac.r77682
+	xkeyval.r77682
+	xltxtra.r77682
+	xunicode.r77682
+"
+# Removed in target tlpdb: pdfmanagement-testphase
+TEXLIVE_MODULE_DOC_CONTENTS="
+	anysize.doc.r77682
+	attachfile2.doc.r77682
+	booktabs.doc.r77682
+	breqn.doc.r77682
+	caption.doc.r77682
+	cite.doc.r77682
+	cmap.doc.r77682
+	crop.doc.r77682
+	ctable.doc.r77682
+	eso-pic.doc.r77682
+	etoolbox.doc.r77682
+	euenc.doc.r19795
+	euler.doc.r77682
+	everysel.doc.r57489
+	everyshi.doc.r77682
+	extsizes.doc.r78101
+	fancybox.doc.r77682
+	fancyref.doc.r77682
+	fancyvrb.doc.r78721
+	filehook.doc.r77682
+	float.doc.r77682
+	fontspec.doc.r77682
+	footnotehyper.doc.r77682
+	fp.doc.r77682
+	grffile.doc.r78101
+	hologo.doc.r78580
+	index.doc.r77682
+	infwarerr.doc.r77682
+	jknapltx.doc.r19440
+	l3experimental.doc.r79165
+	latexbug.doc.r79083
+	lineno.doc.r78315
+	listings.doc.r77682
+	lwarp.doc.r78111
+	mathspec.doc.r77682
+	mathtools.doc.r78251
+	mdwtools.doc.r15878
+	memoir.doc.r77682
+	metalogo.doc.r77682
+	microtype.doc.r78228
+	newfloat.doc.r77682
+	ntgclass.doc.r77239
+	parskip.doc.r77682
+	pdfcolfoot.doc.r77682
+	pdflscape.doc.r77682
+	pdfpages.doc.r78558
+	polyglossia.doc.r78740
+	psfrag.doc.r15878
+	ragged2e.doc.r77682
+	rcs.doc.r15878
+	sansmath.doc.r77682
+	section.doc.r20180
+	seminar.doc.r77682
+	sepnum.doc.r20186
+	setspace.doc.r77682
+	subfig.doc.r77682
+	textcase.doc.r77682
+	thumbpdf.doc.r62518
+	translator.doc.r77682
+	typehtml.doc.r17134
+	ucharcat.doc.r78415
+	underscore.doc.r77682
+	unicode-math.doc.r78251
+	xcolor.doc.r77682
+	xfrac.doc.r77682
+	xkeyval.doc.r77682
+	xltxtra.doc.r77682
+	xunicode.doc.r77682
+"
+# Removed in target tlpdb: pdfmanagement-testphase.doc
+TEXLIVE_MODULE_SRC_CONTENTS="
+	attachfile2.source.r77682
+	booktabs.source.r77682
+	breqn.source.r77682
+	caption.source.r77682
+	crop.source.r77682
+	ctable.source.r77682
+	eso-pic.source.r77682
+	euenc.source.r19795
+	euler.source.r77682
+	everysel.source.r57489
+	everyshi.source.r77682
+	fancyref.source.r77682
+	filehook.source.r77682
+	float.source.r77682
+	fontspec.source.r77682
+	footnotehyper.source.r77682
+	grffile.source.r78101
+	hologo.source.r78580
+	index.source.r77682
+	infwarerr.source.r77682
+	l3experimental.source.r79165
+	latexbug.source.r79083
+	listings.source.r77682
+	lwarp.source.r78111
+	mathtools.source.r78251
+	mdwtools.source.r15878
+	memoir.source.r77682
+	metalogo.source.r77682
+	microtype.source.r78228
+	newfloat.source.r77682
+	ntgclass.source.r77239
+	parskip.source.r77682
+	pdfcolfoot.source.r77682
+	pdflscape.source.r77682
+	pdfpages.source.r78558
+	psfrag.source.r15878
+	ragged2e.source.r77682
+	rcs.source.r15878
+	subfig.source.r77682
+	textcase.source.r77682
+	typehtml.source.r17134
+	ucharcat.source.r78415
+	unicode-math.source.r78251
+	xcolor.source.r77682
+	xfrac.source.r77682
+	xkeyval.source.r77682
+	xltxtra.source.r77682
+"
+# Removed in target tlpdb: pdfmanagement-testphase.source
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive LaTeX recommended packages"
+
+LICENSE="CC0-1.0 GPL-1+ LPPL-1.2 LPPL-1.3 LPPL-1.3a LPPL-1.3c MIT TeX-other-free public-domain"
+SLOT="0"
+KEYWORDS="~amd64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-latex-2026
+"
+RDEPEND="
+	${COMMON_DEPEND}
+"
+PDEPEND="
+	>=dev-tex/latex-beamer-3.71
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
+
+TEXLIVE_MODULE_BINSCRIPTS="
+	texmf-dist/scripts/attachfile2/pdfatfi.pl
+	texmf-dist/scripts/lwarp/lwarpmk.lua
+	texmf-dist/scripts/thumbpdf/thumbpdf.pl
+"
