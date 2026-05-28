@@ -144,6 +144,10 @@ MODULAR_X_DEPEND="
 		x11-libs/libXmu
 	)"
 
+# ptexenc floor is 1.5.2 (not the inherited 1.4.6): TL2026's uptex
+# (USE=cjk) calls ptenc_ucs_to_8bit_code, added to ptexenc's unicode.h
+# in 1.5.1. Against an older system ptexenc the call is an implicit
+# declaration that GCC>=14 rejects as an error. verified 2026-05-28
 COMMON_DEPEND="
 	${MODULAR_X_DEPEND}
 	sci-libs/mpfi
@@ -159,7 +163,7 @@ COMMON_DEPEND="
 	app-text/libpaper:=
 	dev-libs/gmp:=
 	dev-libs/mpfr:=
-	>=dev-libs/ptexenc-1.4.6
+	>=dev-libs/ptexenc-1.5.2
 	xetex? (
 		>=app-text/teckit-2.5.10
 		media-libs/fontconfig
