@@ -36,7 +36,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	bzcat "${FILESDIR}/474.patch.bz2" > "${T}/474.patch" || die
+	xzcat "${FILESDIR}/474.patch.xz" > "${T}/474.patch" || die
 	eapply "${T}/474.patch"
 	java-pkg-opt-2_src_prepare
 	cmake_src_prepare
