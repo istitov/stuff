@@ -31,6 +31,7 @@ BDEPEND="
 	>=dev-texlive/texlive-latexextra-2024
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_compile() {
