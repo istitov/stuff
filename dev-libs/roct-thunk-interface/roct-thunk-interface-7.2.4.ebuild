@@ -16,7 +16,7 @@ else
 	# Same upstream archive as dev-libs/rocr-runtime; share the distfile name
 	# to avoid a MatchingChksums hit and let users hardlink/dedup distdir.
 	SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/rocm-${PV}/rocr-runtime.tar.gz -> rocr-runtime-${PV}.tar.gz"
-	S="${WORKDIR}/libhsakmt"
+	S="${WORKDIR}/rocr-runtime/libhsakmt"
 	KEYWORDS="~amd64"
 fi
 

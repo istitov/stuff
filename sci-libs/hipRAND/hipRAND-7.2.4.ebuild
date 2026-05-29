@@ -10,7 +10,7 @@ inherit cmake rocm
 DESCRIPTION="CU / ROCM agnostic hip RAND implementation"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hiprand"
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/hiprand.tar.gz -> hiprand-${PV}.tar.gz"
-S="${WORKDIR}"
+S="${WORKDIR}/hiprand"
 
 REQUIRED_USE="${ROCM_REQUIRED_USE}"
 

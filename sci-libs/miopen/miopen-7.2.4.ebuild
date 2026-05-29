@@ -11,7 +11,7 @@ inherit cmake flag-o-matic llvm-r2 rocm
 DESCRIPTION="AMD's Machine Intelligence Library"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/miopen"
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/miopen.tar.gz -> miopen-${PV}.tar.gz"
-S="${WORKDIR}"
+S="${WORKDIR}/miopen"
 
 LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"

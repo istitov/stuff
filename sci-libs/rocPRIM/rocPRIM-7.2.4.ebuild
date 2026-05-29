@@ -9,7 +9,7 @@ inherit cmake flag-o-matic rocm
 DESCRIPTION="HIP parallel primitives for developing performant GPU-accelerated code on ROCm"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocprim"
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/rocprim.tar.gz -> rocprim-${PV}.tar.gz"
-S="${WORKDIR}"
+S="${WORKDIR}/rocprim"
 
 LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"

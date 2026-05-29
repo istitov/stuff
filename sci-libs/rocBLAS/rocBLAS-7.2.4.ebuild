@@ -23,7 +23,7 @@ if [[ "${PV}" == 9999 ]] ; then
 	SLOT_NOLIVE="0/7.2"
 else
 	SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/rocblas.tar.gz -> rocblas-${PV}.tar.gz"
-	S="${WORKDIR}"
+	S="${WORKDIR}/rocblas"
 	SLOT="0/$(ver_cut 1-2)"
 	SLOT_NOLIVE=${SLOT}
 	KEYWORDS="~amd64"
