@@ -207,6 +207,13 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "net-libs/ortp": {
         "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+$",
     },
+    # OrcaSlicer/OrcaSlicer publishes a dense pre-release stream
+    # (vX.Y.Z-alpha/-beta/-beta2/-rc/-rc2 plus a floating `nightly-builds`
+    # tag); use_max_tag otherwise surfaces e.g. v2.4.0-alpha. We track the
+    # stable line, so restrict to the bare vX.Y.Z release form.
+    "media-gfx/orcaslicer": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
     # HDFGroup/hdf4 tags use the format `hdfX.Y.Z` (e.g. `hdf4.3.1`) for
     # modern releases; older `hdf-4_2_16-2`-style tags used underscores and
     # a dash separator — both are excluded by requiring `hdf[0-9]`.  Strip
