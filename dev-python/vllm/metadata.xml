@@ -7,17 +7,14 @@
   </maintainer>
   <longdescription lang="en">
     vLLM is a fast and easy-to-use library for LLM inference and
-    serving. Provides a Python API and an OpenAI-compatible HTTP server.
-
-    USE=cpu / cuda / rocm pick a single VLLM_TARGET_DEVICE for the
-    build (mutually exclusive). Default (none of the three) builds
-    with VLLM_TARGET_DEVICE=empty — Python entrypoints import cleanly,
-    backend kernels fail at first model load. Useful if you only want
-    the API surface for development.
+    serving, with a Python API and an OpenAI-compatible HTTP server.
+    USE=cpu/cuda/rocm pick a mutually-exclusive VLLM_TARGET_DEVICE;
+    with none set the build is device-agnostic (API surface only).
   </longdescription>
   <use>
     <flag name="cpu">Build for CPU inference (VLLM_TARGET_DEVICE=cpu); pull torchaudio + numba</flag>
     <flag name="rocm">Build for AMD ROCm inference (VLLM_TARGET_DEVICE=rocm); pull HIP libs + torch{audio,vision}</flag>
+    <flag name="rust">Build the optional vllm-rs Rust serving frontend (opt-in at runtime via VLLM_USE_RUST_FRONTEND=1)</flag>
   </use>
   <upstream>
     <remote-id type="pypi">vllm</remote-id>
