@@ -1308,13 +1308,15 @@ prefix = "v"
 source = "github"
 github = "gpoore/latex2pydata"
 use_max_tag = true
-prefix = "v"
+include_regex = '^python/v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "python/v"
 
 ["dev-tex/minted"]
 source = "github"
 github = "gpoore/minted"
 use_max_tag = true
-prefix = "v"
+include_regex = '^latex/v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "latex/v"
 
 ["dev-tex/pgf"]
 source = "github"

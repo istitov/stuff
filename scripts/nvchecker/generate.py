@@ -199,6 +199,20 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "dev-python/spacy-legacy": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
+    # gpoore/{latex2pydata,minted} are dual-artifact repos that tag the
+    # LaTeX and Python halves separately under path prefixes
+    # (`latex/vX.Y.Z`, `python/vX.Y.Z`), alongside stray pre-split bare
+    # `vX.Y` tags. Default `prefix = "v"` matches neither path form, so
+    # max-tag falls back to the old bare tags (latex2pydata -> v0.1,
+    # minted -> v2.9). Pin each to the path scheme of the artifact we ship.
+    "dev-tex/latex2pydata": {  # we ship the Python package
+        "include_regex": r"^python/v[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "python/v",
+    },
+    "dev-tex/minted": {  # we ship the LaTeX package
+        "include_regex": r"^latex/v[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "latex/v",
+    },
     # BelledonneCommunications repos tag alpha/rc releases; restrict to
     # the plain three-part numeric form for stable-only signals.
     "net-libs/bctoolbox": {
