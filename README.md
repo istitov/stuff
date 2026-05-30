@@ -1,6 +1,11 @@
 # stuff
 
-A Gentoo ebuild overlay.
+A Gentoo ebuild overlay. Focus areas: AMD Ryzen-AI / NPU tooling, ROCm
+(typically a release ahead of `::gentoo`), niche scientific physics
+(SAXS / SANS / XAFS / electron microscopy / micromagnetism / Rietveld),
+the DeaDBeeF plugin ecosystem, curated `pf-sources` (CVE-only patch
+curation), and a small Python 2 preservation layer for legacy
+scientific scripts.
 
 ```sh
 eselect repository enable stuff
@@ -253,9 +258,9 @@ consumers follow.
   `net-libs/libinfinity`, `acct-{group,user}/infinote`.
 - **Kernel / low-level** —
   [`sys-kernel/pf-sources`](https://pfkernel.natalenko.name/),
-  [`sys-kernel/flex-sources`](https://codeberg.org/pf-kernel/linux)
-  (pf-kernel's "flex" sibling spine, tracking pre-release upstream
-  kernels), `sys-apps/dkms-gentoo`, `sys-kernel/kernel-cleaner`.
+  `sys-kernel/pf-sources-extended` (curated pf-patchset model on top
+  of vanilla + Gentoo genpatches), `sys-apps/dkms-gentoo`,
+  `sys-kernel/kernel-cleaner`.
 - **Visualization** —
   [`sci-visualization/gwyddion`](https://gwyddion.net/),
   `sci-visualization/gwyddion3`.
@@ -306,6 +311,14 @@ consumers follow.
   *why* (not just that they're suppressed).
 - **CI** runs `pkgcheck scan` on every PR and push (delta only), plus a full
   `--net` scan every three days via scheduled workflow.
+- **Documentation** — [`CONTRIBUTING.md`](CONTRIBUTING.md) (house-style
+  checklist, AI/LLM disclosure expectation),
+  [`SECURITY.md`](SECURITY.md) (vulnerability reporting via GitHub
+  private advisories), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
+- **News items** — `eselect news read` after `emerge --sync stuff`
+  surfaces GLEP-42 announcements for migrations, mask windows, and
+  CVE-sensitive notices. Items live in
+  [`metadata/news/`](metadata/news/).
 
 ## Credits
 
