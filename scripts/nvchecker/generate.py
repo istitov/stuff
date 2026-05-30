@@ -119,16 +119,22 @@ GITHUB_TAG_FILTERS: list[tuple[re.Pattern, dict]] = [
 #
 # NVIDIA/cuda-python is a monorepo housing several Python packages, each
 # with its own tag scheme on the same git repo:
-#   * cuda-bindings    -> v<PV>           (bare semver, the umbrella's tag)
+#   * cuda-bindings    -> v<PV>            (bare semver, the umbrella's tag)
+#   * cuda-core        -> cuda-core-v<PV>
 #   * cuda-pathfinder  -> cuda-pathfinder-v<PV>
 #   * cuda-python (umbrella sdist) is on PyPI -> already classified as pypi.
-# Without per-package filters, both sub-packages share `NVIDIA/cuda-python`
+# Without per-package filters, the sub-packages share `NVIDIA/cuda-python`
 # as github spec and max-tag picks the umbrella's `v<latest>`, false-positive
-# for cuda-pathfinder (whose actual upstream version is much lower).
+# for cuda-core / cuda-pathfinder (which track independent semver streams
+# at much lower numeric versions).
 GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     # NVIDIA monorepo sub-packages
     "dev-python/cuda-bindings": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    "dev-python/cuda-core": {
+        "include_regex": r"^cuda-core-v[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "cuda-core-v",
     },
     "dev-python/cuda-pathfinder": {
         "include_regex": r"^cuda-pathfinder-v[0-9]+\.[0-9]+\.[0-9]+$",
