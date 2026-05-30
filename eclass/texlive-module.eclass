@@ -1,6 +1,13 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Overlay-local fork (stuff overlay).
+# Vendored from ::gentoo with overlay-specific edits:
+#   - tolerate empty RELOC list in src_unpack.
+# @MAINTAINER below credits the upstream ::gentoo author and is kept
+# for attribution; report overlay-specific issues at
+# https://github.com/istitov/stuff/issues.
+
 # @ECLASS: texlive-module.eclass
 # @MAINTAINER:
 # tex@gentoo.org

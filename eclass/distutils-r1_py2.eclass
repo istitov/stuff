@@ -1,6 +1,14 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Overlay-local fork, frozen (stuff overlay).
+# Vendored from ::gentoo's pre-py2-removal state. ::gentoo dropped
+# Python 2 in 2024; this _py2 variant preserves py2 build paths for
+# legacy consumers (sci-visualization/gwyddion pygwy and a small dep
+# tail). Not tracked against upstream.
+# @MAINTAINER below credits the upstream ::gentoo author; report
+# overlay-specific issues at https://github.com/istitov/stuff/issues.
+
 # @ECLASS: distutils-r1_py2.eclass
 # @MAINTAINER:
 # Python team <python@gentoo.org>

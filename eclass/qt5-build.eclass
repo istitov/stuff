@@ -1,6 +1,22 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Overlay-local fork (stuff overlay).
+# Vendored from ::gentoo with overlay-specific edits:
+#   - QT5_KDEPATCHSET_REV machinery now format-dispatches the value: an
+#     `rN-bump` form (e.g. `r0-0`) fetches a self-cut KDE Qt5 Patch
+#     Collection bundle from the extra-stuff sister repo with github /
+#     codeberg / gitlab raw-URL fallbacks; a numeric form falls back to
+#     the legacy asturm-cut distfile path for transitional 5.15.18
+#     ebuilds (qthelp, qtwebchannel) until they bump to 5.15.19.
+#   - qtbase Gentoo build-patchset relocated from asturm's distfile to
+#     the extra-stuff sister repo (`qtbase-5.15-gentoo-patchset` tag);
+#     the internal `_QT5_GENTOOPATCHSET_REV` knob is gone, and bumps
+#     are managed via tag revision on extra-stuff instead.
+# @MAINTAINER below credits the upstream ::gentoo author and is kept
+# for attribution; report overlay-specific issues at
+# https://github.com/istitov/stuff/issues.
+
 # @ECLASS: qt5-build.eclass
 # @MAINTAINER:
 # qt@gentoo.org
