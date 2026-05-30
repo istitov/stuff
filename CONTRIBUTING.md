@@ -16,6 +16,34 @@ for the broader Gentoo guides:
 If something here disagrees with those pages for a reason that is
 not obvious, that is a bug in this file — please open an issue.
 
+## Scope
+
+The overlay grew around a few specific maintenance interests, and
+that's where its packages mostly cluster. Contributions are welcome
+regardless — though for packages outside those areas, the conversation
+may end with "this might fit better in [some other overlay]" rather
+than a merge. That's a discussion, not an automatic no; the overlay
+already carries a handful of packages that landed for historical
+reasons unrelated to the current focus.
+
+What we mostly cover:
+
+- **Niche scientific physics** — SAXS / SANS / XAFS / EM /
+  micromagnetism / Rietveld (mantid, mumax, oommf, xraylarch,
+  demeter, vampire, bornagain, …)
+- **DeaDBeeF plugin ecosystem** — the [DeaDBeeF](https://deadbeef.sf.net/)
+  audio player's third-party plugins
+- **AMD Ryzen-AI application layer** — fastflowlm, lemonade, kokoros,
+  amd-gaia, therock-bin, and the local LLM tooling around them
+- **ROCm leadership** — typically a release ahead of `::gentoo`
+- **Curated `pf-sources`** — surgical CVE-only patch curation for
+  the pf-kernel line, separate from the upstream pf-kernel cadence
+- **Python-2 preservation** — `*_py2` forks of py3-only `::gentoo`
+  packages, kept alive for legacy scientific Python consumers
+
+If you're unsure whether something fits here, opening an issue
+first is cheap and usually clearer than guessing.
+
 ## Before you start
 
 - Clone the repo (or your fork), then either enable it via
