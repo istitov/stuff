@@ -5,16 +5,67 @@ on:
   schedule:
     # Weekly: Mondays at 06:00 UTC.
     - cron: "0 6 * * 1"
+  # PR / push: only the config-drift job below runs (cheap, ~10 s);
+  # the upstream-fetch drift-scan stays gated to schedule/dispatch.
+  # Path filter scopes the trigger to changes that can plausibly
+  # invalidate nvchecker.toml — ebuild adds/drops, generator rule
+  # edits, the generated config itself, and this workflow file.
+  push:
+    branches: [master]
+    paths:
+      - '*/**.ebuild'
+      - 'scripts/nvchecker/generate.py'
+      - 'scripts/nvchecker/nvchecker.toml'
+      - '.github/workflows/nvchecker.yml'
+  pull_request:
+    branches: [master]
+    paths:
+      - '*/**.ebuild'
+      - 'scripts/nvchecker/generate.py'
+      - 'scripts/nvchecker/nvchecker.toml'
+      - '.github/workflows/nvchecker.yml'
 
-# Serialize concurrent runs. A manual workflow_dispatch fired during the
-# scheduled cron would race the upstream fetches and produce a half-fresh
-# baseline; let one finish before the other starts.
+# Scope serialization by event_name + ref so a Monday-morning PR
+# doesn't queue behind the weekly upstream fetch. Within the same
+# event class, runs serialize (manual workflow_dispatch fired during
+# the scheduled cron would race the upstream fetches and produce a
+# half-fresh baseline; let one finish before the other starts).
 concurrency:
-  group: ${{ github.workflow }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: false
 
 jobs:
+  # PR / push gate: enforce that nvchecker.toml stays in sync with
+  # generate.py. Without it, a contributor adding or dropping a
+  # package and forgetting to re-run the generator means the new
+  # package never reaches the drift report (silent omission), and a
+  # dropped package leaves a ghost entry that nvchecker keeps trying
+  # to fetch forever.
+  config-drift:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Regenerate nvchecker.toml and verify no drift
+        run: |
+          set -euo pipefail
+          python3 scripts/nvchecker/generate.py
+          if ! git diff --quiet scripts/nvchecker/nvchecker.toml; then
+            echo "::error file=scripts/nvchecker/nvchecker.toml::scripts/nvchecker/nvchecker.toml is out of sync with generate.py — run 'python3 scripts/nvchecker/generate.py' locally and commit the result."
+            git --no-pager diff scripts/nvchecker/nvchecker.toml | head -200 || true
+            exit 1
+          fi
+          echo "scripts/nvchecker/nvchecker.toml is up-to-date with generate.py."
+
   drift-scan:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -111,11 +162,56 @@ jobs:
           cat "$drift_out"
           echo "::endgroup::"
 
+      # Surface entries that are tracked AND in the tree but returned no
+      # upstream version. nvchecker logs the empty-filter case at
+      # WARNING (below our -l error threshold), so an upstream tag-scheme
+      # pivot that silently empties an include_regex would otherwise look
+      # "up to date" forever — no version => no drift. The local cron's
+      # scripts/nvchecker/silent_entries.py uses set-difference over
+      # consecutive runs; in CI the baseline is the tree itself, so the
+      # equivalent question is "in config AND in tree but missing from
+      # upstream". Surfaced as ::warning::, not ::error::: a single run
+      # can blip on a transient fetch error, and persistence detection
+      # would need state the stateless CI runner deliberately avoids.
+      - name: Detect entries returning no upstream version
+        env:
+          RUNTEMP: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          silent_out="$RUNTEMP/silent.txt"
+          python3 - <<'PY' > "$silent_out"
+          import json, os, tomllib
+          from pathlib import Path
+
+          temp = Path(os.environ["RUNTEMP"])
+          config = tomllib.loads(Path("scripts/nvchecker/nvchecker.toml").read_text())
+          active = {
+              k for k, v in config.items()
+              if not k.startswith("__") and isinstance(v, dict) and "source" in v
+          }
+          with (temp / "old_ver.json").open() as f:
+              tree = set(json.load(f).get("data", {}))
+          with (temp / "new_ver.json").open() as f:
+              upstream = set(json.load(f).get("data", {}))
+          for atom in sorted((active & tree) - upstream):
+              print(atom)
+          PY
+          count=$(wc -l < "$silent_out")
+          if (( count > 0 )); then
+            echo "::warning::nvchecker: ${count} tracked entries returned no upstream version (stale include_regex or dead upstream)"
+            while IFS= read -r atom; do
+              echo "::warning::  ${atom}"
+            done < "$silent_out"
+          else
+            echo "All tracked tree entries returned an upstream version."
+          fi
+
       - uses: actions/upload-artifact@v7
         with:
           name: nvchecker-drift-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/drift.txt
+            ${{ runner.temp }}/silent.txt
             ${{ runner.temp }}/new_ver.json
             ${{ runner.temp }}/old_ver.json
           retention-days: 30
