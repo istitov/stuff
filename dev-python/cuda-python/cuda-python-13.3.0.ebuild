@@ -35,6 +35,7 @@ RESTRICT="bindist mirror"
 # and avoids carrying the monorepo tarball for an empty payload.
 RDEPEND="
 	~dev-python/cuda-bindings-${PV}[${PYTHON_USEDEP}]
+	dev-python/cuda-core[${PYTHON_USEDEP}]
 	dev-python/cuda-pathfinder[${PYTHON_USEDEP}]
 "
 
