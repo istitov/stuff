@@ -69,6 +69,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      # File / append / close the rolling nvchecker-drift issue.
+      issues: write
     steps:
       - uses: actions/checkout@v6
 
@@ -215,3 +217,125 @@ jobs:
             ${{ runner.temp }}/new_ver.json
             ${{ runner.temp }}/old_ver.json
           retention-days: 30
+
+      # Surface drift as a rolling GH issue. The artifact above has the
+      # raw data, but a maintainer has to remember to fetch it — a
+      # rolling issue lands in the watch feed for free, mirroring the
+      # dusty-packages pattern in dusty.yml. Open / append on non-empty
+      # drift OR non-empty silent set; auto-close when both are zero.
+      # Ordered after the artifact upload so a transient GH-API error
+      # in this step doesn't lose the week's drift data.
+      - name: Open / update rolling drift issue
+        uses: actions/github-script@v9
+        env:
+          RUNTEMP: ${{ runner.temp }}
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const LABEL = 'nvchecker-drift';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const when = new Date().toISOString().split('T')[0];
+
+            const readLines = (p) => {
+              try {
+                return fs.readFileSync(p, 'utf8').trimEnd().split('\n').filter(l => l.length > 0);
+              } catch (e) {
+                return [];
+              }
+            };
+
+            const driftLines = readLines(path.join(process.env.RUNTEMP, 'drift.txt'));
+            const silentLines = readLines(path.join(process.env.RUNTEMP, 'silent.txt'));
+
+            // Parse "atom old -> new" lines from nvcmp; skip malformed
+            // (transient fetch-error lines slip into drift.txt because
+            // nvcmp captures stderr).
+            const driftRows = driftLines
+              .map(l => l.match(/^(\S+)\s+(\S+)\s+->\s+(\S+)$/))
+              .filter(m => m)
+              .map(m => ({ atom: m[1], old: m[2], next: m[3] }));
+
+            const findExisting = async () => {
+              const { data } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: LABEL,
+                state: 'open',
+                per_page: 1,
+              });
+              return data[0];
+            };
+
+            // Both lists empty → auto-close any open drift issue.
+            if (driftRows.length === 0 && silentLines.length === 0) {
+              const existing = await findExisting();
+              if (!existing) {
+                core.info('No drift; no open drift issue. Nothing to do.');
+                return;
+              }
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body: `Weekly scan reports zero drift and zero silent entries: ${runUrl}\n\nAuto-closing.`,
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                state: 'closed',
+                state_reason: 'completed',
+              });
+              core.info(`Auto-closed #${existing.number}`);
+              return;
+            }
+
+            // Compose the report body.
+            const parts = [`Weekly upstream-drift report for ${when}.`, ``];
+            if (driftRows.length > 0) {
+              parts.push(`### Version drift (${driftRows.length})`, ``);
+              parts.push(`| Package | Current | Upstream |`);
+              parts.push(`| ------- | ------- | -------- |`);
+              for (const r of driftRows) {
+                parts.push(`| \`${r.atom}\` | ${r.old} | ${r.next} |`);
+              }
+              parts.push(``);
+            }
+            if (silentLines.length > 0) {
+              parts.push(`### No upstream version returned (${silentLines.length})`, ``);
+              parts.push(`Tracked AND in the tree but the upstream fetch returned`);
+              parts.push(`nothing — usually a stale \`include_regex\` after an`);
+              parts.push(`upstream tag-scheme pivot, or a dead upstream. Re-check`);
+              parts.push(`the filter in \`scripts/nvchecker/generate.py\`.`, ``);
+              for (const atom of silentLines) {
+                parts.push(`- \`${atom}\``);
+              }
+              parts.push(``);
+            }
+            parts.push(`Run log + drift artifact: ${runUrl}`, ``);
+            parts.push(`Auto-generated. Close once each listed entry has been`);
+            parts.push(`reviewed — bumped, deliberately held (capped), or`);
+            parts.push(`rejected (yanked / preview).`);
+
+            const body = parts.join('\n');
+
+            const existing = await findExisting();
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+              core.info(`Appended weekly report to #${existing.number}`);
+            } else {
+              const { data: created } = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Upstream version drift (${when})`,
+                body,
+                labels: [LABEL],
+              });
+              core.info(`Opened new drift issue #${created.number}`);
+            }
