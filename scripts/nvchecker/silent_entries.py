@@ -21,8 +21,8 @@ entry — only those absent from the previous run too are reported.
 """
 
 import json
-import re
 import sys
+import tomllib
 
 
 def verfile_keys(path: str) -> set[str]:
@@ -34,12 +34,19 @@ def verfile_keys(path: str) -> set[str]:
 
 
 def main() -> int:
-    config, new_ver, old_ver = sys.argv[1:4]
-    with open(config) as f:
-        # Active entries are quoted `["cat/pkg"]` table headers at column 0;
-        # commented `# ["cat/pkg"] skipped: …` lines start with '#' and so
-        # are excluded.
-        expected = set(re.findall(r'^\["([^"]+)"\]', f.read(), re.M))
+    config_path, new_ver, old_ver = sys.argv[1:4]
+    with open(config_path, "rb") as f:
+        config = tomllib.load(f)
+    # Active entries are top-level tables that nvchecker treats as
+    # tracked sources (have a `source` field). The committed config
+    # also contains skipped packages as commented `# ["cat/pkg"]`
+    # lines; tomllib ignores comments, so those never reach the
+    # parsed dict. The `__config__` block (per-run state-path prepend
+    # from run.sh, when present) is filtered explicitly.
+    expected = {
+        k for k, v in config.items()
+        if not k.startswith("__") and isinstance(v, dict) and "source" in v
+    }
     silent = expected - verfile_keys(new_ver) - verfile_keys(old_ver)
     for atom in sorted(silent):
         print(atom)
