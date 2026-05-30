@@ -319,6 +319,13 @@ consumers follow.
   surfaces GLEP-42 announcements for migrations, mask windows, and
   CVE-sensitive notices. Items live in
   [`metadata/news/`](metadata/news/).
+- **Upstream version tracking** —
+  [`scripts/nvchecker/`](scripts/nvchecker/) holds the
+  generated `nvchecker.toml` plus a local-cron runner
+  (`run.sh`) and the regenerator (`generate.py`). A weekly CI
+  job at [`.github/workflows/nvchecker.yml`](.github/workflows/nvchecker.yml)
+  runs the same config against the tree as baseline and uploads
+  a drift artifact.
 
 ## Credits
 
