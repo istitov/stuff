@@ -4,6 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
+# Upstream PyPI requires-python = "<3.13,>=3.10" (verified 2026-05-30).
 PYTHON_COMPAT=( python3_{12..13} )
 DISTUTILS_SINGLE_IMPL=1
 
