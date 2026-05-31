@@ -224,8 +224,9 @@ jobs:
       # dusty-packages pattern in dusty.yml. Open / append on non-empty
       # drift OR non-empty silent set; auto-close when both are zero.
       # Ordered after the artifact upload so a transient GH-API error
-      # in this step doesn't lose the week's drift data.
-      - name: Open / update rolling drift issue
+      # in these steps doesn't lose the week's drift data.
+      - name: Summarize drift and compose report body
+        id: summary
         uses: actions/github-script@v9
         env:
           RUNTEMP: ${{ runner.temp }}
@@ -233,7 +234,6 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            const LABEL = 'nvchecker-drift';
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const when = new Date().toISOString().split('T')[0];
 
@@ -256,38 +256,15 @@ jobs:
               .filter(m => m)
               .map(m => ({ atom: m[1], old: m[2], next: m[3] }));
 
-            const findExisting = async () => {
-              const { data } = await github.rest.issues.listForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                labels: LABEL,
-                state: 'open',
-                per_page: 1,
-              });
-              return data[0];
-            };
+            core.setOutput('when', when);
+            core.setOutput('drift_count', String(driftRows.length));
+            core.setOutput('silent_count', String(silentLines.length));
 
-            // Both lists empty → auto-close any open drift issue.
+            // Both lists empty → close path takes over; emit the closing
+            // comment and stop.
             if (driftRows.length === 0 && silentLines.length === 0) {
-              const existing = await findExisting();
-              if (!existing) {
-                core.info('No drift; no open drift issue. Nothing to do.');
-                return;
-              }
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: existing.number,
-                body: `Weekly scan reports zero drift and zero silent entries: ${runUrl}\n\nAuto-closing.`,
-              });
-              await github.rest.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: existing.number,
-                state: 'closed',
-                state_reason: 'completed',
-              });
-              core.info(`Auto-closed #${existing.number}`);
+              core.setOutput('close_comment',
+                `Weekly scan reports zero drift and zero silent entries: ${runUrl}\n\nAuto-closing.`);
               return;
             }
 
@@ -318,24 +295,19 @@ jobs:
             parts.push(`reviewed — bumped, deliberately held (capped), or`);
             parts.push(`rejected (yanked / preview).`);
 
-            const body = parts.join('\n');
+            core.setOutput('body', parts.join('\n'));
 
-            const existing = await findExisting();
-            if (existing) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: existing.number,
-                body,
-              });
-              core.info(`Appended weekly report to #${existing.number}`);
-            } else {
-              const { data: created } = await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: `Upstream version drift (${when})`,
-                body,
-                labels: [LABEL],
-              });
-              core.info(`Opened new drift issue #${created.number}`);
-            }
+      - name: Auto-close drift issue when all clear
+        if: steps.summary.outputs.drift_count == '0' && steps.summary.outputs.silent_count == '0'
+        uses: ./.github/actions/rolling-issue-close
+        with:
+          label: nvchecker-drift
+          comment: ${{ steps.summary.outputs.close_comment }}
+
+      - name: Upsert rolling drift issue
+        if: steps.summary.outputs.drift_count != '0' || steps.summary.outputs.silent_count != '0'
+        uses: ./.github/actions/rolling-issue-upsert
+        with:
+          label: nvchecker-drift
+          title: Upstream version drift (${{ steps.summary.outputs.when }})
+          body: ${{ steps.summary.outputs.body }}

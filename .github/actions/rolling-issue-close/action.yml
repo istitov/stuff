@@ -1,0 +1,54 @@
+name: 'Rolling issue close'
+description: >-
+  Find an open issue carrying the given label and close it. When a comment
+  body is given, append it before closing. No-op when no matching open issue
+  exists. Pair with rolling-issue-upsert to auto-close trackers once the
+  underlying signal clears.
+
+inputs:
+  label:
+    description: 'Label that uniquely identifies the rolling issue.'
+    required: true
+  comment:
+    description: 'Optional comment body posted before closing. Skipped when empty.'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/github-script@v9
+      env:
+        ACTION_LABEL: ${{ inputs.label }}
+        ACTION_COMMENT: ${{ inputs.comment }}
+      with:
+        script: |
+          const label = process.env.ACTION_LABEL;
+          const comment = process.env.ACTION_COMMENT;
+          const { data: existing } = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: label,
+            state: 'open',
+            per_page: 1,
+          });
+          if (existing.length === 0) {
+            core.info('No matching open issue; nothing to close.');
+            return;
+          }
+          if (comment) {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing[0].number,
+              body: comment,
+            });
+          }
+          await github.rest.issues.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: existing[0].number,
+            state: 'closed',
+            state_reason: 'completed',
+          });
+          core.info(`Auto-closed #${existing[0].number}`);

@@ -108,9 +108,11 @@ jobs:
 
       # Turn the scan results into a rolling `dusty-packages` issue.
       # If one is already open, append this quarter's report as a comment;
-      # otherwise, open a fresh issue. Close it when the listed packages
-      # have been reviewed (bumped, dropped, or confirmed still current).
-      - name: File dusty report as issue
+      # otherwise, open a fresh issue via the shared rolling-issue-upsert
+      # action. Close it when the listed packages have been reviewed
+      # (bumped, dropped, or confirmed still current).
+      - name: Build dusty-report body
+        id: body
         if: steps.scan.outputs.count != '0' && inputs.dry_run != 'true'
         uses: actions/github-script@v9
         env:
@@ -120,7 +122,6 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const LABEL = 'dusty-packages';
             const when = new Date().toISOString().split('T')[0];
             const count = process.env.DUSTY_COUNT;
             const thresholdDays = process.env.THRESHOLD_DAYS;
@@ -134,7 +135,8 @@ jobs:
                 return `| \`${pkg}\` | ${date} | ${days} |`;
               });
 
-            const body = [
+            core.setOutput('when', when);
+            core.setOutput('body', [
               `Quarterly staleness report for ${when}.`,
               ``,
               `${count} package(s) have not been touched in over ${thresholdDays} days.`,
@@ -153,34 +155,15 @@ jobs:
               `This is an auto-generated report. Close the issue once the`,
               `listed packages have been reviewed — bumped, dropped, or`,
               `confirmed still current.`,
-            ].join('\n');
+            ].join('\n'));
 
-            const { data: existing } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: LABEL,
-              state: 'open',
-              per_page: 1,
-            });
-
-            if (existing.length > 0) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: existing[0].number,
-                body,
-              });
-              core.info(`Appended quarterly report to #${existing[0].number}`);
-            } else {
-              const created = await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: `Dusty packages (${when})`,
-                body,
-                labels: [LABEL],
-              });
-              core.info(`Opened new dusty-packages issue #${created.data.number}`);
-            }
+      - name: File dusty report as issue
+        if: steps.scan.outputs.count != '0' && inputs.dry_run != 'true'
+        uses: ./.github/actions/rolling-issue-upsert
+        with:
+          label: dusty-packages
+          title: Dusty packages (${{ steps.body.outputs.when }})
+          body: ${{ steps.body.outputs.body }}
 
       # When a scheduled run reports zero dusty packages and a
       # dusty-packages issue is still open from a prior quarter, append an
@@ -189,35 +172,10 @@ jobs:
       # bumped or dropped.
       - name: Auto-close dusty-packages issue when none remain
         if: steps.scan.outputs.count == '0' && inputs.dry_run != 'true'
-        uses: actions/github-script@v9
+        uses: ./.github/actions/rolling-issue-close
         with:
-          script: |
-            const LABEL = 'dusty-packages';
-            const { data: existing } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: LABEL,
-              state: 'open',
-              per_page: 1,
-            });
+          label: dusty-packages
+          comment: |
+            Quarterly scan reports zero dusty packages: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            if (existing.length === 0) {
-              core.info('No open dusty-packages issue; nothing to close.');
-              return;
-            }
-
-            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: existing[0].number,
-              body: `Quarterly scan reports zero dusty packages: ${runUrl}\n\nAuto-closing.`,
-            });
-            await github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: existing[0].number,
-              state: 'closed',
-              state_reason: 'completed',
-            });
-            core.info(`Auto-closed #${existing[0].number}`);
+            Auto-closing.

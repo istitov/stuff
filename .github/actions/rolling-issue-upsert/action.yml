@@ -1,0 +1,56 @@
+name: 'Rolling issue upsert'
+description: >-
+  Find an open issue carrying the given label and append a comment to it; if
+  none is open, create a fresh issue with the given title, body, and label.
+  Used by dusty.yml, pkgcheck.yml, and nvchecker.yml to surface periodic
+  reports as a rolling tracker in the issues feed.
+
+inputs:
+  label:
+    description: 'Label that uniquely identifies the rolling issue.'
+    required: true
+  title:
+    description: 'Issue title (used only when creating a new issue).'
+    required: true
+  body:
+    description: 'Markdown body posted as a comment (existing issue) or as the new-issue body.'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/github-script@v9
+      env:
+        ACTION_LABEL: ${{ inputs.label }}
+        ACTION_TITLE: ${{ inputs.title }}
+        ACTION_BODY: ${{ inputs.body }}
+      with:
+        script: |
+          const label = process.env.ACTION_LABEL;
+          const title = process.env.ACTION_TITLE;
+          const body = process.env.ACTION_BODY;
+          const { data: existing } = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: label,
+            state: 'open',
+            per_page: 1,
+          });
+          if (existing.length > 0) {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing[0].number,
+              body,
+            });
+            core.info(`Appended to #${existing[0].number}`);
+          } else {
+            const { data: created } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: [label],
+            });
+            core.info(`Opened new #${created.number}`);
+          }
