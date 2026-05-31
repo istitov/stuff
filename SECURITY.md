@@ -14,7 +14,7 @@ report stays private until disclosed and auto-tracks discussion.
 
 Please include:
 
-- The exact ebuild atom (e.g. `sys-kernel/pf-sources-7.0_p3-r1`).
+- The exact ebuild atom (e.g. `sys-kernel/pf-sources-7.0_p4`).
 - A description of the issue and how to reproduce it.
 - Any CVE identifier if upstream has already assigned one.
 
