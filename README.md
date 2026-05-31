@@ -309,8 +309,10 @@ consumers follow.
   rationale). Single-line messages only for truly trivial edits.
 - **`metadata/pkgcheck.conf`** documents *which* checks are suppressed and
   *why* (not just that they're suppressed).
-- **CI** runs `pkgcheck scan` on every PR and push (delta only), plus a full
-  `--net` scan every three days via scheduled workflow.
+- **CI** runs `pkgcheck scan` on every PR and push (delta only), plus a
+  full repo scan every three days via scheduled workflow. URL-liveness
+  checks (`pkgcheck scan --net`) are not part of CI; run them locally
+  if you change an upstream URL.
 - **Documentation** — [`CONTRIBUTING.md`](CONTRIBUTING.md) (house-style
   checklist, AI/LLM disclosure expectation),
   [`SECURITY.md`](SECURITY.md) (vulnerability reporting via GitHub
