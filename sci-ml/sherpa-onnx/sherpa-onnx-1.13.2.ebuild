@@ -23,7 +23,7 @@ HOMEPAGE="
 SRC_URI="
 	https://github.com/k2-fsa/sherpa-onnx/archive/refs/tags/v${PV}.tar.gz
 		-> ${P}.gh.tar.gz
-	https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.gz
+	https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.bz2
 	https://github.com/likle/cargs/archive/refs/tags/v1.0.3.tar.gz
 		-> cargs-1.0.3.tar.gz
 	https://github.com/csukuangfj/hclust-cpp/archive/refs/tags/2026-02-25.tar.gz
@@ -38,8 +38,8 @@ SRC_URI="
 		-> openfst-1.8.5-2026-04-11.tar.gz
 	https://github.com/pkufool/simple-sentencepiece/archive/refs/tags/v0.7.tar.gz
 		-> simple-sentencepiece-0.7.tar.gz
-	https://github.com/mborgerding/kissfft/archive/febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip
-		-> kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip
+	https://github.com/mborgerding/kissfft/archive/febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.tar.gz
+		-> kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.tar.gz
 	https://github.com/k2-fsa/kaldifst/archive/refs/tags/v1.8.0.tar.gz
 		-> kaldifst-1.8.0.tar.gz
 	portaudio? (
@@ -50,16 +50,16 @@ SRC_URI="
 			-> pybind11-3.0.0.tar.gz
 	)
 	tts? (
-		https://github.com/csukuangfj/espeak-ng/archive/f6fed6c58b5e0998b8e68c6610125e2d07d595a7.zip
-			-> espeak-ng-f6fed6c58b5e0998b8e68c6610125e2d07d595a7.zip
-		https://github.com/csukuangfj/piper-phonemize/archive/78a788e0b719013401572d70fef372e77bff8e43.zip
-			-> piper-phonemize-78a788e0b719013401572d70fef372e77bff8e43.zip
+		https://github.com/csukuangfj/espeak-ng/archive/f6fed6c58b5e0998b8e68c6610125e2d07d595a7.tar.gz
+			-> espeak-ng-f6fed6c58b5e0998b8e68c6610125e2d07d595a7.tar.gz
+		https://github.com/csukuangfj/piper-phonemize/archive/78a788e0b719013401572d70fef372e77bff8e43.tar.gz
+			-> piper-phonemize-78a788e0b719013401572d70fef372e77bff8e43.tar.gz
 	)
 	websocket? (
 		https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-1-24-0.tar.gz
 			-> asio-asio-1-24-0.tar.gz
-		https://github.com/zaphoyd/websocketpp/archive/b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
-			-> websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+		https://github.com/zaphoyd/websocketpp/archive/b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
+			-> websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
 	)
 "
 
