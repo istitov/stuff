@@ -459,8 +459,13 @@ python_compile() {
 	export PYTHONPATH="${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/package:${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/install/lib/${EPYTHON}/site-packages:${PYTHONPATH}"
 
 	# Copy shiboken6_generator files to shiboken6 package so we can reuse the shiboken-target-path
-	rsync -ur "${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-2))/${pyside_build_dir}/package/shiboken6_generator/"* "${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/package/shiboken6/" || die
-	ln -s shiboken6 "${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/package/shiboken6_generator" || die
+	rsync -ur \
+		"${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-2))/${pyside_build_dir}/package/shiboken6_generator/"* \
+		"${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/package/shiboken6/" \
+		|| die
+	ln -s shiboken6 \
+		"${BUILD_DIR}/build$((${#DISTUTILS_WHEELS[@]}-1))/${pyside_build_dir}/package/shiboken6_generator" \
+		|| die
 
 	# If no pyside modules enabled, build just shiboken
 	if [[ ${#ENABLED_QT_MODULES[@]} -gt 0 ]]; then
