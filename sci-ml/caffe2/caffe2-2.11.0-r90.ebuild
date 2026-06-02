@@ -168,6 +168,10 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.10.0-gentoo.patch.xz
 	"${FILESDIR}"/${P}-mimalloc.patch.xz
 	"${FILESDIR}"/${P}-removekineto-pr178960.patch.xz
+	# gcc-15 -Wtemplate-body rejects typename decltype(...)::difference_type in
+	# template bodies during CUDA .cu compilation; use std::ptrdiff_t instead.
+	# verified 2026-06-02
+	"${FILESDIR}"/${P}-list-inl-gcc15.patch.xz
 
 	# stuff overlay only: scrub MKL MPI / cluster libs and force GNU
 	# OpenMP threading in caffe2::mkl's public link interface so that
