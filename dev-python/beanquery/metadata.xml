@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+		<name>Ivan S. Titov</name>
+	</maintainer>
+	<longdescription lang="en">
+		Beanquery is the BQL query engine for Beancount: a customizable
+		lightweight SQL-like query tool over ledger data, providing the
+		bean-query command. In Beancount 3 it is a separate package, split
+		out of the v2 monolith.
+	</longdescription>
+	<upstream>
+		<remote-id type="github">beancount/beanquery</remote-id>
+		<remote-id type="pypi">beanquery</remote-id>
+	</upstream>
+</pkgmetadata>
