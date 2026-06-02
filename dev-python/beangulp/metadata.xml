@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+		<name>Ivan S. Titov</name>
+	</maintainer>
+	<longdescription lang="en">
+		Beangulp provides the framework for importing transactions from
+		external sources into Beancount ledgers: identifying file types,
+		extracting directives, and managing imported documents. In
+		Beancount 3 it is a separate package, split out of the monolithic
+		v2 codebase.
+	</longdescription>
+	<upstream>
+		<remote-id type="github">beancount/beangulp</remote-id>
+		<remote-id type="pypi">beangulp</remote-id>
+	</upstream>
+</pkgmetadata>
