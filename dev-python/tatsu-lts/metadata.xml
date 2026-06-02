@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+		<name>Ivan S. Titov</name>
+	</maintainer>
+	<longdescription lang="en">
+		TatSu takes a grammar in a variation of EBNF as input and outputs a
+		memoizing PEG/Packrat parser in Python. TatSu-LTS is a maintained
+		long-term-support fork of the original TatSu, packaged here as the
+		PEG-parser dependency of beanquery.
+	</longdescription>
+	<upstream>
+		<remote-id type="github">neogeny/TatSu</remote-id>
+		<remote-id type="pypi">TatSu-LTS</remote-id>
+	</upstream>
+</pkgmetadata>
