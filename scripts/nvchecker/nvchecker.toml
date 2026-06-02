@@ -8,7 +8,11 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (202) ---
+# --- pypi (203) ---
+
+["app-office/beancount"]
+source = "pypi"
+pypi = "beancount"
 
 ["dev-python/abtem"]
 source = "pypi"
