@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>iohann.s.titov@gmail.com</email>
+		<name>Ivan S. Titov</name>
+	</maintainer>
+	<longdescription lang="en">
+		Fava is a web interface for the Beancount plain-text double-entry
+		accounting system. It renders balance sheets, income statements,
+		holdings, and an interactive BQL query editor over a Beancount
+		ledger. The frontend assets and translation catalogues are shipped
+		pre-built in the source distribution, so no Node toolchain is
+		required to build the package.
+	</longdescription>
+	<upstream>
+		<remote-id type="github">beancount/fava</remote-id>
+		<remote-id type="pypi">fava</remote-id>
+	</upstream>
+</pkgmetadata>
