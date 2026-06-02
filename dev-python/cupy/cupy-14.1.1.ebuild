@@ -41,7 +41,27 @@ RDEPEND="${DEPEND}"
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
+PATCHES=(
+	# cuSPARSE 12.8.1+ (CUDA 13.3+) defines SpGEAM as enum, not #define;
+	# the old #ifndef guard was ineffective. Guard on CUSPARSE_VERSION instead.
+	# verified 2026-06-02
+	"${FILESDIR}"/cupy-14.1.1-cusparse-spgeam-cuda133.patch.xz
+)
+
 src_prepare() {
+	# Decompress xz patches since eapply can't handle them directly
+	local p b
+	mkdir -p "${T}"/patches
+	for p in "${FILESDIR}"/*.patch.xz; do
+		b=${p##*/}
+		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
+	done
+	local i
+	for i in "${!PATCHES[@]}"; do
+		b=${PATCHES[i]##*/}
+		PATCHES[i]="${T}/patches/${b%.xz}"
+	done
+
 	default
 	eprefixify cupy/cuda/compiler.py
 	use cuda && cuda_src_prepare
