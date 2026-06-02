@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://pypi.org/project/TatSu-LTS/
 "
 
-LICENSE="BSD"
+LICENSE="BSD-4"
 SLOT="0"
 KEYWORDS="~amd64"
 
