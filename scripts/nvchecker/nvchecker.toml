@@ -8,11 +8,15 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (203) ---
+# --- pypi (207) ---
 
 ["app-office/beancount"]
 source = "pypi"
 pypi = "beancount"
+
+["app-office/fava"]
+source = "pypi"
+pypi = "fava"
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -45,6 +49,14 @@ pypi = "atomap"
 ["dev-python/av"]
 source = "pypi"
 pypi = "av"
+
+["dev-python/beangulp"]
+source = "pypi"
+pypi = "beangulp"
+
+["dev-python/beanquery"]
+source = "pypi"
+pypi = "beanquery"
 
 ["dev-python/bidict"]
 source = "pypi"
@@ -653,6 +665,10 @@ pypi = "stop-sequencer"
 ["dev-python/tabledata"]
 source = "pypi"
 pypi = "tabledata"
+
+["dev-python/tatsu-lts"]
+source = "pypi"
+pypi = "tatsu-lts"
 
 ["dev-python/tempdir"]
 source = "pypi"
