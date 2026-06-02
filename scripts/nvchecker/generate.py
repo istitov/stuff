@@ -291,34 +291,7 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
 # Packages whose nvchecker source needs to be hand-crafted because the
 # classifier can't reach the right upstream from SRC_URI / HOMEPAGE alone.
 # Each value is a dict of nvchecker keys emitted verbatim under the entry.
-#
-# pf-sources / pf-sources-extended: HOMEPAGE points at pfkernel.natalenko.name
-# (no machine-readable release feed) and SRC_URI lists extra-stuff distfile
-# mirrors (our own, not upstream).  The actual release feed is pf-kernel/linux
-# on Codeberg, tagged `vX.Y-pfN`.  Both flavors share the same upstream tag
-# scheme.  from_pattern/to_pattern rewrite the tag to Portage-comparable
-# `X.Y_pN` form.
 SPECIAL_SOURCES: dict[str, dict[str, object]] = {
-    "sys-kernel/pf-sources": {
-        "source": "gitea",
-        "host": "codeberg.org",
-        "gitea": "pf-kernel/linux",
-        "use_max_tag": True,
-        "include_regex": r"^v\d+\.\d+-pf\d+$",
-        "prefix": "v",
-        "from_pattern": r"^(\d+\.\d+)-pf(\d+)$",
-        "to_pattern": r"\1_p\2",
-    },
-    "sys-kernel/pf-sources-extended": {
-        "source": "gitea",
-        "host": "codeberg.org",
-        "gitea": "pf-kernel/linux",
-        "use_max_tag": True,
-        "include_regex": r"^v\d+\.\d+-pf\d+$",
-        "prefix": "v",
-        "from_pattern": r"^(\d+\.\d+)-pf(\d+)$",
-        "to_pattern": r"\1_p\2",
-    },
     # therock-bin tracks AMD's nightly ROCm SDK tarballs on the CDN
     # (rocm.nightlies.amd.com).  ROCm/TheRock's github tags are
     # `rocm-X.Y.Z` releases which don't map to the nightly
@@ -386,7 +359,16 @@ _TL_SKIP = (
     "revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream"
 )
 
+_PF_LOCAL_ONLY = (
+    "branch-tip signal tracked in maintainer-local nvchecker-local.toml — pf-sources "
+    "uses a GA-only curated-patch model where 'ship vs upstream tag' is not the right "
+    "drift question; what matters is when codeberg pf-kernel/linux gains a new -pfN tag "
+    "we want to evaluate for inclusion"
+)
+
 SKIP_PKGS: dict[str, str] = {
+    "sys-kernel/pf-sources":          _PF_LOCAL_ONLY,
+    "sys-kernel/pf-sources-extended": _PF_LOCAL_ONLY,
     "sci-libs/amd":     "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
     "sci-libs/camd":    "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
     "sci-libs/ccolamd": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",

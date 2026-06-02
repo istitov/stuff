@@ -46,12 +46,23 @@ first_run=false
 # in the config file. Rather than hard-coding the user's home directory into
 # the committed nvchecker.toml, compose a per-run config that prepends a
 # state-local [__config__] to the committed content.
+#
+# STUFF_NVCHECKER_LOCAL_TOML, if set and pointing at an existing file, has
+# its body concatenated after the committed nvchecker.toml. This is the
+# opt-in hook for maintainer-only triage entries that should never reach
+# the GitHub Actions drift report (e.g. pf-kernel branch-tip watch, KDE
+# Qt5 kde/5.15 per-module tip watch). Unset in CI → the file is ignored
+# even if it happens to exist.
 {
     printf '[__config__]\n'
     printf 'oldver = "%s"\n' "$OLD"
     printf 'newver = "%s"\n' "$NEW"
     printf '\n'
     cat "$CONFIG"
+    if [[ -n "${STUFF_NVCHECKER_LOCAL_TOML:-}" && -f "$STUFF_NVCHECKER_LOCAL_TOML" ]]; then
+        printf '\n'
+        cat "$STUFF_NVCHECKER_LOCAL_TOML"
+    fi
 } > "$RUN_CFG"
 
 # Run version checks. --logger pretty keeps output readable if the user ever
