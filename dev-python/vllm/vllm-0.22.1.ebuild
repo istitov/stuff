@@ -650,7 +650,7 @@ declare -A GIT_CRATES=(
 # below and call cargo_src_unpack manually.
 CARGO_OPTIONAL=1
 
-inherit cargo distutils-r1 pypi rocm
+inherit cargo distutils-r1 pypi rocm toolchain-funcs
 
 # Commit pinned by cmake/external_projects/vllm_flash_attn.cmake (GIT_TAG).
 # Pre-staged so we can patch out FA3's unconditional-build quirk before
@@ -1058,6 +1058,16 @@ src_configure() {
 		export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-${MAX_JOBS}}"
 	elif use cpu; then
 		export VLLM_TARGET_DEVICE=cpu
+		# vllm 0.22.x cpu_extension.cmake locates OpenMP via
+		# vllm_prepare_torch_gomp_shim(), which expects a libgomp vendored
+		# inside PyTorch (torch.libs/libgomp-*.so — a PyPI-wheel artifact).
+		# Our source-built sci-ml/caffe2 ships none, so cmake falls back to
+		# find_library(NAMES gomp), which misses Gentoo's libgomp under the
+		# gcc-internal dir. Point CMAKE_LIBRARY_PATH at the toolchain's
+		# libgomp so the fallback resolves. # verified 2026-06-05 (0.22.1)
+		local gomp_dir
+		gomp_dir=$(dirname "$($(tc-getCC) -print-file-name=libgomp.so)")
+		export CMAKE_ARGS+=" -DCMAKE_LIBRARY_PATH=${gomp_dir}"
 	elif use rocm; then
 		export VLLM_TARGET_DEVICE=rocm
 		# rocm.eclass turns AMDGPU_TARGETS into a semicolon-joined
