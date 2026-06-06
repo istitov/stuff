@@ -1,0 +1,25 @@
+From: backport for CUDA 13.3 CCCL (no upstream 4.x fix; 5.0.0 dropped the thrust tuples)
+Subject: videostab global_motion.cu: include thrust/tuple.h + zip_iterator.h
+
+global_motion.cu calls thrust::make_tuple / thrust::make_zip_iterator but does
+not include thrust/tuple.h or the zip iterator header.  Pre-13.3 those came in
+transitively; the CUDA 13.3 CCCL reshuffle dropped the transitive include, so
+the symbols become undefined and the CUDA TU fails ("namespace thrust has no
+member make_tuple").  Include the two owning headers directly (harmless on every
+older CUDA).  opencv 5.0.0 rewrote this file off thrust tuples, so this is 4.x
+only.  This 4.12.0 copy anchors on the post-cuda-13.0-patch include block
+(cuda/std/functional, not thrust/functional.h) -- see the 4.13.0 patch for the
+other anchor.
+See https://github.com/istitov/stuff/issues/271
+
+--- a/modules/videostab/src/cuda/global_motion.cu
++++ b/modules/videostab/src/cuda/global_motion.cu
+@@ -45,6 +45,8 @@
+ #include <thrust/device_ptr.h>
+ #include <thrust/remove.h>
+ #include <cuda/std/functional>
++#include <thrust/tuple.h>
++#include <thrust/iterator/zip_iterator.h>
+ #include "opencv2/core/cuda/common.hpp"
+
+ namespace cv { namespace cuda { namespace device { namespace globmotion {
