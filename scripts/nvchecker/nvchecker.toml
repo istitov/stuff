@@ -2118,6 +2118,7 @@ to_pattern = '\1_alpha\2'
 # ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["media-libs/opencv"] skipped: custom upstream at opencv.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-plugins/deadbeef-waveform-seekbar"] skipped: cboxdoerfer/deadbeef-waveform-seekbar has no GitHub release tags
 # ["sci-libs/amd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/camd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
