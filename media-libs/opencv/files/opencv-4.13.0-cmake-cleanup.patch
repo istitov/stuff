@@ -1,0 +1,14 @@
+From: stuff overlay (rebased from gentoo opencv-4.9.0-cmake-cleanup for 4.13.0)
+fix openjpeg version string (libavresample hunk dropped: upstream removed it in 4.13.0)
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1577,7 +1577,7 @@
+ 
+ if(HAVE_OPENJPEG)
+   status("    JPEG 2000:" OpenJPEG_FOUND
+-      THEN "OpenJPEG (ver ${OPENJPEG_VERSION})"
++      THEN "OpenJPEG (ver ${OPENJPEG_MAJOR_VERSION}.${OPENJPEG_MINOR_VERSION}.${OPENJPEG_BUILD_VERSION})"
+       ELSE "build (ver ${OPENJPEG_VERSION})"
+   )
+ elseif(HAVE_JASPER)

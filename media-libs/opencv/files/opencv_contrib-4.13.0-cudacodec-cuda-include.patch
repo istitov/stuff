@@ -1,0 +1,19 @@
+From: stuff overlay (istitov/stuff#271)
+cudacodec: keep CUDA toolkit headers on the include path when the Nvidia Video
+Codec SDK is absent, so the unconditionally-globbed NvEncoder.cpp finds <cuda.h>.
+
+--- a/modules/cudacodec/CMakeLists.txt
++++ b/modules/cudacodec/CMakeLists.txt
+@@ -46,6 +46,12 @@
+         list(APPEND extra_libs ${CUDA_nvidia-encode_LIBRARY})
+       endif()
+   endif()
++elseif(ENABLE_CUDA_FIRST_CLASS_LANGUAGE)
++  # cudacodec globs all sources incl. NvEncoder.cpp, which pulls in
++  # private.cuda.hpp -> <cuda.h> even with its body #if'd out when the Nvidia
++  # Video Codec SDK is absent (no NVCUVID/NVCUVENC).  Link cudart so the CUDA
++  # toolkit headers stay on the include path.  istitov/stuff#271, opencv 4.13.0.
++  list(APPEND extra_libs CUDA::cudart${CUDA_LIB_EXT})
+ endif()
+ 
+ ocv_create_module(${extra_libs})
