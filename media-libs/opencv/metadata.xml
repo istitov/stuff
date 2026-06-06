@@ -16,7 +16,8 @@
 	</longdescription>
 	<use>
 		<flag name="atlas">Use <pkg>sci-libs/atlas</pkg> for blas, lapack and sparse blas routines (Experimental!)</flag>
-		<flag name="contrib">Install user contributed scripts from opencv_contrib (Experimental!)</flag>
+		<flag name="contrib" restrict="&lt;media-libs/opencv-5">Install user contributed scripts from opencv_contrib (Experimental!)</flag>
+		<flag name="contrib" restrict="&gt;=media-libs/opencv-5">Install user contributed modules from opencv_contrib (Experimental!); in 5.x this also provides the ml (cv2.ml) and gapi (G-API) modules, which upstream moved out of the main repository</flag>
 		<flag name="contribcvv">Enable CVV in contrib</flag>
 		<flag name="contribdnn" restrict="&gt;media-libs/opencv-4.11">Enable DNN module contrib (requires tinydnn)</flag>
 		<flag name="contribdnn" restrict="&lt;media-libs/opencv-4.11">Enable DNN module</flag>
@@ -29,18 +30,20 @@
 		<flag name="cuda">Enable NVIDIA Cuda computations support (Experimental!)</flag>
 		<flag name="cudnn">Enable support for nVidia cuDNN library</flag>
 		<flag name="eigen">Enable usage of <pkg>dev-cpp/eigen</pkg> for computations</flag>
-		<flag name="features2d">Enable features2d module</flag>
+		<flag name="features2d" restrict="&lt;media-libs/opencv-5">Enable features2d module</flag>
+		<flag name="features" restrict="&gt;=media-libs/opencv-5">Enable the features module (the renamed features2d module in 5.x)</flag>
 		<flag name="gdal">Enable support for <pkg>sci-libs/gdal</pkg> library</flag>
 		<flag name="gflags">Use Google's C++ argument parsing library (<pkg>dev-cpp/gflags</pkg>)</flag>
 		<flag name="glog">Use Google's C++ logging library (<pkg>dev-cpp/glog</pkg>)</flag>
 		<flag name="gtk3">Enable <pkg>x11-libs/gtk+</pkg>:3 support</flag>
 		<flag name="jasper">Use <pkg>media-libs/jasper</pkg> for jpeg2k support</flag>
+		<flag name="jpegxl" restrict="&gt;=media-libs/opencv-5">Enable JPEG XL image format support via <pkg>media-libs/libjxl</pkg></flag>
 		<flag name="mkl">Use <pkg>sci-libs/mkl</pkg> for blas, lapack and sparse blas routines</flag>
 		<flag name="non-free">Enable non-free components</flag>
 		<flag name="opencvapps">Enable compilation with opencvapps</flag>
 		<flag name="openni">Adds support for Kinect-like 3D sensors devices with <pkg>dev-libs/OpenNI</pkg></flag>
 		<flag name="openni2">Adds support for Kinect-like 3D sensors devices with <pkg>dev-libs/OpenNI2</pkg> (should be preferred over openni)</flag>
-		<flag name="quirc">Enable qrcode decoding via <pkg>media-libs/quirc</pkg></flag>
+		<flag name="quirc" restrict="&lt;media-libs/opencv-5">Enable qrcode decoding via <pkg>media-libs/quirc</pkg> (5.x uses its own QR decoder)</flag>
 		<flag name="spng">Use <pkg>media-libs/libspng</pkg> for png support</flag>
 		<flag name="tbb">Enable multithreading with the Intel Threads Building Block (<pkg>dev-cpp/tbb</pkg>)</flag>
 		<flag name="tesseract">Use Google's OCR Engine</flag>
