@@ -219,6 +219,16 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "include_regex": r"^latex/v[0-9]+\.[0-9]+\.[0-9]+$",
         "prefix": "latex/v",
     },
+    # delta-io/delta-rs is a monorepo with parallel tag families: the Python
+    # package is `python-v<PV>`, the Rust crate is `rust-v<PV>`, plus a stray
+    # pre-split bare `v0.1.1`. We ship the Python package from this repo since
+    # 1.6.0 (wheel-only on PyPI; built from the monorepo `python/` member).
+    # Default `prefix = "v"` matches only the stray `v0.1.1` and reports a
+    # phantom downgrade — pin to the python-v scheme and strip the prefix.
+    "dev-python/deltalake": {
+        "include_regex": r"^python-v[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "python-v",
+    },
     # BelledonneCommunications repos tag alpha/rc releases; restrict to
     # the plain three-part numeric form for stable-only signals.
     "net-libs/bctoolbox": {
