@@ -85,6 +85,21 @@ jobs:
         # check also rate-limits on GitHub `/issues` URLs (metadata.xml
         # bugs-to) without auth. Run `pkgcheck scan --net` locally on
         # occasion instead.
+        with:
+          # Exempt two by-design warning classes from the GentooCI exit set
+          # (the action defaults to `--exit GentooCI`, which fails on
+          # warning-level keywords). Both remain reported in a local
+          # `pkgcheck scan`; they just no longer turn the scheduled full
+          # scan red on findings that are intentional repo-wide:
+          #   VisibleVcsPkg   - snapshot ebuilds (zluda, lemonade, fastflowlm,
+          #                     hollama) fetch via git-r3 yet ship ~amd64 by
+          #                     design.
+          #   DroppedKeywords - intentional ~amd64-only forks/retentions
+          #                     (opencv-5.0.0-r90, caffe2, fabio x86 fallback).
+          # Without this the scan failed on every run, so the failure-issue
+          # upsert could never reach the auto-close-on-success path. The
+          # error-level scan is clean. verified 2026-06-07.
+          args: --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords
 
       # Turn a failing scheduled run into a visible issue rather than a
       # silent red dot in the Actions tab. On failure, find an existing
