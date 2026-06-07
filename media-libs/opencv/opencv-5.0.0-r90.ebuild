@@ -384,6 +384,17 @@ PATCHES=(
 
 	"${FILESDIR}/${PN}-4.11.0-cmake-CMP0177.patch"
 
+	# istitov/stuff#271: 5.0.0 still builds the Caffe importer (caffe_io.cpp needs
+	# opencv-caffe.pb.h) but dropped src/caffe/opencv-caffe.proto from the tree and
+	# from the dnn protobuf glob, shipping only a stale pre-generated misc/caffe pb
+	# (protoc 3.19.0, uses generated_message_table_driven.h - gone in modern proto).
+	# With PROTOBUF_UPDATE_FILES=ON (forced for bug #631418) caffe is never
+	# regenerated -> opencv-caffe.pb.h missing -> caffe_io.cpp fails.  src_prepare
+	# restores the proto (4.13.0 schema, identical 71 messages) and this patch adds
+	# it back to the regenerated set.  Only bites opencv[contribdnn].  Verified
+	# (full opencv[contribdnn] compile, caffe importer builds) 2026-06-07.
+	"${FILESDIR}/${PN}-5.0.0-dnn-restore-caffe-proto.patch"
+
 	# Dropped vs 4.13.0-r90 because upstream 5.0.0 fixed them natively (verified
 	# 2026-06-06 against the extracted 5.0.0 tree):
 	#   link-with-cblas-for-lapack  - OpenCVFindLAPACK.cmake now appends CBLAS_LIBRARY
@@ -599,6 +610,16 @@ src_unpack() {
 
 src_prepare() {
 	cmake_src_prepare
+
+	# istitov/stuff#271: 5.0.0 dropped src/caffe/opencv-caffe.proto (see the caffe
+	# PATCHES note above).  Restore it from the overlay copy so the dnn protobuf
+	# step can regenerate opencv-caffe.pb.h for the system protobuf.  The companion
+	# patch adds it back to the proto glob.  The shipped copy is the 4.13.0 proto
+	# with comments stripped (protoc-verified to regenerate a byte-identical header)
+	# and xz-compressed, purely to keep media-libs/opencv/files under the pkgcheck
+	# TotalSizeViolation limit.
+	xz -dc "${FILESDIR}/${P}-dnn-caffe.proto.xz" \
+		> "${S}/modules/dnn/src/caffe/opencv-caffe.proto" || die
 
 	sed \
 		-e '/find_package(OpenMP/s/)/ COMPONENTS C CXX)/g' \

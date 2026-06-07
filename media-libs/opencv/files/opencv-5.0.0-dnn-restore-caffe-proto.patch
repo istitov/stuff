@@ -1,0 +1,29 @@
+From: overlay fix for opencv 5.0.0 dnn caffe importer + system protobuf
+Subject: dnn: regenerate the caffe proto under PROTOBUF_UPDATE_FILES
+
+opencv 5.0.0 still builds the Caffe importer (modules/dnn/src/caffe/
+caffe_io.cpp, which includes opencv-caffe.pb.h) but dropped
+src/caffe/opencv-caffe.proto from the tree and from this glob, shipping
+only a stale pre-generated misc/caffe/opencv-caffe.pb.* (protoc 3.19.0,
+which #includes generated_message_table_driven.h -- removed in modern
+protobuf).  With PROTOBUF_UPDATE_FILES=ON (forced by the Gentoo ebuild for
+bug #631418) the pre-generated fallback is never used and the caffe proto
+is never regenerated, so opencv-caffe.pb.h is missing -> caffe_io.cpp fails.
+
+The ebuild restores src/caffe/opencv-caffe.proto (the 4.13.0 schema, which
+is byte-for-byte the same 71 messages as the 5.0.0 pre-gen).  Add it back to
+the regenerated set, exactly as 4.13.0's CMakeLists does, so protoc rebuilds
+it for the system protobuf.  Only matters for opencv[contribdnn] on 5.0.0.
+See https://github.com/istitov/stuff/issues/271
+
+--- a/modules/dnn/CMakeLists.txt
++++ b/modules/dnn/CMakeLists.txt
+@@ -393,7 +393,7 @@
+   ocv_target_compile_definitions(${the_module} PRIVATE "HAVE_PROTOBUF=1")
+
+   if(PROTOBUF_UPDATE_FILES)
+-    file(GLOB proto_files "${CMAKE_CURRENT_LIST_DIR}/src/tensorflow/*.proto" "${CMAKE_CURRENT_LIST_DIR}/src/onnx/opencv-onnx.proto")
++    file(GLOB proto_files "${CMAKE_CURRENT_LIST_DIR}/src/tensorflow/*.proto" "${CMAKE_CURRENT_LIST_DIR}/src/caffe/opencv-caffe.proto" "${CMAKE_CURRENT_LIST_DIR}/src/onnx/opencv-onnx.proto")
+     if(CMAKE_VERSION VERSION_LESS "3.13.0")
+       set(PROTOBUF_GENERATE_CPP_APPEND_PATH ON) # required for tensorflow
+       protobuf_generate_cpp(fw_srcs fw_hdrs ${proto_files})
