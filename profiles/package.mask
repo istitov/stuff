@@ -77,3 +77,9 @@ app-portage/portopts
 >=dev-texlive/texlive-pstricks-2025
 >=dev-texlive/texlive-publishers-2025
 >=dev-texlive/texlive-xetex-2025
+
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-06-08)
+# Last of the 1.x series before the 2.0 rewrite; retained as a recovery
+# ebuild but blocked from default install. Remove this mask if a 1.x
+# rollback becomes relevant again.
+=app-portage/portconf-1.6.8
