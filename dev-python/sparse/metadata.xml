@@ -2,10 +2,11 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <maintainer type="person">
-    <email>lebedev.vasya@gmail.com</email>
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
   </maintainer>
   <upstream>
+    <remote-id type="pypi">sparse</remote-id>
     <remote-id type="github">pydata/sparse</remote-id>
-    <remote-id type="pypi">Sparse</remote-id>
   </upstream>
 </pkgmetadata>

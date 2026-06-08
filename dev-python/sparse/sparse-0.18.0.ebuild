@@ -3,13 +3,16 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{12..14} )
+
 inherit distutils-r1 pypi
 
 DESCRIPTION="Sparse multi-dimensional arrays for the PyData ecosystem"
-HOMEPAGE="https://github.com/pydata/sparse/"
-SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
+HOMEPAGE="
+	https://github.com/pydata/sparse
+	https://pypi.org/project/sparse/
+"
 
 LICENSE="BSD"
 SLOT="0"
@@ -19,4 +22,10 @@ RDEPEND="
 	>=dev-python/numpy-1.17[${PYTHON_USEDEP}]
 	>=dev-python/numba-0.49[${PYTHON_USEDEP}]
 "
-DEPEND="${RDEPEND}"
+BDEPEND="dev-python/setuptools-scm[${PYTHON_USEDEP}]"
+
+# setuptools_scm cannot derive a version from the gitless sdist.
+export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+
+# Test suite is a heavy numba/hypothesis matrix; upstream-tested.
+RESTRICT="test"
