@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="hyperspy">Enable the HyperSpy converter (<pkg>dev-python/hyperspy</pkg>)</flag>
+    <flag name="mcp">Install the Model Context Protocol server (<pkg>dev-python/mcp</pkg>)</flag>
+    <flag name="nsid">Enable the pyNSID reader backend (<pkg>dev-python/pyNSID</pkg>)</flag>
+    <flag name="tiff">Enable TIFF image support via <pkg>dev-python/tifffile</pkg></flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">SciFiReaders</remote-id>
+    <remote-id type="github">pycroscopy/SciFiReaders</remote-id>
+    <bugs-to>https://github.com/pycroscopy/SciFiReaders/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
