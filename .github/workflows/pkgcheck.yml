@@ -67,7 +67,15 @@ jobs:
 
       - uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
         with:
-          args: --commits ${{ steps.base.outputs.ref }}
+          # Same by-design exit-set exemption as pkgcheck-full below.  The
+          # action defaults to --exit GentooCI (fails on warning-level), and a
+          # commit that merely *touches* a snapshot-VCS package (zluda,
+          # lemonade, fastflowlm, hollama — git-r3 yet ~amd64 => VisibleVcsPkg)
+          # or an ~amd64-only fork (DroppedKeywords) re-surfaces the
+          # by-design warning and reddens the push gate.  e.g. "zluda: drop
+          # 6_pre75" re-scanned the package and tripped on 6_pre76/6_pre77.
+          # Keep this list in sync with pkgcheck-full.  verified 2026-06-09.
+          args: --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords --commits ${{ steps.base.outputs.ref }}
 
   pkgcheck-full:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -195,4 +203,7 @@ jobs:
       - if: steps.detect.outputs.run == 'true'
         uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
         with:
-          args: ''
+          # Full repo scan => same by-design exit-set exemption as the other
+          # two jobs, else a config-only push trips VisibleVcsPkg /
+          # DroppedKeywords here instead.  Keep in sync.  verified 2026-06-09.
+          args: --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords
