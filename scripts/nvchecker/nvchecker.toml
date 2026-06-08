@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (206) ---
+# --- pypi (217) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -17,6 +17,10 @@ pypi = "beancount"
 ["app-office/fava"]
 source = "pypi"
 pypi = "fava"
+
+["dev-python/SciFiReaders"]
+source = "pypi"
+pypi = "SciFiReaders"
 
 ["dev-python/abtem"]
 source = "pypi"
@@ -126,6 +130,10 @@ pypi = "cyclopts"
 source = "pypi"
 pypi = "cymem"
 
+["dev-python/cytoolz"]
+source = "pypi"
+pypi = "cytoolz"
+
 ["dev-python/dans-diffraction"]
 source = "pypi"
 pypi = "dans_diffraction"
@@ -134,9 +142,17 @@ pypi = "dans_diffraction"
 source = "pypi"
 pypi = "darkdetect"
 
+["dev-python/dask-glm"]
+source = "pypi"
+pypi = "dask-glm"
+
 ["dev-python/dask-labextension"]
 source = "pypi"
 pypi = "dask_labextension"
+
+["dev-python/dask-ml"]
+source = "pypi"
+pypi = "dask-ml"
 
 ["dev-python/dataproperty"]
 source = "pypi"
@@ -486,6 +502,18 @@ pypi = "pubchempy"
 source = "pypi"
 pypi = "py4dstem"
 
+["dev-python/pyNSID"]
+source = "pypi"
+pypi = "pyNSID"
+
+["dev-python/pyTEMlib"]
+source = "pypi"
+pypi = "pyTEMlib"
+
+["dev-python/pyUSID"]
+source = "pypi"
+pypi = "pyUSID"
+
 ["dev-python/pyausaxs"]
 source = "pypi"
 pypi = "pyausaxs"
@@ -497,6 +525,10 @@ pypi = "pybase64"
 ["dev-python/pyclibrary"]
 source = "pypi"
 pypi = "pyclibrary"
+
+["dev-python/pycroscopy-gwyfile"]
+source = "pypi"
+pypi = "pycroscopy-gwyfile"
 
 ["dev-python/pycuda"]
 source = "pypi"
@@ -561,6 +593,10 @@ pypi = "pyqt5-sip"
 ["dev-python/pyshortcuts"]
 source = "pypi"
 pypi = "pyshortcuts"
+
+["dev-python/pyswarms"]
+source = "pypi"
+pypi = "pyswarms"
 
 ["dev-python/pytablewriter"]
 source = "pypi"
@@ -629,6 +665,10 @@ pypi = "scooby"
 ["dev-python/seekpath"]
 source = "pypi"
 pypi = "seekpath"
+
+["dev-python/sidpy"]
+source = "pypi"
+pypi = "sidpy"
 
 ["dev-python/silx"]
 source = "pypi"
@@ -745,6 +785,10 @@ pypi = "xgrammar"
 ["dev-python/xraydb"]
 source = "pypi"
 pypi = "xraydb"
+
+["dev-python/xraylib"]
+source = "pypi"
+pypi = "xraylib"
 
 ["dev-python/xyzservices"]
 source = "pypi"
@@ -1964,12 +2008,16 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (3) ---
+# --- special (4) ---
 
 ["dev-libs/cudnn"]
 source = "regex"
 url = "https://developer.download.nvidia.com/compute/cudnn/redist/"
 regex = 'redistrib_(\d+\.\d+\.\d+)\.json'
+
+["dev-python/simpleitk-bin"]
+source = "pypi"
+pypi = "SimpleITK"
 
 ["dev-util/nvidia-cuda-toolkit"]
 source = "regex"

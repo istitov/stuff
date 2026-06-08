@@ -348,6 +348,17 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "url": "https://developer.download.nvidia.com/compute/cudnn/redist/",
         "regex": r"redistrib_(\d+\.\d+\.\d+)\.json",
     },
+    # simpleitk-bin repackages upstream's cp311-abi3 SimpleITK wheel
+    # (::gentoo has no ITK to build from source). It doesn't `inherit pypi`,
+    # so the classifier derives the pypi name from the files.pythonhosted.org
+    # SRC_URI and the package basename — but there's no `simpleitk-bin`
+    # project on PyPI (verified 404 2026-06-08), so that entry would never
+    # resolve. The upstream version signal we want is the `SimpleITK` PyPI
+    # project (the wheel's source); pin it explicitly.
+    "dev-python/simpleitk-bin": {
+        "source": "pypi",
+        "pypi": "SimpleITK",
+    },
 }
 
 
