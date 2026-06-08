@@ -22,6 +22,8 @@ KEYWORDS="~amd64"
 RDEPEND=">=dev-python/toolz-0.8.0[${PYTHON_USEDEP}]"
 BDEPEND=">=dev-python/cython-0.29[${PYTHON_USEDEP}]"
 
+# Plain pytest suite, no third-party plugins.
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
