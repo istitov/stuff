@@ -920,7 +920,14 @@ multilib_src_configure() {
 	# ===================================================
 		-DBUILD_opencv_dnn="$(usex contribdnn)"
 		# 5.x: gapi and ml are contrib modules; only build them with USE=contrib.
-		-DBUILD_opencv_gapi="$(usex contrib "$(usex ffmpeg yes "$(usex gstreamer)")" no)"
+		# istitov/stuff#271: 5.0.0's gapi/src/precomp.hpp includes <opencv2/features.hpp>
+		# in any non-standalone build (i.e. always, here), but gapi's ocv_add_module only
+		# declares imgproc (REQUIRED) + video/stereo (OPTIONAL), never opencv_features.  So unlike
+		# objdetect/stitching/videostab/... (which declare the dep and self-disable
+		# when features is off) gapi builds without it and then fails on the missing
+		# header.  Gate gapi on features too so it cleanly skips instead.  4.x gapi
+		# did not include features2d.hpp here, so this is 5.x-only.  verified 2026-06-08
+		-DBUILD_opencv_gapi="$(usex contrib "$(usex features "$(usex ffmpeg yes "$(usex gstreamer)")" no)" no)"
 		-DBUILD_opencv_ml="$(usex contrib)"
 		# features2d was renamed to features in 5.x (ships a features2d.hpp shim).
 		-DBUILD_opencv_features="$(usex features)"
@@ -1707,10 +1714,24 @@ multilib_src_install() {
 }
 
 pkg_postinst() {
+	# OpenCV 5.x renamed the features2d module (and USE flag) to features.  A
+	# package.use entry from a 4.x install still says "features2d" and silently
+	# no-ops, dropping cv2 feature detection (ORB/SIFT/BFMatcher) plus every
+	# module that depends on it (objdetect, stitching, gapi, videostab, ...).
+	if ! use features; then
+		elog "USE=features is off: OpenCV 5.x renamed the 4.x 'features2d' flag to"
+		elog "'features'.  If you carried a 'features2d' entry over from opencv-4.x,"
+		elog "rename it to 'features' or cv2 feature detection (and objdetect,"
+		elog "stitching, gapi, ...) will be missing."
+	fi
+
 	if ! use contrib; then
 		elog "OpenCV 5.x moved the ml and gapi (G-API) modules into opencv_contrib."
 		elog "They are now only built with USE=contrib, so cv2.ml (SVM/KNN/DTrees/...)"
 		elog "and cv2.gapi are unavailable in this build.  Enable USE=contrib if you"
 		elog "rely on them."
+	elif ! use features; then
+		elog "cv2.gapi additionally requires USE=features in 5.x (its sources pull in"
+		elog "the features module); with contrib but without features, gapi is skipped."
 	fi
 }
