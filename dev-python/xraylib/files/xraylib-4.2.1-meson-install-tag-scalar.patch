@@ -1,0 +1,27 @@
+Upstream's python/meson.build passes install_tag as a single-element
+array to python.extension_module(), which builds exactly one file. Meson
+1.11 tightened install_tag on extension_module() to a scalar str (arrays
+are only valid for multi-output targets like the SWIG custom_target),
+so the build aborts at configure time. Pass the tag as a scalar.
+
+https://github.com/tschoonj/xraylib/blob/master/python/meson.build
+--- a/python/meson.build
++++ b/python/meson.build
+@@ -54,7 +54,7 @@
+         install: true,
+         install_dir: python.get_install_dir(pure: false),
+         c_args: core_c_args + ['-I' + numpy_header_location] + python_error_flags,
+-        install_tag: ['python-runtime']
++        install_tag: 'python-runtime'
+     )
+     python_enabled = true
+ endif
+@@ -86,7 +86,7 @@
+         install: true,
+         install_dir: python.get_install_dir(pure: false),
+         c_args: core_c_args + ['-I' + numpy_header_location] + python_error_flags,
+-        install_tag: ['python-runtime'],
++        install_tag: 'python-runtime',
+     )
+     python_numpy_enabled = true
+ endif
