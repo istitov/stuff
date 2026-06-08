@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (217) ---
+# --- pypi (225) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -254,6 +254,10 @@ pypi = "gemmi"
 source = "pypi"
 pypi = "gguf"
 
+["dev-python/ghp-import"]
+source = "pypi"
+pypi = "ghp-import"
+
 ["dev-python/google-ai-generativelanguage"]
 source = "pypi"
 pypi = "google_ai_generativelanguage"
@@ -358,6 +362,10 @@ pypi = "mbstrdecoder"
 source = "pypi"
 pypi = "mcp"
 
+["dev-python/mergedeep"]
+source = "pypi"
+pypi = "mergedeep"
+
 ["dev-python/misaki"]
 source = "pypi"
 pypi = "misaki"
@@ -365,6 +373,22 @@ pypi = "misaki"
 ["dev-python/mistral-common"]
 source = "pypi"
 pypi = "mistral_common"
+
+["dev-python/mkdocs"]
+source = "pypi"
+pypi = "mkdocs"
+
+["dev-python/mkdocs-get-deps"]
+source = "pypi"
+pypi = "mkdocs-get-deps"
+
+["dev-python/mkdocs-material"]
+source = "pypi"
+pypi = "mkdocs-material"
+
+["dev-python/mkdocs-material-extensions"]
+source = "pypi"
+pypi = "mkdocs-material-extensions"
 
 ["dev-python/model-hosting-container-standards"]
 source = "pypi"
@@ -453,6 +477,10 @@ pypi = "orsopy"
 ["dev-python/outlines-core"]
 source = "pypi"
 pypi = "outlines_core"
+
+["dev-python/paginate"]
+source = "pypi"
+pypi = "paginate"
 
 ["dev-python/palettable"]
 source = "pypi"
@@ -621,6 +649,10 @@ pypi = "pyvistaqt"
 ["dev-python/pyxem"]
 source = "pypi"
 pypi = "pyxem"
+
+["dev-python/pyyaml-env-tag"]
+source = "pypi"
+pypi = "pyyaml-env-tag"
 
 ["dev-python/qtpy"]
 source = "pypi"
