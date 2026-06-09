@@ -337,6 +337,15 @@ everyone who has contributed since. Thank you.
 
 ## License
 
-Ebuilds and associated files are distributed under the GNU General Public
-License v2, matching `::gentoo`. Upstream sources retain their own licenses
-as declared in each ebuild's `LICENSE` variable.
+Original packaging files — ebuilds, eclasses, `metadata.xml`, profiles, and
+news items — are distributed under the GNU General Public License v2,
+matching `::gentoo`'s per-file header convention and its
+[Copyright Policy (GLEP 76)](https://www.gentoo.org/glep/glep-0076.html).
+
+Patches that modify upstream code are derivative works of it and carry that
+code's own license, as do the upstream sources themselves; the applicable
+license is the one declared in each ebuild's `LICENSE` variable — e.g. the
+`dev-python/py4dstem` numpy-2 patch is GPL-3 and the `media-libs/opencv`
+patches are Apache-2.0, not GPL-2. This mirrors GLEP 76's Certificate of
+Origin, under which a contribution "based upon previous work" is submitted
+"under the same free software license" as that prior work.
