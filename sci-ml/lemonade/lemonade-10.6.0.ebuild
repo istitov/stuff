@@ -42,6 +42,24 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
+src_prepare() {
+	cmake_src_prepare
+
+	# ::gentoo's cpp-httplib ships no pkg-config .pc, so upstream's
+	# detection misses it and the build FetchContents cpp-httplib at
+	# v${MIN_HTTPLIB_VERSION} (0.26.0). That tag's own CMakeLists.txt
+	# has a malformed
+	# `if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND VERSION_LESS 10.0.0)`
+	# which CMake 4 rejects ("Unknown arguments specified"). Pin the
+	# fetch to v0.38.0 — the CMake-4-clean version we ship as
+	# dev-cpp/cpp-httplib, API-compatible with the >=0.26.0 floor.
+	# Same fix as 10.7.0; pin point confirmed in this version's
+	# upstream CMakeLists 2026-06-10.
+	sed -i \
+		-e 's|GIT_TAG v${MIN_HTTPLIB_VERSION}|GIT_TAG v0.38.0|' \
+		CMakeLists.txt || die
+}
+
 src_configure() {
 	# BUILD_WEB_APP defaults ON on Linux but pulls Node.js + npm install
 	# at build time; BUILD_TAURI_APP brings cargo + Rust GUI bundling.
