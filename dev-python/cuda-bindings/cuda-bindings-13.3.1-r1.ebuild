@@ -57,6 +57,11 @@ export CUDA_HOME=/opt/cuda
 
 # setuptools_scm is configured with root=".." pointing at the cuda-python
 # monorepo root; the GitHub archive has no .git so the dynamic version
-# would fail. Feed PV explicitly via SETUPTOOLS_SCM_PRETEND_VERSION;
-# the tag_regex strips the "v" prefix from upstream tags.
-export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_CUDA_BINDINGS="v${PV}"
+# would fail. Feed PV explicitly via SETUPTOOLS_SCM_PRETEND_VERSION.
+# This must be the LITERAL version, not the upstream "v"-prefixed tag
+# form: PRETEND_VERSION is used verbatim and bypasses tag_regex, so a
+# "v${PV}" here leaks into cuda.bindings.__version__ as "v13.3.1". That
+# breaks consumers that parse the major version, e.g. cuda.core's
+# __version__.split(".")[0] check (surfaced by dev-python/dask-cuda).
+# verified 2026-06-10
+export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_CUDA_BINDINGS="${PV}"
