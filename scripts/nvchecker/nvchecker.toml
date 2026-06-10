@@ -1179,6 +1179,7 @@ prefix = "v"
 source = "github"
 github = "rapidsai/dask-cuda"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
 ["dev-python/deltalake"]
@@ -1228,6 +1229,7 @@ prefix = "v"
 source = "github"
 github = "rapidsai/rmm"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
 ["dev-python/llvmlite"]
@@ -1339,12 +1341,14 @@ prefix = "v"
 source = "github"
 github = "rapidsai/rapids-dask-dependency"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
 ["dev-python/rapids-logger"]
 source = "github"
 github = "rapidsai/rapids-logger"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
 ["dev-python/rich-rst"]
@@ -1357,6 +1361,7 @@ prefix = "v"
 source = "github"
 github = "rapidsai/rmm"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
 ["dev-python/segments"]

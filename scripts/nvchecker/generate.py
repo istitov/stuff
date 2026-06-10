@@ -146,6 +146,28 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "dev-python/nvidia-cudnn-frontend": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
+    # rapidsai/* (rmm, dask-cuda, rapids-dask-dependency, rapids-logger)
+    # publish a per-cycle alpha tag `vYY.MM.PPa` (e.g. v26.08.00a) ahead
+    # of each GA `vYY.MM.PP`, so use_max_tag reports the next cycle's
+    # alpha as drift against the GA we ship (e.g. 26.06.00). rapids-logger
+    # uses the same trailing-`a` scheme on a plain semver line (v0.3.0a vs
+    # v0.2.3). Restrict to bare 3-part v-tags so only GA counts. Tag
+    # formats verified against each repo 2026-06-11.
+    "dev-python/dask-cuda": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    "dev-python/librmm": {  # tracks rapidsai/rmm (the C++ half of that repo)
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    "dev-python/rmm": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    "dev-python/rapids-dask-dependency": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    "dev-python/rapids-logger": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
     # fmaclen/hollama tags are bare (`0.35.4`), no v prefix. Default
     # v-strip would silently shadow every release.
     "www-apps/hollama": {
