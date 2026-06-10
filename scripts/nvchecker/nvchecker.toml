@@ -910,7 +910,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (158) ---
+# --- github (163) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1175,6 +1175,12 @@ github = "dask/dask"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/dask-cuda"]
+source = "github"
+github = "rapidsai/dask-cuda"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/deltalake"]
 source = "github"
 github = "delta-io/delta-rs"
@@ -1215,6 +1221,12 @@ prefix = "v"
 ["dev-python/latexrestricted"]
 source = "github"
 github = "gpoore/latexrestricted"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/librmm"]
+source = "github"
+github = "rapidsai/rmm"
 use_max_tag = true
 prefix = "v"
 
@@ -1323,9 +1335,27 @@ github = "pymupdf/pymupdf-fonts"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/rapids-dask-dependency"]
+source = "github"
+github = "rapidsai/rapids-dask-dependency"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/rapids-logger"]
+source = "github"
+github = "rapidsai/rapids-logger"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/rich-rst"]
 source = "github"
 github = "wasi-master/rich-rst"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/rmm"]
+source = "github"
+github = "rapidsai/rmm"
 use_max_tag = true
 prefix = "v"
 
