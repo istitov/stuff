@@ -63,7 +63,9 @@ export CUDA_HOME=/opt/cuda
 # setuptools_scm is configured with root=".." pointing at the
 # cuda-python monorepo root; the GitHub archive has no .git so the
 # dynamic version would fail. SETUPTOOLS_SCM_PRETEND_VERSION_FOR_* is
-# processed as a literal version string before tag_regex applies, so
-# feed plain "v${PV}" (which packaging.version accepts as v-prefixed),
-# not the full "cuda-core-v${PV}" tag form. Matches cuda-bindings.
-export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_CUDA_CORE="v${PV}"
+# used verbatim and bypasses tag_regex, so it must be the LITERAL
+# version, not the "v"-prefixed tag form. packaging.version normalises
+# "v1.0.1" away in the dist metadata, but the raw string still leaks
+# into cuda.core.__version__, which breaks consumers that parse it (the
+# same class of bug fixed in cuda-bindings). verified 2026-06-10
+export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_CUDA_CORE="${PV}"
