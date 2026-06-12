@@ -59,7 +59,6 @@ RDEPEND="
 		dev-python/sqlalchemy-utils[${PYTHON_USEDEP}]
 		dev-python/tabulate[${PYTHON_USEDEP}]
 		dev-python/termcolor[${PYTHON_USEDEP}]
-		dev-python/tomli[${PYTHON_USEDEP}]
 		dev-python/tomli-w[${PYTHON_USEDEP}]
 		dev-python/uncertainties[${PYTHON_USEDEP}]
 		dev-python/wxmplot[${PYTHON_USEDEP}]
