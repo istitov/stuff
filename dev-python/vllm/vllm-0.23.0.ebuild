@@ -1011,15 +1011,23 @@ src_prepare() {
 	fi
 
 	if use cuda; then
-		# Pre-stage vllm-flash-attn and apply our FA3-only-when-archs
-		# patch before vllm's CMake FetchContent reaches it.  vllm
-		# honours VLLM_FLASH_ATTN_SRC_DIR (set in src_configure) and
-		# skips the git fetch when the dir already exists.
+		# Pre-stage vllm-flash-attn and apply our local patches before
+		# vllm's CMake FetchContent reaches it.  vllm honours
+		# VLLM_FLASH_ATTN_SRC_DIR (set in src_configure) and skips the
+		# git fetch when the dir already exists.
 		local fa_dir="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
 		[[ -d ${fa_dir} ]] || die "expected ${fa_dir} from SRC_URI unpack"
 		pushd "${fa_dir}" >/dev/null || die
+		# Skip the FA3 (Hopper) target body when no Hopper arch is in
+		# CUDA_ARCHS so Ampere/Ada builds don't compile unrunnable kernels.
 		eapply -p0 \
 			"${FILESDIR}/vllm-flash-attn-${VLLM_FA_COMMIT:0:7}-fa3-only-when-archs.patch"
+		# vllm's PYTHON_COMPAT allows python3_14, but flash-attn's
+		# CMakeLists hard-codes a supported-Python whitelist and
+		# FATAL_ERRORs on 3.14 at configure.  The extension is abi3
+		# (USE_SABI 3), so widening that whitelist is safe.  bug #274
+		eapply -p0 \
+			"${FILESDIR}/vllm-flash-attn-${VLLM_FA_COMMIT:0:7}-py314.patch"
 		popd >/dev/null || die
 	fi
 }
