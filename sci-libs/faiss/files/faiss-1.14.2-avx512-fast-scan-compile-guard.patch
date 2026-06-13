@@ -1,0 +1,50 @@
+Align the AVX512 fast-scan compile guards with availability of the types.
+
+faiss only includes the AVX512 simd type definitions (simdlib_avx512.h,
+pulled in by simdlib_dispatch.h) when COMPILE_SIMD_AVX512 is defined — a
+macro set PRIVATE to the faiss_avx512 / faiss_avx512_spr targets. But the
+fast-scan headers gate their *use* of those types on bare
+`#ifdef __AVX512F__`.
+
+In the non-dynamic-dispatch build (FAISS_OPT_LEVEL=generic/avx2/avx512)
+the common "faiss" and "faiss_avx2" targets compile with the user's
+CFLAGS. On any CPU whose -march enables AVX512 (e.g. -march=znver5),
+__AVX512F__ is defined for those targets while COMPILE_SIMD_AVX512 is not,
+so the AVX512 fast-scan code is compiled while simd32uint16_tpl<AVX512> et
+al. are only forward-declared. The result is a hard build failure (gcc-16:
+no member 'clear', missing operator>> / operator&, no lookup_4_lanes).
+
+faiss's own accumulate_loops_512.h:26 already uses the correct guard
+(defined(COMPILE_SIMD_AVX512) && defined(__AVX512F__)); apply the same to
+kernels_simd512.h and decompose_qbs.h so the AVX512 fast-scan path is
+compiled only in the TUs that actually pull in the AVX512 simdlib.
+
+Upstream: not yet filed (guard mismatch, applies to 1.14.x).
+--- a/faiss/impl/fast_scan/decompose_qbs.h
++++ b/faiss/impl/fast_scan/decompose_qbs.h
+@@ -37,7 +37,7 @@
+         const uint8_t* LUT,
+         ResultHandler& res,
+         const Scaler& scaler) {
+-#ifdef __AVX512F__
++#if defined(COMPILE_SIMD_AVX512) && defined(__AVX512F__)
+     if constexpr (
+             KernelSL == SIMDLevel::AVX512 ||
+             KernelSL == SIMDLevel::AVX512_SPR) {
+--- a/faiss/impl/fast_scan/kernels_simd512.h
++++ b/faiss/impl/fast_scan/kernels_simd512.h
+@@ -10,7 +10,7 @@
+ #include <faiss/impl/platform_macros.h>
+ #include <faiss/impl/simdlib/simdlib_dispatch.h>
+ 
+-#ifdef __AVX512F__
++#if defined(COMPILE_SIMD_AVX512) && defined(__AVX512F__)
+ 
+ namespace faiss {
+ 
+@@ -476,4 +476,4 @@
+ 
+ } // namespace faiss
+ 
+-#endif // __AVX512F__
++#endif // COMPILE_SIMD_AVX512 && __AVX512F__

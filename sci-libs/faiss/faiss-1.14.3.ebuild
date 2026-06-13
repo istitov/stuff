@@ -48,8 +48,7 @@ BDEPEND="
 # The AVX512 fast-scan headers gate their use of the AVX512 simd types on
 # bare __AVX512F__, but those types are only defined when COMPILE_SIMD_AVX512
 # is also set (the faiss_avx512 target). A -march that enables AVX512 (e.g.
-# znver5) thus breaks the generic/avx2 targets on gcc-16. Headers are
-# byte-identical to 1.14.3, so the same patch applies. verified 2026-06-13
+# znver5) thus breaks the generic/avx2 targets on gcc-16. verified 2026-06-13
 PATCHES=( "${FILESDIR}"/faiss-1.14.2-avx512-fast-scan-compile-guard.patch )
 
 pkg_setup() {
