@@ -17,8 +17,8 @@ KEYWORDS="~amd64"
 RESTRICT="test mirror"
 
 RDEPEND="
-	>=sci-libs/spglib-1.14.1[python,${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
+		>=sci-libs/spglib-1.14.1[python,${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
 		dev-python/scipy[${PYTHON_USEDEP}]
 	')
