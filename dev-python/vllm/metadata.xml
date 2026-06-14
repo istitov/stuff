@@ -13,6 +13,7 @@
   </longdescription>
   <use>
     <flag name="cpu">Build for CPU inference (VLLM_TARGET_DEVICE=cpu); pull torchaudio + numba</flag>
+    <flag name="humming">Pull dev-python/humming-kernels for the optional CUDA-only "humming" MXFP4 quantization backend (needs USE=cuda)</flag>
     <flag name="rocm">Build for AMD ROCm inference (VLLM_TARGET_DEVICE=rocm); pull HIP libs + torch{audio,vision}</flag>
     <flag name="rust">Build the optional vllm-rs Rust serving frontend (opt-in at runtime via VLLM_USE_RUST_FRONTEND=1)</flag>
   </use>

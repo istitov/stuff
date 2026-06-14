@@ -680,7 +680,7 @@ LICENSE+="
 "
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="cpu cuda rocm rust"
+IUSE="cpu cuda humming rocm rust"
 # VLLM_TARGET_DEVICE is single-valued; cpu, cuda, and rocm paths are
 # mutually exclusive. Default (none) → empty target. USE=rust is
 # orthogonal — it builds the optional vllm-rs Rust serving frontend
@@ -689,6 +689,7 @@ IUSE="cpu cuda rocm rust"
 REQUIRED_USE="
 	?? ( cpu cuda rocm )
 	rocm? ( || ( ${ROCM_REQUIRED_USE} ) )
+	humming? ( cuda )
 "
 
 # USE=cpu (default off): build with VLLM_TARGET_DEVICE=cpu so the
@@ -770,19 +771,15 @@ REQUIRED_USE="
 # DeepSeek R1 + spec decode install tokenspeed-mla separately.
 # # verified 2026-05-16: vllm imports clean without it.
 #
-# humming-kernels[cu13] (new in 0.22.0 requirements/cuda.txt at ==0.1.2,
-# "for quantization gemm") is omitted for now. The `humming` import in
-# vllm/model_executor/layers/quantization/humming.py is gated by
-# `if current_platform.is_cuda():` with no try/except, and humming.py is
-# pulled in lazily by the quantization registry (quantization/__init__.py
-# imports every config class when a quant method is first resolved), so
-# on a cuda build, loading any quantized model would need it. It is not
-# omittable as cleanly as tokenspeed-mla. It is not yet packaged in this
-# overlay (no plain PyPI sdist; cu13-tagged wheels only), so this is a
-# known cuda-path gap: cuda users of quantized models must install
-# humming-kernels separately until it is packaged. rocm/empty targets
-# skip the import entirely (is_cuda() is False). # noted 2026-05-29; TODO
-# package dev-python/humming-kernels.
+# humming-kernels[cu13] (requirements/cuda.txt, ==0.1.2 "for quantization
+# gemm") provides the optional `humming` quant backend -- pulled only
+# under USE=humming. vllm's quant registry imports `.humming` for any
+# quant method, and humming.py imports the external `humming` package
+# under `if current_platform.is_cuda():` with no fallback, so a cuda
+# build without it aborts on every quantized model load. The
+# ${P}-humming-import-optional.patch guards that import so the other
+# quant methods still work with USE=-humming; upstream makes it lazy in
+# vllm > 0.23.0 (vllm-project/vllm#44921). # 2026-06-15
 # gfx1150 (Strix Point iGPU) rocm build verified on
 # caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt] with
 # AMDGPU_TARGETS=gfx1150.  Both runs produced four working HIP
@@ -918,6 +915,7 @@ RDEPEND="
 		~dev-python/flashinfer-python-0.6.11_p2[${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tilelang-0.1.9[${PYTHON_SINGLE_USEDEP}]
 		>=dev-python/quack-kernels-0.3.3[${PYTHON_SINGLE_USEDEP}]
+		humming? ( ~dev-python/humming-kernels-0.1.2[${PYTHON_SINGLE_USEDEP}] )
 		$(python_gen_cond_dep '
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			>=dev-python/fastsafetensors-0.2.2[${PYTHON_USEDEP}]
@@ -1014,6 +1012,8 @@ src_unpack() {
 		default
 	fi
 }
+
+PATCHES=( "${FILESDIR}/${P}-humming-import-optional.patch" )
 
 src_prepare() {
 	distutils-r1_src_prepare
@@ -1131,6 +1131,13 @@ pkg_postinst() {
 		elog "  NVCC_PREPEND_FLAGS=\"-ccbin /usr/bin/${CHOST}-g++-15\" vllm serve ..."
 		elog ""
 		elog "or switch the system compiler via 'eselect gcc'."
+	fi
+
+	if use cuda && ! use humming; then
+		elog ""
+		elog "The optional 'humming' MXFP4 quantization backend is off by"
+		elog "default. Enable USE=humming to pull dev-python/humming-kernels"
+		elog "if you serve humming-quantized models."
 	fi
 
 	if use rocm; then
