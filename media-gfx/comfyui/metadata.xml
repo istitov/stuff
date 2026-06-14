@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="cuda">Build the torch backend (<pkg>sci-ml/caffe2</pkg>) with CUDA/NVIDIA acceleration; also selects the CUDA wheels of <pkg>dev-python/comfy-aimdo-bin</pkg> and <pkg>dev-python/comfy-kitchen-bin</pkg> (otherwise their pure-python CPU fallbacks)</flag>
+    <flag name="compile">Pull <pkg>dev-python/triton-bin</pkg> for torch.compile / inductor custom nodes and comfy_kitchen's Triton backend</flag>
+    <flag name="templates">Install the bundled example-workflow template gallery (<pkg>dev-python/comfyui-workflow-templates</pkg>; ~330 MiB of preview assets)</flag>
+    <flag name="extra">Pull optional model helpers — <pkg>dev-python/spandrel</pkg> (upscaler architectures) and <pkg>dev-python/kornia</pkg> (computer-vision nodes)</flag>
+    <flag name="opengl">Pull <pkg>dev-python/pyopengl</pkg> + <pkg>dev-python/glfw</pkg> for the 3D-preview nodes</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">comfy-org/comfyui</remote-id>
+  </upstream>
+</pkgmetadata>
