@@ -25,8 +25,8 @@ KEYWORDS="~amd64"	# plotly is amd64-only in ::gentoo
 RESTRICT="test"
 
 RDEPEND="
-	>=sci-libs/spglib-2.5[python,${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
+		>=sci-libs/spglib-2.5[python,${PYTHON_USEDEP}]
 		>=dev-python/matplotlib-3.8[${PYTHON_USEDEP}]
 		>=dev-python/monty-2026.5.18[${PYTHON_USEDEP}]
 		>=dev-python/networkx-2.7[${PYTHON_USEDEP}]
