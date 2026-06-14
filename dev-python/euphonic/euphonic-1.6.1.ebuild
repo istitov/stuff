@@ -18,9 +18,9 @@ KEYWORDS="~amd64"
 IUSE="matplotlib phonopy-reader"
 
 RDEPEND="
-	>=sci-libs/spglib-2.1.0[python,${PYTHON_SINGLE_USEDEP}]
 	>=dev-python/seekpath-2.2.1[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
+		>=sci-libs/spglib-2.1.0[python,${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
 		>=dev-python/numpy-1.24.0[${PYTHON_USEDEP}]
 		>=dev-python/scipy-1.10[${PYTHON_USEDEP}]
