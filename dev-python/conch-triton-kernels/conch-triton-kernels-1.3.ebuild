@@ -18,13 +18,16 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Hard runtime dep is just numpy. Triton + torch are pulled in via
-# upstream's [cpu]/[cuda]/[rocm]/[xpu] extras and accessed lazily inside
-# kernel functions — calling a kernel without triton installed raises
-# ImportError, which is the same behavior we'd get from the wheel.
-# triton itself is not in any tree we depend on, so we can't declare it.
+# numpy and Triton are the runtime deps. The Triton kernels are accessed
+# lazily inside kernel functions; upstream gates Triton behind the
+# [cpu]/[cuda]/[rocm]/[xpu] extras (each pinning a different accelerator
+# Triton build). We ship a single dev-python/triton-bin (mainline, with
+# both the nvidia and amd backends), so declare it directly rather than
+# leave it to the consumer -- the original "can't declare it" note
+# predated triton-bin landing in-tree (2026-06-14).
 RDEPEND="
 	>=dev-python/numpy-1.26.4[${PYTHON_USEDEP}]
+	dev-python/triton-bin[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
