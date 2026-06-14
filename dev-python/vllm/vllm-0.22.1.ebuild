@@ -816,8 +816,27 @@ REQUIRED_USE="
 # videoio_registry submodule — is present in 4.12.0; the 4.13 lower
 # bound upstream is wheel-publication churn, not an API extension.
 # # verified 2026-05-16 against media-libs/opencv-4.12.0-r1[python].
+#
+# vllm resolves its runtime platform from the host hardware (not the
+# VLLM_TARGET_DEVICE built below). platforms/cuda.py / rocm.py import
+# torch.distributed.PrefixStore + ProcessGroup unconditionally at module
+# load (needs USE=distributed), and at engine init vllm builds a CPU
+# coordination group on the gloo backend. Since our caffe2 builds CUDA
+# with USE_NCCL=OFF, vllm's nccl device group also falls back to gloo, so
+# USE=gloo is required too. Both flags are default-off: without
+# caffe2[distributed,gloo] vllm ImportErrors at startup, or
+# AssertionErrors ("Fallback Gloo backend is not available") at engine
+# init. verified 2026-06-14, bug #274
+#
+# vllm's CUDA kernels (slot mapping, attention, sampling, and the
+# torch.compile/inductor path) are @triton.jit. Gentoo's source-built
+# torch does not pull Triton the way upstream's PyPI wheels do, so the
+# cuda? target requires dev-python/triton-bin or vllm dies at first GPU
+# inference with "'function' object is not subscriptable". torch-2.11.0
+# pairs with triton 3.6.0. verified 2026-06-14, bug #274
 RDEPEND="
 	~sci-ml/pytorch-2.11.0[${PYTHON_SINGLE_USEDEP}]
+	sci-ml/caffe2[distributed,gloo]
 	>=sci-ml/transformers-4.56.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/tokenizers-0.21.1[${PYTHON_SINGLE_USEDEP}]
 	>=dev-python/xgrammar-0.2.0[${PYTHON_SINGLE_USEDEP}]
@@ -898,6 +917,7 @@ RDEPEND="
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			>=dev-python/fastsafetensors-0.2.2[${PYTHON_USEDEP}]
 			~dev-python/nvidia-cutlass-dsl-4.5.2[${PYTHON_USEDEP}]
+			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
 		')
 		dev-util/nvidia-cuda-toolkit:=
 	)
@@ -1090,4 +1110,20 @@ src_configure() {
 		export VLLM_TARGET_DEVICE=empty
 	fi
 	distutils-r1_src_configure
+}
+
+pkg_postinst() {
+	if use cuda; then
+		elog "vllm's CUDA path pulls dev-python/flashinfer-python, which"
+		elog "JIT-compiles GPU kernels with nvcc on first inference. CUDA"
+		elog "13.x nvcc rejects host compilers newer than gcc 15, so if the"
+		elog "active gcc is newer, vllm aborts at first run with a"
+		elog "'Ninja build failed ... unsupported GNU version' error."
+		elog ""
+		elog "Pin nvcc's host compiler to a gcc <= 15 when launching vllm:"
+		elog ""
+		elog "  NVCC_PREPEND_FLAGS=\"-ccbin /usr/bin/${CHOST}-g++-15\" vllm serve ..."
+		elog ""
+		elog "or switch the system compiler via 'eselect gcc'."
+	fi
 }
