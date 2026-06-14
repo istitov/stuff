@@ -833,12 +833,17 @@ REQUIRED_USE="
 # AssertionErrors ("Fallback Gloo backend is not available") at engine
 # init. verified 2026-06-14, bug #274
 #
-# vllm's CUDA kernels (slot mapping, attention, sampling, and the
-# torch.compile/inductor path) are @triton.jit. Gentoo's source-built
-# torch does not pull Triton the way upstream's PyPI wheels do, so the
-# cuda? target requires dev-python/triton-bin or vllm dies at first GPU
-# inference with "'function' object is not subscriptable". torch-2.11.0
-# pairs with triton 3.6.0. verified 2026-06-14, bug #274
+# vllm's GPU kernels (slot mapping, attention, sampling, and the
+# torch.compile/inductor path) are @triton.jit on both the cuda and
+# rocm targets -- on ROCm, vllm's custom paged-attention also falls
+# back to a Triton kernel on gfx targets without it (e.g. gfx1150).
+# Gentoo's source-built torch does not pull Triton the way upstream's
+# PyPI wheels do, so the cuda? and rocm? targets require
+# dev-python/triton-bin or vllm dies at first GPU inference with
+# "'function' object is not subscriptable". torch-2.11.0 pairs with
+# triton 3.6.0; its AMD backend JITs gfx kernels via hipcc. cuda
+# verified 2026-06-14 (bug #274); rocm gfx1150 verified 2026-06-14
+# (opt-125m generated, inductor path + Triton _fwd_kernel).
 RDEPEND="
 	~sci-ml/pytorch-2.11.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed,gloo]
@@ -936,6 +941,7 @@ RDEPEND="
 		$(python_gen_cond_dep '
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			~dev-python/conch-triton-kernels-1.2.1[${PYTHON_USEDEP}]
+			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
 			>=dev-util/amdsmi-7.0.2[${PYTHON_USEDEP}]
 		')
 		>=dev-util/hip-7.2:=
@@ -1130,5 +1136,21 @@ pkg_postinst() {
 		elog "  NVCC_PREPEND_FLAGS=\"-ccbin /usr/bin/${CHOST}-g++-15\" vllm serve ..."
 		elog ""
 		elog "or switch the system compiler via 'eselect gcc'."
+	fi
+
+	if use rocm; then
+		elog "vllm initializes a torch.distributed process group at engine"
+		elog "start (a TCPStore rendezvous) even for single-GPU inference."
+		elog "Since torch 2.4 the TCPStore defaults to the libuv backend,"
+		elog "but sci-ml/pytorch's ROCm build ships no libuv -- it rides in"
+		elog "via tensorpipe, which is disabled for ROCm. Without it vllm"
+		elog "aborts at engine init with:"
+		elog ""
+		elog "  DistStoreError: use_libuv was requested but PyTorch was"
+		elog "  built without libuv support"
+		elog ""
+		elog "Launch vllm with USE_LIBUV=0 to use the legacy socket store:"
+		elog ""
+		elog "  USE_LIBUV=0 vllm serve ..."
 	fi
 }
