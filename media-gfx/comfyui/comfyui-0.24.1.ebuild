@@ -25,7 +25,7 @@ KEYWORDS="~amd64"
 # supplies comfy_kitchen.apply_rope on AMD. cuda and rocm are mutually
 # exclusive; neither set = CPU. USE=compile adds triton-bin for torch.compile +
 # comfy_kitchen's Triton backend.
-IUSE="+cuda compile +templates extra opengl rocm"
+IUSE="+cuda compile +templates extra opengl rocm audio"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	?? ( cuda rocm )"
@@ -41,7 +41,6 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 RDEPEND="${PYTHON_DEPS}
 	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP},cuda?,rocm?]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
-	sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/transformers[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/tokenizers[${PYTHON_SINGLE_USEDEP}]
 	dev-python/torchsde[${PYTHON_SINGLE_USEDEP}]
@@ -92,7 +91,13 @@ RDEPEND="${PYTHON_DEPS}
 			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
 		')
 	)
+	audio? ( sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}] )
 "
+# USE=audio pulls torchaudio for the audio nodes (comfy.audio_encoders, the
+# lumina audio VAE), which import it lazily and degrade gracefully if absent.
+# torchaudio tops out at 2.11 (pins ~sci-ml/pytorch-2.11) and conflicts with
+# the pytorch-2.12 stack, so USE=audio only resolves once a torchaudio
+# matching the installed torch exists. verified 2026-06-15.
 BDEPEND="${PYTHON_DEPS}"
 
 src_install() {

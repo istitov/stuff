@@ -12,6 +12,7 @@
     <flag name="templates">Install the bundled example-workflow template gallery (<pkg>dev-python/comfyui-workflow-templates</pkg>; ~330 MiB of preview assets)</flag>
     <flag name="extra">Pull optional model helpers — <pkg>dev-python/spandrel</pkg> (upscaler architectures) and <pkg>dev-python/kornia</pkg> (computer-vision nodes)</flag>
     <flag name="opengl">Pull <pkg>dev-python/pyopengl</pkg> + <pkg>dev-python/glfw</pkg> for the 3D-preview nodes</flag>
+    <flag name="audio">Pull <pkg>sci-ml/torchaudio</pkg> for the audio nodes (audio encoders, audio VAE). torchaudio must match your installed <pkg>sci-ml/pytorch</pkg> — it currently lags the 2.12 stack, so this may not resolve yet</flag>
   </use>
   <upstream>
     <remote-id type="github">comfy-org/comfyui</remote-id>
