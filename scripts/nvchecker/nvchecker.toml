@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (225) ---
+# --- pypi (227) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -285,6 +285,10 @@ pypi = "hdf5plugin"
 ["dev-python/httpx-sse"]
 source = "pypi"
 pypi = "httpx-sse"
+
+["dev-python/humming-kernels"]
+source = "pypi"
+pypi = "humming-kernels"
 
 ["dev-python/hyperspy"]
 source = "pypi"
@@ -778,6 +782,10 @@ pypi = "traitsui"
 source = "pypi"
 pypi = "transforms3d"
 
+["dev-python/triton-bin"]
+source = "pypi"
+pypi = "triton"
+
 ["dev-python/typepy"]
 source = "pypi"
 pypi = "typepy"
@@ -910,7 +918,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (163) ---
+# --- github (164) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1328,6 +1336,12 @@ prefix = "v"
 ["dev-python/pipcl"]
 source = "github"
 github = "ArtifexSoftware/pipcl"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/ptyrad"]
+source = "github"
+github = "chiahao3/ptyrad"
 use_max_tag = true
 prefix = "v"
 
