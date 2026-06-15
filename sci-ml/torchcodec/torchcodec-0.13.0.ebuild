@@ -59,8 +59,8 @@ python_compile() {
 	# CUDA 13.x nvcc rejects gcc>15. Caffe2's cmake config is included
 	# unconditionally by find_package(Torch) and tries to enable_language(CUDA)
 	# whenever it finds /opt/cuda — even for our CPU-only build path. Pin
-	# the host compiler always; gcc-15 is installed alongside the active
-	# gcc-16 system slot. See feedback_cuda_13_host_compiler_gcc_15.
+	# the host compiler always; this requires gcc-15 installed alongside
+	# whatever newer gcc is the active system slot.
 	export CUDAHOSTCXX="/usr/bin/g++-15"
 
 	if use cuda; then
