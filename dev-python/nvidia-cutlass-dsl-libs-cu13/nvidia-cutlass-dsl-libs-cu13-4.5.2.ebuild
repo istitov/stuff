@@ -30,7 +30,7 @@ RESTRICT="bindist mirror"
 
 # Wheel-only on PyPI — CUDA-13-specific binary kernels of NVIDIA's
 # CUTLASS Python DSL. Selected by the parent nvidia-cutlass-dsl when
-# the cu13 extra is enabled (which we want on this host: CUDA 13.2 at
+# the cu13 extra is enabled (the right pick with CUDA 13.2 at
 # /opt/cuda). # verified 2026-05-25 against 4.5.2.
 RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-base-${PV}[${PYTHON_USEDEP}]
