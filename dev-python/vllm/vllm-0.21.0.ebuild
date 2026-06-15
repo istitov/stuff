@@ -61,8 +61,8 @@ REQUIRED_USE="
 # frontend + ...). Compiles the _C / _moe_C / _vllm_fa* CUDA C++
 # extensions in setup.py via nvcc and the system CUDA toolkit at
 # /opt/cuda. CMAKE_CUDA_HOST_COMPILER is pinned to the gcc-15 slot
-# below — CUDA 13.2's nvcc rejects __GNUC__>15 via host_config.h
-# (see feedback_cuda_13_host_compiler_gcc_15.md). FetchContent of
+# below — CUDA 13.2's nvcc rejects __GNUC__>15 via host_config.h.
+# FetchContent of
 # CUTLASS / spdlog / etc. happens during the vllm CMake build, so
 # RESTRICT="cuda? ( network-sandbox )" mirrors the cpu? pattern.
 #
@@ -328,10 +328,9 @@ src_configure() {
 		# Point vllm's cmake FetchContent at our pre-staged + patched
 		# flash-attention source instead of re-fetching from github.
 		export VLLM_FLASH_ATTN_SRC_DIR="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
-		# CUDA 13.2's nvcc rejects gcc>15 via crt/host_config.h; this
-		# host's active gcc is 16. Pin nvcc's host compiler to the
-		# gcc-15 slot. See feedback_cuda_13_host_compiler_gcc_15.md
-		# for the rationale and broader applicability.
+		# CUDA 13.2's nvcc rejects gcc>15 via crt/host_config.h. Pin
+		# nvcc's host compiler to the gcc-15 slot when the active
+		# system gcc is newer.
 		export CUDAHOSTCXX=/usr/bin/x86_64-pc-linux-gnu-g++-15
 		export CMAKE_ARGS+=" -DCMAKE_CUDA_HOST_COMPILER=${CUDAHOSTCXX}"
 
