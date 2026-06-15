@@ -145,8 +145,8 @@ src_configure() {
 	)
 
 	if use cuda; then
-		# CUDA 13.x nvcc on this host rejects gcc>15. See
-		# feedback_cuda_13_host_compiler_gcc_15 — pinned via CUDAHOSTCXX.
+		# CUDA 13.x nvcc rejects gcc>15; pin the host compiler to the
+		# gcc-15 slot via CUDAHOSTCXX.
 		export CUDAHOSTCXX="/usr/bin/g++-15"
 	fi
 
