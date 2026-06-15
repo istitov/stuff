@@ -19,13 +19,16 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 # comfy_aimdo / comfy_kitchen are hard imports; USE=cuda picks their CUDA
-# wheels, else their py3-none-any fallbacks (CPU mode -- no GPU offload, eager
-# kernels) via the cuda= dep propagation below. USE=compile adds triton-bin for
-# torch.compile + comfy_kitchen's Triton backend. (ROCm is a TODO for the AMD
-# host: it needs caffe2[rocm] + a rocm flag here.)
-IUSE="+cuda compile +templates extra opengl"
+# wheels, else their py3-none-any fallbacks (eager kernels, no GPU offload) via
+# the cuda= dep propagation below. USE=rocm builds the AMD path: caffe2[rocm] +
+# those py3-none-any fallbacks (cuda= off) + triton-bin, whose Triton backend
+# supplies comfy_kitchen.apply_rope on AMD. cuda and rocm are mutually
+# exclusive; neither set = CPU. USE=compile adds triton-bin for torch.compile +
+# comfy_kitchen's Triton backend.
+IUSE="+cuda compile +templates extra opengl rocm"
 
-REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}
+	?? ( cuda rocm )"
 
 # comfy_aimdo is imported unconditionally at module load (execution.py,
 # model_management.py, model_patcher.py, pinned_memory.py). comfy_kitchen
@@ -36,7 +39,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 # those models crash at sampling without it. gguf in upstream's freeze is the
 # ComfyUI-GGUF custom node, not core, and is excluded.
 RDEPEND="${PYTHON_DEPS}
-	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP},cuda?]
+	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP},cuda?,rocm?]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/transformers[${PYTHON_SINGLE_USEDEP}]
@@ -80,6 +83,11 @@ RDEPEND="${PYTHON_DEPS}
 		')
 	)
 	compile? (
+		$(python_gen_cond_dep '
+			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
+		')
+	)
+	rocm? (
 		$(python_gen_cond_dep '
 			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
 		')
@@ -137,9 +145,14 @@ pkg_postinst() {
 	if use cuda; then
 		elog "USE=cuda: the comfy_aimdo VRAM allocator + comfy_kitchen kernels use"
 		elog "their CUDA wheels -- an NVIDIA GPU with a CUDA 12.8+ runtime is needed."
+	elif use rocm; then
+		elog "USE=rocm: built against caffe2[rocm]. comfy_aimdo/comfy_kitchen install"
+		elog "their py3-none-any fallbacks; comfy_kitchen.apply_rope (needed by the"
+		elog "flux/lumina/z-image families) runs on dev-python/triton-bin's AMD Triton"
+		elog "backend. comfy_aimdo's VRAM offload is a no-op on ROCm."
 	else
-		elog "USE=-cuda: comfy_aimdo/comfy_kitchen install their pure-python fallbacks"
-		elog "(no GPU offload, eager kernels) and ComfyUI runs on CPU -- slow."
+		elog "USE=-cuda -rocm: comfy_aimdo/comfy_kitchen install their pure-python"
+		elog "fallbacks (no GPU offload, eager kernels) and ComfyUI runs on CPU -- slow."
 	fi
 	if use compile; then
 		elog ""

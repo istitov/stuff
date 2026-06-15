@@ -6,7 +6,8 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <use>
-    <flag name="cuda">Build the torch backend (<pkg>sci-ml/caffe2</pkg>) with CUDA/NVIDIA acceleration; also selects the CUDA wheels of <pkg>dev-python/comfy-aimdo-bin</pkg> and <pkg>dev-python/comfy-kitchen-bin</pkg> (otherwise their pure-python CPU fallbacks)</flag>
+    <flag name="cuda">Build the torch backend (<pkg>sci-ml/caffe2</pkg>) with CUDA/NVIDIA acceleration; also selects the CUDA wheels of <pkg>dev-python/comfy-aimdo-bin</pkg> and <pkg>dev-python/comfy-kitchen-bin</pkg> (otherwise their non-CUDA wheels)</flag>
+    <flag name="rocm">Build the torch backend (<pkg>sci-ml/caffe2</pkg>) with AMD ROCm/HIP acceleration; installs the non-CUDA wheels of <pkg>dev-python/comfy-aimdo-bin</pkg> and <pkg>dev-python/comfy-kitchen-bin</pkg> and pulls <pkg>dev-python/triton-bin</pkg>, whose Triton backend runs comfy_kitchen.apply_rope on AMD. Mutually exclusive with cuda</flag>
     <flag name="compile">Pull <pkg>dev-python/triton-bin</pkg> for torch.compile / inductor custom nodes and comfy_kitchen's Triton backend</flag>
     <flag name="templates">Install the bundled example-workflow template gallery (<pkg>dev-python/comfyui-workflow-templates</pkg>; ~330 MiB of preview assets)</flag>
     <flag name="extra">Pull optional model helpers — <pkg>dev-python/spandrel</pkg> (upscaler architectures) and <pkg>dev-python/kornia</pkg> (computer-vision nodes)</flag>
