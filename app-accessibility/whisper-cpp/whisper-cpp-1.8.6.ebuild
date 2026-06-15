@@ -49,7 +49,7 @@ src_configure() {
 	)
 	if use cuda; then
 		# CUDA 13.x nvcc rejects gcc>15; pin host compiler when gcc-15 is present
-		# (verified 2026-05-14 on this host: gcc-16 active, CUDA 13.2)
+		# (verified 2026-05-14: gcc-16 active, CUDA 13.2)
 		local g15=/usr/bin/x86_64-pc-linux-gnu-g++-15
 		[[ -x ${g15} ]] && mycmakeargs+=( -DCMAKE_CUDA_HOST_COMPILER="${g15}" )
 	fi
