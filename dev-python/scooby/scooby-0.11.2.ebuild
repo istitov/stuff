@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 # scooby uses setuptools_scm to derive its version from git metadata,
 # but PyPI sdist tarballs ship a PKG-INFO file with the version baked
