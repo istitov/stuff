@@ -10,7 +10,7 @@ inherit perl-module
 DESCRIPTION="A LaxNum type which provides the loose behavior of Moose's Num pre-2.10 "
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="test"
 RESTRICT="!test? ( test )"
 
