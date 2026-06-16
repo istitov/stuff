@@ -13,7 +13,7 @@ HOMEPAGE="https://github.com/matthew-brett/transforms3d"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/numpy-1.15[${PYTHON_USEDEP}]
