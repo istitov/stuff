@@ -14,7 +14,7 @@ SRC_URI="https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/refs/tags/v$
 S="${WORKDIR}/${Sparse_P}/${PN^^}"
 LICENSE="BSD"
 SLOT="0/3"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="doc test"
 RESTRICT="!test? ( test )"
 
