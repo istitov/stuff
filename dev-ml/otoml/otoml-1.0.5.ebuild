@@ -11,7 +11,7 @@ SRC_URI="https://github.com/dmbaturin/${PN}/archive/${PV}.tar.gz -> ${P}.gh.tar.
 
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+ocamlopt test"
 
 RESTRICT="!test? ( test )"
