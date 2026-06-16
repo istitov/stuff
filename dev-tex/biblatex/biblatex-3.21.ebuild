@@ -13,7 +13,7 @@ S="${WORKDIR}"
 
 LICENSE="LPPL-1.3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 IUSE="+biber doc examples"
 
