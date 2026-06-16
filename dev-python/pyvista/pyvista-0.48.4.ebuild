@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # vtk: pyvista 0.48 wants 9.2.2 <= vtk < 9.7.0 with !=9.4.0/9.4.1.
 # ::gentoo currently ships sci-libs/vtk-9.4.2-r2 and 9.5.2; both are
