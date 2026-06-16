@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # typing_extensions is not in upstream Requires-Dist but the retrieval
 # submodule imports it at top level; declare explicitly rather than rely
