@@ -15,7 +15,7 @@ SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="doc examples test"
 RESTRICT="!test? ( test )"
 PYTHON_REQ_USE="tk"
