@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 # No runtime deps on Linux — upstream's only requires_dist is
 # pyobjc-framework-Cocoa, gated by `extra == 'macos-listener'` and
