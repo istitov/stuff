@@ -228,7 +228,7 @@ SRC_URI="
 # Unicode-3.0 / Unlicense); the cargo eclass surfaces those at unpack.
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # rusqlite 0.31 is pulled in with the "bundled" feature so SQLite is
 # compiled into the binary; flate2 builds against miniz_oxide (pure
