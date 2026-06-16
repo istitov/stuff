@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Layered on top of stock opentelemetry-semantic-conventions in ::gentoo.
 RDEPEND="
