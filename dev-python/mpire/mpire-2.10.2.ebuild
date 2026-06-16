@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/sybrenjansen/mpire"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="dashboard dill numpy"
 
 # Upstream optional-extras mapped to USE flags:
