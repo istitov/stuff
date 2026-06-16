@@ -21,7 +21,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream pins latex2sympy2_extended==1.11.0 exactly in pyproject.toml.
 # The ~ form matches that version regardless of revision.
