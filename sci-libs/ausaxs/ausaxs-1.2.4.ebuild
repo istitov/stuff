@@ -12,7 +12,7 @@ S="${WORKDIR}/AUSAXS-${PV}"
 
 LICENSE="LGPL-3+"
 SLOT="0/1.2"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="doc executables"
 
 # dlib FetchContent path is always taken when DLIB=ON (there is no
@@ -94,14 +94,23 @@ src_configure() {
 	# latter explicitly to stay conservative on scientific FP.
 	append-flags -fno-finite-math-only
 
-	# CONSTEXPR_TABLES was dropped upstream in 1.2.4; ARCH=x86-64 yields a
-	# generic -march=x86-64 baseline (no illegal instructions on old CPUs).
+	# CONSTEXPR_TABLES was dropped upstream in 1.2.4. ARCH keys into
+	# cmake/setup_compile_commands.cmake's MARCH_FLAGS: amd64/x86 take a
+	# generic -march=x86-64 baseline (no illegal instructions on old CPUs);
+	# arm64 takes -march=armv8-a. Upstream's bare "x86-64" is invalid on
+	# aarch64 (g++ rejects -march=x86-64), so select per-arch.
+	local march
+	case ${ARCH} in
+		amd64|x86) march="x86-64" ;;
+		arm64)     march="armv8-a" ;;
+		*)         march="auto" ;;
+	esac
 	local mycmakeargs=(
 		-DCMAKE_BUILD_TYPE=Release
 		-DGUI=OFF
 		-DDLIB=OFF
 		-DBUILD_PLOT_EXE=OFF
-		-DARCH=x86-64
+		-DARCH="${march}"
 		-DUSE_SYSTEM_GCEM=ON
 		-DUSE_SYSTEM_BACKWARD=ON
 		-DUSE_SYSTEM_CLI11=ON
