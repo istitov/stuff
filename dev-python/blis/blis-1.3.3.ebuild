@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # This is the Python wrapper from explosion/cython-blis (different
 # from sci-libs/blis which is the C library on its own). Upstream
