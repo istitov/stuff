@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Hard-pulls the [en] extra deps because dev-python/kokoro requires
 # misaki[en]. Other-language extras (ja, ko, vi, zh, he) are not
