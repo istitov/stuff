@@ -24,7 +24,7 @@ S="${WORKDIR}/${PN}-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 # Upstream still lists \`future\` as a runtime dep for its Py2/3
 # coexistence era, but the code only does \`from __future__ import ...\`
