@@ -23,7 +23,7 @@ S="${WORKDIR}/${MY_P}/runtime/Python3"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Older 4.11.0 kept alongside ::gentoo's 4.13.2 because lm-eval's math
 # task does `assert version("antlr4-python3-runtime").startswith("4.11")`
