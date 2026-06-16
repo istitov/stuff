@@ -54,7 +54,7 @@ DESCRIPTION="TeXLive Italian"
 
 LICENSE="FDL-1.1+ GPL-1+ LGPL-2+ LPPL-1.3 LPPL-1.3c TeX-other-free"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 COMMON_DEPEND="
 	>=dev-texlive/texlive-basic-2026
 "
