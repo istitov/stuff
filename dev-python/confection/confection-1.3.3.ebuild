@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Bumped to 1.3.x: dev-python/spacy 3.8.14 wants confection>=1.3.2 and
 # dev-python/thinc 8.3.13 wants confection>=1.1.0; the earlier 0.1.5
