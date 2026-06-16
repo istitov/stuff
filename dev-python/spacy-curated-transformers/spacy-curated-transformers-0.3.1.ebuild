@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Pinned to 0.3.x: this version-line uses curated-transformers 0.1.x
 # and curated-tokenizers 0.0.x and works with spacy 3.8 + thinc 8.3.
