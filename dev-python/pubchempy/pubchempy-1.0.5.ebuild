@@ -17,6 +17,6 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 # Tests hit pubchem.ncbi.nlm.nih.gov; not runnable offline.
 RESTRICT="test"
