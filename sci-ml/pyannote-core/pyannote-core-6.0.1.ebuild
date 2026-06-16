@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # scipy is undeclared in upstream pyproject.toml but imported at module
 # top level by utils/{distance,cluster,hierarchy}.py — verified 2026-05-16.
