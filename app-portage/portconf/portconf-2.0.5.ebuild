@@ -9,7 +9,7 @@ SRC_URI="https://github.com/istitov/portconf/releases/download/${PV}/${P}.tar.xz
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="+bash-completion +zsh-completion test"
 RESTRICT="!test? ( test )"
 
