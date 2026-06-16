@@ -25,7 +25,7 @@ S="${WORKDIR}/${PN}-${MY_PV}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream pins dask/distributed to an exact RAPIDS-tested snapshot
 # (>=2026.1.1,<2026.1.2). That cap is NOT functionally load-bearing for
