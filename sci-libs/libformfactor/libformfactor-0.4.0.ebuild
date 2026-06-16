@@ -13,7 +13,7 @@ S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # find_package(LibHeinz REQUIRED) carries no version, but 0.4.0 is the
 # libheinz-4.0 co-release (paired with bornagain-24.0) and 2.0.1 is still in
