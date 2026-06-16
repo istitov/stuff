@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Pinned to 2.5.x: spacy and thinc cap srsly<3.0.0. PyPI sdist is
 # the canonical source — github tags only go up to v2.4.8, which fails
