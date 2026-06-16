@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # PyPI sdist used (github tags lag — v3.0.9 vs PyPI 3.0.13). spacy /
 # thinc cap preshed<3.1.0; 3.0.13 fits.
