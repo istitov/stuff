@@ -18,7 +18,7 @@ SRC_URI="https://github.com/explosion/${PN}/archive/refs/tags/v${PV}.tar.gz
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
