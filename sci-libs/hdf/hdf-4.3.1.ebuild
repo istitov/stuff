@@ -14,7 +14,7 @@ S="${WORKDIR}/hdf4-hdf${PV}"
 
 LICENSE="NCSA-HDF"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~ppc ~riscv ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~riscv ~x86"
 IUSE="examples fortran szip static-libs test"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="test? ( szip )"
