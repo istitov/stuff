@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # PyPI sdist used (github tags lag). thinc caps murmurhash<1.1.0;
 # 1.0.15 fits.
