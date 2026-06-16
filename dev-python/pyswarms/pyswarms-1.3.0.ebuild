@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # The bundled test suite predates current matplotlib/numpy (e.g. imports
 # the removed matplotlib.axes._subplots private API); upstream-tested.
