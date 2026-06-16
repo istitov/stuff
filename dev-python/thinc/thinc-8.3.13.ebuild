@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Pinned to 8.3.x: dev-python/spacy 3.8.14 caps thinc<8.4.0,>=8.3.12.
 # thinc 9.x ships on PyPI but spacy doesn't accept it. Verify when
