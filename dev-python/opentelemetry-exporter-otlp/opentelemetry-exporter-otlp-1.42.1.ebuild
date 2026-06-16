@@ -23,7 +23,7 @@ S="${WORKDIR}/${MY_P}/exporter/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Convenience umbrella; upstream pins the sub-packages with == in
 # pyproject.toml so the version match is exact.
