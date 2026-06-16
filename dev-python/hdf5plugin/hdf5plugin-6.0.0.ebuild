@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/silx-kit/hdf5plugin"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/h5py-3.0.0[${PYTHON_USEDEP}]
