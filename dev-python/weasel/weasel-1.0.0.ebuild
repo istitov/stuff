@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # PyPI sdist used (github max v0.4.1; PyPI 1.0.0 lives only in PyPI).
 # spacy caps weasel<2.0.0,>=1.0.0 — only the PyPI 1.0.x line solves.
