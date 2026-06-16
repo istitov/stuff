@@ -13,7 +13,7 @@ HOMEPAGE="https://github.com/matplotlib/pytest-mpl"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="examples"
 RESTRICT="test"	# Test phase runs with fails
 
