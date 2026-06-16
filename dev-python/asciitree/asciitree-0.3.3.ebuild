@@ -13,4 +13,4 @@ HOMEPAGE="https://github.com/mbr/asciitree"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
