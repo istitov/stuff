@@ -12,7 +12,7 @@ SRC_URI="https://github.com/meskio/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 DEPEND="sys-libs/ncurses:=[unicode(+)]"
 RDEPEND="${DEPEND}"
