@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/newville/wxutils"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/wxpython-4.2.0:*[${PYTHON_USEDEP}]
