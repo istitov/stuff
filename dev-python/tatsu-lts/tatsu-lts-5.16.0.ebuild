@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="BSD-4"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream declares dependencies = []; colorama (colorized output) and
 # rich (the optional parproc submodule) are extras only, and the core
