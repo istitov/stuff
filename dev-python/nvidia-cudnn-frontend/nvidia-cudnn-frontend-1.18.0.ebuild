@@ -40,10 +40,12 @@ KEYWORDS="~amd64"
 # target. # verified 2026-05-07 against 1.18.0.
 RESTRICT="network-sandbox"
 
-# vllm caps at <1.19.0 due to a breaking change in 1.19.0; 1.18.0 is
-# the highest version in range. Base wheel has no Python-level deps;
-# the cutedsl extra adds nvidia-cutlass-dsl + cuda-python + torch
-# which aren't needed by vllm's flashinfer-python path.
+# RETAINED below keep-last-two: 1.18.0 is the only in-tree version
+# satisfying flashinfer-python-0.6.8_p1's <1.19.0 cap (1.19.0 has a
+# breaking change), and vllm-0.21.0 ~-pins that flashinfer. Do not drop
+# while vllm-0.21.0 is in tree. Base wheel has no Python-level deps; the
+# cutedsl extra adds nvidia-cutlass-dsl + cuda-python + torch which
+# aren't needed by vllm's flashinfer-python path. # verified 2026-06-16
 RDEPEND="
 	>=dev-libs/cudnn-9
 	dev-util/nvidia-cuda-toolkit:=
