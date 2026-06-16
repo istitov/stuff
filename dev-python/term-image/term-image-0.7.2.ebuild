@@ -18,7 +18,7 @@ SRC_URI="https://github.com/AnonymouX47/${PN}/archive/refs/tags/v${PV}.tar.gz
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Tests need a TTY that supports the various graphics protocols (kitty,
 # iterm2, sixel) and aren't sandbox-friendly. Skip until someone wants
