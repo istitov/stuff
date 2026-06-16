@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # beanquery is capped tight (<0.3): fava couples to its BQL API surface
 # and upstream tracks it minor-by-minor. The remaining deps carry only
