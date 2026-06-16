@@ -13,7 +13,7 @@ HOMEPAGE="https://colorspacious.readthedocs.io/"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="doc"
 
 RDEPEND="dev-python/numpy[${PYTHON_USEDEP}]"
