@@ -10,7 +10,7 @@ inherit perl-module
 DESCRIPTION="A dynamic Perl interface to gnuplot"
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 RDEPEND="
 	dev-perl/Module-Build
 	sci-visualization/gnuplot
