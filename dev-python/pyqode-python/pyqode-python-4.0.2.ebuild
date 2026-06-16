@@ -23,7 +23,7 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 # Upstream's metadata still names the long-renamed \`pep8\` package,
 # but the actual imports (backend/workers.py, backend/pep8utils.py)
