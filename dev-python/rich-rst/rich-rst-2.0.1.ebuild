@@ -25,7 +25,7 @@ S="${WORKDIR}/${PN}-${PV}"
 # rich_rst/_vendor/LICENSES.txt + VENDORED.md for the full rationale.
 LICENSE="MIT BSD-2 public-domain"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/rich-12.0.0[${PYTHON_USEDEP}]
