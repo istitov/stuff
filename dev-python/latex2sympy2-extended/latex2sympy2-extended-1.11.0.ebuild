@@ -25,7 +25,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Core deps from pyproject.toml [project.dependencies] at v1.11.0.
 # antlr4-python3-runtime range >=4.9.3,<=4.13.2; ::gentoo carries 4.13.2
