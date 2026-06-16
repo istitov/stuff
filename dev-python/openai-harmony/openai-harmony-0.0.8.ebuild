@@ -338,7 +338,7 @@ LICENSE+="
 	0BSD Apache-2.0 BSD-2 BSD ISC MIT MPL-2.0 Unicode-3.0 ZLIB
 "
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Tests live under tests/ but exercise the pyo3 binding via pytest, which
 # requires `maturin develop` against an editable install — mechanics not
