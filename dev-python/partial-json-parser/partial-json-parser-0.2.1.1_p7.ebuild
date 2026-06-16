@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # No required runtime deps; the only optional extra is `playground` which
 # pulls dev-python/rich and ships the json-playground console script.
