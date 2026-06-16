@@ -18,7 +18,7 @@ SRC_URI="https://github.com/savoirfairelinux/${PN}/archive/refs/tags/v${PV}.tar.
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	${PYTHON_DEPS}
