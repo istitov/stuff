@@ -18,7 +18,7 @@ SRC_URI="https://github.com/python-periodictable/periodictable/archive/refs/tags
 
 LICENSE="public-domain BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/pyparsing-3.0.0[${PYTHON_USEDEP}]
