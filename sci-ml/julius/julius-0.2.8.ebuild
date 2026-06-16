@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream pins torch>=1.13.0 in pyproject.toml; SINGLE_IMPL inherited
 # from sci-ml/pytorch.
