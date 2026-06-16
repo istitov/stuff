@@ -18,4 +18,4 @@ SRC_URI="https://github.com/pymupdf/${PN}/archive/${PV}.tar.gz
 
 LICENSE="OFL-1.1"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
