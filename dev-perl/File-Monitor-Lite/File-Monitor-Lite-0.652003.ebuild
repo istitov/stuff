@@ -10,6 +10,6 @@ inherit perl-module
 DESCRIPTION="Monitor file changes"
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 SRC_TEST=do
