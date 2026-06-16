@@ -13,7 +13,7 @@ HOMEPAGE="https://pyfai.readthedocs.io"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="gui opencl"
 
 # Upstream pyproject.toml [project].dependencies block lists numpy>=1.10,
