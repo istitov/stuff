@@ -20,7 +20,7 @@ SRC_URI="https://files.pythonhosted.org/packages/70/06/6c12c149a7f737dacc76b4c39
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Pinned to 0.1.x: dev-python/spacy-curated-transformers 0.3.1
 # (the version compatible with spacy 3.8.x) caps it at <0.2.0,>=0.1.0.
