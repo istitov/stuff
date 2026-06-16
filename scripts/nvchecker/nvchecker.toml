@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (227) ---
+# --- pypi (240) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -89,6 +89,38 @@ pypi = "colorspacious"
 ["dev-python/columnize"]
 source = "pypi"
 pypi = "columnize"
+
+["dev-python/comfyui-embedded-docs"]
+source = "pypi"
+pypi = "comfyui-embedded-docs"
+
+["dev-python/comfyui-frontend-package"]
+source = "pypi"
+pypi = "comfyui-frontend-package"
+
+["dev-python/comfyui-workflow-templates"]
+source = "pypi"
+pypi = "comfyui-workflow-templates"
+
+["dev-python/comfyui-workflow-templates-core"]
+source = "pypi"
+pypi = "comfyui-workflow-templates-core"
+
+["dev-python/comfyui-workflow-templates-media-api"]
+source = "pypi"
+pypi = "comfyui-workflow-templates-media-api"
+
+["dev-python/comfyui-workflow-templates-media-image"]
+source = "pypi"
+pypi = "comfyui-workflow-templates-media-image"
+
+["dev-python/comfyui-workflow-templates-media-other"]
+source = "pypi"
+pypi = "comfyui-workflow-templates-media-other"
+
+["dev-python/comfyui-workflow-templates-media-video"]
+source = "pypi"
+pypi = "comfyui-workflow-templates-media-video"
 
 ["dev-python/compressed-tensors"]
 source = "pypi"
@@ -325,6 +357,14 @@ pypi = "jsonlines"
 ["dev-python/kokoro"]
 source = "pypi"
 pypi = "kokoro"
+
+["dev-python/kornia"]
+source = "pypi"
+pypi = "kornia"
+
+["dev-python/kornia-rs-bin"]
+source = "pypi"
+pypi = "kornia-rs"
 
 ["dev-python/langdetect"]
 source = "pypi"
@@ -714,6 +754,10 @@ pypi = "silx"
 source = "pypi"
 pypi = "spacy-curated-transformers"
 
+["dev-python/spandrel"]
+source = "pypi"
+pypi = "spandrel"
+
 ["dev-python/sparse"]
 source = "pypi"
 pypi = "sparse"
@@ -770,6 +814,10 @@ pypi = "toolwrapper"
 source = "pypi"
 pypi = "torch-c-dlpack-ext"
 
+["dev-python/torchsde"]
+source = "pypi"
+pypi = "torchsde"
+
 ["dev-python/traits"]
 source = "pypi"
 pypi = "traits"
@@ -777,6 +825,10 @@ pypi = "traits"
 ["dev-python/traitsui"]
 source = "pypi"
 pypi = "traitsui"
+
+["dev-python/trampoline"]
+source = "pypi"
+pypi = "trampoline"
 
 ["dev-python/transforms3d"]
 source = "pypi"
@@ -918,7 +970,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (164) ---
+# --- github (166) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1200,6 +1252,12 @@ prefix = "python-v"
 ["dev-python/distributed"]
 source = "github"
 github = "dask/distributed"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/glfw"]
+source = "github"
+github = "FlorianRhiem/pyGLFW"
 use_max_tag = true
 prefix = "v"
 
@@ -1587,6 +1645,12 @@ github = "tutao/tutanota"
 use_max_tag = true
 include_regex = '^tutanota-desktop-release-\d+\.\d+\.\d+$'
 prefix = "tutanota-desktop-release-"
+
+["media-gfx/comfyui"]
+source = "github"
+github = "comfy-org/comfyui"
+use_max_tag = true
+prefix = "v"
 
 ["media-gfx/orcaslicer"]
 source = "github"
@@ -2089,12 +2153,20 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (4) ---
+# --- special (6) ---
 
 ["dev-libs/cudnn"]
 source = "regex"
 url = "https://developer.download.nvidia.com/compute/cudnn/redist/"
 regex = 'redistrib_(\d+\.\d+\.\d+)\.json'
+
+["dev-python/comfy-aimdo-bin"]
+source = "pypi"
+pypi = "comfy-aimdo"
+
+["dev-python/comfy-kitchen-bin"]
+source = "pypi"
+pypi = "comfy-kitchen"
 
 ["dev-python/simpleitk-bin"]
 source = "pypi"

@@ -381,6 +381,21 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "source": "pypi",
         "pypi": "SimpleITK",
     },
+    # comfy-aimdo-bin repackages the comfy-aimdo CUDA wheel via a *literal*
+    # files.pythonhosted.org SRC_URI (the host is visible, unlike the ${MY_BASE}
+    # form kornia-rs-bin/triton-bin use), so the "PyPI via SRC_URI" branch fires
+    # and derives the name from the basename 'comfy-aimdo-bin', which 404s. Pin
+    # the real project so drift tracking resolves.
+    "dev-python/comfy-aimdo-bin": {
+        "source": "pypi",
+        "pypi": "comfy-aimdo",
+    },
+    # comfy-kitchen-bin: same literal files.pythonhosted.org SRC_URI as
+    # comfy-aimdo-bin, so the basename trap applies -- pin the real project.
+    "dev-python/comfy-kitchen-bin": {
+        "source": "pypi",
+        "pypi": "comfy-kitchen",
+    },
 }
 
 
