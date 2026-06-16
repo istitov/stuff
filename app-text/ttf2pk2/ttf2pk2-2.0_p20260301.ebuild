@@ -15,7 +15,7 @@ S="${WORKDIR}/texlive-${PV#*_p}-source/texk/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Note about blockers: it is a freetype2 based replacement for ttf2pk and
 # ttf2tfm from freetype1, so block freetype1.
