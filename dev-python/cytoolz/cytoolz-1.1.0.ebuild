@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND=">=dev-python/toolz-0.8.0[${PYTHON_USEDEP}]"
 BDEPEND=">=dev-python/cython-0.29[${PYTHON_USEDEP}]"
