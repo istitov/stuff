@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/pyxem/diffsims"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/numpy-1.17.3[${PYTHON_USEDEP}]
