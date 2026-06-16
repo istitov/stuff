@@ -10,7 +10,7 @@ inherit perl-module
 DESCRIPTION="takes mixed encoding input and produces UTF-8 output"
 LICENSE="|| ( Artistic GPL-2 )"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="test"
 RESTRICT="!test? ( test )"
 DEPEND="
