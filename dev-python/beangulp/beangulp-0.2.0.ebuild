@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=app-office/beancount-2.3.5[${PYTHON_USEDEP}]
