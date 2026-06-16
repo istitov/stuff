@@ -19,7 +19,7 @@ SRC_URI="https://files.pythonhosted.org/packages/fc/fa/b2d55f0d53c7c7f5dc0b6dbb4
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Pinned to 0.0.x: dev-python/spacy-curated-transformers 0.3.1 caps
 # this at <0.1.0,>=0.0.9. The 0.9.x line is for the unrelated 2.x
