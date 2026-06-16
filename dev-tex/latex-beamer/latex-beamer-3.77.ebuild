@@ -12,7 +12,7 @@ S="${WORKDIR}/beamer-${PV}"
 
 LICENSE="GPL-2 FDL-1.2 LPPL-1.3c"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="doc"
 
 BDEPEND="
