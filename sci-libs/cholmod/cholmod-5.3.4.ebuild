@@ -15,7 +15,7 @@ S="${WORKDIR}/${Sparse_P}/${PN^^}"
 
 LICENSE="LGPL-2.1+ gpl? ( GPL-2+ )"
 SLOT="0/5"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="cuda doc +gpl openmp test"
 RESTRICT="!test? ( test )"
 
