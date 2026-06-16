@@ -20,7 +20,7 @@ S="${WORKDIR}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 src_unpack() {
 	# A PEP517=no distutils-r1 would try to build from the wheel; stash it
