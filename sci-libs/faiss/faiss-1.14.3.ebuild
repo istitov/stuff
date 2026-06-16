@@ -17,7 +17,7 @@ SRC_URI="https://github.com/facebookresearch/faiss/archive/refs/tags/v${PV}.tar.
 
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="python test
 	cpu_flags_x86_avx2 cpu_flags_x86_avx512f"
 
