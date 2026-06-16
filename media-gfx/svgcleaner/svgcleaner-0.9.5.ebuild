@@ -68,7 +68,7 @@ ${CARGO_CRATE_URIS}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 #QA_FLAGS_IGNORED="usr/bin/${PN}"
 
