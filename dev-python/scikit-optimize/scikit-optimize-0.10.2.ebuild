@@ -14,7 +14,7 @@ HOMEPAGE="https://scikit-optimize.github.io/"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream pyproject lists `pyaml>=16.9`, but skopt's source uses
 # `import yaml` (PyYAML) — the dep is mislabelled upstream, so keep
