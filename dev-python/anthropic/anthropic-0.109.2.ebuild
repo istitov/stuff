@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # guru's ebuild fetched from GitHub for npm-driven mock-server tests;
 # we strip that and use the PyPI sdist directly.
