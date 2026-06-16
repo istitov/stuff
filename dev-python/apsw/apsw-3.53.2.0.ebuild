@@ -18,7 +18,7 @@ S=${WORKDIR}/${MY_P}
 
 LICENSE="ZLIB"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="doc"
 
 # apsw's PV is <sqlite-version>.<apsw-revision> (e.g. 3.53.1.0 = first
