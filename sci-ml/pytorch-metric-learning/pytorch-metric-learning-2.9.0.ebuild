@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # scipy is undeclared in upstream setup.py but imported at module top
 # level by utils/common_functions.py and losses/large_margin_softmax_loss.py
