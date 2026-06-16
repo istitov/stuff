@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # phonemizer-fork is a re-published fork of bootphon/phonemizer to PyPI;
 # the upstream project_urls still point at bootphon's repo. PyPI sdist
