@@ -10,7 +10,7 @@ S="${WORKDIR}/SafeInt-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # 3.19+ is purely header-only — upstream dropped CMakeLists.txt,
 # safe_math.{h,_impl.h}, and the build/install scaffolding the
