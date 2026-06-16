@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="BSD-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # pybase64 bundles aklomp/libbase64 source under base64/ and builds it
 # via CMake during setup.py — no system libbase64 dep.
