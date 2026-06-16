@@ -287,7 +287,7 @@ DESCRIPTION="TeXLive PSTricks"
 
 LICENSE="GPL-1+ GPL-2 LGPL-2+ LGPL-3 LPPL-1.2 LPPL-1.3 LPPL-1.3c"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 COMMON_DEPEND="
 	>=dev-texlive/texlive-basic-2026
 	>=dev-texlive/texlive-plaingeneric-2026
