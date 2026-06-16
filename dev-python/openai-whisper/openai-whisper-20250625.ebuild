@@ -21,7 +21,7 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream's optional `triton>=2` dep (gated to x86_64 Linux) enables a
 # fused-attention decoder fastpath. The fastpath is primarily a CUDA
