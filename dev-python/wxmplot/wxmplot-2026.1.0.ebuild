@@ -13,7 +13,7 @@ HOMEPAGE="https://newville.github.io/wxmplot/"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/wxpython-4.2.0:*[${PYTHON_USEDEP}]
