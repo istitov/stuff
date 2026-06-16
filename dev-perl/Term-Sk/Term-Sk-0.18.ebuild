@@ -11,6 +11,6 @@ DESCRIPTION="Perl extension for displaying a progress indicator on a terminal"
 LICENSE="|| ( Artistic GPL-2 )"
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 SRC_TEST=do
