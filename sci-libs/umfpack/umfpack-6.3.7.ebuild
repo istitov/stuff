@@ -15,7 +15,7 @@ S="${WORKDIR}/${Sparse_P}/${PN^^}"
 
 LICENSE="GPL-2+"
 SLOT="0/6"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="doc openmp test"
 RESTRICT="!test? ( test )"
 
