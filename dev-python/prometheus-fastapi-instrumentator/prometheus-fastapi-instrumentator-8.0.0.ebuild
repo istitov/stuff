@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/starlette-1.0.0[${PYTHON_USEDEP}]
