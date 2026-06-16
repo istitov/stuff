@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=hatchling
 
 inherit distutils-r1 pypi
 
@@ -13,7 +13,7 @@ HOMEPAGE="https://github.com/PyLops/pylops"
 
 LICENSE="LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="advanced"
 
 RDEPEND="
