@@ -1,0 +1,20 @@
+--- a/ccimport/buildtools/writer.py	2026-06-17 09:38:31.525445108 +0200
++++ b/ccimport/buildtools/writer.py	2026-06-17 09:38:31.566120489 +0200
+@@ -7,7 +7,16 @@
+ from pathlib import Path
+ from typing import Any, Dict, List, Optional, Tuple, Type, Union
+ 
+-from ninja.ninja_syntax import Writer
++try:
++    from ninja.ninja_syntax import Writer
++except ImportError:  # ninja_syntax only drives JIT builds, not prebuilt-op
++    # imports (e.g. spconv-cuXXX). Stub the base so BaseWritter still defines;
++    # actually building without python 'ninja' then fails clearly.
++    class Writer:  # type: ignore
++        def __init__(self, *args, **kwargs):
++            raise RuntimeError(
++                "ccimport JIT build needs the python 'ninja' package "
++                "(ninja_syntax), which is not installed")
+ from ccimport import compat
+ from ccimport.constants import get_compiler_map, CXX, CUDACXX, HIPCXX
+ from ccimport.buildmeta import BuildMeta
