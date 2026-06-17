@@ -11,7 +11,7 @@ SRC_URI="https://github.com/prism-em/prismatic/archive/refs/tags/v${PV}.tar.gz -
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="double-precision gpu gui qt5 +qt6"
 
 REQUIRED_USE="gui? ( ^^ ( qt5 qt6 ) )"
