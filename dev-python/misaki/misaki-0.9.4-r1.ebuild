@@ -23,12 +23,15 @@ KEYWORDS="~amd64"
 # Hard-pulls the [en] extra deps because dev-python/kokoro requires
 # misaki[en]. Other-language extras (ja, ko, vi, zh, he) are not
 # pulled — they bring fugashi / pyopenjtalk / jieba etc. which we
-# don't have.
+# don't have. en_core_web_sm is the spaCy model misaki's English G2P
+# loads for the higher-quality path; without it misaki falls back to
+# espeak-ng (espeakng-loader / phonemizer-fork).
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-python/spacy-curated-transformers[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/addict[${PYTHON_USEDEP}]
+		dev-python/en_core_web_sm[${PYTHON_USEDEP}]
 		dev-python/espeakng-loader[${PYTHON_USEDEP}]
 		dev-python/num2words[${PYTHON_USEDEP}]
 		dev-python/phonemizer-fork[${PYTHON_USEDEP}]
