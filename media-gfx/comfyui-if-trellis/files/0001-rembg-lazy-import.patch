@@ -1,0 +1,20 @@
+diff --git a/trellis/pipelines/trellis_image_to_3d.py b/trellis/pipelines/trellis_image_to_3d.py
+index cbaa0ca..5a31295 100644
+--- a/trellis/pipelines/trellis_image_to_3d.py
++++ b/trellis/pipelines/trellis_image_to_3d.py
+@@ -8,7 +8,6 @@ from tqdm import tqdm
+ from easydict import EasyDict as edict
+ from torchvision import transforms
+ from PIL import Image
+-import rembg
+ import gc
+ from .base import Pipeline
+ from . import samplers
+@@ -138,6 +137,7 @@ class TrellisImageTo3DPipeline(Pipeline):
+             scale = min(1, 1024 / max_size)
+             if scale < 1:
+                 input = input.resize((int(input.width * scale), int(input.height * scale)), Image.Resampling.LANCZOS)
++            import rembg  # lazy: only needed to auto-mask non-alpha inputs
+             if getattr(self, 'rembg_session', None) is None:
+                 self.rembg_session = rembg.new_session('u2net')
+             output = rembg.remove(input, session=self.rembg_session)

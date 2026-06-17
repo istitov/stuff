@@ -1,0 +1,22 @@
+diff --git a/trellis/utils/postprocessing_utils.py b/trellis/utils/postprocessing_utils.py
+index 7613415..fb77c47 100644
+--- a/trellis/utils/postprocessing_utils.py
++++ b/trellis/utils/postprocessing_utils.py
+@@ -8,10 +8,13 @@ import nvdiffrast.torch as dr
+ from tqdm import tqdm
+ import trimesh
+ import trimesh.visual
+-import xatlas
+-import pyvista as pv
+-from pymeshfix import _meshfix
+-import igraph
++try:
++    import xatlas
++    import pyvista as pv
++    from pymeshfix import _meshfix
++    import igraph
++except ImportError:  # mesh (.glb) post-processing deps; unused for gaussian .ply
++    xatlas = pv = _meshfix = igraph = None
+ import cv2
+ from PIL import Image, ImageDraw
+ from .random_utils import sphere_hammersley_sequence

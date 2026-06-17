@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    ComfyUI custom node wrapping Microsoft's TRELLIS structured 3D latents
+    model for single-image to 3D generation. Installs the node and its bundled
+    TRELLIS library into ComfyUI's system custom_nodes directory. Targets the
+    Gaussian splat (.ply) output path; the CUDA extensions it needs
+    (spconv, flash-attn, nvdiffrast, diff-gaussian-rasterization,
+    diffoctreerast, vox2seq) are packaged separately and built from source.
+  </longdescription>
+  <use>
+    <flag name="mesh">Pull the mesh (.glb) export stack (<pkg>dev-python/xatlas</pkg>,
+      <pkg>dev-python/pyvista</pkg>, <pkg>dev-python/python-igraph</pkg>,
+      <pkg>dev-python/pymeshfix</pkg>; pyvista drags in <pkg>sci-libs/vtk</pkg>).
+      Without it only Gaussian .ply output works.</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">if-ai/ComfyUI-IF_Trellis</remote-id>
+  </upstream>
+</pkgmetadata>

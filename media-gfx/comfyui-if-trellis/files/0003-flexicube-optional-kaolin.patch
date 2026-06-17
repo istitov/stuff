@@ -1,0 +1,17 @@
+diff --git a/trellis/representations/mesh/flexicube.py b/trellis/representations/mesh/flexicube.py
+index 2d78bbb..ea28661 100644
+--- a/trellis/representations/mesh/flexicube.py
++++ b/trellis/representations/mesh/flexicube.py
+@@ -8,7 +8,11 @@
+ 
+ import torch
+ from .tables import *
+-from kaolin.utils.testing import check_tensor
++try:
++    from kaolin.utils.testing import check_tensor
++except ImportError:  # kaolin only backs optional FlexiCubes tensor-shape asserts
++    def check_tensor(*args, **kwargs):
++        return True
+ 
+ __all__ = [
+     'FlexiCubes'
