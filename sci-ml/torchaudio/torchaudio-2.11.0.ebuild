@@ -19,7 +19,7 @@ S="${WORKDIR}/audio-${PV}"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Sister of sci-ml/torchvision; built CPU-only here. CUDA/ROCm modes
 # need the same setup_helpers env-var dance torchvision does — defer
