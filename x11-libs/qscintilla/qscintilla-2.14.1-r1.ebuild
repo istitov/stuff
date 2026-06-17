@@ -14,7 +14,7 @@ S=${WORKDIR}/${MY_P}
 
 LICENSE="GPL-3"
 SLOT="0/15"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 # Qt5 designer plugin dropped: dev-qt/designer:5 is last-rited in
 # ::gentoo. Designer is still available with USE=qt6.
 IUSE="designer doc qt5 +qt6"
