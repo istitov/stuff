@@ -55,7 +55,7 @@ DESCRIPTION="TeXLive Additional formats"
 
 LICENSE="GPL-1+ GPL-2+ GPL-3 LPPL-1.3c MIT TeX TeX-other-free public-domain"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 COMMON_DEPEND="
 	>=dev-texlive/texlive-basic-2026
 	>=dev-texlive/texlive-latex-2026
