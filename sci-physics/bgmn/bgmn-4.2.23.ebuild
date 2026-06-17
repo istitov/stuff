@@ -30,7 +30,9 @@ src_install() {
 	# pre-built blobs) and ship /usr/bin/ wrappers that point EFLECH
 	# at it before exec'ing the real binary.
 	insinto /opt/${PN}
-	doins *.dat *.lam *.mdr *.ano *.xml *.cfg err.msg \
+	# 4.2.23 ships no *.xml (older releases did); the stale glob expands
+	# to a literal '*.xml' and aborts doins. Drop it.
+	doins *.dat *.lam *.mdr *.ano *.cfg err.msg \
 		spacegrp index output plot1 weight.mol \
 		gertest lamtest verzerr
 
