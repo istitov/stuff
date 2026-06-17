@@ -16,7 +16,7 @@ SRC_URI="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Self-contained SvelteKit Node bundle — `npm run build` with the
 # docker-node adapter emits build/index.js plus a fully self-contained
