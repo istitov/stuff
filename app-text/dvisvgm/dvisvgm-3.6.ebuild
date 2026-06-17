@@ -16,7 +16,7 @@ SRC_URI="https://github.com/mgieseki/dvisvgm/releases/download/${PV}/${P}.tar.gz
 # variant: Boost-1.0
 LICENSE="GPL-3 Boost-1.0 || ( public-domain BSD-1 )"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 
