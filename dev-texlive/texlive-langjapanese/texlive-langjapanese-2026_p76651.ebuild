@@ -155,7 +155,7 @@ DESCRIPTION="TeXLive Japanese"
 
 LICENSE="BSD BSD-2 GPL-1+ GPL-2 GPL-3 LPPL-1.3 LPPL-1.3c MIT OFL-1.1 TeX TeX-other-free public-domain"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 COMMON_DEPEND="
 	>=dev-texlive/texlive-langcjk-2026
 "
