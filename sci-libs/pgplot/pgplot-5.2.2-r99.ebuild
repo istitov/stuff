@@ -14,7 +14,7 @@ S="${WORKDIR}/${PN}"
 
 LICENSE="free-noncomm"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~ppc ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~x86"
 IUSE="doc motif static-libs tk"
 
 RDEPEND="
@@ -42,8 +42,10 @@ PATCHES=(
 src_prepare() {
 	default
 
-	# fix pointers for 64 bits
-	if use amd64 || use ia64; then
+	# fix pointers for 64 bits — the X drivers stash pointers in a Fortran
+	# INTEGER (4 bytes), which truncates on any LP64 ABI. arm64/aarch64 is
+	# LP64 just like amd64/ia64, so it needs the INTEGER*8 widening too.
+	if use amd64 || use arm64 || use ia64; then
 		sed -e 's/INTEGER PIXMAP/INTEGER*8 PIXMAP/g' \
 			-i drivers/{gi,pp,wd}driv.f || die "sed 64bits failed"
 	fi
