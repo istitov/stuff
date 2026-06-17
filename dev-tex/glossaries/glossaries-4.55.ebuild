@@ -16,7 +16,7 @@ S=${WORKDIR}/${PN}
 
 LICENSE="LPPL-1.2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 IUSE="doc examples"
 
