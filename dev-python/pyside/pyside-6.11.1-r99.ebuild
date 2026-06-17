@@ -45,7 +45,7 @@ else
 	# so claiming the wider arch set produced unsolvable dep trees on every
 	# non-amd64 profile (pkgcheck NonsolvableDepsInStable). Verified
 	# 2026-05-18.
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 )"
