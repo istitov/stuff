@@ -3,8 +3,6 @@
 
 EAPI=8
 
-inherit bash-completion-r1
-
 DESCRIPTION="Perl script for automatically building LaTeX documents"
 HOMEPAGE="https://personal.psu.edu/~jcc8/software/latexmk/
 		  https://ctan.org/pkg/latexmk/"
@@ -14,7 +12,7 @@ S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	dev-lang/perl
@@ -30,5 +28,4 @@ src_install() {
 	doman latexmk.1
 	dodoc CHANGES README latexmk.pdf latexmk.txt
 	dodoc -r example_rcfiles extra-scripts
-	newbashcomp "${FILESDIR}"/completion.bash-2 ${PN}
 }
