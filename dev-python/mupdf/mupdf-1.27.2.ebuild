@@ -17,7 +17,7 @@ S="${WORKDIR}/${P}-source"
 
 LICENSE="AGPL-3"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 DEPEND="
 	~app-text/mupdf-${PV}
