@@ -23,7 +23,7 @@ S="${WORKDIR}"
 LICENSE="LGPL-3+"
 SLOT="0"
 # x86 not supported; wheel is manylinux2014_x86_64.
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
