@@ -71,7 +71,7 @@ else
 	"
 	# brand-new major upstream release; only build- + runtime-verified on amd64.
 	# Broaden as other arches are tested (gentoo has not keyworded any 5.x).
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 LICENSE="Apache-2.0"
