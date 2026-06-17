@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake java-pkg-opt-2
+inherit cmake flag-o-matic java-pkg-opt-2
 
 DESCRIPTION="Data format for neutron and x-ray scattering data"
 HOMEPAGE="https://nexusformat.org/"
@@ -14,7 +14,7 @@ S="${WORKDIR}"/code-${COMMIT}
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="cxx hdf4 +hdf5 java"
 
 REQUIRED_USE="|| ( hdf4 hdf5 )"
@@ -43,6 +43,12 @@ src_prepare() {
 }
 
 src_configure() {
+	# This 2020 source snapshot uses the 2-argument std::allocator::
+	# allocate(n, hint) overload (NXtranslate/nexus_retriever.cpp), which
+	# is deprecated in C++17 and removed in C++20. GCC defaults to a newer
+	# standard, so pin C++17 where the overload still exists.
+	append-cxxflags -std=gnu++17
+
 	# no fortran, doesn't compile
 	local mycmakeargs=(
 		-DENABLE_APPS=ON
