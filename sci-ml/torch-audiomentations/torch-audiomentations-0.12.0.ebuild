@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # PyYAML is in upstream extras_require, imported lazily in utils/config.py;
 # omit here since downstream sci-ml/pyannote-audio pulls dev-python/pyyaml
