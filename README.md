@@ -1,11 +1,18 @@
 # stuff
 
-A Gentoo ebuild overlay. Focus areas: AMD Ryzen-AI / NPU tooling, ROCm
-(typically a release ahead of `::gentoo`), niche scientific physics
-(SAXS / SANS / XAFS / electron microscopy / micromagnetism / Rietveld),
-the DeaDBeeF plugin ecosystem, curated `pf-sources` (CVE-only patch
-curation), and a small Python 2 preservation layer for legacy
-scientific scripts.
+A Gentoo ebuild overlay that ships hard-to-package software as
+first-class portage citizens — dependency-resolved, built from source,
+and managed with `emerge` like everything else on the system, instead
+of through manual git builds, vendor `.deb`s, or conda environments
+that leave the package manager blind to what's installed.
+
+No single flagship — a curated, multi-niche overlay.
+Front-door slices: **local AI & GPU compute** (AMD Ryzen-AI / NPU ·
+AMD ROCm · NVIDIA CUDA, with LLM runtimes and the PyTorch / ONNX
+ecosystem) · **scientific physics** (SAXS / SANS / XAFS · electron
+microscopy · micromagnetism · Rietveld) · **`pf-sources`** (curated
+pf-kernel patchset) · **DeaDBeeF** plugins · **TeX Live** · a
+**Python 2** legacy preservation layer.
 
 ```sh
 eselect repository enable stuff
@@ -13,6 +20,9 @@ emerge --sync stuff
 ```
 
 [![Package checks](https://github.com/istitov/stuff/actions/workflows/pkgcheck.yml/badge.svg)](https://github.com/istitov/stuff/actions/workflows/pkgcheck.yml)
+
+See [**Overlay:Stuff**](https://wiki.gentoo.org/wiki/Overlay:Stuff) on the
+Gentoo Wiki for enabling the overlay and a package-area overview.
 
 ## Mirrors
 
@@ -26,7 +36,7 @@ Auto-mirrored on every push:
 
 ### AMD Ryzen-AI / NPU stack
 
-NPU-first LLM tooling for AMD Ryzen AI (XDNA2). Application layer plus
+NPU-first LLM tooling for AMD Ryzen AI (XDNA / XDNA2). Application layer plus
 the driver and runtime it needs:
 
 - [`sci-ml/fastflowlm`](https://fastflowlm.com/) — NPU-first LLM runtime
@@ -49,6 +59,9 @@ other OpenAI-compatible endpoint:
 - [`sci-misc/llama-cpp`](https://github.com/ggml-org/llama.cpp) —
   llama.cpp server / runtime. Bundled web UI provisioned at configure
   time (default on; disable with `USE=-webui`).
+- [`sci-ml/ollama`](https://ollama.com) — the Ollama model-server
+  (CUDA / ROCm / CPU backends), with `acct-user/ollama` +
+  `acct-group/ollama` and systemd / openrc service files.
 - [`sci-misc/llama-swap`](https://github.com/mostlygeek/llama-swap) —
   Go HTTP proxy that lifecycle-manages multiple inference backends and
   routes OpenAI/Anthropic-compatible requests to the right one. Optional
@@ -67,6 +80,10 @@ other OpenAI-compatible endpoint:
 - [`dev-util/argc`](https://github.com/sigoden/argc) — Bash CLI
   framework + Argcfile.sh task runner; infrastructure for sigoden's
   tooling cluster.
+- `sci-ml/lm-eval` (lm-evaluation-harness), `sci-ml/evalplus`
+  (HumanEval+ / MBPP+), and
+  [`sci-ml/bigcode-eval`](https://github.com/bigcode-project/bigcode-evaluation-harness)
+  — harnesses for benchmarking local language / code models.
 
 ### Speech / audio ML stack
 
@@ -98,29 +115,54 @@ their own:
   — metric collection for PyTorch training loops.
 - [`sci-ml/pytorch-metric-learning`](https://github.com/KevinMusgrave/pytorch-metric-learning)
   — embedding / metric-learning utilities.
-- [`sci-ml/torchcodec`](https://github.com/pytorch/torchcodec) — PyTorch
+- [`sci-ml/torchcodec`](https://github.com/meta-pytorch/torchcodec) — PyTorch
   video / audio decoder.
-- [`sci-libs/onnxruntime`](https://onnxruntime.ai/) 1.26.0,
+- [`sci-libs/onnxruntime`](https://onnxruntime.ai/),
   [`sci-libs/dlpack`](https://github.com/dmlc/dlpack),
   [`dev-cpp/safeint`](https://github.com/dcleblanc/SafeInt) — the ONNX
   inference engine plus its in-memory tensor-exchange / overflow-safe-int
   building blocks.
 - [`dev-python/optuna`](https://optuna.org/) — hyperparameter
   optimization.
+- `sci-libs/faiss` — FAISS: efficient similarity search and clustering of
+  dense vectors (the vector-index building block for embeddings / RAG).
 
-### ROCm 7.2.3
+### ROCm 7.2.4
 
-Local bumps of the [ROCm](https://rocm.docs.amd.com/) 7.2 stable line
-ahead of `::gentoo`'s 7.2.0:
-`dev-libs/rocm-{core,comgr,device-libs,opencl-runtime}`, `dev-libs/rccl`,
-`dev-libs/hipother`, `dev-build/rocm-cmake`,
-`dev-util/{hip,hipcc,hipify-clang,rocm-smi,rocminfo,rocm_bandwidth_test}`,
-`sci-libs/{hipBLAS,hipBLAS-common,hipBLASLt,hipCUB,hipFFT,hipRAND,hipSOLVER,hipSPARSE,hipsparselt,composable-kernel,miopen,rocBLAS,rocFFT,rocPRIM,rocRAND,rocSOLVER,rocSPARSE,rocThrust}`.
+Local bumps of the [ROCm](https://rocm.docs.amd.com/) / HIP 7.2 stable
+line (7.2.3 and 7.2.4) ahead of `::gentoo`: the full runtime, compiler,
+and math / communication libraries (`rocm-core`, `hip`, `hipBLAS` /
+`rocBLAS`, `hipFFT` / `rocFFT`, `MIOpen`, `composable-kernel`, `rccl`, …)
+plus the `rocm-smi` / `rocminfo` tooling, across `dev-libs/`,
+`dev-util/`, `dev-build/`, and `sci-libs/`.
 
 [`dev-util/therock-bin`](https://github.com/ROCm/TheRock) is a
 /opt-installed ROCm SDK that pulls AMD's nightly TheRock build for a
 per-host `AMDGPU_TARGETS`. Coexists with the /usr ROCm above; an
 nvchecker regex source on AMD's CDN tracks new nightlies.
+
+### RAPIDS GPU computing
+
+GPU-accelerated dataframes and distributed compute (RAPIDS 26.6), not
+in `::gentoo`: `dev-python/rmm` + `dev-python/librmm` (GPU memory
+manager), `dev-python/dask-cuda` (multi-GPU Dask clusters), plus
+`dev-python/rapids-logger` and `dev-python/rapids-dask-dependency`.
+
+### 3D generative (Gaussian splatting / mesh)
+
+Image-to-3D and Gaussian-splat / mesh generation — the stack behind
+the TRELLIS pipeline, fronted by
+[`media-gfx/comfyui-if-trellis`](https://github.com/if-ai/ComfyUI-IF_Trellis):
+[`dev-python/diff-gaussian-rasterization`](https://github.com/autonomousvision/mip-splatting)
+and [`dev-python/diffoctreerast`](https://github.com/JeffreyXiang/diffoctreerast)
+(differentiable rasterizers),
+[`dev-python/nvdiffrast`](https://github.com/NVlabs/nvdiffrast)
+(differentiable rendering), `dev-python/spconv-cu126` (sparse
+convolution), `dev-python/xatlas` + `dev-python/pymeshfix` +
+`dev-python/plyfile` (mesh UV-unwrap / repair / I/O), and
+[`dev-python/vox2seq`](https://github.com/microsoft/TRELLIS) +
+[`dev-python/utils3d`](https://github.com/EasternJournalist/utils3d)
+helpers.
 
 ### HyperSpy / 4D-STEM electron-microscopy stack
 
@@ -141,14 +183,18 @@ for I/O).
 
 - [`sci-physics/mantid`](https://www.mantidproject.org/) — SANS reduction
   and analysis. Installs under `/opt/mantid` and keeps building against
-  the current `::gentoo` by carrying a few local deps (see *Qt5 revivals*
-  below).
+  the current `::gentoo` by carrying a few local deps (see the
+  *Qt5 revival mirror* section below).
 - [`sci-physics/sasview`](https://www.sasview.org/) + `dev-python/sasmodels`
   + `dev-python/bumps` + `dev-python/periodictable` — SAS modeling and
   fitting.
 - [`sci-libs/ausaxs`](https://github.com/AUSAXS/AUSAXS) +
   [`dev-python/pyausaxs`](https://github.com/AUSAXS/pyAUSAXS) — AUSAXS
   solvent-scattering calculator and its Python bindings.
+- [`sci-physics/bornagain`](https://bornagainproject.org/) — simulate and
+  fit X-ray / neutron reflectometry and grazing-incidence small-angle
+  scattering (GISAS / GISANS), with its `sci-libs/libformfactor` +
+  `sci-libs/libheinz` libraries.
 - [`sci-physics/xraylarch`](https://xraypy.github.io/xraylarch/) — XAFS
   analysis; modern replacement for the discontinued `ifeffit`.
 - [`sci-physics/demeter`](https://github.com/bruceravel/demeter) —
@@ -172,15 +218,25 @@ plumbing (`jack`, `pulse2`, `stereo-widener`, `copy-info`,
 [`sci-physics/mumax`](https://mumax.github.io/) (GPU finite-difference,
 Go + CUDA), [`sci-physics/oommf`](https://math.nist.gov/oommf/) (Tcl/Tk
 reference implementation), and
-[`sci-physics/vampire`](https://vampire.york.ac.uk/) (atomistic spin
+[`sci-physics/vampire`](https://www-users.york.ac.uk/~rfle500/research/vampire/) (atomistic spin
 dynamics).
+
+### TeX Live
+
+Current TeX Live, kept ahead of `::gentoo`'s stabilized line: the full
+`dev-texlive/*` collection set at the TL2025 and TL2026 releases (recent
+tlpdb revisions), with upstream package additions, removals, and
+relocations tracked per release — plus `dev-tex/{biber, biblatex,
+latexmk, minted, pgf, tex4ht, …}` build tooling.
 
 ## Design choices
 
 ### Python 2 preservation
 
-`::gentoo` removed Python 2 support in 2024. `sci-visualization/gwyddion`
-2.x ships `pygwy`, Python 2 bindings used by user analysis scripts;
+`::gentoo` dropped Python 2 from its packaging eclasses in 2024 — its
+`distutils-r1` no longer builds py2 modules, though it still ships the
+`dev-lang/python:2.7` interpreter. `sci-visualization/gwyddion` 2.x ships
+`pygwy`, Python 2 bindings used by user analysis scripts;
 Gwyddion 3's GI bindings don't yet cover everything `pygwy` exposes, so
 those scripts still need a py2 runtime. This overlay vendors a small
 Python 2 surface to keep them working:
@@ -210,16 +266,13 @@ carries the full slot:5 set at **v5.15.19-lts-lgpl** with the
 [KDE Qt5 Patch Collection](https://invent.kde.org/qt/qt) applied via
 the local `qt5-build.eclass`.
 
-- **23 `dev-qt/*` packages at 5.15.19** — `linguist-tools`,
-  `qtconcurrent`, `qtcore`, `qtdbus`, `qtdeclarative`,
-  `qtgraphicaleffects`, `qtgui`, `qthelp`, `qtmultimedia`, `qtnetwork`,
-  `qtopengl`, `qtprintsupport`, `qtquickcontrols`, `qtquickcontrols2`,
-  `qtsql`, `qtsvg`, `qttest`, `qttranslations`, `qtwayland`,
-  `qtwebchannel`, `qtwidgets`, `qtx11extras`, `qtxml`. All keyworded
-  `~arch` (qtwebchannel limited to `~amd64 ~x86` per upstream's
-  narrower keyword history). `dev-qt/qthelp` and `dev-qt/qtwebchannel`
-  keep their pre-import 5.15.18 ebuilds alongside; the other 21 ship
-  5.15.19 only.
+- **The full 23-module `dev-qt/*` slot:5 set at 5.15.19** — qtbase
+  (`qtcore`, `qtgui`, `qtwidgets`, `qtnetwork`, …) plus the add-on
+  modules (`qtdeclarative`, `qtmultimedia`, `qtsvg`, `qtwayland`,
+  `qtwebchannel`, …). All keyworded `~arch` except `qtwebchannel`
+  (`~amd64 ~x86`, per upstream's narrower history). `dev-qt/qthelp`
+  and `dev-qt/qtwebchannel` keep their pre-import 5.15.18 ebuilds
+  alongside; the other 21 ship 5.15.19 only.
 - **`dev-python/pyqt5` + `dev-python/pyqt5-sip`** — revived at
   PyPI-latest after `::gentoo`'s treeclean.
 - **`x11-libs/qscintilla-2.14.1-r1`** (the last Qt5-compatible slot),
@@ -237,16 +290,16 @@ consumers follow.
 
 ### Other targeted fixes kept in-tree
 
-- `sci-libs/hdf` 4.2.16 / 4.3.1 — local bumps; 4.2.16 carries a gcc 15
-  build fix, 4.3.1 is ahead of `::gentoo`'s 4.2.15-r2.
+- `sci-libs/hdf` — local bumps carrying a gcc 15 build fix, plus a
+  release ahead of `::gentoo`.
 - `x11-libs/gtk+-2.24.33-r99` — gtk+:2 holdover for apps that still need it.
-- `dev-python/bokeh` — 2.4.2 dropped, 3.4.1 and 3.9.0 kept with the
+- `dev-python/bokeh` — older 2.x dropped; 3.x kept with the
   deprecated `flaky` test dep removed.
-- `dev-python/py4dstem` 0.14.18 — carries upstream PR #712 for numpy 2
+- `dev-python/py4dstem` — carries upstream PR #712 for numpy 2
   compatibility.
-- `dev-python/cupy` 13.6.0 / 14.0.1 — ROCm USE flag dropped from 13.6.0
-  (cupy 13's HIP backend is incompatible with ROCm 7.x hipBLAS); cupy 14
-  dropped ROCm support entirely upstream.
+- `dev-python/cupy` — ROCm USE flag dropped from cupy 13 (its HIP
+  backend is incompatible with ROCm 7.x hipBLAS); cupy 14 dropped ROCm
+  support entirely upstream.
 - Several `media-plugins/deadbeef-*` plugins carry patches for DeaDBeeF's
   modernized C API.
 
@@ -284,15 +337,18 @@ consumers follow.
   [`sys-fs/google-drive-ocamlfuse`](https://github.com/astrada/google-drive-ocamlfuse),
   [`app-text/pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref),
   [`app-portage/portconf`](https://github.com/istitov/portconf)
-  (`/etc/portage` cleaner; forked to istitov + bumped to 2.0.0 in
-  this overlay).
+  (`/etc/portage` cleaner; forked to istitov and bumped to the 2.x
+  series in this overlay).
 - **CUDA / generic ML inference** —
   [`dev-python/cuda-bindings`](https://github.com/NVIDIA/cuda-python),
   `dev-python/cuda-python`, `dev-python/cuda-pathfinder`,
   `dev-python/cuda-tile-bin`,
   [`dev-python/pycuda`](https://documen.tician.de/pycuda/),
   [`dev-util/nvidia-cuda-toolkit`](https://developer.nvidia.com/cuda-toolkit),
-  [`dev-python/vllm`](https://github.com/vllm-project/vllm).
+  [`dev-python/vllm`](https://github.com/vllm-project/vllm) (optional
+  `USE=humming` pulls `dev-python/humming-kernels` for MXFP4
+  quantization), and [`dev-util/zluda`](https://github.com/vosen/ZLUDA) —
+  a drop-in CUDA runtime for AMD GPUs.
 - **Masked but kept**: `net-misc/ipx-utils` (IPX removed from Linux in 4.18),
   `app-portage/portopts` (upstream dormant since 2014). Each mask in
   `profiles/package.mask` carries a comment explaining why and when it
@@ -303,6 +359,8 @@ consumers follow.
 - **Thin manifests**, `masters = gentoo` only. Every package depends on
   `::gentoo` being enabled.
 - **Profiles** under `profiles/` follow standard PMS layout.
+- **Keywording** — packages are primarily `~amd64`; `~arm64`
+  keywording is being rolled out across the tree.
 - **Patches** live in `<category>/<package>/files/` and are applied via
   `PATCHES=()` or `src_prepare()`.
 - **Commit messages** use subject + body form (72-char subject, blank line,
@@ -331,9 +389,10 @@ consumers follow.
 
 ## Credits
 
-Originally created by [@megabaks](https://github.com/megabaks); see the
-[contributors list](https://github.com/istitov/stuff/graphs/contributors) for
-everyone who has contributed since. Thank you.
+Originally created by [@megabaks](https://github.com/megabaks) and now
+maintained by [Ivan S. Titov](https://wiki.gentoo.org/wiki/User:Istitov); see
+the [contributors list](https://github.com/istitov/stuff/graphs/contributors)
+for everyone who has contributed since. Thank you.
 
 ## License
 
