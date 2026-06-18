@@ -1284,7 +1284,8 @@ source = "github"
 github = "rapidsai/dask-cuda"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
-prefix = "v"
+from_pattern = '^v(\d+)\.0*(\d+)\.0*(\d+)$'
+to_pattern = '\1.\2.\3'
 
 ["dev-python/deltalake"]
 source = "github"
@@ -1347,7 +1348,8 @@ source = "github"
 github = "rapidsai/rmm"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
-prefix = "v"
+from_pattern = '^v(\d+)\.0*(\d+)\.0*(\d+)$'
+to_pattern = '\1.\2.\3'
 
 ["dev-python/llvmlite"]
 source = "github"
@@ -1471,7 +1473,8 @@ source = "github"
 github = "rapidsai/rapids-dask-dependency"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
-prefix = "v"
+from_pattern = '^v(\d+)\.0*(\d+)\.0*(\d+)$'
+to_pattern = '\1.\2.\3'
 
 ["dev-python/rapids-logger"]
 source = "github"
@@ -1491,7 +1494,8 @@ source = "github"
 github = "rapidsai/rmm"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
-prefix = "v"
+from_pattern = '^v(\d+)\.0*(\d+)\.0*(\d+)$'
+to_pattern = '\1.\2.\3'
 
 ["dev-python/segments"]
 source = "github"

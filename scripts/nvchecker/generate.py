@@ -153,17 +153,35 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     # uses the same trailing-`a` scheme on a plain semver line (v0.3.0a vs
     # v0.2.3). Restrict to bare 3-part v-tags so only GA counts. Tag
     # formats verified against each repo 2026-06-11.
+    #
+    # The four calver packages (dask-cuda/librmm/rmm/rapids-dask-dependency)
+    # tag with a zero-padded month and 2-digit patch (`v26.06.00`); the
+    # Portage PV strips that padding (`26.6.0`), so a bare `prefix = "v"`
+    # strip still leaves `26.06.00` and reports a phantom upgrade every
+    # cycle. from_pattern/to_pattern fold the v-strip and zero-strip into
+    # one rewrite so the returned value matches the PV exactly. (Adding
+    # from_pattern suppresses the default `prefix = "v"`, so the `^v` is
+    # carried inside the pattern.) rapids-logger is plain semver, not
+    # calver, so it keeps the simple v-strip. verified 2026-06-18
     "dev-python/dask-cuda": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+        "from_pattern": r"^v(\d+)\.0*(\d+)\.0*(\d+)$",
+        "to_pattern": r"\1.\2.\3",
     },
     "dev-python/librmm": {  # tracks rapidsai/rmm (the C++ half of that repo)
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+        "from_pattern": r"^v(\d+)\.0*(\d+)\.0*(\d+)$",
+        "to_pattern": r"\1.\2.\3",
     },
     "dev-python/rmm": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+        "from_pattern": r"^v(\d+)\.0*(\d+)\.0*(\d+)$",
+        "to_pattern": r"\1.\2.\3",
     },
     "dev-python/rapids-dask-dependency": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+        "from_pattern": r"^v(\d+)\.0*(\d+)\.0*(\d+)$",
+        "to_pattern": r"\1.\2.\3",
     },
     "dev-python/rapids-logger": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
