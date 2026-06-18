@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (240) ---
+# --- pypi (251) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -78,6 +78,10 @@ pypi = "bokeh"
 source = "pypi"
 pypi = "bumps"
 
+["dev-python/ccimport"]
+source = "pypi"
+pypi = "ccimport"
+
 ["dev-python/cirron"]
 source = "pypi"
 pypi = "Cirron"
@@ -141,6 +145,10 @@ pypi = "cuda-python"
 ["dev-python/cuda-tile-bin"]
 source = "pypi"
 pypi = "cuda-tile"
+
+["dev-python/cumm-cu126"]
+source = "pypi"
+pypi = "cumm-cu126"
 
 ["dev-python/cupy"]
 source = "pypi"
@@ -214,6 +222,10 @@ pypi = "docstring_parser"
 source = "pypi"
 pypi = "donfig"
 
+["dev-python/easydict"]
+source = "pypi"
+pypi = "easydict"
+
 ["dev-python/einops"]
 source = "pypi"
 pypi = "einops"
@@ -257,6 +269,10 @@ pypi = "fastsafetensors"
 ["dev-python/fire"]
 source = "pypi"
 pypi = "fire"
+
+["dev-python/flash-attn"]
+source = "pypi"
+pypi = "flash-attn"
 
 ["dev-python/flashinfer-cubin"]
 source = "pypi"
@@ -542,6 +558,10 @@ pypi = "partd"
 source = "pypi"
 pypi = "partial-json-parser"
 
+["dev-python/pccm"]
+source = "pypi"
+pypi = "pccm"
+
 ["dev-python/peakutils"]
 source = "pypi"
 pypi = "peakutils"
@@ -553,6 +573,10 @@ pypi = "phonemizer-fork"
 ["dev-python/pint"]
 source = "pypi"
 pypi = "pint"
+
+["dev-python/plyfile"]
+source = "pypi"
+pypi = "plyfile"
 
 ["dev-python/preshed"]
 source = "pypi"
@@ -638,6 +662,10 @@ pypi = "pymatgen-core"
 source = "pypi"
 pypi = "pymatgen-io-validation"
 
+["dev-python/pymeshfix"]
+source = "pypi"
+pypi = "pymeshfix"
+
 ["dev-python/pympler"]
 source = "pypi"
 pypi = "pympler"
@@ -678,6 +706,10 @@ pypi = "pytablewriter"
 source = "pypi"
 pypi = "pytest-mpl"
 
+["dev-python/python-igraph"]
+source = "pypi"
+pypi = "igraph"
+
 ["dev-python/python-socketio"]
 source = "pypi"
 pypi = "python-socketio"
@@ -709,6 +741,10 @@ pypi = "quack-kernels"
 ["dev-python/rdfpy"]
 source = "pypi"
 pypi = "rdfpy"
+
+["dev-python/rootpath"]
+source = "pypi"
+pypi = "rootpath"
 
 ["dev-python/rosettasciio"]
 source = "pypi"
@@ -761,6 +797,10 @@ pypi = "spandrel"
 ["dev-python/sparse"]
 source = "pypi"
 pypi = "sparse"
+
+["dev-python/spconv-cu126"]
+source = "pypi"
+pypi = "spconv-cu126"
 
 ["dev-python/sqlalchemy-utils"]
 source = "pypi"
@@ -870,6 +910,10 @@ pypi = "wxmplot"
 source = "pypi"
 pypi = "wxutils"
 
+["dev-python/xatlas"]
+source = "pypi"
+pypi = "xatlas"
+
 ["dev-python/xgrammar"]
 source = "pypi"
 pypi = "xgrammar"
@@ -970,7 +1014,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (166) ---
+# --- github (169) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1255,6 +1299,13 @@ github = "dask/distributed"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/en_core_web_sm"]
+source = "github"
+github = "explosion/spacy-models"
+use_max_tag = true
+include_regex = '^en_core_web_sm-\d+\.\d+\.\d+$'
+prefix = "en_core_web_sm-"
+
 ["dev-python/glfw"]
 source = "github"
 github = "FlorianRhiem/pyGLFW"
@@ -1322,6 +1373,12 @@ source = "github"
 github = "numba/numba"
 use_max_tag = true
 include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
+
+["dev-python/nvdiffrast"]
+source = "github"
+github = "NVlabs/nvdiffrast"
+use_max_tag = true
 prefix = "v"
 
 ["dev-python/nvidia-cudnn-frontend"]
@@ -1970,6 +2027,12 @@ github = "lemonade-sdk/lemonade"
 use_max_tag = true
 prefix = "v"
 
+["sci-ml/ollama"]
+source = "github"
+github = "ollama/ollama"
+use_max_tag = true
+prefix = "v"
+
 ["sci-ml/sentence-transformers"]
 source = "github"
 github = "huggingface/sentence-transformers"
@@ -2236,6 +2299,8 @@ to_pattern = '\1_alpha\2'
 # ["dev-python/amd-quark-bin"] skipped: AMD internal wheel distribution; not on public PyPI
 # ["dev-python/antlr4-python3-runtime"] skipped: pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/diff-gaussian-rasterization"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
+# ["dev-python/diffoctreerast"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["dev-python/dlinfo"] skipped: fphammerle/dlinfo has no GitHub release tags
 # ["dev-python/mupdf"] skipped: custom upstream at mupdf.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/numpy-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
@@ -2249,6 +2314,8 @@ to_pattern = '\1_alpha\2'
 # ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/tccbox"] skipped: metab0t/tccbox has no GitHub release tags (private or untagged)
 # ["dev-python/unittest-or-fail"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/utils3d"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
+# ["dev-python/vox2seq"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["dev-qt/linguist-tools"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtconcurrent"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtcore"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
@@ -2318,6 +2385,7 @@ to_pattern = '\1_alpha\2'
 # ["dev-texlive/texlive-xetex"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["media-gfx/comfyui-if-trellis"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-libs/opencv"] skipped: custom upstream at opencv.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-plugins/deadbeef-waveform-seekbar"] skipped: cboxdoerfer/deadbeef-waveform-seekbar has no GitHub release tags

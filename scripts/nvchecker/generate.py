@@ -192,6 +192,14 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "include_regex": r"^adplug-\d+\.\d+(?:\.\d+)?$",
         "prefix": "adplug-",
     },
+    # explosion/spacy-models tags every pretrained model on one repo
+    # (en_core_web_sm-3.8.0, zh_core_web_trf-3.8.0, ...); without a filter
+    # max-tag latches onto an unrelated language model. Restrict to this
+    # model's tag family and strip the model-name prefix.
+    "dev-python/en_core_web_sm": {
+        "include_regex": r"^en_core_web_sm-\d+\.\d+\.\d+$",
+        "prefix": "en_core_web_sm-",
+    },
     # adplug/libbinio: same release-tag convention (`libbinio-X.Y`); the
     # repo also has a stray "start" tag that the anchor keeps out.
     "dev-cpp/libbinio": {
@@ -424,6 +432,13 @@ _PF_LOCAL_ONLY = (
     "we want to evaluate for inclusion"
 )
 
+_TRELLIS_SNAPSHOT = (
+    "comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot "
+    "(0_p<date>); there is no upstream release tag to compare against the snapshot PV "
+    "and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, "
+    "so re-pinning is a manual commit-bump rather than a trackable version bump"
+)
+
 SKIP_PKGS: dict[str, str] = {
     "sys-kernel/pf-sources":          _PF_LOCAL_ONLY,
     "sys-kernel/pf-sources-extended": _PF_LOCAL_ONLY,
@@ -450,6 +465,11 @@ SKIP_PKGS: dict[str, str] = {
     "dev-python/antlr4-python3-runtime":   "pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')",
     # Snapshots ahead of upstream's only tag.
     "sci-ml/bigcode-eval":                 "we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind",
+    "dev-python/diff-gaussian-rasterization": _TRELLIS_SNAPSHOT,
+    "dev-python/diffoctreerast":           _TRELLIS_SNAPSHOT,
+    "dev-python/vox2seq":                  _TRELLIS_SNAPSHOT,
+    "dev-python/utils3d":                  _TRELLIS_SNAPSHOT,
+    "media-gfx/comfyui-if-trellis":        _TRELLIS_SNAPSHOT,
     # --- TeX Live (imported from the texlive-stuff overlay 2026-05-28) ---
     # The dev-texlive/* collections and the core/split build components are
     # versioned by the TL release + tlpdb SVN revision and bumped as a set via
