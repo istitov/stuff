@@ -18,7 +18,7 @@ S="${WORKDIR}/${PYPI_PN}-${PV}"
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Build the bundled igraph C core (vendor/source/igraph, shipped in full in the
 # sdist) with CMake. The system dev-libs/igraph would be cleaner, but it
