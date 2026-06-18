@@ -17,7 +17,7 @@ HOMEPAGE="
 # The wrapper is permissive but the bundled MeshFix C++ (src/) is GPL-3.
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
