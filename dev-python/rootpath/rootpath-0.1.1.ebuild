@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream's requires_dist over-declares its test toolchain (tox/coverage/
 # deepdiff/...); the runtime module only needs six. verified 2026-06-16.
