@@ -11,7 +11,7 @@ SRC_URI="https://github.com/BelledonneCommunications/${PN}/archive/refs/tags/${P
 
 LICENSE="GPL-3"
 SLOT="0/${PV}"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="mbedtls +openssl"
 REQUIRED_USE="|| ( mbedtls openssl )"
 
