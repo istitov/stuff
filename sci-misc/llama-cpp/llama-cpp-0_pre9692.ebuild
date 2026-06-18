@@ -19,7 +19,7 @@ else
 	MY_PV="b${PV#0_pre}"
 	SRC_URI="https://github.com/ggml-org/llama.cpp/archive/refs/tags/${MY_PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/llama.cpp-${MY_PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 SRC_URI+="
