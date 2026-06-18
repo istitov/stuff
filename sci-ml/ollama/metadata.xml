@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="cuda">Build the CUDA (cuda_v13) llama-server GPU backend via <pkg>dev-util/nvidia-cuda-toolkit</pkg></flag>
+    <flag name="rocm">Build the ROCm/HIP (rocm_v7_2) llama-server GPU backend</flag>
+    <flag name="vulkan">Build the Vulkan llama-server GPU backend</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ollama/ollama</remote-id>
+  </upstream>
+</pkgmetadata>

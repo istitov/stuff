@@ -1,0 +1,20 @@
+Drop the hipcc-only -parallel-jobs flag from the ROCm HIP build.
+
+llama/server sets CMAKE_HIP_FLAGS=-parallel-jobs=4 for all rocm_v* runners.
+-parallel-jobs is an option of the hipcc/amdclang wrapper; Gentoo builds the
+HIP language with upstream LLVM clang++ (CMAKE_HIP_COMPILER), which rejects it
+("clang++: error: unknown argument: '-parallel-jobs=4'") and fails the HIP
+compiler check. Drop the default so the Linux ROCm build configures; the flag
+is only a codegen-parallelism hint with negligible benefit for a single arch.
+The Windows branch (which also adds it to C/CXX flags) is left untouched.
+--- a/llama/server/CMakeLists.txt
++++ b/llama/server/CMakeLists.txt
+@@ -93,8 +93,6 @@
+ endif()
+ 
+ if(GGML_HIP AND OLLAMA_RUNNER_DIR MATCHES "^rocm_v")
+-    ollama_set_cache_default(CMAKE_HIP_FLAGS STRING
+-        "-parallel-jobs=4" "HIP compiler flags")
+     if(WIN32)
+         # Windows ROCm split-load needs peer copies disabled for correctness.
+         ollama_set_cache_default(GGML_CUDA_NO_PEER_COPY BOOL ON

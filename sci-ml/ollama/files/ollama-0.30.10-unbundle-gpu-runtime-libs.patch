@@ -1,0 +1,57 @@
+Do not bundle the CUDA / ROCm runtime libraries into the payload.
+
+Upstream copies cublas/cublasLt/cudart (and hipblas/rocblas/... + the rocBLAS
+Tensile library dir) next to the GPU backend module so the zip ships
+self-contained. On Gentoo those libraries are already provided by the
+nvidia-cuda-toolkit / hipBLAS+rocBLAS RDEPENDs and live on the dynamic loader's
+search path (CUDA via the toolkit env.d LDPATH, ROCm under /usr/lib64), so the
+bundled copies just duplicate ~570 MB of system libraries and can drift from
+the installed CUDA/ROCm version. Drop the RUNTIME_DEPENDENCIES / Tensile-dir
+copies; the backend module itself is still installed via install(TARGETS ...)
+and resolves its dependencies through the system libraries at runtime. The
+Windows COMGR-bundling branch is left untouched (it never runs on Linux).
+
+--- a/llama/server/CMakeLists.txt
++++ b/llama/server/CMakeLists.txt
+@@ -440,10 +440,6 @@
+         # Find the actual ggml-cuda target to get its runtime dependencies
+         if(TARGET ggml-cuda)
+             install(TARGETS ggml-cuda
+-                RUNTIME_DEPENDENCIES
+-                    DIRECTORIES ${CUDAToolkit_BIN_DIR} ${CUDAToolkit_BIN_DIR}/x64 ${CUDAToolkit_LIBRARY_DIR}
+-                    PRE_INCLUDE_REGEXES cublas cublasLt cudart
+-                    PRE_EXCLUDE_REGEXES ".*"
+                 RUNTIME DESTINATION "${_base_dest}/${OLLAMA_RUNNER_DIR}" COMPONENT llama-server
+                 LIBRARY DESTINATION "${_base_dest}/${OLLAMA_RUNNER_DIR}" COMPONENT llama-server
+             )
+@@ -452,15 +448,6 @@
+     if(GGML_HIP)
+         if(TARGET ggml-hip)
+             install(TARGETS ggml-hip
+-                RUNTIME_DEPENDENCY_SET rocm_deps
+-                RUNTIME DESTINATION "${_base_dest}/${OLLAMA_RUNNER_DIR}" COMPONENT llama-server
+-                LIBRARY DESTINATION "${_base_dest}/${OLLAMA_RUNNER_DIR}" COMPONENT llama-server
+-            )
+-            install(RUNTIME_DEPENDENCY_SET rocm_deps
+-                DIRECTORIES ${HIP_BIN_INSTALL_DIR} ${HIP_LIB_INSTALL_DIR}
+-                PRE_INCLUDE_REGEXES hipblas rocblas amdhip64 rocsolver amd_comgr hsa-runtime64 rocsparse tinfo rocprofiler-register roctx64 rocroller drm drm_amdgpu numa elf
+-                PRE_EXCLUDE_REGEXES ".*"
+-                POST_EXCLUDE_REGEXES "system32"
+                 RUNTIME DESTINATION "${_base_dest}/${OLLAMA_RUNNER_DIR}" COMPONENT llama-server
+                 LIBRARY DESTINATION "${_base_dest}/${OLLAMA_RUNNER_DIR}" COMPONENT llama-server
+             )
+@@ -485,14 +472,6 @@
+                     message(FATAL_ERROR "Could not find ROCm COMGR runtime DLLs to bundle")
+                 endif()
+             endif()
+-            foreach(_hip_dir IN ITEMS ${HIP_BIN_INSTALL_DIR} ${HIP_LIB_INSTALL_DIR})
+-                if(EXISTS ${_hip_dir}/rocblas)
+-                    install(DIRECTORY ${_hip_dir}/rocblas
+-                        DESTINATION "${_base_dest}/${OLLAMA_RUNNER_DIR}"
+-                        COMPONENT llama-server)
+-                    break()
+-                endif()
+-            endforeach()
+         endif()
+     endif()
+     if(GGML_VULKAN)
