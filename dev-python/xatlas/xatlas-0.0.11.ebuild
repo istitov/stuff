@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # The sdist bundles both the xatlas C++ and pybind11 under extern/ (plain
 # add_subdirectory, no FetchContent), so the scikit-build-core/cmake build is
