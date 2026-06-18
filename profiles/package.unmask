@@ -37,3 +37,9 @@ dev-qt/qtsvg:5
 dev-qt/qttranslations:5
 dev-qt/qtwayland:5
 dev-qt/qtx11extras:5
+
+# qtwebchannel:5 — ::gentoo removed its :5 slot outright (now ships only
+# :6), so no ::gentoo mask currently catches our ebuild, unlike the set
+# above. Unmasked here for consistency with the revived
+# dev-qt/qtwebchannel-5.15.{18,19} (cf. dev-qt/qthelp:5 at top).
+dev-qt/qtwebchannel:5
