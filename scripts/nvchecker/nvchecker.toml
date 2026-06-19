@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (251) ---
+# --- pypi (252) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -825,6 +825,10 @@ pypi = "tabledata"
 ["dev-python/tatsu-lts"]
 source = "pypi"
 pypi = "tatsu-lts"
+
+["dev-python/tavily-python"]
+source = "pypi"
+pypi = "tavily-python"
 
 ["dev-python/tempdir"]
 source = "pypi"
