@@ -14,7 +14,7 @@ SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream [project].dependencies lists numpy>=1.17 and numba>=0.49
 # only, but the source imports scipy.sparse / scipy.sparse.csgraph
