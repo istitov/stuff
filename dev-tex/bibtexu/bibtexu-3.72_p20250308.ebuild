@@ -28,7 +28,7 @@ S="${WORKDIR}"/texlive-${PV#*_p}-source/texk/bibtex-x
 LICENSE="GPL-2"
 SLOT="0"
 
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 IUSE="doc source"
 
