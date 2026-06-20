@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
 
-DESCRIPTION="Pythonic bindings for FFmpeg's libraries."
+DESCRIPTION="Pythonic bindings for FFmpeg's libraries"
 HOMEPAGE="https://github.com/PyAV-Org/PyAV https://pypi.org/project/av/"
 
 LICENSE="BSD"
