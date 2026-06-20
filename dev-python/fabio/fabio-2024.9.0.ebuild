@@ -19,7 +19,7 @@ SLOT="0"
 # ::gentoo, so the newer version cannot solve on x86. pkgcheck
 # DroppedKeywords on the bump is therefore informational and
 # expected; do not "fix" by chasing parity.
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
