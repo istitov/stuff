@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="image"
 
 # vllm uses mistral_common[image] which adds opencv-python-headless;
