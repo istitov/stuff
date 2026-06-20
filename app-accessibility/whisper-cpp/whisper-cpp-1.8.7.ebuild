@@ -53,6 +53,13 @@ src_configure() {
 		local g15=/usr/bin/x86_64-pc-linux-gnu-g++-15
 		[[ -x ${g15} ]] && mycmakeargs+=( -DCMAKE_CUDA_HOST_COMPILER="${g15}" )
 	fi
+	if use blas; then
+		# ggml-blas calls cblas_sgemm (the C interface); without an explicit
+		# vendor, CMake's FindBLAS picks the Fortran-only libblas.so and the
+		# link dies on an undefined cblas_sgemm. We already dep on
+		# sci-libs/openblas (which ships cblas) — point ggml at it.
+		mycmakeargs+=( -DGGML_BLAS_VENDOR=OpenBLAS )
+	fi
 	cmake_src_configure
 }
 
