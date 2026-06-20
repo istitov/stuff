@@ -1,0 +1,19 @@
+diff --git a/src/slic3r/GUI/wxMediaCtrl2.cpp b/src/slic3r/GUI/wxMediaCtrl2.cpp
+index 2c4b789..f23fd8c 100644
+--- a/src/slic3r/GUI/wxMediaCtrl2.cpp
++++ b/src/slic3r/GUI/wxMediaCtrl2.cpp
+@@ -138,9 +138,11 @@ wxMediaCtrl2::wxMediaCtrl2(wxWindow *parent)
+ #endif
+     if (!m_use_gtk_sink && m_imp) {
+         auto playbin = reinterpret_cast<wxGStreamerMediaBackend *>(m_imp)->m_playbin;
+-        g_object_set(G_OBJECT(playbin),
+-                     "audio-sink", nullptr,
+-                     nullptr);
++        if (g_object_class_find_property(G_OBJECT_GET_CLASS(playbin), "audio-sink")) {
++            g_object_set(G_OBJECT(playbin),
++                         "audio-sink", nullptr,
++                         nullptr);
++        }
+     } else if (!m_use_gtk_sink) {
+         BOOST_LOG_TRIVIAL(warning) << "wxMediaCtrl2: wxMediaCtrl backend is unavailable";
+     }
