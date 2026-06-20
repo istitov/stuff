@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/ercius/openNCEM"
 
 LICENSE="GPL-3 MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/numpy-2[${PYTHON_USEDEP}]
