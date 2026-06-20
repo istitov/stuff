@@ -32,7 +32,7 @@ S=${WORKDIR}/texlive-${PV#*_p}-source/texk/${PN}
 LICENSE="LGPL-2.1"
 SLOT="0/${PV%_p*}"
 
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="doc static-libs"
 
 TEXMF_PATH=/usr/share/texmf-dist
