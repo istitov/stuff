@@ -30,7 +30,7 @@ CRATES="
 
 inherit cargo
 
-DESCRIPTION="SVG Cleaner cleans up your SVG files from unnecessary data."
+DESCRIPTION="SVG Cleaner cleans up your SVG files from unnecessary data"
 HOMEPAGE="https://github.com/RazrFalcon/SVGCleaner"
 
 inherit git-r3
