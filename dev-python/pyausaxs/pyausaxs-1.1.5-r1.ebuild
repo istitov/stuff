@@ -57,8 +57,13 @@ _install_one() {
 	python_domodule pyausaxs
 
 	# Ship the .dist-info so importlib.metadata.version("pyausaxs")
-	# and pip's view of the installed packages match upstream.
-	local distinfo="${P/-/_}.dist-info"
+	# and pip's view of the installed packages match upstream. The wheel
+	# names it "${P}.dist-info" (a literal hyphen before the version, per
+	# the wheel spec — "pyausaxs" needs no name normalisation), so use
+	# ${P} directly; the historical ${P/-/_} mangled the name-version
+	# separator and silently skipped the copy. verified 2026-06-20 (same
+	# fix as 1.1.6; -r1 backports it to 1.1.5).
+	local distinfo="${P}.dist-info"
 	if [[ -d ${distinfo} ]]; then
 		local sitedir
 		sitedir=$(python_get_sitedir)
