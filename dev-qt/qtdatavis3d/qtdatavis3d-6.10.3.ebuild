@@ -8,7 +8,7 @@ inherit qt6-build
 DESCRIPTION="Data Visualization component library for the Qt6 framework"
 
 if [[ ${QT6_BUILD_TYPE} == release ]]; then
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 # QtDataVisualization is an OpenGL-based 3D scatter/surface/bar viewer.
