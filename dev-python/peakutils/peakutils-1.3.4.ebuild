@@ -18,7 +18,7 @@ S=${WORKDIR}/${MYP}
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/numpy-1.8[${PYTHON_USEDEP}]
