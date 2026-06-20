@@ -28,7 +28,7 @@ S="${WORKDIR}/texlive-${TL_VERSION}-source/texk/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="doc source"
 
 DEPEND=">=dev-libs/kpathsea-6.2.1:="
