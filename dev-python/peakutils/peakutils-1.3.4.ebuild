@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="This package provides utilities related to the detection of peaks on 1D data."
+DESCRIPTION="This package provides utilities related to the detection of peaks on 1D data"
 HOMEPAGE="https://pypi.org/project/PeakUtils/
 	https://bitbucket.org/lucashnegri/peakutils/"
 MYPN="${PN/peakutils/PeakUtils}"
