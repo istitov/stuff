@@ -15,7 +15,7 @@ SRC_URI="https://github.com/jamesrhester/${PN}/archive/refs/tags/${PV}.tar.gz ->
 
 LICENSE="ASRP"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
