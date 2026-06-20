@@ -13,7 +13,7 @@ HOMEPAGE="https://scikit-optimize.github.io/"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/joblib-0.11[${PYTHON_USEDEP}]
