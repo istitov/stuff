@@ -25,7 +25,7 @@ S="${WORKDIR}"
 
 LICENSE="all-rights-reserved"
 SLOT="0"
-KEYWORDS="-* ~amd64"
+KEYWORDS="-* ~amd64 ~arm64"
 RESTRICT="bindist mirror strip"
 
 # Pre-compiled cubins shipped only as a binary wheel — no upstream
