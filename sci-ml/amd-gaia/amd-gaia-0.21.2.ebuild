@@ -69,6 +69,14 @@ RESTRICT="test"
 # overlay yet; revisit once it lands. still present in v0.21.2, verified
 # 2026-06-19.
 #
+# httpx (ui?) — a hard upstream requirement: the `ui` extra declares
+# httpx>=0.27.0 (setup.py) and 9 src/gaia modules import it (ui/server.py,
+# ui/tunnel.py, ui/routers/*, agents/base/agent.py, ...). httpx is
+# ::gentoo-deprecated (2026-04-01: upstream stopped accepting bug reports)
+# but is still in-tree with no drop-in replacement, so the DeprecatedDep
+# warning is knowingly accepted, not fixable by removal. Revisit if/when
+# ::gentoo last-rites httpx. verified 2026-06-20.
+#
 # eval? — v0.21.2 adds tiktoken>=0.7.0,<1 to the eval extra (token-cost
 # accounting in gaia/eval/tool_cost.py; imported lazily with a char-count
 # fallback when absent). dev-python/tiktoken is packaged, carried uncapped.

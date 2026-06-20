@@ -64,6 +64,14 @@ RESTRICT="test"
 #
 # talk? — v0.21.0 adds `pip` to the talk extra: the Kokoro/misaki TTS
 # path downloads its spaCy model at runtime via pip. verified 2026-06-13.
+#
+# httpx (ui?) — a hard upstream requirement: the `ui` extra declares
+# httpx>=0.27.0 (setup.py) and 9 src/gaia modules import it (ui/server.py,
+# ui/tunnel.py, ui/routers/*, agents/base/agent.py, ...). httpx is
+# ::gentoo-deprecated (2026-04-01: upstream stopped accepting bug reports)
+# but is still in-tree with no drop-in replacement, so the DeprecatedDep
+# warning is knowingly accepted, not fixable by removal. Revisit if/when
+# ::gentoo last-rites httpx. verified 2026-06-20.
 RDEPEND="
 	${PYTHON_DEPS}
 	sci-ml/accelerate[${PYTHON_SINGLE_USEDEP}]
