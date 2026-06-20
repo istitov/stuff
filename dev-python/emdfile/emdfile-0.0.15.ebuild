@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/py4dstem/emdfile"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/h5py-3.2.0[${PYTHON_USEDEP}]
