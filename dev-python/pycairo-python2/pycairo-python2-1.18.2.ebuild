@@ -22,7 +22,7 @@ S="${WORKDIR}/${MYP}"
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 IUSE="examples"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
