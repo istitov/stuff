@@ -17,7 +17,7 @@ S=${WORKDIR}/${MYP}
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 
@@ -31,3 +31,12 @@ DEPEND="${RDEPEND}
 		dev-util/ruff
 	)
 "
+
+src_prepare() {
+	# versioneer.py uses two APIs removed in Python 3.12: SafeConfigParser (a
+	# deprecated alias of ConfigParser since 3.2) and ConfigParser.readfp
+	# (renamed to read_file). Restore the build on 3.12+.
+	sed -i -e 's/SafeConfigParser/ConfigParser/g' \
+		-e 's/\.readfp(/.read_file(/g' versioneer.py || die
+	distutils-r1_src_prepare
+}
