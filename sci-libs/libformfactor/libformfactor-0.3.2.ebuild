@@ -13,7 +13,7 @@ S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Built against the libheinz 2.x API; cap below 3 so the libheinz-4.0
 # co-release of libformfactor-0.4.0 / bornagain-24.0 can't be pulled in here.
