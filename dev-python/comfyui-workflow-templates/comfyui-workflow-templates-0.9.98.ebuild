@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream requires_dist pins each split to an exact version; ~ atoms track
 # that == pin (any revision). Single-impl propagation via PYTHON_SINGLE_USEDEP.
