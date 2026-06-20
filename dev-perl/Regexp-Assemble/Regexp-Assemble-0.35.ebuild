@@ -10,7 +10,7 @@ inherit perl-module
 DESCRIPTION="Assemble multiple Regular Expressions into a single RE"
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 #PATCHES=(
 #	"${FILESDIR}/${PV}/no-pod-tests.patch"
 #)
