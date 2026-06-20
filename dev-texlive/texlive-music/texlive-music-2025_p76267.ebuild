@@ -92,7 +92,7 @@ DESCRIPTION="TeXLive Music packages"
 
 LICENSE="BSD CC-BY-SA-4.0 FDL-1.1+ GPL-1+ GPL-2 GPL-2+ GPL-3 LGPL-2.1 LPPL-1.2 LPPL-1.3 LPPL-1.3c MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 COMMON_DEPEND="
 	>=dev-texlive/texlive-latex-2025
 "
