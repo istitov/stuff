@@ -346,7 +346,7 @@ LICENSE+="
 	CC0-1.0 ISC MIT MPL-2.0 Unicode-3.0 Unicode-DFS-2016 ZLIB
 "
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	$(python_gen_cond_dep '
