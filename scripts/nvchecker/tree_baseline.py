@@ -101,7 +101,11 @@ def main() -> int:
         for eb in pkgdir.glob(f"{pkg}-*.ebuild"):
             pv = eb.stem[len(pkg) + 1:]
             base_pv = pv.split("-r")[0]
-            if set(base_pv.replace(".", "")) == {"9"}:
+            # Live ebuilds use an all-9s PV of live magnitude (9999, 999999,
+            # 9.9999).  Require >=4 nines so bare real releases like "9" (e.g.
+            # dev-python/pipcl-9), "99", or "999" are not mistaken for live.
+            digits = base_pv.replace(".", "")
+            if len(digits) >= 4 and set(digits) == {"9"}:
                 continue
             released.append((pv, eb))
         if not released:
