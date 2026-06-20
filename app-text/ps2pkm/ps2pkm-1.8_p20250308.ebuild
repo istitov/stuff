@@ -17,7 +17,7 @@ S="${WORKDIR}/texlive-${PV#*_p}-source/texk/ps2pk"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 DEPEND=">=dev-libs/kpathsea-6.2.1:="
 RDEPEND="${DEPEND}"
