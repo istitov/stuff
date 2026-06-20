@@ -14,7 +14,7 @@ S="${WORKDIR}/gwyddion-${PV}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="bzip2 doc fits hdf5 json nls openexr openmp webp X xml"
 
 RDEPEND="
