@@ -16,7 +16,7 @@ SRC_URI="https://github.com/richard-evans/${PN}/archive/refs/tags/v${PV}.tar.gz 
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 #IUSE="doc"
 
 PATCHES=( "${FILESDIR}/${P}-cstdint.patch" )
