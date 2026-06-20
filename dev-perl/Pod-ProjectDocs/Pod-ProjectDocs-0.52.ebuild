@@ -10,7 +10,7 @@ inherit perl-module
 DESCRIPTION="generates CPAN like project documents from pod"
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 # https://rt.cpan.org/Ticket/Display.html?id=60373
 #IUSE="+highlight"
 comment() { true;}
