@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Overlay fork providing a 3.3-gtk3 SLOT of wxGTK (wxWidgets GTK build).
+    ::gentoo carries only the 3.2-gtk3 slot as of 2026-06-20; this 3.3 slot
+    exists to satisfy media-gfx/orcaslicer-2.4.0, which upstream-requires
+    wxWidgets >=3.3. It installs in parallel with the system 3.2 slot and
+    registers with app-eselect/eselect-wxwidgets. The ebuild is forked from
+    ::gentoo's wxGTK-3.2.8.1-r2 and pairs with the overlay's forked
+    wxwidgets.eclass (which accepts the 3.3-gtk3 SLOT).
+  </longdescription>
+  <use>
+    <flag name="gstreamer">
+      Enable the wxMediaCtrl class for playing audio and video through
+      gstreamer.
+    </flag>
+    <flag name="sdl">
+      Use Simple Directmedia Layer (<pkg>media-libs/libsdl</pkg>) for
+      audio.
+    </flag>
+  </use>
+  <upstream>
+    <remote-id type="sourceforge">wxpython</remote-id>
+    <remote-id type="github">wxWidgets/wxWidgets</remote-id>
+  </upstream>
+  <slots>
+    <slot name="*">Slots reflect MAJOR.MINOR versions which can
+      be installed in parallel.</slot>
+  </slots>
+</pkgmetadata>

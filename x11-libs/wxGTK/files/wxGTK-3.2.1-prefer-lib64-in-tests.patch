@@ -1,0 +1,21 @@
+Prefer /lib64 and /usr/lib64 ahead of /lib in the DynamicLibrary test so it
+loads the real shared object on multilib lib64 systems instead of failing.
+
+Imported verbatim from ::gentoo (wxGTK-3.2.1-prefer-lib64-in-tests.patch, by
+Arsen Arsenović); applies cleanly (fuzz=0) to 3.3.2. Test-only (USE=test).
+Upstream ref: https://github.com/wxWidgets/wxWidgets/commit/512b8033feef6ba99c4dfdf6ada42a56d7425d6d
+
+--- a/tests/misc/dynamiclib.cpp
++++ b/tests/misc/dynamiclib.cpp
+@@ -37,9 +37,10 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
+ #else // other Unix
+     static const char* const candidateDirs[] =
+     {
++        "/lib64",
++        "/usr/lib64",
+         "/lib/x86_64-linux-gnu",
+         "/lib",
+-        "/lib64",
+         "/usr/lib",
+     };
+

@@ -1,0 +1,25 @@
+Neuter wx-config's dedup_flags() so it stops rewriting/de-duplicating compiler
+flags (the awk pass drops repeats and mangles -arch/-framework pairs). Consumers
+get the flags verbatim instead.
+
+Imported from ::gentoo (wxGTK-3.2.5-dont-break-flags.patch); applies cleanly
+(fuzz=0) to 3.3.2. Rewritten to a/b paths; hunk unchanged.
+
+--- a/configure
++++ b/configure
+@@ -45700,13 +45700,8 @@
+
+ dedup_flags()
+ {
+-    printf "%s " "$@" |
+-        awk 'BEGIN { RS=" "; ORS=" " }
+-        {
+-            if ($0=="") next
+-            if ($0=="-arch" || $0=="-framework") { x=$0; next }
+-            if (x!="") x=x " " $0; else x=$0; if (!seen[x]++) print x; x=""
+-        }'
++	# Gentoo: Don't hack out flags, parsing them is complex.
++	printf '%s ' "$@"
+ }
+
+ WX_CPPFLAGS=`dedup_flags "$CPPFLAGS"`
