@@ -19,7 +19,7 @@ HOMEPAGE="
 # the GPL-3.0 Comfy-Org/ComfyUI_frontend build. verified 2026-06-14
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 src_configure() {
 	# setup.py derives the version from this env var, falling back to a bogus
