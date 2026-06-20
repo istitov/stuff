@@ -21,7 +21,7 @@ SRC_URI="$(pypi_sdist_url "${MYPN}" "${PV}" .zip)"
 S="${WORKDIR}/${MYP}"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 BDEPEND="
 	dev-lang/python:2.7
