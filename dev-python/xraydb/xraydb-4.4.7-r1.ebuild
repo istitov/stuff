@@ -13,10 +13,19 @@ HOMEPAGE="https://github.com/xraypy/XrayDB"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
 	>=dev-python/scipy-0.17[${PYTHON_USEDEP}]
 	dev-python/sqlalchemy[${PYTHON_USEDEP}]
 "
+
+src_prepare() {
+	# versioneer.py uses two APIs removed in Python 3.12: SafeConfigParser (a
+	# deprecated alias of ConfigParser since 3.2) and ConfigParser.readfp
+	# (renamed to read_file). Restore the build on 3.12+.
+	sed -i -e 's/SafeConfigParser/ConfigParser/g' \
+		-e 's/\.readfp(/.read_file(/g' versioneer.py || die
+	distutils-r1_src_prepare
+}
