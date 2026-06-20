@@ -1,0 +1,24 @@
+md4c is vendored vanilla (0.5.2) under deps_src/md4c and otherwise built shared
+(the slicer's global BUILD_SHARED_LIBS overrides its local option) but not
+installed -- so the linked libmd4c-html.so resolves against the system md4c at
+runtime after the install-time rpath strip. Build against the system
+dev-libs/md4c (0.5.3, API-compatible) instead: drop the vendored subdir and
+expose INTERFACE shims under the same target names the slicer links, so
+target_link_libraries(... md4c-html ...) pulls the system library.
+
+--- a/deps_src/CMakeLists.txt
++++ b/deps_src/CMakeLists.txt
+@@ -27,5 +27,12 @@
+ add_subdirectory(libnest2d)
+ add_subdirectory(mcut)
+-add_subdirectory(md4c)
++# ::stuff: build against system dev-libs/md4c instead of the vendored copy.
++# Provide INTERFACE shims under the vendored target names so the slicer's
++# target_link_libraries(... md4c-html ...) resolves to the system library.
++find_package(md4c REQUIRED)
++add_library(md4c INTERFACE)
++target_link_libraries(md4c INTERFACE md4c::md4c)
++add_library(md4c-html INTERFACE)
++target_link_libraries(md4c-html INTERFACE md4c::md4c-html)
+ add_subdirectory(mdns)
+ add_subdirectory(miniz)

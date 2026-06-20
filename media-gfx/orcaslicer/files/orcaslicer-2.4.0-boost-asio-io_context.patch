@@ -1,0 +1,17 @@
+reserve_loopback_port() in 2.4.0 still declares the removed boost::asio::io_service
+type (dropped in Boost 1.87+, succeeded by io_context). Every other asio user in
+the tree already uses io_context; this lone holdout breaks the build against modern
+Boost. Switch the type to io_context (keeping the local variable name io_service so
+the acceptor ctor on the next line is untouched). io_context has the same length, so
+the column alignment is preserved.
+
+--- a/src/slic3r/GUI/WebUserLoginDialog.cpp
++++ b/src/slic3r/GUI/WebUserLoginDialog.cpp
+@@ -49,6 +49,6 @@
+ {
+     try {
+-        boost::asio::io_service       io_service;
++        boost::asio::io_context       io_service;
+         boost::asio::ip::tcp::acceptor acceptor(io_service, {boost::asio::ip::tcp::v4(), 0});
+         return static_cast<int>(acceptor.local_endpoint().port());
+     } catch (...) {

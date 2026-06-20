@@ -1,0 +1,20 @@
+orcaslicer vendors a *customized* Clipper2 (a bespoke clipper2_z.hpp "Hackish
+wrapper ... to compile Clipper2 with Z support" that the slicer includes
+directly), so it cannot be built against the system sci-mathematics/clipper2.
+deps_src/clipper2 otherwise builds shared (the slicer's global BUILD_SHARED_LIBS
+overrides its local option), and the resulting libClipper2.so is linked but not
+installed -- after the install-time rpath strip it would resolve against the
+system clipper2, an ABI-skew hazard. Force the vendored copy STATIC so it is
+baked into orca-slicer instead (no runtime .so, no system clipper2 dependency).
+
+--- a/deps_src/clipper2/CMakeLists.txt
++++ b/deps_src/clipper2/CMakeLists.txt
+@@ -30,7 +30,7 @@
+ )
+
+ # 2d version of Clipper2
+-add_library(Clipper2 ${CLIPPER2_INC} ${CLIPPER2_SRC})
++add_library(Clipper2 STATIC ${CLIPPER2_INC} ${CLIPPER2_SRC})
+
+ target_include_directories(Clipper2
+   PUBLIC Clipper2Lib/include

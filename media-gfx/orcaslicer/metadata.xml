@@ -16,6 +16,9 @@
   </use>
   <upstream>
     <remote-id type="github">OrcaSlicer/OrcaSlicer</remote-id>
+    <!-- Vendored Eigen 5 source (see the ebuild src_configure); declared to
+         satisfy pkgcheck MissingRemoteId, not orcaslicer's own upstream. -->
+    <remote-id type="gitlab">libeigen/eigen</remote-id>
     <bugs-to>https://github.com/OrcaSlicer/OrcaSlicer/issues</bugs-to>
     <doc>https://www.orcaslicer.com/wiki/</doc>
   </upstream>
