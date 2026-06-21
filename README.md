@@ -221,6 +221,13 @@ reference implementation), and
 [`sci-physics/vampire`](https://www-users.york.ac.uk/~rfle500/research/vampire/) (atomistic spin
 dynamics).
 
+### Rietveld refinement
+
+X-ray powder diffraction and Rietveld refinement:
+[`sci-physics/bgmn`](http://www.bgmn.de/) (the BGMN refinement engine)
+and [`sci-physics/profex`](http://www.profex-xrd.org/) (Profex, its Qt6
+GUI front-end).
+
 ### TeX Live
 
 Current TeX Live, kept ahead of `::gentoo`'s stabilized line: the full
@@ -322,8 +329,6 @@ consumers follow.
   `x11-libs/wxGTK` 3.3 pulled ahead of `::gentoo`'s 3.2 (and a local
   `wxwidgets.eclass` that accepts the new `3.3-gtk3` slot) to build it.
 - **Crystallography / atomistic** —
-  [`sci-physics/bgmn`](http://www.bgmn.de/),
-  [`sci-physics/profex`](http://www.profex-xrd.org/),
   [`sci-physics/prismatic`](https://prism-em.com/),
   [`sci-libs/nexus`](https://www.nexusformat.org/),
   `sci-libs/pycifrw`.
