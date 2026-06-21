@@ -33,6 +33,15 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# NeXus' C++ API wraps the C "napi" layer and calls only the HDF5 C API
+	# (no <H5Cpp.h> / H5:: usage in the tree), but CMakeLists requires the
+	# HDF5 CXX component (libhdf5_cpp) under ENABLE_CXX. That pulls in
+	# sci-libs/hdf5[cxx], which collides with hdf5's REQUIRED_USE
+	# at-most-one-of( cxx mpi ) on mpi-enabled systems. Require only the C +
+	# HL components that are actually linked. verified 2026-06-21.
+	sed -e 's/COMPONENTS CXX HL REQUIRED/COMPONENTS C HL REQUIRED/' \
+		-i CMakeLists.txt || die
+
 	java-pkg-opt-2_src_prepare
 	cmake_src_prepare
 }
