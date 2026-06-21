@@ -1,0 +1,11 @@
+--- a/unittest_or_fail.py
++++ b/unittest_or_fail.py
+@@ -10,7 +10,7 @@
+     """
+ 
+     def run(self, test):
+-        result = super().run(test)
++        result = super(NonZeroTextTestRunner, self).run(test)
+         if result.testsRun == 0 and not result.skipped:
+             self.stream.writeln("No tests found -- failing")
+             sys.exit(3)

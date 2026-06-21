@@ -19,10 +19,15 @@ LICENSE="BSD-2"
 SLOT="2"
 KEYWORDS="amd64 ~arm64 x86"
 
-# Warning: do not use distutils_enable_tests to avoid a circular
-# dependency on itself!
+# Upstream is python3 code; two things break it under python2.7:
+#  - setup.py declares a non-ASCII author with no PEP 263 encoding line, a
+#    SyntaxError under python2.7 -- so install the module directly instead of
+#    running setup.py;
+#  - the module's run() uses a python3-only zero-arg super() (patched).
+# distutils_enable_tests is avoided (it would add a circular dep on this
+# package), so no tests are run.
+PATCHES=( "${FILESDIR}/${P}-python2-super.patch" )
 
-python_test() {
-	"${EPYTHON}" -m unittest -v test/test_unittest_or_fail.py ||
-		die "Tests failed with ${EPYTHON}"
+src_install() {
+	python_foreach_impl python_domodule "${S}"/unittest_or_fail.py
 }
