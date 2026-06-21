@@ -317,6 +317,10 @@ consumers follow.
 - **Visualization** —
   [`sci-visualization/gwyddion`](https://gwyddion.net/),
   `sci-visualization/gwyddion3`.
+- **3D printing** — [`media-gfx/orcaslicer`](https://www.orcaslicer.com/),
+  the open-source slicer (a PrusaSlicer / Bambu Studio fork), with
+  `x11-libs/wxGTK` 3.3 pulled ahead of `::gentoo`'s 3.2 (and a local
+  `wxwidgets.eclass` that accepts the new `3.3-gtk3` slot) to build it.
 - **Crystallography / atomistic** —
   [`sci-physics/bgmn`](http://www.bgmn.de/),
   [`sci-physics/profex`](http://www.profex-xrd.org/),
