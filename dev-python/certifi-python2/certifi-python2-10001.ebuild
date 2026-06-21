@@ -39,6 +39,10 @@ src_compile() {
 	python_foreach_impl esetup.py build  "${build_args[@]}" "${@}"
 }
 
+src_test() {
+	distutils-r1_src_test
+}
+
 src_install() {
 	python_foreach_impl distutils-r1_python_install
 }
