@@ -1018,7 +1018,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (169) ---
+# --- github (170) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2126,6 +2126,12 @@ source = "github"
 github = "fmaclen/hollama"
 use_max_tag = true
 prefix = ""
+
+["x11-libs/wxGTK"]
+source = "github"
+github = "wxWidgets/wxWidgets"
+use_max_tag = true
+prefix = "v"
 
 # --- gitlab (3) ---
 
