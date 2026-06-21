@@ -300,14 +300,9 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "include_regex": r"^hdf[0-9]+\.[0-9]+\.[0-9]+$",
         "prefix": "hdf",
     },
-    # Xilinx/XRT tags are date-prefixed: `YYYYMM.MAJOR.MINOR.PATCH`.  The
-    # overlay ebuild carries only MAJOR.MINOR.PATCH (e.g. 2.21.75).  Strip
-    # the 6-digit date prefix so the extracted version is comparable.
-    "dev-util/xrt": {
-        "include_regex": r"^[0-9]{6}\.[0-9]+\.[0-9]+\.[0-9]+$",
-        "from_pattern": r"^[0-9]{6}\.(.+)$",
-        "to_pattern": r"\1",
-    },
+    # NOTE: dev-util/xrt is tracked via SPECIAL_SOURCES (use_latest_release),
+    # not here — see the block in SPECIAL_SOURCES for why use_max_tag can't
+    # work for XRT's dated/prerelease release scheme.
     # lierdakil/pandoc-crossref publishes alpha/rc tags for next releases;
     # restrict to stable tags (3- or 4-part version, with optional trailing
     # letter like `0.3.23a`, but no hyphenated pre-release suffixes).
@@ -395,6 +390,35 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "source": "regex",
         "url": "https://developer.download.nvidia.com/compute/cudnn/redist/",
         "regex": r"redistrib_(\d+\.\d+\.\d+)\.json",
+    },
+    # Xilinx/XRT follows the upstream *official* release line, whose tags are
+    # date-prefixed: `YYYYMM.2.XX.YYY[_name]`. The embedded `2.XX.YYY` is the
+    # real XRT version and is monotonically increasing across releases
+    # (2.17.319 → 2.18.179 → 2.19.194 → 2.20.197 → 2.23.0); the overlay ships
+    # 2.23.0 from the `202610.2.23.0_Canonical` release, so we track that line.
+    #
+    # use_latest_release (NOT use_max_tag) is mandatory here: XRT publishes
+    # *prereleases* under the same dated scheme (e.g. 202610.2.21.21) and also
+    # cuts a parallel stream of plain `2.21.x` point tags. Tag-sort can't read
+    # the release/prerelease flag, so use_max_tag surfaced that prerelease as
+    # the "newest" — the github releases/latest endpoint excludes
+    # prereleases/drafts by construction. from_pattern strips the `YYYYMM.`
+    # date prefix and any `_name` suffix to yield the bare `2.XX.YYY` that
+    # compares against the ebuild PV.
+    #
+    # Caveat: "latest release" is by publish date, not version. The plain
+    # point-tag releases (e.g. 2.21.75, itself a non-prerelease) are
+    # interleaved in publish order, so if upstream cuts a new plain point
+    # release *after* a dated one, from_pattern won't match it and it surfaces
+    # as a benign "we ship newer" — never a false upgrade, since the plain
+    # stream is lower-versioned than 2.23.0. verified against the releases
+    # API 2026-06-21.
+    "dev-util/xrt": {
+        "source": "github",
+        "github": "Xilinx/XRT",
+        "use_latest_release": True,
+        "from_pattern": r"^\d{6}\.(\d+\.\d+\.\d+)(?:_.*)?$",
+        "to_pattern": r"\1",
     },
     # simpleitk-bin repackages upstream's cp311-abi3 SimpleITK wheel
     # (::gentoo has no ITK to build from source). It doesn't `inherit pypi`,
