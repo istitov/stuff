@@ -1,0 +1,32 @@
+The move-constructor precondition assert in OptimizableSymmetryStorage is
+malformed: the lambda is captureless ([]), yet odr-uses the member
+'symmetries' (needs 'this'), and is never invoked (no trailing () before
+the '&& "msg"'). Upstream only compiles because their Release defines
+NDEBUG and discards the whole assert(); Gentoo's cmake Release blanks
+CMAKE_CXX_FLAGS_RELEASE (no -DNDEBUG, to honour user CFLAGS), so the
+assert body is compiled and g++ rejects it.
+
+Fix to match the author's own sibling asserts in the same feature
+(core/data/symmetry/CyclicSymmetry.cpp and rigidbody/transform/
+TransformStrategy.cpp), which are written '[&]() -> bool { ... }() && "msg"'
+— capture by reference, explicit bool return, and invoked. This restores
+the intended precondition check. Reported upstream.
+
+--- a/source/rigidbody/parameters/OptimizableSymmetryStorage.cpp
++++ b/source/rigidbody/parameters/OptimizableSymmetryStorage.cpp
+@@ -9,13 +9,13 @@ using namespace ausaxs::symmetry;
+ using namespace ausaxs::symmetry;
+
+ OptimizableSymmetryStorage::OptimizableSymmetryStorage(SymmetryStorage&& other) : SymmetryStorage(std::move(other)) {
+-    assert([] () {
++    assert([&]() -> bool {
+         for (const auto& s : symmetries) {
+             if (dynamic_cast<const ReferenceSymmetryView*>(s.get()) != nullptr) {
+                 return false;
+             }
+         }
+         return true;
+-    } && "OptimizableSymmetryStorage::OptimizableSymmetryStorage: Cannot move from a SymmetryStorage that contains ReferenceSymmetryViews.");
++    }() && "OptimizableSymmetryStorage::OptimizableSymmetryStorage: Cannot move from a SymmetryStorage that contains ReferenceSymmetryViews.");
+ }
+ OptimizableSymmetryStorage::~OptimizableSymmetryStorage() = default;
