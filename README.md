@@ -1,18 +1,20 @@
 # stuff
 
-A Gentoo ebuild overlay that ships hard-to-package software as
-first-class portage citizens — dependency-resolved, built from source,
-and managed with `emerge` like everything else on the system, instead
-of through manual git builds, vendor `.deb`s, or conda environments
-that leave the package manager blind to what's installed.
+A [Gentoo](https://wiki.gentoo.org/wiki/Main_Page) ebuild overlay that
+ships hard-to-package software as first-class portage citizens —
+dependency-resolved, built from source, and managed with `emerge` like
+everything else on the system, instead of through manual git builds,
+vendor `.deb`s, or conda environments that leave the package manager
+blind to what's installed.
 
 No single flagship — a curated, multi-niche overlay.
 Front-door slices: **local AI & GPU compute** (AMD Ryzen-AI / NPU ·
 AMD ROCm · NVIDIA CUDA, with LLM runtimes and the PyTorch / ONNX
-ecosystem) · **scientific physics** (SAXS / SANS / XAFS · electron
-microscopy · micromagnetism · Rietveld) · **`pf-sources`** (curated
-pf-kernel patchset) · **DeaDBeeF** plugins · **TeX Live** · a
-**Python 2** legacy preservation layer.
+ecosystem) · **materials science** (SAXS / SANS / XAFS / XRD /
+Rietveld · electron microscopy · SPM · micromagnetism) ·
+**`pf-sources`** (curated pf-kernel patchset) · **DeaDBeeF** plugins ·
+**TeX Live** · a **Qt5** revival mirror · a **Python 2** legacy
+preservation layer.
 
 ```sh
 eselect repository enable stuff
@@ -32,7 +34,7 @@ Auto-mirrored on every push:
 - [gitlab.com/istitov/stuff](https://gitlab.com/istitov/stuff)
 - [codeberg.org/istitov/stuff](https://codeberg.org/istitov/stuff)
 
-## Highlights
+## AI & GPU compute
 
 ### AMD Ryzen-AI / NPU stack
 
@@ -127,7 +129,7 @@ their own:
 - `sci-libs/faiss` — FAISS: efficient similarity search and clustering of
   dense vectors (the vector-index building block for embeddings / RAG).
 
-### ROCm 7.2.4
+### ROCm stack
 
 Local bumps of the [ROCm](https://rocm.docs.amd.com/) / HIP 7.2 stable
 line (7.2.3 and 7.2.4) ahead of `::gentoo`: the full runtime, compiler,
@@ -140,6 +142,21 @@ plus the `rocm-smi` / `rocminfo` tooling, across `dev-libs/`,
 /opt-installed ROCm SDK that pulls AMD's nightly TheRock build for a
 per-host `AMDGPU_TARGETS`. Coexists with the /usr ROCm above; an
 nvchecker regex source on AMD's CDN tracks new nightlies.
+
+[`dev-util/zluda`](https://github.com/vosen/ZLUDA) — a drop-in CUDA
+runtime for AMD GPUs (an honorable mention as it is ROCm-bound).
+
+### CUDA / generic ML inference
+
+NVIDIA CUDA runtime, Python bindings, and generic ML inference:
+[`dev-python/cuda-bindings`](https://github.com/NVIDIA/cuda-python),
+`dev-python/cuda-python`, `dev-python/cuda-pathfinder`,
+`dev-python/cuda-tile-bin`,
+[`dev-python/pycuda`](https://documen.tician.de/pycuda/),
+[`dev-util/nvidia-cuda-toolkit`](https://developer.nvidia.com/cuda-toolkit),
+and [`dev-python/vllm`](https://github.com/vllm-project/vllm) (optional
+`USE=humming` pulls `dev-python/humming-kernels` for MXFP4
+quantization).
 
 ### RAPIDS GPU computing
 
@@ -164,20 +181,18 @@ convolution), `dev-python/xatlas` + `dev-python/pymeshfix` +
 [`dev-python/utils3d`](https://github.com/EasternJournalist/utils3d)
 helpers.
 
-### HyperSpy / 4D-STEM electron-microscopy stack
+## Materials science
 
-A full [HyperSpy](https://hyperspy.org) ecosystem that is not in `::gentoo`:
+### Electron-microscopy stack
 
-`hyperspy`, `hyperspyui`, `hyperspy-gui-traitsui`, `hyperspy-gui-ipywidgets`,
-[`rosettasciio`](https://hyperspy.org/rosettasciio/), `emdfile`, `ncempy`,
-`exspy`, [`atomap`](https://atomap.org/),
+The full [HyperSpy](https://hyperspy.org) stack — core, GUI backends,
+I/O, and domain extensions (`exspy`, [`atomap`](https://atomap.org/),
 [`pyxem`](https://github.com/pyxem/pyxem),
-[`py4dstem`](https://github.com/py4dstem/py4DSTEM).
+[`py4dstem`](https://github.com/py4dstem/py4DSTEM)).
 
-Packaging follows upstream's split into a core (`hyperspy`) plus GUI backends
-and per-domain extensions (`exspy` for EELS/EDS, `atomap` for atomic-column
-analysis, `pyxem` / `py4dstem` for 4D-STEM, `ncempy`/`emdfile`/`rosettasciio`
-for I/O).
+[`sci-visualization/gwyddion`](https://gwyddion.net/) +
+`sci-visualization/gwyddion3` — the de-facto standard open-source tool
+for SPM (AFM / STM) data visualization and analysis.
 
 ### SANS / SAXS / XAFS analysis
 
@@ -200,19 +215,6 @@ for I/O).
 - [`sci-physics/demeter`](https://github.com/bruceravel/demeter) —
   classic Athena/Artemis XAFS GUIs (Perl).
 
-### DeaDBeeF plugin collection
-
-Twenty-six [`media-plugins/deadbeef-*`](https://deadbeef.sourceforge.io/)
-packages, covering audio format
-support (`opus`, `vgmstream`, `vfs-rar`, `archive-reader`, `bs2b`),
-visualization (`spectrogram`, `musical-spectrum`, `vu-meter`, `dr-meter`,
-`waveform-seekbar`), playback/session control
-(`playback-order`, `playback-status`, `headerbar`, `quick-search`, `rating`,
-`replaygain-control`), file browsing (`fb`, `bookmark-manager`), desktop
-integration (`gnome`, `statusnotifier`, `discord-presence`) and output
-plumbing (`jack`, `pulse2`, `stereo-widener`, `copy-info`,
-`customizable-toolbar`).
-
 ### Micromagnetism
 
 [`sci-physics/mumax`](https://mumax.github.io/) (GPU finite-difference,
@@ -221,14 +223,17 @@ reference implementation), and
 [`sci-physics/vampire`](https://www-users.york.ac.uk/~rfle500/research/vampire/) (atomistic spin
 dynamics).
 
-### Rietveld refinement
+### Rietveld refinement / crystallography
 
 X-ray powder diffraction and Rietveld refinement:
 [`sci-physics/bgmn`](http://www.bgmn.de/) (the BGMN refinement engine)
 and [`sci-physics/profex`](http://www.profex-xrd.org/) (Profex, its Qt6
-GUI front-end).
+GUI front-end). Plus crystallography / atomistic tooling:
+[`sci-physics/prismatic`](https://prism-em.com/) (STEM image
+simulation), [`sci-libs/nexus`](https://www.nexusformat.org/) (NeXus
+neutron / X-ray data format), and `sci-libs/pycifrw` (CIF read/write).
 
-### TeX Live
+## TeX Live
 
 Current TeX Live, kept ahead of `::gentoo`'s stabilized line: the full
 `dev-texlive/*` collection set at the TL2025 and TL2026 releases (recent
@@ -236,79 +241,22 @@ tlpdb revisions), with upstream package additions, removals, and
 relocations tracked per release — plus `dev-tex/{biber, biblatex,
 latexmk, minted, pgf, tex4ht, …}` build tooling.
 
-## Design choices
-
-### Python 2 preservation
-
-`::gentoo` dropped Python 2 from its packaging eclasses in 2024 — its
-`distutils-r1` no longer builds py2 modules, though it still ships the
-`dev-lang/python:2.7` interpreter. `sci-visualization/gwyddion` 2.x ships
-`pygwy`, Python 2 bindings used by user analysis scripts;
-Gwyddion 3's GI bindings don't yet cover everything `pygwy` exposes, so
-those scripts still need a py2 runtime. This overlay vendors a small
-Python 2 surface to keep them working:
-
-- **Locally-vendored eclasses** in `eclass/`: `distutils-r1_py2`,
-  `python-r1_py2`, `python-single-r1_py2`, `python-utils-r1_py2`.
-  Inheriting one of these is the signal that a package is intentionally
-  pinned to py2.
-- **py2 forks of core libs** under `dev-python/*-python2`:
-  `numpy-python2`, `certifi-python2`, `setuptools-python2`,
-  `setuptools_scm-python2`, `pycairo-python2`. Named distinctly so they can
-  coexist with the py3 versions from `::gentoo`.
-- **py2-only legacy packages** kept as-is: `pygobject-2.28.6`, `pygtk-2.24.0`,
-  `unittest-or-fail`.
-
-Expected `pkgcheck` warnings from this corner (`UnderscoreInUseFlag`,
-`PythonMismatchedPackageName`, `RequiredUseDefaults`) are suppressed globally
-in `metadata/pkgcheck.conf` with a comment explaining why.
-
-### Qt5 revival mirror
+## Qt5 revival mirror
 
 `::gentoo` last-rited the entire `dev-qt:5` set on 2026-05-15
-(bug #948836) and started treecleaning Qt5 consumers
-(`dev-python/pyqt5` went 2026-05-21). `sci-physics/mantid` and a few
-other consumers will need Qt5 through 2026 at minimum, so this overlay
-carries the full slot:5 set at **v5.15.19-lts-lgpl** with the
+(bug #948836) and is treecleaning its Qt5 consumers, but
+`sci-physics/mantid` and a few others still need Qt5. This overlay
+carries the full 23-module `dev-qt/*` slot:5 set at
+**v5.15.19-lts-lgpl** — the
 [KDE Qt5 Patch Collection](https://invent.kde.org/qt/qt) applied via
-the local `qt5-build.eclass`.
-
-- **The full 23-module `dev-qt/*` slot:5 set at 5.15.19** — qtbase
-  (`qtcore`, `qtgui`, `qtwidgets`, `qtnetwork`, …) plus the add-on
-  modules (`qtdeclarative`, `qtmultimedia`, `qtsvg`, `qtwayland`,
-  `qtwebchannel`, …). All keyworded `~arch` except `qtwebchannel`
-  (`~amd64 ~x86`, per upstream's narrower history). `dev-qt/qthelp`
-  and `dev-qt/qtwebchannel` keep their pre-import 5.15.18 ebuilds
-  alongside; the other 21 ship 5.15.19 only.
-- **`dev-python/pyqt5` + `dev-python/pyqt5-sip`** — revived at
-  PyPI-latest after `::gentoo`'s treeclean.
-- **`x11-libs/qscintilla-2.14.1-r1`** (the last Qt5-compatible slot),
-  with `=x11-libs/qscintilla-2.14.1-r2` (Qt6-only) masked in
-  `profiles/package.mask`.
-- **KDE Qt5 Patch Collection bundles** mirrored to
-  [extra-stuff](https://github.com/istitov/extra-stuff) as signed-tag-pinned
-  `.tar.xz` distfiles; the eclass fans the SRC_URI out across the
-  github / codeberg / gitlab raw URLs.
-- **`profiles/package.unmask`** overrides `::gentoo`'s bare `dev-qt/*:5`
-  masks so these ebuilds stay installable for overlay users.
+the local `qt5-build.eclass`, distfiles mirrored on
+[extra-stuff](https://github.com/istitov/extra-stuff) — plus the
+revived `dev-python/pyqt5` and the last Qt5-compatible
+`x11-libs/qscintilla`, all unmasked in `profiles/package.unmask` so
+they stay installable.
 
 Drop the mirror once mantid finishes its Qt6 port and the other
 consumers follow.
-
-### Other targeted fixes kept in-tree
-
-- `sci-libs/hdf` — local bumps carrying a gcc 15 build fix, plus a
-  release ahead of `::gentoo`.
-- `x11-libs/gtk+-2.24.33-r99` — gtk+:2 holdover for apps that still need it.
-- `dev-python/bokeh` — older 2.x dropped; 3.x kept with the
-  deprecated `flaky` test dep removed.
-- `dev-python/py4dstem` — carries upstream PR #712 for numpy 2
-  compatibility.
-- `dev-python/cupy` — ROCm USE flag dropped from cupy 13 (its HIP
-  backend is incompatible with ROCm 7.x hipBLAS); cupy 14 dropped ROCm
-  support entirely upstream.
-- Several `media-plugins/deadbeef-*` plugins carry patches for DeaDBeeF's
-  modernized C API.
 
 ## Also here
 
@@ -321,17 +269,10 @@ consumers follow.
   `sys-kernel/pf-sources-extended` (curated pf-patchset model on top
   of vanilla + Gentoo genpatches), `sys-apps/dkms-gentoo`,
   `sys-kernel/kernel-cleaner`.
-- **Visualization** —
-  [`sci-visualization/gwyddion`](https://gwyddion.net/),
-  `sci-visualization/gwyddion3`.
 - **3D printing** — [`media-gfx/orcaslicer`](https://www.orcaslicer.com/),
   the open-source slicer (a PrusaSlicer / Bambu Studio fork), with
   `x11-libs/wxGTK` 3.3 pulled ahead of `::gentoo`'s 3.2 (and a local
   `wxwidgets.eclass` that accepts the new `3.3-gtk3` slot) to build it.
-- **Crystallography / atomistic** —
-  [`sci-physics/prismatic`](https://prism-em.com/),
-  [`sci-libs/nexus`](https://www.nexusformat.org/),
-  `sci-libs/pycifrw`.
 - **SuiteSparse imports** —
   [`sci-libs/{amd,camd,cholmod,colamd,ccolamd,umfpack,suitesparseconfig}`](https://people.engr.tamu.edu/davis/suitesparse.html).
 - **Retro / fun** —
@@ -347,17 +288,18 @@ consumers follow.
   [`app-text/pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref),
   [`app-portage/portconf`](https://github.com/istitov/portconf)
   (`/etc/portage` cleaner; forked to istitov and bumped to the 2.x
-  series in this overlay).
-- **CUDA / generic ML inference** —
-  [`dev-python/cuda-bindings`](https://github.com/NVIDIA/cuda-python),
-  `dev-python/cuda-python`, `dev-python/cuda-pathfinder`,
-  `dev-python/cuda-tile-bin`,
-  [`dev-python/pycuda`](https://documen.tician.de/pycuda/),
-  [`dev-util/nvidia-cuda-toolkit`](https://developer.nvidia.com/cuda-toolkit),
-  [`dev-python/vllm`](https://github.com/vllm-project/vllm) (optional
-  `USE=humming` pulls `dev-python/humming-kernels` for MXFP4
-  quantization), and [`dev-util/zluda`](https://github.com/vosen/ZLUDA) —
-  a drop-in CUDA runtime for AMD GPUs.
+  series in this overlay), and
+  [`app-portage/udept`](https://github.com/istitov/udept) (a Portage
+  analysis toolkit, likewise forked to istitov).
+- **DeaDBeeF plugins** — twenty-six
+  [`media-plugins/deadbeef-*`](https://deadbeef.sourceforge.io/plugins.html) packages:
+  audio-format support, visualization, playback / session control, file
+  browsing, desktop integration, and output plumbing.
+- **Python 2 preservation** — a small py2 surface kept alive for
+  `sci-visualization/gwyddion`'s `pygwy` bindings: locally-vendored
+  `*_py2` eclasses, py2 forks of core libs (`dev-python/numpy-python2`,
+  `certifi-python2`, `pycairo-python2`, …), and py2-only legacy packages
+  (`pygobject-2.28.6`, `pygtk-2.24.0`, `unittest-or-fail`).
 - **Masked but kept**: `net-misc/ipx-utils` (IPX removed from Linux in 4.18),
   `app-portage/portopts` (upstream dormant since 2014). Each mask in
   `profiles/package.mask` carries a comment explaining why and when it
