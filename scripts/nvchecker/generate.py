@@ -277,6 +277,18 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "include_regex": r"^python-v[0-9]+\.[0-9]+\.[0-9]+$",
         "prefix": "python-v",
     },
+    # astrada/ocamlfuse is one repo serving two Gentoo packages from
+    # different major lines: the FUSE 2 binding (opam "ocamlfuse", 2.x
+    # tags) pinned as dev-ml/ocamlfuse, and its FUSE 3 successor (opam
+    # "fuse3", 3.x tags) split out as dev-ml/fuse3. Pin each to its own
+    # major so neither reports the other's tags as drift; this also skips
+    # the v2.7.1_cvsN snapshot tags. verified 2026-06-23
+    "dev-ml/ocamlfuse": {
+        "include_regex": r"^v2\.[0-9]+\.[0-9]+$",
+    },
+    "dev-ml/fuse3": {
+        "include_regex": r"^v3\.[0-9]+\.[0-9]+$",
+    },
     # BelledonneCommunications repos tag alpha/rc releases; restrict to
     # the plain three-part numeric form for stable-only signals.
     "net-libs/bctoolbox": {
