@@ -71,8 +71,8 @@ RDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${P}-unbundle-gpu-runtime-libs.patch"
-	"${FILESDIR}/${P}-rocm-no-parallel-jobs.patch"
+	"${FILESDIR}/ollama-unbundle-gpu-runtime-libs.patch"
+	"${FILESDIR}/ollama-rocm-no-parallel-jobs.patch"
 )
 
 pkg_setup() {
