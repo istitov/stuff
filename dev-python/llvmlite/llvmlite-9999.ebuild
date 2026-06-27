@@ -15,7 +15,9 @@ HOMEPAGE="https://llvmlite.pydata.org/"
 EGIT_REPO_URI="https://github.com/numba/llvmlite.git"
 
 LICENSE="BSD"
-SLOT="0"
+# Subslot tracks the (single) LLVM major llvmlite builds against -- the
+# binding's ABI axis -- so a numba llvmlite:= dep rebuilds on an LLVM bump.
+SLOT="0/${LLVM_COMPAT[0]}"
 KEYWORDS=""
 
 RDEPEND="
