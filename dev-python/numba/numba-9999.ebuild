@@ -17,8 +17,10 @@ LICENSE="BSD"
 SLOT="0"
 IUSE="openmp threads"
 
+# llvmlite ships a compiled binding tied to its LLVM major; depend on its
+# subslot (:=) so numba rebuilds when llvmlite is rebuilt against a new LLVM.
 RDEPEND="
-	~dev-python/llvmlite-9999[${PYTHON_USEDEP}]
+	~dev-python/llvmlite-9999:=[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2019.5 )
 "
