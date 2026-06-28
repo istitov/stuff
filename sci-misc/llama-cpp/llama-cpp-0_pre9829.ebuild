@@ -19,7 +19,7 @@ else
 	MY_PV="b${PV#0_pre}"
 	SRC_URI="https://github.com/ggml-org/llama.cpp/archive/refs/tags/${MY_PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/llama.cpp-${MY_PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 SRC_URI+="
@@ -134,15 +134,22 @@ src_configure() {
 		-DLLAMA_BUILD_TESTS=OFF
 		-DLLAMA_BUILD_EXAMPLES=$(usex examples)
 		-DLLAMA_BUILD_SERVER=ON
-		# tools/ui/CMakeLists.txt guards on OR, so both the new and the
-		# legacy option names must be set, otherwise the default-ON
-		# legacy alias wins and the webui asset provisioning runs anyway.
+		# webui gates two independent things since b9413: LLAMA_BUILD_UI
+		# builds/embeds the server web UI, and LLAMA_USE_PREBUILT_UI lets
+		# scripts/ui-assets.cmake fetch the prebuilt bundle from the HF
+		# bucket. Both must track USE=webui: the script's HF-download step
+		# is gated only on HF_ENABLED (no BUILD_UI guard), so UI=off with
+		# PREBUILT_UI=on would still hit the network and break the sandbox.
+		# (LLAMA_BUILD_WEBUI and LLAMA_USE_PREBUILT_WEBUI are deprecated
+		# aliases for the *_UI names; see tools/ui/CMakeLists.txt:7-12.)
 		-DLLAMA_BUILD_UI=$(usex webui)
-		-DLLAMA_BUILD_WEBUI=$(usex webui)
+		-DLLAMA_USE_PREBUILT_UI=$(usex webui)
 		-DCMAKE_SKIP_BUILD_RPATH=ON
 		-DGGML_NATIVE=0	# don't set march
 		-DGGML_RPC=ON
 		-DLLAMA_OPENSSL=$(usex openssl)
+		-DLLAMA_BUILD_NUMBER="${PV#0_pre}"
+		-DLLAMA_BUILD_COMMIT="b${PV#0_pre}"
 		-DGENTOO_REMOVE_CMAKE_BLAS_HACK=ON
 		-DGGML_CUDA=$(usex cuda)
 		-DGGML_CUDA_NCCL=OFF
