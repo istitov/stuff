@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (252) ---
+# --- pypi (254) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -110,9 +110,17 @@ pypi = "comfyui-workflow-templates"
 source = "pypi"
 pypi = "comfyui-workflow-templates-core"
 
+["dev-python/comfyui-workflow-templates-json"]
+source = "pypi"
+pypi = "comfyui-workflow-templates-json"
+
 ["dev-python/comfyui-workflow-templates-media-api"]
 source = "pypi"
 pypi = "comfyui-workflow-templates-media-api"
+
+["dev-python/comfyui-workflow-templates-media-assets01"]
+source = "pypi"
+pypi = "comfyui-workflow-templates-media-assets-01"
 
 ["dev-python/comfyui-workflow-templates-media-image"]
 source = "pypi"
