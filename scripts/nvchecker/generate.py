@@ -336,16 +336,17 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "from_pattern": r"^b([0-9]+)$",
         "to_pattern": r"0_pre\1",
     },
-    # vosen/ZLUDA tags today are all `v<N>-preview.<M>` — the rolling
-    # preview channel upstream recommends over the years-old stable
-    # releases. The overlay's tagged ebuild uses PV form `N_preM`;
-    # rewrite the preview form to it via from_pattern/to_pattern.
-    # include_regex also lets through a hypothetical future `v<N>(.<M>)+`
-    # stable scheme (e.g. v6.0.0, v7.0.0) so we still see drift if
-    # upstream ever pivots; the prefix step strips the leading `v` so
-    # those compare as bare dotted versions against our `N_preM` PV.
+    # vosen/ZLUDA cut its first stable `v6` (bare major, no dots) on
+    # 2026-06-29, at the same commit as `v6-preview.79`; before that the
+    # only tags were the rolling `v<N>-preview.<M>` preview channel. The
+    # overlay's preview ebuilds use PV form `N_preM`, rewritten from the
+    # preview tag via from_pattern/to_pattern; the stable `v6` strips its
+    # `v` prefix to a bare `6`. include_regex's dotted group is
+    # *-quantified (not +) so a bare `v6` matches as well as a future
+    # dotted `v6.0.1` — the old +-form silently skipped the bare `v6`.
+    # use_max_tag then picks the stable `6` over the `6_pre*` previews.
     "dev-util/zluda": {
-        "include_regex": r"^v[0-9]+(?:-preview\.[0-9]+|(?:\.[0-9]+)+)$",
+        "include_regex": r"^v[0-9]+(?:-preview\.[0-9]+|(?:\.[0-9]+)*)$",
         "prefix": "v",
         "from_pattern": r"^([0-9]+)-preview\.([0-9]+)$",
         "to_pattern": r"\1_pre\2",
