@@ -2318,6 +2318,7 @@ to_pattern = '\1'
 # ["x11-terms/cool-retro-term"] skipped: live-only ebuild (no release tracking)
 
 # ["app-text/dvipsk"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["app-text/mupdf"] skipped: custom upstream at mupdf.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["app-text/ps2pkm"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["app-text/texlive-core"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["app-text/ttf2pk2"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
