@@ -1,0 +1,56 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{12..14} )
+
+inherit distutils-r1 optfeature
+
+DESCRIPTION="NumPy aware dynamic Python compiler using LLVM"
+HOMEPAGE="https://numba.pydata.org/
+	https://github.com/numba"
+SRC_URI="https://github.com/numba/numba/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="openmp threads"
+
+RDEPEND="
+	>=dev-python/llvmlite-0.48.0[${PYTHON_USEDEP}]
+	<dev-python/llvmlite-0.49[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
+	<dev-python/numpy-2.5[${PYTHON_USEDEP}]
+	threads? ( >=dev-cpp/tbb-2019.5 )
+"
+BDEPEND="
+	dev-python/pip[${PYTHON_USEDEP}]
+	dev-python/versioneer[${PYTHON_USEDEP}]
+"
+
+pkg_setup() {
+	if ! use openmp; then
+		export NUMBA_DISABLE_OPENMP=1 || die
+	else
+		unset NUMBA_DISABLE_OPENMP || die
+	fi
+	if ! use threads; then
+		export NUMBA_DISABLE_TBB=1 || die
+	else
+		unset NUMBA_DISABLE_TBB || die
+		export TBBROOT="${EPREFIX}/usr" || die
+	fi
+}
+
+python_compile() {
+	# FIXME: parallel python building fails. See Portage bug #614464 and
+	# gentoo/sci issue #1080.
+	export MAKEOPTS=-j1 || die
+	distutils-r1_python_compile
+}
+
+pkg_postinst() {
+	optfeature "compile cuda code" dev-util/nvidia-cuda-sdk
+}
