@@ -1026,7 +1026,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (170) ---
+# --- github (173) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2036,6 +2036,18 @@ github = "FastFlowLM/FastFlowLM"
 use_max_tag = true
 prefix = "v"
 
+["sci-ml/hf_xet"]
+source = "github"
+github = "huggingface/xet-core"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/huggingface_hub"]
+source = "github"
+github = "huggingface/huggingface_hub"
+use_max_tag = true
+prefix = "v"
+
 ["sci-ml/lemonade"]
 source = "github"
 github = "lemonade-sdk/lemonade"
@@ -2069,6 +2081,12 @@ prefix = "v"
 ["sci-ml/torchcodec"]
 source = "github"
 github = "meta-pytorch/torchcodec"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/transformers"]
+source = "github"
+github = "huggingface/transformers"
 use_max_tag = true
 prefix = "v"
 
