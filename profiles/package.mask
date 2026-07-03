@@ -20,64 +20,6 @@ app-portage/portopts
 # remove this mask if 0.5.x rollback becomes relevant again.
 =app-portage/udept-0.5.99.0.2.96
 
-# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-05-29)
-# TeX Live 2025/2026, freshly imported from the texlive-stuff overlay, would
-# shadow ::gentoo's stable TL2024 on ~amd64 systems. Masked for an initial
-# testing window so the large slot-0 + 39-collection upgrade (including the
-# cross-collection file moves between collections) is an explicit opt-in rather
-# than a surprise on `emerge -uDN @world`. Stable amd64 users are unaffected:
-# these ebuilds are ~amd64 and ::gentoo's TL2024 is stable. latexmk and
-# glossaries are intentionally NOT masked — their PVs match ::gentoo's, so there
-# is nothing to shadow. Drop this mask on 2026-06-12 after real-world testing.
-# See news item 2026-05-29-texlive-2025-2026 for adoption + upgrade notes.
->=app-text/texlive-core-2025
->=app-text/dvipsk-2025
->=app-text/ttf2pk2-2.0_p20250308
->=app-text/ps2pkm-1.8_p20250308
->=dev-libs/kpathsea-6.4.1
->=dev-libs/ptexenc-1.5.1
->=dev-tex/bibtexu-3.72_p20250308
->=dev-tex/tex4ht-20250308
->=dev-texlive/texlive-basic-2025
->=dev-texlive/texlive-bibtexextra-2025
->=dev-texlive/texlive-binextra-2025
->=dev-texlive/texlive-context-2025
->=dev-texlive/texlive-fontsextra-2025
->=dev-texlive/texlive-fontsrecommended-2025
->=dev-texlive/texlive-fontutils-2025
->=dev-texlive/texlive-formatsextra-2025
->=dev-texlive/texlive-games-2025
->=dev-texlive/texlive-humanities-2025
->=dev-texlive/texlive-langarabic-2025
->=dev-texlive/texlive-langchinese-2025
->=dev-texlive/texlive-langcjk-2025
->=dev-texlive/texlive-langcyrillic-2025
->=dev-texlive/texlive-langczechslovak-2025
->=dev-texlive/texlive-langenglish-2025
->=dev-texlive/texlive-langeuropean-2025
->=dev-texlive/texlive-langfrench-2025
->=dev-texlive/texlive-langgerman-2025
->=dev-texlive/texlive-langgreek-2025
->=dev-texlive/texlive-langitalian-2025
->=dev-texlive/texlive-langjapanese-2025
->=dev-texlive/texlive-langkorean-2025
->=dev-texlive/texlive-langother-2025
->=dev-texlive/texlive-langpolish-2025
->=dev-texlive/texlive-langportuguese-2025
->=dev-texlive/texlive-langspanish-2025
->=dev-texlive/texlive-latex-2025
->=dev-texlive/texlive-latexextra-2025
->=dev-texlive/texlive-latexrecommended-2025
->=dev-texlive/texlive-luatex-2025
->=dev-texlive/texlive-mathscience-2025
->=dev-texlive/texlive-metapost-2025
->=dev-texlive/texlive-music-2025
->=dev-texlive/texlive-pictures-2025
->=dev-texlive/texlive-plaingeneric-2025
->=dev-texlive/texlive-pstricks-2025
->=dev-texlive/texlive-publishers-2025
->=dev-texlive/texlive-xetex-2025
-
 # Ivan S. Titov <iohann.s.titov@gmail.com> (2026-06-08)
 # Last of the 1.x series before the 2.0 rewrite; retained as a recovery
 # ebuild but blocked from default install. Remove this mask if a 1.x
