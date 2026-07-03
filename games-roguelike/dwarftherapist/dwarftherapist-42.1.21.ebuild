@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake xdg
 
-DESCRIPTION="Dwarf (The)rapist for Dwarf Fortress."
+DESCRIPTION="Dwarf (The)rapist for Dwarf Fortress"
 HOMEPAGE="https://github.com/Dwarf-Therapist/Dwarf-Therapist"
 
 if [[ ${PV} == 9999* ]] ; then
