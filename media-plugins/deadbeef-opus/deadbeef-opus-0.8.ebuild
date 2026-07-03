@@ -5,7 +5,7 @@ EAPI=8
 
 inherit flag-o-matic
 
-DESCRIPTION="Ogg Opus decoder plugin for DeaDBeeF audio player."
+DESCRIPTION="Ogg Opus decoder plugin for DeaDBeeF audio player"
 HOMEPAGE="https://bitbucket.org/Lithopsian/deadbeef-opus/overview"
 # Upstream stopped uploading release tarballs to bitbucket downloads/
 # at 0.6; switch to the per-tag git archive instead. The archive's top

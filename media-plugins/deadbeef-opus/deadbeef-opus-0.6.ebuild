@@ -5,7 +5,7 @@ EAPI=8
 
 inherit flag-o-matic
 
-DESCRIPTION="Ogg Opus decoder plugin for DeaDBeeF audio player."
+DESCRIPTION="Ogg Opus decoder plugin for DeaDBeeF audio player"
 HOMEPAGE="https://bitbucket.org/Lithopsian/deadbeef-opus/overview"
 SRC_URI="https://bitbucket.org/Lithopsian/deadbeef-opus/downloads/opus-${PV}.tar.gz"
 
