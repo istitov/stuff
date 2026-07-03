@@ -5,7 +5,7 @@ EAPI="8"
 
 [[ ${PV} == 9999 ]] && inherit git-r3
 
-DESCRIPTION="oocairo are Lua bindings to the cairo library."
+DESCRIPTION="oocairo are Lua bindings to the cairo library"
 HOMEPAGE="https://github.com/awesomeWM/oocairo"
 
 if [[ ${PV} == 9999 ]]; then
