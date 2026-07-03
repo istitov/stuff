@@ -1,0 +1,34 @@
+Title: TeX Live 2025/2026 unmasked — now the default
+Author: Ivan S. Titov <iohann.s.titov@gmail.com>
+Posted: 2026-07-03
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: app-text/texlive-core
+
+The initial testing window from the 2026-05-29 import has closed and the
+package.mask on TeX Live 2025/2026 has been removed. The set -- texlive-core,
+the 39 dev-texlive/* collections, and the split build tools -- is now visible
+by default on ~amd64 and ~arm64. TL2026 is the highest version, so an ~arch
+`emerge -uDN @world` will upgrade TL2024 -> TL2026.
+
+Stable amd64 users are unaffected: these ebuilds are ~amd64 and ::gentoo's
+TL2024 stays stable.
+
+== Upgrade as a set ==
+
+Some packages moved between collections across TL years. The ebuilds carry
+blockers that order the moves, but they resolve cleanly only when the whole
+set upgrades together -- use `emerge -uDN @world`. A partial merge can hit
+protect-owned collisions; add FEATURES="-protect-owned" if you must do one.
+
+== Reporting problems ==
+
+If you encounter any problem related to TeX Live -- a failed merge or a
+document that no longer builds -- please report it at
+https://github.com/istitov/stuff/issues with the exact category/pkg-version,
+your `emerge --info`, and the failing build log or LaTeX output.
+
+== More ==
+
+See the 2026-05-29 news item, "TeX Live 2025/2026 imported", for the xelatex
+font-by-name fontconfig note and the early opt-in background.
