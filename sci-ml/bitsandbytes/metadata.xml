@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="rocm">Build the HIP/ROCm GPU backend (COMPUTE_BACKEND=hip) instead of the CPU backend</flag>
+  </use>
+  <upstream>
+    <remote-id type="pypi">bitsandbytes</remote-id>
+    <remote-id type="github">bitsandbytes-foundation/bitsandbytes</remote-id>
+  </upstream>
+</pkgmetadata>
