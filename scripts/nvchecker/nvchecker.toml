@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (253) ---
+# --- pypi (262) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -254,6 +254,10 @@ pypi = "espeakng-loader"
 source = "pypi"
 pypi = "euphonic"
 
+["dev-python/eval-type-backport"]
+source = "pypi"
+pypi = "eval-type-backport"
+
 ["dev-python/exspy"]
 source = "pypi"
 pypi = "exspy"
@@ -337,6 +341,10 @@ pypi = "hatch-sphinx"
 ["dev-python/hdf5plugin"]
 source = "pypi"
 pypi = "hdf5plugin"
+
+["dev-python/hf-transfer"]
+source = "pypi"
+pypi = "hf-transfer"
 
 ["dev-python/httpx-sse"]
 source = "pypi"
@@ -506,9 +514,17 @@ pypi = "nvidia-cutlass-dsl"
 source = "pypi"
 pypi = "nvidia-cutlass-dsl-libs-base"
 
+["dev-python/nvidia-cutlass-dsl-libs-core"]
+source = "pypi"
+pypi = "nvidia-cutlass-dsl-libs-core"
+
 ["dev-python/nvidia-cutlass-dsl-libs-cu13"]
 source = "pypi"
 pypi = "nvidia-cutlass-dsl-libs-cu13"
+
+["dev-python/omegaconf"]
+source = "pypi"
+pypi = "omegaconf"
 
 ["dev-python/openai"]
 source = "pypi"
@@ -890,6 +906,10 @@ pypi = "triton"
 source = "pypi"
 pypi = "typepy"
 
+["dev-python/tyro"]
+source = "pypi"
+pypi = "tyro"
+
 ["dev-python/uctools"]
 source = "pypi"
 pypi = "uctools"
@@ -970,6 +990,18 @@ pypi = "lightning-utilities"
 source = "pypi"
 pypi = "lm_eval"
 
+["sci-ml/modelscope"]
+source = "pypi"
+pypi = "modelscope"
+
+["sci-ml/modelscope-hub"]
+source = "pypi"
+pypi = "modelscope-hub"
+
+["sci-ml/peft"]
+source = "pypi"
+pypi = "peft"
+
 ["sci-ml/pyannote-audio"]
 source = "pypi"
 pypi = "pyannote.audio"
@@ -1014,6 +1046,10 @@ pypi = "torch-pitch-shift"
 source = "pypi"
 pypi = "torchmetrics"
 
+["sci-ml/trl"]
+source = "pypi"
+pypi = "trl"
+
 ["sci-physics/sasview"]
 source = "pypi"
 pypi = "sasview"
@@ -1022,7 +1058,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (176) ---
+# --- github (180) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1039,6 +1075,12 @@ prefix = "v"
 ["app-editors/manpageeditor"]
 source = "github"
 github = "KeithDHedger/ManPageEditor"
+use_max_tag = true
+prefix = "v"
+
+["app-misc/qdrant"]
+source = "github"
+github = "qdrant/qdrant"
 use_max_tag = true
 prefix = "v"
 
@@ -2010,6 +2052,12 @@ github = "DrTimothyAldenDavis/SuiteSparse"
 use_max_tag = true
 prefix = "v"
 
+["sci-misc/koboldcpp"]
+source = "github"
+github = "LostRuins/koboldcpp"
+use_max_tag = true
+prefix = "v"
+
 ["sci-misc/llama-cpp"]
 source = "github"
 github = "ggml-org/llama.cpp"
@@ -2028,6 +2076,12 @@ prefix = "v"
 ["sci-ml/amd-gaia"]
 source = "github"
 github = "amd/gaia"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/bitsandbytes"]
+source = "github"
+github = "bitsandbytes-foundation/bitsandbytes"
 use_max_tag = true
 prefix = "v"
 
@@ -2058,6 +2112,12 @@ prefix = "v"
 ["sci-ml/ollama"]
 source = "github"
 github = "ollama/ollama"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/safetensors"]
+source = "github"
+github = "huggingface/safetensors"
 use_max_tag = true
 prefix = "v"
 
