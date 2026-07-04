@@ -37,8 +37,12 @@ PY2_INHERIT_RE = re.compile(r"^\s*inherit\b.*_py2\b", re.MULTILINE)
 PYPI_PN_RE = re.compile(r'^\s*PYPI_PN=(?:"([^"]+)"|\'([^\']+)\'|(\S+))', re.MULTILINE)
 PYPI_NORMALIZE_RE = re.compile(r'^\s*PYPI_NO_NORMALIZE=(\S+)', re.MULTILINE)
 MY_PN_RE = re.compile(r'^\s*MY_PN=(?:"([^"]+)"|\'([^\']+)\'|(\S+))', re.MULTILINE)
-SRC_URI_RE = re.compile(r'^SRC_URI=(?:"([^"]*)"|\'([^\']*)\')', re.MULTILINE | re.DOTALL)
-HOMEPAGE_RE = re.compile(r'^HOMEPAGE=(?:"([^"]*)"|\'([^\']*)\')', re.MULTILINE | re.DOTALL)
+# Allow leading whitespace: SRC_URI / HOMEPAGE are frequently declared indented
+# inside an `if [[ ${PV} == *9999* ]] ; then … else … fi` block (e.g. darktable,
+# the ROCm stack, llama-cpp, opencv, xrt). A bare `^` anchor missed those and the
+# package fell through to an unknown/HOMEPAGE-domain classification.
+SRC_URI_RE = re.compile(r'^\s*SRC_URI=(?:"([^"]*)"|\'([^\']*)\')', re.MULTILINE | re.DOTALL)
+HOMEPAGE_RE = re.compile(r'^\s*HOMEPAGE=(?:"([^"]*)"|\'([^\']*)\')', re.MULTILINE | re.DOTALL)
 EGIT_REPO_URI_RE = re.compile(r'^EGIT_REPO_URI=(?:"([^"]*)"|\'([^\']*)\')', re.MULTILINE)
 
 GITHUB_ARCHIVE_RE = re.compile(r'https?://(?:www\.)?github\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git)?/(?:archive|releases/download)/')
@@ -311,6 +315,22 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "sci-libs/hdf": {
         "include_regex": r"^hdf[0-9]+\.[0-9]+\.[0-9]+$",
         "prefix": "hdf",
+    },
+    # darktable-org/darktable tags every release `release-X.Y.Z`, but follows
+    # the even-minor = stable / odd-minor = development convention (5.6 is
+    # stable, 5.5 and the already-tagged 5.7 are dev snapshots). Restrict to
+    # even minor versions so max-tag can't latch onto a dev release, and strip
+    # the `release-` prefix. verified against upstream tags 2026-07-04
+    "media-gfx/darktable": {
+        "include_regex": r"^release-[0-9]+\.[0-9]*[02468]\.[0-9]+$",
+        "prefix": "release-",
+    },
+    # opencv/opencv tags are bare `X.Y.Z` (no v prefix), but the repo also
+    # carries prerelease (`5.0.0-alpha`) and vendor-variant (`4.10.0-kleidicv`)
+    # tags that a naive max-tag would surface. Restrict to the plain 3-part
+    # numeric release form. verified 2026-07-04
+    "media-libs/opencv": {
+        "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+$",
     },
     # NOTE: dev-util/xrt is tracked via SPECIAL_SOURCES (use_latest_release),
     # not here — see the block in SPECIAL_SOURCES for why use_max_tag can't

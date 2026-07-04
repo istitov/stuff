@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (254) ---
+# --- pypi (253) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -373,10 +373,6 @@ pypi = "ipympl"
 ["dev-python/jiter"]
 source = "pypi"
 pypi = "jiter"
-
-["dev-python/jsonlines"]
-source = "pypi"
-pypi = "jsonlines"
 
 ["dev-python/kokoro"]
 source = "pypi"
@@ -1026,7 +1022,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (173) ---
+# --- github (176) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1097,7 +1093,6 @@ github = "ROCm/rocm-cmake"
 use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
-# note: from HOMEPAGE
 
 ["dev-cpp/backward-cpp"]
 source = "github"
@@ -1142,7 +1137,6 @@ source = "github"
 github = "awesomeWM/oocairo"
 use_max_tag = true
 prefix = "v"
-# note: from HOMEPAGE
 
 ["dev-libs/rccl"]
 source = "github"
@@ -1171,7 +1165,6 @@ github = "ROCm/llvm-project"
 use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
-# note: from HOMEPAGE
 
 ["dev-libs/rocm-opencl-runtime"]
 source = "github"
@@ -1186,7 +1179,6 @@ github = "ROCm/rocm-systems"
 use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
-# note: from HOMEPAGE
 
 ["dev-libs/roct-thunk-interface"]
 source = "github"
@@ -1194,21 +1186,18 @@ github = "ROCm/rocm-systems"
 use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
-# note: from HOMEPAGE
 
 ["dev-libs/xdna-driver"]
 source = "github"
 github = "amd/xdna-driver"
 use_max_tag = true
 prefix = "v"
-# note: from HOMEPAGE
 
 ["dev-libs/xrt-xdna"]
 source = "github"
 github = "amd/xdna-driver"
 use_max_tag = true
 prefix = "v"
-# note: from HOMEPAGE
 
 ["dev-ml/fuse3"]
 source = "github"
@@ -1342,6 +1331,12 @@ prefix = "v"
 ["dev-python/h5pyd"]
 source = "github"
 github = "HDFGroup/h5pyd"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/jsonlines"]
+source = "github"
+github = "wbolster/jsonlines"
 use_max_tag = true
 prefix = "v"
 
@@ -1648,7 +1643,6 @@ github = "ROCm/rocm-systems"
 use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
-# note: from HOMEPAGE
 
 ["dev-util/hipcc"]
 source = "github"
@@ -1656,7 +1650,6 @@ github = "ROCm/llvm-project"
 use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
-# note: from HOMEPAGE
 
 ["dev-util/hipify-clang"]
 source = "github"
@@ -1671,7 +1664,6 @@ github = "ROCm/rocm-systems"
 use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
-# note: from HOMEPAGE
 
 ["dev-util/rocm_bandwidth_test"]
 source = "github"
@@ -1686,7 +1678,6 @@ github = "ROCm/rocm-systems"
 use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
-# note: from HOMEPAGE
 
 ["dev-util/rtk"]
 source = "github"
@@ -1709,7 +1700,6 @@ source = "github"
 github = "Dwarf-Therapist/Dwarf-Therapist"
 use_max_tag = true
 prefix = "v"
-# note: from HOMEPAGE
 
 ["mail-client/tutanota-desktop-bin"]
 source = "github"
@@ -1723,6 +1713,13 @@ source = "github"
 github = "comfy-org/comfyui"
 use_max_tag = true
 prefix = "v"
+
+["media-gfx/darktable"]
+source = "github"
+github = "darktable-org/darktable"
+use_max_tag = true
+include_regex = '^release-[0-9]+\.[0-9]*[02468]\.[0-9]+$'
+prefix = "release-"
 
 ["media-gfx/orcaslicer"]
 source = "github"
@@ -1761,12 +1758,18 @@ source = "github"
 github = "strukturag/libde265"
 use_max_tag = true
 prefix = "v"
-# note: from HOMEPAGE
 
 ["media-libs/libnoise"]
 source = "github"
 github = "SoftFever/Orca-deps-libnoise"
 use_max_tag = true
+prefix = "v"
+
+["media-libs/opencv"]
+source = "github"
+github = "opencv/opencv"
+use_max_tag = true
+include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
 ["media-libs/viuer"]
@@ -1958,7 +1961,6 @@ github = "ROCm/rocm-libraries"
 use_max_tag = true
 include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
 prefix = "rocm-"
-# note: from HOMEPAGE
 
 ["sci-libs/rocFFT"]
 source = "github"
@@ -2015,7 +2017,6 @@ use_max_tag = true
 include_regex = '^b[0-9]{4,}$'
 from_pattern = '^b([0-9]+)$'
 to_pattern = '0_pre\1'
-# note: from HOMEPAGE
 
 ["sci-misc/llama-swap"]
 source = "github"
@@ -2434,7 +2435,6 @@ to_pattern = '\1'
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/comfyui-if-trellis"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["media-libs/opencv"] skipped: custom upstream at opencv.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-plugins/deadbeef-waveform-seekbar"] skipped: cboxdoerfer/deadbeef-waveform-seekbar has no GitHub release tags
 # ["sci-libs/amd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/camd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
