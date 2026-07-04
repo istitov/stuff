@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    KoboldCpp is a single-binary local AI server built on ggml/llama.cpp
+    that bundles LLM text generation (KoboldAI Lite web UI + an
+    OpenAI-compatible API), Stable Diffusion image generation, Whisper
+    speech-to-text and TTS. This ebuild builds the ggml backends from
+    source and installs the pure-Python launcher (koboldcpp.py) with the
+    embedded web UI and resources; it does NOT ship the upstream
+    PyInstaller binary or any model weights. AMD/NVIDIA GPU acceleration
+    is via Vulkan (the officially supported path); ROCm/hipBLAS is
+    best-effort.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">LostRuins/koboldcpp</remote-id>
+  </upstream>
+</pkgmetadata>
