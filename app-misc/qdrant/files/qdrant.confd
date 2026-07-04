@@ -1,0 +1,6 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# Extra command-line options passed to the qdrant daemon.
+# See https://qdrant.tech/documentation/ and /etc/qdrant/config.yaml.
+QDRANT_OPTS=""

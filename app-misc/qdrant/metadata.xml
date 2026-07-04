@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Qdrant is a vector database and vector similarity search engine written
+    in Rust, exposing REST and gRPC APIs. It stores embeddings with payloads
+    and serves approximate nearest-neighbour queries, making it the vector
+    store for retrieval-augmented generation (RAG) alongside this overlay's
+    local-LLM stack. This ebuild builds the server from source and installs
+    an OpenRC service, a systemd unit, /etc/qdrant/config.yaml and a
+    qdrant-owned /var/lib/qdrant data directory; client SDKs are not packaged.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">qdrant/qdrant</remote-id>
+  </upstream>
+</pkgmetadata>

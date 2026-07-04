@@ -1,0 +1,25 @@
+#!/sbin/openrc-run
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="Qdrant vector database"
+description="High-performance vector database and similarity search engine"
+
+command="/usr/bin/qdrant"
+command_args="--config-path /etc/qdrant/config.yaml ${QDRANT_OPTS}"
+command_user="qdrant:qdrant"
+command_background="true"
+directory="/var/lib/qdrant"
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/qdrant/qdrant.log"
+error_log="/var/log/qdrant/qdrant.log"
+
+depend() {
+	need net
+	after logger
+}
+
+start_pre() {
+	checkpath -d -m 0750 -o qdrant:qdrant /var/lib/qdrant
+	checkpath -d -m 0750 -o qdrant:qdrant /var/log/qdrant
+}
