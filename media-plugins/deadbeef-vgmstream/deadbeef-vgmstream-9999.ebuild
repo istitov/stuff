@@ -28,6 +28,13 @@ src_prepare(){
 	default
 }
 
+src_compile() {
+	# The bundled vgmstream sources link into a shared object, so every
+	# TU needs -fPIC; upstream's Makefile doesn't force it and binutils
+	# rejects the final link without it. # verified 2026-07-06
+	emake CFLAGS="${CFLAGS} -fPIC"
+}
+
 src_install(){
 	insinto /usr/$(get_libdir)/deadbeef
 	doins vgm.so
