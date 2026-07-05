@@ -1,0 +1,77 @@
+Backport upstream commit 5b3db08 ("Fixed build due to main app API
+changes") so the tagged 1.2 release builds under gcc-16. deadbeef's
+action callbacks take ddb_action_context_t (not int) as of
+DDB_API_LEVEL 11; gcc-16 hard-errors the incompatible-pointer-types
+callback2 assignment. HEAD is already fixed -- this only affects 1.2.
+diff --git a/rating.c b/rating.c
+index c11e3b2..a3c0964 100644
+--- a/rating.c
++++ b/rating.c
+@@ -1,3 +1,4 @@
++#include <sys/types.h>
+ #include <deadbeef.h>
+ #include <string.h>
+ #include <stdlib.h>
+@@ -65,9 +66,9 @@ rating_action_rate_helper(DB_plugin_action_t *action, int ctx, int rating)
+             }
+             deadbeef->pl_lock();
+             const char *dec = deadbeef->pl_find_meta_raw(it, ":DECODER");
+-            char decoder_id[100];
++            char decoder_id[100] = {0};
+             if (dec) {
+-                strncpy(decoder_id, dec, sizeof(decoder_id));
++                strncpy(decoder_id, dec, sizeof(decoder_id)-1);
+             }
+             int match = it && dec;
+             deadbeef->pl_unlock();
+@@ -103,43 +104,43 @@ out:
+ }
+ 
+ static int
+-rating_action_rate0(DB_plugin_action_t *action, int ctx)
++rating_action_rate0(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     return rating_action_rate_helper(action, ctx, 0);
+ }
+ 
+ static int
+-rating_action_rate1(DB_plugin_action_t *action, int ctx)
++rating_action_rate1(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     return rating_action_rate_helper(action, ctx, 1);
+ }
+ 
+ static int
+-rating_action_rate2(DB_plugin_action_t *action, int ctx)
++rating_action_rate2(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     return rating_action_rate_helper(action, ctx, 2);
+ }
+ 
+ static int
+-rating_action_rate3(DB_plugin_action_t *action, int ctx)
++rating_action_rate3(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     return rating_action_rate_helper(action, ctx, 3);
+ }
+ 
+ static int
+-rating_action_rate4(DB_plugin_action_t *action, int ctx)
++rating_action_rate4(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     return rating_action_rate_helper(action, ctx, 4);
+ }
+ 
+ static int
+-rating_action_rate5(DB_plugin_action_t *action, int ctx)
++rating_action_rate5(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     return rating_action_rate_helper(action, ctx, 5);
+ }
+ 
+ static int
+-rating_action_remove(DB_plugin_action_t *action, int ctx)
++rating_action_remove(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     return rating_action_rate_helper(action, ctx, -1);
+ }
