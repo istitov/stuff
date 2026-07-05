@@ -5,10 +5,9 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..15} )
 
-# *.bc / *.dll under llvm_zluda/src/device-libs are git-lfs blobs and the
-# llvm_zluda build.rs panics if it sees lfs stubs. The upstream tag tarball
-# from GitHub does NOT carry resolved LFS blobs, so git-r3 + EGIT_LFS=yes
-# remains the only viable fetch path even for tagged versions.
+# *.bc / *.dll under llvm_zluda/src/device-libs are git-lfs blobs; llvm_zluda's
+# build.rs panics on lfs stubs. GitHub tag tarballs don't carry resolved LFS
+# blobs, so git-r3 + EGIT_LFS=yes is the only viable fetch path even for tags.
 EGIT_LFS=yes
 
 inherit git-r3 python-any-r1
@@ -17,8 +16,8 @@ DESCRIPTION="Drop-in replacement for CUDA on AMD GPUs"
 HOMEPAGE="https://github.com/vosen/ZLUDA"
 
 EGIT_REPO_URI="https://github.com/vosen/ZLUDA.git"
-# Pin to the upstream preview tag. Bump = rename the .ebuild file; the
-# substitution converts e.g. 7_pre1 -> v7-preview.1.
+# Pin to the upstream preview tag; bump = rename the .ebuild. The substitution
+# converts e.g. 7_pre1 -> v7-preview.1.
 EGIT_COMMIT="v${PV/_pre/-preview.}"
 EGIT_SUBMODULES=( '*' )
 
@@ -28,19 +27,15 @@ LICENSE="|| ( Apache-2.0 MIT ) Apache-2.0-with-LLVM-exceptions"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# cargo fetches the workspace's dependency tree at build time and git-r3
-# pulls submodules + LFS blobs; both need the network. PROPERTIES=live
-# marks the resulting binary as non-deterministic between rebuilds even
-# though the source revision is pinned to a tag.
+# cargo fetches deps at build time and git-r3 pulls submodules + LFS blobs;
+# both need the network. PROPERTIES=live marks the binary non-deterministic
+# between rebuilds despite the tag-pinned source revision.
 PROPERTIES="live"
 RESTRICT="network-sandbox test"
 
-# build deps:
-#  - cargo eclass would normally derive Rust from CRATES; this ebuild
-#    fetches crates online, matching upstream's "cargo xtask --release"
-#    flow. Edition 2024 is in use upstream.
-#  - cmake + python3 + C++ compiler are documented build requirements
-#    (LLVM submodule build).
+# build deps: no CRATES — fetches crates online, matching upstream's
+# "cargo xtask --release" flow (edition 2024). cmake + python3 + C++ are
+# documented build requirements for the LLVM submodule build.
 BDEPEND="
 	|| ( >=dev-lang/rust-1.85 >=dev-lang/rust-bin-1.85 )
 	>=dev-build/cmake-3.20
@@ -68,11 +63,10 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_compile() {
-	# Default xtask invocation per upstream docs/src/building.md. xtask runs
-	# `cargo build --release` on the workspace's default-members
-	# (zluda, zluda_ml, zluda_inject, zluda_redirect, compiler) and creates
-	# the libnvcuda.so -> libcuda.so{,.1} symlinks declared in
-	# zluda/Cargo.toml's [package.metadata.zluda].linux_symlinks.
+	# Default xtask invocation per upstream docs/src/building.md: `cargo build
+	# --release` on the workspace default-members (zluda, zluda_ml, zluda_inject,
+	# zluda_redirect, compiler), creating the libnvcuda.so -> libcuda.so{,.1}
+	# symlinks from zluda/Cargo.toml's [package.metadata.zluda].linux_symlinks.
 	cargo xtask --release || die "cargo xtask --release failed"
 
 	# Math-library replacements (cuFFT / cuBLAS / cuBLASLt / cuSPARSE) live
@@ -90,10 +84,9 @@ src_compile() {
 }
 
 src_install() {
-	# Install to /opt/zluda (flat layout, no lib/ subdir). Users opt in via
-	# LD_LIBRARY_PATH per upstream docs/src/quick_start.md, where
-	# <ZLUDA_DIRECTORY> is a flat directory matching the upstream prebuilt
-	# zip. Dropping libcuda.so into the default search path would shadow
+	# Install to /opt/zluda (flat layout, matching upstream's prebuilt zip);
+	# users opt in via LD_LIBRARY_PATH per upstream docs/src/quick_start.md.
+	# Dropping libcuda.so into the default search path would shadow
 	# nvidia-drivers' libcuda for any user with both installed.
 	local zdir="/opt/zluda"
 

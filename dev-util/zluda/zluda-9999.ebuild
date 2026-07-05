@@ -28,11 +28,9 @@ SLOT="0"
 PROPERTIES="live"
 RESTRICT="network-sandbox test"
 
-# build deps:
-#  - cargo eclass would normally derive Rust from CRATES; live ebuild fetches
-#    online, so we depend on Rust directly. Edition 2024 is in use upstream.
-#  - cmake + python3 + C++ compiler are documented build requirements (LLVM
-#    submodule build).
+# build deps: no CRATES — live ebuild fetches crates online, so depend on Rust
+# directly (edition 2024). cmake + python3 + C++ are documented build
+# requirements for the LLVM submodule build.
 BDEPEND="
 	|| ( >=dev-lang/rust-1.85 >=dev-lang/rust-bin-1.85 )
 	>=dev-build/cmake-3.20
@@ -60,11 +58,10 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_compile() {
-	# Default xtask invocation per upstream docs/src/building.md. xtask runs
-	# `cargo build --release` on the workspace's default-members
-	# (zluda, zluda_ml, zluda_inject, zluda_redirect, compiler) and creates
-	# the libnvcuda.so → libcuda.so{,.1} symlinks declared in
-	# zluda/Cargo.toml's [package.metadata.zluda].linux_symlinks.
+	# Default xtask invocation per upstream docs/src/building.md: `cargo build
+	# --release` on the workspace default-members (zluda, zluda_ml, zluda_inject,
+	# zluda_redirect, compiler), creating the libnvcuda.so → libcuda.so{,.1}
+	# symlinks from zluda/Cargo.toml's [package.metadata.zluda].linux_symlinks.
 	cargo xtask --release || die "cargo xtask --release failed"
 
 	# Math-library replacements (cuFFT / cuBLAS / cuBLASLt / cuSPARSE) live
@@ -82,10 +79,9 @@ src_compile() {
 }
 
 src_install() {
-	# Install to /opt/zluda (flat layout, no lib/ subdir). Users opt in via
-	# LD_LIBRARY_PATH per upstream docs/src/quick_start.md, where
-	# <ZLUDA_DIRECTORY> is a flat directory matching the upstream prebuilt
-	# zip. Dropping libcuda.so into the default search path would shadow
+	# Install to /opt/zluda (flat layout, matching upstream's prebuilt zip);
+	# users opt in via LD_LIBRARY_PATH per upstream docs/src/quick_start.md.
+	# Dropping libcuda.so into the default search path would shadow
 	# nvidia-drivers' libcuda for any user with both installed.
 	local zdir="/opt/zluda"
 
