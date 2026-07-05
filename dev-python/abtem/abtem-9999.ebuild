@@ -40,20 +40,6 @@ RDEPEND="
 DEPEND="${RDEPEND}
 "
 
-#PATCHES=(
-#	"${FILESDIR}"/scan.patch
-#)
-
-#src_prepare() {
-	#all for numpy-2.0
-	#sed -i 's/\r$//' abtem/scan.py || die
-	#eapply "${FILESDIR}/scan2.patch"
-	#sed -i -e 's:import strategies :from . import strategies :' test/*.py || die
-	#sed -i -e "s:wrapped.itemset(0, x):wrapped[0] = x:" abtem/core/ensemble.py || die
-	#sed -i -e "s:artists.itemset(i, artist):artists[i] = artist:" abtem/visualize/visualizations.py || #die
-#	default
-#}
-
 python_test() {
 	virtx epytest
 }
