@@ -1058,7 +1058,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (180) ---
+# --- github (187) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1820,9 +1820,51 @@ github = "atanunq/viuer"
 use_max_tag = true
 prefix = "v"
 
+["media-plugins/deadbeef-copy-info"]
+source = "github"
+github = "danpla/ddb_copy_info"
+use_max_tag = true
+prefix = "v"
+
+["media-plugins/deadbeef-discord-presence"]
+source = "github"
+github = "kuba160/ddb_discord_presence"
+use_max_tag = true
+prefix = "v"
+
+["media-plugins/deadbeef-dr-meter"]
+source = "github"
+github = "dakeryas/deadbeef-dr-meter"
+use_max_tag = true
+prefix = "v"
+
+["media-plugins/deadbeef-headerbar"]
+source = "github"
+github = "saivert/ddb_misc_headerbar_GTK3"
+use_max_tag = true
+prefix = "v"
+
 ["media-plugins/deadbeef-jack"]
 source = "github"
 github = "tokiclover/deadbeef-plugins-jack"
+use_max_tag = true
+prefix = "v"
+
+["media-plugins/deadbeef-pulse2"]
+source = "github"
+github = "saivert/ddb_output_pulse2"
+use_max_tag = true
+prefix = "v"
+
+["media-plugins/deadbeef-rating"]
+source = "github"
+github = "splushii/deadbeef-rating"
+use_max_tag = true
+prefix = "v"
+
+["media-plugins/deadbeef-statusnotifier"]
+source = "github"
+github = "vovochka404/deadbeef-statusnotifier-plugin"
 use_max_tag = true
 prefix = "v"
 
@@ -2366,22 +2408,15 @@ to_pattern = '\1'
 # ["media-plugins/deadbeef-archive-reader"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-bookmark-manager"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-bs2b"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-copy-info"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-customizable-toolbar"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-discord-presence"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-dr-meter"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-fb"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-gnome"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-headerbar"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-musical-spectrum"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-playback-order"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-playback-status"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-pulse2"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-quick-search"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-rating"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-replaygain-control"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-spectrogram"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-statusnotifier"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-stereo-widener"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-vfs-rar"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-vgmstream"] skipped: live-only ebuild (no release tracking)
