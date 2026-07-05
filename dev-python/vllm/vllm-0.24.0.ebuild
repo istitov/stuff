@@ -785,13 +785,14 @@ REQUIRED_USE="
 #
 # humming-kernels[cu13] (requirements/cuda.txt, ==0.1.4 "for quantization
 # gemm") provides the optional `humming` quant backend -- pulled only
-# under USE=humming. vllm's quant registry imports `.humming` for any
-# quant method, and humming.py imports the external `humming` package
-# under `if current_platform.is_cuda():` with no fallback, so a cuda
-# build without it aborts on every quantized model load. The
-# ${P}-humming-import-optional.patch guards that import so the other
-# quant methods still work with USE=-humming; upstream makes it lazy in
-# vllm > 0.23.0 (vllm-project/vllm#44921). # 2026-06-15
+# under USE=humming. As of 0.24.0 vllm lazily imports the external
+# `humming` package via vllm.utils.humming (vllm-project/vllm#44921), so
+# the quant registry imports fine without it and a Humming-quantized
+# model only errors at load time under USE=-humming. No import-guard
+# patch is needed here -- verified 2026-07-05 that
+# vllm.model_executor.layers.quantization.humming imports with
+# humming-kernels absent (0.23.0 and earlier predate #44921 and still
+# ship the guard patch).
 # gfx1150 (Strix Point iGPU) rocm build verified on
 # caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt] with
 # AMDGPU_TARGETS=gfx1150.  Produces the HIP extensions (_C,
@@ -1027,8 +1028,6 @@ src_unpack() {
 		default
 	fi
 }
-
-PATCHES=( "${FILESDIR}/${P}-humming-import-optional.patch" )
 
 src_prepare() {
 	distutils-r1_src_prepare
