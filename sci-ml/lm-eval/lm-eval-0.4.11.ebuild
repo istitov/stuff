@@ -39,22 +39,20 @@ IUSE="+api ifeval math sentencepiece statsmodels vllm"
 # unitxt, zeno, ibm_watsonx_ai, acpbench) gate on packages we do not
 # currently carry; users wanting them must `pip install lm_eval[<extra>]`.
 #
-# math: at lm_eval 0.4.11, lm_eval/tasks/minerva_math/utils.py asserts
+# math: lm_eval/tasks/minerva_math/utils.py asserts
 #   version("antlr4-python3-runtime").startswith("4.11")
 # at task-load, so the antlr4-4.11* pin is load-bearing, not advisory
-# (verified upstream 2026-05-11). We carry the older
-# antlr4-python3-runtime-4.11.0 alongside ::gentoo's 4.13.2 for this;
-# flipping USE=math triggers the downgrade.
+# (verified upstream 2026-05-11). We carry antlr4-python3-runtime-4.11.0
+# alongside ::gentoo's 4.13.2; flipping USE=math triggers the downgrade.
 #
-# ifeval: at lm_eval 0.4.11, lm_eval/tasks/leaderboard/ifeval/
-# instructions_util.py asserts nltk>=3.9.1 at module import (older
-# nltk has a remote-code-exec via `punkt`, see EleutherAI/lm-
-# evaluation-harness#2210 and nltk/nltk#3266), so the >=nltk-3.9.1
-# bound is load-bearing, not advisory (verified upstream 2026-05-11).
-# The task also auto-downloads the punkt_tab tokenizer at the same
-# import — users on offline hosts should seed ~/nltk_data ahead of
-# time (a bare TaskManager() that loads leaderboard_ifeval is enough
-# to trigger the fetch; not gated on actually running an eval).
+# ifeval: lm_eval/tasks/leaderboard/ifeval/instructions_util.py asserts
+# nltk>=3.9.1 at module import (older nltk has a remote-code-exec via
+# `punkt`, see EleutherAI/lm-evaluation-harness#2210 and nltk/nltk#3266),
+# so the bound is load-bearing (verified upstream 2026-05-11). The task
+# also auto-downloads the punkt_tab tokenizer at that same import —
+# offline hosts should seed ~/nltk_data ahead of time (loading
+# leaderboard_ifeval via a bare TaskManager() triggers the fetch, not
+# gated on running an eval).
 #
 # single-impl: sci-ml/{datasets,evaluate} are SINGLE_IMPL; rest of stack is
 # multi-impl, wrapped via python_gen_cond_dep.

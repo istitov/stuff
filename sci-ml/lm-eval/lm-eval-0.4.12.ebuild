@@ -43,15 +43,13 @@ IUSE="+api ifeval math sentencepiece statsmodels vllm"
 # math: lm_eval/tasks/minerva_math/utils.py asserts
 #   version("antlr4-python3-runtime").startswith("4.11")
 # at task-load, so the antlr4-4.11* pin is load-bearing, not advisory
-# (verified upstream 2026-05-13). We carry the older
-# antlr4-python3-runtime-4.11.0 alongside ::gentoo's 4.13.2 for this;
-# flipping USE=math triggers the downgrade.
+# (verified upstream 2026-05-13). We carry antlr4-python3-runtime-4.11.0
+# alongside ::gentoo's 4.13.2; flipping USE=math triggers the downgrade.
 #
 # ifeval: lm_eval/tasks/leaderboard/ifeval/instructions_util.py asserts
 # nltk>=3.9.1 at module import (older nltk has a remote-code-exec via
-# `punkt`, see EleutherAI/lm-evaluation-harness#2210 and
-# nltk/nltk#3266), so the >=nltk-3.9.1 bound is load-bearing, not
-# advisory (verified upstream 2026-05-13).
+# `punkt`, see EleutherAI/lm-evaluation-harness#2210 and nltk/nltk#3266),
+# so the bound is load-bearing (verified upstream 2026-05-13).
 #
 # single-impl: sci-ml/{datasets,evaluate} are SINGLE_IMPL; rest of stack is
 # multi-impl, wrapped via python_gen_cond_dep.
