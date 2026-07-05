@@ -77,18 +77,15 @@ TL_CORE_EXTRA_DOC_CONTENTS="
 	xindy.doc.r78957
 	xml2pmx.doc.r57972
 "
-# TL_CORE_EXTRA_SRC_CONTENTS: axodraw2.source was the only TL2024 entry
-# and was dropped in TL2025 (the upstream container_split policy stopped
-# emitting a separate srcfiles tarball for axodraw2). No replacement
-# packages have srcfiles, so the variable is empty and the matching
-# source? ( ) USE-conditional block in SRC_URI is also omitted (an empty
-# 'source? ( )' is unparseable).
+# TL_CORE_EXTRA_SRC_CONTENTS omitted: axodraw2.source (only TL2024
+# srcfiles entry) dropped in TL2025 (upstream container_split stopped
+# emitting its srcfiles tarball); nothing else ships srcfiles, so the
+# variable and its `source? ( )` SRC_URI block are gone (empty is unparseable).
 
-# TL2026 dropped m-tx.lua from linked_scripts. The M-Tx engine is now
-# the compiled prepmx binary (m-tx.ARCH, built via --enable-m-tx,
-# installed as /usr/bin/prepmx); the old m-tx.lua orchestrator is
-# demoted to a doc file under doc/generic/m-tx/. No script to wrap, so
-# it is gone from BINSCRIPTS.
+# TL2026 dropped m-tx.lua from linked_scripts: the M-Tx engine is now the
+# compiled prepmx binary (m-tx.ARCH via --enable-m-tx, installed as
+# /usr/bin/prepmx) and m-tx.lua is demoted to a doc under doc/generic/m-tx/.
+# No script to wrap, so it is gone from BINSCRIPTS.
 TEXLIVE_MODULE_BINSCRIPTS="
 	texmf-dist/scripts/extractbb/extractbb.lua
 	texmf-dist/scripts/texlive/fmtutil-sys.sh
