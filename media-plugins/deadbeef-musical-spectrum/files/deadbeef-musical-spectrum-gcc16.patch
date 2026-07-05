@@ -1,0 +1,18 @@
+Fix build with gcc-16.
+
+deadbeef's vis_waveform_listen() callback parameter became
+`const ddb_audio_data_t *` (deadbeef.h); the listener must match or
+gcc-16 errors on the incompatible pointer type. Add the const.
+
+Upstream last commit 2022; carried locally.
+--- a/spectrum.c
++++ b/spectrum.c
+@@ -120,7 +120,7 @@
+ }
+ 
+ static void
+-spectrum_wavedata_listener (void *ctx, ddb_audio_data_t *data) {
++spectrum_wavedata_listener (void *ctx, const ddb_audio_data_t *data) {
+     w_spectrum_t *w = ctx;
+     g_assert (w->data->samples != NULL);
+ 

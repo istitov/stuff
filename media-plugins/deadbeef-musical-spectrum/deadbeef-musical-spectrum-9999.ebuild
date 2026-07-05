@@ -19,6 +19,8 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
+PATCHES=( "${FILESDIR}/${PN}-gcc16.patch" )
+
 src_compile() {
 	emake gtk3
 }
