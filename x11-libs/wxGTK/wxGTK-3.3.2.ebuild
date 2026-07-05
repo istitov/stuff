@@ -3,14 +3,13 @@
 
 EAPI=8
 
-# Overlay (::stuff) 3.3-gtk3 slot. ::gentoo only ships the 3.2-gtk3 slot as of
-# 2026-06-20; media-gfx/orcaslicer-2.4.0 upstream-requires wxWidgets >=3.3
+# Overlay (::stuff) 3.3-gtk3 slot: ::gentoo ships only 3.2-gtk3 as of
+# 2026-06-20, but media-gfx/orcaslicer-2.4.0 requires wxWidgets >=3.3
 # (find_package(wxWidgets 3.3 REQUIRED)). Forked from ::gentoo's
-# wxGTK-3.2.8.1-r2.ebuild: bumped to the 3.3.2 release, slot 3.3-gtk3, and the
-# eselect-owned aclocal/bakefile install renames keyed to "33" so this slot
-# installs in parallel with the system 3.2-gtk3 slot. The setup-wxwidgets side
-# is handled by the overlay's forked wxwidgets.eclass (accepts 3.3-gtk3).
-# Re-sync with ::gentoo once it carries a 3.3 slot of its own.
+# wxGTK-3.2.8.1-r2 to the 3.3.2 release, slot 3.3-gtk3; eselect-owned
+# aclocal/bakefile installs are renamed to "33" for parallel install with
+# the system 3.2-gtk3 slot, and the overlay's forked wxwidgets.eclass
+# accepts 3.3-gtk3. Re-sync with ::gentoo once it carries a 3.3 slot.
 
 inherit edo multilib-minimal flag-o-matic toolchain-funcs
 
@@ -84,9 +83,8 @@ BDEPEND="
 # I'm missing something.  This is an automagic header dep, though.
 
 # Patch set trimmed for 3.3.2: ::gentoo's 3.2 configure-tests and
-# wayland-control patches are obsolete here -- 3.3.2 has native --enable-tests
-# (configure: enable_tests) and --with-wayland (configure: with_wayland), see
-# src_configure. The remaining two apply cleanly (fuzz=0) to 3.3.2.
+# wayland-control patches are obsolete -- 3.3.2 has native --enable-tests
+# and --with-wayland (see src_configure). The remaining two apply fuzz=0.
 PATCHES=(
 	"${FILESDIR}/${PN}-3.2.1-prefer-lib64-in-tests.patch"
 	"${FILESDIR}/${PN}-3.2.5-dont-break-flags.patch"
@@ -166,11 +164,9 @@ multilib_src_configure() {
 		$(use_with libnotify)
 		$(use_with opengl)
 		$(use_with tiff libtiff sys)
-		# WebP image support is new in wx 3.3 and auto-detects system libwebp
-		# when present (and silently falls back to the bundled builtin when it
-		# is "sys" but missing). Gate it on USE to avoid that automagic dep:
-		# on -> --with-libwebp=sys (the webp? dep guarantees the system lib),
-		# off -> --without-libwebp.
+		# WebP is new in wx 3.3 and auto-detects system libwebp, silently
+		# falling back to the bundled builtin when "sys" but missing. Gate on
+		# USE to avoid that automagic dep; webp? guarantees the sys lib.
 		$(use_with webp libwebp sys)
 		$(use_enable keyring secretstore)
 		$(use_enable spell spellcheck)
