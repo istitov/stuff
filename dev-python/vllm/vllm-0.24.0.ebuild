@@ -728,15 +728,9 @@ REQUIRED_USE="
 # CUTLASS / spdlog / etc. happens during the vllm CMake build, so
 # RESTRICT="cuda? ( network-sandbox )" mirrors the cpu? pattern.
 #
-# CAVEAT (historical): same MKL-MPI link pollution as USE=cpu —
-# ::gentoo sci-ml/pytorch with USE=mkl exported MKL MPI / cluster
-# libs in its public link interface, breaking the cumem_allocator
-# extension's link step on partial-MKL hosts. Fixed by the
-# >=sci-ml/caffe2-2.11.0-r90 pin below: this overlay's r90 fork
-# scrubs those libs from caffe2::mkl. Without that pin, all 339
-# CUDA-compiled objects (_C / _moe_C / _vllm_fa2/3 extensions)
-# would still build cleanly but the final cumem_allocator link
-# would fail with "cannot find -lmkl_scalapack_ilp64".
+# Same MKL-MPI link-pollution caveat as USE=cpu (above): without the
+# >=sci-ml/caffe2-2.11.0-r90 pin the cumem_allocator link fails with
+# "cannot find -lmkl_scalapack_ilp64" after all 339 CUDA objects build.
 #
 # USE=rocm: build with VLLM_TARGET_DEVICE=rocm. Pulls torchaudio +
 # torchvision + numba + the runai-streamer/tensorizer/conch-triton
@@ -768,9 +762,10 @@ REQUIRED_USE="
 # dep lives on the flashinfer-python ebuild — vllm has zero direct
 # cudnn_frontend imports; it is for flashinfer's internal use. fastsafetensors
 # floor rose 0.2.2 -> 0.3.2.
-# # static cuda.txt audit 2026-06-13 against vllm-0.23.0 (rocm gfx1150 +
-# # cpu + empty + USE=rust build-verified 2026-06-13; cuda sm_86 GPU
-# # build re-verification still pending).
+# static cuda.txt audit last done 2026-06-13 against vllm-0.23.0 (rocm
+# gfx1150 + cpu + empty + USE=rust build-verified then; cuda sm_86 GPU
+# build re-verification still pending; 0.24.0's dep set not re-profiled --
+# same cuda.txt shape as 0.23.0).
 #
 # tokenspeed-mla (in requirements/cuda.txt at ==0.1.2 with the comment
 # "for faster mla with spec decode") is deliberately omitted from
@@ -781,7 +776,7 @@ REQUIRED_USE="
 # Triton vendor-fork we'd otherwise have to package as a hard build
 # dep for a backend most users never enable. Users on Blackwell with
 # DeepSeek R1 + spec decode install tokenspeed-mla separately.
-# # verified 2026-05-16: vllm imports clean without it.
+# verified 2026-05-16: vllm imports clean without it.
 #
 # humming-kernels[cu13] (requirements/cuda.txt, ==0.1.4 "for quantization
 # gemm") provides the optional `humming` quant backend -- pulled only
@@ -793,13 +788,14 @@ REQUIRED_USE="
 # vllm.model_executor.layers.quantization.humming imports with
 # humming-kernels absent (0.23.0 and earlier predate #44921 and still
 # ship the guard patch).
+#
 # gfx1150 (Strix Point iGPU) rocm build verified on
 # caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt] with
 # AMDGPU_TARGETS=gfx1150.  Produces the HIP extensions (_C,
 # _C_stable_libtorch, _moe_C, _rocm_C, cumem_allocator, spinloop) and
 # installs cleanly.
-# # verified 2026-05-08 for 0.20.1, 2026-05-16 for 0.21.0, 2026-06-13 for
-# # 0.23.0 (with pytorch/caffe2 2.11.0; cpu + empty + USE=rust also OK).
+# verified 2026-05-08 for 0.20.1, 2026-05-16 for 0.21.0, 2026-06-13 for
+# 0.23.0 (with pytorch/caffe2 2.11.0; cpu + empty + USE=rust also OK).
 #
 # RTX A4500 Laptop (sm_86 Ampere) cuda build verified on
 # caffe2-2.11.0-r90 + CUDA-13.2 + CUDAHOSTCXX=g++-15 + MAX_JOBS=4.
@@ -813,7 +809,7 @@ REQUIRED_USE="
 # RTX A4500 Laptop GPU"; FA2 kernels build for sm_80+PTX (forward-
 # compat with sm_86); FA3 (Hopper) does NOT build on sm_86 in the
 # post-patch shape (FA3_AVAILABLE=False at runtime, vllm picks FA2).
-# # verified 2026-05-17 for 0.21.0 on sm_86 + CUDA 13.2 (both shapes).
+# verified 2026-05-17 for 0.21.0 on sm_86 + CUDA 13.2 (both shapes).
 #
 # USE=-cpu -cuda -rocm (default): build with VLLM_TARGET_DEVICE=empty
 # — Python entrypoints import cleanly, backend kernels fail at first
@@ -826,7 +822,7 @@ REQUIRED_USE="
 # the 3-arg bytes+backend form, VideoWriter, VideoWriter_fourcc,
 # videoio_registry submodule — is present in 4.12.0; the 4.13 lower
 # bound upstream is wheel-publication churn, not an API extension.
-# # verified 2026-05-16 against media-libs/opencv-4.12.0-r1[python].
+# verified 2026-05-16 against media-libs/opencv-4.12.0-r1[python].
 #
 # vllm resolves its runtime platform from the host hardware (not the
 # VLLM_TARGET_DEVICE built below). platforms/cuda.py / rocm.py import
