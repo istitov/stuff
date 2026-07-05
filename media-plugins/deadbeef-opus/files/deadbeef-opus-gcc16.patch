@@ -1,0 +1,33 @@
+Fix build with gcc-16.
+
+deadbeef's action callback2 takes ddb_action_context_t (not const int)
+as of DDB_API_LEVEL 11; gcc-16 hard-errors the incompatible-pointer-types
+assignment. Correct the three action callback signatures. Upstream
+inactive since 2017.
+--- a/opus.c
++++ b/opus.c
+@@ -1644,13 +1644,13 @@
+     deadbeef->plt_unref(plt);
+ }
+ 
+-static int opus_embed_pics(DB_plugin_action_t *action, const int ctx)
++static int opus_embed_pics(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     for_all_selected(embed_album_art);
+     return 0;
+ }
+ 
+-static int opus_save_streams(DB_plugin_action_t *action, const int ctx)
++static int opus_save_streams(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     char *pattern = copy_conf_str("opus.opusname");
+     for_all_selected(save_file, pattern && pattern[0] ? pattern : "%n-%t.opus", false);
+@@ -1658,7 +1658,7 @@
+     return 0;
+ }
+ 
+-static int opus_save_links(DB_plugin_action_t *action, const int ctx)
++static int opus_save_links(DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     char *pattern = copy_conf_str("opus.oggname");
+     for_all_selected(save_file, pattern && pattern[0] ? pattern : "%n-%t.opus", true);

@@ -26,6 +26,8 @@ DEPEND_COMMON="
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
+PATCHES=( "${FILESDIR}/${PN}-gcc16.patch" )
+
 #QA_PRESTRIPPED="usr/$(get_libdir)/deadbeef/opus.so"
 
 src_unpack() {
