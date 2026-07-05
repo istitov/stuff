@@ -20,6 +20,8 @@ DEPEND_COMMON="
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
+PATCHES=( "${FILESDIR}/${PN}-gcc16.patch" )
+
 src_compile() {
 	emake gtk3
 }
