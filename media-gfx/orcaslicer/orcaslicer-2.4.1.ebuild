@@ -24,10 +24,10 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 LICENSE="AGPL-3 Apache-2.0 Boost-1.0 GPL-2 LGPL-2.1+ LGPL-3 MIT MPL-2.0"
 SLOT="0"
 # 2.4.0 needs two things ::gentoo doesn't provide for this consumer: Eigen 5
-# (shares eigen:3's main slot, so it can't be a normal dep -- vendored in
-# src_configure) and wxWidgets >=3.3 (src/CMakeLists.txt:34, no wxGTK 3.3 slot
-# in ::gentoo -- provided by ::stuff's x11-libs/wxGTK-3.3.* slot + forked
-# wxwidgets.eclass, selected via WX_GTK_VER=3.3-gtk3 above). verified 2026-06-20.
+# (vendored in src_configure -- see the eigen block there) and wxWidgets >=3.3
+# (src/CMakeLists.txt:34, no wxGTK 3.3 slot in ::gentoo -- provided by ::stuff's
+# x11-libs/wxGTK-3.3.* slot + forked wxwidgets.eclass, selected via
+# WX_GTK_VER=3.3-gtk3 above). verified 2026-06-20.
 KEYWORDS="~amd64"
 IUSE="test"
 
