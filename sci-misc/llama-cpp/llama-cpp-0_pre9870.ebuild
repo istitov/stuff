@@ -32,19 +32,18 @@ SRC_URI+="
 LICENSE="MIT"
 SLOT="0"
 # ggml also exposes GGML_AVX_VNNI / GGML_AVX512_VNNI / GGML_AVX512_BF16
-# (default OFF in cmake). They are NOT wired here — Gentoo has no standard
-# cpu_flags_x86_avx_vnni / avx512_vnni / avx512_bf16 USE flags. Sapphire
-# Rapids and later miss those kernels; would need custom USE flags.
+# (default OFF). NOT wired here — Gentoo has no cpu_flags_x86_avx_vnni /
+# avx512_vnni / avx512_bf16 USE flags, so Sapphire Rapids+ miss those kernels
+# (would need custom USE flags).
 CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
 # wmma USE explained here: https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
 IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas wmma examples +webui sycl"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
-# The embedded server web UI no longer ships in the source tarball as of
-# upstream PR #22937 (~b9163): cmake provisions assets at configure time
-# from a Hugging Face bucket (or a local npm build). Enabling 'webui'
-# allows that network fetch.
+# The embedded server web UI no longer ships in the tarball as of upstream
+# PR #22937 (~b9163): cmake provisions assets at configure time from a Hugging
+# Face bucket (or a local npm build). USE=webui allows that network fetch.
 PROPERTIES="webui? ( live )"
 RESTRICT="webui? ( network-sandbox )"
 
@@ -59,16 +58,13 @@ REQUIRED_USE="
 	)
 "
 
-# numpy is used by convert_hf_to_gguf.py
+# numpy is used by convert_hf_to_gguf.py.
 #
-# USE=sycl additionally needs a -fsycl-capable C++ compiler (Intel icpx
-# from oneAPI, or clang++ with SYCL patches) — not expressible as a
-# Portage dep; pkg_setup warns if icpx is absent from PATH.  cmake also
-# auto-detects dev-libs/level-zero (faster device-memory path) and
-# sci-ml/oneDNN (oneDNN-accelerated kernels) and silently disables each
-# if missing — install separately for full performance.
-# UNTESTED 2026-05-17: the sycl USE=path has not been end-to-end built
-# on this overlay; revisit on first user report.
+# USE=sycl needs a -fsycl-capable C++ compiler (Intel icpx, or clang++ with
+# SYCL patches) — not expressible as a Portage dep; pkg_setup warns if icpx is
+# absent. cmake also auto-detects dev-libs/level-zero and sci-ml/oneDNN and
+# silently disables each if missing — install separately for full performance.
+# UNTESTED 2026-05-17: the sycl path has not been end-to-end built here.
 CDEPEND="
 	openblas? ( sci-libs/openblas:= )
 	openmp? ( llvm-runtimes/openmp:= )
@@ -100,10 +96,9 @@ RDEPEND="${CDEPEND}
 BDEPEND="vulkan? ( media-libs/shaderc )"
 
 pkg_setup() {
-	# No reliable way to test the system C++ compiler for SYCL support
-	# from an ebuild — cmake's check_cxx_compiler_flag(-fsycl) decides at
-	# configure time. icpx is the common SYCL toolchain; absence usually
-	# means oneAPI isn't installed and the build will fatal-error.
+	# No ebuild-level way to test the C++ compiler for SYCL support;
+	# cmake's check_cxx_compiler_flag(-fsycl) decides at configure time.
+	# Absent icpx usually means oneAPI isn't installed and cmake fatal-errors.
 	if use sycl && ! type -P icpx &>/dev/null; then
 		ewarn "USE=sycl: Intel icpx (from oneAPI) is not on PATH. If your"
 		ewarn "system clang++ has -fsycl support, ignore this; otherwise"
@@ -134,14 +129,13 @@ src_configure() {
 		-DLLAMA_BUILD_TESTS=OFF
 		-DLLAMA_BUILD_EXAMPLES=$(usex examples)
 		-DLLAMA_BUILD_SERVER=ON
-		# webui gates two independent things since b9413: LLAMA_BUILD_UI
-		# builds/embeds the server web UI, and LLAMA_USE_PREBUILT_UI lets
-		# scripts/ui-assets.cmake fetch the prebuilt bundle from the HF
-		# bucket. Both must track USE=webui: the script's HF-download step
-		# is gated only on HF_ENABLED (no BUILD_UI guard), so UI=off with
-		# PREBUILT_UI=on would still hit the network and break the sandbox.
-		# (LLAMA_BUILD_WEBUI and LLAMA_USE_PREBUILT_WEBUI are deprecated
-		# aliases for the *_UI names; see tools/ui/CMakeLists.txt:7-12.)
+		# Since b9413, webui gates two knobs: LLAMA_BUILD_UI builds/embeds the
+		# server web UI, LLAMA_USE_PREBUILT_UI fetches the prebuilt bundle from
+		# the HF bucket (scripts/ui-assets.cmake). Both must track USE=webui: the
+		# HF-download step is gated only on HF_ENABLED (no BUILD_UI guard), so
+		# UI=off + PREBUILT_UI=on would still hit the network and break the
+		# sandbox. LLAMA_BUILD_WEBUI / LLAMA_USE_PREBUILT_WEBUI are deprecated
+		# aliases for the *_UI names (tools/ui/CMakeLists.txt:7-12).
 		-DLLAMA_BUILD_UI=$(usex webui)
 		-DLLAMA_USE_PREBUILT_UI=$(usex webui)
 		-DCMAKE_SKIP_BUILD_RPATH=ON
@@ -212,10 +206,10 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	# The rpc-server tool was renamed to ggml-rpc-server upstream (b9829) and
-	# given its own install rule under LLAMA_TOOLS_INSTALL (on for standalone
-	# builds), so cmake_src_install now places it -- the old manual dobin path
-	# (bin/rpc-server) no longer exists. verified 2026-06-28
+	# rpc-server was renamed to ggml-rpc-server upstream (b9829) and given its
+	# own install rule under LLAMA_TOOLS_INSTALL (on for standalone builds), so
+	# cmake_src_install now places it -- the old manual dobin (bin/rpc-server)
+	# is gone. verified 2026-06-28
 
 	# avoid clashing with whisper.cpp
 	rm -rf "${ED}/usr/include"
