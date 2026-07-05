@@ -17,20 +17,29 @@ EGIT_REPO_URI="https://github.com/mantidproject/mantid.git"
 if [[ ${PV} = *9999* ]] ; then
 	EGIT_COMMIT="HEAD"
 else
-	EGIT_COMMIT=v${PV}
+	# Mantid tags drop Gentoo's underscore in prerelease components:
+	# PV 6.15.0.4_rc1 -> tag v6.15.0.4rc1.
+	EGIT_COMMIT=v${PV/_/}
 fi
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 # ~amd64 — full src_unpack/prepare/configure/compile/install pipeline
-# now verified clean against gcc-15 + Boost-1.90 + Qt-5.15.18 + Python
-# 3.13. The earlier HDF4-probe blocker (Gentoo bug 942866) is resolved
-# by this overlay's sci-libs/hdf-4.2.16. Install lands ~178 MiB under
-# /opt/mantid/{bin,lib,lib64,plugins,instrument,scripts}; runtime
+# verified clean 2026-07-05 against gcc-16 + Boost-1.90 + Qt-5.15.19 +
+# Python 3.13, at HEAD commit f48e1a58 (derived version
+# 6.16.20260701.1953.dev4). That HEAD carries a Qt5-safe
+# QT_DISABLE_DEPRECATED_BEFORE=0x050F00 flag (disables only pre-5.15
+# deprecations), so the Qt-5.15-era APIs mantid still uses (e.g.
+# QMutex::Recursive) stay available and no flag-revert sed is needed —
+# contrast the 6.16.0.1 tag, which flipped it to 0x060000 and broke the
+# Qt5 build. HEAD moves and upstream flip-flops that flag, so re-verify
+# on each rebuild. The earlier HDF4-probe blocker (Gentoo bug 942866) is
+# resolved by this overlay's sci-libs/hdf-4.2.16. Install lands ~253 MiB
+# under /opt/mantid/{bin,lib,lib64,plugins,instrument,scripts}; runtime
 # behaviour (workbench launch, algorithm catalog) is still untested.
 #
-# Note: as of 6.15.x mantid has no GPU offload — the build system uses
+# Note: as of 6.16.x mantid has no GPU offload — the build system uses
 # only TBB + OpenMP for parallelism, and the source tree contains no
 # .cu/.cuh files or find_package(CUDA) calls. There is no `cuda` IUSE
 # to add here even when nvidia-cuda-toolkit is installed.
