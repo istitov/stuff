@@ -4,13 +4,10 @@
 EAPI=8
 
 DISTUTILS_EXT=1
-# Upstream drives the CMake build from setup.py's custom build_cmake via the
-# scikit-build-core setuptools shim (build-backend =
-# scikit_build_core.setuptools.build_meta, wheel.cmake=false). The CMakeLists
-# has no install() rule; it emits libbitsandbytes_<backend>.so straight into
-# the package dir (LIBRARY_OUTPUT_DIRECTORY) which setuptools then packages.
-# So use the package's own PEP517 backend (standalone) rather than the
-# eclass's scikit-build-core value (which expects scikit_build_core.build).
+# Upstream's build-backend is scikit_build_core.setuptools.build_meta (a
+# setuptools shim that drives CMake; wheel.cmake=false), not
+# scikit_build_core.build -- so use standalone, not the eclass's
+# scikit-build-core value.
 DISTUTILS_USE_PEP517=standalone
 DISTUTILS_SINGLE_IMPL=1
 PYTHON_COMPAT=( python3_{11..13} )
@@ -56,9 +53,9 @@ BDEPEND="
 "
 
 src_compile() {
-	# COMPUTE_BACKEND defaults to cpu in the CMakeLists; select the HIP/ROCm
-	# backend here. scikit-build-core honors the CMAKE_ARGS environment
-	# variable, and bitsandbytes reads AMDGPU_TARGETS for CMAKE_HIP_ARCHITECTURES.
+	# COMPUTE_BACKEND defaults to cpu in the CMakeLists. scikit-build-core
+	# honors CMAKE_ARGS; bitsandbytes reads AMDGPU_TARGETS for
+	# CMAKE_HIP_ARCHITECTURES.
 	if use rocm; then
 		export CMAKE_ARGS="-DCOMPUTE_BACKEND=hip -DAMDGPU_TARGETS=$(get_amdgpu_flags)"
 	fi
