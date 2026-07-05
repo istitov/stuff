@@ -135,7 +135,6 @@ src_configure() {
 	local mycmakeargs=(
 		-DOLLAMA_VERSION="${PV}"
 		-DOLLAMA_LIB_DIR="$(get_libdir)/ollama"
-		# Prestaged llama.cpp source; no network FetchContent.
 		-DFETCHCONTENT_SOURCE_DIR_LLAMA_CPP="${LLAMACPP_S}"
 		-DGGML_CCACHE=OFF
 		-DOLLAMA_LLAMA_BACKENDS="$(IFS=';'; echo "${backends[*]}")"
