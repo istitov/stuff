@@ -16,6 +16,8 @@ KEYWORDS=""
 DEPEND="media-sound/deadbeef"
 RDEPEND="${DEPEND}"
 
+PATCHES=( "${FILESDIR}/${PN}-gcc16.patch" )
+
 src_install() {
 	exeinto /usr/$(get_libdir)/deadbeef
 	doexe *.so

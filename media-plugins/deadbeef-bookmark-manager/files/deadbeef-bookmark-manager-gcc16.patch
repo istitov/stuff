@@ -1,0 +1,47 @@
+Fix build with gcc-16 (deadbeef DDB_API_LEVEL >= 11).
+
+Two forward-compat diagnostics gcc-16 now treats as hard errors:
+  * get_time() is declared void but ended with `return 0;`
+    (-Wreturn-mismatch).
+  * the action callbacks used the pre-API-11 `int ctx` signature;
+    DB_plugin_action_callback2_t now takes ddb_action_context_t.
+
+Upstream unmaintained since 2015; carried locally.
+--- a/bookmark.c
++++ b/bookmark.c
+@@ -66,7 +66,7 @@
+     *hr = time/3600;
+     *mn = (time-(*hr)*3600)/60;
+     *sc = time-(*hr)*3600-(*mn)*60;
+-    return 0;
++    return;
+ }
+ 
+ static int
+@@ -218,7 +218,7 @@
+ }
+ 
+ static int
+-bookmark_action_select (DB_plugin_action_t *action, int ctx)
++bookmark_action_select (DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     DB_playItem_t *it = bookmark_get_selected_track (ctx);
+     if (!it) {
+@@ -233,7 +233,7 @@
+ }
+ 
+ static int
+-bookmark_action_reset (DB_plugin_action_t *action, int ctx)
++bookmark_action_reset (DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     DB_playItem_t *it = bookmark_get_selected_track (ctx);
+     if (!it) {
+@@ -249,7 +249,7 @@
+ }
+ 
+ static int
+-bookmark_action_resume (DB_plugin_action_t *action, int ctx)
++bookmark_action_resume (DB_plugin_action_t *action, ddb_action_context_t ctx)
+ {
+     DB_playItem_t *it = bookmark_get_selected_track (ctx);
+     if (!it) {
