@@ -42,12 +42,10 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Per-slot snapshot of alicef's genpatches trunk for this branch,
-# bundled into pf-genpatches-${SHPV}.tar.xz on the sister overlay
-# extra-stuff (https://github.com/istitov/extra-stuff). Pinned by
-# tag (-r70-1) so the URL is immutable; refreshing the snapshot
-# means a new tag suffix. The original alicef trunk dir is a live
-# working dir, so this bundle is the durable reference.
+# Per-slot snapshot of alicef's genpatches trunk (a live working dir),
+# bundled as pf-genpatches-${SHPV}.tar.xz on the sister overlay extra-stuff
+# (https://github.com/istitov/extra-stuff), pinned by immutable tag -r70-1
+# (refresh = new tag suffix). The bundle is the durable reference.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
@@ -65,11 +63,9 @@ K_EXTRAEINFO="For more info on pf-kernel and details on how to report problems,
 
 pkg_setup() {
 	ewarn ""
-	ewarn "${PN} is *not* supported by the Gentoo Kernel Project in any way."
-	ewarn "If you need support, please create an issue at"
-	ewarn "https://github.com/istitov/stuff/issues"
-	ewarn "Do *not* open bugs in Gentoo's bugzilla unless you have issues with"
-	ewarn "the ebuilds. Thank you."
+	ewarn "${PN} is *not* supported by the Gentoo Kernel Project. For support,"
+	ewarn "open an issue at https://github.com/istitov/stuff/issues. Do *not* use"
+	ewarn "Gentoo's bugzilla unless the problem is in the ebuild itself."
 	ewarn ""
 
 	kernel-2_pkg_setup
@@ -90,46 +86,23 @@ pkg_postinst() {
 	kernel-2_pkg_postinst
 
 	elog ""
-	elog "This is the gentoo-sources-based pf-sources-extended kernel."
-	elog "It tracks linux-stable through 6.13.12 (full upstream coverage — 6.13"
-	elog "ended at .12) via alicef's genpatches trunk AND keeps a curated"
-	elog "subset of natalenko's pf-kernel delta on top. 6.13 is an EOL non-LTS"
-	elog "branch — no further linux-stable backports will arrive."
+	elog "gentoo-sources-based pf-sources-extended: tracks linux-stable through"
+	elog "6.13.12 (full coverage — 6.13 ended at .12) via alicef's genpatches"
+	elog "trunk, plus a curated subset of natalenko's pf-kernel delta. 6.13 is"
+	elog "an EOL non-LTS branch — no further linux-stable backports will arrive."
 	elog ""
-	elog "Curated pf features RETAINED from natalenko's patchset:"
-	elog "  * BBRv3 TCP congestion control (net/ipv4/tcp_bbr* and helpers)"
-	elog "  * zstd compression library updates (lib/zstd/)"
-	elog "  * DDCCI / DDCCI-backlight drivers (drivers/char/ddcci.c)"
-	elog "  * AMD-pstate cpufreq enhancements (drivers/cpufreq/amd-pstate.c)"
-	elog "  * syscall.tbl additions across arches (futex_waitv etc.)"
-	elog "  * Subset of mm/include hooks (madvise, ksm, smpboot)"
+	elog "Curated pf features kept: BBRv3, zstd bump, DDCCI, AMD-pstate,"
+	elog "syscall.tbl additions, and mm/include hooks. NOTE: pf-style x86 ISA"
+	elog "levels are NOT included on this branch — keeping stable's arch/x86"
+	elog "improvements means vanilla x86 family selection."
 	elog ""
-	elog "x86 ISA-level Kconfig is NOT included on this slot (same as 6.11)."
-	elog "Three trunk patches modify arch/x86/{Kconfig,Kconfig.cpu,Makefile}"
-	elog "in ways pf would revert (KASAN/KCSAN GCC-compat, MMU_GATHER, EISA"
-	elog "x86_32-only, MGEODE_LX support, GCC15 build fix). Promoting pf's"
-	elog "versions would regress these stable improvements; user gets vanilla"
-	elog "x86 family selection on this branch."
+	elog "pf changes overlapping gentoo-sources' newer form (scheduler tweaks,"
+	elog "arch/x86) and the opt-in BMQ/PDS + 5010 CPU-opt patches are dropped in"
+	elog "favour of stable; see the ebuild header for the per-branch rationale."
 	elog ""
-	elog "Patches DROPPED from natalenko's patchset, with reasons:"
-	elog "  * kernel/sched/{core,fair,rt}.c: gentoo-sources has newer"
-	elog "    scheduler helpers."
-	elog "  * arch/x86/Kconfig{,.cpu} + arch/x86/Makefile: see note above."
-	elog "  * Most 'minor fixes' pf carries are now in linux-stable's 6.13.X"
-	elog "    backports already (often in newer/better form)."
-	elog ""
-	elog "Patches NOT FETCHED from genpatches (per-branch judgment):"
-	elog "  * 5010_enable-cpu-optimizations-universal: pf-flavored vanilla"
-	elog "    mismatch."
-	elog "  * 5020_BMQ-and-PDS-io-scheduler + 5021_BMQ-and-PDS-gentoo-defaults:"
-	elog "    opt-in alternative scheduler. Out of scope."
-	elog ""
-	elog "If you specifically need pf-kernel's full patchset (including ISA"
-	elog "Kconfig + scheduler), install pf-sources-6.13_p6-r1 instead — it"
-	elog "stays GA-frozen and ships natalenko's patchset verbatim, missing"
-	elog "the bulk of the twelve linux-stable releases (6.13.1-6.13.12) that"
-	elog "this revision applies; r1 still ships surgical CVE backports for"
-	elog "the most severe vulnerabilities from that range."
+	elog "For pf-kernel's full patchset (including ISA Kconfig + scheduler),"
+	elog "install pf-sources-6.13_p6-r1 instead — it stays GA-frozen and still"
+	elog "ships surgical CVE backports."
 	elog ""
 
 	optfeature "userspace KSM helper" sys-process/uksmd
