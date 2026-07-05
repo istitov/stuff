@@ -18,26 +18,25 @@ S="${WORKDIR}/ComfyUI-${PV}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-# comfy_aimdo / comfy_kitchen are hard imports; USE=cuda picks their CUDA
-# wheels, else their py3-none-any fallbacks (eager kernels, no GPU offload) via
-# the cuda= dep propagation below. USE=rocm builds the AMD path: caffe2[rocm] +
-# those py3-none-any fallbacks (cuda= off) + triton-bin, whose Triton backend
-# supplies comfy_kitchen.apply_rope on AMD. cuda and rocm are mutually
-# exclusive; neither set = CPU. USE=compile adds triton-bin for torch.compile +
-# comfy_kitchen's Triton backend.
+# comfy_aimdo / comfy_kitchen are hard imports. USE=cuda picks their CUDA
+# wheels via the cuda= propagation below; otherwise the py3-none-any fallbacks
+# (eager kernels, no GPU offload). USE=rocm builds the AMD path: caffe2[rocm] +
+# those fallbacks + triton-bin, whose Triton backend supplies
+# comfy_kitchen.apply_rope on AMD. cuda/rocm are mutually exclusive; neither = CPU.
+# USE=compile adds triton-bin for torch.compile + comfy_kitchen's Triton backend.
 IUSE="+cuda compile +templates extra opengl rocm audio"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	?? ( cuda rocm )"
 
 # comfy_aimdo is imported unconditionally at module load (execution.py,
-# model_management.py, model_patcher.py, pinned_memory.py). comfy_kitchen
-# provides the RoPE/quant kernels that comfy.quant_ops.ck.apply_rope uses
-# unconditionally for the flux/lumina/z-image model families. Both are hard
-# deps: comfy_kitchen's import is try/except-wrapped but the wrapper only
-# degrades the fp8/fp4 *message* -- the RoPE path assumes ck is present, so
-# those models crash at sampling without it. gguf in upstream's freeze is the
-# ComfyUI-GGUF custom node, not core, and is excluded.
+# model_management.py, model_patcher.py, pinned_memory.py); comfy_kitchen
+# provides the RoPE/quant kernels comfy.quant_ops.ck.apply_rope uses
+# unconditionally for the flux/lumina/z-image families. Both are hard deps:
+# comfy_kitchen's import is try/except-wrapped but the wrapper only degrades the
+# fp8/fp4 *message* -- the RoPE path assumes ck is present, so those models
+# crash at sampling without it. The gguf freeze entry is the ComfyUI-GGUF custom
+# node, not core, and is excluded.
 RDEPEND="${PYTHON_DEPS}
 	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP},cuda?,rocm?]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
@@ -93,11 +92,11 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	audio? ( sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}] )
 "
-# USE=audio pulls torchaudio for the audio nodes (comfy.audio_encoders, the
-# lumina audio VAE), which import it lazily and degrade gracefully if absent.
-# torchaudio tops out at 2.11 (pins ~sci-ml/pytorch-2.11) and conflicts with
-# the pytorch-2.12 stack, so USE=audio only resolves once a torchaudio
-# matching the installed torch exists. verified 2026-06-15.
+# USE=audio pulls torchaudio for the audio nodes (comfy.audio_encoders, lumina
+# audio VAE), imported lazily and degrading gracefully if absent. torchaudio
+# tops out at 2.11 (pins ~sci-ml/pytorch-2.11) and conflicts with the
+# pytorch-2.12 stack, so USE=audio only resolves once a matching torchaudio
+# exists. verified 2026-06-15.
 BDEPEND="${PYTHON_DEPS}"
 
 src_install() {
@@ -109,7 +108,6 @@ src_install() {
 	# Drop test suites and VCS/CI leftovers from the runtime image.
 	rm -rf "${ED}${dest}"/{tests,tests-unit,pytest.ini,.github,.gitignore} || die
 
-	# Byte-compile the application tree for the chosen interpreter.
 	python_optimize "${ED}${dest}"
 
 	# System-wide custom_nodes dir (for admin/emerge-dropped nodes); ComfyUI
