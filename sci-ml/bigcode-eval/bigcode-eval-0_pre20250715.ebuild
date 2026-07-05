@@ -22,9 +22,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Core deps from requirements.txt at HEAD. pyext is listed but not actually
-# imported in any .py source (only by ds1000 adapter at runtime via dynamic
-# code generation, which is broken on Py3.11+ regardless), so we drop it.
+# Core deps from requirements.txt at HEAD; pyext dropped in src_prepare.
 #
 # single-impl: the entire sci-ml/* stack here is SINGLE_IMPL; only the two
 # dev-python/* helpers are multi-impl, wrapped via python_gen_cond_dep.
@@ -42,9 +40,10 @@ RDEPEND="
 "
 
 src_prepare() {
-	# pyext is in requirements.txt but unused in python source; it would also
-	# fail to install on Py3.11+ anyway (uses inspect.getargspec at import
-	# time). The `mosestokenizer==1.0.0` pin is wishful — upstream CI uses
+	# pyext is in requirements.txt but never statically imported (only the
+	# ds1000 adapter pulls it at runtime via dynamic code generation); it would
+	# also fail to install on Py3.11+ (uses inspect.getargspec at import time),
+	# so drop it. The `mosestokenizer==1.0.0` pin is wishful — upstream CI uses
 	# 1.2.x, and the API surface bigcode touches is unchanged.
 	sed -i \
 		-e '/^pyext\b/d' \
