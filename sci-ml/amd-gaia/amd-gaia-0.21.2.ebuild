@@ -31,62 +31,47 @@ RESTRICT="test"
 
 # Core install_requires per setup.py (verified against v0.21.2 sdist
 # 2026-06-19).
-# Lemonade Server is the recommended OpenAI-compatible LLM backend but
-# isn't a hard dep — gaia speaks any OpenAI-compatible endpoint, so the
-# RDEPEND only mentions the bundled Python deps. See pkg_postinst.
+# Lemonade Server is the AMD-recommended backend but not a hard dep — gaia
+# speaks any OpenAI-compatible endpoint (see pkg_postinst).
 #
-# python-multipart — base install_requires since v0.20.1: the base
-# `gaia-mcp` console_script parses multipart uploads via python_multipart
-# at import time, so a plain install needs it even without USE=api.
-# Carried in base and dropped from api? as redundant. still base in
-# v0.21.2, verified 2026-06-19.
+# python-multipart — base install_requires since v0.20.1: base `gaia-mcp`
+# console_script imports python_multipart at import time, so needed even
+# without USE=api. Dropped from api? as redundant. verified 2026-06-19.
 #
-# keyring — v0.21.0 promotes it from the ui/api extras into the base
-# install_requires (upstream #1621): gaia.connectors.{store,mcp_server}
-# both `import keyring` at module load and `gaia connectors` is a base CLI
-# command, so a plain install needs it. Carried in base (>=24,<26 per
-# upstream's supply-chain pin) and dropped from ui? as redundant. verified
-# 2026-06-19 against v0.21.2.
-#
-# tavily-python — v0.21.2 adds it to base install_requires (>=0.5.0), but
-# it's a SOFT dep: gaia/web/tavily.py guards `from tavily import ...` in a
-# try/except (TAVILY_SDK_AVAILABLE) and falls back to DuckDuckGo when the
-# SDK is absent. Not packaged in ::gentoo or this overlay, so omitted from
-# RDEPEND — web search degrades gracefully without it. verified 2026-06-19.
-#
-# audio? — gaia code only `import torch`s (gaia/audio/whisper_asr.py);
-# never imports torchvision OR torchaudio (re-grepped src/ for v0.21.2,
-# 2026-06-19). Upstream's `audio` extra caps torch<2.13 because of
-# old-era openai-whisper transitive deps; verified 2026-06-04 the cap is
-# stale (current openai-whisper has unbounded torch and no torchvision
-# dep), so we ship without the cap and without the unused torchvision/
-# torchaudio. RDEPEND on sci-ml/pytorch alone.
-#
-# ui? — upstream 0.20.0 added python-pptx>=0.6.21 (PPTX ingestion in
-# RAG). gaia.rag.{sdk,pptx_utils} both `from pptx import ...` lazily, so
-# the missing dep only surfaces if a user actually ingests a .pptx
-# file. dev-python/python-pptx isn't packaged in ::gentoo or this
-# overlay yet; revisit once it lands. still present in v0.21.2, verified
+# keyring — v0.21.0 promotes it from ui/api extras to base install_requires
+# (upstream #1621): gaia.connectors.{store,mcp_server} import keyring at
+# module load, and `gaia connectors` is a base CLI command. >=24,<26 is
+# upstream's supply-chain pin. Dropped from ui? as redundant. verified
 # 2026-06-19.
 #
-# httpx (ui?) — a hard upstream requirement: the `ui` extra declares
-# httpx>=0.27.0 (setup.py) and 9 src/gaia modules import it (ui/server.py,
-# ui/tunnel.py, ui/routers/*, agents/base/agent.py, ...). httpx is
-# ::gentoo-deprecated (2026-04-01: upstream stopped accepting bug reports)
-# but is still in-tree with no drop-in replacement, so the DeprecatedDep
-# warning is knowingly accepted, not fixable by removal. Revisit if/when
-# ::gentoo last-rites httpx. verified 2026-06-20.
+# tavily-python — v0.21.2 adds it to base install_requires (>=0.5.0), but
+# it's a SOFT dep: gaia/web/tavily.py guards `from tavily import` in
+# try/except (TAVILY_SDK_AVAILABLE) and falls back to DuckDuckGo. Not
+# packaged, so omitted — web search degrades gracefully. verified 2026-06-19.
+#
+# audio? — gaia only `import torch`s (gaia/audio/whisper_asr.py), never
+# torchvision/torchaudio (re-grepped src/ 2026-06-19). Upstream's audio
+# extra caps torch<2.13 for old-era openai-whisper deps; cap is stale
+# (verified 2026-06-04: current openai-whisper unbounded torch, no
+# torchvision), so we ship uncapped on sci-ml/pytorch alone.
+#
+# ui? — upstream 0.20.0 added python-pptx>=0.6.21 (PPTX RAG ingestion,
+# lazy `from pptx import`); not packaged in ::gentoo or this overlay, so
+# omitted — only surfaces if a user ingests a .pptx. verified 2026-06-19.
+#
+# httpx (ui?) — hard upstream req: ui extra declares httpx>=0.27.0 and 9
+# src/gaia modules import it. ::gentoo-deprecated 2026-04-01 (no drop-in
+# replacement), so the DeprecatedDep warning is knowingly accepted.
+# verified 2026-06-20.
 #
 # eval? — v0.21.2 adds tiktoken>=0.7.0,<1 to the eval extra (token-cost
-# accounting in gaia/eval/tool_cost.py; imported lazily with a char-count
-# fallback when absent). dev-python/tiktoken is packaged, carried uncapped.
-# Upstream also caps numpy>=2.0,<2.3.0 here, but ::gentoo ships numpy 2.4+
-# by default so that cap is left off (same posture as the stale torch cap
-# above) — would otherwise make USE=eval unsolvable. verified 2026-06-19.
-#
-# talk? — v0.21.0 adds `pip` to the talk extra: the Kokoro/misaki TTS
-# path downloads its spaCy model at runtime via pip. still in v0.21.2,
+# accounting in gaia/eval/tool_cost.py; lazy import, char-count fallback).
+# Carried uncapped. Upstream also caps numpy>=2.0,<2.3.0 here, but ::gentoo
+# ships numpy 2.4+ so that cap is left off (would make USE=eval unsolvable).
 # verified 2026-06-19.
+#
+# talk? — v0.21.0 adds `pip` to the talk extra: Kokoro/misaki TTS downloads
+# its spaCy model at runtime via pip. verified 2026-06-19.
 RDEPEND="
 	${PYTHON_DEPS}
 	sci-ml/accelerate[${PYTHON_SINGLE_USEDEP}]

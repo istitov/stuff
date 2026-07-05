@@ -30,48 +30,36 @@ REQUIRED_USE="ui? ( api )"
 RESTRICT="test"
 
 # Core install_requires per setup.py (verified against v0.21.0 sdist).
-# Lemonade Server is the recommended OpenAI-compatible LLM backend but
-# isn't a hard dep — gaia speaks any OpenAI-compatible endpoint, so the
-# RDEPEND only mentions the bundled Python deps. See pkg_postinst.
+# Lemonade Server is the AMD-recommended backend but not a hard dep — gaia
+# speaks any OpenAI-compatible endpoint (see pkg_postinst).
 #
-# python-multipart — base install_requires since v0.20.1: the base
-# `gaia-mcp` console_script parses multipart uploads via python_multipart
-# at import time, so a plain install needs it even without USE=api.
-# Carried in base and dropped from api? as redundant. still base in
-# v0.21.0, verified 2026-06-13.
+# python-multipart — base install_requires since v0.20.1: base `gaia-mcp`
+# console_script imports python_multipart at import time, so needed even
+# without USE=api. Dropped from api? as redundant. verified 2026-06-13.
 #
-# keyring — v0.21.0 promotes it from the ui/api extras into the base
-# install_requires (upstream #1621): gaia.connectors.{store,mcp_server}
-# both `import keyring` at module load and `gaia connectors` is a base CLI
-# command, so a plain install needs it. Carried in base (>=24,<26 per
-# upstream's supply-chain pin) and dropped from ui? as redundant. verified
-# 2026-06-13 against v0.21.0.
-#
-# audio? — gaia code only `import torch`s (gaia/audio/whisper_asr.py:19);
-# never imports torchvision OR torchaudio (re-grepped src/ for v0.21.0,
-# 2026-06-13). Upstream's `audio` extra caps torch<2.13 because of
-# old-era openai-whisper transitive deps; verified 2026-06-04 the cap is
-# stale (current openai-whisper has unbounded torch and no torchvision
-# dep), so we ship without the cap and without the unused torchvision/
-# torchaudio. RDEPEND on sci-ml/pytorch alone.
-#
-# ui? — upstream 0.20.0 added python-pptx>=0.6.21 (PPTX ingestion in
-# RAG). gaia.rag.{sdk,pptx_utils} both `from pptx import ...` lazily, so
-# the missing dep only surfaces if a user actually ingests a .pptx
-# file. dev-python/python-pptx isn't packaged in ::gentoo or this
-# overlay yet; revisit once it lands. still present in v0.21.0, verified
+# keyring — v0.21.0 promotes it from ui/api extras to base install_requires
+# (upstream #1621): gaia.connectors.{store,mcp_server} import keyring at
+# module load, and `gaia connectors` is a base CLI command. >=24,<26 is
+# upstream's supply-chain pin. Dropped from ui? as redundant. verified
 # 2026-06-13.
 #
-# talk? — v0.21.0 adds `pip` to the talk extra: the Kokoro/misaki TTS
-# path downloads its spaCy model at runtime via pip. verified 2026-06-13.
+# audio? — gaia only `import torch`s (gaia/audio/whisper_asr.py:19), never
+# torchvision/torchaudio (re-grepped src/ 2026-06-13). Upstream's audio
+# extra caps torch<2.13 for old-era openai-whisper deps; cap is stale
+# (verified 2026-06-04: current openai-whisper unbounded torch, no
+# torchvision), so we ship uncapped on sci-ml/pytorch alone.
 #
-# httpx (ui?) — a hard upstream requirement: the `ui` extra declares
-# httpx>=0.27.0 (setup.py) and 9 src/gaia modules import it (ui/server.py,
-# ui/tunnel.py, ui/routers/*, agents/base/agent.py, ...). httpx is
-# ::gentoo-deprecated (2026-04-01: upstream stopped accepting bug reports)
-# but is still in-tree with no drop-in replacement, so the DeprecatedDep
-# warning is knowingly accepted, not fixable by removal. Revisit if/when
-# ::gentoo last-rites httpx. verified 2026-06-20.
+# ui? — upstream 0.20.0 added python-pptx>=0.6.21 (PPTX RAG ingestion,
+# lazy `from pptx import`); not packaged in ::gentoo or this overlay, so
+# omitted — only surfaces if a user ingests a .pptx. verified 2026-06-13.
+#
+# talk? — v0.21.0 adds `pip` to the talk extra: Kokoro/misaki TTS downloads
+# its spaCy model at runtime via pip. verified 2026-06-13.
+#
+# httpx (ui?) — hard upstream req: ui extra declares httpx>=0.27.0 and 9
+# src/gaia modules import it. ::gentoo-deprecated 2026-04-01 (no drop-in
+# replacement), so the DeprecatedDep warning is knowingly accepted.
+# verified 2026-06-20.
 RDEPEND="
 	${PYTHON_DEPS}
 	sci-ml/accelerate[${PYTHON_SINGLE_USEDEP}]
