@@ -1,0 +1,24 @@
+Fix build with gcc-16 (backport upstream commit 63ed1ad "Fix casting").
+
+action_shuffle_mode_init()/action_repeat_mode_init() take a
+GSimpleAction*, but g_action_map_lookup_action() returns a GAction*.
+gcc-16 makes the incompatible-pointer-types conversion a hard error.
+Wrap the lookups in G_SIMPLE_ACTION(), exactly as upstream did right
+after the v1.3 release.
+--- a/src/headerbarui.c
++++ b/src/headerbarui.c
+@@ -1183,12 +1183,12 @@
+     hookup_action_to_radio_menu_item(G_ACTION_MAP(group), "shufflemode", G_CALLBACK(order_shuffle_activate), "order_shuffle");
+     hookup_action_to_radio_menu_item(G_ACTION_MAP(group), "shufflemode", G_CALLBACK(order_shuffle_albums_activate), "order_shuffle_albums");
+     hookup_action_to_radio_menu_item(G_ACTION_MAP(group), "shufflemode", G_CALLBACK(order_random_activate), "order_random");
+-    action_shuffle_mode_init (g_action_map_lookup_action (G_ACTION_MAP (group), "shufflemode"));
++    action_shuffle_mode_init (G_SIMPLE_ACTION (g_action_map_lookup_action (G_ACTION_MAP (group), "shufflemode")));
+ 
+     hookup_action_to_radio_menu_item(G_ACTION_MAP(group), "repeatmode", G_CALLBACK(loop_disable_activate), "loop_disable");
+     hookup_action_to_radio_menu_item(G_ACTION_MAP(group), "repeatmode", G_CALLBACK(loop_single_activate), "loop_single");
+     hookup_action_to_radio_menu_item(G_ACTION_MAP(group), "repeatmode", G_CALLBACK(loop_all_albums_activate), "loop_all");
+-    action_repeat_mode_init (g_action_map_lookup_action (G_ACTION_MAP (group), "repeatmode"));
++    action_repeat_mode_init (G_SIMPLE_ACTION (g_action_map_lookup_action (G_ACTION_MAP (group), "repeatmode")));
+ 
+ 
+     g_object_set(G_OBJECT(headerbar), "spacing", headerbarui_flags.button_spacing, NULL);
