@@ -15,7 +15,6 @@ S=${WORKDIR}/${P}
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-#IUSE="mrcz tests"
 IUSE="cuda doc +learning +gui-jupyter speed +gui-traitsui mrcz test"
 
 RDEPEND="
@@ -45,27 +44,6 @@ RDEPEND="
 		dev-python/numexpr[${PYTHON_USEDEP}] )
 	cuda? ( dev-python/cupy[${PYTHON_USEDEP}] )
 "
-	##
-	##mrcz? ( >=dev-python/blosc-1.5 >=dev-python/mrcz-0.3.6 )
-	#	<dev-python/matplotlib-3.5[${PYTHON_USEDEP}]
-
-#	>=dev-python/pyface-7.4.1[${PYTHON_USEDEP}]
-#	dev-python/requests[${PYTHON_USEDEP}]
-
-#	dev-python/dill[${PYTHON_USEDEP}]
-#	>=dev-python/h5py-2.3[${PYTHON_USEDEP}]
-#	>=dev-python/python-dateutil-2.5.0[${PYTHON_USEDEP}]
-#	dev-python/ipyparallel[${PYTHON_USEDEP}]
-#
-
-#	dev-python/statsmodels[${PYTHON_USEDEP}]
-#
-#	dev-python/sparse[${PYTHON_USEDEP}]
-#	dev-python/imageio[${PYTHON_USEDEP}]
-#	dev-python/zarr[${PYTHON_USEDEP}]
-#	dev-python/matplotlib-scalebar[${PYTHON_USEDEP}]
-#	!dev-python/PTable
-#	>=dev-python/tifffile-2019.12.3[${PYTHON_USEDEP}]
 
 DEPEND="${RDEPEND}
 	test? (
@@ -82,38 +60,6 @@ PDEPEND="
 	gui-jupyter? ( >=dev-python/hyperspy-gui-ipywidgets-2.0 )
 	gui-traitsui? ( >=dev-python/hyperspy-gui-traitsui-2.0 )
 "
-#"ipympl",
-
-#baseline = [
-#    "pybaselines"
-#coverage = [
-#    "pytest-cov",
-#]
-#dask-image = [
-#    "dask-image",
-#]
-
-#doc = [
-#    "holospy", # example gallery
-#    "IPython", # Needed in testing code in basic_usage.rst
-#    "numpydoc",
-#    "pybaselines", # for docstring test
-#    "pydata_sphinx_theme",
-#    "scikit-image",
-#    "setuptools_scm",
-#    "sphinx-copybutton",
-#    "sphinx-design",
-#    "sphinx-favicon",
-#    "sphinx-gallery",
-#    "sphinx>=1.7",
-#    "sphinxcontrib-mermaid",
-#    "sphinxcontrib-towncrier>=0.5.0a0",
-#    "towncrier",
-#]
-
-#odr = [
-#    "odrpack>=0.3.1",
-#]
 
 python_test() {
 	virtx epytest
