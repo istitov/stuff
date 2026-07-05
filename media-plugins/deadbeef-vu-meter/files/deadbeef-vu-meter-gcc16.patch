@@ -1,0 +1,29 @@
+Fix build with gcc-16.
+
+Two forward-compat diagnostics gcc-16 now treats as hard errors:
+  * vumeter_draw_bars() returns void but bailed out with `return FALSE;`
+    on a NULL surface (-Wreturn-mismatch).
+  * vis_waveform_listen()'s callback parameter became
+    const ddb_audio_data_t * (deadbeef.h); match it in the listener.
+
+Upstream unmaintained since 2017; carried locally.
+--- a/vumeter.c
++++ b/vumeter.c
+@@ -808,7 +808,7 @@
+ }
+ 
+ static void
+-vumeter_wavedata_listener (void *ctx, ddb_audio_data_t *data) {
++vumeter_wavedata_listener (void *ctx, const ddb_audio_data_t *data) {
+     w_vumeter_t *w = ctx;
+     deadbeef->mutex_lock (w->mutex);
+     w->channels = MIN (MAX_CHANNELS, data->fmt->channels);
+@@ -879,7 +879,7 @@
+ 
+     unsigned char *data = cairo_image_surface_get_data (w->surf);
+     if (!data) {
+-        return FALSE;
++        return;
+     }
+     int stride = cairo_image_surface_get_stride (w->surf);
+     memset (data, 0, height * stride);
