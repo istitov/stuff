@@ -877,12 +877,11 @@ RDEPEND="
 RESTRICT="test"
 
 src_prepare() {
-	# The cargo eclass's GIT_CRATES [patch] does not override delta-rs's
-	# branch-pinned + package-renamed `delta_kernel` git dep under the
-	# maturin/offline build (cargo attempts a live checkout and dies offline).
-	# Repoint the workspace dependency at the GIT_CRATES-extracted tree —
-	# upstream ships exactly this as a commented `path =` variant. With no
-	# committed Cargo.lock, cargo then resolves the path dep + vendored registry
+	# Repoint delta-rs's branch-pinned + package-renamed `delta_kernel` git dep
+	# at the GIT_CRATES-extracted tree (eclass [patch] doesn't cover it — see the
+	# GIT_CRATES note above; cargo would otherwise attempt a live checkout and die
+	# offline). Upstream ships exactly this as a commented `path =` variant; with
+	# no committed Cargo.lock, cargo then resolves the path dep + vendored registry
 	# crates fully offline. verified 2026-06-25.
 	local ws_toml="${WORKDIR}/delta-rs-python-v${PV}/Cargo.toml"
 	local from='git = "https://github.com/buoyant-data/delta-kernel-rs", branch = "buoyant/main"'
