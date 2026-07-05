@@ -26,16 +26,13 @@ SLOT="0"
 KEYWORDS="~amd64"
 RESTRICT="bindist mirror"
 
-# Trivial metapackage — empty py3-none-any wheel whose entire purpose
-# is to pull libs-base and (under the cu13 extra) libs-cu13. No source
-# release on PyPI; the GitHub monorepo cuda-python doesn't carry this
-# subdir either since cutlass-dsl lives at NVIDIA/cutlass with its own
-# release cadence and PyPI-only metawheel. Packaging the wheel
-# directly is byte-equivalent to a hypothetical empty source.
+# Trivial metapackage: empty py3-none-any wheel that just pulls libs-base
+# and (via the cu13 extra) libs-cu13. No PyPI source release — cutlass-dsl
+# ships a PyPI-only metawheel from NVIDIA/cutlass — so packaging the wheel
+# directly is byte-equivalent to an empty source.
 #
-# This overlay always pulls the cu13 path: amd64 + CUDA 13.2 at
-# /opt/cuda. cu12 would need its own libs-cu12 sibling which we
-# haven't packaged. Add a USE flag if a cu12 user emerges.
+# Always the cu13 path (amd64 + CUDA 13.2 at /opt/cuda); cu12 would need a
+# libs-cu12 sibling we haven't packaged. Add a USE flag if a cu12 user emerges.
 RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-base-${PV}[${PYTHON_USEDEP}]
 	~dev-python/nvidia-cutlass-dsl-libs-cu13-${PV}[${PYTHON_USEDEP}]
