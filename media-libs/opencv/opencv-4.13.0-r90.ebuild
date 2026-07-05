@@ -612,32 +612,31 @@ src_prepare() {
 		eapply "${FILESDIR}/${PN}_contrib-4.8.1-rgbd.patch"
 		eapply "${FILESDIR}/${PN}_contrib-4.8.1-NVIDIAOpticalFlowSDK-2.0.tar.gz.patch"
 		# istitov/stuff#271: cudev ptr2d/zip.hpp opens the libcu++ std namespace via
-		# _LIBCUDACXX_BEGIN_NAMESPACE_STD unconditionally to specialize tuple_size /
-		# tuple_element; CUDA 13.2+ reorganized CCCL, so that macro no longer compiles
-		# and the build dies at the first CUDA TU (core/src/cuda/gpu_mat.cu).  Backport
-		# the upstream version guard selecting _CCCL_*_NAMESPACE_CUDA_STD for CUDA >=
-		# 13.2 (fixed in opencv_contrib master / 5.0.0, but not the 4.13.0 tag).
-		# Verified: opencv[cuda] build + cv2.cuda runtime on CUDA 13.3 / sm_86,
-		# 2026-06-06.  Drop once ::gentoo ships opencv with the upstream fix.
-		# (zip.hpp is identical in 4.12.0/4.13.0, so the 4.12.0-named patch applies.)
+		# _LIBCUDACXX_BEGIN_NAMESPACE_STD to specialize tuple_size/tuple_element; CUDA
+		# 13.2+ reorganized CCCL so that macro no longer compiles and the build dies at
+		# the first CUDA TU (core/src/cuda/gpu_mat.cu). Backport the upstream version
+		# guard selecting _CCCL_*_NAMESPACE_CUDA_STD for CUDA >= 13.2 (fixed in
+		# opencv_contrib master / 5.0.0, not the 4.13.0 tag). Verified opencv[cuda]
+		# build + cv2.cuda runtime on CUDA 13.3 / sm_86, 2026-06-06. Drop once ::gentoo
+		# ships opencv with the upstream fix. (zip.hpp is identical in 4.12.0/4.13.0,
+		# so the 4.12.0-named patch applies.)
 		eapply "${FILESDIR}/${PN}_contrib-4.12.0-cudev-cuda13-namespace.patch"
-		# istitov/stuff#271: cudacodec gained an encoder (NvEncoder.cpp) in 4.13.0 that
-		# is globbed unconditionally but only gets the CUDA toolkit include path when
-		# the Nvidia Video Codec SDK is present.  Without the SDK its <cuda.h> include
-		# (via precomp.hpp) breaks the build; link cudart for the headers regardless.
+		# istitov/stuff#271: cudacodec gained an encoder (NvEncoder.cpp) in 4.13.0,
+		# globbed unconditionally but only given the CUDA toolkit include path when the
+		# Nvidia Video Codec SDK is present. Without the SDK its <cuda.h> include (via
+		# precomp.hpp) breaks the build; link cudart for the headers regardless.
 		eapply "${FILESDIR}/${PN}_contrib-4.13.0-cudacodec-cuda-include.patch"
 		# istitov/stuff#271: videostab global_motion.cu uses thrust::make_tuple /
 		# make_zip_iterator but only includes thrust/{device_ptr,remove,functional}.h,
-		# which pulled tuple.h + the zip iterator in transitively until the CUDA 13.3
-		# CCCL reshuffle dropped that.  The TU then fails ("thrust has no member
-		# make_tuple").  Include the owning headers directly (inert on older CUDA).
-		# This is the *second*, independent CUDA-13 regression after the cudev one
-		# above: it only surfaces on 13.3, which is why the 13.2-verified build above
-		# missed it.  No upstream 4.x fix (5.0.0 dropped the thrust tuples).  Per-version
-		# patch: 4.12.0's cuda-13.0 patch rewrites this file's include block differently,
-		# so each tag carries its own correctly-anchored copy.
-		# Verified: full opencv[cuda,contrib,features2d] compile (global_motion.cu
-		# builds) on CUDA 13.3 / sm_86, 2026-06-07.
+		# which pulled tuple.h + the zip iterator transitively until the CUDA 13.3 CCCL
+		# reshuffle dropped that (TU then fails "thrust has no member make_tuple").
+		# Include the owning headers directly (inert on older CUDA). Second, independent
+		# CUDA-13 regression after the cudev one above; only surfaces on 13.3, which is
+		# why the 13.2-verified build above missed it. No upstream 4.x fix (5.0.0
+		# dropped the thrust tuples). Per-version patch: 4.12.0's cuda-13.0 patch
+		# rewrites this file's include block differently, so each tag carries its own
+		# correctly-anchored copy. Verified full opencv[cuda,contrib,features2d]
+		# compile (global_motion.cu builds) on CUDA 13.3 / sm_86, 2026-06-07.
 		eapply "${FILESDIR}/${PN}_contrib-4.13.0-videostab-cuda13-thrust-tuple.patch"
 		[[ -n "${PATCHES_CONTRIB_USER[*]}" ]] && eapply "${PATCHES_CONTRIB_USER[@]}"
 		popd >/dev/null || die

@@ -616,24 +616,23 @@ src_prepare() {
 		eapply "${FILESDIR}/${PN}_contrib-4.8.1-NVIDIAOpticalFlowSDK-2.0.tar.gz.patch"
 		eapply "${FILESDIR}/${PN}_contrib-4.12.0-cuda-13.0.patch"
 		# istitov/stuff#271: cudev ptr2d/zip.hpp opens the libcu++ std namespace via
-		# _LIBCUDACXX_BEGIN_NAMESPACE_STD unconditionally to specialize tuple_size /
-		# tuple_element; CUDA 13.2+ reorganized CCCL, so that macro no longer compiles
-		# and the build dies at the first CUDA TU (core/src/cuda/gpu_mat.cu).  Backport
-		# the upstream-master version guard selecting _CCCL_*_NAMESPACE_CUDA_STD for
-		# CUDA >= 13.2.  Verified: opencv[cuda] build + cv2.cuda GPU kernels (cudaarithm
-		# threshold == CPU) on CUDA 13.3 / sm_86, 2026-06-06.  Drop once ::gentoo opencv
-		# ships the upstream fix.
+		# _LIBCUDACXX_BEGIN_NAMESPACE_STD to specialize tuple_size/tuple_element; CUDA
+		# 13.2+ reorganized CCCL so that macro no longer compiles and the build dies at
+		# the first CUDA TU (core/src/cuda/gpu_mat.cu). Backport the upstream-master
+		# version guard selecting _CCCL_*_NAMESPACE_CUDA_STD for CUDA >= 13.2. Verified
+		# opencv[cuda] build + cv2.cuda kernels (cudaarithm threshold == CPU) on CUDA
+		# 13.3 / sm_86, 2026-06-06. Drop once ::gentoo opencv ships the upstream fix.
 		eapply "${FILESDIR}/${PN}_contrib-4.12.0-cudev-cuda13-namespace.patch"
 		# istitov/stuff#271: videostab global_motion.cu uses thrust::make_tuple /
 		# make_zip_iterator but only includes thrust/{device_ptr,remove,functional}.h,
-		# which pulled tuple.h + the zip iterator in transitively until the CUDA 13.3
-		# CCCL reshuffle dropped that.  The TU then fails ("thrust has no member
-		# make_tuple").  Include the owning headers directly (inert on older CUDA).
-		# This is the *second*, independent CUDA-13 regression after the cudev one
-		# above, surfacing only on 13.3.  No upstream 4.x fix (5.0.0 dropped the thrust
-		# tuples).  This patch anchors on the post-cuda-13.0-patch include block, which
-		# differs from 4.13.0's, so each tag carries its own copy.
-		# Verified: isolated nvcc compile of the TU on CUDA 13.3 / sm_86, 2026-06-07.
+		# which pulled tuple.h + the zip iterator transitively until the CUDA 13.3 CCCL
+		# reshuffle dropped that (TU then fails "thrust has no member make_tuple").
+		# Include the owning headers directly (inert on older CUDA). Second, independent
+		# CUDA-13 regression after the cudev one above, surfacing only on 13.3; no
+		# upstream 4.x fix (5.0.0 dropped the thrust tuples). Anchors on the post-cuda-
+		# 13.0-patch include block, which differs from 4.13.0's, so each tag carries its
+		# own copy. Verified isolated nvcc compile of the TU on CUDA 13.3 / sm_86,
+		# 2026-06-07.
 		eapply "${FILESDIR}/${PN}_contrib-4.12.0-videostab-cuda13-thrust-tuple.patch"
 		[[ -n "${PATCHES_CONTRIB_USER[*]}" ]] && eapply "${PATCHES_CONTRIB_USER[@]}"
 		popd >/dev/null || die

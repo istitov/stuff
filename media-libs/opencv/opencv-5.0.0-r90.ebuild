@@ -386,13 +386,13 @@ PATCHES=(
 
 	# istitov/stuff#271: 5.0.0 still builds the Caffe importer (caffe_io.cpp needs
 	# opencv-caffe.pb.h) but dropped src/caffe/opencv-caffe.proto from the tree and
-	# from the dnn protobuf glob, shipping only a stale pre-generated misc/caffe pb
-	# (protoc 3.19.0, uses generated_message_table_driven.h - gone in modern proto).
-	# With PROTOBUF_UPDATE_FILES=ON (forced for bug #631418) caffe is never
-	# regenerated -> opencv-caffe.pb.h missing -> caffe_io.cpp fails.  src_prepare
-	# restores the proto (4.13.0 schema, identical 71 messages) and this patch adds
-	# it back to the regenerated set.  Only bites opencv[contribdnn].  Verified
-	# (full opencv[contribdnn] compile, caffe importer builds) 2026-06-07.
+	# the dnn protobuf glob, shipping only a stale pre-generated misc/caffe pb (protoc
+	# 3.19.0, uses generated_message_table_driven.h - gone in modern proto). With
+	# PROTOBUF_UPDATE_FILES=ON (forced for bug #631418) caffe is never regenerated ->
+	# opencv-caffe.pb.h missing -> caffe_io.cpp fails. src_prepare restores the proto
+	# (4.13.0 schema, identical 71 messages) and this patch adds it back to the
+	# regenerated set. Only bites opencv[contribdnn]. Verified full opencv[contribdnn]
+	# compile (caffe importer builds) 2026-06-07.
 	"${FILESDIR}/${PN}-5.0.0-dnn-restore-caffe-proto.patch"
 
 	# Dropped vs 4.13.0-r90 because upstream 5.0.0 fixed them natively (verified
@@ -611,13 +611,12 @@ src_unpack() {
 src_prepare() {
 	cmake_src_prepare
 
-	# istitov/stuff#271: 5.0.0 dropped src/caffe/opencv-caffe.proto (see the caffe
-	# PATCHES note above).  Restore it from the overlay copy so the dnn protobuf
-	# step can regenerate opencv-caffe.pb.h for the system protobuf.  The companion
-	# patch adds it back to the proto glob.  The shipped copy is the 4.13.0 proto
-	# with comments stripped (protoc-verified to regenerate a byte-identical header)
-	# and xz-compressed, purely to keep media-libs/opencv/files under the pkgcheck
-	# TotalSizeViolation limit.
+	# istitov/stuff#271: restore src/caffe/opencv-caffe.proto (dropped by 5.0.0; see
+	# the caffe PATCHES note above) so the dnn protobuf step can regenerate
+	# opencv-caffe.pb.h for the system protobuf; the companion patch adds it back to
+	# the glob. Shipped copy is the 4.13.0 proto with comments stripped (protoc-
+	# verified to regenerate a byte-identical header) and xz-compressed, to keep
+	# media-libs/opencv/files under the pkgcheck TotalSizeViolation limit.
 	xz -dc "${FILESDIR}/${P}-dnn-caffe.proto.xz" \
 		> "${S}/modules/dnn/src/caffe/opencv-caffe.proto" || die
 
@@ -921,12 +920,12 @@ multilib_src_configure() {
 		-DBUILD_opencv_dnn="$(usex contribdnn)"
 		# 5.x: gapi and ml are contrib modules; only build them with USE=contrib.
 		# istitov/stuff#271: 5.0.0's gapi/src/precomp.hpp includes <opencv2/features.hpp>
-		# in any non-standalone build (i.e. always, here), but gapi's ocv_add_module only
-		# declares imgproc (REQUIRED) + video/stereo (OPTIONAL), never opencv_features.  So unlike
-		# objdetect/stitching/videostab/... (which declare the dep and self-disable
-		# when features is off) gapi builds without it and then fails on the missing
-		# header.  Gate gapi on features too so it cleanly skips instead.  4.x gapi
-		# did not include features2d.hpp here, so this is 5.x-only.  verified 2026-06-08
+		# in any non-standalone build (always, here), but gapi's ocv_add_module declares
+		# only imgproc (REQUIRED) + video/stereo (OPTIONAL), never opencv_features. Unlike
+		# objdetect/stitching/videostab/... (which declare the dep and self-disable when
+		# features is off) gapi builds without it and then fails on the missing header.
+		# Gate gapi on features too so it cleanly skips instead. 4.x gapi did not include
+		# features2d.hpp here, so this is 5.x-only. verified 2026-06-08
 		-DBUILD_opencv_gapi="$(usex contrib "$(usex features "$(usex ffmpeg yes "$(usex gstreamer)")" no)" no)"
 		-DBUILD_opencv_ml="$(usex contrib)"
 		# features2d was renamed to features in 5.x (ships a features2d.hpp shim).
