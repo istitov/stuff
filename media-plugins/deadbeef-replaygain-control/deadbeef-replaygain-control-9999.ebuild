@@ -23,6 +23,8 @@ DEPEND="
 RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
 
+PATCHES=( "${FILESDIR}/${PN}-gcc16.patch" )
+
 src_compile() {
 	use gtk2 && emake gtk2
 	use gtk3 && emake gtk3
