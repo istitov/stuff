@@ -1,0 +1,16 @@
+Drop the Windows-only isnt.o from UNRAR_OBJS.
+
+vfs_rar's Makefile predates unrar's platform split and still lists isnt.o
+(Windows version detection -- DWORD/OSVERSIONINFO/GetVersionEx), which no
+longer compiles on Linux with modern unrar (7.2.6). unrar's own Linux
+makefile excludes it as well.
+--- a/Makefile
++++ b/Makefile
+@@ -41,7 +41,6 @@
+ 	      arcread.o \
+ 	      unicode.o \
+ 	      system.o \
+-	      isnt.o \
+ 	      crypt.o \
+ 	      crc.o \
+ 	      rawread.o \
