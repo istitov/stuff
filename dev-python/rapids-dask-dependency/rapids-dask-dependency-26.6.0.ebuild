@@ -35,7 +35,7 @@ KEYWORDS="~amd64 ~arm64"
 # (patches/{dask,distributed}/__init__.py call
 # make_monkey_patch_loader(..., lambda _: None)), so nothing is keyed to
 # the exact dask version. We relax the upper cap (see src_prepare) so the
-# shim coexists with our dev-python/dask-2026.3.0 rather than forcing a
+# shim coexists with whatever dask we ship rather than forcing a
 # downgrade. verified 2026-06-10
 RDEPEND="
 	>=dev-python/dask-2026.1.1[${PYTHON_USEDEP}]
