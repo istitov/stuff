@@ -1,0 +1,16 @@
+# GCC 17 header hygiene: the bundled llama.cpp common.h uses std::ofstream
+# without including <fstream>; GCC 17 no longer pulls it in transitively.
+# Harmless on GCC < 17. Adopted from ::gentoo sci-ml/ollama (tupone@gentoo.org).
+# Paths are relative to the llama.cpp tree root; applied from ${LLAMACPP_S} so
+# the patch is independent of the pinned llama.cpp commit.
+
+--- a/common/common.h
++++ b/common/common.h
+@@ -8,6 +8,7 @@
+ #include "ggml.h"
+ 
+ #include <set>
++#include <fstream>
+ #include <sstream>
+ #include <string>
+ #include <string_view>
