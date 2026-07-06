@@ -1058,7 +1058,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (187) ---
+# --- github (185) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1276,12 +1276,6 @@ prefix = "v"
 ["dev-python/addict"]
 source = "github"
 github = "mewwts/addict"
-use_max_tag = true
-prefix = "v"
-
-["dev-python/apsw"]
-source = "github"
-github = "rogerbinns/apsw"
 use_max_tag = true
 prefix = "v"
 
@@ -1871,12 +1865,6 @@ prefix = "v"
 ["media-sound/mpdris2"]
 source = "github"
 github = "eonpatapon/mpDris2"
-use_max_tag = true
-prefix = "v"
-
-["media-sound/puddletag"]
-source = "github"
-github = "puddletag/puddletag"
 use_max_tag = true
 prefix = "v"
 
@@ -2537,7 +2525,6 @@ to_pattern = '\1'
 # ["sci-libs/cholmod"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/colamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["sci-libs/umfpack"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-ml/bigcode-eval"] skipped: we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind
 # ["sci-ml/caffe2"] skipped: pytorch/caffe2 repo has no tags; caffe2 was absorbed into pytorch/pytorch
