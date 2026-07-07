@@ -5,7 +5,7 @@ EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
 	collection-context.r75426
-	context.r78843
+	context.r79578
 	context-calendar-examples.r66947
 	context-chat.r72010
 	context-collating-marks.r68696
@@ -13,7 +13,7 @@ TEXLIVE_MODULE_CONTENTS="
 	context-filter.r62070
 	context-gnuplot.r75301
 	context-handlecsv.r76721
-	context-legacy.r78843
+	context-legacy.r79578
 	context-letter.r77841
 	context-mathsets.r47085
 	context-pocketdiary.r73164
@@ -29,7 +29,7 @@ TEXLIVE_MODULE_CONTENTS="
 "
 # Removed in target tlpdb: context-companion-fonts, context-texlive
 TEXLIVE_MODULE_DOC_CONTENTS="
-	context.doc.r78843
+	context.doc.r79578
 	context-calendar-examples.doc.r66947
 	context-chat.doc.r72010
 	context-collating-marks.doc.r68696
@@ -37,7 +37,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	context-filter.doc.r62070
 	context-gnuplot.doc.r75301
 	context-handlecsv.doc.r76721
-	context-legacy.doc.r78843
+	context-legacy.doc.r79578
 	context-letter.doc.r77841
 	context-mathsets.doc.r47085
 	context-notes-zh-cn.doc.r78640
