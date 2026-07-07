@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-plaingeneric.r78986
+	collection-plaingeneric.r79318
 	abbr.r77161
 	abstyles.r76790
 	advice.r70688
@@ -95,7 +95,7 @@ TEXLIVE_MODULE_CONTENTS="
 	schemata.r76178
 	shade.r22212
 	simplekv.r77682
-	soul.r78291
+	soul.r79461
 	swrule.r54267
 	systeme.r77682
 	tabto-generic.r15878
@@ -104,7 +104,7 @@ TEXLIVE_MODULE_CONTENTS="
 	texapi.r54080
 	texdate.r49362
 	texdimens.r77682
-	texinfo.r78334
+	texinfo.r79244
 	timetable.r15878
 	tracklang.r79146
 	treetex.r28176
@@ -207,7 +207,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	schemata.doc.r76178
 	shade.doc.r22212
 	simplekv.doc.r77682
-	soul.doc.r78291
+	soul.doc.r79461
 	systeme.doc.r77682
 	termmenu.doc.r76924
 	tex-ps.doc.r15878
@@ -261,7 +261,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	plainpkg.source.r27765
 	randomlist.source.r78632
 	schemata.source.r76178
-	soul.source.r78291
+	soul.source.r79461
 	termmenu.source.r76924
 	texdate.source.r49362
 	tracklang.source.r79146
