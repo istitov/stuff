@@ -60,7 +60,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pdftex.doc.r78401
 	tex.doc.r77830
 	tex-ini-files.doc.r78524
-	texlive-common.doc.r78660
+	texlive-common.doc.r79598
 	texlive-en.doc.r79177
 	tlshell.doc.r78053
 	unicode-data.doc.r76413
