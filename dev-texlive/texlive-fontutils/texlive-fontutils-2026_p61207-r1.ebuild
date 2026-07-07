@@ -12,7 +12,7 @@ TEXLIVE_MODULE_CONTENTS="
 	dvipsconfig.r13293
 	epstopdf.r71782
 	fontinst.r74240
-	fontools.r78781
+	fontools.r79207
 	fontware.r77830
 	luafindfont.r75679
 	mf2pt1.r71883
@@ -24,7 +24,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	dosepsbin.doc.r29752
 	epstopdf.doc.r71782
 	fontinst.doc.r74240
-	fontools.doc.r78781
+	fontools.doc.r79207
 	fontware.doc.r77830
 	luafindfont.doc.r75679
 	mf2pt1.doc.r71883
