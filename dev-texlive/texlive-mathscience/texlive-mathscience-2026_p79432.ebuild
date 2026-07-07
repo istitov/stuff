@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-mathscience.r79170
+	collection-mathscience.r79432
 	12many.r15878
 	accents.r77682
 	aiplans.r74462
@@ -19,7 +19,7 @@ TEXLIVE_MODULE_CONTENTS="
 	amscdx.r77682
 	amstex.r77830
 	annotate-equations.r67044
-	apxproof.r79016
+	apxproof.r79251
 	autobreak.r77682
 	backnaur.r54080
 	begriff.r15878
@@ -41,7 +41,7 @@ TEXLIVE_MODULE_CONTENTS="
 	causets.r74247
 	ccfonts.r77682
 	ccool.r76924
-	chemarrow.r17146
+	chemarrow.r79461
 	chemcompounds.r15878
 	chemcono.r17119
 	chemexec.r21632
@@ -59,7 +59,7 @@ TEXLIVE_MODULE_CONTENTS="
 	clrscode3e.r51137
 	codeanatomy.r76924
 	coloredtheorem.r74812
-	commath.r15878
+	commath.r79461
 	commutative-diagrams.r71053
 	complexity.r45322
 	computational-complexity.r44847
@@ -92,7 +92,7 @@ TEXLIVE_MODULE_CONTENTS="
 	emf.r76790
 	endiagram.r76924
 	engtlc.r28571
-	eolang.r77164
+	eolang.r79525
 	eqexpl.r63629
 	eqnarray.r77682
 	eqnnumwarn.r75878
@@ -136,9 +136,9 @@ TEXLIVE_MODULE_CONTENTS="
 	karnaugh.r21338
 	karnaugh-map.r61614
 	karnaughmap.r36989
-	keytheorems.r78577
+	keytheorems.r79254
 	kvmap.r67201
-	letterswitharrows.r77682
+	letterswitharrows.r79422
 	lie-hasse.r75301
 	linearregression.r76924
 	logicproof.r33254
@@ -174,13 +174,13 @@ TEXLIVE_MODULE_CONTENTS="
 	natded.r32693
 	nath.r77682
 	nchairx.r60196
-	nicematrix.r79103
+	nicematrix.r79473
 	nuc.r22256
 	nucleardata.r47307
 	numbersets.r76924
 	numerica.r77682
 	numerica-plus.r76924
-	numerica-tables.r77682
+	numerica-tables.r79461
 	objectz.r61719
 	odesandpdes.r69485
 	oplotsymbl.r44951
@@ -205,7 +205,7 @@ TEXLIVE_MODULE_CONTENTS="
 	prooftrees.r78038
 	pseudo.r76924
 	pseudocode.r54080
-	pythonhighlight.r70698
+	pythonhighlight.r79461
 	qsharp.r49722
 	quickreaction.r66867
 	quiver.r77816
@@ -289,20 +289,20 @@ TEXLIVE_MODULE_CONTENTS="
 	freemath.r76930
 	glmatrix.r78601
 	hideproofs.r75712
-	intexgral.r77252
+	intexgral.r79309
 	linkedthm.r75860
 	logictools.r76924
 	lua-regression.r74969
 	mohelper.r78603
 	mystyletau.r78620
-	numodel-bundle.r79158
+	numodel-bundle.r79223
 	orbitals.r79170
 	physics3.r77682
 	quantikz.r67206
 	quantum-chemistry-bonn.r78362
 	quantumcubemodel.r78909
 	query-astro.r78766
-	quickderivs.r78510
+	quickderivs.r79523
 	qworld.r75910
 	register-transfer-level.r78780
 	seqcalc.r77561
@@ -329,7 +329,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	amscdx.doc.r77682
 	amstex.doc.r77830
 	annotate-equations.doc.r67044
-	apxproof.doc.r79016
+	apxproof.doc.r79251
 	autobreak.doc.r77682
 	backnaur.doc.r54080
 	begriff.doc.r15878
@@ -351,7 +351,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	causets.doc.r74247
 	ccfonts.doc.r77682
 	ccool.doc.r76924
-	chemarrow.doc.r17146
+	chemarrow.doc.r79461
 	chemcompounds.doc.r15878
 	chemcono.doc.r17119
 	chemexec.doc.r21632
@@ -369,7 +369,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	clrscode3e.doc.r51137
 	codeanatomy.doc.r76924
 	coloredtheorem.doc.r74812
-	commath.doc.r15878
+	commath.doc.r79461
 	commutative-diagrams.doc.r71053
 	complexity.doc.r45322
 	computational-complexity.doc.r44847
@@ -402,7 +402,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	emf.doc.r76790
 	endiagram.doc.r76924
 	engtlc.doc.r28571
-	eolang.doc.r77164
+	eolang.doc.r79525
 	eqexpl.doc.r63629
 	eqnarray.doc.r77682
 	eqnnumwarn.doc.r75878
@@ -446,9 +446,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	karnaugh.doc.r21338
 	karnaugh-map.doc.r61614
 	karnaughmap.doc.r36989
-	keytheorems.doc.r78577
+	keytheorems.doc.r79254
 	kvmap.doc.r67201
-	letterswitharrows.doc.r77682
+	letterswitharrows.doc.r79422
 	lie-hasse.doc.r75301
 	linearregression.doc.r76924
 	logicproof.doc.r33254
@@ -483,13 +483,13 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	natded.doc.r32693
 	nath.doc.r77682
 	nchairx.doc.r60196
-	nicematrix.doc.r79103
+	nicematrix.doc.r79473
 	nuc.doc.r22256
 	nucleardata.doc.r47307
 	numbersets.doc.r76924
 	numerica.doc.r77682
 	numerica-plus.doc.r76924
-	numerica-tables.doc.r77682
+	numerica-tables.doc.r79461
 	objectz.doc.r61719
 	odesandpdes.doc.r69485
 	oplotsymbl.doc.r44951
@@ -514,7 +514,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	prooftrees.doc.r78038
 	pseudo.doc.r76924
 	pseudocode.doc.r54080
-	pythonhighlight.doc.r70698
+	pythonhighlight.doc.r79461
 	qsharp.doc.r49722
 	quickreaction.doc.r66867
 	quiver.doc.r77816
@@ -598,20 +598,20 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	freemath.doc.r76930
 	glmatrix.doc.r78601
 	hideproofs.doc.r75712
-	intexgral.doc.r77252
+	intexgral.doc.r79309
 	linkedthm.doc.r75860
 	logictools.doc.r76924
 	lua-regression.doc.r74969
 	mohelper.doc.r78603
 	mystyletau.doc.r78620
-	numodel-bundle.doc.r79158
+	numodel-bundle.doc.r79223
 	orbitals.doc.r79170
 	physics3.doc.r77682
 	quantikz.doc.r67206
 	quantum-chemistry-bonn.doc.r78362
 	quantumcubemodel.doc.r78909
 	query-astro.doc.r78766
-	quickderivs.doc.r78510
+	quickderivs.doc.r79523
 	qworld.doc.r75910
 	register-transfer-level.doc.r78780
 	seqcalc.doc.r77561
@@ -630,7 +630,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	algorithms.source.r78101
 	aligned-overset.source.r77682
 	amscdx.source.r77682
-	apxproof.source.r79016
+	apxproof.source.r79251
 	autobreak.source.r77682
 	backnaur.source.r54080
 	binomexp.source.r15878
@@ -646,7 +646,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	cascade.source.r76924
 	ccfonts.source.r77682
 	ccool.source.r76924
-	chemarrow.source.r17146
+	chemarrow.source.r79461
 	chemcompounds.source.r15878
 	chemobabel.source.r64778
 	chemschemex.source.r46723
@@ -668,7 +668,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	dyntree.source.r67016
 	easing.source.r75712
 	ebproof.source.r77682
-	eolang.source.r77164
+	eolang.source.r79525
 	eqnarray.source.r77682
 	euclideangeometry.source.r67608
 	extpfeil.source.r77682
@@ -691,7 +691,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	karnaugh-map.source.r61614
 	karnaughmap.source.r36989
 	kvmap.source.r67201
-	letterswitharrows.source.r77682
+	letterswitharrows.source.r79422
 	linearregression.source.r76924
 	logicproof.source.r33254
 	lplfitch.source.r75712
@@ -710,7 +710,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	multiobjective.source.r75878
 	naive-ebnf.source.r72843
 	nchairx.source.r60196
-	nicematrix.source.r79103
+	nicematrix.source.r79473
 	nucleardata.source.r47307
 	objectz.source.r61719
 	odesandpdes.source.r69485
@@ -765,8 +765,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	fits-astro.source.r78624
 	glmatrix.source.r78601
 	hideproofs.source.r75712
-	intexgral.source.r77252
-	numodel-bundle.source.r79158
+	intexgral.source.r79309
+	numodel-bundle.source.r79223
 	physics3.source.r77682
 	query-astro.source.r78766
 	tensorstyles.source.r78864
