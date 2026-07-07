@@ -2422,6 +2422,7 @@ prefix = "v"
 # ["app-text/dvipsk"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["app-text/mupdf"] skipped: custom upstream at mupdf.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["app-text/ps2pkm"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
+# ["app-text/texlive"] skipped: custom upstream at tug.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["app-text/texlive-core"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["app-text/ttf2pk2"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["dev-lang/tcc"] skipped: custom upstream at bellard.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
