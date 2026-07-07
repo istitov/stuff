@@ -19,7 +19,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	feupphdteses.doc.r30962
 	latex-via-exemplos.doc.r78322
 	latexcheat-ptbr.doc.r15878
-	lshort-portuguese.doc.r55643
+	lshort-portuguese.doc.r79461
 	numberpt.doc.r76924
 	ordinalpt.doc.r15878
 	ptlatexcommands.doc.r67125
