@@ -13,7 +13,7 @@ DESCRIPTION="Voxel <-> space-filling-curve (Morton/Hilbert) sequence CUDA ops fo
 HOMEPAGE="https://github.com/microsoft/TRELLIS"
 # A TRELLIS-local extension (extensions/vox2seq) that upstream later removed from
 # the repo; sourced from the if-ai/ComfyUI-IF_Trellis bundle and vendored on
-# extra-stuff. MIT (TRELLIS). See CLAUDE.md "Sister repo: extra-stuff".
+# the istitov/extra-stuff distfile repo. MIT (TRELLIS).
 SRC_URI="https://raw.githubusercontent.com/istitov/extra-stuff/${P}-r0-0/dev-python/${PN}/${P}.tar.xz -> ${P}-r0-0.tar.xz"
 S="${WORKDIR}/${P}"
 
