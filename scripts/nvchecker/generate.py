@@ -453,6 +453,23 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "from_pattern": r"^\d{6}\.(\d+\.\d+\.\d+)(?:_.*)?$",
         "to_pattern": r"\1",
     },
+    # wxGTK's SRC_URI pulls the upstream *release* tarball
+    # (releases/download/v${PV}/wxWidgets-${PV}.tar.bz2), which bundles the
+    # git submodules (wxSTC scintilla/lexilla, nanosvg/lunasvg) inline. The
+    # bare git tag is cut days ahead of that release, and GitHub's
+    # auto-generated tag archive leaves those bundled-only submodules empty
+    # (no --with-*=sys fallback exists for them), so it can't stand in for the
+    # release tarball. use_max_tag therefore surfaces e.g. v3.3.3 while our
+    # SRC_URI still 404s. Track use_latest_release instead: releases/latest
+    # only reports once the real tarball is published — exactly when a bump
+    # becomes fetchable. verified 2026-07-07 (v3.3.3 tagged 2026-07-05, no
+    # release yet; releases/latest still v3.3.2).
+    "x11-libs/wxGTK": {
+        "source": "github",
+        "github": "wxWidgets/wxWidgets",
+        "use_latest_release": True,
+        "prefix": "v",
+    },
     # simpleitk-bin repackages upstream's cp311-abi3 SimpleITK wheel
     # (::gentoo has no ITK to build from source). It doesn't `inherit pypi`,
     # so the classifier derives the pypi name from the files.pythonhosted.org

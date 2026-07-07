@@ -1058,7 +1058,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (185) ---
+# --- github (184) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2243,12 +2243,6 @@ github = "fmaclen/hollama"
 use_max_tag = true
 prefix = ""
 
-["x11-libs/wxGTK"]
-source = "github"
-github = "wxWidgets/wxWidgets"
-use_max_tag = true
-prefix = "v"
-
 # --- gitlab (3) ---
 
 ["sci-libs/libformfactor"]
@@ -2346,7 +2340,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (7) ---
+# --- special (8) ---
 
 ["dev-libs/cudnn"]
 source = "regex"
@@ -2383,6 +2377,12 @@ github = "Xilinx/XRT"
 use_latest_release = true
 from_pattern = '^\d{6}\.(\d+\.\d+\.\d+)(?:_.*)?$'
 to_pattern = '\1'
+
+["x11-libs/wxGTK"]
+source = "github"
+github = "wxWidgets/wxWidgets"
+use_latest_release = true
+prefix = "v"
 
 # --- skipped ---
 
