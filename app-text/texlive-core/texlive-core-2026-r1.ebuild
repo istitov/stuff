@@ -40,9 +40,9 @@ TL_CORE_EXTRA_CONTENTS="
 	makeindex.r75712
 	pmx.r75301
 	texdoctk.r62186
-	texlive-scripts.r79188
+	texlive-scripts.r79598
 	texlive-scripts-extra.r78162
-	texlive.infra.r78313
+	texlive.infra.r79511
 	tpic2pdftex.r75712
 	upmendex.r77845
 	velthuis.r66186
@@ -67,9 +67,9 @@ TL_CORE_EXTRA_DOC_CONTENTS="
 	makeindex.doc.r75712
 	pmx.doc.r75301
 	texdoctk.doc.r62186
-	texlive-scripts.doc.r79188
+	texlive-scripts.doc.r79598
 	texlive-scripts-extra.doc.r78162
-	texlive.infra.doc.r78313
+	texlive.infra.doc.r79511
 	tpic2pdftex.doc.r75712
 	upmendex.doc.r77845
 	velthuis.doc.r66186
