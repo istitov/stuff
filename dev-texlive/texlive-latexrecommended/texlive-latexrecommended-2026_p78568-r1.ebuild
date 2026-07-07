@@ -6,7 +6,7 @@ EAPI=8
 TEXLIVE_MODULE_CONTENTS="
 	collection-latexrecommended.r78568
 	anysize.r77682
-	attachfile2.r77682
+	attachfile2.r79461
 	booktabs.r77682
 	breqn.r77682
 	caption.r77682
@@ -14,7 +14,7 @@ TEXLIVE_MODULE_CONTENTS="
 	cmap.r77682
 	crop.r77682
 	ctable.r77682
-	eso-pic.r77682
+	eso-pic.r79229
 	euenc.r19795
 	euler.r77682
 	everysel.r57489
@@ -28,41 +28,41 @@ TEXLIVE_MODULE_CONTENTS="
 	fontspec.r77682
 	footnotehyper.r77682
 	fp.r77682
-	grffile.r78101
-	hologo.r78580
+	grffile.r79461
+	hologo.r79461
 	index.r77682
-	infwarerr.r77682
+	infwarerr.r79461
 	jknapltx.r19440
 	koma-script.r77575
-	l3experimental.r79165
+	l3experimental.r79407
 	latexbug.r79083
 	lineno.r78315
 	listings.r77682
-	lwarp.r78111
+	lwarp.r79391
 	mathspec.r77682
 	mathtools.r78251
 	mdwtools.r15878
 	memoir.r77682
-	metalogo.r77682
+	metalogo.r79461
 	microtype.r78228
 	newfloat.r77682
 	ntgclass.r77239
 	parskip.r77682
-	pdfcolfoot.r77682
-	pdflscape.r77682
+	pdfcolfoot.r79461
+	pdflscape.r79461
 	pdfpages.r78558
 	polyglossia.r78740
 	psfrag.r15878
 	ragged2e.r77682
 	rcs.r15878
-	sansmath.r77682
+	sansmath.r79371
 	section.r20180
 	seminar.r77682
 	sepnum.r20186
 	setspace.r77682
 	subfig.r77682
 	textcase.r77682
-	thumbpdf.r62518
+	thumbpdf.r79461
 	translator.r77682
 	typehtml.r17134
 	ucharcat.r78415
@@ -73,13 +73,13 @@ TEXLIVE_MODULE_CONTENTS="
 	xkeyval.r77682
 	xltxtra.r77682
 	xunicode.r77682
-	ltx-talk.r78858
-	lua-unicode-math.r78498
+	ltx-talk.r79566
+	lua-unicode-math.r79419
 "
 # Removed in target tlpdb: pdfmanagement-testphase
 TEXLIVE_MODULE_DOC_CONTENTS="
 	anysize.doc.r77682
-	attachfile2.doc.r77682
+	attachfile2.doc.r79461
 	booktabs.doc.r77682
 	breqn.doc.r77682
 	caption.doc.r77682
@@ -87,7 +87,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	cmap.doc.r77682
 	crop.doc.r77682
 	ctable.doc.r77682
-	eso-pic.doc.r77682
+	eso-pic.doc.r79229
 	euenc.doc.r19795
 	euler.doc.r77682
 	everysel.doc.r57489
@@ -101,40 +101,40 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fontspec.doc.r77682
 	footnotehyper.doc.r77682
 	fp.doc.r77682
-	grffile.doc.r78101
-	hologo.doc.r78580
+	grffile.doc.r79461
+	hologo.doc.r79461
 	index.doc.r77682
-	infwarerr.doc.r77682
+	infwarerr.doc.r79461
 	jknapltx.doc.r19440
-	l3experimental.doc.r79165
+	l3experimental.doc.r79407
 	latexbug.doc.r79083
 	lineno.doc.r78315
 	listings.doc.r77682
-	lwarp.doc.r78111
+	lwarp.doc.r79391
 	mathspec.doc.r77682
 	mathtools.doc.r78251
 	mdwtools.doc.r15878
 	memoir.doc.r77682
-	metalogo.doc.r77682
+	metalogo.doc.r79461
 	microtype.doc.r78228
 	newfloat.doc.r77682
 	ntgclass.doc.r77239
 	parskip.doc.r77682
-	pdfcolfoot.doc.r77682
-	pdflscape.doc.r77682
+	pdfcolfoot.doc.r79461
+	pdflscape.doc.r79461
 	pdfpages.doc.r78558
 	polyglossia.doc.r78740
 	psfrag.doc.r15878
 	ragged2e.doc.r77682
 	rcs.doc.r15878
-	sansmath.doc.r77682
+	sansmath.doc.r79371
 	section.doc.r20180
 	seminar.doc.r77682
 	sepnum.doc.r20186
 	setspace.doc.r77682
 	subfig.doc.r77682
 	textcase.doc.r77682
-	thumbpdf.doc.r62518
+	thumbpdf.doc.r79461
 	translator.doc.r77682
 	typehtml.doc.r17134
 	ucharcat.doc.r78415
@@ -145,18 +145,18 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xkeyval.doc.r77682
 	xltxtra.doc.r77682
 	xunicode.doc.r77682
-	ltx-talk.doc.r78858
-	lua-unicode-math.doc.r78498
+	ltx-talk.doc.r79566
+	lua-unicode-math.doc.r79419
 "
 # Removed in target tlpdb: pdfmanagement-testphase.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
-	attachfile2.source.r77682
+	attachfile2.source.r79461
 	booktabs.source.r77682
 	breqn.source.r77682
 	caption.source.r77682
 	crop.source.r77682
 	ctable.source.r77682
-	eso-pic.source.r77682
+	eso-pic.source.r79229
 	euenc.source.r19795
 	euler.source.r77682
 	everysel.source.r57489
@@ -166,24 +166,24 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	float.source.r77682
 	fontspec.source.r77682
 	footnotehyper.source.r77682
-	grffile.source.r78101
-	hologo.source.r78580
+	grffile.source.r79461
+	hologo.source.r79461
 	index.source.r77682
-	infwarerr.source.r77682
-	l3experimental.source.r79165
+	infwarerr.source.r79461
+	l3experimental.source.r79407
 	latexbug.source.r79083
 	listings.source.r77682
-	lwarp.source.r78111
+	lwarp.source.r79391
 	mathtools.source.r78251
 	mdwtools.source.r15878
 	memoir.source.r77682
-	metalogo.source.r77682
+	metalogo.source.r79461
 	microtype.source.r78228
 	newfloat.source.r77682
 	ntgclass.source.r77239
 	parskip.source.r77682
-	pdfcolfoot.source.r77682
-	pdflscape.source.r77682
+	pdfcolfoot.source.r79461
+	pdflscape.source.r79461
 	pdfpages.source.r78558
 	psfrag.source.r15878
 	ragged2e.source.r77682
@@ -197,8 +197,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xfrac.source.r77682
 	xkeyval.source.r77682
 	xltxtra.source.r77682
-	ltx-talk.source.r78858
-	lua-unicode-math.source.r78498
+	ltx-talk.source.r79566
+	lua-unicode-math.source.r79419
 "
 # Removed in target tlpdb: pdfmanagement-testphase.source
 
