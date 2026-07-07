@@ -24,7 +24,7 @@ TEXLIVE_MODULE_CONTENTS="
 	gmp.r77682
 	hatching.r23818
 	hershey-mp.r70885
-	huffman.r67071
+	huffman.r79290
 	latexmp.r55643
 	metago.r78101
 	metaobj.r15878
@@ -76,9 +76,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	gmp.doc.r77682
 	hatching.doc.r23818
 	hershey-mp.doc.r70885
-	huffman.doc.r67071
+	huffman.doc.r79290
 	latexmp.doc.r55643
-	mcf2graph.doc.r79128
+	mcf2graph.doc.r79502
 	metago.doc.r78101
 	metaobj.doc.r15878
 	metaplot.doc.r15878
