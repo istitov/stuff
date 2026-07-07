@@ -6,7 +6,7 @@ EAPI=8
 TEXLIVE_MODULE_CONTENTS="
 	collection-fontsextra.r78246
 	aboensis.r77682
-	academicons.r77682
+	academicons.r79395
 	accanthis.r77682
 	adforn.r78315
 	adfsymbols.r78315
@@ -30,7 +30,7 @@ TEXLIVE_MODULE_CONTENTS="
 	asana-math.r76895
 	asapsym.r40201
 	ascii-font.r77682
-	aspectratio.r25243
+	aspectratio.r79461
 	astro.r15878
 	atkinson.r77682
 	augie.r61719
@@ -257,7 +257,7 @@ TEXLIVE_MODULE_CONTENTS="
 	montserrat.r77682
 	mpfonts.r54512
 	mweights.r77682
-	newcomputermodern.r78874
+	newcomputermodern.r79453
 	newpx.r77682
 	newtx.r78101
 	newtxsf.r77682
@@ -273,7 +273,7 @@ TEXLIVE_MODULE_CONTENTS="
 	ocherokee.r25689
 	ocr-b.r20852
 	ocr-b-outline.r20969
-	ogham.r24876
+	ogham.r79461
 	oinuit.r28668
 	old-arrows.r77682
 	oldlatin.r17932
@@ -290,7 +290,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pigpen.r77682
 	playfair.r77682
 	plex.r77682
-	plex-otf.r77682
+	plex-otf.r79300
 	plimsoll.r56605
 	poiretone.r78931
 	poltawski.r77682
@@ -318,7 +318,7 @@ TEXLIVE_MODULE_CONTENTS="
 	schulschriften.r59388
 	semaphor.r18651
 	shobhika.r79121
-	simpleicons.r78804
+	simpleicons.r79577
 	skull.r51907
 	sourcecodepro.r77682
 	spectral.r77682
@@ -338,7 +338,7 @@ TEXLIVE_MODULE_CONTENTS="
 	tempora.r77682
 	tengwarscript.r34594
 	termes-otf.r77682
-	tfrupee.r20770
+	tfrupee.r79461
 	theanodidot.r78931
 	theanomodern.r78931
 	theanooldstyle.r78931
@@ -371,10 +371,10 @@ TEXLIVE_MODULE_CONTENTS="
 	fontawesome7.r76735
 	fontawesomescaled.r75980
 	juliamono.r77682
-	luciole.r77682
+	luciole.r79597
 	lydtype.r76924
 	monaspace-otf.r77682
-	pennstander-otf.r78900
+	pennstander-otf.r79461
 	sourcesans.r78899
 	sourceserif.r78252
 	splentinex.r77682
@@ -383,7 +383,7 @@ TEXLIVE_MODULE_CONTENTS="
 # Removed in target tlpdb: gentium-tug
 TEXLIVE_MODULE_DOC_CONTENTS="
 	aboensis.doc.r77682
-	academicons.doc.r77682
+	academicons.doc.r79395
 	accanthis.doc.r77682
 	adforn.doc.r78315
 	adfsymbols.doc.r78315
@@ -407,7 +407,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	asana-math.doc.r76895
 	asapsym.doc.r40201
 	ascii-font.doc.r77682
-	aspectratio.doc.r25243
+	aspectratio.doc.r79461
 	astro.doc.r15878
 	atkinson.doc.r77682
 	augie.doc.r61719
@@ -534,7 +534,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fontawesome5.doc.r77682
 	fontmfizz.doc.r43546
 	fonts-churchslavonic.doc.r67473
-	fontscripts.doc.r74247
+	fontscripts.doc.r79461
 	forum.doc.r77682
 	fourier.doc.r77682
 	fouriernc.doc.r77682
@@ -631,7 +631,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	montserrat.doc.r77682
 	mpfonts.doc.r54512
 	mweights.doc.r77682
-	newcomputermodern.doc.r78874
+	newcomputermodern.doc.r79453
 	newpx.doc.r77682
 	newtx.doc.r78101
 	newtxsf.doc.r77682
@@ -647,7 +647,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ocherokee.doc.r25689
 	ocr-b.doc.r20852
 	ocr-b-outline.doc.r20969
-	ogham.doc.r24876
+	ogham.doc.r79461
 	oinuit.doc.r28668
 	old-arrows.doc.r77682
 	oldlatin.doc.r17932
@@ -664,7 +664,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pigpen.doc.r77682
 	playfair.doc.r77682
 	plex.doc.r77682
-	plex-otf.doc.r77682
+	plex-otf.doc.r79300
 	plimsoll.doc.r56605
 	poiretone.doc.r78931
 	poltawski.doc.r77682
@@ -691,7 +691,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	schulschriften.doc.r59388
 	semaphor.doc.r18651
 	shobhika.doc.r79121
-	simpleicons.doc.r78804
+	simpleicons.doc.r79577
 	sourcecodepro.doc.r77682
 	spectral.doc.r77682
 	srbtiks.doc.r63308
@@ -710,7 +710,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tempora.doc.r77682
 	tengwarscript.doc.r34594
 	termes-otf.doc.r77682
-	tfrupee.doc.r20770
+	tfrupee.doc.r79461
 	theanodidot.doc.r78931
 	theanomodern.doc.r78931
 	theanooldstyle.doc.r78931
@@ -743,10 +743,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fontawesome7.doc.r76735
 	fontawesomescaled.doc.r75980
 	juliamono.doc.r77682
-	luciole.doc.r77682
+	luciole.doc.r79597
 	lydtype.doc.r76924
 	monaspace-otf.doc.r77682
-	pennstander-otf.doc.r78900
+	pennstander-otf.doc.r79461
 	sourcesans.doc.r78899
 	sourceserif.doc.r78252
 	splentinex.doc.r77682
@@ -797,7 +797,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	fetamont.source.r77682
 	feyn.source.r63945
 	fge.source.r77682
-	fontscripts.source.r74247
+	fontscripts.source.r79461
 	frimurer.source.r56704
 	gnu-freefont.source.r68624
 	gothic.source.r49869
@@ -829,7 +829,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	stix2-type1.source.r77682
 	svrsymbols.source.r50019
 	tengwarscript.source.r34594
-	tfrupee.source.r20770
+	tfrupee.source.r79461
 	tpslifonts.source.r42428
 	trajan.source.r77682
 	txfontsb.source.r54512
