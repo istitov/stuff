@@ -7,7 +7,7 @@ TEXLIVE_MODULE_CONTENTS="
 	collection-langarabic.r78033
 	alkalami.r44497
 	alpha-persian.r76790
-	amiri.r65191
+	amiri.r79461
 	arabi.r77682
 	arabi-add.r67573
 	arabic-book.r59594
@@ -22,7 +22,7 @@ TEXLIVE_MODULE_CONTENTS="
 	iran-bibtex.r76790
 	khatalmaqala.r68280
 	kurdishlipsum.r77682
-	luabidi.r78654
+	luabidi.r79256
 	na-box.r45130
 	parsimatn.r70775
 	parsinevis.r70776
@@ -41,7 +41,7 @@ TEXLIVE_MODULE_CONTENTS="
 TEXLIVE_MODULE_DOC_CONTENTS="
 	alkalami.doc.r44497
 	alpha-persian.doc.r76790
-	amiri.doc.r65191
+	amiri.doc.r79461
 	arabi.doc.r77682
 	arabi-add.doc.r67573
 	arabic-book.doc.r59594
@@ -56,8 +56,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	iran-bibtex.doc.r76790
 	khatalmaqala.doc.r68280
 	kurdishlipsum.doc.r77682
-	lshort-persian.doc.r31296
-	luabidi.doc.r78654
+	lshort-persian.doc.r79461
+	luabidi.doc.r79256
 	na-box.doc.r45130
 	parsimatn.doc.r70775
 	parsinevis.doc.r70776
