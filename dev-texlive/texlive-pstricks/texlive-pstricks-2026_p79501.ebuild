@@ -4,11 +4,11 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-pstricks.r79169
+	collection-pstricks.r79501
 	auto-pst-pdf.r77682
 	bclogo.r77682
 	dsptricks.r68753
-	luapstricks.r77336
+	luapstricks.r79280
 	makeplot.r15878
 	pdftricks.r15878
 	pdftricks2.r31016
@@ -46,11 +46,11 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-fit.r70686
 	pst-flags.r76924
 	pst-fr3d.r15878
-	pst-fractal.r64714
+	pst-fractal.r79409
 	pst-fun.r79050
 	pst-func.r77682
 	pst-gantt.r35832
-	pst-geo.r74247
+	pst-geo.r79528
 	pst-geometrictools.r70953
 	pst-gr3d.r15878
 	pst-grad.r77682
@@ -74,7 +74,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-ob3d.r54514
 	pst-ode.r69296
 	pst-optexp.r62977
-	pst-optic.r72694
+	pst-optic.r79461
 	pst-osci.r68781
 	pst-ovl.r77682
 	pst-pad.r15878
@@ -89,11 +89,11 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-qtree.r15878
 	pst-rputover.r44724
 	pst-rubans.r23464
-	pst-shell.r56070
+	pst-shell.r79376
 	pst-sigsys.r21667
 	pst-slpe.r24391
 	pst-solarsystem.r69675
-	pst-solides3d.r68786
+	pst-solides3d.r79298
 	pst-soroban.r15878
 	pst-spectra.r15878
 	pst-spinner.r66115
@@ -113,7 +113,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pstricks.r78101
 	pstricks-add.r77682
 	uml.r17476
-	vaucanson-g.r15878
+	vaucanson-g.r79288
 	vocaltract.r25629
 	pst-eqhz.r79121
 	pst-fourbarlinkage.r77161
@@ -121,7 +121,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-kepler.r77232
 	pst-massspring.r77131
 	pst-nutation.r77145
-	pst-spectrum.r78793
+	pst-spectrum.r79278
 	pst-sphericaltrochoid.r77173
 	pst-titration.r79169
 "
@@ -129,7 +129,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	auto-pst-pdf.doc.r77682
 	bclogo.doc.r77682
 	dsptricks.doc.r68753
-	luapstricks.doc.r77336
+	luapstricks.doc.r79280
 	makeplot.doc.r15878
 	pdftricks.doc.r15878
 	pdftricks2.doc.r31016
@@ -167,11 +167,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-fit.doc.r70686
 	pst-flags.doc.r76924
 	pst-fr3d.doc.r15878
-	pst-fractal.doc.r64714
+	pst-fractal.doc.r79409
 	pst-fun.doc.r79050
 	pst-func.doc.r77682
 	pst-gantt.doc.r35832
-	pst-geo.doc.r74247
+	pst-geo.doc.r79528
 	pst-geometrictools.doc.r70953
 	pst-gr3d.doc.r15878
 	pst-grad.doc.r77682
@@ -195,7 +195,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-ob3d.doc.r54514
 	pst-ode.doc.r69296
 	pst-optexp.doc.r62977
-	pst-optic.doc.r72694
+	pst-optic.doc.r79461
 	pst-osci.doc.r68781
 	pst-ovl.doc.r77682
 	pst-pad.doc.r15878
@@ -210,11 +210,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-qtree.doc.r15878
 	pst-rputover.doc.r44724
 	pst-rubans.doc.r23464
-	pst-shell.doc.r56070
+	pst-shell.doc.r79376
 	pst-sigsys.doc.r21667
 	pst-slpe.doc.r24391
 	pst-solarsystem.doc.r69675
-	pst-solides3d.doc.r68786
+	pst-solides3d.doc.r79298
 	pst-soroban.doc.r15878
 	pst-spectra.doc.r15878
 	pst-spinner.doc.r66115
@@ -236,7 +236,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pstricks-add.doc.r77682
 	pstricks_calcnotes.doc.r34363
 	uml.doc.r17476
-	vaucanson-g.doc.r15878
+	vaucanson-g.doc.r79288
 	vocaltract.doc.r25629
 	pst-eqhz.doc.r79121
 	pst-fourbarlinkage.doc.r77161
@@ -244,7 +244,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-kepler.doc.r77232
 	pst-massspring.doc.r77131
 	pst-nutation.doc.r77145
-	pst-spectrum.doc.r78793
+	pst-spectrum.doc.r79278
 	pst-sphericaltrochoid.doc.r77173
 	pst-titration.doc.r79169
 "
@@ -271,7 +271,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	pst-pdgr.source.r45875
 	pst-platon.source.r16538
 	pst-rubans.source.r23464
-	pst-shell.source.r56070
 	pst-slpe.source.r24391
 	pst-soroban.source.r15878
 	pst-thick.source.r16369
