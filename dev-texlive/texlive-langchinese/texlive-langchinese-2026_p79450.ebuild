@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-langchinese.r78607
+	collection-langchinese.r79450
 	arphic.r15878
 	arphic-ttf.r42675
 	cns.r45677
@@ -22,14 +22,14 @@ TEXLIVE_MODULE_CONTENTS="
 	upzhkinsoku.r47354
 	xpinyin.r77682
 	xtuthesis.r47049
-	zhlineskip.r51142
-	zhlipsum.r54994
+	zhlineskip.r79514
+	zhlipsum.r79461
 	zhmetrics.r22207
 	zhmetrics-uptex.r40728
 	zhnumber.r77682
 	zhspacing.r41145
 	luatex-cn.r78192
-	lxgw-fonts.r79004
+	lxgw-fonts.r79530
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	arphic.doc.r15878
@@ -44,7 +44,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fduthesis.doc.r67231
 	hanzibox.doc.r77682
 	impatient-cn.doc.r54080
-	install-latex-guide-zh-cn.doc.r78866
+	install-latex-guide-zh-cn.doc.r79570
 	latex-notes-zh-cn.doc.r15878
 	lshort-chinese.doc.r73160
 	nanicolle.doc.r56224
@@ -59,14 +59,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	upzhkinsoku.doc.r47354
 	xpinyin.doc.r77682
 	xtuthesis.doc.r47049
-	zhlineskip.doc.r51142
-	zhlipsum.doc.r54994
+	zhlineskip.doc.r79514
+	zhlipsum.doc.r79461
 	zhmetrics.doc.r22207
 	zhmetrics-uptex.doc.r40728
 	zhnumber.doc.r77682
 	zhspacing.doc.r41145
 	luatex-cn.doc.r78192
-	lxgw-fonts.doc.r79004
+	lxgw-fonts.doc.r79530
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	fduthesis.source.r67231
@@ -74,10 +74,10 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	njurepo.source.r50492
 	sjtutex.source.r78164
 	xpinyin.source.r77682
-	zhlipsum.source.r54994
+	zhlipsum.source.r79461
 	zhmetrics.source.r22207
 	zhnumber.source.r77682
-	lxgw-fonts.source.r79004
+	lxgw-fonts.source.r79530
 "
 
 inherit texlive-module
