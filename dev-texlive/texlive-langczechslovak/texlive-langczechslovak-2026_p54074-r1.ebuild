@@ -22,7 +22,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	csbulletin.doc.r77112
 	cstex.doc.r64149
 	lshort-czech.doc.r55643
-	lshort-slovak.doc.r15878
+	lshort-slovak.doc.r79461
 	texlive-cz.doc.r77067
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
