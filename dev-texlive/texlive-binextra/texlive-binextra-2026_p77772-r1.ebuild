@@ -7,7 +7,7 @@ TEXLIVE_MODULE_CONTENTS="
 	collection-binextra.r77772
 	a2ping.r52964
 	adhocfilelist.r29349
-	arara.r75653
+	arara.r79461
 	bundledoc.r79024
 	checklistings.r38300
 	chklref.r52649
@@ -35,24 +35,24 @@ TEXLIVE_MODULE_CONTENTS="
 	ketcindy.r58661
 	l3sys-query.r77682
 	latex-git-log.r71402
-	latex-papersize.r53131
+	latex-papersize.r79316
 	latex2man.r77377
 	latex2nemeth.r76924
 	latexfileversion.r29349
-	latexindent.r78896
+	latexindent.r79306
 	latexpand.r66226
 	light-latex-make.r66473
 	listings-ext.r29349
 	ltxfileinfo.r38663
 	ltximg.r59335
 	make4ht.r78133
-	match_parens.r76442
+	match_parens.r79202
 	mflua.r78968
 	mkjobtexmf.r29725
 	optexcount.r59817
 	patgen.r77830
 	pdfbook2.r76924
-	pdfcrop.r66862
+	pdfcrop.r79461
 	pdflatexpicscale.r72650
 	pdftex-quiet.r49169
 	pdftosrc.r77830
@@ -68,7 +68,7 @@ TEXLIVE_MODULE_CONTENTS="
 	spix.r65050
 	sqltex.r72396
 	srcredact.r38710
-	sty2dtx.r76924
+	sty2dtx.r79461
 	synctex.r66203
 	tex4ebook.r78132
 	texaccents.r64447
@@ -100,7 +100,7 @@ TEXLIVE_MODULE_CONTENTS="
 TEXLIVE_MODULE_DOC_CONTENTS="
 	a2ping.doc.r52964
 	adhocfilelist.doc.r29349
-	arara.doc.r75653
+	arara.doc.r79461
 	bundledoc.doc.r79024
 	checklistings.doc.r38300
 	chklref.doc.r52649
@@ -130,23 +130,23 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ketcindy.doc.r58661
 	l3sys-query.doc.r77682
 	latex-git-log.doc.r71402
-	latex-papersize.doc.r53131
+	latex-papersize.doc.r79316
 	latex2man.doc.r77377
 	latex2nemeth.doc.r76924
 	latexfileversion.doc.r29349
-	latexindent.doc.r78896
+	latexindent.doc.r79306
 	latexpand.doc.r66226
 	light-latex-make.doc.r66473
 	listings-ext.doc.r29349
 	ltxfileinfo.doc.r38663
 	ltximg.doc.r59335
 	make4ht.doc.r78133
-	match_parens.doc.r76442
+	match_parens.doc.r79202
 	mkjobtexmf.doc.r29725
 	optexcount.doc.r59817
 	patgen.doc.r77830
 	pdfbook2.doc.r76924
-	pdfcrop.doc.r66862
+	pdfcrop.doc.r79461
 	pdflatexpicscale.doc.r72650
 	pdftex-quiet.doc.r49169
 	pdftosrc.doc.r77830
@@ -162,7 +162,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	spix.doc.r65050
 	sqltex.doc.r72396
 	srcredact.doc.r38710
-	sty2dtx.doc.r76924
+	sty2dtx.doc.r79461
 	synctex.doc.r66203
 	tex4ebook.doc.r78132
 	texaccents.doc.r64447
@@ -193,7 +193,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	adhocfilelist.source.r29349
-	arara.source.r75653
+	arara.source.r79461
 	checklistings.source.r38300
 	clojure-pamphlet.source.r77682
 	listings-ext.source.r29349
