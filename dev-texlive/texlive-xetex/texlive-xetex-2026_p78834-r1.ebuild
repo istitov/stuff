@@ -45,9 +45,9 @@ TEXLIVE_MODULE_CONTENTS="
 	xetexko.r77682
 	xevlna.r77682
 	zbmath-review-template.r59693
-	ctex.r77682
+	ctex.r79569
 	shtthesis.r62441
-	xecjk.r77682
+	xecjk.r79564
 	xetex-devanagari.r34296
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -89,9 +89,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xetexko.doc.r77682
 	xevlna.doc.r77682
 	zbmath-review-template.doc.r59693
-	ctex.doc.r77682
+	ctex.doc.r79569
 	shtthesis.doc.r62441
-	xecjk.doc.r77682
+	xecjk.doc.r79564
 	xetex-devanagari.doc.r34296
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
@@ -100,8 +100,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	fontbook.source.r23608
 	philokalia.source.r45356
 	xespotcolor.source.r77682
-	ctex.source.r77682
-	xecjk.source.r77682
+	ctex.source.r79569
+	xecjk.source.r79564
 "
 
 inherit font texlive-module
