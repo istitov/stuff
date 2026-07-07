@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-games.r78746
+	collection-games.r79571
 	bartel-chess-fonts.r78101
 	chess.r78101
 	chess-problem-diagrams.r78101
@@ -58,7 +58,7 @@ TEXLIVE_MODULE_CONTENTS="
 	twoxtwogame.r70423
 	wargame.r72903
 	weiqi.r78101
-	wordle.r72059
+	wordle.r79377
 	xq.r78101
 	xskak.r78101
 	cardgame.r78746
@@ -122,7 +122,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	twoxtwogame.doc.r70423
 	wargame.doc.r72903
 	weiqi.doc.r78101
-	wordle.doc.r72059
+	wordle.doc.r79377
 	xq.doc.r78101
 	xskak.doc.r78101
 	cardgame.doc.r78746
