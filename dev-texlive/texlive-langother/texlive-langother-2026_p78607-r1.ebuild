@@ -30,7 +30,7 @@ TEXLIVE_MODULE_CONTENTS="
 	ethiop.r77682
 	ethiop-t1.r15878
 	fc.r32796
-	fonts-tlwg.r78431
+	fonts-tlwg.r79529
 	hebrew-fonts.r68038
 	hyphen-afrikaans.r78069
 	hyphen-armenian.r78069
@@ -91,7 +91,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ethiop.doc.r77682
 	ethiop-t1.doc.r15878
 	fc.doc.r32796
-	fonts-tlwg.doc.r78431
+	fonts-tlwg.doc.r79529
 	hebrew-fonts.doc.r68038
 	hindawi-latex-template.doc.r57757
 	hyphen-sanskrit.doc.r78069
@@ -99,7 +99,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	latexbangla.doc.r55475
 	latino-sine-flexione.doc.r69568
 	lshort-thai.doc.r55643
-	lshort-vietnamese.doc.r55643
+	lshort-vietnamese.doc.r79461
 	marathi.doc.r61719
 	ntheorem-vn.doc.r15878
 	quran-bn.doc.r74830
@@ -135,7 +135,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	ctib.source.r15878
 	culmus.source.r76924
 	ethiop.source.r77682
-	fonts-tlwg.source.r78431
+	fonts-tlwg.source.r79529
 	hebrew-fonts.source.r68038
 	hyphen-armenian.source.r78069
 	hyphen-ethiopic.source.r78069
