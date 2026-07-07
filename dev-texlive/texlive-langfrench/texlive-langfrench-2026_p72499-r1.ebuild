@@ -5,10 +5,10 @@ EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
 	collection-langfrench.r72499
-	aeguill.r15878
+	aeguill.r79461
 	annee-scolaire.r76924
 	babel-basque.r77682
-	babel-french.r78251
+	babel-french.r79302
 	basque-book.r32924
 	basque-date.r26477
 	bib-fr.r76790
@@ -23,26 +23,26 @@ TEXLIVE_MODULE_CONTENTS="
 	frpseudocode.r79121
 	hyphen-basque.r78069
 	hyphen-french.r78069
-	impnattypo.r78251
+	impnattypo.r79493
 	letgut.r78543
 	mafr.r15878
 	matapli.r76924
 	panneauxroute.r73069
-	profcollege.r79140
+	profcollege.r79384
 	proflabo.r63147
-	proflycee.r78521
+	proflycee.r79565
 	profsio.r79121
 	tabvar.r63921
 	tdsfrmath.r15878
 	variations.r15878
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
-	aeguill.doc.r15878
+	aeguill.doc.r79461
 	annee-scolaire.doc.r76924
 	apprendre-a-programmer-en-tex.doc.r76790
 	apprends-latex.doc.r19306
 	babel-basque.doc.r77682
-	babel-french.doc.r78251
+	babel-french.doc.r79302
 	basque-book.doc.r32924
 	basque-date.doc.r26477
 	bib-fr.doc.r76790
@@ -62,17 +62,17 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	frletter.doc.r15878
 	frpseudocode.doc.r79121
 	impatient-fr.doc.r54080
-	impnattypo.doc.r78251
+	impnattypo.doc.r79493
 	l2tabu-french.doc.r31315
 	latex2e-help-texinfo-fr.doc.r64228
 	letgut.doc.r78543
-	lshort-french.doc.r23332
+	lshort-french.doc.r79461
 	mafr.doc.r15878
 	matapli.doc.r76924
 	panneauxroute.doc.r73069
-	profcollege.doc.r79140
+	profcollege.doc.r79384
 	proflabo.doc.r63147
-	proflycee.doc.r78521
+	proflycee.doc.r79565
 	profsio.doc.r79121
 	tabvar.doc.r63921
 	tdsfrmath.doc.r15878
@@ -88,7 +88,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 TEXLIVE_MODULE_SRC_CONTENTS="
 	annee-scolaire.source.r76924
 	babel-basque.source.r77682
-	babel-french.source.r78251
+	babel-french.source.r79302
 	basque-book.source.r32924
 	basque-date.source.r26477
 	bibleref-french.source.r75246
@@ -96,7 +96,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	formation-latex-ul.source.r70507
 	frenchmath.source.r71205
 	hyphen-basque.source.r78069
-	impnattypo.source.r78251
+	impnattypo.source.r79493
 	letgut.source.r78543
 	tabvar.source.r63921
 	tdsfrmath.source.r15878
