@@ -4,18 +4,18 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-langeuropean.r73414
+	collection-langeuropean.r79350
 	armtex.r69418
 	babel-albanian.r77682
 	babel-bosnian.r77682
-	babel-breton.r77470
+	babel-breton.r79363
 	babel-croatian.r77682
 	babel-danish.r77682
 	babel-dutch.r77682
 	babel-estonian.r38064
 	babel-finnish.r77682
 	babel-friulan.r77682
-	babel-hungarian.r77586
+	babel-hungarian.r79587
 	babel-icelandic.r51551
 	babel-irish.r77682
 	babel-kurmanji.r30279
@@ -72,14 +72,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	armtex.doc.r69418
 	babel-albanian.doc.r77682
 	babel-bosnian.doc.r77682
-	babel-breton.doc.r77470
+	babel-breton.doc.r79363
 	babel-croatian.doc.r77682
 	babel-danish.doc.r77682
 	babel-dutch.doc.r77682
 	babel-estonian.doc.r38064
 	babel-finnish.doc.r77682
 	babel-friulan.doc.r77682
-	babel-hungarian.doc.r77586
+	babel-hungarian.doc.r79587
 	babel-icelandic.doc.r51551
 	babel-irish.doc.r77682
 	babel-kurmanji.doc.r30279
@@ -106,10 +106,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	kaytannollista-latexia.doc.r77555
 	lithuanian.doc.r66461
 	lshort-dutch.doc.r15878
-	lshort-estonian.doc.r39323
-	lshort-finnish.doc.r15878
-	lshort-slovenian.doc.r77050
-	lshort-turkish.doc.r15878
+	lshort-estonian.doc.r79461
+	lshort-finnish.doc.r79461
+	lshort-slovenian.doc.r79461
+	lshort-turkish.doc.r79461
 	nevelok.doc.r39029
 	rojud.doc.r56895
 	swebib.doc.r76924
@@ -118,7 +118,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-albanian.source.r77682
 	babel-bosnian.source.r77682
-	babel-breton.source.r77470
+	babel-breton.source.r79363
 	babel-croatian.source.r77682
 	babel-danish.source.r77682
 	babel-dutch.source.r77682
