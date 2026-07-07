@@ -18,7 +18,7 @@ SRC_URI="
 	https://dev.gentoo.org/~flow/distfiles/texlive/${MY_SOURCE_FILE}
 "
 
-TL_REVISION=77861
+TL_REVISION=79498
 EXTRA_TL_MODULES="kpathsea.r${TL_REVISION}"
 EXTRA_TL_DOC_MODULES="kpathsea.doc.r${TL_REVISION}"
 
@@ -38,7 +38,7 @@ IUSE="doc static-libs"
 TEXMF_PATH=/usr/share/texmf-dist
 
 # c23 patch dropped: backport from TL trunk r74888 (Apr 2025) is already
-# in TL2025 source (kpathsea revision 77861 > 74888). musl patch kept;
+# in TL2025 source (kpathsea revision 79498 > 74888). musl patch kept;
 # still applicable to TL2025 getopt.[ch] shipped here.
 PATCHES=(
 	"${FILESDIR}"/kpathsea-getopt-musl.patch
