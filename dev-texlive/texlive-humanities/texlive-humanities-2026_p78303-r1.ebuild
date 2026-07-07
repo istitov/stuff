@@ -59,7 +59,7 @@ TEXLIVE_MODULE_CONTENTS="
 	textglos.r30788
 	thalie.r65249
 	tree-dvips.r21751
-	verse.r77682
+	verse.r79461
 	xyling.r15878
 	linguistix.r79010
 	liturgy-cw.r76053
@@ -121,7 +121,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	thalie.doc.r65249
 	theatre.doc.r79121
 	tree-dvips.doc.r21751
-	verse.doc.r77682
+	verse.doc.r79461
 	xyling.doc.r15878
 	linguistix.doc.r79010
 	liturgy-cw.doc.r76053
@@ -156,7 +156,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	screenplay.source.r27223
 	stage.source.r62929
 	textglos.source.r30788
-	verse.source.r77682
+	verse.source.r79461
 	linguistix.source.r79010
 	liturgy-cw.source.r76053
 	sharedline.source.r78303
