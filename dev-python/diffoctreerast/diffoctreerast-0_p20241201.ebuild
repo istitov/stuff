@@ -13,7 +13,7 @@ DESCRIPTION="Differentiable octree-based radiance-field / voxel rasterization fo
 HOMEPAGE="https://github.com/JeffreyXiang/diffoctreerast"
 # TRELLIS pins JeffreyXiang/diffoctreerast @ b09c20b with a bundled glm submodule;
 # vendored self-contained on extra-stuff (glm rides along), no cleanly pinnable
-# release tag. See CLAUDE.md "Sister repo: extra-stuff".
+# release tag; the pinned bundle is hosted in the istitov/extra-stuff distfile repo.
 SRC_URI="https://raw.githubusercontent.com/istitov/extra-stuff/${P}-r0-0/dev-python/${PN}/${P}.tar.xz -> ${P}-r0-0.tar.xz"
 S="${WORKDIR}/${P}"
 
