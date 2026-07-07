@@ -1,0 +1,78 @@
+Fix C++/Python binding generation against libclang 22.
+
+libclang 22 changed what Cursor/Type.get_declaration() and FIELD_DECL child
+traversal return: forward declarations and inline type declarations instead of
+the completed definitions and their members that older libclang returned. This
+breaks three places in mupdfwrap.py's parser, each aborting 'mupdfwrap.py
+--build' with a hard assert:
+
+  parse.has_refs():
+    AssertionError: fz_pixmap has fz_keep_pixmap() but have not found
+    size/location of .refs member.
+      -> get_base_type().get_declaration() returns the forward decl
+         'typedef struct fz_pixmap fz_pixmap;' (fitz/color.h), so
+         is_definition() is False and both the .refs scan and the hard-coded
+         fallbacks are skipped.
+
+  parse.get_members() (e.g. via cpp.class_accessors()):
+    AssertionError: No fields found for fz_pixmap.
+      -> same forward-decl cursor; get_children() yields nothing.
+
+  parse.get_members() on a struct/union FIELD_DECL (via find_name(), reached
+  from cpp.class_add_iterator() for the fz_stext_* iterator classes):
+    AttributeError: 'NoneType' object has no attribute 'type'
+      -> get_children() of a FIELD_DECL whose type is an anonymous struct/union
+         (e.g. fz_stext_block.u) returns the inline type declaration rather than
+         the union's members, so dotted paths like u.t.first_line don't resolve.
+
+Fixes, all in get_members()/has_refs(): when a FIELD_DECL wraps a struct/union,
+descend to the field's record declaration; and resolve any forward-declaration
+cursor to its definition via Cursor.get_definition(). Both are no-ops on older
+libclang (get_declaration() already returned the definition), so the patch is
+safe across LLVM slots.
+
+--- a/scripts/wrap/parse.py
++++ b/scripts/wrap/parse.py
+@@ -120,6 +120,25 @@
+         cursor2 = cursor.underlying_typedef_type.get_declaration()
+     else:
+         cursor2 = cursor
++    if cursor2.kind == state.clang.cindex.CursorKind.FIELD_DECL:
++        # libclang 22: get_children() of a FIELD_DECL whose type is an
++        # (anonymous) struct/union yields the inline type declaration rather
++        # than the type's members, so nested member paths such as
++        # fz_stext_block.u.t.first_line cannot be resolved. Descend to the
++        # field's record declaration so its members are enumerable.
++        field_type_decl = cursor2.type.get_declaration()
++        if ( field_type_decl is not None
++                and field_type_decl.kind != state.clang.cindex.CursorKind.NO_DECL_FOUND
++                ):
++            cursor2 = field_type_decl
++    if not cursor2.is_definition():
++        # libclang 22 may hand back a forward-declaration cursor (e.g. for
++        # fz_pixmap, declared via 'typedef struct fz_pixmap fz_pixmap;'), whose
++        # get_children() yields no fields. Resolve to the definition so struct
++        # members are enumerable.
++        cursor2_def = cursor2.get_definition()
++        if cursor2_def is not None:
++            cursor2 = cursor2_def
+ 
+     if 0:
+         # Diagnostics to show the difference between
+@@ -252,6 +271,16 @@
+                     if verbose:
+                         jlib.log( 'There is a keep() fn for this type so it uses reference counting: {keep_name=}')
+                     base_type_cursor = get_base_type( type_).get_declaration()
++                    if not base_type_cursor.is_definition():
++                        # libclang 22 can return the forward declaration (e.g.
++                        # 'typedef struct fz_pixmap fz_pixmap;') from
++                        # get_declaration() rather than the definition, leaving
++                        # is_definition() False so both the .refs member scan and
++                        # the hard-coded fallbacks below are skipped. Resolve to
++                        # the definition cursor when it is available in the TU.
++                        base_type_cursor_def = base_type_cursor.get_definition()
++                        if base_type_cursor_def is not None:
++                            base_type_cursor = base_type_cursor_def
+                     if base_type_cursor.is_definition():
+                         if verbose:
+                             jlib.log( 'Type definition is available so we look for .refs member: {key=} {type_.spelling=} {fileline(base_type_cursor)=}')

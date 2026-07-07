@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=no
 DISTUTILS_EXT=1
-LLVM_COMPAT=( {18..21} )
+LLVM_COMPAT=( {18..22} )
 
 inherit distutils-r1 llvm-r2 toolchain-funcs
 
@@ -34,6 +34,7 @@ BDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/python.diff
+	"${FILESDIR}"/mupdf-clang22-has_refs.patch
 )
 
 EPYTEST_PLUGINS=()
