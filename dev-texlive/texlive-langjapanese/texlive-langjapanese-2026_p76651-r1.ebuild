@@ -5,23 +5,23 @@ EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
 	collection-langjapanese.r76651
-	ascmac.r53411
+	ascmac.r79461
 	asternote.r63838
 	babel-japanese.r57733
 	bxbase.r78793
 	bxcjkjatype.r78793
-	bxcoloremoji.r77682
+	bxcoloremoji.r79465
 	bxghost.r78793
 	bxjaholiday.r78793
-	bxjalipsum.r78793
+	bxjalipsum.r79277
 	bxjaprnind.r78793
 	bxjatoucs.r78793
-	bxjscls.r78536
+	bxjscls.r79198
 	bxorigcapt.r78793
-	bxwareki.r78793
+	bxwareki.r79312
 	convbkmk.r49252
 	endnotesj.r77682
-	gckanbun.r77307
+	gckanbun.r79444
 	gentombow.r77682
 	haranoaji.r76078
 	haranoaji-extra.r76079
@@ -51,11 +51,11 @@ TEXLIVE_MODULE_CONTENTS="
 	ptex-fonts.r64330
 	ptex2pdf.r65953
 	pxbase.r77682
-	pxchfon.r77682
+	pxchfon.r79479
 	pxcjkcat.r77682
 	pxjahyper.r79106
 	pxjodel.r77682
-	pxrubrica.r66298
+	pxrubrica.r79461
 	pxufont.r77682
 	uplatex.r77830
 	uptex.r77830
@@ -67,23 +67,23 @@ TEXLIVE_MODULE_CONTENTS="
 	luwa-ul.r77595
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
-	ascmac.doc.r53411
+	ascmac.doc.r79461
 	asternote.doc.r63838
 	babel-japanese.doc.r57733
 	bxbase.doc.r78793
 	bxcjkjatype.doc.r78793
-	bxcoloremoji.doc.r77682
+	bxcoloremoji.doc.r79465
 	bxghost.doc.r78793
 	bxjaholiday.doc.r78793
-	bxjalipsum.doc.r78793
+	bxjalipsum.doc.r79277
 	bxjaprnind.doc.r78793
 	bxjatoucs.doc.r78793
-	bxjscls.doc.r78536
+	bxjscls.doc.r79198
 	bxorigcapt.doc.r78793
-	bxwareki.doc.r78793
+	bxwareki.doc.r79312
 	convbkmk.doc.r49252
 	endnotesj.doc.r77682
-	gckanbun.doc.r77307
+	gckanbun.doc.r79444
 	gentombow.doc.r77682
 	haranoaji.doc.r76078
 	haranoaji-extra.doc.r76079
@@ -100,7 +100,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	jpnedumathsymbols.doc.r72959
 	jsclasses.doc.r77682
 	kanbun.doc.r77682
-	lshort-japanese.doc.r36207
+	lshort-japanese.doc.r79461
 	luatexja.doc.r79037
 	mendex-doc.doc.r77843
 	morisawa.doc.r77682
@@ -117,11 +117,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ptex-manual.doc.r75173
 	ptex2pdf.doc.r65953
 	pxbase.doc.r77682
-	pxchfon.doc.r77682
+	pxchfon.doc.r79479
 	pxcjkcat.doc.r77682
 	pxjahyper.doc.r79106
 	pxjodel.doc.r77682
-	pxrubrica.doc.r66298
+	pxrubrica.doc.r79461
 	pxufont.doc.r77682
 	texlive-ja.doc.r78540
 	uplatex.doc.r77830
@@ -134,9 +134,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	luwa-ul.doc.r77595
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
-	ascmac.source.r53411
+	ascmac.source.r79461
 	babel-japanese.source.r57733
-	bxjscls.source.r78536
+	bxjscls.source.r79198
 	japanese-otf.source.r78329
 	jlreq.source.r77682
 	jsclasses.source.r77682
@@ -145,7 +145,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	morisawa.source.r77682
 	platex.source.r77830
 	ptex-fontmaps.source.r65953
-	pxrubrica.source.r66298
+	pxrubrica.source.r79461
 	uplatex.source.r77830
 "
 
