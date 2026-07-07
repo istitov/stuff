@@ -10,18 +10,18 @@ TEXLIVE_MODULE_CONTENTS="
 	ajl.r76790
 	amsrefs.r78101
 	annotate.r76790
-	apacite.r77682
+	apacite.r79461
 	apalike-ejor.r76790
 	apalike2.r76790
-	archaeologie.r76790
+	archaeologie.r79585
 	authordate.r77682
-	beebe.r77590
+	beebe.r79461
 	besjournals.r76790
 	bestpapers.r76790
 	bib2gls.r76845
 	bib2qr.r71940
 	bibarts.r74384
-	bibcop.r75042
+	bibcop.r79293
 	biber-ms.r78957
 	bibexport.r50677
 	bibhtml.r31607
@@ -31,26 +31,26 @@ TEXLIVE_MODULE_CONTENTS="
 	biblatex-apa.r76158
 	biblatex-apa6.r56209
 	biblatex-archaeology.r53281
-	biblatex-arthistory-bonn.r46637
+	biblatex-arthistory-bonn.r79461
 	biblatex-bath.r77530
 	biblatex-bookinarticle.r40323
 	biblatex-bookinother.r76924
 	biblatex-bwl.r26556
-	biblatex-caspervector.r76790
+	biblatex-caspervector.r79461
 	biblatex-chem.r76236
 	biblatex-chicago.r77682
 	biblatex-claves.r76924
 	biblatex-cv.r59433
-	biblatex-dw.r77682
+	biblatex-dw.r79461
 	biblatex-enc.r73019
 	biblatex-ext.r79072
 	biblatex-fiwi.r45876
-	biblatex-gb7714-2015.r78680
+	biblatex-gb7714-2015.r79337
 	biblatex-german-legal.r66461
 	biblatex-gost.r66935
 	biblatex-historian.r19787
 	biblatex-ieee.r75952
-	biblatex-ijsra.r76790
+	biblatex-ijsra.r79584
 	biblatex-iso690.r62866
 	biblatex-jura2.r64762
 	biblatex-juradiss.r77682
@@ -77,7 +77,7 @@ TEXLIVE_MODULE_CONTENTS="
 	biblatex-sbl.r78850
 	biblatex-science.r48945
 	biblatex-shortfields.r45858
-	biblatex-socialscienceshuberlin.r76790
+	biblatex-socialscienceshuberlin.r79461
 	biblatex-software.r77180
 	biblatex-source-division.r76790
 	biblatex-spbasic.r61439
@@ -89,7 +89,7 @@ TEXLIVE_MODULE_CONTENTS="
 	biblatex-vancouver.r75301
 	biblatex2bibitem.r77682
 	biblist.r77682
-	bibtexperllibs.r76255
+	bibtexperllibs.r79466
 	bibtools.r75712
 	bibtopic.r77682
 	bibtopicprefix.r15878
@@ -98,7 +98,7 @@ TEXLIVE_MODULE_CONTENTS="
 	bookdb.r76790
 	breakcites.r78101
 	cell.r76790
-	chbibref.r17120
+	chbibref.r79461
 	chembst.r76790
 	chicago.r77682
 	chicago-annote.r76790
@@ -110,7 +110,7 @@ TEXLIVE_MODULE_CONTENTS="
 	citeref.r47407
 	collref.r77682
 	compactbib.r15878
-	crossrefware.r76407
+	crossrefware.r79457
 	custom-bib.r76790
 	din1505.r76790
 	dk-bib.r76790
@@ -122,7 +122,7 @@ TEXLIVE_MODULE_CONTENTS="
 	figbib.r19388
 	footbib.r17115
 	francais-bst.r76790
-	gbt7714.r79173
+	gbt7714.r79531
 	geschichtsfrkl.r42121
 	harvard.r77682
 	harvmac.r15878
@@ -176,16 +176,16 @@ TEXLIVE_MODULE_CONTENTS="
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	amsrefs.doc.r78101
-	apacite.doc.r77682
+	apacite.doc.r79461
 	apalike-ejor.doc.r76790
-	archaeologie.doc.r76790
+	archaeologie.doc.r79585
 	authordate.doc.r77682
 	besjournals.doc.r76790
 	bestpapers.doc.r76790
 	bib2gls.doc.r76845
 	bib2qr.doc.r71940
 	bibarts.doc.r74384
-	bibcop.doc.r75042
+	bibcop.doc.r79293
 	biber-ms.doc.r78957
 	bibexport.doc.r50677
 	bibhtml.doc.r31607
@@ -195,26 +195,26 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	biblatex-apa.doc.r76158
 	biblatex-apa6.doc.r56209
 	biblatex-archaeology.doc.r53281
-	biblatex-arthistory-bonn.doc.r46637
+	biblatex-arthistory-bonn.doc.r79461
 	biblatex-bath.doc.r77530
 	biblatex-bookinarticle.doc.r40323
 	biblatex-bookinother.doc.r76924
 	biblatex-bwl.doc.r26556
-	biblatex-caspervector.doc.r76790
+	biblatex-caspervector.doc.r79461
 	biblatex-chem.doc.r76236
 	biblatex-chicago.doc.r77682
 	biblatex-claves.doc.r76924
 	biblatex-cv.doc.r59433
-	biblatex-dw.doc.r77682
+	biblatex-dw.doc.r79461
 	biblatex-enc.doc.r73019
 	biblatex-ext.doc.r79072
 	biblatex-fiwi.doc.r45876
-	biblatex-gb7714-2015.doc.r78680
+	biblatex-gb7714-2015.doc.r79337
 	biblatex-german-legal.doc.r66461
 	biblatex-gost.doc.r66935
 	biblatex-historian.doc.r19787
 	biblatex-ieee.doc.r75952
-	biblatex-ijsra.doc.r76790
+	biblatex-ijsra.doc.r79584
 	biblatex-iso690.doc.r62866
 	biblatex-jura2.doc.r64762
 	biblatex-juradiss.doc.r77682
@@ -241,7 +241,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	biblatex-sbl.doc.r78850
 	biblatex-science.doc.r48945
 	biblatex-shortfields.doc.r45858
-	biblatex-socialscienceshuberlin.doc.r76790
+	biblatex-socialscienceshuberlin.doc.r79461
 	biblatex-software.doc.r77180
 	biblatex-source-division.doc.r76790
 	biblatex-spbasic.doc.r61439
@@ -253,7 +253,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	biblatex-vancouver.doc.r75301
 	biblatex2bibitem.doc.r77682
 	biblist.doc.r77682
-	bibtexperllibs.doc.r76255
+	bibtexperllibs.doc.r79466
 	bibtopic.doc.r77682
 	bibtopicprefix.doc.r15878
 	bibunits.doc.r77682
@@ -261,7 +261,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	bookdb.doc.r76790
 	breakcites.doc.r78101
 	cell.doc.r76790
-	chbibref.doc.r17120
+	chbibref.doc.r79461
 	chembst.doc.r76790
 	chicago-annote.doc.r76790
 	chicagolinks.doc.r76790
@@ -270,7 +270,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	citeall.doc.r77682
 	citeref.doc.r47407
 	collref.doc.r77682
-	crossrefware.doc.r76407
+	crossrefware.doc.r79457
 	custom-bib.doc.r76790
 	din1505.doc.r76790
 	dk-bib.doc.r76790
@@ -281,7 +281,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	figbib.doc.r19388
 	footbib.doc.r17115
 	francais-bst.doc.r76790
-	gbt7714.doc.r79173
+	gbt7714.doc.r79531
 	geschichtsfrkl.doc.r42121
 	harvard.doc.r77682
 	harvmac.doc.r15878
@@ -329,12 +329,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	amsrefs.source.r78101
-	apacite.source.r77682
-	archaeologie.source.r76790
+	apacite.source.r79461
+	archaeologie.source.r79585
 	bib2gls.source.r76845
 	bib2qr.source.r71940
 	bibarts.source.r74384
-	bibcop.source.r75042
+	bibcop.source.r79293
 	biber-ms.source.r78957
 	bibexport.source.r50677
 	biblatex-archaeology.source.r53281
@@ -343,7 +343,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	biblatex-oxref.source.r78703
 	biblatex-philosophy.source.r64414
 	biblatex-software.source.r77180
-	bibtexperllibs.source.r76255
+	bibtexperllibs.source.r79466
 	bibtools.source.r75712
 	bibtopic.source.r77682
 	bibtopicprefix.source.r15878
@@ -356,7 +356,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	doipubmed.source.r15878
 	footbib.source.r17115
 	francais-bst.source.r76790
-	gbt7714.source.r79173
+	gbt7714.source.r79531
 	geschichtsfrkl.source.r42121
 	harvard.source.r77682
 	hep-bibliography.source.r76220
