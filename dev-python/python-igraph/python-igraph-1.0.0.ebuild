@@ -22,8 +22,8 @@ KEYWORDS="~amd64 ~arm64"
 
 # Build the bundled igraph C core (vendor/source/igraph, shipped in full in the
 # sdist) with CMake. The system dev-libs/igraph would be cleaner, but it
-# hard-depends on sci-mathematics/glpk, which fails to build against this host's
-# (overlay-masked) SuiteSparse -- glpk can't find amd.h. The vendored core needs
+# hard-depends on sci-mathematics/glpk, which fails to build against the
+# overlay-masked SuiteSparse -- glpk can't find amd.h. The vendored core needs
 # none of that. verified 2026-06-17
 RDEPEND="
 	dev-python/texttable[${PYTHON_USEDEP}]
