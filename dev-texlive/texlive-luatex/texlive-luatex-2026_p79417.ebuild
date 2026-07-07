@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-luatex.r78670
+	collection-luatex.r79417
 	addliga.r78793
 	addtoluatexpath.r73424
 	auto-pst-pdf-lua.r77682
@@ -43,7 +43,7 @@ TEXLIVE_MODULE_CONTENTS="
 	luacas.r67247
 	luacensor.r71922
 	luacode.r78415
-	luacolor.r77682
+	luacolor.r79461
 	luacomplex.r68883
 	luagcd.r76790
 	luahttp.r67348
@@ -58,9 +58,9 @@ TEXLIVE_MODULE_CONTENTS="
 	lualinalg.r76924
 	luamathalign.r77682
 	luamaths.r76924
-	luamml.r78219
+	luamml.r79442
 	luamodulartables.r68893
-	luamplib.r79161
+	luamplib.r79420
 	luaoptions.r79068
 	luaotfload.r74324
 	luapackageloader.r54779
@@ -90,9 +90,9 @@ TEXLIVE_MODULE_CONTENTS="
 	pdfextra.r65184
 	penlight.r73362
 	penlightplus.r74000
-	piton.r79137
+	piton.r79521
 	placeat.r45145
-	plantuml.r75196
+	plantuml.r79512
 	pyluatex.r78739
 	scikgtex.r66764
 	selnolig.r77682
@@ -114,13 +114,13 @@ TEXLIVE_MODULE_CONTENTS="
 	countwords.r78714
 	fancymag.r75720
 	farbe.r75449
-	kkluaverb.r77516
+	kkluaverb.r79443
 	kkran.r78190
-	kksymbols.r78727
+	kksymbols.r79445
 	lua-list-hyphen.r79160
 	luahyperbolic.r78431
-	luakeyval.r76992
-	lualineno.r77766
+	luakeyval.r79472
+	lualineno.r79471
 	luatex-type-definitions.r75890
 	parstat.r77123
 	seatingchart.r76924
@@ -164,7 +164,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	luacas.doc.r67247
 	luacensor.doc.r71922
 	luacode.doc.r78415
-	luacolor.doc.r77682
+	luacolor.doc.r79461
 	luacomplex.doc.r68883
 	luagcd.doc.r76790
 	luahttp.doc.r67348
@@ -179,9 +179,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	lualinalg.doc.r76924
 	luamathalign.doc.r77682
 	luamaths.doc.r76924
-	luamml.doc.r78219
+	luamml.doc.r79442
 	luamodulartables.doc.r68893
-	luamplib.doc.r79161
+	luamplib.doc.r79420
 	luaoptions.doc.r79068
 	luaotfload.doc.r74324
 	luapackageloader.doc.r54779
@@ -211,9 +211,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pdfextra.doc.r65184
 	penlight.doc.r73362
 	penlightplus.doc.r74000
-	piton.doc.r79137
+	piton.doc.r79521
 	placeat.doc.r45145
-	plantuml.doc.r75196
+	plantuml.doc.r79512
 	pyluatex.doc.r78739
 	scikgtex.doc.r66764
 	selnolig.doc.r77682
@@ -235,13 +235,13 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	countwords.doc.r78714
 	fancymag.doc.r75720
 	farbe.doc.r75449
-	kkluaverb.doc.r77516
+	kkluaverb.doc.r79443
 	kkran.doc.r78190
-	kksymbols.doc.r78727
+	kksymbols.doc.r79445
 	lua-list-hyphen.doc.r79160
 	luahyperbolic.doc.r78431
-	luakeyval.doc.r76992
-	lualineno.doc.r77766
+	luakeyval.doc.r79472
+	lualineno.doc.r79471
 	luatex-type-definitions.doc.r75890
 	parstat.doc.r77123
 	seatingchart.doc.r76924
@@ -258,22 +258,22 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	lua-widow-control.source.r77682
 	luaaddplot.source.r72350
 	luacode.source.r78415
-	luacolor.source.r77682
+	luacolor.source.r79461
 	luaindex.source.r25882
 	luainputenc.source.r77682
 	lualatex-math.source.r77682
 	lualatex-truncate.source.r78632
 	lualibs.source.r78415
 	luamathalign.source.r77682
-	luamml.source.r78219
-	luamplib.source.r79161
+	luamml.source.r79442
+	luamplib.source.r79420
 	luaotfload.source.r74324
 	luatex85.source.r77682
 	luatexbase.source.r77682
 	luatextra.source.r77682
 	newpax.source.r78945
 	nodetree.source.r76924
-	piton.source.r79137
+	piton.source.r79521
 	placeat.source.r45145
 	semesterplannerlua.source.r71322
 	texfindpkg.source.r72937
