@@ -64,8 +64,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	lcyw.doc.r15878
 	lh.doc.r77838
 	lshort-bulgarian.doc.r77050
-	lshort-mongol.doc.r15878
-	lshort-russian.doc.r55643
+	lshort-mongol.doc.r79461
+	lshort-russian.doc.r79461
 	lshort-ukr.doc.r55643
 	mnhyphn.doc.r69727
 	mongolian-babel.doc.r15878
