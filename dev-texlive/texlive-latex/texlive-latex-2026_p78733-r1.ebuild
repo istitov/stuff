@@ -1,0 +1,216 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+TEXLIVE_MODULE_CONTENTS="
+	collection-latex.r78733
+	ae.r79461
+	amscls.r77682
+	amsmath.r79234
+	atbegshi.r79461
+	atveryend.r79461
+	auxhook.r79461
+	babel.r79370
+	babel-english.r77682
+	babelbib.r76790
+	bigintcalc.r79461
+	bitset.r79461
+	bookmark.r79461
+	carlisle.r59577
+	colortbl.r79461
+	epstopdf-pkg.r79461
+	etexcmds.r79461
+	fancyhdr.r78348
+	firstaid.r79234
+	fix2col.r78931
+	geometry.r78315
+	gettitlestring.r79461
+	graphics.r79234
+	graphics-cfg.r41448
+	grfext.r79461
+	hopatch.r79461
+	hycolor.r79461
+	hypcap.r79461
+	hyperref.r79408
+	intcalc.r79461
+	kvdefinekeys.r79461
+	kvoptions.r79461
+	kvsetkeys.r79461
+	l3backend.r78544
+	l3kernel.r79405
+	l3packages.r76637
+	latex.r79234
+	latex-bin.r78282
+	latex-fonts.r28888
+	latex-lab.r79404
+	latexconfig.r68923
+	letltxmacro.r79461
+	ltxcmds.r79461
+	ltxmisc.r75878
+	mfnfss.r77682
+	mptopdf.r79578
+	natbib.r77682
+	oberdiek.r79461
+	pagesel.r79461
+	pdfescape.r79461
+	pdftexcmds.r79461
+	pslatex.r67469
+	psnfss.r77682
+	pspicture.r15878
+	refcount.r79461
+	rerunfilecheck.r79461
+	stringenc.r79461
+	tools.r79234
+	uniquecounter.r79461
+	url.r77682
+	etoolbox.r77682
+	lua-uni-algos.r76195
+	pdfmanagement.r79164
+	tagpdf.r79038
+"
+TEXLIVE_MODULE_DOC_CONTENTS="
+	ae.doc.r79461
+	amscls.doc.r77682
+	amsmath.doc.r79234
+	atbegshi.doc.r79461
+	atveryend.doc.r79461
+	auxhook.doc.r79461
+	babel.doc.r79370
+	babel-english.doc.r77682
+	babelbib.doc.r76790
+	bigintcalc.doc.r79461
+	bitset.doc.r79461
+	bookmark.doc.r79461
+	carlisle.doc.r59577
+	colortbl.doc.r79461
+	epstopdf-pkg.doc.r79461
+	etexcmds.doc.r79461
+	fancyhdr.doc.r78348
+	firstaid.doc.r79234
+	fix2col.doc.r78931
+	geometry.doc.r78315
+	gettitlestring.doc.r79461
+	graphics.doc.r79234
+	graphics-cfg.doc.r41448
+	grfext.doc.r79461
+	hopatch.doc.r79461
+	hycolor.doc.r79461
+	hypcap.doc.r79461
+	hyperref.doc.r79408
+	intcalc.doc.r79461
+	kvdefinekeys.doc.r79461
+	kvoptions.doc.r79461
+	kvsetkeys.doc.r79461
+	l3backend.doc.r78544
+	l3kernel.doc.r79405
+	l3packages.doc.r76637
+	latex.doc.r79234
+	latex-bin.doc.r78282
+	latex-fonts.doc.r28888
+	latex-lab.doc.r79404
+	letltxmacro.doc.r79461
+	ltxcmds.doc.r79461
+	mfnfss.doc.r77682
+	mptopdf.doc.r79578
+	natbib.doc.r77682
+	oberdiek.doc.r79461
+	pagesel.doc.r79461
+	pdfescape.doc.r79461
+	pdftexcmds.doc.r79461
+	psnfss.doc.r77682
+	pspicture.doc.r15878
+	refcount.doc.r79461
+	rerunfilecheck.doc.r79461
+	stringenc.doc.r79461
+	tools.doc.r79234
+	uniquecounter.doc.r79461
+	url.doc.r77682
+	etoolbox.doc.r77682
+	lua-uni-algos.doc.r76195
+	pdfmanagement.doc.r79164
+	tagpdf.doc.r79038
+"
+TEXLIVE_MODULE_SRC_CONTENTS="
+	ae.source.r79461
+	amscls.source.r77682
+	amsmath.source.r79234
+	atbegshi.source.r79461
+	atveryend.source.r79461
+	auxhook.source.r79461
+	babel.source.r79370
+	babel-english.source.r77682
+	bigintcalc.source.r79461
+	bitset.source.r79461
+	bookmark.source.r79461
+	carlisle.source.r59577
+	colortbl.source.r79461
+	epstopdf-pkg.source.r79461
+	etexcmds.source.r79461
+	fancyhdr.source.r78348
+	firstaid.source.r79234
+	fix2col.source.r78931
+	geometry.source.r78315
+	gettitlestring.source.r79461
+	graphics.source.r79234
+	grfext.source.r79461
+	hopatch.source.r79461
+	hycolor.source.r79461
+	hypcap.source.r79461
+	hyperref.source.r79408
+	intcalc.source.r79461
+	kvdefinekeys.source.r79461
+	kvoptions.source.r79461
+	kvsetkeys.source.r79461
+	l3backend.source.r78544
+	l3kernel.source.r79405
+	l3packages.source.r76637
+	latex.source.r79234
+	latex-lab.source.r79404
+	letltxmacro.source.r79461
+	ltxcmds.source.r79461
+	mfnfss.source.r77682
+	natbib.source.r77682
+	oberdiek.source.r79461
+	pagesel.source.r79461
+	pdfescape.source.r79461
+	pdftexcmds.source.r79461
+	pslatex.source.r67469
+	psnfss.source.r77682
+	pspicture.source.r15878
+	refcount.source.r79461
+	rerunfilecheck.source.r79461
+	stringenc.source.r79461
+	tools.source.r79234
+	uniquecounter.source.r79461
+	pdfmanagement.source.r79164
+	tagpdf.source.r79038
+"
+
+inherit texlive-module
+
+DESCRIPTION="TeXLive LaTeX fundamental packages"
+
+LICENSE="GPL-2 LPPL-1.0 LPPL-1.3 LPPL-1.3c public-domain"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+COMMON_DEPEND="
+	>=dev-texlive/texlive-basic-2026
+"
+# Block pre-move collection versions so an upgrade can't collide on
+# files relocated into texlive-latex (verified 2026-05-28):
+#   etoolbox (from latexrecommended), lua-uni-algos (from luatex) in TL2025
+#   tagpdf (from latexextra) in TL2026
+RDEPEND="
+	${COMMON_DEPEND}
+	!<dev-texlive/texlive-latexrecommended-2025
+	!<dev-texlive/texlive-luatex-2025
+	!<dev-texlive/texlive-latexextra-2026
+"
+DEPEND="
+	${COMMON_DEPEND}
+"
+
+TEXLIVE_MODULE_BINSCRIPTS="
+	texmf-dist/scripts/context/perl/mptopdf.pl
+"
