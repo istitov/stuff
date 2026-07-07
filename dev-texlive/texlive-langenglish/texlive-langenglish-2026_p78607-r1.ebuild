@@ -44,7 +44,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	latex-refsheet.doc.r45076
 	latex-veryshortguide.doc.r55228
 	latex-web-companion.doc.r29349
-	latex2e-help-texinfo.doc.r71252
+	latex2e-help-texinfo.doc.r79327
 	latex4wp.doc.r68096
 	latexcheat.doc.r15878
 	latexcourse-rug.doc.r39026
