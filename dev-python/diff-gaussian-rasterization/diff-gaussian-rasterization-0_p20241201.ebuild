@@ -13,8 +13,8 @@ DESCRIPTION="Differentiable antialiased Gaussian rasterization (mip-splatting) f
 HOMEPAGE="https://github.com/autonomousvision/mip-splatting"
 # The antialiased diff-gaussian-rasterization that TRELLIS/mip-splatting use is a
 # git submodule with a bundled glm and no cleanly pinnable upstream tag, so the
-# self-contained source is vendored on extra-stuff (glm rides along). See
-# CLAUDE.md "Sister repo: extra-stuff".
+# self-contained source is vendored in the istitov/extra-stuff distfile repo
+# (glm rides along).
 SRC_URI="https://raw.githubusercontent.com/istitov/extra-stuff/${P}-r0-0/dev-python/${PN}/${P}.tar.xz -> ${P}-r0-0.tar.xz"
 S="${WORKDIR}/${P}"
 
