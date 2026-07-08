@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Oculante is a no-nonsense, hardware-accelerated image viewer written in
+    Rust. It supports a wide range of formats (including AVIF, JPEG XL, HEIF,
+    OpenEXR, HDR and camera raw), non-destructive editing, EXIF inspection and
+    per-channel analysis, with a GPU-accelerated rendering backend.
+  </longdescription>
+  <use>
+    <flag name="heif">Enable HEIF/HEIC image support via <pkg>media-libs/libheif</pkg></flag>
+  </use>
+  <upstream>
+    <remote-id type="github">woelper/oculante</remote-id>
+    <bugs-to>https://github.com/woelper/oculante/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
