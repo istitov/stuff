@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (262) ---
+# --- pypi (261) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -285,10 +285,6 @@ pypi = "fire"
 ["dev-python/flash-attn"]
 source = "pypi"
 pypi = "flash-attn"
-
-["dev-python/flashinfer-cubin"]
-source = "pypi"
-pypi = "flashinfer-cubin"
 
 ["dev-python/flashinfer-python"]
 source = "pypi"
@@ -1058,7 +1054,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (184) ---
+# --- github (185) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1351,6 +1347,12 @@ github = "explosion/spacy-models"
 use_max_tag = true
 include_regex = '^en_core_web_sm-\d+\.\d+\.\d+$'
 prefix = "en_core_web_sm-"
+
+["dev-python/flashinfer-cubin"]
+source = "github"
+github = "flashinfer-ai/flashinfer"
+use_max_tag = true
+prefix = "v"
 
 ["dev-python/glfw"]
 source = "github"
@@ -2340,7 +2342,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (8) ---
+# --- special (9) ---
 
 ["dev-libs/cudnn"]
 source = "regex"
@@ -2377,6 +2379,13 @@ github = "Xilinx/XRT"
 use_latest_release = true
 from_pattern = '^\d{6}\.(\d+\.\d+\.\d+)(?:_.*)?$'
 to_pattern = '\1'
+
+["sci-misc/stable-diffusion-cpp"]
+source = "github"
+github = "leejet/stable-diffusion.cpp"
+use_latest_release = true
+from_pattern = '^master-([0-9]+)-[0-9a-f]+$'
+to_pattern = '0_pre\1'
 
 ["x11-libs/wxGTK"]
 source = "github"

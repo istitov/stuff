@@ -470,6 +470,21 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "use_latest_release": True,
         "prefix": "v",
     },
+    # stable-diffusion.cpp cuts a GitHub *release* per master commit, tagged
+    # master-<build>-<shorthash> (e.g. master-767-885f01a); the overlay PV is
+    # 0_pre<build>. use_latest_release (NOT use_max_tag) is mandatory: the raw
+    # tag list also carries bare master-<hash> and workflow-<hash> forms with no
+    # build number, and awesomeversion can't order the trailing hex hash, so
+    # tag-sort picks garbage. releases/latest returns the newest numbered build
+    # directly; from_pattern lifts the build number into the 0_pre<N> PV form.
+    # verified 2026-07-08.
+    "sci-misc/stable-diffusion-cpp": {
+        "source": "github",
+        "github": "leejet/stable-diffusion.cpp",
+        "use_latest_release": True,
+        "from_pattern": r"^master-([0-9]+)-[0-9a-f]+$",
+        "to_pattern": r"0_pre\1",
+    },
     # simpleitk-bin repackages upstream's cp311-abi3 SimpleITK wheel
     # (::gentoo has no ITK to build from source). It doesn't `inherit pypi`,
     # so the classifier derives the pypi name from the files.pythonhosted.org
