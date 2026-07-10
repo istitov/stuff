@@ -1054,7 +1054,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (185) ---
+# --- github (186) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1758,6 +1758,13 @@ github = "darktable-org/darktable"
 use_max_tag = true
 include_regex = '^release-[0-9]+\.[0-9]*[02468]\.[0-9]+$'
 prefix = "release-"
+
+["media-gfx/oculante"]
+source = "github"
+github = "woelper/oculante"
+use_max_tag = true
+include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
 
 ["media-gfx/orcaslicer"]
 source = "github"
