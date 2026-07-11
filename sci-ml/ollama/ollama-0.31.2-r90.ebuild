@@ -6,7 +6,7 @@ EAPI=8
 # supports ROCM/HIP >=5.5, but we define 7.0 to match the rest of the overlay
 ROCM_VERSION="7.0"
 
-inherit cuda rocm cmake flag-o-matic go-module linux-info systemd
+inherit cuda rocm cmake flag-o-matic go-module linux-info multiprocessing systemd
 
 # Upstream's CMake superbuild (cmake/local.cmake) builds the GGML/llama.cpp
 # inference backends from a pinned llama.cpp fetched via ExternalProject. The
@@ -79,6 +79,20 @@ PATCHES=(
 	"${FILESDIR}/ollama-nostrip.patch"
 )
 
+pkg_pretend() {
+	if use cuda || use rocm; then
+		# The GPU backend compiles ~600 CUDA/HIP template-instance TUs in a
+		# nested cmake sub-build whose job count follows MAKEOPTS (wired via
+		# -DOLLAMA_BUILD_PARALLEL in src_configure). Each concurrent nvcc/clang
+		# pipeline is memory-hungry, so a high -j on a RAM-constrained host can
+		# be OOM-killed mid-compile.
+		ewarn "The GPU backend compiles ~600 CUDA/HIP template units; their"
+		ewarn "parallelism follows MAKEOPTS. On a RAM-constrained host a high -j"
+		ewarn "may be OOM-killed mid-compile -- cap jobs for this package with a"
+		ewarn "MAKEOPTS=\"-jN\" line in /etc/portage/env/${CATEGORY}/${PN}"
+	fi
+}
+
 pkg_setup() {
 	if use rocm; then
 		linux-info_pkg_setup
@@ -137,6 +151,15 @@ src_configure() {
 		-DOLLAMA_LIB_DIR="$(get_libdir)/ollama"
 		-DGGML_CCACHE=OFF
 		-DOLLAMA_LLAMA_BACKENDS="$(IFS=';'; echo "${backends[*]}")"
+		# Cap the nested llama-server sub-builds' parallelism. cmake/local.cmake
+		# runs each backend's `cmake --build --parallel` with NO job count, so
+		# those ExternalProject builds ignore MAKEOPTS *and*
+		# CMAKE_BUILD_PARALLEL_LEVEL and fan out to the generator default (all
+		# cores). For ggml-cuda's ~600 fat template-instance TUs that OOM-kills
+		# the compile on constrained-RAM hosts. OLLAMA_BUILD_PARALLEL supplies
+		# the missing `--parallel <N>`; tie it to MAKEOPTS so a per-package env
+		# job cap governs the nested CUDA/HIP build too.
+		-DOLLAMA_BUILD_PARALLEL="$(makeopts_jobs)"
 	)
 
 	if use rocm; then
