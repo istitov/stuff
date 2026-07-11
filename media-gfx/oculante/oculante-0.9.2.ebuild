@@ -967,3 +967,20 @@ src_install() {
 	domenu res/oculante.desktop
 	dodoc README.md
 }
+
+pkg_postinst() {
+	xdg_pkg_postinst
+
+	# This release pins notan 0.12 -> winit 0.28 -> wayland-client 0.29,
+	# whose old client stack aborts at startup on wl_shm v2 compositors
+	# (recent wlroots/sway, Mutter, ...). The 0.9.2_p20260406 master
+	# snapshot bumps notan/winit/wayland and renders under native Wayland.
+	ewarn "On wl_shm v2 Wayland compositors (recent wlroots/sway, Mutter),"
+	ewarn "oculante ${PV} aborts at startup with:"
+	ewarn "  [wayland-client error] Attempted to dispatch unknown opcode 0"
+	ewarn "  for wl_shm, aborting."
+	ewarn "Workarounds:"
+	ewarn "  - run under XWayland:  env -u WAYLAND_DISPLAY oculante ..."
+	ewarn "  - or emerge >=media-gfx/oculante-0.9.2_p20260406 (master snapshot"
+	ewarn "    on notan 0.14 / winit 0.30 / wayland-client 0.31) for native Wayland."
+}
