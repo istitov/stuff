@@ -308,6 +308,13 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "media-gfx/orcaslicer": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
+    # ollama/ollama publishes -rcN release candidates for each version
+    # (e.g. v0.31.2-rc0..rc2, v0.32.0-rc0) alongside the stable vX.Y.Z tags.
+    # Without a filter, use_max_tag surfaces the next cycle's rc0 and masks
+    # the current stable release. Restrict to the plain vX.Y.Z release form.
+    "sci-ml/ollama": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
     # HDFGroup/hdf4 tags use the format `hdfX.Y.Z` (e.g. `hdf4.3.1`) for
     # modern releases; older `hdf-4_2_16-2`-style tags used underscores and
     # a dash separator — both are excluded by requiring `hdf[0-9]`.  Strip
