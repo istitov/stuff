@@ -1,0 +1,37 @@
+# /etc/conf.d/lemonade
+# Configuration for the lemonade (lemond) OpenRC service.
+
+# REQUIRED. Local user the daemon runs as. Must own the lemonade cache
+# (~/.cache/lemonade) and be able to reach any NPU/GPU backends lemond
+# drives. The service refuses to start if this is unset.
+LEMONADE_USER=""
+
+# Listener address, passed via --host (which OVERRIDES config.json).
+# 127.0.0.1 (default) is localhost-only. Use 0.0.0.0 for all interfaces
+# ONLY if you also require API-key auth (see LEMONADE_API_KEY below) or
+# reach the host over SSH / WireGuard. lemond ships no transport
+# encryption; the bind is the security boundary for the HTTP API. (Note:
+# lemond also emits a UDP presence broadcast on LAN interfaces at startup,
+# on by default and independent of this bind; turn it off by setting
+# no_broadcast to true in ~/.cache/lemonade/config.json.)
+#LEMONADE_HOST="127.0.0.1"
+
+# Port. Leave empty to use lemond's default (13305) / the config.json value.
+#LEMONADE_PORT=""
+
+# Cache dir (lemond's positional argument, holds config.json + models).
+# Leave empty to auto-derive from LEMONADE_USER's home:
+#   ${HOME}/.cache/lemonade
+#LEMONADE_CACHE=""
+
+# Log file (opened by supervise-daemon as root before drop-priv).
+#LEMONADE_LOG="/var/log/lemonade.log"
+
+# Extra CLI args appended before the cache-dir positional.
+#LEMONADE_EXTRA_OPTS=""
+
+# To require API-key auth on all routes, export LEMONADE_API_KEY into
+# lemond's environment. Note this file is world-readable (mode 0644), so a
+# key here is exposed to any local user; `chmod 600 /etc/conf.d/lemonade`
+# or keep the key in a root-only drop-in instead. Example:
+#export LEMONADE_API_KEY="change-me"

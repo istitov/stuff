@@ -18,6 +18,8 @@
   </longdescription>
   <use>
     <flag name="fastflowlm">Pull in <pkg>sci-ml/fastflowlm</pkg> as the NPU backend</flag>
+    <flag name="openrc">Install OpenRC init.d/conf.d files for a supervise-daemon-managed service</flag>
+    <flag name="systemd">Keep upstream's systemd units (lemond.service, system + user), running as a dedicated <pkg>acct-user/lemonade</pkg></flag>
   </use>
   <upstream>
     <remote-id type="github">lemonade-sdk/lemonade</remote-id>

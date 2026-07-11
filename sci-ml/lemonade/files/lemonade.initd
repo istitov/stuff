@@ -1,0 +1,65 @@
+#!/sbin/openrc-run
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+description="Lemonade local AI server (lemond) — OpenAI-compatible LLM inference."
+
+# Design note: the systemd unit runs lemond as the dedicated acct-user
+# 'lemonade'. OpenRC intentionally does NOT assume that account -- it runs
+# as an admin-chosen LEMONADE_USER that already owns ~/.cache/lemonade.
+# This asymmetry is deliberate; don't "unify" the two onto the lemonade
+# system user without rechecking cache ownership.
+
+# Set LEMONADE_USER in /etc/conf.d/lemonade. No default — the service
+# refuses to start until it's configured.
+: ${LEMONADE_USER:=}
+: ${LEMONADE_HOST:=127.0.0.1}
+: ${LEMONADE_PORT:=}
+: ${LEMONADE_CACHE:=}
+: ${LEMONADE_LOG:=/var/log/lemonade.log}
+: ${LEMONADE_EXTRA_OPTS:=}
+
+supervisor="supervise-daemon"
+command="/usr/bin/lemond"
+output_log="${LEMONADE_LOG}"
+error_log="${LEMONADE_LOG}"
+respawn_delay=5
+# never give up restarting; the inference daemon is long-lived
+respawn_max=0
+
+# Mirror the upstream systemd unit's CAP_SYS_RESOURCE grant: give the
+# dropped user rlimit headroom for mmap/mlock of large model weights.
+rc_ulimit="-l unlimited"
+
+depend() {
+	need net
+	after net
+}
+
+start_pre() {
+	if [ -z "${LEMONADE_USER}" ]; then
+		eerror "LEMONADE_USER is not set in /etc/conf.d/lemonade."
+		eerror "Set it to the local user that owns the lemonade cache."
+		return 1
+	fi
+	if ! getent passwd "${LEMONADE_USER}" > /dev/null; then
+		eerror "User '${LEMONADE_USER}' not found on this system."
+		return 1
+	fi
+	if [ -z "${LEMONADE_CACHE}" ]; then
+		local home
+		home="$(getent passwd "${LEMONADE_USER}" | cut -d: -f6)"
+		LEMONADE_CACHE="${home}/.cache/lemonade"
+	fi
+	# --host overrides config.json, so 127.0.0.1 here forces a loopback
+	# bind regardless of what config.json carries. Set LEMONADE_HOST to
+	# 0.0.0.0 in /etc/conf.d/lemonade ONLY behind API-key auth
+	# (LEMONADE_API_KEY) or a trusted transport (SSH tunnel / WireGuard);
+	# lemond has no built-in TLS.
+	local args="--host ${LEMONADE_HOST}"
+	[ -n "${LEMONADE_PORT}" ] && args="${args} --port ${LEMONADE_PORT}"
+	[ -n "${LEMONADE_EXTRA_OPTS}" ] && args="${args} ${LEMONADE_EXTRA_OPTS}"
+	args="${args} ${LEMONADE_CACHE}"
+	command_args="${args}"
+	command_user="${LEMONADE_USER}:${LEMONADE_USER}"
+}
