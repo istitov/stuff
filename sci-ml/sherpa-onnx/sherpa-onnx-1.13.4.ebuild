@@ -50,10 +50,10 @@ SRC_URI="
 			-> pybind11-3.0.0.tar.gz
 	)
 	tts? (
-		https://github.com/csukuangfj/espeak-ng/archive/f6fed6c58b5e0998b8e68c6610125e2d07d595a7.zip
-			-> espeak-ng-f6fed6c58b5e0998b8e68c6610125e2d07d595a7.zip
-		https://github.com/csukuangfj/piper-phonemize/archive/78a788e0b719013401572d70fef372e77bff8e43.zip
-			-> piper-phonemize-78a788e0b719013401572d70fef372e77bff8e43.zip
+		https://github.com/csukuangfj/espeak-ng/archive/ed530aa113046142eb5115cf2fc9157854d0ffe1.zip
+			-> espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.zip
+		https://github.com/csukuangfj/piper-phonemize/archive/f3ff95afc03640bc1399e113e83361192a2fafb4.zip
+			-> piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.zip
 	)
 	websocket? (
 		https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-1-24-0.tar.gz
