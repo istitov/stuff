@@ -206,7 +206,6 @@ pkg_postinst() {
 	elog "Quick start (manual):"
 	elog "  lemond                   # start the server (port 13305 by default)"
 	elog "  lemonade run <model>     # CLI client"
-	elog "  lemonade-server          # deprecated shim that wraps both"
 	elog ""
 	if use openrc; then
 		elog "OpenRC service (supervise-daemon; auto-restart on crash):"
