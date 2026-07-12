@@ -1,0 +1,33 @@
+vllm-flash-attn: allow Python 3.14 in the supported-versions gate.
+
+vllm's PYTHON_COMPAT enables python3_14, but the bundled vllm-flash-attn
+hard-codes a supported-Python whitelist in CMakeLists.txt and asserts
+against it via find_python_constrained_versions() (cmake/utils.cmake).
+On 3.14 the interpreter version "3.14" is not in
+{3.9,3.10,3.11,3.12,3.13}, so CMake aborts at configure time with a
+FATAL_ERROR before any extension is built.  That is what makes
+`emerge vllm[cuda]` fail under PYTHON_SINGLE_TARGET=python3_14: vllm's
+own setup.py allows 3.14, but its CMake FetchContent of flash-attn does
+not.
+
+The flash-attn extensions are compiled against the Python *stable* ABI
+(the macro calls find_package(... Development.SABIModule) and the
+targets are built USE_SABI 3 / WITH_SOABI), so the produced abi3 module
+is independent of the exact CPython minor version; this whitelist is a
+pure build-time assertion, not an ABI constraint.  Widening it to add
+"3.14" is therefore safe.
+
+Carried forward for vllm-0.25.0 against vllm-project/flash-attention @
+2c839c3 (applies clean; cuda build-verification deferred to a NVIDIA host).
+
+--- CMakeLists.txt.orig	2026-07-12 09:39:38.087215872 +0200
++++ CMakeLists.txt	2026-07-12 09:39:38.089881131 +0200
+@@ -19,7 +19,7 @@
+ set(ignoreMe "${VLLM_PYTHON_PATH}")
+ 
+ # Supported python versions. These should be kept in sync with setup.py.
+-set(PYTHON_SUPPORTED_VERSIONS "3.9" "3.10" "3.11" "3.12" "3.13")
++set(PYTHON_SUPPORTED_VERSIONS "3.9" "3.10" "3.11" "3.12" "3.13" "3.14")
+ 
+ # Supported NVIDIA architectures.
+ set(CUDA_SUPPORTED_ARCHS "8.0;8.6;8.9;9.0")
