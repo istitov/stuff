@@ -15,7 +15,7 @@ SRC_URI="https://github.com/lemonade-sdk/${PN}/archive/refs/tags/v${PV}.tar.gz -
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="fastflowlm openrc systemd"
+IUSE="fastflowlm openrc system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd"
 
 # Upstream's CMake detects nlohmann_json/curl/zstd/CLI11 via pkg-config or
 # find_path, but cpp-httplib detection requires a .pc file (which ::gentoo
@@ -41,11 +41,19 @@ RDEPEND="
 	fastflowlm? ( sci-ml/fastflowlm )
 	acct-user/lemonade
 	acct-group/lemonade
+	system-llamacpp? ( sci-misc/llama-cpp )
+	system-whispercpp? ( app-accessibility/whisper-cpp )
+	system-sdcpp? ( sci-misc/stable-diffusion-cpp )
+	system-kokoro? ( sci-ml/kokoros )
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
 	>=dev-build/cmake-3.12
 	virtual/pkgconfig
+	system-llamacpp? ( app-misc/jq )
+	system-whispercpp? ( app-misc/jq )
+	system-sdcpp? ( app-misc/jq )
+	system-kokoro? ( app-misc/jq )
 "
 
 src_prepare() {
@@ -116,6 +124,68 @@ src_install() {
 		newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 		newconfd "${FILESDIR}/${PN}.confd" "${PN}"
 	fi
+
+	# Repoint lemond's fetch-by-default backends at the portage-managed
+	# binaries so it reuses them instead of downloading an upstream prebuilt
+	# into ~/.cache/lemonade/bin/ at runtime. lemond seeds a fresh config.json
+	# from the config-seed defaults file (the ${def} set below -- NOT the
+	# byte-identical resources/ copy): new installs reuse automatically,
+	# existing users run `lemonade config set` (see pkg_postinst).
+	#
+	# Each section pins `backend` AND the matching <backend>_bin. Pinning the
+	# backend is REQUIRED -- lemond's "auto" resolves per-backend and only reads
+	# the resolved backend's *_bin, so setting *_bin alone is a silent no-op
+	# that still fetches. But the pinned value is only lemond's routing to the
+	# binary; it does NOT pick the GPU. Once launched, the binary uses whichever
+	# ggml backend it registered first (gpu_device 0) -- on a multi-backend
+	# build ROCm/CUDA register before Vulkan, so the deps carry no backend USE
+	# constraint and pkg_postinst tells the user to build the package with the
+	# backend they want. whispercpp's section has no vulkan_bin key (only
+	# cpu/npu), so it MUST route via cpu_bin whatever the build -- do not
+	# "correct" it to vulkan. kokoro has no `backend` key at all (CPU-only).
+	# backend/*_bin keys recur across sections -> edit by key with jq, not sed.
+	# The has() guard fails the build loudly if a future lemonade renames or
+	# moves a section (jq would otherwise auto-vivify a stray key and lemond
+	# would silently fall back to fetching). Routing is by config key, not a
+	# capability probe -- a cpu/vulkan pin launches a cuda-built server that
+	# still runs on its own GPU (device 0). End-to-end reuse (fresh config, no
+	# fetch, GPU device 0) cross-checked on a CUDA host. verified 2026-07-12
+	local -a jqf=() sections=()
+	if use system-llamacpp; then
+		jqf+=( '.llamacpp.backend="vulkan" | .llamacpp.vulkan_bin="/usr/bin/llama-server"' )
+		sections+=( llamacpp )
+	fi
+	if use system-whispercpp; then
+		jqf+=( '.whispercpp.backend="cpu" | .whispercpp.cpu_bin="/usr/bin/whisper-server"' )
+		sections+=( whispercpp )
+	fi
+	if use system-sdcpp; then
+		jqf+=( '.sdcpp.backend="vulkan" | .sdcpp.vulkan_bin="/usr/bin/sd-server"' )
+		sections+=( sdcpp )
+	fi
+	if use system-kokoro; then
+		jqf+=( '.kokoro.cpu_bin="/usr/bin/koko"' )
+		sections+=( kokoro )
+	fi
+	if [[ ${#jqf[@]} -gt 0 ]]; then
+		# Pin the CONFIG-SEED template, /usr/share/lemonade/defaults.json --
+		# NOT /usr/share/lemonade-server/resources/defaults.json. lemond ships
+		# BOTH (byte-identical) but seeds a fresh ~/.cache/lemonade/config.json
+		# only from the former; edits to the resources/ copy never reach a
+		# fresh config, so reuse silently no-ops and fetches. Identical content
+		# makes the wrong file easy to pick -- do not "simplify" to the
+		# resources/ path. verified 2026-07-12 (sentinel-seeded a fresh config)
+		local def="${ED}/usr/share/lemonade/defaults.json"
+		local s
+		for s in "${sections[@]}"; do
+			jq -e "has(\"${s}\")" "${def}" >/dev/null \
+				|| die "defaults.json has no '${s}' section; re-audit the reuse pin"
+		done
+		local filter
+		printf -v filter '%s | ' "${jqf[@]}"
+		jq "${filter% | }" "${def}" > "${T}/defaults.json" || die
+		mv "${T}/defaults.json" "${def}" || die
+	fi
 }
 
 pkg_postinst() {
@@ -152,6 +222,33 @@ pkg_postinst() {
 		elog "  systemctl --user enable --now lemond   # per-user"
 		elog "  host/port live in config.json, not env vars; HF_TOKEN and"
 		elog "  LEMONADE_API_KEY go in /etc/lemonade/conf.d/*.conf"
+		elog ""
+	fi
+	if use system-llamacpp || use system-whispercpp || use system-sdcpp || use system-kokoro; then
+		elog "system-* backends: lemond reuses portage-managed binaries instead"
+		elog "of fetching prebuilts into ~/.cache/lemonade/ at runtime --"
+		use system-llamacpp   && elog "  llamacpp   -> /usr/bin/llama-server   (sci-misc/llama-cpp)"
+		use system-whispercpp && elog "  whispercpp -> /usr/bin/whisper-server (app-accessibility/whisper-cpp)"
+		use system-sdcpp      && elog "  sdcpp      -> /usr/bin/sd-server      (sci-misc/stable-diffusion-cpp)"
+		use system-kokoro     && elog "  kokoro     -> /usr/bin/koko           (sci-ml/kokoros)"
+		elog ""
+		ewarn "Which GPU backend runs is decided by the BINARY, not lemond: ggml"
+		ewarn "uses the first-registered backend (gpu_device 0). In a build with"
+		ewarn "several GPU backends, ROCm/CUDA register before Vulkan, so a"
+		ewarn "hip+vulkan or cuda+vulkan binary runs ROCm/CUDA -- not Vulkan."
+		ewarn "Build the reused package with the backend you actually want (on"
+		ewarn "gfx1150, vulkan-only: Vulkan out-runs ROCm/OpenCL there)."
+		if use system-sdcpp; then
+			ewarn "On Ryzen AI, stable-diffusion-cpp[opencl] makes sd-server abort"
+			ewarn "at startup (XRT OpenCL ICD GGML_ASSERT) -- build it with -opencl."
+		fi
+		elog ""
+		elog "The shipped defaults pin the vulkan routing (cpu for whisper/kokoro);"
+		elog "new configs pick these up automatically. For an existing config, or"
+		elog "if you built a different backend, set the bin (and matching backend):"
+		elog "  lemonade config set llamacpp.backend=vulkan llamacpp.vulkan_bin=/usr/bin/llama-server"
+		elog "lemond does not verify these paths; if the package is removed the"
+		elog "backend's model loads fail."
 		elog ""
 	fi
 	if use fastflowlm; then
