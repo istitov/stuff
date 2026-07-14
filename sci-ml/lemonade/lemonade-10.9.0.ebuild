@@ -94,7 +94,6 @@ pkg_postinst() {
 	elog "Quick start:"
 	elog "  lemond                   # start the server (port 13305 by default)"
 	elog "  lemonade run <model>     # CLI client"
-	elog "  lemonade-server          # deprecated shim that wraps both"
 	elog ""
 	if use fastflowlm; then
 		elog "USE=fastflowlm enabled — the NPU runtime is provided by"
