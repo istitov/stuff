@@ -24,11 +24,27 @@ LEMONADE_USER=""
 #   ${HOME}/.cache/lemonade
 #LEMONADE_CACHE=""
 
-# Log file (opened by supervise-daemon as root before drop-priv).
+# Log file for the daemon's stdout/stderr. supervise-daemon opens this redirect
+# itself, as the dropped user (LEMONADE_USER) not as root, so the init script
+# pre-creates it (mode 0640, owned by LEMONADE_USER) before starting -- the
+# default /var/log is root-owned, so otherwise the open fails and the daemon
+# dies before writing a line. A custom path must live in a directory that
+# already exists.
 #LEMONADE_LOG="/var/log/lemonade.log"
 
 # Extra CLI args appended before the cache-dir positional.
 #LEMONADE_EXTRA_OPTS=""
+
+# Writable runtime directory, exported to lemond as XDG_RUNTIME_DIR. lemond
+# needs one for its control socket / runtime state and refuses to start without
+# it. supervise-daemon starts with a clean environment that has no
+# XDG_RUNTIME_DIR -- elogind's /run/user/<uid> only exists after an interactive
+# login, which a boot-time service can't rely on -- so the init script creates
+# this path (mode 0700, owned by LEMONADE_USER) and exports it. This mirrors the
+# upstream systemd unit's RuntimeDirectory=lemonade (/run/lemonade). /run is
+# tmpfs and cleared each boot, which is correct for a runtime dir. Set empty
+# only if you arrange XDG_RUNTIME_DIR for the service some other way.
+#LEMONADE_RUNTIME_DIR="/run/lemonade"
 
 # ROCm runtime root, exported to lemond as ROCM_PATH. Without it, lemond's
 # bundled ROCm image/audio backends (sd-cpp, acestep, thinksound) download

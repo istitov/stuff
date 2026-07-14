@@ -18,6 +18,10 @@ description="Lemonade local AI server (lemond) — OpenAI-compatible LLM inferen
 : ${LEMONADE_CACHE:=}
 : ${LEMONADE_LOG:=/var/log/lemonade.log}
 : ${LEMONADE_EXTRA_OPTS:=}
+# Writable runtime dir exported as XDG_RUNTIME_DIR; lemond refuses to start
+# without one. Mirrors the upstream systemd unit's RuntimeDirectory=lemonade.
+# See conf.d for the full rationale. Empty disables the creation/export.
+: ${LEMONADE_RUNTIME_DIR:=/run/lemonade}
 # Reuse the system ROCm runtime for lemond's bundled ROCm backends instead of
 # fetching AMD's multi-GB TheRock runtime; /usr is Gentoo's ROCm prefix. See
 # conf.d for the full rationale. Empty disables the export.
@@ -54,6 +58,26 @@ start_pre() {
 		local home
 		home="$(getent passwd "${LEMONADE_USER}" | cut -d: -f6)"
 		LEMONADE_CACHE="${home}/.cache/lemonade"
+	fi
+	# supervise-daemon opens the stdout/stderr redirect (LEMONADE_LOG) itself,
+	# as the dropped user (not as root), and dup2s it onto the child's fds.
+	# /var/log is root-owned, so that open fails and lemond never gets a valid
+	# stdout -- it dies before writing a line. Pre-create the log user-owned so
+	# the redirect opens; 0640 keeps it off other local users.
+	if [ -n "${LEMONADE_LOG}" ]; then
+		checkpath -f -m 0640 -o "${LEMONADE_USER}:${LEMONADE_USER}" \
+			"${LEMONADE_LOG}" || return 1
+	fi
+	# lemond needs a writable XDG_RUNTIME_DIR for its control socket and
+	# runtime state, and refuses to start without one. supervise-daemon's
+	# clean environment has none -- elogind's /run/user/<uid> only exists
+	# after an interactive login, which a boot-time service can't rely on.
+	# Create a dedicated dir owned by the dropped user (mirroring the upstream
+	# systemd unit's RuntimeDirectory=lemonade) and export it.
+	if [ -n "${LEMONADE_RUNTIME_DIR}" ]; then
+		checkpath -d -m 0700 -o "${LEMONADE_USER}:${LEMONADE_USER}" \
+			"${LEMONADE_RUNTIME_DIR}" || return 1
+		export XDG_RUNTIME_DIR="${LEMONADE_RUNTIME_DIR}"
 	fi
 	# Reuse the system ROCm runtime (skips the multi-GB TheRock download) for
 	# lemond's bundled ROCm backends. No-op unless a ROCm backend is selected
