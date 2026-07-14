@@ -24,6 +24,7 @@
     <flag name="system-sdcpp">Reuse the system <pkg>sci-misc/stable-diffusion-cpp</pkg> (/usr/bin/sd-server) for the stable-diffusion.cpp backend instead of fetching an upstream prebuilt binary at runtime; build it with your preferred GPU backend (see the post-install notes)</flag>
     <flag name="system-whispercpp">Reuse the system <pkg>app-accessibility/whisper-cpp</pkg> (/usr/bin/whisper-server) for the whisper.cpp backend instead of fetching an upstream prebuilt binary at runtime; build it with your preferred GPU backend (see the post-install notes)</flag>
     <flag name="systemd">Keep upstream's systemd units (lemond.service, system + user), running as a dedicated <pkg>acct-user/lemonade</pkg></flag>
+    <flag name="tauri">Build the Tauri desktop app (lemonade-app) -- a native webkit2gtk window wrapping the same renderer as USE=webui. Pulls a Rust toolchain (<pkg>dev-lang/rust</pkg>) plus <pkg>net-libs/webkit-gtk</pkg>, and fetches Rust crates over the network at build time</flag>
     <flag name="webui">Build the bundled React web frontend (served by lemond at the server root) via <pkg>net-libs/nodejs</pkg>; runs npm/webpack over the network at build time. Without it lemond serves a static placeholder page</flag>
   </use>
   <upstream>

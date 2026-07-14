@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake systemd
+inherit cmake desktop systemd
 
 DESCRIPTION="Local AI server: optimized LLM inference on AMD NPU + GPU"
 HOMEPAGE="
@@ -15,7 +15,7 @@ SRC_URI="https://github.com/lemonade-sdk/${PN}/archive/refs/tags/v${PV}.tar.gz -
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="fastflowlm openrc system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd webui"
+IUSE="fastflowlm openrc system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd tauri webui"
 
 # Upstream's CMake detects nlohmann_json/curl/zstd/CLI11 via pkg-config or
 # find_path, but cpp-httplib detection requires a .pc file (which ::gentoo
@@ -45,6 +45,11 @@ RDEPEND="
 	system-whispercpp? ( app-accessibility/whisper-cpp )
 	system-sdcpp? ( sci-misc/stable-diffusion-cpp )
 	system-kokoro? ( sci-ml/kokoros )
+	tauri? (
+		net-libs/webkit-gtk:4.1
+		x11-libs/gtk+:3
+		net-libs/libsoup:3.0
+	)
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
@@ -55,6 +60,10 @@ BDEPEND="
 	system-sdcpp? ( app-misc/jq )
 	system-kokoro? ( app-misc/jq )
 	webui? ( net-libs/nodejs[npm] )
+	tauri? (
+		net-libs/nodejs[npm]
+		|| ( dev-lang/rust dev-lang/rust-bin )
+	)
 "
 
 src_prepare() {
@@ -83,8 +92,14 @@ src_configure() {
 	# net-libs/nodejs provides node+npm. Upstream's USE_SYSTEM_NODEJS_MODULES
 	# path (system webpack + distro JS libs under /usr/share/nodejs) would
 	# avoid the npm fetch, but ::gentoo doesn't package those modules, so the
-	# npm fetch is the only viable route. BUILD_TAURI_APP (cargo + Rust
-	# desktop GUI + webkit2gtk) stays off — no USE flag for it yet.
+	# npm fetch is the only viable route. USE=tauri additionally builds the
+	# Tauri desktop app -- a native webkit2gtk window wrapping the same
+	# renderer -- but BUILD_TAURI_APP stays OFF deliberately: upstream's ON
+	# path builds the app during the *configure* step (fails on a clean build
+	# -- no CMakeCache.txt yet) and gates its install() rules on the binary
+	# already existing at configure time. The `tauri-app` custom target is
+	# defined whenever node+npm+cargo are found (independent of this flag), so
+	# src_compile builds it and src_install places the artifacts by hand.
 	#
 	# Upstream defaults to /opt as the prefix for Linux, but lemond's
 	# get_resource_path() searches /usr/share/lemonade-server/ and
@@ -97,6 +112,19 @@ src_configure() {
 		-DBUILD_TAURI_APP=OFF
 	)
 	cmake_src_configure
+}
+
+src_compile() {
+	cmake_src_compile
+
+	# Build the Tauri desktop app. `tauri-app` is a standalone CMake target
+	# (not part of `all`): it runs `npm ci` in src/app then
+	# `tauri build --no-bundle` (webpack renderer + cargo host, LTO release).
+	# The npm + crates.io fetches ride the same network build the rest of the
+	# ebuild already needs. The built binary lands at ${BUILD_DIR}/app/.
+	if use tauri; then
+		cmake_src_compile tauri-app
+	fi
 }
 
 src_install() {
@@ -193,6 +221,16 @@ src_install() {
 		jq "${filter% | }" "${def}" > "${T}/defaults.json" || die
 		mv "${T}/defaults.json" "${def}" || die
 	fi
+
+	if use tauri; then
+		# Install the Tauri desktop binary by hand (upstream's install() rules
+		# are unusable -- see src_configure). The .desktop launches it as
+		# `lemonade-app` (a URL-scheme handler for lemonade://), so dobin to
+		# /usr/bin; the icon resolves Icon=lemonade-app from hicolor.
+		dobin "${BUILD_DIR}/app/lemonade-app"
+		domenu "${S}/data/lemonade-app.desktop"
+		newicon -s scalable "${S}/src/app/assets/logo.svg" lemonade-app.svg
+	fi
 }
 
 pkg_postinst() {
@@ -232,6 +270,12 @@ pkg_postinst() {
 		elog "Web UI: lemond serves the bundled React app at the server root,"
 		elog "e.g. http://127.0.0.1:13305/ -- open it in a browser. It shares the"
 		elog "API's bind, so it is loopback-only unless you widen LEMONADE_HOST."
+		elog ""
+	fi
+	if use tauri; then
+		elog "Desktop app: run 'lemonade-app' (or launch \"Lemonade App\" from"
+		elog "your menu) for the same UI in a native window. It is a client for"
+		elog "a lemond server, so start lemond (or the service) first."
 		elog ""
 	fi
 	if use openrc; then
