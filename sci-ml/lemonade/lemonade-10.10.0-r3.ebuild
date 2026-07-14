@@ -15,7 +15,7 @@ SRC_URI="https://github.com/lemonade-sdk/${PN}/archive/refs/tags/v${PV}.tar.gz -
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="fastflowlm openrc system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd"
+IUSE="fastflowlm openrc system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd webui"
 
 # Upstream's CMake detects nlohmann_json/curl/zstd/CLI11 via pkg-config or
 # find_path, but cpp-httplib detection requires a .pc file (which ::gentoo
@@ -54,6 +54,7 @@ BDEPEND="
 	system-whispercpp? ( app-misc/jq )
 	system-sdcpp? ( app-misc/jq )
 	system-kokoro? ( app-misc/jq )
+	webui? ( net-libs/nodejs[npm] )
 "
 
 src_prepare() {
@@ -74,10 +75,16 @@ src_prepare() {
 }
 
 src_configure() {
-	# BUILD_WEB_APP defaults ON on Linux but pulls Node.js + npm install
-	# at build time; BUILD_TAURI_APP brings cargo + Rust GUI bundling.
-	# Both are off here for a server-only build; revisit if a USE flag is
-	# requested for the desktop GUI.
+	# BUILD_WEB_APP (USE=webui) builds the bundled React SPA that lemond
+	# serves at the server root (/); without it lemond serves a static
+	# "built without a web app" placeholder there. The build runs `npm ci`
+	# (fetching the JS dependency tree from the npm registry — hence the
+	# network build, already the case here for FetchContent) then webpack.
+	# net-libs/nodejs provides node+npm. Upstream's USE_SYSTEM_NODEJS_MODULES
+	# path (system webpack + distro JS libs under /usr/share/nodejs) would
+	# avoid the npm fetch, but ::gentoo doesn't package those modules, so the
+	# npm fetch is the only viable route. BUILD_TAURI_APP (cargo + Rust
+	# desktop GUI + webkit2gtk) stays off — no USE flag for it yet.
 	#
 	# Upstream defaults to /opt as the prefix for Linux, but lemond's
 	# get_resource_path() searches /usr/share/lemonade-server/ and
@@ -86,7 +93,7 @@ src_configure() {
 	# .deb/.rpm layout and lets the resources resolve cleanly.
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="/usr"
-		-DBUILD_WEB_APP=OFF
+		-DBUILD_WEB_APP=$(usex webui ON OFF)
 		-DBUILD_TAURI_APP=OFF
 	)
 	cmake_src_configure
@@ -221,6 +228,12 @@ pkg_postinst() {
 	elog "  lemond                   # start the server (port 13305 by default)"
 	elog "  lemonade run <model>     # CLI client"
 	elog ""
+	if use webui; then
+		elog "Web UI: lemond serves the bundled React app at the server root,"
+		elog "e.g. http://127.0.0.1:13305/ -- open it in a browser. It shares the"
+		elog "API's bind, so it is loopback-only unless you widen LEMONADE_HOST."
+		elog ""
+	fi
 	if use openrc; then
 		elog "OpenRC service (supervise-daemon; auto-restart on crash):"
 		elog "  edit /etc/conf.d/lemonade and set LEMONADE_USER (required)"

@@ -9,9 +9,9 @@
     Lemonade is a local AI server that exposes optimized LLMs through
     OpenAI / Anthropic / Ollama compatible APIs, running inference on
     AMD NPU and GPU. The C++ server core (lemond, lemonade-server) is
-    packaged here without the Tauri desktop wrapper or the bundled
-    web frontend; both are CMake-toggleable and can be added behind
-    USE flags later if needed.
+    packaged here without the Tauri desktop wrapper; the bundled web
+    frontend is available behind USE=webui, and the Tauri wrapper stays
+    CMake-toggleable and can be added behind a USE flag later if needed.
 
     Pairs with sci-ml/fastflowlm to drive the AMD Ryzen AI XDNA2 NPU
     backend.
@@ -24,6 +24,7 @@
     <flag name="system-sdcpp">Reuse the system <pkg>sci-misc/stable-diffusion-cpp</pkg> (/usr/bin/sd-server) for the stable-diffusion.cpp backend instead of fetching an upstream prebuilt binary at runtime; build it with your preferred GPU backend (see the post-install notes)</flag>
     <flag name="system-whispercpp">Reuse the system <pkg>app-accessibility/whisper-cpp</pkg> (/usr/bin/whisper-server) for the whisper.cpp backend instead of fetching an upstream prebuilt binary at runtime; build it with your preferred GPU backend (see the post-install notes)</flag>
     <flag name="systemd">Keep upstream's systemd units (lemond.service, system + user), running as a dedicated <pkg>acct-user/lemonade</pkg></flag>
+    <flag name="webui">Build the bundled React web frontend (served by lemond at the server root) via <pkg>net-libs/nodejs</pkg>; runs npm/webpack over the network at build time. Without it lemond serves a static placeholder page</flag>
   </use>
   <upstream>
     <remote-id type="github">lemonade-sdk/lemonade</remote-id>
