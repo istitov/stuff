@@ -18,6 +18,10 @@ description="Lemonade local AI server (lemond) — OpenAI-compatible LLM inferen
 : ${LEMONADE_CACHE:=}
 : ${LEMONADE_LOG:=/var/log/lemonade.log}
 : ${LEMONADE_EXTRA_OPTS:=}
+# Reuse the system ROCm runtime for lemond's bundled ROCm backends instead of
+# fetching AMD's multi-GB TheRock runtime; /usr is Gentoo's ROCm prefix. See
+# conf.d for the full rationale. Empty disables the export.
+: ${LEMONADE_ROCM_PATH:=/usr}
 
 supervisor="supervise-daemon"
 command="/usr/bin/lemond"
@@ -51,6 +55,10 @@ start_pre() {
 		home="$(getent passwd "${LEMONADE_USER}" | cut -d: -f6)"
 		LEMONADE_CACHE="${home}/.cache/lemonade"
 	fi
+	# Reuse the system ROCm runtime (skips the multi-GB TheRock download) for
+	# lemond's bundled ROCm backends. No-op unless a ROCm backend is selected
+	# and a ROCm runtime is actually present at this path.
+	[ -n "${LEMONADE_ROCM_PATH}" ] && export ROCM_PATH="${LEMONADE_ROCM_PATH}"
 	# --host overrides config.json, so 127.0.0.1 here forces a loopback
 	# bind regardless of what config.json carries. Set LEMONADE_HOST to
 	# 0.0.0.0 in /etc/conf.d/lemonade ONLY behind API-key auth

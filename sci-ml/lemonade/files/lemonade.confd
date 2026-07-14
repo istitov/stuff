@@ -30,6 +30,21 @@ LEMONADE_USER=""
 # Extra CLI args appended before the cache-dir positional.
 #LEMONADE_EXTRA_OPTS=""
 
+# ROCm runtime root, exported to lemond as ROCM_PATH. Without it, lemond's
+# bundled ROCm image/audio backends (sd-cpp, acestep, thinksound) download
+# AMD's multi-GB "TheRock" ROCm runtime into the cache at first use; pointing
+# ROCM_PATH at the system ROCm makes lemond reuse it and skip that download.
+# Gentoo installs ROCm under /usr (hipconfig --path) -- the default the init
+# script applies. Takes effect only if a ROCm backend is selected AND ROCm is
+# present here; harmless otherwise and ignored by the Vulkan/CPU backends
+# (USE=system-sdcpp routes sd-cpp to the Vulkan /usr/bin/sd-server instead).
+# Do NOT drop a ROCm "version" file under this path: lemond trusts an
+# explicitly-selected ROCm blindly, but a version file makes it gate on an
+# exact major.minor match, fail it (Gentoo's ROCm differs from the bundled
+# TheRock pin), and download TheRock anyway. verified 2026-07-14. Set empty
+# to disable and leave lemond's own ROCm resolution in place.
+#LEMONADE_ROCM_PATH="/usr"
+
 # To require API-key auth on all routes, export LEMONADE_API_KEY into
 # lemond's environment. Note this file is world-readable (mode 0644), so a
 # key here is exposed to any local user; `chmod 600 /etc/conf.d/lemonade`
