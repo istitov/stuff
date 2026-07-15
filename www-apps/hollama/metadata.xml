@@ -18,6 +18,10 @@
     served by /usr/bin/hollama; systemd unit and openrc init.d
     scripts shipped under /etc/. Defaults to loopback-only.
   </longdescription>
+  <use>
+    <flag name="openrc">Install OpenRC init.d/conf.d files for the hollama service</flag>
+    <flag name="systemd">Install a systemd service unit (hollama.service, DynamicUser)</flag>
+  </use>
   <upstream>
     <remote-id type="github">fmaclen/hollama</remote-id>
   </upstream>

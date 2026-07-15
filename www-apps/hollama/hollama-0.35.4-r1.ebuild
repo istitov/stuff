@@ -17,6 +17,7 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
+IUSE="openrc systemd"
 
 # Self-contained SvelteKit Node bundle — `npm run build` with the
 # docker-node adapter emits build/index.js plus a fully self-contained
@@ -60,12 +61,16 @@ src_install() {
 
 	newbin "${FILESDIR}"/hollama.bin hollama
 
-	# systemd + openrc service management; defaults in /etc/conf.d
-	# (shared by both, though systemd ignores HOLLAMA_USER and uses
-	# DynamicUser=yes for stateless isolation).
-	systemd_dounit "${FILESDIR}"/hollama.service
-	newinitd "${FILESDIR}"/hollama.initd hollama
-	newconfd "${FILESDIR}"/hollama.confd hollama
+	# systemd + openrc service management; the conf.d defaults are OpenRC's
+	# (systemd ignores HOLLAMA_USER and uses DynamicUser=yes for stateless
+	# isolation), so they install with the OpenRC init under USE=openrc.
+	if use systemd; then
+		systemd_dounit "${FILESDIR}"/hollama.service
+	fi
+	if use openrc; then
+		newinitd "${FILESDIR}"/hollama.initd hollama
+		newconfd "${FILESDIR}"/hollama.confd hollama
+	fi
 
 	dodoc README.md SELF_HOSTING.md
 }
