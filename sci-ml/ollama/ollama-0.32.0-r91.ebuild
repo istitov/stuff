@@ -43,7 +43,7 @@ KEYWORDS="~amd64"
 # vulkan-> vulkan llama-server backend.
 # The CPU backend (all microarch variants) is always built and the right one
 # is dlopen'd at runtime, so no cpu_flags_x86 USE flags are needed.
-IUSE="cuda rocm vulkan"
+IUSE="cuda openrc rocm systemd vulkan"
 
 # Upstream tests pull models from the network; the dependency tarball is a
 # GitHub release asset that must not be mirrored.
@@ -220,9 +220,13 @@ src_install() {
 	# the already-staged lib/ollama payload without re-entering the sub-builds.
 	DESTDIR="${D}" cmake --install "${BUILD_DIR}" || die
 
-	newinitd "${FILESDIR}"/ollama.init "${PN}"
-	newconfd "${FILESDIR}"/ollama.confd "${PN}"
-	systemd_dounit "${FILESDIR}"/ollama.service
+	if use openrc; then
+		newinitd "${FILESDIR}"/ollama.init "${PN}"
+		newconfd "${FILESDIR}"/ollama.confd "${PN}"
+	fi
+	if use systemd; then
+		systemd_dounit "${FILESDIR}"/ollama.service
+	fi
 }
 
 pkg_preinst() {

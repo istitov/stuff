@@ -7,7 +7,9 @@
   </maintainer>
   <use>
     <flag name="cuda">Build the CUDA (cuda_v13) llama-server GPU backend via <pkg>dev-util/nvidia-cuda-toolkit</pkg></flag>
+    <flag name="openrc">Install OpenRC init.d/conf.d files for the ollama service</flag>
     <flag name="rocm">Build the ROCm/HIP (rocm_v7_2) llama-server GPU backend</flag>
+    <flag name="systemd">Install a systemd service unit (ollama.service)</flag>
     <flag name="vulkan">Build the Vulkan llama-server GPU backend</flag>
   </use>
   <upstream>
