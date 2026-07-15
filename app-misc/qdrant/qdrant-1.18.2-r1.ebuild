@@ -19,6 +19,7 @@ SRC_URI="https://github.com/qdrant/qdrant/archive/refs/tags/v${PV}.tar.gz -> ${P
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="openrc systemd"
 
 # Cargo.lock pulls 3 crates from git (tikv/raft-rs at a pinned rev and qdrant's
 # tonic fork) that are not on crates.io, so the dependency graph is fetched by
@@ -66,9 +67,13 @@ src_install() {
 	fowners -R qdrant:qdrant /var/lib/qdrant /var/log/qdrant
 	fperms 0750 /var/lib/qdrant /var/log/qdrant
 
-	newinitd "${FILESDIR}/qdrant.initd" qdrant
-	newconfd "${FILESDIR}/qdrant.confd" qdrant
-	systemd_dounit "${FILESDIR}/qdrant.service"
+	if use openrc; then
+		newinitd "${FILESDIR}/qdrant.initd" qdrant
+		newconfd "${FILESDIR}/qdrant.confd" qdrant
+	fi
+	if use systemd; then
+		systemd_dounit "${FILESDIR}/qdrant.service"
+	fi
 
 	dodoc README.md
 }

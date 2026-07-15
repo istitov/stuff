@@ -14,6 +14,10 @@
     an OpenRC service, a systemd unit, /etc/qdrant/config.yaml and a
     qdrant-owned /var/lib/qdrant data directory; client SDKs are not packaged.
   </longdescription>
+  <use>
+    <flag name="openrc">Install OpenRC init.d/conf.d files for a supervise-daemon-managed service</flag>
+    <flag name="systemd">Install a systemd service unit (qdrant.service)</flag>
+  </use>
   <upstream>
     <remote-id type="github">qdrant/qdrant</remote-id>
   </upstream>
