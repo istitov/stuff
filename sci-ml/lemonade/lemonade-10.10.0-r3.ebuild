@@ -135,24 +135,32 @@ src_install() {
 	# statically already, no consumers).
 	find "${ED}" -name 'libwebsockets.a' -delete || die
 
-	# Upstream's CMake unconditionally installs systemd units (system +
-	# user), plus a migrate-to-systemd helper. Gate them behind
-	# USE=systemd: the system unit runs as User=lemonade (provided by
-	# acct-user/lemonade). Without USE=systemd, strip them so OpenRC (or
-	# unit-less) installs don't carry dead units.
+	# Upstream's CPack "if(UNIX AND NOT APPLE)" block unconditionally installs
+	# a full systemd payload: the system + user lemond.service units, a
+	# sysusers.d snippet, an /etc/lemonade/conf.d secrets EnvironmentFile, and
+	# a migrate-to-systemd helper. Gate the lot behind USE=systemd -- the
+	# system unit runs as User=lemonade (provided by acct-user/lemonade).
+	# Without USE=systemd, strip all of it so OpenRC (or unit-less) installs
+	# don't carry dead systemd files. zz-secrets.conf especially is worse than
+	# dead on OpenRC: the init reads /etc/conf.d/lemonade, so an API key
+	# dropped in /etc/lemonade/conf.d/ is silently ignored (no auth) rather
+	# than applied. sysusers.d/lemonade.conf is redundant with the unconditional
+	# acct-user/lemonade; keep it under systemd (idempotent), drop it here.
 	#
-	# The three paths below mirror exactly what upstream's CMake installs
-	# as of v10.10.0. On a bump, re-confirm the unit basename, the migrate
-	# helper path and that examples/ still exists -- a rename upstream
+	# The paths below mirror exactly what upstream's CMake installs as of
+	# v10.10.0. On a bump, re-confirm each basename/dir -- a rename upstream
 	# turns any of these `rm ... || die` into a build failure.
-	# verified 2026-07-11
+	# verified 2026-07-15
 	if ! use systemd; then
 		# systemd_get_*unitdir already carries EPREFIX, so pair it with
 		# ${D} (not ${ED}) to avoid a doubled prefix.
 		rm "${D}$(systemd_get_systemunitdir)/lemond.service" || die
 		rm "${D}$(systemd_get_userunitdir)/lemond.service" || die
+		rm "${ED}/usr/lib/sysusers.d/lemonade.conf" || die
+		rm "${ED}/etc/lemonade/conf.d/zz-secrets.conf" || die
 		rm "${ED}/usr/share/lemonade-server/examples/migrate-to-systemd.sh" || die
 		rmdir "${ED}/usr/share/lemonade-server/examples" 2>/dev/null || true
+		rmdir "${ED}/etc/lemonade/conf.d" "${ED}/etc/lemonade" 2>/dev/null || true
 	fi
 
 	if use openrc; then
