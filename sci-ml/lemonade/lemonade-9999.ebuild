@@ -46,6 +46,10 @@ RDEPEND="
 	system-whispercpp? ( app-accessibility/whisper-cpp )
 	system-sdcpp? ( sci-misc/stable-diffusion-cpp )
 	system-kokoro? ( sci-ml/kokoros )
+	webui? (
+		app-misc/jq
+		x11-misc/xdg-utils
+	)
 	tauri? (
 		net-libs/webkit-gtk:4.1
 		x11-libs/gtk+:3
@@ -89,7 +93,14 @@ src_prepare() {
 src_configure() {
 	# BUILD_WEB_APP (USE=webui) builds the bundled React SPA that lemond
 	# serves at the server root (/); without it lemond serves a static
-	# "built without a web app" placeholder there. The build runs `npm ci`
+	# "built without a web app" placeholder there. Since v11.0.0 USE=webui
+	# also installs a lemonade-web-app browser launcher (/usr/bin + a
+	# .desktop menu entry + /usr/share/pixmaps icon) via cmake_src_install;
+	# that launcher runs under `set -e` and pipes `lemonade status --json`
+	# through jq for port discovery (which aborts the launcher if jq is
+	# absent), falling back to xdg-open to open the browser -- hence the
+	# webui? ( app-misc/jq x11-misc/xdg-utils ) RDEPEND. verified 2026-07-16
+	# The build runs `npm ci`
 	# (fetching the JS dependency tree from the npm registry — hence the
 	# network build, already the case here for FetchContent) then webpack.
 	# net-libs/nodejs provides node+npm. Upstream's USE_SYSTEM_NODEJS_MODULES
@@ -150,9 +161,12 @@ src_install() {
 	# than applied. sysusers.d/lemonade.conf is redundant with the unconditional
 	# acct-user/lemonade; keep it under systemd (idempotent), drop it here.
 	#
-	# The paths below mirror what upstream's CMake installs at HEAD (≈v10.10.0).
+	# The paths below mirror what upstream's CMake installs at HEAD (v11.x).
 	# On a HEAD bump, re-confirm each basename/dir -- a rename upstream turns
-	# any of these `rm ... || die` into a build failure. verified 2026-07-15
+	# any of these `rm ... || die` into a build failure. NB: since v11.0.0 the
+	# examples/ dir also carries non-systemd API samples, so the rmdir below
+	# no-ops (dir non-empty) -- only migrate-to-systemd.sh is systemd-specific
+	# and stripped; the samples ship regardless of USE. verified 2026-07-16
 	if ! use systemd; then
 		# systemd_get_*unitdir already carries EPREFIX, so pair it with
 		# ${D} (not ${ED}) to avoid a doubled prefix.
@@ -282,6 +296,8 @@ pkg_postinst() {
 		elog "Web UI: lemond serves the bundled React app at the server root,"
 		elog "e.g. http://127.0.0.1:13305/ -- open it in a browser. It shares the"
 		elog "API's bind, so it is loopback-only unless you widen LEMONADE_HOST."
+		elog "A 'lemonade-web-app' launcher (+ \"Lemonade Web App\" menu entry)"
+		elog "that opens the UI in your browser is installed too; start lemond first."
 		elog ""
 	fi
 	if use tauri; then
@@ -335,7 +351,14 @@ pkg_postinst() {
 	fi
 	if use system-fastflowlm; then
 		elog "USE=system-fastflowlm enabled — the NPU runtime is provided by"
-		elog "sci-ml/fastflowlm. Confirm 'flm validate' passes before"
-		elog "lemonade tries to drive the NPU backend."
+		elog "sci-ml/fastflowlm (flm on PATH; lemond resolves it there, no"
+		elog "runtime fetch). Confirm 'flm validate' passes before lemonade"
+		elog "drives the NPU backend."
+	else
+		ewarn "Without USE=system-fastflowlm, lemond auto-downloads the FastFlowLM"
+		ewarn "(flm) NPU runtime into ~/.cache/lemonade on first NPU use -- it"
+		ewarn "resolves flm as config-override -> PATH -> download, so a packaged"
+		ewarn "flm on PATH wins. Enable USE=system-fastflowlm (sci-ml/fastflowlm) to"
+		ewarn "use the packaged runtime and skip that fetch."
 	fi
 }
