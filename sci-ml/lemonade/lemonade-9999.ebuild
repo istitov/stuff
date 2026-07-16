@@ -16,7 +16,11 @@ EGIT_REPO_URI="https://github.com/lemonade-sdk/${PN}.git"
 LICENSE="Apache-2.0"
 SLOT="0"
 # No KEYWORDS for live ebuild.
-IUSE="openrc system-fastflowlm system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd tauri webui"
+IUSE="openrc system-fastflowlm system-kokoro system-llamacpp system-rocm system-sdcpp system-therock system-whispercpp systemd tauri webui"
+
+# system-rocm and system-therock both point lemond's ROCm runtime at a system
+# path via ROCM_PATH (skipping the TheRock download); at most one applies.
+REQUIRED_USE="?? ( system-rocm system-therock )"
 
 # Upstream's CMake detects nlohmann_json/curl/zstd/CLI11 via pkg-config or
 # find_path, but cpp-httplib detection requires a .pc file (which ::gentoo
@@ -46,6 +50,8 @@ RDEPEND="
 	system-whispercpp? ( app-accessibility/whisper-cpp )
 	system-sdcpp? ( sci-misc/stable-diffusion-cpp )
 	system-kokoro? ( sci-ml/kokoros )
+	system-rocm? ( dev-util/hip )
+	system-therock? ( >=dev-util/therock-bin-7.13.0 <dev-util/therock-bin-7.14 )
 	webui? (
 		app-misc/jq
 		x11-misc/xdg-utils
@@ -182,6 +188,33 @@ src_install() {
 	if use openrc; then
 		newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 		newconfd "${FILESDIR}/${PN}.confd" "${PN}"
+	fi
+
+	# system-rocm / system-therock bake lemond's ROCm-runtime source into the
+	# service so it reuses a system ROCm via ROCM_PATH instead of downloading
+	# AMD's TheRock. system-rocm -> /usr (Gentoo's ROCm; blind-trusted, no
+	# version file); system-therock -> /opt/therock-bin (dev-util/therock-bin,
+	# whose .info/version must major.minor-match lemond's backend_versions.json
+	# therock.version 7.13 -- the RDEPEND holds it to the 7.13 line). OpenRC
+	# gets the confd value; systemd gets an Environment drop-in on both units.
+	# A manual launch still needs the export (see pkg_postinst). verified 2026-07-16
+	local rocm_path=
+	use system-rocm && rocm_path="/usr"
+	use system-therock && rocm_path="/opt/therock-bin"
+	if [[ -n ${rocm_path} ]]; then
+		if use openrc; then
+			sed -i -e "s|^#\?LEMONADE_ROCM_PATH=.*|LEMONADE_ROCM_PATH=\"${rocm_path}\"|" \
+				"${ED}/etc/conf.d/${PN}" || die
+		fi
+		if use systemd; then
+			printf '[Service]\nEnvironment=ROCM_PATH=%s\n' "${rocm_path}" \
+				> "${T}/10-rocm-path.conf" || die
+			local unitdir
+			for unitdir in "$(systemd_get_systemunitdir)" "$(systemd_get_userunitdir)"; do
+				insinto "${unitdir#"${EPREFIX}"}/lemond.service.d"
+				newins "${T}/10-rocm-path.conf" 10-rocm-path.conf
+			done
+		fi
 	fi
 
 	# Repoint lemond's fetch-by-default backends at the portage-managed
@@ -347,6 +380,22 @@ pkg_postinst() {
 		elog "  lemonade config set llamacpp.backend=vulkan llamacpp.vulkan_bin=/usr/bin/llama-server"
 		elog "lemond does not verify these paths; if the package is removed the"
 		elog "backend's model loads fail."
+		elog ""
+	fi
+	if use system-rocm || use system-therock; then
+		local _rp=/usr
+		use system-therock && _rp=/opt/therock-bin
+		elog "ROCm runtime: lemond is pointed at ${_rp} (ROCM_PATH), so its"
+		elog "rocm-stable image/audio backends reuse that ROCm instead of"
+		elog "downloading AMD's ~3 GB TheRock runtime. The OpenRC service (confd)"
+		elog "and the systemd units (drop-in) set it automatically; for a MANUAL"
+		elog "launch, export it yourself:"
+		elog "  export ROCM_PATH=${_rp}"
+		if use system-therock; then
+			elog "dev-util/therock-bin must major.minor-match lemond's pinned ROCm"
+			elog "(7.13); the RDEPEND holds it to the 7.13 line. A mismatched version"
+			elog "file makes lemond reject it and download TheRock anyway."
+		fi
 		elog ""
 	fi
 	if use system-fastflowlm; then
