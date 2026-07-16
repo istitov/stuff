@@ -16,7 +16,7 @@ EGIT_REPO_URI="https://github.com/lemonade-sdk/${PN}.git"
 LICENSE="Apache-2.0"
 SLOT="0"
 # No KEYWORDS for live ebuild.
-IUSE="fastflowlm openrc system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd tauri webui"
+IUSE="openrc system-fastflowlm system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd tauri webui"
 
 # Upstream's CMake detects nlohmann_json/curl/zstd/CLI11 via pkg-config or
 # find_path, but cpp-httplib detection requires a .pc file (which ::gentoo
@@ -39,9 +39,9 @@ RDEPEND="
 	>=net-libs/libwebsockets-4.3.3
 	>=net-misc/curl-8.5.0
 	sys-libs/libcap
-	fastflowlm? ( sci-ml/fastflowlm )
 	acct-user/lemonade
 	acct-group/lemonade
+	system-fastflowlm? ( sci-ml/fastflowlm )
 	system-llamacpp? ( sci-misc/llama-cpp )
 	system-whispercpp? ( app-accessibility/whisper-cpp )
 	system-sdcpp? ( sci-misc/stable-diffusion-cpp )
@@ -333,8 +333,8 @@ pkg_postinst() {
 		elog "backend's model loads fail."
 		elog ""
 	fi
-	if use fastflowlm; then
-		elog "USE=fastflowlm enabled — the NPU runtime is provided by"
+	if use system-fastflowlm; then
+		elog "USE=system-fastflowlm enabled — the NPU runtime is provided by"
 		elog "sci-ml/fastflowlm. Confirm 'flm validate' passes before"
 		elog "lemonade tries to drive the NPU backend."
 	fi

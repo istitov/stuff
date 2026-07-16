@@ -15,7 +15,7 @@ SRC_URI="https://github.com/lemonade-sdk/${PN}/archive/refs/tags/v${PV}.tar.gz -
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="fastflowlm openrc system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd tauri webui"
+IUSE="openrc system-fastflowlm system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd tauri webui"
 
 # Upstream's CMake detects nlohmann_json/curl/zstd/CLI11 via pkg-config or
 # find_path, but cpp-httplib detection requires a .pc file (which ::gentoo
@@ -38,9 +38,9 @@ RDEPEND="
 	>=net-libs/libwebsockets-4.3.3
 	>=net-misc/curl-8.5.0
 	sys-libs/libcap
-	fastflowlm? ( sci-ml/fastflowlm )
 	acct-user/lemonade
 	acct-group/lemonade
+	system-fastflowlm? ( sci-ml/fastflowlm )
 	system-llamacpp? ( sci-misc/llama-cpp )
 	system-whispercpp? ( app-accessibility/whisper-cpp )
 	system-sdcpp? ( sci-misc/stable-diffusion-cpp )
@@ -350,16 +350,16 @@ pkg_postinst() {
 		elog "backend's model loads fail."
 		elog ""
 	fi
-	if use fastflowlm; then
-		elog "USE=fastflowlm enabled — the NPU runtime is provided by"
+	if use system-fastflowlm; then
+		elog "USE=system-fastflowlm enabled — the NPU runtime is provided by"
 		elog "sci-ml/fastflowlm (flm on PATH; lemond resolves it there, no"
 		elog "runtime fetch). Confirm 'flm validate' passes before lemonade"
 		elog "drives the NPU backend."
 	else
-		ewarn "Without USE=fastflowlm, lemond 11.x auto-downloads the FastFlowLM"
+		ewarn "Without USE=system-fastflowlm, lemond 11.x auto-downloads the FastFlowLM"
 		ewarn "(flm) NPU runtime into ~/.cache/lemonade on first NPU use -- it"
 		ewarn "resolves flm as config-override -> PATH -> download, so a packaged"
-		ewarn "flm on PATH wins. Enable USE=fastflowlm (sci-ml/fastflowlm) to use"
-		ewarn "the packaged runtime and skip that fetch."
+		ewarn "flm on PATH wins. Enable USE=system-fastflowlm (sci-ml/fastflowlm) to"
+		ewarn "use the packaged runtime and skip that fetch."
 	fi
 }

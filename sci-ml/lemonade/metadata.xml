@@ -17,8 +17,9 @@
     backend.
   </longdescription>
   <use>
-    <flag name="fastflowlm">Pull in <pkg>sci-ml/fastflowlm</pkg> as the NPU backend</flag>
+    <flag name="fastflowlm">Pull in <pkg>sci-ml/fastflowlm</pkg> as the NPU backend (renamed to system-fastflowlm from 11.0.0; kept for 10.10.0-r3)</flag>
     <flag name="openrc">Install OpenRC init.d/conf.d files for a supervise-daemon-managed service</flag>
+    <flag name="system-fastflowlm">Reuse the system <pkg>sci-ml/fastflowlm</pkg> (/usr/bin/flm) for the FastFlowLM NPU backend instead of letting lemond auto-download the flm runtime at first NPU use</flag>
     <flag name="system-kokoro">Reuse the system <pkg>sci-ml/kokoros</pkg> (/usr/bin/koko) for the Kokoro TTS backend instead of fetching an upstream prebuilt binary at runtime</flag>
     <flag name="system-llamacpp">Reuse the system <pkg>sci-misc/llama-cpp</pkg> (/usr/bin/llama-server) for the llama.cpp backend instead of fetching an upstream prebuilt binary at runtime; build it with your preferred GPU backend (see the post-install notes)</flag>
     <flag name="system-sdcpp">Reuse the system <pkg>sci-misc/stable-diffusion-cpp</pkg> (/usr/bin/sd-server) for the stable-diffusion.cpp backend instead of fetching an upstream prebuilt binary at runtime; build it with your preferred GPU backend (see the post-install notes)</flag>
