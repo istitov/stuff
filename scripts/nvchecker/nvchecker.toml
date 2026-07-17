@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (261) ---
+# --- pypi (263) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -722,9 +722,17 @@ pypi = "pytablewriter"
 source = "pypi"
 pypi = "pytest-mpl"
 
+["dev-python/python-docx"]
+source = "pypi"
+pypi = "python-docx"
+
 ["dev-python/python-igraph"]
 source = "pypi"
 pypi = "igraph"
+
+["dev-python/python-pptx"]
+source = "pypi"
+pypi = "python-pptx"
 
 ["dev-python/python-socketio"]
 source = "pypi"
