@@ -1,0 +1,178 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
+
+inherit distutils-r1
+
+DESCRIPTION="Lightweight agent framework for the edge and AMD Ryzen AI PCs"
+HOMEPAGE="https://github.com/amd/gaia"
+SRC_URI="https://github.com/amd/gaia/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
+S="${WORKDIR}/gaia-${PV}"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="~amd64"
+IUSE="+api audio +mcp eval image talk ui"
+
+# ui implies api: upstream's ui extra restates fastapi/uvicorn/python-
+# multipart on top of its own RAG deps.
+REQUIRED_USE="ui? ( api )"
+
+# Upstream pytest config marks tests as needing a live Lemonade server,
+# Docker, the Gmail API, and other integration targets that aren't
+# reachable from a sandboxed build. RESTRICT until someone wants to
+# split out a unit-only subset.
+RESTRICT="test"
+
+# Core install_requires per setup.py (verified against v0.22.0 sdist
+# 2026-07-17).
+# Lemonade Server is the AMD-recommended backend but not a hard dep — gaia
+# speaks any OpenAI-compatible endpoint (see pkg_postinst).
+#
+# python-multipart — base install_requires since v0.20.1: base `gaia-mcp`
+# console_script imports python_multipart at import time, so needed even
+# without USE=api. Dropped from api? as redundant. verified 2026-06-19.
+#
+# keyring — v0.21.0 promotes it from ui/api extras to base install_requires
+# (upstream #1621): gaia.connectors.{store,mcp_server} import keyring at
+# module load, and `gaia connectors` is a base CLI command. >=24,<26 is
+# upstream's supply-chain pin. Dropped from ui? as redundant. verified
+# 2026-06-19.
+#
+# tavily-python — v0.21.2 adds it to base install_requires (>=0.5.0), but
+# it's a SOFT dep: gaia/web/tavily.py guards `from tavily import` in
+# try/except (TAVILY_SDK_AVAILABLE) and falls back to DuckDuckGo. Not
+# packaged, so omitted — web search degrades gracefully. verified 2026-06-19.
+#
+# apscheduler + tomli-w — v0.22.0 adds a cron-based scheduler (upstream #892):
+# apscheduler drives the daemon, tomli-w writes ~/.gaia/schedules.toml. Both
+# are base install_requires now. (Upstream also lists tomli for python_version
+# < 3.11, omitted here — PYTHON_COMPAT floors at 3.12 where tomllib is stdlib.)
+# verified 2026-07-17.
+#
+# audio? — gaia only `import torch`s (gaia/audio/whisper_asr.py), never
+# torchvision/torchaudio (re-grepped src/ 2026-07-17). Upstream's audio
+# extra caps torch<2.14 for old-era openai-whisper deps; cap is stale
+# (verified 2026-06-04: current openai-whisper unbounded torch, no
+# torchvision), so we ship uncapped on sci-ml/pytorch alone.
+#
+# ui? — the ui/rag extras ingest .pptx (python-pptx>=0.6.21, since 0.20.0)
+# and .docx (python-docx>=1.1.0, new in v0.22.0) via lazy imports. Both are
+# now packaged in this overlay, so both are carried. verified 2026-07-17.
+#
+# httpx (ui?) — hard upstream req: ui extra declares httpx>=0.27.0 and 9
+# src/gaia modules import it. ::gentoo-deprecated 2026-04-01 (no drop-in
+# replacement), so the DeprecatedDep warning is knowingly accepted.
+# verified 2026-06-20.
+#
+# eval? — v0.21.2 adds tiktoken>=0.7.0,<1 to the eval extra (token-cost
+# accounting in gaia/eval/tool_cost.py; lazy import, char-count fallback).
+# Carried uncapped. Upstream also caps numpy>=2.0,<2.3.0 here, but ::gentoo
+# ships numpy 2.4+ so that cap is left off (would make USE=eval unsolvable).
+# verified 2026-06-19.
+#
+# talk? — v0.21.0 adds `pip` to the talk extra: Kokoro/misaki TTS downloads
+# its spaCy model at runtime via pip. verified 2026-06-19.
+RDEPEND="
+	${PYTHON_DEPS}
+	sci-ml/accelerate[${PYTHON_SINGLE_USEDEP}]
+	sci-ml/transformers[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/aiohttp[${PYTHON_USEDEP}]
+		>=dev-python/apscheduler-3.10.0[${PYTHON_USEDEP}]
+		dev-python/beautifulsoup4[${PYTHON_USEDEP}]
+		>=dev-python/keyring-24.0.0[${PYTHON_USEDEP}]
+		<dev-python/keyring-26[${PYTHON_USEDEP}]
+		dev-python/openai[${PYTHON_USEDEP}]
+		>=dev-python/pillow-9.0.0[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-2.9.2[${PYTHON_USEDEP}]
+		dev-python/python-dotenv[${PYTHON_USEDEP}]
+		>=dev-python/python-multipart-0.0.9[${PYTHON_USEDEP}]
+		dev-python/requests[${PYTHON_USEDEP}]
+		dev-python/rich[${PYTHON_USEDEP}]
+		>=dev-python/tomli-w-1.0.0[${PYTHON_USEDEP}]
+		>=dev-python/watchdog-2.1.0[${PYTHON_USEDEP}]
+		api? (
+			>=dev-python/fastapi-0.115.0[${PYTHON_USEDEP}]
+			>=dev-python/uvicorn-0.32.0[${PYTHON_USEDEP}]
+		)
+		image? (
+			dev-python/term-image[${PYTHON_USEDEP}]
+		)
+		talk? (
+			dev-python/pip[${PYTHON_USEDEP}]
+			dev-python/sounddevice[${PYTHON_USEDEP}]
+			dev-python/soundfile[${PYTHON_USEDEP}]
+			dev-python/psutil[${PYTHON_USEDEP}]
+		)
+		ui? (
+			>=dev-python/httpx-0.27.0[${PYTHON_USEDEP}]
+			>=dev-python/psutil-5.9.0[${PYTHON_USEDEP}]
+			dev-python/PyMuPDF[${PYTHON_USEDEP}]
+			dev-python/pypdf[${PYTHON_USEDEP}]
+			>=dev-python/python-docx-1.1.0[${PYTHON_USEDEP}]
+			>=dev-python/python-pptx-0.6.21[${PYTHON_USEDEP}]
+			sci-ml/safetensors[${PYTHON_USEDEP}]
+		)
+		mcp? (
+			>=dev-python/mcp-1.1.0[${PYTHON_USEDEP}]
+			dev-python/starlette[${PYTHON_USEDEP}]
+			dev-python/uvicorn[${PYTHON_USEDEP}]
+		)
+		eval? (
+			dev-python/anthropic[${PYTHON_USEDEP}]
+			dev-python/numpy[${PYTHON_USEDEP}]
+			dev-python/pypdf[${PYTHON_USEDEP}]
+			dev-python/reportlab[${PYTHON_USEDEP}]
+			>=dev-python/scikit-learn-1.5.0[${PYTHON_USEDEP}]
+			>=dev-python/tiktoken-0.7.0[${PYTHON_USEDEP}]
+		)
+	')
+	audio? (
+		sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	)
+	talk? (
+		dev-python/kokoro[${PYTHON_SINGLE_USEDEP}]
+		dev-python/openai-whisper[${PYTHON_SINGLE_USEDEP}]
+	)
+	ui? (
+		sci-libs/faiss[python,${PYTHON_SINGLE_USEDEP}]
+		sci-ml/sentence-transformers[${PYTHON_SINGLE_USEDEP}]
+	)
+"
+
+DEPEND="${RDEPEND}"
+BDEPEND="${PYTHON_DEPS}"
+
+pkg_postinst() {
+	elog "GAIA is an LLM-agent framework. It speaks any OpenAI-compatible"
+	elog "endpoint; the AMD-recommended local backend is Lemonade Server"
+	elog "(sci-ml/lemonade in this overlay), which runs models on Ryzen AI"
+	elog "hardware (NPU + iGPU). Point gaia at a server with:"
+	elog ""
+	elog "  export OPENAI_BASE_URL=http://localhost:8000/api/v1"
+	elog ""
+	elog "Extras supported via USE flags:"
+	elog "  audio  — sci-ml/pytorch (gaia code doesn't touch torchvision/"
+	elog "           torchaudio despite upstream's audio extra listing them)"
+	elog "  image  — dev-python/term-image"
+	elog "  talk   — dev-python/openai-whisper + dev-python/sounddevice +"
+	elog "           dev-python/kokoro (full upstream parity)."
+	elog "  ui     — full RAG web frontend over PDF/DOCX/PPTX (faiss +"
+	elog "           sentence-transformers + PyMuPDF + pypdf + python-docx +"
+	elog "           python-pptx + safetensors); implies +api"
+	elog ""
+	elog "Extras still not built (deps not all in tree):"
+	elog "  blender — bpy (Blender Python module — heavy)"
+	elog ""
+	elog "Web search uses the Tavily SDK (dev-python/tavily-python, not"
+	elog "packaged); without it gaia falls back to DuckDuckGo automatically."
+	elog ""
+	elog "Use the upstream pip install if you need an extra flavour we"
+	elog "haven't packaged yet."
+}
