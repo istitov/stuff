@@ -131,7 +131,7 @@ RDEPEND="
 		dev-python/openai-whisper[${PYTHON_SINGLE_USEDEP}]
 	)
 	ui? (
-		sci-libs/faiss[python]
+		sci-libs/faiss[python,${PYTHON_SINGLE_USEDEP}]
 		sci-ml/sentence-transformers[${PYTHON_SINGLE_USEDEP}]
 	)
 "
