@@ -12,3 +12,8 @@ gfx110X-all - TheRock fat-bundle: RDNA3 discrete GPUs (gfx1100/1101/1102/1103; R
 gfx120X-all - TheRock fat-bundle: RDNA4 discrete GPUs (gfx1200/1201; RX 9070/9060/9050)
 gfx94X-dcgpu - TheRock fat-bundle: CDNA3 datacenter (gfx940/941/942; Instinct MI300A/X)
 gfx950-dcgpu - TheRock fat-bundle: CDNA4 datacenter (gfx950; Instinct MI350X/355X)
+
+# Individual target not yet in ::gentoo's canonical list; introduced here for
+# sci-libs/aotriton-bin 0.13b, which ships a standalone gfx1250 kernel image.
+# Drop this entry once ::gentoo's amdgpu_targets.desc carries gfx1250.
+gfx1250 - AMD GPU target gfx1250
