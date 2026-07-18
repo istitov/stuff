@@ -525,6 +525,19 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "source": "pypi",
         "pypi": "comfy-kitchen",
     },
+    # amd-quark-bin / runai-model-streamer-bin: the old "AMD/Run:ai internal,
+    # not on public PyPI" skip is stale -- both now publish public PyPI wheels
+    # (verified 2026-07-18: amd-quark 0.12.post1, runai-model-streamer 0.16.1).
+    # Same literal-pythonhosted basename trap as comfy-kitchen-bin, so pin the
+    # real project so drift tracks them.
+    "dev-python/amd-quark-bin": {
+        "source": "pypi",
+        "pypi": "amd-quark",
+    },
+    "dev-python/runai-model-streamer-bin": {
+        "source": "pypi",
+        "pypi": "runai-model-streamer",
+    },
 }
 
 
@@ -578,9 +591,8 @@ SKIP_PKGS: dict[str, str] = {
     "sci-ml/caffe2":                       "pytorch/caffe2 repo has no tags; caffe2 was absorbed into pytorch/pytorch",
     # Upstreams that are gone or use non-public distribution channels.
     "sci-physics/demeter":                 "Demeter removed from CPAN; no public upstream tracking possible",
-    "dev-python/amd-quark-bin":            "AMD internal wheel distribution; not on public PyPI",
-    "dev-python/runai-model-streamer-bin": "Run:ai internal distribution; not on public PyPI",
-    # Nightly / CDN-sourced package with no comparable GitHub tag scheme.
+    # (amd-quark-bin / runai-model-streamer-bin were here until 2026-07-18 —
+    # both now ship public PyPI wheels, so they moved to SPECIAL_SOURCES.)
     # Intentional version pins — upstream advances but a consumer in the
     # tree hard-asserts on a specific version range.
     "dev-python/antlr4-python3-runtime":   "pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')",

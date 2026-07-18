@@ -2358,12 +2358,16 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (9) ---
+# --- special (11) ---
 
 ["dev-libs/cudnn"]
 source = "regex"
 url = "https://developer.download.nvidia.com/compute/cudnn/redist/"
 regex = 'redistrib_(\d+\.\d+\.\d+)\.json'
+
+["dev-python/amd-quark-bin"]
+source = "pypi"
+pypi = "amd-quark"
 
 ["dev-python/comfy-aimdo-bin"]
 source = "pypi"
@@ -2372,6 +2376,10 @@ pypi = "comfy-aimdo"
 ["dev-python/comfy-kitchen-bin"]
 source = "pypi"
 pypi = "comfy-kitchen"
+
+["dev-python/runai-model-streamer-bin"]
+source = "pypi"
+pypi = "runai-model-streamer"
 
 ["dev-python/simpleitk-bin"]
 source = "pypi"
@@ -2453,7 +2461,6 @@ prefix = "v"
 # ["dev-lang/tcc"] skipped: custom upstream at bellard.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-libs/kpathsea"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
 # ["dev-libs/ptexenc"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream
-# ["dev-python/amd-quark-bin"] skipped: AMD internal wheel distribution; not on public PyPI
 # ["dev-python/antlr4-python3-runtime"] skipped: pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/diff-gaussian-rasterization"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
@@ -2466,7 +2473,6 @@ prefix = "v"
 # ["dev-python/pygtk"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pyprismatic"] skipped: prism-em/pyprismatic has no GitHub release tags
 # ["dev-python/pyside"] skipped: custom upstream at wiki.qt.io; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["dev-python/runai-model-streamer-bin"] skipped: Run:ai internal distribution; not on public PyPI
 # ["dev-python/setuptools-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/tccbox"] skipped: metab0t/tccbox has no GitHub release tags (private or untagged)
