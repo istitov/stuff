@@ -28,6 +28,8 @@ State lives under `$XDG_STATE_HOME/stuff-nvchecker/` (default
 | `generate.py` | Walks the overlay, emits `nvchecker.toml` by classifying each package's upstream source |
 | `nvchecker.toml` | Generated config: one entry per trackable package, skip comments for untrackable ones |
 | `run.sh` | Cron-friendly runner: executes `nvchecker`, diffs against last run via `nvcmp`, prints drift |
+| `tree_baseline.py` | Emits an nvchecker `oldver` baseline from current ebuild PVs (the CI "what does upstream have that we don't ship?" framing) |
+| `nvtemplate_audit.py` | Audits per-package version-template *correctness* — detects templates that have gone stale vs upstream's current scheme (silent omission) |
 
 ## Setup
 
@@ -104,6 +106,54 @@ The generator classifies each package's newest ebuild by source type:
 Hand-edits to `nvchecker.toml` are overwritten on the next
 `generate.py` run. To pin a non-obvious upstream, add the detection
 rule to `generate.py` so the classification survives regeneration.
+
+## Auditing template staleness
+
+The drift report tells you when upstream *moves*. It cannot tell you when a
+package's **version template silently stops matching** — if upstream changes its
+tag scheme (a new major, a tag-prefix rename, a build-counter reset, an
+even/odd-minor convention drop), a `github` entry's `include_regex` /
+`from_pattern` can quietly match nothing or latch onto a stale tag, and the
+package then reads "up to date" forever while its releases go untracked. That is
+a silent, permanent omission a normal drift run cannot surface.
+
+`nvtemplate_audit.py` catches it. For every tracked package it compares three
+things — our newest ebuild PV, what the rendered template in `nvchecker.toml`
+currently resolves, and upstream's true newest release — and buckets each entry:
+
+```sh
+python3 scripts/nvchecker/nvtemplate_audit.py            # all entries
+python3 scripts/nvchecker/nvtemplate_audit.py --only cat/pkg,cat/pkg2
+python3 scripts/nvchecker/nvtemplate_audit.py --source github
+```
+
+It reads the **rendered** filter straight from `nvchecker.toml` (so it audits
+exactly what nvchecker uses) and reaches GitHub via `git ls-remote --tags` — the
+git protocol, *not* the REST API — so it needs **no token** and is not subject to
+the 60 req/hr limit. Needs network → run with the sandbox disabled.
+
+Verdicts, most-actionable first:
+
+| Verdict | Meaning |
+| ------- | ------- |
+| `UNRESOLVED` | the template matches **nothing** — almost certainly broken; fix now |
+| `OMISSION-SUSPECT` | a version-like upstream tag newer than our matched latest is **excluded** by the filter — either a scheme change (fix) or an intended exclusion (a monorepo sibling family, a prerelease, an odd-minor dev release); needs human eyes |
+| `SHAPE-DRIFT` | the resolved value's form differs from our PV's form (part count / prefix) — the mapping may have drifted |
+| `WE-SHIP-NEWER` | our PV > upstream latest (usually benign: errata suffix, snapshot) |
+| `SKIP` | source type not covered by this pass (cpan / gitlab / bitbucket / regex) — hand-check |
+
+`OMISSION-SUSPECT` has a known intended-exclusion tail (deliberate one-repo-two-
+package splits like `dev-ml/ocamlfuse` vs `dev-ml/fuse3`, monorepo sub-package or
+sibling-artifact tag families, and the `media-gfx/darktable` even-minor policy).
+The detector flags them for a glance; it never auto-edits. Nightly / build /
+foreign-project tag channels (ROCm `therock-*`/`llvmorg-*`, calver `…a` alphas,
+`YYYYMMDD` dates) are suppressed so they don't recur as noise.
+
+When a fix *is* needed, correct the template in `generate.py` (the
+`GITHUB_TAG_FILTERS_BY_PKG` / `GITHUB_TAG_FILTERS` / `SPECIAL_SOURCES` dict), and
+if the scheme change also touched packaging, keep the ebuild PV / SRC_URI in step
+so `upstream tag → nvchecker value → PV` line up. Then regenerate and re-audit the
+one entry. The report is a point-in-time worklist (default `/tmp`), not committed.
 
 ## Output shape
 
