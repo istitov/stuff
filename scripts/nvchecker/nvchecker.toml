@@ -1062,7 +1062,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (186) ---
+# --- github (188) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1923,6 +1923,14 @@ use_max_tag = true
 include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
+["sci-libs/aotriton-bin"]
+source = "github"
+github = "ROCm/aotriton"
+use_max_tag = true
+include_regex = '^[0-9]+\.[0-9]+(?:\.[0-9]+)?b$'
+prefix = ""
+# note: from HOMEPAGE
+
 ["sci-libs/ausaxs"]
 source = "github"
 github = "AUSAXS/AUSAXS"
@@ -2159,6 +2167,13 @@ prefix = "v"
 ["sci-ml/ollama"]
 source = "github"
 github = "ollama/ollama"
+use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
+
+["sci-ml/pytorch"]
+source = "github"
+github = "pytorch/pytorch"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"

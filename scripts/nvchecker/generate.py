@@ -385,6 +385,26 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "from_pattern": r"^([0-9]+)-preview\.([0-9]+)$",
         "to_pattern": r"\1_pre\2",
     },
+    # pytorch/pytorch carries ~5800 tags, almost all non-release: ciflow/*,
+    # ci/*, nightly, and per-commit `<sha>-<name>-debug` tags. A bare
+    # use_max_tag ranks the huge ciflow build numbers (e.g. ciflow/b200/174699)
+    # above the real vX.Y.Z releases, so restrict to the bare 3-part release tag.
+    # prefix "v" (default) strips to the PV. verified 2026-07-18
+    "sci-ml/pytorch": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    # ROCm/aotriton does NOT use the org-wide `rocm-X.Y.Z` release scheme that
+    # the repo-wide ^ROCm/.+ filter assumes — it tags betas bare as `X.Y[.Z]b`
+    # (0.12b, 0.13b, 0.11.210b), alongside stray `0.12.50tp*`, `0.7preview*`,
+    # and `legal-scan` tags. Under the blanket rocm- filter this entry matched
+    # NOTHING and silently omitted upstream (was hiding 0.12b -> 0.13b). This
+    # per-package override wins over GITHUB_TAG_FILTERS. Tags are bare (no v),
+    # so prefix "" ; the `b`-suffixed value maps straight to the ebuild PV
+    # (aotriton-bin fetches releases/download/<PV>/ with PV=0.12b). verified 2026-07-18
+    "sci-libs/aotriton-bin": {
+        "include_regex": r"^[0-9]+\.[0-9]+(?:\.[0-9]+)?b$",
+        "prefix": "",
+    },
 }
 
 
