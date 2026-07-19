@@ -34,6 +34,16 @@ RESTRICT="network-sandbox"
 # unconditionally (matching sci-ml/ollama's acct-user) so toggling
 # USE=systemd can't orphan the /var/lib/lemonade state dir; the OpenRC
 # service ignores this account and runs as LEMONADE_USER instead.
+#
+# x11-libs/libdrm[video_cards_amdgpu]: system_info.cpp #includes
+# <libdrm/amdgpu.h>/<libdrm/amdgpu_drm.h> unconditionally under __linux__ and
+# CMakeLists links drm_amdgpu into lemonade-server-core (target_link_libraries
+# ... drm_amdgpu), calling amdgpu_device_initialize() directly rather than via
+# dlopen -- so the header and libdrm_amdgpu.so are hard build+runtime
+# requirements on EVERY Linux host, not just AMD ones. Only the amdgpu USE flag
+# ships them; without it the build dies at "libdrm/amdgpu.h: No such file or
+# directory". AMD hosts satisfy this incidentally via VIDEO_CARDS; a non-AMD
+# host does not. verified 2026-07-18
 RDEPEND="
 	app-arch/brotli:=
 	app-arch/zstd:=
@@ -43,6 +53,7 @@ RDEPEND="
 	>=net-libs/libwebsockets-4.3.3
 	>=net-misc/curl-8.5.0
 	sys-libs/libcap
+	x11-libs/libdrm[video_cards_amdgpu]
 	acct-user/lemonade
 	acct-group/lemonade
 	system-fastflowlm? ( sci-ml/fastflowlm )
