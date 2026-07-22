@@ -466,6 +466,37 @@ src_install() {
 		rm -rf "${ED}"/usr/lib/libaotriton_v2* "${ED}"/usr/lib/aotriton.images || die
 	fi
 
+	# 2.13.0 folds the torch *Python* package install into cmake (torch._C +
+	# version.py via DESTINATION "." plus cmake/PackageData.cmake), relative to
+	# CMAKE_INSTALL_PREFIX = /usr where upstream assumes the wheel's <root>/torch.
+	# So the payload leaks into /usr/ root and drops stray /usr/lib symlinks --
+	# /usr/lib/terminfo collides with sys-libs/ncurses and aborts the merge.
+	# Keep only the compiled torch._C: 2.13.0 moved its build to cmake and
+	# sci-ml/pytorch skips cmake (dontbuildagain patch), so nothing else ships it
+	# and `import torch` fails without it. Relocate _C into site-packages/torch
+	# (its NEEDED libtorch* resolve from /usr/lib64); the pure-python package is
+	# sci-ml/pytorch's, so whitelist the FHS dirs and drop the rest.
+	# verified 2026-07-22
+	local _c_ext=( "${ED}"/usr/_C.cpython-*.so )
+	if [[ -f ${_c_ext[0]} ]]; then
+		local _torchdir="${D}$(python_get_sitedir)/torch"
+		mkdir -p "${_torchdir}" || die
+		cp -p "${_c_ext[0]}" "${_torchdir}/" || die
+	fi
+	local d
+	for d in "${ED}"/usr/*; do
+		case ${d##*/} in
+			bin|include|lib|lib64|share) ;;
+			*) rm -rf "${d}" || die ;;
+		esac
+	done
+	# caffe2 owns nothing directly under /usr/lib but the python site-packages
+	# tree (added by python_install below); drop the stray leaked symlinks.
+	if [[ -d ${ED}/usr/lib ]]; then
+		find "${ED}"/usr/lib -mindepth 1 -maxdepth 1 ! -name 'python*' \
+			-exec rm -rf {} + || die
+	fi
+
 	# Used by pytorch ebuild
 	insinto "/var/lib/${PN}"
 	doins "${BUILD_DIR}"/CMakeCache.txt
