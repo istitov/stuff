@@ -1062,7 +1062,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (188) ---
+# --- github (189) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2205,6 +2205,12 @@ prefix = "v"
 ["sci-ml/torchcodec"]
 source = "github"
 github = "meta-pytorch/torchcodec"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/torchvision"]
+source = "github"
+github = "pytorch/vision"
 use_max_tag = true
 prefix = "v"
 
