@@ -689,6 +689,9 @@ REQUIRED_USE="
 # Upstream requirements/cuda.txt pins nvidia-cutlass-dsl[cu13]==4.5.2,
 # tilelang==0.1.9 and flashinfer-python==0.6.13 exactly; we pin
 # ~nvidia-cutlass-dsl-4.5.2 and ~flashinfer-python-0.6.13 to match.
+# quack-kernels must stay <0.6.0: 0.6+ raised its own cutlass-dsl floor to
+# >=4.6.0, which is incompatible with that ~4.5.2 pin; 0.5.x uses >=4.5.2,
+# so 4.5.2 satisfies it. verified 2026-07-22
 # The cutlass-dsl metapackage pulls nvidia-cutlass-dsl-libs-cu13
 # transitively, so it already covers the [cu13] extra. The
 # nvidia-cudnn-frontend floor stays >=1.19.1; that dep lives on the
@@ -883,6 +886,7 @@ RDEPEND="
 		>=sci-ml/torchcodec-0.14[${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tilelang-0.1.9[${PYTHON_SINGLE_USEDEP}]
 		>=dev-python/quack-kernels-0.3.3[${PYTHON_SINGLE_USEDEP}]
+		<dev-python/quack-kernels-0.6.0[${PYTHON_SINGLE_USEDEP}]
 		humming? ( ~dev-python/humming-kernels-0.1.10[${PYTHON_SINGLE_USEDEP}] )
 		$(python_gen_cond_dep '
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
