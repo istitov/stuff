@@ -52,5 +52,5 @@ python_compile() {
 }
 
 pkg_postinst() {
-	optfeature "compile cuda code" dev-util/nvidia-cuda-sdk
+	optfeature "compile cuda code" dev-util/nvidia-cuda-toolkit
 }
