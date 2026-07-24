@@ -47,7 +47,6 @@ python_prepare_all() {
 }
 
 pkg_postinst() {
-	optfeature "commandline interface" dev-python/fastapi-cli
 	optfeature "test client" dev-python/httpx
 	optfeature "templates" dev-python/jinja2
 	optfeature "forms and file uploads" dev-python/python-multipart
