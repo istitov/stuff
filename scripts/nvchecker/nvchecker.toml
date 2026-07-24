@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (263) ---
+# --- pypi (262) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -946,10 +946,6 @@ pypi = "wxutils"
 source = "pypi"
 pypi = "xatlas"
 
-["dev-python/xgrammar"]
-source = "pypi"
-pypi = "xgrammar"
-
 ["dev-python/xraydb"]
 source = "pypi"
 pypi = "xraydb"
@@ -1062,7 +1058,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (189) ---
+# --- github (190) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1617,6 +1613,12 @@ prefix = "v"
 ["dev-python/wasabi"]
 source = "github"
 github = "explosion/wasabi"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/xgrammar"]
+source = "github"
+github = "mlc-ai/xgrammar"
 use_max_tag = true
 prefix = "v"
 
