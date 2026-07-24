@@ -34,7 +34,7 @@ RDEPEND="
 	>=dev-python/typing-inspection-0.4.2[${PYTHON_USEDEP}]
 "
 # Tests need a sprawl of dev-python/* deps (pwdlib, sqlmodel,
-# strawberry-graphql, pydantic-extra-types) that live in ::guru only.
+# strawberry-graphql) that live in ::guru only.
 # Forking them all just to run fastapi's test suite is overkill for our
 # overlay's needs — RESTRICT them and rely on upstream CI.
 RESTRICT="test"
@@ -54,6 +54,8 @@ pkg_postinst() {
 	optfeature "uvicorn with uvloop" dev-python/uvicorn
 	optfeature "settings management" dev-python/pydantic-settings
 	optfeature "extra Pydantic data types" dev-python/pydantic-extra-types
+	optfeature "session middleware support" dev-python/itsdangerous
+	optfeature "YAML support" dev-python/pyyaml
 	optfeature_header "Alternative JSON responses"
 	optfeature "ORJSONResponse" dev-python/orjson
 	optfeature "UJSONResponse" dev-python/ujson
