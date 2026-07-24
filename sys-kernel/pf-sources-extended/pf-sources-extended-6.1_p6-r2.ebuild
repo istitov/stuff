@@ -6,8 +6,8 @@ EAPI=8
 ETYPE="sources"
 
 # Track the latest 6.1.X linux-stable via genpatches. Match
-# gentoo-sources-6.1.174's K_GENPATCHES_VER. verified 2026-05-24.
-K_GENPATCHES_VER="189"
+# gentoo-sources-6.1.177's K_GENPATCHES_VER. verified 2026-07-24.
+K_GENPATCHES_VER="193"
 
 # Curated pf delta sets EXTRAVERSION via the patch itself.
 K_NOSETEXTRAVERSION="1"

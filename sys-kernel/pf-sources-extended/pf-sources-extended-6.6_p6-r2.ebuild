@@ -5,9 +5,9 @@ EAPI=8
 
 ETYPE="sources"
 
-# Track the latest 6.12.X linux-stable via genpatches. Match
-# gentoo-sources-6.12.91's K_GENPATCHES_VER. verified 2026-05-24.
-K_GENPATCHES_VER="100"
+# Track the latest 6.6.X linux-stable via genpatches. Match
+# gentoo-sources-6.6.144's K_GENPATCHES_VER. verified 2026-07-24.
+K_GENPATCHES_VER="158"
 
 # Curated pf delta sets EXTRAVERSION via the patch itself.
 K_NOSETEXTRAVERSION="1"
@@ -21,7 +21,7 @@ K_SECURITY_UNSUPPORTED="1"
 
 K_WANT_GENPATCHES="base extras"
 
-# Map "6.12_p4" → "6.12" for the kernel.org tarball + genpatches.
+# Map "6.6_p6" → "6.6" for the kernel.org tarball + genpatches.
 SHPV="${PV/_p*/}"
 
 # Pretend version visible in /lib/modules and /usr/src.
@@ -33,7 +33,7 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Vanilla 6.12 from kernel.org + Gentoo's genpatches (stable + non-stable)
+# Vanilla 6.6 from kernel.org + Gentoo's genpatches (stable + non-stable)
 # + our curated pf delta. The codeberg pf-kernel tarball is intentionally
 # not fetched — its content is replaced by the much smaller curated
 # patch in files/.
@@ -95,20 +95,20 @@ pkg_postinst() {
 	kernel-2_pkg_postinst
 
 	elog ""
-	elog "gentoo-sources-based pf-sources-extended: tracks linux-stable (6.12.X)"
+	elog "gentoo-sources-based pf-sources-extended: tracks linux-stable (6.6.X)"
 	elog "via Gentoo's genpatches, plus a curated subset of natalenko's pf-kernel"
 	elog "delta. CVE backports now arrive automatically with each gentoo-sources"
 	elog "stable bump."
 	elog ""
-	elog "Curated pf features kept: BBRv3, x86 ISA levels (X86_64_ISA_LEVEL=1..4"
-	elog "→ -march=x86-64-vN), zstd bump, v4l2loopback, DDCCI, syscall.tbl"
+	elog "Curated pf features kept: BBRv3, x86 generic ISA levels (GENERIC_CPU2/"
+	elog "3/4 = x86-64-v2/v3/v4), zstd bump, v4l2loopback, DDCCI, syscall.tbl"
 	elog "additions, and vmlinux.lds.S section additions."
 	elog ""
 	elog "pf changes overlapping gentoo-sources' newer form (scheduler/futex"
 	elog "tweaks, the pre-rewrite SMB/cifs stack) are dropped in favour of stable."
 	elog ""
 	elog "For pf-kernel's full patchset (scheduler heuristics, futex2, pre-rewrite"
-	elog "SMB), install pf-sources-6.12_p4-r2 instead — it stays GA-frozen and"
+	elog "SMB), install pf-sources-6.6_p6-r2 instead — it stays GA-frozen and"
 	elog "still ships surgical CVE backports."
 	elog ""
 
