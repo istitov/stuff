@@ -76,7 +76,6 @@ python_test() {
 }
 
 pkg_postinst() {
-	optfeature "integration with amazon S3" dev-python/boto
 	optfeature "pypi integration to publish packages" dev-python/twine
 	optfeature "js library usage" net-libs/nodejs
 }
