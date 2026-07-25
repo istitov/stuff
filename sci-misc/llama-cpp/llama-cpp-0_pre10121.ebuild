@@ -19,7 +19,7 @@ else
 	MY_PV="b${PV#0_pre}"
 	SRC_URI="https://github.com/ggml-org/llama.cpp/archive/refs/tags/${MY_PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/llama.cpp-${MY_PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 SRC_URI+="
@@ -40,8 +40,7 @@ CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 # Upstream removed the GGML_HIP_ROCWMMA_FATTN cmake option in b10121 (PR #26046,
 # "HIP: remove rocWMMA FlashAttention") -- HIP FlashAttention now runs through the
 # shared ggml-cuda fattn-mma template instances, so the old rocWMMA path (and its
-# sci-libs/rocWMMA dep) is gone from master. The wmma USE flag was dropped here.
-# verified 2026-07-25
+# sci-libs/rocWMMA dep) is gone. The wmma USE flag was dropped here. verified 2026-07-25
 IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui sycl"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
@@ -127,15 +126,21 @@ src_configure() {
 		-DLLAMA_BUILD_TESTS=OFF
 		-DLLAMA_BUILD_EXAMPLES=$(usex examples)
 		-DLLAMA_BUILD_SERVER=ON
-		# tools/ui/CMakeLists.txt guards on OR, so both the new and the
-		# legacy option names must be set, otherwise the default-ON
-		# legacy alias wins and the webui asset provisioning runs anyway.
+		# Since b9413, webui gates two knobs: LLAMA_BUILD_UI builds/embeds the
+		# server web UI, LLAMA_USE_PREBUILT_UI fetches the prebuilt bundle from
+		# the HF bucket (scripts/ui-assets.cmake). Both must track USE=webui: the
+		# HF-download step is gated only on HF_ENABLED (no BUILD_UI guard), so
+		# UI=off + PREBUILT_UI=on would still hit the network and break the
+		# sandbox. LLAMA_BUILD_WEBUI / LLAMA_USE_PREBUILT_WEBUI are deprecated
+		# aliases for the *_UI names (tools/ui/CMakeLists.txt:7-12).
 		-DLLAMA_BUILD_UI=$(usex webui)
-		-DLLAMA_BUILD_WEBUI=$(usex webui)
+		-DLLAMA_USE_PREBUILT_UI=$(usex webui)
 		-DCMAKE_SKIP_BUILD_RPATH=ON
 		-DGGML_NATIVE=0	# don't set march
 		-DGGML_RPC=ON
 		-DLLAMA_OPENSSL=$(usex openssl)
+		-DLLAMA_BUILD_NUMBER="${PV#0_pre}"
+		-DLLAMA_BUILD_COMMIT="b${PV#0_pre}"
 		-DGENTOO_REMOVE_CMAKE_BLAS_HACK=ON
 		-DGGML_CUDA=$(usex cuda)
 		-DGGML_CUDA_NCCL=OFF
