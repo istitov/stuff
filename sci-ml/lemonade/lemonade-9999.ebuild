@@ -77,6 +77,7 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	>=dev-build/cmake-3.12
 	virtual/pkgconfig
+	system-fastflowlm? ( app-misc/jq )
 	system-llamacpp? ( app-misc/jq )
 	system-whispercpp? ( app-misc/jq )
 	system-sdcpp? ( app-misc/jq )
@@ -245,7 +246,9 @@ src_install() {
 	# constraint and pkg_postinst tells the user to build the package with the
 	# backend they want. whispercpp's section has no vulkan_bin key (only
 	# cpu/npu), so it MUST route via cpu_bin whatever the build -- do not
-	# "correct" it to vulkan. kokoro has no `backend` key at all (CPU-only).
+	# "correct" it to vulkan. kokoro has no `backend` key at all (CPU-only);
+	# flm likewise pins only npu_bin -- its resolver hardcodes the single npu
+	# backend, so there is no `backend` key to route.
 	# backend/*_bin keys recur across sections -> edit by key with jq, not sed.
 	# The has() guard fails the build loudly if a future lemonade renames or
 	# moves a section (jq would otherwise auto-vivify a stray key and lemond
@@ -269,6 +272,15 @@ src_install() {
 	if use system-kokoro; then
 		jqf+=( '.kokoro.cpu_bin="/usr/bin/koko"' )
 		sections+=( kokoro )
+	fi
+	if use system-fastflowlm; then
+		# flm's resolver is npu_bin override -> PATH (ONLY when flm.prefer_system
+		# is set) -> Lemonade-managed download. A bare flm on PATH is invisible
+		# without prefer_system, so pin the override to the packaged binary; else
+		# lemond reports the NPU backend "supported but not installed" and
+		# re-downloads the flm NPU runtime on first use. verified 2026-07-25
+		jqf+=( '.flm.npu_bin="/usr/bin/flm"' )
+		sections+=( flm )
 	fi
 	if [[ ${#jqf[@]} -gt 0 ]]; then
 		# Pin the CONFIG-SEED template, /usr/share/lemonade/defaults.json --
@@ -410,15 +422,21 @@ pkg_postinst() {
 		elog ""
 	fi
 	if use system-fastflowlm; then
-		elog "USE=system-fastflowlm enabled — the NPU runtime is provided by"
-		elog "sci-ml/fastflowlm (flm on PATH; lemond resolves it there, no"
-		elog "runtime fetch). Confirm 'flm validate' passes before lemonade"
-		elog "drives the NPU backend."
+		elog "system-fastflowlm: the NPU runtime is provided by sci-ml/fastflowlm."
+		elog "The config seed pins flm.npu_bin=/usr/bin/flm, so a fresh config"
+		elog "reuses it with no runtime fetch. A bare flm on PATH is NOT auto-used"
+		elog "-- lemond gates PATH resolution behind flm.prefer_system -- so an"
+		elog "EXISTING ~/.cache/lemonade/config.json (which the rebuild does not"
+		elog "touch) still shows the NPU backend as \"supported but not installed\""
+		elog "until you set the pin by hand:"
+		elog "  lemonade config set flm.npu_bin=/usr/bin/flm"
+		elog "Confirm 'flm validate' passes before lemonade drives the NPU backend."
 	else
 		ewarn "Without USE=system-fastflowlm, lemond auto-downloads the FastFlowLM"
-		ewarn "(flm) NPU runtime into ~/.cache/lemonade on first NPU use -- it"
-		ewarn "resolves flm as config-override -> PATH -> download, so a packaged"
-		ewarn "flm on PATH wins. Enable USE=system-fastflowlm (sci-ml/fastflowlm) to"
-		ewarn "use the packaged runtime and skip that fetch."
+		ewarn "(flm) NPU runtime into ~/.cache/lemonade on first NPU use. It resolves"
+		ewarn "flm as flm.npu_bin override -> PATH (only when flm.prefer_system is"
+		ewarn "set) -> download; a bare flm on PATH is NOT used by default. Enable"
+		ewarn "USE=system-fastflowlm (sci-ml/fastflowlm), which pins"
+		ewarn "flm.npu_bin=/usr/bin/flm, to reuse the packaged runtime and skip the fetch."
 	fi
 }
