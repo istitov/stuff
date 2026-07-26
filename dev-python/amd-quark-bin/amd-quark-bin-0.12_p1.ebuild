@@ -4,7 +4,11 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=no
-PYTHON_COMPAT=( python3_12 )
+# Upstream declares requires-python "<3.14,>=3.11" for 0.12.post1, so 3.13 is
+# the ceiling here. pkgcheck suggests python3_14 anyway because the wheel is
+# py3-none-any; that suggestion is wrong and should not be taken.
+# verified 2026-07-26
+PYTHON_COMPAT=( python3_{12..13} )
 DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
