@@ -1,5 +1,13 @@
 name: Package checks
 
+# On the pkgcore/pkgcheck-action SHA pins below: the SHA fixes the action
+# wrapper only. The action runs pkgcheck from docker://ghcr.io/pkgcore/
+# pkgcheck:latest, a mutable tag, so the scanner version these jobs execute
+# floats with whatever that image last built -- the pin does not make a scan
+# reproducible, and two runs of the same commit can use different pkgcheck
+# releases. Keep that in mind when a result changes with no tree change.
+# verified 2026-07-26
+
 on:
   workflow_dispatch:
   push:
