@@ -39,23 +39,47 @@ jobs:
       # one destination doesn't block the other (failure isolation). The
       # final step re-raises the job exit if either push failed (failure
       # visibility — keeps the workflow visibly red on partial success).
+      #
+      # Both pushes hand the token to git through a credential helper
+      # rather than embedding it in the remote URL. A `${{ secrets.* }}`
+      # expression is substituted before the shell runs, so that form
+      # would put the literal token in the step script the runner writes
+      # to _temp/ *and* in git's argv. Via env: + helper it is in
+      # neither — same reasoning as the keyfile step in nvchecker.yml.
+      # The empty `-c credential.helper=` first resets any inherited
+      # helper, so only ours answers.
       - name: Push to Codeberg
         id: codeberg
         continue-on-error: true
+        env:
+          CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
         run: |
           set -euo pipefail
-          git push --force --prune \
-            "https://istitov:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/istitov/stuff.git" \
+          # The helper body stays single-quoted on purpose: git re-runs it
+          # through `sh -c`, and the token is resolved there from the
+          # environment. Expanding it in this shell would put it back on
+          # the command line, which is what we are avoiding.
+          # shellcheck disable=SC2016
+          git -c credential.helper= \
+              -c credential.helper='!f() { echo username=istitov; echo "password=${CODEBERG_TOKEN}"; }; f' \
+            push --force --prune \
+            https://codeberg.org/istitov/stuff.git \
             'refs/remotes/origin/*:refs/heads/*' \
             'refs/tags/*:refs/tags/*'
 
       - name: Push to GitLab
         id: gitlab
         continue-on-error: true
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
           set -euo pipefail
-          git push --force --prune \
-            "https://istitov:${{ secrets.GITLAB_TOKEN }}@gitlab.com/istitov/stuff.git" \
+          # Single-quoted for the same reason as the Codeberg step above.
+          # shellcheck disable=SC2016
+          git -c credential.helper= \
+              -c credential.helper='!f() { echo username=istitov; echo "password=${GITLAB_TOKEN}"; }; f' \
+            push --force --prune \
+            https://gitlab.com/istitov/stuff.git \
             'refs/remotes/origin/*:refs/heads/*' \
             'refs/tags/*:refs/tags/*'
 
