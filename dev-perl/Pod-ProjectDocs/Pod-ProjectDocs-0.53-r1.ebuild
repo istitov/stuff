@@ -15,15 +15,15 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 #IUSE="+highlight"
 comment() { true;}
 COMMON_DEPEND="
-	$(comment Pod::Parser 1.32)
-	$(comment Pod::ParseUtils)
-	>=dev-perl/Pod-Parser-1.620.0
+	$(comment Moose)
+	$(comment Moose::Role)
+	dev-perl/Moose
 
-	$(comment Class::Accessor::Fast)
-	dev-perl/Class-Accessor
+	$(comment HTML::Entities)
+	dev-perl/HTML-Parser
 
-	$(comment Class::Data::Inheritable)
-	dev-perl/Class-Data-Inheritable
+	$(comment Pod::Simple::XHTML 3.31)
+	>=virtual/perl-Pod-Simple-3.310.0
 
 	$(comment File::Spec)
 	virtual/perl-File-Spec
@@ -43,9 +43,6 @@ COMMON_DEPEND="
 	$(comment Readonly)
 	dev-perl/Readonly
 
-	$(comment URI::Escape)
-	dev-perl/URI
-
 	$(comment JSON 2.04)
 	>=dev-perl/JSON-2.40.0
 "
@@ -53,6 +50,7 @@ COMMON_DEPEND="
 #		dev-perl/Syntax-Highlight-Universal
 #	)
 #"
+#>=virtual/perl-Pod-Parser-1.320.0
 DEPEND="
 	${COMMON_DEPEND}
 "
