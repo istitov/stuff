@@ -18,6 +18,18 @@ Usage: silent_entries.py <config.toml> <new_ver.json> <old_ver.json>
 A missing verfile (e.g. a crashed run that never wrote new_ver.json) is
 treated as an empty key set, so a catastrophic run can't false-alarm every
 entry — only those absent from the previous run too are reported.
+
+A parallel detector lives inline in .github/workflows/nvchecker.yml, and it
+deliberately computes something different. CI keeps no state between runs,
+so there is no "previous run" to difference against: its old_ver.json is
+the tree baseline rather than the prior upstream result, and it asks "in
+config AND in tree but absent upstream" in a single pass, reporting at
+::warning:: because one run cannot distinguish a transient fetch failure
+from a dead filter. Neither version subsumes the other — this one needs
+state, that one needs none.
+
+Keep the active-entry predicate below in sync with the copy there: a change
+to how the config marks a tracked entry has to land in both places.
 """
 
 import json
