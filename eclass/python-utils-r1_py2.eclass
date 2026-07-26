@@ -2,10 +2,26 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # Overlay-local fork, frozen (stuff overlay).
-# Vendored from ::gentoo's pre-py2-removal state. ::gentoo dropped
-# Python 2 in 2024; this _py2 variant preserves py2 build paths for
-# legacy consumers (sci-visualization/gwyddion pygwy and a small dep
-# tail). Not tracked against upstream.
+# Vendored from ::gentoo's pre-py2-removal state; ::gentoo dropped
+# Python 2 in 2024. Kept for sci-visualization/gwyddion's pygwy
+# plugin and its dependency tail. Not tracked against upstream.
+#
+# This is the fork that actually carries python2_7, and it does so in
+# a non-obvious way: _PYTHON_ALL_IMPLS below does NOT list python2_7.
+# The only way in is the _PYTHON_ALLOW_PY27 escape hatch inside
+# _python_set_impls(), which re-adds python2_7 when PYTHON_COMPAT asks
+# for it. A py2 consumer must therefore set
+#
+#     _PYTHON_ALLOW_PY27=1
+#
+# in global scope before its inherit line, or the eclass dies with
+# "No supported implementation in PYTHON_COMPAT." All eight py2
+# ebuilds in this overlay set it. The PYTHON_COMPAT validation case
+# list is likewise kept accepting python2_7 rather than flagging it
+# obsolete.
+#
+# Not inherited by any ebuild directly -- it reaches them through
+# python-r1_py2, and through distutils-r1_py2 in turn.
 # @MAINTAINER below credits the upstream ::gentoo author; report
 # overlay-specific issues at https://github.com/istitov/stuff/issues.
 

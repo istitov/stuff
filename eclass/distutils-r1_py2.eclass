@@ -2,10 +2,19 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # Overlay-local fork, frozen (stuff overlay).
-# Vendored from ::gentoo's pre-py2-removal state. ::gentoo dropped
-# Python 2 in 2024; this _py2 variant preserves py2 build paths for
-# legacy consumers (sci-visualization/gwyddion pygwy and a small dep
-# tail). Not tracked against upstream.
+# Vendored from ::gentoo's pre-py2-removal state; ::gentoo dropped
+# Python 2 in 2024. Kept for sci-visualization/gwyddion's pygwy
+# plugin and its dependency tail. Not tracked against upstream.
+#
+# This fork's specific job: keep the legacy non-PEP517 build path
+# (esetup.py, i.e. DISTUTILS_USE_PEP517 left unset) that ::gentoo's
+# distutils-r1 has since removed. It carries no python2_7 logic
+# itself -- the py2 implementation comes from the forked
+# python-utils-r1_py2 chain, where consumers opt in by setting
+# _PYTHON_ALLOW_PY27=1 before inherit.
+#
+# Direct consumers: dev-python/{certifi,numpy,pycairo,setuptools,
+# setuptools_scm}-python2 and dev-python/unittest-or-fail.
 # @MAINTAINER below credits the upstream ::gentoo author; report
 # overlay-specific issues at https://github.com/istitov/stuff/issues.
 
