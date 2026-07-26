@@ -576,7 +576,7 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
 # reason is factored out rather than repeated per atom.
 _TL_SKIP = (
     "TeX Live release component — PV tracks the annual TL release + tlpdb SVN "
-    "revision, bumped as a set via bin/regenerate-dev-texlive.py, no independent upstream"
+    "revision, regenerated as a set from the tlpdb, no independent upstream"
 )
 
 _PF_LOCAL_ONLY = (
@@ -680,7 +680,7 @@ SKIP_PKGS: dict[str, str] = {
     # now; add an nvchecker regex/htmlparser entry if independent drift is wanted.
     "dev-tex/latexmk":                     "TL-shipped; upstream personal.psu.edu has no tag scheme — add an htmlparser tracker for independent drift",
     "dev-tex/glossaries":                  "TL-shipped; CTAN upstream — add a regex/htmlparser tracker for independent drift",
-    "dev-tex/tex4ht":                      "engine bootstrapped from svn.gnu.org.ua trunk via bin/bootstrap-tex4ht.sh; SVN-revision versioned, no upstream tags",
+    "dev-tex/tex4ht":                      "engine bootstrapped from svn.gnu.org.ua trunk; SVN-revision versioned, no upstream tags",
 }
 
 
