@@ -4,8 +4,9 @@
   <upstream>
     <remote-id type="pypi">cupy</remote-id>
   </upstream>
-  <maintainer type="person">
-    <email>xgreenlandforwuyy@gmail.com</email>
+  <maintainer type="person" proxied="yes">
+    <email>xgreenlandforwyy@gmail.com</email>
+    <name>Yiyang Wu</name>
   </maintainer>
   <maintainer type="person">
     <email>heroxbd@gentoo.org</email>
