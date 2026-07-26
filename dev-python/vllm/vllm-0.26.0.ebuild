@@ -757,9 +757,8 @@ REQUIRED_USE="
 # 0.1.2->0.1.8 and amd-quark 0.8.99->0.12 stay omitted. cpu.txt unchanged (torch
 # still ==2.11.0). flash-attn pin 2c839c3->caaa4eb (fa3-skip + py314 patches apply
 # clean, regenerated as caaa4eb copies). CRATES 561->594, GIT_CRATES llm-multimodal
-# rev 7d74582->5390032 (still v1.7.1), oss-harmony unchanged. Build-checked against
-# the host's torch 2.13.0 (rocm target), NOT the shipped ~2.11.0 config; full
-# rocm/cuda verify deferred (torch-2.11.0 session + raukaan sibling).
+# rev 7d74582->5390032 (still v1.7.1), oss-harmony unchanged. The rocm and cuda
+# targets are not yet verified against the shipped ~2.11.0 torch pin.
 #
 # tokenspeed-mla (in requirements/cuda.txt at ==0.1.2 with the comment
 # "for faster mla with spec decode") is deliberately omitted from
