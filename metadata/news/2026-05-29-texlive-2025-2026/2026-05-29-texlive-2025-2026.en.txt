@@ -1,7 +1,7 @@
 Title: TeX Live 2025/2026 imported — masked during initial testing
 Author: Ivan S. Titov <iohann.s.titov@gmail.com>
 Posted: 2026-05-29
-Revision: 1
+Revision: 2
 News-Item-Format: 2.0
 Display-If-Installed: app-text/texlive-core
 
@@ -13,10 +13,12 @@ TL2024.
 
 The set is ~amd64 and package.masked for an initial testing window, so it is
 not pulled by default, even on ~amd64. Stable amd64 users are unaffected
-(::gentoo's TL2024 is stable). The mask drops on 2026-06-12.
+(::gentoo's TL2024 is stable).
 
-To opt in early, copy the 2026-05-29 TeX Live block from the overlay's
-profiles/package.mask into /etc/portage/package.unmask (and accept ~amd64).
+UPDATE: the mask was lifted on 2026-07-03, later than the 2026-06-12 date
+given when this item was first posted. The TeX Live block is no longer in
+profiles/package.mask, so no unmasking is needed. See the news item
+2026-07-03-texlive-2025-2026-unmasked.
 
 == Upgrading ==
 

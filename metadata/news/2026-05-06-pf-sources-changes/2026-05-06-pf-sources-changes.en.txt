@@ -1,7 +1,7 @@
 Title: pf-sources changes — CVE-2026-31431 fixes, -r70 ebuilds, GA-only phase-out
 Author: Ivan S. Titov <iohann.s.titov@gmail.com>
 Posted: 2026-05-06
-Revision: 1
+Revision: 2
 News-Item-Format: 2.0
 Display-If-Installed: sys-kernel/pf-sources
 
@@ -63,9 +63,10 @@ cycle:
   * sys-kernel/pf-sources-6.18_p6
   * sys-kernel/pf-sources-6.19_p5
 
-These are added to profiles/package.mask on 2026-05-06 and unkeyworded
-(KEYWORDS="") on 2026-06-05. The ebuilds themselves remain in tree as a
-recovery path. Users currently on one of these versions should switch
+These are unkeyworded (KEYWORDS="") as of 2026-06-05, which is what keeps
+them from being pulled; the package.mask entry described when this item was
+first posted was not used in the end. The ebuilds themselves remain in tree
+as a recovery path. Users currently on one of these versions should switch
 to the matching -r1 (verbatim natalenko + surgical CVE patch) or -r70
 (curated + linux-stable tracking) ebuild before 2026-06-05.
 
