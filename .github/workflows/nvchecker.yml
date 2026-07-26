@@ -80,8 +80,8 @@ jobs:
       # run (the lxml/structlog/aiohttp transitive deps are the slow
       # part). The pinned version lives in scripts/nvchecker/
       # requirements.txt — same supply-chain discipline as the
-      # pkgcheck-action SHA pin and actionlint@v1.7.12, with the side
-      # benefit that Dependabot's pip ecosystem can scan it.
+      # pkgcheck-action SHA pin and actionlint@v1.7.12. Bumps are
+      # deliberate and manual; this repo runs no Dependabot.
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
