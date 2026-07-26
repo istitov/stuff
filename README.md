@@ -12,9 +12,10 @@ Front-door slices: **local AI & GPU compute** (AMD Ryzen-AI / NPU ·
 AMD ROCm · NVIDIA CUDA, with LLM runtimes and the PyTorch / ONNX
 ecosystem) · **materials science** (SAXS / SANS / XAFS / XRD /
 Rietveld · electron microscopy · SPM · micromagnetism) ·
-**`pf-sources`** (curated pf-kernel patchset) · **DeaDBeeF** plugins ·
-**TeX Live** · a **Qt5** revival mirror · a **Python 2** legacy
-preservation layer.
+**`pf-sources`** (full pf-kernel patchset, GA-frozen with CVE
+backports, plus a stable-tracking `pf-sources-extended` tier) ·
+**DeaDBeeF** plugins · **TeX Live** · a **Qt5** revival mirror ·
+a **Python 2** legacy preservation layer.
 
 ```sh
 eselect repository enable stuff
@@ -265,9 +266,12 @@ consumers follow.
 - **Collaborative editing** — [`app-editors/gobby`](https://gobby.github.io/),
   `net-libs/libinfinity`, `acct-{group,user}/infinote`.
 - **Kernel / low-level** —
-  [`sys-kernel/pf-sources`](https://pfkernel.natalenko.name/),
-  `sys-kernel/pf-sources-extended` (curated pf-patchset model on top
-  of vanilla + Gentoo genpatches), `sys-apps/dkms-gentoo`,
+  [`sys-kernel/pf-sources`](https://pfkernel.natalenko.name/), the
+  full pf patchset on a GA-frozen base, with surgical CVE backports
+  where pf's deliberate no-linux-stable policy leaves a gap;
+  `sys-kernel/pf-sources-extended`, the complementary tier — vanilla
+  plus Gentoo genpatches, so linux-stable *is* tracked, carrying a
+  curated subset of the pf delta rebased on top; `sys-apps/dkms-gentoo`,
   `sys-kernel/kernel-cleaner`.
 - **3D printing** — [`media-gfx/orcaslicer`](https://www.orcaslicer.com/),
   the open-source slicer (a PrusaSlicer / Bambu Studio fork), with

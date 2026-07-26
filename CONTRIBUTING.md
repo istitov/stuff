@@ -36,8 +36,12 @@ What we mostly cover:
 - **AMD Ryzen-AI application layer** — fastflowlm, lemonade, kokoros,
   amd-gaia, therock-bin, and the local LLM tooling around them
 - **ROCm leadership** — typically a release ahead of `::gentoo`
-- **Curated `pf-sources`** — surgical CVE-only patch curation for
-  the pf-kernel line, separate from the upstream pf-kernel cadence
+- **The `pf-sources` line** — two deliberately co-installable tiers,
+  both maintained separately from the upstream pf-kernel cadence:
+  `pf-sources` (the full pf patchset, GA-frozen, with surgical CVE
+  backports) and `pf-sources-extended` (a vanilla + genpatches base
+  that does track linux-stable, carrying a curated subset of the pf
+  delta)
 - **Python-2 preservation** — `*_py2` forks of py3-only `::gentoo`
   packages, kept alive for legacy scientific Python consumers
 
