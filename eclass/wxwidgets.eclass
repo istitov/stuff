@@ -1,6 +1,20 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Overlay-local fork (stuff overlay): identical to ::gentoo's
+# wxwidgets.eclass except the WX_GTK_VER case guard also accepts
+# "3.3-gtk3", to support the overlay's x11-libs/wxGTK-3.3.* slot
+# (needed by media-gfx/orcaslicer-2.4.0, which upstream-requires
+# wxWidgets >=3.3).  ::gentoo only ships the 3.2-gtk3 slot -- verified
+# 2026-07-27, x11-libs/wxGTK-3.2.8.1-r2 is its sole version.  The
+# setup-wxwidgets() body already handles the 3.3 wx-config naming
+# (gtk3-unicode-3.3) via the ${WX_GTK_VER%%-*} branch, so only the
+# guard changed, along with the two doc/die strings that enumerate the
+# accepted slots.  Re-sync (and drop this fork) once ::gentoo adds a
+# 3.3-gtk3 slot.
+# @MAINTAINER below is upstream ::gentoo's; report overlay-specific
+# issues at https://github.com/istitov/stuff/issues.
+
 # @ECLASS: wxwidgets.eclass
 # @MAINTAINER:
 # wxwidgets@gentoo.org
@@ -20,14 +34,6 @@
 #
 # The configuration chosen is based on the version required and the flags
 # wxGTK was built with.
-#
-# OVERLAY FORK (::stuff): identical to ::gentoo's wxwidgets.eclass except the
-# WX_GTK_VER case guard also accepts "3.3-gtk3", to support the overlay's
-# x11-libs/wxGTK-3.3.* slot (needed by media-gfx/orcaslicer-2.4.0, which
-# upstream-requires wxWidgets >=3.3).  ::gentoo only ships the 3.2-gtk3 slot
-# as of 2026-06-20.  The setup-wxwidgets() body already handles the 3.3 wx-config
-# naming (gtk3-unicode-3.3) via the ${WX_GTK_VER%%-*} branch, so only the guard
-# changed.  Re-sync (and drop this fork) once ::gentoo adds a 3.3-gtk3 slot.
 
 case ${EAPI} in
 	8) ;;
