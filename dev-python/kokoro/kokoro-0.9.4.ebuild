@@ -35,12 +35,11 @@ DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
 
 src_prepare() {
-	# Cap-relax (per feedback_cap_relax_recipe.md). Upstream commit
-	# dfb907a0 (2025-08-06, "Enable Python 3.13 (#244)") relaxes the
-	# requires-python cap from <3.13 to <3.14 — a one-line pyproject
-	# change with no code edits, confirming py3.13 works as-is. The
-	# 0.9.4 PyPI release predates that commit; the sed below applies
-	# the same change verified 2026-05-09.
+	# Cap-relax. Upstream commit dfb907a0 (2025-08-06, "Enable Python
+	# 3.13 (#244)") relaxes the requires-python cap from <3.13 to <3.14
+	# — a one-line pyproject change with no code edits, confirming
+	# py3.13 works as-is. The 0.9.4 PyPI release predates that commit;
+	# the sed below applies the same change verified 2026-05-09.
 	sed -i 's|>=3.10, <3.13|>=3.10, <3.14|' pyproject.toml || die
 	distutils-r1_src_prepare
 }
