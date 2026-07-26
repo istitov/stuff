@@ -1,5 +1,5 @@
 Thanks for opening a PR! Please skim
-[CONTRIBUTING.md](/CONTRIBUTING.md) if you haven't
+[CONTRIBUTING.md](https://github.com/istitov/stuff/blob/master/CONTRIBUTING.md) if you haven't
 already — the checklist below is a condensed view of what's there.
 
 <!--

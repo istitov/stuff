@@ -49,7 +49,7 @@ first is cheap and usually clearer than guessing.
 - Clone the repo (or your fork), then either enable it via
   `eselect repository enable stuff` and `emerge --sync stuff`, or
   point your own overlay config at the working tree.
-- Install the tooling: `app-portage/pkgdev` and `dev-util/pkgcheck`.
+- Install the tooling: `dev-util/pkgdev` and `dev-util/pkgcheck`.
 - The repo declares `masters = gentoo` and `thin-manifests = true`
   — every package depends on `::gentoo` being available, and
   `Manifest` files only carry `DIST` lines.
