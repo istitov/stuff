@@ -15,7 +15,10 @@ HOMEPAGE="https://github.com/istitov/udept"
 
 LICENSE="GPL-3"
 SLOT="0"
-#~amd64 ~mips ~ppc ~sparc ~x86
+# Retained for rollback only, and masked in profiles/package.mask. An
+# empty KEYWORDS keeps it out of every arch's default resolution while
+# leaving it installable via ACCEPT_KEYWORDS="**".
+KEYWORDS=""
 IUSE="bash-completion"
 
 DEPEND="app-shells/bash:=
