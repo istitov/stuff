@@ -411,7 +411,7 @@ python_configure_all() {
 		--no-size-optimization
 		--openssl="${ESYSROOT}/usr/bin/openssl"
 		--qt="$(ver_cut 1-3)"
-		--qtpaths="$(qt6_get_bindir)/qtpaths"
+		--qtpaths="$(qt_get_broot_binary 6 qtpaths)"
 		--log-level=verbose
 		--parallel="$(makeopts_jobs)"
 		"$(usex debug "--debug" "--relwithdebinfo")"
@@ -529,9 +529,9 @@ python_compile() {
 	# Install misc files from inner install dir
 	find "${BUILD_DIR}"/build*/"${pyside_build_dir}"/install -type f \
 		-name libPySidePlugin.so -exec \
-		mkdir -p "${BUILD_DIR}/install/$(qt6_get_plugindir)/designer/" \; \
+		mkdir -p "${BUILD_DIR}/install/$(qt_get_plugindir 6)/designer/" \; \
 		-exec \
-		cp "{}" "${BUILD_DIR}/install/$(qt6_get_plugindir)/designer/" \; \
+		cp "{}" "${BUILD_DIR}/install/$(qt_get_plugindir 6)/designer/" \; \
 			|| die
 
 	for dir in cmake pkgconfig; do
