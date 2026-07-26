@@ -74,7 +74,7 @@ jobs:
           # or an ~amd64-only fork (DroppedKeywords) re-surfaces the
           # by-design warning and reddens the push gate.  e.g. "zluda: drop
           # 6_pre75" re-scanned the package and tripped on 6_pre76/6_pre77.
-          # Keep this list in sync with pkgcheck-full.  verified 2026-06-09.
+          # Keep this list in sync with pkgcheck-full.  verified 2026-07-26.
           args: --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords --commits ${{ steps.base.outputs.ref }}
 
   pkgcheck-full:
@@ -106,7 +106,7 @@ jobs:
           #                     (opencv-5.0.0-r90, caffe2, fabio x86 fallback).
           # Without this the scan failed on every run, so the failure-issue
           # upsert could never reach the auto-close-on-success path. The
-          # error-level scan is clean. verified 2026-06-07.
+          # error-level scan is clean. verified 2026-07-26.
           args: --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords
 
       # Turn a failing scheduled run into a visible issue rather than a
@@ -205,5 +205,5 @@ jobs:
         with:
           # Full repo scan => same by-design exit-set exemption as the other
           # two jobs, else a config-only push trips VisibleVcsPkg /
-          # DroppedKeywords here instead.  Keep in sync.  verified 2026-06-09.
+          # DroppedKeywords here instead.  Keep in sync.  verified 2026-07-26.
           args: --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords
