@@ -128,10 +128,15 @@ you change an upstream URL.
 ### `metadata.xml`
 
 - `https://` DTD, two-space indent.
-- Proxy-maintained packages use the maintainer's own email +
-  `<name>Ivan S. Titov</name>` for now, since the overlay is
-  maintained by a small group; if you take over a package in a PR,
-  feel free to adjust.
+- Packages maintained here carry `iohann.s.titov@gmail.com` with
+  `<name>Ivan S. Titov</name>`.
+- Ebuilds imported from another overlay keep their original
+  maintainer entry verbatim — the upstream author's own email and
+  name, and any `proxied="yes"`. Don't overwrite it with this
+  overlay's identity; add a second `<maintainer>` if you need to be
+  reachable too. Some inherited entries carry an email with no
+  `<name>`; that is how they arrived, and is left alone rather than
+  guessed at.
 - Add `<upstream><remote-id>` entries where they exist
   (`pypi`, `github`, `sourceforge`, etc.).
 
