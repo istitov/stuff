@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (262) ---
+# --- pypi (264) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -341,6 +341,10 @@ pypi = "hdf5plugin"
 ["dev-python/hf-transfer"]
 source = "pypi"
 pypi = "hf-transfer"
+
+["dev-python/hsluv"]
+source = "pypi"
+pypi = "hsluv"
 
 ["dev-python/httpx-sse"]
 source = "pypi"
@@ -917,6 +921,10 @@ pypi = "tyro"
 ["dev-python/uctools"]
 source = "pypi"
 pypi = "uctools"
+
+["dev-python/vispy"]
+source = "pypi"
+pypi = "vispy"
 
 ["dev-python/vllm"]
 source = "pypi"
