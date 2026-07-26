@@ -27,6 +27,13 @@ DEPEND="
 	icu? ( dev-libs/icu:= )
 	!icu? ( virtual/libiconv )
 "
+# pkgcheck reports every blocker below as NonexistentBlocker, because this
+# overlay only ever shipped these modules at 5.15.19 and ::gentoo has since
+# removed its dev-qt:5 set outright -- so nothing in repo history matches.
+# They still do their job: a user migrating off ::gentoo's Qt5 can have older
+# modules *installed*, and Qt refuses to work across mismatched module
+# versions, so the blockers are what force the whole split set to move
+# together. Do not drop them to silence the warning. verified 2026-07-27
 RDEPEND="${DEPEND}
 	!<dev-qt/qtconcurrent-${QT5_PV}:5
 	!<dev-qt/qtdbus-${QT5_PV}:5
