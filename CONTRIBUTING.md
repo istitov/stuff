@@ -135,10 +135,14 @@ you change an upstream URL.
 
 `eclass/` carries locally-vendored `*_py2` variants of the
 distutils/python eclasses (`distutils-r1_py2`, `python-r1_py2`,
-`python-single-r1_py2`, `python-utils-r1_py2`). Inheriting one of
-these signals that the package is **intentionally pinned to
-Python 2** — typically because upstream is unmaintained and the
-code has no realistic py3 port.
+`python-utils-r1_py2`). Inheriting one of these signals that the
+package is **intentionally pinned to Python 2** — typically because
+upstream is unmaintained and the code has no realistic py3 port.
+
+There is no `python-single-r1_py2`: nothing ever set
+`DISTUTILS_SINGLE_IMPL` in a py2 package, so the fork was dropped.
+`distutils-r1_py2` dies with a clear message if that variable is set;
+recover the eclass from git history if a py2 package ever needs it.
 
 Do not inherit these for packages that still have a living py3
 upstream. Use the normal `::gentoo` eclasses instead.

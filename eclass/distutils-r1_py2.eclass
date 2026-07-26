@@ -16,7 +16,7 @@
 # Author: Michał Górny <mgorny@gentoo.org>
 # Based on the work of: Krzysztof Pawlik <nelchael@gentoo.org>
 # @SUPPORTED_EAPIS: 7 8
-# @PROVIDES: python-r1_py2 python-single-r1_py2
+# @PROVIDES: python-r1_py2
 # @BLURB: A simple eclass to build Python packages using distutils.
 # @DESCRIPTION:
 # A simple eclass providing functions to build Python packages using
@@ -184,7 +184,12 @@ inherit multibuild multiprocessing ninja-utils toolchain-funcs
 if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
 	inherit python-r1_py2
 else
-	inherit python-single-r1_py2
+	# The py2 fork of python-single-r1 was dropped from this overlay: no
+	# consumer ever set DISTUTILS_SINGLE_IMPL, so it was 465 lines of
+	# unreachable code. Fail loudly rather than on a missing eclass if a
+	# future py2 package needs the single-impl path -- restore
+	# python-single-r1_py2 from git history at that point.
+	die "DISTUTILS_SINGLE_IMPL is not supported by the py2 eclass fork"
 fi
 
 fi
