@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    High-performance interactive 2D/3D data visualization library that
+    leverages the GPU through OpenGL. Pulled into ::stuff as a runtime
+    dependency of dev-python/wxmplot (>= 2026.2.0); the actual GL app
+    backend (wxPython + PyOpenGL) is provided by the consumer.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">vispy/vispy</remote-id>
+    <remote-id type="pypi">vispy</remote-id>
+  </upstream>
+</pkgmetadata>
