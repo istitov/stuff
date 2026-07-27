@@ -35,7 +35,6 @@ DEPEND="
 #)
 
 src_prepare() {
-	./configure
 	default
 }
 
