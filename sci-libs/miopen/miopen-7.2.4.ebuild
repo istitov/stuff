@@ -43,10 +43,17 @@ RDEPEND="
 	roctracer? ( dev-util/roctracer:${SLOT} )
 "
 
+# hipblaslt? pulls hipblas-common too: CMakeLists.txt does a second
+# find_package(hipblas-common REQUIRED) right after the hipblaslt one, inside
+# the same if(MIOPEN_USE_HIPBLASLT) block. sci-libs/hipBLASLt carries
+# hipBLAS-common in its own DEPEND, which does not propagate, so a depcleaned
+# system loses the cmake config and configure fails. Build-time only - the
+# package ships no library we link against. verified 2026-07-27
 DEPEND="
 	${RDEPEND}
 	dev-cpp/nlohmann_json
 	>=dev-libs/half-1.12.0-r1
+	hipblaslt? ( sci-libs/hipBLAS-common:${SLOT} )
 	test? ( dev-cpp/gtest )
 
 	amdgpu_targets_gfx908? ( =dev-cpp/frugally-deep-0.15* )
