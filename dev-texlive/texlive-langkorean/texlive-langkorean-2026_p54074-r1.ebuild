@@ -6,11 +6,11 @@ EAPI=8
 TEXLIVE_MODULE_CONTENTS="
 	collection-langkorean.r54074
 	baekmuk.r56915
-	cjk-ko.r70300
-	kotex-oblivoir.r78115
+	cjk-ko.r79618
+	kotex-oblivoir.r79618
 	kotex-plain.r63689
 	kotex-utf.r63690
-	kotex-utils.r38727
+	kotex-utils.r79618
 	nanumtype1.r29558
 	pmhanguljamo.r78114
 	uhc.r16791
@@ -19,11 +19,11 @@ TEXLIVE_MODULE_CONTENTS="
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	baekmuk.doc.r56915
-	cjk-ko.doc.r70300
-	kotex-oblivoir.doc.r78115
+	cjk-ko.doc.r79618
+	kotex-oblivoir.doc.r79618
 	kotex-plain.doc.r63689
 	kotex-utf.doc.r63690
-	kotex-utils.doc.r38727
+	kotex-utils.doc.r79618
 	lshort-korean.doc.r73814
 	nanumtype1.doc.r29558
 	pmhanguljamo.doc.r78114
