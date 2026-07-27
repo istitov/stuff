@@ -22,10 +22,13 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# google-api-core[grpc] enables grpcio + proto-plus[grpcio] paths upstream
-# expects. Listing them explicitly so we don't depend on extra resolution.
+# Upstream requires google-api-core[grpc]. ::gentoo models that extra as a USE
+# flag gating grpcio AND grpcio-status, so ask for the flag rather than
+# re-listing its contents: the previous enumeration here had already drifted,
+# carrying grpcio but not grpcio-status. grpcio stays declared because upstream
+# names it separately from the extra. verified 2026-07-27
 RDEPEND="
-	>=dev-python/google-api-core-1.34.1[${PYTHON_USEDEP}]
+	>=dev-python/google-api-core-1.34.1[grpc,${PYTHON_USEDEP}]
 	>=dev-python/google-auth-2.14.1[${PYTHON_USEDEP}]
 	>=dev-python/proto-plus-1.22.3[${PYTHON_USEDEP}]
 	dev-python/protobuf[${PYTHON_USEDEP}]
