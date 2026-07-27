@@ -35,20 +35,20 @@ TEXLIVE_MODULE_CONTENTS="
 	babel-turkish.r51560
 	babel-welsh.r77682
 	finbib.r76790
-	hrlatex.r18020
+	hrlatex.r79618
 	huaz.r77576
 	hulipsum.r77317
 	hyphen-croatian.r78069
-	hyphen-danish.r78069
-	hyphen-dutch.r78069
+	hyphen-danish.r79618
+	hyphen-dutch.r79618
 	hyphen-estonian.r78069
 	hyphen-finnish.r78069
 	hyphen-friulan.r78069
 	hyphen-hungarian.r78069
-	hyphen-icelandic.r78069
+	hyphen-icelandic.r79618
 	hyphen-irish.r78069
 	hyphen-kurmanji.r78069
-	hyphen-latin.r78069
+	hyphen-latin.r79618
 	hyphen-latvian.r78069
 	hyphen-lithuanian.r78069
 	hyphen-macedonian.r78069
@@ -66,7 +66,7 @@ TEXLIVE_MODULE_CONTENTS="
 	nevelok.r39029
 	rojud.r56895
 	swebib.r76924
-	turkmen.r77682
+	turkmen.r79618
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	armtex.doc.r69418
@@ -99,7 +99,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	babel-turkish.doc.r51560
 	babel-welsh.doc.r77682
 	gloss-occitan.doc.r52593
-	hrlatex.doc.r18020
+	hrlatex.doc.r79618
 	huaz.doc.r77576
 	hulipsum.doc.r77317
 	hyphen-hungarian.doc.r78069
@@ -113,7 +113,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	nevelok.doc.r39029
 	rojud.doc.r56895
 	swebib.doc.r76924
-	turkmen.doc.r77682
+	turkmen.doc.r79618
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-albanian.source.r77682
@@ -144,11 +144,11 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-turkish.source.r51560
 	babel-welsh.source.r77682
 	gloss-occitan.source.r52593
-	hrlatex.source.r18020
+	hrlatex.source.r79618
 	hulipsum.source.r77317
 	hyphen-turkish.source.r78069
 	nevelok.source.r39029
-	turkmen.source.r77682
+	turkmen.source.r79618
 "
 
 inherit texlive-module
