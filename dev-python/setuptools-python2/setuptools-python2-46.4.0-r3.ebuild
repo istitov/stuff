@@ -3,7 +3,6 @@
 
 EAPI=7
 
-DISTUTILS_USE_SETUPTOOLS=no
 _PYTHON_ALLOW_PY27=1
 DISTUTILS_OPTIONAL=1
 PYTHON_COMPAT=( python2_7 )
@@ -23,8 +22,16 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-BDEPEND="
-	dev-lang/python:2.7
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+
+# DISTUTILS_OPTIONAL suppresses the eclass's PYTHON_DEPS and
+# PYTHON_REQUIRED_USE, so the ebuild has to supply both. RDEPEND had neither:
+# a package of Python 2 modules that depended on no interpreter. The literal
+# dev-lang/python:2.7 that was in BDEPEND also dropped the PYTHON_REQ_USE
+# above, so nothing required python built with xml support.
+# verified 2026-07-27
+RDEPEND="${PYTHON_DEPS}"
+BDEPEND="${RDEPEND}
 	app-arch/unzip
 "
 # installing plugins apparently breaks stuff at runtime, so let's pull
