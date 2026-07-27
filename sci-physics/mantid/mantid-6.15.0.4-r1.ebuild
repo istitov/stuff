@@ -91,6 +91,8 @@ RDEPEND="
 		>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
 		dev-python/pip[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-2.11.4[${PYTHON_USEDEP}]
+		<dev-python/pydantic-3[${PYTHON_USEDEP}]
 		sci-libs/pycifrw[${PYTHON_USEDEP}]
 		dev-python/pyqt5[${PYTHON_USEDEP},gui,widgets,printsupport]
 		dev-python/python-dateutil[${PYTHON_USEDEP}]

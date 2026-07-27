@@ -27,11 +27,10 @@ SLOT="0"
 KEYWORDS=""
 # ~amd64 — full src_unpack/prepare/configure/compile/install pipeline
 # verified clean 2026-07-05 against gcc-16 + Boost-1.90 + Qt-5.15.19 +
-# Python 3.13. Unlike the 6.16.0.1 patch tag — which carries a
-# QT_DISABLE_DEPRECATED_BEFORE=0x060000 switch that removes the Qt5-era
-# deprecated APIs mantid still uses, breaking the Qt5 build — 6.16.1 uses
-# the Qt5-safe QT_DISABLE_DEPRECATED_UP_TO=0x050F00 and builds on Qt5
-# unchanged. The earlier HDF4-probe blocker (Gentoo bug 942866) is
+# Python 3.13, WITH the src_prepare Qt-deprecation-flag revert below (this
+# patch tag alone ships the Qt5-breaking QT_DISABLE_DEPRECATED_BEFORE
+# switch; see the sed in src_prepare). The earlier HDF4-probe blocker
+# (Gentoo bug 942866) is
 # resolved by this overlay's sci-libs/hdf-4.2.16. Install lands ~254 MiB
 # under /opt/mantid/{bin,lib,lib64,plugins,instrument,scripts}; workbench
 # launches under QT_API=pyqt5 (see pkg_postinst). Upstream removed all
@@ -95,6 +94,8 @@ RDEPEND="
 		>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
 		dev-python/pip[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-2.11.4[${PYTHON_USEDEP}]
+		<dev-python/pydantic-3[${PYTHON_USEDEP}]
 		sci-libs/pycifrw[${PYTHON_USEDEP}]
 		dev-python/pyqt5[${PYTHON_USEDEP},gui,widgets,printsupport]
 		dev-python/python-dateutil[${PYTHON_USEDEP}]
@@ -148,6 +149,17 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 MY_PREFIX="/opt/mantid"
 
 src_prepare() {
+	# 6.16.0.1's top CMakeLists sets QT_DISABLE_DEPRECATED_BEFORE=0x060000 — a
+	# Qt6-readiness switch (upstream is mid Qt5->Qt6 migration) that hides every
+	# Qt5-era deprecated API. mantid's own code still calls some of those (e.g.
+	# the recursive-QMutex ctor in WorkspaceTreeWidget), so the flag breaks the
+	# Qt5 build outright. 6.16.0 and 6.16.1 instead use the milder
+	# QT_DISABLE_DEPRECATED_UP_TO=0x050F00; restore that Qt5-safe form here so
+	# this patch tag builds on a Qt5-only Gentoo. Only 6.16.0.1 carries the
+	# 0x060000 flip. # verified 2026-07-05
+	sed -i -e 's/QT_DISABLE_DEPRECATED_BEFORE=0x060000/QT_DISABLE_DEPRECATED_UP_TO=0x050F00/' \
+		CMakeLists.txt || die
+
 	# The no-qt5-webwidgets patch removes a "Prefer WebEngineWidgets
 	# over WebKitWidgets" block that fatal-errors when neither is
 	# available; the block is present in v6.15.0.3 but already gone
