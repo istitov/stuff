@@ -46,8 +46,16 @@ RDEPEND="
 # The custom standalone backend (_build_backend.py) imports Babel at
 # build time to compile the .po catalogues into .mo, and uses
 # setuptools_scm for the version.
+# setuptools is in upstream's build-system.requires at >=80 and was missing
+# here. DISTUTILS_USE_PEP517=standalone is why nothing else supplies it: the
+# eclass's standalone case adds no backend dependency at all, so setuptools
+# arrived only transitively through setuptools-scm's own >=dev-python/
+# setuptools-64, and ::gentoo still ships an installable 79.0.1 alongside
+# 82.0.1 and 83.0.0. Upstream's Babel <3 cap is not mirrored: 2.18.0 is the
+# only version in tree. verified 2026-07-27
 BDEPEND="
 	>=dev-python/babel-2.7[${PYTHON_USEDEP}]
+	>=dev-python/setuptools-80[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
 	dev-python/wheel[${PYTHON_USEDEP}]
 "
