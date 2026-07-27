@@ -8,10 +8,10 @@ TEXLIVE_MODULE_CONTENTS="
 	babel-czech.r30261
 	babel-slovak.r30292
 	cnbwp.r69910
-	cs.r41553
+	cs.r79618
 	csbulletin.r77112
-	cslatex.r67494
-	csplain.r78607
+	cslatex.r79618
+	csplain.r79618
 	hyphen-czech.r78069
 	hyphen-slovak.r78069
 "
@@ -28,7 +28,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-czech.source.r30261
 	babel-slovak.source.r30292
-	cslatex.source.r67494
+	cslatex.source.r79618
 "
 
 inherit texlive-module
