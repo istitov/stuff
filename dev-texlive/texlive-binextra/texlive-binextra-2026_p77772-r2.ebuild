@@ -6,12 +6,12 @@ EAPI=8
 TEXLIVE_MODULE_CONTENTS="
 	collection-binextra.r77772
 	a2ping.r52964
-	adhocfilelist.r29349
+	adhocfilelist.r79618
 	arara.r79461
 	bundledoc.r79024
 	checklistings.r38300
 	chklref.r52649
-	clojure-pamphlet.r77682
+	clojure-pamphlet.r79618
 	cluttex.r74655
 	ctan-o-mat.r51578
 	ctanbib.r79157
@@ -31,14 +31,14 @@ TEXLIVE_MODULE_CONTENTS="
 	findhyph.r47444
 	fragmaster.r26313
 	git-latexdiff.r75878
-	installfont.r31205
+	installfont.r79618
 	ketcindy.r58661
 	l3sys-query.r77682
 	latex-git-log.r71402
 	latex-papersize.r79316
-	latex2man.r77377
-	latex2nemeth.r76924
-	latexfileversion.r29349
+	latex2man.r79618
+	latex2nemeth.r79618
+	latexfileversion.r79618
 	latexindent.r79306
 	latexpand.r66226
 	light-latex-make.r66473
@@ -61,23 +61,23 @@ TEXLIVE_MODULE_CONTENTS="
 	pkfix.r26032
 	pkfix-helper.r56061
 	ppmcheckpdf.r74165
-	purifyeps.r29725
+	purifyeps.r79618
 	pythontex.r77873
 	runtexshebang.r68882
 	seetexk.r57972
 	spix.r65050
-	sqltex.r72396
+	sqltex.r79618
 	srcredact.r38710
 	sty2dtx.r79461
 	synctex.r66203
 	tex4ebook.r78132
 	texaccents.r64447
 	texblend.r68961
-	texcount.r49013
+	texcount.r79618
 	texdef.r74067
-	texdiff.r29752
+	texdiff.r79618
 	texdirflatten.r55064
-	texdoc.r73876
+	texdoc.r79716
 	texfot.r77286
 	texliveonfly.r76924
 	texloganalyser.r54526
@@ -90,7 +90,7 @@ TEXLIVE_MODULE_CONTENTS="
 	tlcockpit.r54857
 	typeoutfileinfo.r67526
 	web.r77830
-	xindex.r78720
+	xindex.r79618
 	xpdfopen.r65952
 	runtexfile.r76526
 	show-pdf-tags.r77604
@@ -99,12 +99,12 @@ TEXLIVE_MODULE_CONTENTS="
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	a2ping.doc.r52964
-	adhocfilelist.doc.r29349
+	adhocfilelist.doc.r79618
 	arara.doc.r79461
 	bundledoc.doc.r79024
 	checklistings.doc.r38300
 	chklref.doc.r52649
-	clojure-pamphlet.doc.r77682
+	clojure-pamphlet.doc.r79618
 	cluttex.doc.r74655
 	ctan-o-mat.doc.r51578
 	ctan_chk.doc.r36304
@@ -126,14 +126,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fragmaster.doc.r26313
 	git-latexdiff.doc.r75878
 	hook-pre-commit-pkg.doc.r76790
-	installfont.doc.r31205
+	installfont.doc.r79618
 	ketcindy.doc.r58661
 	l3sys-query.doc.r77682
 	latex-git-log.doc.r71402
 	latex-papersize.doc.r79316
-	latex2man.doc.r77377
-	latex2nemeth.doc.r76924
-	latexfileversion.doc.r29349
+	latex2man.doc.r79618
+	latex2nemeth.doc.r79618
+	latexfileversion.doc.r79618
 	latexindent.doc.r79306
 	latexpand.doc.r66226
 	light-latex-make.doc.r66473
@@ -155,23 +155,23 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pkfix.doc.r26032
 	pkfix-helper.doc.r56061
 	ppmcheckpdf.doc.r74165
-	purifyeps.doc.r29725
+	purifyeps.doc.r79618
 	pythontex.doc.r77873
 	runtexshebang.doc.r68882
 	seetexk.doc.r57972
 	spix.doc.r65050
-	sqltex.doc.r72396
+	sqltex.doc.r79618
 	srcredact.doc.r38710
 	sty2dtx.doc.r79461
 	synctex.doc.r66203
 	tex4ebook.doc.r78132
 	texaccents.doc.r64447
 	texblend.doc.r68961
-	texcount.doc.r49013
+	texcount.doc.r79618
 	texdef.doc.r74067
-	texdiff.doc.r29752
+	texdiff.doc.r79618
 	texdirflatten.doc.r55064
-	texdoc.doc.r73876
+	texdoc.doc.r79716
 	texfot.doc.r77286
 	texliveonfly.doc.r76924
 	texloganalyser.doc.r54526
@@ -184,7 +184,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tlcockpit.doc.r54857
 	typeoutfileinfo.doc.r67526
 	web.doc.r77830
-	xindex.doc.r78720
+	xindex.doc.r79618
 	xpdfopen.doc.r65952
 	runtexfile.doc.r76526
 	show-pdf-tags.doc.r77604
@@ -192,16 +192,16 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xdvipsk-support.doc.r78653
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
-	adhocfilelist.source.r29349
+	adhocfilelist.source.r79618
 	arara.source.r79461
 	checklistings.source.r38300
-	clojure-pamphlet.source.r77682
+	clojure-pamphlet.source.r79618
 	listings-ext.source.r29349
 	mkjobtexmf.source.r29725
 	optexcount.source.r59817
 	pfarrei.source.r68950
 	pythontex.source.r77873
-	sqltex.source.r72396
+	sqltex.source.r79618
 	texaccents.source.r64447
 	texosquery.source.r77682
 	texplate.source.r71963
