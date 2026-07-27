@@ -18,11 +18,15 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Upstream also lists 'fire' (a CLI framework), used only by pccm's command-line
-# entry points -- not when cumm/spconv import generated code at runtime.
-# verified 2026-06-17
+# fire is reached only through pccm/main.py: __init__.py imports builder,
+# core, middlewares and targets, and upstream ships an empty console_scripts
+# list, so nothing cumm/spconv import at runtime touches it. Declared anyway,
+# because main.py is installed and does a module-level `import fire` - leaving
+# it out ships a module that cannot be imported. dev-python/fire carries the
+# same PYTHON_COMPAT, so this costs no targets. verified 2026-07-27
 RDEPEND="
 	dev-python/ccimport[${PYTHON_USEDEP}]
+	dev-python/fire[${PYTHON_USEDEP}]
 	dev-python/lark[${PYTHON_USEDEP}]
 	dev-python/portalocker[${PYTHON_USEDEP}]
 	dev-python/pybind11[${PYTHON_USEDEP}]
