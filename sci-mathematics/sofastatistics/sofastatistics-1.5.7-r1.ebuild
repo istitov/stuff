@@ -24,6 +24,11 @@ done
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
+# psycopg is slotted: slot 2 is psycopg2 and provides the psycopg2 module,
+# slot 0 is psycopg 3 and provides psycopg. sofa_main/dbe_plugins/
+# dbe_postgresql.py does `import psycopg2`, and its except branch re-raises
+# rather than degrading, so the unslotted atom was satisfiable by slot 0
+# without providing anything the code can use. verified 2026-07-27
 RDEPEND="
 	${PYTHON_DEPS}
 	$(python_gen_cond_dep '
@@ -33,7 +38,7 @@ RDEPEND="
 		dev-python/pillow[${PYTHON_USEDEP}]
 		dev-python/pymysql[${PYTHON_USEDEP}]
 		dev-python/pypdf[${PYTHON_USEDEP}]
-		dev-python/psycopg[${PYTHON_USEDEP}]
+		dev-python/psycopg:2[${PYTHON_USEDEP}]
 		dev-python/pyxdg[${PYTHON_USEDEP}]
 		dev-python/wxpython[${PYTHON_USEDEP}]
 	')
