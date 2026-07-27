@@ -8,10 +8,10 @@ TEXLIVE_MODULE_CONTENTS="
 	arphic.r15878
 	arphic-ttf.r42675
 	cns.r45677
-	exam-zh.r76834
+	exam-zh.r79661
 	fandol.r37889
 	fduthesis.r67231
-	hanzibox.r77682
+	hanzibox.r79715
 	hyphen-chinese.r78069
 	nanicolle.r56224
 	njurepo.r50492
@@ -20,16 +20,16 @@ TEXLIVE_MODULE_CONTENTS="
 	sjtutex.r78164
 	suanpan-l3.r76924
 	upzhkinsoku.r47354
-	xpinyin.r77682
+	xpinyin.r79618
 	xtuthesis.r47049
-	zhlineskip.r79514
+	zhlineskip.r79618
 	zhlipsum.r79461
-	zhmetrics.r22207
+	zhmetrics.r79618
 	zhmetrics-uptex.r40728
-	zhnumber.r77682
-	zhspacing.r41145
+	zhnumber.r79618
+	zhspacing.r79618
 	luatex-cn.r78192
-	lxgw-fonts.r79530
+	lxgw-fonts.r79609
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	arphic.doc.r15878
@@ -39,10 +39,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	asymptote-manual-zh-cn.doc.r15878
 	cns.doc.r45677
 	ctex-faq.doc.r15878
-	exam-zh.doc.r76834
+	exam-zh.doc.r79661
 	fandol.doc.r37889
 	fduthesis.doc.r67231
-	hanzibox.doc.r77682
+	hanzibox.doc.r79715
 	impatient-cn.doc.r54080
 	install-latex-guide-zh-cn.doc.r79570
 	latex-notes-zh-cn.doc.r15878
@@ -57,27 +57,27 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	texproposal.doc.r43151
 	tlmgr-intro-zh-cn.doc.r59100
 	upzhkinsoku.doc.r47354
-	xpinyin.doc.r77682
+	xpinyin.doc.r79618
 	xtuthesis.doc.r47049
-	zhlineskip.doc.r79514
+	zhlineskip.doc.r79618
 	zhlipsum.doc.r79461
-	zhmetrics.doc.r22207
+	zhmetrics.doc.r79618
 	zhmetrics-uptex.doc.r40728
-	zhnumber.doc.r77682
-	zhspacing.doc.r41145
+	zhnumber.doc.r79618
+	zhspacing.doc.r79618
 	luatex-cn.doc.r78192
-	lxgw-fonts.doc.r79530
+	lxgw-fonts.doc.r79609
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	fduthesis.source.r67231
-	hanzibox.source.r77682
+	hanzibox.source.r79715
 	njurepo.source.r50492
 	sjtutex.source.r78164
-	xpinyin.source.r77682
+	xpinyin.source.r79618
 	zhlipsum.source.r79461
-	zhmetrics.source.r22207
-	zhnumber.source.r77682
-	lxgw-fonts.source.r79530
+	zhmetrics.source.r79618
+	zhnumber.source.r79618
+	lxgw-fonts.source.r79609
 "
 
 inherit texlive-module
