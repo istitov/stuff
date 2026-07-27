@@ -31,6 +31,19 @@ RDEPEND="
 	>=dev-python/bokeh-1.0.0[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
+# distutils-r1 contributes only gpep517 and hatchling from
+# DISTUTILS_USE_PEP517. Upstream's build-system.requires also names
+# jupyterlab and hatch-nodejs-version, and the jupyter-builder build hook
+# pulls hatch-jupyter-builder; without them the PEP 517 backend cannot load.
+# The hook's npm step does not run: its ensured-targets, labextension/
+# package.json and static/style.js, are both prebuilt in the sdist, so no
+# nodejs is needed. verified 2026-07-27
+BDEPEND="
+	>=dev-python/hatch-jupyter-builder-0.5[${PYTHON_USEDEP}]
+	dev-python/hatch-nodejs-version[${PYTHON_USEDEP}]
+	>=dev-python/jupyterlab-4.0.0[${PYTHON_USEDEP}]
+	<dev-python/jupyterlab-5.0.0[${PYTHON_USEDEP}]
+"
 
 python_install_all() {
 	distutils-r1_python_install_all
