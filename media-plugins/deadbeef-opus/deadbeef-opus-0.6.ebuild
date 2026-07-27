@@ -32,10 +32,9 @@ DEPEND="${DEPEND_COMMON}"
 #QA_PRESTRIPPED="usr/$(get_libdir)/deadbeef/opus.so"
 
 src_prepare(){
-	sed \
-		-e 's|-I/usr/local/include/opus||'\
-		-e 's|$(CC) $(LDFLAGS) $(OBJECTS) -o $@|$(CC) $(OBJECTS) $(LDFLAGS) -o $@|'\
-		-i Makefile
+	# Upstream hardcodes an -I into /usr/local, which must not leak into a
+	# sandboxed build.
+	sed -e 's|-I/usr/local/include/opus||' -i Makefile || die
 
 	if use x86;then
 		append-cflags -D_FILE_OFFSET_BITS=64
