@@ -19,7 +19,7 @@ HOMEPAGE="https://github.com/ROCm/TheRock"
 # patchelf is needed. The .run is internally 7.14.0rc3 (BUILDINFO) but is the
 # official ROCm 7.14.0 release; MY_BUILD is the installer revision
 # (rocm-installer-${PV}-${MY_BUILD}.run) -- revbump when AMD reissues it.
-MY_BUILD="5"
+MY_BUILD="6"
 MY_RUN="rocm-installer-${PV}-${MY_BUILD}.run"
 SRC_URI="https://repo.radeon.com/rocm/installer/rocm-runfile-installer/rocm-rel-${PV%.*}/${MY_RUN}"
 S="${WORKDIR}"
