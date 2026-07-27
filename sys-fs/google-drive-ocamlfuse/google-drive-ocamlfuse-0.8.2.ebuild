@@ -12,6 +12,17 @@ HOMEPAGE="
 "
 SRC_URI="https://github.com/astrada/${PN}/archive/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 
+# Retained below last-two on purpose: this is the last FUSE-2 release.
+# Upstream's own opam metadata moves from "ocamlfuse" {>= "2.7.2"} to
+# "fuse3" {>= "3.10.0"} exactly at 0.9.0, so 0.8.x and 0.9.x are two
+# different bindings rather than a plain version progression, and 0.8.2 is
+# the only remaining consumer of dev-ml/ocamlfuse anywhere in the tree -
+# dropping it orphans that package as well as removing the FUSE-2 path.
+# bin/retention-audit.py cannot infer this: it buckets a series by the
+# first dotted component, so every 0.x version collapses into one bucket
+# and its last-of-earlier-series rule never fires here. Carried there as
+# an explicit override instead. verified 2026-07-28
+
 LICENSE="MIT"
 SLOT="0/${PV}"
 KEYWORDS="~amd64"
