@@ -9,9 +9,9 @@ TEXLIVE_MODULE_CONTENTS="
 	babel-italian.r77371
 	codicefiscaleitaliano.r29803
 	fixltxhyph.r73227
-	frontespizio.r24054
+	frontespizio.r79618
 	hyphen-italian.r78069
-	itnumpar.r78793
+	itnumpar.r79618
 	layaureo.r19087
 	verifica.r75682
 	attinormativi.r79199
@@ -25,8 +25,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	codicefiscaleitaliano.doc.r29803
 	fancyhdr-it.doc.r21912
 	fixltxhyph.doc.r73227
-	frontespizio.doc.r24054
-	itnumpar.doc.r78793
+	frontespizio.doc.r79618
+	itnumpar.doc.r79618
 	l2tabu-italian.doc.r25218
 	latex4wp-it.doc.r36000
 	layaureo.doc.r19087
@@ -41,8 +41,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-italian.source.r77371
 	codicefiscaleitaliano.source.r29803
 	fixltxhyph.source.r73227
-	frontespizio.source.r24054
-	itnumpar.source.r78793
+	frontespizio.source.r79618
+	itnumpar.source.r79618
 	layaureo.source.r19087
 	verifica.source.r75682
 	attinormativi.source.r79199
