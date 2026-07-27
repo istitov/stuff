@@ -22,7 +22,13 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
+# upstream's setup.py declares only transformers, but both modules open with
+# a bare `import torch`, so the package cannot be imported without it. The
+# transformers dependency does not cover that: sci-ml/transformers has
+# IUSE="torch" with torch off by default, so a default build of it pulls no
+# pytorch at all. verified 2026-07-27
 RDEPEND="
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.3.0[${PYTHON_SINGLE_USEDEP}]
 "
 
