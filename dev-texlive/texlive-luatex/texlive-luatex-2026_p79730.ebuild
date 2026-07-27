@@ -4,21 +4,21 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-luatex.r79417
+	collection-luatex.r79730
 	addliga.r78793
 	addtoluatexpath.r73424
 	auto-pst-pdf-lua.r77682
 	barracuda.r63708
 	bezierplot.r72750
 	blopentype.r69080
-	checkcites.r73120
+	checkcites.r79618
 	chickenize.r78415
 	chinese-jfm.r57758
 	cloze.r75681
 	combofont.r78793
 	cstypo.r41986
 	ctablestack.r78101
-	ekdosis.r69568
+	ekdosis.r79618
 	emoji.r77682
 	emojicite.r76924
 	enigma.r29802
@@ -60,7 +60,7 @@ TEXLIVE_MODULE_CONTENTS="
 	luamaths.r76924
 	luamml.r79442
 	luamodulartables.r68893
-	luamplib.r79420
+	luamplib.r79640
 	luaoptions.r79068
 	luaotfload.r74324
 	luapackageloader.r54779
@@ -85,12 +85,12 @@ TEXLIVE_MODULE_CONTENTS="
 	newpax.r78945
 	nodetree.r76924
 	odsfile.r78415
-	optex.r79102
+	optex.r79618
 	pdfarticle.r51127
 	pdfextra.r65184
 	penlight.r73362
 	penlightplus.r74000
-	piton.r79521
+	piton.r79722
 	placeat.r45145
 	plantuml.r79512
 	pyluatex.r78739
@@ -117,13 +117,13 @@ TEXLIVE_MODULE_CONTENTS="
 	kkluaverb.r79443
 	kkran.r78190
 	kksymbols.r79445
-	lua-list-hyphen.r79160
+	lua-list-hyphen.r79775
 	luahyperbolic.r78431
 	luakeyval.r79472
 	lualineno.r79471
 	luatex-type-definitions.r75890
 	parstat.r77123
-	seatingchart.r76924
+	seatingchart.r79764
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	addliga.doc.r78793
@@ -132,14 +132,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	barracuda.doc.r63708
 	bezierplot.doc.r72750
 	blopentype.doc.r69080
-	checkcites.doc.r73120
+	checkcites.doc.r79618
 	chickenize.doc.r78415
 	chinese-jfm.doc.r57758
 	cloze.doc.r75681
 	combofont.doc.r78793
 	cstypo.doc.r41986
 	ctablestack.doc.r78101
-	ekdosis.doc.r69568
+	ekdosis.doc.r79618
 	emoji.doc.r77682
 	emojicite.doc.r76924
 	enigma.doc.r29802
@@ -181,7 +181,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	luamaths.doc.r76924
 	luamml.doc.r79442
 	luamodulartables.doc.r68893
-	luamplib.doc.r79420
+	luamplib.doc.r79640
 	luaoptions.doc.r79068
 	luaotfload.doc.r74324
 	luapackageloader.doc.r54779
@@ -206,12 +206,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	newpax.doc.r78945
 	nodetree.doc.r76924
 	odsfile.doc.r78415
-	optex.doc.r79102
+	optex.doc.r79618
 	pdfarticle.doc.r51127
 	pdfextra.doc.r65184
 	penlight.doc.r73362
 	penlightplus.doc.r74000
-	piton.doc.r79521
+	piton.doc.r79722
 	placeat.doc.r45145
 	plantuml.doc.r79512
 	pyluatex.doc.r78739
@@ -238,18 +238,18 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	kkluaverb.doc.r79443
 	kkran.doc.r78190
 	kksymbols.doc.r79445
-	lua-list-hyphen.doc.r79160
+	lua-list-hyphen.doc.r79775
 	luahyperbolic.doc.r78431
 	luakeyval.doc.r79472
 	lualineno.doc.r79471
 	luatex-type-definitions.doc.r75890
 	parstat.doc.r77123
-	seatingchart.doc.r76924
+	seatingchart.doc.r79764
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	chickenize.source.r78415
 	ctablestack.source.r78101
-	ekdosis.source.r69568
+	ekdosis.source.r79618
 	innerscript.source.r75161
 	lt3luabridge.source.r76924
 	lua-typo.source.r77682
@@ -266,21 +266,21 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	lualibs.source.r78415
 	luamathalign.source.r77682
 	luamml.source.r79442
-	luamplib.source.r79420
+	luamplib.source.r79640
 	luaotfload.source.r74324
 	luatex85.source.r77682
 	luatexbase.source.r77682
 	luatextra.source.r77682
 	newpax.source.r78945
 	nodetree.source.r76924
-	piton.source.r79521
+	piton.source.r79722
 	placeat.source.r45145
 	semesterplannerlua.source.r71322
 	texfindpkg.source.r72937
 	char2path.source.r76924
 	countwords.source.r78714
 	fancymag.source.r75720
-	lua-list-hyphen.source.r79160
+	lua-list-hyphen.source.r79775
 "
 # Removed in target tlpdb: cloze.source
 
