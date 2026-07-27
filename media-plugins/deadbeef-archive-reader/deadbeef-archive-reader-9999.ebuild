@@ -13,7 +13,16 @@ S=${WORKDIR}/${P}/src
 LICENSE="LGPL-2.1"
 SLOT="0"
 
-DEPEND_COMMON="media-sound/deadbeef"
+# src/Makefile defaults ZLIB_LIBS to -lz and folds it into LDFLAGS
+# unconditionally, so ddb_archive_reader.so carries a direct DT_NEEDED on
+# libz. zlib is not in @system, it just happens to be installed everywhere
+# as a transitive dependency. The virtual rather than sys-libs/zlib because
+# nothing here needs the reference implementation over zlib-ng[compat].
+# verified 2026-07-27
+DEPEND_COMMON="
+	media-sound/deadbeef
+	virtual/zlib
+"
 
 RDEPEND="
 	${DEPEND_COMMON}
