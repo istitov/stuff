@@ -24,6 +24,10 @@ SLOT="0"
 KEYWORDS="~amd64"
 RESTRICT="bindist mirror strip"
 
+# The tutanota-desktop binary carries a direct DT_NEEDED on libudev.so.1 and
+# nothing else here provides it: media-libs/mesa pulls virtual/libudev only
+# under USE=vulkan, and none of the other members reference udev at all.
+# verified 2026-07-27
 RDEPEND="
 	app-accessibility/at-spi2-core:2
 	app-crypt/libsecret
@@ -35,6 +39,7 @@ RDEPEND="
 	media-libs/mesa
 	net-print/cups
 	sys-apps/dbus
+	virtual/libudev
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
 	x11-libs/gtk+:3
