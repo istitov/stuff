@@ -25,35 +25,72 @@ fi
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-# ~amd64 — full src_unpack/prepare/configure/compile/install pipeline
-# verified clean 2026-07-27 against gcc-16 + Boost-1.90 + Qt-6.11.1 +
-# Python 3.13: 3028/3028 compile steps, and the 224 MiB image links no
-# libQt5 at all and carries no Qt5-named artefact.
+# ~amd64 — both toolkits run the full src_unpack/prepare/configure/
+# compile/install pipeline clean, verified 2026-07-27 against gcc-16 +
+# Boost-1.90 + Python 3.13:
+#   USE=qt6  Qt-6.11.1, 3028/3028 steps, 227 MiB, image links no libQt5
+#            and carries no Qt5-named artefact. Runtime-checked too: the
+#            framework runs algorithms, qtpy binds PyQt6, the
+#            QScintilla-backed ScriptEditor instantiates and the workbench
+#            MainWindow constructs.
+#   USE=qt5  Qt-5.15.19, 3028/3028 steps, 230 MiB, image links only
+#            libQt5{Core,Widgets,Gui,Xml,PrintSupport} and no Qt6 at all.
+#            Compile/install only — not runtime-exercised.
 #
-# This is the Qt6 build. 6.16.1.1 added MANTID_QT_VERSION (5 or 6) and
-# defaults it to 6 on Linux, so the Qt5 packaging this overlay carried
-# through 6.16.1 no longer matches what upstream builds by default here.
-# The version is pinned explicitly in src_configure rather than left to
-# the platform default, so a future upstream change of that default
-# cannot silently switch which toolkit gets linked.
+# 6.16.1.1 added MANTID_QT_VERSION (5 or 6), so this ebuild exposes both
+# toolkits as mutually exclusive USE flags rather than hardcoding one.
+# Upstream's own default moved twice inside a month — 6.16.1.1 picks 6 on
+# Linux but 5 on Windows/macOS, and main hardcoded 6 for every platform on
+# 2026-07-27 (#41896) — so src_configure passes the version explicitly and
+# never inherits the platform default.
+#
+# Upstream still offers Qt5 deliberately — CMakeLists.txt keeps
+# `set_property(CACHE MANTID_QT_VERSION PROPERTY STRINGS 5 6)` and a real
+# find_package(QT 5.15 NAMES Qt5 ... REQUIRED), and #41896 changed only
+# the default — but at this tag that path does NOT build unpatched. The
+# deprecation-guard rename described in src_prepare breaks it, and USE=qt5
+# depends on the workaround there. Treat the predicted bitrot as already
+# under way rather than hypothetical: no platform defaults to Qt5 on Linux
+# any more, so upstream CI does not compile this configuration and the
+# next bump may well need a fresh fix. verified 2026-07-27
 #
 # Everything the Qt6 path needs is in ::gentoo: qtbase-6.11.1 satisfies
-# upstream's QT6_MIN_VERSION of 6.11, QtHelp comes from qttools[assistant],
-# and dev-python/pyqt6 supersedes dev-python/pyqt5 (which ::gentoo has
-# removed and only this overlay still carries). Upstream compiles the
-# workbench resources with Qt's own rcc under Qt6 — PyQt6 ships no Python
-# resource compiler — so the PyQt5-only pyrcc5 path is not entered and no
-# PyQt5 build-time tool is pulled in.
+# upstream's QT6_MIN_VERSION of 6.11, and QtHelp comes from
+# qttools[assistant]. The Qt5 path additionally needs dev-python/pyqt5 and
+# dev-python/pyqt5-sip, which ::gentoo has removed and only this overlay
+# still carries — that dependency is the standing cost of keeping the flag.
 #
-# The dev-qt/qtsql:5 the Qt5 ebuilds carried has no direct counterpart:
-# mantid itself asks for no Sql component. The build does still link
+# pyrcc5 is a build-time requirement of the Qt5 path only, and pyqt5
+# covers it: qt/CMakeLists.txt resolves PYRCC5_CMD under
+# `MANTID_QT_VERSION EQUAL 5` and FATAL_ERRORs when neither
+# PyQt5.pyrcc_main nor a pyrcc5 binary is found. Under Qt6 that block is
+# skipped entirely — PyQt6 ships no Python resource compiler, so upstream
+# compiles a binary .rcc with Qt's own rcc instead.
+#
+# dev-python/lz4 is a hard runtime requirement on Linux specifically, and
+# a clean build does not reveal it: mantidqt/dialogs/errorreports/
+# run_pystack.py does a bare `if is_linux(): import lz4.frame` at module
+# scope, and the workbench's exception handler imports that module during
+# startup. Without it the framework and `import mantidqt` both still work
+# and only the GUI fails. Upstream lists it under the Linux-only branch of
+# conda/recipes/mantidworkbench/recipe.yaml. verified 2026-07-27
+#
+# The `pystack` upstream lists beside it is NOT declared here: it is in no
+# Gentoo repo, and run_pystack.py only ever shells out to it
+# (`["pystack", "core", ...]`) when analysing a core dump. Missing, it
+# degrades crash reporting and nothing else. ipykernel is likewise not
+# declared - mantid never imports it, and dev-python/qtconsole already
+# requires >=ipykernel-4.1.
+#
+# The dev-qt/qtsql:5 the Qt5 branch carries has no Qt6 counterpart:
+# mantid itself asks for no Sql component. The Qt6 build does still link
 # libQt6Sql, because dev-qt/qttools[assistant] pulls
 # ~dev-qt/qtbase:6[concurrent,network,sql,sqlite] for QtHelp's own
-# database. Declaring sql here would duplicate a constraint qttools
+# database. Declaring sql there would duplicate a constraint qttools
 # already enforces.
 #
 # The earlier HDF4-probe blocker (Gentoo bug 942866) is resolved by this
-# overlay's sci-libs/hdf-4.2.16. Install lands ~224 MiB under
+# overlay's sci-libs/hdf-4.2.16. Install lands ~230 MiB under
 # /opt/mantid/{bin,lib,lib64,plugins,instrument,scripts}. Upstream removed
 # all QtWebEngineWidgets usage in 6.15.0.4rc1 and it stays gone in 6.16.x.
 #
@@ -61,7 +98,7 @@ KEYWORDS=""
 # only TBB + OpenMP for parallelism, and the source tree contains no
 # .cu/.cuh files or find_package(CUDA) calls. There is no `cuda` IUSE
 # to add here even when nvidia-cuda-toolkit is installed.
-IUSE="doc python test"
+IUSE="doc python qt5 +qt6 test"
 RESTRICT="!test? ( test )"
 
 # Build-host note: sci-libs/hdf5[cxx] (below) trips hdf5's REQUIRED_USE
@@ -69,10 +106,10 @@ RESTRICT="!test? ( test )"
 # USE=unsupported on sci-libs/hdf5 (the cxx+mpi combo is upstream-
 # "unsupported" but builds fine). That is the only host USE-config not
 # expressible as a dep atom; emerge --autounmask proposes the rest from
-# the atoms (qtbase concurrent/gui/network/widgets, qttools assistant,
-# qscintilla qt6, nexus cxx, and nexus' own doxygen[dot]; pyqt6 and qtpy
-# already default to the flags needed). KEYWORDS is empty — unmask the
-# wanted version to install.
+# the atoms (nexus cxx, nexus' own doxygen[dot], and per toolkit either
+# qtbase concurrent/gui/network/widgets + qttools assistant + qscintilla
+# qt6, or the dev-qt:5 set + qscintilla qt5). KEYWORDS is empty — unmask
+# the wanted version to install.
 
 RDEPEND="
 	dev-libs/boost
@@ -92,9 +129,22 @@ RDEPEND="
 	dev-libs/poco
 	dev-python/pyvista[${PYTHON_SINGLE_USEDEP}]
 	dev-python/pyvistaqt[${PYTHON_SINGLE_USEDEP}]
-	x11-libs/qscintilla[qt6(+)]
-	dev-qt/qtbase:6[concurrent,gui,network,widgets]
-	dev-qt/qttools:6[assistant]
+	qt6? (
+		x11-libs/qscintilla[qt6(+)]
+		dev-qt/qtbase:6[concurrent,gui,network,widgets]
+		dev-qt/qttools:6[assistant]
+	)
+	qt5? (
+		x11-libs/qscintilla[qt5(-)]
+		dev-qt/qtconcurrent:5
+		dev-qt/qtgui:5
+		dev-qt/qthelp:5
+		dev-qt/qtnetwork:5
+		dev-qt/qtprintsupport:5
+		dev-qt/qtsql:5
+		dev-qt/qtwidgets:5
+		dev-qt/qtxml:5
+	)
 	dev-cpp/tbb
 	sci-libs/opencascade
 	app-text/texlive-core
@@ -111,12 +161,14 @@ RDEPEND="
 		>=dev-python/pydantic-2.11.4[${PYTHON_USEDEP}]
 		<dev-python/pydantic-3[${PYTHON_USEDEP}]
 		sci-libs/pycifrw[${PYTHON_USEDEP}]
-		dev-python/pyqt6[${PYTHON_USEDEP},gui,widgets,printsupport]
+		qt6? ( dev-python/pyqt6[${PYTHON_USEDEP},gui,widgets,printsupport] )
+		qt5? ( dev-python/pyqt5[${PYTHON_USEDEP},gui,widgets,printsupport] )
 		dev-python/python-dateutil[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/orsopy[${PYTHON_USEDEP}]
 		dev-python/qtconsole[${PYTHON_USEDEP}]
-		dev-python/qtpy[${PYTHON_USEDEP},pyqt6(-)]
+		qt6? ( dev-python/qtpy[${PYTHON_USEDEP},pyqt6(-)] )
+		qt5? ( dev-python/qtpy[${PYTHON_USEDEP},pyqt5(-)] )
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/superqt[${PYTHON_USEDEP}]
 		dev-python/scipy[${PYTHON_USEDEP}]
@@ -126,6 +178,7 @@ RDEPEND="
 		dev-python/toml[${PYTHON_USEDEP}]
 		dev-python/versioningit[${PYTHON_USEDEP}]
 		dev-python/joblib[${PYTHON_USEDEP}]
+		dev-python/lz4[${PYTHON_USEDEP}]
 	')
 	test? (
 		sys-apps/pciutils
@@ -153,7 +206,10 @@ DEPEND="${BDEPEND}
 	${RDEPEND}
 "
 
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+REQUIRED_USE="
+	python? ( ${PYTHON_REQUIRED_USE} )
+	^^ ( qt5 qt6 )
+"
 
 # Install under /opt rather than /usr: upstream's CMake drops data into
 # top-level /usr children (instrument/, plugins/, scripts/) that aren't
@@ -173,6 +229,30 @@ src_prepare() {
 		eapply "${FILESDIR}/${PN}-no-qt5-webwidgets.patch"
 	fi
 
+	if use qt5; then
+		# 6.16.1.1 renamed the deprecation guard from
+		# QT_DISABLE_DEPRECATED_UP_TO (6.16.0, 6.16.1) to
+		# QT_DISABLE_DEPRECATED_BEFORE, keeping the value 0x050F00. That is
+		# inert under Qt6 but breaks Qt5, because Qt 5.15's qglobal.h knows
+		# only the _BEFORE spelling: _UP_TO is silently ignored, while
+		# _BEFORE feeds QT_DEPRECATED_SINCE(major, minor), defined as
+		# QT_VERSION_CHECK(major, minor, 0) > QT_DISABLE_DEPRECATED_BEFORE.
+		# For an API deprecated in 5.15 that is 0x050F00 > 0x050F00, i.e.
+		# false, so everything deprecated up to AND INCLUDING 5.15 is
+		# compiled out - among it QMutex::RecursionMode, which
+		# WorkspaceTreeWidget.cpp still uses inside its own
+		# `#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)` guard.
+		#
+		# Restore the spelling 6.16.1 shipped. Scoped to USE=qt5 so the
+		# verified Qt6 build keeps upstream's own flag verbatim. This is
+		# the same failure the 6.16.0.1 ebuild works around, re-introduced
+		# by a rename rather than a value change. verified 2026-07-27
+		sed -i -e 's/QT_DISABLE_DEPRECATED_BEFORE=0x050F00/QT_DISABLE_DEPRECATED_UP_TO=0x050F00/' \
+			CMakeLists.txt || die
+		grep -q 'QT_DISABLE_DEPRECATED_UP_TO=0x050F00' CMakeLists.txt ||
+			die "deprecation-guard rename did not apply"
+	fi
+
 	# Gentoo's opencascade installs to /usr/{include,lib64}/opencascade
 	# instead of /opt/OpenCASCADE; retarget the finder.
 	sed -i -e 's:/OpenCASCADE:/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
@@ -184,12 +264,13 @@ src_prepare() {
 	sed -iez 's:#include <vector>:#include <vector>\n#include <stdexcept>:' \
 		Framework/API/inc/MantidAPI/PreviewManager.h || die
 
-	# No qt.conf rewrite here, unlike the Qt5 ebuilds. The
+	# No qt.conf rewrite here, unlike the Qt5-only ebuilds that preceded
+	# this one - and that holds for both toolkits, not just Qt6. The
 	# "Prefix = ../lib/qt5" that sed targeted lives inside an if(WIN32)
 	# block - true at 6.16.1 as well as here - so it was never reached on
-	# a Linux build, and under Qt6 it sits in the PyQt5-only resource
-	# branch too. The Linux install writes no qt.conf at all, so Qt
-	# resolves plugins from the system prefix, which is what we want.
+	# a Linux build either way. The Linux install writes no qt.conf at
+	# all, so Qt resolves plugins from the system prefix, which is what
+	# we want.
 
 	# Gentoo's dev-libs/boost-1.90 ships CMake configs for most
 	# components except boost_system (header-only in newer Boost,
@@ -245,9 +326,11 @@ src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="${MY_PREFIX}"
 		-DENABLE_DOCS=$(usex doc)
-		# Pin the toolkit rather than inheriting upstream's per-platform
-		# default, so the linked Qt cannot change under us on a bump.
-		-DMANTID_QT_VERSION=6
+		# Pass the toolkit explicitly rather than inheriting upstream's
+		# default, which has already moved twice — 6.16.1.1 varies it by
+		# platform and main hardcoded 6. REQUIRED_USE makes this exactly
+		# one of the two.
+		-DMANTID_QT_VERSION=$(usex qt6 6 5)
 	)
 	cmake_src_configure
 }
@@ -263,9 +346,23 @@ src_install() {
 	# that includes our site-packages dir.
 	rm "${ED}${MY_PREFIX}/bin/launch_mantidworkbench" || die
 	local sp_dir="${MY_PREFIX}/lib/${EPYTHON}/site-packages"
+
+	# Pin the Qt binding the launcher hands to qtpy. qtpy resolves its
+	# binding as os.environ.get("QT_API", "pyqt5") and only falls through
+	# to PyQt6 when PyQt5 cannot be imported - it does NOT prefer the
+	# newest available. mantidqt then loads a toolkit-specific extension
+	# selected by that same variable (_commonqt5 vs _commonqt6), and only
+	# the one matching MANTID_QT_VERSION is built. So on any host that also
+	# has dev-python/pyqt5 installed - which every Qt5 mantid pulls in, and
+	# which this overlay still ships - a Qt6 workbench would otherwise
+	# select PyQt5 and abort with "No module named 'mantidqt._commonqt5'".
+	# ${QT_API:-...} keeps an explicit user override working.
+	# verified 2026-07-27 by launching the workbench with and without it.
+	local qt_api=$(usex qt6 pyqt6 pyqt5)
 	sed -i \
 		-e "s|\${INSTALLDIR}/bin/python|${EPYTHON}|" \
 		-e "s|LOCAL_PYTHONPATH=\${INSTALLDIR}/bin:\${INSTALLDIR}/lib:\${INSTALLDIR}/plugins|LOCAL_PYTHONPATH=${sp_dir}:\${INSTALLDIR}/bin:\${INSTALLDIR}/lib:\${INSTALLDIR}/plugins|" \
+		-e "s|^LD_PRELOAD=\${LOCAL_PRELOAD}|QT_API=\${QT_API:-${qt_api}} LD_PRELOAD=\${LOCAL_PRELOAD}|" \
 		"${ED}${MY_PREFIX}/bin/launch_mantidworkbench.standalone" || die
 
 	# Wire /opt/mantid into PATH, LDPATH, and PYTHONPATH via env.d so
@@ -274,7 +371,7 @@ src_install() {
 	#   * site-packages — the Python wrappers (mantid, mantidqt, workbench)
 	#   * bin           — Mantid.properties (mantid resolves bin-relative
 	#                     paths from sys.path entries via _bin_dirs())
-	#   * plugins       — algorithm/qt6 .so plugins enumerated at startup
+	#   * plugins       — algorithm and Qt .so plugins enumerated at startup
 	newenvd - 99mantid <<-EOF
 		PATH=${MY_PREFIX}/bin
 		ROOTPATH=${MY_PREFIX}/bin
@@ -295,20 +392,28 @@ pkg_postinst() {
 	elog "Run 'env-update && source /etc/profile' or start a new shell"
 	elog "before invoking mantid."
 	elog
-	elog "This build links Qt6, matching upstream's default for Linux from"
-	elog "6.16.1.1 onward. QtPy already defaults to PyQt6, so QT_API no"
-	elog "longer has to be set by hand - earlier Qt5 builds of this package"
-	elog "needed QT_API=pyqt5 and that override should now be dropped."
-	elog "The full invocation:"
+	local qt_api=$(usex qt6 pyqt6 pyqt5)
+	elog "This build links Qt$(usex qt6 6 5) and its Python layer binds"
+	elog "${qt_api}. qtpy does not pick the newest binding available - it"
+	elog "reads QT_API and falls back to pyqt5 - so the launcher below"
+	elog "exports QT_API=${qt_api} for you. Use it rather than invoking"
+	elog "the workbench directly:"
+	elog
+	elog "    ${MY_PREFIX}/bin/launch_mantidworkbench.standalone"
+	elog
+	elog "Calling ${MY_PREFIX}/bin/workbench by hand needs QT_API set"
+	elog "explicitly, or mantidqt looks for the extension of whichever"
+	elog "toolkit qtpy picked and aborts with a ModuleNotFoundError for"
+	elog "mantidqt._commonqt5 / _commonqt6 - only _common${qt_api#py} is built:"
 	elog
 	elog "    env LD_PRELOAD=/usr/lib64/libtbbmalloc_proxy.so.2 \\"
+	elog "        QT_API=${qt_api} \\"
 	elog "        PYTHONPATH=${MY_PREFIX}/lib/${EPYTHON}/site-packages:${MY_PREFIX}/bin:${MY_PREFIX}/plugins \\"
 	elog "        ${MY_PREFIX}/bin/workbench"
 	elog
-	elog "After 'env-update && source /etc/profile' the PYTHONPATH and"
-	elog "LD_PRELOAD pieces simplify to:"
+	elog "After 'env-update && source /etc/profile' that shortens to:"
 	elog
-	elog "    ${MY_PREFIX}/bin/workbench"
+	elog "    env QT_API=${qt_api} ${MY_PREFIX}/bin/workbench"
 	elog
 	elog "(LD_PRELOAD of libtbbmalloc_proxy is a perf optimisation; the"
 	elog "shipped launcher ${MY_PREFIX}/bin/launch_mantidworkbench.standalone"
