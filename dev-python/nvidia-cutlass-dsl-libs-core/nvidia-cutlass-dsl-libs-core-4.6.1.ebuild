@@ -34,13 +34,16 @@ RESTRICT="bindist mirror"
 # generated bits and libs-cu13 only the CUDA-13 runtime; all three file
 # sets are disjoint (0 overlap).
 #
-# Upstream also declares protobuf<7,>=6.30.2, but it is used only by the
-# iket perfetto profiler (perfetto_trace_pb2.py in libs-base), which this
-# overlay does not use. Pulling it would force a system-wide protobuf
-# 7->6 downgrade and conflict with protobuf-7 consumers, so it is
-# omitted deliberately. nvidia-cuda-nvdisasm (core DSL compiler —
+# Upstream also declares protobuf<7,>=6.30.2, but this wheel carries no
+# *_pb2 module and no google.protobuf reference anywhere in its payload;
+# the only consumer is the iket perfetto profiler, whose
+# perfetto_trace_pb2.py ships in libs-base instead. Declaring it would
+# also evict the installed protobuf rather than slot alongside it -
+# dev-python/protobuf keeps every version in main slot 0, so a <7 atom
+# forces a system-wide 7->6 downgrade onto every protobuf-7 consumer.
+# Omitted deliberately. nvidia-cuda-nvdisasm (core DSL compiler —
 # base_dsl/compiler.py) is provided by the CUDA toolkit.
-# # verified 2026-07-14 against 4.6.1.
+# # verified 2026-07-14, wheel payload re-checked 2026-07-27 against 4.6.1.
 RDEPEND="
 	dev-python/cuda-python[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
