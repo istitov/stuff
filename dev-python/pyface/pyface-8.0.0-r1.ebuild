@@ -27,6 +27,6 @@ RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 	>=dev-python/traits-6.2[${PYTHON_USEDEP}]
 	pyqt6? ( dev-python/pyqt6[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
-	wx? ( >=dev-python/wxpython-2.8.10:*[${PYTHON_USEDEP}] )
+	wx? ( >=dev-python/wxpython-4:*[${PYTHON_USEDEP}] )
 	pyside? ( dev-python/pyside[${PYTHON_USEDEP}] dev-python/pygments[${PYTHON_USEDEP}] )
 "
