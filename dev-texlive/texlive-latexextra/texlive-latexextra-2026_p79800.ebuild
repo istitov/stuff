@@ -4,22 +4,22 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-latexextra.r79458
+	collection-latexextra.r79800
 	2up.r55076
-	a0poster.r54071
+	a0poster.r79618
 	a4wide.r77682
 	a5comb.r76924
 	abraces.r77682
 	abspos.r76924
-	abstract.r79461
+	abstract.r79618
 	accessibility.r55777
 	accsupp.r79461
 	achemso.r79461
 	acro.r77682
 	acronym.r78101
 	acroterm.r61719
-	actuarialangle.r67201
-	actuarialsymbol.r67201
+	actuarialangle.r79618
+	actuarialsymbol.r79618
 	addfont.r58559
 	addlines.r77682
 	adjmulticol.r77682
@@ -28,10 +28,10 @@ TEXLIVE_MODULE_CONTENTS="
 	advdate.r77682
 	affilauthor.r76924
 	akktex.r26055
-	akletter.r15878
+	akletter.r79618
 	alchemist.r66924
 	alertmessage.r76924
-	alnumsec.r77682
+	alnumsec.r79618
 	alphalph.r79461
 	alterqcm.r59265
 	altfont.r15878
@@ -40,13 +40,13 @@ TEXLIVE_MODULE_CONTENTS="
 	anima.r79461
 	animate.r72548
 	anonchap.r79461
-	answers.r77682
-	anyfontsize.r78101
+	answers.r79618
+	anyfontsize.r79618
 	appendix.r79461
 	appendixnumberbeamer.r79061
 	apptools.r77682
-	arabicfront.r77682
-	arcs.r79461
+	arabicfront.r79618
+	arcs.r79618
 	argumentation.r79431
 	arraycols.r71168
 	arrayjobx.r18125
@@ -54,7 +54,7 @@ TEXLIVE_MODULE_CONTENTS="
 	arydshln.r77682
 	asciilist.r77682
 	askinclude.r79461
-	assignment.r20431
+	assignment.r79618
 	assoccnt.r38497
 	association-matrix.r76924
 	atenddvi.r79461
@@ -64,19 +64,19 @@ TEXLIVE_MODULE_CONTENTS="
 	authoraftertitle.r79461
 	authorarchive.r77171
 	authorindex.r51757
-	autofancyhdr.r54049
+	autofancyhdr.r79618
 	autonum.r77682
 	autopdf.r32377
 	autopuncitems.r78415
 	avremu.r71991
 	awesomebox.r79461
 	axessibility.r77682
-	background.r79461
-	bankstatement.r75301
+	background.r79618
+	bankstatement.r79618
 	bashful.r25597
 	basicarith.r35460
 	bchart.r79461
-	beamer-rl.r76587
+	beamer-rl.r79762
 	beamer2thesis.r72949
 	beamerappendixnote.r55732
 	beameraudience.r23427
@@ -84,7 +84,7 @@ TEXLIVE_MODULE_CONTENTS="
 	beamercolorthemeowl.r40105
 	beamerdarkthemes.r55117
 	beamerposter.r77682
-	beamersubframe.r23510
+	beamersubframe.r79618
 	beamertheme-arguelles.r78826
 	beamertheme-cuerna.r42161
 	beamertheme-detlevcm.r39048
@@ -102,9 +102,9 @@ TEXLIVE_MODULE_CONTENTS="
 	beamertheme-simpledarkblue.r73454
 	beamertheme-simpleplus.r73362
 	beamertheme-tcolorbox.r77380
-	beamertheme-trigon.r65985
-	beamertheme-upenn-bc.r29937
-	beamerthemeamurmaple.r69742
+	beamertheme-trigon.r79618
+	beamertheme-upenn-bc.r79618
+	beamerthemeamurmaple.r79618
 	beamerthemeconcrete.r69528
 	beamerthemejltree.r21977
 	beamerthemelalic.r58777
@@ -114,7 +114,7 @@ TEXLIVE_MODULE_CONTENTS="
 	beaulivre.r78004
 	beautybook.r76924
 	beautynote.r76924
-	beton.r77682
+	beton.r79618
 	bewerbung.r61632
 	bez123.r79461
 	bhcexam.r72638
@@ -134,16 +134,16 @@ TEXLIVE_MODULE_CONTENTS="
 	bold-extra.r79461
 	book-of-common-prayer.r62240
 	bookcover.r77334
-	bookest.r15878
+	bookest.r79618
 	booklet.r79461
 	bookshelf.r72521
-	boolexpr.r17830
-	bophook.r17062
+	boolexpr.r79618
+	bophook.r79618
 	boxedminipage.r77682
 	boxhandler.r76790
 	bracketkey.r17129
 	braket.r77682
-	breakurl.r77682
+	breakurl.r79618
 	bubblesort.r56070
 	bullcntr.r15878
 	bxcalc.r78793
@@ -155,7 +155,7 @@ TEXLIVE_MODULE_CONTENTS="
 	bxpdfver.r79071
 	bxtexlogo.r79121
 	calcage.r27725
-	calctab.r15878
+	calctab.r79618
 	calculator.r77682
 	calculatoritems.r76037
 	calrsfs.r77682
@@ -163,9 +163,9 @@ TEXLIVE_MODULE_CONTENTS="
 	calxxxx-yyyy.r77222
 	cancel.r77682
 	canoniclayout.r64889
-	capt-of.r79461
-	captcont.r77682
-	captdef.r79461
+	capt-of.r79618
+	captcont.r79618
+	captdef.r79618
 	carbohydrates.r39000
 	cases.r77682
 	casyl.r15878
@@ -174,32 +174,32 @@ TEXLIVE_MODULE_CONTENTS="
 	catechis.r59998
 	catoptions.r68982
 	catppuccinpalette.r79252
-	cbcoptic.r16666
+	cbcoptic.r79618
 	ccaption.r79461
-	cclicenses.r15878
+	cclicenses.r79618
 	cd.r34452
 	cd-cover.r17121
 	cdcmd.r76924
-	cdpbundl.r61719
-	cellprops.r76924
-	cellspace.r77682
+	cdpbundl.r79618
+	cellprops.r79618
+	cellspace.r79618
 	censor.r79461
 	centeredline.r77682
 	centerlastline.r56644
-	changebar.r77682
+	changebar.r79719
 	changelayout.r16094
 	changelog.r77682
 	changepage.r79461
-	changes.r77682
-	chappg.r79461
-	chapterfolder.r15878
+	changes.r79618
+	chappg.r79618
+	chapterfolder.r79618
 	cheatsheet.r45069
-	checkend.r78101
-	chet.r78825
+	checkend.r79618
+	chet.r79672
 	chextras.r27118
 	childdoc.r74758
 	chkfloat.r77682
-	chletter.r20060
+	chletter.r79618
 	chngcntr.r79461
 	chronology.r79461
 	circ.r62977
@@ -208,7 +208,7 @@ TEXLIVE_MODULE_CONTENTS="
 	classics.r76924
 	classpack.r55218
 	clefval.r79121
-	cleveref.r77682
+	cleveref.r79618
 	cleveref-forward.r76924
 	cleveref-usedon.r70491
 	clicks.r73208
@@ -219,7 +219,7 @@ TEXLIVE_MODULE_CONTENTS="
 	clrstrip.r77682
 	cmdstring.r15878
 	cmdtrack.r78101
-	cmsd.r78632
+	cmsd.r79618
 	cnltx.r76924
 	cntformats.r34668
 	cntperchap.r37572
@@ -232,14 +232,14 @@ TEXLIVE_MODULE_CONTENTS="
 	collcell.r77682
 	collectbox.r77682
 	colophon.r77682
-	color-edits.r56707
+	color-edits.r79607
 	colorblind.r77410
 	colordoc.r18270
 	colorframed.r77682
 	colorinfo.r15878
 	coloring.r41042
 	colorist.r79461
-	colorspace.r50585
+	colorspace.r79618
 	colortab.r22155
 	colorwav.r67012
 	colorweb.r31490
@@ -247,18 +247,18 @@ TEXLIVE_MODULE_CONTENTS="
 	combelow.r18462
 	combine.r79461
 	comma.r78931
-	commado.r38875
-	commalists-tools.r79353
+	commado.r79618
+	commalists-tools.r79756
 	commedit.r50116
 	comment.r77682
 	commonunicode.r62901
 	competences.r47573
-	concepts.r29020
+	concepts.r79618
 	concprog.r18791
 	conditext.r79121
-	constants.r15878
+	constants.r79618
 	continue.r79461
-	contour.r77682
+	contour.r79618
 	contracard.r79287
 	conv-xkv.r43558
 	cooking.r15878
@@ -268,13 +268,13 @@ TEXLIVE_MODULE_CONTENTS="
 	coollist.r67048
 	coolstr.r67015
 	coolthms.r29062
-	cooltooltips.r60201
+	cooltooltips.r79618
 	coop-writing.r76924
-	coordsys.r15878
+	coordsys.r79618
 	copyedit.r37928
 	copyrightbox.r24829
 	coseoul.r23862
-	count1to.r71526
+	count1to.r79618
 	counterz.r67335
 	counttexruns.r27576
 	courseoutline.r15878
@@ -282,22 +282,22 @@ TEXLIVE_MODULE_CONTENTS="
 	coverpage.r63509
 	cprotect.r78728
 	cprotectinside.r76924
-	crbox.r29803
+	crbox.r79618
 	create-theorem.r76924
 	creationboites.r79568
 	crefthe.r76924
-	crossreference.r15878
+	crossreference.r79618
 	crossreftools.r77682
 	crumbs.r64602
 	csquotes.r79060
 	css-colors.r54512
 	csvmerge.r51857
 	csvsimple.r79527
-	cuisine.r34453
+	cuisine.r79618
 	currency.r48990
 	currfile.r77682
 	curriculum-vitae.r75698
-	currvita.r15878
+	currvita.r79618
 	customenvs.r79567
 	cutwin.r77682
 	cv.r15878
@@ -307,17 +307,17 @@ TEXLIVE_MODULE_CONTENTS="
 	cybercic.r37659
 	darkmode.r76924
 	dashbox.r77682
-	dashrule.r77682
+	dashrule.r79618
 	dashrulex.r76924
 	dashundergaps.r77682
 	dataref.r62942
 	datatool.r77021
 	datax.r61772
-	dateiliste.r27974
+	dateiliste.r79618
 	datenumber.r78101
 	datestamp.r61719
 	datetime.r36650
-	datetime2.r77682
+	datetime2.r79618
 	datetime2-bahasai.r46287
 	datetime2-basque.r47064
 	datetime2-breton.r52647
@@ -367,73 +367,73 @@ TEXLIVE_MODULE_CONTENTS="
 	decimalcomma.r69251
 	decorule.r77682
 	defoldfonts.r76435
-	delimtxt.r16549
+	delimtxt.r79618
 	democodetools.r77050
 	denisbdoc.r77982
 	diabetes-logbook.r77161
 	diagbox.r77682
 	diagnose.r19387
-	dialogl.r28946
+	dialogl.r79618
 	dichokey.r17192
 	didactic.r70901
 	didec.r79241
 	dimnum.r58774
-	dinbrief.r79121
-	directory.r15878
+	dinbrief.r79618
+	directory.r79618
 	dirtytalk.r20520
-	dlfltxb.r17337
+	dlfltxb.r79618
 	dnaseq.r17194
 	doclicense.r77682
-	docmfp.r79461
+	docmfp.r79618
 	docmute.r78101
-	docshots.r69676
+	docshots.r79688
 	doctools.r34474
 	documentation.r34521
 	docutils.r56594
 	doi.r79461
 	doibanner.r71919
-	dotarrow.r15878
-	dotlessi.r77682
+	dotarrow.r79618
+	dotlessi.r79618
 	dotseqn.r77682
 	download.r79121
-	dox.r46011
-	dpfloat.r77682
-	dprogress.r15878
-	drac.r15878
-	draftcopy.r15878
+	dox.r79618
+	dpfloat.r79618
+	dprogress.r79618
+	drac.r79618
+	draftcopy.r79618
 	draftfigure.r76790
 	draftwatermark.r77682
-	dtk.r71776
+	dtk.r79668
 	dtxdescribe.r79394
 	ducksay.r76911
 	duckuments.r77682
-	dvdcoll.r79121
+	dvdcoll.r79618
 	dynamicnumber.r38726
 	dynblocks.r35193
 	ean13isbn.r57514
-	easy.r19440
+	easy.r79618
 	easy-todo.r32677
 	easybook.r76924
 	easyfig.r77682
 	easyfloats.r72699
 	easyformat.r44543
 	easylist.r77682
-	easyreview.r38352
-	ebezier.r76924
+	easyreview.r79618
+	ebezier.r79618
 	ecclesiastic.r38172
 	econlipsum.r77682
 	ecv.r24928
 	ed.r25231
 	edichokey.r56223
-	edmargin.r27599
-	eemeir.r15878
+	edmargin.r79618
+	eemeir.r79618
 	efbox.r77682
 	egplot.r20617
 	ehhline.r54676
 	einfart.r78004
 	elements.r61792
 	ellipsis.r77682
-	elmath.r15878
+	elmath.r79618
 	elocalloc.r78931
 	elpres.r76790
 	elzcards.r51894
@@ -446,47 +446,47 @@ TEXLIVE_MODULE_CONTENTS="
 	emptypage.r78101
 	emulateapj.r74166
 	endfloat.r77682
-	endheads.r73959
+	endheads.r79618
 	endnotes.r79461
 	endnotes-hy.r54758
-	engpron.r16558
-	engrec.r15878
+	engpron.r79618
+	engrec.r79618
 	enotez.r77682
 	ensps-colorscheme.r71431
 	enumext.r79230
-	enumitem.r77682
+	enumitem.r79618
 	enumitem-zref.r75712
-	envbig.r15878
+	envbig.r79618
 	enverb.r76924
-	environ.r77682
+	environ.r79618
 	envlab.r61937
 	epcqrcode.r76924
 	epigraph.r79461
 	epigraph-keys.r75301
-	epiolmec.r15878
+	epiolmec.r79618
 	eq-pin2corr.r59477
 	eqell.r22931
-	eqlist.r77682
+	eqlist.r79618
 	eqnalign.r43278
 	eqname.r79130
 	eqparbox.r77682
 	errata.r42428
 	erw-l3.r78101
-	esami.r71883
+	esami.r79618
 	esdiff.r78348
 	esieecv.r59638
-	esindex.r71111
+	esindex.r79618
 	esint.r77682
 	esint-type1.r15878
-	etaremune.r77682
-	etextools.r20694
-	etl.r76924
+	etaremune.r79618
+	etextools.r79618
+	etl.r79618
 	etoc.r78908
-	eukdate.r15878
+	eukdate.r79618
 	eulerpx.r63967
 	euromoney.r73069
 	europasscv.r56829
-	europecv.r75227
+	europecv.r79618
 	everyhook.r35675
 	everypage.r77682
 	exam.r77682
@@ -506,16 +506,16 @@ TEXLIVE_MODULE_CONTENTS="
 	exercisesheets.r76924
 	exesheet.r75102
 	exframe.r78482
-	exp-testopt.r15878
-	expdlist.r76924
-	export.r27206
+	exp-testopt.r79618
+	expdlist.r79618
+	export.r79618
 	exsheets.r76924
 	exsol.r73982
 	extract.r52117
 	ezedits.r72849
-	facsimile.r21328
+	facsimile.r79618
 	factura.r61697
-	fail-fast.r67543
+	fail-fast.r79671
 	familytree.r63739
 	fancyhandout.r46411
 	fancylabel.r46736
@@ -529,27 +529,27 @@ TEXLIVE_MODULE_CONTENTS="
 	fcolumn.r79461
 	fetchcls.r45245
 	fewerfloatpages.r77682
-	ffcode.r79167
+	ffcode.r79645
 	ffslides.r38895
 	fgruler.r77333
-	fifo-stack.r33288
-	figsize.r18784
+	fifo-stack.r79618
+	figsize.r79618
 	filecontents.r77682
 	filecontentsdef.r77682
-	filedate.r29529
-	fileinfo.r28421
+	filedate.r79618
+	fileinfo.r79618
 	filemod.r77682
 	fillwith.r76924
-	fink.r24329
-	finstrut.r21719
+	fink.r79618
+	finstrut.r79618
 	fistrum.r76924
 	fithesis.r76028
 	fixcmex.r78632
-	fixfoot.r79461
+	fixfoot.r79618
 	fixme.r77682
 	fixmetodonotes.r30168
 	fjodor.r53207
-	flabels.r17272
+	flabels.r79618
 	flacards.r19440
 	flagderiv.r15878
 	flashcards.r62104
@@ -562,12 +562,12 @@ TEXLIVE_MODULE_CONTENTS="
 	floatrow.r77682
 	floatrowbytocbasic.r67946
 	flowfram.r79423
-	fmp.r15878
+	fmp.r79618
 	fmtcount.r77682
 	fn2end.r15878
 	fnbreak.r77682
 	fncychap.r77682
-	fncylab.r79461
+	fncylab.r79618
 	fnpara.r25607
 	fnpct.r77682
 	fnumprint.r77682
@@ -583,12 +583,12 @@ TEXLIVE_MODULE_CONTENTS="
 	footnotebackref.r77682
 	footnoterange.r77682
 	footnpag.r77682
-	forarray.r78101
+	forarray.r79618
 	foreign.r78101
 	forloop.r77682
 	formlett.r21480
 	forms16be.r51305
-	formular.r15878
+	formular.r79618
 	fragments.r79461
 	frame.r18312
 	framed.r77682
@@ -597,7 +597,7 @@ TEXLIVE_MODULE_CONTENTS="
 	frege.r27417
 	froufrou.r77682
 	ftcap.r17275
-	ftnxtra.r77682
+	ftnxtra.r79618
 	fullblck.r25434
 	fullminipage.r34545
 	fullwidth.r24684
@@ -608,17 +608,17 @@ TEXLIVE_MODULE_CONTENTS="
 	fwlw.r77682
 	g-brief.r77050
 	gatherenum.r76924
-	gauss.r32934
+	gauss.r79618
 	gcard.r15878
 	gcite.r15878
 	gender.r79121
 	genealogy-profiles.r77110
 	genmpage.r15878
 	gensymb.r77682
-	getfiledate.r16189
+	getfiledate.r79618
 	getitems.r39365
-	gindex.r52311
-	ginpenc.r24980
+	gindex.r79618
+	ginpenc.r79618
 	gitfile-info.r79121
 	gitinfo.r34049
 	gitinfo2.r77682
@@ -626,7 +626,7 @@ TEXLIVE_MODULE_CONTENTS="
 	gitstatus.r64662
 	gitver.r76924
 	globalvals.r49962
-	gloss.r75240
+	gloss.r79618
 	glossaries-danish.r35665
 	glossaries-dutch.r35685
 	glossaries-english.r35665
@@ -645,29 +645,29 @@ TEXLIVE_MODULE_CONTENTS="
 	glossaries-serbian.r35665
 	glossaries-slovene.r51211
 	glossaries-spanish.r35665
-	gmdoc.r21292
-	gmdoc-enhance.r15878
+	gmdoc.r79618
+	gmdoc-enhance.r79618
 	gmiflink.r15878
 	gmutils.r24287
 	gmverb.r24288
-	grabbox.r65223
+	grabbox.r79618
 	gradient-text.r76924
 	grading-scheme.r76924
 	graphbox.r77682
 	graphicscache.r65318
-	graphicx-psmin.r56931
-	graphicxbox.r32630
+	graphicx-psmin.r79618
+	graphicxbox.r79618
 	graphpaper.r63116
 	grayhints.r49052
-	grfpaste.r17354
-	grid.r61719
+	grfpaste.r79618
+	grid.r79618
 	grid-system.r32981
 	gridpapers.r58723
 	gridset.r77682
 	gridslides.r54512
 	gs1.r76924
 	guitlogo.r55741
-	ha-prosper.r59651
+	ha-prosper.r79618
 	hackthefootline.r46494
 	halloweenmath.r77682
 	handin.r48255
@@ -687,21 +687,21 @@ TEXLIVE_MODULE_CONTENTS="
 	hep-text.r76220
 	hep-title.r76220
 	hereapplies.r68638
-	hhtensor.r54080
+	hhtensor.r79618
 	hideanswer.r72949
 	highlightlatex.r58392
 	highlightx.r77296
 	histogr.r15878
-	hitec.r15878
+	hitec.r79618
 	hitreport.r58357
 	hletter.r30002
 	hobsub.r79461
 	homework.r78004
 	hpsdiss.r15878
-	href-ul.r74512
+	href-ul.r79622
 	hrefhide.r73641
 	huawei.r73148
-	hvextern.r79524
+	hvextern.r79606
 	hvindex.r77682
 	hvlogos.r77682
 	hvpygmentex.r62405
@@ -710,34 +710,34 @@ TEXLIVE_MODULE_CONTENTS="
 	hypdestopt.r79461
 	hypdoc.r79461
 	hypdvips.r77682
-	hyper.r17357
+	hyper.r79618
 	hyperbar.r48147
 	hypernat.r17358
 	hyperxmp.r78281
 	hyphenat.r79461
 	identkey.r61719
 	idxcmds.r54554
-	idxlayout.r25821
-	iexec.r73480
+	idxlayout.r79618
+	iexec.r79681
 	ifallfalse.r60027
 	iffont.r38823
 	ifmslide.r20727
-	ifmtarg.r79461
-	ifnextok.r23379
+	ifmtarg.r79618
+	ifnextok.r79618
 	ifoddpage.r77682
-	ifthenx.r25819
-	iitem.r29613
-	image-gallery.r15878
+	ifthenx.r79618
+	iitem.r79618
+	image-gallery.r79618
 	imakeidx.r77682
 	import.r77682
-	incgraph.r79476
+	incgraph.r79618
 	indextools.r68555
 	inline-images.r61719
-	inlinedef.r78931
+	inlinedef.r79618
 	inlinegraphicx.r79494
 	inlinelabel.r63853
 	inputenx.r79461
-	inputtrc.r28019
+	inputtrc.r79618
 	interactiveworkbook.r15878
 	interfaces.r21474
 	intopdf.r77682
@@ -748,12 +748,12 @@ TEXLIVE_MODULE_CONTENTS="
 	ipsum.r75788
 	iso.r15878
 	iso10303.r15878
-	isodate.r78101
+	isodate.r79618
 	isodoc.r75787
 	isonums.r17362
 	isopt.r45509
 	isorot.r15878
-	isotope.r23711
+	isotope.r79618
 	issuulinks.r25742
 	iwonamath.r77682
 	jlabels.r24858
@@ -763,11 +763,11 @@ TEXLIVE_MODULE_CONTENTS="
 	jslectureplanner.r77682
 	jsonparse.r79374
 	jumplines.r37553
-	jvlisting.r79461
+	jvlisting.r79618
 	kalendarium.r48744
 	kantlipsum.r77682
-	kerntest.r15878
-	keycommand.r78101
+	kerntest.r79618
+	keycommand.r79618
 	keyfloat.r77682
 	keyindex.r50828
 	keyparse.r76924
@@ -778,14 +778,14 @@ TEXLIVE_MODULE_CONTENTS="
 	kix.r21606
 	knowledge.r79392
 	koma-moderncvclassic.r78632
-	koma-script-sfs.r77050
+	koma-script-sfs.r79618
 	komacv.r57721
 	komacv-rg.r49064
 	korigamik.r71991
 	ktv-texdata.r27369
-	l3backend-dev.r79424
-	l3build.r79575
-	l3kernel-dev.r79424
+	l3backend-dev.r79718
+	l3build.r79721
+	l3kernel-dev.r79718
 	labbook.r15878
 	labels.r15878
 	labels4easylist.r51124
@@ -809,14 +809,14 @@ TEXLIVE_MODULE_CONTENTS="
 	layouts.r79461
 	lazylist.r17691
 	lccaps.r46432
-	lcd.r16549
-	lcg.r77682
-	leading.r77682
+	lcd.r79618
+	lcg.r79618
+	leading.r79618
 	leaflet.r77682
 	lebhart.r78004
 	lectures.r74632
 	lectureslides.r62292
-	leftidx.r77682
+	leftidx.r79618
 	leftindex.r77682
 	leipzig.r52450
 	lengthconvert.r76924
@@ -825,15 +825,15 @@ TEXLIVE_MODULE_CONTENTS="
 	lewis.r15878
 	lhelp.r76924
 	libgreek.r75712
-	limap.r79088
+	limap.r79618
 	linegoal.r79461
 	linop.r41304
 	lipsum.r77682
 	lisp-on-tex.r73165
-	listing.r79461
+	listing.r79618
 	listingsutf8.r79461
 	listlbls.r77682
-	listliketab.r77682
+	listliketab.r79618
 	listofsymbols.r16134
 	litetable.r77682
 	lkproof.r79461
@@ -842,22 +842,22 @@ TEXLIVE_MODULE_CONTENTS="
 	logbox.r24499
 	logical-markup-utils.r15878
 	logoetalab.r73069
-	logpap.r15878
+	logpap.r79618
 	longfbox.r79461
 	longfigure.r34302
-	longnamefilelist.r77682
+	longnamefilelist.r79618
 	loops.r30704
-	lsc.r15878
+	lsc.r79618
 	lscapeenhanced.r79461
 	lstaddons.r79461
 	lstfiracode.r49503
 	lt3graph.r76924
 	lt3rawobjects.r76924
 	ltablex.r77682
-	ltabptch.r17533
-	ltxdockit.r21869
+	ltabptch.r79618
+	ltxdockit.r79618
 	ltxguidex.r50992
-	ltxkeys.r28332
+	ltxkeys.r79618
 	ltxnew.r21586
 	ltxtools.r24897
 	lua-check-hyphen.r77682
@@ -870,19 +870,19 @@ TEXLIVE_MODULE_CONTENTS="
 	magicwatermark.r76924
 	mailing.r77241
 	mailmerge.r15878
-	makebarcode.r15878
+	makebarcode.r79618
 	makebase.r41012
-	makebox.r77682
+	makebox.r79618
 	makecell.r78101
 	makecirc.r15878
-	makecmds.r79461
+	makecmds.r79618
 	makedtx.r77871
 	makeglos.r15878
 	makelabels.r60255
 	makerobust.r79461
 	mandi.r76924
-	manfnt.r77682
-	manuscript.r36110
+	manfnt.r79618
+	manuscript.r79618
 	manyind.r49874
 	marginfit.r77682
 	marginfix.r78931
@@ -890,22 +890,22 @@ TEXLIVE_MODULE_CONTENTS="
 	markdown.r79410
 	mathalpha.r77682
 	mathastext.r77682
-	mathexam.r15878
+	mathexam.r79618
 	mathfam256.r53519
 	mathfont.r77682
-	mathgreeks.r71248
-	maybemath.r15878
-	mcaption.r77682
+	mathgreeks.r79759
+	maybemath.r79618
+	mcaption.r79618
 	mceinleger.r79121
 	mcexam.r60481
 	mcite.r77682
-	mciteplus.r77682
-	mdframed.r77682
+	mciteplus.r79618
+	mdframed.r79618
 	media4svg.r76924
 	media9.r76924
 	medstarbeamer.r38828
 	meetingmins.r31878
-	memexsupp.r15878
+	memexsupp.r79618
 	memory.r30452
 	mensa-tex.r45997
 	menu.r15878
@@ -915,149 +915,149 @@ TEXLIVE_MODULE_CONTENTS="
 	metanorma.r79461
 	metastr.r74751
 	method.r17485
-	metre.r18489
+	metre.r79618
 	mfirstuc.r77682
-	mftinc.r78793
+	mftinc.r79618
 	mi-solns.r49651
-	midpage.r79461
+	midpage.r79618
 	mindflow.r65236
 	minibox.r77682
 	minidocument.r43752
 	minifp.r76924
 	minimalist.r78004
-	minipage-marginpar.r15878
+	minipage-marginpar.r79618
 	minitoc.r77682
 	minorrevision.r32165
 	minutes.r42186
 	mla-paper.r54080
 	mleftright.r79461
-	mlist.r77682
+	mlist.r79618
 	mmap.r77682
 	mnotes.r63406
-	moderncv.r79474
+	moderncv.r79618
 	modernposter.r47269
 	moderntimeline.r55518
-	modref.r15878
-	modroman.r79121
+	modref.r79618
+	modroman.r79618
 	modular.r44142
 	moloch.r77913
-	monofill.r28140
+	monofill.r79618
 	moodle.r65672
 	moreenum.r77682
 	morefloats.r77682
-	morehype.r38815
-	moresize.r78101
-	moreverb.r79461
+	morehype.r79618
+	moresize.r79618
+	moreverb.r79618
 	morewrites.r77682
 	movement-arrows.r67270
 	movie15.r26473
 	mparhack.r77682
 	mpostinl.r77187
 	msc.r67718
-	msg.r49578
+	msg.r79618
 	mslapa.r76790
-	mtgreek.r17967
+	mtgreek.r79618
 	multenum.r77682
 	multiaudience.r77682
-	multibbl.r15878
-	multicap.r15878
+	multibbl.r79618
+	multicap.r79618
 	multicolrule.r78101
 	multidef.r40637
-	multienv.r64967
+	multienv.r79618
 	multiexpand.r77682
 	multifootnote.r70745
 	multilang.r77682
 	multiple-choice.r63722
 	multirow.r77682
-	multitoc.r77682
+	multitoc.r79618
 	mversion.r29370
 	mwe.r77682
 	mycv.r26807
-	mylatex.r77050
+	mylatex.r79618
 	mylatexformat.r21392
-	nag.r77682
+	nag.r79618
 	nameauth.r76172
-	namespc.r15878
+	namespc.r79618
 	ncclatex.r15878
 	ncctools.r51810
 	needspace.r77682
 	nestquot.r27323
 	newenviron.r29331
-	newfile.r79461
+	newfile.r79618
 	newlfm.r15878
-	newspaper.r15878
+	newspaper.r79618
 	newunicodechar.r77682
-	newvbtm.r23996
+	newvbtm.r79618
 	newverbs.r77682
-	nextpage.r79461
+	nextpage.r79618
 	nfssext-cfr.r79461
 	nicefilelist.r77682
-	niceframe.r77682
-	nicetext.r38914
+	niceframe.r79618
+	nicetext.r79618
 	nidanfloat.r77682
 	ninecolors.r76924
 	nlctdoc.r79421
 	noconflict.r30140
 	nodepthtext.r73069
 	noindentafter.r59195
-	noitcrul.r77682
+	noitcrul.r79618
 	nolbreaks.r77682
-	nomencl.r77682
-	nomentbl.r16549
+	nomencl.r79618
+	nomentbl.r79618
 	non-decimal-units.r76924
 	nonfloat.r77682
 	nonumonpart.r77682
 	nopageno.r77682
 	normalcolor.r77682
 	notebeamer.r77682
-	notes.r42428
+	notes.r79618
 	notespages.r76790
 	notestex.r45396
 	notoccite.r77682
 	nowidow.r77682
 	nox.r30991
-	ntheorem.r77682
+	ntheorem.r79618
 	numberedblock.r33109
-	numname.r18130
-	numprint.r77682
+	numname.r79618
+	numprint.r79618
 	numspell.r77682
 	ocg-p.r28803
 	ocgx.r54512
 	ocgx2.r78793
 	ocr-latex.r15878
 	octavo.r15878
-	oldstyle.r79461
-	onlyamsmath.r42927
-	opcit.r15878
+	oldstyle.r79618
+	onlyamsmath.r79618
+	opcit.r79618
 	opencolor.r78822
-	optidef.r50941
+	optidef.r79618
 	optional.r77682
 	options.r39030
 	orcidlink.r78657
 	orientation.r57390
-	outline.r18360
+	outline.r79618
 	outliner.r21095
-	outlines.r77682
+	outlines.r79618
 	outlining.r45601
 	overlays.r57866
 	overpic.r77682
 	padcount.r47621
 	pagecolor.r77682
-	pagecont.r15878
+	pagecont.r79618
 	pagegrid.r77682
 	pagelayout.r71937
 	pagenote.r79461
-	pagerange.r16915
+	pagerange.r79618
 	pageslts.r76054
 	palette.r60119
 	pangram.r76924
 	paper.r79461
 	papercdcase.r15878
 	papermas.r78632
-	papertex.r75878
-	paracol.r77682
+	papertex.r79618
+	paracol.r79618
 	parades.r40042
-	paralist.r77682
+	paralist.r79618
 	paresse.r76924
 	parnotes.r77682
 	parsa.r54840
@@ -1066,36 +1066,36 @@ TEXLIVE_MODULE_CONTENTS="
 	pas-cv.r32263
 	pas-tableur.r78983
 	passopt.r76924
-	patchcmd.r78101
-	pauldoc.r16005
+	patchcmd.r79618
+	pauldoc.r79618
 	pawpict.r21629
-	pbalance.r67201
+	pbalance.r79618
 	pbox.r77682
-	pbsheet.r24830
+	pbsheet.r79618
 	pdf14.r76924
 	pdfannotations.r68958
-	pdfcol.r79461
+	pdfcol.r79618
 	pdfcolmk.r79461
 	pdfcomment.r79390
-	pdfcprot.r18735
+	pdfcprot.r79618
 	pdfmarginpar.r77682
 	pdfoverlay.r77682
 	pdfpagediff.r37946
 	pdfpc.r78281
-	pdfpc-movie.r67201
+	pdfpc-movie.r79618
 	pdfprivacy.r79126
 	pdfrender.r79461
-	pdfreview.r50100
+	pdfreview.r79618
 	pdfscreen.r42428
 	pdfslide.r15878
-	pdfsync.r20373
+	pdfsync.r79618
 	pdfwin.r68667
-	pdfx.r77682
+	pdfx.r79618
 	pecha.r15878
-	perltex.r73044
+	perltex.r79618
 	permute.r15878
 	petiteannonce.r25915
-	pgfmath-xfp.r76924
+	pgfmath-xfp.r79618
 	phfcc.r60731
 	phfextendedabstract.r60732
 	phffullpagefigure.r41857
@@ -1107,24 +1107,24 @@ TEXLIVE_MODULE_CONTENTS="
 	phfthm.r60735
 	philex.r36396
 	phonenumbers.r79484
-	photo.r18739
+	photo.r79618
 	photobook.r71843
 	picture.r79461
 	piff.r79461
 	pkgloader.r76924
 	placeins.r77682
 	plantslabels.r29803
-	plates.r15878
+	plates.r79618
 	plweb.r79121
 	pmboxdraw.r79461
 	polynom.r77682
-	polynomial.r15878
+	polynomial.r79618
 	polytable.r77682
 	postcards.r75878
-	poster-mac.r18305
+	poster-mac.r79618
 	postnotes.r77682
 	powerdot.r77682
-	ppr-prv.r15878
+	ppr-prv.r79618
 	ppt-slides.r79345
 	practicalreports.r52312
 	precattl.r76924
@@ -1135,54 +1135,54 @@ TEXLIVE_MODULE_CONTENTS="
 	prettytok.r76924
 	preview.r71662
 	printlen.r79461
-	probsoln.r44783
+	probsoln.r79618
 	profmaquette.r77282
-	program.r44214
-	progress.r19519
-	progressbar.r33822
+	program.r79618
+	progress.r79618
+	progressbar.r79618
 	projlib.r78004
 	proofread.r61719
 	properties.r15878
-	prosper.r77682
-	protex.r41633
+	prosper.r79618
+	protex.r79618
 	protocol.r25562
-	psfragx.r26243
+	psfragx.r79618
 	pstool.r46393
-	pstring.r42857
-	pxgreeks.r21838
+	pstring.r79618
+	pxgreeks.r79618
 	pygmentex.r78632
 	pynotebook.r78767
 	python.r60162
 	pythonimmediate.r76924
 	q-and-a.r76924
-	qcm.r63833
-	qstest.r73069
+	qcm.r79618
+	qstest.r79618
 	qsymbols.r15878
 	quicktype.r42183
 	quiz2socrative.r52276
 	quotchap.r77682
 	quoting.r77682
-	quotmark.r15878
+	quotmark.r79618
 	ran_toks.r59515
 	randexam.r71883
 	randintlist.r78007
 	randtext.r15878
 	rccol.r77682
-	rcs-multi.r64967
-	rcsinfo.r15878
+	rcs-multi.r79618
+	rcsinfo.r79618
 	readablecv.r76790
 	readarray.r60540
 	realboxes.r77682
 	recipe.r54080
 	recipebook.r75878
-	recipecard.r15878
+	recipecard.r79618
 	rectopma.r70885
 	refcheck.r77682
 	refenums.r44131
 	reflectgraphics.r40612
-	refman.r15878
-	refstyle.r77682
-	regcount.r19979
+	refman.r79618
+	refstyle.r79618
+	regcount.r79618
 	regexpatch.r77682
 	register.r54485
 	regstats.r78101
@@ -1199,31 +1199,31 @@ TEXLIVE_MODULE_CONTENTS="
 	rlepsf.r19082
 	rmpage.r54080
 	robust-externalize.r76924
-	robustcommand.r15878
+	robustcommand.r79618
 	robustindex.r49877
 	romanbar.r77682
 	romanbarpagenumber.r36236
 	romanneg.r20087
-	romannum.r79461
-	rorlink.r76790
-	rotfloat.r77682
-	rotpages.r77682
+	romannum.r79618
+	rorlink.r79618
+	rotfloat.r79618
+	rotpages.r79618
 	roundbox.r29675
 	rterface.r30084
-	rtkinenc.r76790
+	rtkinenc.r79618
 	rulerbox.r50984
 	rulercompass.r32392
 	runcode.r79364
-	rvwrite.r19614
+	rvwrite.r79618
 	sanitize-umlaut.r77720
-	sauerj.r15878
+	sauerj.r79618
 	saveenv.r76924
 	savefnmark.r15878
 	savesym.r78101
 	savetrees.r77682
 	scale.r15878
-	scalebar.r15878
-	scalerel.r77682
+	scalebar.r79618
+	scalerel.r79618
 	scaletextbullet.r77949
 	scanpages.r42633
 	schedule.r51805
@@ -1236,38 +1236,38 @@ TEXLIVE_MODULE_CONTENTS="
 	scrwfile.r77682
 	sdaps.r76924
 	sdrt.r15878
-	secdot.r79461
+	secdot.r79618
 	secnum.r76924
 	sectionbox.r37749
 	sectionbreak.r77682
-	sectsty.r77682
+	sectsty.r79618
 	seealso.r76924
 	selectp.r77682
 	selinput.r79461
 	semantex.r76924
-	semantic.r15878
+	semantic.r79618
 	semantic-markup.r53607
 	semesterplanner.r56841
-	semioneside.r15878
+	semioneside.r79618
 	semproc.r37568
 	semtex.r76924
 	sepfootnotes.r77682
-	seqsplit.r77682
+	seqsplit.r79618
 	sesstime.r78482
 	setspaceenhanced.r79461
 	sf298.r41653
-	sffms.r15878
-	sfmath.r77682
-	shadethm.r77682
-	shadow.r77682
-	shadowtext.r78101
+	sffms.r79618
+	sfmath.r79618
+	shadethm.r79618
+	shadow.r79618
+	shadowtext.r79618
 	shapepar.r77682
 	shdoc.r41991
 	shipunov.r52334
-	shorttoc.r77682
-	show2e.r78101
+	shorttoc.r79618
+	show2e.r79618
 	showcharinbox.r29803
-	showdim.r78101
+	showdim.r79618
 	showexpl.r77682
 	showlabels.r77682
 	sidecap.r77682
@@ -1277,18 +1277,18 @@ TEXLIVE_MODULE_CONTENTS="
 	sillypage.r77682
 	sim-os-menus.r75975
 	simplecd.r79461
-	simplecv.r35537
+	simplecv.r79618
 	simpleinvoice.r45673
 	simplivre.r78004
 	sitem.r22136
-	skb.r22781
+	skb.r79618
 	skdoc.r79121
 	skeldoc.r76924
 	skeycommand.r24652
 	skeyval.r30560
 	skills.r56734
 	skrapport.r79121
-	slantsc.r77682
+	slantsc.r79618
 	smalltableof.r20333
 	smart-eqn.r76924
 	smartref.r77682
@@ -1296,19 +1296,19 @@ TEXLIVE_MODULE_CONTENTS="
 	snapshot.r77682
 	snaptodo.r70676
 	snotez.r79461
-	soulpos.r77682
+	soulpos.r79618
 	spacingtricks.r69048
 	spark-otf.r77682
 	sparklines.r42821
 	spelatex.r78647
 	sphack.r20842
-	splitindex.r77682
+	splitindex.r79618
 	spot.r22408
 	spotcolor.r15878
 	spreadtab.r77682
-	spverbatim.r77682
+	spverbatim.r79618
 	srbook-mem.r45818
-	srcltx.r15878
+	srcltx.r79618
 	sseq.r31585
 	sslides.r32293
 	stack.r15878
@@ -1316,7 +1316,7 @@ TEXLIVE_MODULE_CONTENTS="
 	standalone.r77682
 	standardsectioning.r76431
 	starray.r79594
-	stdclsdv.r79461
+	stdclsdv.r79618
 	stdpage.r79121
 	stealcaps.r64967
 	stex.r79507
@@ -1328,29 +1328,29 @@ TEXLIVE_MODULE_CONTENTS="
 	stubs.r75437
 	studenthandouts.r43516
 	styledcmd.r76924
-	subdepth.r77682
-	subdocs.r51480
+	subdepth.r79618
+	subdocs.r79618
 	subeqn.r77682
 	subeqnarray.r77682
-	subfigmat.r20308
-	subfigure.r15878
+	subfigmat.r79618
+	subfigure.r79618
 	subfiles.r77682
-	subfloat.r77682
+	subfloat.r79618
 	substr.r77682
 	supertabular.r77682
 	suppose.r59281
 	svg.r77682
 	svgcolor.r15878
 	svn.r15878
-	svn-multi.r64967
-	svn-prov.r77682
+	svn-multi.r79618
+	svn-prov.r79618
 	svninfo.r62157
 	swfigure.r63255
 	swungdash.r76924
 	syntax.r15878
 	synthslant.r76662
-	syntrace.r15878
-	synttree.r16252
+	syntrace.r79618
+	synttree.r79618
 	tabbing.r78931
 	tabfigures.r25202
 	tableaux.r42413
@@ -1363,48 +1363,48 @@ TEXLIVE_MODULE_CONTENTS="
 	tabto-ltx.r78101
 	tabu.r77682
 	tabularborder.r17885
-	tabularcalc.r77682
+	tabularcalc.r79618
 	tabularew.r15878
 	tabularray.r78251
 	tabulary.r77682
 	tagging.r77682
 	tagpair.r42138
-	talk.r76392
-	tamefloats.r27345
+	talk.r79618
+	tamefloats.r79618
 	tangocolors.r66733
 	tasks.r77682
 	tblr-extras.r76924
-	tcldoc.r22018
+	tcldoc.r79618
 	tcolorbox.r79191
 	tdclock.r33043
-	technics.r29349
-	ted.r76924
+	technics.r79618
+	ted.r79618
 	telprint.r79461
 	templatetools.r67201
 	termcal.r76924
-	termlist.r18923
+	termlist.r79618
 	termsim.r76924
 	testhyphens.r79522
 	testidx.r60966
 	tex-label.r16372
 	tex-locale.r77682
 	texlogos.r19083
-	texmate.r78101
-	texments.r15878
-	texpower.r29349
+	texmate.r79618
+	texments.r79618
+	texpower.r79618
 	texshade.r76586
-	texsurgery.r59885
+	texsurgery.r79618
 	textcsc.r78632
 	textfit.r20591
 	textmerg.r79461
 	textpos.r77682
-	textualicomma.r76924
+	textualicomma.r79618
 	texvc.r76874
-	theoremref.r79461
+	theoremref.r79618
 	thinsp.r39669
 	threadcol.r28754
 	threeparttable.r77682
-	threeparttablex.r77682
+	threeparttablex.r79618
 	thumb.r16549
 	thumbs.r77682
 	thumby.r16736
@@ -1412,11 +1412,11 @@ TEXLIVE_MODULE_CONTENTS="
 	timeop.r75112
 	tipauni.r78793
 	titlecaps.r77682
-	titlefoot.r77682
-	titlepic.r43497
+	titlefoot.r79618
+	titlepic.r79618
 	titleref.r79461
 	titlesec.r77682
-	titling.r79461
+	titling.r79618
 	to-be-determined.r72527
 	tocbibind.r79461
 	tocdata.r77682
@@ -1425,39 +1425,39 @@ TEXLIVE_MODULE_CONTENTS="
 	todo.r17746
 	todonotes.r77682
 	tokcycle.r74841
-	tokenizer.r15878
-	toolbox.r32260
+	tokenizer.r79618
+	toolbox.r79618
 	topfloat.r19084
 	topiclongtable.r76924
 	totalcount.r77682
-	totcount.r77682
-	totpages.r77682
+	totcount.r79618
+	totpages.r79618
 	tramlines.r71842
 	translations.r77682
 	transparent.r79461
 	treesvr.r71382
 	trfsigns.r79461
 	trimspaces.r77682
-	trivfloat.r77682
+	trivfloat.r79618
 	trsym.r18732
 	truncate.r77682
 	tucv.r20680
 	turnthepage.r77682
 	tutodoc.r76924
 	twoinone.r17024
-	twoup.r15878
-	txgreeks.r21839
-	type1cm.r78101
+	twoup.r79618
+	txgreeks.r79618
+	type1cm.r79618
 	typed-checklist.r77682
 	typeface.r27046
 	typoaid.r44238
 	typog.r76661
-	typogrid.r24994
+	typogrid.r79618
 	uassign.r38459
 	ucs.r78101
 	uebungsblatt.r15878
-	umoline.r19085
-	underlin.r15878
+	umoline.r79618
+	underlin.r79618
 	underoverlap.r77682
 	undolabl.r77682
 	uni-titlepage.r76033
@@ -1466,81 +1466,81 @@ TEXLIVE_MODULE_CONTENTS="
 	unifront.r67054
 	unisc.r78632
 	unitconv.r76924
-	units.r42428
+	units.r79618
 	unravel.r77682
 	updatemarks.r76924
 	upmethodology.r78632
 	upquote.r77682
 	uri.r77682
 	useclass.r76924
-	ushort.r32261
+	ushort.r79618
 	uspace.r63123
 	utf8add.r61074
 	uwmslide.r27354
 	variablelm.r60014
-	varindex.r32262
+	varindex.r79618
 	varsfromjobname.r76924
-	varwidth.r77682
+	varwidth.r79618
 	vcell.r77682
 	vdmlisting.r56905
 	verbasef.r21922
-	verbatimbox.r77682
-	verbatimcopy.r15878
-	verbdef.r79461
+	verbatimbox.r79618
+	verbatimcopy.r79618
+	verbdef.r79618
 	verbments.r23670
 	verifiche.r78906
 	verifycommand.r79461
 	version.r77682
-	versions.r21921
+	versions.r79618
 	versonotes.r77682
 	vertbars.r79461
 	vgrid.r32457
 	vhistory.r61719
-	vmargin.r15878
+	vmargin.r79618
 	volumes.r75878
-	vpe.r26039
+	vpe.r79618
 	vruler.r78101
 	vtable.r51126
 	vwcol.r77682
-	wallcalendar.r78383
+	wallcalendar.r79618
 	wallpaper.r77682
 	warning.r73265
-	warpcol.r77682
+	warpcol.r79618
 	was.r64691
 	webquiz.r58808
 	whatsnote.r76836
 	widetable.r77682
 	widows-and-orphans.r77682
-	williams.r15878
+	williams.r79618
 	willowtreebook.r60638
 	withargs.r76924
-	wordcount.r46165
+	wordcount.r79618
 	wordlike.r15878
 	worksheet.r76924
 	wrapfig.r77682
 	wrapfig2.r77682
 	wrapstuff.r78931
 	writeongrid.r77353
-	wtref.r69214
-	xargs.r77682
+	wtref.r79618
+	xargs.r79618
 	xassoccnt.r61112
 	xbmks.r53448
 	xcntperchap.r54080
 	xcolor-material.r42289
 	xcolor-solarized.r61719
 	xcomment.r77682
-	xcookybooky.r36435
+	xcookybooky.r79618
 	xcpdftips.r50449
-	xdoc.r15878
+	xdoc.r79618
 	xellipsis.r47546
 	xfakebold.r77682
-	xfor.r77682
+	xfor.r79618
 	xhfill.r77682
 	xifthen.r77682
 	ximera.r71243
 	xint.r76255
 	xint-regression.r77909
-	xkcdcolors.r67895
+	xkcdcolors.r79618
 	xkeymask.r69223
 	xltabular.r77682
 	xmpincl.r60593
@@ -1554,26 +1554,26 @@ TEXLIVE_MODULE_CONTENTS="
 	xsavebox.r77682
 	xsim.r76924
 	xstring.r77682
-	xtab.r79461
+	xtab.r79618
 	xurl.r77682
 	xwatermark.r61719
 	xytree.r15878
-	yafoot.r48568
-	yagusylo.r29803
+	yafoot.r79618
+	yagusylo.r79618
 	yaletter.r42830
 	ycbook.r46201
 	ydoc.r64887
-	yplan.r34398
+	yplan.r79618
 	zed-csp.r17258
 	zennote.r76924
-	ziffer.r32279
+	ziffer.r79618
 	zref.r79461
 	zref-check.r78101
 	zref-clever.r77682
 	zref-vario.r77682
-	zugferd.r79162
-	zwgetfdate.r15878
-	zwpagelayout.r63074
+	zugferd.r79761
+	zwgetfdate.r79618
+	zwpagelayout.r79618
 	afperpack.r77050
 	aliascnt.r79461
 	beamer-reveal.r78638
@@ -1585,8 +1585,8 @@ TEXLIVE_MODULE_CONTENTS="
 	beamertheme-durham.r78101
 	beamertheme-geode.r79040
 	beamertheme-spectrum.r77770
-	beamertheme-westlake.r78290
-	booktabstabular.r79500
+	beamertheme-westlake.r79618
+	booktabstabular.r79618
 	boustrophedon.r79090
 	cistercian.r77682
 	clawxiv.r78742
@@ -1641,16 +1641,16 @@ TEXLIVE_MODULE_CONTENTS="
 	spotxcolor.r78546
 	styleitems.r78427
 	switch.r77050
-	tablericons.r78730
+	tablericons.r79604
 	tabular2.r78431
 	tabularht.r79461
 	terminalcode.r76729
 	tokglobalstack.r77947
 	tokgroupmark.r77946
 	traffic-light-protocol.r76924
-	ullrcorners.r75278
+	ullrcorners.r79618
 	user-persona.r78798
-	vscodeicons.r76927
+	vscodeicons.r79603
 	xmeaning.r77128
 	xpeekahead.r77050
 	xsipa.r76924
@@ -1663,20 +1663,20 @@ TEXLIVE_MODULE_CONTENTS="
 # Removed in target tlpdb: isosafety, litebook, litesolution
 TEXLIVE_MODULE_DOC_CONTENTS="
 	2up.doc.r55076
-	a0poster.doc.r54071
+	a0poster.doc.r79618
 	a4wide.doc.r77682
 	a5comb.doc.r76924
 	abraces.doc.r77682
 	abspos.doc.r76924
-	abstract.doc.r79461
+	abstract.doc.r79618
 	accessibility.doc.r55777
 	accsupp.doc.r79461
 	achemso.doc.r79461
 	acro.doc.r77682
 	acronym.doc.r78101
 	acroterm.doc.r61719
-	actuarialangle.doc.r67201
-	actuarialsymbol.doc.r67201
+	actuarialangle.doc.r79618
+	actuarialsymbol.doc.r79618
 	addfont.doc.r58559
 	addlines.doc.r77682
 	adjmulticol.doc.r77682
@@ -1685,10 +1685,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	advdate.doc.r77682
 	affilauthor.doc.r76924
 	akktex.doc.r26055
-	akletter.doc.r15878
+	akletter.doc.r79618
 	alchemist.doc.r66924
 	alertmessage.doc.r76924
-	alnumsec.doc.r77682
+	alnumsec.doc.r79618
 	alphalph.doc.r79461
 	alterqcm.doc.r59265
 	altfont.doc.r15878
@@ -1697,13 +1697,13 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	anima.doc.r79461
 	animate.doc.r72548
 	anonchap.doc.r79461
-	answers.doc.r77682
-	anyfontsize.doc.r78101
+	answers.doc.r79618
+	anyfontsize.doc.r79618
 	appendix.doc.r79461
 	appendixnumberbeamer.doc.r79061
 	apptools.doc.r77682
-	arabicfront.doc.r77682
-	arcs.doc.r79461
+	arabicfront.doc.r79618
+	arcs.doc.r79618
 	argumentation.doc.r79431
 	arraycols.doc.r71168
 	arrayjobx.doc.r18125
@@ -1711,7 +1711,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	arydshln.doc.r77682
 	asciilist.doc.r77682
 	askinclude.doc.r79461
-	assignment.doc.r20431
+	assignment.doc.r79618
 	assoccnt.doc.r38497
 	association-matrix.doc.r76924
 	atenddvi.doc.r79461
@@ -1721,19 +1721,19 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	authoraftertitle.doc.r79461
 	authorarchive.doc.r77171
 	authorindex.doc.r51757
-	autofancyhdr.doc.r54049
+	autofancyhdr.doc.r79618
 	autonum.doc.r77682
 	autopdf.doc.r32377
 	autopuncitems.doc.r78415
 	avremu.doc.r71991
 	awesomebox.doc.r79461
 	axessibility.doc.r77682
-	background.doc.r79461
-	bankstatement.doc.r75301
+	background.doc.r79618
+	bankstatement.doc.r79618
 	bashful.doc.r25597
 	basicarith.doc.r35460
 	bchart.doc.r79461
-	beamer-rl.doc.r76587
+	beamer-rl.doc.r79762
 	beamer2thesis.doc.r72949
 	beamerappendixnote.doc.r55732
 	beameraudience.doc.r23427
@@ -1741,7 +1741,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	beamercolorthemeowl.doc.r40105
 	beamerdarkthemes.doc.r55117
 	beamerposter.doc.r77682
-	beamersubframe.doc.r23510
+	beamersubframe.doc.r79618
 	beamertheme-arguelles.doc.r78826
 	beamertheme-cuerna.doc.r42161
 	beamertheme-detlevcm.doc.r39048
@@ -1759,9 +1759,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	beamertheme-simpledarkblue.doc.r73454
 	beamertheme-simpleplus.doc.r73362
 	beamertheme-tcolorbox.doc.r77380
-	beamertheme-trigon.doc.r65985
-	beamertheme-upenn-bc.doc.r29937
-	beamerthemeamurmaple.doc.r69742
+	beamertheme-trigon.doc.r79618
+	beamertheme-upenn-bc.doc.r79618
+	beamerthemeamurmaple.doc.r79618
 	beamerthemeconcrete.doc.r69528
 	beamerthemelalic.doc.r58777
 	beamerthemenirma.doc.r20765
@@ -1770,7 +1770,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	beaulivre.doc.r78004
 	beautybook.doc.r76924
 	beautynote.doc.r76924
-	beton.doc.r77682
+	beton.doc.r79618
 	bewerbung.doc.r61632
 	bez123.doc.r79461
 	bhcexam.doc.r72638
@@ -1790,16 +1790,16 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	bold-extra.doc.r79461
 	book-of-common-prayer.doc.r62240
 	bookcover.doc.r77334
-	bookest.doc.r15878
+	bookest.doc.r79618
 	booklet.doc.r79461
 	bookshelf.doc.r72521
-	boolexpr.doc.r17830
-	bophook.doc.r17062
+	boolexpr.doc.r79618
+	bophook.doc.r79618
 	boxedminipage.doc.r77682
 	boxhandler.doc.r76790
 	bracketkey.doc.r17129
 	braket.doc.r77682
-	breakurl.doc.r77682
+	breakurl.doc.r79618
 	bubblesort.doc.r56070
 	bullcntr.doc.r15878
 	bxcalc.doc.r78793
@@ -1811,7 +1811,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	bxpdfver.doc.r79071
 	bxtexlogo.doc.r79121
 	calcage.doc.r27725
-	calctab.doc.r15878
+	calctab.doc.r79618
 	calculator.doc.r77682
 	calculatoritems.doc.r76037
 	calrsfs.doc.r77682
@@ -1819,9 +1819,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	calxxxx-yyyy.doc.r77222
 	cancel.doc.r77682
 	canoniclayout.doc.r64889
-	capt-of.doc.r79461
-	captcont.doc.r77682
-	captdef.doc.r79461
+	capt-of.doc.r79618
+	captcont.doc.r79618
+	captdef.doc.r79618
 	carbohydrates.doc.r39000
 	cases.doc.r77682
 	casyl.doc.r15878
@@ -1830,32 +1830,32 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	catechis.doc.r59998
 	catoptions.doc.r68982
 	catppuccinpalette.doc.r79252
-	cbcoptic.doc.r16666
+	cbcoptic.doc.r79618
 	ccaption.doc.r79461
-	cclicenses.doc.r15878
+	cclicenses.doc.r79618
 	cd.doc.r34452
 	cd-cover.doc.r17121
 	cdcmd.doc.r76924
-	cdpbundl.doc.r61719
-	cellprops.doc.r76924
-	cellspace.doc.r77682
+	cdpbundl.doc.r79618
+	cellprops.doc.r79618
+	cellspace.doc.r79618
 	censor.doc.r79461
 	centeredline.doc.r77682
 	centerlastline.doc.r56644
-	changebar.doc.r77682
+	changebar.doc.r79719
 	changelayout.doc.r16094
 	changelog.doc.r77682
 	changepage.doc.r79461
-	changes.doc.r77682
-	chappg.doc.r79461
-	chapterfolder.doc.r15878
+	changes.doc.r79618
+	chappg.doc.r79618
+	chapterfolder.doc.r79618
 	cheatsheet.doc.r45069
-	checkend.doc.r78101
-	chet.doc.r78825
+	checkend.doc.r79618
+	chet.doc.r79672
 	chextras.doc.r27118
 	childdoc.doc.r74758
 	chkfloat.doc.r77682
-	chletter.doc.r20060
+	chletter.doc.r79618
 	chngcntr.doc.r79461
 	chronology.doc.r79461
 	circ.doc.r62977
@@ -1864,7 +1864,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	classics.doc.r76924
 	classpack.doc.r55218
 	clefval.doc.r79121
-	cleveref.doc.r77682
+	cleveref.doc.r79618
 	cleveref-forward.doc.r76924
 	cleveref-usedon.doc.r70491
 	clicks.doc.r73208
@@ -1875,7 +1875,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	clrstrip.doc.r77682
 	cmdstring.doc.r15878
 	cmdtrack.doc.r78101
-	cmsd.doc.r78632
+	cmsd.doc.r79618
 	cnltx.doc.r76924
 	cntformats.doc.r34668
 	cntperchap.doc.r37572
@@ -1888,14 +1888,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	collcell.doc.r77682
 	collectbox.doc.r77682
 	colophon.doc.r77682
-	color-edits.doc.r56707
+	color-edits.doc.r79607
 	colorblind.doc.r77410
 	colordoc.doc.r18270
 	colorframed.doc.r77682
 	colorinfo.doc.r15878
 	coloring.doc.r41042
 	colorist.doc.r79461
-	colorspace.doc.r50585
+	colorspace.doc.r79618
 	colortab.doc.r22155
 	colorwav.doc.r67012
 	colorweb.doc.r31490
@@ -1903,18 +1903,18 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	combelow.doc.r18462
 	combine.doc.r79461
 	comma.doc.r78931
-	commado.doc.r38875
-	commalists-tools.doc.r79353
+	commado.doc.r79618
+	commalists-tools.doc.r79756
 	commedit.doc.r50116
 	comment.doc.r77682
 	commonunicode.doc.r62901
 	competences.doc.r47573
-	concepts.doc.r29020
+	concepts.doc.r79618
 	concprog.doc.r18791
 	conditext.doc.r79121
-	constants.doc.r15878
+	constants.doc.r79618
 	continue.doc.r79461
-	contour.doc.r77682
+	contour.doc.r79618
 	contracard.doc.r79287
 	conv-xkv.doc.r43558
 	cooking.doc.r15878
@@ -1924,13 +1924,13 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	coollist.doc.r67048
 	coolstr.doc.r67015
 	coolthms.doc.r29062
-	cooltooltips.doc.r60201
+	cooltooltips.doc.r79618
 	coop-writing.doc.r76924
-	coordsys.doc.r15878
+	coordsys.doc.r79618
 	copyedit.doc.r37928
 	copyrightbox.doc.r24829
 	coseoul.doc.r23862
-	count1to.doc.r71526
+	count1to.doc.r79618
 	counterz.doc.r67335
 	counttexruns.doc.r27576
 	courseoutline.doc.r15878
@@ -1938,22 +1938,22 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	coverpage.doc.r63509
 	cprotect.doc.r78728
 	cprotectinside.doc.r76924
-	crbox.doc.r29803
+	crbox.doc.r79618
 	create-theorem.doc.r76924
 	creationboites.doc.r79568
 	crefthe.doc.r76924
-	crossreference.doc.r15878
+	crossreference.doc.r79618
 	crossreftools.doc.r77682
 	crumbs.doc.r64602
 	csquotes.doc.r79060
 	css-colors.doc.r54512
 	csvmerge.doc.r51857
 	csvsimple.doc.r79527
-	cuisine.doc.r34453
+	cuisine.doc.r79618
 	currency.doc.r48990
 	currfile.doc.r77682
 	curriculum-vitae.doc.r75698
-	currvita.doc.r15878
+	currvita.doc.r79618
 	customenvs.doc.r79567
 	cutwin.doc.r77682
 	cv.doc.r15878
@@ -1963,17 +1963,17 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	cybercic.doc.r37659
 	darkmode.doc.r76924
 	dashbox.doc.r77682
-	dashrule.doc.r77682
+	dashrule.doc.r79618
 	dashrulex.doc.r76924
 	dashundergaps.doc.r77682
 	dataref.doc.r62942
 	datatool.doc.r77021
 	datax.doc.r61772
-	dateiliste.doc.r27974
+	dateiliste.doc.r79618
 	datenumber.doc.r78101
 	datestamp.doc.r61719
 	datetime.doc.r36650
-	datetime2.doc.r77682
+	datetime2.doc.r79618
 	datetime2-bahasai.doc.r46287
 	datetime2-basque.doc.r47064
 	datetime2-breton.doc.r52647
@@ -2023,74 +2023,74 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	decimalcomma.doc.r69251
 	decorule.doc.r77682
 	defoldfonts.doc.r76435
-	delimtxt.doc.r16549
+	delimtxt.doc.r79618
 	democodetools.doc.r77050
 	denisbdoc.doc.r77982
 	diabetes-logbook.doc.r77161
 	diagbox.doc.r77682
 	diagnose.doc.r19387
-	dialogl.doc.r28946
+	dialogl.doc.r79618
 	dichokey.doc.r17192
 	didactic.doc.r70901
 	didec.doc.r79241
 	dimnum.doc.r58774
-	dinbrief.doc.r79121
-	directory.doc.r15878
+	dinbrief.doc.r79618
+	directory.doc.r79618
 	dirtytalk.doc.r20520
-	dlfltxb.doc.r17337
+	dlfltxb.doc.r79618
 	dnaseq.doc.r17194
 	doclicense.doc.r77682
-	docmfp.doc.r79461
+	docmfp.doc.r79618
 	docmute.doc.r78101
-	docshots.doc.r69676
+	docshots.doc.r79688
 	doctools.doc.r34474
 	documentation.doc.r34521
 	docutils.doc.r56594
 	doi.doc.r79461
 	doibanner.doc.r71919
-	dotarrow.doc.r15878
-	dotlessi.doc.r77682
+	dotarrow.doc.r79618
+	dotlessi.doc.r79618
 	dotseqn.doc.r77682
 	download.doc.r79121
-	dox.doc.r46011
-	dpfloat.doc.r77682
-	dprogress.doc.r15878
-	drac.doc.r15878
-	draftcopy.doc.r15878
+	dox.doc.r79618
+	dpfloat.doc.r79618
+	dprogress.doc.r79618
+	drac.doc.r79618
+	draftcopy.doc.r79618
 	draftfigure.doc.r76790
 	draftwatermark.doc.r77682
-	dtk.doc.r71776
+	dtk.doc.r79668
 	dtxdescribe.doc.r79394
-	dtxgallery.doc.r49504
+	dtxgallery.doc.r79618
 	ducksay.doc.r76911
 	duckuments.doc.r77682
-	dvdcoll.doc.r79121
+	dvdcoll.doc.r79618
 	dynamicnumber.doc.r38726
 	dynblocks.doc.r35193
 	ean13isbn.doc.r57514
-	easy.doc.r19440
+	easy.doc.r79618
 	easy-todo.doc.r32677
 	easybook.doc.r76924
 	easyfig.doc.r77682
 	easyfloats.doc.r72699
 	easyformat.doc.r44543
 	easylist.doc.r77682
-	easyreview.doc.r38352
-	ebezier.doc.r76924
+	easyreview.doc.r79618
+	ebezier.doc.r79618
 	ecclesiastic.doc.r38172
 	econlipsum.doc.r77682
 	ecv.doc.r24928
 	ed.doc.r25231
 	edichokey.doc.r56223
-	edmargin.doc.r27599
-	eemeir.doc.r15878
+	edmargin.doc.r79618
+	eemeir.doc.r79618
 	efbox.doc.r77682
 	egplot.doc.r20617
 	ehhline.doc.r54676
 	einfart.doc.r78004
 	elements.doc.r61792
 	ellipsis.doc.r77682
-	elmath.doc.r15878
+	elmath.doc.r79618
 	elocalloc.doc.r78931
 	elpres.doc.r76790
 	elzcards.doc.r51894
@@ -2103,46 +2103,46 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	emptypage.doc.r78101
 	emulateapj.doc.r74166
 	endfloat.doc.r77682
-	endheads.doc.r73959
+	endheads.doc.r79618
 	endnotes.doc.r79461
 	endnotes-hy.doc.r54758
-	engpron.doc.r16558
-	engrec.doc.r15878
+	engpron.doc.r79618
+	engrec.doc.r79618
 	enotez.doc.r77682
 	ensps-colorscheme.doc.r71431
 	enumext.doc.r79230
-	enumitem.doc.r77682
+	enumitem.doc.r79618
 	enumitem-zref.doc.r75712
-	envbig.doc.r15878
+	envbig.doc.r79618
 	enverb.doc.r76924
-	environ.doc.r77682
+	environ.doc.r79618
 	envlab.doc.r61937
 	epcqrcode.doc.r76924
 	epigraph.doc.r79461
 	epigraph-keys.doc.r75301
-	epiolmec.doc.r15878
+	epiolmec.doc.r79618
 	eq-pin2corr.doc.r59477
 	eqell.doc.r22931
-	eqlist.doc.r77682
+	eqlist.doc.r79618
 	eqnalign.doc.r43278
 	eqparbox.doc.r77682
 	errata.doc.r42428
 	erw-l3.doc.r78101
-	esami.doc.r71883
+	esami.doc.r79618
 	esdiff.doc.r78348
 	esieecv.doc.r59638
-	esindex.doc.r71111
+	esindex.doc.r79618
 	esint.doc.r77682
 	esint-type1.doc.r15878
-	etaremune.doc.r77682
-	etextools.doc.r20694
-	etl.doc.r76924
+	etaremune.doc.r79618
+	etextools.doc.r79618
+	etl.doc.r79618
 	etoc.doc.r78908
-	eukdate.doc.r15878
+	eukdate.doc.r79618
 	eulerpx.doc.r63967
 	euromoney.doc.r73069
 	europasscv.doc.r56829
-	europecv.doc.r75227
+	europecv.doc.r79618
 	everyhook.doc.r35675
 	everypage.doc.r77682
 	exam.doc.r77682
@@ -2161,16 +2161,16 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	exercisesheets.doc.r76924
 	exesheet.doc.r75102
 	exframe.doc.r78482
-	exp-testopt.doc.r15878
-	expdlist.doc.r76924
-	export.doc.r27206
+	exp-testopt.doc.r79618
+	expdlist.doc.r79618
+	export.doc.r79618
 	exsheets.doc.r76924
 	exsol.doc.r73982
 	extract.doc.r52117
 	ezedits.doc.r72849
-	facsimile.doc.r21328
+	facsimile.doc.r79618
 	factura.doc.r61697
-	fail-fast.doc.r67543
+	fail-fast.doc.r79671
 	familytree.doc.r63739
 	fancyhandout.doc.r46411
 	fancylabel.doc.r46736
@@ -2184,27 +2184,27 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fcolumn.doc.r79461
 	fetchcls.doc.r45245
 	fewerfloatpages.doc.r77682
-	ffcode.doc.r79167
+	ffcode.doc.r79645
 	ffslides.doc.r38895
 	fgruler.doc.r77333
-	fifo-stack.doc.r33288
-	figsize.doc.r18784
+	fifo-stack.doc.r79618
+	figsize.doc.r79618
 	filecontents.doc.r77682
 	filecontentsdef.doc.r77682
-	filedate.doc.r29529
-	fileinfo.doc.r28421
+	filedate.doc.r79618
+	fileinfo.doc.r79618
 	filemod.doc.r77682
 	fillwith.doc.r76924
-	fink.doc.r24329
-	finstrut.doc.r21719
+	fink.doc.r79618
+	finstrut.doc.r79618
 	fistrum.doc.r76924
 	fithesis.doc.r76028
 	fixcmex.doc.r78632
-	fixfoot.doc.r79461
+	fixfoot.doc.r79618
 	fixme.doc.r77682
 	fixmetodonotes.doc.r30168
 	fjodor.doc.r53207
-	flabels.doc.r17272
+	flabels.doc.r79618
 	flacards.doc.r19440
 	flagderiv.doc.r15878
 	flashcards.doc.r62104
@@ -2217,12 +2217,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	floatrow.doc.r77682
 	floatrowbytocbasic.doc.r67946
 	flowfram.doc.r79423
-	fmp.doc.r15878
+	fmp.doc.r79618
 	fmtcount.doc.r77682
 	fn2end.doc.r15878
 	fnbreak.doc.r77682
 	fncychap.doc.r77682
-	fncylab.doc.r79461
+	fncylab.doc.r79618
 	fnpara.doc.r25607
 	fnpct.doc.r77682
 	fnumprint.doc.r77682
@@ -2238,12 +2238,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	footnotebackref.doc.r77682
 	footnoterange.doc.r77682
 	footnpag.doc.r77682
-	forarray.doc.r78101
+	forarray.doc.r79618
 	foreign.doc.r78101
 	forloop.doc.r77682
 	formlett.doc.r21480
 	forms16be.doc.r51305
-	formular.doc.r15878
+	formular.doc.r79618
 	fragments.doc.r79461
 	frame.doc.r18312
 	framed.doc.r77682
@@ -2252,7 +2252,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	frege.doc.r27417
 	froufrou.doc.r77682
 	ftcap.doc.r17275
-	ftnxtra.doc.r77682
+	ftnxtra.doc.r79618
 	fullblck.doc.r25434
 	fullminipage.doc.r34545
 	fullwidth.doc.r24684
@@ -2262,17 +2262,17 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fwlw.doc.r77682
 	g-brief.doc.r77050
 	gatherenum.doc.r76924
-	gauss.doc.r32934
+	gauss.doc.r79618
 	gcard.doc.r15878
 	gcite.doc.r15878
 	gender.doc.r79121
 	genealogy-profiles.doc.r77110
 	genmpage.doc.r15878
 	gensymb.doc.r77682
-	getfiledate.doc.r16189
+	getfiledate.doc.r79618
 	getitems.doc.r39365
-	gindex.doc.r52311
-	ginpenc.doc.r24980
+	gindex.doc.r79618
+	ginpenc.doc.r79618
 	gitfile-info.doc.r79121
 	gitinfo.doc.r34049
 	gitinfo2.doc.r77682
@@ -2280,7 +2280,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	gitstatus.doc.r64662
 	gitver.doc.r76924
 	globalvals.doc.r49962
-	gloss.doc.r75240
+	gloss.doc.r79618
 	glossaries-danish.doc.r35665
 	glossaries-dutch.doc.r35685
 	glossaries-english.doc.r35665
@@ -2299,29 +2299,29 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	glossaries-serbian.doc.r35665
 	glossaries-slovene.doc.r51211
 	glossaries-spanish.doc.r35665
-	gmdoc.doc.r21292
-	gmdoc-enhance.doc.r15878
+	gmdoc.doc.r79618
+	gmdoc-enhance.doc.r79618
 	gmiflink.doc.r15878
 	gmutils.doc.r24287
 	gmverb.doc.r24288
-	grabbox.doc.r65223
+	grabbox.doc.r79618
 	gradient-text.doc.r76924
 	grading-scheme.doc.r76924
 	graphbox.doc.r77682
 	graphicscache.doc.r65318
-	graphicx-psmin.doc.r56931
-	graphicxbox.doc.r32630
+	graphicx-psmin.doc.r79618
+	graphicxbox.doc.r79618
 	graphpaper.doc.r63116
 	grayhints.doc.r49052
-	grfpaste.doc.r17354
-	grid.doc.r61719
+	grfpaste.doc.r79618
+	grid.doc.r79618
 	grid-system.doc.r32981
 	gridpapers.doc.r58723
 	gridset.doc.r77682
 	gridslides.doc.r54512
 	gs1.doc.r76924
 	guitlogo.doc.r55741
-	ha-prosper.doc.r59651
+	ha-prosper.doc.r79618
 	hackthefootline.doc.r46494
 	halloweenmath.doc.r77682
 	handin.doc.r48255
@@ -2341,21 +2341,21 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	hep-text.doc.r76220
 	hep-title.doc.r76220
 	hereapplies.doc.r68638
-	hhtensor.doc.r54080
+	hhtensor.doc.r79618
 	hideanswer.doc.r72949
 	highlightlatex.doc.r58392
 	highlightx.doc.r77296
 	histogr.doc.r15878
-	hitec.doc.r15878
+	hitec.doc.r79618
 	hitreport.doc.r58357
 	hletter.doc.r30002
 	hobsub.doc.r79461
 	homework.doc.r78004
 	hpsdiss.doc.r15878
-	href-ul.doc.r74512
+	href-ul.doc.r79622
 	hrefhide.doc.r73641
 	huawei.doc.r73148
-	hvextern.doc.r79524
+	hvextern.doc.r79606
 	hvindex.doc.r77682
 	hvlogos.doc.r77682
 	hvpygmentex.doc.r62405
@@ -2364,34 +2364,34 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	hypdestopt.doc.r79461
 	hypdoc.doc.r79461
 	hypdvips.doc.r77682
-	hyper.doc.r17357
+	hyper.doc.r79618
 	hyperbar.doc.r48147
 	hypernat.doc.r17358
 	hyperxmp.doc.r78281
 	hyphenat.doc.r79461
 	identkey.doc.r61719
 	idxcmds.doc.r54554
-	idxlayout.doc.r25821
-	iexec.doc.r73480
+	idxlayout.doc.r79618
+	iexec.doc.r79681
 	ifallfalse.doc.r60027
 	iffont.doc.r38823
 	ifmslide.doc.r20727
-	ifmtarg.doc.r79461
-	ifnextok.doc.r23379
+	ifmtarg.doc.r79618
+	ifnextok.doc.r79618
 	ifoddpage.doc.r77682
-	ifthenx.doc.r25819
-	iitem.doc.r29613
-	image-gallery.doc.r15878
+	ifthenx.doc.r79618
+	iitem.doc.r79618
+	image-gallery.doc.r79618
 	imakeidx.doc.r77682
 	import.doc.r77682
-	incgraph.doc.r79476
+	incgraph.doc.r79618
 	indextools.doc.r68555
 	inline-images.doc.r61719
-	inlinedef.doc.r78931
+	inlinedef.doc.r79618
 	inlinegraphicx.doc.r79494
 	inlinelabel.doc.r63853
 	inputenx.doc.r79461
-	inputtrc.doc.r28019
+	inputtrc.doc.r79618
 	interactiveworkbook.doc.r15878
 	interfaces.doc.r21474
 	intopdf.doc.r77682
@@ -2402,12 +2402,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ipsum.doc.r75788
 	iso.doc.r15878
 	iso10303.doc.r15878
-	isodate.doc.r78101
+	isodate.doc.r79618
 	isodoc.doc.r75787
 	isonums.doc.r17362
 	isopt.doc.r45509
 	isorot.doc.r15878
-	isotope.doc.r23711
+	isotope.doc.r79618
 	issuulinks.doc.r25742
 	iwonamath.doc.r77682
 	jlabels.doc.r24858
@@ -2417,11 +2417,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	jslectureplanner.doc.r77682
 	jsonparse.doc.r79374
 	jumplines.doc.r37553
-	jvlisting.doc.r79461
+	jvlisting.doc.r79618
 	kalendarium.doc.r48744
 	kantlipsum.doc.r77682
-	kerntest.doc.r15878
-	keycommand.doc.r78101
+	kerntest.doc.r79618
+	keycommand.doc.r79618
 	keyfloat.doc.r77682
 	keyindex.doc.r50828
 	keyparse.doc.r76924
@@ -2432,14 +2432,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	kix.doc.r21606
 	knowledge.doc.r79392
 	koma-moderncvclassic.doc.r78632
-	koma-script-sfs.doc.r77050
+	koma-script-sfs.doc.r79618
 	komacv.doc.r57721
 	komacv-rg.doc.r49064
 	korigamik.doc.r71991
 	ktv-texdata.doc.r27369
-	l3backend-dev.doc.r79424
-	l3build.doc.r79575
-	l3kernel-dev.doc.r79424
+	l3backend-dev.doc.r79718
+	l3build.doc.r79721
+	l3kernel-dev.doc.r79718
 	labbook.doc.r15878
 	labels.doc.r15878
 	labels4easylist.doc.r51124
@@ -2463,14 +2463,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	layouts.doc.r79461
 	lazylist.doc.r17691
 	lccaps.doc.r46432
-	lcd.doc.r16549
-	lcg.doc.r77682
-	leading.doc.r77682
+	lcd.doc.r79618
+	lcg.doc.r79618
+	leading.doc.r79618
 	leaflet.doc.r77682
 	lebhart.doc.r78004
 	lectures.doc.r74632
 	lectureslides.doc.r62292
-	leftidx.doc.r77682
+	leftidx.doc.r79618
 	leftindex.doc.r77682
 	leipzig.doc.r52450
 	lengthconvert.doc.r76924
@@ -2479,15 +2479,15 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	lewis.doc.r15878
 	lhelp.doc.r76924
 	libgreek.doc.r75712
-	limap.doc.r79088
+	limap.doc.r79618
 	linegoal.doc.r79461
 	linop.doc.r41304
 	lipsum.doc.r77682
 	lisp-on-tex.doc.r73165
-	listing.doc.r79461
+	listing.doc.r79618
 	listingsutf8.doc.r79461
 	listlbls.doc.r77682
-	listliketab.doc.r77682
+	listliketab.doc.r79618
 	listofsymbols.doc.r16134
 	litetable.doc.r77682
 	lkproof.doc.r79461
@@ -2496,22 +2496,22 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	logbox.doc.r24499
 	logical-markup-utils.doc.r15878
 	logoetalab.doc.r73069
-	logpap.doc.r15878
+	logpap.doc.r79618
 	longfbox.doc.r79461
 	longfigure.doc.r34302
-	longnamefilelist.doc.r77682
+	longnamefilelist.doc.r79618
 	loops.doc.r30704
-	lsc.doc.r15878
+	lsc.doc.r79618
 	lscapeenhanced.doc.r79461
 	lstaddons.doc.r79461
 	lstfiracode.doc.r49503
 	lt3graph.doc.r76924
 	lt3rawobjects.doc.r76924
 	ltablex.doc.r77682
-	ltabptch.doc.r17533
-	ltxdockit.doc.r21869
+	ltabptch.doc.r79618
+	ltxdockit.doc.r79618
 	ltxguidex.doc.r50992
-	ltxkeys.doc.r28332
+	ltxkeys.doc.r79618
 	ltxnew.doc.r21586
 	ltxtools.doc.r24897
 	lua-check-hyphen.doc.r77682
@@ -2524,20 +2524,20 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	magicwatermark.doc.r76924
 	mailing.doc.r77241
 	mailmerge.doc.r15878
-	makebarcode.doc.r15878
+	makebarcode.doc.r79618
 	makebase.doc.r41012
-	makebox.doc.r77682
+	makebox.doc.r79618
 	makecell.doc.r78101
 	makecirc.doc.r15878
-	makecmds.doc.r79461
+	makecmds.doc.r79618
 	makecookbook.doc.r49311
 	makedtx.doc.r77871
 	makeglos.doc.r15878
 	makelabels.doc.r60255
 	makerobust.doc.r79461
 	mandi.doc.r76924
-	manfnt.doc.r77682
-	manuscript.doc.r36110
+	manfnt.doc.r79618
+	manuscript.doc.r79618
 	manyind.doc.r49874
 	marginfit.doc.r77682
 	marginfix.doc.r78931
@@ -2545,22 +2545,22 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	markdown.doc.r79410
 	mathalpha.doc.r77682
 	mathastext.doc.r77682
-	mathexam.doc.r15878
+	mathexam.doc.r79618
 	mathfam256.doc.r53519
 	mathfont.doc.r77682
-	mathgreeks.doc.r71248
-	maybemath.doc.r15878
-	mcaption.doc.r77682
+	mathgreeks.doc.r79759
+	maybemath.doc.r79618
+	mcaption.doc.r79618
 	mceinleger.doc.r79121
 	mcexam.doc.r60481
 	mcite.doc.r77682
-	mciteplus.doc.r77682
-	mdframed.doc.r77682
+	mciteplus.doc.r79618
+	mdframed.doc.r79618
 	media4svg.doc.r76924
 	media9.doc.r76924
 	medstarbeamer.doc.r38828
 	meetingmins.doc.r31878
-	memexsupp.doc.r15878
+	memexsupp.doc.r79618
 	memory.doc.r30452
 	mensa-tex.doc.r45997
 	menu.doc.r15878
@@ -2570,148 +2570,148 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	metanorma.doc.r79461
 	metastr.doc.r74751
 	method.doc.r17485
-	metre.doc.r18489
+	metre.doc.r79618
 	mfirstuc.doc.r77682
-	mftinc.doc.r78793
+	mftinc.doc.r79618
 	mi-solns.doc.r49651
-	midpage.doc.r79461
+	midpage.doc.r79618
 	mindflow.doc.r65236
 	minibox.doc.r77682
 	minidocument.doc.r43752
 	minifp.doc.r76924
 	minimalist.doc.r78004
-	minipage-marginpar.doc.r15878
+	minipage-marginpar.doc.r79618
 	minitoc.doc.r77682
 	minorrevision.doc.r32165
 	minutes.doc.r42186
 	mla-paper.doc.r54080
 	mleftright.doc.r79461
-	mlist.doc.r77682
+	mlist.doc.r79618
 	mmap.doc.r77682
 	mnotes.doc.r63406
-	moderncv.doc.r79474
+	moderncv.doc.r79618
 	modernposter.doc.r47269
 	moderntimeline.doc.r55518
-	modref.doc.r15878
-	modroman.doc.r79121
+	modref.doc.r79618
+	modroman.doc.r79618
 	modular.doc.r44142
 	moloch.doc.r77913
-	monofill.doc.r28140
+	monofill.doc.r79618
 	moodle.doc.r65672
 	moreenum.doc.r77682
 	morefloats.doc.r77682
-	morehype.doc.r38815
-	moresize.doc.r78101
-	moreverb.doc.r79461
+	morehype.doc.r79618
+	moresize.doc.r79618
+	moreverb.doc.r79618
 	morewrites.doc.r77682
 	movement-arrows.doc.r67270
 	movie15.doc.r26473
 	mparhack.doc.r77682
 	mpostinl.doc.r77187
 	msc.doc.r67718
-	msg.doc.r49578
+	msg.doc.r79618
 	mslapa.doc.r76790
-	mtgreek.doc.r17967
+	mtgreek.doc.r79618
 	multenum.doc.r77682
 	multiaudience.doc.r77682
-	multibbl.doc.r15878
-	multicap.doc.r15878
+	multibbl.doc.r79618
+	multicap.doc.r79618
 	multicolrule.doc.r78101
 	multidef.doc.r40637
-	multienv.doc.r64967
+	multienv.doc.r79618
 	multiexpand.doc.r77682
 	multifootnote.doc.r70745
 	multilang.doc.r77682
 	multiple-choice.doc.r63722
 	multirow.doc.r77682
-	multitoc.doc.r77682
+	multitoc.doc.r79618
 	mversion.doc.r29370
 	mwe.doc.r77682
 	mycv.doc.r26807
-	mylatex.doc.r77050
+	mylatex.doc.r79618
 	mylatexformat.doc.r21392
-	nag.doc.r77682
+	nag.doc.r79618
 	nameauth.doc.r76172
-	namespc.doc.r15878
+	namespc.doc.r79618
 	ncclatex.doc.r15878
 	ncctools.doc.r51810
 	needspace.doc.r77682
-	newcommand.doc.r18704
+	newcommand.doc.r79618
 	newenviron.doc.r29331
-	newfile.doc.r79461
+	newfile.doc.r79618
 	newlfm.doc.r15878
-	newspaper.doc.r15878
+	newspaper.doc.r79618
 	newunicodechar.doc.r77682
-	newvbtm.doc.r23996
+	newvbtm.doc.r79618
 	newverbs.doc.r77682
 	nfssext-cfr.doc.r79461
 	nicefilelist.doc.r77682
-	niceframe.doc.r77682
-	nicetext.doc.r38914
+	niceframe.doc.r79618
+	nicetext.doc.r79618
 	nidanfloat.doc.r77682
 	ninecolors.doc.r76924
 	nlctdoc.doc.r79421
 	noconflict.doc.r30140
 	nodepthtext.doc.r73069
 	noindentafter.doc.r59195
-	noitcrul.doc.r77682
+	noitcrul.doc.r79618
 	nolbreaks.doc.r77682
-	nomencl.doc.r77682
-	nomentbl.doc.r16549
+	nomencl.doc.r79618
+	nomentbl.doc.r79618
 	non-decimal-units.doc.r76924
 	nonfloat.doc.r77682
 	nonumonpart.doc.r77682
 	nopageno.doc.r77682
 	normalcolor.doc.r77682
 	notebeamer.doc.r77682
-	notes.doc.r42428
+	notes.doc.r79618
 	notespages.doc.r76790
 	notestex.doc.r45396
 	notoccite.doc.r77682
 	nowidow.doc.r77682
 	nox.doc.r30991
-	ntheorem.doc.r77682
+	ntheorem.doc.r79618
 	numberedblock.doc.r33109
-	numname.doc.r18130
-	numprint.doc.r77682
+	numname.doc.r79618
+	numprint.doc.r79618
 	numspell.doc.r77682
 	ocg-p.doc.r28803
 	ocgx.doc.r54512
 	ocgx2.doc.r78793
 	ocr-latex.doc.r15878
 	octavo.doc.r15878
-	oldstyle.doc.r79461
-	onlyamsmath.doc.r42927
-	opcit.doc.r15878
+	oldstyle.doc.r79618
+	onlyamsmath.doc.r79618
+	opcit.doc.r79618
 	opencolor.doc.r78822
-	optidef.doc.r50941
+	optidef.doc.r79618
 	optional.doc.r77682
 	options.doc.r39030
 	orcidlink.doc.r78657
 	orientation.doc.r57390
-	outline.doc.r18360
+	outline.doc.r79618
 	outliner.doc.r21095
-	outlines.doc.r77682
+	outlines.doc.r79618
 	outlining.doc.r45601
 	overlays.doc.r57866
 	overpic.doc.r77682
 	padcount.doc.r47621
 	pagecolor.doc.r77682
-	pagecont.doc.r15878
+	pagecont.doc.r79618
 	pagegrid.doc.r77682
 	pagelayout.doc.r71937
 	pagenote.doc.r79461
-	pagerange.doc.r16915
+	pagerange.doc.r79618
 	pageslts.doc.r76054
 	palette.doc.r60119
 	pangram.doc.r76924
 	paper.doc.r79461
 	papercdcase.doc.r15878
 	papermas.doc.r78632
-	papertex.doc.r75878
-	paracol.doc.r77682
+	papertex.doc.r79618
+	paracol.doc.r79618
 	parades.doc.r40042
-	paralist.doc.r77682
+	paralist.doc.r79618
 	paresse.doc.r76924
 	parnotes.doc.r77682
 	parsa.doc.r54840
@@ -2720,36 +2720,36 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pas-cv.doc.r32263
 	pas-tableur.doc.r78983
 	passopt.doc.r76924
-	patchcmd.doc.r78101
-	pauldoc.doc.r16005
+	patchcmd.doc.r79618
+	pauldoc.doc.r79618
 	pawpict.doc.r21629
-	pbalance.doc.r67201
+	pbalance.doc.r79618
 	pbox.doc.r77682
-	pbsheet.doc.r24830
+	pbsheet.doc.r79618
 	pdf14.doc.r76924
 	pdfannotations.doc.r68958
-	pdfcol.doc.r79461
+	pdfcol.doc.r79618
 	pdfcolmk.doc.r79461
 	pdfcomment.doc.r79390
-	pdfcprot.doc.r18735
+	pdfcprot.doc.r79618
 	pdfmarginpar.doc.r77682
 	pdfoverlay.doc.r77682
 	pdfpagediff.doc.r37946
 	pdfpc.doc.r78281
-	pdfpc-movie.doc.r67201
+	pdfpc-movie.doc.r79618
 	pdfprivacy.doc.r79126
 	pdfrender.doc.r79461
-	pdfreview.doc.r50100
+	pdfreview.doc.r79618
 	pdfscreen.doc.r42428
 	pdfslide.doc.r15878
-	pdfsync.doc.r20373
+	pdfsync.doc.r79618
 	pdfwin.doc.r68667
-	pdfx.doc.r77682
+	pdfx.doc.r79618
 	pecha.doc.r15878
-	perltex.doc.r73044
+	perltex.doc.r79618
 	permute.doc.r15878
 	petiteannonce.doc.r25915
-	pgfmath-xfp.doc.r76924
+	pgfmath-xfp.doc.r79618
 	phfcc.doc.r60731
 	phfextendedabstract.doc.r60732
 	phffullpagefigure.doc.r41857
@@ -2761,24 +2761,24 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	phfthm.doc.r60735
 	philex.doc.r36396
 	phonenumbers.doc.r79484
-	photo.doc.r18739
+	photo.doc.r79618
 	photobook.doc.r71843
 	picture.doc.r79461
 	piff.doc.r79461
 	pkgloader.doc.r76924
 	placeins.doc.r77682
 	plantslabels.doc.r29803
-	plates.doc.r15878
+	plates.doc.r79618
 	plweb.doc.r79121
 	pmboxdraw.doc.r79461
 	polynom.doc.r77682
-	polynomial.doc.r15878
+	polynomial.doc.r79618
 	polytable.doc.r77682
 	postcards.doc.r75878
-	poster-mac.doc.r18305
+	poster-mac.doc.r79618
 	postnotes.doc.r77682
 	powerdot.doc.r77682
-	ppr-prv.doc.r15878
+	ppr-prv.doc.r79618
 	ppt-slides.doc.r79345
 	practicalreports.doc.r52312
 	precattl.doc.r76924
@@ -2789,54 +2789,54 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	prettytok.doc.r76924
 	preview.doc.r71662
 	printlen.doc.r79461
-	probsoln.doc.r44783
+	probsoln.doc.r79618
 	profmaquette.doc.r77282
-	program.doc.r44214
-	progress.doc.r19519
-	progressbar.doc.r33822
+	program.doc.r79618
+	progress.doc.r79618
+	progressbar.doc.r79618
 	projlib.doc.r78004
 	proofread.doc.r61719
 	properties.doc.r15878
-	prosper.doc.r77682
-	protex.doc.r41633
+	prosper.doc.r79618
+	protex.doc.r79618
 	protocol.doc.r25562
-	psfragx.doc.r26243
+	psfragx.doc.r79618
 	pstool.doc.r46393
-	pstring.doc.r42857
-	pxgreeks.doc.r21838
+	pstring.doc.r79618
+	pxgreeks.doc.r79618
 	pygmentex.doc.r78632
 	pynotebook.doc.r78767
 	python.doc.r60162
 	pythonimmediate.doc.r76924
 	q-and-a.doc.r76924
-	qcm.doc.r63833
-	qstest.doc.r73069
+	qcm.doc.r79618
+	qstest.doc.r79618
 	qsymbols.doc.r15878
 	quicktype.doc.r42183
 	quiz2socrative.doc.r52276
 	quotchap.doc.r77682
 	quoting.doc.r77682
-	quotmark.doc.r15878
+	quotmark.doc.r79618
 	ran_toks.doc.r59515
 	randexam.doc.r71883
 	randintlist.doc.r78007
 	randtext.doc.r15878
 	rccol.doc.r77682
-	rcs-multi.doc.r64967
-	rcsinfo.doc.r15878
+	rcs-multi.doc.r79618
+	rcsinfo.doc.r79618
 	readablecv.doc.r76790
 	readarray.doc.r60540
 	realboxes.doc.r77682
 	recipe.doc.r54080
 	recipebook.doc.r75878
-	recipecard.doc.r15878
+	recipecard.doc.r79618
 	rectopma.doc.r70885
 	refcheck.doc.r77682
 	refenums.doc.r44131
 	reflectgraphics.doc.r40612
-	refman.doc.r15878
-	refstyle.doc.r77682
-	regcount.doc.r19979
+	refman.doc.r79618
+	refstyle.doc.r79618
+	regcount.doc.r79618
 	regexpatch.doc.r77682
 	register.doc.r54485
 	regstats.doc.r78101
@@ -2853,30 +2853,30 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	rlepsf.doc.r19082
 	rmpage.doc.r54080
 	robust-externalize.doc.r76924
-	robustcommand.doc.r15878
+	robustcommand.doc.r79618
 	robustindex.doc.r49877
 	romanbar.doc.r77682
 	romanbarpagenumber.doc.r36236
 	romanneg.doc.r20087
-	romannum.doc.r79461
-	rorlink.doc.r76790
-	rotfloat.doc.r77682
-	rotpages.doc.r77682
+	romannum.doc.r79618
+	rorlink.doc.r79618
+	rotfloat.doc.r79618
+	rotpages.doc.r79618
 	roundbox.doc.r29675
 	rterface.doc.r30084
-	rtkinenc.doc.r76790
+	rtkinenc.doc.r79618
 	rulerbox.doc.r50984
 	rulercompass.doc.r32392
 	runcode.doc.r79364
-	rvwrite.doc.r19614
+	rvwrite.doc.r79618
 	sanitize-umlaut.doc.r77720
-	sauerj.doc.r15878
+	sauerj.doc.r79618
 	saveenv.doc.r76924
 	savefnmark.doc.r15878
 	savetrees.doc.r77682
 	scale.doc.r15878
-	scalebar.doc.r15878
-	scalerel.doc.r77682
+	scalebar.doc.r79618
+	scalerel.doc.r79618
 	scaletextbullet.doc.r77949
 	scanpages.doc.r42633
 	schedule.doc.r51805
@@ -2889,37 +2889,37 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	scrwfile.doc.r77682
 	sdaps.doc.r76924
 	sdrt.doc.r15878
-	secdot.doc.r79461
+	secdot.doc.r79618
 	secnum.doc.r76924
 	sectionbox.doc.r37749
 	sectionbreak.doc.r77682
-	sectsty.doc.r77682
+	sectsty.doc.r79618
 	seealso.doc.r76924
 	selectp.doc.r77682
 	selinput.doc.r79461
 	semantex.doc.r76924
-	semantic.doc.r15878
+	semantic.doc.r79618
 	semantic-markup.doc.r53607
 	semesterplanner.doc.r56841
-	semioneside.doc.r15878
+	semioneside.doc.r79618
 	semproc.doc.r37568
 	semtex.doc.r76924
 	sepfootnotes.doc.r77682
-	seqsplit.doc.r77682
+	seqsplit.doc.r79618
 	sesstime.doc.r78482
 	setspaceenhanced.doc.r79461
 	sf298.doc.r41653
-	sffms.doc.r15878
-	shadethm.doc.r77682
-	shadow.doc.r77682
-	shadowtext.doc.r78101
+	sffms.doc.r79618
+	shadethm.doc.r79618
+	shadow.doc.r79618
+	shadowtext.doc.r79618
 	shapepar.doc.r77682
 	shdoc.doc.r41991
 	shipunov.doc.r52334
-	shorttoc.doc.r77682
-	show2e.doc.r78101
+	shorttoc.doc.r79618
+	show2e.doc.r79618
 	showcharinbox.doc.r29803
-	showdim.doc.r78101
+	showdim.doc.r79618
 	showexpl.doc.r77682
 	showlabels.doc.r77682
 	sidecap.doc.r77682
@@ -2929,18 +2929,18 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	sillypage.doc.r77682
 	sim-os-menus.doc.r75975
 	simplecd.doc.r79461
-	simplecv.doc.r35537
+	simplecv.doc.r79618
 	simpleinvoice.doc.r45673
 	simplivre.doc.r78004
 	sitem.doc.r22136
-	skb.doc.r22781
+	skb.doc.r79618
 	skdoc.doc.r79121
 	skeldoc.doc.r76924
 	skeycommand.doc.r24652
 	skeyval.doc.r30560
 	skills.doc.r56734
 	skrapport.doc.r79121
-	slantsc.doc.r77682
+	slantsc.doc.r79618
 	smalltableof.doc.r20333
 	smart-eqn.doc.r76924
 	smartref.doc.r77682
@@ -2948,26 +2948,26 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	snapshot.doc.r77682
 	snaptodo.doc.r70676
 	snotez.doc.r79461
-	soulpos.doc.r77682
+	soulpos.doc.r79618
 	spacingtricks.doc.r69048
 	spark-otf.doc.r77682
 	sparklines.doc.r42821
 	spelatex.doc.r78647
 	sphack.doc.r20842
-	splitindex.doc.r77682
+	splitindex.doc.r79618
 	spot.doc.r22408
 	spotcolor.doc.r15878
 	spreadtab.doc.r77682
-	spverbatim.doc.r77682
+	spverbatim.doc.r79618
 	srbook-mem.doc.r45818
-	srcltx.doc.r15878
+	srcltx.doc.r79618
 	sseq.doc.r31585
 	sslides.doc.r32293
 	stackengine.doc.r75878
 	standalone.doc.r77682
 	standardsectioning.doc.r76431
 	starray.doc.r79594
-	stdclsdv.doc.r79461
+	stdclsdv.doc.r79618
 	stdpage.doc.r79121
 	stealcaps.doc.r64967
 	stex.doc.r79507
@@ -2979,29 +2979,29 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	stubs.doc.r75437
 	studenthandouts.doc.r43516
 	styledcmd.doc.r76924
-	subdepth.doc.r77682
-	subdocs.doc.r51480
+	subdepth.doc.r79618
+	subdocs.doc.r79618
 	subeqn.doc.r77682
 	subeqnarray.doc.r77682
-	subfigmat.doc.r20308
-	subfigure.doc.r15878
+	subfigmat.doc.r79618
+	subfigure.doc.r79618
 	subfiles.doc.r77682
-	subfloat.doc.r77682
+	subfloat.doc.r79618
 	substr.doc.r77682
 	supertabular.doc.r77682
 	suppose.doc.r59281
 	svg.doc.r77682
 	svgcolor.doc.r15878
 	svn.doc.r15878
-	svn-multi.doc.r64967
-	svn-prov.doc.r77682
+	svn-multi.doc.r79618
+	svn-prov.doc.r79618
 	svninfo.doc.r62157
 	swfigure.doc.r63255
 	swungdash.doc.r76924
 	syntax.doc.r15878
 	synthslant.doc.r76662
-	syntrace.doc.r15878
-	synttree.doc.r16252
+	syntrace.doc.r79618
+	synttree.doc.r79618
 	tabbing.doc.r78931
 	tabfigures.doc.r25202
 	tableaux.doc.r42413
@@ -3014,47 +3014,47 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tabto-ltx.doc.r78101
 	tabu.doc.r77682
 	tabularborder.doc.r17885
-	tabularcalc.doc.r77682
+	tabularcalc.doc.r79618
 	tabularew.doc.r15878
 	tabularray.doc.r78251
 	tabulary.doc.r77682
 	tagging.doc.r77682
 	tagpair.doc.r42138
-	talk.doc.r76392
-	tamefloats.doc.r27345
+	talk.doc.r79618
+	tamefloats.doc.r79618
 	tangocolors.doc.r66733
 	tasks.doc.r77682
 	tblr-extras.doc.r76924
-	tcldoc.doc.r22018
+	tcldoc.doc.r79618
 	tcolorbox.doc.r79191
 	tdclock.doc.r33043
-	technics.doc.r29349
-	ted.doc.r76924
+	technics.doc.r79618
+	ted.doc.r79618
 	telprint.doc.r79461
 	templatetools.doc.r67201
 	termcal.doc.r76924
-	termlist.doc.r18923
+	termlist.doc.r79618
 	termsim.doc.r76924
 	testhyphens.doc.r79522
 	testidx.doc.r60966
 	tex-label.doc.r16372
 	tex-locale.doc.r77682
-	texmate.doc.r78101
-	texments.doc.r15878
-	texpower.doc.r29349
+	texmate.doc.r79618
+	texments.doc.r79618
+	texpower.doc.r79618
 	texshade.doc.r76586
-	texsurgery.doc.r59885
+	texsurgery.doc.r79618
 	textcsc.doc.r78632
 	textfit.doc.r20591
 	textmerg.doc.r79461
 	textpos.doc.r77682
-	textualicomma.doc.r76924
+	textualicomma.doc.r79618
 	texvc.doc.r76874
-	theoremref.doc.r79461
+	theoremref.doc.r79618
 	thinsp.doc.r39669
 	threadcol.doc.r28754
 	threeparttable.doc.r77682
-	threeparttablex.doc.r77682
+	threeparttablex.doc.r79618
 	thumb.doc.r16549
 	thumbs.doc.r77682
 	thumby.doc.r16736
@@ -3062,10 +3062,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	timeop.doc.r75112
 	tipauni.doc.r78793
 	titlecaps.doc.r77682
-	titlepic.doc.r43497
+	titlepic.doc.r79618
 	titleref.doc.r79461
 	titlesec.doc.r77682
-	titling.doc.r79461
+	titling.doc.r79618
 	to-be-determined.doc.r72527
 	tocbibind.doc.r79461
 	tocdata.doc.r77682
@@ -3074,39 +3074,39 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	todo.doc.r17746
 	todonotes.doc.r77682
 	tokcycle.doc.r74841
-	tokenizer.doc.r15878
-	toolbox.doc.r32260
+	tokenizer.doc.r79618
+	toolbox.doc.r79618
 	topfloat.doc.r19084
 	topiclongtable.doc.r76924
 	totalcount.doc.r77682
-	totcount.doc.r77682
-	totpages.doc.r77682
+	totcount.doc.r79618
+	totpages.doc.r79618
 	tramlines.doc.r71842
 	translations.doc.r77682
 	transparent.doc.r79461
 	treesvr.doc.r71382
 	trfsigns.doc.r79461
 	trimspaces.doc.r77682
-	trivfloat.doc.r77682
+	trivfloat.doc.r79618
 	trsym.doc.r18732
 	truncate.doc.r77682
 	tucv.doc.r20680
 	turnthepage.doc.r77682
 	tutodoc.doc.r76924
 	twoinone.doc.r17024
-	twoup.doc.r15878
-	txgreeks.doc.r21839
-	type1cm.doc.r78101
+	twoup.doc.r79618
+	txgreeks.doc.r79618
+	type1cm.doc.r79618
 	typed-checklist.doc.r77682
 	typeface.doc.r27046
 	typoaid.doc.r44238
 	typog.doc.r76661
-	typogrid.doc.r24994
+	typogrid.doc.r79618
 	uassign.doc.r38459
 	ucs.doc.r78101
 	uebungsblatt.doc.r15878
-	umoline.doc.r19085
-	underlin.doc.r15878
+	umoline.doc.r79618
+	underlin.doc.r79618
 	underoverlap.doc.r77682
 	undolabl.doc.r77682
 	uni-titlepage.doc.r76033
@@ -3115,81 +3115,81 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	unifront.doc.r67054
 	unisc.doc.r78632
 	unitconv.doc.r76924
-	units.doc.r42428
+	units.doc.r79618
 	unravel.doc.r77682
 	updatemarks.doc.r76924
 	upmethodology.doc.r78632
 	upquote.doc.r77682
 	uri.doc.r77682
 	useclass.doc.r76924
-	ushort.doc.r32261
+	ushort.doc.r79618
 	uspace.doc.r63123
 	utf8add.doc.r61074
 	uwmslide.doc.r27354
 	variablelm.doc.r60014
-	varindex.doc.r32262
+	varindex.doc.r79618
 	varsfromjobname.doc.r76924
-	varwidth.doc.r77682
+	varwidth.doc.r79618
 	vcell.doc.r77682
 	vdmlisting.doc.r56905
 	verbasef.doc.r21922
-	verbatimbox.doc.r77682
-	verbatimcopy.doc.r15878
-	verbdef.doc.r79461
+	verbatimbox.doc.r79618
+	verbatimcopy.doc.r79618
+	verbdef.doc.r79618
 	verbments.doc.r23670
 	verifiche.doc.r78906
 	verifycommand.doc.r79461
 	version.doc.r77682
-	versions.doc.r21921
+	versions.doc.r79618
 	versonotes.doc.r77682
 	vertbars.doc.r79461
 	vgrid.doc.r32457
 	vhistory.doc.r61719
-	vmargin.doc.r15878
+	vmargin.doc.r79618
 	volumes.doc.r75878
-	vpe.doc.r26039
+	vpe.doc.r79618
 	vruler.doc.r78101
 	vtable.doc.r51126
 	vwcol.doc.r77682
-	wallcalendar.doc.r78383
+	wallcalendar.doc.r79618
 	wallpaper.doc.r77682
 	warning.doc.r73265
-	warpcol.doc.r77682
+	warpcol.doc.r79618
 	was.doc.r64691
 	webquiz.doc.r58808
 	whatsnote.doc.r76836
 	widetable.doc.r77682
 	widows-and-orphans.doc.r77682
-	williams.doc.r15878
+	williams.doc.r79618
 	willowtreebook.doc.r60638
 	withargs.doc.r76924
-	wordcount.doc.r46165
+	wordcount.doc.r79618
 	wordlike.doc.r15878
 	worksheet.doc.r76924
 	wrapfig.doc.r77682
 	wrapfig2.doc.r77682
 	wrapstuff.doc.r78931
 	writeongrid.doc.r77353
-	wtref.doc.r69214
-	xargs.doc.r77682
+	wtref.doc.r79618
+	xargs.doc.r79618
 	xassoccnt.doc.r61112
 	xbmks.doc.r53448
 	xcntperchap.doc.r54080
 	xcolor-material.doc.r42289
 	xcolor-solarized.doc.r61719
 	xcomment.doc.r77682
-	xcookybooky.doc.r36435
+	xcookybooky.doc.r79618
 	xcpdftips.doc.r50449
-	xdoc.doc.r15878
+	xdoc.doc.r79618
 	xellipsis.doc.r47546
 	xfakebold.doc.r77682
-	xfor.doc.r77682
+	xfor.doc.r79618
 	xhfill.doc.r77682
 	xifthen.doc.r77682
 	ximera.doc.r71243
 	xint.doc.r76255
 	xint-regression.doc.r77909
-	xkcdcolors.doc.r67895
+	xkcdcolors.doc.r79618
 	xkeymask.doc.r69223
 	xltabular.doc.r77682
 	xmpincl.doc.r60593
@@ -3203,26 +3203,26 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xsavebox.doc.r77682
 	xsim.doc.r76924
 	xstring.doc.r77682
-	xtab.doc.r79461
+	xtab.doc.r79618
 	xurl.doc.r77682
 	xwatermark.doc.r61719
 	xytree.doc.r15878
-	yafoot.doc.r48568
-	yagusylo.doc.r29803
+	yafoot.doc.r79618
+	yagusylo.doc.r79618
 	yaletter.doc.r42830
 	ycbook.doc.r46201
 	ydoc.doc.r64887
-	yplan.doc.r34398
+	yplan.doc.r79618
 	zed-csp.doc.r17258
 	zennote.doc.r76924
-	ziffer.doc.r32279
+	ziffer.doc.r79618
 	zref.doc.r79461
 	zref-check.doc.r78101
 	zref-clever.doc.r77682
 	zref-vario.doc.r77682
-	zugferd.doc.r79162
-	zwgetfdate.doc.r15878
-	zwpagelayout.doc.r63074
+	zugferd.doc.r79761
+	zwgetfdate.doc.r79618
+	zwpagelayout.doc.r79618
 	afperpack.doc.r77050
 	aliascnt.doc.r79461
 	beamer-reveal.doc.r78638
@@ -3234,8 +3234,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	beamertheme-durham.doc.r78101
 	beamertheme-geode.doc.r79040
 	beamertheme-spectrum.doc.r77770
-	beamertheme-westlake.doc.r78290
-	booktabstabular.doc.r79500
+	beamertheme-westlake.doc.r79618
+	booktabstabular.doc.r79618
 	boustrophedon.doc.r79090
 	cistercian.doc.r77682
 	clawxiv.doc.r78742
@@ -3290,16 +3290,16 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	spotxcolor.doc.r78546
 	styleitems.doc.r78427
 	switch.doc.r77050
-	tablericons.doc.r78730
+	tablericons.doc.r79604
 	tabular2.doc.r78431
 	tabularht.doc.r79461
 	terminalcode.doc.r76729
 	tokglobalstack.doc.r77947
 	tokgroupmark.doc.r77946
 	traffic-light-protocol.doc.r76924
-	ullrcorners.doc.r75278
+	ullrcorners.doc.r79618
 	user-persona.doc.r78798
-	vscodeicons.doc.r76927
+	vscodeicons.doc.r79603
 	xmeaning.doc.r77128
 	xpeekahead.doc.r77050
 	xsipa.doc.r76924
@@ -3312,30 +3312,30 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 # Removed in target tlpdb: isosafety.doc, litebook.doc, litesolution.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	abspos.source.r76924
-	abstract.source.r79461
+	abstract.source.r79618
 	accessibility.source.r55777
 	accsupp.source.r79461
 	achemso.source.r79461
 	acronym.source.r78101
 	acroterm.source.r61719
-	actuarialangle.source.r67201
-	actuarialsymbol.source.r67201
+	actuarialangle.source.r79618
+	actuarialsymbol.source.r79618
 	addlines.source.r77682
 	adjmulticol.source.r77682
 	adjustbox.source.r78101
 	adrconv.source.r76790
 	alertmessage.source.r76924
-	alnumsec.source.r77682
+	alnumsec.source.r79618
 	alphalph.source.r79461
 	altfont.source.r15878
 	altsubsup.source.r62738
 	amsaddr.source.r77682
 	anima.source.r79461
 	animate.source.r72548
-	answers.source.r77682
+	answers.source.r79618
 	appendix.source.r79461
 	apptools.source.r77682
-	arcs.source.r79461
+	arcs.source.r79618
 	arraycols.source.r71168
 	arraysort.source.r31576
 	arydshln.source.r77682
@@ -3348,18 +3348,18 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	autopdf.source.r32377
 	avremu.source.r71991
 	axessibility.source.r77682
-	background.source.r79461
+	background.source.r79618
 	basicarith.source.r35460
 	beamerappendixnote.source.r55732
 	beamercolorthemeowl.source.r40105
-	beamersubframe.source.r23510
+	beamersubframe.source.r79618
 	beamertheme-cuerna.source.r42161
 	beamertheme-gotham.source.r78692
 	beamertheme-metropolis.source.r78281
 	beamertheme-saintpetersburg.source.r45877
-	beamertheme-trigon.source.r65985
+	beamertheme-trigon.source.r79618
 	bearwear.source.r54826
-	beton.source.r77682
+	beton.source.r79618
 	bewerbung.source.r61632
 	bez123.source.r79461
 	bigfoot.source.r77682
@@ -3371,44 +3371,44 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	boites.source.r79461
 	bookcover.source.r77334
 	booklet.source.r79461
-	boolexpr.source.r17830
-	bophook.source.r17062
+	boolexpr.source.r79618
+	bophook.source.r79618
 	boxedminipage.source.r77682
 	boxhandler.source.r76790
-	breakurl.source.r77682
+	breakurl.source.r79618
 	bubblesort.source.r56070
 	bullcntr.source.r15878
 	calcage.source.r27725
 	calculator.source.r77682
 	cals.source.r43003
 	canoniclayout.source.r64889
-	capt-of.source.r79461
-	captcont.source.r77682
+	capt-of.source.r79618
+	captcont.source.r79618
 	catchfile.source.r79461
 	catchfilebetweentags.source.r21476
 	catechis.source.r59998
 	catppuccinpalette.source.r79252
 	ccaption.source.r79461
-	cclicenses.source.r15878
+	cclicenses.source.r79618
 	cd.source.r34452
 	cd-cover.source.r17121
 	cdcmd.source.r76924
-	cdpbundl.source.r61719
-	cellprops.source.r76924
+	cdpbundl.source.r79618
+	cellprops.source.r79618
 	centerlastline.source.r56644
-	changebar.source.r77682
+	changebar.source.r79719
 	changepage.source.r79461
-	changes.source.r77682
-	chappg.source.r79461
-	chapterfolder.source.r15878
+	changes.source.r79618
+	chappg.source.r79618
+	chapterfolder.source.r79618
 	cheatsheet.source.r45069
 	chextras.source.r27118
 	childdoc.source.r74758
-	chletter.source.r20060
+	chletter.source.r79618
 	circ.source.r62977
 	classpack.source.r55218
 	clefval.source.r79121
-	cleveref.source.r77682
+	cleveref.source.r79618
 	cleveref-usedon.source.r70491
 	clicks.source.r73208
 	clistmap.source.r76924
@@ -3420,17 +3420,17 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	collcell.source.r77682
 	collectbox.source.r77682
 	colophon.source.r77682
-	color-edits.source.r56707
+	color-edits.source.r79607
 	colordoc.source.r18270
 	colorwav.source.r67012
 	colorweb.source.r31490
 	combine.source.r79461
-	commado.source.r38875
+	commado.source.r79618
 	commedit.source.r50116
 	competences.source.r47573
-	constants.source.r15878
+	constants.source.r79618
 	continue.source.r79461
-	contour.source.r77682
+	contour.source.r79618
 	contracard.source.r79287
 	conv-xkv.source.r43558
 	cooking.source.r15878
@@ -3439,36 +3439,36 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	coollist.source.r67048
 	coolstr.source.r67015
 	coolthms.source.r29062
-	cooltooltips.source.r60201
+	cooltooltips.source.r79618
 	coop-writing.source.r76924
-	coordsys.source.r15878
+	coordsys.source.r79618
 	copyedit.source.r37928
-	count1to.source.r71526
+	count1to.source.r79618
 	counterz.source.r67335
 	counttexruns.source.r27576
 	coverpage.source.r63509
 	cprotect.source.r78728
-	crossreference.source.r15878
+	crossreference.source.r79618
 	crumbs.source.r64602
 	csvmerge.source.r51857
-	cuisine.source.r34453
+	cuisine.source.r79618
 	currency.source.r48990
 	currfile.source.r77682
-	currvita.source.r15878
+	currvita.source.r79618
 	cutwin.source.r77682
 	cyber.source.r46776
 	cybercic.source.r37659
 	darkmode.source.r76924
 	dashbox.source.r77682
-	dashrule.source.r77682
+	dashrule.source.r79618
 	dashundergaps.source.r77682
 	datatool.source.r77021
 	datax.source.r61772
-	dateiliste.source.r27974
+	dateiliste.source.r79618
 	datenumber.source.r78101
 	datestamp.source.r61719
 	datetime.source.r36650
-	datetime2.source.r77682
+	datetime2.source.r79618
 	datetime2-bahasai.source.r46287
 	datetime2-basque.source.r47064
 	datetime2-breton.source.r52647
@@ -3517,29 +3517,29 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	decimalcomma.source.r69251
 	decorule.source.r77682
 	defoldfonts.source.r76435
-	delimtxt.source.r16549
+	delimtxt.source.r79618
 	denisbdoc.source.r77982
 	diagbox.source.r77682
-	dialogl.source.r28946
+	dialogl.source.r79618
 	didactic.source.r70901
 	dimnum.source.r58774
-	dinbrief.source.r79121
+	dinbrief.source.r79618
 	dirtytalk.source.r20520
 	dnaseq.source.r17194
 	doclicense.source.r77682
-	docmfp.source.r79461
+	docmfp.source.r79618
 	docmute.source.r78101
-	docshots.source.r69676
+	docshots.source.r79688
 	doctools.source.r34474
 	documentation.source.r34521
 	doibanner.source.r71919
-	dotarrow.source.r15878
+	dotarrow.source.r79618
 	dotseqn.source.r77682
 	download.source.r79121
-	dox.source.r46011
-	dprogress.source.r15878
-	drac.source.r15878
-	draftcopy.source.r15878
+	dox.source.r79618
+	dprogress.source.r79618
+	drac.source.r79618
+	draftcopy.source.r79618
 	draftwatermark.source.r77682
 	dtxdescribe.source.r79394
 	ducksay.source.r76911
@@ -3548,18 +3548,18 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	easybook.source.r76924
 	easyfig.source.r77682
 	easyfloats.source.r72699
-	easyreview.source.r38352
-	ebezier.source.r76924
+	easyreview.source.r79618
+	ebezier.source.r79618
 	ecclesiastic.source.r38172
 	econlipsum.source.r77682
 	ecv.source.r24928
 	ed.source.r25231
-	edmargin.source.r27599
-	eemeir.source.r15878
+	edmargin.source.r79618
+	eemeir.source.r79618
 	efbox.source.r77682
 	egplot.source.r20617
 	ellipsis.source.r77682
-	elmath.source.r15878
+	elmath.source.r79618
 	elocalloc.source.r78931
 	elzcards.source.r51894
 	emarks.source.r24504
@@ -3568,21 +3568,21 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	emo.source.r77682
 	emptypage.source.r78101
 	endfloat.source.r77682
-	endheads.source.r73959
+	endheads.source.r79618
 	endnotes-hy.source.r54758
-	engpron.source.r16558
-	engrec.source.r15878
+	engpron.source.r79618
+	engrec.source.r79618
 	ensps-colorscheme.source.r71431
 	enumext.source.r79230
 	enumitem-zref.source.r75712
 	enverb.source.r76924
-	environ.source.r77682
+	environ.source.r79618
 	envlab.source.r61937
 	epcqrcode.source.r76924
 	epigraph.source.r79461
-	epiolmec.source.r15878
+	epiolmec.source.r79618
 	eq-pin2corr.source.r59477
-	eqlist.source.r77682
+	eqlist.source.r79618
 	eqnalign.source.r43278
 	eqparbox.source.r77682
 	errata.source.r42428
@@ -3590,11 +3590,11 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	esdiff.source.r78348
 	esieecv.source.r59638
 	esint.source.r77682
-	etaremune.source.r77682
-	etextools.source.r20694
-	etl.source.r76924
+	etaremune.source.r79618
+	etextools.source.r79618
+	etl.source.r79618
 	etoc.source.r78908
-	eukdate.source.r15878
+	eukdate.source.r79618
 	everyhook.source.r35675
 	everypage.source.r77682
 	exam-n.source.r64674
@@ -3604,14 +3604,14 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	exercises.source.r55188
 	exesheet.source.r75102
 	exframe.source.r78482
-	exp-testopt.source.r15878
-	expdlist.source.r76924
-	export.source.r27206
+	exp-testopt.source.r79618
+	expdlist.source.r79618
+	export.source.r79618
 	exsol.source.r73982
 	extract.source.r52117
-	facsimile.source.r21328
+	facsimile.source.r79618
 	factura.source.r61697
-	fail-fast.source.r67543
+	fail-fast.source.r79671
 	familytree.source.r63739
 	fancylabel.source.r46736
 	fancynum.source.r15878
@@ -3621,22 +3621,22 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	fcolumn.source.r79461
 	fetchcls.source.r45245
 	fewerfloatpages.source.r77682
-	ffcode.source.r79167
+	ffcode.source.r79645
 	fgruler.source.r77333
-	fifo-stack.source.r33288
+	fifo-stack.source.r79618
 	filecontents.source.r77682
 	filecontentsdef.source.r77682
-	filedate.source.r29529
-	fileinfo.source.r28421
+	filedate.source.r79618
+	fileinfo.source.r79618
 	fillwith.source.r76924
-	fink.source.r24329
-	finstrut.source.r21719
+	fink.source.r79618
+	finstrut.source.r79618
 	fistrum.source.r76924
 	fithesis.source.r76028
 	fixcmex.source.r78632
 	fixme.source.r77682
 	fixmetodonotes.source.r30168
-	flabels.source.r17272
+	flabels.source.r79618
 	flagderiv.source.r15878
 	flashcards.source.r62104
 	flexipage.source.r66614
@@ -3646,7 +3646,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	floatrow.source.r77682
 	floatrowbytocbasic.source.r67946
 	flowfram.source.r79423
-	fmp.source.r15878
+	fmp.source.r79618
 	fmtcount.source.r77682
 	fnbreak.source.r77682
 	fnumprint.source.r77682
@@ -3658,15 +3658,15 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	footmisx.source.r42621
 	footnoterange.source.r77682
 	footnpag.source.r77682
-	forarray.source.r78101
+	forarray.source.r79618
 	foreign.source.r78101
 	forloop.source.r77682
 	forms16be.source.r51305
-	formular.source.r15878
+	formular.source.r79618
 	framedsyntax.source.r76790
 	frankenstein.source.r15878
 	froufrou.source.r77682
-	ftnxtra.source.r77682
+	ftnxtra.source.r79618
 	fullblck.source.r25434
 	fullminipage.source.r34545
 	fundus-calligra.source.r79063
@@ -3678,7 +3678,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	genmpage.source.r15878
 	gensymb.source.r77682
 	getitems.source.r39365
-	ginpenc.source.r24980
+	ginpenc.source.r79618
 	gitfile-info.source.r79121
 	gitstatus.source.r64662
 	glossaries-danish.source.r35665
@@ -3699,21 +3699,21 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	glossaries-serbian.source.r35665
 	glossaries-slovene.source.r51211
 	glossaries-spanish.source.r35665
-	gmdoc-enhance.source.r15878
-	grabbox.source.r65223
+	gmdoc-enhance.source.r79618
+	grabbox.source.r79618
 	grading-scheme.source.r76924
 	graphbox.source.r77682
 	graphicscache.source.r65318
-	graphicx-psmin.source.r56931
-	graphicxbox.source.r32630
+	graphicx-psmin.source.r79618
+	graphicxbox.source.r79618
 	graphpaper.source.r63116
 	grayhints.source.r49052
-	grid.source.r61719
+	grid.source.r79618
 	gridpapers.source.r58723
 	gridset.source.r77682
 	gs1.source.r76924
 	guitlogo.source.r55741
-	ha-prosper.source.r59651
+	ha-prosper.source.r79618
 	halloweenmath.source.r77682
 	handoutwithnotes.source.r76924
 	hanging.source.r79461
@@ -3724,49 +3724,49 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	hep-math.source.r76220
 	hep-text.source.r76220
 	hep-title.source.r76220
-	hhtensor.source.r54080
+	hhtensor.source.r79618
 	histogr.source.r15878
 	hitreport.source.r58357
 	hpsdiss.source.r15878
-	href-ul.source.r74512
+	href-ul.source.r79622
 	hrefhide.source.r73641
 	huawei.source.r73148
 	hypdoc.source.r79461
-	hyper.source.r17357
+	hyper.source.r79618
 	hyperbar.source.r48147
 	hyperxmp.source.r78281
 	hyphenat.source.r79461
-	idxlayout.source.r25821
-	iexec.source.r73480
+	idxlayout.source.r79618
+	iexec.source.r79681
 	ifallfalse.source.r60027
 	iffont.source.r38823
-	ifmtarg.source.r79461
-	ifnextok.source.r23379
+	ifmtarg.source.r79618
+	ifnextok.source.r79618
 	ifoddpage.source.r77682
-	iitem.source.r29613
+	iitem.source.r79618
 	imakeidx.source.r77682
 	indextools.source.r68555
-	inlinedef.source.r78931
+	inlinedef.source.r79618
 	inputenx.source.r79461
-	inputtrc.source.r28019
+	inputtrc.source.r79618
 	interfaces.source.r21474
 	intopdf.source.r77682
 	inversepath.source.r77682
 	invoice2.source.r67327
 	iso.source.r15878
 	iso10303.source.r15878
-	isodate.source.r78101
+	isodate.source.r79618
 	isodoc.source.r75787
 	isorot.source.r15878
-	isotope.source.r23711
+	isotope.source.r79618
 	issuulinks.source.r25742
 	iwonamath.source.r77682
 	jmsdelim.source.r62630
-	jvlisting.source.r79461
+	jvlisting.source.r79618
 	kalendarium.source.r48744
 	kantlipsum.source.r77682
-	kerntest.source.r15878
-	keycommand.source.r78101
+	kerntest.source.r79618
+	keycommand.source.r79618
 	keyfloat.source.r77682
 	keyindex.source.r50828
 	keyparse.source.r76924
@@ -3775,9 +3775,9 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	komacv.source.r57721
 	komacv-rg.source.r49064
 	ktv-texdata.source.r27369
-	l3backend-dev.source.r79424
-	l3build.source.r79575
-	l3kernel-dev.source.r79424
+	l3backend-dev.source.r79718
+	l3build.source.r79721
+	l3kernel-dev.source.r79718
 	labbook.source.r15878
 	labels.source.r15878
 	labelschanged.source.r77682
@@ -3795,29 +3795,29 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	latexgit.source.r54811
 	layouts.source.r79461
 	lccaps.source.r46432
-	lcd.source.r16549
-	lcg.source.r77682
-	leading.source.r77682
+	lcd.source.r79618
+	lcg.source.r79618
+	leading.source.r79618
 	leaflet.source.r77682
-	leftidx.source.r77682
+	leftidx.source.r79618
 	leipzig.source.r52450
 	lengthconvert.source.r76924
 	lettrine.source.r77053
 	lhelp.source.r76924
 	libgreek.source.r75712
-	limap.source.r79088
+	limap.source.r79618
 	linegoal.source.r79461
 	lipsum.source.r77682
 	listingsutf8.source.r79461
 	listlbls.source.r77682
-	listliketab.source.r77682
+	listliketab.source.r79618
 	listofsymbols.source.r16134
 	lmake.source.r25552
 	locality.source.r20422
 	logbox.source.r24499
-	logpap.source.r15878
+	logpap.source.r79618
 	longfigure.source.r34302
-	longnamefilelist.source.r77682
+	longnamefilelist.source.r79618
 	lscapeenhanced.source.r79461
 	lstaddons.source.r79461
 	lt3rawobjects.source.r76924
@@ -3829,25 +3829,25 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	mailing.source.r77241
 	mailmerge.source.r15878
 	makebase.source.r41012
-	makebox.source.r77682
+	makebox.source.r79618
 	makecell.source.r78101
-	makecmds.source.r79461
+	makecmds.source.r79618
 	makedtx.source.r77871
 	makelabels.source.r60255
 	mandi.source.r76924
-	manfnt.source.r77682
-	manuscript.source.r36110
+	manfnt.source.r79618
+	manuscript.source.r79618
 	marginfit.source.r77682
 	marginfix.source.r78931
 	marginnote.source.r79461
 	markdown.source.r79410
 	mathastext.source.r77682
-	mathexam.source.r15878
+	mathexam.source.r79618
 	mathfont.source.r77682
-	mathgreeks.source.r71248
-	mcaption.source.r77682
+	mathgreeks.source.r79759
+	mcaption.source.r79618
 	mcite.source.r77682
-	mdframed.source.r77682
+	mdframed.source.r79618
 	media9.source.r76924
 	meetingmins.source.r31878
 	memory.source.r30452
@@ -3857,87 +3857,87 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	metalogox.source.r77682
 	metastr.source.r74751
 	method.source.r17485
-	metre.source.r18489
+	metre.source.r79618
 	mfirstuc.source.r77682
-	mftinc.source.r78793
+	mftinc.source.r79618
 	mi-solns.source.r49651
 	mindflow.source.r65236
 	minibox.source.r77682
 	minidocument.source.r43752
 	minifp.source.r76924
-	minipage-marginpar.source.r15878
+	minipage-marginpar.source.r79618
 	minutes.source.r42186
 	mleftright.source.r79461
-	mlist.source.r77682
+	mlist.source.r79618
 	mnotes.source.r63406
 	moderntimeline.source.r55518
-	modref.source.r15878
-	modroman.source.r79121
+	modref.source.r79618
+	modroman.source.r79618
 	moloch.source.r77913
-	monofill.source.r28140
+	monofill.source.r79618
 	moodle.source.r65672
 	morefloats.source.r77682
-	morehype.source.r38815
-	moresize.source.r78101
-	moreverb.source.r79461
+	morehype.source.r79618
+	moresize.source.r79618
+	moreverb.source.r79618
 	morewrites.source.r77682
 	mparhack.source.r77682
 	mpostinl.source.r77187
-	msg.source.r49578
-	mtgreek.source.r17967
+	msg.source.r79618
+	mtgreek.source.r79618
 	multiaudience.source.r77682
-	multibbl.source.r15878
-	multicap.source.r15878
+	multibbl.source.r79618
+	multicap.source.r79618
 	multicolrule.source.r78101
 	multidef.source.r40637
-	multienv.source.r64967
+	multienv.source.r79618
 	multiexpand.source.r77682
 	multilang.source.r77682
 	multirow.source.r77682
-	multitoc.source.r77682
+	multitoc.source.r79618
 	mversion.source.r29370
 	mwe.source.r77682
 	mycv.source.r26807
 	mylatexformat.source.r21392
-	nag.source.r77682
+	nag.source.r79618
 	nameauth.source.r76172
-	namespc.source.r15878
+	namespc.source.r79618
 	ncctools.source.r51810
 	needspace.source.r77682
-	newfile.source.r79461
+	newfile.source.r79618
 	newlfm.source.r15878
-	newspaper.source.r15878
+	newspaper.source.r79618
 	newunicodechar.source.r77682
-	newvbtm.source.r23996
+	newvbtm.source.r79618
 	newverbs.source.r77682
 	nfssext-cfr.source.r79461
 	nicefilelist.source.r77682
-	niceframe.source.r77682
-	nicetext.source.r38914
+	niceframe.source.r79618
+	nicetext.source.r79618
 	nidanfloat.source.r77682
 	noindentafter.source.r59195
-	noitcrul.source.r77682
-	nomencl.source.r77682
-	nomentbl.source.r16549
+	noitcrul.source.r79618
+	nomencl.source.r79618
+	nomentbl.source.r79618
 	nonfloat.source.r77682
 	nonumonpart.source.r77682
 	normalcolor.source.r77682
-	notes.source.r42428
+	notes.source.r79618
 	notespages.source.r76790
 	nowidow.source.r77682
-	ntheorem.source.r77682
-	numprint.source.r77682
+	ntheorem.source.r79618
+	numprint.source.r79618
 	ocgx.source.r54512
 	octavo.source.r15878
-	oldstyle.source.r79461
-	onlyamsmath.source.r42927
-	opcit.source.r15878
+	oldstyle.source.r79618
+	onlyamsmath.source.r79618
+	opcit.source.r79618
 	orcidlink.source.r78657
 	outlining.source.r45601
 	overpic.source.r77682
 	padcount.source.r47621
 	pagecolor.source.r77682
-	pagecont.source.r15878
+	pagecont.source.r79618
 	pagegrid.source.r77682
 	pagenote.source.r79461
 	pageslts.source.r76054
@@ -3946,29 +3946,29 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	paper.source.r79461
 	papercdcase.source.r15878
 	papermas.source.r78632
-	papertex.source.r75878
-	paracol.source.r77682
-	paralist.source.r77682
+	papertex.source.r79618
+	paracol.source.r79618
+	paralist.source.r79618
 	paresse.source.r76924
 	parselines.source.r21475
-	patch.source.r42428
-	patchcmd.source.r78101
-	pauldoc.source.r16005
+	patch.source.r79618
+	patchcmd.source.r79618
+	pauldoc.source.r79618
 	pawpict.source.r21629
-	pbalance.source.r67201
+	pbalance.source.r79618
 	pbox.source.r77682
-	pbsheet.source.r24830
+	pbsheet.source.r79618
 	pdf14.source.r76924
-	pdfcol.source.r79461
-	pdfcprot.source.r18735
+	pdfcol.source.r79618
+	pdfcprot.source.r79618
 	pdfoverlay.source.r77682
-	pdfpc-movie.source.r67201
+	pdfpc-movie.source.r79618
 	pdfprivacy.source.r79126
 	pdfrender.source.r79461
-	pdfx.source.r77682
-	perltex.source.r73044
+	pdfx.source.r79618
+	perltex.source.r79618
 	permute.source.r15878
-	pgfmath-xfp.source.r76924
+	pgfmath-xfp.source.r79618
 	phfcc.source.r60731
 	phfextendedabstract.source.r60732
 	phffullpagefigure.source.r41857
@@ -3978,45 +3978,45 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	phfquotetext.source.r41869
 	phfsvnwatermark.source.r41870
 	phfthm.source.r60735
-	photo.source.r18739
+	photo.source.r79618
 	picture.source.r79461
 	plweb.source.r79121
 	pmboxdraw.source.r79461
 	polynom.source.r77682
-	polynomial.source.r15878
+	polynomial.source.r79618
 	polytable.source.r77682
 	postnotes.source.r77682
 	powerdot.source.r77682
-	ppr-prv.source.r15878
+	ppr-prv.source.r79618
 	ppt-slides.source.r79345
 	prelim2e.source.r77682
 	preprint.source.r30447
 	pressrelease.source.r35147
 	prettyref.source.r77682
 	preview.source.r71662
-	probsoln.source.r44783
+	probsoln.source.r79618
 	projlib.source.r78004
 	proofread.source.r61719
 	protocol.source.r25562
-	psfragx.source.r26243
-	pxgreeks.source.r21838
-	qcm.source.r63833
-	qstest.source.r73069
+	psfragx.source.r79618
+	pxgreeks.source.r79618
+	qcm.source.r79618
+	qstest.source.r79618
 	qsymbols.source.r15878
 	quotchap.source.r77682
 	quoting.source.r77682
-	quotmark.source.r15878
+	quotmark.source.r79618
 	ran_toks.source.r59515
 	rccol.source.r77682
-	rcs-multi.source.r64967
-	rcsinfo.source.r15878
+	rcs-multi.source.r79618
+	rcsinfo.source.r79618
 	realboxes.source.r77682
-	recipecard.source.r15878
+	recipecard.source.r79618
 	rectopma.source.r70885
 	reflectgraphics.source.r40612
-	refman.source.r15878
-	refstyle.source.r77682
-	regcount.source.r19979
+	refman.source.r79618
+	refstyle.source.r79618
+	regcount.source.r79618
 	regexpatch.source.r77682
 	register.source.r54485
 	regstats.source.r78101
@@ -4025,19 +4025,19 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	resmes.source.r65375
 	rgltxdoc.source.r53858
 	rjlparshap.source.r15878
-	robustcommand.source.r15878
+	robustcommand.source.r79618
 	romanbar.source.r77682
 	romanbarpagenumber.source.r36236
-	romannum.source.r79461
-	rorlink.source.r76790
-	rotfloat.source.r77682
-	rtkinenc.source.r76790
+	romannum.source.r79618
+	rorlink.source.r79618
+	rotfloat.source.r79618
+	rtkinenc.source.r79618
 	rulercompass.source.r32392
-	sauerj.source.r15878
+	sauerj.source.r79618
 	savefnmark.source.r15878
 	savetrees.source.r77682
 	scale.source.r15878
-	scalebar.source.r15878
+	scalebar.source.r79618
 	schedule.source.r51805
 	schooldocs.source.r73466
 	scontents.source.r79225
@@ -4047,21 +4047,21 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	scrwfile.source.r77682
 	sdaps.source.r76924
 	secnum.source.r76924
-	sectsty.source.r77682
+	sectsty.source.r79618
 	seealso.source.r76924
 	selinput.source.r79461
-	semantic.source.r15878
+	semantic.source.r79618
 	semesterplanner.source.r56841
-	semioneside.source.r15878
+	semioneside.source.r79618
 	semproc.source.r37568
-	seqsplit.source.r77682
+	seqsplit.source.r79618
 	sesstime.source.r78482
 	setspaceenhanced.source.r79461
 	sf298.source.r41653
-	sffms.source.r15878
+	sffms.source.r79618
 	shdoc.source.r41991
-	shorttoc.source.r77682
-	show2e.source.r78101
+	shorttoc.source.r79618
+	show2e.source.r79618
 	showcharinbox.source.r29803
 	showexpl.source.r77682
 	showlabels.source.r77682
@@ -4071,25 +4071,25 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	silence.source.r77682
 	sillypage.source.r77682
 	simplecd.source.r79461
-	simplecv.source.r35537
+	simplecv.source.r79618
 	sitem.source.r22136
-	skb.source.r22781
+	skb.source.r79618
 	skdoc.source.r79121
 	skrapport.source.r79121
-	slantsc.source.r77682
+	slantsc.source.r79618
 	smart-eqn.source.r76924
 	snapshot.source.r77682
 	spacingtricks.source.r69048
 	spelatex.source.r78647
-	splitindex.source.r77682
+	splitindex.source.r79618
 	spot.source.r22408
-	spverbatim.source.r77682
-	srcltx.source.r15878
+	spverbatim.source.r79618
+	srcltx.source.r79618
 	sseq.source.r31585
 	stack.source.r15878
 	standalone.source.r77682
 	standardsectioning.source.r76431
-	stdclsdv.source.r79461
+	stdclsdv.source.r79618
 	stdpage.source.r79121
 	stealcaps.source.r64967
 	stex.source.r79507
@@ -4097,22 +4097,22 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	stringstrings.source.r77682
 	sttools.source.r77682
 	styledcmd.source.r76924
-	subdepth.source.r77682
+	subdepth.source.r79618
 	subeqn.source.r77682
 	subeqnarray.source.r77682
-	subfigure.source.r15878
+	subfigure.source.r79618
 	subfiles.source.r77682
-	subfloat.source.r77682
+	subfloat.source.r79618
 	supertabular.source.r77682
 	svg.source.r77682
 	svn.source.r15878
-	svn-multi.source.r64967
-	svn-prov.source.r77682
+	svn-multi.source.r79618
+	svn-prov.source.r79618
 	svninfo.source.r62157
 	swfigure.source.r63255
 	synthslant.source.r76662
-	syntrace.source.r15878
-	synttree.source.r16252
+	syntrace.source.r79618
+	synttree.source.r79618
 	tabbing.source.r78931
 	tabfigures.source.r25202
 	tablefootnote.source.r77682
@@ -4123,33 +4123,33 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	tabularborder.source.r17885
 	tabularew.source.r15878
 	tabulary.source.r77682
-	talk.source.r76392
+	talk.source.r79618
 	tangocolors.source.r66733
-	tcldoc.source.r22018
-	ted.source.r76924
+	tcldoc.source.r79618
+	ted.source.r79618
 	telprint.source.r79461
 	templatetools.source.r67201
 	termcal.source.r76924
-	termlist.source.r18923
+	termlist.source.r79618
 	termsim.source.r76924
 	testhyphens.source.r79522
 	testidx.source.r60966
 	tex-label.source.r16372
 	tex-locale.source.r77682
-	texmate.source.r78101
-	texments.source.r15878
-	texpower.source.r29349
+	texmate.source.r79618
+	texments.source.r79618
+	texpower.source.r79618
 	texshade.source.r76586
 	textfit.source.r20591
 	textmerg.source.r79461
 	textpos.source.r77682
-	textualicomma.source.r76924
+	textualicomma.source.r79618
 	texvc.source.r76874
 	threadcol.source.r28754
 	thumb.source.r16549
 	thumbs.source.r77682
 	tipauni.source.r78793
-	titling.source.r79461
+	titling.source.r79618
 	to-be-determined.source.r72527
 	tocbibind.source.r79461
 	tocdata.source.r77682
@@ -4157,60 +4157,60 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	tocvsec2.source.r77682
 	todo.source.r17746
 	todonotes.source.r77682
-	toolbox.source.r32260
+	toolbox.source.r79618
 	totalcount.source.r77682
-	totcount.source.r77682
-	totpages.source.r77682
+	totcount.source.r79618
+	totpages.source.r79618
 	transparent.source.r79461
 	trfsigns.source.r79461
 	trimspaces.source.r77682
-	trivfloat.source.r77682
+	trivfloat.source.r79618
 	trsym.source.r18732
 	tucv.source.r20680
-	twoup.source.r15878
-	txgreeks.source.r21839
-	type1cm.source.r78101
+	twoup.source.r79618
+	txgreeks.source.r79618
+	type1cm.source.r79618
 	typed-checklist.source.r77682
 	typeface.source.r27046
 	typog.source.r76661
-	typogrid.source.r24994
+	typogrid.source.r79618
 	ucs.source.r78101
-	umoline.source.r19085
-	underlin.source.r15878
+	umoline.source.r79618
+	underlin.source.r79618
 	undolabl.source.r77682
 	uni-titlepage.source.r76033
 	unicodefonttable.source.r78793
 	unisc.source.r78632
-	units.source.r42428
+	units.source.r79618
 	unravel.source.r77682
 	upquote.source.r77682
 	uri.source.r77682
 	useclass.source.r76924
-	ushort.source.r32261
-	varindex.source.r32262
+	ushort.source.r79618
+	varindex.source.r79618
 	verifiche.source.r78906
 	verifycommand.source.r79461
 	versonotes.source.r77682
 	vgrid.source.r32457
-	vmargin.source.r15878
+	vmargin.source.r79618
 	volumes.source.r75878
 	vwcol.source.r77682
-	warpcol.source.r77682
+	warpcol.source.r79618
 	was.source.r64691
 	widetable.source.r77682
 	widows-and-orphans.source.r77682
 	wordlike.source.r15878
 	wrapfig2.source.r77682
 	wrapstuff.source.r78931
-	xargs.source.r77682
+	xargs.source.r79618
 	xbmks.source.r53448
 	xcolor-material.source.r42289
 	xcolor-solarized.source.r61719
-	xcookybooky.source.r36435
+	xcookybooky.source.r79618
 	xcpdftips.source.r50449
-	xdoc.source.r15878
+	xdoc.source.r79618
 	xellipsis.source.r47546
-	xfor.source.r77682
+	xfor.source.r79618
 	ximera.source.r71243
 	xint.source.r76255
 	xmpincl.source.r60593
@@ -4218,21 +4218,21 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xpeek.source.r61719
 	xpunctuate.source.r67918
 	xsavebox.source.r77682
-	xtab.source.r79461
-	yafoot.source.r48568
-	yagusylo.source.r29803
+	xtab.source.r79618
+	yafoot.source.r79618
+	yagusylo.source.r79618
 	yaletter.source.r42830
 	ydoc.source.r64887
 	zref.source.r79461
 	zref-check.source.r78101
 	zref-clever.source.r77682
 	zref-vario.source.r77682
-	zugferd.source.r79162
+	zugferd.source.r79761
 	aliascnt.source.r79461
 	beamer-reveal.source.r78638
 	beamer-varbox.source.r78996
-	beamertheme-westlake.source.r78290
-	booktabstabular.source.r79500
+	beamertheme-westlake.source.r79618
+	booktabstabular.source.r79618
 	boustrophedon.source.r79090
 	clawxiv.source.r78742
 	enumsub.source.r75967
@@ -4254,7 +4254,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	tabular2.source.r78431
 	tabularht.source.r79461
 	traffic-light-protocol.source.r76924
-	ullrcorners.source.r75278
+	ullrcorners.source.r79618
 	xmeaning.source.r77128
 	zebra.source.r79464
 "
