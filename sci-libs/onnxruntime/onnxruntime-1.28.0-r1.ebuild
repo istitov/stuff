@@ -27,12 +27,21 @@ IUSE="python test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
+# cmake/deps.txt for v1.28.0 pins onnx v1.22.0, and the
+# use-system-libraries patch rewrites that FetchContent entry to
+# FIND_PACKAGE_ARGS ... REQUIRED, so the system onnx is what gets used with
+# no version guard of its own. That floor is not expressible: sci-ml/onnx
+# exists only in ::gentoo and tops out at 1.20.1. Floored at 1.20.1 to keep
+# 1.18.0-r1 out, which is further still from the pin. Whether 1.20.1 is
+# actually sufficient has NOT been established -- raise this to
+# >=sci-ml/onnx-1.22.0 once onnx is packaged that far.
+# verified 2026-07-27
 RDEPEND="
 	dev-cpp/abseil-cpp:=
 	dev-libs/cpuinfo
 	dev-libs/protobuf:=
 	dev-libs/re2:=
-	sci-ml/onnx[disableStaticReg]
+	>=sci-ml/onnx-1.20.1[disableStaticReg]
 
 	python? (
 		${PYTHON_DEPS}
