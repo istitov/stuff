@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_SINGLE_IMPL=1
-PYTHON_COMPAT=( python3_{11..15} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 # Upstream PyPI name ends in "-01" (a bundle/shard number); a Gentoo package
 # name may not end in a hyphen followed by digits (PMS package-name syntax),

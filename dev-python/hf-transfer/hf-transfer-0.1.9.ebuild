@@ -183,7 +183,7 @@ CRATES="
 "
 
 DISTUTILS_USE_PEP517=maturin
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 RUST_MIN_VER="1.74.0"
 
 inherit cargo distutils-r1 pypi

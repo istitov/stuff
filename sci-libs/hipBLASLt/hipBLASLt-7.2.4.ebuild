@@ -4,7 +4,7 @@
 EAPI=8
 
 ROCM_SKIP_GLOBALS=1
-PYTHON_COMPAT=( python3_{10..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 
 LLVM_COMPAT=( 22 )
 

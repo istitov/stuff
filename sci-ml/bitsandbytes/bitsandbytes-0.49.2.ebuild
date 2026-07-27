@@ -10,7 +10,7 @@ DISTUTILS_EXT=1
 # scikit-build-core value.
 DISTUTILS_USE_PEP517=standalone
 DISTUTILS_SINGLE_IMPL=1
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{12..13} )
 ROCM_VERSION=6.3
 
 inherit distutils-r1 rocm

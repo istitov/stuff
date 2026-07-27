@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 
 # 2.1.0 (2021) predates PEP 625, so its sdist keeps the legacy hyphenated
 # filename ghp-import-2.1.0.tar.gz rather than the normalized ghp_import-.

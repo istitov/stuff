@@ -4,7 +4,7 @@
 EAPI=8
 
 ROCM_VERSION=${PV}
-PYTHON_COMPAT=( python3_{10..14} python3_13t )
+PYTHON_COMPAT=( python3_{12..14} )
 
 inherit check-reqs cmake flag-o-matic multiprocessing python-r1 rocm
 
