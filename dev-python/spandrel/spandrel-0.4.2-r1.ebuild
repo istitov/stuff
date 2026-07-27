@@ -19,8 +19,12 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
+# spandrel imports torch directly, so declare sci-ml/pytorch rather than
+# relying on sci-ml/torchvision to drag it in; that works today only because
+# torchvision happens to carry =sci-ml/pytorch-2.13*. verified 2026-07-27
 RDEPEND="
 	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP}]
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		sci-ml/safetensors[${PYTHON_USEDEP}]
