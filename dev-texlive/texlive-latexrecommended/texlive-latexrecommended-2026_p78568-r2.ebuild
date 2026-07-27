@@ -8,15 +8,15 @@ TEXLIVE_MODULE_CONTENTS="
 	anysize.r77682
 	attachfile2.r79461
 	booktabs.r77682
-	breqn.r77682
-	caption.r77682
+	breqn.r79618
+	caption.r79618
 	cite.r77682
 	cmap.r77682
-	crop.r77682
+	crop.r79618
 	ctable.r77682
 	eso-pic.r79229
 	euenc.r19795
-	euler.r77682
+	euler.r79618
 	everysel.r57489
 	everyshi.r77682
 	extsizes.r78101
@@ -24,49 +24,49 @@ TEXLIVE_MODULE_CONTENTS="
 	fancyref.r77682
 	fancyvrb.r78721
 	filehook.r77682
-	float.r77682
+	float.r79618
 	fontspec.r77682
 	footnotehyper.r77682
-	fp.r77682
+	fp.r79618
 	grffile.r79461
 	hologo.r79461
 	index.r77682
 	infwarerr.r79461
-	jknapltx.r19440
+	jknapltx.r79739
 	koma-script.r77575
 	l3experimental.r79407
 	latexbug.r79083
-	lineno.r78315
+	lineno.r79618
 	listings.r77682
 	lwarp.r79391
-	mathspec.r77682
+	mathspec.r79618
 	mathtools.r78251
 	mdwtools.r15878
 	memoir.r77682
 	metalogo.r79461
 	microtype.r78228
-	newfloat.r77682
+	newfloat.r79618
 	ntgclass.r77239
 	parskip.r77682
 	pdfcolfoot.r79461
 	pdflscape.r79461
 	pdfpages.r78558
-	polyglossia.r78740
+	polyglossia.r79752
 	psfrag.r15878
-	ragged2e.r77682
+	ragged2e.r79618
 	rcs.r15878
 	sansmath.r79371
 	section.r20180
 	seminar.r77682
 	sepnum.r20186
 	setspace.r77682
-	subfig.r77682
+	subfig.r79618
 	textcase.r77682
 	thumbpdf.r79461
 	translator.r77682
 	typehtml.r17134
 	ucharcat.r78415
-	underscore.r77682
+	underscore.r79618
 	unicode-math.r78251
 	xcolor.r77682
 	xfrac.r77682
@@ -81,15 +81,15 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	anysize.doc.r77682
 	attachfile2.doc.r79461
 	booktabs.doc.r77682
-	breqn.doc.r77682
-	caption.doc.r77682
+	breqn.doc.r79618
+	caption.doc.r79618
 	cite.doc.r77682
 	cmap.doc.r77682
-	crop.doc.r77682
+	crop.doc.r79618
 	ctable.doc.r77682
 	eso-pic.doc.r79229
 	euenc.doc.r19795
-	euler.doc.r77682
+	euler.doc.r79618
 	everysel.doc.r57489
 	everyshi.doc.r77682
 	extsizes.doc.r78101
@@ -97,48 +97,48 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fancyref.doc.r77682
 	fancyvrb.doc.r78721
 	filehook.doc.r77682
-	float.doc.r77682
+	float.doc.r79618
 	fontspec.doc.r77682
 	footnotehyper.doc.r77682
-	fp.doc.r77682
+	fp.doc.r79618
 	grffile.doc.r79461
 	hologo.doc.r79461
 	index.doc.r77682
 	infwarerr.doc.r79461
-	jknapltx.doc.r19440
+	jknapltx.doc.r79739
 	l3experimental.doc.r79407
 	latexbug.doc.r79083
-	lineno.doc.r78315
+	lineno.doc.r79618
 	listings.doc.r77682
 	lwarp.doc.r79391
-	mathspec.doc.r77682
+	mathspec.doc.r79618
 	mathtools.doc.r78251
 	mdwtools.doc.r15878
 	memoir.doc.r77682
 	metalogo.doc.r79461
 	microtype.doc.r78228
-	newfloat.doc.r77682
+	newfloat.doc.r79618
 	ntgclass.doc.r77239
 	parskip.doc.r77682
 	pdfcolfoot.doc.r79461
 	pdflscape.doc.r79461
 	pdfpages.doc.r78558
-	polyglossia.doc.r78740
+	polyglossia.doc.r79752
 	psfrag.doc.r15878
-	ragged2e.doc.r77682
+	ragged2e.doc.r79618
 	rcs.doc.r15878
 	sansmath.doc.r79371
 	section.doc.r20180
 	seminar.doc.r77682
 	sepnum.doc.r20186
 	setspace.doc.r77682
-	subfig.doc.r77682
+	subfig.doc.r79618
 	textcase.doc.r77682
 	thumbpdf.doc.r79461
 	translator.doc.r77682
 	typehtml.doc.r17134
 	ucharcat.doc.r78415
-	underscore.doc.r77682
+	underscore.doc.r79618
 	unicode-math.doc.r78251
 	xcolor.doc.r77682
 	xfrac.doc.r77682
@@ -152,18 +152,18 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 TEXLIVE_MODULE_SRC_CONTENTS="
 	attachfile2.source.r79461
 	booktabs.source.r77682
-	breqn.source.r77682
-	caption.source.r77682
-	crop.source.r77682
+	breqn.source.r79618
+	caption.source.r79618
+	crop.source.r79618
 	ctable.source.r77682
 	eso-pic.source.r79229
 	euenc.source.r19795
-	euler.source.r77682
+	euler.source.r79618
 	everysel.source.r57489
 	everyshi.source.r77682
 	fancyref.source.r77682
 	filehook.source.r77682
-	float.source.r77682
+	float.source.r79618
 	fontspec.source.r77682
 	footnotehyper.source.r77682
 	grffile.source.r79461
@@ -179,16 +179,16 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	memoir.source.r77682
 	metalogo.source.r79461
 	microtype.source.r78228
-	newfloat.source.r77682
+	newfloat.source.r79618
 	ntgclass.source.r77239
 	parskip.source.r77682
 	pdfcolfoot.source.r79461
 	pdflscape.source.r79461
 	pdfpages.source.r78558
 	psfrag.source.r15878
-	ragged2e.source.r77682
+	ragged2e.source.r79618
 	rcs.source.r15878
-	subfig.source.r77682
+	subfig.source.r79618
 	textcase.source.r77682
 	typehtml.source.r17134
 	ucharcat.source.r78415
