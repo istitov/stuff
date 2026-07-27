@@ -20,12 +20,25 @@ KEYWORDS="~amd64 ~arm64"
 RESTRICT="test"
 
 REQUIRED_USE=${PYTHON_REQUIRED_USE}
+# The block below mirrors torch's unconditional Requires-Dist verbatim, floors
+# included, so it can be diffed against the built
+# torch-${PV}.dist-info/METADATA. Only typing-extensions is imported by
+# `import torch`; the rest are reached lazily -- sympy and networkx from
+# torch.fx, jinja2 and filelock from the inductor codegen and its compile
+# cache, fsspec from torch.load/save on remote paths, setuptools from
+# torch.utils.cpp_extension. Lazy does not mean optional: upstream marks none
+# of them as an extra. verified 2026-07-27
 RDEPEND="
 	${PYTHON_DEPS}
 	~sci-ml/caffe2-${PV}[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/sympy[${PYTHON_USEDEP}]
-		dev-python/typing-extensions[${PYTHON_USEDEP}]
+		dev-python/filelock[${PYTHON_USEDEP}]
+		>=dev-python/fsspec-0.8.5[${PYTHON_USEDEP}]
+		dev-python/jinja2[${PYTHON_USEDEP}]
+		>=dev-python/networkx-2.5.1[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-77.0.3[${PYTHON_USEDEP}]
+		>=dev-python/sympy-1.13.3[${PYTHON_USEDEP}]
+		>=dev-python/typing-extensions-4.10.0[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="${RDEPEND}
