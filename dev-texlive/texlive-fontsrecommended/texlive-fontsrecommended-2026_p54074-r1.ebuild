@@ -11,15 +11,15 @@ TEXLIVE_MODULE_CONTENTS="
 	cm-super.r15878
 	cmextra.r57866
 	courier.r77161
-	euro.r22191
+	euro.r79618
 	euro-ce.r25714
 	eurosym.r78101
-	fpl.r54512
+	fpl.r79618
 	helvetic.r77161
 	lm.r77682
 	lm-math.r67718
 	manfnt-font.r45777
-	marvosym.r77682
+	marvosym.r79618
 	mathpazo.r77682
 	mflogo-font.r54512
 	ncntrsbk.r77161
@@ -30,7 +30,7 @@ TEXLIVE_MODULE_CONTENTS="
 	tex-gyre.r68624
 	tex-gyre-math.r41264
 	times.r77161
-	tipa.r77682
+	tipa.r79618
 	txfonts.r77682
 	utopia.r77682
 	wasy.r53533
@@ -42,20 +42,20 @@ TEXLIVE_MODULE_CONTENTS="
 TEXLIVE_MODULE_DOC_CONTENTS="
 	charter.doc.r15878
 	cm-super.doc.r15878
-	euro.doc.r22191
+	euro.doc.r79618
 	euro-ce.doc.r25714
 	eurosym.doc.r78101
-	fpl.doc.r54512
+	fpl.doc.r79618
 	lm.doc.r77682
 	lm-math.doc.r67718
-	marvosym.doc.r77682
+	marvosym.doc.r79618
 	mathpazo.doc.r77682
 	mflogo-font.doc.r54512
 	pxfonts.doc.r77682
 	rsfs.doc.r15878
 	tex-gyre.doc.r68624
 	tex-gyre-math.doc.r41264
-	tipa.doc.r77682
+	tipa.doc.r79618
 	txfonts.doc.r77682
 	utopia.doc.r77682
 	wasy.doc.r53533
@@ -63,9 +63,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	wasysym.doc.r77682
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
-	euro.source.r22191
-	fpl.source.r54512
-	marvosym.source.r77682
+	euro.source.r79618
+	fpl.source.r79618
+	marvosym.source.r79618
 	mathpazo.source.r77682
 	tex-gyre.source.r68624
 	tex-gyre-math.source.r41264
