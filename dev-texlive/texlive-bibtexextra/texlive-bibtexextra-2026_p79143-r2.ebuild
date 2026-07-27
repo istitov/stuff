@@ -6,23 +6,23 @@ EAPI=8
 TEXLIVE_MODULE_CONTENTS="
 	collection-bibtexextra.r79143
 	aaai-named.r76790
-	aichej.r76790
-	ajl.r76790
+	aichej.r79618
+	ajl.r79618
 	amsrefs.r78101
 	annotate.r76790
-	apacite.r79461
+	apacite.r79618
 	apalike-ejor.r76790
 	apalike2.r76790
 	archaeologie.r79585
 	authordate.r77682
-	beebe.r79461
+	beebe.r79654
 	besjournals.r76790
 	bestpapers.r76790
 	bib2gls.r76845
 	bib2qr.r71940
 	bibarts.r74384
 	bibcop.r79293
-	biber-ms.r78957
+	biber-ms.r79618
 	bibexport.r50677
 	bibhtml.r31607
 	biblatex-abnt.r72565
@@ -48,7 +48,7 @@ TEXLIVE_MODULE_CONTENTS="
 	biblatex-gb7714-2015.r79337
 	biblatex-german-legal.r66461
 	biblatex-gost.r66935
-	biblatex-historian.r19787
+	biblatex-historian.r79618
 	biblatex-ieee.r75952
 	biblatex-ijsra.r79584
 	biblatex-iso690.r62866
@@ -87,19 +87,19 @@ TEXLIVE_MODULE_CONTENTS="
 	biblatex-true-citepages-omit.r76790
 	biblatex-unified.r64975
 	biblatex-vancouver.r75301
-	biblatex2bibitem.r77682
+	biblatex2bibitem.r79618
 	biblist.r77682
 	bibtexperllibs.r79466
 	bibtools.r75712
 	bibtopic.r77682
-	bibtopicprefix.r15878
-	bibunits.r77682
+	bibtopicprefix.r79618
+	bibunits.r79618
 	biolett-bst.r76790
 	bookdb.r76790
 	breakcites.r78101
 	cell.r76790
 	chbibref.r79461
-	chembst.r76790
+	chembst.r79618
 	chicago.r77682
 	chicago-annote.r76790
 	chicagoa.r76790
@@ -111,39 +111,39 @@ TEXLIVE_MODULE_CONTENTS="
 	collref.r77682
 	compactbib.r15878
 	crossrefware.r79457
-	custom-bib.r76790
+	custom-bib.r79618
 	din1505.r76790
 	dk-bib.r76790
-	doipubmed.r15878
+	doipubmed.r79618
 	ecobiblatex.r39233
 	econ-bst.r76907
-	economic.r76790
-	fbs.r76790
+	economic.r79618
+	fbs.r79618
 	figbib.r19388
-	footbib.r17115
+	footbib.r79618
 	francais-bst.r76790
-	gbt7714.r79531
+	gbt7714.r79717
 	geschichtsfrkl.r42121
-	harvard.r77682
+	harvard.r79618
 	harvmac.r15878
 	hep-bibliography.r76220
-	historische-zeitschrift.r42635
+	historische-zeitschrift.r79618
 	icite.r67201
 	ijqc.r76790
-	inlinebib.r22018
+	inlinebib.r79618
 	iopart-num.r15878
 	is-bst.r76790
 	jbact.r76790
 	jmb.r77682
 	jneurosci.r76790
-	jurabib.r77682
+	jurabib.r79618
 	ksfh_nat.r76790
 	listbib.r29349
 	logreq.r53003
 	ltb2bib.r43746
 	luabibentry.r55777
 	margbib.r15878
-	multibib.r77682
+	multibib.r79618
 	multibibliography.r77682
 	munich.r76790
 	nar.r77682
@@ -176,7 +176,7 @@ TEXLIVE_MODULE_CONTENTS="
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	amsrefs.doc.r78101
-	apacite.doc.r79461
+	apacite.doc.r79618
 	apalike-ejor.doc.r76790
 	archaeologie.doc.r79585
 	authordate.doc.r77682
@@ -186,7 +186,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	bib2qr.doc.r71940
 	bibarts.doc.r74384
 	bibcop.doc.r79293
-	biber-ms.doc.r78957
+	biber-ms.doc.r79618
 	bibexport.doc.r50677
 	bibhtml.doc.r31607
 	biblatex-abnt.doc.r72565
@@ -212,7 +212,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	biblatex-gb7714-2015.doc.r79337
 	biblatex-german-legal.doc.r66461
 	biblatex-gost.doc.r66935
-	biblatex-historian.doc.r19787
+	biblatex-historian.doc.r79618
 	biblatex-ieee.doc.r75952
 	biblatex-ijsra.doc.r79584
 	biblatex-iso690.doc.r62866
@@ -251,18 +251,18 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	biblatex-true-citepages-omit.doc.r76790
 	biblatex-unified.doc.r64975
 	biblatex-vancouver.doc.r75301
-	biblatex2bibitem.doc.r77682
+	biblatex2bibitem.doc.r79618
 	biblist.doc.r77682
 	bibtexperllibs.doc.r79466
 	bibtopic.doc.r77682
-	bibtopicprefix.doc.r15878
-	bibunits.doc.r77682
+	bibtopicprefix.doc.r79618
+	bibunits.doc.r79618
 	biolett-bst.doc.r76790
 	bookdb.doc.r76790
 	breakcites.doc.r78101
 	cell.doc.r76790
 	chbibref.doc.r79461
-	chembst.doc.r76790
+	chembst.doc.r79618
 	chicago-annote.doc.r76790
 	chicagolinks.doc.r76790
 	chscite.doc.r28552
@@ -271,36 +271,36 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	citeref.doc.r47407
 	collref.doc.r77682
 	crossrefware.doc.r79457
-	custom-bib.doc.r76790
+	custom-bib.doc.r79618
 	din1505.doc.r76790
 	dk-bib.doc.r76790
-	doipubmed.doc.r15878
+	doipubmed.doc.r79618
 	ecobiblatex.doc.r39233
 	econ-bst.doc.r76907
-	economic.doc.r76790
+	economic.doc.r79618
 	figbib.doc.r19388
-	footbib.doc.r17115
+	footbib.doc.r79618
 	francais-bst.doc.r76790
-	gbt7714.doc.r79531
+	gbt7714.doc.r79717
 	geschichtsfrkl.doc.r42121
-	harvard.doc.r77682
+	harvard.doc.r79618
 	harvmac.doc.r15878
 	hep-bibliography.doc.r76220
-	historische-zeitschrift.doc.r42635
+	historische-zeitschrift.doc.r79618
 	icite.doc.r67201
 	ietfbibs.doc.r41332
 	ijqc.doc.r76790
-	inlinebib.doc.r22018
+	inlinebib.doc.r79618
 	iopart-num.doc.r15878
 	is-bst.doc.r76790
 	jneurosci.doc.r76790
-	jurabib.doc.r77682
+	jurabib.doc.r79618
 	listbib.doc.r29349
 	logreq.doc.r53003
 	ltb2bib.doc.r43746
 	luabibentry.doc.r55777
 	margbib.doc.r15878
-	multibib.doc.r77682
+	multibib.doc.r79618
 	multibibliography.doc.r77682
 	munich.doc.r76790
 	newcastle-bst.doc.r76790
@@ -329,13 +329,13 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	amsrefs.source.r78101
-	apacite.source.r79461
+	apacite.source.r79618
 	archaeologie.source.r79585
 	bib2gls.source.r76845
 	bib2qr.source.r71940
 	bibarts.source.r74384
 	bibcop.source.r79293
-	biber-ms.source.r78957
+	biber-ms.source.r79618
 	bibexport.source.r50677
 	biblatex-archaeology.source.r53281
 	biblatex-bath.source.r77530
@@ -346,27 +346,27 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	bibtexperllibs.source.r79466
 	bibtools.source.r75712
 	bibtopic.source.r77682
-	bibtopicprefix.source.r15878
-	bibunits.source.r77682
-	chembst.source.r76790
+	bibtopicprefix.source.r79618
+	bibunits.source.r79618
+	chembst.source.r79618
 	chscite.source.r28552
 	collref.source.r77682
-	custom-bib.source.r76790
+	custom-bib.source.r79618
 	dk-bib.source.r76790
-	doipubmed.source.r15878
-	footbib.source.r17115
+	doipubmed.source.r79618
+	footbib.source.r79618
 	francais-bst.source.r76790
-	gbt7714.source.r79531
+	gbt7714.source.r79717
 	geschichtsfrkl.source.r42121
-	harvard.source.r77682
+	harvard.source.r79618
 	hep-bibliography.source.r76220
 	icite.source.r67201
-	jurabib.source.r77682
+	jurabib.source.r79618
 	listbib.source.r29349
 	ltb2bib.source.r43746
 	luabibentry.source.r55777
 	margbib.source.r15878
-	multibib.source.r77682
+	multibib.source.r79618
 	multibibliography.source.r77682
 	nmbib.source.r77682
 	notes2bib.source.r77682
