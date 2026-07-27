@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 #IUSE="mrcz tests"
-IUSE="cuda doc +learning gui-jupyter speed gui-traitsui mrcz test"
+IUSE="cuda +learning gui-jupyter speed gui-traitsui mrcz test"
 
 RDEPEND="
 	dev-python/cloudpickle[${PYTHON_USEDEP}]
@@ -38,7 +38,6 @@ RDEPEND="
 
 	>=dev-python/scikit-image-0.15[${PYTHON_USEDEP}]
 
-	doc? ( >=app-misc/sphinx-1.7 dev-python/sphinx-rtd-theme )
 	learning? ( dev-python/scikit-learn[${PYTHON_USEDEP}] )
 	speed? ( >=dev-python/numba-0.56.0[${PYTHON_USEDEP}]
 		dev-python/cython[${PYTHON_USEDEP}]
