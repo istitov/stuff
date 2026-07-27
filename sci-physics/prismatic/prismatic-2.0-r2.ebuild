@@ -26,8 +26,15 @@ RDEPEND="
 		dev-qt/qtwidgets:5
 	)
 	qt6? ( dev-qt/qtbase:6[gui,widgets] )
+	gpu? ( dev-util/nvidia-cuda-toolkit )
 "
 DEPEND="${RDEPEND}"
+# nvidia-cuda-toolkit was BDEPEND-only, which is wrong in both directions:
+# CMakeLists.txt builds the binaries with cuda_add_executable() +
+# cuda_add_cufft_to_target(), so libcudart and libcufft are needed at link
+# time (DEPEND) and stay in DT_NEEDED afterwards (RDEPEND). BDEPEND is also
+# CBUILD-scoped, so it was the wrong side of a cross build. It stays here for
+# nvcc itself. verified 2026-07-27
 BDEPEND="
 	gpu? ( dev-util/nvidia-cuda-toolkit )
 "
