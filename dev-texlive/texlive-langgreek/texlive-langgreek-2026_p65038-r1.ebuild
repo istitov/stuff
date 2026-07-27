@@ -7,19 +7,19 @@ TEXLIVE_MODULE_CONTENTS="
 	collection-langgreek.r65038
 	babel-greek.r78101
 	begingreek.r63255
-	betababel.r15878
+	betababel.r79618
 	cbfonts.r54080
 	cbfonts-fd.r54080
-	gfsbaskerville.r77682
-	gfsporson.r77682
+	gfsbaskerville.r79618
+	gfsporson.r79618
 	greek-fontenc.r77682
 	greek-inputenc.r66634
-	greekdates.r75878
+	greekdates.r79618
 	greektex.r28327
-	greektonoi.r39419
+	greektonoi.r79618
 	hyphen-ancientgreek.r78069
 	hyphen-greek.r78069
-	ibycus-babel.r15878
+	ibycus-babel.r79618
 	ibygrk.r15878
 	kerkis.r56271
 	levy.r76924
@@ -28,24 +28,24 @@ TEXLIVE_MODULE_CONTENTS="
 	mkgrkindex.r26313
 	talos.r61820
 	teubner.r68074
-	xgreek.r77682
+	xgreek.r79601
 	yannisgr.r22613
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	babel-greek.doc.r78101
 	begingreek.doc.r63255
-	betababel.doc.r15878
+	betababel.doc.r79618
 	cbfonts.doc.r54080
 	cbfonts-fd.doc.r54080
-	gfsbaskerville.doc.r77682
-	gfsporson.doc.r77682
+	gfsbaskerville.doc.r79618
+	gfsporson.doc.r79618
 	greek-fontenc.doc.r77682
 	greek-inputenc.doc.r66634
-	greekdates.doc.r75878
+	greekdates.doc.r79618
 	greektex.doc.r28327
-	greektonoi.doc.r39419
+	greektonoi.doc.r79618
 	hyphen-greek.doc.r78069
-	ibycus-babel.doc.r15878
+	ibycus-babel.doc.r79618
 	ibygrk.doc.r15878
 	kerkis.doc.r56271
 	levy.doc.r76924
@@ -54,18 +54,18 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	mkgrkindex.doc.r26313
 	talos.doc.r61820
 	teubner.doc.r68074
-	xgreek.doc.r77682
+	xgreek.doc.r79601
 	yannisgr.doc.r22613
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-greek.source.r78101
 	begingreek.source.r63255
 	cbfonts-fd.source.r54080
-	greekdates.source.r75878
-	ibycus-babel.source.r15878
+	greekdates.source.r79618
+	ibycus-babel.source.r79618
 	lgrmath.source.r65038
 	teubner.source.r68074
-	xgreek.source.r77682
+	xgreek.source.r79601
 "
 
 inherit texlive-module
