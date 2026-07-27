@@ -31,12 +31,8 @@ RDEPEND="
 	~dev-python/opentelemetry-api-${PV}[${PYTHON_USEDEP}]
 	~dev-python/opentelemetry-exporter-otlp-proto-common-${PV}[${PYTHON_USEDEP}]
 	~dev-python/opentelemetry-proto-${PV}[${PYTHON_USEDEP}]
+	~dev-python/opentelemetry-sdk-${PV}[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.6.0[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		~dev-python/opentelemetry-sdk-${PV}[${PYTHON_USEDEP}]
-	)
 "
 
 EPYTEST_PLUGINS=()
