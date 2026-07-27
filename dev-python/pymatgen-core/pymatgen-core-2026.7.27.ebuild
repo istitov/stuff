@@ -28,7 +28,7 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		>=sci-libs/spglib-2.5[python,${PYTHON_USEDEP}]
 		>=dev-python/matplotlib-3.8[${PYTHON_USEDEP}]
-		>=dev-python/monty-2026.5.18[${PYTHON_USEDEP}]
+		>=dev-python/monty-2026.7.16[${PYTHON_USEDEP}]
 		>=dev-python/networkx-2.7[${PYTHON_USEDEP}]
 		<dev-python/numpy-3[${PYTHON_USEDEP}]
 		>=dev-python/numpy-1.25[${PYTHON_USEDEP}]
