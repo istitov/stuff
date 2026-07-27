@@ -11,8 +11,8 @@ TEXLIVE_MODULE_CONTENTS="
 	chordbox.r51000
 	ddphonism.r75201
 	figbas.r28943
-	gchords.r29803
-	gregoriotex.r74348
+	gchords.r79618
+	gregoriotex.r79618
 	gtrcrd.r32484
 	guitar.r32258
 	guitarchordschemes.r54512
@@ -24,16 +24,16 @@ TEXLIVE_MODULE_CONTENTS="
 	musical.r54758
 	musicography.r77682
 	musixguit.r21649
-	musixtex.r77682
+	musixtex.r79618
 	musixtex-fonts.r65517
 	musixtnt.r69742
 	octave.r76790
-	piano.r77682
+	piano.r79662
 	pmxchords.r73868
 	recorder-fingering.r76924
-	songbook.r18136
+	songbook.r79618
 	songproj.r76924
-	songs.r51494
+	songs.r79618
 	undar-digitacion.r69742
 	xpiano.r77682
 	fretplot.r78741
@@ -45,8 +45,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	chordbox.doc.r51000
 	ddphonism.doc.r75201
 	figbas.doc.r28943
-	gchords.doc.r29803
-	gregoriotex.doc.r74348
+	gchords.doc.r79618
+	gregoriotex.doc.r79618
 	gtrcrd.doc.r32484
 	guitar.doc.r32258
 	guitarchordschemes.doc.r54512
@@ -59,29 +59,29 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	musical.doc.r54758
 	musicography.doc.r77682
 	musixguit.doc.r21649
-	musixtex.doc.r77682
+	musixtex.doc.r79618
 	musixtex-fonts.doc.r65517
 	musixtnt.doc.r69742
 	octave.doc.r76790
-	piano.doc.r77682
+	piano.doc.r79662
 	pmxchords.doc.r73868
 	recorder-fingering.doc.r76924
-	songbook.doc.r18136
+	songbook.doc.r79618
 	songproj.doc.r76924
-	songs.doc.r51494
+	songs.doc.r79618
 	undar-digitacion.doc.r69742
 	xpiano.doc.r77682
 	fretplot.doc.r78741
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	abc.source.r41157
-	gregoriotex.source.r74348
+	gregoriotex.source.r79618
 	guitar.source.r32258
 	lilyglyphs.source.r56473
-	musixtex.source.r77682
-	songbook.source.r18136
+	musixtex.source.r79618
+	songbook.source.r79618
 	songproj.source.r76924
-	songs.source.r51494
+	songs.source.r79618
 	undar-digitacion.source.r69742
 	xpiano.source.r77682
 "
