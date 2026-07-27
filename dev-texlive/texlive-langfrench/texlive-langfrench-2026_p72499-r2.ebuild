@@ -12,11 +12,11 @@ TEXLIVE_MODULE_CONTENTS="
 	basque-book.r32924
 	basque-date.r26477
 	bib-fr.r76790
-	bibleref-french.r75246
+	bibleref-french.r79618
 	cahierprof.r76102
 	couleurs-fr.r78637
 	droit-fr.r39802
-	e-french.r79121
+	e-french.r79618
 	facture.r67538
 	frenchmath.r71205
 	frletter.r15878
@@ -33,25 +33,25 @@ TEXLIVE_MODULE_CONTENTS="
 	proflycee.r79565
 	profsio.r79121
 	tabvar.r63921
-	tdsfrmath.r15878
+	tdsfrmath.r79618
 	variations.r15878
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	aeguill.doc.r79461
 	annee-scolaire.doc.r76924
 	apprendre-a-programmer-en-tex.doc.r76790
-	apprends-latex.doc.r19306
+	apprends-latex.doc.r79618
 	babel-basque.doc.r77682
 	babel-french.doc.r79302
 	basque-book.doc.r32924
 	basque-date.doc.r26477
 	bib-fr.doc.r76790
-	bibleref-french.doc.r75246
+	bibleref-french.doc.r79618
 	booktabs-fr.doc.r79121
 	cahierprof.doc.r76102
 	couleurs-fr.doc.r78637
 	droit-fr.doc.r39802
-	e-french.doc.r79121
+	e-french.doc.r79618
 	epslatex-fr.doc.r19440
 	expose-expl3-dunkerque-2019.doc.r76924
 	facture.doc.r67538
@@ -75,11 +75,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	proflycee.doc.r79565
 	profsio.doc.r79121
 	tabvar.doc.r63921
-	tdsfrmath.doc.r15878
+	tdsfrmath.doc.r79618
 	texlive-fr.doc.r78031
-	translation-array-fr.doc.r79121
-	translation-dcolumn-fr.doc.r79121
-	translation-natbib-fr.doc.r25105
+	translation-array-fr.doc.r79618
+	translation-dcolumn-fr.doc.r79618
+	translation-natbib-fr.doc.r79618
 	translation-tabbing-fr.doc.r24228
 	variations.doc.r15878
 	visualfaq-fr.doc.r71053
@@ -91,7 +91,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-french.source.r79302
 	basque-book.source.r32924
 	basque-date.source.r26477
-	bibleref-french.source.r75246
+	bibleref-french.source.r79618
 	facture.source.r67538
 	formation-latex-ul.source.r70507
 	frenchmath.source.r71205
@@ -99,7 +99,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	impnattypo.source.r79493
 	letgut.source.r78543
 	tabvar.source.r63921
-	tdsfrmath.source.r15878
+	tdsfrmath.source.r79618
 "
 
 inherit texlive-module
