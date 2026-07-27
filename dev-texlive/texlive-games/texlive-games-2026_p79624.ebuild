@@ -4,15 +4,15 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-games.r79571
+	collection-games.r79624
 	bartel-chess-fonts.r78101
 	chess.r78101
 	chess-problem-diagrams.r78101
-	chessboard.r78101
-	chessfss.r78101
+	chessboard.r79618
+	chessfss.r79618
 	chinesechess.r78101
 	crossword.r79069
-	crosswrd.r16896
+	crosswrd.r79618
 	customdice.r64089
 	egameps.r15878
 	gamebook.r24714
@@ -21,7 +21,7 @@ TEXLIVE_MODULE_CONTENTS="
 	hanoi.r25019
 	havannah.r36348
 	hexboard.r62102
-	hexgame.r15878
+	hexgame.r79618
 	hmtrump.r54512
 	horoscop.r56021
 	jeuxcartes.r76966
@@ -36,8 +36,8 @@ TEXLIVE_MODULE_CONTENTS="
 	othello.r15878
 	othelloboard.r23714
 	pas-crosswords.r32313
-	playcards.r67342
-	psgo.r78101
+	playcards.r79618
+	psgo.r79618
 	quizztex.r75977
 	realtranspose.r76924
 	reverxii.r63753
@@ -47,11 +47,11 @@ TEXLIVE_MODULE_CONTENTS="
 	schwalbe-chess.r78101
 	scrabble.r77114
 	sgame.r30959
-	skak.r78101
-	skaknew.r78101
+	skak.r79618
+	skaknew.r79618
 	soup.r50815
-	sudoku.r78101
-	sudokubundle.r78101
+	sudoku.r79618
+	sudokubundle.r79618
 	tangramtikz.r75123
 	thematicpuzzle.r75984
 	trivialpursuit.r76152
@@ -60,7 +60,7 @@ TEXLIVE_MODULE_CONTENTS="
 	weiqi.r78101
 	wordle.r79377
 	xq.r78101
-	xskak.r78101
+	xskak.r79618
 	cardgame.r78746
 	eigo.r78101
 	magicthegathering.r78456
@@ -73,11 +73,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	bartel-chess-fonts.doc.r78101
 	chess.doc.r78101
 	chess-problem-diagrams.doc.r78101
-	chessboard.doc.r78101
-	chessfss.doc.r78101
+	chessboard.doc.r79618
+	chessfss.doc.r79618
 	chinesechess.doc.r78101
 	crossword.doc.r79069
-	crosswrd.doc.r16896
+	crosswrd.doc.r79618
 	customdice.doc.r64089
 	egameps.doc.r15878
 	gamebook.doc.r24714
@@ -85,7 +85,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	go.doc.r78101
 	havannah.doc.r36348
 	hexboard.doc.r62102
-	hexgame.doc.r15878
+	hexgame.doc.r79618
 	hmtrump.doc.r54512
 	horoscop.doc.r56021
 	jeuxcartes.doc.r76966
@@ -100,8 +100,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	othello.doc.r15878
 	othelloboard.doc.r23714
 	pas-crosswords.doc.r32313
-	playcards.doc.r67342
-	psgo.doc.r78101
+	playcards.doc.r79618
+	psgo.doc.r79618
 	quizztex.doc.r75977
 	realtranspose.doc.r76924
 	reverxii.doc.r63753
@@ -111,11 +111,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	schwalbe-chess.doc.r78101
 	scrabble.doc.r77114
 	sgame.doc.r30959
-	skak.doc.r78101
-	skaknew.doc.r78101
+	skak.doc.r79618
+	skaknew.doc.r79618
 	soup.doc.r50815
-	sudoku.doc.r78101
-	sudokubundle.doc.r78101
+	sudoku.doc.r79618
+	sudokubundle.doc.r79618
 	tangramtikz.doc.r75123
 	thematicpuzzle.doc.r75984
 	trivialpursuit.doc.r76152
@@ -124,7 +124,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	weiqi.doc.r78101
 	wordle.doc.r79377
 	xq.doc.r78101
-	xskak.doc.r78101
+	xskak.doc.r79618
 	cardgame.doc.r78746
 	eigo.doc.r78101
 	magicthegathering.doc.r78456
@@ -135,10 +135,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	chess-problem-diagrams.source.r78101
-	chessboard.source.r78101
-	chessfss.source.r78101
+	chessboard.source.r79618
+	chessfss.source.r79618
 	crossword.source.r79069
-	crosswrd.source.r16896
+	crosswrd.source.r79618
 	customdice.source.r64089
 	gamebook.source.r24714
 	gamebooklib.source.r67772
@@ -154,11 +154,11 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	rubik.source.r46791
 	schwalbe-chess.source.r78101
 	soup.source.r50815
-	sudoku.source.r78101
-	sudokubundle.source.r78101
+	sudoku.source.r79618
+	sudokubundle.source.r79618
 	wargame.source.r72903
 	weiqi.source.r78101
-	xskak.source.r78101
+	xskak.source.r79618
 	cardgame.source.r78746
 	tictactoe.source.r75712
 "
