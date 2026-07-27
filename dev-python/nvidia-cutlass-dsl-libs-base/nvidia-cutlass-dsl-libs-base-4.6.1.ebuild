@@ -33,10 +33,15 @@ RESTRICT="bindist mirror"
 # Wheel-only on PyPI (binary CUDA-shared bits with no source release).
 # Sub-package of the nvidia-cutlass-dsl umbrella. 4.6.0 split the
 # pure-Python core into ~libs-core (pulled below). protobuf<7 is declared
-# upstream but only used by the iket perfetto profiler (perfetto_trace_pb2.py
-# ships here), which this overlay does not use; omitted to avoid a
-# system-wide protobuf 7->6 downgrade. nvidia-cuda-nvdisasm is provided by
-# the CUDA toolkit. # verified 2026-07-14 against 4.6.1.
+# upstream but reaches only the iket perfetto profiler:
+# perfetto_trace_pb2.py is this wheel's single *_pb2 module and its only
+# google.protobuf importer, and nothing pulls it in except
+# iket/profiler/postprocess.py. Omitted because dev-python/protobuf keeps
+# every version in main slot 0, so a <7 atom cannot slot alongside the
+# installed protobuf - it forces a system-wide 7->6 downgrade onto every
+# protobuf-7 consumer. nvidia-cuda-nvdisasm is provided by the CUDA
+# toolkit. # verified 2026-07-14, wheel payload re-checked 2026-07-27
+# against 4.6.1.
 RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-core-${PV}[${PYTHON_USEDEP}]
 	dev-python/cuda-python[${PYTHON_USEDEP}]
