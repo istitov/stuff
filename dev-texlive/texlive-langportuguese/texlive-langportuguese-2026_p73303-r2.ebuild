@@ -9,7 +9,7 @@ TEXLIVE_MODULE_CONTENTS="
 	feupphdteses.r30962
 	hyphen-portuguese.r78069
 	numberpt.r76924
-	ordinalpt.r15878
+	ordinalpt.r79618
 	ptlatexcommands.r67125
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
@@ -21,14 +21,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	latexcheat-ptbr.doc.r15878
 	lshort-portuguese.doc.r79461
 	numberpt.doc.r76924
-	ordinalpt.doc.r15878
+	ordinalpt.doc.r79618
 	ptlatexcommands.doc.r67125
 	xypic-tut-pt.doc.r15878
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-portuges.source.r77682
 	numberpt.source.r76924
-	ordinalpt.source.r15878
+	ordinalpt.source.r79618
 	ptlatexcommands.source.r67125
 "
 
