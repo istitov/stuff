@@ -43,10 +43,19 @@ RDEPEND="
 	dev-util/nvidia-cuda-toolkit:=[profiler]
 "
 DEPEND="${RDEPEND}"
+# Two entries from upstream's build-system.requires were missing.
+# setuptools >= 80: DISTUTILS_USE_PEP517=standalone hits an empty case in
+# distutils-r1 and contributes no backend dependency, so setuptools arrived
+# only through setuptools-scm's >=dev-python/setuptools-64, and ::gentoo still
+# ships an installable 79.0.1. cuda-pathfinder >= 1.5: declared in RDEPEND,
+# which is a runtime guarantee rather than a build one, while the build backend
+# imports it. verified 2026-07-27
 BDEPEND="
 	dev-python/pyclibrary[${PYTHON_USEDEP}]
+	>=dev-python/cuda-pathfinder-1.5[${PYTHON_USEDEP}]
 	>=dev-python/cython-3.2[${PYTHON_USEDEP}]
 	<dev-python/cython-3.3[${PYTHON_USEDEP}]
+	>=dev-python/setuptools-80[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
 "
 
