@@ -5,7 +5,7 @@ EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
 	collection-latex.r78733
-	ae.r79461
+	ae.r79618
 	amscls.r77682
 	amsmath.r79234
 	atbegshi.r79461
@@ -17,8 +17,8 @@ TEXLIVE_MODULE_CONTENTS="
 	bigintcalc.r79461
 	bitset.r79461
 	bookmark.r79461
-	carlisle.r59577
-	colortbl.r79461
+	carlisle.r79618
+	colortbl.r79618
 	epstopdf-pkg.r79461
 	etexcmds.r79461
 	fancyhdr.r78348
@@ -40,23 +40,23 @@ TEXLIVE_MODULE_CONTENTS="
 	l3backend.r78544
 	l3kernel.r79405
 	l3packages.r76637
-	latex.r79234
+	latex.r79618
 	latex-bin.r78282
-	latex-fonts.r28888
+	latex-fonts.r79618
 	latex-lab.r79404
 	latexconfig.r68923
 	letltxmacro.r79461
 	ltxcmds.r79461
 	ltxmisc.r75878
-	mfnfss.r77682
-	mptopdf.r79578
-	natbib.r77682
+	mfnfss.r79618
+	mptopdf.r79616
+	natbib.r79618
 	oberdiek.r79461
 	pagesel.r79461
 	pdfescape.r79461
 	pdftexcmds.r79461
-	pslatex.r67469
-	psnfss.r77682
+	pslatex.r79618
+	psnfss.r79618
 	pspicture.r15878
 	refcount.r79461
 	rerunfilecheck.r79461
@@ -67,10 +67,10 @@ TEXLIVE_MODULE_CONTENTS="
 	etoolbox.r77682
 	lua-uni-algos.r76195
 	pdfmanagement.r79164
-	tagpdf.r79038
+	tagpdf.r79799
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
-	ae.doc.r79461
+	ae.doc.r79618
 	amscls.doc.r77682
 	amsmath.doc.r79234
 	atbegshi.doc.r79461
@@ -82,8 +82,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	bigintcalc.doc.r79461
 	bitset.doc.r79461
 	bookmark.doc.r79461
-	carlisle.doc.r59577
-	colortbl.doc.r79461
+	carlisle.doc.r79618
+	colortbl.doc.r79618
 	epstopdf-pkg.doc.r79461
 	etexcmds.doc.r79461
 	fancyhdr.doc.r78348
@@ -105,20 +105,20 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	l3backend.doc.r78544
 	l3kernel.doc.r79405
 	l3packages.doc.r76637
-	latex.doc.r79234
+	latex.doc.r79618
 	latex-bin.doc.r78282
-	latex-fonts.doc.r28888
+	latex-fonts.doc.r79618
 	latex-lab.doc.r79404
 	letltxmacro.doc.r79461
 	ltxcmds.doc.r79461
-	mfnfss.doc.r77682
-	mptopdf.doc.r79578
-	natbib.doc.r77682
+	mfnfss.doc.r79618
+	mptopdf.doc.r79616
+	natbib.doc.r79618
 	oberdiek.doc.r79461
 	pagesel.doc.r79461
 	pdfescape.doc.r79461
 	pdftexcmds.doc.r79461
-	psnfss.doc.r77682
+	psnfss.doc.r79618
 	pspicture.doc.r15878
 	refcount.doc.r79461
 	rerunfilecheck.doc.r79461
@@ -129,10 +129,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	etoolbox.doc.r77682
 	lua-uni-algos.doc.r76195
 	pdfmanagement.doc.r79164
-	tagpdf.doc.r79038
+	tagpdf.doc.r79799
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
-	ae.source.r79461
+	ae.source.r79618
 	amscls.source.r77682
 	amsmath.source.r79234
 	atbegshi.source.r79461
@@ -143,8 +143,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	bigintcalc.source.r79461
 	bitset.source.r79461
 	bookmark.source.r79461
-	carlisle.source.r59577
-	colortbl.source.r79461
+	carlisle.source.r79618
+	colortbl.source.r79618
 	epstopdf-pkg.source.r79461
 	etexcmds.source.r79461
 	fancyhdr.source.r78348
@@ -165,18 +165,18 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	l3backend.source.r78544
 	l3kernel.source.r79405
 	l3packages.source.r76637
-	latex.source.r79234
+	latex.source.r79618
 	latex-lab.source.r79404
 	letltxmacro.source.r79461
 	ltxcmds.source.r79461
-	mfnfss.source.r77682
-	natbib.source.r77682
+	mfnfss.source.r79618
+	natbib.source.r79618
 	oberdiek.source.r79461
 	pagesel.source.r79461
 	pdfescape.source.r79461
 	pdftexcmds.source.r79461
-	pslatex.source.r67469
-	psnfss.source.r77682
+	pslatex.source.r79618
+	psnfss.source.r79618
 	pspicture.source.r15878
 	refcount.source.r79461
 	rerunfilecheck.source.r79461
@@ -184,7 +184,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	tools.source.r79234
 	uniquecounter.source.r79461
 	pdfmanagement.source.r79164
-	tagpdf.source.r79038
+	tagpdf.source.r79799
 "
 
 inherit texlive-module
