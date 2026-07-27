@@ -5,7 +5,7 @@ EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
 	collection-xetex.r78834
-	arabxetex.r77682
+	arabxetex.r79618
 	bidi-atbegshi.r62009
 	bidicontour.r77682
 	bidipagegrid.r77682
@@ -45,13 +45,13 @@ TEXLIVE_MODULE_CONTENTS="
 	xetexko.r77682
 	xevlna.r77682
 	zbmath-review-template.r59693
-	ctex.r79569
+	ctex.r79778
 	shtthesis.r62441
-	xecjk.r79564
+	xecjk.r79774
 	xetex-devanagari.r34296
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
-	arabxetex.doc.r77682
+	arabxetex.doc.r79618
 	bidi-atbegshi.doc.r62009
 	bidicontour.doc.r77682
 	bidipagegrid.doc.r77682
@@ -89,19 +89,19 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xetexko.doc.r77682
 	xevlna.doc.r77682
 	zbmath-review-template.doc.r59693
-	ctex.doc.r79569
+	ctex.doc.r79778
 	shtthesis.doc.r62441
-	xecjk.doc.r79564
+	xecjk.doc.r79774
 	xetex-devanagari.doc.r34296
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
-	arabxetex.source.r77682
+	arabxetex.source.r79618
 	fixlatvian.source.r21631
 	fontbook.source.r23608
 	philokalia.source.r45356
 	xespotcolor.source.r77682
-	ctex.source.r79569
-	xecjk.source.r79564
+	ctex.source.r79778
+	xecjk.source.r79774
 "
 
 inherit font texlive-module
