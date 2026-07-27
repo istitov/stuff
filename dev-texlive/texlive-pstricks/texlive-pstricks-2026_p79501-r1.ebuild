@@ -6,16 +6,16 @@ EAPI=8
 TEXLIVE_MODULE_CONTENTS="
 	collection-pstricks.r79501
 	auto-pst-pdf.r77682
-	bclogo.r77682
-	dsptricks.r68753
+	bclogo.r79618
+	dsptricks.r79618
 	luapstricks.r79280
-	makeplot.r15878
+	makeplot.r79618
 	pdftricks.r15878
 	pdftricks2.r31016
 	pedigree-perl.r64227
-	psbao.r55013
-	pst-2dplot.r15878
-	pst-3d.r77682
+	psbao.r79618
+	pst-2dplot.r79618
+	pst-3d.r79618
 	pst-3dplot.r68727
 	pst-abspos.r15878
 	pst-am.r19591
@@ -32,14 +32,14 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-cie.r60959
 	pst-circ.r72519
 	pst-coil.r77682
-	pst-contourplot.r48230
-	pst-cox.r15878
+	pst-contourplot.r79618
+	pst-cox.r79618
 	pst-dart.r60476
 	pst-dbicons.r17556
 	pst-diffraction.r71819
 	pst-electricfield.r29803
 	pst-eps.r77682
-	pst-eucl.r77682
+	pst-eucl.r79618
 	pst-exa.r45289
 	pst-feyn.r48781
 	pst-fill.r77682
@@ -56,8 +56,8 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-grad.r77682
 	pst-graphicx.r21717
 	pst-hsb.r66739
-	pst-infixplot.r15878
-	pst-intersect.r33210
+	pst-infixplot.r79618
+	pst-intersect.r79618
 	pst-jtree.r20946
 	pst-knot.r16033
 	pst-labo.r74874
@@ -66,20 +66,20 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-light3d.r15878
 	pst-lsystem.r49556
 	pst-magneticfield.r69493
-	pst-marble.r50925
+	pst-marble.r79618
 	pst-math.r77682
 	pst-mirror.r71294
 	pst-moire.r60411
 	pst-node.r77682
 	pst-ob3d.r54514
-	pst-ode.r69296
+	pst-ode.r79618
 	pst-optexp.r62977
 	pst-optic.r79461
 	pst-osci.r68781
 	pst-ovl.r77682
 	pst-pad.r15878
 	pst-pdf.r77682
-	pst-pdgr.r45875
+	pst-pdgr.r79618
 	pst-perspective.r39585
 	pst-platon.r16538
 	pst-plot.r77682
@@ -90,8 +90,8 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-rputover.r44724
 	pst-rubans.r23464
 	pst-shell.r79376
-	pst-sigsys.r21667
-	pst-slpe.r24391
+	pst-sigsys.r79618
+	pst-slpe.r79618
 	pst-solarsystem.r69675
 	pst-solides3d.r79298
 	pst-soroban.r15878
@@ -101,14 +101,14 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-text.r77682
 	pst-thick.r16369
 	pst-tools.r60621
-	pst-tree.r77682
+	pst-tree.r79618
 	pst-turtle.r52261
 	pst-tvz.r77256
 	pst-uml.r15878
 	pst-vectorian.r78101
 	pst-vehicle.r61438
 	pst-venn.r49316
-	pst-vowel.r25228
+	pst-vowel.r79618
 	pst2pdf.r56172
 	pstricks.r78101
 	pstricks-add.r77682
@@ -127,16 +127,16 @@ TEXLIVE_MODULE_CONTENTS="
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	auto-pst-pdf.doc.r77682
-	bclogo.doc.r77682
-	dsptricks.doc.r68753
+	bclogo.doc.r79618
+	dsptricks.doc.r79618
 	luapstricks.doc.r79280
-	makeplot.doc.r15878
+	makeplot.doc.r79618
 	pdftricks.doc.r15878
 	pdftricks2.doc.r31016
 	pedigree-perl.doc.r64227
-	psbao.doc.r55013
-	pst-2dplot.doc.r15878
-	pst-3d.doc.r77682
+	psbao.doc.r79618
+	pst-2dplot.doc.r79618
+	pst-3d.doc.r79618
 	pst-3dplot.doc.r68727
 	pst-abspos.doc.r15878
 	pst-am.doc.r19591
@@ -153,14 +153,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-cie.doc.r60959
 	pst-circ.doc.r72519
 	pst-coil.doc.r77682
-	pst-contourplot.doc.r48230
-	pst-cox.doc.r15878
+	pst-contourplot.doc.r79618
+	pst-cox.doc.r79618
 	pst-dart.doc.r60476
 	pst-dbicons.doc.r17556
 	pst-diffraction.doc.r71819
 	pst-electricfield.doc.r29803
 	pst-eps.doc.r77682
-	pst-eucl.doc.r77682
+	pst-eucl.doc.r79618
 	pst-exa.doc.r45289
 	pst-feyn.doc.r48781
 	pst-fill.doc.r77682
@@ -177,8 +177,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-grad.doc.r77682
 	pst-graphicx.doc.r21717
 	pst-hsb.doc.r66739
-	pst-infixplot.doc.r15878
-	pst-intersect.doc.r33210
+	pst-infixplot.doc.r79618
+	pst-intersect.doc.r79618
 	pst-jtree.doc.r20946
 	pst-knot.doc.r16033
 	pst-labo.doc.r74874
@@ -187,20 +187,20 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-light3d.doc.r15878
 	pst-lsystem.doc.r49556
 	pst-magneticfield.doc.r69493
-	pst-marble.doc.r50925
+	pst-marble.doc.r79618
 	pst-math.doc.r77682
 	pst-mirror.doc.r71294
 	pst-moire.doc.r60411
 	pst-node.doc.r77682
 	pst-ob3d.doc.r54514
-	pst-ode.doc.r69296
+	pst-ode.doc.r79618
 	pst-optexp.doc.r62977
 	pst-optic.doc.r79461
 	pst-osci.doc.r68781
 	pst-ovl.doc.r77682
 	pst-pad.doc.r15878
 	pst-pdf.doc.r77682
-	pst-pdgr.doc.r45875
+	pst-pdgr.doc.r79618
 	pst-perspective.doc.r39585
 	pst-platon.doc.r16538
 	pst-plot.doc.r77682
@@ -211,8 +211,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-rputover.doc.r44724
 	pst-rubans.doc.r23464
 	pst-shell.doc.r79376
-	pst-sigsys.doc.r21667
-	pst-slpe.doc.r24391
+	pst-sigsys.doc.r79618
+	pst-slpe.doc.r79618
 	pst-solarsystem.doc.r69675
 	pst-solides3d.doc.r79298
 	pst-soroban.doc.r15878
@@ -223,14 +223,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-text.doc.r77682
 	pst-thick.doc.r16369
 	pst-tools.doc.r60621
-	pst-tree.doc.r77682
+	pst-tree.doc.r79618
 	pst-turtle.doc.r52261
 	pst-tvz.doc.r77256
 	pst-uml.doc.r15878
 	pst-vectorian.doc.r78101
 	pst-vehicle.doc.r61438
 	pst-venn.doc.r49316
-	pst-vowel.doc.r25228
+	pst-vowel.doc.r79618
 	pst2pdf.doc.r56172
 	pstricks.doc.r78101
 	pstricks-add.doc.r77682
@@ -250,9 +250,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	auto-pst-pdf.source.r77682
-	makeplot.source.r15878
+	makeplot.source.r79618
 	pedigree-perl.source.r64227
-	pst-3d.source.r77682
+	pst-3d.source.r79618
 	pst-abspos.source.r15878
 	pst-am.source.r19591
 	pst-blur.source.r15878
@@ -261,17 +261,17 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	pst-eps.source.r77682
 	pst-fr3d.source.r15878
 	pst-gr3d.source.r15878
-	pst-intersect.source.r33210
+	pst-intersect.source.r79618
 	pst-lens.source.r15878
 	pst-light3d.source.r15878
 	pst-ob3d.source.r54514
 	pst-optexp.source.r62977
 	pst-pad.source.r15878
 	pst-pdf.source.r77682
-	pst-pdgr.source.r45875
+	pst-pdgr.source.r79618
 	pst-platon.source.r16538
 	pst-rubans.source.r23464
-	pst-slpe.source.r24391
+	pst-slpe.source.r79618
 	pst-soroban.source.r15878
 	pst-thick.source.r16369
 	pst-uml.source.r15878
