@@ -14,10 +14,17 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
+# Upstream links -lopusfile -lopus -logg -lm, plus -lopusurl -lssl -lcrypto
+# because USE_OPUSURL defaults to true and we do not override it, so opus.so
+# has a direct DT_NEEDED on libopus and libssl/libcrypto. Both currently
+# arrive through opusfile[http], which is not ours to depend on.
+# verified 2026-07-27
 DEPEND_COMMON="
 	media-sound/deadbeef
 	media-libs/opusfile[float,http]
-	media-libs/libogg"
+	media-libs/libogg
+	media-libs/opus
+	dev-libs/openssl:="
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
