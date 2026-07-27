@@ -25,9 +25,18 @@ RDEPEND="
 	<dev-python/numpy-2.5[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2019.5 )
 "
+# numpy is needed to build, not only to run, and at a higher floor than at
+# runtime. setup.py get_ext_modules() does `import numpy` for np.get_include()
+# to compile the C extensions, and sets min_numpy_build_version = 2.0.0rc1
+# against min_numpy_run_version = 1.22 -- so RDEPEND above is right for running
+# and wrong for building. 0.66.0 ships no pyproject.toml, so the eclass
+# synthesises one and nothing pulls numpy in for the build phase.
+# verified 2026-07-27
 BDEPEND="
 	dev-python/pip[${PYTHON_USEDEP}]
 	dev-python/versioneer[${PYTHON_USEDEP}]
+	>=dev-python/numpy-2.0.0[${PYTHON_USEDEP}]
+	<dev-python/numpy-2.5[${PYTHON_USEDEP}]
 "
 
 pkg_setup() {
