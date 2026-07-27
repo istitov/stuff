@@ -7,12 +7,12 @@ TEXLIVE_MODULE_CONTENTS="
 	collection-fontutils.r61207
 	accfonts.r18835
 	afm2pl.r71515
-	albatross.r73436
+	albatross.r79618
 	dosepsbin.r29752
 	dvipsconfig.r13293
 	epstopdf.r71782
-	fontinst.r74240
-	fontools.r79207
+	fontinst.r79618
+	fontools.r79613
 	fontware.r77830
 	luafindfont.r75679
 	mf2pt1.r71883
@@ -20,19 +20,19 @@ TEXLIVE_MODULE_CONTENTS="
 TEXLIVE_MODULE_DOC_CONTENTS="
 	accfonts.doc.r18835
 	afm2pl.doc.r71515
-	albatross.doc.r73436
+	albatross.doc.r79618
 	dosepsbin.doc.r29752
 	epstopdf.doc.r71782
-	fontinst.doc.r74240
-	fontools.doc.r79207
+	fontinst.doc.r79618
+	fontools.doc.r79613
 	fontware.doc.r77830
 	luafindfont.doc.r75679
 	mf2pt1.doc.r71883
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
-	albatross.source.r73436
+	albatross.source.r79618
 	dosepsbin.source.r29752
-	fontinst.source.r74240
+	fontinst.source.r79618
 	metatype1.source.r37105
 "
 
