@@ -29,8 +29,15 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="doc lapack"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-RDEPEND="
+# DISTUTILS_OPTIONAL stops the eclass contributing PYTHON_DEPS and
+# PYTHON_REQUIRED_USE, leaving the ebuild to supply both. They were missing, so
+# a package consisting of Python 2 modules depended on no interpreter at all
+# and offered no target constraint. ${PYTHON_DEPS} rather than a literal
+# dev-lang/python:2.7 so the PYTHON_REQ_USE above is honoured.
+# verified 2026-07-27
+RDEPEND="${PYTHON_DEPS}
 	lapack? (
 		virtual/cblas
 		virtual/lapack
