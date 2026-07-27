@@ -11,7 +11,7 @@ inherit cmake cuda rocm linux-info
 # (e.g. master-767-885f01a). PV=0_pre<build>; MY_COMMIT pins the short hash so
 # the tag/S resolve. GGML_COMMIT is the ggml submodule gitlink at that release
 # (git ls-tree stable-diffusion.cpp <tag> -- ggml). Re-read both on every bump.
-MY_COMMIT="5114672"
+MY_COMMIT="2d0385b"
 GGML_COMMIT="eced84c86f8b012c752c016f7fe789adea168e1e"
 
 DESCRIPTION="Diffusion model (SD, Flux, Wan, Qwen-Image, ...) inference in pure C/C++"
