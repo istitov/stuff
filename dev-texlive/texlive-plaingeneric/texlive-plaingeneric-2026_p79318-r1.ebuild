@@ -11,11 +11,11 @@ TEXLIVE_MODULE_CONTENTS="
 	apnum.r47510
 	autoaligne.r77682
 	barr.r38479
-	bitelist.r25779
+	bitelist.r79618
 	borceux.r21047
 	c-pascal.r18337
 	calcfrac.r68684
-	catcodes.r38859
+	catcodes.r79618
 	chronosys.r26700
 	collargs.r70689
 	colorsep.r13293
@@ -23,30 +23,30 @@ TEXLIVE_MODULE_CONTENTS="
 	crossrefenum.r76004
 	cweb-old.r49271
 	dinat.r76790
-	dirtree.r78931
-	docbytex.r34294
-	dowith.r38860
+	dirtree.r79618
+	docbytex.r79618
+	dowith.r79618
 	eijkhout.r15878
-	encxvlna.r34087
+	encxvlna.r79618
 	epigram.r20513
 	epsf.r77682
 	epsf-dvipdfmx.r35575
 	etoolbox-generic.r68513
 	expex-acro.r68046
-	expkv-bundle.r73212
-	fenixpar.r24730
+	expkv-bundle.r79618
+	fenixpar.r79618
 	figflow.r21462
 	fixpdfmag.r15878
 	fltpoint.r56594
 	fntproof.r20638
 	font-change.r40403
-	fontch.r17859
+	fontch.r79618
 	fontname.r75544
 	gates.r29803
 	getoptk.r23567
 	gfnotation.r37156
-	gobble.r64967
-	graphics-pln.r79121
+	gobble.r79618
+	graphics-pln.r79618
 	gtl.r69297
 	hlist.r79121
 	hyplain.r15878
@@ -55,17 +55,17 @@ TEXLIVE_MODULE_CONTENTS="
 	insbox.r34299
 	js-misc.r16211
 	kastrup.r15878
-	lambda-lists.r31402
-	langcode.r76924
+	lambda-lists.r79618
+	langcode.r79618
 	lecturer.r23916
 	letterspacing.r54266
 	librarian.r19880
 	listofitems.r77682
 	localloc.r56496
-	mathdots.r77682
+	mathdots.r79618
 	metatex.r15878
 	midnight.r15878
-	mkpattern.r76924
+	mkpattern.r79618
 	mlawriter.r67558
 	modulus.r47599
 	multido.r77682
@@ -73,20 +73,20 @@ TEXLIVE_MODULE_CONTENTS="
 	navigator.r41413
 	newsletr.r15878
 	nth.r77682
-	ofs.r16991
-	olsak-misc.r74906
+	ofs.r79618
+	olsak-misc.r79634
 	outerhbox.r54254
 	path.r77682
 	pdf-trans.r32809
 	pdfmsym.r66618
 	pitex.r24731
 	placeins-plain.r15878
-	plainpkg.r27765
+	plainpkg.r79618
 	plipsum.r30353
-	plnfss.r15878
+	plnfss.r79618
 	plstmary.r31088
 	poormanlog.r77682
-	present.r50048
+	present.r79618
 	pwebmac.r74648
 	random.r54723
 	randomlist.r78632
@@ -116,7 +116,7 @@ TEXLIVE_MODULE_CONTENTS="
 	xintsession.r60926
 	xlop.r77682
 	yax.r54080
-	zztex.r55862
+	zztex.r79618
 	eoldef.r76050
 	measurebox.r75139
 	pdftoolbox.r74832
@@ -134,36 +134,36 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	apnum.doc.r47510
 	autoaligne.doc.r77682
 	barr.doc.r38479
-	bitelist.doc.r25779
+	bitelist.doc.r79618
 	borceux.doc.r21047
 	c-pascal.doc.r18337
 	calcfrac.doc.r68684
-	catcodes.doc.r38859
+	catcodes.doc.r79618
 	chronosys.doc.r26700
 	collargs.doc.r70689
 	crossrefenum.doc.r76004
 	dinat.doc.r76790
-	dirtree.doc.r78931
-	docbytex.doc.r34294
-	dowith.doc.r38860
-	encxvlna.doc.r34087
+	dirtree.doc.r79618
+	docbytex.doc.r79618
+	dowith.doc.r79618
+	encxvlna.doc.r79618
 	epsf.doc.r77682
 	epsf-dvipdfmx.doc.r35575
 	etoolbox-generic.doc.r68513
 	expex-acro.doc.r68046
-	expkv-bundle.doc.r73212
-	fenixpar.doc.r24730
+	expkv-bundle.doc.r79618
+	fenixpar.doc.r79618
 	figflow.doc.r21462
 	fltpoint.doc.r56594
 	fntproof.doc.r20638
 	font-change.doc.r40403
-	fontch.doc.r17859
+	fontch.doc.r79618
 	fontname.doc.r75544
 	gates.doc.r29803
 	getoptk.doc.r23567
 	gfnotation.doc.r37156
-	gobble.doc.r64967
-	graphics-pln.doc.r79121
+	gobble.doc.r79618
+	graphics-pln.doc.r79618
 	gtl.doc.r69297
 	hlist.doc.r79121
 	hyplain.doc.r15878
@@ -172,34 +172,34 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	insbox.doc.r34299
 	js-misc.doc.r16211
 	kastrup.doc.r15878
-	lambda-lists.doc.r31402
-	langcode.doc.r76924
+	lambda-lists.doc.r79618
+	langcode.doc.r79618
 	lecturer.doc.r23916
 	librarian.doc.r19880
 	listofitems.doc.r77682
 	localloc.doc.r56496
-	mathdots.doc.r77682
+	mathdots.doc.r79618
 	metatex.doc.r15878
 	midnight.doc.r15878
-	mkpattern.doc.r76924
+	mkpattern.doc.r79618
 	mlawriter.doc.r67558
 	modulus.doc.r47599
 	multido.doc.r77682
 	namedef.doc.r77682
 	navigator.doc.r41413
 	newsletr.doc.r15878
-	ofs.doc.r16991
-	olsak-misc.doc.r74906
+	ofs.doc.r79618
+	olsak-misc.doc.r79634
 	path.doc.r77682
 	pdf-trans.doc.r32809
 	pdfmsym.doc.r66618
 	pitex.doc.r24731
-	plainpkg.doc.r27765
+	plainpkg.doc.r79618
 	plipsum.doc.r30353
-	plnfss.doc.r15878
+	plnfss.doc.r79618
 	plstmary.doc.r31088
 	poormanlog.doc.r77682
-	present.doc.r50048
+	present.doc.r79618
 	pwebmac.doc.r74648
 	random.doc.r54723
 	randomlist.doc.r78632
@@ -227,7 +227,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xintsession.doc.r60926
 	xlop.doc.r77682
 	yax.doc.r54080
-	zztex.doc.r55862
+	zztex.doc.r79618
 	eoldef.doc.r76050
 	measurebox.doc.r75139
 	pdftoolbox.doc.r74832
@@ -240,25 +240,25 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	advice.source.r70688
-	bitelist.source.r25779
-	catcodes.source.r38859
+	bitelist.source.r79618
+	catcodes.source.r79618
 	collargs.source.r70689
-	dirtree.source.r78931
-	dowith.source.r38860
+	dirtree.source.r79618
+	dowith.source.r79618
 	expex-acro.source.r68046
-	expkv-bundle.source.r73212
+	expkv-bundle.source.r79618
 	fltpoint.source.r56594
-	gobble.source.r64967
+	gobble.source.r79618
 	gtl.source.r69297
 	inputnormalization.source.r78101
 	kastrup.source.r15878
-	langcode.source.r76924
+	langcode.source.r79618
 	localloc.source.r56496
-	mathdots.source.r77682
+	mathdots.source.r79618
 	modulus.source.r47599
 	multido.source.r77682
 	namedef.source.r77682
-	plainpkg.source.r27765
+	plainpkg.source.r79618
 	randomlist.source.r78632
 	schemata.source.r76178
 	soul.source.r79461
