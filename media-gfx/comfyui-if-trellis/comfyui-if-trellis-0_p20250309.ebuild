@@ -37,6 +37,11 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 # are spconv-format, so torchsparse (different weight naming/layout) cannot load
 # them -- the loader auto-selects spconv when present.
 #
+# imageio-ffmpeg is unconditional even though it only matters when the node's
+# render_video widget is on (it defaults to off): imageio.mimsave() writes an
+# .mp4 preview, which plain imageio cannot do without the ffmpeg plugin.
+# verified 2026-07-27
+#
 # USE=mesh pulls the textured/solid mesh (.glb) post-processing stack
 # (xatlas UV unwrap, pyvista decimation, python-igraph hole-fill). Without it the
 # node still loads and the Gaussian (.ply) path works -- patches 0002/0003 make
@@ -63,6 +68,7 @@ RDEPEND="
 		dev-python/scipy[${PYTHON_USEDEP}]
 		dev-python/tqdm[${PYTHON_USEDEP}]
 		dev-python/imageio[${PYTHON_USEDEP}]
+		dev-python/imageio-ffmpeg[${PYTHON_USEDEP}]
 		dev-python/pillow[${PYTHON_USEDEP}]
 		dev-python/trimesh[${PYTHON_USEDEP}]
 		sci-ml/safetensors[${PYTHON_USEDEP}]
