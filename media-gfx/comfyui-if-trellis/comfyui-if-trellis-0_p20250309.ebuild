@@ -7,7 +7,9 @@ PYTHON_COMPAT=( python3_{12..13} )
 
 inherit python-single-r1
 
-# Upstream tags no releases; pin the commit. The repo bundles its own copy of
+# Upstream's newest tag, 0.1.1, predates its own default branch by two months
+# (2025-01-06 vs the 2025-03-09 commit below), so the tags are not the release
+# line - pin the commit. The repo bundles its own copy of
 # Microsoft's TRELLIS library under trellis/ (plus a wheels/ dir of prebuilt
 # CUDA extensions and an extensions/ source tree we do not use -- those ship as
 # their own ebuilds). MY_NODE is the on-disk custom_nodes directory name ComfyUI
