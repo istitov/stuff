@@ -20,9 +20,15 @@ REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
 RESTRICT="!test? ( test )"
 
+# cmake/Dependencies.cmake does find_package(benchmark 1.9.1 QUIET) and, on
+# failure, falls through to a FetchContent clone of github.com/google/benchmark,
+# which cannot work inside portage's network sandbox. ::gentoo still ships 1.8.4
+# next to the 1.9.x line, so an existing 1.8.4 install satisfied the bare atom,
+# got no upgrade, and sent USE=benchmark builds down the fetch path.
+# verified 2026-07-27
 RDEPEND="
 	dev-util/hip:${SLOT}
-	benchmark? ( dev-cpp/benchmark )
+	benchmark? ( >=dev-cpp/benchmark-1.9.1 )
 "
 DEPEND="${RDEPEND}
 	dev-build/rocm-cmake
