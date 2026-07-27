@@ -29,8 +29,11 @@ RESTRICT="test"
 # detectable — and that does an unguarded `from wxmplot import ...`.
 # So gating on a wxgui USE flag would silently break `larch` whenever
 # wxpython is installed for any reason. Pull the whole stack always.
+# Upstream raised the larixite floor at 2026.2.0; 2026.1.2 still asks for
+# 2025.5.1 and keeps it. Both larixite versions are in this overlay, so the
+# stale floor was satisfiable by the one upstream rejects. verified 2026-07-27
 RDEPEND="
-	>=dev-python/larixite-2025.5.1[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/larixite-2026.1.0[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/asteval-1.0.7[${PYTHON_USEDEP}]
 		dev-python/charset-normalizer[${PYTHON_USEDEP}]
