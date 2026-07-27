@@ -23,11 +23,21 @@ KEYWORDS="~amd64 ~arm64"
 
 IUSE="doc"
 
+# minted.sty opens with two hard gates, each followed by \minted@fatalerror:
+#   \IfPackageAtLeastTF{fvextra}{2026/02/25}
+#   \IfPackageAtLeastTF{latex2pydata}{2026/02/25}
+# so a too-old provider of either aborts every document rather than degrading.
+# fvextra 1.14.0 [2026/02/25] arrives with texlive-latexextra-2026_p79458,
+# which pins fvextra.r78296; the 2025_p78212 ebuild pins r78177 and is below
+# the gate. latex2pydata.sty [2026/02/25 v0.7.0] comes from the 0.7.0 ebuild --
+# 0.5.0 ships a [2025/03/03 v0.5.0dev2] development .sty, which is why an
+# unfloored dependency here produced an installable but unusable minted.
+# verified 2026-07-27
 RDEPEND="
 	>=dev-python/latexrestricted-0.6.2[${PYTHON_USEDEP}]
 	>=dev-python/pygments-2.17.0[${PYTHON_USEDEP}]
-	>=dev-tex/latex2pydata-0.5.0[${PYTHON_USEDEP}]
-	dev-texlive/texlive-latexextra
+	>=dev-tex/latex2pydata-0.7.0[${PYTHON_USEDEP}]
+	>=dev-texlive/texlive-latexextra-2026
 "
 BDEPEND="
 	doc? (
