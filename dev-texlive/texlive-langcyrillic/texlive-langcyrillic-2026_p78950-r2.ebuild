@@ -15,9 +15,9 @@ TEXLIVE_MODULE_CONTENTS="
 	cmcyr.r68681
 	cyrillic.r71408
 	cyrillic-bin.r62517
-	cyrplain.r45692
+	cyrplain.r79618
 	disser.r43417
-	eskd.r15878
+	eskd.r79618
 	eskdx.r29235
 	gost.r76790
 	hyphen-belarusian.r78069
@@ -31,17 +31,17 @@ TEXLIVE_MODULE_CONTENTS="
 	lh.r77838
 	lhcyr.r77838
 	mnhyphn.r69727
-	mongolian-babel.r15878
+	mongolian-babel.r79618
 	montex.r29349
 	numnameru.r44895
-	ruhyphen.r21081
+	ruhyphen.r79618
 	russ.r25209
 	serbian-apostrophe.r23799
 	serbian-date-lat.r23446
 	serbian-def-cyr.r23734
 	serbian-lig.r53127
-	t2.r47870
-	ukrhyph.r21081
+	t2.r79618
+	ukrhyph.r79618
 	xecyrmongolian.r53160
 	babel-kazakh.r78969
 	hyphen-kazakh.r78069
@@ -58,7 +58,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	cyrillic.doc.r71408
 	cyrillic-bin.doc.r62517
 	disser.doc.r43417
-	eskd.doc.r15878
+	eskd.doc.r79618
 	eskdx.doc.r29235
 	gost.doc.r76790
 	lcyw.doc.r15878
@@ -68,7 +68,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	lshort-russian.doc.r79461
 	lshort-ukr.doc.r55643
 	mnhyphn.doc.r69727
-	mongolian-babel.doc.r15878
+	mongolian-babel.doc.r79618
 	montex.doc.r29349
 	mpman-ru.doc.r15878
 	numnameru.doc.r44895
@@ -78,10 +78,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	serbian-date-lat.doc.r23446
 	serbian-def-cyr.doc.r23734
 	serbian-lig.doc.r53127
-	t2.doc.r47870
+	t2.doc.r79618
 	texlive-ru.doc.r58426
 	texlive-sr.doc.r54594
-	ukrhyph.doc.r21081
+	ukrhyph.doc.r79618
 	xecyrmongolian.doc.r53160
 	babel-kazakh.doc.r78969
 "
@@ -94,13 +94,13 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-ukrainian.source.r79184
 	cyrillic.source.r71408
 	disser.source.r43417
-	eskd.source.r15878
+	eskd.source.r79618
 	gost.source.r76790
 	lcyw.source.r15878
 	lh.source.r77838
 	lhcyr.source.r77838
-	mongolian-babel.source.r15878
-	ruhyphen.source.r21081
+	mongolian-babel.source.r79618
+	ruhyphen.source.r79618
 	xecyrmongolian.source.r53160
 	hyphen-kazakh.source.r78069
 "
