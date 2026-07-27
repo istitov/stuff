@@ -16,5 +16,3 @@ RDEPEND="
 	sci-visualization/gnuplot
 "
 DEPEND="${RDEPEND}"
-
-SRC_TEST=do

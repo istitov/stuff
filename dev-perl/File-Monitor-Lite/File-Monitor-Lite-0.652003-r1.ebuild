@@ -12,8 +12,6 @@ DESCRIPTION="Monitor file changes"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-SRC_TEST=do
-
 # lib/File/Monitor/Lite.pm uses all four at module scope: File::Spec::Functions,
 # File::Find::Rule and File::Monitor by name, and Class::Accessor::Fast via
 # `use base` plus mk_accessors. Matches upstream's Makefile.PL PREREQ_PM, minus

@@ -15,4 +15,3 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 #PATCHES=(
 #	"${FILESDIR}/${PV}/no-pod-tests.patch"
 #)
-SRC_TEST=do

@@ -17,5 +17,3 @@ RDEPEND="
 	virtual/perl-ExtUtils-MakeMaker
 	dev-perl/PDL
 "
-
-SRC_TEST="do"

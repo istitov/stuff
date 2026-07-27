@@ -11,5 +11,3 @@ DESCRIPTION="Perl extension for working with Chemical Elements"
 
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-
-SRC_TEST=do

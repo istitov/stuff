@@ -30,5 +30,3 @@ DEPEND="${RDEPEND}
 #		dev-perl/Test-Fatal
 #		dev-perl/Test-More
 #	)
-
-SRC_TEST=do
