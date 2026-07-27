@@ -30,9 +30,9 @@ TEXLIVE_MODULE_CONTENTS="
 	ifxptex.r46153
 	ipaex.r61719
 	japanese-mathformulas.r64678
-	japanese-otf.r78329
+	japanese-otf.r79618
 	jieeetran.r76924
-	jlreq.r77682
+	jlreq.r79733
 	jlreq-deluxe.r78373
 	jpneduenumerate.r72898
 	jpnedumathsymbols.r72959
@@ -92,9 +92,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ifxptex.doc.r46153
 	ipaex.doc.r61719
 	japanese-mathformulas.doc.r64678
-	japanese-otf.doc.r78329
+	japanese-otf.doc.r79618
 	jieeetran.doc.r76924
-	jlreq.doc.r77682
+	jlreq.doc.r79733
 	jlreq-deluxe.doc.r78373
 	jpneduenumerate.doc.r72898
 	jpnedumathsymbols.doc.r72959
@@ -137,8 +137,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	ascmac.source.r79461
 	babel-japanese.source.r57733
 	bxjscls.source.r79198
-	japanese-otf.source.r78329
-	jlreq.source.r77682
+	japanese-otf.source.r79618
+	jlreq.source.r79733
 	jsclasses.source.r77682
 	luatexja.source.r79037
 	mendex-doc.source.r77843
