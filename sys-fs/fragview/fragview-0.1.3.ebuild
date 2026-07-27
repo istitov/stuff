@@ -20,3 +20,8 @@ DEPEND="
 	dev-libs/boost
 "
 RDEPEND="${DEPEND}"
+# CMakeLists.txt:15 find_package(PkgConfig REQUIRED) feeds the
+# pkg_check_modules() call on the next line, so configure dies without it.
+# cmake.eclass does not pull pkgconfig in, and virtual/pkgconfig is not part
+# of @system - it only appears in the stage-build set. verified 2026-07-27
+BDEPEND="virtual/pkgconfig"
