@@ -405,6 +405,15 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "include_regex": r"^[0-9]+\.[0-9]+(?:\.[0-9]+)?b$",
         "prefix": "",
     },
+    # ROCm/FastFlowLM was adopted into the ROCm org but kept its own
+    # `vX.Y.Z` tags instead of the org-wide `rocm-X.Y.Z` scheme the
+    # ^ROCm/.+ filter assumes — under that blanket filter this entry would
+    # match NOTHING and silently drop tracking. This per-package override
+    # wins over GITHUB_TAG_FILTERS. verified 2026-07-29: all 56 tags are
+    # v-scheme (v0.9.46 latest), zero rocm-* tags.
+    "sci-ml/fastflowlm": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
 }
 
 

@@ -2152,8 +2152,9 @@ prefix = "v"
 
 ["sci-ml/fastflowlm"]
 source = "github"
-github = "FastFlowLM/FastFlowLM"
+github = "ROCm/FastFlowLM"
 use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
 ["sci-ml/hf_xet"]

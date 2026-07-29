@@ -8,10 +8,10 @@ inherit cmake git-r3 systemd
 DESCRIPTION="NPU-first LLM runtime for AMD Ryzen AI (XDNA2) processors"
 HOMEPAGE="
 	https://fastflowlm.com/
-	https://github.com/FastFlowLM/FastFlowLM
+	https://github.com/ROCm/FastFlowLM
 "
 
-EGIT_REPO_URI="https://github.com/FastFlowLM/FastFlowLM.git"
+EGIT_REPO_URI="https://github.com/ROCm/FastFlowLM.git"
 EGIT_SUBMODULES=( '*' )
 
 LICENSE="MIT FastFlowLM-Binary"

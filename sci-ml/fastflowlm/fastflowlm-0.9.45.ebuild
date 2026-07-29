@@ -8,7 +8,7 @@ inherit cmake systemd
 DESCRIPTION="NPU-first LLM runtime for AMD Ryzen AI (XDNA2) processors"
 HOMEPAGE="
 	https://fastflowlm.com/
-	https://github.com/FastFlowLM/FastFlowLM
+	https://github.com/ROCm/FastFlowLM
 "
 
 # Submodule commit pins. tokenizers-cpp reverted to acbdc5a in 0.9.43
@@ -19,7 +19,7 @@ SENTENCEPIECE_COMMIT="11051e3b73b3a6222a52acd720e39805dc7545ab"
 MSGPACK_COMMIT="092bc69b6e815980bce7808595c914dd3a29f905"
 
 SRC_URI="
-	https://github.com/FastFlowLM/FastFlowLM/archive/refs/tags/v${PV}.tar.gz
+	https://github.com/ROCm/FastFlowLM/archive/refs/tags/v${PV}.tar.gz
 		-> ${P}.tar.gz
 	https://github.com/mlc-ai/tokenizers-cpp/archive/${TOKENIZERS_CPP_COMMIT}.tar.gz
 		-> tokenizers-cpp-${TOKENIZERS_CPP_COMMIT}.tar.gz
