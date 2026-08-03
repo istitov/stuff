@@ -18,8 +18,6 @@ HOMEPAGE="
 LICENSE="Apache-2.0 BSD"
 SLOT="0"
 KEYWORDS="~amd64"
-# Upstream's suite builds extra C++ modules and requires optional ML frameworks.
-RESTRICT="test"
 
 RDEPEND="
 	>=dev-python/typing-extensions-4.5[${PYTHON_USEDEP}]
@@ -28,7 +26,16 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	>=dev-python/cython-3.0[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+	test? (
+		app-alternatives/ninja
+		dev-python/ml-dtypes[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-python/packaging[${PYTHON_USEDEP}]
+	)
 "
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
 
 # Upstream's pyproject.toml [tool.scikit-build] sets a cmake.args list
 # that includes -DTVM_FFI_BUILD_PYTHON_MODULE=ON. The Gentoo PEP517
