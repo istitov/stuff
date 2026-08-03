@@ -3,28 +3,31 @@
 
 EAPI=8
 
-inherit flag-o-matic fortran-2
+PYTHON_COMPAT=( python3_{12..15} )
+
+inherit flag-o-matic fortran-2 python-any-r1
 
 DESCRIPTION="Suite of interactive programs for XAFS analysis"
 HOMEPAGE="https://sourceforge.net/projects/ifeffit/"
 SRC_URI="https://archive.ubuntu.com/ubuntu/pool/multiverse/${P:0:1}/${PN}/${PN}_${PV}.orig.tar.gz"
 
 S="${WORKDIR}/${PN}-${PV}"
-LICENSE="BSD"
+LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc"
 
 RDEPEND="
-	dev-perl/PGPLOT
-	sci-libs/pgplot[static-libs]
+	media-libs/libpng:=
+	sci-libs/pgplot:=
+	sys-libs/ncurses:=
+	sys-libs/readline:=
+	virtual/zlib:=
+	x11-libs/libX11:=
 "
-#	x11-libs/libX11[static-libs]
-#	x11-libs/libXi[static-libs]
-#	x11-libs/libXrender[static-libs]
-
-DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
+DEPEND="${RDEPEND}"
+BDEPEND="
+	${PYTHON_DEPS}
+	dev-lang/perl
 "
 
 PATCHES=(
@@ -34,6 +37,7 @@ PATCHES=(
 	"${FILESDIR}"/readline_6.3_patch
 	"${FILESDIR}"/unescaped-left-brace.patch
 	"${FILESDIR}"/wrapper_patches
+	"${FILESDIR}"/${P}-modern-build.patch
 )
 
 src_configure() {
@@ -44,19 +48,23 @@ src_configure() {
 	# 2026-05-09.
 	append-cflags -std=gnu89
 
-	./configure --with-pgplot-link="-L/usr/lib64/ -lX11 -lpgplot -lpng -lz -L/usr/lib64/pgplot -lpgplot"
+	python_setup
+	PYTHON="${PYTHON}" econf \
+		--with-pgplot-link="-lpgplot -lX11 -lpng -lz" \
+		--with-termcap-link="-lncurses"
 }
 
-src_compile() {
-	make
-}
+src_install() {
+	emake DESTDIR="${D}" install
+	rm "${ED}"/usr/$(get_libdir)/libnopgplot.a || die
 
-pkg_install() {
-	make install
-}
+	# Autoconf includes compiler-specific -L paths in FLIBS.  They become
+	# stale after a compiler upgrade and are unnecessary in standard paths.
+	local config
+	for config in Config.mak Makefile.PL TclSetup.in site_install.py; do
+		sed -E -i 's|-L/[^[:space:]"]+[[:space:]]*||g' \
+			"${ED}"/usr/share/${PN}/config/${config} || die
+	done
 
-pkg_postinst() {
-	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/local/share/ifeffit/config/Config.mak || die "Sed failed!"
-	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/local/share/ifeffit/config/TclSetup.in || die "Sed failed!"
-	sed -i 's:/var/tmp/portage/sci-physics/ifeffit-9999/work/ifeffit-9999/src/pgstub/libnopgplot.a:/usr/lib64/libifeffit.a:' "${ROOT}"/usr/local/share/ifeffit/config/Makefile.PL || die "Sed failed!"
+	einstalldocs
 }

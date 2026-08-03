@@ -1,0 +1,111 @@
+Port the build-time command generator to Python 3, remove a malformed
+autoconf probe, and make installed wrapper configuration refer to installed
+headers and libraries without embedding the package build flags.
+
+--- a/configure.in
++++ b/configure.in
+@@ -16,7 +16,6 @@ AC_HEADER_STDC
+ #  change for Debian (CUS)
+ #AC_PROG_RANLIB
+ AC_PROG_LIBTOOL
+-AC_INCLUDES_DEFAULT
+ 
+ AC_PATH_PROGS(PERL,   perl perl5 perl5.8 perl5.6 perl5.005, NO_PERL )
+ AC_PATH_PROGS(PYTHON, python python2 python2.5 python2.4 python2.3 python2.2 python2.1, NO_PYTHON)
+
+--- a/configure
++++ b/configure
+@@ -3353,6 +3353,3 @@ fi
+ done
+-
+-
+-$ac_includes_default
+ 
+ for ac_prog in perl perl5 perl5.8 perl5.6 perl5.005
+ do
+
+--- a/src/lib/ComBuild
++++ b/src/lib/ComBuild
+@@ -1,8 +1,8 @@
+-#!/usr/bin/python 
++#!/usr/bin/env python3
+ #
+ #  build ifeffit's build.h file
+ #  copyright (c) 2002  matt newville
+ #
+-import string, sys
++import sys
+ 
+ try:
+     keywords = sys.argv[1]
+@@ -14,7 +14,7 @@
+ indent   = " " * 5
+ 
+ def readfile(file):
+-    print " Reading %s " % file
++    print(" Reading %s " % file)
+     f = open(file,'r')
+     l = f.readlines()
+     f.close()
+@@ -25,11 +25,10 @@
+ for i in kw:
+     j = i.strip()
+     if ((len(j) > 5) and (j[0] != '#')):
+-        (x, y) = string.split(i,'::')
++        (x, y) = i.split('::', 1)
+         coms[x] = y.strip()
+ 
+-k  = coms.keys()
+-k.sort()
++k = sorted(coms)
+ 
+ file = comfile
+ f = open(file,'w')
+@@ -44,5 +43,5 @@
+ 
+ f.write("c}\n")
+ f.close()
+-print " Wrote %s " % file
++print(" Wrote %s " % file)
+ 
+--- a/src/lib/Makefile.in
++++ b/src/lib/Makefile.in
+@@ -489,10 +489,10 @@ Config.mak: $(OBJECTS)
+ 	@echo '#    LIB_F77 = Fortran libraries'     >> $@
+ 	@echo '#    LIB_X11 = X Libaries'            >> $@
+ 	@echo '#    INC_IFF = location of ifeffit.h' >> $@
+-	@echo 'LIB_IFF  = -L$(prefix)/lib -lifeffit' >> $@
++	@echo 'LIB_IFF  = -lifeffit'                  >> $@
+ 	@echo 'LIB_PLT  = $(PGPLOT_LIBS)'            >> $@
+ 	@echo 'LIB_F77  = $(MN_FLIBS) '              >> $@
+-	@echo 'INC_IFF  = -I$(pkgdatadir)/config'    >> $@
++	@echo 'INC_IFF  = -I$(includedir) -I$(pkgdatadir)/config' >> $@
+ 	@echo '#==  ' >> $@
+ 	@echo 'made $@'
+ 
+@@ -526,7 +526,7 @@ Makefile.PL: Config.mak
+ 	@echo "              'INSTALLSCRIPT' => '$(bindir)',">> $@
+ 	@echo "              'LDDLFLAGS'     => '$(LDDLFLAGS_P5)',"  >> $@
+-	@echo "              'INC'    => '-I../../src/lib -I$(pkgdatadir)/config'," >> $@
+-	@echo "              'LIBS'   =>[' -L../../src/lib '.\$$Config{ldflags}." >> $@
++	@echo "              'INC'    => '-I$(includedir) -I$(pkgdatadir)/config'," >> $@
++	@echo "              'LIBS'   =>[' '.\$$Config{ldflags}." >> $@
+ 	@echo "                    ' -lifeffit $(PGPLOT_LIBS) '." >> $@
+ 	@echo "                    join(\" \", (sort(split(\" \", \"$(MN_FLIBS)\" ))))] " >> $@
+ 	@echo "         );" >> $@
+@@ -544,2 +544,2 @@ site_install.py: Config.mak
+-	@echo 'bin_dir="$(bindir)"' > $@
+-	@echo 'lib_iff="-L../../src/lib -lifeffit "' >> $@
++	@echo 'bin_dir="$(bindir)"' >> $@
++	@echo 'lib_iff="-lifeffit "' >> $@
+@@ -548 +548 @@ site_install.py: Config.mak
+-	@echo 'inc_iff="-I../../src/lib -I$(pkgdatadir)/config"' >> $@
++	@echo 'inc_iff="-I$(includedir) -I$(pkgdatadir)/config"' >> $@
+@@ -560,5 +560,2 @@ TclSetup.in: Config.mak
+-	@echo 'LIB_IFF  = -L../../src/lib -lifeffit ' >> $@
+-	@echo 'INC_IFF  = -I../../src/lib -I$(pkgdatadir)/config' >> $@
++	@echo 'LIB_IFF  = -lifeffit ' >> $@
++	@echo 'INC_IFF  = -I$(includedir) -I$(pkgdatadir)/config' >> $@
+-	@echo 'CC       = $(CCLD)'     >> $@
+-	@echo 'CFLAGS   = $(CFLAGS)'   >> $@
+-	@echo 'LDFLAGS  = $(LDFLAGS)'  >> $@
