@@ -349,12 +349,6 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     # NOTE: dev-util/xrt is tracked via SPECIAL_SOURCES (use_latest_release),
     # not here — see the block in SPECIAL_SOURCES for why use_max_tag can't
     # work for XRT's dated/prerelease release scheme.
-    # lierdakil/pandoc-crossref publishes alpha/rc tags for next releases;
-    # restrict to stable tags (3- or 4-part version, with optional trailing
-    # letter like `0.3.23a`, but no hyphenated pre-release suffixes).
-    "app-text/pandoc-crossref-bin": {
-        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+[0-9a-z.]*$",
-    },
     # ggml-org/llama.cpp tags its builds as `b<N>` (e.g. b9209), not semver.
     # The repo also carries old `gguf-v<X>.<Y>` and `master-<sha>` style refs.
     # Match only the 4+ digit build-number form (current N is ~9200, so 4-digit

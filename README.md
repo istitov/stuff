@@ -289,7 +289,6 @@ consumers follow.
   [`app-office/mytetra`](http://webhamster.ru/site/page/index/articles/projectcode/138),
   `app-misc/tudu`,
   [`sys-fs/google-drive-ocamlfuse`](https://github.com/astrada/google-drive-ocamlfuse),
-  [`app-text/pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref),
   [`app-portage/portconf`](https://github.com/istitov/portconf)
   (`/etc/portage` cleaner; forked to istitov and bumped to the 2.x
   series in this overlay), and
