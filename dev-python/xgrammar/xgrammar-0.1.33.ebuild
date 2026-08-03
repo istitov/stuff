@@ -17,16 +17,15 @@ HOMEPAGE="
 	https://pypi.org/project/xgrammar/
 "
 
-LICENSE="Apache-2.0"
+LICENSE="Apache-2.0 BSD-2"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# vllm pins >=0.1.32, <1.0.0; we ship 0.1.33 because 0.1.34+ added a
-# hard dep on apache-tvm-ffi (TVM's FFI shim) which isn't packaged.
 RDEPEND="
 	>=sci-ml/pytorch-1.10.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.38.0[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
+		dev-python/triton-bin[${PYTHON_USEDEP}]
 		dev-python/pydantic[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
 		>=dev-python/typing-extensions-4.9.0[${PYTHON_USEDEP}]
@@ -38,3 +37,16 @@ BDEPEND="
 		>=dev-python/nanobind-2.5.0[${PYTHON_USEDEP}]
 	')
 "
+
+PATCHES=(
+	"${FILESDIR}/${PN}-respect-toolchain-flags.patch"
+	"${FILESDIR}/${P}-disable-nanobind-lto.patch"
+)
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+python_test() {
+	# The excluded tests download gated or multi-gigabyte model tokenizers.
+	epytest -m "not hf_token_required"
+}

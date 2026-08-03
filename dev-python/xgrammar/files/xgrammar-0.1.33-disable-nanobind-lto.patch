@@ -1,0 +1,8 @@
+From: Gentoo
+Subject: [PATCH] let the toolchain control LTO for nanobind
+
+--- a/cpp/nanobind/CMakeLists.txt
++++ b/cpp/nanobind/CMakeLists.txt
+@@ -21 +21 @@
+-nanobind_add_module(xgrammar_bindings FREE_THREADED LTO nanobind.cc)
++nanobind_add_module(xgrammar_bindings FREE_THREADED nanobind.cc)
