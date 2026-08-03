@@ -1,0 +1,68 @@
+From 40aa80ba446f4ac6c0bed199a509661f3f7693f3 Mon Sep 17 00:00:00 2001
+From: Linzhang Li <yuchuan.7streams@gmail.com>
+Date: Wed, 22 Jul 2026 11:14:51 -0400
+Subject: [PATCH] tests: align the tests with the current main branch
+
+Backport the test expectation corrections committed immediately after the
+v0.2.5 tag.
+
+Upstream-Commit: https://github.com/mlc-ai/xgrammar/commit/40aa80ba446f4ac6c0bed199a509661f3f7693f3
+---
+ tests/python/test_json_schema_converter.py    | 4 ++--
+ tests/python/test_structural_tag_converter.py | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tests/python/test_json_schema_converter.py b/tests/python/test_json_schema_converter.py
+index f2ae2e7..25ee2f2 100644
+--- a/tests/python/test_json_schema_converter.py
++++ b/tests/python/test_json_schema_converter.py
+@@ -3392,14 +3392,14 @@ root_prop_0 ::= ("0" | "-"? [1-9] [0-9]*)
+ 
+     # Ordered: the required props are emitted in fixed declared order (a, then b).
+     assert ordered == prefix + (
+-        r"""root_part_0 ::= [ \n\t]* "<parameter=b>" [ \n\t]* xml_string [ \n\t]* "</parameter>" ""
++        r"""root_part_0 ::= [ \n\t]* "<parameter=b>" xml_string "</parameter>" ""
+ root ::=  [ \n\t]* (("<parameter=a>" [ \n\t]* root_prop_0 [ \n\t]* "</parameter>" root_part_0)) [ \n\t]*
+ """
+     )
+ 
+     # any_order: one "item" alternation repeated [n=#required=2, m=unbounded] times.
+     assert any_order == prefix + (
+-        r"""root_item ::= "<parameter=a>" [ \n\t]* root_prop_0 [ \n\t]* "</parameter>" | "<parameter=b>" [ \n\t]* xml_string [ \n\t]* "</parameter>"
++        r"""root_item ::= "<parameter=a>" [ \n\t]* root_prop_0 [ \n\t]* "</parameter>" | "<parameter=b>" xml_string "</parameter>"
+ root ::=  [ \n\t]* (root_item ([ \n\t]* root_item){1,} ) [ \n\t]*
+ """
+     )
+diff --git a/tests/python/test_structural_tag_converter.py b/tests/python/test_structural_tag_converter.py
+index fbcc3b4..3db0266 100644
+--- a/tests/python/test_structural_tag_converter.py
++++ b/tests/python/test_structural_tag_converter.py
+@@ -201,7 +201,7 @@ xml_object ::= (([ \n\t]* "<parameter=" xml_variable_name ">" [ \n\t]* xml_any [
+ xml_variable_name ::= (([a-zA-Z_] [a-zA-Z0-9_]*))
+ root_prop_1 ::= (("0") | (root_prop_1_1 [1-9] [0-9]*))
+ root_part_0 ::= (([ \n\t]* "<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>"))
+-root_0 ::= (([ \n\t]* "<parameter=name>" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0 [ \n\t]*))
++root_0 ::= (([ \n\t]* "<parameter=name>" xml_string "</parameter>" root_part_0 [ \n\t]*))
+ basic_integer_1 ::= ("" | ("-"))
+ basic_number_1 ::= ("" | ("-"))
+ basic_number_2 ::= (([0-9] basic_number_2) | ([0-9]))
+@@ -313,7 +313,7 @@ xml_object ::= (([ \n\t]* "<parameter name=\"" xml_variable_name "\">" [ \n\t]*
+ xml_variable_name ::= (([a-zA-Z_] [a-zA-Z0-9_]*))
+ root_prop_1 ::= (("0") | (root_prop_1_1 [1-9] [0-9]*))
+ root_part_0 ::= (([ \n\t]* "<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>"))
+-root_0 ::= (([ \n\t]* "<parameter name=\"name\">" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0 [ \n\t]*))
++root_0 ::= (([ \n\t]* "<parameter name=\"name\">" xml_string "</parameter>" root_part_0 [ \n\t]*))
+ basic_integer_1 ::= ("" | ("-"))
+ basic_number_1 ::= ("" | ("-"))
+ basic_number_2 ::= (([0-9] basic_number_2) | ([0-9]))
+@@ -396,7 +396,7 @@ xml_object ::= (([ \n\t]* "<\uff5cDSML\uff5cparameter name=\"" xml_variable_name
+ xml_variable_name ::= (([a-zA-Z_] [a-zA-Z0-9_]*))
+ root_prop_1 ::= (("0") | (root_prop_1_1 [1-9] [0-9]*))
+ root_part_0 ::= (([ \n\t]* "<\uff5cDSML\uff5cparameter name=\"age\" string=\"" root_part_0_1 "\">" [ \n\t]* root_prop_1 [ \n\t]* "</\uff5cDSML\uff5cparameter>"))
+-root_0 ::= (([ \n\t]* "<\uff5cDSML\uff5cparameter name=\"name\" string=\"" root_1 "\">" [ \n\t]* xml_string [ \n\t]* "</\uff5cDSML\uff5cparameter>" root_part_0 [ \n\t]*))
++root_0 ::= (([ \n\t]* "<\uff5cDSML\uff5cparameter name=\"name\" string=\"" root_1 "\">" xml_string "</\uff5cDSML\uff5cparameter>" root_part_0 [ \n\t]*))
+ basic_integer_1 ::= ("" | ("-"))
+ basic_number_1 ::= ("" | ("-"))
+ basic_number_2 ::= (([0-9] basic_number_2) | ([0-9]))
+-- 
+2.53.0
