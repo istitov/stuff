@@ -15,7 +15,7 @@ HOMEPAGE="
 	https://pypi.org/project/apache-tvm-ffi/
 "
 
-LICENSE="Apache-2.0"
+LICENSE="Apache-2.0 BSD"
 SLOT="0"
 KEYWORDS="~amd64"
 
@@ -26,7 +26,16 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	>=dev-python/cython-3.0[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+	test? (
+		app-alternatives/ninja
+		dev-python/ml-dtypes[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-python/packaging[${PYTHON_USEDEP}]
+	)
 "
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
 
 # Upstream's pyproject.toml [tool.scikit-build] sets a cmake.args list
 # that includes -DTVM_FFI_BUILD_PYTHON_MODULE=ON. The Gentoo PEP517
@@ -34,7 +43,7 @@ BDEPEND="
 # the pyproject.toml value, so the option falls back to its CMakeLists
 # default (OFF) and the cython core extension is skipped, leaving an
 # unimportable installed package. Re-pass the option via DISTUTILS_ARGS
-# so it survives the override. # verified 2026-05-07 against 0.1.9.
+# so it survives the override. # verified 2026-08-03 against 0.1.12.
 DISTUTILS_ARGS=(
 	-DTVM_FFI_BUILD_PYTHON_MODULE=ON
 )
