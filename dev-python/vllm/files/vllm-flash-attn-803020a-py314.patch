@@ -1,0 +1,12 @@
+vllm-flash-attn: allow Python 3.14 in the supported-versions gate.
+
+The extension uses Python's stable ABI, so the hard-coded configure-time
+whitelist can safely follow vllm's own Python compatibility declaration.
+
+Tested against vllm-project/flash-attention @ 803020a (vllm-0.24.0 pin).
+
+--- CMakeLists.txt.orig
++++ CMakeLists.txt
+@@ -22 +22 @@
+-set(PYTHON_SUPPORTED_VERSIONS "3.9" "3.10" "3.11" "3.12" "3.13")
++set(PYTHON_SUPPORTED_VERSIONS "3.9" "3.10" "3.11" "3.12" "3.13" "3.14")
