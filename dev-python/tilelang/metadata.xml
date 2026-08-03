@@ -5,6 +5,9 @@
     <email>iohann.s.titov@gmail.com</email>
     <name>Ivan S. Titov</name>
   </maintainer>
+  <use>
+    <flag name="rocm">Build the AMD ROCm backend instead of the CUDA backend</flag>
+  </use>
   <upstream>
     <remote-id type="pypi">tilelang</remote-id>
     <remote-id type="github">tile-ai/tilelang</remote-id>
