@@ -1,0 +1,22 @@
+From: Gentoo
+Subject: [PATCH] load the binding from the xgrammar package directory
+
+Gentoo does not retain a wheel RECORD, so TVM-FFI cannot discover the binding
+through distribution metadata.  Search xgrammar's own package directory
+instead of requiring a cross-package symlink under tvm_ffi/lib.
+
+--- a/python/xgrammar/load_binding.py
++++ b/python/xgrammar/load_binding.py
+@@ -3,3 +3,4 @@
+ import os
+-
++from pathlib import Path
++
+ from tvm_ffi.libinfo import load_lib_module
+@@ -11 +12,5 @@
+-    LIB = load_lib_module("xgrammar", "xgrammar_bindings")
++    LIB = load_lib_module(
++        "xgrammar",
++        "xgrammar_bindings",
++        extra_lib_paths=[Path(__file__).parent],
++    )

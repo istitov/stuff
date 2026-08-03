@@ -17,70 +17,47 @@ HOMEPAGE="
 	https://pypi.org/project/xgrammar/
 "
 
-LICENSE="Apache-2.0"
+LICENSE="Apache-2.0 BSD-2"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# vllm 0.21.0 pins xgrammar <1.0.0; 0.2.1 fits.
-# Upstream also lists `triton` as a runtime dep on Linux x86_64, but
-# triton isn't packaged in ::gentoo or here yet — vllm + xgrammar's
-# grammar-matching paths we exercise don't require it. # verified 2026-05-10
 RDEPEND="
 	>=sci-ml/pytorch-1.10.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.38.0[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
-		>=dev-python/apache-tvm-ffi-0.1.9[${PYTHON_USEDEP}]
+		>=dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
+		dev-python/triton-bin[${PYTHON_USEDEP}]
 		dev-python/pydantic[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
 		>=dev-python/typing-extensions-4.9.0[${PYTHON_USEDEP}]
 	')
 "
-# apache-tvm-ffi is also a build dep: 0.2.2's cpp/tvm_ffi/CMakeLists.txt
-# runs find_package(tvm_ffi) at configure time, which imports the
-# tvm_ffi module and reads its share/cmake/tvm_ffi config. # verified 2026-06-12
 BDEPEND="
 	>=dev-build/cmake-3.18
 	$(python_gen_cond_dep '
-		>=dev-python/apache-tvm-ffi-0.1.9[${PYTHON_USEDEP}]
-		>=dev-python/nanobind-2.5.0[${PYTHON_USEDEP}]
+		>=dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
 	')
 "
 
-python_compile() {
-	# 0.2.2 imports tvm_ffi during the build (cmake find_package and stub
-	# generation), and tvm_ffi opens accelerator device nodes at import.
-	# Without these the sandbox denies /dev/kfd and /dev/accel/accel0 and
-	# the build aborts. Predict them so the import proceeds. # verified 2026-06-12
-	addpredict /dev/kfd
-	addpredict /dev/accel
-	distutils-r1_python_compile
+PATCHES=(
+	"${FILESDIR}/${PN}-respect-toolchain-flags.patch"
+	"${FILESDIR}/${P}-load-binding-from-package.patch"
+)
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+src_configure() {
+	local device
+	# tvm_ffi imports PyTorch, which probes available accelerator devices.
+	for device in /dev/kfd /dev/dri/render* /dev/accel/accel*; do
+		[[ -e ${device} ]] && addpredict "${device}"
+	done
+
+	distutils-r1_src_configure
 }
 
-python_install_all() {
-	distutils-r1_python_install_all
-
-	# FIXME: workaround, not proper fix.
-	# xgrammar/load_binding.py calls tvm_ffi's load_lib_module without
-	# passing extra_lib_paths, so tvm_ffi searches only its own lib/
-	# dirs and a few PATH entries. The .so installed at xgrammar/
-	# libxgrammar_bindings.so is invisible to that search. Symlink it
-	# into tvm_ffi's lib/ so the lookup succeeds. Upstream wheel works
-	# only by accident (their wheel layout differs from a normal
-	# site-packages install). # verified 2026-05-16 against 0.2.0:
-	# without this symlink, `from vllm import LLM` dies during
-	# xgrammar module init.
-	#
-	# Upstream-able fix: patch xgrammar/load_binding.py to pass
-	# `extra_lib_paths=[Path(__file__).parent]` to load_lib_module —
-	# self-contained inside xgrammar's package boundary, no
-	# cross-package symlink dance. Switch to that pattern (and ship
-	# the patch in files/) when there's appetite for a maintained
-	# patch rather than this dosym workaround.  Also remove the
-	# symlink risk: a hypothetical future apache-tvm-ffi shipping its
-	# own libxgrammar_bindings.so would collide here.
-	local sp
-	sp=$(${EPYTHON} -c 'import sysconfig; print(sysconfig.get_path("purelib"))') || die
-	local tvm_lib="${ED}${sp}/tvm_ffi/lib"
-	dodir "${tvm_lib#${ED}}"
-	dosym "${sp}/xgrammar/libxgrammar_bindings.so" "${tvm_lib#${ED}}/libxgrammar_bindings.so"
+python_test() {
+	# The excluded tests download gated or multi-gigabyte model tokenizers.
+	epytest -m "not hf_token_required"
 }
