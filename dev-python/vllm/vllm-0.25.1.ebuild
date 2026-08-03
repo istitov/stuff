@@ -593,13 +593,23 @@ declare -A GIT_CRATES=(
 # below and call cargo_src_unpack manually.
 CARGO_OPTIONAL=1
 
-inherit cargo distutils-r1 pypi rocm toolchain-funcs
+inherit cargo cuda distutils-r1 flag-o-matic pypi rocm toolchain-funcs
 
-# Commit pinned by cmake/external_projects/vllm_flash_attn.cmake (GIT_TAG).
-# Pre-staged so we can patch out FA3's unconditional-build quirk before
-# vllm's CMake FetchContent reaches it.  Bump in lockstep with vllm
-# bumps that change the pin.
+# Revisions pinned by vllm's CMake files.  Keep these in lockstep with
+# upstream: all CMake dependencies are pre-staged so builds stay offline.
+VLLM_CUTLASS_TAG="4.4.2"
+VLLM_DEEPGEMM_COMMIT="a6b593d2826719dcf4892609af7b84ee23aaf32a"
+VLLM_DEEPGEMM_CUTLASS_COMMIT="f3fde58372d33e9a5650ba7b80fc48b3b49d40c8"
+VLLM_DEEPGEMM_FMT_COMMIT="553ec11ec06fbe0beebfbb45f9dc3c9eabd83d28"
 VLLM_FA_COMMIT="2c839c33742309ec41e620bf837495ec9926c56e"
+VLLM_FA_CUTLASS_COMMIT="62750a2b75c802660e4894434dc55e839f322277"
+VLLM_FLASHMLA_COMMIT="a6ec2ba7bd0a7dff98b3f4d3e6b52b159c48d78b"
+VLLM_FLASHMLA_CUTLASS_COMMIT="147f5673d0c1c3dcf66f78d677fd647e4a020219"
+VLLM_FMHA_SM100_COMMIT="2e63ec37a0fc29bc20f39cd1a52e0f5affc33a73"
+VLLM_FMHA_SM100_CUTLASS_COMMIT="eb61c911471867a5fd2466bfd8f29306cea6ebf8"
+VLLM_ONEDNN_TAG="3.10"
+VLLM_QUTLASS_COMMIT="830d2c4537c7396e14a02a46fbddd18b5d107c65"
+VLLM_TRITON_KERNELS_TAG="3.5.1"
 
 DESCRIPTION="High-throughput, memory-efficient inference and serving engine for LLMs"
 HOMEPAGE="
@@ -609,17 +619,47 @@ HOMEPAGE="
 "
 SRC_URI+="
 	rust? ( ${CARGO_CRATE_URIS} )
+	cpu? (
+		https://github.com/oneapi-src/oneDNN/archive/refs/tags/v${VLLM_ONEDNN_TAG}.tar.gz
+			-> vllm-oneDNN-${VLLM_ONEDNN_TAG}.gh.tar.gz
+	)
 	cuda? (
+		https://github.com/NVIDIA/cutlass/archive/refs/tags/v${VLLM_CUTLASS_TAG}.tar.gz
+			-> vllm-cutlass-${VLLM_CUTLASS_TAG}.gh.tar.gz
+		https://github.com/deepseek-ai/DeepGEMM/archive/${VLLM_DEEPGEMM_COMMIT}.tar.gz
+			-> vllm-DeepGEMM-${VLLM_DEEPGEMM_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_DEEPGEMM_CUTLASS_COMMIT}.tar.gz
+			-> vllm-DeepGEMM-cutlass-${VLLM_DEEPGEMM_CUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/fmtlib/fmt/archive/${VLLM_DEEPGEMM_FMT_COMMIT}.tar.gz
+			-> vllm-DeepGEMM-fmt-${VLLM_DEEPGEMM_FMT_COMMIT:0:7}.gh.tar.gz
 		https://github.com/vllm-project/flash-attention/archive/${VLLM_FA_COMMIT}.tar.gz
 			-> vllm-flash-attn-${VLLM_FA_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_FA_CUTLASS_COMMIT}.tar.gz
+			-> vllm-flash-attn-cutlass-${VLLM_FA_CUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/vllm-project/FlashMLA/archive/${VLLM_FLASHMLA_COMMIT}.tar.gz
+			-> vllm-FlashMLA-${VLLM_FLASHMLA_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_FLASHMLA_CUTLASS_COMMIT}.tar.gz
+			-> vllm-FlashMLA-cutlass-${VLLM_FLASHMLA_CUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/vllm-project/MSA/archive/${VLLM_FMHA_SM100_COMMIT}.tar.gz
+			-> vllm-MSA-${VLLM_FMHA_SM100_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_FMHA_SM100_CUTLASS_COMMIT}.tar.gz
+			-> vllm-MSA-cutlass-${VLLM_FMHA_SM100_CUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/IST-DASLab/qutlass/archive/${VLLM_QUTLASS_COMMIT}.tar.gz
+			-> vllm-qutlass-${VLLM_QUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/triton-lang/triton/archive/refs/tags/v${VLLM_TRITON_KERNELS_TAG}.tar.gz
+			-> vllm-triton-kernels-${VLLM_TRITON_KERNELS_TAG}.gh.tar.gz
+	)
+	rocm? (
+		https://github.com/triton-lang/triton/archive/refs/tags/v${VLLM_TRITON_KERNELS_TAG}.tar.gz
+			-> vllm-triton-kernels-${VLLM_TRITON_KERNELS_TAG}.gh.tar.gz
 	)
 "
 
 LICENSE="Apache-2.0"
 # Dependent crate licenses
 LICENSE+="
-	Apache-2.0 BSD-2 BSD CC0-1.0 CDLA-Permissive-2.0 ISC LGPL-3 MIT
-	MPL-2.0 MPL-2.0 UoI-NCSA Unicode-3.0 Unicode-DFS-2016 Unlicense ZLIB
+	BSD-2 BSD CC0-1.0 CDLA-Permissive-2.0 ISC LGPL-3 MIT
+	MPL-2.0 UoI-NCSA Unicode-3.0 Unicode-DFS-2016 Unlicense ZLIB
 "
 SLOT="0"
 KEYWORDS="~amd64"
@@ -655,11 +695,8 @@ REQUIRED_USE="
 # + tilelang + nvidia-cutlass-dsl + cuda-bindings + nvidia-cudnn-
 # frontend + ...). Compiles the _C / _moe_C / _vllm_fa* CUDA C++
 # extensions in setup.py via nvcc and the system CUDA toolkit at
-# /opt/cuda. CMAKE_CUDA_HOST_COMPILER is pinned to the gcc-15 slot
-# below — CUDA 13.2's nvcc rejects __GNUC__>15 via host_config.h.
-# FetchContent of
-# CUTLASS / spdlog / etc. happens during the vllm CMake build, so
-# RESTRICT="cuda? ( network-sandbox )" mirrors the cpu? pattern.
+# /opt/cuda. cuda.eclass selects a supported host compiler. All CMake
+# external projects are pre-staged from SRC_URI for an offline build.
 #
 # Same MKL-MPI link-pollution caveat as USE=cpu (above): without the
 # >=sci-ml/caffe2-2.11.0-r90 pin the cumem_allocator link fails with
@@ -675,8 +712,7 @@ REQUIRED_USE="
 # toolchain at /opt/rocm. Inherits sci-ml/caffe2's MKL-MPI scrub
 # (>=2.11.0-r90) — same link-pollution caveat as the cuda path.
 # PYTORCH_ROCM_ARCH is derived from AMDGPU_TARGETS via rocm.eclass's
-# get_amdgpu_flags. FetchContent of CK / spdlog / etc. happens during
-# the vllm CMake build, hence RESTRICT="rocm? ( network-sandbox )".
+# get_amdgpu_flags. CMake external projects are pre-staged from SRC_URI.
 #
 # amd-quark (in requirements/rocm.txt as "for Quark quantization on
 # ROCm") is deliberately omitted from RDEPEND: no direct `import` from
@@ -773,15 +809,6 @@ REQUIRED_USE="
 # — Python entrypoints import cleanly, backend kernels fail at first
 # model-load. Useful if you only want the API surface for development.
 #
-# media-libs/opencv lower bound: upstream requirements/common.txt says
-# opencv-python-headless >=4.13.0, ::gentoo tops at 4.12.0.  The full
-# cv2 surface vllm imports — resize, cvtColor, COLOR_BGR2RGB,
-# CAP_PROP_FRAME_COUNT/FPS/FRAME_WIDTH/FRAME_HEIGHT, VideoCapture incl.
-# the 3-arg bytes+backend form, VideoWriter, VideoWriter_fourcc,
-# videoio_registry submodule — is present in 4.12.0; the 4.13 lower
-# bound upstream is wheel-publication churn, not an API extension.
-# verified 2026-05-16 against media-libs/opencv-4.12.0-r1[python].
-#
 # vllm resolves its runtime platform from the host hardware (not the
 # VLLM_TARGET_DEVICE built below). platforms/cuda.py / rocm.py import
 # torch.distributed.PrefixStore + ProcessGroup unconditionally at module
@@ -804,6 +831,11 @@ REQUIRED_USE="
 # triton 3.6.0; its AMD backend JITs gfx kernels via hipcc. cuda
 # verified 2026-06-14 (bug #274); rocm gfx1150 verified 2026-06-14
 # (opt-125m generated, inductor path + Triton _fwd_kernel).
+# Upstream pins lark==1.2.2 and numba==0.65.0, neither of which is in the
+# active repositories. Stay within their compatible major/minor series.
+# common.txt allows xgrammar 0.2.1..<1; CUDA pins apache-tvm-ffi 0.1.9 and
+# ROCm pins 0.1.10. xgrammar 0.2.2 supports both FFI releases and
+# transformers 5, so constrain it on those backends.
 RDEPEND="
 	~sci-ml/pytorch-2.11.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed,gloo]
@@ -824,7 +856,10 @@ RDEPEND="
 		dev-python/tqdm[${PYTHON_USEDEP}]
 		dev-python/blake3[${PYTHON_USEDEP}]
 		dev-python/py-cpuinfo[${PYTHON_USEDEP}]
-		>=dev-python/protobuf-5.29.6[${PYTHON_USEDEP}]
+		|| (
+			~dev-python/protobuf-5.29.6[${PYTHON_USEDEP}]
+			>=dev-python/protobuf-6.33.5[${PYTHON_USEDEP}]
+		)
 		>=dev-python/fastapi-0.133.0[${PYTHON_USEDEP}]
 		<dev-python/fastapi-0.137.0[${PYTHON_USEDEP}]
 		>=dev-python/starlette-1.0.1[${PYTHON_USEDEP}]
@@ -841,6 +876,7 @@ RDEPEND="
 		~dev-python/outlines-core-0.2.14[${PYTHON_USEDEP}]
 		>=dev-python/diskcache-5.6.3[${PYTHON_USEDEP}]
 		>=dev-python/lark-1.2.2[${PYTHON_USEDEP}]
+		<dev-python/lark-2[${PYTHON_USEDEP}]
 		>=dev-python/jsonschema-4.23.0[${PYTHON_USEDEP}]
 		>=dev-python/typing-extensions-4.10[${PYTHON_USEDEP}]
 		>=dev-python/filelock-3.16.1[${PYTHON_USEDEP}]
@@ -850,12 +886,17 @@ RDEPEND="
 		>=dev-python/mistral-common-1.11.5[${PYTHON_USEDEP},image]
 		>=media-libs/opencv-4.13.0[python,${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
-		dev-python/six[${PYTHON_USEDEP}]
+		>=dev-python/six-1.16.0[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-77.0.3[${PYTHON_USEDEP}]
 		dev-python/einops[${PYTHON_USEDEP}]
 		~dev-python/depyf-0.20.0[${PYTHON_USEDEP}]
 		dev-python/cloudpickle[${PYTHON_USEDEP}]
 		dev-python/uvloop[${PYTHON_USEDEP}]
 		dev-python/watchfiles[${PYTHON_USEDEP}]
+		>=dev-python/uvicorn-0.12.0[${PYTHON_USEDEP}]
+		>=dev-python/jinja2-3.1.5[${PYTHON_USEDEP}]
+		>=dev-python/python-multipart-0.0.18[${PYTHON_USEDEP}]
+		>=dev-python/websockets-13.0[${PYTHON_USEDEP}]
 		dev-python/python-json-logger[${PYTHON_USEDEP}]
 		dev-python/pybase64[${PYTHON_USEDEP}]
 		dev-python/cbor2[${PYTHON_USEDEP}]
@@ -872,42 +913,52 @@ RDEPEND="
 		>=dev-python/opentelemetry-semantic-conventions-ai-0.4.1[${PYTHON_USEDEP}]
 	')
 	cpu? (
-		>=sci-ml/caffe2-2.11.0-r90
+		>=sci-ml/caffe2-2.11.0-r90[-cuda,-rocm]
 		~sci-ml/torchaudio-2.11.0
+		~sci-ml/torchvision-0.26.0[-cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
+		>=sci-ml/torchcodec-0.14[-cuda,${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
+			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 		')
 	)
 	cuda? (
-		>=sci-ml/caffe2-2.11.0-r90
+		>=sci-ml/caffe2-2.11.0-r90[cuda,-rocm]
 		~sci-ml/torchaudio-2.11.0
-		~sci-ml/torchvision-0.26.0[${PYTHON_SINGLE_USEDEP}]
+		~sci-ml/torchvision-0.26.0[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
+		~dev-python/xgrammar-0.2.2[${PYTHON_SINGLE_USEDEP}]
 		~dev-python/flashinfer-python-0.6.13[${PYTHON_SINGLE_USEDEP}]
-		>=sci-ml/torchcodec-0.14[${PYTHON_SINGLE_USEDEP}]
-		~dev-python/tilelang-0.1.9[${PYTHON_SINGLE_USEDEP}]
+		>=sci-ml/torchcodec-0.14[cuda,${PYTHON_SINGLE_USEDEP}]
+		~dev-python/tilelang-0.1.9[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
 		>=dev-python/quack-kernels-0.3.3[${PYTHON_SINGLE_USEDEP}]
 		<dev-python/quack-kernels-0.6.0[${PYTHON_SINGLE_USEDEP}]
 		humming? ( ~dev-python/humming-kernels-0.1.10[${PYTHON_SINGLE_USEDEP}] )
 		$(python_gen_cond_dep '
+			~dev-python/apache-tvm-ffi-0.1.9[${PYTHON_USEDEP}]
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
-			>=dev-python/fastsafetensors-0.3.2[${PYTHON_USEDEP}]
+			<dev-python/numba-0.66[${PYTHON_USEDEP}]
+			>=dev-python/fastsafetensors-0.3.2[${PYTHON_SINGLE_USEDEP}]
 			~dev-python/nvidia-cutlass-dsl-4.5.2[${PYTHON_USEDEP}]
 			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
 		')
 		dev-util/nvidia-cuda-toolkit:=
 	)
 	rocm? (
-		>=sci-ml/caffe2-2.11.0-r90
+		>=sci-ml/caffe2-2.11.0-r90[-cuda,rocm,${ROCM_USEDEP}]
 		~sci-ml/torchaudio-2.11.0
-		~sci-ml/torchvision-0.26.0[${PYTHON_SINGLE_USEDEP}]
+		~sci-ml/torchvision-0.26.0[-cuda,rocm,${PYTHON_SINGLE_USEDEP}]
+		~dev-python/xgrammar-0.2.2[${PYTHON_SINGLE_USEDEP}]
 		>=dev-python/runai-model-streamer-bin-0.15.7[${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tensorizer-2.10.1[${PYTHON_SINGLE_USEDEP}]
-		~dev-python/tilelang-0.1.10[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/tilelang-0.1.10[-cuda,rocm,${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
+			~dev-python/apache-tvm-ffi-0.1.10[${PYTHON_USEDEP}]
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
+			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 			~dev-python/conch-triton-kernels-1.2.1[${PYTHON_USEDEP}]
 			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
 			>=dev-util/amdsmi-7.0.2[${PYTHON_USEDEP}]
+			>=dev-python/fastsafetensors-0.3.2[${PYTHON_SINGLE_USEDEP}]
 		')
 		>=dev-util/hip-7.2:=
 		>=sci-libs/hipBLAS-7.2:=
@@ -952,17 +1003,7 @@ BDEPEND="
 "
 
 # Tests need a model+inference setup; not wired up here.
-# CPU build fetches oneDNN v3.10 from GitHub via CMake FetchContent.
-# CUDA build similarly uses FetchContent for CUTLASS / spdlog / etc.
-# during the _C / _moe_C / _vllm_fa* extension compile. Both paths
-# need the network-sandbox bypass. # verified 2026-05-07 against
-# 0.20.1; 0.21.0's FetchContent set wasn't re-audited at bump time.
-RESTRICT="
-	test
-	cpu? ( network-sandbox )
-	cuda? ( network-sandbox )
-	rocm? ( network-sandbox )
-"
+RESTRICT="test"
 
 # 0.20.x carried a patch to relax cmake/cpu_extension.cmake's libgomp
 # probe so it would fall back to the system gcc-runtime libgomp when
@@ -1002,11 +1043,32 @@ src_prepare() {
 	fi
 
 	if use cuda; then
+		# Populate the gitlinks omitted by GitHub-generated archives.
+		local deepgemm_dir="${WORKDIR}/DeepGEMM-${VLLM_DEEPGEMM_COMMIT}"
+		local fa_dir="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
+		local flashmla_dir="${WORKDIR}/FlashMLA-${VLLM_FLASHMLA_COMMIT}"
+		local fmha_dir="${WORKDIR}/MSA-${VLLM_FMHA_SM100_COMMIT}"
+
+		rmdir "${deepgemm_dir}/third-party/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_DEEPGEMM_CUTLASS_COMMIT}" \
+			"${deepgemm_dir}/third-party/cutlass" || die
+		rmdir "${deepgemm_dir}/third-party/fmt" || die
+		mv "${WORKDIR}/fmt-${VLLM_DEEPGEMM_FMT_COMMIT}" \
+			"${deepgemm_dir}/third-party/fmt" || die
+		rmdir "${fa_dir}/csrc/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_FA_CUTLASS_COMMIT}" \
+			"${fa_dir}/csrc/cutlass" || die
+		rmdir "${flashmla_dir}/csrc/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_FLASHMLA_CUTLASS_COMMIT}" \
+			"${flashmla_dir}/csrc/cutlass" || die
+		rmdir "${fmha_dir}/python/fmha_sm100/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_FMHA_SM100_CUTLASS_COMMIT}" \
+			"${fmha_dir}/python/fmha_sm100/cutlass" || die
+
 		# Pre-stage vllm-flash-attn and apply our local patches before
 		# vllm's CMake FetchContent reaches it.  vllm honours
 		# VLLM_FLASH_ATTN_SRC_DIR (set in src_configure) and skips the
 		# git fetch when the dir already exists.
-		local fa_dir="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
 		[[ -d ${fa_dir} ]] || die "expected ${fa_dir} from SRC_URI unpack"
 		pushd "${fa_dir}" >/dev/null || die
 		# Skip the FA3 (Hopper) target body when no Hopper arch is in
@@ -1029,15 +1091,23 @@ src_configure() {
 	# optional extension.
 	use rust && export VLLM_REQUIRE_RUST_FRONTEND=1
 
+	if use cuda || use rocm; then
+		export TRITON_KERNELS_SRC_DIR="${WORKDIR}/triton-${VLLM_TRITON_KERNELS_TAG}/python/triton_kernels/triton_kernels"
+	fi
+
 	if use cuda; then
 		export VLLM_TARGET_DEVICE=cuda
-		# Point vllm's cmake FetchContent at our pre-staged + patched
-		# flash-attention source instead of re-fetching from github.
+		# Point every CMake external project at its pre-staged source.
+		export VLLM_CUTLASS_SRC_DIR="${WORKDIR}/cutlass-${VLLM_CUTLASS_TAG}"
+		export DEEPGEMM_SRC_DIR="${WORKDIR}/DeepGEMM-${VLLM_DEEPGEMM_COMMIT}"
+		export FLASH_MLA_SRC_DIR="${WORKDIR}/FlashMLA-${VLLM_FLASHMLA_COMMIT}"
+		export FMHA_SM100_SRC_DIR="${WORKDIR}/MSA-${VLLM_FMHA_SM100_COMMIT}"
+		export QUTLASS_SRC_DIR="${WORKDIR}/qutlass-${VLLM_QUTLASS_COMMIT}"
 		export VLLM_FLASH_ATTN_SRC_DIR="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
-		# CUDA 13.2's nvcc rejects gcc>15 via crt/host_config.h. Pin
-		# nvcc's host compiler to the gcc-15 slot when the active
-		# system gcc is newer.
-		export CUDAHOSTCXX=/usr/bin/x86_64-pc-linux-gnu-g++-15
+		# Select the newest installed compiler supported by this CUDA,
+		# while still respecting an explicit user override.
+		: "${CUDAHOSTCXX:=$(cuda_gccdir)/g++}"
+		export CUDAHOSTCXX
 		export CMAKE_ARGS+=" -DCMAKE_CUDA_HOST_COMPILER=${CUDAHOSTCXX}"
 
 		# vllm's heavy CUDA template instantiations
@@ -1061,6 +1131,7 @@ src_configure() {
 		export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-${MAX_JOBS}}"
 	elif use cpu; then
 		export VLLM_TARGET_DEVICE=cpu
+		export FETCHCONTENT_SOURCE_DIR_ONEDNN="${WORKDIR}/oneDNN-${VLLM_ONEDNN_TAG}"
 		# vllm 0.22.x cpu_extension.cmake locates OpenMP via
 		# vllm_prepare_torch_gomp_shim(), which expects a libgomp vendored
 		# inside PyTorch (torch.libs/libgomp-*.so — a PyPI-wheel artifact).
@@ -1073,6 +1144,7 @@ src_configure() {
 		export CMAKE_ARGS+=" -DCMAKE_LIBRARY_PATH=${gomp_dir}"
 	elif use rocm; then
 		export VLLM_TARGET_DEVICE=rocm
+		filter-lto
 		# rocm.eclass turns AMDGPU_TARGETS into a semicolon-joined
 		# list. vllm's CMakeLists reads PYTORCH_ROCM_ARCH and feeds
 		# it to enable_language(HIP). Same MAX_JOBS throttle as the
