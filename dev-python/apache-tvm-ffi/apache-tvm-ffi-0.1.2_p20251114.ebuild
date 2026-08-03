@@ -28,8 +28,6 @@ S="${WORKDIR}/tvm-ffi-${TVM_FFI_COMMIT}"
 LICENSE="Apache-2.0 BSD"
 SLOT="0"
 KEYWORDS="~amd64"
-# Upstream's suite builds extra C++ modules and requires optional ML frameworks.
-RESTRICT="test"
 
 RDEPEND="
 	>=dev-python/typing-extensions-4.5[${PYTHON_USEDEP}]
@@ -38,8 +36,16 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	>=dev-python/cython-3.0[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+	test? (
+		app-alternatives/ninja
+		dev-python/ml-dtypes[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+	)
 "
 PATCHES=( "${FILESDIR}/${PN}-0.1.2-gcc16-optional.patch" )
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
 
 # GitHub archives omit submodules and VCS metadata. Restore the exact submodule
 # revisions pinned by this commit and provide a PEP 440 version to setuptools-scm.
