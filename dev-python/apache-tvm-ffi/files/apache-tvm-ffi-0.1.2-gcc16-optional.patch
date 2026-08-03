@@ -1,0 +1,67 @@
+From: Gentoo
+Subject: [PATCH] Avoid recursive std::optional constraint with GCC 16
+
+Dereference the populated TVM Optional before returning it.  This is
+equivalent to the existing imported-module path below and avoids GCC 16
+recursively testing whether Function is constructible from Optional<Function>.
+Materialize packed-call return values as Any before assignment for the same
+reason; this selects Any's move assignment instead of its generic template.
+Accept Optional rvalues by reference in TypeTraits so overload resolution does
+not probe Optional's converting value constructor while passing the argument.
+
+diff --git a/include/tvm/ffi/function_details.h b/include/tvm/ffi/function_details.h
+--- a/include/tvm/ffi/function_details.h
++++ b/include/tvm/ffi/function_details.h
+@@ -220,7 +220,7 @@ TVM_FFI_INLINE void unpack_call(std::index_sequence<Is...>, const std::string* o
+     f(ArgValueWithContext<std::tuple_element_t<Is, PackedArgs>>{args, Is, optional_name, f_sig}...);
+   } else {
+-    *rv = R(f(ArgValueWithContext<std::tuple_element_t<Is, PackedArgs>>{args, Is, optional_name,
+-                                                                        f_sig}...));
++    *rv = Any(R(f(ArgValueWithContext<std::tuple_element_t<Is, PackedArgs>>{
++        args, Is, optional_name, f_sig}...)));
+   }
+ }
+
+diff --git a/src/ffi/extra/module.cc b/src/ffi/extra/module.cc
+--- a/src/ffi/extra/module.cc
++++ b/src/ffi/extra/module.cc
+@@ -32,7 +32,7 @@ namespace ffi {
+ 
+ Optional<Function> ModuleObj::GetFunction(const String& name, bool query_imports) {
+   if (auto opt_func = this->GetFunction(name)) {
+-    return opt_func;
++    return *opt_func;
+   }
+   if (query_imports) {
+     for (const Any& import : imports_) {
+@@ -46,7 +46,7 @@ Optional<Function> ModuleObj::GetFunction(const String& name, bool query_imports
+ 
+ Optional<String> ModuleObj::GetFunctionMetadata(const String& name, bool query_imports) {
+   if (auto opt_metadata = this->GetFunctionMetadata(name)) {
+-    return opt_metadata;
++    return *opt_metadata;
+   }
+   if (query_imports) {
+     for (const Any& import : imports_) {
+@@ -60,7 +60,7 @@ Optional<String> ModuleObj::GetFunctionMetadata(const String& name, bool query_i
+ 
+ Optional<String> ModuleObj::GetFunctionDoc(const String& name, bool query_imports) {
+   if (auto opt_str = this->GetFunctionDoc(name)) {
+-    return opt_str;
++    return *opt_str;
+   }
+   if (query_imports) {
+     for (const Any& import : imports_) {
+
+diff --git a/include/tvm/ffi/type_traits.h b/include/tvm/ffi/type_traits.h
+--- a/include/tvm/ffi/type_traits.h
++++ b/include/tvm/ffi/type_traits.h
+@@ -771,7 +771,7 @@ struct TypeTraits<Optional<T>> : public TypeTraitsBase {
+     }
+   }
+ 
+-  TVM_FFI_INLINE static void MoveToAny(Optional<T> src, TVMFFIAny* result) {
++  TVM_FFI_INLINE static void MoveToAny(Optional<T>&& src, TVMFFIAny* result) {
+     if (src.has_value()) {
+       TypeTraits<T>::MoveToAny(*std::move(src), result);
+     } else {
