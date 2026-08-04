@@ -1,0 +1,24 @@
+From 3b00143e7ebd8d273633691bf92e7691945ed26e Mon Sep 17 00:00:00 2001
+From: Muspi Merol <me@promplate.dev>
+Date: Mon, 17 Nov 2025 16:12:10 +0800
+Subject: [PATCH] check error message in pytest correctly
+
+---
+ tests/test_examples.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_examples.py b/tests/test_examples.py
+index 1fcd02e..7bf8727 100644
+--- a/tests/test_examples.py
++++ b/tests/test_examples.py
+@@ -117,7 +117,7 @@ def consistent(json_string, allow):
+         res = fix(json_string, allow)
+         return res == fix_fast(json_string, allow)
+     except PartialJSON as err:
+-        with raises(PartialJSON, match=str(err)):
++        with raises(PartialJSON, match=f"^{err}$"):
+             fix_fast(json_string, allow)
+         return True
+ 
+-- 
+2.51.0
