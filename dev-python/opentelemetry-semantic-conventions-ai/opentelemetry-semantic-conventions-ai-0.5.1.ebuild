@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1 pypi
 
@@ -19,7 +19,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 # Layered on top of stock opentelemetry-semantic-conventions in ::gentoo.
+# opentelemetry-python 1.38.0 contains semantic-conventions 0.59b0.
 RDEPEND="
 	>=dev-python/opentelemetry-sdk-1.38.0[${PYTHON_USEDEP}]
-	dev-python/opentelemetry-semantic-conventions[${PYTHON_USEDEP}]
+	<dev-python/opentelemetry-sdk-2[${PYTHON_USEDEP}]
+	>=dev-python/opentelemetry-semantic-conventions-1.38.0[${PYTHON_USEDEP}]
 "
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
