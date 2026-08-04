@@ -5,6 +5,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
+# pyo3-0.25 supports at most Python 3.14.
 PYTHON_COMPAT=( python3_{12..14} )
 
 RUST_MIN_VER="1.85.0"
@@ -329,6 +330,8 @@ HOMEPAGE="
 	https://pypi.org/project/openai-harmony/
 "
 SRC_URI+="
+	https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken
+	https://openaipublic.blob.core.windows.net/encodings/o200k_base.tiktoken
 	${CARGO_CRATE_URIS}
 "
 
@@ -340,14 +343,20 @@ LICENSE+="
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Tests live under tests/ but exercise the pyo3 binding via pytest, which
-# requires `maturin develop` against an editable install — mechanics not
-# wired up here; revisit once a bigger Rust+Python test harness lands.
-RESTRICT="test"
-
 RDEPEND="
 	>=dev-python/pydantic-2.11.7[${PYTHON_USEDEP}]
 "
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+src_test() {
+	# Keep the native and binding tests offline.
+	export TIKTOKEN_ENCODINGS_BASE="${DISTDIR}"
+	cargo_src_test --all-targets --all-features
+	cargo_src_test --doc
+	distutils-r1_src_test
+}
 
 # Rust extension module — strip wouldn't roundtrip cleanly through QA's
 # generic shared-library check.
