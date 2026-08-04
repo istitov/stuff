@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1
 
@@ -30,6 +30,12 @@ RDEPEND="
 	~dev-python/opentelemetry-api-${PV}[${PYTHON_USEDEP}]
 	~dev-python/opentelemetry-semantic-conventions-${PV}[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.5.0[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	test? (
+		>=dev-python/jsonschema-4.0[${PYTHON_USEDEP}]
+		>=dev-python/pyyaml-6.0[${PYTHON_USEDEP}]
+	)
 "
 
 EPYTEST_PLUGINS=( pytest-rerunfailures )
