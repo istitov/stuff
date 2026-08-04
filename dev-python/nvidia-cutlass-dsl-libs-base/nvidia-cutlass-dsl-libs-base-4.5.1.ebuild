@@ -23,23 +23,22 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-LICENSE="NVIDIA-CUDA"
+LICENSE="NVIDIA-CUTLASS"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-# NVIDIA-CUDA is an EULA license; distfiles must not be mirrored,
-# binpkgs must not be redistributed.
-RESTRICT="bindist mirror"
+# The CUTLASS EULA prohibits redistributing the binary payload.
+RESTRICT="bindist mirror strip"
 
 # Wheel-only on PyPI (binary CUDA-shared bits with no source release).
 # Sub-package of the nvidia-cutlass-dsl umbrella; required by the
-# parent's base install. # verified 2026-05-07 against 4.5.0.
+# parent's base install. # verified 2026-08-04 against 4.5.1.
 RDEPEND="
-	dev-python/cuda-python[${PYTHON_USEDEP}]
+	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
 
-QA_PREBUILT="usr/lib/python3.*/site-packages/cutlass/*"
+QA_PREBUILT="usr/lib/python3.*/site-packages/nvidia_cutlass_dsl/*"
 
 src_unpack() {
 	mkdir -p "${S}/wheel" || die
@@ -49,11 +48,7 @@ src_unpack() {
 	done
 }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+python_install() {
 	local pyver=${EPYTHON#python}
 	local cptag=cp${pyver//./}
 	local whl="${MY_PN}-${PV}-${cptag}-${cptag}-manylinux_2_28_x86_64.whl"
@@ -61,19 +56,18 @@ install_wheel() {
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${whl}" || die
 
 	# This wheel and the sibling nvidia-cutlass-dsl-libs-cu13 wheel
-	# overlap on 217 file paths but ship subtly different *contents*
+	# overlap on 179 file paths but ship subtly different *contents*
 	# at those paths (CUDA-13 builds vs the base build). pip's
 	# behaviour when both are installed is "cu13 overwrites base";
 	# Portage's collision-protect would error instead. We mirror
 	# pip's end state here by keeping only this wheel's *unique*
-	# files (LICENSE, libcuda_dialect_runtime_static.a, utils/block.py)
-	# — three files in 4.5.0, verified against the cu13 wheel's
-	# manifest. The cu13 ebuild then installs everything else,
+	# files (LICENSE and libcuda_dialect_runtime_static.a). The cu13
+	# ebuild then installs everything else,
 	# including its own variants of the shared paths.
-	# # verified 2026-05-07 against 4.5.0.
+	# # verified 2026-08-04 against 4.5.1 (2 unique, 179 shared).
 	local sp="${D}$(${EPYTHON} -c 'import sysconfig; print(sysconfig.get_path("purelib"))')"
 	local nvdir="${sp}/nvidia_cutlass_dsl"
-	local keep_re='^(LICENSE|lib/libcuda_dialect_runtime_static\.a|python_packages/cutlass/utils/block\.py)$'
+	local keep_re='^(LICENSE|lib/libcuda_dialect_runtime_static\.a)$'
 	local f rel
 	while IFS= read -r -d '' f; do
 		rel=${f#${nvdir}/}
@@ -88,4 +82,5 @@ install_wheel() {
 	# enables nvidia_cutlass_dsl/python_packages/ as an extra import
 	# path, which is what makes `import cutlass` work.)
 	rm -f "${sp}/nvidia_cutlass_dsl.pth" || die
+	python_optimize
 }
