@@ -4,6 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=no
+DISTUTILS_EXT=1
 PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
@@ -23,23 +24,20 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-LICENSE="NVIDIA-CUDA"
+LICENSE="NVIDIA-CUTLASS"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-RESTRICT="bindist mirror"
+RESTRICT="bindist mirror strip"
 
 # Wheel-only on PyPI — CUDA-13-specific binary kernels of NVIDIA's
 # CUTLASS Python DSL. Selected by the parent nvidia-cutlass-dsl when
-# the cu13 extra is enabled (the right pick with CUDA 13.3 at
-# /opt/cuda). protobuf<7 (iket profiler only) is omitted as in the base
-# split; nvidia-cuda-nvdisasm is provided by the CUDA toolkit.
-# # verified 2026-07-04 against 4.6.0.
+# the cu13 extra is enabled. The wheel's dependency metadata is implemented by
+# the base/core split below. # verified 2026-08-04 against 4.6.0.
 RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-base-${PV}[${PYTHON_USEDEP}]
-	dev-python/cuda-python[${PYTHON_USEDEP}]
+	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/typing-extensions[${PYTHON_USEDEP}]
-	>=dev-util/nvidia-cuda-toolkit-13.3
+	>=dev-python/typing-extensions-4.10.0[${PYTHON_USEDEP}]
 "
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/nvidia_cutlass_dsl/*"
@@ -52,14 +50,11 @@ src_unpack() {
 	done
 }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+python_install() {
 	local pyver=${EPYTHON#python}
 	local cptag=cp${pyver//./}
 	local whl="${MY_PN}-${PV}-${cptag}-${cptag}-manylinux_2_28_x86_64.whl"
 	[[ -f ${S}/wheel/${whl} ]] || die "expected wheel ${whl} not found"
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${whl}" || die
+	python_optimize
 }
