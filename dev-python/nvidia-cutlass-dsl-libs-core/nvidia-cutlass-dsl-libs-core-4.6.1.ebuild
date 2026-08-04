@@ -21,11 +21,10 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-LICENSE="NVIDIA-CUDA"
+LICENSE="NVIDIA-CUTLASS"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-# NVIDIA-CUDA is an EULA license; distfiles must not be mirrored,
-# binpkgs must not be redistributed.
+# The CUTLASS EULA restricts redistribution.
 RESTRICT="bindist mirror"
 
 # New sibling in 4.6.0: NVIDIA split the pure-Python cutlass DSL core
@@ -34,21 +33,16 @@ RESTRICT="bindist mirror"
 # generated bits and libs-cu13 only the CUDA-13 runtime; all three file
 # sets are disjoint (0 overlap).
 #
-# Upstream also declares protobuf<7,>=6.30.2, but this wheel carries no
-# *_pb2 module and no google.protobuf reference anywhere in its payload;
-# the only consumer is the iket perfetto profiler, whose
-# perfetto_trace_pb2.py ships in libs-base instead. Declaring it would
-# also evict the installed protobuf rather than slot alongside it -
-# dev-python/protobuf keeps every version in main slot 0, so a <7 atom
-# forces a system-wide 7->6 downgrade onto every protobuf-7 consumer.
-# Omitted deliberately. nvidia-cuda-nvdisasm (core DSL compiler —
-# base_dsl/compiler.py) is provided by the CUDA toolkit.
-# # verified 2026-07-14, wheel payload re-checked 2026-07-27 against 4.6.1.
+# Upstream duplicates its protobuf metadata here, but this payload has no
+# protobuf importer; libs-base owns that dependency. The nvdisasm lookup is
+# patched to accept the system CUDA toolkit instead of requiring a PyPI wheel.
+# # verified 2026-08-04 against 4.6.1.
 RDEPEND="
-	dev-python/cuda-python[${PYTHON_USEDEP}]
+	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/typing-extensions[${PYTHON_USEDEP}]
+	>=dev-python/typing-extensions-4.10.0[${PYTHON_USEDEP}]
 	>=dev-util/nvidia-cuda-toolkit-13.3
+	<dev-util/nvidia-cuda-toolkit-14
 "
 
 src_unpack() {
@@ -56,10 +50,12 @@ src_unpack() {
 	cp "${DISTDIR}/${MY_WHEEL}" "${S}/wheel/" || die
 }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+python_install() {
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${MY_WHEEL}" || die
+
+	local sp="${D}$(${EPYTHON} -c 'import sysconfig; print(sysconfig.get_path("purelib"))')"
+	pushd "${sp}/nvidia_cutlass_dsl" >/dev/null || die
+	eapply "${FILESDIR}/${PN}-4.6-system-nvdisasm.patch"
+	popd >/dev/null || die
+	python_optimize
 }
