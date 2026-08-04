@@ -23,17 +23,18 @@ KEYWORDS="~amd64"
 # build sandbox. # 2026-06-14
 RESTRICT="test"
 
-# Pure-Python wheel; the GEMM kernels ship as bundled CUDA sources
-# (.cu/.cuh/.cpp) and are JIT-compiled at first use via the system nvcc.
-# Upstream's install target is humming-kernels[cu13]; its
-# nvidia-cuda-nvcc/nvrtc/runtime wheels are satisfied here by
-# dev-util/nvidia-cuda-toolkit, which the only consumer
-# (dev-python/vllm[cuda]) already pulls -- no USE flag or pip cuda wheels
-# needed. cuda-only by nature: vllm imports this module only under
-# `if current_platform.is_cuda():`. # added 2026-06-14
+# Pure Python package; its bundled CUDA sources and launcher are JIT-compiled
+# at use time.  The system CUDA toolkit replaces upstream's cu12/cu13 wheel
+# extras.  Humming calls g++ directly for its NVRTC helper and uses PyTorch's
+# Ninja-based C++ extension loader for the launcher.
 RDEPEND="
-	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	app-alternatives/ninja
+	dev-util/nvidia-cuda-toolkit:=
+	>=sci-ml/pytorch-2.7[${PYTHON_SINGLE_USEDEP}]
+	sci-ml/caffe2[cuda,-rocm]
+	sys-devel/gcc:*[cxx]
 	$(python_gen_cond_dep '
+		dev-python/filelock[${PYTHON_USEDEP}]
 		dev-python/triton-bin[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
 		sci-ml/safetensors[${PYTHON_USEDEP}]
@@ -41,7 +42,13 @@ RDEPEND="
 		dev-python/pyelftools[${PYTHON_USEDEP}]
 		dev-python/nvidia-ml-py[${PYTHON_USEDEP}]
 		dev-python/cuda-bindings[${PYTHON_USEDEP}]
+		dev-python/packaging[${PYTHON_USEDEP}]
 		dev-python/tqdm[${PYTHON_USEDEP}]
 		dev-python/tabulate[${PYTHON_USEDEP}]
+	')
+"
+BDEPEND="
+	$(python_gen_cond_dep '
+		>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
 	')
 "
