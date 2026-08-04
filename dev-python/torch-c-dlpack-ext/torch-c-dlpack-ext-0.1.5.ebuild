@@ -9,7 +9,7 @@ DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="Companion DLPack C-exchange-API ext for older torch builds"
+DESCRIPTION="AOT-compiled DLPack exchange extension for PyTorch"
 HOMEPAGE="
 	https://github.com/apache/tvm-ffi
 	https://pypi.org/project/torch-c-dlpack-ext/
@@ -18,22 +18,26 @@ HOMEPAGE="
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
+RESTRICT="test"
 
-# Custom build_backend.py: at wheel build time it inspects the
-# installed torch — if torch.Tensor already has __dlpack_c_exchange_api__
-# (true for 2.11+) the package installs as pure-Python; otherwise it
-# subprocess-invokes tvm_ffi.utils._build_optional_torch_c_dlpack to
-# compile a native .so against the detected CUDA/ROCm runtime, which
-# pulls apache-tvm-ffi at build time. We declare apache-tvm-ffi as a
-# BDEPEND defensively — cheap, and avoids a surprise on hosts that
-# rebuild after a torch downgrade. # verified 2026-05-07 against 0.1.5.
+DOCS=( NOTICE README.md )
+
+# The PyPI sdist ships no tests. Its custom backend imports PyTorch and skips
+# native compilation when Tensor already provides the DLPack exchange API;
+# otherwise it uses apache-tvm-ffi to build an extension against PyTorch.
+# verified 2026-08-04 against 0.1.5.
 RDEPEND="
+	$(python_gen_cond_dep '
+		dev-python/packaging[${PYTHON_USEDEP}]
+	')
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 "
-DEPEND="${RDEPEND}"
+DEPEND="
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+"
 BDEPEND="
 	$(python_gen_cond_dep '
-		dev-python/apache-tvm-ffi[${PYTHON_USEDEP}]
+		>=dev-python/apache-tvm-ffi-0.1.1[${PYTHON_USEDEP}]
 	')
 "
 
@@ -46,7 +50,7 @@ python_install_all() {
 	# import, polluting every interpreter that imports the package.
 	# The module is only needed at PEP 517 build time. Drop it
 	# post-install rather than carry a one-line pyproject.toml patch.
-	# verified 2026-05-07 against 0.1.5.
+	# verified 2026-08-04 against 0.1.5.
 	rm -f "${ED}"/usr/lib/python*/site-packages/build_backend.py || die
 	rm -rf "${ED}"/usr/lib/python*/site-packages/__pycache__/build_backend.* || die
 }
