@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1
 
@@ -27,6 +27,7 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/protobuf-5.0.0[${PYTHON_USEDEP}]
+	<dev-python/protobuf-8[${PYTHON_USEDEP}]
 "
 
 EPYTEST_PLUGINS=()
