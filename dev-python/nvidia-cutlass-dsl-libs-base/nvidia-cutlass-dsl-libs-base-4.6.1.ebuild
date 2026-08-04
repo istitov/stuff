@@ -4,6 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=no
+DISTUTILS_EXT=1
 PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
@@ -23,31 +24,24 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-LICENSE="NVIDIA-CUDA"
+LICENSE="NVIDIA-CUTLASS"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-# NVIDIA-CUDA is an EULA license; distfiles must not be mirrored,
-# binpkgs must not be redistributed.
-RESTRICT="bindist mirror"
+# The CUTLASS EULA prohibits redistributing the binary payload.
+RESTRICT="bindist mirror strip"
 
 # Wheel-only on PyPI (binary CUDA-shared bits with no source release).
 # Sub-package of the nvidia-cutlass-dsl umbrella. 4.6.0 split the
-# pure-Python core into ~libs-core (pulled below). protobuf<7 is declared
-# upstream but reaches only the iket perfetto profiler:
-# perfetto_trace_pb2.py is this wheel's single *_pb2 module and its only
-# google.protobuf importer, and nothing pulls it in except
-# iket/profiler/postprocess.py. Omitted because dev-python/protobuf keeps
-# every version in main slot 0, so a <7 atom cannot slot alongside the
-# installed protobuf - it forces a system-wide 7->6 downgrade onto every
-# protobuf-7 consumer. nvidia-cuda-nvdisasm is provided by the CUDA
-# toolkit. # verified 2026-07-14, wheel payload re-checked 2026-07-27
-# against 4.6.1.
+# pure-Python core into ~libs-core (pulled below). The generated iket profiler
+# module is the sole protobuf importer. It works with protobuf 7.35.1, so keep
+# upstream's lower bound while relaxing its unnecessary <7 cap.
+# # verified 2026-08-04 against 4.6.1.
 RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-core-${PV}[${PYTHON_USEDEP}]
-	dev-python/cuda-python[${PYTHON_USEDEP}]
+	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/typing-extensions[${PYTHON_USEDEP}]
-	>=dev-util/nvidia-cuda-toolkit-13.3
+	>=dev-python/protobuf-6.30.2[${PYTHON_USEDEP}]
+	>=dev-python/typing-extensions-4.10.0[${PYTHON_USEDEP}]
 "
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/nvidia_cutlass_dsl/*"
@@ -60,10 +54,6 @@ src_unpack() {
 	done
 }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
 # 4.6.0 restructured the split: this wheel ships only the generic
 # nvidia_cutlass_dsl/dsl_packages/{cutlass,iket} bits and the sibling
 # cu13 wheel ships only nvidia_cutlass_dsl/cu13/* plus its one
@@ -71,11 +61,12 @@ src_install() {
 # (0 overlap; was ~179 shared paths through 4.5.2), so the old
 # keep-only-unique dedup is gone. The `import cutlass` path is set up
 # by nvidia_cutlass_dsl_packages.pth, now shipped by the parent
-# metapackage wheel. # verified 2026-07-14 against 4.6.1.
-install_wheel() {
+# metapackage wheel. # verified 2026-08-04 against 4.6.1.
+python_install() {
 	local pyver=${EPYTHON#python}
 	local cptag=cp${pyver//./}
 	local whl="${MY_PN}-${PV}-${cptag}-${cptag}-manylinux_2_28_x86_64.whl"
 	[[ -f ${S}/wheel/${whl} ]] || die "expected wheel ${whl} not found"
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${whl}" || die
+	python_optimize
 }
