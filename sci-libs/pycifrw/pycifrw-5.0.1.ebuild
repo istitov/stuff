@@ -13,7 +13,7 @@ DESCRIPTION="Reading and writing CIF (Crystallographic Information Format) files
 HOMEPAGE="https://pypi.org/project/PyCifRW/ https://github.com/jamesrhester/pycifrw/"
 SRC_URI="https://github.com/jamesrhester/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 
-LICENSE="ASRP"
+LICENSE="PyCifRW"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
