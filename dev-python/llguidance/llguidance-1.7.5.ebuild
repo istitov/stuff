@@ -381,7 +381,14 @@ LICENSE+="
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Tests live in upstream's CI workflow; not wired up in our overlay.
-RESTRICT="test"
-
 QA_FLAGS_IGNORED="usr/lib/python3.*/site-packages/llguidance/_lib*.so"
+
+python_test() {
+	"${EPYTHON}" -c "import llguidance; assert llguidance.__version__ == '${PV}'" || die
+}
+
+src_test() {
+	# Some integration tests download tokenizers from Hugging Face.
+	cargo_src_test --package llguidance --package toktrie --lib
+	distutils-r1_src_test
+}
