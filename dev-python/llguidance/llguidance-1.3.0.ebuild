@@ -7,7 +7,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
 PYTHON_COMPAT=( python3_{12..14} )
 
-RUST_MIN_VER="1.85.0"
+RUST_MIN_VER="1.87.0"
 CRATES="
 	addr2line@0.24.2
 	adler2@2.0.1
@@ -354,7 +354,14 @@ LICENSE+="
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Tests live in upstream's CI workflow; not wired up in our overlay.
-RESTRICT="test"
-
 QA_FLAGS_IGNORED="usr/lib/python3.*/site-packages/llguidance/_lib*.so"
+
+python_test() {
+	"${EPYTHON}" -c "import importlib.metadata as m, llguidance; assert m.version('llguidance') == '${PV}'" || die
+}
+
+src_test() {
+	# Some integration tests download tokenizers from Hugging Face.
+	cargo_src_test --package llguidance --package toktrie --lib
+	distutils-r1_src_test
+}
