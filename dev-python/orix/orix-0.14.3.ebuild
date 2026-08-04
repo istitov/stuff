@@ -4,9 +4,12 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1 pypi
+
+EPYTEST_PLUGINS=( pytest-rerunfailures )
+distutils_enable_tests pytest
 
 DESCRIPTION="Python library for handling crystal orientation mapping data"
 HOMEPAGE="
@@ -17,10 +20,6 @@ HOMEPAGE="
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-
-# Tests pull pytest-rerunfailures, pytest-xdist and numpydoc just to
-# run; build-time validation of the package layout is enough.
-RESTRICT="test"
 
 RDEPEND="
 	dev-python/dask[${PYTHON_USEDEP}]
@@ -35,3 +34,14 @@ RDEPEND="
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/tqdm[${PYTHON_USEDEP}]
 "
+
+EPYTEST_IGNORE=(
+	# require network access to download example data
+	orix/tests/test_data/test_data.py
+)
+
+python_test() {
+	local -x MPLBACKEND=Agg
+	local -x MPLCONFIGDIR=${T}/matplotlib
+	epytest
+}
