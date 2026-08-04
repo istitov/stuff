@@ -290,8 +290,18 @@ LICENSE+="
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Tests pull torch + numpy + numba + scipy + asv (sci-stack heavyweights);
-# the binding builds and is exercised by upstream CI.
-RESTRICT="test"
-
 QA_FLAGS_IGNORED="usr/lib/python3.*/site-packages/outlines_core/outlines_core.*.so"
+
+distutils_enable_tests pytest
+
+src_test() {
+	# The default feature and its doctests require Hugging Face model downloads.
+	cargo_src_test --lib --no-default-features
+	distutils-r1_src_test
+}
+
+python_test() {
+	# The remaining tests require model downloads or scientific-stack extras.
+	cd "${T}" || die
+	epytest "${S}"/tests/test_imports.py
+}
