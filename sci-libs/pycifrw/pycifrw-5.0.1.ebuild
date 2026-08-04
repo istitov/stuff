@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1 pypi
 
@@ -23,8 +23,26 @@ RDEPEND="
 	dev-python/prettytable[${PYTHON_USEDEP}]
 "
 
-# 2026-04-29: TestPyCIFRW.py / TestDrel.py live at the source root and use
-# relative "tests/" data paths; unittest discover instead picks up src/ and
-# fails. Running the test scripts directly would also need RDEPENDs added as
-# test deps. Skip until upstream restructures.
-RESTRICT="test"
+EPYTEST_PLUGINS=()
+EPYTEST_DESELECT=(
+	# require the separate tests/dictionaries fixture set
+	TestPyCIFRW.py::DictTestCase
+	TestPyCIFRW.py::DDL1TestCase
+	TestPyCIFRW.py::DDLmDicTestCase
+	TestPyCIFRW.py::DicEvalTestCase
+	TestPyCIFRW.py::DicStructureTestCase
+	TestDrel.py::TestMoreComplex::test_fancy_assign
+	TestDrel.py::TestWithDict
+)
+distutils_enable_tests pytest
+
+src_prepare() {
+	distutils-r1_src_prepare
+	python_setup
+	emake -C src PYTHON="${EPYTHON}" Parsers
+}
+
+python_test() {
+	epytest TestPyCIFRW.py TestDrel.py
+	rm "${BUILD_DIR}/install$(python_get_sitedir)"/CifFile/drel/{parser.out,parsetab.py} || die
+}
