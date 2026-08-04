@@ -1,0 +1,38 @@
+--- a/dsl_packages/cutlass/base_dsl/env_manager.py
++++ b/dsl_packages/cutlass/base_dsl/env_manager.py
+@@ -344,27 +344,26 @@
+ @lru_cache(maxsize=1)
+ def _find_nvdisasm_binary() -> str:
+-    """Return absolute path to the bundled nvdisasm binary."""
++    """Return absolute path to an nvdisasm binary."""
+     from importlib import metadata
+ 
+     try:
+         dist = metadata.distribution("nvidia-cuda-nvdisasm")
+     except metadata.PackageNotFoundError:
+         dist = None
+     if dist is not None and dist.files is not None:
+         for entry in dist.files:
+             if entry.name == "nvdisasm":
+                 binpath = Path(str(dist.locate_file(entry)))
+                 if binpath.is_file():
+                     return str(binpath)
++    system_nvdisasm = shutil.which("nvdisasm")
++    if system_nvdisasm is not None:
++        return system_nvdisasm
+     raise DSLUserCodeError(
+-        "nvdisasm binary not found inside the nvidia-cuda-nvdisasm wheel.",
+-        suggestion="\n".join(
+-            [
+-                "nvidia-cuda-nvdisasm is a runtime dependency of nvidia-cutlass-dsl",
+-                "and should have been installed automatically. Try:",
+-                "  • pip install --force-reinstall nvidia-cuda-nvdisasm",
+-            ]
+-        ),
++        "nvdisasm binary not found.",
++        suggestion=(
++            "Install the CUDA toolkit or reinstall nvidia-cuda-nvdisasm."
++        ),
+     )
+ 
+ 

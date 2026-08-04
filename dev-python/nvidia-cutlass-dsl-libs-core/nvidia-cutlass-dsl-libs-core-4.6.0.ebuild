@@ -21,11 +21,10 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-LICENSE="NVIDIA-CUDA"
+LICENSE="NVIDIA-CUTLASS"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-# NVIDIA-CUDA is an EULA license; distfiles must not be mirrored,
-# binpkgs must not be redistributed.
+# The CUTLASS EULA restricts redistribution.
 RESTRICT="bindist mirror"
 
 # New sibling in 4.6.0: NVIDIA split the pure-Python cutlass DSL core
@@ -34,18 +33,16 @@ RESTRICT="bindist mirror"
 # generated bits and libs-cu13 only the CUDA-13 runtime; all three file
 # sets are disjoint (0 overlap).
 #
-# Upstream also declares protobuf<7,>=6.30.2, but it is used only by the
-# iket perfetto profiler (perfetto_trace_pb2.py in libs-base), which this
-# overlay does not use. Pulling it would force a system-wide protobuf
-# 7->6 downgrade and conflict with protobuf-7 consumers, so it is
-# omitted deliberately. nvidia-cuda-nvdisasm (core DSL compiler —
-# base_dsl/compiler.py) is provided by the CUDA toolkit.
-# # verified 2026-07-04 against 4.6.0.
+# Upstream duplicates its protobuf metadata here, but this payload has no
+# protobuf importer; libs-base owns that dependency. The nvdisasm lookup is
+# patched to accept the system CUDA toolkit instead of requiring a PyPI wheel.
+# # verified 2026-08-04 against 4.6.0.
 RDEPEND="
-	dev-python/cuda-python[${PYTHON_USEDEP}]
+	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/typing-extensions[${PYTHON_USEDEP}]
+	>=dev-python/typing-extensions-4.10.0[${PYTHON_USEDEP}]
 	>=dev-util/nvidia-cuda-toolkit-13.3
+	<dev-util/nvidia-cuda-toolkit-14
 "
 
 src_unpack() {
@@ -53,10 +50,12 @@ src_unpack() {
 	cp "${DISTDIR}/${MY_WHEEL}" "${S}/wheel/" || die
 }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+python_install() {
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${MY_WHEEL}" || die
+
+	local sp="${D}$(${EPYTHON} -c 'import sysconfig; print(sysconfig.get_path("purelib"))')"
+	pushd "${sp}/nvidia_cutlass_dsl" >/dev/null || die
+	eapply "${FILESDIR}/${PN}-4.6-system-nvdisasm.patch"
+	popd >/dev/null || die
+	python_optimize
 }
