@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1
 
@@ -26,11 +26,14 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
-	>=dev-python/googleapis-common-protos-1.57[${PYTHON_USEDEP}]
+	<dev-python/googleapis-common-protos-2[${PYTHON_USEDEP}]
+	>=dev-python/googleapis-common-protos-1.52[${PYTHON_USEDEP}]
 	~dev-python/opentelemetry-api-${PV}[${PYTHON_USEDEP}]
 	~dev-python/opentelemetry-exporter-otlp-proto-common-${PV}[${PYTHON_USEDEP}]
 	~dev-python/opentelemetry-proto-${PV}[${PYTHON_USEDEP}]
 	~dev-python/opentelemetry-sdk-${PV}[${PYTHON_USEDEP}]
+	~dev-python/opentelemetry-semantic-conventions-${PV}[${PYTHON_USEDEP}]
+	<dev-python/requests-3[${PYTHON_USEDEP}]
 	>=dev-python/requests-2.7[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.5.0[${PYTHON_USEDEP}]
 "
