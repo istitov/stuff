@@ -23,23 +23,22 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-LICENSE="NVIDIA-CUDA"
+LICENSE="NVIDIA-CUTLASS"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-# NVIDIA-CUDA is an EULA license; distfiles must not be mirrored,
-# binpkgs must not be redistributed.
-RESTRICT="bindist mirror"
+# The CUTLASS EULA prohibits redistributing the binary payload.
+RESTRICT="bindist mirror strip"
 
 # Wheel-only on PyPI (binary CUDA-shared bits with no source release).
 # Sub-package of the nvidia-cutlass-dsl umbrella; required by the
-# parent's base install. # verified 2026-05-25 against 4.5.2.
+# parent's base install. # verified 2026-08-04 against 4.5.2.
 RDEPEND="
-	dev-python/cuda-python[${PYTHON_USEDEP}]
+	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
 
-QA_PREBUILT="usr/lib/python3.*/site-packages/cutlass/*"
+QA_PREBUILT="usr/lib/python3.*/site-packages/nvidia_cutlass_dsl/*"
 
 src_unpack() {
 	mkdir -p "${S}/wheel" || die
@@ -49,11 +48,7 @@ src_unpack() {
 	done
 }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+python_install() {
 	local pyver=${EPYTHON#python}
 	local cptag=cp${pyver//./}
 	local whl="${MY_PN}-${PV}-${cptag}-${cptag}-manylinux_2_28_x86_64.whl"
@@ -72,7 +67,7 @@ install_wheel() {
 	# regex drops them now to avoid collision-protect.) The cu13
 	# ebuild installs everything else, including its own variants of
 	# the shared paths.
-	# # verified 2026-05-25 against 4.5.2 (1 unique file, 179 overlap).
+	# # verified 2026-08-04 against 4.5.2 (1 unique, 180 shared).
 	local sp="${D}$(${EPYTHON} -c 'import sysconfig; print(sysconfig.get_path("purelib"))')"
 	local nvdir="${sp}/nvidia_cutlass_dsl"
 	local keep_re='^LICENSE$'
@@ -90,4 +85,5 @@ install_wheel() {
 	# enables nvidia_cutlass_dsl/python_packages/ as an extra import
 	# path, which is what makes `import cutlass` work.)
 	rm -f "${sp}/nvidia_cutlass_dsl.pth" || die
+	python_optimize
 }
