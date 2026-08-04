@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1
 
@@ -31,3 +31,17 @@ RDEPEND="
 	~dev-python/opentelemetry-exporter-otlp-proto-grpc-${PV}[${PYTHON_USEDEP}]
 	~dev-python/opentelemetry-exporter-otlp-proto-http-${PV}[${PYTHON_USEDEP}]
 "
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+python_test() {
+	cp -a "${BUILD_DIR}"/{install,test} || die
+	local -x PATH=${BUILD_DIR}/test/usr/bin:${PATH}
+
+	pushd "${WORKDIR}/${MY_P}/tests/opentelemetry-test-utils" >/dev/null || die
+	distutils_pep517_install "${BUILD_DIR}"/test
+	popd >/dev/null || die
+
+	epytest
+}
