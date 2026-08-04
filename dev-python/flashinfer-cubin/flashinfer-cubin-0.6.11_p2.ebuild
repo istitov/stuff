@@ -4,11 +4,12 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=no
+# Python 3.15 remains unkeyworded in ::gentoo (verified 2026-08-04).
 PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
 
-# Translate Gentoo's _p1 suffix back to PyPI's .post1 for upstream
+# Translate Gentoo's _pN suffix back to PyPI's .postN for upstream
 # wheel filenames; Gentoo's PMS version syntax forbids ".postN".
 MY_PV="${PV/_p/.post}"
 MY_WHEEL="${PN//-/_}-${MY_PV}-py3-none-any.whl"
@@ -28,21 +29,32 @@ SLOT="0"
 KEYWORDS="-* ~amd64 ~arm64"
 RESTRICT="bindist mirror strip"
 
-# Pre-compiled cubins shipped only as a binary wheel — no upstream
-# source release. Imported as a runtime sidecar by flashinfer-python.
-# Has no Python-level dependencies. # verified 2026-05-07 against 0.6.8.post1.
+# The binary wheel has no license payload or reproducible source mapping.
+# Its metadata claims Apache-2.0, but the pre-compiled artifacts come from
+# NVIDIA's artifactory, so retain the conservative redistribution policy.
+# Imported as a dependency-free runtime sidecar by flashinfer-python.
+# verified 2026-08-04 against 0.6.11.post2.
+
+BDEPEND+="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
+"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/flashinfer_cubin/*"
 
 src_unpack() {
-	mkdir -p "${S}/wheel" || die
-	cp "${DISTDIR}/${MY_WHEEL}" "${S}/wheel/" || die
+	:
 }
 
-src_install() {
-	python_foreach_impl install_wheel
+python_install() {
+	${EPYTHON} -m installer --destdir="${D}" \
+		"${DISTDIR}/${MY_WHEEL}" || die
+	python_optimize
 }
 
-install_wheel() {
-	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${MY_WHEEL}" || die
+pkg_postinst() {
+	ewarn "The upstream wheel omits the optional host-native CuTe DSL FMHA"
+	ewarn "libraries listed in its manifests. That backend is not provided by"
+	ewarn "this package and may attempt an unsupported runtime download."
 }
