@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1
 
@@ -28,11 +28,8 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 RDEPEND="
 	~dev-python/opentelemetry-api-${PV}[${PYTHON_USEDEP}]
 	~dev-python/opentelemetry-proto-${PV}[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		~dev-python/opentelemetry-sdk-${PV}[${PYTHON_USEDEP}]
-	)
+	~dev-python/opentelemetry-sdk-${PV}[${PYTHON_USEDEP}]
+	~dev-python/opentelemetry-semantic-conventions-${PV}[${PYTHON_USEDEP}]
 "
 
 EPYTEST_PLUGINS=()
