@@ -21,18 +21,14 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-LICENSE="NVIDIA-CUDA"
+LICENSE="NVIDIA-CUTLASS"
 SLOT="0"
 KEYWORDS="~amd64"
 RESTRICT="bindist mirror"
 
-# Trivial metapackage: empty py3-none-any wheel that just pulls libs-base
-# and (via the cu13 extra) libs-cu13. No PyPI source release — cutlass-dsl
-# ships a PyPI-only metawheel from NVIDIA/cutlass — so packaging the wheel
-# directly is byte-equivalent to an empty source.
-#
-# Always the cu13 path (amd64 + CUDA 13.2 at /opt/cuda); cu12 would need a
-# libs-cu12 sibling we haven't packaged. Add a USE flag if a cu12 user emerges.
+# Metadata-only wheel with no payload files. Upstream requires libs-base and
+# exposes libs-cu13 as an extra; select that extra directly because this overlay
+# packages only the CUDA 13 backend.
 RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-base-${PV}[${PYTHON_USEDEP}]
 	~dev-python/nvidia-cutlass-dsl-libs-cu13-${PV}[${PYTHON_USEDEP}]
@@ -43,10 +39,6 @@ src_unpack() {
 	cp "${DISTDIR}/${MY_WHEEL}" "${S}/wheel/" || die
 }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+python_install() {
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${MY_WHEEL}" || die
 }
