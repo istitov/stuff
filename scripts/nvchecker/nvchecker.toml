@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (264) ---
+# --- pypi (262) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -462,10 +462,6 @@ pypi = "mkdocs-material"
 source = "pypi"
 pypi = "mkdocs-material-extensions"
 
-["dev-python/model-hosting-container-standards"]
-source = "pypi"
-pypi = "model-hosting-container-standards"
-
 ["dev-python/monty"]
 source = "pypi"
 pypi = "monty"
@@ -573,10 +569,6 @@ pypi = "parsimonious"
 ["dev-python/partd"]
 source = "pypi"
 pypi = "partd"
-
-["dev-python/partial-json-parser"]
-source = "pypi"
-pypi = "partial-json-parser"
 
 ["dev-python/pccm"]
 source = "pypi"
@@ -1066,7 +1058,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (189) ---
+# --- github (191) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1422,6 +1414,12 @@ github = "mwilliamson/locket.py"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/model-hosting-container-standards"]
+source = "github"
+github = "aws/model-hosting-container-standards"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/num2words"]
 source = "github"
 github = "savoirfairelinux/num2words"
@@ -1499,6 +1497,12 @@ prefix = "v"
 ["dev-python/opentelemetry-semantic-conventions"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/partial-json-parser"]
+source = "github"
+github = "promplate/partial-json-parser"
 use_max_tag = true
 prefix = "v"
 
