@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 PYPI_NO_NORMALIZE=1
 PYPI_PN=outlines_core
 
@@ -285,12 +285,24 @@ SRC_URI+="
 LICENSE="Apache-2.0"
 # Dependent crate licenses
 LICENSE+="
-	0BSD Apache-2.0 BSD-2 BSD ISC MIT MPL-2.0 Unicode-3.0 ZLIB
+	0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD ISC
+	CDLA-Permissive-2.0 MIT MPL-2.0 openssl Unicode-3.0 ZLIB
 "
 SLOT="0"
 KEYWORDS="~amd64"
 
+BDEPEND="
+	test? ( dev-python/pydantic[${PYTHON_USEDEP}] )
+"
+
 QA_FLAGS_IGNORED="usr/lib/python3.*/site-packages/outlines_core/outlines_core.*.so"
+EPYTEST_PLUGINS=()
+EPYTEST_DESELECT=(
+	tests/test_guide.py::test_pickling_from_pretrained_with_revision
+	tests/test_guide.py::test_write_mask_into
+	tests/test_guide.py::test_write_mask_into_interface
+	tests/test_vocabulary.py::test_from_pretrained
+)
 
 distutils_enable_tests pytest
 
@@ -301,7 +313,12 @@ src_test() {
 }
 
 python_test() {
-	# The remaining tests require model downloads or scientific-stack extras.
+	# Remaining tests requiring network/scientific-stack/downloads are deselected.
 	cd "${T}" || die
-	epytest "${S}"/tests/test_imports.py
+	epytest \
+		"${S}"/tests/test_guide.py \
+		"${S}"/tests/test_imports.py \
+		"${S}"/tests/test_index.py \
+		"${S}"/tests/test_json_schema.py \
+		"${S}"/tests/test_vocabulary.py
 }
