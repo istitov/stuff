@@ -132,6 +132,12 @@ GITHUB_TAG_FILTERS: list[tuple[re.Pattern, dict]] = [
 # for cuda-core / cuda-pathfinder (which track independent semver streams
 # at much lower numeric versions).
 GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
+    # lierdakil/pandoc-crossref publishes alpha/rc tags for next releases;
+    # restrict to stable tags (3- or 4-part version, with optional trailing
+    # letter like `0.3.23a`, but no hyphenated pre-release suffixes).
+    "app-text/pandoc-crossref-bin": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+[0-9a-z.]*$",
+    },
     # NVIDIA monorepo sub-packages
     "dev-python/cuda-bindings": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
