@@ -40,6 +40,7 @@ BDEPEND="
 	)
 "
 
+# Test-dependency suppressions verified 2026-08-05: cmaes and lupa are unpackaged.
 EPYTEST_IGNORE=(
 	# require optional dependencies
 	tests/artifacts_tests/test_boto3.py
