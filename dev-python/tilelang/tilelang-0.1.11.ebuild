@@ -63,7 +63,7 @@ BDEPEND="
 "
 
 # Upstream caps z3-solver at <4.15.5, but Gentoo provides newer versions.
-# Treat it as a tested-version cap unless an incompatibility surfaces.
+# Treat it as a tested-version cap unless an incompatibility surfaces. # verified 2026-08-05
 
 # Upstream's bundled cmake/pypi-z3/FindZ3.cmake looks for libz3 and
 # headers ONLY inside the PyPI z3-solver wheel's bundled site-packages
