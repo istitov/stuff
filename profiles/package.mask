@@ -17,12 +17,6 @@ app-portage/portopts
 # re-verified 2026-07-28
 =x11-libs/qscintilla-2.14.1-r2
 
-# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-05-16)
-# Last of the 0.5 series before the 0.7 line; retained as a recovery
-# ebuild but blocked from default install. Remove this mask if a 0.5.x
-# rollback becomes relevant again.
-=app-portage/udept-0.5.99.0.2.96
-
 # Ivan S. Titov <iohann.s.titov@gmail.com> (2026-06-08)
 # Last of the 1.x series before the 2.0 rewrite; retained as a recovery
 # ebuild but blocked from default install. Remove this mask if a 1.x
