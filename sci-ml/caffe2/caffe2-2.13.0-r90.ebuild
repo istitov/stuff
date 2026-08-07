@@ -63,6 +63,12 @@ REQUIRED_USE="
 	nccl? ( rocm )
 "
 
+# FBGEMM 1.7 dropped a template parameter from fbgemm::Quantize (was
+# Quantize<T, LEGACY>, now Quantize<T>); the pytorch-2.13 source this fork
+# builds still calls the 2-arg form in aten/.../QuantizedLinear.cpp. Build-
+# verified 2026-08-08: 2.13.0-r90 compiles clean against FBGEMM-1.4.0.2025.12.10
+# and would fail the same way as 2.11/2.12 against 1.7. The fbgemm? dep below
+# caps to the 1.4 series until the frozen source is patched for the new API.
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-cpp/abseil-cpp:=
@@ -80,7 +86,7 @@ RDEPEND="
 		>=dev-util/nvidia-cuda-toolkit-12.9:=[profiler]
 		cusparselt? ( dev-libs/cusparselt )
 	)
-	fbgemm? ( >=sci-ml/FBGEMM-1.4 )
+	fbgemm? ( >=sci-ml/FBGEMM-1.4 <sci-ml/FBGEMM-1.5 )
 	gloo? ( >=sci-ml/gloo-2025.06.04[cuda?,rocm?] )
 	kineto? ( ~sci-ml/kineto-0.4.0_p20260323 )
 	mimalloc? ( dev-libs/mimalloc )
@@ -235,6 +241,16 @@ src_prepare() {
 		cmake/ProtoBuf.cmake \
 		aten/src/ATen/CMakeLists.txt \
 		|| die
+
+	# 2.13.0's cmake/FileMirroring.cmake FATAL_ERRORs on CUDA builds when the
+	# bundled cutlass submodule's CuTeDSL grouped_gemm.py example is absent --
+	# it is, because we unbundle cutlass and build against system
+	# dev-libs/cutlass. That file is only an optional Blackwell CuTeDSL
+	# grouped-GEMM template vendored into torch/_inductor; the single
+	# FATAL_ERROR in the file is this check, so downgrade it to STATUS and let
+	# the unbundled build configure. Drop if cutlass is ever prestaged.
+	# verified 2026-08-08
+	sed -i -e 's/message(FATAL_ERROR/message(STATUS/' cmake/FileMirroring.cmake || die
 
 	# 2.13.0 added FMT_NO_UNIQUE_ADDRESS compile-defs on the bundled fmt /
 	# fmt-header-only targets, which no longer exist once fmt is unbundled

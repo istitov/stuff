@@ -63,6 +63,12 @@ REQUIRED_USE="
 	nccl? ( rocm )
 "
 
+# FBGEMM 1.7 dropped a template parameter from fbgemm::Quantize (was
+# Quantize<T, LEGACY>, now Quantize<T>), breaking this frozen pytorch-2.11
+# tree's aten/.../QuantizedLinear.cpp (no matching Quantize<int8_t, false>).
+# The last good build (2026-07-22) linked FBGEMM-1.4.0.2025.12.10; 1.7 landed
+# 2026-08-06 and fails to compile. The fbgemm? dep below caps to the 1.4
+# series until the frozen source is patched for the new API. verified 2026-08-07
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-cpp/abseil-cpp:=
@@ -80,7 +86,7 @@ RDEPEND="
 		>=dev-util/nvidia-cuda-toolkit-12.9:=[profiler]
 		cusparselt? ( dev-libs/cusparselt )
 	)
-	fbgemm? ( >=sci-ml/FBGEMM-1.4 )
+	fbgemm? ( >=sci-ml/FBGEMM-1.4 <sci-ml/FBGEMM-1.5 )
 	gloo? ( >=sci-ml/gloo-2025.06.04[cuda?,rocm?] )
 	kineto? ( ~sci-ml/kineto-0.4.0_p20260323 )
 	mimalloc? ( dev-libs/mimalloc )

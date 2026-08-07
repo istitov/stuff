@@ -63,6 +63,12 @@ REQUIRED_USE="
 	nccl? ( rocm )
 "
 
+# FBGEMM 1.7 dropped a template parameter from fbgemm::Quantize (was
+# Quantize<T, LEGACY>, now Quantize<T>); the pytorch-2.12 source this fork
+# builds still calls the 2-arg form in aten/.../QuantizedLinear.cpp. Build-
+# verified 2026-08-08: 2.12.0-r91 compiles clean against FBGEMM-1.4.0.2025.12.10
+# and would fail the same way as 2.11 against 1.7. The fbgemm? dep below caps to
+# the 1.4 series until the frozen source is patched for the new API.
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-cpp/abseil-cpp:=
@@ -80,7 +86,7 @@ RDEPEND="
 		>=dev-util/nvidia-cuda-toolkit-12.9:=[profiler]
 		cusparselt? ( dev-libs/cusparselt )
 	)
-	fbgemm? ( >=sci-ml/FBGEMM-1.4 )
+	fbgemm? ( >=sci-ml/FBGEMM-1.4 <sci-ml/FBGEMM-1.5 )
 	gloo? ( >=sci-ml/gloo-2025.06.04[cuda?,rocm?] )
 	kineto? ( ~sci-ml/kineto-0.4.0_p20260323 )
 	mimalloc? ( dev-libs/mimalloc )
