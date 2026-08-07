@@ -763,9 +763,14 @@ REQUIRED_USE="
 # tilelang==0.1.9 and flashinfer-python==0.6.14 exactly; we pin
 # ~nvidia-cutlass-dsl-4.6.0 and ~flashinfer-python-0.6.14 to match.
 # quack-kernels floor is now >=0.4.0 (0.26.0 cuda.txt, "Required for
-# tml-fa4") and the earlier <0.6.0 cap is dropped: cutlass-dsl moved to
-# 4.6.0 this bump, so quack 0.6.x (which floors cutlass-dsl >=4.6.0) is
-# now compatible. verified 2026-07-26
+# tml-fa4") but we KEEP an upper cap at <0.6.2. cutlass-dsl moved to 4.6.0
+# this bump; quack-kernels 0.6.1 pins ~nvidia-cutlass-dsl-4.6.0 (compatible),
+# but 0.6.2+ bumped to ~nvidia-cutlass-dsl-4.6.1 (their JIT kernels ABI-lock
+# to 4.6.1). vllm's ~4.6.0 pin (upstream cuda.txt ==4.6.0) is incompatible
+# with 4.6.1, so an uncapped floor lets -uDN pull quack 0.6.3 -> cutlass 4.6.1
+# and conflict with our own cutlass pin. Cap at <0.6.2 keeps quack on 0.6.1
+# (~4.6.0). Do NOT relax to 4.6.1: not blessed by this vllm release.
+# verified 2026-08-07
 # The cutlass-dsl metapackage pulls nvidia-cutlass-dsl-libs-cu13
 # transitively, so it already covers the [cu13] extra. The
 # nvidia-cudnn-frontend floor stays >=1.19.1; that dep lives on the
@@ -793,7 +798,8 @@ REQUIRED_USE="
 # 0.26.0 (2026-07-26): common.txt drops diskcache (outlines disk-cache removed).
 # cuda.txt deltas vs 0.25.1: flashinfer-python/cubin 0.6.13->0.6.14, apache-tvm-ffi
 # 0.1.9->0.1.10, nvidia-cutlass-dsl 4.5.2->4.6.0,
-# quack-kernels >=0.3.3,<0.6.0 -> >=0.4.0 (cap lifted, see above); tokenspeed-mla
+# quack-kernels >=0.3.3,<0.6.0 -> >=0.4.0,<0.6.2 (floor raised, cap moved to
+# 0.6.2 for the cutlass-4.6.1 boundary, see above); tokenspeed-mla
 # 0.1.2->0.1.8 and amd-quark 0.8.99->0.12 stay omitted. cpu.txt unchanged (torch
 # still ==2.11.0). flash-attn pin 2c839c3->caaa4eb (fa3-skip + py314 patches apply
 # clean, regenerated as caaa4eb copies). CRATES 561->594, GIT_CRATES llm-multimodal
@@ -977,6 +983,7 @@ RDEPEND="
 		>=sci-ml/torchcodec-0.14[cuda,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tilelang-0.1.9[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
 		>=dev-python/quack-kernels-0.4.0[${PYTHON_SINGLE_USEDEP}]
+		<dev-python/quack-kernels-0.6.2[${PYTHON_SINGLE_USEDEP}]
 		humming? ( ~dev-python/humming-kernels-0.1.10[${PYTHON_SINGLE_USEDEP}] )
 		$(python_gen_cond_dep '
 			~dev-python/apache-tvm-ffi-0.1.10[${PYTHON_USEDEP}]
