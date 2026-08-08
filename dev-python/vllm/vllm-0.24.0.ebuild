@@ -948,7 +948,7 @@ RDEPEND="
 		>=dev-python/anthropic-0.71.0[${PYTHON_USEDEP}]
 		>=dev-python/model-hosting-container-standards-0.1.14[${PYTHON_USEDEP}]
 		<dev-python/model-hosting-container-standards-1.0.0[${PYTHON_USEDEP}]
-		dev-python/mcp[${PYTHON_USEDEP}]
+		<dev-python/mcp-2.0[${PYTHON_USEDEP}]
 		>=dev-python/opentelemetry-sdk-1.27.0[${PYTHON_USEDEP}]
 		>=dev-python/opentelemetry-api-1.27.0[${PYTHON_USEDEP}]
 		>=dev-python/opentelemetry-exporter-otlp-1.27.0[${PYTHON_USEDEP}]
