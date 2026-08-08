@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (262) ---
+# --- pypi (263) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -433,6 +433,10 @@ pypi = "mbstrdecoder"
 ["dev-python/mcp"]
 source = "pypi"
 pypi = "mcp"
+
+["dev-python/mcp-types"]
+source = "pypi"
+pypi = "mcp-types"
 
 ["dev-python/mergedeep"]
 source = "pypi"
