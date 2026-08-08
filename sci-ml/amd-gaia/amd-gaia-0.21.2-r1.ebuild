@@ -111,6 +111,7 @@ RDEPEND="
 		)
 		mcp? (
 			>=dev-python/mcp-1.1.0[${PYTHON_USEDEP}]
+			<dev-python/mcp-2.0[${PYTHON_USEDEP}]
 			dev-python/starlette[${PYTHON_USEDEP}]
 			dev-python/uvicorn[${PYTHON_USEDEP}]
 		)
