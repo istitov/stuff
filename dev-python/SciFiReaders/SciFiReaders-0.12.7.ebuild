@@ -35,7 +35,7 @@ RDEPEND="
 	>=dev-python/scipy-1.11[${PYTHON_USEDEP}]
 	dev-python/pillow[${PYTHON_USEDEP}]
 	hyperspy? ( dev-python/hyperspy[${PYTHON_USEDEP}] )
-	mcp? ( dev-python/mcp[${PYTHON_USEDEP}] )
+	mcp? ( <dev-python/mcp-2.0[${PYTHON_USEDEP}] )
 	nsid? ( dev-python/pyNSID[${PYTHON_USEDEP}] )
 	tiff? ( dev-python/tifffile[${PYTHON_USEDEP}] )
 "
