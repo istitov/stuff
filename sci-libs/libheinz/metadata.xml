@@ -11,6 +11,6 @@
     software (libformfactor, BornAgain, Steca).
   </longdescription>
   <upstream>
-    <remote-id type="gitlab">mlz/libheinz</remote-id>
+    <remote-id type="gitlab">mlz/lib/heinz</remote-id>
   </upstream>
 </pkgmetadata>
