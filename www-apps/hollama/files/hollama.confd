@@ -6,7 +6,7 @@
 # built-in auth — chat state lives in the user's browser localStorage
 # so no server-side data leaks, but anyone with network reach can use
 # your local LLM endpoints through it. Set to 0.0.0.0 only after
-# you've thought about who can route to this host.
+# you've considered who can reach the listening address.
 HOLLAMA_HOST="127.0.0.1"
 
 # Listening port.
