@@ -33,7 +33,7 @@ State lives under `$XDG_STATE_HOME/stuff-nvchecker/` (default
 
 ## Setup
 
-### GitHub token (required — the config has ~60 GitHub entries)
+### GitHub token (required — the config has about 195 GitHub entries)
 
 The GitHub API rate-limits unauthenticated requests to 60/hour per IP,
 which is trivially exceeded by this config. Create a personal access

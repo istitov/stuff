@@ -92,7 +92,7 @@ jobs:
         run: pip install --user -r scripts/nvchecker/requirements.txt
 
       # nvchecker's GitHub source needs a token to avoid the 60-req/hour
-      # unauthenticated rate limit (this config has ~60 GitHub entries,
+      # unauthenticated rate limit (this config has about 195 GitHub entries,
       # which trivially saturates that). The default GITHUB_TOKEN gets
       # 1000 req/hour, which is plenty.
       - name: Configure github keyfile
