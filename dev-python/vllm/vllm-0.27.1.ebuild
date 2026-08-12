@@ -826,8 +826,12 @@ REQUIRED_USE="
 # (cuda, no submodules, reads FLASH_KDA_SRC_DIR). All nested cutlass/fmt UNCHANGED.
 # CRATES 594->595 (tonic 0.14.5->0.14.6 +tonic-health, xgrammar-structural-tag
 # 0.2.2.4d145cc->0.2.4.dd729e7), GIT_CRATES llm-multimodal 5390032->15adba5 (still
-# v1.7.1), oss-harmony now tag v0.0.11 (same commit 76e8494). rocm gfx1150 + cpu +
-# empty build-verify pending on this host; cuda deferred to a NVIDIA host.
+# v1.7.1), oss-harmony now tag v0.0.11 (same commit 76e8494). rocm gfx1150
+# build + `from vllm import LLM` import verified 2026-08-12 (against
+# caffe2/pytorch 2.13.0), after two fixes the torch-2.13 stack forced: the rocm
+# HIP_CLANG_PATH export below (caffe2 2.13's LoadHIP no longer finds the slotted
+# llvm) and bumping rocm apache-tvm-ffi to 0.1.11 (xgrammar 0.2.2 needs its
+# extra_lib_paths). cuda deferred to a NVIDIA host.
 #
 # tokenspeed-mla (in requirements/cuda.txt at ==0.1.2 with the comment
 # "for faster mla with spec decode") is deliberately omitted from
@@ -909,9 +913,12 @@ REQUIRED_USE="
 # (opt-125m generated, inductor path + Triton _fwd_kernel).
 # Upstream pins lark==1.2.2 and numba==0.65.0, neither of which is in the
 # active repositories.  Stay within their compatible major/minor series.
-# common.txt allows xgrammar 0.2.1..<1, but CUDA and ROCm both pin
-# apache-tvm-ffi 0.1.10. xgrammar 0.2.2 is the newest release compatible
-# with that FFI and with transformers 5, so constrain it on those backends.
+# common.txt allows xgrammar 0.2.1..<1; constrain it to ~0.2.2 on CUDA/ROCm
+# (newest compatible with transformers 5). xgrammar 0.2.2 calls tvm-ffi's
+# load_lib_module(extra_lib_paths=...), which only exists from apache-tvm-ffi
+# 0.1.11 (0.1.10 raises TypeError at `import vllm`). Upstream rocm.txt still
+# pins tvm-ffi 0.1.10, but that is too old for the shipped xgrammar, so ROCm is
+# bumped to ~0.1.11 here to match CUDA (rocm import-verified 2026-08-12).
 RDEPEND="
 	~sci-ml/pytorch-2.13.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed,gloo]
@@ -1027,7 +1034,7 @@ RDEPEND="
 		~dev-python/tensorizer-2.10.1[${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tilelang-0.1.10[-cuda,rocm,${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
-			~dev-python/apache-tvm-ffi-0.1.10[${PYTHON_USEDEP}]
+			~dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 			~dev-python/conch-triton-kernels-1.2.1[${PYTHON_USEDEP}]
@@ -1221,6 +1228,14 @@ src_configure() {
 		export CMAKE_ARGS+=" -DCMAKE_LIBRARY_PATH=${gomp_dir}"
 	elif use rocm; then
 		export VLLM_TARGET_DEVICE=rocm
+		# caffe2 2.13.0's cmake/public/LoadHIP.cmake (consumed here via
+		# find_package(Torch)) switched to CMake-native HIP and defaults the
+		# compiler to ${ROCM_PATH}/lib/llvm/bin/clang++ (i.e. /usr/lib/llvm/bin),
+		# but Gentoo slots llvm at /usr/lib/llvm/<N>/bin. LoadHIP honours
+		# HIP_CLANG_PATH; point it at the real HIP clang, same as sci-ml/caffe2's
+		# own build does. (torch 2.11's FindHIP path did not need this.)
+		# verified 2026-08-12
+		export HIP_CLANG_PATH="$(hipconfig -l)"
 		filter-lto
 		# rocm.eclass turns AMDGPU_TARGETS into a semicolon-joined
 		# list. vllm's CMakeLists reads PYTORCH_ROCM_ARCH and feeds
