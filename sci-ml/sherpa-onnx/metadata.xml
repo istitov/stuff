@@ -6,7 +6,7 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <use>
-    <flag name="cuda">Build the NVIDIA CUDA backend (requires CUDA Toolkit; nvcc is pinned to gcc-15 on this host)</flag>
+    <flag name="cuda">Build the NVIDIA CUDA backend (requires CUDA Toolkit and a compiler version supported by nvcc)</flag>
     <flag name="portaudio">Build the example CLI tools that record/play audio (portaudio is vendored + statically linked by upstream cmake)</flag>
     <flag name="python">Build and install the Python bindings (pybind11) into site-packages</flag>
     <flag name="tts">Build text-to-speech support (pulls vendored espeak-ng-for-piper at build time)</flag>
