@@ -790,7 +790,7 @@ REQUIRED_USE="
 # 0.24.0: flashinfer-python 0.6.12->0.6.13, humming-kernels 0.1.4->0.1.10,
 # +torchcodec>=0.14, flash-attn pin dd62dac->2c839c3; PyNvVideoCodec + nvtx
 # omitted (see below). rocm gfx1150 + cpu + empty + USE=rust build-verified
-# 2026-07-12 on this host; cuda sm_86 build+run verified 2026-07-12 on an
+# 2026-07-12; cuda sm_86 build+run verified 2026-07-12 on an
 # NVIDIA host (A4500, CUDA 13.3, nvcc -ccbin g++-15): FA2 builds, FA3 stubbed
 # on sm_86, opt-125m generate() OK, USE=humming registry loads. 0.25.0 adds a
 # new ninja target _vllm_fa4_cutedsl_C (cutedsl) that builds clean and needs
