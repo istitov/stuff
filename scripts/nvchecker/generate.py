@@ -421,6 +421,12 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
 # classifier can't reach the right upstream from SRC_URI / HOMEPAGE alone.
 # Each value is a dict of nvchecker keys emitted verbatim under the entry.
 SPECIAL_SOURCES: dict[str, dict[str, object]] = {
+    # comfy-angle-bin installs upstream's platform wheel rather than an sdist,
+    # so the generic classifier cannot derive its PyPI project name from SRC_URI.
+    "dev-python/comfy-angle-bin": {
+        "source": "pypi",
+        "pypi": "comfy-angle",
+    },
     # therock-bin tracks AMD's nightly ROCm SDK tarballs on the CDN
     # (rocm.nightlies.amd.com).  ROCm/TheRock's github tags are
     # `rocm-X.Y.Z` releases which don't map to the nightly

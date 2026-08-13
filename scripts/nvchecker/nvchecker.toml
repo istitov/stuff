@@ -2398,7 +2398,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (11) ---
+# --- special (12) ---
 
 ["dev-libs/cudnn"]
 source = "regex"
@@ -2412,6 +2412,10 @@ pypi = "amd-quark"
 ["dev-python/comfy-aimdo-bin"]
 source = "pypi"
 pypi = "comfy-aimdo"
+
+["dev-python/comfy-angle-bin"]
+source = "pypi"
+pypi = "comfy-angle"
 
 ["dev-python/comfy-kitchen-bin"]
 source = "pypi"
