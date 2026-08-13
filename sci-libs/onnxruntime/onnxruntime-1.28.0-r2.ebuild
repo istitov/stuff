@@ -5,25 +5,41 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
 
-inherit cmake edo flag-o-matic python-r1
+inherit cuda cmake edo flag-o-matic python-r1
 
 EIGEN_COMMIT="1d8b82b0740839c0de7f1242a3585e3390ff5f33"
+ABSEIL_VERSION="20250814.1"
+CUTLASS_VERSION="4.4.2"
+CUDNN_FRONTEND_VERSION="1.24.0"
+GTEST_VERSION="1.17.0"
 
 DESCRIPTION="Cross-platform, high performance ML inferencing and training accelerator"
 HOMEPAGE="
 	https://onnxruntime.ai
 	https://github.com/microsoft/onnxruntime
 "
-SRC_URI="
+	SRC_URI="
 	https://github.com/microsoft/onnxruntime/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_COMMIT}/eigen-${EIGEN_COMMIT}.tar.bz2 ->
 		eigen-3.4.0_p20250216.tar.bz2
+	cuda? (
+		https://github.com/abseil/abseil-cpp/archive/refs/tags/${ABSEIL_VERSION}.tar.gz ->
+			abseil-cpp-${ABSEIL_VERSION}.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/refs/tags/v${CUTLASS_VERSION}.tar.gz ->
+			cutlass-${CUTLASS_VERSION}.tar.gz
+		https://github.com/NVIDIA/cudnn-frontend/archive/refs/tags/v${CUDNN_FRONTEND_VERSION}.tar.gz ->
+			cudnn-frontend-${CUDNN_FRONTEND_VERSION}.tar.gz
+	)
+	test? (
+		https://github.com/google/googletest/archive/refs/tags/v${GTEST_VERSION}.tar.gz ->
+			googletest-${GTEST_VERSION}.tar.gz
+	)
 "
 
-LICENSE="MIT"
+LICENSE="Apache-2.0 BSD MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-IUSE="python test"
+IUSE="cuda python test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
@@ -37,11 +53,16 @@ RESTRICT="!test? ( test )"
 # >=sci-ml/onnx-1.22.0 once onnx is packaged that far.
 # verified 2026-07-27
 RDEPEND="
-	dev-cpp/abseil-cpp:=
+	!cuda? ( dev-cpp/abseil-cpp:= )
 	dev-libs/cpuinfo
 	dev-libs/protobuf:=
 	dev-libs/re2:=
 	>=sci-ml/onnx-1.20.1[disableStaticReg]
+	cuda? (
+		~dev-cpp/abseil-cpp-20250814.1:=
+		dev-libs/cudnn:=
+		dev-util/nvidia-cuda-toolkit:=
+	)
 
 	python? (
 		${PYTHON_DEPS}
@@ -69,10 +90,9 @@ DEPEND="
 "
 BDEPEND="
 	${PYTHON_DEPS}
+	cuda? ( sys-devel/gcc:15 )
 
 	test? (
-		dev-cpp/gtest
-
 		python? ( dev-python/pytest[${PYTHON_USEDEP}] )
 	)
 "
@@ -85,6 +105,16 @@ PATCHES=(
 
 CMAKE_USE_DIR="${S}/cmake"
 
+src_prepare() {
+	cmake_src_prepare
+
+	if use cuda; then
+		pushd "${WORKDIR}/abseil-cpp-${ABSEIL_VERSION}" >/dev/null || die
+		eapply "${FILESDIR}/${PN}-1.28.0-abseil-nvcc.patch"
+		popd >/dev/null || die
+	fi
+}
+
 src_configure() {
 	# Python is used at build time unconditionally
 	python_setup
@@ -94,6 +124,7 @@ src_configure() {
 
 		-Donnxruntime_BUILD_UNIT_TESTS=$(usex test)
 		-Donnxruntime_ENABLE_PYTHON=$(usex python)
+		-Donnxruntime_USE_CUDA=$(usex cuda)
 
 		# Use vendored Eigen at a specific 3.4-branch commit (2025-02-15).
 		# ::gentoo's dev-cpp/eigen-3.4.0-r3 (Aug 2021) lacks 3+ years of
@@ -109,6 +140,24 @@ src_configure() {
 		-DCMAKE_INCLUDE_PATH="$(python_get_sitedir)"
 
 		-Wno-dev
+	)
+
+	if use cuda; then
+		local -x CUDAHOSTCXX="/usr/bin/g++-15"
+		cuda_add_sandbox -w
+		mycmakeargs+=(
+			-DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS:-all-major}"
+			-DCMAKE_CUDA_COMPILER="/opt/cuda/bin/nvcc"
+			-DCMAKE_CUDA_FLAGS="-I${WORKDIR}/abseil-cpp-${ABSEIL_VERSION}"
+			-DCMAKE_CUDA_HOST_COMPILER="${CUDAHOSTCXX}"
+			-DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND="${WORKDIR}/cudnn-frontend-${CUDNN_FRONTEND_VERSION}"
+			-DFETCHCONTENT_SOURCE_DIR_CUTLASS="${WORKDIR}/cutlass-${CUTLASS_VERSION}"
+			-Donnxruntime_CUDA_HOME="/opt/cuda"
+			-Donnxruntime_CUDNN_HOME="/opt/cuda"
+		)
+	fi
+	use test && mycmakeargs+=(
+		-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST="${WORKDIR}/googletest-${GTEST_VERSION}"
 	)
 
 	append-ldflags -Wl,-z,noexecstack
@@ -145,6 +194,7 @@ python_install() {
 		"libonnxruntime.so.${PV}"
 		"libonnxruntime_providers_shared.so"
 	)
+	use cuda && libs+=( "libonnxruntime_providers_cuda.so" )
 	for lib in "${libs[@]}"; do
 		ln -fsr "${ED}/usr/$(get_libdir)/${lib}" "${D}/$(python_get_sitedir)/onnxruntime/capi/${lib}" || die
 	done

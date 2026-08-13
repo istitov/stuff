@@ -1,0 +1,14 @@
+--- a/absl/container/internal/raw_hash_map.h
++++ b/absl/container/internal/raw_hash_map.h
+@@ -107,7 +107,9 @@
+       ABSL_INTERNAL_IF_##KValue##_NOR_##VValue(                                \
+           int = (EnableIf<LifetimeBoundKV<K, KValue, V, VValue,                \
+-                                          IfRRef<int KQual>::AddPtr<K>,        \
+-                                          IfRRef<int VQual>::AddPtr<V>>>()),   \
++              std::conditional_t<std::is_rvalue_reference_v<int KQual>, K*,   \
++                                 K>,                                           \
++              std::conditional_t<std::is_rvalue_reference_v<int VQual>, V*,   \
++                                 V>>>()),                                      \
+           ABSL_INTERNAL_SINGLE_ARG(                                            \
+               int &...,                                                        \
+               decltype(EnableIf<LifetimeBoundKV<K, KValue, V, VValue>>()) =    \

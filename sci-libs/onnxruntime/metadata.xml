@@ -13,14 +13,18 @@
     to whichever provider is registered.
 
     USE=python builds the Python bindings (numpy + flatbuffers + sympy +
-    coloredlogs); USE=test pulls dev-cpp/gtest for the C++ test suite.
+    coloredlogs); USE=test builds the C++ test suite with upstream's pinned
+    GoogleTest source.
 
-    Forked from ::guru @ same version; ebuild + 3 patches (relax
-    flatbuffers dep, drop -Werror, use system libraries instead of
-    vendored copies) imported verbatim. Eigen3 is still fetched as a
-    specific gitlab archive commit because upstream onnxruntime's CMake
-    requires Eigen features post-3.4.0 not yet in a tagged release.
+    Derived from the ::guru package with patches to relax the flatbuffers
+    dependency, drop -Werror, and use system libraries. Eigen3 remains pinned
+    to a specific GitLab archive commit because upstream requires features
+    newer than the latest compatible tagged release. CUDA builds use pinned
+    CUTLASS and cuDNN Frontend sources required by upstream.
   </longdescription>
+  <use>
+    <flag name="cuda">Build the NVIDIA CUDA execution provider</flag>
+  </use>
   <upstream>
     <bugs-to>https://github.com/microsoft/onnxruntime/issues</bugs-to>
     <doc>https://onnxruntime.ai/docs/</doc>
