@@ -76,6 +76,7 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	opengl? (
 		$(python_gen_cond_dep '
+			~dev-python/comfy-angle-bin-0.1.0[${PYTHON_USEDEP}]
 			dev-python/pyopengl[${PYTHON_USEDEP}]
 		')
 	)
@@ -97,13 +98,8 @@ RDEPEND="${PYTHON_DEPS}
 # pytorch-2.12 stack, so USE=audio only resolves once a matching torchaudio
 # exists. verified 2026-06-15.
 #
-# 0.27.0 dropped glfw (no remaining consumer). Its only PyOpenGL consumer,
-# comfy_extras/nodes_glsl.py, now imports comfy_angle first to pre-load the
-# ANGLE EGL/GLES runtime. comfy-angle (a Comfy-Org binary wheel) isn't packaged
-# here yet, so the GLSL shader nodes stay unavailable regardless of USE=opengl;
-# init_builtin_extra_nodes() catches the missing import and skips that node file
-# (no startup crash). USE=opengl still installs PyOpenGL for when comfy-angle
-# lands. verified 2026-07-01.
+# 0.27.0 dropped glfw (no remaining consumer). The GLSL nodes use comfy-angle
+# to load the ANGLE EGL/GLES runtime before importing PyOpenGL.
 BDEPEND="${PYTHON_DEPS}"
 
 src_install() {
