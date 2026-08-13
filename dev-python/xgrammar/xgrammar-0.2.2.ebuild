@@ -21,13 +21,13 @@ LICENSE="Apache-2.0 BSD-2"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Match xgrammar's declared apache-tvm-ffi floor.  Consumers that combine it
-# with other FFI users are responsible for pinning a complete compatible set.
+# The packaged-library lookup patch uses load_lib_module(extra_lib_paths=...),
+# which apache-tvm-ffi added in 0.1.11.
 RDEPEND="
 	>=sci-ml/pytorch-1.10.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.38.0[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
-		>=dev-python/apache-tvm-ffi-0.1.9[${PYTHON_USEDEP}]
+		>=dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
 		dev-python/triton-bin[${PYTHON_USEDEP}]
 		dev-python/pydantic[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
@@ -37,7 +37,7 @@ RDEPEND="
 BDEPEND="
 	>=dev-build/cmake-3.18
 	$(python_gen_cond_dep '
-		>=dev-python/apache-tvm-ffi-0.1.9[${PYTHON_USEDEP}]
+		>=dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
 	')
 "
 
