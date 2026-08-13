@@ -23,7 +23,7 @@ HOMEPAGE="
 SRC_URI="
 	https://github.com/k2-fsa/sherpa-onnx/archive/refs/tags/v${PV}.tar.gz
 		-> ${P}.gh.tar.gz
-	https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.gz
+	https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.bz2
 	https://github.com/likle/cargs/archive/refs/tags/v1.0.3.tar.gz
 		-> cargs-1.0.3.tar.gz
 	https://github.com/csukuangfj/hclust-cpp/archive/refs/tags/2026-02-25.tar.gz
@@ -50,16 +50,16 @@ SRC_URI="
 			-> pybind11-3.0.0.tar.gz
 	)
 	tts? (
-		https://github.com/csukuangfj/espeak-ng/archive/ed530aa113046142eb5115cf2fc9157854d0ffe1.zip
-			-> espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.zip
-		https://github.com/csukuangfj/piper-phonemize/archive/f3ff95afc03640bc1399e113e83361192a2fafb4.zip
-			-> piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.zip
+		https://github.com/csukuangfj/espeak-ng/archive/ed530aa113046142eb5115cf2fc9157854d0ffe1.tar.gz
+			-> espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.tar.gz
+		https://github.com/csukuangfj/piper-phonemize/archive/f3ff95afc03640bc1399e113e83361192a2fafb4.tar.gz
+			-> piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.tar.gz
 	)
 	websocket? (
 		https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-1-24-0.tar.gz
 			-> asio-asio-1-24-0.tar.gz
-		https://github.com/zaphoyd/websocketpp/archive/b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
-			-> websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+		https://github.com/zaphoyd/websocketpp/archive/b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
+			-> websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
 	)
 "
 
@@ -79,7 +79,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 # (under USE=python, which is the default here), they'd collide.
 RDEPEND="
 	!sci-ml/sherpa-onnx-bin
-	sci-libs/onnxruntime:=
+	sci-libs/onnxruntime:=[cuda?]
 	media-libs/alsa-lib
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	python? (
@@ -87,11 +87,7 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}"
-# app-arch/unzip is used by CMake's FetchContent at configure time to
-# extract the .zip-archived vendored deps (kissfft, websocketpp,
-# piper-phonemize, espeak-ng). Upstream ships these as .zip rather than
-# .tar.gz on github even though tarball mirrors exist — keeping .zip to
-# match the cmake possible_file_locations fallback filenames.
+# kaldi-native-fbank's CMake fallback consumes kissfft as a ZIP archive.
 BDEPEND="
 	app-arch/unzip
 	python? (
@@ -120,6 +116,10 @@ src_unpack() {
 		cp -- "${DISTDIR}/${f}" "${S}/" || die
 	done
 }
+
+PATCHES=(
+	"${FILESDIR}/${PN}-1.13.4-compressed-tarballs.patch"
+)
 
 src_configure() {
 	use python && python_setup

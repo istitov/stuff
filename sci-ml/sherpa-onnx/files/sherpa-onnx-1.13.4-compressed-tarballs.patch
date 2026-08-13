@@ -1,0 +1,121 @@
+diff --git a/cmake/eigen.cmake b/cmake/eigen.cmake
+index 3c54325..85035ef 100644
+--- a/cmake/eigen.cmake
++++ b/cmake/eigen.cmake
+@@ -1,17 +1,17 @@
+ function(download_eigen)
+   include(FetchContent)
+ 
+-  set(eigen_URL  "https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.gz")
+-  set(eigen_HASH "SHA256=e9c326dc8c05cd1e044c71f30f1b2e34a6161a3b6ecf445d56b53ff1669e3dec")
++  set(eigen_URL  "https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.bz2")
++  set(eigen_HASH "SHA256=e4de6b08f33fd8b8985d2f204381408c660bffa6170ac65b68ae1bd3cd575c0a")
+ 
+   # If you don't have access to the Internet,
+   # please pre-download eigen
+   set(possible_file_locations
+-    $ENV{HOME}/Downloads/eigen-5.0.1.tar.gz
+-    ${CMAKE_SOURCE_DIR}/eigen-5.0.1.tar.gz
+-    ${CMAKE_BINARY_DIR}/eigen-5.0.1.tar.gz
+-    /tmp/eigen-5.0.1.tar.gz
+-    /star-fj/fangjun/download/github/eigen-5.0.1.tar.gz
++    $ENV{HOME}/Downloads/eigen-5.0.1.tar.bz2
++    ${CMAKE_SOURCE_DIR}/eigen-5.0.1.tar.bz2
++    ${CMAKE_BINARY_DIR}/eigen-5.0.1.tar.bz2
++    /tmp/eigen-5.0.1.tar.bz2
++    /star-fj/fangjun/download/github/eigen-5.0.1.tar.bz2
+   )
+ 
+   foreach(f IN LISTS possible_file_locations)
+diff --git a/cmake/espeak-ng-for-piper.cmake b/cmake/espeak-ng-for-piper.cmake
+index 26952ac..797985f 100644
+--- a/cmake/espeak-ng-for-piper.cmake
++++ b/cmake/espeak-ng-for-piper.cmake
+@@ -1,8 +1,8 @@
+ function(download_espeak_ng_for_piper)
+   include(FetchContent)
+ 
+-  set(espeak_ng_URL  "https://github.com/csukuangfj/espeak-ng/archive/ed530aa113046142eb5115cf2fc9157854d0ffe1.zip")
+-  set(espeak_ng_HASH "SHA256=e4e262cbe34f7fe21f91f1ba3397f2728e1f30eafbae7853f2b753a9ed13f0dd")
++  set(espeak_ng_URL  "https://github.com/csukuangfj/espeak-ng/archive/ed530aa113046142eb5115cf2fc9157854d0ffe1.tar.gz")
++  set(espeak_ng_HASH "SHA256=3606d2bf55b3d7e6f1a0685e5d1a83c24f96197ada93b849a4dbfe7b34baf0d9")
+ 
+   set(BUILD_ESPEAK_NG_TESTS OFF CACHE BOOL "" FORCE)
+   set(USE_ASYNC OFF CACHE BOOL "" FORCE)
+@@ -20,11 +20,11 @@ function(download_espeak_ng_for_piper)
+   # If you don't have access to the Internet,
+   # please pre-download kaldi-decoder
+   set(possible_file_locations
+-    $ENV{HOME}/Downloads/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.zip
+-    ${CMAKE_SOURCE_DIR}/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.zip
+-    ${CMAKE_BINARY_DIR}/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.zip
+-    /tmp/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.zip
+-    /star-fj/fangjun/download/github/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.zip
++    $ENV{HOME}/Downloads/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.tar.gz
++    ${CMAKE_SOURCE_DIR}/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.tar.gz
++    ${CMAKE_BINARY_DIR}/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.tar.gz
++    /tmp/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.tar.gz
++    /star-fj/fangjun/download/github/espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.tar.gz
+   )
+ 
+   foreach(f IN LISTS possible_file_locations)
+diff --git a/cmake/piper-phonemize.cmake b/cmake/piper-phonemize.cmake
+index 323316a..f9321b2 100644
+--- a/cmake/piper-phonemize.cmake
++++ b/cmake/piper-phonemize.cmake
+@@ -1,16 +1,16 @@
+ function(download_piper_phonemize)
+   include(FetchContent)
+ 
+-  set(piper_phonemize_URL  "https://github.com/csukuangfj/piper-phonemize/archive/f3ff95afc03640bc1399e113e83361192a2fafb4.zip")
+-  set(piper_phonemize_HASH "SHA256=d9cca4e2bdc7d6dd8dffb96a4668283dbd3f77a9c194a3e530c1e8eba9406a5d")
++  set(piper_phonemize_URL  "https://github.com/csukuangfj/piper-phonemize/archive/f3ff95afc03640bc1399e113e83361192a2fafb4.tar.gz")
++  set(piper_phonemize_HASH "SHA256=257a121c1edc30b13363079abe7bbed16b194ebb8df6a861ee39e733f42bf708")
+ 
+   # If you don't have access to the Internet,
+   # please pre-download kaldi-decoder
+   set(possible_file_locations
+-    $ENV{HOME}/Downloads/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.zip
+-    ${CMAKE_SOURCE_DIR}/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.zip
+-    ${CMAKE_BINARY_DIR}/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.zip
+-    /tmp/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.zip
+-    /star-fj/fangjun/download/github/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.zip
++    $ENV{HOME}/Downloads/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.tar.gz
++    ${CMAKE_SOURCE_DIR}/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.tar.gz
++    ${CMAKE_BINARY_DIR}/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.tar.gz
++    /tmp/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.tar.gz
++    /star-fj/fangjun/download/github/piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.tar.gz
+   )
+ 
+   foreach(f IN LISTS possible_file_locations)
+diff --git a/cmake/websocketpp.cmake b/cmake/websocketpp.cmake
+index 9d1087e..1b7d547 100644
+--- a/cmake/websocketpp.cmake
++++ b/cmake/websocketpp.cmake
+@@ -2,17 +2,17 @@ function(download_websocketpp)
+   include(FetchContent)
+ 
+   # The latest commit on the develop branch os as 2022-10-22
+-  set(websocketpp_URL  "https://github.com/zaphoyd/websocketpp/archive/b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip")
+-  set(websocketpp_URL2  "https://hf-mirror.com/csukuangfj/sherpa-onnx-cmake-deps/resolve/main/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip")
+-  set(websocketpp_HASH "SHA256=1385135ede8191a7fbef9ec8099e3c5a673d48df0c143958216cd1690567f583")
++  set(websocketpp_URL  "https://github.com/zaphoyd/websocketpp/archive/b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz")
++  set(websocketpp_URL2)
++  set(websocketpp_HASH "SHA256=167a44121a332e71c51608e08c741c3d3b462f06eba06d4b4882b268cd944f36")
+ 
+   # If you don't have access to the Internet,
+   # please pre-download websocketpp
+   set(possible_file_locations
+-    $ENV{HOME}/Downloads/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+-    ${CMAKE_SOURCE_DIR}/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+-    ${CMAKE_BINARY_DIR}/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+-    /tmp/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+-    /star-fj/fangjun/download/github/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
++    $ENV{HOME}/Downloads/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
++    ${CMAKE_SOURCE_DIR}/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
++    ${CMAKE_BINARY_DIR}/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
++    /tmp/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
++    /star-fj/fangjun/download/github/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
+   )
+ 
+   foreach(f IN LISTS possible_file_locations)
