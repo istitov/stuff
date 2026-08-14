@@ -656,7 +656,7 @@ HOMEPAGE="
 SRC_URI+="
 	rust? ( ${CARGO_CRATE_URIS} )
 	cpu? (
-		https://github.com/oneapi-src/oneDNN/archive/refs/tags/v${VLLM_ONEDNN_TAG}.tar.gz
+		https://github.com/uxlfoundation/oneDNN/archive/refs/tags/v${VLLM_ONEDNN_TAG}.tar.gz
 			-> vllm-oneDNN-${VLLM_ONEDNN_TAG}.gh.tar.gz
 	)
 	cuda? (
