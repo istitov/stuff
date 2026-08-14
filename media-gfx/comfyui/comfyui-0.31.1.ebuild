@@ -75,8 +75,8 @@ RDEPEND="${PYTHON_DEPS}
 		dev-python/kornia[${PYTHON_SINGLE_USEDEP}]
 	)
 	opengl? (
+		~dev-python/comfy-angle-bin-0.1.0[${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
-			~dev-python/comfy-angle-bin-0.1.0[${PYTHON_USEDEP}]
 			dev-python/pyopengl[${PYTHON_USEDEP}]
 		')
 	)
