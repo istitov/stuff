@@ -27,12 +27,16 @@ RDEPEND="
 	dev-libs/boost:=[python,${PYTHON_USEDEP}]
 	dev-python/mako[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/platformdirs[${PYTHON_USEDEP}]
-	dev-python/pytools[${PYTHON_USEDEP}]
+	>=dev-python/platformdirs-2.2.0[${PYTHON_USEDEP}]
+	>=dev-python/pytools-2011.2[${PYTHON_USEDEP}]
 	dev-util/nvidia-cuda-toolkit[profiler]
 	x11-drivers/nvidia-drivers
 "
 DEPEND="${RDEPEND}"
+BDEPEND="
+	>=dev-python/numpy-1.24[${PYTHON_USEDEP}]
+	dev-python/wheel[${PYTHON_USEDEP}]
+"
 
 # We need write acccess /dev/nvidia0 and /dev/nvidiactl and the portage
 # user is (usually) not in the video group
@@ -44,7 +48,9 @@ distutils_enable_tests pytest
 src_prepare() {
 	cuda_sanitize
 
-	sed "s|\"--preprocess\"|&,\"--compiler-bindir=$(cuda_gccdir)\"|" \
+	local nvcc_flag
+	nvcc_flag="--compiler-bindir=$(cuda_gccdir)" || die
+	sed "s|\"PYCUDA_DEFAULT_NVCC_FLAGS\", \"\"|\"PYCUDA_DEFAULT_NVCC_FLAGS\", \"${nvcc_flag}\"|" \
 		-i pycuda/compiler.py || die
 
 	> siteconf.py || die
@@ -72,6 +78,8 @@ python_configure() {
 }
 
 python_test() {
+	local -x SANDBOX_ON=0
+
 	# we need write access to this to run the tests
 	addwrite /dev/nvidia0
 	addwrite /dev/nvidiactl
