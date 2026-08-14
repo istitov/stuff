@@ -2199,7 +2199,7 @@ prefix = "v"
 
 ["sci-ml/safetensors"]
 source = "github"
-github = "huggingface/safetensors"
+github = "safetensors/safetensors"
 use_max_tag = true
 prefix = "v"
 
