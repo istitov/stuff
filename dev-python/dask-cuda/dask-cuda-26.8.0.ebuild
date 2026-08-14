@@ -37,12 +37,15 @@ KEYWORDS="~amd64"
 RDEPEND="
 	>=dev-python/click-8.1[${PYTHON_USEDEP}]
 	>=dev-python/cuda-core-0.5.1[${PYTHON_USEDEP}]
+	<dev-python/cuda-core-2[${PYTHON_USEDEP}]
 	>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
+	<dev-python/numpy-3.0[${PYTHON_USEDEP}]
 	>=dev-python/nvidia-ml-py-12[${PYTHON_USEDEP}]
 	>=dev-python/pandas-1.3[${PYTHON_USEDEP}]
 	~dev-python/rapids-dask-dependency-26.8.0[${PYTHON_USEDEP}]
 	>=dev-python/zict-2.0.0[${PYTHON_USEDEP}]
 "
+BDEPEND=">=dev-python/setuptools-77.0.0[${PYTHON_USEDEP}]"
 
 python_prepare_all() {
 	# Upstream builds through rapids_build_backend, a RAPIDS PEP517 shim
