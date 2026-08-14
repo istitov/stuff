@@ -42,6 +42,7 @@ PATCHES=(
 	"${FILESDIR}/${P}-cxx17-standard.patch"
 	"${FILESDIR}/${P}-boost-bessel-qualify.patch"
 	"${FILESDIR}/${P}-complex-literal.patch"
+	"${FILESDIR}/${P}-package-version.patch"
 )
 
 src_prepare() {
