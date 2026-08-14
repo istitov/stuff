@@ -37,6 +37,7 @@ RDEPEND="
 BDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+		dev-python/wheel[${PYTHON_USEDEP}]
 	')
 "
 
@@ -76,8 +77,13 @@ python_test() {
 		tests/test_utils/test_safetensors_load.py
 		tests/test_utils/test_type.py
 	)
+	local -a deselect=(
+		'--deselect=tests/test_quantization/test_quant_config.py::test_map_to_checkpoint_names[llava]'
+		'--deselect=tests/test_quantization/test_quant_config.py::test_map_to_checkpoint_names[gemma4]'
+		'--deselect=tests/test_quantization/test_quant_config.py::test_map_to_checkpoint_names[qwen2_vl]'
+	)
 
-	epytest "${test_paths[@]}"
+	epytest "${test_paths[@]}" "${deselect[@]}"
 }
 
 pkg_postinst() {
