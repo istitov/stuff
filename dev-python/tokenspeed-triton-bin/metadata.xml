@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person"><email>iohann.s.titov@gmail.com</email><name>Ivan S. Titov</name></maintainer>
+	<longdescription>TokenSpeed's Triton distribution provides the compiler and language runtime used by TokenSpeed CUDA kernels.</longdescription>
+	<upstream><remote-id type="pypi">tokenspeed-triton</remote-id></upstream>
+</pkgmetadata>
