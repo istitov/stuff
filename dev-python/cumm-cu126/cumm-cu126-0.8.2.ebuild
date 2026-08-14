@@ -16,8 +16,7 @@ HOMEPAGE="
 	https://pypi.org/project/cumm-cu126/
 "
 # Prebuilt manylinux CUDA-12.6 wheel; bundles its own compiled CUDA kernels and
-# loads the CUDA runtime at import. Verified to run on a CUDA-13.3 host with the
-# backward-compatible driver. 0.7.x because spconv-cu126 caps cumm at <0.8.0.
+# loads them through the backward-compatible NVIDIA driver interface.
 SRC_URI="
 	https://files.pythonhosted.org/packages/54/b6/ff4eb87df5da67c56006a8d9fe5bf114cb69bb420194bde08192e5ad8573/${MY_PN}-${PV}-cp313-cp313-manylinux_2_28_x86_64.whl
 "
@@ -30,13 +29,13 @@ RESTRICT="bindist mirror strip"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/cumm/*"
 
-# Upstream also lists 'fire' and 'sympy'; neither is imported when spconv loads
-# cumm's prebuilt GEMM kernels at runtime. verified 2026-06-17
 RDEPEND="
 	$(python_gen_cond_dep '
-		dev-python/pccm[${PYTHON_USEDEP}]
-		dev-python/pybind11[${PYTHON_USEDEP}]
+		>=dev-python/pccm-0.4.15[${PYTHON_USEDEP}]
+		>=dev-python/pybind11-2.6.0[${PYTHON_USEDEP}]
+		dev-python/fire[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-python/sympy[${PYTHON_USEDEP}]
 	')
 "
 
