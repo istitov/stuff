@@ -32,18 +32,19 @@ KEYWORDS="~amd64"
 IUSE="rocm"
 
 RDEPEND="
-	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/pytorch-2.4[${PYTHON_SINGLE_USEDEP}]
+	<sci-ml/pytorch-3[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/numpy[${PYTHON_USEDEP}]
-		dev-python/packaging[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.17[${PYTHON_USEDEP}]
+		>=dev-python/packaging-20.9[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/scikit-build-core[${PYTHON_USEDEP}]
-		dev-python/setuptools[${PYTHON_USEDEP}]
-		dev-python/trove-classifiers[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-77.0.3[${PYTHON_USEDEP}]
+		>=dev-python/trove-classifiers-2025.8.6.13[${PYTHON_USEDEP}]
 	')
 	rocm? (
 		dev-util/hip
