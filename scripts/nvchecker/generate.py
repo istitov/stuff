@@ -269,9 +269,9 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     # `vX.Y` tags. Default `prefix = "v"` matches neither path form, so
     # max-tag falls back to the old bare tags (latex2pydata -> v0.1,
     # minted -> v2.9). Pin each to the path scheme of the artifact we ship.
-    "dev-tex/latex2pydata": {  # we ship the Python package
-        "include_regex": r"^python/v[0-9]+\.[0-9]+\.[0-9]+$",
-        "prefix": "python/v",
+    "dev-tex/latex2pydata": {  # PV follows the LaTeX package
+        "include_regex": r"^latex/v[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "latex/v",
     },
     "dev-tex/minted": {  # we ship the LaTeX package
         "include_regex": r"^latex/v[0-9]+\.[0-9]+\.[0-9]+$",
