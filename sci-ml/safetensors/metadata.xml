@@ -7,6 +7,6 @@
   </maintainer>
   <upstream>
     <remote-id type="pypi">safetensors</remote-id>
-    <remote-id type="github">huggingface/safetensors</remote-id>
+    <remote-id type="github">safetensors/safetensors</remote-id>
   </upstream>
 </pkgmetadata>

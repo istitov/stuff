@@ -63,7 +63,7 @@ HOMEPAGE="
 	https://pypi.org/project/safetensors/
 	https://huggingface.co/
 "
-SRC_URI="https://github.com/huggingface/${PN}/archive/refs/tags/v${PV}.tar.gz
+SRC_URI="https://github.com/safetensors/${PN}/archive/refs/tags/v${PV}.tar.gz
 	-> ${P}.gh.tar.gz
 	${CARGO_CRATE_URIS}
 "
