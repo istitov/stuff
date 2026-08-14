@@ -60,7 +60,9 @@ CDEPEND="
 "
 DEPEND="${CDEPEND}"
 BDEPEND="
+	>=dev-build/cmake-3.24
 	>=dev-lang/go-1.26.0
+	dev-vcs/git
 	vulkan? (
 		dev-util/vulkan-headers
 		media-libs/shaderc
