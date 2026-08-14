@@ -10,7 +10,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Divides large result sets into pages for easier browsing"
 HOMEPAGE="
-	https://github.com/Signum/paginate
+	https://github.com/Pylons/paginate
 	https://pypi.org/project/paginate/
 "
 
