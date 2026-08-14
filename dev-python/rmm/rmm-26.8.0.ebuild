@@ -39,8 +39,10 @@ RESTRICT="network-sandbox test"
 
 RDEPEND="
 	>=dev-python/cuda-bindings-13.0.1[${PYTHON_USEDEP}]
+	<dev-python/cuda-bindings-14[${PYTHON_USEDEP}]
 	~dev-python/librmm-26.8.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
+	<dev-python/numpy-3[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -53,11 +55,13 @@ DEPEND="
 # symbols degrade to Python objects and fail the nogil blocks.
 # verified 2026-08-06
 BDEPEND="
-	>=dev-build/cmake-3.30.4
+	>=dev-build/cmake-4
 	dev-build/ninja
 	>=dev-python/cuda-bindings-13.0.1[${PYTHON_USEDEP}]
-	>=dev-python/cython-3.0[${PYTHON_USEDEP}]
+	<dev-python/cuda-bindings-14[${PYTHON_USEDEP}]
+	>=dev-python/cython-3.2.2[${PYTHON_USEDEP}]
 	~dev-python/librmm-26.8.0[${PYTHON_USEDEP}]
+	>=dev-python/scikit-build-core-0.11.0[${PYTHON_USEDEP}]
 "
 
 python_prepare_all() {
