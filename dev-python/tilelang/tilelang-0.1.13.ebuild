@@ -32,7 +32,7 @@ RESTRICT="test"
 # installed Python package's library at runtime. Keep both ABIs exact.
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
-	sci-mathematics/z3:=[python,${PYTHON_SINGLE_USEDEP}]
+	>=sci-mathematics/z3-4.13.0:=[python,${PYTHON_SINGLE_USEDEP}]
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
 		sci-ml/caffe2[cuda]
@@ -56,6 +56,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
+	>=dev-build/cmake-3.26.1
 	>=dev-util/patchelf-0.17.2
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	$(python_gen_cond_dep '
