@@ -20,7 +20,7 @@ DESCRIPTION="Simplified interface to the Insight Toolkit (ITK) for image analysi
 HOMEPAGE="
 	https://simpleitk.org/
 	https://github.com/SimpleITK/SimpleITK
-	https://pypi.org/project/SimpleITK/
+	https://pypi.org/project/simpleitk/
 "
 SRC_URI="https://files.pythonhosted.org/packages/f4/ec/301532fb2003e6557e6a12106eb1df572ed6f74c08c05c2e7a8913353383/${MY_WHEEL}"
 S="${WORKDIR}"

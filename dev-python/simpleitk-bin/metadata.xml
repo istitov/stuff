@@ -6,7 +6,7 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <upstream>
-    <remote-id type="pypi">SimpleITK</remote-id>
+    <remote-id type="pypi">simpleitk</remote-id>
     <remote-id type="github">SimpleITK/SimpleITK</remote-id>
     <bugs-to>https://github.com/SimpleITK/SimpleITK/issues</bugs-to>
   </upstream>
