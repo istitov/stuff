@@ -1,0 +1,31 @@
+--- a/diffoctreerast/octree_voxel_rasterizer.py
++++ b/diffoctreerast/octree_voxel_rasterizer.py
+@@ -168,6 +168,7 @@ class OctreeVoxelRasterizationSettings(NamedTuple):
+     sh_degree : int
+     campos : torch.Tensor
+     debug : bool
++    with_distloss : bool = False
+ 
+ 
+ class OctreeVoxelRasterizer(nn.Module):
+--- a/diffoctreerast/octree_trivec_rasterizer.py
++++ b/diffoctreerast/octree_trivec_rasterizer.py
+@@ -202,6 +202,8 @@ class OctreeTrivecRasterizationSettings(NamedTuple):
+     sh_degree : int
+     campos : torch.Tensor
+     debug : bool
++    density_shift : float = 0.0
++    jitter : bool = False
+ 
+ 
+ class OctreeTrivecRasterizer(nn.Module):
+--- a/diffoctreerast/octree_decoupoly_rasterizer.py
++++ b/diffoctreerast/octree_decoupoly_rasterizer.py
+@@ -195,6 +195,7 @@ class OctreeDecoupolyRasterizationSettings(NamedTuple):
+     sh_degree : int
+     campos : torch.Tensor
+     debug : bool
++    density_shift : float = 0.0
+ 
+ 
+ class OctreeDecoupolyRasterizer(nn.Module):

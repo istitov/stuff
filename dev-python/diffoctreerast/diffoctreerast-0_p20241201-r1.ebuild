@@ -33,6 +33,8 @@ BDEPEND="
 	')
 "
 
+PATCHES=( "${FILESDIR}/${P}-settings.patch" )
+
 src_prepare() {
 	distutils-r1_src_prepare
 }
