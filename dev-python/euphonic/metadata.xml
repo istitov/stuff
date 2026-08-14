@@ -10,6 +10,6 @@
   </use>
   <upstream>
     <remote-id type="github">pace-neutrons/Euphonic</remote-id>
-    <remote-id type="pypi">euphonic</remote-id>
+    <remote-id type="pypi">Euphonic</remote-id>
   </upstream>
 </pkgmetadata>
