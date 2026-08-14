@@ -277,6 +277,15 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "include_regex": r"^latex/v[0-9]+\.[0-9]+\.[0-9]+$",
         "prefix": "latex/v",
     },
+    # deadbeef-dr-meter tags releases as vYYYY_MM_DD_hHH while the ebuild
+    # uses the date alone as its PV. Normalize the tag to that date-based PV
+    # so the build-hour suffix does not create permanent false drift.
+    "media-plugins/deadbeef-dr-meter": {
+        "include_regex": r"^v[0-9]{4}_[0-9]{2}_[0-9]{2}_h[0-9]+$",
+        "prefix": "v",
+        "from_pattern": r"^([0-9]{4})_([0-9]{2})_([0-9]{2})_h[0-9]+$",
+        "to_pattern": r"\1.\2.\3",
+    },
     # delta-io/delta-rs is a monorepo with parallel tag families: the Python
     # package is `python-v<PV>`, the Rust crate is `rust-v<PV>`, plus a stray
     # pre-split bare `v0.1.1`. We ship the Python package from this repo since
