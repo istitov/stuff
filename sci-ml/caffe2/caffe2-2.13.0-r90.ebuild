@@ -69,8 +69,11 @@ REQUIRED_USE="
 # verified 2026-08-08: 2.13.0-r90 compiles clean against FBGEMM-1.4.0.2025.12.10
 # and would fail the same way as 2.11/2.12 against 1.7. The fbgemm? dep below
 # caps to the 1.4 series until the frozen source is patched for the new API.
+# torch._C moved into this package in 2.13, so older pytorch versions
+# must be removed before the replacement file can be merged.
 RDEPEND="
 	${PYTHON_DEPS}
+	!!<sci-ml/pytorch-2.13.0
 	dev-cpp/abseil-cpp:=
 	dev-cpp/gflags:=
 	>=dev-cpp/glog-0.5.0:=
