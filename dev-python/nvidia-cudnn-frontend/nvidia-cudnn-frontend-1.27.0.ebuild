@@ -47,7 +47,8 @@ RDEPEND="
 	dev-util/nvidia-cuda-toolkit:=
 "
 DEPEND="${RDEPEND}"
-# Build-system requires (pyproject): setuptools, cmake>=3.18,
+# Build-system requires setuptools>=64; the root CMakeLists requires CMake>=3.23.
+# The remaining pyproject requirements are
 # pybind11[global]>=2.13,<3, ninja. ninja is optional — setup.py falls
 # back to make when the `ninja` Python module is absent (it is, here).
 # Upstream's pybind11 <3 cap is conservative: verified 2026-06-11 that
@@ -55,6 +56,7 @@ DEPEND="${RDEPEND}"
 # so carry the >=2.13 floor without the upper cap. No setuptools-scm —
 # the version is a literal in python/cudnn/__init__.py read via attr.
 BDEPEND="
-	>=dev-build/cmake-3.18
+	>=dev-build/cmake-3.23
 	>=dev-python/pybind11-2.13[${PYTHON_USEDEP}]
+	>=dev-python/setuptools-64[${PYTHON_USEDEP}]
 "
