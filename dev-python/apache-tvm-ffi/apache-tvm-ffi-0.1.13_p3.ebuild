@@ -24,17 +24,19 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
-	>=dev-python/cython-3.0[${PYTHON_USEDEP}]
+	app-alternatives/ninja
+	>=dev-build/cmake-3.26
+	>=dev-python/cython-3.2.8[${PYTHON_USEDEP}]
+	>=dev-python/scikit-build-core-0.10[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
 	test? (
-		app-alternatives/ninja
 		dev-python/ml-dtypes[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
 	)
 "
 
-EPYTEST_PLUGINS=()
+EPYTEST_PLUGINS=( pytest-xdist )
 distutils_enable_tests pytest
 
 # Upstream's pyproject.toml [tool.scikit-build] sets a cmake.args list
