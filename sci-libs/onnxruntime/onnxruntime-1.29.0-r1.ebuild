@@ -70,7 +70,7 @@ RDEPEND="
 		dev-python/flatbuffers[${PYTHON_USEDEP}]
 		>=dev-python/numpy-2[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
-		dev-python/protobuf[${PYTHON_USEDEP}]
+		>=dev-python/protobuf-4.25.8[${PYTHON_USEDEP}]
 		dev-python/sympy[${PYTHON_USEDEP}]
 	)
 "
