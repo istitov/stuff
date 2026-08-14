@@ -27,10 +27,13 @@ KEYWORDS="~amd64"
 # predated triton-bin landing in-tree (2026-06-14).
 RDEPEND="
 	>=dev-python/numpy-1.26.4[${PYTHON_USEDEP}]
-	dev-python/triton-bin[${PYTHON_USEDEP}]
+	>=dev-python/triton-bin-3.3[${PYTHON_USEDEP}]
+	sci-ml/caffe2[${PYTHON_USEDEP}]
 "
 BDEPEND="
+	>=dev-python/setuptools-42[${PYTHON_USEDEP}]
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-python/wheel[${PYTHON_USEDEP}]
 "
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
