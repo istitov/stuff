@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
 
-inherit cuda cmake edo flag-o-matic python-r1
+inherit cuda cmake edo flag-o-matic multiprocessing python-r1
 
 EIGEN_COMMIT="1d8b82b0740839c0de7f1242a3585e3390ff5f33"
 ABSEIL_VERSION="20250814.1"
@@ -105,6 +105,16 @@ PATCHES=(
 
 CMAKE_USE_DIR="${S}/cmake"
 
+onnxruntime_cmake_phase() {
+	local jobs=$(makeopts_jobs)
+	if use cuda && (( jobs > 4 )); then
+		# Flash-attention nvcc jobs can each consume more than 3 GiB.
+		# Preserve lower user limits while avoiding concurrent compiler OOMs.
+		local -x MAKEOPTS="${MAKEOPTS} -j4"
+	fi
+	"$@"
+}
+
 src_prepare() {
 	cmake_src_prepare
 
@@ -171,6 +181,10 @@ src_configure() {
 	cmake_src_configure
 }
 
+src_compile() {
+	onnxruntime_cmake_phase cmake_src_compile
+}
+
 # Adapted from `run_onnxruntime_tests` in `tools/ci_build/build.py`
 python_test() {
 	cd "${S}/cmake_build" || die
@@ -211,7 +225,7 @@ python_install() {
 }
 
 src_install() {
-	cmake_src_install
+	onnxruntime_cmake_phase cmake_src_install
 
 	if use python ; then
 		python_foreach_impl python_install
