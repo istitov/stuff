@@ -794,9 +794,9 @@ REQUIRED_USE="
 # static cuda.txt audit done 2026-07-12 against vllm-0.25.0 -- deltas vs
 # 0.24.0: flashinfer-python 0.6.12->0.6.13, humming-kernels 0.1.4->0.1.10,
 # +torchcodec>=0.14, flash-attn pin dd62dac->2c839c3; PyNvVideoCodec + nvtx
-# omitted (see below). rocm gfx1150 + cpu + empty + USE=rust build-verified
-# 2026-07-12; cuda sm_86 build+run verified 2026-07-12 on an
-# NVIDIA host (A4500, CUDA 13.3, nvcc -ccbin g++-15): FA2 builds, FA3 stubbed
+# were packaged with the 0.27.1 dependency audit. rocm gfx1150 + cpu + empty
+# + USE=rust coverage completed 2026-07-12; CUDA sm_86 coverage on an A4500
+# with CUDA 13.3 and nvcc -ccbin g++-15 completed the same day: FA2 builds, FA3 stubbed
 # on sm_86, opt-125m generate() OK, USE=humming registry loads. 0.25.0 adds a
 # new ninja target _vllm_fa4_cutedsl_C (cutedsl) that builds clean and needs
 # no patch -- watch it alongside the FA3 stub on future bumps.
@@ -805,7 +805,8 @@ REQUIRED_USE="
 # 0.1.9->0.1.10, nvidia-cutlass-dsl 4.5.2->4.6.0,
 # quack-kernels >=0.3.3,<0.6.0 -> >=0.4.0,<0.6.2 (floor raised, cap moved to
 # 0.6.2 for the cutlass-4.6.1 boundary, see above); tokenspeed-mla
-# 0.1.2->0.1.8 and amd-quark 0.8.99->0.12 stay omitted. cpu.txt unchanged (torch
+# 0.1.2->0.1.8 is packaged exactly while amd-quark 0.8.99->0.12 stays omitted.
+# cpu.txt is unchanged (torch
 # still ==2.11.0). flash-attn pin 2c839c3->caaa4eb (fa3-skip + py314 patches apply
 # clean, regenerated as caaa4eb copies). CRATES 561->594, GIT_CRATES llm-multimodal
 # rev 7d74582->5390032 (still v1.7.1), oss-harmony unchanged. The rocm and cuda
@@ -831,25 +832,12 @@ REQUIRED_USE="
 # caffe2/pytorch 2.13.0), after two fixes the torch-2.13 stack forced: the rocm
 # HIP_CLANG_PATH export below (caffe2 2.13's LoadHIP no longer finds the slotted
 # llvm) and bumping rocm apache-tvm-ffi to 0.1.11 (xgrammar 0.2.2 needs its
-# extra_lib_paths). cuda deferred to a NVIDIA host.
+# extra_lib_paths). CUDA sm_86 clean rebuild and non-eager OPT-125M generation
+# completed 2026-08-14 with CUDA 13.3, driver 610.57.04, and GCC 15.
 #
-# tokenspeed-mla (in requirements/cuda.txt at ==0.1.2 with the comment
-# "for faster mla with spec decode") is deliberately omitted from
-# cuda?'s RDEPEND for similar reasons: all imports in vllm core are
-# lazy and gated by try/except with a clear pip-install hint, the
-# kernels are Blackwell SM100/SM103-only (irrelevant on Ampere/Hopper
-# hosts), and the package transitively pulls tokenspeed-triton — a
-# Triton vendor-fork we'd otherwise have to package as a hard build
-# dep for a backend most users never enable. Users on Blackwell with
-# DeepSeek R1 + spec decode install tokenspeed-mla separately.
-# verified 2026-05-16: vllm imports clean without it.
-#
-# PyNvVideoCodec (requirements/cuda.txt ==2.0.4) and nvtx (==0.2.15) are
-# likewise omitted -- both cuda-only and lazily imported (nvtx inside a fn
-# at vllm/v1/utils.py; PyNvVideoCodec inside decode_frames_pynvvideocodec()
-# at vllm/multimodal/video.py). nvtx is profiling markers, PyNvVideoCodec an
-# optional GPU video-decode backend; neither is packaged, users needing them
-# install separately. verified lazy 2026-07-12 against 0.25.0.
+# requirements/cuda.txt pins tokenspeed-mla 0.1.8, PyNvVideoCodec 2.0.4,
+# and nvtx 0.2.15. Keep the exact dependency set even though the TokenSpeed
+# kernels target Blackwell SM100/SM103 and the other two imports are lazy.
 #
 # humming-kernels[cu13] (requirements/cuda.txt, ==0.1.10 "for quantization
 # gemm") provides the optional `humming` quant backend -- pulled only
@@ -1006,6 +994,8 @@ RDEPEND="
 	)
 	cuda? (
 		>=sci-ml/caffe2-2.13.0-r90[cuda,-rocm]
+		~dev-python/pynvvideocodec-bin-2.0.4[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/tokenspeed-mla-bin-0.1.8[${PYTHON_SINGLE_USEDEP}]
 		~sci-ml/torchaudio-2.11.0
 		~sci-ml/torchvision-0.28.0[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/xgrammar-0.2.2[${PYTHON_SINGLE_USEDEP}]
@@ -1016,6 +1006,7 @@ RDEPEND="
 		<dev-python/quack-kernels-0.6.2[${PYTHON_SINGLE_USEDEP}]
 		humming? ( ~dev-python/humming-kernels-0.1.10[${PYTHON_SINGLE_USEDEP}] )
 		$(python_gen_cond_dep '
+			~dev-python/nvtx-0.2.15[${PYTHON_USEDEP}]
 			~dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
