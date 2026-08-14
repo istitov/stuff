@@ -24,9 +24,8 @@
     <flag name="systemd">Install a systemd template service unit (fastflowlm@.service)</flag>
   </use>
   <upstream>
-    <remote-id type="github">FastFlowLM/FastFlowLM</remote-id>
-    <bugs-to>https://github.com/FastFlowLM/FastFlowLM/issues</bugs-to>
+    <remote-id type="github">ROCm/FastFlowLM</remote-id>
+    <bugs-to>https://github.com/ROCm/FastFlowLM/issues</bugs-to>
     <doc>https://fastflowlm.com/docs/</doc>
   </upstream>
 </pkgmetadata>
-

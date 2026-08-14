@@ -126,7 +126,7 @@ src_install() {
 	# Helper that patches HuggingFace Whisper config.json so FLM's
 	# decoder-only LM_Config validator doesn't crash on it. Idempotent;
 	# user runs once after `flm pull whisper-v3:turbo`.
-	# Upstream bug: https://github.com/FastFlowLM/FastFlowLM/issues/545
+	# Upstream bug: https://github.com/ROCm/FastFlowLM/issues/545
 	newbin "${FILESDIR}/flm-patch-whisper" flm-patch-whisper
 
 	newenvd - 99fastflowlm <<-'EOF'
@@ -185,7 +185,7 @@ pkg_postinst() {
 	ewarn "until their config.json is patched: FLM's LM_Config validator"
 	ewarn "asserts on decoder-only LM-shape fields that HuggingFace Whisper"
 	ewarn "configs don't carry."
-	ewarn "Upstream bug: https://github.com/FastFlowLM/FastFlowLM/issues/545"
+	ewarn "Upstream bug: https://github.com/ROCm/FastFlowLM/issues/545"
 	ewarn ""
 	ewarn "After 'flm pull whisper-v3:turbo' (or any Whisper model), run"
 	ewarn "    flm-patch-whisper"

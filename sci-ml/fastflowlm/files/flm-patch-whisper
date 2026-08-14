@@ -22,7 +22,7 @@ finds every Whisper config that's missing the decoder-only fields,
 and adds them with values mapped from the encoder-* keys. It's
 idempotent — configs that already carry hidden_size are left alone.
 
-Upstream bug: https://github.com/FastFlowLM/FastFlowLM/issues/545
+Upstream bug: https://github.com/ROCm/FastFlowLM/issues/545
 
 Drop this helper from the overlay once upstream merges a real fix.
 """

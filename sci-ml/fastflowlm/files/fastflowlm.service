@@ -1,6 +1,6 @@
 [Unit]
 Description=FastFlowLM NPU runtime (user %i)
-Documentation=https://github.com/FastFlowLM/FastFlowLM
+Documentation=https://github.com/ROCm/FastFlowLM
 After=network.target
 Wants=network.target
 
