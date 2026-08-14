@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person"><email>iohann.s.titov@gmail.com</email><name>Ivan S. Titov</name></maintainer>
+	<longdescription>NVTX provides Python bindings and decorators for annotating application code for NVIDIA profiling tools.</longdescription>
+	<upstream><remote-id type="github">NVIDIA/NVTX</remote-id><remote-id type="pypi">nvtx</remote-id></upstream>
+</pkgmetadata>
