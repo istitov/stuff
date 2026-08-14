@@ -57,6 +57,7 @@ BDEPEND="
 	>=dev-build/cmake-3.18
 	$(python_gen_cond_dep '
 		>=dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
+		>=dev-python/scikit-build-core-0.10[${PYTHON_USEDEP}]
 	')
 "
 
