@@ -40,44 +40,46 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 RDEPEND="${PYTHON_DEPS}
 	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP},cuda?,rocm?]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
-	sci-ml/transformers[${PYTHON_SINGLE_USEDEP}]
-	sci-ml/tokenizers[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/transformers-4.50.3[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/tokenizers-0.13.3[${PYTHON_SINGLE_USEDEP}]
 	dev-python/torchsde[${PYTHON_SINGLE_USEDEP}]
 	~dev-python/comfyui-frontend-package-1.48.7[${PYTHON_SINGLE_USEDEP}]
 	~dev-python/comfyui-embedded-docs-0.5.9[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/comfy-aimdo-bin[${PYTHON_USEDEP},cuda=]
-		dev-python/comfy-kitchen-bin[${PYTHON_USEDEP},cuda=]
-		sci-ml/safetensors[${PYTHON_USEDEP}]
+		~dev-python/comfy-aimdo-bin-0.4.13[${PYTHON_USEDEP},cuda=]
+		~dev-python/comfy-kitchen-bin-0.2.30[${PYTHON_USEDEP},cuda=]
+		>=sci-ml/safetensors-0.4.2[${PYTHON_USEDEP}]
 		sci-ml/sentencepiece[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.25.0[${PYTHON_USEDEP}]
 		dev-python/einops[${PYTHON_USEDEP}]
-		dev-python/aiohttp[${PYTHON_USEDEP}]
-		dev-python/yarl[${PYTHON_USEDEP}]
+		>=dev-python/aiohttp-3.11.8[${PYTHON_USEDEP}]
+		>=dev-python/yarl-1.18.0[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/pillow[${PYTHON_USEDEP}]
 		dev-python/scipy[${PYTHON_USEDEP}]
 		dev-python/tqdm[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
 		dev-python/alembic[${PYTHON_USEDEP}]
-		dev-python/sqlalchemy[${PYTHON_USEDEP}]
+		>=dev-python/sqlalchemy-2.0.0[${PYTHON_USEDEP}]
 		dev-python/filelock[${PYTHON_USEDEP}]
 		>=dev-python/av-16.0.0[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 		>=dev-python/simpleeval-1.0.0[${PYTHON_USEDEP}]
 		dev-python/blake3[${PYTHON_USEDEP}]
-		dev-python/pydantic[${PYTHON_USEDEP}]
-		dev-python/pydantic-settings[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-2.0[${PYTHON_USEDEP}]
+		<dev-python/pydantic-3[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-settings-2.0[${PYTHON_USEDEP}]
+		<dev-python/pydantic-settings-3[${PYTHON_USEDEP}]
 	')
 	templates? ( ~dev-python/comfyui-workflow-templates-0.11.39[${PYTHON_SINGLE_USEDEP}] )
 	extra? (
 		dev-python/spandrel[${PYTHON_SINGLE_USEDEP}]
-		dev-python/kornia[${PYTHON_SINGLE_USEDEP}]
+		>=dev-python/kornia-0.7.1[${PYTHON_SINGLE_USEDEP}]
 	)
 	opengl? (
 		~dev-python/comfy-angle-bin-0.1.0[${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
-			dev-python/pyopengl[${PYTHON_USEDEP}]
+			>=dev-python/pyopengl-3.1.8[${PYTHON_USEDEP}]
 		')
 	)
 	compile? (
