@@ -53,7 +53,6 @@ RDEPEND="
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/tabulate[${PYTHON_USEDEP}]
 		dev-python/tqdm[${PYTHON_USEDEP}]
-		dev-python/typing-extensions[${PYTHON_USEDEP}]
 		~dev-python/flashinfer-cubin-'${PV}'[${PYTHON_USEDEP}]
 	')
 "
