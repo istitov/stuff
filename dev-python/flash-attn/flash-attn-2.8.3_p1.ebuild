@@ -30,7 +30,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP}]
+	>=dev-util/nvidia-cuda-toolkit-11.7:=
+	sci-ml/caffe2[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/einops[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
@@ -40,7 +41,9 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	app-alternatives/ninja
 	$(python_gen_cond_dep '
+		dev-python/psutil[${PYTHON_USEDEP}]
 		dev-python/setuptools[${PYTHON_USEDEP}]
+		dev-python/wheel[${PYTHON_USEDEP}]
 	')
 "
 
@@ -59,7 +62,7 @@ src_compile() {
 	# torch's cpp_extension passes CC/CXX to nvcc as -ccbin; CUDA 13.x rejects
 	# gcc>15, so pin the cuda-eclass gcc.
 	export CC="${gccdir}/gcc" CXX="${gccdir}/g++"
-	export TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST:-8.0 8.6 8.9 9.0}"
+	export FLASH_ATTN_CUDA_ARCHS="${FLASH_ATTN_CUDA_ARCHS:-80;90}"
 	export FORCE_CUDA=1 FLASH_ATTENTION_FORCE_BUILD=TRUE
 	# The flash_bwd_hdim128 kernels peak ~10-13GB each under cicc; at the
 	# upstream default MAX_JOBS they OOM a 32GB host. Cap parallelism.
