@@ -64,6 +64,8 @@ BDEPEND="
 	')
 "
 
+PATCHES=( "${FILESDIR}/${P}-cudahostcxx.patch" )
+
 # Upstream caps z3-solver at <4.15.5, but Gentoo provides newer versions.
 # Treat it as a tested-version cap unless an incompatibility surfaces. # verified 2026-08-05
 
@@ -153,5 +155,5 @@ pkg_postinst() {
 	elog "tilelang JIT-compiles kernels with nvcc at runtime. If the active"
 	elog "compiler is unsupported by CUDA, select the compatible compiler with:"
 	elog ""
-	elog "  export NVCC_PREPEND_FLAGS='-ccbin ${cuda_gcc_dir}/g++'"
+	elog "  export CUDAHOSTCXX='${cuda_gcc_dir}/g++'"
 }
