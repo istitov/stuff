@@ -13,7 +13,7 @@ DISTUTILS_SINGLE_IMPL=1
 PYTHON_COMPAT=( python3_{12..14} )
 ROCM_VERSION=6.3
 
-inherit distutils-r1 rocm
+inherit cuda distutils-r1 rocm
 
 DESCRIPTION="k-bit quantization (QLoRA) and 8-bit optimizers for PyTorch"
 HOMEPAGE="https://github.com/bitsandbytes-foundation/bitsandbytes"
@@ -26,10 +26,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Default backend is CPU; USE=rocm builds the HIP/ROCm backend. The ROCm
-# gfx coverage includes the consumer RDNA3 (gfx1100) and Strix-Halo
-# (gfx1150/gfx1151) targets this overlay uses.
-IUSE="rocm"
+# Default backend is CPU; CUDA and ROCm backends are mutually exclusive.
+IUSE="cuda rocm"
+REQUIRED_USE="?? ( cuda rocm )"
 
 RDEPEND="
 	>=sci-ml/pytorch-2.4[${PYTHON_SINGLE_USEDEP}]
@@ -38,6 +37,7 @@ RDEPEND="
 		>=dev-python/numpy-1.17[${PYTHON_USEDEP}]
 		>=dev-python/packaging-20.9[${PYTHON_USEDEP}]
 	')
+	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
@@ -53,13 +53,48 @@ BDEPEND="
 	)
 "
 
+src_prepare() {
+	distutils-r1_src_prepare
+	use cuda && cuda_src_prepare
+}
+
 src_compile() {
 	# COMPUTE_BACKEND defaults to cpu in the CMakeLists. scikit-build-core
 	# honors CMAKE_ARGS; bitsandbytes reads AMDGPU_TARGETS for
 	# CMAKE_HIP_ARCHITECTURES.
-	if use rocm; then
-		export CMAKE_ARGS="-DCOMPUTE_BACKEND=hip -DAMDGPU_TARGETS=$(get_amdgpu_flags)"
+	local cmake_args=()
+	if use cuda; then
+		local gccdir target capability
+		local cuda_targets=()
+		gccdir=$(cuda_gccdir) || die
+		export CC="${gccdir}/gcc" CXX="${gccdir}/g++"
+		cmake_args+=(
+			-DCOMPUTE_BACKEND=cuda
+			"-DCMAKE_CUDA_HOST_COMPILER=${gccdir}/g++"
+		)
+
+		if [[ -n ${NVPTX_TARGETS} ]]; then
+			for target in ${NVPTX_TARGETS}; do
+				cuda_targets+=( "${target#sm_}" )
+			done
+		elif [[ -n ${CUDAARCHS} ]]; then
+			for target in ${CUDAARCHS//[;,]/ }; do
+				target=${target#sm_}
+				cuda_targets+=( "${target//./}" )
+			done
+		fi
+
+		if [[ ${#cuda_targets[@]} -gt 0 ]]; then
+			capability=$(IFS=';'; printf '%s' "${cuda_targets[*]}")
+			cmake_args+=( "-DCOMPUTE_CAPABILITY=${capability}" )
+		fi
+	elif use rocm; then
+		cmake_args+=(
+			-DCOMPUTE_BACKEND=hip
+			"-DAMDGPU_TARGETS=$(get_amdgpu_flags)"
+		)
 	fi
+	export CMAKE_ARGS="${CMAKE_ARGS} ${cmake_args[*]}"
 
 	distutils-r1_src_compile
 }
