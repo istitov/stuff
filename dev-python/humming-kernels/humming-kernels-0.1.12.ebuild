@@ -49,5 +49,6 @@ RDEPEND="
 BDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+		dev-python/wheel[${PYTHON_USEDEP}]
 	')
 "
