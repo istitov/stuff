@@ -30,6 +30,7 @@ RDEPEND="
 BDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/pybind11-2.10[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-78.1.1[${PYTHON_USEDEP}]
 	')
 "
 
