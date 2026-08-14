@@ -16,6 +16,6 @@
   </longdescription>
   <upstream>
     <remote-id type="github">pymupdf/pymupdf</remote-id>
-    <remote-id type="pypi">PyMuPDF</remote-id>
+    <remote-id type="pypi">pymupdf</remote-id>
   </upstream>
 </pkgmetadata>
