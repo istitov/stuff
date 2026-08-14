@@ -6,7 +6,7 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <upstream>
-    <remote-id type="pypi">kornia_rs</remote-id>
+    <remote-id type="pypi">kornia-rs</remote-id>
     <remote-id type="github">kornia/kornia-rs</remote-id>
   </upstream>
 </pkgmetadata>
