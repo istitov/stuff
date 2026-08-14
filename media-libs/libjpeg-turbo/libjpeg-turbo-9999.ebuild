@@ -8,7 +8,7 @@ inherit cmake-multilib git-r3 java-pkg-opt-2
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
 HOMEPAGE="https://libjpeg-turbo.org/ https://github.com/libjpeg-turbo/libjpeg-turbo"
 EGIT_REPO_URI="https://github.com/libjpeg-turbo/${PN}.git"
-SRC_URI="mirror://gentoo/libjpeg8_8d-2.debian.tar.gz"
+SRC_URI="https://snapshot.debian.org/archive/debian/20131204T043919Z/pool/main/libj/libjpeg8/libjpeg8_8d-2.debian.tar.gz"
 
 LICENSE="BSD IJG ZLIB java? ( GPL-2-with-classpath-exception )"
 SLOT="0/0.2"
