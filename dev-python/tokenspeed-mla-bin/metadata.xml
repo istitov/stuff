@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person"><email>iohann.s.titov@gmail.com</email><name>Ivan S. Titov</name></maintainer>
+	<longdescription>TokenSpeed MLA provides precompiled and just-in-time CUDA kernels for multi-head latent attention on NVIDIA Blackwell GPUs.</longdescription>
+	<upstream><remote-id type="pypi">tokenspeed-mla</remote-id></upstream>
+</pkgmetadata>
