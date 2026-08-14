@@ -34,8 +34,11 @@ BDEPEND="
 	dev-python/nanobind[${PYTHON_USEDEP}]
 "
 
+PATCHES=( "${FILESDIR}/${P}-export-shared-symbols.patch" )
+
 src_prepare() {
 	cmake_src_prepare
+	local PATCHES=()
 	distutils-r1_src_prepare
 }
 

@@ -1,0 +1,10 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -517,7 +517,6 @@
+ add_library(onnx $<TARGET_OBJECTS:onnx_proto>)
+ add_subdirectory(onnx)
+ add_dependencies(onnx onnx_proto)
+-set_target_properties(onnx PROPERTIES CXX_VISIBILITY_PRESET hidden)
+ add_onnx_global_defines(onnx)
+ 
+ if(ONNX_BUILD_PYTHON)
