@@ -24,6 +24,10 @@ KEYWORDS="~amd64 ~arm64"
 
 RESTRICT="test"
 
+BDEPEND="
+	>=dev-python/setuptools-80[${PYTHON_USEDEP}]
+"
+
 src_prepare() {
 	# The GitHub archive carries no git history, so the upstream
 	# setuptools_scm-driven dynamic version resolution can't run. Rewrite
