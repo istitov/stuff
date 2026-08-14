@@ -51,7 +51,7 @@ DEPEND="${RDEPEND}"
 # which is a runtime guarantee rather than a build one, while the build backend
 # imports it. verified 2026-07-27
 BDEPEND="
-	dev-python/pyclibrary[${PYTHON_USEDEP}]
+	>=dev-python/pyclibrary-0.1.7[${PYTHON_USEDEP}]
 	>=dev-python/cuda-pathfinder-1.5[${PYTHON_USEDEP}]
 	>=dev-python/cython-3.2[${PYTHON_USEDEP}]
 	<dev-python/cython-3.3[${PYTHON_USEDEP}]
