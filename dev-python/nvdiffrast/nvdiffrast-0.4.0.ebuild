@@ -32,8 +32,10 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
+	app-alternatives/ninja
 	$(python_gen_cond_dep '
-		dev-python/setuptools[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-64[${PYTHON_USEDEP}]
+		dev-python/wheel[${PYTHON_USEDEP}]
 	')
 "
 
