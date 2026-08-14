@@ -4,7 +4,7 @@
 EAPI=8
 
 DESCRIPTION="NVIDIA Accelerated Deep Learning on GPU library"
-HOMEPAGE="https://developer.nvidia.com/cudnn"
+HOMEPAGE="https://developer.nvidia.com/cuda/cuda-x-libraries/cudnn"
 
 SRC_URI="
 	amd64? (
