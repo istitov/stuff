@@ -26,17 +26,23 @@ IUSE="+cuda"
 #
 # Upstream 14.x also dropped fastrlock (no longer imported anywhere),
 # bumped numpy to >=2.0, and conditionally appends
-# cuda-pathfinder>=1.3.3,==1.* for non-HIP builds in setup.py.
+# cuda-pathfinder>=1.3.4,==1.* for non-HIP builds in setup.py.
 DEPEND="
-	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
+	<dev-python/numpy-2.6[${PYTHON_USEDEP}]
 	cuda? (
 		dev-util/nvidia-cuda-toolkit[profiler]
-		>=dev-python/cuda-pathfinder-1.3.3[${PYTHON_USEDEP}]
+		>=dev-python/cuda-pathfinder-1.3.4[${PYTHON_USEDEP}]
 		<dev-python/cuda-pathfinder-2[${PYTHON_USEDEP}]
 	)
 "
 RDEPEND="${DEPEND}"
+BDEPEND="
+	>=dev-python/setuptools-77[${PYTHON_USEDEP}]
+	dev-python/wheel[${PYTHON_USEDEP}]
+	>=dev-python/cython-3.2[${PYTHON_USEDEP}]
+	<dev-python/cython-3.3[${PYTHON_USEDEP}]
+"
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
