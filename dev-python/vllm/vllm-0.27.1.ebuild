@@ -1196,13 +1196,13 @@ src_configure() {
 
 		# vllm's heavy CUDA template instantiations
 		# (paged_attention_v*, layernorm_quant_kernels, w8a8/fp8/...)
-		# can each peak at 3-4 GiB during cudafe++. With ninja's
-		# default 24-way parallelism this OOM-kills on a 31 GiB host
+		# can each peak at 3-4 GiB during cudafe++. Unrestricted ninja
+		# parallelism can OOM-kill the compiler
 		# (cudafe++ dies with SIGKILL, "[code=9]"). MAX_JOBS is the
 		# env var vllm's setup.py reads to throttle the CMake build;
 		# CMAKE_BUILD_PARALLEL_LEVEL backs it up for direct cmake
-		# --build invocations. Tune this per-host: 31 GiB → 4-6,
-		# 54 GiB → 8-10, 128 GiB → ~16. The OOM threshold was measured
+		# --build invocations. MAX_JOBS=4 is a conservative default that
+		# users can override according to available memory. The OOM threshold was measured
 		# against 0.20.1; 0.21.0's CUDA template set wasn't re-profiled
 		# at bump time but the heavy instantiations (paged_attention,
 		# layernorm_quant, w8a8/fp8) are unchanged, so MAX_JOBS=4 stays
