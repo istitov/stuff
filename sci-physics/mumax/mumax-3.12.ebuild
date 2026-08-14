@@ -14,6 +14,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 
+BDEPEND=">=dev-lang/go-1.22.4"
 DEPEND=">=dev-util/nvidia-cuda-toolkit-7.5.18-r2"
 RDEPEND="${DEPEND}"
 
