@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person"><email>iohann.s.titov@gmail.com</email><name>Ivan S. Titov</name></maintainer>
+	<longdescription>PyNvVideoCodec provides Python bindings for hardware-accelerated video encoding and decoding through the NVIDIA Video Codec SDK.</longdescription>
+	<upstream><remote-id type="pypi">pynvvideocodec</remote-id></upstream>
+</pkgmetadata>
