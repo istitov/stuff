@@ -186,7 +186,7 @@ src_compile() {
 		# the device-node sandbox allowances must be in effect here, not in
 		# src_configure. CMake reads CUDAHOSTCXX into CMAKE_CUDA_HOST_COMPILER.
 		local -x CUDAHOSTCXX
-		CUDAHOSTCXX="$(cuda_gccdir)"
+		CUDAHOSTCXX="$(cuda_gccdir)/g++"
 		cuda_add_sandbox -w
 		addpredict "/dev/char/"
 	fi
