@@ -10,7 +10,7 @@ inherit python-single-r1
 DESCRIPTION="Node-based diffusion / generative-AI workflow GUI and inference engine"
 HOMEPAGE="
 	https://github.com/comfy-org/comfyui
-	https://www.comfy.org/
+	https://comfy.org/
 "
 SRC_URI="https://github.com/comfy-org/comfyui/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 S="${WORKDIR}/ComfyUI-${PV}"
