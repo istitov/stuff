@@ -66,7 +66,6 @@ RDEPEND="
 
 	python? (
 		${PYTHON_DEPS}
-		dev-python/coloredlogs[${PYTHON_USEDEP}]
 		dev-python/flatbuffers[${PYTHON_USEDEP}]
 		>=dev-python/numpy-2[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
