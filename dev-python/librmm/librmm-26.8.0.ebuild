@@ -46,9 +46,10 @@ DEPEND="
 	dev-util/nvidia-cuda-toolkit:=
 "
 BDEPEND="
-	>=dev-build/cmake-3.30.4
+	>=dev-build/cmake-4
 	dev-build/ninja
 	~dev-python/rapids-logger-0.2.3[${PYTHON_USEDEP}]
+	>=dev-python/scikit-build-core-0.11.0[${PYTHON_USEDEP}]
 "
 
 python_prepare_all() {
