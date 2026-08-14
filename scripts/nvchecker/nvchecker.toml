@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (263) ---
+# --- pypi (264) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -521,6 +521,10 @@ pypi = "nvidia-cutlass-dsl-libs-core"
 ["dev-python/nvidia-cutlass-dsl-libs-cu13"]
 source = "pypi"
 pypi = "nvidia-cutlass-dsl-libs-cu13"
+
+["dev-python/nvtx"]
+source = "pypi"
+pypi = "nvtx"
 
 ["dev-python/omegaconf"]
 source = "pypi"
@@ -2401,7 +2405,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (12) ---
+# --- special (15) ---
 
 ["dev-libs/cudnn"]
 source = "regex"
@@ -2424,6 +2428,10 @@ pypi = "comfy-angle"
 source = "pypi"
 pypi = "comfy-kitchen"
 
+["dev-python/pynvvideocodec-bin"]
+source = "pypi"
+pypi = "pynvvideocodec"
+
 ["dev-python/runai-model-streamer-bin"]
 source = "pypi"
 pypi = "runai-model-streamer"
@@ -2431,6 +2439,14 @@ pypi = "runai-model-streamer"
 ["dev-python/simpleitk-bin"]
 source = "pypi"
 pypi = "SimpleITK"
+
+["dev-python/tokenspeed-mla-bin"]
+source = "pypi"
+pypi = "tokenspeed-mla"
+
+["dev-python/tokenspeed-triton-bin"]
+source = "pypi"
+pypi = "tokenspeed-triton"
 
 ["dev-util/nvidia-cuda-toolkit"]
 source = "regex"

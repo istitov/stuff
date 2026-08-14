@@ -430,6 +430,18 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
 # classifier can't reach the right upstream from SRC_URI / HOMEPAGE alone.
 # Each value is a dict of nvchecker keys emitted verbatim under the entry.
 SPECIAL_SOURCES: dict[str, dict[str, object]] = {
+    "dev-python/pynvvideocodec-bin": {
+        "source": "pypi",
+        "pypi": "pynvvideocodec",
+    },
+    "dev-python/tokenspeed-mla-bin": {
+        "source": "pypi",
+        "pypi": "tokenspeed-mla",
+    },
+    "dev-python/tokenspeed-triton-bin": {
+        "source": "pypi",
+        "pypi": "tokenspeed-triton",
+    },
     # comfy-angle-bin installs upstream's platform wheel rather than an sdist,
     # so the generic classifier cannot derive its PyPI project name from SRC_URI.
     "dev-python/comfy-angle-bin": {
