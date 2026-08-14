@@ -10,7 +10,7 @@ inherit distutils-r1
 
 DESCRIPTION="a client library to interact with the Hugging Face Hub"
 HOMEPAGE="
-	https://pypi.org/project/huggingface_hub/
+	https://pypi.org/project/huggingface-hub/
 "
 SRC_URI="https://github.com/huggingface/${PN}/archive/refs/tags/v${PV}.tar.gz
 	-> ${P}.gh.tar.gz"
