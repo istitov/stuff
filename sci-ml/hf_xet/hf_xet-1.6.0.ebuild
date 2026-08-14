@@ -1,4 +1,4 @@
-# Copyright 2025-2026 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # CRATES inlined from xet-core v1.6.0 hf_xet/Cargo.lock (fork of
