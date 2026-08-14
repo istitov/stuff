@@ -184,7 +184,7 @@ src_configure() {
 	fi
 
 	if use cuda; then
-		local -x CUDAHOSTCXX="$(cuda_gccdir)"
+		local -x CUDAHOSTCXX="$(cuda_gccdir)/g++"
 		# tries to recreate dev symlinks
 		cuda_add_sandbox
 		addpredict "/dev/char/"
