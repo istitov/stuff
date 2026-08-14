@@ -38,6 +38,7 @@ DEPEND="
 BDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/apache-tvm-ffi-0.1.1[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-61[${PYTHON_USEDEP}]
 	')
 "
 
