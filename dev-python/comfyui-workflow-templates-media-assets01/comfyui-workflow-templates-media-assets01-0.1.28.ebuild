@@ -24,3 +24,7 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
+
+BDEPEND="$(python_gen_cond_dep '
+	>=dev-python/setuptools-61[${PYTHON_USEDEP}]
+')"
