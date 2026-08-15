@@ -19,6 +19,10 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
+BDEPEND="$(python_gen_cond_dep '
+	>=dev-python/setuptools-61[${PYTHON_USEDEP}]
+')"
+
 # Upstream requires_dist pins each split to an exact version; ~ atoms track
 # that == pin (any revision). Single-impl propagation via PYTHON_SINGLE_USEDEP.
 RDEPEND="
