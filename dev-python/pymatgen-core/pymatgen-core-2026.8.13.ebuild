@@ -30,8 +30,6 @@ RDEPEND="
 		>=dev-python/matplotlib-3.8[${PYTHON_USEDEP}]
 		>=dev-python/monty-2026.7.16[${PYTHON_USEDEP}]
 		>=dev-python/networkx-2.7[${PYTHON_USEDEP}]
-		<dev-python/numpy-3[${PYTHON_USEDEP}]
-		>=dev-python/numpy-1.25[${PYTHON_USEDEP}]
 		>=dev-python/orjson-3.10[${PYTHON_USEDEP}]
 		<dev-python/orjson-4[${PYTHON_USEDEP}]
 		>=dev-python/palettable-3.3.3[${PYTHON_USEDEP}]
@@ -47,9 +45,20 @@ RDEPEND="
 		>=dev-python/tqdm-4.67.3[${PYTHON_USEDEP}]
 		>=dev-python/requests-2.32.5[${PYTHON_USEDEP}]
 	')
+	$(python_gen_cond_dep '
+		<dev-python/numpy-3[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.25[${PYTHON_USEDEP}]
+	' python3_12)
+	$(python_gen_cond_dep '
+		<dev-python/numpy-3[${PYTHON_USEDEP}]
+		>=dev-python/numpy-2.1[${PYTHON_USEDEP}]
+	' python3_{13..14})
 "
 BDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/cython-3[${PYTHON_USEDEP}]
+		>=dev-python/numpy-2.1[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-77[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
 	')
 "
