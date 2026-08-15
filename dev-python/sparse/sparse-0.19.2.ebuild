@@ -22,7 +22,10 @@ RDEPEND="
 	>=dev-python/numpy-1.17[${PYTHON_USEDEP}]
 	>=dev-python/numba-0.49[${PYTHON_USEDEP}]
 "
-BDEPEND="dev-python/setuptools-scm[${PYTHON_USEDEP}]"
+BDEPEND="
+	>=dev-python/setuptools-64[${PYTHON_USEDEP}]
+	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+"
 
 # setuptools_scm cannot derive a version from the gitless sdist.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
