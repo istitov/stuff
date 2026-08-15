@@ -1,0 +1,10 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -8,7 +8,7 @@ version_scheme = "post-release"
+ 
+ [tool.setuptools.packages.find]
+-include = ["sitka_spruce"]
++include = ["sitka_spruce", "sitka_spruce.*"]
+ 
+ [tool.coverage.run]
+ omit = ["tests/*"]
