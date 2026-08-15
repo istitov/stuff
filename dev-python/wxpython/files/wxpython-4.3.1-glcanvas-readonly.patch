@@ -1,0 +1,14 @@
+Mark wxGLCanvas::DefaultSwapInterval read-only explicitly. SIP does not always
+infer this from the const-qualified Doxygen type and otherwise generates a
+setter that cannot compile.
+
+--- a/etg/_glcanvas.py
++++ b/etg/_glcanvas.py
+@@ -86,6 +86,7 @@ def run():
+     c.find('GetGLAttrs').ignore()
+ 
+     c = module.find('wxGLCanvas')
+     tools.fixWindowClass(c)
++    c.find('DefaultSwapInterval').noSetter = True
+ 
+     # We already have a MappedType for wxArrayInt, so just tweak the

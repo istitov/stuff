@@ -1,0 +1,450 @@
+Backport wxWidgets 3.3 binding and test fixes from Phoenix master.
+
+Upstream-Commit: 65acdee586244bfcb163189f853435e006e2da50
+
+--- a/etg/auibook.py
++++ b/etg/auibook.py
+@@ -9,6 +9,7 @@
+ 
+ import etgtools
+ import etgtools.tweaker_tools as tools
++import copy
+ 
+ PACKAGE   = "wx"
+ MODULE    = "_aui"
+@@ -102,6 +103,25 @@
+     c.find('GetBestTabCtrlSize').ignore()
+     c.find('ShowDropDown').ignore()
+ 
++    # Replace wxAuiNativeTabArt TypedefDef with ClassDef
++    c = module.find("wxAuiNativeTabArt")
++    assert isinstance(c, etgtools.TypedefDef)
++    module.items.remove(c)
++    c = etgtools.ClassDef(
++        name="wxAuiNativeTabArt",
++        bases=["wxAuiGenericTabArt"],
++        briefDoc=c.briefDoc,
++        items=[
++            etgtools.MethodDef(
++                name="wxAuiNativeTabArt",
++                classname="wxAuiNativeTabArt",
++                isCtor=True,
++                items=[],
++            ),
++        ]
++    )
++    module.addItem(c)
++
+     c = module.find('wxAuiNotebookEvent')
+     tools.fixEventClass(c)
+     module.addPyCode("""\
+@@ -135,6 +155,12 @@
+     
+     c = module.find('wxAuiFlatTabArt')
+     c.addPrivateCopyCtor()
++    c.addPublic()
++    p = copy.deepcopy(module.find('wxAuiTabArt'))
++    for m in p.allItems():
++        if isinstance(m, etgtools.MethodDef) and m.isPureVirtual:
++            m.isPureVirtual = False
++            c.addItem(m)
+     
+     
+     c = module.find('wxAuiNotebookPosition')
+--- a/etg/geometry.py
++++ b/etg/geometry.py
+@@ -110,6 +110,10 @@
+     c.find('Inflate').ignore()
+     c.find('Deflate').ignore()
+ 
++    # new in 3.3.0, ignore since its auto-conversion shadows and corrupts
++    # the float-sequence ctor. Use wx.Rect2D(*aRect) instead.
++    c.find('wxRect2DDouble').findOverload('wxRect &').ignore()
++
+     c.convertFromPyObject = tools.convertFourDoublesTemplate('wxRect2DDouble')
+ 
+     c.addCppMethod('PyObject*', 'Get', '()', """\
+--- a/etg/mimetype.py
++++ b/etg/mimetype.py
+@@ -192,7 +192,19 @@
+     c = module.find('wxFileTypeInfo')
+ 
+     # Ignore the variadic nature of this ctor
+-    ctor = c.find('wxFileTypeInfo').findOverload('extensions').ignore()
++    ctor = c.find('wxFileTypeInfo').findOverload('extensions')
++    extParam = ctor.find('extensions')
++    extParam.type = 'const wxString &'
++    extParam.name = 'extension'
++    ctor.argsString = ctor.argsString.replace('Targs... extensions', 'const wxString &extension')
++    ctor.setCppCode("""\
++        wxFileTypeInfo* fti = new wxFileTypeInfo(*mimeType);
++        fti->SetOpenCommand(*openCmd);
++        fti->SetPrintCommand(*printCmd);
++        fti->SetDescription(*description);
++        fti->AddExtension(*extension);
++        return fti;
++        """)
+     ctor.useDerivedName = False
+ 
+ 
+--- a/etg/ribbon_art.py
++++ b/etg/ribbon_art.py
+@@ -7,6 +7,8 @@
+ # License:     wxWindows License
+ #---------------------------------------------------------------------------
+ 
++import copy
++
+ import etgtools
+ import etgtools.tweaker_tools as tools
+ 
+@@ -33,12 +35,14 @@
+     # Tweak the parsed meta objects in the module object as needed for
+     # customizing the generated code and docstrings.
+ 
++    baseArtProvider = module.find('wxRibbonArtProvider')
++
+     for klass in ['wxRibbonArtProvider',
+                   'wxRibbonMSWArtProvider',
+                   'wxRibbonAUIArtProvider']:
+         c = module.find(klass)
+         assert isinstance(c, etgtools.ClassDef)
+-        
++
+         if c.findItem('Clone'):
+             c.find('Clone').factory = True
+         else:
+@@ -55,6 +59,13 @@
+                 ".. note:: The Python version of this method returns the three"
+                 "   scheme colours as a tuple of :class:`wx.Colour` objects.")
+ 
++        if klass == 'wxRibbonMSWArtProvider':
++            p = copy.deepcopy(baseArtProvider)
++            for m in p.allItems():
++                if isinstance(m, etgtools.MethodDef) and m.isPureVirtual and m.name != 'Clone':
++                    m.isPureVirtual = False
++                    c.addItem(m)
++
+ 
+     module.addPyCode("""\
+         if 'wxMSW' in wx.PlatformInfo:
+--- a/unittests/test_font.py
++++ b/unittests/test_font.py
+@@ -120,7 +120,6 @@
+         wx.FONTENCODING_MACMONGOLIAN
+         wx.FONTENCODING_MACETHIOPIC
+         wx.FONTENCODING_MACCENTRALEUR
+-        wx.FONTENCODING_MACVIATNAMESE
+         wx.FONTENCODING_MACARABICEXT
+         wx.FONTENCODING_MACSYMBOL
+         wx.FONTENCODING_MACDINGBATS
+--- a/unittests/test_icon.py
++++ b/unittests/test_icon.py
+@@ -25,10 +25,6 @@
+         i.Height
+         i.Handle
+ 
+-        i.SetDepth(32)
+-        i.SetWidth(32)
+-        i.SetHeight(32)
+-
+ 
+ #---------------------------------------------------------------------------
+ 
+--- a/unittests/test_iconbndl.py
++++ b/unittests/test_iconbndl.py
+@@ -15,6 +15,7 @@
+         ib.AddIcon(icoFile)
+         ib.AddIcon(wx.Icon(icoFile))
+         i = ib.GetIcon()
++        i2 = ib.Icon
+ 
+     def test_iconbndl2(self):
+         ib = wx.IconBundle(icoFile)
+@@ -27,7 +28,6 @@
+     def test_iconbndl4(self):
+         ib = wx.IconBundle()
+ 
+-        ib.Icon
+         ib.IconCount
+ 
+         wx.NullIconBundle
+--- a/unittests/test_pen.py
++++ b/unittests/test_pen.py
+@@ -90,8 +90,6 @@
+         wx.PENSTYLE_DOT_DASH
+         wx.PENSTYLE_USER_DASH
+         wx.PENSTYLE_TRANSPARENT
+-        wx.PENSTYLE_STIPPLE_MASK_OPAQUE
+-        wx.PENSTYLE_STIPPLE_MASK
+         wx.PENSTYLE_STIPPLE
+         wx.PENSTYLE_BDIAGONAL_HATCH
+         wx.PENSTYLE_CROSSDIAG_HATCH
+--- a/unittests/test_dataview.py
++++ b/unittests/test_dataview.py
+@@ -434,15 +434,12 @@
+         evt = dv.DataViewEvent()
+ 
+         evt.GetItem
+-        evt.SetItem
+         evt.GetColumn
+         evt.SetColumn
+         evt.GetModel
+-        evt.SetModel
+         evt.GetValue
+         evt.SetValue
+         evt.IsEditCancelled
+-        evt.SetDataViewColumn
+         evt.GetDataViewColumn
+         evt.GetPosition
+         evt.SetPosition
+--- a/unittests/test_propgrid.py
++++ b/unittests/test_propgrid.py
+@@ -39,24 +39,6 @@
+         pg.PG_EX_NO_TOOLBAR_DIVIDER
+         pg.PG_EX_TOOLBAR_SEPARATOR
+ 
+-        pg.PG_VFB_STAY_IN_PROPERTY
+-        pg.PG_VFB_BEEP
+-        pg.PG_VFB_MARK_CELL
+-        pg.PG_VFB_SHOW_MESSAGE
+-        pg.PG_VFB_SHOW_MESSAGEBOX
+-        pg.PG_VFB_SHOW_MESSAGE_ON_STATUSBAR
+-        pg.PG_VFB_DEFAULT
+-
+-        pg.PG_ACTION_INVALID
+-        pg.PG_ACTION_NEXT_PROPERTY
+-        pg.PG_ACTION_PREV_PROPERTY
+-        pg.PG_ACTION_EXPAND_PROPERTY
+-        pg.PG_ACTION_COLLAPSE_PROPERTY
+-        pg.PG_ACTION_CANCEL_EDIT
+-        pg.PG_ACTION_EDIT
+-        pg.PG_ACTION_PRESS_BUTTON
+-        pg.PG_ACTION_MAX
+-
+         pg.PG_DEFAULT_STYLE
+         pg.PGMAN_DEFAULT_STYLE
+ 
+--- a/unittests/test_bitmap.py
++++ b/unittests/test_bitmap.py
+@@ -85,6 +85,8 @@
+     def test_BitmapMask(self):
+         img = wx.Image(pngFile)
+         img = img.ConvertToMono(0,0,0)
++        if img.HasAlpha():
++            img.ClearAlpha()
+         bmp = wx.Bitmap(img, 1)
+         m = wx.Mask()
+         m = wx.Mask(bmp)
+@@ -95,6 +97,8 @@
+     def test_BitmapMaskWithPalette(self):
+         img = wx.Image(pngFile)
+         img = img.ConvertToMono(0,0,0)
++        if img.HasAlpha():
++            img.ClearAlpha()
+         bmp = wx.Bitmap(img, 1)
+         rgb = bytearray(range(256))
+         pal = wx.Palette(rgb, rgb, rgb)
+@@ -108,15 +112,6 @@
+         wx.BitmapBufferFormat_RGB32
+         wx.BitmapBufferFormat_ARGB32
+ 
+-    @unittest.skipIf('wxMac' in wx.PlatformInfo, 'Changing exiting bitmap size not allowed on wxMac')
+-    def test_bitmapSetSize(self):
+-        b1 = wx.Bitmap(1,1)
+-        b1.SetSize((20,30))
+-        self.assertTrue(b1.GetSize() == (20,30))
+-        self.assertTrue(b1.Size == (20,30))
+-        b1.Size = (25,35)
+-        self.assertTrue(b1.GetSize() == (25,35))
+-
+     def test_bitmapHandle(self):
+         b1 = wx.Bitmap(1,1)
+         b1.Handle
+--- a/unittests/test_propgriddefs.py
++++ b/unittests/test_propgriddefs.py
+@@ -25,20 +25,6 @@
+         pg.PG_FORCE
+         pg.PG_SORT_TOP_LEVEL_ONLY
+ 
+-        pg.PG_FULL_VALUE
+-        pg.PG_REPORT_ERROR
+-        pg.PG_PROPERTY_SPECIFIC
+-        pg.PG_EDITABLE_VALUE
+-        pg.PG_COMPOSITE_FRAGMENT
+-        pg.PG_UNEDITABLE_COMPOSITE_FRAGMENT
+-        pg.PG_VALUE_IS_CURRENT
+-        pg.PG_PROGRAMMATIC_VALUE
+-
+-        pg.PG_SETVAL_REFRESH_EDITOR
+-        pg.PG_SETVAL_AGGREGATED
+-        pg.PG_SETVAL_FROM_PARENT
+-        pg.PG_SETVAL_BY_USER
+-
+         pg.PG_LABEL
+         pg.PG_LABEL_STRING
+         pg.PG_NULL_BITMAP
+--- a/unittests/test_defs.py
++++ b/unittests/test_defs.py
+@@ -19,7 +19,7 @@
+         # was done right.
+         self.assertEqual(wx.VSCROLL, -2147483648)
+         self.assertEqual(wx.CANCEL_DEFAULT, -2147483648)
+-        self.assertEqual(wx.WINDOW_STYLE_MASK, -65536)
++        self.assertEqual(wx.WINDOW_STYLE_MASK, -1114112)
+ 
+ 
+ #---------------------------------------------------------------------------
+--- a/unittests/test_propgridprops.py
++++ b/unittests/test_propgridprops.py
+@@ -12,8 +12,6 @@
+ 
+ 
+     def test_propgridprops02(self):
+-        pg.PG_PROP_PASSWORD
+-
+         p1 = pg.StringProperty()
+         p2 = pg.StringProperty('label', 'name', 'value')
+ 
+@@ -22,10 +20,6 @@
+ 
+ 
+     def test_propgridprops03(self):
+-        pg.PG_PROPERTY_VALIDATION_ERROR_MESSAGE
+-        pg.PG_PROPERTY_VALIDATION_SATURATE
+-        pg.PG_PROPERTY_VALIDATION_WRAP
+-
+         o = pg.NumericPropertyValidator(pg.NumericPropertyValidator.Signed)
+ 
+         pg.NumericPropertyValidator.Signed
+@@ -47,14 +41,10 @@
+ 
+ 
+     def test_propgridprops07(self):
+-        pg.PG_PROP_USE_CHECKBOX
+-        pg.PG_PROP_USE_DCC
+         p = pg.BoolProperty()
+ 
+ 
+     def test_propgridprops08(self):
+-        pg.PG_PROP_STATIC_CHOICES
+-
+         p1 = pg.EnumProperty()
+         p2 = pg.EnumProperty(label='label', name='name',
+                              labels=['one', 'two', 'three'],
+@@ -75,14 +65,7 @@
+                               values=[1, 2, 3])
+ 
+ 
+-    @unittest.skip('class was removed?')
+-    def test_propgridprops11(self):
+-        da = pg.PGFileDialogAdapter()
+-
+-
+     def test_propgridprops12(self):
+-        pg.PG_PROP_SHOW_FULL_FILENAME
+-
+         p1 = pg.FileProperty()
+         value = '/foo/bar/value'
+         p2 = pg.FileProperty('label', 'name', value)
+@@ -91,12 +74,6 @@
+         assert fn.replace(os.path.sep, '/') == value
+ 
+ 
+-    @unittest.skip('class was removed?')
+-    def test_propgridprops13(self):
+-        pg.PG_PROP_NO_ESCAPE
+-        da = pg.PGLongStringDialogAdapter()
+-
+-
+     def test_propgridprops14(self):
+         p1 = pg.LongStringProperty()
+ 
+--- a/unittests/test_propgridpagestate.py
++++ b/unittests/test_propgridpagestate.py
+@@ -13,7 +13,6 @@
+ 
+ 
+     def test_propgridpagestate02(self):
+-        ib = pg.PropertyGridIteratorBase()
+         ii = pg.PropertyGridIterator()
+ 
+ 
+--- a/unittests/test_propgridproperty.py
++++ b/unittests/test_propgridproperty.py
+@@ -88,31 +88,6 @@
+         pg.PGChoicesEmptyData
+ 
+ 
+-    def test_propgridproperty09(self):
+-        pg.PG_PROP_MODIFIED
+-        pg.PG_PROP_DISABLED
+-        pg.PG_PROP_HIDDEN
+-        pg.PG_PROP_CUSTOMIMAGE
+-        pg.PG_PROP_NOEDITOR
+-        pg.PG_PROP_COLLAPSED
+-        pg.PG_PROP_INVALID_VALUE
+-        pg.PG_PROP_WAS_MODIFIED
+-        pg.PG_PROP_AGGREGATE
+-        pg.PG_PROP_CHILDREN_ARE_COPIES
+-        pg.PG_PROP_PROPERTY
+-        pg.PG_PROP_CATEGORY
+-        pg.PG_PROP_MISC_PARENT
+-        pg.PG_PROP_READONLY
+-        pg.PG_PROP_COMPOSED_VALUE
+-        pg.PG_PROP_USES_COMMON_VALUE
+-        pg.PG_PROP_AUTO_UNSPECIFIED
+-        pg.PG_PROP_CLASS_SPECIFIC_1
+-        pg.PG_PROP_CLASS_SPECIFIC_2
+-        pg.PG_PROP_BEING_DELETED
+-        pg.PG_PROP_MAX
+-        pg.PG_PROP_PARENTAL_FLAGS
+-
+-
+     def test_propgridproperty10(self):
+         p1 = pg.PGProperty()
+         p2 = pg.PGProperty('label', 'name')
+--- a/unittests/test_stc.py
++++ b/unittests/test_stc.py
+@@ -173,7 +173,6 @@
+         stc.wxEVT_STC_SAVEPOINTREACHED
+         stc.wxEVT_STC_SAVEPOINTLEFT
+         stc.wxEVT_STC_ROMODIFYATTEMPT
+-        stc.wxEVT_STC_KEY
+         stc.wxEVT_STC_DOUBLECLICK
+         stc.wxEVT_STC_UPDATEUI
+         stc.wxEVT_STC_MODIFIED
+@@ -182,7 +181,6 @@
+         stc.wxEVT_STC_NEEDSHOWN
+         stc.wxEVT_STC_PAINTED
+         stc.wxEVT_STC_USERLISTSELECTION
+-        stc.wxEVT_STC_URIDROPPED
+         stc.wxEVT_STC_DWELLSTART
+         stc.wxEVT_STC_DWELLEND
+         stc.wxEVT_STC_START_DRAG
+@@ -207,7 +205,6 @@
+         stc.EVT_STC_SAVEPOINTREACHED
+         stc.EVT_STC_SAVEPOINTLEFT
+         stc.EVT_STC_ROMODIFYATTEMPT
+-        stc.EVT_STC_KEY
+         stc.EVT_STC_DOUBLECLICK
+         stc.EVT_STC_UPDATEUI
+         stc.EVT_STC_MODIFIED
+@@ -216,7 +213,6 @@
+         stc.EVT_STC_NEEDSHOWN
+         stc.EVT_STC_PAINTED
+         stc.EVT_STC_USERLISTSELECTION
+-        stc.EVT_STC_URIDROPPED
+         stc.EVT_STC_DWELLSTART
+         stc.EVT_STC_DWELLEND
+         stc.EVT_STC_START_DRAG
+--- a/unittests/test_treelist.py
++++ b/unittests/test_treelist.py
+@@ -15,7 +15,6 @@
+         wx.dataview.TL_3STATE
+         wx.dataview.TL_USER_3STATE
+         wx.dataview.TL_DEFAULT_STYLE
+-        wx.dataview.TL_STYLE_MASK
+ 
+         wx.dataview.EVT_TREELIST_SELECTION_CHANGED
+         wx.dataview.EVT_TREELIST_ITEM_EXPANDING
