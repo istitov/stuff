@@ -10,8 +10,8 @@ User=%i
 Group=%i
 # LLAMA_SWAP_CONFIG must be supplied via /etc/default/llama-swap@%i; we
 # don't default it to e.g. %h/.config/llama-swap.yaml because systemd's
-# %h resolves to /root for system-manager units, and hardcoding /home/%i
-# would assume a passwd layout this overlay can't promise.
+# %h resolves to /root for system-manager units, and hardcoding a
+# conventional user-home path would assume a passwd layout that is not portable.
 EnvironmentFile=/etc/default/llama-swap@%i
 Environment="LLAMA_SWAP_LISTEN=127.0.0.1:8080"
 Environment="LLAMA_SWAP_EXTRA_OPTS="
