@@ -25,6 +25,8 @@ RDEPEND="
 	>=sci-ml/transformers-4.56.2[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/jinja2[${PYTHON_USEDEP}]
-		>=dev-python/packaging-20.0[${PYTHON_USEDEP}]
+		>dev-python/packaging-20.0-r0[${PYTHON_USEDEP}]
 	')
 "
+
+BDEPEND="$(python_gen_cond_dep '>=dev-python/setuptools-77.0.3[${PYTHON_USEDEP}]')"
