@@ -1,0 +1,26 @@
+--- a/cmake/onnxruntime_unittests.cmake
++++ b/cmake/onnxruntime_unittests.cmake
+@@ -1239,6 +1239,14 @@ AddTest(
+ )
+ target_include_directories(onnxruntime_test_all PRIVATE ${ONNXRUNTIME_ROOT}/core/flatbuffers/schema) # ort.fbs.h
+ 
++# allocation_planner_test.cc calls the inline CUDAExecutionProvider::GetProviderOptions(),
++# but the provider module hides the implementation from this statically-linked test.
++if (onnxruntime_USE_CUDA)
++  target_sources(onnxruntime_test_all PRIVATE
++    ${ONNXRUNTIME_ROOT}/core/providers/cuda/cuda_execution_provider_info.cc)
++  target_link_options(onnxruntime_test_all PRIVATE -Wl,--gc-sections)
++endif()
++
+ onnxruntime_apply_test_target_workarounds(onnxruntime_test_all)
+ 
+ if (onnxruntime_USE_CUDA AND onnxruntime_BUILD_CUDA_EP_AS_PLUGIN)
+@@ -2078,7 +2086,7 @@ if (onnxruntime_BUILD_UNIT_TESTS)
+       list(APPEND onnxruntime_shared_lib_test_LIBS cpuinfo)
+     endif()
+     if (onnxruntime_USE_CUDA)
+-      list(APPEND onnxruntime_shared_lib_test_LIBS CUDA::cudart)
++      list(APPEND onnxruntime_shared_lib_test_LIBS CUDA::cudart onnxruntime_framework)
+     endif()
+ 
+     if (onnxruntime_USE_TENSORRT)

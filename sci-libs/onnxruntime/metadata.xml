@@ -12,8 +12,8 @@
     CoreML, and others. Reads ONNX-format models and dispatches operators
     to whichever provider is registered.
 
-    USE=python builds the Python bindings (numpy + flatbuffers + sympy +
-    coloredlogs); USE=test builds the C++ test suite with upstream's pinned
+    USE=python builds the Python bindings (NumPy, flatbuffers, protobuf, and
+    packaging); USE=test builds the C++ test suite with upstream's pinned
     GoogleTest source.
 
     Derived from the ::guru package with patches to relax the flatbuffers

@@ -18,7 +18,7 @@ HOMEPAGE="
 	https://onnxruntime.ai
 	https://github.com/microsoft/onnxruntime
 "
-	SRC_URI="
+SRC_URI="
 	https://github.com/microsoft/onnxruntime/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_COMMIT}/eigen-${EIGEN_COMMIT}.tar.bz2 ->
 		eigen-3.4.0_p20250216.tar.bz2
@@ -43,21 +43,15 @@ IUSE="cuda python test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
-# cmake/deps.txt for v1.29.0 pins onnx v1.22.0, and the
-# use-system-libraries patch rewrites that FetchContent entry to
-# FIND_PACKAGE_ARGS ... REQUIRED, so the system onnx is what gets used with
-# no version guard of its own. That floor is not expressible: sci-ml/onnx
-# exists only in ::gentoo and tops out at 1.20.1. Floored at 1.20.1 to keep
-# 1.18.0-r1 out, which is further still from the pin. Whether 1.20.1 is
-# actually sufficient has NOT been established -- raise this to
-# >=sci-ml/onnx-1.22.0 once onnx is packaged that far.
-# verified 2026-07-27
+# cmake/deps.txt pins the final ONNX 1.22.0 release. The system-libraries
+# patch turns that FetchContent entry into a required find_package call, so
+# keep the system package at the exact upstream floor.
 RDEPEND="
 	!cuda? ( dev-cpp/abseil-cpp:= )
 	dev-libs/cpuinfo
 	dev-libs/protobuf:=
 	dev-libs/re2:=
-	>=sci-ml/onnx-1.20.1[disableStaticReg]
+	>=sci-ml/onnx-1.22.0[disableStaticReg]
 	cuda? (
 		~dev-cpp/abseil-cpp-20250814.1:=
 		dev-libs/cudnn:=
@@ -67,10 +61,9 @@ RDEPEND="
 	python? (
 		${PYTHON_DEPS}
 		dev-python/flatbuffers[${PYTHON_USEDEP}]
-		>=dev-python/numpy-2[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.21.6[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
 		>=dev-python/protobuf-4.25.8[${PYTHON_USEDEP}]
-		dev-python/sympy[${PYTHON_USEDEP}]
 	)
 "
 DEPEND="
@@ -90,6 +83,7 @@ DEPEND="
 BDEPEND="
 	${PYTHON_DEPS}
 	cuda? ( sys-devel/gcc:15 )
+	python? ( >=dev-python/setuptools-61[${PYTHON_USEDEP}] )
 
 	test? (
 		python? ( dev-python/pytest[${PYTHON_USEDEP}] )
@@ -100,6 +94,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-1.22.2-relax-the-dependency-on-flatbuffers.patch"
 	"${FILESDIR}/${PN}-1.24.4-no-werror.patch"
 	"${FILESDIR}/${PN}-1.28.0-use-system-libraries.patch"
+	"${FILESDIR}/${PN}-1.29.0-fix-cuda-test-linking.patch"
 )
 
 CMAKE_USE_DIR="${S}/cmake"
@@ -152,7 +147,11 @@ src_configure() {
 	)
 
 	if use cuda; then
-		local -x CUDAHOSTCXX="/usr/bin/g++-15"
+		# CUDA 13 rejects GCC 16. Keep ordinary C++, CUDA host compilation,
+		# and final linking on one libstdc++ ABI.
+		local -x CC="/usr/bin/gcc-15"
+		local -x CXX="/usr/bin/g++-15"
+		local -x CUDAHOSTCXX="${CXX}"
 		cuda_add_sandbox -w
 		mycmakeargs+=(
 			-DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS:-all-major}"
