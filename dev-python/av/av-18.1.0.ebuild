@@ -18,7 +18,10 @@ RESTRICT="test"
 
 RDEPEND="media-video/ffmpeg:="
 DEPEND="${RDEPEND}"
-BDEPEND=">=dev-python/cython-3.1.0[${PYTHON_USEDEP}]"
+BDEPEND="
+	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
+	>=dev-python/setuptools-77[${PYTHON_USEDEP}]
+"
 
 #distutils_enable_tests setup.py
 # The configuration file (or one of the modules it imports) called sys.exit()
