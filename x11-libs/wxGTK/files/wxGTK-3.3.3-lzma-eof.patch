@@ -1,0 +1,17 @@
+Do not report EOF from wxLZMAInputStream when the requested output buffer was
+filled. wxInputStream::Peek() only puts the byte back while the stream remains
+in the no-error state, so eagerly setting EOF consumes the final byte. This
+matches wxZlibInputStream, which defers EOF when inflate() fills the buffer.
+
+--- a/src/common/lzmastream.cpp
++++ b/src/common/lzmastream.cpp
+@@ -137,7 +137,8 @@ size_t wxLZMAInputStream::OnSysRead(void* outbuf, size_t size)
+                 continue;
+ 
+             case LZMA_STREAM_END:
+-                m_lasterror = wxSTREAM_EOF;
++                if ( m_stream->avail_out )
++                    m_lasterror = wxSTREAM_EOF;
+                 continue;
+ 
+             case LZMA_FORMAT_ERROR:

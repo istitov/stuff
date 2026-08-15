@@ -21,11 +21,10 @@ HOMEPAGE="https://wxwidgets.org/"
 SRC_URI="
 	https://github.com/wxWidgets/wxWidgets/releases/download/v${PV}/wxWidgets-${PV}.tar.bz2
 	doc? ( https://github.com/wxWidgets/wxWidgets/releases/download/v${PV}/wxWidgets-${PV}-docs-html.tar.bz2 )"
-# 3.3.3's release tarball (wxWidgets-3.3.3.tar.bz2) unpacks to
-# wxWidgets-v3.3.3.1/ -- upstream added a "v" prefix and a 4th
-# tarball-revision component vs 3.3.2's plain wxWidgets-3.3.2/. Re-check the
-# extracted dir name on the next bump. verified 2026-07-08
-S="${WORKDIR}/wxWidgets-v3.3.3.1"
+# The current 3.3.3 release tarball uses the standard wxWidgets-${PV}
+# top-level directory. Keep this explicit because an earlier payload for the
+# same release used a different directory name.
+S="${WORKDIR}/wxWidgets-${PV}"
 
 LICENSE="wxWinLL-3 GPL-2 doc? ( wxWinFDL-3 )"
 SLOT="${WXRELEASE}/3.3"
@@ -92,6 +91,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-3.2.1-prefer-lib64-in-tests.patch"
 	"${FILESDIR}/${PN}-3.2.5-dont-break-flags.patch"
+	"${FILESDIR}/${P}-lzma-eof.patch"
 )
 
 multilib_src_configure() {
