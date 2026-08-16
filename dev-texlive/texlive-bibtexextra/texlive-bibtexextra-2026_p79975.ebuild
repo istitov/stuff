@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-bibtexextra.r79143
+	collection-bibtexextra.r79975
 	aaai-named.r76790
 	aichej.r79618
 	ajl.r79618
@@ -15,23 +15,28 @@ TEXLIVE_MODULE_CONTENTS="
 	apalike2.r76790
 	archaeologie.r79585
 	authordate.r77682
-	beebe.r79654
+	beebe.r79945
 	besjournals.r76790
 	bestpapers.r76790
 	bib2gls.r76845
 	bib2qr.r71940
 	bibarts.r74384
+	bibbreeze.r76924
 	bibcop.r79293
 	biber-ms.r79618
 	bibexport.r50677
 	bibhtml.r31607
 	biblatex-abnt.r72565
+	biblatex-abs-annote.r78770
 	biblatex-ajc2020unofficial.r54401
+	biblatex-ams.r78803
 	biblatex-anonymous.r48548
 	biblatex-apa.r76158
+	biblatex-apa-zh.r79975
 	biblatex-apa6.r56209
 	biblatex-archaeology.r53281
 	biblatex-arthistory-bonn.r79461
+	biblatex-asa.r79900
 	biblatex-bath.r77530
 	biblatex-bookinarticle.r40323
 	biblatex-bookinother.r76924
@@ -48,6 +53,7 @@ TEXLIVE_MODULE_CONTENTS="
 	biblatex-gb7714-2015.r79337
 	biblatex-german-legal.r66461
 	biblatex-gost.r66935
+	biblatex-greifswald.r79143
 	biblatex-historian.r79618
 	biblatex-ieee.r75952
 	biblatex-ijsra.r79584
@@ -108,6 +114,7 @@ TEXLIVE_MODULE_CONTENTS="
 	citation-style-language.r78491
 	citeall.r77682
 	citeref.r47407
+	citeright.r75480
 	collref.r77682
 	compactbib.r15878
 	crossrefware.r79457
@@ -116,7 +123,7 @@ TEXLIVE_MODULE_CONTENTS="
 	dk-bib.r76790
 	doipubmed.r79618
 	ecobiblatex.r39233
-	econ-bst.r76907
+	econ-bst.r79973
 	economic.r79618
 	fbs.r79618
 	figbib.r19388
@@ -126,7 +133,7 @@ TEXLIVE_MODULE_CONTENTS="
 	geschichtsfrkl.r42121
 	harvard.r79618
 	harvmac.r15878
-	hep-bibliography.r76220
+	hep-bibliography.r79976
 	historische-zeitschrift.r79618
 	icite.r67201
 	ijqc.r76790
@@ -168,11 +175,6 @@ TEXLIVE_MODULE_CONTENTS="
 	windycity.r67011
 	xcite.r77682
 	zootaxa-bst.r76790
-	bibbreeze.r76924
-	biblatex-abs-annote.r78770
-	biblatex-ams.r78803
-	biblatex-greifswald.r79143
-	citeright.r75480
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	amsrefs.doc.r78101
@@ -185,17 +187,22 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	bib2gls.doc.r76845
 	bib2qr.doc.r71940
 	bibarts.doc.r74384
+	bibbreeze.doc.r76924
 	bibcop.doc.r79293
 	biber-ms.doc.r79618
 	bibexport.doc.r50677
 	bibhtml.doc.r31607
 	biblatex-abnt.doc.r72565
+	biblatex-abs-annote.doc.r78770
 	biblatex-ajc2020unofficial.doc.r54401
+	biblatex-ams.doc.r78803
 	biblatex-anonymous.doc.r48548
 	biblatex-apa.doc.r76158
+	biblatex-apa-zh.doc.r79975
 	biblatex-apa6.doc.r56209
 	biblatex-archaeology.doc.r53281
 	biblatex-arthistory-bonn.doc.r79461
+	biblatex-asa.doc.r79900
 	biblatex-bath.doc.r77530
 	biblatex-bookinarticle.doc.r40323
 	biblatex-bookinother.doc.r76924
@@ -212,6 +219,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	biblatex-gb7714-2015.doc.r79337
 	biblatex-german-legal.doc.r66461
 	biblatex-gost.doc.r66935
+	biblatex-greifswald.doc.r79143
 	biblatex-historian.doc.r79618
 	biblatex-ieee.doc.r75952
 	biblatex-ijsra.doc.r79584
@@ -269,6 +277,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	citation-style-language.doc.r78491
 	citeall.doc.r77682
 	citeref.doc.r47407
+	citeright.doc.r75480
 	collref.doc.r77682
 	crossrefware.doc.r79457
 	custom-bib.doc.r79618
@@ -276,7 +285,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	dk-bib.doc.r76790
 	doipubmed.doc.r79618
 	ecobiblatex.doc.r39233
-	econ-bst.doc.r76907
+	econ-bst.doc.r79973
 	economic.doc.r79618
 	figbib.doc.r19388
 	footbib.doc.r79618
@@ -285,7 +294,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	geschichtsfrkl.doc.r42121
 	harvard.doc.r79618
 	harvmac.doc.r15878
-	hep-bibliography.doc.r76220
+	hep-bibliography.doc.r79976
 	historische-zeitschrift.doc.r79618
 	icite.doc.r67201
 	ietfbibs.doc.r41332
@@ -321,11 +330,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	windycity.doc.r67011
 	xcite.doc.r77682
 	zootaxa-bst.doc.r76790
-	bibbreeze.doc.r76924
-	biblatex-abs-annote.doc.r78770
-	biblatex-ams.doc.r78803
-	biblatex-greifswald.doc.r79143
-	citeright.doc.r75480
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	amsrefs.source.r78101
@@ -338,6 +342,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	biber-ms.source.r79618
 	bibexport.source.r50677
 	biblatex-archaeology.source.r53281
+	biblatex-asa.source.r79900
 	biblatex-bath.source.r77530
 	biblatex-nejm.source.r49839
 	biblatex-oxref.source.r78703
@@ -359,7 +364,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	gbt7714.source.r79717
 	geschichtsfrkl.source.r42121
 	harvard.source.r79618
-	hep-bibliography.source.r76220
+	hep-bibliography.source.r79976
 	icite.source.r67201
 	jurabib.source.r79618
 	listbib.source.r29349
