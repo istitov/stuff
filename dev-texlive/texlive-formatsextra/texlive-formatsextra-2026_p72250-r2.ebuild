@@ -9,7 +9,7 @@ TEXLIVE_MODULE_CONTENTS="
 	antomega.r21933
 	eplain.r71409
 	hitex.r77830
-	jadetex.r79618
+	jadetex.r79862
 	lambda.r45756
 	lollipop.r69742
 	mltex.r71363
@@ -28,7 +28,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	antomega.doc.r21933
 	eplain.doc.r71409
 	hitex.doc.r77830
-	jadetex.doc.r79618
+	jadetex.doc.r79862
 	lollipop.doc.r69742
 	mltex.doc.r71363
 	mxedruli.doc.r79618
@@ -43,7 +43,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 TEXLIVE_MODULE_SRC_CONTENTS="
 	antomega.source.r21933
 	eplain.source.r71409
-	jadetex.source.r79618
+	jadetex.source.r79862
 	otibet.source.r45777
 	psizzl.source.r69742
 	startex.source.r69742
