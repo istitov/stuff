@@ -29,6 +29,7 @@ RDEPEND="
 	>=dev-python/confection-1.0.0[${PYTHON_USEDEP}]
 	>=dev-python/httpx-0.24.0[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
+	>=dev-python/pydantic-2.0.0[${PYTHON_USEDEP}]
 	>=dev-python/smart-open-5.2.1[${PYTHON_USEDEP}]
 	>=dev-python/srsly-2.4.3[${PYTHON_USEDEP}]
 	>=dev-python/typer-0.3.0[${PYTHON_USEDEP}]
