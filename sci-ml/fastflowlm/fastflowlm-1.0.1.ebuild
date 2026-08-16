@@ -55,6 +55,7 @@ RDEPEND="
 	net-misc/curl:=
 	dev-libs/boost:=
 	sci-libs/fftw:3.0=
+	sys-libs/ncurses:=
 	sys-libs/readline:=
 "
 DEPEND="${RDEPEND}"
