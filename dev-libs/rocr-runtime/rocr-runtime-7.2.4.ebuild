@@ -29,10 +29,11 @@ COMMON_DEPEND="dev-libs/elfutils
 DEPEND="${COMMON_DEPEND}
 	dev-libs/roct-thunk-interface:${SLOT}
 	dev-libs/rocm-device-libs:${SLOT}
-	$(llvm_gen_dep "
-		llvm-core/clang:\${LLVM_SLOT}=
-		llvm-core/lld:\${LLVM_SLOT}=
-	")
+		$(llvm_gen_dep "
+			llvm-core/clang:\${LLVM_SLOT}=
+			llvm-core/lld:\${LLVM_SLOT}=
+			llvm-core/llvm:\${LLVM_SLOT}=
+		")
 "
 RDEPEND="${DEPEND}"
 BDEPEND="app-editors/vim-core"
