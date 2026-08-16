@@ -25,6 +25,7 @@ KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	<dev-python/fastapi-0.137.0[${PYTHON_USEDEP}]
+	dev-python/httpx[${PYTHON_USEDEP}]
 	dev-python/jmespath[${PYTHON_USEDEP}]
 	dev-python/pydantic[${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
