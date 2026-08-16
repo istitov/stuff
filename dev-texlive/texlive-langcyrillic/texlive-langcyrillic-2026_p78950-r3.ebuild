@@ -7,6 +7,7 @@ TEXLIVE_MODULE_CONTENTS="
 	collection-langcyrillic.r78950
 	babel-belarusian.r49022
 	babel-bulgarian.r31902
+	babel-kazakh.r78969
 	babel-russian.r57376
 	babel-serbian.r64571
 	babel-serbianc.r64588
@@ -23,6 +24,7 @@ TEXLIVE_MODULE_CONTENTS="
 	hyphen-belarusian.r78069
 	hyphen-bulgarian.r78069
 	hyphen-churchslavonic.r78069
+	hyphen-kazakh.r78069
 	hyphen-mongolian.r78069
 	hyphen-russian.r78069
 	hyphen-serbian.r78069
@@ -43,12 +45,11 @@ TEXLIVE_MODULE_CONTENTS="
 	t2.r79618
 	ukrhyph.r79618
 	xecyrmongolian.r53160
-	babel-kazakh.r78969
-	hyphen-kazakh.r78069
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	babel-belarusian.doc.r49022
 	babel-bulgarian.doc.r31902
+	babel-kazakh.doc.r78969
 	babel-russian.doc.r57376
 	babel-serbian.doc.r64571
 	babel-serbianc.doc.r64588
@@ -83,7 +84,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	texlive-sr.doc.r54594
 	ukrhyph.doc.r79618
 	xecyrmongolian.doc.r53160
-	babel-kazakh.doc.r78969
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-belarusian.source.r49022
@@ -96,13 +96,13 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	disser.source.r43417
 	eskd.source.r79618
 	gost.source.r76790
+	hyphen-kazakh.source.r78069
 	lcyw.source.r15878
 	lh.source.r77838
 	lhcyr.source.r77838
 	mongolian-babel.source.r79618
 	ruhyphen.source.r79618
 	xecyrmongolian.source.r53160
-	hyphen-kazakh.source.r78069
 "
 
 inherit texlive-module
