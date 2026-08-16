@@ -19,6 +19,6 @@ RDEPEND="
 	>=dev-python/numpy-1.12[${PYTHON_USEDEP}]
 	>=dev-python/six-1.10[${PYTHON_USEDEP}]
 	>=dev-python/wxpython-4.0.3[${PYTHON_USEDEP}]
-	>=dev-python/matplotlib-2.0[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-3.0.3[${PYTHON_USEDEP}]
 "
 #dev-python/PyQt4
