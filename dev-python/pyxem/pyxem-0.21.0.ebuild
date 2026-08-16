@@ -36,5 +36,8 @@ RDEPEND="
 	dev-python/scipy[${PYTHON_USEDEP}]
 	>dev-python/shapely-2.0.0-r0[${PYTHON_USEDEP}]
 	dev-python/transforms3d[${PYTHON_USEDEP}]
+	dev-python/tqdm[${PYTHON_USEDEP}]
+	dev-python/traits[${PYTHON_USEDEP}]
+	<dev-python/zarr-3[${PYTHON_USEDEP}]
 	dev-python/ipywidgets[${PYTHON_USEDEP}]
 "
