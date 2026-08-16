@@ -5,7 +5,8 @@ EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
 	collection-context.r75426
-	context.r79618
+	context.r79834
+	context-animation.r75386
 	context-calendar-examples.r66947
 	context-chat.r72010
 	context-collating-marks.r68696
@@ -13,7 +14,7 @@ TEXLIVE_MODULE_CONTENTS="
 	context-filter.r62070
 	context-gnuplot.r75301
 	context-handlecsv.r76721
-	context-legacy.r79616
+	context-legacy.r79834
 	context-letter.r77841
 	context-mathsets.r47085
 	context-pocketdiary.r73164
@@ -23,13 +24,12 @@ TEXLIVE_MODULE_CONTENTS="
 	context-transliterator.r61127
 	context-typescripts.r76524
 	context-vim.r62071
-	context-visualcounter.r47085
+	context-visualcounter.r79994
 	jmn.r45751
-	context-animation.r75386
 "
-# Removed in target tlpdb: context-companion-fonts, context-texlive
 TEXLIVE_MODULE_DOC_CONTENTS="
-	context.doc.r79618
+	context.doc.r79834
+	context-animation.doc.r75386
 	context-calendar-examples.doc.r66947
 	context-chat.doc.r72010
 	context-collating-marks.doc.r68696
@@ -37,7 +37,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	context-filter.doc.r62070
 	context-gnuplot.doc.r75301
 	context-handlecsv.doc.r76721
-	context-legacy.doc.r79616
+	context-legacy.doc.r79834
 	context-letter.doc.r77841
 	context-mathsets.doc.r47085
 	context-notes-zh-cn.doc.r78640
@@ -48,12 +48,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	context-transliterator.doc.r61127
 	context-typescripts.doc.r76524
 	context-vim.doc.r62071
-	context-visualcounter.doc.r47085
-	context-animation.doc.r75386
+	context-visualcounter.doc.r79994
 "
-# Removed in target tlpdb: context-companion-fonts.doc, context-texlive.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
-	context-visualcounter.source.r47085
+	context.source.r79834
+	context-visualcounter.source.r79994
 "
 
 inherit greadme texlive-module
