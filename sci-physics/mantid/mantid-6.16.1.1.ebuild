@@ -176,7 +176,6 @@ RDEPEND="
 		dev-python/sphinx[${PYTHON_USEDEP}]
 		dev-python/sphinx-bootstrap-theme[${PYTHON_USEDEP}]
 		dev-python/toml[${PYTHON_USEDEP}]
-		dev-python/versioningit[${PYTHON_USEDEP}]
 		dev-python/joblib[${PYTHON_USEDEP}]
 		dev-python/lz4[${PYTHON_USEDEP}]
 	')
@@ -200,6 +199,9 @@ RDEPEND="
 BDEPEND="
 	dev-build/cmake
 	dev-build/ninja
+	$(python_gen_cond_dep '
+		dev-python/versioningit[${PYTHON_USEDEP}]
+	')
 "
 
 DEPEND="${BDEPEND}
