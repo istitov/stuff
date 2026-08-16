@@ -38,6 +38,7 @@ RDEPEND="
 		dev-python/scikit-learn[${PYTHON_USEDEP}]
 	')
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/tokenizers-0.19[${PYTHON_SINGLE_USEDEP}]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
