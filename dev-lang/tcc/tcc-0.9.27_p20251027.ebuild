@@ -13,8 +13,10 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://repo.or.cz/r/tinycc.git"
 	inherit git-r3
 elif [[ ${PV} == *_p* ]] ; then
-	SRC_URI="https://repo.or.cz/tinycc.git/snapshot/${MY_COMMIT}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}"/tinycc-234e2dd
+	# The canonical snapshot endpoint serves a JavaScript challenge instead of
+	# an archive. This mirror carries the same immutable Git object.
+	SRC_URI="https://github.com/TinyCC/tinycc/archive/${MY_COMMIT}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/tinycc-${MY_COMMIT}"
 else
 	SRC_URI="https://download.savannah.gnu.org/releases/tinycc/${P}.tar.bz2"
 fi
