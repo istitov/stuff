@@ -11,7 +11,7 @@ TEXLIVE_MODULE_CONTENTS="
 	atbegshi.r79461
 	atveryend.r79461
 	auxhook.r79461
-	babel.r79370
+	babel.r79911
 	babel-english.r77682
 	babelbib.r76790
 	bigintcalc.r79461
@@ -21,6 +21,7 @@ TEXLIVE_MODULE_CONTENTS="
 	colortbl.r79618
 	epstopdf-pkg.r79461
 	etexcmds.r79461
+	etoolbox.r77682
 	fancyhdr.r78348
 	firstaid.r79234
 	fix2col.r78931
@@ -37,8 +38,8 @@ TEXLIVE_MODULE_CONTENTS="
 	kvdefinekeys.r79461
 	kvoptions.r79461
 	kvsetkeys.r79461
-	l3backend.r78544
-	l3kernel.r79405
+	l3backend.r79958
+	l3kernel.r79868
 	l3packages.r76637
 	latex.r79618
 	latex-bin.r78282
@@ -48,12 +49,14 @@ TEXLIVE_MODULE_CONTENTS="
 	letltxmacro.r79461
 	ltxcmds.r79461
 	ltxmisc.r75878
+	lua-uni-algos.r76195
 	mfnfss.r79618
-	mptopdf.r79616
+	mptopdf.r79834
 	natbib.r79618
 	oberdiek.r79461
 	pagesel.r79461
 	pdfescape.r79461
+	pdfmanagement.r79164
 	pdftexcmds.r79461
 	pslatex.r79618
 	psnfss.r79618
@@ -61,13 +64,10 @@ TEXLIVE_MODULE_CONTENTS="
 	refcount.r79461
 	rerunfilecheck.r79461
 	stringenc.r79461
+	tagpdf.r79799
 	tools.r79234
 	uniquecounter.r79461
 	url.r77682
-	etoolbox.r77682
-	lua-uni-algos.r76195
-	pdfmanagement.r79164
-	tagpdf.r79799
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	ae.doc.r79618
@@ -76,7 +76,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	atbegshi.doc.r79461
 	atveryend.doc.r79461
 	auxhook.doc.r79461
-	babel.doc.r79370
+	babel.doc.r79911
 	babel-english.doc.r77682
 	babelbib.doc.r76790
 	bigintcalc.doc.r79461
@@ -86,6 +86,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	colortbl.doc.r79618
 	epstopdf-pkg.doc.r79461
 	etexcmds.doc.r79461
+	etoolbox.doc.r77682
 	fancyhdr.doc.r78348
 	firstaid.doc.r79234
 	fix2col.doc.r78931
@@ -102,8 +103,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	kvdefinekeys.doc.r79461
 	kvoptions.doc.r79461
 	kvsetkeys.doc.r79461
-	l3backend.doc.r78544
-	l3kernel.doc.r79405
+	l3backend.doc.r79958
+	l3kernel.doc.r79868
 	l3packages.doc.r76637
 	latex.doc.r79618
 	latex-bin.doc.r78282
@@ -111,25 +112,24 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	latex-lab.doc.r79404
 	letltxmacro.doc.r79461
 	ltxcmds.doc.r79461
+	lua-uni-algos.doc.r76195
 	mfnfss.doc.r79618
-	mptopdf.doc.r79616
+	mptopdf.doc.r79834
 	natbib.doc.r79618
 	oberdiek.doc.r79461
 	pagesel.doc.r79461
 	pdfescape.doc.r79461
+	pdfmanagement.doc.r79164
 	pdftexcmds.doc.r79461
 	psnfss.doc.r79618
 	pspicture.doc.r15878
 	refcount.doc.r79461
 	rerunfilecheck.doc.r79461
 	stringenc.doc.r79461
+	tagpdf.doc.r79799
 	tools.doc.r79234
 	uniquecounter.doc.r79461
 	url.doc.r77682
-	etoolbox.doc.r77682
-	lua-uni-algos.doc.r76195
-	pdfmanagement.doc.r79164
-	tagpdf.doc.r79799
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	ae.source.r79618
@@ -138,7 +138,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	atbegshi.source.r79461
 	atveryend.source.r79461
 	auxhook.source.r79461
-	babel.source.r79370
+	babel.source.r79911
 	babel-english.source.r77682
 	bigintcalc.source.r79461
 	bitset.source.r79461
@@ -162,8 +162,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	kvdefinekeys.source.r79461
 	kvoptions.source.r79461
 	kvsetkeys.source.r79461
-	l3backend.source.r78544
-	l3kernel.source.r79405
+	l3backend.source.r79958
+	l3kernel.source.r79868
 	l3packages.source.r76637
 	latex.source.r79618
 	latex-lab.source.r79404
@@ -174,6 +174,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	oberdiek.source.r79461
 	pagesel.source.r79461
 	pdfescape.source.r79461
+	pdfmanagement.source.r79164
 	pdftexcmds.source.r79461
 	pslatex.source.r79618
 	psnfss.source.r79618
@@ -181,10 +182,9 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	refcount.source.r79461
 	rerunfilecheck.source.r79461
 	stringenc.source.r79461
+	tagpdf.source.r79799
 	tools.source.r79234
 	uniquecounter.source.r79461
-	pdfmanagement.source.r79164
-	tagpdf.source.r79799
 "
 
 inherit texlive-module
