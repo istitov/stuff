@@ -33,6 +33,9 @@ RDEPEND="
 	>=dev-python/python-multipart-0.0.9[${PYTHON_USEDEP}]
 	>=dev-python/sse-starlette-3.0.0[${PYTHON_USEDEP}]
 	>=dev-python/starlette-0.27.0[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/starlette-0.48.0[${PYTHON_USEDEP}]
+	' python3_14)
 	>=dev-python/typing-extensions-4.13.0[${PYTHON_USEDEP}]
 	>=dev-python/typing-inspection-0.4.1[${PYTHON_USEDEP}]
 	>=dev-python/uvicorn-0.31.1[${PYTHON_USEDEP}]
