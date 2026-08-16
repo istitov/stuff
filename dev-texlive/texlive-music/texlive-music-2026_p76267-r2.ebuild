@@ -11,6 +11,7 @@ TEXLIVE_MODULE_CONTENTS="
 	chordbox.r51000
 	ddphonism.r75201
 	figbas.r28943
+	fretplot.r78741
 	gchords.r79618
 	gregoriotex.r79618
 	gtrcrd.r32484
@@ -36,7 +37,6 @@ TEXLIVE_MODULE_CONTENTS="
 	songs.r79618
 	undar-digitacion.r69742
 	xpiano.r77682
-	fretplot.r78741
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	abc.doc.r41157
@@ -45,6 +45,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	chordbox.doc.r51000
 	ddphonism.doc.r75201
 	figbas.doc.r28943
+	fretplot.doc.r78741
 	gchords.doc.r79618
 	gregoriotex.doc.r79618
 	gtrcrd.doc.r32484
@@ -71,7 +72,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	songs.doc.r79618
 	undar-digitacion.doc.r69742
 	xpiano.doc.r77682
-	fretplot.doc.r78741
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	abc.source.r41157
