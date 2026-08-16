@@ -17,6 +17,7 @@ KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/joblib-0.11[${PYTHON_USEDEP}]
+	>=dev-python/pyaml-16.9[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	>=dev-python/matplotlib-2.0.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.13.3[${PYTHON_USEDEP}]
