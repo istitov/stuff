@@ -22,7 +22,6 @@ TEXLIVE_MODULE_CONTENTS="
 	knuth-local.r57963
 	lua-alt-getopt.r78415
 	luahbtex.r77830
-	luajittex.r78968
 	luatex.r78218
 	metafont.r77830
 	mflogo.r79618
@@ -32,9 +31,10 @@ TEXLIVE_MODULE_CONTENTS="
 	plain.r75712
 	tex.r77830
 	tex-ini-files.r78524
-	texlive-msg-translations.r78661
+	texlive-msg-translations.r79983
 	tlshell.r78053
-	unicode-data.r76413
+	unicode-data.r79913
+	luajittex.r78968
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	amsfonts.doc.r77682
@@ -51,7 +51,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	iftex.doc.r77682
 	lua-alt-getopt.doc.r78415
 	luahbtex.doc.r77830
-	luajittex.doc.r78968
 	luatex.doc.r78218
 	metafont.doc.r77830
 	mflogo.doc.r79618
@@ -63,7 +62,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	texlive-common.doc.r79648
 	texlive-en.doc.r79177
 	tlshell.doc.r78053
-	unicode-data.doc.r76413
+	unicode-data.doc.r79913
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	amsfonts.source.r77682
