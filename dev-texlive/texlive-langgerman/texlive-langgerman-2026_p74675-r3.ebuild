@@ -13,6 +13,7 @@ TEXLIVE_MODULE_CONTENTS="
 	dehyph-exptl.r79618
 	dhua.r79618
 	dtk-bibliography.r78985
+	fragoli.r79228
 	german.r79618
 	germbib.r76790
 	germkorr.r15878
@@ -26,7 +27,6 @@ TEXLIVE_MODULE_CONTENTS="
 	udesoftec.r57866
 	uhrzeit.r79121
 	umlaute.r79618
-	fragoli.r79228
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	apalike-german.doc.r76790
@@ -41,6 +41,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	etdipa.doc.r76924
 	etoolbox-de.doc.r79121
 	fifinddo-info.doc.r79618
+	fragoli.doc.r79228
 	german.doc.r79618
 	germbib.doc.r76790
 	germkorr.doc.r15878
@@ -73,7 +74,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	uhrzeit.doc.r79121
 	umlaute.doc.r79618
 	voss-mathcol.doc.r79618
-	fragoli.doc.r79228
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	babel-german.source.r78737
