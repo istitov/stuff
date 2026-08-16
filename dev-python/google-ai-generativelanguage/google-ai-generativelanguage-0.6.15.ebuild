@@ -36,5 +36,6 @@ RDEPEND="
 		>=dev-python/proto-plus-1.25.0[${PYTHON_USEDEP}]
 	' python3_{13..14})
 	dev-python/protobuf[${PYTHON_USEDEP}]
+	<dev-python/protobuf-6[${PYTHON_USEDEP}]
 	dev-python/grpcio[${PYTHON_USEDEP}]
 "
