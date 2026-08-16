@@ -15,7 +15,7 @@ TEXLIVE_MODULE_CONTENTS="
 	babel-estonian.r38064
 	babel-finnish.r77682
 	babel-friulan.r77682
-	babel-hungarian.r79587
+	babel-hungarian.r79912
 	babel-icelandic.r51551
 	babel-irish.r77682
 	babel-kurmanji.r30279
@@ -79,7 +79,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	babel-estonian.doc.r38064
 	babel-finnish.doc.r77682
 	babel-friulan.doc.r77682
-	babel-hungarian.doc.r79587
+	babel-hungarian.doc.r79912
 	babel-icelandic.doc.r51551
 	babel-irish.doc.r77682
 	babel-kurmanji.doc.r30279
@@ -103,7 +103,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	huaz.doc.r77576
 	hulipsum.doc.r77317
 	hyphen-hungarian.doc.r78069
-	kaytannollista-latexia.doc.r77555
+	kaytannollista-latexia.doc.r79894
 	lithuanian.doc.r66461
 	lshort-dutch.doc.r15878
 	lshort-estonian.doc.r79461
