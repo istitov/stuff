@@ -13,6 +13,7 @@ TEXLIVE_MODULE_CONTENTS="
 	bidishadowtext.r77682
 	businesscard-qrcode.r76924
 	cqubeamer.r54512
+	ctex.r79993
 	fixlatvian.r21631
 	font-change-xetex.r40404
 	fontbook.r23608
@@ -21,6 +22,7 @@ TEXLIVE_MODULE_CONTENTS="
 	na-position.r55559
 	philokalia.r45356
 	ptext.r77682
+	shtthesis.r62441
 	simple-resume-cv.r43057
 	simple-thesis-dissertation.r43058
 	tetragonos.r49732
@@ -30,13 +32,15 @@ TEXLIVE_MODULE_CONTENTS="
 	unisugar.r22357
 	xebaposter.r75290
 	xechangebar.r77682
+	xecjk.r79910
 	xecolor.r77682
 	xecyr.r77682
 	xeindex.r77682
-	xelatex-dev.r71363
+	xelatex-dev.r79947
 	xesearch.r77682
 	xespotcolor.r77682
 	xetex.r77830
+	xetex-devanagari.r34296
 	xetex-itrans.r55475
 	xetex-pstricks.r17055
 	xetex-tibetan.r28847
@@ -45,10 +49,6 @@ TEXLIVE_MODULE_CONTENTS="
 	xetexko.r77682
 	xevlna.r77682
 	zbmath-review-template.r59693
-	ctex.r79778
-	shtthesis.r62441
-	xecjk.r79774
-	xetex-devanagari.r34296
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	arabxetex.doc.r79618
@@ -59,6 +59,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	bidishadowtext.doc.r77682
 	businesscard-qrcode.doc.r76924
 	cqubeamer.doc.r54512
+	ctex.doc.r79993
 	fixlatvian.doc.r21631
 	font-change-xetex.doc.r40404
 	fontbook.doc.r23608
@@ -67,6 +68,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	na-position.doc.r55559
 	philokalia.doc.r45356
 	ptext.doc.r77682
+	shtthesis.doc.r62441
 	simple-resume-cv.doc.r43057
 	simple-thesis-dissertation.doc.r43058
 	tetragonos.doc.r49732
@@ -76,12 +78,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	unisugar.doc.r22357
 	xebaposter.doc.r75290
 	xechangebar.doc.r77682
+	xecjk.doc.r79910
 	xecolor.doc.r77682
 	xecyr.doc.r77682
 	xeindex.doc.r77682
 	xesearch.doc.r77682
 	xespotcolor.doc.r77682
 	xetex.doc.r77830
+	xetex-devanagari.doc.r34296
 	xetex-itrans.doc.r55475
 	xetex-pstricks.doc.r17055
 	xetex-tibetan.doc.r28847
@@ -89,19 +93,15 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xetexko.doc.r77682
 	xevlna.doc.r77682
 	zbmath-review-template.doc.r59693
-	ctex.doc.r79778
-	shtthesis.doc.r62441
-	xecjk.doc.r79774
-	xetex-devanagari.doc.r34296
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	arabxetex.source.r79618
+	ctex.source.r79993
 	fixlatvian.source.r21631
 	fontbook.source.r23608
 	philokalia.source.r45356
+	xecjk.source.r79910
 	xespotcolor.source.r77682
-	ctex.source.r79778
-	xecjk.source.r79774
 "
 
 inherit font texlive-module
