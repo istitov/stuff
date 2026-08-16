@@ -39,17 +39,20 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-diffraction.r71819
 	pst-electricfield.r29803
 	pst-eps.r77682
+	pst-eqhz.r79121
 	pst-eucl.r79618
 	pst-exa.r45289
 	pst-feyn.r48781
 	pst-fill.r77682
 	pst-fit.r70686
 	pst-flags.r76924
+	pst-fourbarlinkage.r77161
 	pst-fr3d.r15878
 	pst-fractal.r79409
 	pst-fun.r79050
 	pst-func.r77682
 	pst-gantt.r35832
+	pst-gears.r77113
 	pst-geo.r79528
 	pst-geometrictools.r70953
 	pst-gr3d.r15878
@@ -59,18 +62,21 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-infixplot.r79618
 	pst-intersect.r79618
 	pst-jtree.r20946
+	pst-kepler.r77232
 	pst-knot.r16033
-	pst-labo.r74874
+	pst-labo.r79832
 	pst-layout.r29803
 	pst-lens.r15878
 	pst-light3d.r15878
 	pst-lsystem.r49556
 	pst-magneticfield.r69493
 	pst-marble.r79618
+	pst-massspring.r77131
 	pst-math.r77682
 	pst-mirror.r71294
 	pst-moire.r60411
 	pst-node.r77682
+	pst-nutation.r77145
 	pst-ob3d.r54514
 	pst-ode.r79618
 	pst-optexp.r62977
@@ -96,10 +102,13 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-solides3d.r79298
 	pst-soroban.r15878
 	pst-spectra.r15878
+	pst-spectrum.r79278
+	pst-sphericaltrochoid.r77173
 	pst-spinner.r66115
 	pst-stru.r38613
 	pst-text.r77682
 	pst-thick.r16369
+	pst-titration.r79169
 	pst-tools.r60621
 	pst-tree.r79618
 	pst-turtle.r52261
@@ -115,15 +124,6 @@ TEXLIVE_MODULE_CONTENTS="
 	uml.r17476
 	vaucanson-g.r79288
 	vocaltract.r25629
-	pst-eqhz.r79121
-	pst-fourbarlinkage.r77161
-	pst-gears.r77113
-	pst-kepler.r77232
-	pst-massspring.r77131
-	pst-nutation.r77145
-	pst-spectrum.r79278
-	pst-sphericaltrochoid.r77173
-	pst-titration.r79169
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	auto-pst-pdf.doc.r77682
@@ -160,17 +160,20 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-diffraction.doc.r71819
 	pst-electricfield.doc.r29803
 	pst-eps.doc.r77682
+	pst-eqhz.doc.r79121
 	pst-eucl.doc.r79618
 	pst-exa.doc.r45289
 	pst-feyn.doc.r48781
 	pst-fill.doc.r77682
 	pst-fit.doc.r70686
 	pst-flags.doc.r76924
+	pst-fourbarlinkage.doc.r77161
 	pst-fr3d.doc.r15878
 	pst-fractal.doc.r79409
 	pst-fun.doc.r79050
 	pst-func.doc.r77682
 	pst-gantt.doc.r35832
+	pst-gears.doc.r77113
 	pst-geo.doc.r79528
 	pst-geometrictools.doc.r70953
 	pst-gr3d.doc.r15878
@@ -180,18 +183,21 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-infixplot.doc.r79618
 	pst-intersect.doc.r79618
 	pst-jtree.doc.r20946
+	pst-kepler.doc.r77232
 	pst-knot.doc.r16033
-	pst-labo.doc.r74874
+	pst-labo.doc.r79832
 	pst-layout.doc.r29803
 	pst-lens.doc.r15878
 	pst-light3d.doc.r15878
 	pst-lsystem.doc.r49556
 	pst-magneticfield.doc.r69493
 	pst-marble.doc.r79618
+	pst-massspring.doc.r77131
 	pst-math.doc.r77682
 	pst-mirror.doc.r71294
 	pst-moire.doc.r60411
 	pst-node.doc.r77682
+	pst-nutation.doc.r77145
 	pst-ob3d.doc.r54514
 	pst-ode.doc.r79618
 	pst-optexp.doc.r62977
@@ -217,11 +223,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-solides3d.doc.r79298
 	pst-soroban.doc.r15878
 	pst-spectra.doc.r15878
+	pst-spectrum.doc.r79278
+	pst-sphericaltrochoid.doc.r77173
 	pst-spinner.doc.r66115
 	pst-stru.doc.r38613
 	pst-support.doc.r15878
 	pst-text.doc.r77682
 	pst-thick.doc.r16369
+	pst-titration.doc.r79169
 	pst-tools.doc.r60621
 	pst-tree.doc.r79618
 	pst-turtle.doc.r52261
@@ -238,15 +247,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	uml.doc.r17476
 	vaucanson-g.doc.r79288
 	vocaltract.doc.r25629
-	pst-eqhz.doc.r79121
-	pst-fourbarlinkage.doc.r77161
-	pst-gears.doc.r77113
-	pst-kepler.doc.r77232
-	pst-massspring.doc.r77131
-	pst-nutation.doc.r77145
-	pst-spectrum.doc.r79278
-	pst-sphericaltrochoid.doc.r77173
-	pst-titration.doc.r79169
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	auto-pst-pdf.source.r77682
