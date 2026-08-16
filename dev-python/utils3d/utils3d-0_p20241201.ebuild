@@ -23,5 +23,6 @@ KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/plyfile[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 "
