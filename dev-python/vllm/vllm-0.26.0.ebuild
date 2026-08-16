@@ -800,29 +800,23 @@ REQUIRED_USE="
 # 0.1.9->0.1.10, nvidia-cutlass-dsl 4.5.2->4.6.0,
 # quack-kernels >=0.3.3,<0.6.0 -> >=0.4.0,<0.6.2 (floor raised, cap moved to
 # 0.6.2 for the cutlass-4.6.1 boundary, see above); tokenspeed-mla
-# 0.1.2->0.1.8 and amd-quark 0.8.99->0.12 stay omitted. cpu.txt unchanged (torch
+# 0.1.2->0.1.8 is now pulled (see below); amd-quark 0.8.99->0.12 stays
+# omitted. cpu.txt unchanged (torch
 # still ==2.11.0). flash-attn pin 2c839c3->caaa4eb (fa3-skip + py314 patches apply
 # clean, regenerated as caaa4eb copies). CRATES 561->594, GIT_CRATES llm-multimodal
 # rev 7d74582->5390032 (still v1.7.1), oss-harmony unchanged. The rocm and cuda
 # targets are not yet verified against the shipped ~2.11.0 torch pin.
 #
-# tokenspeed-mla (in requirements/cuda.txt at ==0.1.2 with the comment
-# "for faster mla with spec decode") is deliberately omitted from
-# cuda?'s RDEPEND for similar reasons: all imports in vllm core are
-# lazy and gated by try/except with a clear pip-install hint, the
-# kernels are Blackwell SM100/SM103-only (irrelevant on Ampere/Hopper
-# hosts), and the package transitively pulls tokenspeed-triton — a
-# Triton vendor-fork we'd otherwise have to package as a hard build
-# dep for a backend most users never enable. Users on Blackwell with
-# DeepSeek R1 + spec decode install tokenspeed-mla separately.
-# verified 2026-05-16: vllm imports clean without it.
-#
-# PyNvVideoCodec (requirements/cuda.txt ==2.0.4) and nvtx (==0.2.15) are
-# likewise omitted -- both cuda-only and lazily imported (nvtx inside a fn
-# at vllm/v1/utils.py; PyNvVideoCodec inside decode_frames_pynvvideocodec()
-# at vllm/multimodal/video.py). nvtx is profiling markers, PyNvVideoCodec an
-# optional GPU video-decode backend; neither is packaged, users needing them
-# install separately. verified lazy 2026-07-12 against 0.25.0.
+# requirements/cuda.txt pins tokenspeed-mla 0.1.8, PyNvVideoCodec 2.0.4
+# and nvtx 0.2.15; all three are now packaged and pulled into cuda?'s
+# RDEPEND to match the exact upstream set. The TokenSpeed kernels target
+# Blackwell SM100/SM103 (irrelevant on Ampere/Hopper) and both nvtx
+# (profiling markers, imported lazily in vllm/v1/utils.py) and
+# PyNvVideoCodec (GPU video-decode backend, imported lazily inside
+# decode_frames_pynvvideocodec() at vllm/multimodal/video.py) load
+# lazily, so on hosts that never touch those paths they are inert weight;
+# they are kept for parity with the upstream dependency set.
+# verified lazy 2026-07-12; dependency set completed 2026-08-17.
 #
 # humming-kernels[cu13] (requirements/cuda.txt, ==0.1.10 "for quantization
 # gemm") provides the optional `humming` quant backend -- pulled only
