@@ -21,12 +21,16 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
+	>=dev-python/docopt-0.6.2[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-2.0.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-2.2.2[${PYTHON_USEDEP}]
 	>=dev-python/pandas-2.2.3[${PYTHON_USEDEP}]
 	>=sci-ml/pyannote-core-6.0[${PYTHON_USEDEP}]
 	>=sci-ml/pyannote-database-6.0[${PYTHON_USEDEP}]
 	>=dev-python/scikit-learn-1.6.1[${PYTHON_USEDEP}]
 	>=dev-python/scipy-1.15.1[${PYTHON_USEDEP}]
+	>=dev-python/sympy-1.1[${PYTHON_USEDEP}]
+	>=dev-python/tabulate-0.7.7[${PYTHON_USEDEP}]
 "
 
 RESTRICT="test"
