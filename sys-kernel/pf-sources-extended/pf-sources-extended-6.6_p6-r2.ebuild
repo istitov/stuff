@@ -37,9 +37,21 @@ HOMEPAGE="https://pfkernel.natalenko.name/
 # + our curated pf delta. The codeberg pf-kernel tarball is intentionally
 # not fetched — its content is replaced by the much smaller curated
 # patch in files/.
+#
+# genpatches come from the archival distfiles.gentoo.org/pub/proj/kernel/
+# genpatches/ host (+ ~alicef/~mpagano dist fallbacks), matching kernel-2
+# eclass's own GENPATCHES_URI. mirror://gentoo resolves to the general
+# distfiles pool, which prunes files no longer referenced by an in-tree
+# DIST; the pinned genpatches-158 is older than current ::gentoo
+# gentoo-sources and would be pruned there, leaving no fetch source.
+# verified 2026-08-16.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
-	mirror://gentoo/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
-	mirror://gentoo/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
 	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz"
