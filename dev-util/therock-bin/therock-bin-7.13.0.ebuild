@@ -3,6 +3,9 @@
 
 EAPI=8
 
+PYTHON_COMPAT=( python3_{11..13} )
+inherit python-single-r1
+
 DESCRIPTION="ROCm SDK pre-built distribution from TheRock (AMDGPU_TARGETS-selected)"
 HOMEPAGE="https://github.com/ROCm/TheRock"
 
@@ -45,7 +48,10 @@ IUSE="${AMDGPU_ARCHS[*]/#/amdgpu_targets_}"
 
 # One runfile carries the whole SDK; only one target lives under
 # /opt/therock-bin/ at a time.
-REQUIRED_USE="^^ ( ${AMDGPU_ARCHS[*]/#/amdgpu_targets_} )"
+REQUIRED_USE="
+	${PYTHON_REQUIRED_USE}
+	^^ ( ${AMDGPU_ARCHS[*]/#/amdgpu_targets_} )
+"
 
 # bindist:  conservative -- TheRock bundles many third-party components.
 # mirror:   not redistributable from Gentoo mirrors.
@@ -58,10 +64,13 @@ RESTRICT="bindist mirror strip"
 # bump.
 RDEPEND="
 	app-arch/zstd:=
+	dev-lang/perl
 	dev-libs/elfutils
 	sys-process/numactl
+	sys-libs/zlib
 	virtual/libcrypt:=
 	x11-libs/libdrm
+	${PYTHON_DEPS}
 "
 
 QA_PREBUILT="opt/therock-bin/*"
