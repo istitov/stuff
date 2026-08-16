@@ -30,6 +30,7 @@ TEXLIVE_MODULE_CONTENTS="
 	ethiop.r79618
 	ethiop-t1.r15878
 	fc.r32796
+	fonts-arundina.r78421
 	fonts-tlwg.r79529
 	hebrew-fonts.r68038
 	hyphen-afrikaans.r78069
@@ -38,12 +39,14 @@ TEXLIVE_MODULE_CONTENTS="
 	hyphen-esperanto.r78069
 	hyphen-ethiopic.r78069
 	hyphen-georgian.r78069
+	hyphen-hebrew.r74032
 	hyphen-indic.r78069
 	hyphen-indonesian.r78069
 	hyphen-interlingua.r78069
 	hyphen-sanskrit.r78069
 	hyphen-thai.r78069
 	hyphen-turkmen.r78069
+	hyphen-vietnamese.r74032
 	latexbangla.r55475
 	latino-sine-flexione.r69568
 	marathi.r61719
@@ -54,16 +57,12 @@ TEXLIVE_MODULE_CONTENTS="
 	sanskrit-t1.r79618
 	thaienum.r44140
 	thaispec.r77682
+	tuzuk.r74620
 	unicode-alphabets.r66225
 	vntex.r79618
 	wnri.r22459
 	wnri-latex.r22338
-	fonts-arundina.r78421
-	hyphen-hebrew.r74032
-	hyphen-vietnamese.r74032
-	tuzuk.r74620
 "
-# Removed in target tlpdb: padauk
 TEXLIVE_MODULE_DOC_CONTENTS="
 	aalok.doc.r76924
 	akshar.doc.r76924
@@ -91,6 +90,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ethiop.doc.r79618
 	ethiop-t1.doc.r15878
 	fc.doc.r32796
+	fonts-arundina.doc.r78421
 	fonts-tlwg.doc.r79529
 	hebrew-fonts.doc.r68038
 	hindawi-latex-template.doc.r57757
@@ -109,14 +109,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	sanskrit-t1.doc.r79618
 	thaienum.doc.r44140
 	thaispec.doc.r77682
+	tuzuk.doc.r74620
 	unicode-alphabets.doc.r66225
 	vntex.doc.r79618
 	wnri.doc.r22459
 	wnri-latex.doc.r22338
-	fonts-arundina.doc.r78421
-	tuzuk.doc.r74620
 "
-# Removed in target tlpdb: padauk.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	aalok.source.r76924
 	akshar.source.r76924
@@ -135,6 +133,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	ctib.source.r15878
 	culmus.source.r76924
 	ethiop.source.r79618
+	fonts-arundina.source.r78421
 	fonts-tlwg.source.r79529
 	hebrew-fonts.source.r68038
 	hyphen-armenian.source.r78069
@@ -143,10 +142,9 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	marathi.source.r61719
 	sanskrit.source.r79618
 	thaispec.source.r77682
+	tuzuk.source.r74620
 	vntex.source.r79618
 	wnri-latex.source.r22338
-	fonts-arundina.source.r78421
-	tuzuk.source.r74620
 "
 
 inherit texlive-module
