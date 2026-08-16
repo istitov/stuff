@@ -22,7 +22,7 @@ RESTRICT="!test? ( test )"
 RDEPEND="dev-lang/python:2.7
 	>=dev-libs/glib-2.8:2
 	>=x11-libs/pango-1.16
-	>=dev-libs/atk-1.12
+	>=app-accessibility/at-spi2-core-2.46.0
 	>=x11-libs/gtk+-2.24:2
 	dev-python/pycairo-python2[${PYTHON_USEDEP}]
 	>=dev-python/pygobject-2.26.8-r53:2[${PYTHON_USEDEP}]
