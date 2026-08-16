@@ -5,10 +5,6 @@ EAPI=8
 
 ETYPE="sources"
 
-# Track the latest 6.6.X linux-stable via genpatches. Match
-# gentoo-sources-6.6.144's K_GENPATCHES_VER. verified 2026-07-24.
-K_GENPATCHES_VER="158"
-
 # Curated pf delta sets EXTRAVERSION via the patch itself.
 K_NOSETEXTRAVERSION="1"
 
@@ -19,9 +15,7 @@ K_NOSETEXTRAVERSION="1"
 # or the overlay maintainers.
 K_SECURITY_UNSUPPORTED="1"
 
-K_WANT_GENPATCHES="base extras"
-
-# Map "6.6_p6" → "6.6" for the kernel.org tarball + genpatches.
+# Map "6.6_p6" → "6.6" for the kernel.org tarball + bundle names.
 SHPV="${PV/_p*/}"
 
 # Pretend version visible in /lib/modules and /usr/src.
@@ -33,25 +27,19 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Vanilla 6.6 from kernel.org + Gentoo's genpatches (stable + non-stable)
-# + our curated pf delta. The codeberg pf-kernel tarball is intentionally
-# not fetched — its content is replaced by the much smaller curated
-# patch in files/.
-#
-# genpatches come from the archival distfiles.gentoo.org/pub/proj/kernel/
-# genpatches/ host (+ ~alicef/~mpagano dist fallbacks), matching kernel-2
-# eclass's own GENPATCHES_URI. mirror://gentoo resolves to the general
-# distfiles pool, which prunes files no longer referenced by an in-tree
-# DIST; the pinned genpatches-158 is older than current ::gentoo
-# gentoo-sources and would be pruned there, leaving no fetch source.
-# verified 2026-08-16.
+# Vanilla 6.6 from kernel.org + a pinned snapshot of Gentoo's genpatches
+# (genpatches-6.6-158 base + extras: the linux-stable backport chain plus
+# the Gentoo Kconfig additions) + our curated pf delta. 6.6-158 has aged
+# out of every Gentoo genpatches host, so it is repackaged as
+# pf-genpatches-6.6.tar.xz on the sister overlay extra-stuff
+# (https://github.com/istitov/extra-stuff), pinned by immutable tag -r70-1
+# (refresh = new tag suffix), exactly like the other pf-sources-extended
+# slots. The codeberg pf-kernel tarball is intentionally not fetched — its
+# content is replaced by the much smaller curated patch. verified 2026-08-16.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
-	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
-	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
-	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
-	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
-	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
-	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
 	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz"
@@ -80,11 +68,11 @@ src_unpack() {
 }
 
 src_prepare() {
-	# Apply genpatches stack. Unlike pf-sources -r1/-r2, we DO NOT
-	# delete `1*linux*.patch` — the linux-stable backport chain
-	# (1000_linux-${SHPV}.1.patch through 1NNN_linux-${SHPV}.X.patch)
-	# is the entire point of this revision.
-	eapply "${WORKDIR}"/*.patch
+	# Apply the genpatches base+extras snapshot: the linux-stable backport
+	# chain (1000_linux-${SHPV}.1.patch through 1NNN_linux-${SHPV}.X.patch)
+	# plus the extras (Gentoo Kconfig, firmware-info). Filename order is
+	# apply order.
+	eapply "${WORKDIR}/pf-genpatches-${SHPV}"/*.patch
 
 	# Curated pf-kernel delta on top of gentoo-sources state, as a
 	# numbered series of per-feature patches re-cut from natalenko's
