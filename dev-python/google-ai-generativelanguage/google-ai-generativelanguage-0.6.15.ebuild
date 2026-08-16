@@ -31,6 +31,10 @@ RDEPEND="
 	>=dev-python/google-api-core-1.34.1[grpc,${PYTHON_USEDEP}]
 	>=dev-python/google-auth-2.14.1[${PYTHON_USEDEP}]
 	>=dev-python/proto-plus-1.22.3[${PYTHON_USEDEP}]
+	<dev-python/proto-plus-2[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/proto-plus-1.25.0[${PYTHON_USEDEP}]
+	' python3_{13..14})
 	dev-python/protobuf[${PYTHON_USEDEP}]
 	dev-python/grpcio[${PYTHON_USEDEP}]
 "
