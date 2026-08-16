@@ -22,10 +22,10 @@ TEXLIVE_MODULE_CONTENTS="
 	extsizes.r78101
 	fancybox.r77682
 	fancyref.r77682
-	fancyvrb.r78721
+	fancyvrb.r79962
 	filehook.r77682
 	float.r79618
-	fontspec.r77682
+	fontspec.r79934
 	footnotehyper.r77682
 	fp.r79618
 	grffile.r79461
@@ -38,6 +38,8 @@ TEXLIVE_MODULE_CONTENTS="
 	latexbug.r79083
 	lineno.r79618
 	listings.r77682
+	ltx-talk.r79893
+	lua-unicode-math.r79839
 	lwarp.r79391
 	mathspec.r79618
 	mathtools.r78251
@@ -73,10 +75,7 @@ TEXLIVE_MODULE_CONTENTS="
 	xkeyval.r77682
 	xltxtra.r77682
 	xunicode.r77682
-	ltx-talk.r79566
-	lua-unicode-math.r79419
 "
-# Removed in target tlpdb: pdfmanagement-testphase
 TEXLIVE_MODULE_DOC_CONTENTS="
 	anysize.doc.r77682
 	attachfile2.doc.r79461
@@ -95,10 +94,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	extsizes.doc.r78101
 	fancybox.doc.r77682
 	fancyref.doc.r77682
-	fancyvrb.doc.r78721
+	fancyvrb.doc.r79962
 	filehook.doc.r77682
 	float.doc.r79618
-	fontspec.doc.r77682
+	fontspec.doc.r79934
 	footnotehyper.doc.r77682
 	fp.doc.r79618
 	grffile.doc.r79461
@@ -110,6 +109,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	latexbug.doc.r79083
 	lineno.doc.r79618
 	listings.doc.r77682
+	ltx-talk.doc.r79893
+	lua-unicode-math.doc.r79839
 	lwarp.doc.r79391
 	mathspec.doc.r79618
 	mathtools.doc.r78251
@@ -145,10 +146,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xkeyval.doc.r77682
 	xltxtra.doc.r77682
 	xunicode.doc.r77682
-	ltx-talk.doc.r79566
-	lua-unicode-math.doc.r79419
 "
-# Removed in target tlpdb: pdfmanagement-testphase.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	attachfile2.source.r79461
 	booktabs.source.r77682
@@ -164,7 +162,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	fancyref.source.r77682
 	filehook.source.r77682
 	float.source.r79618
-	fontspec.source.r77682
+	fontspec.source.r79934
 	footnotehyper.source.r77682
 	grffile.source.r79461
 	hologo.source.r79461
@@ -173,6 +171,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	l3experimental.source.r79407
 	latexbug.source.r79083
 	listings.source.r77682
+	ltx-talk.source.r79893
+	lua-unicode-math.source.r79839
 	lwarp.source.r79391
 	mathtools.source.r78251
 	mdwtools.source.r15878
@@ -197,8 +197,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xfrac.source.r77682
 	xkeyval.source.r77682
 	xltxtra.source.r77682
-	ltx-talk.source.r79566
-	lua-unicode-math.source.r79419
 "
 # Removed in target tlpdb: pdfmanagement-testphase.source
 
