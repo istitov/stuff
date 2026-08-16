@@ -20,17 +20,22 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
+# docopt, sympy and tabulate are upstream's [cli] extra, pulled
+# unconditionally because this ebuild installs the pyannote-metrics
+# console script (pyannote.metrics.cli:main) -- a docopt CLI that imports
+# them at startup. Floors track the 4.1 [cli] extra exactly. matplotlib
+# is upstream's [plot]/[doc] extra, used only by optional plotting
+# helpers, so it is intentionally not pulled. verified 2026-08-17.
 RDEPEND="
 	>=dev-python/docopt-0.6.2[${PYTHON_USEDEP}]
-	>=dev-python/matplotlib-2.0.0[${PYTHON_USEDEP}]
 	>=dev-python/numpy-2.2.2[${PYTHON_USEDEP}]
 	>=dev-python/pandas-2.2.3[${PYTHON_USEDEP}]
 	>=sci-ml/pyannote-core-6.0[${PYTHON_USEDEP}]
 	>=sci-ml/pyannote-database-6.0[${PYTHON_USEDEP}]
 	>=dev-python/scikit-learn-1.6.1[${PYTHON_USEDEP}]
 	>=dev-python/scipy-1.15.1[${PYTHON_USEDEP}]
-	>=dev-python/sympy-1.1[${PYTHON_USEDEP}]
-	>=dev-python/tabulate-0.7.7[${PYTHON_USEDEP}]
+	>=dev-python/sympy-1.13.3[${PYTHON_USEDEP}]
+	>=dev-python/tabulate-0.9.0[${PYTHON_USEDEP}]
 "
 
 RESTRICT="test"
