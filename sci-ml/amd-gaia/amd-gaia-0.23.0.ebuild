@@ -111,6 +111,7 @@ RDEPEND="
 		>=dev-python/python-multipart-0.0.9[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/rich[${PYTHON_USEDEP}]
+		>=dev-python/tavily-python-0.5.0[${PYTHON_USEDEP}]
 		>=dev-python/tomli-w-1.0.0[${PYTHON_USEDEP}]
 		>=dev-python/watchdog-2.1.0[${PYTHON_USEDEP}]
 		api? (
