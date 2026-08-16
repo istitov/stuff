@@ -34,7 +34,7 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/sympy[${PYTHON_USEDEP}]
 		>=dev-python/antlr4-python3-runtime-4.9.3[${PYTHON_USEDEP}]
-		<dev-python/antlr4-python3-runtime-4.14[${PYTHON_USEDEP}]
+		<dev-python/antlr4-python3-runtime-4.13.3[${PYTHON_USEDEP}]
 	')
 "
 
