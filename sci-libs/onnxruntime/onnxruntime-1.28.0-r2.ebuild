@@ -143,7 +143,11 @@ src_configure() {
 	)
 
 	if use cuda; then
-		local -x CUDAHOSTCXX="/usr/bin/g++-15"
+		# nvcc rejects gcc newer than the active CUDA toolkit supports
+		# (CUDA 13 tops out at gcc 15). cuda_gccdir picks the newest
+		# supported slot; the cuda? sys-devel/gcc:15 BDEPEND guarantees one
+		# is installed.
+		local -x CUDAHOSTCXX="$(cuda_gccdir)/g++"
 		cuda_add_sandbox -w
 		mycmakeargs+=(
 			-DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS:-all-major}"
