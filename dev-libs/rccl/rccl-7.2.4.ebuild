@@ -32,6 +32,7 @@ RDEPEND="
 	roctracer? ( dev-util/roctracer:${SLOT} )
 "
 DEPEND="${RDEPEND}
+	dev-libs/rocr-runtime:${SLOT}
 	sys-libs/binutils-libs
 	dev-libs/libfmt:=
 "
