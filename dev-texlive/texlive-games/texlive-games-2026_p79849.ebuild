@@ -4,8 +4,9 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-games.r79624
+	collection-games.r79849
 	bartel-chess-fonts.r78101
+	cardgame.r78746
 	chess.r78101
 	chess-problem-diagrams.r78101
 	chessboard.r79618
@@ -15,6 +16,7 @@ TEXLIVE_MODULE_CONTENTS="
 	crosswrd.r79618
 	customdice.r64089
 	egameps.r15878
+	eigo.r78101
 	gamebook.r24714
 	gamebooklib.r67772
 	go.r78101
@@ -28,14 +30,18 @@ TEXLIVE_MODULE_CONTENTS="
 	jigsaw.r71923
 	labyrinth.r33454
 	logicpuzzle.r78101
+	magicthegathering.r78456
 	mahjong.r76924
+	mathador.r76924
 	maze.r79180
+	multi-sudoku.r78101
 	musikui.r47472
 	nimsticks.r64118
 	onedown.r69067
 	othello.r15878
 	othelloboard.r23714
 	pas-crosswords.r32313
+	pgf-go.r78101
 	playcards.r79618
 	psgo.r79618
 	quizztex.r75977
@@ -54,6 +60,8 @@ TEXLIVE_MODULE_CONTENTS="
 	sudokubundle.r79618
 	tangramtikz.r75123
 	thematicpuzzle.r75984
+	tictactoe.r75712
+	tikz-catan.r79833
 	trivialpursuit.r76152
 	twoxtwogame.r70423
 	wargame.r72903
@@ -61,16 +69,10 @@ TEXLIVE_MODULE_CONTENTS="
 	wordle.r79377
 	xq.r78101
 	xskak.r79618
-	cardgame.r78746
-	eigo.r78101
-	magicthegathering.r78456
-	mathador.r76924
-	multi-sudoku.r78101
-	pgf-go.r78101
-	tictactoe.r75712
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	bartel-chess-fonts.doc.r78101
+	cardgame.doc.r78746
 	chess.doc.r78101
 	chess-problem-diagrams.doc.r78101
 	chessboard.doc.r79618
@@ -80,6 +82,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	crosswrd.doc.r79618
 	customdice.doc.r64089
 	egameps.doc.r15878
+	eigo.doc.r78101
 	gamebook.doc.r24714
 	gamebooklib.doc.r67772
 	go.doc.r78101
@@ -92,14 +95,18 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	jigsaw.doc.r71923
 	labyrinth.doc.r33454
 	logicpuzzle.doc.r78101
+	magicthegathering.doc.r78456
 	mahjong.doc.r76924
+	mathador.doc.r76924
 	maze.doc.r79180
+	multi-sudoku.doc.r78101
 	musikui.doc.r47472
 	nimsticks.doc.r64118
 	onedown.doc.r69067
 	othello.doc.r15878
 	othelloboard.doc.r23714
 	pas-crosswords.doc.r32313
+	pgf-go.doc.r78101
 	playcards.doc.r79618
 	psgo.doc.r79618
 	quizztex.doc.r75977
@@ -118,6 +125,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	sudokubundle.doc.r79618
 	tangramtikz.doc.r75123
 	thematicpuzzle.doc.r75984
+	tictactoe.doc.r75712
+	tikz-catan.doc.r79833
 	trivialpursuit.doc.r76152
 	twoxtwogame.doc.r70423
 	wargame.doc.r72903
@@ -125,15 +134,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	wordle.doc.r79377
 	xq.doc.r78101
 	xskak.doc.r79618
-	cardgame.doc.r78746
-	eigo.doc.r78101
-	magicthegathering.doc.r78456
-	mathador.doc.r76924
-	multi-sudoku.doc.r78101
-	pgf-go.doc.r78101
-	tictactoe.doc.r75712
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
+	cardgame.source.r78746
 	chess-problem-diagrams.source.r78101
 	chessboard.source.r79618
 	chessfss.source.r79618
@@ -156,11 +159,10 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	soup.source.r50815
 	sudoku.source.r79618
 	sudokubundle.source.r79618
+	tictactoe.source.r75712
 	wargame.source.r72903
 	weiqi.source.r78101
 	xskak.source.r79618
-	cardgame.source.r78746
-	tictactoe.source.r75712
 "
 
 inherit texlive-module
