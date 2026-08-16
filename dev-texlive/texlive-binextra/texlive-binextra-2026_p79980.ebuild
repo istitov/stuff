@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-binextra.r77772
+	collection-binextra.r79980
 	a2ping.r52964
 	adhocfilelist.r79618
 	arara.r79461
@@ -63,8 +63,10 @@ TEXLIVE_MODULE_CONTENTS="
 	ppmcheckpdf.r74165
 	purifyeps.r79618
 	pythontex.r77873
+	runtexfile.r76526
 	runtexshebang.r68882
 	seetexk.r57972
+	show-pdf-tags.r77604
 	spix.r65050
 	sqltex.r79618
 	srcredact.r38710
@@ -73,6 +75,7 @@ TEXLIVE_MODULE_CONTENTS="
 	tex4ebook.r78132
 	texaccents.r64447
 	texblend.r68961
+	texchanges.r79995
 	texcount.r79618
 	texdef.r74067
 	texdiff.r79618
@@ -90,12 +93,10 @@ TEXLIVE_MODULE_CONTENTS="
 	tlcockpit.r54857
 	typeoutfileinfo.r67526
 	web.r77830
-	xindex.r79618
-	xpdfopen.r65952
-	runtexfile.r76526
-	show-pdf-tags.r77604
 	xdvipsk.r78968
 	xdvipsk-support.r78653
+	xindex.r79964
+	xpdfopen.r65952
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	a2ping.doc.r52964
@@ -142,6 +143,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ltximg.doc.r59335
 	make4ht.doc.r78133
 	match_parens.doc.r79202
+	mflua.doc.r78968
 	mkjobtexmf.doc.r29725
 	optexcount.doc.r59817
 	patgen.doc.r77830
@@ -157,8 +159,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ppmcheckpdf.doc.r74165
 	purifyeps.doc.r79618
 	pythontex.doc.r77873
+	runtexfile.doc.r76526
 	runtexshebang.doc.r68882
 	seetexk.doc.r57972
+	show-pdf-tags.doc.r77604
 	spix.doc.r65050
 	sqltex.doc.r79618
 	srcredact.doc.r38710
@@ -167,6 +171,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tex4ebook.doc.r78132
 	texaccents.doc.r64447
 	texblend.doc.r68961
+	texchanges.doc.r79995
 	texcount.doc.r79618
 	texdef.doc.r74067
 	texdiff.doc.r79618
@@ -184,12 +189,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tlcockpit.doc.r54857
 	typeoutfileinfo.doc.r67526
 	web.doc.r77830
-	xindex.doc.r79618
-	xpdfopen.doc.r65952
-	runtexfile.doc.r76526
-	show-pdf-tags.doc.r77604
 	xdvipsk.doc.r78968
 	xdvipsk-support.doc.r78653
+	xindex.doc.r79964
+	xpdfopen.doc.r65952
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	adhocfilelist.source.r79618
