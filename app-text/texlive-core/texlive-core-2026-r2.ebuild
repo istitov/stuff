@@ -26,56 +26,56 @@ TL_CORE_EXTRA_CONTENTS="
 	autosp.r77851
 	axodraw2.r77682
 	chktex.r78219
-	detex.r70015
+	detex.r79618
 	dvi2tty.r66186
 	dvidvi.r75712
 	dviljk.r66186
 	dvipdfmx.r78409
 	dvipos.r66186
 	extractbb.r77855
-	gsftopk.r52851
+	gsftopk.r79618
 	hyphen-base.r78076
 	lacheck.r75712
-	m-tx.r78106
+	m-tx.r79618
 	makeindex.r75712
-	pmx.r75301
+	pmx.r79618
 	texdoctk.r62186
-	texlive-scripts.r79598
+	texlive-scripts.r79996
 	texlive-scripts-extra.r78162
-	texlive.infra.r79511
+	texlive.infra.r79982
 	tpic2pdftex.r75712
 	upmendex.r77845
 	velthuis.r66186
 	vlna.r73908
-	xindy.r78957
-	xml2pmx.r57972
+	xindy.r79990
+	xml2pmx.r79618
 "
 TL_CORE_EXTRA_DOC_CONTENTS="
 	autosp.doc.r77851
 	axodraw2.doc.r77682
 	chktex.doc.r78219
-	detex.doc.r70015
+	detex.doc.r79618
 	dvi2tty.doc.r66186
 	dvidvi.doc.r75712
 	dviljk.doc.r66186
 	dvipdfmx.doc.r78409
 	dvipos.doc.r66186
 	extractbb.doc.r77855
-	gsftopk.doc.r52851
+	gsftopk.doc.r79618
 	lacheck.doc.r75712
-	m-tx.doc.r78106
+	m-tx.doc.r79618
 	makeindex.doc.r75712
-	pmx.doc.r75301
+	pmx.doc.r79618
 	texdoctk.doc.r62186
-	texlive-scripts.doc.r79598
+	texlive-scripts.doc.r79996
 	texlive-scripts-extra.doc.r78162
-	texlive.infra.doc.r79511
+	texlive.infra.doc.r79982
 	tpic2pdftex.doc.r75712
 	upmendex.doc.r77845
 	velthuis.doc.r66186
 	vlna.doc.r73908
-	xindy.doc.r78957
-	xml2pmx.doc.r57972
+	xindy.doc.r79990
+	xml2pmx.doc.r79618
 "
 # TL_CORE_EXTRA_SRC_CONTENTS omitted: axodraw2.source (only TL2024
 # srcfiles entry) dropped in TL2025 (upstream container_split stopped
