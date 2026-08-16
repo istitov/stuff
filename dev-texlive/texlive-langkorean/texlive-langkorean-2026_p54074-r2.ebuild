@@ -6,7 +6,7 @@ EAPI=8
 TEXLIVE_MODULE_CONTENTS="
 	collection-langkorean.r54074
 	baekmuk.r56915
-	cjk-ko.r79618
+	cjk-ko.r79846
 	kotex-oblivoir.r79618
 	kotex-plain.r63689
 	kotex-utf.r63690
@@ -19,7 +19,7 @@ TEXLIVE_MODULE_CONTENTS="
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	baekmuk.doc.r56915
-	cjk-ko.doc.r79618
+	cjk-ko.doc.r79846
 	kotex-oblivoir.doc.r79618
 	kotex-plain.doc.r63689
 	kotex-utf.doc.r63690
