@@ -32,6 +32,7 @@ BDEPEND="
 	$(llvm_gen_dep "
 		llvm-core/clang:\${LLVM_SLOT}
 		llvm-core/lld:\${LLVM_SLOT}
+		llvm-core/llvm:\${LLVM_SLOT}
 	")
 "
 
