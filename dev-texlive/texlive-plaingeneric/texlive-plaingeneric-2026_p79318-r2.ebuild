@@ -28,6 +28,7 @@ TEXLIVE_MODULE_CONTENTS="
 	dowith.r79618
 	eijkhout.r15878
 	encxvlna.r79618
+	eoldef.r76050
 	epigram.r20513
 	epsf.r77682
 	epsf-dvipdfmx.r35575
@@ -63,6 +64,7 @@ TEXLIVE_MODULE_CONTENTS="
 	listofitems.r77682
 	localloc.r56496
 	mathdots.r79618
+	measurebox.r75139
 	metatex.r15878
 	midnight.r15878
 	mkpattern.r79618
@@ -79,8 +81,11 @@ TEXLIVE_MODULE_CONTENTS="
 	path.r77682
 	pdf-trans.r32809
 	pdfmsym.r66618
+	pdftoolbox.r74832
 	pitex.r24731
 	placeins-plain.r15878
+	plain-grid.r78986
+	plain-widow.r75230
 	plainpkg.r79618
 	plipsum.r30353
 	plnfss.r79618
@@ -96,6 +101,7 @@ TEXLIVE_MODULE_CONTENTS="
 	shade.r22212
 	simplekv.r77682
 	soul.r79461
+	stretchy.r75140
 	swrule.r54267
 	systeme.r77682
 	tabto-generic.r15878
@@ -106,6 +112,8 @@ TEXLIVE_MODULE_CONTENTS="
 	texdimens.r77682
 	texinfo.r79244
 	timetable.r15878
+	tokmap.r75599
+	tokstools.r78736
 	tracklang.r79146
 	treetex.r28176
 	trigonometry.r43006
@@ -113,19 +121,11 @@ TEXLIVE_MODULE_CONTENTS="
 	ulem.r78931
 	upca.r22511
 	varisize.r15878
+	visualtoks.r76207
 	xintsession.r60926
 	xlop.r77682
 	yax.r54080
 	zztex.r79618
-	eoldef.r76050
-	measurebox.r75139
-	pdftoolbox.r74832
-	plain-grid.r78986
-	plain-widow.r75230
-	stretchy.r75140
-	tokmap.r75599
-	tokstools.r78736
-	visualtoks.r76207
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	abbr.doc.r77161
@@ -147,6 +147,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	docbytex.doc.r79618
 	dowith.doc.r79618
 	encxvlna.doc.r79618
+	eoldef.doc.r76050
 	epsf.doc.r77682
 	epsf-dvipdfmx.doc.r35575
 	etoolbox-generic.doc.r68513
@@ -179,6 +180,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	listofitems.doc.r77682
 	localloc.doc.r56496
 	mathdots.doc.r79618
+	measurebox.doc.r75139
 	metatex.doc.r15878
 	midnight.doc.r15878
 	mkpattern.doc.r79618
@@ -193,7 +195,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	path.doc.r77682
 	pdf-trans.doc.r32809
 	pdfmsym.doc.r66618
+	pdftoolbox.doc.r74832
 	pitex.doc.r24731
+	plain-grid.doc.r78986
+	plain-widow.doc.r75230
 	plainpkg.doc.r79618
 	plipsum.doc.r30353
 	plnfss.doc.r79618
@@ -208,12 +213,15 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	shade.doc.r22212
 	simplekv.doc.r77682
 	soul.doc.r79461
+	stretchy.doc.r75140
 	systeme.doc.r77682
 	termmenu.doc.r76924
 	tex-ps.doc.r15878
 	texapi.doc.r54080
 	texdate.doc.r49362
 	texdimens.doc.r77682
+	tokmap.doc.r75599
+	tokstools.doc.r78736
 	tracklang.doc.r79146
 	transparent-io.doc.r64113
 	treetex.doc.r28176
@@ -222,21 +230,13 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ulem.doc.r78931
 	upca.doc.r22511
 	varisize.doc.r15878
+	visualtoks.doc.r76207
 	xii.doc.r45804
 	xii-lat.doc.r45805
 	xintsession.doc.r60926
 	xlop.doc.r77682
 	yax.doc.r54080
 	zztex.doc.r79618
-	eoldef.doc.r76050
-	measurebox.doc.r75139
-	pdftoolbox.doc.r74832
-	plain-grid.doc.r78986
-	plain-widow.doc.r75230
-	stretchy.doc.r75140
-	tokmap.doc.r75599
-	tokstools.doc.r78736
-	visualtoks.doc.r76207
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	advice.source.r70688
