@@ -19,10 +19,10 @@ IUSE="cuda +learning +gui-jupyter speed +gui-traitsui mrcz test"
 
 RDEPEND="
 	dev-python/cloudpickle[${PYTHON_USEDEP}]
-	>=dev-python/dask-0.18[${PYTHON_USEDEP}]
+	>=dev-python/dask-2023.2.1[${PYTHON_USEDEP}]
 	>=dev-python/importlib-metadata-3.6[${PYTHON_USEDEP}]
 	dev-python/jinja2[${PYTHON_USEDEP}]
-	>=dev-python/matplotlib-3.1[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-3.6[${PYTHON_USEDEP}]
 	dev-python/natsort[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
