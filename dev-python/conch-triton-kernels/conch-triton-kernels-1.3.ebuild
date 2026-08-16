@@ -28,7 +28,7 @@ KEYWORDS="~amd64"
 RDEPEND="
 	>=dev-python/numpy-1.26.4[${PYTHON_USEDEP}]
 	>=dev-python/triton-bin-3.3[${PYTHON_USEDEP}]
-	sci-ml/caffe2[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep 'sci-ml/caffe2[${PYTHON_SINGLE_USEDEP}]')
 "
 BDEPEND="
 	>=dev-python/setuptools-42[${PYTHON_USEDEP}]
