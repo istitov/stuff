@@ -1,0 +1,28 @@
+--- a/python/xgrammar/kernels/apply_token_bitmask_inplace_cuda.py
++++ b/python/xgrammar/kernels/apply_token_bitmask_inplace_cuda.py
+@@ -50,6 +50,17 @@ def _check_cuda_toolchain() -> None:
+         raise ImportError(f"nvcc compiler not found at {nvcc_path}")
+ 
+ 
++def _select_cuda_host_compiler() -> None:
++    """Select the compiler declared by the CUDA-enabled Gentoo package."""
++    import os
++
++    # torch.utils.cpp_extension uses CXX for its C++ shim and CC to select
++    # nvcc's host compiler.  Translate the standard CUDA overrides and
++    # otherwise use the GCC slot pulled in by USE=cuda.
++    os.environ["CC"] = os.environ.get("CUDAHOSTCC", "/usr/bin/gcc-15")
++    os.environ["CXX"] = os.environ.get("CUDAHOSTCXX", "/usr/bin/g++-15")
++
++
+ def _remove_torch_nvcc_flags() -> None:
+     REMOVE_NVCC_FLAGS = [
+         "-D__CUDA_NO_HALF_OPERATORS__",
+@@ -91,6 +102,7 @@ def _load_torch_ops() -> None:
+ 
+ 
+ _check_cuda_toolchain()
++_select_cuda_host_compiler()
+ _remove_torch_nvcc_flags()
+ _load_torch_ops()
+ 

@@ -38,10 +38,15 @@ S="${WORKDIR}/${PN}-${PV}"
 LICENSE="Apache-2.0 BSD-2"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="cuda"
 
 # transformers is capped <5 upstream: v5 breaks tokenizer loading for several
 # models (TokenizerInfo.from_huggingface), so the pyproject pins >=4.38.0,<5.
 RDEPEND="
+	cuda? (
+		dev-util/nvidia-cuda-toolkit:=
+		sys-devel/gcc:15
+	)
 	>=sci-ml/pytorch-1.10.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.38.0[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/transformers-5
@@ -65,6 +70,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-respect-toolchain-flags.patch"
 	"${FILESDIR}/${PN}-0.2.3-load-binding-from-package.patch"
 	"${FILESDIR}/${PN}-0.2.5-align-tests-with-implementation.patch"
+	"${FILESDIR}/${PN}-0.2.2-cuda-host-compiler.patch"
 )
 
 src_unpack() {

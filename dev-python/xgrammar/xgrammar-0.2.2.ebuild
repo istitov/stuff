@@ -20,10 +20,15 @@ HOMEPAGE="
 LICENSE="Apache-2.0 BSD-2"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="cuda"
 
 # The packaged-library lookup patch uses load_lib_module(extra_lib_paths=...),
 # which apache-tvm-ffi added in 0.1.11.
 RDEPEND="
+	cuda? (
+		dev-util/nvidia-cuda-toolkit:=
+		sys-devel/gcc:15
+	)
 	>=sci-ml/pytorch-1.10.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.38.0[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
@@ -44,6 +49,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-respect-toolchain-flags.patch"
 	"${FILESDIR}/${PN}-0.2.3-load-binding-from-package.patch"
+	"${FILESDIR}/${PN}-0.2.2-cuda-host-compiler.patch"
 )
 
 EPYTEST_PLUGINS=()
