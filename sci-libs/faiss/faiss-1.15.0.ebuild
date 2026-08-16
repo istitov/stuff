@@ -31,6 +31,7 @@ RDEPEND="
 		${PYTHON_DEPS}
 		$(python_gen_cond_dep '
 			dev-python/numpy[${PYTHON_USEDEP}]
+			dev-python/packaging[${PYTHON_USEDEP}]
 		')
 	)
 "
