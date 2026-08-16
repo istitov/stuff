@@ -145,9 +145,15 @@ src_configure() {
 	if use cuda; then
 		# nvcc rejects gcc newer than the active CUDA toolkit supports
 		# (CUDA 13 tops out at gcc 15). cuda_gccdir picks the newest
-		# supported slot; the cuda? sys-devel/gcc:15 BDEPEND guarantees one
-		# is installed.
-		local -x CUDAHOSTCXX="$(cuda_gccdir)/g++"
+		# supported slot; pin ordinary C++, CUDA host compilation, and
+		# final linking to it so all three share one libstdc++ ABI. The
+		# cuda? sys-devel/gcc:15 BDEPEND guarantees a compatible slot is
+		# installed for cuda_gccdir to find.
+		local cuda_gcc_bindir
+		cuda_gcc_bindir="$(cuda_gccdir)" || die
+		local -x CC="${cuda_gcc_bindir}/gcc"
+		local -x CXX="${cuda_gcc_bindir}/g++"
+		local -x CUDAHOSTCXX="${CXX}"
 		cuda_add_sandbox -w
 		mycmakeargs+=(
 			-DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS:-all-major}"
