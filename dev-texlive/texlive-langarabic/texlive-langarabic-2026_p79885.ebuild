@@ -4,25 +4,30 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-langarabic.r78033
+	collection-langarabic.r79885
 	alkalami.r79618
 	alpha-persian.r79618
 	amiri.r79618
+	arabdoc.r79884
 	arabi.r79618
 	arabi-add.r67573
 	arabic-book.r59594
 	arabluatex.r79618
 	arabtex.r79618
+	awami.r76980
 	bidi.r77682
 	bidihl.r77682
 	dad.r54191
+	fariscovernew.r78508
 	ghab.r79618
+	hadith.r79886
 	hvarabic.r76924
 	imsproc.r29803
 	iran-bibtex.r76790
 	khatalmaqala.r68280
 	kurdishlipsum.r79618
 	luabidi.r79256
+	mohe-book.r74912
 	na-box.r45130
 	parsimatn.r70775
 	parsinevis.r70776
@@ -34,23 +39,24 @@ TEXLIVE_MODULE_CONTENTS="
 	tram.r79618
 	xepersian.r77682
 	xepersian-hm.r77682
-	awami.r76980
-	fariscovernew.r78508
-	mohe-book.r74912
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	alkalami.doc.r79618
 	alpha-persian.doc.r79618
 	amiri.doc.r79618
+	arabdoc.doc.r79884
 	arabi.doc.r79618
 	arabi-add.doc.r67573
 	arabic-book.doc.r59594
 	arabluatex.doc.r79618
 	arabtex.doc.r79618
+	awami.doc.r76980
 	bidi.doc.r77682
 	bidihl.doc.r77682
 	dad.doc.r54191
+	fariscovernew.doc.r78508
 	ghab.doc.r79618
+	hadith.doc.r79886
 	hvarabic.doc.r76924
 	imsproc.doc.r29803
 	iran-bibtex.doc.r76790
@@ -58,6 +64,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	kurdishlipsum.doc.r79618
 	lshort-persian.doc.r79461
 	luabidi.doc.r79256
+	mohe-book.doc.r74912
 	na-box.doc.r45130
 	parsimatn.doc.r70775
 	parsinevis.doc.r70776
@@ -70,9 +77,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xepersian.doc.r77682
 	xepersian-hm.doc.r77682
 	xindy-persian.doc.r59013
-	awami.doc.r76980
-	fariscovernew.doc.r78508
-	mohe-book.doc.r74912
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	arabluatex.source.r79618
