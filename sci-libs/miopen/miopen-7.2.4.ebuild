@@ -56,10 +56,10 @@ DEPEND="
 	hipblaslt? ( sci-libs/hipBLAS-common:${SLOT} )
 	test? ( dev-cpp/gtest )
 
-	amdgpu_targets_gfx908? ( =dev-cpp/frugally-deep-0.15* )
-	amdgpu_targets_gfx940? ( =dev-cpp/frugally-deep-0.15* )
-	amdgpu_targets_gfx941? ( =dev-cpp/frugally-deep-0.15* )
-	amdgpu_targets_gfx942? ( =dev-cpp/frugally-deep-0.15* )
+	amdgpu_targets_gfx908? ( =dev-cpp/frugally-deep-0.15* dev-cpp/eigen:3 )
+	amdgpu_targets_gfx940? ( =dev-cpp/frugally-deep-0.15* dev-cpp/eigen:3 )
+	amdgpu_targets_gfx941? ( =dev-cpp/frugally-deep-0.15* dev-cpp/eigen:3 )
+	amdgpu_targets_gfx942? ( =dev-cpp/frugally-deep-0.15* dev-cpp/eigen:3 )
 "
 
 BDEPEND="
