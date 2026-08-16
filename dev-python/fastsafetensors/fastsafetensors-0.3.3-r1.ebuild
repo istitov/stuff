@@ -26,6 +26,9 @@ KEYWORDS="~amd64"
 # entry point. # verified 2026-08-04 against 0.3.3.
 RDEPEND="
 	>=sci-ml/pytorch-2.10.0[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/typer-0.9.0[${PYTHON_USEDEP}]
+	')
 "
 BDEPEND="
 	$(python_gen_cond_dep '
