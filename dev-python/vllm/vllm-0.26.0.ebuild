@@ -978,7 +978,7 @@ RDEPEND="
 		>=sci-ml/caffe2-2.11.0-r90[cuda,-rocm]
 		~sci-ml/torchaudio-2.11.0
 		~sci-ml/torchvision-0.26.0[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
-		~dev-python/xgrammar-0.2.2[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/xgrammar-0.2.2[cuda,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/flashinfer-python-0.6.14[${PYTHON_SINGLE_USEDEP}]
 		>=sci-ml/torchcodec-0.14[cuda,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tilelang-0.1.9[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]

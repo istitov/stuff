@@ -998,7 +998,7 @@ RDEPEND="
 		~dev-python/tokenspeed-mla-bin-0.1.8[${PYTHON_SINGLE_USEDEP}]
 		~sci-ml/torchaudio-2.11.0
 		~sci-ml/torchvision-0.28.0[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
-		~dev-python/xgrammar-0.2.2[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/xgrammar-0.2.2[cuda,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/flashinfer-python-0.6.16_p3[${PYTHON_SINGLE_USEDEP}]
 		>=sci-ml/torchcodec-0.14[cuda,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tilelang-0.1.12[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
