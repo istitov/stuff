@@ -18,4 +18,5 @@ RDEPEND="
 	>=dev-python/wxpython-4.2.0:*[${PYTHON_USEDEP}]
 	dev-python/pyshortcuts[${PYTHON_USEDEP}]
 	dev-python/darkdetect[${PYTHON_USEDEP}]
+	dev-python/jeepney[${PYTHON_USEDEP}]
 "
