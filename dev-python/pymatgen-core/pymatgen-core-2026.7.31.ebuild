@@ -47,6 +47,9 @@ RDEPEND="
 		>=dev-python/tqdm-4.67.3[${PYTHON_USEDEP}]
 		>=dev-python/requests-2.32.5[${PYTHON_USEDEP}]
 	')
+	$(python_gen_cond_dep '
+		>=dev-python/numpy-2.1.0[${PYTHON_USEDEP}]
+	' python3_{13..14})
 "
 BDEPEND="
 	$(python_gen_cond_dep '
