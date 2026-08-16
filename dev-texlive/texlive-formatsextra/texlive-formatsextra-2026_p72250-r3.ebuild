@@ -51,6 +51,15 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 
 inherit texlive-module
 
+src_install() {
+	if use doc; then
+		# texlive-core installs these man pages with the hitex binaries.
+		rm texmf-dist/doc/man/man1/{texprof,texprofile}.1 || die
+	fi
+
+	texlive-module_src_install
+}
+
 DESCRIPTION="TeXLive Additional formats"
 
 LICENSE="GPL-1+ GPL-2+ GPL-3 LPPL-1.3c MIT TeX TeX-other-free public-domain"
