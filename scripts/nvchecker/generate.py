@@ -441,6 +441,8 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
     "dev-python/tokenspeed-triton-bin": {
         "source": "pypi",
         "pypi": "tokenspeed-triton",
+        "from_pattern": r"^(\d+\.\d+\.\d+)\.post(\d+)$",
+        "to_pattern": r"\1_p\2",
     },
     # comfy-angle-bin installs upstream's platform wheel rather than an sdist,
     # so the generic classifier cannot derive its PyPI project name from SRC_URI.

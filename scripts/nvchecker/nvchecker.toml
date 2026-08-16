@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (264) ---
+# --- pypi (267) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -814,6 +814,14 @@ pypi = "sidpy"
 source = "pypi"
 pypi = "silx"
 
+["dev-python/sip"]
+source = "pypi"
+pypi = "sip"
+
+["dev-python/sitka-spruce"]
+source = "pypi"
+pypi = "sitka_spruce"
+
 ["dev-python/spacy-curated-transformers"]
 source = "pypi"
 pypi = "spacy-curated-transformers"
@@ -946,6 +954,10 @@ pypi = "word2number"
 source = "pypi"
 pypi = "wxmplot"
 
+["dev-python/wxpython"]
+source = "pypi"
+pypi = "wxPython"
+
 ["dev-python/wxutils"]
 source = "pypi"
 pypi = "wxutils"
@@ -1066,7 +1078,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (193) ---
+# --- github (194) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1426,6 +1438,12 @@ prefix = "v"
 ["dev-python/locket"]
 source = "github"
 github = "mwilliamson/locket.py"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/mkl-fft"]
+source = "github"
+github = "IntelPython/mkl_fft"
 use_max_tag = true
 prefix = "v"
 
@@ -2453,6 +2471,8 @@ pypi = "tokenspeed-mla"
 ["dev-python/tokenspeed-triton-bin"]
 source = "pypi"
 pypi = "tokenspeed-triton"
+from_pattern = '^(\d+\.\d+\.\d+)\.post(\d+)$'
+to_pattern = '\1_p\2'
 
 ["dev-util/nvidia-cuda-toolkit"]
 source = "regex"
