@@ -92,6 +92,7 @@ RDEPEND="
 	media-gfx/openvdb:=
 	media-libs/draco
 	media-libs/fontconfig
+	media-libs/freetype:2
 	media-libs/glfw
 	media-libs/gst-plugins-base:1.0
 	media-libs/gstreamer:1.0
