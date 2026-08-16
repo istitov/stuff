@@ -67,7 +67,7 @@ RDEPEND="
 	dev-lang/perl
 	dev-libs/elfutils
 	sys-process/numactl
-	sys-libs/zlib
+	virtual/zlib
 	virtual/libcrypt:=
 	x11-libs/libdrm
 	${PYTHON_DEPS}
