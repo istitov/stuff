@@ -138,6 +138,12 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "app-text/pandoc-crossref-bin": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+[0-9a-z.]*$",
     },
+    # TinyCC tags releases as release_X_Y_Z while the ebuild uses X.Y.Z.
+    "dev-lang/tcc": {
+        "include_regex": r"^release_[0-9]+_[0-9]+_[0-9]+$",
+        "from_pattern": r"^release_([0-9]+)_([0-9]+)_([0-9]+)$",
+        "to_pattern": r"\1.\2.\3",
+    },
     # NVIDIA monorepo sub-packages
     "dev-python/cuda-bindings": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",

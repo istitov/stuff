@@ -1078,7 +1078,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (194) ---
+# --- github (195) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1186,6 +1186,14 @@ source = "github"
 github = "dcleblanc/SafeInt"
 use_max_tag = true
 prefix = "v"
+
+["dev-lang/tcc"]
+source = "github"
+github = "TinyCC/tinycc"
+use_max_tag = true
+include_regex = '^release_[0-9]+_[0-9]+_[0-9]+$'
+from_pattern = '^release_([0-9]+)_([0-9]+)_([0-9]+)$'
+to_pattern = '\1.\2.\3'
 
 ["dev-libs/hipother"]
 source = "github"
@@ -2547,7 +2555,6 @@ prefix = "v"
 # ["app-text/texlive"] skipped: custom upstream at tug.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["app-text/texlive-core"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
 # ["app-text/ttf2pk2"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
-# ["dev-lang/tcc"] skipped: custom upstream at bellard.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-libs/kpathsea"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
 # ["dev-libs/ptexenc"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
 # ["dev-python/antlr4-python3-runtime"] skipped: pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')
