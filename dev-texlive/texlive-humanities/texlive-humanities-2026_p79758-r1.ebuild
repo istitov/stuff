@@ -35,7 +35,9 @@ TEXLIVE_MODULE_CONTENTS="
 	lexref.r36026
 	ling-macros.r42268
 	linguex.r79618
+	linguistix.r79010
 	liturg.r79618
+	liturgy-cw.r76053
 	metrix.r76924
 	nnext.r56575
 	opbible.r79618
@@ -54,16 +56,14 @@ TEXLIVE_MODULE_CONTENTS="
 	rtklage.r15878
 	screenplay.r27223
 	screenplay-pkg.r44965
+	sharedline.r78303
 	sides.r76924
 	stage.r62929
 	textglos.r30788
 	thalie.r65249
 	tree-dvips.r21751
-	verse.r79618
+	verse.r79919
 	xyling.r15878
-	linguistix.r79010
-	liturgy-cw.r76053
-	sharedline.r78303
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	adtrees.doc.r51618
@@ -96,7 +96,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	lexref.doc.r36026
 	ling-macros.doc.r42268
 	linguex.doc.r79618
+	linguistix.doc.r79010
 	liturg.doc.r79618
+	liturgy-cw.doc.r76053
 	metrix.doc.r76924
 	nnext.doc.r56575
 	opbible.doc.r79618
@@ -115,17 +117,15 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	rtklage.doc.r15878
 	screenplay.doc.r27223
 	screenplay-pkg.doc.r44965
+	sharedline.doc.r78303
 	sides.doc.r76924
 	stage.doc.r62929
 	textglos.doc.r30788
 	thalie.doc.r65249
 	theatre.doc.r79121
 	tree-dvips.doc.r21751
-	verse.doc.r79618
+	verse.doc.r79919
 	xyling.doc.r15878
-	linguistix.doc.r79010
-	liturgy-cw.doc.r76053
-	sharedline.doc.r78303
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	bibleref.source.r75257
@@ -141,7 +141,9 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	jurarsp.source.r15878
 	langnames.source.r69101
 	ledmac.source.r41811
+	linguistix.source.r79010
 	liturg.source.r79618
+	liturgy-cw.source.r76053
 	metrix.source.r76924
 	nnext.source.r56575
 	parallel.source.r79618
@@ -154,12 +156,10 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	reledmac.source.r79618
 	rrgtrees.source.r79618
 	screenplay.source.r27223
+	sharedline.source.r78303
 	stage.source.r62929
 	textglos.source.r30788
-	verse.source.r79618
-	linguistix.source.r79010
-	liturgy-cw.source.r76053
-	sharedline.source.r78303
+	verse.source.r79919
 "
 
 inherit texlive-module
