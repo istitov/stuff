@@ -50,6 +50,10 @@ src_prepare() {
 
 	local nvcc_flag
 	nvcc_flag="--compiler-bindir=$(cuda_gccdir)" || die
+	# sed exits 0 on no-match, so guard the substitution target explicitly:
+	# a silent upstream rename would otherwise leave the default nvcc host
+	# compiler (rejected by CUDA 13) and only fail at runtime JIT.
+	grep -q '"PYCUDA_DEFAULT_NVCC_FLAGS", ""' pycuda/compiler.py || die
 	sed "s|\"PYCUDA_DEFAULT_NVCC_FLAGS\", \"\"|\"PYCUDA_DEFAULT_NVCC_FLAGS\", \"${nvcc_flag}\"|" \
 		-i pycuda/compiler.py || die
 
