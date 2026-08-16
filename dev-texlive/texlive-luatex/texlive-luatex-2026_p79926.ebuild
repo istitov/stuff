@@ -4,34 +4,43 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-luatex.r79730
+	collection-luatex.r79926
 	addliga.r78793
 	addtoluatexpath.r73424
 	auto-pst-pdf-lua.r77682
 	barracuda.r63708
 	bezierplot.r72750
 	blopentype.r69080
+	char2path.r76924
 	checkcites.r79618
 	chickenize.r78415
 	chinese-jfm.r57758
 	cloze.r75681
 	combofont.r78793
+	countwords.r78714
 	cstypo.r41986
 	ctablestack.r78101
+	dichromacy.r79926
 	ekdosis.r79618
 	emoji.r77682
 	emojicite.r76924
 	enigma.r29802
+	fancymag.r75720
+	farbe.r75449
 	gitinfo-lua.r78348
 	ideavault.r74773
 	innerscript.r75161
 	interpreter.r78415
 	kanaparser.r48052
+	kkluaverb.r79443
+	kkran.r78190
+	kksymbols.r79941
 	ligtype.r78793
 	linebreaker.r77682
 	longmath.r78632
 	lparse.r78101
 	lt3luabridge.r76924
+	lua-list-hyphen.r79861
 	lua-placeholders.r79056
 	lua-tinyyaml.r73671
 	lua-typo.r77682
@@ -47,20 +56,24 @@ TEXLIVE_MODULE_CONTENTS="
 	luacomplex.r68883
 	luagcd.r76790
 	luahttp.r67348
+	luahyperbolic.r78431
 	luahyphenrules.r78101
 	luaimageembed.r50788
 	luaindex.r25882
 	luainputenc.r77682
 	luakeys.r78101
+	luakeyval.r79472
 	lualatex-math.r77682
 	lualatex-truncate.r78632
 	lualibs.r78415
 	lualinalg.r76924
+	lualineno.r79471
+	luamathaccents.r79805
 	luamathalign.r77682
 	luamaths.r76924
 	luamml.r79442
 	luamodulartables.r68893
-	luamplib.r79640
+	luamplib.r79953
 	luaoptions.r79068
 	luaotfload.r74324
 	luapackageloader.r54779
@@ -69,6 +82,7 @@ TEXLIVE_MODULE_CONTENTS="
 	luaquotes.r65652
 	luarandom.r78101
 	luaset.r76924
+	luatex-type-definitions.r75890
 	luatex85.r77682
 	luatexbase.r77682
 	luatexko.r78005
@@ -86,15 +100,17 @@ TEXLIVE_MODULE_CONTENTS="
 	nodetree.r76924
 	odsfile.r78415
 	optex.r79618
+	parstat.r77123
 	pdfarticle.r51127
 	pdfextra.r65184
 	penlight.r73362
 	penlightplus.r74000
-	piton.r79722
+	piton.r79971
 	placeat.r45145
 	plantuml.r79512
 	pyluatex.r78739
 	scikgtex.r66764
+	seatingchart.r79764
 	selnolig.r77682
 	semesterplannerlua.r71322
 	showhyphenation.r77682
@@ -110,20 +126,6 @@ TEXLIVE_MODULE_CONTENTS="
 	typewriter.r73877
 	uninormalize.r78101
 	yamlvars.r73922
-	char2path.r76924
-	countwords.r78714
-	fancymag.r75720
-	farbe.r75449
-	kkluaverb.r79443
-	kkran.r78190
-	kksymbols.r79445
-	lua-list-hyphen.r79775
-	luahyperbolic.r78431
-	luakeyval.r79472
-	lualineno.r79471
-	luatex-type-definitions.r75890
-	parstat.r77123
-	seatingchart.r79764
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	addliga.doc.r78793
@@ -132,27 +134,36 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	barracuda.doc.r63708
 	bezierplot.doc.r72750
 	blopentype.doc.r69080
+	char2path.doc.r76924
 	checkcites.doc.r79618
 	chickenize.doc.r78415
 	chinese-jfm.doc.r57758
 	cloze.doc.r75681
 	combofont.doc.r78793
+	countwords.doc.r78714
 	cstypo.doc.r41986
 	ctablestack.doc.r78101
+	dichromacy.doc.r79926
 	ekdosis.doc.r79618
 	emoji.doc.r77682
 	emojicite.doc.r76924
 	enigma.doc.r29802
+	fancymag.doc.r75720
+	farbe.doc.r75449
 	gitinfo-lua.doc.r78348
 	ideavault.doc.r74773
 	innerscript.doc.r75161
 	interpreter.doc.r78415
 	kanaparser.doc.r48052
+	kkluaverb.doc.r79443
+	kkran.doc.r78190
+	kksymbols.doc.r79941
 	ligtype.doc.r78793
 	linebreaker.doc.r77682
 	longmath.doc.r78632
 	lparse.doc.r78101
 	lt3luabridge.doc.r76924
+	lua-list-hyphen.doc.r79861
 	lua-placeholders.doc.r79056
 	lua-tinyyaml.doc.r73671
 	lua-typo.doc.r77682
@@ -168,20 +179,24 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	luacomplex.doc.r68883
 	luagcd.doc.r76790
 	luahttp.doc.r67348
+	luahyperbolic.doc.r78431
 	luahyphenrules.doc.r78101
 	luaimageembed.doc.r50788
 	luaindex.doc.r25882
 	luainputenc.doc.r77682
 	luakeys.doc.r78101
+	luakeyval.doc.r79472
 	lualatex-math.doc.r77682
 	lualatex-truncate.doc.r78632
 	lualibs.doc.r78415
 	lualinalg.doc.r76924
+	lualineno.doc.r79471
+	luamathaccents.doc.r79805
 	luamathalign.doc.r77682
 	luamaths.doc.r76924
 	luamml.doc.r79442
 	luamodulartables.doc.r68893
-	luamplib.doc.r79640
+	luamplib.doc.r79953
 	luaoptions.doc.r79068
 	luaotfload.doc.r74324
 	luapackageloader.doc.r54779
@@ -190,6 +205,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	luaquotes.doc.r65652
 	luarandom.doc.r78101
 	luaset.doc.r76924
+	luatex-type-definitions.doc.r75890
 	luatex85.doc.r77682
 	luatexbase.doc.r77682
 	luatexko.doc.r78005
@@ -207,15 +223,17 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	nodetree.doc.r76924
 	odsfile.doc.r78415
 	optex.doc.r79618
+	parstat.doc.r77123
 	pdfarticle.doc.r51127
 	pdfextra.doc.r65184
 	penlight.doc.r73362
 	penlightplus.doc.r74000
-	piton.doc.r79722
+	piton.doc.r79971
 	placeat.doc.r45145
 	plantuml.doc.r79512
 	pyluatex.doc.r78739
 	scikgtex.doc.r66764
+	seatingchart.doc.r79764
 	selnolig.doc.r77682
 	semesterplannerlua.doc.r71322
 	showhyphenation.doc.r77682
@@ -231,27 +249,18 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	typewriter.doc.r73877
 	uninormalize.doc.r78101
 	yamlvars.doc.r73922
-	char2path.doc.r76924
-	countwords.doc.r78714
-	fancymag.doc.r75720
-	farbe.doc.r75449
-	kkluaverb.doc.r79443
-	kkran.doc.r78190
-	kksymbols.doc.r79445
-	lua-list-hyphen.doc.r79775
-	luahyperbolic.doc.r78431
-	luakeyval.doc.r79472
-	lualineno.doc.r79471
-	luatex-type-definitions.doc.r75890
-	parstat.doc.r77123
-	seatingchart.doc.r79764
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
+	char2path.source.r76924
 	chickenize.source.r78415
+	countwords.source.r78714
 	ctablestack.source.r78101
+	dichromacy.source.r79926
 	ekdosis.source.r79618
+	fancymag.source.r75720
 	innerscript.source.r75161
 	lt3luabridge.source.r76924
+	lua-list-hyphen.source.r79861
 	lua-typo.source.r77682
 	lua-uca.source.r74807
 	lua-ul.source.r77682
@@ -266,21 +275,18 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	lualibs.source.r78415
 	luamathalign.source.r77682
 	luamml.source.r79442
-	luamplib.source.r79640
+	luamplib.source.r79953
 	luaotfload.source.r74324
 	luatex85.source.r77682
 	luatexbase.source.r77682
 	luatextra.source.r77682
 	newpax.source.r78945
 	nodetree.source.r76924
-	piton.source.r79722
+	piton.source.r79971
 	placeat.source.r45145
+	seatingchart.source.r79764
 	semesterplannerlua.source.r71322
 	texfindpkg.source.r72937
-	char2path.source.r76924
-	countwords.source.r78714
-	fancymag.source.r75720
-	lua-list-hyphen.source.r79775
 "
 # Removed in target tlpdb: cloze.source
 
