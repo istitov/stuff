@@ -65,12 +65,14 @@ DEPEND="
 	dev-libs/opencl-icd-loader
 	dev-libs/rapidjson
 	dev-util/opencl-headers
+	sys-libs/ncurses:=
 	x11-libs/libdrm
 	dev-cpp/ms-gsl
 "
 
 BDEPEND="
 	${PYTHON_DEPS}
+	virtual/pkgconfig
 	$(python_gen_any_dep "
 		dev-python/jinja2[\${PYTHON_USEDEP}]
 		dev-python/markdown[\${PYTHON_USEDEP}]
