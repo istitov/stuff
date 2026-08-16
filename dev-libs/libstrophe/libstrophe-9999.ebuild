@@ -16,6 +16,7 @@ KEYWORDS=""
 IUSE="doc expat gnutls"
 
 RDEPEND="
+	virtual/zlib:=
 	expat? ( dev-libs/expat )
 	!expat? ( dev-libs/libxml2:2= )
 	gnutls? ( net-libs/gnutls:0= )
