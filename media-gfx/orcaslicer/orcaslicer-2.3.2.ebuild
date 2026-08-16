@@ -56,10 +56,12 @@ RDEPEND="
 	dev-libs/libmspack
 	dev-libs/libspnav
 	dev-libs/mpfr:=
+	dev-libs/openssl:=
 	media-gfx/libbgcode
 	media-gfx/openvdb:=
 	media-libs/draco
 	media-libs/fontconfig
+	media-libs/freetype:2
 	media-libs/glew:0=
 	media-libs/glfw
 	media-libs/gst-plugins-base:1.0
