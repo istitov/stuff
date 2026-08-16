@@ -1002,8 +1002,7 @@ RDEPEND="
 		~dev-python/flashinfer-python-0.6.16_p3[${PYTHON_SINGLE_USEDEP}]
 		>=sci-ml/torchcodec-0.14[cuda,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tilelang-0.1.12[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
-		>=dev-python/quack-kernels-0.4.0[${PYTHON_SINGLE_USEDEP}]
-		<dev-python/quack-kernels-0.6.2[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/quack-kernels-0.6.1[${PYTHON_SINGLE_USEDEP}]
 		humming? ( ~dev-python/humming-kernels-0.1.10[${PYTHON_SINGLE_USEDEP}] )
 		$(python_gen_cond_dep '
 			~dev-python/nvtx-0.2.15[${PYTHON_USEDEP}]
@@ -1011,6 +1010,7 @@ RDEPEND="
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 			>=dev-python/fastsafetensors-0.3.2[${PYTHON_SINGLE_USEDEP}]
+			>=dev-python/nvidia-cudnn-frontend-1.19.1[${PYTHON_USEDEP}]
 			~dev-python/nvidia-cutlass-dsl-4.6.0[${PYTHON_USEDEP}]
 			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
 		')

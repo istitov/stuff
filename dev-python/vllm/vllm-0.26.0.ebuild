@@ -891,6 +891,9 @@ REQUIRED_USE="
 # in 0.1.11), so CUDA and ROCm both pin apache-tvm-ffi 0.1.11. xgrammar
 # 0.2.2 is the newest release compatible with that FFI and with
 # transformers 5, so constrain it on those backends. verified 2026-08-16.
+# Upstream pins apache-tvm-ffi-0.1.10 for CUDA, but the packaged
+# xgrammar-0.2.2 needs >=0.1.11 for its extra library search path.
+# Keep the newer pin so the complete CUDA dependency graph is solvable.
 RDEPEND="
 	~sci-ml/pytorch-2.11.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed,gloo]
@@ -978,6 +981,8 @@ RDEPEND="
 	)
 	cuda? (
 		>=sci-ml/caffe2-2.11.0-r90[cuda,-rocm]
+		~dev-python/pynvvideocodec-bin-2.0.4[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/tokenspeed-mla-bin-0.1.8[${PYTHON_SINGLE_USEDEP}]
 		~sci-ml/torchaudio-2.11.0
 		~sci-ml/torchvision-0.26.0[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/xgrammar-0.2.2[cuda,${PYTHON_SINGLE_USEDEP}]
@@ -988,10 +993,12 @@ RDEPEND="
 		<dev-python/quack-kernels-0.6.2[${PYTHON_SINGLE_USEDEP}]
 		humming? ( ~dev-python/humming-kernels-0.1.10[${PYTHON_SINGLE_USEDEP}] )
 		$(python_gen_cond_dep '
+			~dev-python/nvtx-0.2.15[${PYTHON_USEDEP}]
 			~dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 			>=dev-python/fastsafetensors-0.3.2[${PYTHON_SINGLE_USEDEP}]
+			>=dev-python/nvidia-cudnn-frontend-1.19.1[${PYTHON_USEDEP}]
 			~dev-python/nvidia-cutlass-dsl-4.6.0[${PYTHON_USEDEP}]
 			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
 		')
