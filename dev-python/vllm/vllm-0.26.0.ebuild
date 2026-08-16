@@ -886,9 +886,11 @@ REQUIRED_USE="
 # (opt-125m generated, inductor path + Triton _fwd_kernel).
 # Upstream pins lark==1.2.2 and numba==0.65.0, neither of which is in the
 # active repositories.  Stay within their compatible major/minor series.
-# common.txt allows xgrammar 0.2.1..<1, but CUDA and ROCm both pin
-# apache-tvm-ffi 0.1.10. xgrammar 0.2.2 is the newest release compatible
-# with that FFI and with transformers 5, so constrain it on those backends.
+# common.txt allows xgrammar 0.2.1..<1, but xgrammar 0.2.2 floors
+# >=apache-tvm-ffi-0.1.11 (the load_lib_module extra_lib_paths arg lands
+# in 0.1.11), so CUDA and ROCm both pin apache-tvm-ffi 0.1.11. xgrammar
+# 0.2.2 is the newest release compatible with that FFI and with
+# transformers 5, so constrain it on those backends. verified 2026-08-16.
 RDEPEND="
 	~sci-ml/pytorch-2.11.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed,gloo]
@@ -986,7 +988,7 @@ RDEPEND="
 		<dev-python/quack-kernels-0.6.2[${PYTHON_SINGLE_USEDEP}]
 		humming? ( ~dev-python/humming-kernels-0.1.10[${PYTHON_SINGLE_USEDEP}] )
 		$(python_gen_cond_dep '
-			~dev-python/apache-tvm-ffi-0.1.10[${PYTHON_USEDEP}]
+			~dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 			>=dev-python/fastsafetensors-0.3.2[${PYTHON_SINGLE_USEDEP}]
@@ -1004,7 +1006,7 @@ RDEPEND="
 		~dev-python/tensorizer-2.10.1[${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tilelang-0.1.10[-cuda,rocm,${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
-			~dev-python/apache-tvm-ffi-0.1.10[${PYTHON_USEDEP}]
+			~dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 			~dev-python/conch-triton-kernels-1.2.1[${PYTHON_USEDEP}]
