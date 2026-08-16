@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-fontsextra.r78246
+	collection-fontsextra.r79823
 	aboensis.r77682
 	academicons.r79395
 	accanthis.r79618
@@ -26,6 +26,7 @@ TEXLIVE_MODULE_CONTENTS="
 	arev.r79618
 	arimo.r77682
 	arsenal.r77682
+	arsenal-math.r77682
 	arvo.r78931
 	asana-math.r76895
 	asapsym.r40201
@@ -37,6 +38,7 @@ TEXLIVE_MODULE_CONTENTS="
 	auncial-new.r79618
 	aurical.r77682
 	b1encoding.r21271
+	bahaistar.r76351
 	barcodes.r15878
 	baskervaldadf.r79618
 	baskervaldx.r78931
@@ -84,6 +86,7 @@ TEXLIVE_MODULE_CONTENTS="
 	cmathbb.r56414
 	cmbright.r79618
 	cmexb.r54074
+	cmgraded.r79923
 	cmll.r77682
 	cmpica.r15878
 	cmsrb.r76790
@@ -158,8 +161,12 @@ TEXLIVE_MODULE_CONTENTS="
 	fonetika.r21326
 	fontawesome.r78348
 	fontawesome5.r77682
+	fontawesome6.r79929
+	fontawesome7.r79928
+	fontawesomescaled.r75980
 	fontmfizz.r43546
 	fonts-churchslavonic.r67473
+	fontscripts.r79461
 	forum.r77682
 	fourier.r77682
 	fouriernc.r77682
@@ -190,8 +197,8 @@ TEXLIVE_MODULE_CONTENTS="
 	hacm.r27671
 	hamnosys.r61941
 	hands.r13293
-	hep-font.r76220
-	hep-math-font.r76220
+	hep-font.r79992
+	hep-math-font.r79976
 	heros-otf.r77682
 	heuristica.r79618
 	hfbright.r29349
@@ -210,11 +217,12 @@ TEXLIVE_MODULE_CONTENTS="
 	jablantile.r16364
 	jamtimes.r20408
 	josefin.r78793
+	juliamono.r79753
 	junicode.r77682
 	junicodevf.r77682
 	kixfont.r18488
 	kpfonts.r77682
-	kpfonts-otf.r78294
+	kpfonts-otf.r79915
 	kurier.r77682
 	lato.r79618
 	lete-sans-math.r78489
@@ -236,9 +244,11 @@ TEXLIVE_MODULE_CONTENTS="
 	linguisticspro.r77682
 	lobster2.r77682
 	logix.r63688
+	luciole.r79625
 	luwiantype.r73719
 	lxfonts.r77682
 	ly1.r79618
+	lydtype.r76924
 	magra.r78931
 	marcellus.r77682
 	mathabx.r77682
@@ -254,6 +264,7 @@ TEXLIVE_MODULE_CONTENTS="
 	missaali.r61719
 	mlmodern.r77682
 	mnsymbol.r78931
+	monaspace-otf.r77682
 	montserrat.r77682
 	mpfonts.r54512
 	mweights.r77682
@@ -285,6 +296,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pacioli.r79618
 	pagella-otf.r77682
 	paratype.r79618
+	pennstander-otf.r79461
 	phaistos.r79618
 	phonetic.r79618
 	pigpen.r77682
@@ -318,10 +330,13 @@ TEXLIVE_MODULE_CONTENTS="
 	schulschriften.r59388
 	semaphor.r18651
 	shobhika.r79121
-	simpleicons.r79771
+	simpleicons.r79907
 	skull.r51907
 	sourcecodepro.r79618
+	sourcesans.r79618
+	sourceserif.r79618
 	spectral.r77682
+	splentinex.r77682
 	srbtiks.r63308
 	starfont.r19982
 	staves.r79618
@@ -365,22 +380,7 @@ TEXLIVE_MODULE_CONTENTS="
 	yinit-otf.r40207
 	ysabeau.r77682
 	zlmtt.r77682
-	arsenal-math.r77682
-	bahaistar.r76351
-	fontawesome6.r77682
-	fontawesome7.r76735
-	fontawesomescaled.r75980
-	juliamono.r79753
-	luciole.r79625
-	lydtype.r76924
-	monaspace-otf.r77682
-	pennstander-otf.r79461
-	sourcesans.r79618
-	sourceserif.r79618
-	splentinex.r77682
 "
-# Removed in target tlpdb: sourcesanspro, sourceserifpro
-# Removed in target tlpdb: gentium-tug
 TEXLIVE_MODULE_DOC_CONTENTS="
 	aboensis.doc.r77682
 	academicons.doc.r79395
@@ -403,6 +403,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	arev.doc.r79618
 	arimo.doc.r77682
 	arsenal.doc.r77682
+	arsenal-math.doc.r77682
 	arvo.doc.r78931
 	asana-math.doc.r76895
 	asapsym.doc.r40201
@@ -414,6 +415,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	auncial-new.doc.r79618
 	aurical.doc.r77682
 	b1encoding.doc.r21271
+	bahaistar.doc.r76351
 	barcodes.doc.r15878
 	baskervaldadf.doc.r79618
 	baskervaldx.doc.r78931
@@ -460,6 +462,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	cmathbb.doc.r56414
 	cmbright.doc.r79618
 	cmexb.doc.r54074
+	cmgraded.doc.r79923
 	cmll.doc.r77682
 	cmpica.doc.r15878
 	cmsrb.doc.r76790
@@ -532,6 +535,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fonetika.doc.r21326
 	fontawesome.doc.r78348
 	fontawesome5.doc.r77682
+	fontawesome6.doc.r79929
+	fontawesome7.doc.r79928
+	fontawesomescaled.doc.r75980
 	fontmfizz.doc.r43546
 	fonts-churchslavonic.doc.r67473
 	fontscripts.doc.r79461
@@ -564,8 +570,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	gudea.doc.r78931
 	hacm.doc.r27671
 	hamnosys.doc.r61941
-	hep-font.doc.r76220
-	hep-math-font.doc.r76220
+	hep-font.doc.r79992
+	hep-math-font.doc.r79976
 	heros-otf.doc.r77682
 	heuristica.doc.r79618
 	hfbright.doc.r29349
@@ -584,11 +590,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	jablantile.doc.r16364
 	jamtimes.doc.r20408
 	josefin.doc.r78793
+	juliamono.doc.r79753
 	junicode.doc.r77682
 	junicodevf.doc.r77682
 	kixfont.doc.r18488
 	kpfonts.doc.r77682
-	kpfonts-otf.doc.r78294
+	kpfonts-otf.doc.r79915
 	kurier.doc.r77682
 	lato.doc.r79618
 	lete-sans-math.doc.r78489
@@ -610,9 +617,11 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	linguisticspro.doc.r77682
 	lobster2.doc.r77682
 	logix.doc.r63688
+	luciole.doc.r79625
 	luwiantype.doc.r73719
 	lxfonts.doc.r77682
 	ly1.doc.r79618
+	lydtype.doc.r76924
 	magra.doc.r78931
 	marcellus.doc.r77682
 	mathabx.doc.r77682
@@ -628,6 +637,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	missaali.doc.r61719
 	mlmodern.doc.r77682
 	mnsymbol.doc.r78931
+	monaspace-otf.doc.r77682
 	montserrat.doc.r77682
 	mpfonts.doc.r54512
 	mweights.doc.r77682
@@ -659,6 +669,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pacioli.doc.r79618
 	pagella-otf.doc.r77682
 	paratype.doc.r79618
+	pennstander-otf.doc.r79461
 	phaistos.doc.r79618
 	phonetic.doc.r79618
 	pigpen.doc.r77682
@@ -691,9 +702,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	schulschriften.doc.r59388
 	semaphor.doc.r18651
 	shobhika.doc.r79121
-	simpleicons.doc.r79771
+	simpleicons.doc.r79907
 	sourcecodepro.doc.r79618
+	sourcesans.doc.r79618
+	sourceserif.doc.r79618
 	spectral.doc.r77682
+	splentinex.doc.r77682
 	srbtiks.doc.r63308
 	starfont.doc.r19982
 	staves.doc.r79618
@@ -737,22 +751,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	yinit-otf.doc.r40207
 	ysabeau.doc.r77682
 	zlmtt.doc.r77682
-	arsenal-math.doc.r77682
-	bahaistar.doc.r76351
-	fontawesome6.doc.r77682
-	fontawesome7.doc.r76735
-	fontawesomescaled.doc.r75980
-	juliamono.doc.r79753
-	luciole.doc.r79625
-	lydtype.doc.r76924
-	monaspace-otf.doc.r77682
-	pennstander-otf.doc.r79461
-	sourcesans.doc.r79618
-	sourceserif.doc.r79618
-	splentinex.doc.r77682
 "
-# Removed in target tlpdb: sourcesanspro.doc, sourceserifpro.doc
-# Removed in target tlpdb: gentium-tug.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	adforn.source.r78315
 	adfsymbols.source.r78315
@@ -786,6 +785,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	dozenal.source.r75722
 	drm.source.r38157
 	dsserif.source.r77682
+	ebgaramond-maths.source.r77682
 	eco.source.r29349
 	eiad-ltx.source.r15878
 	electrumadf.source.r79618
@@ -802,8 +802,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	gnu-freefont.source.r68624
 	gothic.source.r49869
 	hamnosys.source.r61941
-	hep-font.source.r76220
-	hep-math-font.source.r76220
+	hep-font.source.r79992
+	hep-math-font.source.r79976
 	hfoldsty.source.r29349
 	inconsolata-nerd-font.source.r77682
 	libris.source.r79618
