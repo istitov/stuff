@@ -180,33 +180,6 @@ RDEPEND="
 DEPEND="
 	${COMMON_DEPEND}
 "
-BDEPEND="
-	doc? ( virtual/pkgconfig )
-"
-
 TEXLIVE_MODULE_BINSCRIPTS="
 	texmf-dist/scripts/diadia/diadia.lua
 "
-
-src_prepare() {
-	default
-
-	if use doc; then
-		pushd texmf-dist/doc/luatex/opbible &> /dev/null || die
-
-		# https://github.com/olsak/OpBible/pull/1
-		eapply "${FILESDIR}"/${PN}-2023-opbible-improve-Makefile-respect-user-flags.patch
-		# Remove the binary, so that it is rebuild.
-		rm txs-gen/mod2tex || die
-
-		popd &> /dev/null || die
-	fi
-}
-
-src_compile() {
-	if use doc; then
-		emake -C texmf-dist/doc/luatex/opbible/txs-gen
-	fi
-
-	texlive-module_src_compile
-}
