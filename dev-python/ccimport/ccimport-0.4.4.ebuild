@@ -24,7 +24,9 @@ KEYWORDS="~amd64 ~arm64"
 # lone module-level ninja_syntax import is made optional by the patch below.
 # verified 2026-06-17
 RDEPEND="
+	dev-build/ninja
 	dev-python/pybind11[${PYTHON_USEDEP}]
+	dev-python/requests[${PYTHON_USEDEP}]
 "
 
 PATCHES=(
