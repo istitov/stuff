@@ -18,7 +18,7 @@ HOMEPAGE="
 	https://onnxruntime.ai
 	https://github.com/microsoft/onnxruntime
 "
-	SRC_URI="
+SRC_URI="
 	https://github.com/microsoft/onnxruntime/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_COMMIT}/eigen-${EIGEN_COMMIT}.tar.bz2 ->
 		eigen-3.4.0_p20250216.tar.bz2

@@ -64,6 +64,7 @@ RDEPEND="
 		>=dev-python/numpy-1.21.6[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
 		>=dev-python/protobuf-4.25.8[${PYTHON_USEDEP}]
+		dev-python/sympy[${PYTHON_USEDEP}]
 	)
 "
 DEPEND="
@@ -99,11 +100,13 @@ PATCHES=(
 
 CMAKE_USE_DIR="${S}/cmake"
 
+# Throttle nvcc during the compile phase only: flash-attention nvcc jobs
+# each consume more than 3 GiB, so cap concurrency to avoid OOM while
+# preserving any lower user limit. Not applied to the install phase, which
+# only copies files and spawns no compiler.
 onnxruntime_cmake_phase() {
 	local jobs=$(makeopts_jobs)
 	if use cuda && (( jobs > 4 )); then
-		# Flash-attention nvcc jobs can each consume more than 3 GiB.
-		# Preserve lower user limits while avoiding concurrent compiler OOMs.
 		local -x MAKEOPTS="${MAKEOPTS} -j4"
 	fi
 	"$@"
@@ -223,7 +226,7 @@ python_install() {
 }
 
 src_install() {
-	onnxruntime_cmake_phase cmake_src_install
+	cmake_src_install
 
 	if use python ; then
 		python_foreach_impl python_install
