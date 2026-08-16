@@ -22,7 +22,11 @@ IUSE="blas cuda ffmpeg hip opencl sdl2 vulkan"
 CDEPEND="blas? ( sci-libs/openblas )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	ffmpeg? ( media-video/ffmpeg:= )
-	hip? ( sci-libs/hipBLAS:= )
+	hip? (
+		dev-util/hip:=
+		sci-libs/hipBLAS:=
+		sci-libs/rocBLAS:=
+	)
 	opencl? ( sci-libs/clblast:= )
 	sdl2? ( media-libs/libsdl2:= )"
 DEPEND="${CDEPEND}
