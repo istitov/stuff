@@ -25,6 +25,7 @@ KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	<dev-python/fastapi-0.137.0[${PYTHON_USEDEP}]
+	dev-python/httpx[${PYTHON_USEDEP}]
 	dev-python/jmespath[${PYTHON_USEDEP}]
 	dev-python/pydantic[${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
@@ -36,7 +37,7 @@ EPYTEST_PLUGINS=( pytest-asyncio )
 distutils_enable_tests pytest
 
 python_test() {
-	# Integration tests need deprecated httpx, create venvs and install packages,
-	# or launch real supervisor trees.
+	# Integration tests create venvs and install packages, or launch real
+	# supervisor trees.
 	epytest --ignore=tests/integration
 }

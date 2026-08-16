@@ -37,7 +37,7 @@ EPYTEST_PLUGINS=( pytest-asyncio )
 distutils_enable_tests pytest
 
 python_test() {
-	# Integration tests need deprecated httpx, create venvs and install packages,
-	# or launch real supervisor trees.
+	# Integration tests create venvs and install packages, or launch real
+	# supervisor trees.
 	epytest --ignore=tests/integration
 }
