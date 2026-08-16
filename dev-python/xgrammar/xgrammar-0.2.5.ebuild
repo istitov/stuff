@@ -42,6 +42,14 @@ IUSE="cuda"
 
 # transformers is capped <5 upstream: v5 breaks tokenizer loading for several
 # models (TokenizerInfo.from_huggingface), so the pyproject pins >=4.38.0,<5.
+#
+# gcc:15 is a runtime dep because the CUDA token-bitmask kernel is
+# JIT-compiled at import via torch.utils.cpp_extension, and nvcc rejects a
+# host gcc newer than the toolkit supports (CUDA 13 tops out at gcc 15).
+# The slot here MUST track the /usr/bin/gcc-15 and /usr/bin/g++-15 fallback
+# in ${PN}-0.2.2-cuda-host-compiler.patch: when a CUDA bump raises this
+# slot, update that patch's fallback in the same commit. cuda_gccdir cannot
+# resolve it -- it runs on the user's machine at JIT time, not at build.
 RDEPEND="
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
