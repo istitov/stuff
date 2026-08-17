@@ -6,6 +6,6 @@
   </maintainer>
   <upstream>
     <remote-id type="github">dask/dask-labextension</remote-id>
-    <remote-id type="pypi">dask_labextension</remote-id>
+    <remote-id type="pypi">dask-labextension</remote-id>
   </upstream>
 </pkgmetadata>
