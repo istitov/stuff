@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-langenglish.r78607
+	collection-langenglish.r79965
 	hyphen-english.r78069
 	latexfileinfo-pkgs.r79618
 	macros2e.r77050
@@ -71,7 +71,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tex-overview.doc.r41403
 	tex-vpat.doc.r72067
 	texbytopic.doc.r68950
-	texonly.doc.r76924
 	titlepages.doc.r79618
 	tlc2.doc.r79618
 	tlc3-examples.doc.r65496
@@ -81,7 +80,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	visualfaq.doc.r79618
 	webguide.doc.r77050
 	wrapstuff-doc-en.doc.r71835
-	xetexref.doc.r73885
 	yet-another-guide-latex2e.doc.r77842
 "
 # Removed in target tlpdb: tex-refs.doc
