@@ -40,7 +40,7 @@ TL_CORE_EXTRA_CONTENTS="
 	makeindex.r75712
 	pmx.r79618
 	texdoctk.r62186
-	texlive-scripts.r79996
+	texlive-scripts.r80004
 	texlive-scripts-extra.r78162
 	texlive.infra.r79982
 	tpic2pdftex.r75712
@@ -67,7 +67,7 @@ TL_CORE_EXTRA_DOC_CONTENTS="
 	makeindex.doc.r75712
 	pmx.doc.r79618
 	texdoctk.doc.r62186
-	texlive-scripts.doc.r79996
+	texlive-scripts.doc.r80004
 	texlive-scripts-extra.doc.r78162
 	texlive.infra.doc.r79982
 	tpic2pdftex.doc.r75712
