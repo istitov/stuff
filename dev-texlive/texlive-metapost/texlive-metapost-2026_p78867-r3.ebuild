@@ -35,7 +35,9 @@ TEXLIVE_MODULE_CONTENTS="
 	mfpic.r28444
 	mfpic4ode.r79618
 	minim-hatching.r70885
+	mp-gears.r78918
 	mp-geom2d.r77019
+	mp-neuralnetwork.r73627
 	mp3d.r29349
 	mparrows.r39729
 	mpattern.r15878
@@ -45,7 +47,7 @@ TEXLIVE_MODULE_CONTENTS="
 	mpkiviat.r75712
 	mptrees.r70887
 	piechartmp.r19440
-	repere.r66998
+	repere.r79906
 	roex.r45818
 	roundrect.r39796
 	shapes.r42428
@@ -54,7 +56,6 @@ TEXLIVE_MODULE_CONTENTS="
 	suanpan.r15878
 	textpath.r15878
 	threeddice.r20675
-	mp-gears.r78918
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	automata.doc.r19717
@@ -88,7 +89,9 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	mfpic.doc.r28444
 	mfpic4ode.doc.r79618
 	minim-hatching.doc.r70885
+	mp-gears.doc.r78918
 	mp-geom2d.doc.r77019
+	mp-neuralnetwork.doc.r73627
 	mp3d.doc.r29349
 	mparrows.doc.r39729
 	mpattern.doc.r15878
@@ -98,7 +101,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	mpkiviat.doc.r75712
 	mptrees.doc.r70887
 	piechartmp.doc.r19440
-	repere.doc.r66998
+	repere.doc.r79906
 	roundrect.doc.r39796
 	shapes.doc.r42428
 	slideshow.doc.r15878
@@ -106,7 +109,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	suanpan.doc.r15878
 	textpath.doc.r15878
 	threeddice.doc.r20675
-	mp-gears.doc.r78918
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	emp.source.r23483
