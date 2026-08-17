@@ -6,7 +6,7 @@ EAPI=8
 inherit libtool
 
 DESCRIPTION="Library for Japanese pTeX providing a better way of handling character encodings"
-HOMEPAGE="http://tutimura.ath.cx/ptexlive/?ptexenc"
+HOMEPAGE="https://tutimura.ath.cx/ptexlive/?ptexenc"
 # 2026 hardcoded in the historic URL because PV's "_p<YYYYMMDD>" date
 # format makes the four-digit year non-trivial to extract via Portage
 # parameter expansion at SRC_URI time. Bump on TL2027 adoption.
