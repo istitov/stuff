@@ -20,6 +20,9 @@ IUSE="bzip2 doc fits jansson hdf5 nls openexr openmp perl python ruby sourceview
 # and codegen, not the runtime CPython bindings, so system pygtk:2
 # (which pulls pygobject:2 and pycairo-python2) is required for a
 # working 'import gwy'.
+# Keep GtkSourceView 2 for the optional Pygwy console: it embeds a
+# GtkSourceView widget in this GTK 2 application. GtkSourceView 3 uses
+# GTK 3 types and cannot be substituted without porting the application.
 RDEPEND="
 	>=dev-libs/glib-2.32
 	dev-libs/libzip
