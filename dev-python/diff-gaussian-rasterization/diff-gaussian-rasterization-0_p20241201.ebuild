@@ -41,11 +41,23 @@ src_prepare() {
 
 src_compile() {
 	# torch cpp_extension reads CC/CXX for nvcc's -ccbin; pin to the
-	# cuda-eclass gcc (<=15 for CUDA 13.x). Arch from make.conf (caffe2 convention).
+	# cuda-eclass gcc (<=15 for CUDA 13.x).
 	local gccdir
 	gccdir=$(cuda_gccdir) || die
 	export CC="${gccdir}/gcc" CXX="${gccdir}/g++"
-	export TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST:-8.0 8.6 8.9 9.0}"
+	# Build only for the GPU(s) actually present. An explicit
+	# TORCH_CUDA_ARCH_LIST (e.g. from make.conf) always wins; otherwise
+	# probe the native compute capability with nvcc's device query
+	# (e.g. 86 -> 8.6) so each host compiles just what it can run. If no
+	# GPU is visible at build time (headless / binhost), leave it unset
+	# and let torch's cpp_extension fall back to its full arch list.
+	if [[ -z ${TORCH_CUDA_ARCH_LIST} ]]; then
+		cuda_add_sandbox -w
+		local native_cc
+		native_cc=$(__nvcc_device_query 2>/dev/null)
+		[[ ${native_cc} =~ ^[0-9]{2,}$ ]] &&
+			export TORCH_CUDA_ARCH_LIST="${native_cc%?}.${native_cc: -1}"
+	fi
 	export FORCE_CUDA=1 MAX_JOBS="${MAX_JOBS:-4}"
 
 	distutils-r1_src_compile
