@@ -1,0 +1,84 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_REQ_USE="sqlite"
+
+inherit desktop python-single-r1
+
+DESCRIPTION="SOFA is a statistics, analysis, and reporting program"
+HOMEPAGE="https://www.sofastatistics.com/ https://sourceforge.net/projects/sofastatistics/"
+SRC_URI="https://sourceforge.net/projects/sofastatistics/files/${PN}/${PV}/sofastats-${PV}.tar.gz/download -> ${P}.tar.gz"
+S="${WORKDIR}/sofastats-${PV}"
+
+LICENSE="AGPL-3"
+SLOT="0"
+KEYWORDS="~amd64 ~x86"
+
+LANGS="br ca de en es fr gl hr it mn pt ru sl tr"
+for lang in ${LANGS}; do
+	IUSE+=" l10n_${lang}"
+done
+
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+
+# The PostgreSQL backend only uses connect(), cursor(), execute(), fetchall()
+# and close(), plus the DB-API %s placeholder. Psycopg 3 provides this API;
+# src_prepare updates the module name used by the exact 1.5.7 source.
+RDEPEND="
+	${PYTHON_DEPS}
+	$(python_gen_cond_dep '
+		dev-python/matplotlib[wxwidgets,${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-python/openpyxl[${PYTHON_USEDEP}]
+		dev-python/pillow[${PYTHON_USEDEP}]
+		dev-python/pymysql[${PYTHON_USEDEP}]
+		dev-python/pypdf[${PYTHON_USEDEP}]
+		dev-python/psycopg:0[${PYTHON_USEDEP}]
+		dev-python/pyxdg[${PYTHON_USEDEP}]
+		dev-python/wxpython[${PYTHON_USEDEP}]
+	')
+	app-text/ghostscript-gpl
+"
+DEPEND="${RDEPEND}"
+
+pkg_setup() {
+	python-single-r1_pkg_setup
+}
+
+src_prepare() {
+	default
+	# 2026-04-29: dev-python/PyPDF2 is gone from ::gentoo; the modern
+	# fork (dev-python/pypdf) is API-compatible for PdfReader, which is
+	# all this module uses. Drop the PyPDF2 alias.
+	sed -i -e 's/import PyPDF2 as pypdf/import pypdf/' \
+		sofa_main/exporting/export_output_pdfs.py || die
+	# Psycopg 3 retains the DB-API calls used by this backend but changed
+	# its import name from psycopg2 to psycopg.
+	sed -i -e 's/import psycopg2 as pg/import psycopg as pg/' \
+		sofa_main/dbe_plugins/dbe_postgresql.py || die
+}
+
+src_install() {
+	local lang
+	for lang in ${LANGS}; do
+		use "l10n_${lang}" || rm -rf "sofa_main/locale/${lang}"
+	done
+	insinto /usr/share/sofastats
+	doins -r sofa_main/*
+	exeinto /usr/share/sofastats
+	doexe sofa_main/*.py*
+	doexe sofa_main/*/*.py*
+	dosym ../share/sofastats/start.py /usr/bin/sofastats
+	make_desktop_entry sofastats ${PN} /usr/share/sofastats/images/sofa_32x32.ico "Science;"
+}
+
+pkg_postinst() {
+	elog
+	elog "SOFA's PDF and image export features call out to wkhtmltopdf"
+	elog "and pdftk at runtime, but neither is in ::gentoo any more."
+	elog "All other functionality works without them."
+	elog
+}
