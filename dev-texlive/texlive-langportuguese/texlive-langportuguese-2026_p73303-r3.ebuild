@@ -17,7 +17,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	beamer-tut-pt.doc.r15878
 	cursolatex.doc.r24139
 	feupphdteses.doc.r30962
-	latex-via-exemplos.doc.r78322
+	latex-via-exemplos.doc.r80001
 	latexcheat-ptbr.doc.r15878
 	lshort-portuguese.doc.r79461
 	numberpt.doc.r76924
