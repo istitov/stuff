@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-mathscience.r79957
+	collection-mathscience.r80002
 	12many.r79618
 	accents.r79618
 	aiplans.r74462
@@ -171,6 +171,7 @@ TEXLIVE_MODULE_CONTENTS="
 	mathsemantics.r63241
 	matlab-prettifier.r34323
 	matrix-skeleton.r65013
+	matrixdiagrams.r80000
 	mattens.r77682
 	mecaso.r60346
 	medmath.r74208
@@ -210,6 +211,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pdfmathaccents.r79812
 	perfectcut.r79618
 	pfdicons.r77771
+	phtitration.r80002
 	physconst.r58727
 	physics.r74247
 	physics2.r69369
@@ -484,6 +486,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	mathsemantics.doc.r63241
 	matlab-prettifier.doc.r34323
 	matrix-skeleton.doc.r65013
+	matrixdiagrams.doc.r80000
 	mattens.doc.r77682
 	mecaso.doc.r60346
 	medmath.doc.r74208
@@ -523,6 +526,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pdfmathaccents.doc.r79812
 	perfectcut.doc.r79618
 	pfdicons.doc.r77771
+	phtitration.doc.r80002
 	physconst.doc.r58727
 	physics.doc.r74247
 	physics2.doc.r69369
@@ -714,6 +718,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	mathfixs.source.r78635
 	mathpartir.source.r77682
 	matlab-prettifier.source.r34323
+	matrixdiagrams.source.r80000
 	mattens.source.r77682
 	messagepassing.source.r69123
 	mgltex.source.r63255
