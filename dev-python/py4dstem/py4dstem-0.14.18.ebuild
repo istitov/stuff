@@ -11,7 +11,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="Processing and analysis of 4D-STEM data"
 HOMEPAGE="
 	https://github.com/py4dstem/py4DSTEM/
-	https://pypi.org/project/py4dstem/
+	https://pypi.org/project/py4DSTEM/
 "
 
 LICENSE="GPL-3"
