@@ -75,7 +75,7 @@ TEXLIVE_MODULE_CONTENTS="
 	tex4ebook.r78132
 	texaccents.r64447
 	texblend.r68961
-	texchanges.r79995
+	texchanges.r79999
 	texcount.r79618
 	texdef.r74067
 	texdiff.r79618
@@ -171,7 +171,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tex4ebook.doc.r78132
 	texaccents.doc.r64447
 	texblend.doc.r68961
-	texchanges.doc.r79995
+	texchanges.doc.r79999
 	texcount.doc.r79618
 	texdef.doc.r74067
 	texdiff.doc.r79618
