@@ -6,7 +6,7 @@ EAPI=8
 inherit perl-module
 
 DESCRIPTION="A BibTeX replacement for users of biblatex"
-HOMEPAGE="http://biblatex-biber.sourceforge.net/ https://github.com/plk/biber/"
+HOMEPAGE="https://biblatex-biber.sourceforge.net/ https://github.com/plk/biber/"
 SRC_URI="https://github.com/plk/biber/archive/v${PV}.tar.gz  -> ${P}.tar.gz"
 
 LICENSE="Artistic-2"
