@@ -25,8 +25,8 @@ RDEPEND="
 	app-arch/gzip
 	sys-apps/groff
 	virtual/man
-	x11-libs/gtk+:2
-	x11-libs/gtksourceview:2.0
+	x11-libs/gtk+:3
+	x11-libs/gtksourceview:3.0
 	x11-misc/xdg-utils
 	spell? ( app-text/aspell )
 "
@@ -38,7 +38,9 @@ src_prepare() {
 }
 
 src_configure() {
-	econf $(use_enable spell aspell)
+	econf \
+		--enable-gtk3 \
+		$(use_enable spell aspell)
 }
 
 src_install() {
