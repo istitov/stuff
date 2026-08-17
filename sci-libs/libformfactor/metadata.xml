@@ -11,6 +11,6 @@
     and other MLZ scientific tools.
   </longdescription>
   <upstream>
-    <remote-id type="gitlab">mlz/libformfactor</remote-id>
+    <remote-id type="gitlab">mlz/lib/formfactor</remote-id>
   </upstream>
 </pkgmetadata>

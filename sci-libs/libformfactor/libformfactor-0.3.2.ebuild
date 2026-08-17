@@ -7,11 +7,11 @@ inherit cmake
 
 MY_P="${PN}-v${PV}"
 DESCRIPTION="Computes Fourier shape transforms (form factors) for BornAgain"
-HOMEPAGE="https://jugit.fz-juelich.de/mlz/libformfactor"
-SRC_URI="https://jugit.fz-juelich.de/mlz/libformfactor/-/archive/v${PV}/${MY_P}.tar.gz"
+HOMEPAGE="https://jugit.fz-juelich.de/mlz/lib/formfactor"
+SRC_URI="https://jugit.fz-juelich.de/mlz/lib/formfactor/-/archive/v${PV}/${MY_P}.tar.gz"
 # jugit's tag archive unpacks to formfactor-v<ver>-<full-sha> (mlz/libformfactor
-# was renamed to mlz/formfactor upstream; the old path still serves via
-# redirect), so pin the tag commit for S=. verified 2026-08-10
+# moved to mlz/lib/formfactor upstream), so pin the tag commit for S=.
+# verified 2026-08-10
 COMMIT="7e235d29b1ab60f2e4788e7c819d7c0277aa2954"
 S="${WORKDIR}/formfactor-v${PV}-${COMMIT}"
 
