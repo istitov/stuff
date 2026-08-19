@@ -874,7 +874,7 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
     # fetch override. The `/-/archive/` path is GitLab-specific, so this reaches
     # self-hosted instances (jugit.fz-juelich.de, …) that GITLAB_RE's
     # hostname-based match misses — e.g. sci-libs/libformfactor fetches
-    # jugit.fz-juelich.de/mlz/libformfactor/-/archive/v${PV}/...
+    # jugit.fz-juelich.de/mlz/lib/formfactor/-/archive/v${PV}/...
     if src_uri:
         m = GITLAB_ARCHIVE_RE.search(src_uri)
         if m:

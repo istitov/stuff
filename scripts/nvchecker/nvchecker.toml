@@ -2344,7 +2344,7 @@ prefix = ""
 
 ["sci-libs/libformfactor"]
 source = "gitlab"
-gitlab = "mlz/libformfactor"
+gitlab = "mlz/lib/formfactor"
 host = "jugit.fz-juelich.de"
 use_max_tag = true
 prefix = "v"
