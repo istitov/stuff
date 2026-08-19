@@ -367,18 +367,28 @@ src_install() {
 		-e "s|^LD_PRELOAD=\${LOCAL_PRELOAD}|QT_API=\${QT_API:-${qt_api}} LD_PRELOAD=\${LOCAL_PRELOAD}|" \
 		"${ED}${MY_PREFIX}/bin/launch_mantidworkbench.standalone" || die
 
-	# Wire /opt/mantid into PATH, LDPATH, and PYTHONPATH via env.d so
-	# `import mantid` etc. work in any shell after `env-update && source
-	# /etc/profile` (or a new shell). PYTHONPATH covers:
-	#   * site-packages — the Python wrappers (mantid, mantidqt, workbench)
-	#   * bin           — Mantid.properties (mantid resolves bin-relative
-	#                     paths from sys.path entries via _bin_dirs())
-	#   * plugins       — algorithm and Qt .so plugins enumerated at startup
+	# Wire /opt/mantid's binaries and libraries into PATH/LDPATH via env.d.
+	# PYTHONPATH is deliberately NOT exported globally: it leaks /opt/mantid's
+	# site-packages into every package build's Python and broke
+	# dev-qt/qtwebengine's hermetic chromium/perfetto codegen
+	# (ModuleNotFoundError: No module named 'python.generators'). The workbench
+	# launcher sets its own PYTHONPATH; the mantidpython wrapper below gives
+	# `import mantid` for scripting without polluting the global environment.
 	newenvd - 99mantid <<-EOF
 		PATH=${MY_PREFIX}/bin
 		ROOTPATH=${MY_PREFIX}/bin
 		LDPATH=${MY_PREFIX}/lib
-		PYTHONPATH=${sp_dir}:${MY_PREFIX}/bin:${MY_PREFIX}/plugins
+	EOF
+
+	# mantidpython: run the system Python with Mantid's packages importable,
+	# scoped to the invoked process only. PYTHONPATH covers site-packages (the
+	# mantid/mantidqt/workbench wrappers), bin (Mantid.properties, resolved
+	# bin-relative from sys.path via _bin_dirs()), and plugins (algorithm and
+	# Qt .so plugins enumerated at startup).
+	newbin - mantidpython <<-EOF
+		#!/bin/sh
+		export PYTHONPATH="${sp_dir}:${MY_PREFIX}/bin:${MY_PREFIX}/plugins\${PYTHONPATH:+:\${PYTHONPATH}}"
+		exec ${EPYTHON} "\$@"
 	EOF
 }
 
@@ -390,9 +400,14 @@ pkg_postinst() {
 	elog "distributed monolithically. A single /opt prefix matches that"
 	elog "shape and avoids a substantial path-rewriting patch set."
 	elog
-	elog "PATH, LDPATH, and PYTHONPATH are wired up via /etc/env.d/99mantid."
-	elog "Run 'env-update && source /etc/profile' or start a new shell"
-	elog "before invoking mantid."
+	elog "PATH and LDPATH are wired up via /etc/env.d/99mantid; run"
+	elog "'env-update && source /etc/profile' or start a new shell first."
+	elog "PYTHONPATH is deliberately NOT exported globally (it would leak"
+	elog "into other packages' builds). For 'import mantid' in your own"
+	elog "scripts, use the mantidpython wrapper -- system Python with"
+	elog "Mantid importable, scoped to that process:"
+	elog
+	elog "    mantidpython yourscript.py       # or: mantidpython  (REPL)"
 	elog
 	local qt_api=$(usex qt6 pyqt6 pyqt5)
 	elog "This build links Qt$(usex qt6 6 5) and its Python layer binds"
@@ -412,10 +427,6 @@ pkg_postinst() {
 	elog "        QT_API=${qt_api} \\"
 	elog "        PYTHONPATH=${MY_PREFIX}/lib/${EPYTHON}/site-packages:${MY_PREFIX}/bin:${MY_PREFIX}/plugins \\"
 	elog "        ${MY_PREFIX}/bin/workbench"
-	elog
-	elog "After 'env-update && source /etc/profile' that shortens to:"
-	elog
-	elog "    env QT_API=${qt_api} ${MY_PREFIX}/bin/workbench"
 	elog
 	elog "(LD_PRELOAD of libtbbmalloc_proxy is a perf optimisation; the"
 	elog "shipped launcher ${MY_PREFIX}/bin/launch_mantidworkbench.standalone"
