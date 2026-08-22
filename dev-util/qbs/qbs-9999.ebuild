@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 inherit cmake flag-o-matic git-r3 python-any-r1 toolchain-funcs
 
 DESCRIPTION="Modern build tool for software projects"
@@ -56,15 +56,6 @@ python_check_deps() {
 
 pkg_setup() {
 	use doc && python-any-r1_pkg_setup
-}
-
-src_prepare() {
-	cmake_src_prepare
-
-	# test fails to build with Qt 6.10.1 since [1] and, given skipping
-	# this test either way, may as well also not build it for now
-	# [1] https://github.com/qt/qtbase/commit/7196bb00ed7
-	sed -i '/add_subdirectory(language)/d' tests/auto/CMakeLists.txt || die
 }
 
 src_configure() {
