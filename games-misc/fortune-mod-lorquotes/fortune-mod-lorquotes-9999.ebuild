@@ -5,28 +5,23 @@ EAPI=8
 
 DESCRIPTION="Best phrases of Linux.Org.Ru members, packaged for fortune"
 HOMEPAGE="https://github.com/OlegKorchagin/lorquotes_archive"
-SRC_URI="https://raw.githubusercontent.com/OlegKorchagin/lorquotes_archive/refs/heads/main/lor"
-S="${WORKDIR}"
+EGIT_REPO_URI="https://github.com/OlegKorchagin/lorquotes_archive.git"
 
-LICENSE="WTFPL-2"
+inherit git-r3
+
+LICENSE="all-rights-reserved"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
 RDEPEND="games-misc/fortune-mod"
 BDEPEND="games-misc/fortune-mod"	# provides strfile
 
-src_unpack() {
-	# Upstream "archive" is the live \`lor\` text file on the main
-	# branch of the GitHub repo. It has no extension, so portage
-	# doesn't unpack - copy it into \${WORKDIR} under \${PN} instead.
-	cp "${DISTDIR}/lor" "${S}/${PN}" || die
-}
-
 src_compile() {
-	strfile "${PN}" || die
+	strfile lor || die
 }
 
 src_install() {
 	insinto /usr/share/fortune
-	doins "${PN}" "${PN}.dat"
+	newins lor "${PN}"
+	newins lor.dat "${PN}.dat"
 }
