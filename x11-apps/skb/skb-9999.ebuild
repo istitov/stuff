@@ -15,6 +15,8 @@ SLOT="0"
 RDEPEND="x11-libs/libX11"
 DEPEND="${RDEPEND}"
 
+PATCHES=( "${FILESDIR}/${PN}-9999-format-security.patch" )
+
 src_prepare() {
 	default
 	# Drop the strip invocations from Makefile so Portage's debug
