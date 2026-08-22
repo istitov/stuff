@@ -13,9 +13,9 @@ LICENSE="GPL-3 GPL-2"
 SLOT="0"
 
 RDEPEND="
-	dev-qt/qt5compat:6
-	dev-qt/qtbase:6[concurrent,gui,network,sql,widgets]
-	dev-qt/qtdeclarative:6
+	dev-qt/qt5compat:6[qml]
+	dev-qt/qtbase:6[concurrent,gui,network,opengl,sql,widgets]
+	dev-qt/qtdeclarative:6[opengl,sql]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
