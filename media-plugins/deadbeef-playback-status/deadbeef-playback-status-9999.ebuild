@@ -3,20 +3,22 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="Playback status widget for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/cboxdoerfer/ddb_playback_status"
 EGIT_REPO_URI="https://github.com/cboxdoerfer/ddb_playback_status.git"
 
-LICENSE="GPL-2"
+LICENSE="BSD GPL-2+"
 SLOT="0"
 KEYWORDS=""
 IUSE="+gtk3 gtk2"
 REQUIRED_USE="|| ( gtk2 gtk3 )"
 
 DEPEND="
+	dev-libs/glib:2
 	media-sound/deadbeef
+	x11-libs/cairo
 	gtk2? ( x11-libs/gtk+:2 )
 	gtk3? ( x11-libs/gtk+:3 )
 "
@@ -24,8 +26,14 @@ RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
 
 src_compile() {
-	use gtk2 && emake gtk2
-	use gtk3 && emake gtk3
+	local make_args=(
+		CC="$(tc-getCC)"
+		CFLAGS="${CFLAGS} -fPIC -std=c99 -D_GNU_SOURCE"
+		LDFLAGS="${LDFLAGS} -shared"
+	)
+
+	use gtk2 && emake "${make_args[@]}" gtk2
+	use gtk3 && emake "${make_args[@]}" gtk3
 }
 
 src_install() {
