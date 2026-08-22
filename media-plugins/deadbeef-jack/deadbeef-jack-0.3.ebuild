@@ -3,6 +3,8 @@
 
 EAPI=8
 
+inherit toolchain-funcs
+
 DESCRIPTION="JACK output plugin for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/tokiclover/deadbeef-plugins-jack"
 SRC_URI="https://github.com/tokiclover/deadbeef-plugins-jack/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
@@ -17,8 +19,16 @@ DEPEND="
 	virtual/jack
 "
 RDEPEND="${DEPEND}"
+BDEPEND="virtual/pkgconfig"
 
-PATCHES=( "${FILESDIR}"/${P}-modern-api.patch )
+PATCHES=(
+	"${FILESDIR}"/${P}-modern-api.patch
+	"${FILESDIR}"/${P}-safety.patch
+)
+
+src_compile() {
+	emake CC="$(tc-getCC)"
+}
 
 src_install() {
 	exeinto /usr/$(get_libdir)/deadbeef

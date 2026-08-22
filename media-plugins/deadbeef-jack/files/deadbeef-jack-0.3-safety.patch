@@ -1,0 +1,164 @@
+Bound channel storage, use correctly typed JACK callbacks, and release port lists.
+
+--- a/ddb_jack.c
++++ b/ddb_jack.c
+@@ -19,6 +19,8 @@
+ #include <signal.h>
+ #include <limits.h>
+ 
++#define DDB_JACK_MAX_CHANNELS 32
++
+ //#define trace(...) { fprintf(stderr, __VA_ARGS__); }
+ #define trace(fmt,...)
+ 
+@@ -33,7 +35,7 @@
+     char connect;
+     ddb_waveformat_t *fmt;
+     unsigned short state;
+-    jack_port_t   *ports[];
++    jack_port_t   *ports[DDB_JACK_MAX_CHANNELS];
+ } ddb_client_t;
+ 
+ static DB_output_t plugin;
+@@ -123,10 +125,11 @@
+     }
+ }
+ 
+-static int jack_rate_callback (void *arg)
++static int jack_rate_callback (jack_nframes_t nframes, void *arg)
+ {
+     trace (__func__);
+-    ddb_client_t *dbc = &ddb_client;
++    ddb_client_t *dbc = arg;
++    (void)nframes;
+ 
+     if (!dbc->connect)
+         return EPERM;
+@@ -135,13 +138,13 @@
+     return 0;
+ }
+ 
+-static int jack_shutdown_callback (void *arg)
++static void jack_shutdown_callback (void *arg)
+ {
+     trace (__func__);
+     ddb_client_t *dbc = arg;
+ 
+     if (!dbc->connect)
+-        return EPERM;
++        return;
+     dbc->connect = 0;
+ 
+     // if JACK crashes or is shut down, start a new server instance
+@@ -154,8 +157,6 @@
+         fprintf (stderr, "%s: JACK server shut down unexpectedly, stopping playback\n", DB_PLUG_NAME);
+         ddb_api->streamer_reset (1);
+     }
+-
+-    return 0;
+ }
+ 
+ static int ddb_jack_init (void)
+@@ -169,7 +170,8 @@
+     dbc->autoconnect  = (char)ddb_api->conf_get_int("ddb_jack.autoconnect", 1);
+ 
+     // create new client on JACK server
+-    jack_options_t options = JackNullOption|(JackNoStartServer && !dbc->autostart);
++    jack_options_t options = JackNullOption |
++        (dbc->autostart ? 0 : JackNoStartServer);
+     dbc->client = jack_client_open (dbc->name, options, &dbc->status);
+     if (dbc->status & JackInitFailure) {
+         fprintf (stderr, "%s: Could not connect to JACK server\n", DB_PLUG_NAME);
+@@ -193,21 +195,21 @@
+     }
+ 
+     // set sample rate callback 
+-    if (jack_set_sample_rate_callback(dbc->client, (JackSampleRateCallback)&jack_rate_callback, NULL)) {
++    if (jack_set_sample_rate_callback(dbc->client, jack_rate_callback, dbc)) {
+         fprintf (stderr, "%s: Could not set sample rate callback\n", DB_PLUG_NAME);
+         plugin.free();
+         return ESRCH;
+     }
+ 
+     // set shutdown callback
+-    jack_on_shutdown (dbc->client, (JackShutdownCallback)&jack_shutdown_callback, dbc);
++    jack_on_shutdown (dbc->client, jack_shutdown_callback, dbc);
+ 
+     // register ports
+     for (unsigned short i=0; i < dbc->fmt->channels; i++) {
+-        char port_name[16];
++        char port_name[32];
+ 
+         // i+1 used to adhere to JACK convention of counting ports from 1, not 0
+-        sprintf (port_name, "ddb_playback_%d", i+1);
++        snprintf (port_name, sizeof(port_name), "ddb_playback_%hu", (unsigned short)(i+1));
+         jack_options_t options = JackPortIsOutput|JackPortIsTerminal;
+         dbc->ports[i] = jack_port_register(dbc->client, (const char*)&port_name,
+                 JACK_DEFAULT_AUDIO_TYPE, options, 0);
+@@ -224,6 +226,9 @@
+         plugin.free();
+         return EACCES;
+     }
++    else {
++        dbc->active = 1;
++    }
+ 
+     // connect ports to hardware output
+     if (dbc->autoconnect) {
+@@ -237,14 +242,22 @@
+         else {
+             int ret;
+             for (unsigned short i=0; i < dbc->fmt->channels; i++) {
++                if (!playback_ports[i]) {
++                    fprintf (stderr, "%s: Not enough playback ports\n", DB_PLUG_NAME);
++                    jack_free (playback_ports);
++                    plugin.free();
++                    return ENXIO;
++                }
+                 ret = jack_connect(dbc->client, jack_port_name (dbc->ports[i]),    playback_ports[i]);    
+                 if (ret != 0 && ret != EEXIST) {
+                     fprintf (stderr, "%s: Could not create connection from %s to %s\n",
+                             DB_PLUG_NAME, jack_port_name (dbc->ports[i]), playback_ports[i]);
++                    jack_free (playback_ports);
+                     plugin.free();
+                     return EACCES;
+                 }
+             }
++            jack_free (playback_ports);
+         }
+     }
+ 
+@@ -255,11 +268,12 @@
+ {
+     trace (__func__);
+ 
++    if (fmt->channels < 1 || fmt->channels > DDB_JACK_MAX_CHANNELS)
++        return EINVAL;
++
+     /* Support only changing channels numbers */
+     if (plugin.fmt.channels == fmt->channels)
+         return 0;
+-    else
+-        plugin.fmt.channels = fmt->channels;
+ 
+     if (ddb_client.active) {
+         if (ddb_playback_stop())
+@@ -268,7 +282,9 @@
+             return ESRCH;
+         ddb_client.active = 0;
+     }
+-    if(!ddb_jack_init())
++
++    plugin.fmt.channels = fmt->channels;
++    if (ddb_jack_init())
+         return ENOEXEC;
+ 
+     return 0;
+@@ -344,6 +360,7 @@
+ {
+     trace (__func__);
+     ddb_client.connect = 0;
++    ddb_client.active = 0;
+ 
+     // stop playback if we didn't start jack
+     // this prevents problems with not disconnecting gracefully
