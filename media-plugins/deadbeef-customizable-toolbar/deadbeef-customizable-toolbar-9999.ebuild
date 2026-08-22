@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="Customizable toolbar widget for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/kravich/ddb_customizabletb"
@@ -23,7 +23,19 @@ DEPEND="
 RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
 
+src_compile() {
+	local make_args=(
+		CC="$(tc-getCC)"
+		CFLAGS="${CFLAGS} -std=c99 -fPIC"
+		LDFLAGS="${LDFLAGS}"
+	)
+
+	use gtk2 && emake "${make_args[@]}" gtk2
+	use gtk3 && emake "${make_args[@]}" gtk3
+}
+
 src_install() {
 	exeinto /usr/$(get_libdir)/deadbeef
-	doexe *.so
+	use gtk2 && doexe ddb_customizabletb_gtk2.so
+	use gtk3 && doexe ddb_customizabletb_gtk3.so
 }
