@@ -1,0 +1,17 @@
+From: Ivan S. Titov <iohann.s.titov@gmail.com>
+Subject: [PATCH] Avoid treating XKB group names as format strings
+
+XGetAtomName() returns data controlled by the active keyboard layout.
+Pass it as a string argument instead of using it as the format itself.
+
+--- a/skb.c
++++ b/skb.c
+@@ -47,7 +47,7 @@ get_gr_names(Display *dpy, XkbDescPtr kb, int ngroups, char **groups) {
+     for (i = 0; i < ngroups; i++) {
+         if (kb->names->groups[i]) {
+             if ((name = XGetAtomName(dpy, kb->names->groups[i])))
+-		snprintf(groups[i], OUTPUT_LENGTH+1, name);
++		snprintf(groups[i], OUTPUT_LENGTH+1, "%s", name);
+             else
+ 		eprint("skb: XGetAtomName() failed\n");
+         }

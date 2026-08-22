@@ -18,6 +18,8 @@ KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 RDEPEND="x11-libs/libX11"
 DEPEND="${RDEPEND}"
 
+PATCHES=( "${FILESDIR}/${PN}-0.4-format-security.patch" )
+
 src_prepare() {
 	default
 	# Drop the strip invocations from Makefile so Portage's debug
