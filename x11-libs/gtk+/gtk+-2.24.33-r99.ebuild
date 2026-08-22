@@ -5,7 +5,7 @@ EAPI=8
 
 GNOME2_EAUTORECONF="yes"
 
-inherit flag-o-matic gnome2 multilib multilib-minimal readme.gentoo-r1 virtualx
+inherit flag-o-matic gnome2 multilib multilib-minimal readme.gentoo-r1 toolchain-funcs virtualx
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
@@ -55,12 +55,10 @@ DEPEND="${COMMON_DEPEND}
 	)
 "
 
-# gtk+-2.24.8 breaks Alt key handling in <=x11-libs/vte-0.28.2:0
 RDEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-update-icon-cache-2
 	>=x11-themes/adwaita-icon-theme-3.14
 	x11-themes/gnome-themes-standard
-	dev-util/gtk-builder-convert
 "
 # librsvg for svg icons (PDEPEND to avoid circular dep), bug #547710
 PDEPEND="
@@ -102,6 +100,8 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.24.33-respect-NM.patch # requires eautoreconf
 	# Fix casts, bug #880617
 	"${FILESDIR}"/${PN}-2.24.33-Fix-casts.patch
+	# Fixes "ac_fn_c_try_run: command not found", bug #887337
+	"${FILESDIR}"/${PN}-2.24.33-configure.ac-Use-AC_RUN_IFELSE.patch # requires eautoreconf
 	"${FILESDIR}"/gtkfilechooserdefault.c.patch
 	"${FILESDIR}"/gtkfilesystemmodel.c.patch
 	"${FILESDIR}"/gtkpathbar.c.patch
@@ -180,6 +180,8 @@ src_prepare() {
 multilib_src_configure() {
 	[[ ${ABI} == ppc64 ]] && append-flags -mminimal-toc
 
+	tc-export CPP
+
 	ECONF_SOURCE=${S} \
 	gnome2_src_configure \
 		$(usex aqua --with-gdktarget=quartz --with-gdktarget=x11) \
@@ -221,7 +223,7 @@ multilib_src_install_all() {
 	EOF
 
 	einstalldocs
-	rm "${ED}"/usr/share/doc/${P}/ChangeLog # empty file
+	rm "${ED}"/usr/share/doc/${PF}/ChangeLog || die # empty file
 
 	# dev-util/gtk-builder-convert split off into a separate package, #402905
 	rm "${ED}"/usr/bin/gtk-builder-convert || die
@@ -243,7 +245,7 @@ pkg_preinst() {
 			touch "${ED}${cache}" || die
 		fi
 	}
-	multilib_parallel_foreach_abi multilib_pkg_preinst
+	multilib_foreach_abi multilib_pkg_preinst
 }
 
 pkg_postinst() {
@@ -253,7 +255,7 @@ pkg_postinst() {
 		gnome2_query_immodules_gtk2 \
 			|| die "Update immodules cache failed (for ${ABI})"
 	}
-	multilib_parallel_foreach_abi multilib_pkg_postinst
+	multilib_foreach_abi multilib_pkg_postinst
 
 	set_gtk2_confdir
 
