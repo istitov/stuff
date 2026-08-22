@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="JACK output plugin for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/tokiclover/deadbeef-plugins-jack"
@@ -18,6 +18,16 @@ DEPEND="
 	virtual/jack
 "
 RDEPEND="${DEPEND}"
+BDEPEND="virtual/pkgconfig"
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.3-modern-api.patch
+	"${FILESDIR}"/${PN}-9999-safety.patch
+)
+
+src_compile() {
+	emake CC="$(tc-getCC)"
+}
 
 src_install() {
 	exeinto /usr/$(get_libdir)/deadbeef
