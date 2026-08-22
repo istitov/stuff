@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="bs2b DSP plugin for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/DeaDBeeF-Player/bs2b"
@@ -18,6 +18,12 @@ DEPEND="
 	media-sound/deadbeef
 "
 RDEPEND="${DEPEND}"
+
+PATCHES=( "${FILESDIR}"/${PN}-system-libbs2b.patch )
+
+src_compile() {
+	emake CC="$(tc-getCC)"
+}
 
 src_install() {
 	exeinto /usr/$(get_libdir)/deadbeef

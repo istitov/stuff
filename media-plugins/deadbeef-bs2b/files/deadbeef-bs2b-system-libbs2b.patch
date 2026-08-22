@@ -1,0 +1,38 @@
+Use Gentoo's system copy of libbs2b instead of the bundled source.
+
+--- a/Makefile
++++ b/Makefile
+@@ -1,18 +1,16 @@
+ OUT?=ddb_bs2b.so
+ 
+-CFLAGS+=-std=c99 -fPIC -Wall -I./libbs2b-3.1.0/src
++BS2B_LIBS?=-lbs2b
++CFLAGS+=-std=c99 -fPIC -Wall
+ 
+-BS2B_SOURCES=\
+-libbs2b-3.1.0/src/bs2b.c
+-
+-SOURCES=bs2b.c $(BS2B_SOURCES)
++SOURCES=bs2b.c
+ 
+ OBJECTS=$(SOURCES:.c=.o)
+ 
+ all: $(SOURCES) $(OUT)
+ 
+ $(OUT): $(OBJECTS)
+-	$(CC) $(CFLAGS) -shared -lm $(OBJECTS) -o $@ $(LDFLAGS)
++	$(CC) $(LDFLAGS) -shared $(OBJECTS) -o $@ $(BS2B_LIBS) -lm
+ 
+ .c.o:
+ 	$(CC) $(CFLAGS) $< -c -o $@
+--- a/bs2b.c
++++ b/bs2b.c
+@@ -8,7 +8,7 @@
+ */
+ 
+ #include <deadbeef/deadbeef.h>
+-#include "bs2b.h"
++#include <bs2b/bs2b.h>
+ #include <stdlib.h>
+ #include <string.h>
+ 
