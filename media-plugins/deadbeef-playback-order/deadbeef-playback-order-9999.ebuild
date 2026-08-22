@@ -3,13 +3,13 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="Playback order dropdown widget for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/cboxdoerfer/ddb_playback_order"
 EGIT_REPO_URI="https://github.com/cboxdoerfer/ddb_playback_order.git"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS=""
 IUSE="+gtk3 gtk2"
@@ -24,8 +24,14 @@ RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
 
 src_compile() {
-	use gtk2 && emake gtk2
-	use gtk3 && emake gtk3
+	local make_args=(
+		CC="$(tc-getCC)"
+		CFLAGS="${CFLAGS} -fPIC -std=c99 -D_GNU_SOURCE"
+		LDFLAGS="${LDFLAGS} -shared"
+	)
+
+	use gtk2 && emake "${make_args[@]}" gtk2
+	use gtk3 && emake "${make_args[@]}" gtk3
 }
 
 src_install() {
