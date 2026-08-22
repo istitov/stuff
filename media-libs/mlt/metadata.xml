@@ -7,9 +7,11 @@
   </maintainer>
   <use>
     <flag name="frei0r">Build the module for <pkg>media-plugins/frei0r-plugins</pkg></flag>
+    <flag name="libplacebo">Enable GPU-accelerated video rendering with <pkg>media-libs/libplacebo</pkg></flag>
     <flag name="opencv">Enable image processing via <pkg>media-libs/opencv</pkg></flag>
     <flag name="python">Build SWIG bindings for Python</flag>
     <flag name="rtaudio">Builds rtaudio consumer for native audio support on multiple platforms.</flag>
+    <flag name="rnnoise">Build noise-reduction module using <pkg>media-libs/rnnoise</pkg></flag>
     <flag name="rubberband">Enable pitch/time stretching via <pkg>media-libs/rubberband</pkg></flag>
     <flag name="vidstab">Enable video stabilization via <pkg>media-libs/vidstab</pkg></flag>
   </use>
