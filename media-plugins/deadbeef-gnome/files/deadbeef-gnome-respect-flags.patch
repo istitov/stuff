@@ -1,0 +1,23 @@
+Respect the compiler and flags supplied by the package manager.
+
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,8 @@
+-CC = gcc
++CC ?= gcc
++CFLAGS += -fPIC
++LDFLAGS += -shared
+ INCLUDES = $(shell pkg-config --cflags gio-2.0 glib-2.0)
+ LIBS = $(shell pkg-config --libs gio-2.0 glib-2.0)
+-OPTIONS = -fPIC -shared
+ NAME = ddb_gnome_mmkeys
+ ROOTDIR = /
+ INSTALL_DIR = usr/lib/deadbeef
+@@ -12,6 +13,6 @@ plugin: $(NAME).so
+ 
+ $(NAME).so: $(NAME).c
+-	$(CC) $(INCLUDES) $(OPTIONS) -o $(NAME).so $(NAME).c $(LIBS)
++	$(CC) $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $(NAME).so $(NAME).c $(LIBS)
+ 
+ install:
+ 	mkdir -p $(ROOTDIR)$(INSTALL_DIR)
