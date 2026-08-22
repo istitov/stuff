@@ -9,6 +9,17 @@ Two forward-compat diagnostics gcc-16 now treats as hard errors:
 Upstream unmaintained since 2015; carried locally.
 --- a/bookmark.c
 +++ b/bookmark.c
+@@ -34,8 +34,8 @@
+ static DB_functions_t *deadbeef;
+ 
+ static char menu_item_title_01[100];
+-static char bookmarks[MAX_BOOKMARKS][20];
+-static char name[MAX_BOOKMARKS][20];
++static char bookmarks[MAX_BOOKMARKS][64];
++static char name[MAX_BOOKMARKS][64];
+ 
+ static int CONFIG_ENABLED = 0;
+ static int CONFIG_AUTO_CONTINUE = 0;
 @@ -66,7 +66,7 @@
      *hr = time/3600;
      *mn = (time-(*hr)*3600)/60;

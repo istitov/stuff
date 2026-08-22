@@ -3,13 +3,13 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="Bookmark Manager plugin for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/cboxdoerfer/ddb_bookmark_manager"
 EGIT_REPO_URI="https://github.com/cboxdoerfer/ddb_bookmark_manager.git"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS=""
 
@@ -17,6 +17,13 @@ DEPEND="media-sound/deadbeef"
 RDEPEND="${DEPEND}"
 
 PATCHES=( "${FILESDIR}/${PN}-gcc16.patch" )
+
+src_compile() {
+	emake \
+		CC="$(tc-getCC)" \
+		CFLAGS="${CFLAGS} -std=c99 -fPIC -Wall" \
+		LDFLAGS="${LDFLAGS} -shared"
+}
 
 src_install() {
 	exeinto /usr/$(get_libdir)/deadbeef
