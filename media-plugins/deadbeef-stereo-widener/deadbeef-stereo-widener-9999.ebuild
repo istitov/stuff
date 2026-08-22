@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="Stereo widener plugin for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/DeaDBeeF-Player/stereo-widener"
@@ -15,6 +15,12 @@ KEYWORDS=""
 
 DEPEND="media-sound/deadbeef"
 RDEPEND="${DEPEND}"
+
+PATCHES=( "${FILESDIR}"/${PN}-respect-flags.patch )
+
+src_compile() {
+	emake CC="$(tc-getCC)"
+}
 
 src_install() {
 	exeinto /usr/$(get_libdir)/deadbeef

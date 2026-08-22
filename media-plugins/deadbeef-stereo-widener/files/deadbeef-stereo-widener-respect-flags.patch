@@ -1,0 +1,12 @@
+Respect the compiler and flags supplied by the package manager.
+
+--- a/Makefile
++++ b/Makefile
+@@ -1,2 +1,6 @@
++CC ?= gcc
++CFLAGS += -std=c99 -fPIC -Wall
++LDFLAGS += -shared
++
+ all:
+-	gcc -I/usr/local/include  -std=c99 -shared -O2 -o stereo_widener.so stereo_widener.c -fPIC -Wall -march=native
++	$(CC) $(CFLAGS) $(LDFLAGS) -o stereo_widener.so stereo_widener.c
