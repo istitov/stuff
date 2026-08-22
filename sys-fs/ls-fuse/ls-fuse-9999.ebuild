@@ -19,6 +19,11 @@ RDEPEND="sys-fs/fuse:0"
 DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
 
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.4-const.patch
+	"${FILESDIR}"/${PN}-0.4-respect-flags.patch
+)
+
 src_prepare() {
 	default
 	eautoreconf

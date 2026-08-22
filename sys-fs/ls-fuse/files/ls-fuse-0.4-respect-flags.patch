@@ -1,0 +1,12 @@
+Do not override distribution optimization and debug flags.
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -14,6 +14,6 @@ CFLAGS="$CFLAGS $fuse_CFLAGS"
+ 
+ if test "x$enable_debug" = xyes; then
+-	CFLAGS="$CFLAGS -Wall -Wunused -DDEBUG -O0 -g3"
++	CFLAGS="$CFLAGS -DDEBUG"
+ else
+ 	CFLAGS="$CFLAGS -DNDEBUG"
+ fi
