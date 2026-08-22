@@ -6,7 +6,7 @@
         <name>Dmitry Podgorny</name>
     </maintainer>
     <use>
-        <flag name='debug'>Enables debug messages</flag>
+        <flag name="debug">Enable debug messages</flag>
     </use>
     <upstream>
         <remote-id type="github">pasis/ls-fuse</remote-id>

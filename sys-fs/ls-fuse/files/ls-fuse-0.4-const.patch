@@ -1,0 +1,35 @@
+Preserve the const qualifier returned from strstr().
+
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -500,25 +500,26 @@ static void node_set_selinux(lsnode_t *node, const char * const ctx)
+ 
+ static void node_set_name(lsnode_t *node, const char * const name)
+ {
+-	char *sub;
++	const char *sub;
++	const char *target;
+ 	char *tmp;
+ 	size_t len;
+ 
+ 	assert(name != NULL);
+ 
+ 	if ((node->mode & S_IFLNK) == S_IFLNK) {
+ 		#define LNK_DELIM " -> "
+ 		sub = strstr(name, LNK_DELIM);
+ 		if (sub) {
+ 			len = sub - name;
+ 			tmp = (char *)malloc(len + 1);
+ 			memcpy(tmp, name, len);
+ 			tmp[len] = '\0';
+ 			node->name = tmp;
+-			tmp = sub + strlen(LNK_DELIM);
+-			if (*tmp != '\0') {
+-				node->data = strdup(tmp);
++			target = sub + strlen(LNK_DELIM);
++			if (*target != '\0') {
++				node->data = strdup(target);
+ 			}
+ 		} else {
+ 			node->name = strdup(name);
+ 		}

@@ -10,7 +10,17 @@ SRC_URI="https://github.com/pasis/${PN}/releases/download/${PV}/${P}.tar.bz2"
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
+IUSE="debug"
 
 RDEPEND="sys-fs/fuse:0"
-DEPEND="${RDEPEND}
-	virtual/pkgconfig"
+DEPEND="${RDEPEND}"
+BDEPEND="virtual/pkgconfig"
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.4-const.patch
+	"${FILESDIR}"/${PN}-0.4-respect-flags-configure.patch
+)
+
+src_configure() {
+	econf $(use_enable debug)
+}
