@@ -41,6 +41,6 @@ RDEPEND="
 		dev-python/cuda-bindings[${PYTHON_USEDEP}]
 		dev-python/einops[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
-		dev-python/triton-bin[${PYTHON_USEDEP}]
+		virtual/triton[${PYTHON_USEDEP}]
 	')
 "
