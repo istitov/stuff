@@ -873,7 +873,7 @@ REQUIRED_USE="
 # back to a Triton kernel on gfx targets without it (e.g. gfx1150).
 # Gentoo's source-built torch does not pull Triton the way upstream's
 # PyPI wheels do, so the cuda? and rocm? targets require
-# dev-python/triton-bin or vllm dies at first GPU inference with
+# virtual/triton or vllm dies at first GPU inference with
 # "'function' object is not subscriptable". torch-2.11.0 pairs with
 # triton 3.6.0; its AMD backend JITs gfx kernels via hipcc. cuda
 # verified 2026-06-14 (bug #274); rocm gfx1150 verified 2026-06-14
@@ -994,7 +994,7 @@ RDEPEND="
 			>=dev-python/fastsafetensors-0.3.2[${PYTHON_SINGLE_USEDEP}]
 			>=dev-python/nvidia-cudnn-frontend-1.19.1[${PYTHON_USEDEP}]
 			~dev-python/nvidia-cutlass-dsl-4.6.0[${PYTHON_USEDEP}]
-			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
+			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
 		')
 		dev-util/nvidia-cuda-toolkit:=
 	)
@@ -1011,7 +1011,7 @@ RDEPEND="
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 			~dev-python/conch-triton-kernels-1.2.1[${PYTHON_USEDEP}]
-			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
+			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
 			>=dev-util/amdsmi-7.0.2[${PYTHON_USEDEP}]
 			>=dev-python/fastsafetensors-0.3.2[${PYTHON_SINGLE_USEDEP}]
 		')
