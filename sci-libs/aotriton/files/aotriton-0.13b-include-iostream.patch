@@ -1,0 +1,27 @@
+From 112e5885a27176fcdf386f6f63f1720beb88e378 Mon Sep 17 00:00:00 2001
+From: Ivan S. Titov <iohann.s.titov@gmail.com>
+Date: Sun, 23 Aug 2026 18:00:00 +0200
+Subject: [PATCH] codegen: include iostream for generated diagnostics
+
+The generated godel-number validation uses std::cerr and std::endl in
+non-NDEBUG builds.  Declare them directly rather than relying on transitive
+includes.
+---
+ python/codegen/interface.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/python/codegen/interface.py b/python/codegen/interface.py
+index b46088f..8be2b46 100644
+--- a/python/codegen/interface.py
++++ b/python/codegen/interface.py
+@@ -42,6 +42,7 @@ class InterfaceGenerator(ABC):
+         self._this_repo = RegistryRepository()
+         self._hdr_include_repo = self._this_repo.get_list_registry('headers_needed_in_header_file')
+         self._src_include_repo = self._this_repo.get_list_registry('headers_needed_in_source_file')
++        self._src_include_repo.register('iostream')
+         self._shim_files = []
+         for hdr in iface.HEADER_EXTRA_INCLUDES:
+             self._add_include_to_header(hdr)
+-- 
+2.51.0
+
