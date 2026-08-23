@@ -2,7 +2,8 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <maintainer type="person">
-    <email>megagreener@gmail.com</email>
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
   </maintainer>
   <use>
     <flag name='parallel'>Add support for <pkg>sys-process/parallel</pkg></flag>
