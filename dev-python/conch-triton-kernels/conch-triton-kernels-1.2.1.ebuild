@@ -21,13 +21,13 @@ KEYWORDS="~amd64"
 # numpy and Triton are the runtime deps. The Triton kernels are accessed
 # lazily inside kernel functions; upstream gates Triton behind the
 # [cpu]/[cuda]/[rocm]/[xpu] extras (each pinning a different accelerator
-# Triton build). We ship a single dev-python/triton-bin (mainline, with
+# Triton build). We ship a single virtual/triton (mainline, with
 # both the nvidia and amd backends), so declare it directly rather than
 # leave it to the consumer -- the original "can't declare it" note
 # predated triton-bin landing in-tree (2026-06-14).
 RDEPEND="
 	>=dev-python/numpy-1.26.4[${PYTHON_USEDEP}]
-	dev-python/triton-bin[${PYTHON_USEDEP}]
+	virtual/triton[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
