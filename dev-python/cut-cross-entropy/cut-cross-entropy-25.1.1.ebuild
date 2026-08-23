@@ -25,7 +25,9 @@ KEYWORDS="~amd64"
 RESTRICT="test"
 
 RDEPEND="
-	dev-python/triton[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/triton[${PYTHON_USEDEP}]
+	')
 "
 BDEPEND="${RDEPEND}"
