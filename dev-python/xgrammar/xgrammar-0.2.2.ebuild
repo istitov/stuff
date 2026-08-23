@@ -41,7 +41,7 @@ RDEPEND="
 	>=sci-ml/transformers-4.38.0[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
-		dev-python/triton-bin[${PYTHON_USEDEP}]
+		virtual/triton[${PYTHON_USEDEP}]
 		dev-python/pydantic[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
 		>=dev-python/typing-extensions-4.9.0[${PYTHON_USEDEP}]
