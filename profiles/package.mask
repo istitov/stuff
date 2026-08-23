@@ -22,3 +22,12 @@ app-portage/portopts
 # ebuild but blocked from default install. Remove this mask if a 1.x
 # rollback becomes relevant again.
 =app-portage/portconf-1.6.8
+
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-08-23)
+# Beta desktop UI (Tauri). This -bin ships only the GUI shell; on first
+# launch unsloth-studio downloads its own uv, a private CPython, PyTorch and
+# the inference engine into ~/.unsloth/studio, entirely outside portage - it
+# does not use the system sci-ml/unsloth / sci-ml/pytorch stack. Masked so
+# users opt in to that runtime self-bootstrap (and the beta status)
+# consciously. Lift once a version reuses system packages, or drop the beta tag.
+sci-ml/unsloth-desktop-bin
