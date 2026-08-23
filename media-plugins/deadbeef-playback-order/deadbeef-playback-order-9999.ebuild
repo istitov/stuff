@@ -16,6 +16,7 @@ IUSE="+gtk3 gtk2"
 REQUIRED_USE="|| ( gtk2 gtk3 )"
 
 DEPEND="
+	dev-libs/glib:2
 	media-sound/deadbeef
 	gtk2? ( x11-libs/gtk+:2 )
 	gtk3? ( x11-libs/gtk+:3 )
