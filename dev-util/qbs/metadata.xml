@@ -2,7 +2,8 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <maintainer type="person">
-    <email>megagreener@gmail.com</email>
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
   </maintainer>
   <longdescription lang="en">
     Qbs is an all-in-one build tool that generates a build graph from a
