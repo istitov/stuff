@@ -27,7 +27,7 @@ RESTRICT="test"
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/triton[${PYTHON_USEDEP}]
+		virtual/triton[${PYTHON_USEDEP}]
 	')
 "
 BDEPEND="${RDEPEND}"
