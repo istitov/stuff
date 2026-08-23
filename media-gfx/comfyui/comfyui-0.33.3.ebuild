@@ -81,12 +81,12 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	compile? (
 		$(python_gen_cond_dep '
-			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
+			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
 		')
 	)
 	rocm? (
 		$(python_gen_cond_dep '
-			~dev-python/triton-bin-3.6.0[${PYTHON_USEDEP}]
+			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
 		')
 	)
 	audio? ( sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}] )
@@ -158,7 +158,7 @@ pkg_postinst() {
 	elif use rocm; then
 		elog "USE=rocm: built against caffe2[rocm]. comfy_aimdo/comfy_kitchen install"
 		elog "their py3-none-any fallbacks; comfy_kitchen.apply_rope (needed by the"
-		elog "flux/lumina/z-image families) runs on dev-python/triton-bin's AMD Triton"
+		elog "flux/lumina/z-image families) runs on virtual/triton's AMD Triton"
 		elog "backend. comfy_aimdo's VRAM offload is a no-op on ROCm."
 	else
 		elog "USE=-cuda -rocm: comfy_aimdo/comfy_kitchen install their pure-python"
@@ -166,7 +166,7 @@ pkg_postinst() {
 	fi
 	if use compile; then
 		elog ""
-		elog "USE=compile pulled dev-python/triton-bin for torch.compile / inductor"
+		elog "USE=compile pulled virtual/triton for torch.compile / inductor"
 		elog "custom nodes and comfy_kitchen's Triton backend."
 	fi
 }
