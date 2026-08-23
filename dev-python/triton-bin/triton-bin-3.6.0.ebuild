@@ -50,6 +50,7 @@ RESTRICT="bindist mirror strip"
 # and hard-fail without it. # verified 2026-06-14 end-to-end: vllm[cuda]
 # generated tokens on sm_86 with this triton present.
 
+RDEPEND="!!dev-python/triton"
 QA_PREBUILT="usr/lib/python3.*/site-packages/triton/*"
 
 src_unpack() {

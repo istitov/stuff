@@ -52,6 +52,7 @@ RESTRICT="bindist mirror strip"
 # end-to-end-tested with vllm[cuda] on this triton (the 3.6.0 ebuild
 # carries that run for the torch-2.11 pairing).
 
+RDEPEND="!!dev-python/triton"
 QA_PREBUILT="usr/lib/python3.*/site-packages/triton/*"
 
 src_unpack() {
