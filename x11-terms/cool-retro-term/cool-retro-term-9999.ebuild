@@ -14,7 +14,7 @@ SLOT="0"
 
 RDEPEND="
 	dev-qt/qt5compat:6[qml]
-	dev-qt/qtbase:6[concurrent,gui,network,opengl,sql,widgets]
+	dev-qt/qtbase:6[gui,network,opengl,sql,widgets]
 	dev-qt/qtdeclarative:6[opengl,sql]
 "
 DEPEND="${RDEPEND}"
@@ -27,6 +27,7 @@ src_configure() {
 }
 
 src_install() {
-	emake INSTALL_ROOT="${D}" install
+	# qmltermwidget has overlapping directory and file install targets.
+	emake -j1 INSTALL_ROOT="${D}" install
 	doman packaging/debian/cool-retro-term.1
 }
