@@ -2,7 +2,8 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <maintainer type="person">
-    <email>megagreener@gmail.com</email>
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
   </maintainer>
   <upstream>
     <remote-id type="github">zhanghai/deadbeef-gnome-mmkeys</remote-id>
