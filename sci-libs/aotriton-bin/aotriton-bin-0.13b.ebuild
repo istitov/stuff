@@ -73,6 +73,7 @@ QA_PREBUILT="usr/lib*/libaotriton_v2.so.*"
 #               Shims wired here span rocm6.4..7.2, so floor hip at 6.4 and
 #               cap below 7.3 (matching 0.12b's proven range).
 RDEPEND="
+	!!sci-libs/aotriton
 	sys-libs/glibc
 	sys-devel/gcc
 	app-arch/xz-utils

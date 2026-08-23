@@ -67,6 +67,7 @@ QA_PREBUILT="usr/lib*/libaotriton_v2.so.*"
 #               and trigger reinstall on sub-slot change.
 #               0.12b's lowest shim is rocm6.4, so floor hip at 6.4.
 RDEPEND="
+	!!sci-libs/aotriton
 	sys-libs/glibc
 	sys-devel/gcc
 	app-arch/xz-utils
