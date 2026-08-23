@@ -49,7 +49,7 @@ RDEPEND="
 		dev-python/psutil[${PYTHON_USEDEP}]
 		dev-python/regex[${PYTHON_USEDEP}]
 		dev-python/tqdm[${PYTHON_USEDEP}]
-		>=dev-python/triton-3[${PYTHON_USEDEP}]
+		>=virtual/triton-3[${PYTHON_USEDEP}]
 		dev-python/tyro[${PYTHON_USEDEP}]
 		dev-python/typing-extensions[${PYTHON_USEDEP}]
 		>=dev-python/wheel-0.42[${PYTHON_USEDEP}]
