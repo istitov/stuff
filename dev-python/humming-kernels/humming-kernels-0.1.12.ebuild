@@ -35,7 +35,7 @@ RDEPEND="
 	sys-devel/gcc:*[cxx]
 	$(python_gen_cond_dep '
 		dev-python/filelock[${PYTHON_USEDEP}]
-		dev-python/triton-bin[${PYTHON_USEDEP}]
+		virtual/triton[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
 		sci-ml/safetensors[${PYTHON_USEDEP}]
 		dev-python/jinja2[${PYTHON_USEDEP}]
