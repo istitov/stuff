@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Unsloth Desktop is a Tauri-based GUI shell for running and training LLMs,
+    diffusion, and audio models on local hardware. This binary package ships
+    only the desktop UI (unsloth-studio); on first launch it bootstraps a
+    private Python backend under ~/.unsloth/studio -- downloading uv, a
+    dedicated CPython, PyTorch and the inference engine -- independently of the
+    system sci-ml/unsloth stack. AMD ROCm is auto-selected on supported GPUs.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">unslothai/unsloth</remote-id>
+  </upstream>
+</pkgmetadata>
