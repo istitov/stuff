@@ -52,7 +52,7 @@ RDEPEND="
 		dev-python/rich[${PYTHON_USEDEP}]
 		>=dev-python/structlog-24.1[${PYTHON_USEDEP}]
 		dev-python/tqdm[${PYTHON_USEDEP}]
-		>=dev-python/triton-3[${PYTHON_USEDEP}]
+		>=virtual/triton-3[${PYTHON_USEDEP}]
 		>=dev-python/typer-0.12[${PYTHON_USEDEP}]
 		dev-python/tyro[${PYTHON_USEDEP}]
 		>=dev-python/wheel-0.42[${PYTHON_USEDEP}]
