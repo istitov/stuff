@@ -1,0 +1,17 @@
+--- a/setup.py
++++ b/setup.py
+@@ -209,4 +209,5 @@ def get_extensions():
+         (
+-            torch.cuda.is_available()
++            os.getenv("XFORMERS_DISABLE_ACCELERATOR", "0") != "1"
++            and torch.cuda.is_available()
+             and (CUDA_HOME is not None)
+             and (torch.version.cuda is not None)
+@@ -275,6 +276,7 @@ def get_extensions():
+         )
+     elif (
+         torch.version.hip
++        and os.getenv("XFORMERS_DISABLE_ACCELERATOR", "0") != "1"
+         and os.getenv("XFORMERS_CK_FLASH_ATTN", "1") == "1"
+         and (torch.cuda.is_available() or os.getenv("HIP_ARCHITECTURES", "") != "")
+     ):
