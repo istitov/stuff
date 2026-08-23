@@ -56,3 +56,8 @@ RDEPEND="
 		>=sci-ml/sentencepiece-0.2[${PYTHON_USEDEP}]
 	')
 "
+BDEPEND="
+	$(python_gen_cond_dep '
+		dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	')
+"
