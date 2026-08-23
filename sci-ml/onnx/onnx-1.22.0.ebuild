@@ -30,6 +30,8 @@ RDEPEND="
 "
 DEPEND=${RDEPEND}
 BDEPEND="
+	>=dev-build/cmake-3.26
+	dev-build/ninja
 	>=dev-python/scikit-build-core-0.11[${PYTHON_USEDEP}]
 	dev-python/nanobind[${PYTHON_USEDEP}]
 "
