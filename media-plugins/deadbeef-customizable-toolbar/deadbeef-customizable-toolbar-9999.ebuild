@@ -16,7 +16,10 @@ IUSE="+gtk3 gtk2"
 REQUIRED_USE="|| ( gtk2 gtk3 )"
 
 DEPEND="
+	app-accessibility/at-spi2-core
+	dev-libs/glib:2
 	media-sound/deadbeef
+	x11-libs/gdk-pixbuf:2
 	gtk2? ( x11-libs/gtk+:2 )
 	gtk3? ( x11-libs/gtk+:3 )
 "
