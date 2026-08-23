@@ -30,4 +30,9 @@ RDEPEND="
 		virtual/triton[${PYTHON_USEDEP}]
 	')
 "
-BDEPEND="${RDEPEND}"
+BDEPEND="
+	${RDEPEND}
+	$(python_gen_cond_dep '
+		dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	')
+"
