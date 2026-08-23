@@ -25,6 +25,7 @@ KEYWORDS="~amd64"
 # The upstream suite requires supported NVIDIA or AMD accelerator hardware.
 RESTRICT="test"
 
+RDEPEND="!!dev-python/triton-bin"
 BDEPEND="
 	dev-build/cmake
 	dev-build/ninja
