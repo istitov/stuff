@@ -1,0 +1,11 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -43,7 +43,7 @@ develop = [
+ ]
+ 
+ [tool.setuptools.packages.find]
+-include = ["caio*", "tests"]
++include = ["caio*"]
+ 
+ [tool.pytest.ini_options]
+ asyncio_default_fixture_loop_scope = "function"
