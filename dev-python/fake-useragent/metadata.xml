@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="pypi">fake-useragent</remote-id>
+    <remote-id type="github">fake-useragent/fake-useragent</remote-id>
+    <bugs-to>https://github.com/fake-useragent/fake-useragent/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
