@@ -1,0 +1,13 @@
+--- a/ddgs/http_client2.py
++++ b/ddgs/http_client2.py
+@@ -8,8 +8,8 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import h2
+-import httpcore
+-import httpx
++import httpcore2 as httpcore
++import httpx2 as httpx
+ 
+ from .exceptions import DDGSException, TimeoutException
+ 
