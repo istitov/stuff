@@ -131,6 +131,15 @@ GITHUB_TAG_FILTERS: list[tuple[re.Pattern, dict]] = [
 # as github spec and max-tag picks the umbrella's `v<latest>`, false-positive
 # for cuda-core / cuda-pathfinder (which track independent semver streams
 # at much lower numeric versions).
+# Some -bin packages fetch a wheel from files.pythonhosted.org, but the Gentoo
+# PN carries a -bin suffix that is NOT the PyPI project name. Map them to the
+# real project so drift queries the right thing.
+PYPI_NAME_BY_PKG: dict[str, str] = {
+    "pymupdf-layout-bin": "pymupdf-layout",
+    "sqlite-vec-bin": "sqlite-vec",
+}
+
+
 GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     # lierdakil/pandoc-crossref publishes alpha/rc tags for next releases;
     # restrict to stable tags (3- or 4-part version, with optional trailing
@@ -888,7 +897,7 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
 
     # PyPI via SRC_URI
     if src_uri and PYPI_URL_RE.search(src_uri):
-        return {"kind": "pypi", "spec": pkg_name}
+        return {"kind": "pypi", "spec": PYPI_NAME_BY_PKG.get(pkg_name, pkg_name)}
 
     # CPAN (perl packages): perl-module eclass composes SRC_URI internally
     # from DIST_AUTHOR/DIST_NAME, so the ebuild's SRC_URI= variable is often

@@ -748,7 +748,7 @@ pypi = "pympler"
 
 ["dev-python/pymupdf-layout-bin"]
 source = "pypi"
-pypi = "pymupdf-layout-bin"
+pypi = "pymupdf-layout"
 
 ["dev-python/pymupdf4llm"]
 source = "pypi"
@@ -908,7 +908,7 @@ pypi = "sqlalchemy-utils"
 
 ["dev-python/sqlite-vec-bin"]
 source = "pypi"
-pypi = "sqlite-vec-bin"
+pypi = "sqlite-vec"
 
 ["dev-python/srsly"]
 source = "pypi"
