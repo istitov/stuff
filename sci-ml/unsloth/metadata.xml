@@ -5,6 +5,13 @@
     <email>iohann.s.titov@gmail.com</email>
     <name>Ivan S. Titov</name>
   </maintainer>
+  <use>
+    <flag name="studio">Enable the bundled Unsloth Studio web backend (the
+      <pkg>dev-python/fastmcp</pkg>-driven FastAPI server run by the
+      <pkg>dev-python/uvicorn</pkg> host) against the system interpreter, pulling
+      its runtime dependencies and an in-process launch patch instead of the
+      desktop app's self-downloaded virtualenv</flag>
+  </use>
   <upstream>
     <remote-id type="github">unslothai/unsloth</remote-id>
     <remote-id type="pypi">unsloth</remote-id>

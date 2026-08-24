@@ -18,9 +18,28 @@ HOMEPAGE="
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
+# USE=studio enables the bundled Unsloth Studio web backend (studio/backend, a
+# FastAPI server driven by the `unsloth studio` CLI command) to run against the
+# system interpreter, instead of the desktop app's self-downloaded venv. It pulls
+# the server's runtime deps and applies a patch adding a UNSLOTH_STUDIO_SYSTEM
+# in-process launch path. The React frontend dist is added separately (Phase 2);
+# until then only `unsloth studio --api-only` is functional.
+IUSE="studio"
 
 # Tests require model downloads and supported accelerator hardware.
 RESTRICT="test"
+
+# USE=studio dep-version notes -- the studio server deps below are intentionally
+# newer than the studio backend's own requirements pins, verified API-compatible
+# 2026-08-24 (comments here, not in RDEPEND: a `#` inside a quoted dep silently
+# masks it):
+#  - pymupdf4llm: upstream pins ==0.3.4 (+ pymupdf 1.27.2.3); we ship the
+#    PyMuPDF-matched 1.28.2 pair. The backend calls only pymupdf4llm.to_markdown()
+#    (core/rag/parsers.py, routes/data_recipe/seed.py), stable across the
+#    0.3->1.28 versioning realignment. 1.28.2 hard-deps pymupdf-layout
+#    (onnxruntime), which 0.3.x kept optional -- accepted, onnxruntime is in-tree.
+#  - ddgs: upstream pins ==9.14.4; we ship 9.15.0 (patch). The backend uses only
+#    DDGS() + the DDGSException/RatelimitException classes, both present in 9.15.0.
 
 RDEPEND="
 	>=dev-python/unsloth-zoo-2026.8.13[${PYTHON_SINGLE_USEDEP}]
@@ -58,9 +77,65 @@ RDEPEND="
 		>=dev-python/wheel-0.42[${PYTHON_USEDEP}]
 		>=sci-ml/sentencepiece-0.2[${PYTHON_USEDEP}]
 	')
+	studio? (
+		$(python_gen_cond_dep '
+			dev-python/fastapi[${PYTHON_USEDEP}]
+			dev-python/uvicorn[${PYTHON_USEDEP}]
+			dev-python/matplotlib[${PYTHON_USEDEP}]
+			dev-python/pandas[${PYTHON_USEDEP}]
+			dev-python/pyjwt[${PYTHON_USEDEP}]
+			dev-python/urllib3[${PYTHON_USEDEP}]
+			dev-python/cryptography[${PYTHON_USEDEP}]
+			dev-python/boto3[${PYTHON_USEDEP}]
+			dev-python/httpx[${PYTHON_USEDEP}]
+			dev-python/av[${PYTHON_USEDEP}]
+			dev-python/gguf[${PYTHON_USEDEP}]
+			dev-python/python-docx[${PYTHON_USEDEP}]
+			dev-python/diceware[${PYTHON_USEDEP}]
+			dev-python/ddgs[${PYTHON_USEDEP}]
+			dev-python/fastmcp[${PYTHON_USEDEP}]
+			dev-python/pymupdf4llm[${PYTHON_USEDEP}]
+			dev-python/PyMuPDF[${PYTHON_USEDEP}]
+			dev-python/sqlite-vec-bin[${PYTHON_USEDEP}]
+		')
+	)
 "
 BDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	')
 "
+
+src_prepare() {
+	# System-mode launch path for the bundled studio backend (skip the
+	# ~/.unsloth/studio venv re-exec + install.sh); inert without USE=studio and
+	# without UNSLOTH_STUDIO_SYSTEM=1 at runtime.
+	use studio && PATCHES+=( "${FILESDIR}/${P}-system-studio.patch" )
+	distutils-r1_src_prepare
+}
+
+python_install_all() {
+	distutils-r1_python_install_all
+
+	if use studio; then
+		# Launcher that serves the studio UI/API in-process against the system
+		# interpreter (the base package already installs the `unsloth` CLI + the
+		# studio/backend package). See the system-studio patch.
+		newbin - unsloth-studio <<-'EOF'
+			#!/bin/sh
+			export UNSLOTH_STUDIO_SYSTEM=1
+			exec unsloth studio "$@"
+		EOF
+	fi
+}
+
+pkg_postinst() {
+	if use studio; then
+		elog "USE=studio: run the Unsloth Studio web backend on the system stack with:"
+		elog "  unsloth-studio            # serves the UI/API on http://127.0.0.1:PORT"
+		elog "  unsloth-studio --api-only # API only (no web UI)"
+		elog "It runs in-process against the system interpreter -- no ~/.unsloth/studio"
+		elog "venv, no runtime download. The React web UI is not bundled yet, so for now"
+		elog "use --api-only; the full UI arrives once the frontend dist is packaged."
+	fi
+}
