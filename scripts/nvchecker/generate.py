@@ -426,6 +426,14 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "include_regex": r"^[0-9]+\.[0-9]+(?:\.[0-9]+)?b$",
         "prefix": "",
     },
+    # sci-libs/aotriton (from-source) shares aotriton-bin's bare `X.Y[.Z]b`
+    # beta scheme, NOT the org-wide rocm-X.Y.Z — under the blanket ^ROCm/.+
+    # rocm- filter this matched NOTHING and silently omitted upstream. Same
+    # override as sci-libs/aotriton-bin above. verified 2026-08-24: PV 0.13b.
+    "sci-libs/aotriton": {
+        "include_regex": r"^[0-9]+\.[0-9]+(?:\.[0-9]+)?b$",
+        "prefix": "",
+    },
     # ROCm/FastFlowLM was adopted into the ROCm org but kept its own
     # `vX.Y.Z` tags instead of the org-wide `rocm-X.Y.Z` scheme the
     # ^ROCm/.+ filter assumes — under that blanket filter this entry would
@@ -434,6 +442,23 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     # v-scheme (v0.9.46 latest), zero rocm-* tags.
     "sci-ml/fastflowlm": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
+    # unslothai/unsloth is the Unsloth *library* monorepo (date-tagged, e.g.
+    # 2025-03), but it ALSO carries the desktop app's own `vX.Y.Z-beta` tags
+    # (the studio/ Tauri shell; both unsloth-desktop and -bin fetch
+    # archive/v0.1.801-beta from it). A bare use_max_tag latches onto the
+    # library's date tag; restrict to the beta line and normalise the
+    # `-beta` tag suffix to the PMS `_beta` so the value matches the PV.
+    # verified 2026-08-24.
+    "sci-ml/unsloth-desktop": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+-beta$",
+        "from_pattern": r"^v([0-9]+\.[0-9]+\.[0-9]+)-beta$",
+        "to_pattern": r"\1_beta",
+    },
+    "sci-ml/unsloth-desktop-bin": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+-beta$",
+        "from_pattern": r"^v([0-9]+\.[0-9]+\.[0-9]+)-beta$",
+        "to_pattern": r"\1_beta",
     },
 }
 
@@ -461,6 +486,18 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
     "dev-python/comfy-angle-bin": {
         "source": "pypi",
         "pypi": "comfy-angle",
+    },
+    # gwyddion3's SRC_URI lists gwyddion.net (the real tarball host) plus an
+    # istitov/extra-stuff gitlab bundle (the pygwy payload); the generic
+    # classifier picked the extra-stuff gitlab URL and tracked Ivan's own
+    # distfile repo (latching onto its newest, unrelated `llama-swap-*` tag).
+    # gwyddion.net is a custom host with no built-in nvchecker source, so
+    # scrape download.php. It lists the 2.x stable line too (gwyddion-2.71),
+    # so anchor the capture to `3.`. verified 2026-08-24: newest is 3.11.
+    "sci-visualization/gwyddion3": {
+        "source": "regex",
+        "url": "https://gwyddion.net/download.php",
+        "regex": r"gwyddion-(3\.[0-9]+(?:\.[0-9]+)?)\.tar\.xz",
     },
     # therock-bin tracks AMD's nightly ROCm SDK tarballs on the CDN
     # (rocm.nightlies.amd.com).  ROCm/TheRock's github tags are

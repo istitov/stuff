@@ -2076,8 +2076,8 @@ prefix = "v"
 source = "github"
 github = "ROCm/aotriton"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^[0-9]+\.[0-9]+(?:\.[0-9]+)?b$'
+prefix = ""
 # note: from EGIT_REPO_URI
 
 ["sci-libs/aotriton-bin"]
@@ -2394,13 +2394,17 @@ prefix = "v"
 source = "github"
 github = "unslothai/unsloth"
 use_max_tag = true
-prefix = "v"
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+-beta$'
+from_pattern = '^v([0-9]+\.[0-9]+\.[0-9]+)-beta$'
+to_pattern = '\1_beta'
 
 ["sci-ml/unsloth-desktop-bin"]
 source = "github"
 github = "unslothai/unsloth"
 use_max_tag = true
-prefix = "v"
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+-beta$'
+from_pattern = '^v([0-9]+\.[0-9]+\.[0-9]+)-beta$'
+to_pattern = '\1_beta'
 
 ["sci-physics/mantid"]
 source = "github"
@@ -2464,7 +2468,7 @@ github = "fmaclen/hollama"
 use_max_tag = true
 prefix = ""
 
-# --- gitlab (4) ---
+# --- gitlab (3) ---
 
 ["sci-libs/libformfactor"]
 source = "gitlab"
@@ -2484,12 +2488,6 @@ prefix = "v"
 source = "gitlab"
 gitlab = "mlz/bornagain"
 host = "jugit.fz-juelich.de"
-use_max_tag = true
-prefix = "v"
-
-["sci-visualization/gwyddion3"]
-source = "gitlab"
-gitlab = "istitov/extra-stuff"
 use_max_tag = true
 prefix = "v"
 
@@ -2567,7 +2565,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (15) ---
+# --- special (16) ---
 
 ["dev-libs/cudnn"]
 source = "regex"
@@ -2637,6 +2635,11 @@ github = "leejet/stable-diffusion.cpp"
 use_latest_release = true
 from_pattern = '^master-([0-9]+)-[0-9a-f]+$'
 to_pattern = '0_pre\1'
+
+["sci-visualization/gwyddion3"]
+source = "regex"
+url = "https://gwyddion.net/download.php"
+regex = 'gwyddion-(3\.[0-9]+(?:\.[0-9]+)?)\.tar\.xz'
 
 ["x11-libs/wxGTK"]
 source = "github"
