@@ -370,20 +370,17 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     # NOTE: dev-util/xrt is tracked via SPECIAL_SOURCES (use_latest_release),
     # not here — see the block in SPECIAL_SOURCES for why use_max_tag can't
     # work for XRT's dated/prerelease release scheme.
-    # ggml-org/llama.cpp tags its builds as `b<N>` (e.g. b9209), not semver.
-    # The repo also carries old `gguf-v<X>.<Y>` and `master-<sha>` style refs.
-    # Match only the 4+ digit build-number form (current N is ~9200, so 4-digit
-    # is a tight fit; broaden if upstream ever resets the counter) and rewrite
-    # to the `0_pre<N>` PV the overlay's ebuilds use, so drift compares cleanly
-    # without falling back to tracking master's HEAD commit.
-    #
-    # Sort risk: nvchecker uses awesomeversion which compares `b<N>` strings
-    # by extracting the numeric portion, so b9999 → b10000 should still pick
-    # the latter correctly. Worth re-verifying when N actually crosses 5 digits.
+    # ggml-org/llama.cpp publishes two tag tracks: rolling `b<N>` build tags
+    # (bleeding edge, many per day) and, since ~b10566, SemVer `vX.Y.Z` release
+    # tags -- "stable, slower release cadence, recommended for downstream
+    # distribution" per upstream. Track the stable v* track for drift; the
+    # overlay ships `0.<Y>.<Z>` as the stable ebuild and keeps the last two
+    # `0_pre<N>` (b<N>) ebuilds as an unstable, refresh-on-demand option (those
+    # are not drift-tracked -- the b<N> track moves too fast to bump on).
     "sci-misc/llama-cpp": {
-        "include_regex": r"^b[0-9]{4,}$",
-        "from_pattern": r"^b([0-9]+)$",
-        "to_pattern": r"0_pre\1",
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+        "from_pattern": r"^v(.+)$",
+        "to_pattern": r"\1",
     },
     # vosen/ZLUDA cut its first stable `v6` (bare major, no dots) on
     # 2026-06-29, at the same commit as `v6-preview.79`; before that the

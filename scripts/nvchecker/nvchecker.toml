@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (267) ---
+# --- pypi (290) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -25,6 +25,10 @@ pypi = "SciFiReaders"
 ["dev-python/abtem"]
 source = "pypi"
 pypi = "abtem"
+
+["dev-python/aiofile"]
+source = "pypi"
+pypi = "aiofile"
 
 ["dev-python/anthropic"]
 source = "pypi"
@@ -77,6 +81,10 @@ pypi = "bokeh"
 ["dev-python/bumps"]
 source = "pypi"
 pypi = "bumps"
+
+["dev-python/caio"]
+source = "pypi"
+pypi = "caio"
 
 ["dev-python/ccimport"]
 source = "pypi"
@@ -170,6 +178,10 @@ pypi = "curated-tokenizers"
 source = "pypi"
 pypi = "curated-transformers"
 
+["dev-python/cut-cross-entropy"]
+source = "pypi"
+pypi = "cut_cross_entropy"
+
 ["dev-python/cyclopts"]
 source = "pypi"
 pypi = "cyclopts"
@@ -206,9 +218,17 @@ pypi = "dask-ml"
 source = "pypi"
 pypi = "dataproperty"
 
+["dev-python/ddgs"]
+source = "pypi"
+pypi = "ddgs"
+
 ["dev-python/depyf"]
 source = "pypi"
 pypi = "depyf"
+
+["dev-python/diceware"]
+source = "pypi"
+pypi = "diceware"
 
 ["dev-python/diffpy-structure"]
 source = "pypi"
@@ -221,6 +241,10 @@ pypi = "diffpy.utils"
 ["dev-python/diffsims"]
 source = "pypi"
 pypi = "diffsims"
+
+["dev-python/dill"]
+source = "pypi"
+pypi = "dill"
 
 ["dev-python/docstring-parser"]
 source = "pypi"
@@ -266,9 +290,17 @@ pypi = "exspy"
 source = "pypi"
 pypi = "fabio"
 
+["dev-python/fake-useragent"]
+source = "pypi"
+pypi = "fake-useragent"
+
 ["dev-python/fastapi"]
 source = "pypi"
 pypi = "fastapi"
+
+["dev-python/fastmcp"]
+source = "pypi"
+pypi = "fastmcp"
 
 ["dev-python/fastrlock"]
 source = "pypi"
@@ -298,6 +330,10 @@ pypi = "flexcache"
 source = "pypi"
 pypi = "flexparser"
 
+["dev-python/fsspec"]
+source = "pypi"
+pypi = "fsspec"
+
 ["dev-python/gdown"]
 source = "pypi"
 pypi = "gdown"
@@ -321,6 +357,10 @@ pypi = "google_ai_generativelanguage"
 ["dev-python/google-crc32c"]
 source = "pypi"
 pypi = "google-crc32c"
+
+["dev-python/griffelib"]
+source = "pypi"
+pypi = "griffelib"
 
 ["dev-python/hatch-build-scripts"]
 source = "pypi"
@@ -486,6 +526,10 @@ pypi = "mpire"
 source = "pypi"
 pypi = "mpld3"
 
+["dev-python/multiprocess"]
+source = "pypi"
+pypi = "multiprocess"
+
 ["dev-python/murmurhash"]
 source = "pypi"
 pypi = "murmurhash"
@@ -537,6 +581,10 @@ pypi = "openai"
 ["dev-python/openai-harmony"]
 source = "pypi"
 pypi = "openai-harmony"
+
+["dev-python/openapi-pydantic"]
+source = "pypi"
+pypi = "openapi-pydantic"
 
 ["dev-python/openfile"]
 source = "pypi"
@@ -606,6 +654,10 @@ pypi = "preshed"
 source = "pypi"
 pypi = "primePy"
 
+["dev-python/primp"]
+source = "pypi"
+pypi = "primp"
+
 ["dev-python/prometheus-fastapi-instrumentator"]
 source = "pypi"
 pypi = "prometheus-fastapi-instrumentator"
@@ -613,6 +665,10 @@ pypi = "prometheus-fastapi-instrumentator"
 ["dev-python/pubchempy"]
 source = "pypi"
 pypi = "pubchempy"
+
+["dev-python/py-key-value-aio"]
+source = "pypi"
+pypi = "py-key-value-aio"
 
 ["dev-python/py4dstem"]
 source = "pypi"
@@ -689,6 +745,14 @@ pypi = "pymeshfix"
 ["dev-python/pympler"]
 source = "pypi"
 pypi = "pympler"
+
+["dev-python/pymupdf-layout-bin"]
+source = "pypi"
+pypi = "pymupdf-layout-bin"
+
+["dev-python/pymupdf4llm"]
+source = "pypi"
+pypi = "pymupdf4llm"
 
 ["dev-python/pynida"]
 source = "pypi"
@@ -842,6 +906,10 @@ pypi = "spconv-cu126"
 source = "pypi"
 pypi = "sqlalchemy-utils"
 
+["dev-python/sqlite-vec-bin"]
+source = "pypi"
+pypi = "sqlite-vec-bin"
+
 ["dev-python/srsly"]
 source = "pypi"
 pypi = "srsly"
@@ -930,6 +998,14 @@ pypi = "tyro"
 source = "pypi"
 pypi = "uctools"
 
+["dev-python/uncalled-for"]
+source = "pypi"
+pypi = "uncalled-for"
+
+["dev-python/unsloth-zoo"]
+source = "pypi"
+pypi = "unsloth_zoo"
+
 ["dev-python/vispy"]
 source = "pypi"
 pypi = "vispy"
@@ -989,6 +1065,14 @@ pypi = "zict"
 ["sci-ml/asteroid-filterbanks"]
 source = "pypi"
 pypi = "asteroid-filterbanks"
+
+["sci-ml/datasets"]
+source = "pypi"
+pypi = "datasets"
+
+["sci-ml/diffusers"]
+source = "pypi"
+pypi = "diffusers"
 
 ["sci-ml/evalplus"]
 source = "pypi"
@@ -1070,6 +1154,14 @@ pypi = "torchmetrics"
 source = "pypi"
 pypi = "trl"
 
+["sci-ml/unsloth"]
+source = "pypi"
+pypi = "unsloth"
+
+["sci-ml/xformers"]
+source = "pypi"
+pypi = "xformers"
+
 ["sci-physics/sasview"]
 source = "pypi"
 pypi = "sasview"
@@ -1078,7 +1170,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (195) ---
+# --- github (200) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1656,6 +1748,12 @@ github = "uiri/toml"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/triton"]
+source = "github"
+github = "triton-lang/triton"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/wasabi"]
 source = "github"
 github = "explosion/wasabi"
@@ -1974,6 +2072,14 @@ use_max_tag = true
 include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
+["sci-libs/aotriton"]
+source = "github"
+github = "ROCm/aotriton"
+use_max_tag = true
+include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+prefix = "rocm-"
+# note: from EGIT_REPO_URI
+
 ["sci-libs/aotriton-bin"]
 source = "github"
 github = "ROCm/aotriton"
@@ -2168,9 +2274,9 @@ prefix = "v"
 source = "github"
 github = "ggml-org/llama.cpp"
 use_max_tag = true
-include_regex = '^b[0-9]{4,}$'
-from_pattern = '^b([0-9]+)$'
-to_pattern = '0_pre\1'
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+from_pattern = '^v(.+)$'
+to_pattern = '\1'
 
 ["sci-misc/llama-swap"]
 source = "github"
@@ -2254,6 +2360,12 @@ github = "k2-fsa/sherpa-onnx"
 use_max_tag = true
 prefix = "v"
 
+["sci-ml/torchao"]
+source = "github"
+github = "pytorch/ao"
+use_max_tag = true
+prefix = "v"
+
 ["sci-ml/torchaudio"]
 source = "github"
 github = "pytorch/audio"
@@ -2275,6 +2387,18 @@ prefix = "v"
 ["sci-ml/transformers"]
 source = "github"
 github = "huggingface/transformers"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/unsloth-desktop"]
+source = "github"
+github = "unslothai/unsloth"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/unsloth-desktop-bin"]
+source = "github"
+github = "unslothai/unsloth"
 use_max_tag = true
 prefix = "v"
 
@@ -2340,7 +2464,7 @@ github = "fmaclen/hollama"
 use_max_tag = true
 prefix = ""
 
-# --- gitlab (3) ---
+# --- gitlab (4) ---
 
 ["sci-libs/libformfactor"]
 source = "gitlab"
@@ -2360,6 +2484,12 @@ prefix = "v"
 source = "gitlab"
 gitlab = "mlz/bornagain"
 host = "jugit.fz-juelich.de"
+use_max_tag = true
+prefix = "v"
+
+["sci-visualization/gwyddion3"]
+source = "gitlab"
+gitlab = "istitov/extra-stuff"
 use_max_tag = true
 prefix = "v"
 
@@ -2662,9 +2792,10 @@ prefix = "v"
 # ["sci-physics/oommf"] skipped: custom upstream at math.nist.gov; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/profex"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-visualization/gwyddion"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["sci-visualization/gwyddion3"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sys-kernel/pf-sources"] skipped: branch-tip signal tracked in maintainer-local nvchecker-local.toml — pf-sources uses a GA-only curated-patch model where 'ship vs upstream tag' is not the right drift question; what matters is when codeberg pf-kernel/linux gains a new -pfN tag we want to evaluate for inclusion
 # ["sys-kernel/pf-sources-extended"] skipped: branch-tip signal tracked in maintainer-local nvchecker-local.toml — pf-sources uses a GA-only curated-patch model where 'ship vs upstream tag' is not the right drift question; what matters is when codeberg pf-kernel/linux gains a new -pfN tag we want to evaluate for inclusion
+# ["virtual/aotriton"] skipped: no recognizable upstream
+# ["virtual/triton"] skipped: no recognizable upstream
 # ["www-misc/httraqt"] skipped: sourceforge/httraqt — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["x11-apps/skb"] skipped: polachok/skb has no GitHub release tags
 # ["x11-libs/gtk+"] skipped: custom upstream at www.gtk.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
