@@ -1,0 +1,27 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -8,11 +8,11 @@
+ name = "griffelib"
+ description = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API."
+ authors = [{name = "Timothée Mazzucotelli", email = "dev@pawamoy.fr"}]
+ license = "ISC"
++version = "2.2.0"
+ license-files = ["LICENSE"]
+ requires-python = ">=3.10"
+ keywords = ["api", "signature", "breaking-changes", "static-analysis", "dynamic-analysis"]
+-dynamic = ["version"]
+ classifiers = [
+     "Development Status :: 5 - Production/Stable",
+     "Intended Audience :: Developers",
+@@ -44,11 +44,6 @@
+ [tool.uv-dynamic-versioning]
+ pattern = '(?P<base>\d+\.\d+\.\d+)'
+ 
+-[tool.hatch.version]
+-source = "code"
+-path = "../../scripts/get_version.py"
+-expression = "get_version()"
+-
+ [tool.hatch.build.targets.sdist.force-include]
+ "../../CHANGELOG.md" = "CHANGELOG.md"
+ "../../LICENSE" = "LICENSE"
