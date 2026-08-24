@@ -15,19 +15,26 @@ HOMEPAGE="
 	https://pypi.org/project/unsloth/
 "
 
-LICENSE="Apache-2.0"
+# Apache-2.0: the core library. USE=studio also builds/installs the studio
+# frontend (AGPL-3, studio/LICENSE.AGPL-3.0) and its bundled Figtree/Inter/
+# Space-Grotesk web fonts (OFL-1.1); the proprietary Hellix font is stripped.
+LICENSE="Apache-2.0 studio? ( AGPL-3 OFL-1.1 )"
 SLOT="0"
 KEYWORDS="~amd64"
 # USE=studio enables the bundled Unsloth Studio web backend (studio/backend, a
 # FastAPI server driven by the `unsloth studio` CLI command) to run against the
 # system interpreter, instead of the desktop app's self-downloaded venv. It pulls
 # the server's runtime deps and applies a patch adding a UNSLOTH_STUDIO_SYSTEM
-# in-process launch path. The React frontend dist is added separately (Phase 2);
-# until then only `unsloth studio --api-only` is functional.
+# in-process launch path, and builds the React web UI (studio/frontend) with npm
+# so the backend serves the full app (not just the API).
 IUSE="studio"
 
-# Tests require model downloads and supported accelerator hardware.
-RESTRICT="test"
+# Tests require model downloads and supported accelerator hardware. USE=studio's
+# frontend build (npm) fetches its dependency set from the registry, which the
+# network sandbox forbids, so it is live + network like the overlay's other
+# web-UI-bundling ebuilds (sci-misc/llama-swap[ui]).
+RESTRICT="test studio? ( network-sandbox )"
+PROPERTIES="studio? ( live )"
 
 # USE=studio dep-version notes -- the studio server deps below are intentionally
 # newer than the studio backend's own requirements pins, verified API-compatible
@@ -104,6 +111,7 @@ BDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	')
+	studio? ( net-libs/nodejs[npm] )
 "
 
 src_prepare() {
@@ -112,6 +120,38 @@ src_prepare() {
 	# without UNSLOTH_STUDIO_SYSTEM=1 at runtime.
 	use studio && PATCHES+=( "${FILESDIR}/${P}-system-studio.patch" )
 	distutils-r1_src_prepare
+}
+
+src_compile() {
+	if use studio; then
+		# Build the React web UI (studio/frontend) that the backend serves. The
+		# sdist ships no prebuilt dist; vite writes it to studio/frontend/dist.
+		einfo "Building the Unsloth Studio web frontend (npm ci + vite build)"
+		pushd studio/frontend > /dev/null || die
+		npm ci --no-audit --no-fund || die "npm ci failed"
+		npm run build || die "vite build failed"
+		# Strip the proprietary Hellix font (copied public/ -> dist/); the OFL-1.1
+		# @fontsource fonts (Figtree/Inter/Space-Grotesk) stay.
+		find dist -iname '*hellix*' -exec rm -rf {} + || die
+		popd > /dev/null || die
+	fi
+	distutils-r1_src_compile
+}
+
+python_install() {
+	distutils-r1_python_install
+
+	if use studio; then
+		# setuptools' package-data glob (studio/frontend/dist/**) already bundles
+		# the vite-built UI into the wheel, but it also drags in the whole
+		# studio/frontend source tree (TS sources, tests, configs). Only the built
+		# dist/ is served at runtime, so drop the rest to trim the install.
+		local fe="${D}$(python_get_sitedir)/studio/frontend"
+		if [[ -d ${fe} ]]; then
+			find "${fe}" -mindepth 1 -maxdepth 1 ! -name dist \
+				-exec rm -rf {} + || die
+		fi
+	fi
 }
 
 python_install_all() {
@@ -131,11 +171,10 @@ python_install_all() {
 
 pkg_postinst() {
 	if use studio; then
-		elog "USE=studio: run the Unsloth Studio web backend on the system stack with:"
-		elog "  unsloth-studio            # serves the UI/API on http://127.0.0.1:PORT"
+		elog "USE=studio: run the Unsloth Studio web app on the system stack with:"
+		elog "  unsloth-studio            # serves the full web UI on http://127.0.0.1:PORT"
 		elog "  unsloth-studio --api-only # API only (no web UI)"
 		elog "It runs in-process against the system interpreter -- no ~/.unsloth/studio"
-		elog "venv, no runtime download. The React web UI is not bundled yet, so for now"
-		elog "use --api-only; the full UI arrives once the frontend dist is packaged."
+		elog "venv and no runtime download."
 	fi
 }
