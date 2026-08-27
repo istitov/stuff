@@ -41,7 +41,12 @@ _PORTAGE_TO_PEP440 = [
     (re.compile(r'_rc(\d+)$'),    r'rc\1'),
     (re.compile(r'_alpha(\d+)$'), r'a\1'),
     (re.compile(r'_beta(\d+)$'),  r'b\1'),
-    (re.compile(r'_pre\d*$'),     r'.dev0'),
+    # Keep the _pre number: mapping every _preN to a bare .dev0 collapses all
+    # prereleases of a package to one Version, so the sort falls through to the
+    # raw-PV tiebreaker and ranks lexically (7_pre9 > 7_pre10). Bare _pre (no
+    # digits) is legal in Portage and still maps to .dev0.
+    (re.compile(r'_pre(\d+)$'),   r'.dev\1'),
+    (re.compile(r'_pre$'),        r'.dev0'),
 ]
 
 
