@@ -43,6 +43,16 @@ RESTRICT="network-sandbox"
 # ships them; without it the build dies at "libdrm/amdgpu.h: No such file or
 # directory". AMD hosts satisfy this incidentally via VIDEO_CARDS; a non-AMD
 # host does not. verified 2026-07-18
+#
+# The system-therock range tracks src/cpp/resources/backend_versions.json
+# (therock.version), which is 7.14.0 at 11.8.0 -- the 7.14 series is exactly
+# what upstream tests against. Do NOT read the <7.15 bound as stale just
+# because dev-util/therock-bin ships something numerically far above it: AMD
+# renumbered ROCm 7.14 -> 10.0 on 2026-08-27 (six-week cadence from there), so
+# 10.0.0 > 7.15 and is *correctly* excluded until lemonade's own
+# backend_versions.json moves to a 10.x therock. Relaxing the cap to admit
+# 10.x would claim a backend pairing upstream has not blessed. Re-derive both
+# bounds from that json on every bump. verified 2026-08-27 against 11.8.0
 RDEPEND="
 	app-arch/brotli:=
 	app-arch/zstd:=
