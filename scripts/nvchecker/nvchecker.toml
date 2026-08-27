@@ -2616,11 +2616,12 @@ url = "https://developer.download.nvidia.com/compute/cuda/redist/"
 regex = 'redistrib_(\d+\.\d+\.\d+)\.json'
 
 ["dev-util/therock-bin"]
-source = "regex"
-url = "https://rocm.nightlies.amd.com/tarball/"
-regex = 'therock-dist-linux-[a-z0-9X-]+-(\d+\.\d+\.\d+a\d+)\.tar\.gz'
-from_pattern = '^(\d+\.\d+\.\d+)a(\d+)$'
-to_pattern = '\1_alpha\2'
+source = "github"
+github = "ROCm/TheRock"
+use_max_tag = true
+include_regex = '^therock-\d+\.\d+$'
+from_pattern = '^therock-(\d+\.\d+)$'
+to_pattern = '\1.0'
 
 ["dev-util/xrt"]
 source = "github"

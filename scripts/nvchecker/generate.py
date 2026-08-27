@@ -499,26 +499,46 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "url": "https://gwyddion.net/download.php",
         "regex": r"gwyddion-(3\.[0-9]+(?:\.[0-9]+)?)\.tar\.xz",
     },
-    # therock-bin tracks AMD's nightly ROCm SDK tarballs on the CDN
-    # (rocm.nightlies.amd.com).  ROCm/TheRock's github tags are
-    # `rocm-X.Y.Z` releases which don't map to the nightly
-    # tarball naming, so we scrape the CDN's tarball/ listing for the
-    # highest `therock-dist-linux-<arch>-X.Y.ZaYYYYMMDD` entry and
-    # rewrite the trailing `aYYYYMMDD` to PMS-valid `_alphaYYYYMMDD`.
+    # therock-bin must track the RELEASE runfile line, because that is what
+    # the ebuild fetches:
+    #   repo.radeon.com/rocm/installer/rocm-runfile-installer/rocm-rel-${PV%.*}/
+    #     rocm-installer-${PV}-${MY_BUILD}.run
     #
-    # The arch token is matched generically (`[a-z0-9X-]+` covers
-    # gfx1150, gfx101X-dgpu, gfx950-dcgpu, …) rather than pinned to a
-    # single arch: the package is multi-arch via amdgpu_targets_* USE
-    # flags and every arch publishes the same nightly version, so any
-    # arch is a valid version canary.  Pinning one arch would go silent
-    # if AMD ever dropped that specific target from the matrix while the
-    # package stayed trackable via the others.
+    # It previously scraped the nightly CDN (rocm.nightlies.amd.com/tarball/)
+    # for `therock-dist-linux-<arch>-X.Y.ZaYYYYMMDD`, rewritten to
+    # `_alphaYYYYMMDD`.  Those two lines can never converge: the tree ships a
+    # release PV (7.14.0) while the tracker reported a nightly
+    # (7.14.0_alpha20260612), so the entry produced a permanent tree-is-ahead
+    # `<-` noise line in every drift run and could never signal a real bump.
+    # It stayed silent through the entire 7.14 -> 10.0 renumbering, while
+    # rocm-installer-10.0.0-4.run was already published.
+    # verified 2026-08-27.
+    #
+    # Track ROCm/TheRock's own `therock-X.Y` tag line, which is the release
+    # series the runfile directory mirrors (therock-7.14 <-> rocm-rel-7.14,
+    # therock-10.0 <-> rocm-rel-10.0).  The tag carries only X.Y, so append
+    # `.0` for the PV: AMD ships X.Y.0 runfiles and keeps the installer
+    # revision separate in MY_BUILD (the `-N` suffix), which is a revbump, not
+    # a version bump, and is deliberately not tracked here.
+    #
+    # include_regex pins the therock-* line specifically.  The repo also
+    # carries `rocm-*` tags and dated `pytorch-triage/*` tags; per
+    # [[project_rocm_therock_tag_lines_are_separate]] those are NOT the same
+    # series and must not be mixed in.
+    #
+    # CAVEAT when this fires: a therock-X.Y tag can appear before the matching
+    # rocm-installer-X.Y.0-N.run is published, so confirm the runfile exists at
+    # repo.radeon.com/rocm/installer/rocm-runfile-installer/rocm-rel-X.Y/
+    # before bumping -- same tag-leads-artifact race that held darktable 5.6.1
+    # for a day. verified 2026-08-27: therock-10.0 tag and
+    # rocm-installer-10.0.0-4.run are both live.
     "dev-util/therock-bin": {
-        "source": "regex",
-        "url": "https://rocm.nightlies.amd.com/tarball/",
-        "regex": r"therock-dist-linux-[a-z0-9X-]+-(\d+\.\d+\.\d+a\d+)\.tar\.gz",
-        "from_pattern": r"^(\d+\.\d+\.\d+)a(\d+)$",
-        "to_pattern": r"\1_alpha\2",
+        "source": "github",
+        "github": "ROCm/TheRock",
+        "use_max_tag": True,
+        "include_regex": r"^therock-\d+\.\d+$",
+        "from_pattern": r"^therock-(\d+\.\d+)$",
+        "to_pattern": r"\1.0",
     },
     # nvidia-cuda-toolkit ships as an NVIDIA-hosted .run installer under
     # developer.download.nvidia.com (no github/pypi feed), so the classifier
