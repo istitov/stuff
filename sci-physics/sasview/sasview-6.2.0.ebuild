@@ -72,7 +72,7 @@ BDEPEND="
 # SasView runs without it; only the PDF export feature breaks.
 #
 # 6.1.x pinned pyausaxs==1.0.4; 6.2.0 unpinned it. We now depend on the
-# real dev-python/pyausaxs (the AUSAXS C++ wrapper, resolves 1.2.0) so
+# real dev-python/pyausaxs (the AUSAXS C++ wrapper, unversioned) so
 # SasView's SANS Debye path runs the accelerated backend instead of the
 # pure-Python fallback (ausaxs_sans_debye.py still try/excepts, so a
 # missing/broken lib degrades gracefully). x86_64-only: the wheel ships a
