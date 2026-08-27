@@ -1,0 +1,1304 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_EXT=1
+PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
+ROCM_VERSION=7.2
+
+RUST_MIN_VER="1.89.0"
+
+# vllm 0.22.0 ships a Rust frontend binary (vllm-rs) built via
+# setuptools-rust from the bundled rust/ workspace.  Vendor its crate
+# dependencies (generated from rust/Cargo.lock) rather than relying on a
+# network-sandbox bypass, per the overlay's Rust+Python convention.  The
+# frontend is opt-in at runtime (VLLM_USE_RUST_FRONTEND=1, default off);
+# vllm's Python API server stays the default, so the binary is a
+# performance option, not load-bearing.
+CRATES="
+	adler2@2.0.1
+	ahash@0.8.12
+	aho-corasick@1.1.4
+	android_system_properties@0.1.5
+	anes@0.1.6
+	anstream@0.6.21
+	anstream@1.0.0
+	anstyle-parse@0.2.7
+	anstyle-parse@1.0.0
+	anstyle-query@1.1.5
+	anstyle-wincon@3.0.11
+	anstyle@1.0.13
+	anyhow@1.0.102
+	arc-swap@1.9.0
+	arrayref@0.3.9
+	arrayvec@0.7.6
+	async-io@2.6.0
+	async-openai-macros@0.1.1
+	async-openai@0.33.1
+	async-trait@0.1.89
+	asynchronous-codec@0.7.0
+	asynk-strim-attr-macro@0.1.0
+	asynk-strim-attr@0.1.0
+	asynk-strim@0.1.5
+	atomic-waker@1.1.2
+	auto_enums@0.8.9
+	auto_impl@1.3.0
+	autocfg@1.5.0
+	axum-core@0.5.6
+	axum@0.8.8
+	backoff@0.4.0
+	base64@0.13.1
+	base64@0.22.1
+	base64ct@1.8.3
+	bit-set@0.5.3
+	bit-set@0.8.0
+	bit-vec@0.6.3
+	bit-vec@0.8.0
+	bitflags@2.11.0
+	blake3@1.8.5
+	block-buffer@0.10.4
+	bstr@1.12.1
+	bumpalo@3.20.2
+	bytemuck@1.25.0
+	bytemuck_derive@1.10.2
+	byteorder-lite@0.1.0
+	byteorder@1.5.0
+	bytes@1.12.0
+	cast@0.3.0
+	castaway@0.2.4
+	cc@1.2.56
+	cfg-if@1.0.4
+	chrono@0.4.44
+	ciborium-io@0.2.2
+	ciborium-ll@0.2.2
+	ciborium@0.2.2
+	clap@4.5.60
+	clap_builder@4.5.60
+	clap_derive@4.5.55
+	clap_lex@1.0.0
+	color_quant@1.1.0
+	colorchoice@1.0.4
+	compact_str@0.9.0
+	concurrent-queue@2.5.0
+	console@0.16.2
+	constant_time_eq@0.4.2
+	cookie@0.18.1
+	cookie_store@0.22.1
+	core-foundation-sys@0.8.7
+	core-foundation@0.10.1
+	core-foundation@0.9.4
+	cpufeatures@0.2.17
+	cpufeatures@0.3.0
+	crc32fast@1.5.0
+	criterion-plot@0.5.0
+	criterion@0.5.1
+	crossbeam-deque@0.8.6
+	crossbeam-epoch@0.9.18
+	crossbeam-queue@0.3.12
+	crossbeam-utils@0.8.21
+	crunchy@0.2.4
+	crypto-common@0.1.7
+	daachorse@1.0.0
+	darling@0.20.11
+	darling@0.23.0
+	darling_core@0.20.11
+	darling_core@0.23.0
+	darling_macro@0.20.11
+	darling_macro@0.23.0
+	dary_heap@0.3.8
+	der@0.8.1
+	deranged@0.5.8
+	derive_builder@0.20.2
+	derive_builder_core@0.20.2
+	derive_builder_macro@0.20.2
+	derive_more-impl@1.0.0
+	derive_more@1.0.0
+	derive_utils@0.15.1
+	digest@0.10.7
+	dirs-sys@0.5.0
+	dirs@6.0.0
+	displaydoc@0.2.5
+	dissimilar@1.0.11
+	document-features@0.2.12
+	dtoa@1.0.11
+	dyn-clone@1.0.20
+	easy-ext@1.0.3
+	educe@0.6.0
+	either@1.15.0
+	encode_unicode@1.0.0
+	encoding_rs@0.8.35
+	enum-as-inner@0.7.0
+	enum-ordinalize-derive@4.3.2
+	enum-ordinalize@4.3.2
+	env_filter@1.0.1
+	env_logger@0.11.10
+	equivalent@1.0.2
+	errno@0.3.14
+	esaxx-rs@0.1.10
+	eventsource-stream@0.2.3
+	expect-test@1.5.1
+	extended@0.1.0
+	fancy-regex@0.13.0
+	fancy-regex@0.17.0
+	fast_image_resize@6.0.0
+	fastokens@0.2.1
+	fastrand@2.3.0
+	fax@0.2.6
+	fax_derive@0.2.0
+	fdeflate@0.3.7
+	find-msvc-tools@0.1.9
+	fixedbitset@0.5.7
+	flate2@1.1.9
+	fnv@1.0.7
+	foldhash@0.1.5
+	foreign-types-shared@0.1.1
+	foreign-types@0.3.2
+	form_urlencoded@1.2.2
+	fslock@0.2.1
+	futures-channel@0.3.32
+	futures-core@0.3.32
+	futures-executor@0.3.32
+	futures-io@0.3.32
+	futures-lite@2.6.1
+	futures-macro@0.3.32
+	futures-sink@0.3.32
+	futures-task@0.3.32
+	futures-timer@3.0.3
+	futures-util@0.3.32
+	futures@0.3.32
+	generic-array@0.14.7
+	getopts@0.2.24
+	getrandom@0.2.17
+	getrandom@0.3.4
+	getrandom@0.4.2
+	gif@0.14.2
+	h2@0.4.15
+	half@2.7.1
+	hashbrown@0.12.3
+	hashbrown@0.14.5
+	hashbrown@0.15.5
+	hashbrown@0.16.1
+	heck@0.5.0
+	hermit-abi@0.5.2
+	hex@0.4.3
+	hf-hub@0.5.0
+	hmac@0.12.1
+	hound@3.5.1
+	http-body-util@0.1.3
+	http-body@1.0.1
+	http@1.4.0
+	httparse@1.10.1
+	httpdate@1.0.3
+	hyper-rustls@0.27.7
+	hyper-timeout@0.5.2
+	hyper-tls@0.6.0
+	hyper-util@0.1.20
+	hyper@1.10.1
+	iana-time-zone-haiku@0.1.2
+	iana-time-zone@0.1.65
+	icu_collections@2.1.1
+	icu_locale_core@2.1.1
+	icu_normalizer@2.1.1
+	icu_normalizer_data@2.1.1
+	icu_properties@2.1.2
+	icu_properties_data@2.1.2
+	icu_provider@2.1.1
+	id-arena@2.3.0
+	ident_case@1.0.1
+	idna@1.1.0
+	idna_adapter@1.2.1
+	image-webp@0.2.4
+	image@0.25.10
+	indexmap@1.9.3
+	indexmap@2.13.0
+	indicatif@0.18.4
+	instant@0.1.13
+	ipnet@2.12.0
+	iri-string@0.7.10
+	is-macro@0.3.7
+	is-terminal@0.4.17
+	is_terminal_polyfill@1.70.2
+	itertools@0.10.5
+	itertools@0.11.0
+	itertools@0.14.0
+	itoa@1.0.17
+	jiff-static@0.2.23
+	jiff@0.2.23
+	jobserver@0.1.34
+	js-sys@0.3.91
+	lalrpop-util@0.20.2
+	lazy_static@1.5.0
+	leb128fmt@0.1.0
+	libc@0.2.183
+	libloading@0.8.9
+	libm@0.2.16
+	libmimalloc-sys@0.1.49
+	libredox@0.1.14
+	linux-raw-sys@0.12.1
+	litemap@0.8.1
+	litrs@1.0.0
+	lock_api@0.4.14
+	log@0.4.29
+	macro_rules_attribute-proc_macro@0.2.2
+	macro_rules_attribute@0.2.2
+	malachite-base@0.4.22
+	malachite-bigint@0.2.3
+	malachite-nz@0.4.22
+	malachite-q@0.4.22
+	malachite@0.4.22
+	matchers@0.2.0
+	matchit@0.8.4
+	matrixmultiply@0.3.10
+	memchr@2.8.0
+	memo-map@0.3.3
+	mimalloc@0.1.52
+	mime@0.3.17
+	mime_guess@2.0.5
+	minijinja-contrib@2.18.0
+	minijinja@2.18.0
+	minimal-lexical@0.2.1
+	miniz_oxide@0.8.9
+	mio@1.2.1
+	monostate-impl@0.1.18
+	monostate@0.1.18
+	moxcms@0.8.1
+	multimap@0.10.1
+	native-tls@0.2.18
+	ndarray@0.16.1
+	ndarray@0.17.2
+	nom@7.1.3
+	nu-ansi-term@0.50.3
+	num-complex@0.4.6
+	num-conv@0.2.0
+	num-integer@0.1.46
+	num-traits@0.2.19
+	num_cpus@1.17.0
+	num_threads@0.1.7
+	once_cell@1.21.4
+	once_cell_polyfill@1.70.2
+	onig@6.5.1
+	onig_sys@69.9.1
+	oorandom@11.1.5
+	openai-protocol@1.6.0
+	openssl-macros@0.1.1
+	openssl-probe@0.2.1
+	openssl-src@300.5.5+3.5.5
+	openssl-sys@0.9.117
+	openssl@0.10.81
+	option-ext@0.2.0
+	parking@2.2.1
+	parking_lot@0.12.5
+	parking_lot_core@0.9.12
+	paste@1.0.15
+	pcre2-sys@0.2.10
+	pcre2@0.2.11
+	pem-rfc7468@1.0.0
+	percent-encoding@2.3.2
+	petgraph@0.8.3
+	phf@0.11.3
+	phf_codegen@0.11.3
+	phf_generator@0.11.3
+	phf_shared@0.11.3
+	pin-project-internal@1.1.11
+	pin-project-lite@0.2.17
+	pin-project@1.1.11
+	pkg-config@0.3.32
+	plotters-backend@0.3.7
+	plotters-svg@0.3.7
+	plotters@0.3.7
+	png@0.18.1
+	polling@3.11.0
+	portable-atomic-util@0.2.6
+	portable-atomic@1.13.1
+	potential_utf@0.1.4
+	powerfmt@0.2.0
+	ppv-lite86@0.2.21
+	prettyplease@0.2.37
+	primal-check@0.3.4
+	proc-macro-crate@3.5.0
+	proc-macro-error-attr2@2.0.0
+	proc-macro-error2@2.0.1
+	proc-macro2@1.0.106
+	prometheus-client-derive-encode@0.5.0
+	prometheus-client@0.24.0
+	prost-build@0.14.3
+	prost-derive@0.14.3
+	prost-types@0.14.3
+	prost@0.14.3
+	pulldown-cmark-to-cmark@22.0.0
+	pulldown-cmark@0.13.3
+	pxfm@0.1.29
+	pyo3-build-config@0.28.3
+	pyo3-ffi@0.28.3
+	pyo3-macros-backend@0.28.3
+	pyo3-macros@0.28.3
+	pyo3@0.28.3
+	pythonize@0.28.0
+	quick-error@2.0.1
+	quote@1.0.45
+	r-efi@5.3.0
+	r-efi@6.0.0
+	rand@0.8.5
+	rand@0.9.2
+	rand_chacha@0.3.1
+	rand_chacha@0.9.0
+	rand_core@0.6.4
+	rand_core@0.9.5
+	rand_distr@0.5.1
+	rawpointer@0.2.1
+	rayon-cond@0.4.0
+	rayon-core@1.13.0
+	rayon@1.12.0
+	realfft@3.5.0
+	redox_syscall@0.5.18
+	redox_users@0.5.2
+	ref-cast-impl@1.0.25
+	ref-cast@1.0.25
+	regex-automata@0.4.14
+	regex-lite@0.1.9
+	regex-syntax@0.8.10
+	regex@1.12.3
+	reqwest-eventsource@0.6.0
+	reqwest@0.12.28
+	reqwest@0.13.4
+	ring@0.17.14
+	riptoken@0.3.0
+	rlimit@0.11.0
+	rmp-serde@1.3.1
+	rmp@0.8.15
+	rmpv@1.3.1
+	rubato@0.16.2
+	rustc-hash@1.1.0
+	rustc-hash@2.1.1
+	rustfft@6.4.1
+	rustix@1.1.4
+	rustls-pki-types@1.14.1
+	rustls-webpki@0.103.9
+	rustls@0.23.37
+	rustpython-ast@0.4.0
+	rustpython-parser-core@0.4.0
+	rustpython-parser-vendored@0.4.0
+	rustpython-parser@0.4.0
+	rustversion@1.0.22
+	ryu@1.0.23
+	saa@5.5.0
+	same-file@1.0.6
+	scc@2.4.0
+	scc@3.6.9
+	schannel@0.1.29
+	schemars@0.8.22
+	schemars@0.9.0
+	schemars@1.2.1
+	schemars_derive@0.8.22
+	scopeguard@1.2.0
+	sdd@3.0.10
+	sdd@4.7.3
+	secrecy@0.10.3
+	security-framework-sys@2.17.0
+	security-framework@3.7.0
+	semver@1.0.27
+	serde-json-fmt@0.1.0
+	serde@1.0.228
+	serde_bytes@0.11.19
+	serde_core@1.0.228
+	serde_default@0.2.0
+	serde_derive@1.0.228
+	serde_derive_internals@0.29.1
+	serde_json@1.0.149
+	serde_path_to_error@0.1.20
+	serde_repr@0.1.20
+	serde_tuple@1.1.3
+	serde_tuple_macros@1.1.3
+	serde_urlencoded@0.7.1
+	serde_with@3.18.0
+	serde_with_macros@3.18.0
+	serial_test@3.4.0
+	serial_test_derive@3.4.0
+	sha2@0.10.9
+	sharded-slab@0.1.7
+	shlex@1.3.0
+	signal-hook-registry@1.4.8
+	simd-adler32@0.3.8
+	siphasher@1.0.2
+	slab@0.4.12
+	smallvec@1.15.1
+	smartstring@1.0.1
+	socket2@0.6.3
+	socks@0.3.4
+	spm_precompiled@0.1.4
+	stable_deref_trait@1.2.1
+	static_assertions@1.1.0
+	strength_reduce@0.2.4
+	strsim@0.11.1
+	strum@0.27.2
+	strum_macros@0.27.2
+	subenum@1.1.3
+	subtle@2.6.1
+	symphonia-bundle-flac@0.6.0
+	symphonia-bundle-mp3@0.6.0
+	symphonia-codec-aac@0.6.0
+	symphonia-codec-adpcm@0.6.0
+	symphonia-codec-alac@0.6.0
+	symphonia-codec-pcm@0.6.0
+	symphonia-codec-vorbis@0.6.0
+	symphonia-common@0.6.0
+	symphonia-core@0.6.0
+	symphonia-format-caf@0.6.0
+	symphonia-format-isomp4@0.6.0
+	symphonia-format-mkv@0.6.0
+	symphonia-format-ogg@0.6.0
+	symphonia-format-riff@0.6.0
+	symphonia-metadata@0.6.0
+	symphonia@0.6.0
+	syn@1.0.109
+	syn@2.0.117
+	sync_wrapper@1.0.2
+	synstructure@0.13.2
+	system-configuration-sys@0.6.0
+	system-configuration@0.7.0
+	target-lexicon@0.13.5
+	task-local@0.1.1
+	tekken-rs@0.1.1
+	tempfile@3.27.0
+	thiserror-ext-derive@0.3.0
+	thiserror-ext@0.3.0
+	thiserror-impl@1.0.69
+	thiserror-impl@2.0.18
+	thiserror@1.0.69
+	thiserror@2.0.18
+	thread_local@1.1.9
+	tiff@0.11.3
+	tiktoken-rs@0.7.0
+	tiktoken-rs@0.9.1
+	time-core@0.1.8
+	time-macros@0.2.27
+	time@0.3.47
+	tiny-keccak@2.0.2
+	tinystr@0.8.2
+	tinytemplate@1.2.1
+	tls-listener@0.11.2
+	tokenizers@0.22.2
+	tokio-macros@2.7.0
+	tokio-native-tls@0.3.1
+	tokio-openssl@0.6.5
+	tokio-rustls@0.26.4
+	tokio-stream@0.1.18
+	tokio-tungstenite@0.28.0
+	tokio-util@0.7.18
+	tokio@1.52.3
+	toml_datetime@1.1.1+spec-1.1.0
+	toml_edit@0.25.11+spec-1.1.0
+	toml_parser@1.1.2+spec-1.1.0
+	tonic-build@0.14.6
+	tonic-health@0.14.6
+	tonic-prost-build@0.14.6
+	tonic-prost@0.14.6
+	tonic@0.14.6
+	tool-parser@1.2.0
+	tower-http@0.6.8
+	tower-layer@0.3.3
+	tower-service@0.3.3
+	tower@0.5.3
+	tracing-attributes@0.1.31
+	tracing-core@0.1.36
+	tracing-futures@0.2.5
+	tracing-log@0.2.0
+	tracing-subscriber@0.3.22
+	tracing@0.1.44
+	trait-set@0.3.0
+	transpose@0.2.3
+	try-lock@0.2.5
+	tungstenite@0.28.0
+	typenum@1.19.0
+	unic-char-property@0.9.0
+	unic-char-range@0.9.0
+	unic-common@0.9.0
+	unic-emoji-char@0.9.0
+	unic-ucd-ident@0.9.0
+	unic-ucd-version@0.9.0
+	unicase@2.9.0
+	unicode-ident@1.0.24
+	unicode-normalization-alignments@0.1.12
+	unicode-segmentation@1.13.1
+	unicode-width@0.2.2
+	unicode-xid@0.2.6
+	unicode_categories@0.1.1
+	unicode_names2@1.3.0
+	unicode_names2_generator@1.3.0
+	unit-prefix@0.5.2
+	untrusted@0.9.0
+	ureq-proto@0.6.0
+	ureq@3.3.0
+	url@2.5.8
+	utf-8@0.7.6
+	utf16_iter@1.0.5
+	utf8-zero@0.8.1
+	utf8_iter@1.0.4
+	utf8parse@0.2.2
+	uuid@1.22.0
+	validator@0.20.0
+	validator_derive@0.20.0
+	valuable@0.1.1
+	vcpkg@0.2.15
+	version_check@0.9.5
+	walkdir@2.5.0
+	want@0.3.1
+	wasi@0.11.1+wasi-snapshot-preview1
+	wasip2@1.0.2+wasi-0.2.9
+	wasip3@0.4.0+wasi-0.3.0-rc-2026-01-06
+	wasm-bindgen-futures@0.4.64
+	wasm-bindgen-macro-support@0.2.114
+	wasm-bindgen-macro@0.2.114
+	wasm-bindgen-shared@0.2.114
+	wasm-bindgen@0.2.114
+	wasm-encoder@0.244.0
+	wasm-metadata@0.244.0
+	wasm-streams@0.4.2
+	wasm-streams@0.5.0
+	wasmparser@0.244.0
+	web-sys@0.3.91
+	web-time@1.1.0
+	webpki-root-certs@1.0.8
+	webpki-roots@1.0.8
+	weezl@0.1.12
+	win_uds@0.2.2
+	winapi-i686-pc-windows-gnu@0.4.0
+	winapi-util@0.1.11
+	winapi-x86_64-pc-windows-gnu@0.4.0
+	winapi@0.3.9
+	windows-core@0.62.2
+	windows-implement@0.60.2
+	windows-interface@0.59.3
+	windows-link@0.2.1
+	windows-registry@0.6.1
+	windows-result@0.4.1
+	windows-strings@0.5.1
+	windows-sys@0.52.0
+	windows-sys@0.61.2
+	windows-targets@0.52.6
+	windows_aarch64_gnullvm@0.52.6
+	windows_aarch64_msvc@0.52.6
+	windows_i686_gnu@0.52.6
+	windows_i686_gnullvm@0.52.6
+	windows_i686_msvc@0.52.6
+	windows_x86_64_gnu@0.52.6
+	windows_x86_64_gnullvm@0.52.6
+	windows_x86_64_msvc@0.52.6
+	winnow@1.0.2
+	wit-bindgen-core@0.51.0
+	wit-bindgen-rust-macro@0.51.0
+	wit-bindgen-rust@0.51.0
+	wit-bindgen@0.51.0
+	wit-component@0.244.0
+	wit-parser@0.244.0
+	write16@1.0.0
+	writeable@0.6.2
+	xgrammar-structural-tag@0.2.0+xgrammar.0.2.4.dd729e7
+	yoke-derive@0.8.1
+	yoke@0.8.1
+	zerocopy-derive@0.8.42
+	zerocopy@0.8.42
+	zerofrom-derive@0.1.6
+	zerofrom@0.1.6
+	zeroize@1.8.2
+	zeromq@0.6.0
+	zerotrie@0.2.3
+	zerovec-derive@0.11.2
+	zerovec@0.11.5
+	zmij@1.0.21
+	zstd-safe@7.2.4
+	zstd-sys@2.0.16+zstd.1.5.7
+	zstd@0.13.3
+	zune-core@0.5.1
+	zune-jpeg@0.5.15
+"
+declare -A GIT_CRATES=(
+	[llm-multimodal]='https://github.com/smg-project/llm-multimodal;15adba5e025d8636ba4a334fb379b1371f6196a1;llm-multimodal-%commit%'
+	[oss-harmony]='https://github.com/oss-harmony/harmony;76e849426cc092f84509e31a17027755f67d662a;harmony-%commit%'
+)
+
+# The Rust frontend (vllm-rs) is opt-in at runtime (VLLM_USE_RUST_FRONTEND=1,
+# default off) and a heavy 600+-crate build, so gate it behind USE=rust rather
+# than building it for every install. CARGO_OPTIONAL stops the cargo eclass from
+# auto-adding its BDEPEND/SRC_URI/phase functions; we wire those under rust?
+# below and call cargo_src_unpack manually.
+CARGO_OPTIONAL=1
+
+inherit cargo cuda distutils-r1 flag-o-matic pypi rocm toolchain-funcs
+
+# Revisions pinned by vllm's CMake files.  Keep these in lockstep with
+# upstream: all CMake dependencies are pre-staged so builds stay offline.
+VLLM_CUTLASS_TAG="4.4.2"
+VLLM_DEEPGEMM_COMMIT="8b1392b978f5a03c828dd1711090d7fb50958b8a"
+VLLM_DEEPGEMM_CUTLASS_COMMIT="f3fde58372d33e9a5650ba7b80fc48b3b49d40c8"
+VLLM_DEEPGEMM_FMT_COMMIT="553ec11ec06fbe0beebfbb45f9dc3c9eabd83d28"
+VLLM_FA_COMMIT="f3e1a4f74c99145c0717709860bf765de1703779"
+VLLM_FA_CUTLASS_COMMIT="62750a2b75c802660e4894434dc55e839f322277"
+VLLM_FLASHMLA_COMMIT="a8f794d1251cbfd88a5011445dd5582289c727e4"
+VLLM_FLASHMLA_CUTLASS_COMMIT="147f5673d0c1c3dcf66f78d677fd647e4a020219"
+VLLM_FMHA_SM100_COMMIT="087c161814d4d9c735b46c21212a09e5f8eb92fa"
+VLLM_FMHA_SM100_CUTLASS_COMMIT="eb61c911471867a5fd2466bfd8f29306cea6ebf8"
+VLLM_ONEDNN_TAG="3.13"
+VLLM_QUTLASS_COMMIT="e74319e3405ce6d71965732880f5dc1f52371f64"
+VLLM_FLASHKDA_COMMIT="053de1b716ef3255873e02d2d28f4adf09951978"
+VLLM_TML_FA4_COMMIT="b206834606ed5b5f21f8eed6b0683f528ea9cf7d"
+VLLM_TRITON_KERNELS_TAG="3.5.1"
+
+DESCRIPTION="High-throughput, memory-efficient inference and serving engine for LLMs"
+HOMEPAGE="
+	https://github.com/vllm-project/vllm
+	https://docs.vllm.ai/
+	https://pypi.org/project/vllm/
+"
+SRC_URI+="
+	rust? ( ${CARGO_CRATE_URIS} )
+	cpu? (
+		https://github.com/uxlfoundation/oneDNN/archive/refs/tags/v${VLLM_ONEDNN_TAG}.tar.gz
+			-> vllm-oneDNN-${VLLM_ONEDNN_TAG}.gh.tar.gz
+	)
+	cuda? (
+		https://github.com/NVIDIA/cutlass/archive/refs/tags/v${VLLM_CUTLASS_TAG}.tar.gz
+			-> vllm-cutlass-${VLLM_CUTLASS_TAG}.gh.tar.gz
+		https://github.com/deepseek-ai/DeepGEMM/archive/${VLLM_DEEPGEMM_COMMIT}.tar.gz
+			-> vllm-DeepGEMM-${VLLM_DEEPGEMM_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_DEEPGEMM_CUTLASS_COMMIT}.tar.gz
+			-> vllm-DeepGEMM-cutlass-${VLLM_DEEPGEMM_CUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/fmtlib/fmt/archive/${VLLM_DEEPGEMM_FMT_COMMIT}.tar.gz
+			-> vllm-DeepGEMM-fmt-${VLLM_DEEPGEMM_FMT_COMMIT:0:7}.gh.tar.gz
+		https://github.com/vllm-project/flash-attention/archive/${VLLM_FA_COMMIT}.tar.gz
+			-> vllm-flash-attn-${VLLM_FA_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_FA_CUTLASS_COMMIT}.tar.gz
+			-> vllm-flash-attn-cutlass-${VLLM_FA_CUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/vllm-project/FlashMLA/archive/${VLLM_FLASHMLA_COMMIT}.tar.gz
+			-> vllm-FlashMLA-${VLLM_FLASHMLA_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_FLASHMLA_CUTLASS_COMMIT}.tar.gz
+			-> vllm-FlashMLA-cutlass-${VLLM_FLASHMLA_CUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/vllm-project/MSA/archive/${VLLM_FMHA_SM100_COMMIT}.tar.gz
+			-> vllm-MSA-${VLLM_FMHA_SM100_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_FMHA_SM100_CUTLASS_COMMIT}.tar.gz
+			-> vllm-MSA-cutlass-${VLLM_FMHA_SM100_CUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/IST-DASLab/qutlass/archive/${VLLM_QUTLASS_COMMIT}.tar.gz
+			-> vllm-qutlass-${VLLM_QUTLASS_COMMIT:0:7}.gh.tar.gz
+		https://github.com/vllm-project/tml-fa4/archive/${VLLM_TML_FA4_COMMIT}.tar.gz
+			-> vllm-tml-fa4-${VLLM_TML_FA4_COMMIT:0:7}.gh.tar.gz
+		https://github.com/vllm-project/FlashKDA/archive/${VLLM_FLASHKDA_COMMIT}.tar.gz
+			-> vllm-FlashKDA-${VLLM_FLASHKDA_COMMIT:0:7}.gh.tar.gz
+		https://github.com/triton-lang/triton/archive/refs/tags/v${VLLM_TRITON_KERNELS_TAG}.tar.gz
+			-> vllm-triton-kernels-${VLLM_TRITON_KERNELS_TAG}.gh.tar.gz
+	)
+	rocm? (
+		https://github.com/triton-lang/triton/archive/refs/tags/v${VLLM_TRITON_KERNELS_TAG}.tar.gz
+			-> vllm-triton-kernels-${VLLM_TRITON_KERNELS_TAG}.gh.tar.gz
+	)
+"
+
+LICENSE="Apache-2.0"
+# Dependent crate licenses
+LICENSE+="
+	BSD-2 BSD CC0-1.0 CDLA-Permissive-2.0 ISC LGPL-3 MIT
+	MPL-2.0 UoI-NCSA Unicode-3.0 Unicode-DFS-2016 Unlicense ZLIB
+"
+SLOT="0"
+KEYWORDS="~amd64"
+IUSE="cpu cuda humming rocm rust"
+# VLLM_TARGET_DEVICE is single-valued; cpu, cuda, and rocm paths are
+# mutually exclusive. Default (none) → empty target. USE=rust is
+# orthogonal — it builds the optional vllm-rs Rust serving frontend
+# (opt-in at runtime via VLLM_USE_RUST_FRONTEND=1) and combines with any
+# target.
+REQUIRED_USE="
+	?? ( cpu cuda rocm )
+	rocm? ( || ( ${ROCM_REQUIRED_USE} ) )
+	humming? ( cuda )
+"
+
+# USE=cpu (default off): build with VLLM_TARGET_DEVICE=cpu so the
+# Python entrypoints can actually drive inference on CPU hardware.
+# Pulls torchaudio + numba (vllm's cpu.txt also lists intel-openmp on
+# x86_64, but Intel ships it as a proprietary blob — we omit it; vllm
+# falls back to the pthreads OpenMP shipped with sci-libs/openblas etc.)
+#
+# CAVEAT (historical): ::gentoo sci-ml/pytorch's caffe2::mkl public
+# link interface used to drag MKL's MPI / cluster libs (scalapack,
+# cdft, blacs_intelmpi) and Intel-OpenMP threading (intel_thread)
+# into every consumer link, breaking the build on hosts without
+# Intel Cluster Edition + Compiler. We pin >=sci-ml/caffe2-2.11.0-r90
+# below — this overlay's r90 fork ships a scrub patch on
+# cmake/public/mkl.cmake that filters those libs and forces
+# gnu_thread. Drop the pin once an equivalent upstream fix lands.
+#
+# USE=cuda: build with VLLM_TARGET_DEVICE=cuda. Pulls torchaudio +
+# torchvision + numba and the full Tier-0..5 CUDA stack (flashinfer
+# + tilelang + nvidia-cutlass-dsl + cuda-bindings + nvidia-cudnn-
+# frontend + ...). Compiles the _C / _moe_C / _vllm_fa* CUDA C++
+# extensions in setup.py via nvcc and the system CUDA toolkit at
+# /opt/cuda. CMAKE_CUDA_HOST_COMPILER is selected through cuda.eclass
+# because nvcc rejects unsupported host compiler versions.
+# All CMake dependencies are pre-staged from SRC_URI below.
+#
+# Same MKL-MPI link-pollution caveat as USE=cpu (above): without the
+# >=sci-ml/caffe2-2.11.0-r90 pin the cumem_allocator link fails with
+# "cannot find -lmkl_scalapack_ilp64" after all 339 CUDA objects build.
+#
+# USE=rocm: build with VLLM_TARGET_DEVICE=rocm. Pulls torchaudio +
+# torchvision + numba + the runai-streamer/tensorizer/conch-triton
+# trio from upstream's requirements/rocm.txt, plus the HIP libs that
+# vllm's CMake `enable_language(HIP)` and the linked libtorch_hip
+# resolve at link time (hipBLAS / hipBLASLt / hipFFT / hipRAND /
+# hipSOLVER / hipSPARSE / hipCUB). Compiles the _C / _moe_C / _rocm_C
+# extensions and csrc/rocm/*.cu via hipcc and the system ROCm
+# toolchain at /opt/rocm. Inherits sci-ml/caffe2's MKL-MPI scrub
+# (>=2.11.0-r90) — same link-pollution caveat as the cuda path.
+# PYTORCH_ROCM_ARCH is derived from AMDGPU_TARGETS via rocm.eclass's
+# get_amdgpu_flags.
+#
+# amd-quark (in requirements/rocm.txt as "for Quark quantization on
+# ROCm") is deliberately omitted from RDEPEND: no direct `import` from
+# vllm core code, only used by vllm.model_executor.layers.quantization.
+# quark internals when Quark-quantized models are loaded.
+# dev-python/amd-quark-bin in this overlay caps PYTHON_COMPAT at
+# 3.{11,12}, which would block vllm on 3.13/3.14. Users wanting Quark
+# quantization install amd-quark-bin separately.
+#
+# Upstream requirements/cuda.txt (0.27.1) pins nvidia-cutlass-dsl[cu13]==4.6.0,
+# tilelang==0.1.12 and flashinfer-python==0.6.16.post3 exactly; we pin
+# ~nvidia-cutlass-dsl-4.6.0, ~tilelang-0.1.12 and ~flashinfer-python-0.6.16_p3
+# to match.
+# quack-kernels floor is now >=0.4.0 (0.26.0 cuda.txt, "Required for
+# tml-fa4") but we KEEP an upper cap at <0.6.2. cutlass-dsl moved to 4.6.0
+# this bump; quack-kernels 0.6.1 pins ~nvidia-cutlass-dsl-4.6.0 (compatible),
+# but 0.6.2+ bumped to ~nvidia-cutlass-dsl-4.6.1 (their JIT kernels ABI-lock
+# to 4.6.1). vllm's ~4.6.0 pin (upstream cuda.txt ==4.6.0) is incompatible
+# with 4.6.1, so an uncapped floor lets -uDN pull quack 0.6.3 -> cutlass 4.6.1
+# and conflict with our own cutlass pin. Cap at <0.6.2 keeps quack on 0.6.1
+# (~4.6.0). Do NOT relax to 4.6.1: not blessed by this vllm release.
+# verified 2026-08-07
+# The cutlass-dsl metapackage pulls nvidia-cutlass-dsl-libs-cu13
+# transitively, so it already covers the [cu13] extra. The
+# nvidia-cudnn-frontend floor stays >=1.19.1; that dep lives on the
+# flashinfer-python ebuild — vllm has zero direct cudnn_frontend imports;
+# it is for flashinfer's internal use. fastsafetensors floor >=0.3.2.
+# 0.25.0 also adds torchcodec>=0.14 (GPU video decode) to cuda.txt; pulled
+# in cuda? here.
+# 0.25.1 (2026-07-14): patch release; both packaging AND build inputs are
+# byte-identical to 0.25.0 -- rust/Cargo.lock (575 crates), GIT_CRATES
+# (oss-harmony, llm-multimodal), every requirements/*.txt, the flash-attn
+# pin, requires-python, setup.py, CMakeLists.txt, cmake/ and all of csrc/
+# are unchanged; only 7 .py files differ (5 runtime vllm modules, the version
+# stamp, and one test), all py_compile-clean. So the 0.25.0 audit below
+# carries over verbatim and the compiled result is identical -- not
+# separately rebuilt.
+# static cuda.txt audit done 2026-07-12 against vllm-0.25.0 -- deltas vs
+# 0.24.0: flashinfer-python 0.6.12->0.6.13, humming-kernels 0.1.4->0.1.10,
+# +torchcodec>=0.14, flash-attn pin dd62dac->2c839c3; PyNvVideoCodec + nvtx
+# were packaged with the 0.27.1 dependency audit. rocm gfx1150 + cpu + empty
+# + USE=rust coverage completed 2026-07-12; CUDA sm_86 coverage on an A4500
+# with CUDA 13.3 and nvcc -ccbin g++-15 completed the same day: FA2 builds, FA3 stubbed
+# on sm_86, opt-125m generate() OK, USE=humming registry loads. 0.25.0 adds a
+# new ninja target _vllm_fa4_cutedsl_C (cutedsl) that builds clean and needs
+# no patch -- watch it alongside the FA3 stub on future bumps.
+# 0.26.0 (2026-07-26): common.txt drops diskcache (outlines disk-cache removed).
+# cuda.txt deltas vs 0.25.1: flashinfer-python/cubin 0.6.13->0.6.14, apache-tvm-ffi
+# 0.1.9->0.1.10, nvidia-cutlass-dsl 4.5.2->4.6.0,
+# quack-kernels >=0.3.3,<0.6.0 -> >=0.4.0,<0.6.2 (floor raised, cap moved to
+# 0.6.2 for the cutlass-4.6.1 boundary, see above); tokenspeed-mla
+# 0.1.2->0.1.8 is packaged exactly while amd-quark 0.8.99->0.12 stays omitted.
+# cpu.txt is unchanged (torch
+# still ==2.11.0). flash-attn pin 2c839c3->caaa4eb (fa3-skip + py314 patches apply
+# clean, regenerated as caaa4eb copies). CRATES 561->594, GIT_CRATES llm-multimodal
+# rev 7d74582->5390032 (still v1.7.1), oss-harmony unchanged. The rocm and cuda
+# targets are not yet verified against the shipped ~2.11.0 torch pin.
+#
+# 0.27.1 (2026-08-12): the big one -- torch 2.11.0 -> 2.13.0 (caffe2/pytorch
+# pins ->2.13.0-r90; torchvision 0.26.0->0.28.0; torchaudio stays ==2.11.0 per
+# cuda.txt). cuda.txt: flashinfer-python/cubin 0.6.14->0.6.16.post3, apache-tvm-ffi
+# 0.1.10->0.1.11 (rocm stays 0.1.10), tilelang 0.1.9->0.1.12 (rocm stays 0.1.10),
+# quack-kernels now ==0.6.1 (our >=0.4.0<0.6.2 range still resolves it). common.txt:
+# mistral-common 1.11.5->1.11.6. numba stays ==0.65.0 upstream (kept <0.66; numba
+# 0.65.1 + llvmlite 0.47.0 were re-added this cycle to satisfy it). xgrammar kept
+# ~0.2.2 (requirements only bound 0.2.1..<1; FFI ABI move unverified here).
+# CMake: DeepGEMM repo deepseek-ai->vllm-project + a6b593d->e21c821, MSA
+# 2e63ec3->087c161, qutlass 830d2c4->e74319e, FA caaa4eb->28e862d (patches
+# regenerated: FA CMakeLists moved to C++20 + per-target CXX_STANDARD, fa3 guard
+# folds the new set_target_properties in); NEW external project FlashKDA a3e42bb
+# (cuda, no submodules, reads FLASH_KDA_SRC_DIR). All nested cutlass/fmt UNCHANGED.
+# CRATES 594->595 (tonic 0.14.5->0.14.6 +tonic-health, xgrammar-structural-tag
+# 0.2.2.4d145cc->0.2.4.dd729e7), GIT_CRATES llm-multimodal 5390032->15adba5 (still
+# v1.7.1), oss-harmony now tag v0.0.11 (same commit 76e8494). rocm gfx1150
+# build + `from vllm import LLM` import verified 2026-08-12 (against
+# caffe2/pytorch 2.13.0), after two fixes the torch-2.13 stack forced: the rocm
+# HIP_CLANG_PATH export below (caffe2 2.13's LoadHIP no longer finds the slotted
+# llvm) and bumping rocm apache-tvm-ffi to 0.1.11 (xgrammar 0.2.2 needs its
+# extra_lib_paths). CUDA sm_86 clean rebuild and non-eager OPT-125M generation
+# completed 2026-08-14 with CUDA 13.3, driver 610.57.04, and GCC 15.
+#
+# 0.28.0 (2026-08-26): a quiet one next to 0.27.1. common.txt adds exactly one
+# line -- huggingface_hub >= 1.27.0, previously only transitive through
+# transformers, now declared -- and changes nothing else; torch stays ==2.13.0
+# in cuda.txt/cpu.txt/pyproject, so the caffe2/pytorch 2.13.0 pins hold. cuda.txt:
+# fastsafetensors 0.3.2->0.3.3 (rocm.txt likewise), nvidia-cutlass-dsl 4.6.0->4.6.2,
+# quack-kernels 0.6.1->0.6.4 (which itself pins ~nvidia-cutlass-dsl-4.6.2, so the
+# pair stays consistent), humming-kernels 0.1.10->0.1.12. cpu.txt unchanged.
+# transformers floor stays >=5.5.3 upstream -- the "bumped to 5.15.0" release note
+# is the CI test pin (requirements/test/cuda.txt), not a runtime bound.
+# CMake: DeepGEMM repo moves BACK vllm-project->deepseek-ai + e21c821->8b1392b,
+# FlashKDA a3e42bb->053de1b, oneDNN v3.10->v3.13 (CPU path), FA 28e862d->f3e1a4f.
+# The FA move breaks the fa3 guard patch -- upstream added TORCH_TARGET_VERSION
+# and USE_CUDA to the _vllm_fa3_C target_compile_definitions block -- so it is
+# regenerated for f3e1a4f (both new defines fold inside the FA3_ARCHS guard);
+# the py314 patch carried over unchanged apart from the filename. All nested
+# cutlass/fmt submodule pins UNCHANGED. Upstream also gained an in-tree
+# cmake/patches/pytorch_stable_string.patch that CMake applies to a shadow copy
+# of Torch's stableivalue_conversions.h when Torch_VERSION is in [2.13,2.14) --
+# that is exactly our torch, and it runs with COMMAND_ERROR_IS_FATAL ANY, so a
+# failure there is a hard build stop rather than a warning. No network involved.
+#
+# requirements/cuda.txt pins tokenspeed-mla 0.1.8, PyNvVideoCodec 2.0.4,
+# and nvtx 0.2.15. Keep the exact dependency set even though the TokenSpeed
+# kernels target Blackwell SM100/SM103 and the other two imports are lazy.
+#
+# humming-kernels[cu13] (requirements/cuda.txt, ==0.1.10 "for quantization
+# gemm") provides the optional `humming` quant backend -- pulled only
+# under USE=humming. As of 0.24.0 vllm lazily imports the external
+# `humming` package via vllm.utils.humming (vllm-project/vllm#44921), so
+# the quant registry imports fine without it and a Humming-quantized
+# model only errors at load time under USE=-humming. No import-guard
+# patch is needed here -- verified 2026-07-05 that
+# vllm.model_executor.layers.quantization.humming imports with
+# humming-kernels absent (0.23.0 and earlier predate #44921 and still
+# ship the guard patch).
+#
+# gfx1150 (Strix Point iGPU) rocm build verified on
+# caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt] with
+# AMDGPU_TARGETS=gfx1150.  Produces the HIP extensions (_C,
+# _C_stable_libtorch, _moe_C, _rocm_C, cumem_allocator, spinloop) and
+# installs cleanly.
+# verified 2026-05-08 for 0.20.1, 2026-05-16 for 0.21.0, 2026-06-13 for
+# 0.23.0, 2026-07-12 for 0.25.0 (with pytorch/caffe2 2.11.0; cpu + empty +
+# USE=rust also OK).
+#
+# RTX A4500 Laptop (sm_86 Ampere) cuda build verified on
+# caffe2-2.11.0-r90 + CUDA-13.2 + CUDAHOSTCXX=g++-15 + MAX_JOBS=4.
+# Pre-FA3-skip baseline: ~2h30m wallclock, 339 CUDA template files
+# (FA3 .cu compiled at nvcc's default arch — wasted on Ampere).
+# Post-FA3-skip (next commit, files/vllm-flash-attn-...-fa3-only-
+# when-archs.patch): ~1h35m wallclock, 144 CUDA template files.
+# Peak ~14 GiB RSS in either case (16 GiB free headroom on 31 GiB
+# host).  Smoke test in both shapes: `from vllm import LLM`
+# succeeds, torch.cuda.is_available() True, torch reports "NVIDIA
+# RTX A4500 Laptop GPU"; FA2 kernels build for sm_80+PTX (forward-
+# compat with sm_86); FA3 (Hopper) does NOT build on sm_86 in the
+# post-patch shape (FA3_AVAILABLE=False at runtime, vllm picks FA2).
+# verified 2026-05-17 for 0.21.0 on sm_86 + CUDA 13.2 (both shapes).
+#
+# USE=-cpu -cuda -rocm (default): build with VLLM_TARGET_DEVICE=empty
+# — Python entrypoints import cleanly, backend kernels fail at first
+# model-load. Useful if you only want the API surface for development.
+#
+# vllm resolves its runtime platform from the host hardware (not the
+# VLLM_TARGET_DEVICE built below). platforms/cuda.py / rocm.py import
+# torch.distributed.PrefixStore + ProcessGroup unconditionally at module
+# load (needs USE=distributed), and at engine init vllm builds a CPU
+# coordination group on the gloo backend. Since our caffe2 builds CUDA
+# with USE_NCCL=OFF, vllm's nccl device group also falls back to gloo, so
+# USE=gloo is required too. Both flags are default-off: without
+# caffe2[distributed,gloo] vllm ImportErrors at startup, or
+# AssertionErrors ("Fallback Gloo backend is not available") at engine
+# init. verified 2026-06-14, bug #274
+#
+# vllm's GPU kernels (slot mapping, attention, sampling, and the
+# torch.compile/inductor path) are @triton.jit on both the cuda and
+# rocm targets -- on ROCm, vllm's custom paged-attention also falls
+# back to a Triton kernel on gfx targets without it (e.g. gfx1150).
+# Gentoo's source-built torch does not pull Triton the way upstream's
+# PyPI wheels do, so the cuda? and rocm? targets require
+# virtual/triton or vllm dies at first GPU inference with
+# "'function' object is not subscriptable". torch-2.11.0 pairs with
+# triton 3.6.0; its AMD backend JITs gfx kernels via hipcc. cuda
+# verified 2026-06-14 (bug #274); rocm gfx1150 verified 2026-06-14
+# (opt-125m generated, inductor path + Triton _fwd_kernel).
+# Upstream pins lark==1.2.2 and numba==0.65.0, neither of which is in the
+# active repositories.  Stay within their compatible major/minor series.
+# common.txt allows xgrammar 0.2.1..<1; constrain it to ~0.2.2 on CUDA/ROCm
+# (newest compatible with transformers 5). xgrammar 0.2.2 calls tvm-ffi's
+# load_lib_module(extra_lib_paths=...), which only exists from apache-tvm-ffi
+# 0.1.11 (0.1.10 raises TypeError at `import vllm`). Upstream rocm.txt still
+# pins tvm-ffi 0.1.10, but that is too old for the shipped xgrammar, so ROCm is
+# bumped to ~0.1.11 here to match CUDA (rocm import-verified 2026-08-12).
+RDEPEND="
+	~sci-ml/pytorch-2.13.0[${PYTHON_SINGLE_USEDEP}]
+	sci-ml/caffe2[distributed,gloo]
+	>=sci-ml/transformers-5.5.3[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/huggingface_hub-1.27.0[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/tokenizers-0.21.1[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/xgrammar-0.2.1[${PYTHON_SINGLE_USEDEP}]
+	<dev-python/xgrammar-1.0.0[${PYTHON_SINGLE_USEDEP}]
+	~dev-python/compressed-tensors-0.17.0[${PYTHON_SINGLE_USEDEP}]
+	app-alternatives/ninja
+	$(python_gen_cond_dep '
+		dev-python/regex[${PYTHON_USEDEP}]
+		dev-python/cachetools[${PYTHON_USEDEP}]
+		dev-python/psutil[${PYTHON_USEDEP}]
+		sci-ml/sentencepiece[${PYTHON_USEDEP}]
+		>=sci-ml/safetensors-0.6.2[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		>=dev-python/requests-2.26.0[${PYTHON_USEDEP}]
+		dev-python/tqdm[${PYTHON_USEDEP}]
+		dev-python/blake3[${PYTHON_USEDEP}]
+		dev-python/py-cpuinfo[${PYTHON_USEDEP}]
+		|| (
+			~dev-python/protobuf-5.29.6[${PYTHON_USEDEP}]
+			>=dev-python/protobuf-6.33.5[${PYTHON_USEDEP}]
+		)
+		>=dev-python/fastapi-0.133.0[${PYTHON_USEDEP}]
+		<dev-python/fastapi-0.137.0[${PYTHON_USEDEP}]
+		>=dev-python/starlette-1.0.1[${PYTHON_USEDEP}]
+		>=dev-python/aiohttp-3.13.3[${PYTHON_USEDEP}]
+		>=dev-python/openai-2.0.0[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-2.12.0[${PYTHON_USEDEP}]
+		>=dev-python/prometheus-client-0.18.0[${PYTHON_USEDEP}]
+		dev-python/pillow[${PYTHON_USEDEP}]
+		>=dev-python/prometheus-fastapi-instrumentator-8.0.0[${PYTHON_USEDEP}]
+		>=dev-python/tiktoken-0.6.0[${PYTHON_USEDEP}]
+		~dev-python/lm-format-enforcer-0.11.3[${PYTHON_USEDEP}]
+		>=dev-python/llguidance-1.7.0[${PYTHON_USEDEP}]
+		<dev-python/llguidance-1.8.0[${PYTHON_USEDEP}]
+		~dev-python/outlines-core-0.2.14[${PYTHON_USEDEP}]
+		>=dev-python/lark-1.2.2[${PYTHON_USEDEP}]
+		<dev-python/lark-2[${PYTHON_USEDEP}]
+		>=dev-python/jsonschema-4.23.0[${PYTHON_USEDEP}]
+		>=dev-python/typing-extensions-4.10[${PYTHON_USEDEP}]
+		>=dev-python/filelock-3.16.1[${PYTHON_USEDEP}]
+		dev-python/partial-json-parser[${PYTHON_USEDEP}]
+		>=dev-python/pyzmq-25.0.0[${PYTHON_USEDEP}]
+		dev-python/msgspec[${PYTHON_USEDEP}]
+		>=dev-python/mistral-common-1.11.6[${PYTHON_USEDEP},image]
+		>=media-libs/opencv-4.13.0[python,${PYTHON_USEDEP}]
+		dev-python/pyyaml[${PYTHON_USEDEP}]
+		>=dev-python/six-1.16.0[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-77.0.3[${PYTHON_USEDEP}]
+		dev-python/einops[${PYTHON_USEDEP}]
+		~dev-python/depyf-0.20.0[${PYTHON_USEDEP}]
+		dev-python/cloudpickle[${PYTHON_USEDEP}]
+		dev-python/uvloop[${PYTHON_USEDEP}]
+		dev-python/watchfiles[${PYTHON_USEDEP}]
+		>=dev-python/uvicorn-0.12.0[${PYTHON_USEDEP}]
+		>=dev-python/jinja2-3.1.5[${PYTHON_USEDEP}]
+		>=dev-python/python-multipart-0.0.18[${PYTHON_USEDEP}]
+		>=dev-python/websockets-13.0[${PYTHON_USEDEP}]
+		dev-python/python-json-logger[${PYTHON_USEDEP}]
+		dev-python/pybase64[${PYTHON_USEDEP}]
+		dev-python/cbor2[${PYTHON_USEDEP}]
+		dev-python/ijson[${PYTHON_USEDEP}]
+		dev-python/setproctitle[${PYTHON_USEDEP}]
+		>=dev-python/openai-harmony-0.0.3[${PYTHON_USEDEP}]
+		>=dev-python/anthropic-0.71.0[${PYTHON_USEDEP}]
+		>=dev-python/model-hosting-container-standards-0.1.14[${PYTHON_USEDEP}]
+		<dev-python/model-hosting-container-standards-1.0.0[${PYTHON_USEDEP}]
+		<dev-python/mcp-2.0[${PYTHON_USEDEP}]
+		>=dev-python/opentelemetry-sdk-1.27.0[${PYTHON_USEDEP}]
+		>=dev-python/opentelemetry-api-1.27.0[${PYTHON_USEDEP}]
+		>=dev-python/opentelemetry-exporter-otlp-1.27.0[${PYTHON_USEDEP}]
+		>=dev-python/opentelemetry-semantic-conventions-ai-0.4.1[${PYTHON_USEDEP}]
+	')
+	cpu? (
+		>=sci-ml/caffe2-2.13.0-r90[-cuda,-rocm]
+		~sci-ml/torchaudio-2.11.0
+		~sci-ml/torchvision-0.28.0[-cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
+		>=sci-ml/torchcodec-0.14[-cuda,${PYTHON_SINGLE_USEDEP}]
+		$(python_gen_cond_dep '
+			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
+			<dev-python/numba-0.66[${PYTHON_USEDEP}]
+		')
+	)
+	cuda? (
+		>=sci-ml/caffe2-2.13.0-r90[cuda,-rocm]
+		~dev-python/pynvvideocodec-bin-2.0.4[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/tokenspeed-mla-bin-0.1.8[${PYTHON_SINGLE_USEDEP}]
+		~sci-ml/torchaudio-2.11.0
+		~sci-ml/torchvision-0.28.0[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
+		~dev-python/xgrammar-0.2.2[cuda,${PYTHON_SINGLE_USEDEP}]
+		~dev-python/flashinfer-python-0.6.16_p3[${PYTHON_SINGLE_USEDEP}]
+		>=sci-ml/torchcodec-0.14[cuda,${PYTHON_SINGLE_USEDEP}]
+		~dev-python/tilelang-0.1.12[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
+		~dev-python/quack-kernels-0.6.4[${PYTHON_SINGLE_USEDEP}]
+		humming? ( ~dev-python/humming-kernels-0.1.12[${PYTHON_SINGLE_USEDEP}] )
+		$(python_gen_cond_dep '
+			~dev-python/nvtx-0.2.15[${PYTHON_USEDEP}]
+			~dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
+			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
+			<dev-python/numba-0.66[${PYTHON_USEDEP}]
+			>=dev-python/fastsafetensors-0.3.3[${PYTHON_SINGLE_USEDEP}]
+			>=dev-python/nvidia-cudnn-frontend-1.19.1[${PYTHON_USEDEP}]
+			~dev-python/nvidia-cutlass-dsl-4.6.2[${PYTHON_USEDEP}]
+			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
+		')
+		dev-util/nvidia-cuda-toolkit:=
+	)
+	rocm? (
+		>=sci-ml/caffe2-2.13.0-r90[-cuda,rocm,${ROCM_USEDEP}]
+		~sci-ml/torchaudio-2.11.0
+		~sci-ml/torchvision-0.28.0[-cuda,rocm,${PYTHON_SINGLE_USEDEP}]
+		~dev-python/xgrammar-0.2.2[${PYTHON_SINGLE_USEDEP}]
+		>=dev-python/runai-model-streamer-bin-0.15.7[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/tensorizer-2.10.1[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/tilelang-0.1.10[-cuda,rocm,${PYTHON_SINGLE_USEDEP}]
+		$(python_gen_cond_dep '
+			~dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
+			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
+			<dev-python/numba-0.66[${PYTHON_USEDEP}]
+			~dev-python/conch-triton-kernels-1.2.1[${PYTHON_USEDEP}]
+			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
+			>=dev-util/amdsmi-7.0.2[${PYTHON_USEDEP}]
+			>=dev-python/fastsafetensors-0.3.3[${PYTHON_SINGLE_USEDEP}]
+		')
+		>=dev-util/hip-7.2:=
+		>=sci-libs/hipBLAS-7.2:=
+		>=sci-libs/hipBLASLt-7.2:=
+		>=sci-libs/hipFFT-7.2:=
+		>=sci-libs/hipRAND-7.2:=
+		>=sci-libs/hipSOLVER-7.2:=
+		>=sci-libs/hipSPARSE-7.2:=
+		>=sci-libs/hipCUB-7.2:=
+	)
+"
+# Upstream pyproject.toml caps setuptools at <81.0.0; dropped from
+# BDEPEND because (a) gentoo only ships 79.0.1 + 82.0.1 (nothing in
+# the 80.x/81.x line), and downgrading to 79.0.1 fights pkg-resources-
+# 81.0.0 (which has !<setuptools-82 and is pulled in by html5lib /
+# opcodes / python-xlib among others); and (b) vllm's setup.py uses
+# only the standard setuptools surface (Extension, setup, build_ext)
+# — no pkg_resources imports, no setuptools.command.* removed in 81+.
+# Cap re-evaluate on bump. # verified 2026-05-16 against setup.py.
+BDEPEND="
+	>=dev-build/cmake-3.26.1
+	app-alternatives/ninja
+	~sci-ml/pytorch-2.13.0[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/setuptools-77.0.3[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-scm-8.0[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-rust-1.9.0[${PYTHON_USEDEP}]
+		>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
+		dev-python/jinja2[${PYTHON_USEDEP}]
+	')
+	rust? (
+		${RUST_DEPEND}
+		dev-lang/perl
+	)
+	cuda? (
+		dev-util/nvidia-cuda-toolkit:=
+	)
+	rocm? (
+		>=dev-util/hip-7.2:=
+		>=dev-util/hipcc-7.2:=
+	)
+"
+
+# Tests need a model+inference setup; not wired up here.
+RESTRICT="test"
+
+# 0.20.x carried a patch to relax cmake/cpu_extension.cmake's libgomp
+# probe so it would fall back to the system gcc-runtime libgomp when
+# torch.libs/ contains no vendored copy.  Upstream 0.21.0's cmake now
+# has an equivalent fallback (find_library(OPEN_MP NAMES gomp REQUIRED)
+# without NO_DEFAULT_PATH) when VLLM_TORCH_GOMP_SHIM_DIR is empty, so
+# the local patch is no longer needed.
+
+# Pretend the version so setuptools-scm doesn't probe git.
+export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
+
+src_unpack() {
+	if use rust; then
+		# Vendor the vllm-rs crate deps and set up CARGO_HOME for the
+		# offline build (cargo_src_unpack also unpacks the sdist + any
+		# cuda? flash-attn tarball normally).
+		cargo_src_unpack
+	else
+		default
+	fi
+}
+
+src_prepare() {
+	distutils-r1_src_prepare
+
+	if ! use rust; then
+		# vllm's setup.py unconditionally wires the vllm-rs RustExtension.
+		# With USE=-rust we ship no crates and set up no cargo, so drop the
+		# extension list to keep setup.py from attempting a cargo build.
+		# Guard the sed: it exits 0 on a no-match, so a future upstream
+		# rename of this kwarg would silently leave the rust build active
+		# and break the -rust build. Fail loudly instead.
+		grep -q 'rust_extensions=rust_extensions,' setup.py ||
+			die "vllm-rs RustExtension wiring changed; revisit the USE=rust gate"
+		sed -i 's/rust_extensions=rust_extensions,/rust_extensions=[],/' \
+			setup.py || die
+	fi
+
+	if use cuda; then
+		# Populate the gitlinks omitted by GitHub-generated archives.
+		local deepgemm_dir="${WORKDIR}/DeepGEMM-${VLLM_DEEPGEMM_COMMIT}"
+		local fa_dir="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
+		local flashmla_dir="${WORKDIR}/FlashMLA-${VLLM_FLASHMLA_COMMIT}"
+		local fmha_dir="${WORKDIR}/MSA-${VLLM_FMHA_SM100_COMMIT}"
+
+		rmdir "${deepgemm_dir}/third-party/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_DEEPGEMM_CUTLASS_COMMIT}" \
+			"${deepgemm_dir}/third-party/cutlass" || die
+		rmdir "${deepgemm_dir}/third-party/fmt" || die
+		mv "${WORKDIR}/fmt-${VLLM_DEEPGEMM_FMT_COMMIT}" \
+			"${deepgemm_dir}/third-party/fmt" || die
+		rmdir "${fa_dir}/csrc/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_FA_CUTLASS_COMMIT}" \
+			"${fa_dir}/csrc/cutlass" || die
+		rmdir "${flashmla_dir}/csrc/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_FLASHMLA_CUTLASS_COMMIT}" \
+			"${flashmla_dir}/csrc/cutlass" || die
+		rmdir "${fmha_dir}/python/fmha_sm100/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_FMHA_SM100_CUTLASS_COMMIT}" \
+			"${fmha_dir}/python/fmha_sm100/cutlass" || die
+
+		# Pre-stage vllm-flash-attn and apply our local patches before
+		# vllm's CMake FetchContent reaches it.  vllm honours
+		# VLLM_FLASH_ATTN_SRC_DIR (set in src_configure) and skips the
+		# git fetch when the dir already exists.
+		[[ -d ${fa_dir} ]] || die "expected ${fa_dir} from SRC_URI unpack"
+		pushd "${fa_dir}" >/dev/null || die
+		# Skip the FA3 (Hopper) target body when no Hopper arch is in
+		# CUDA_ARCHS so Ampere/Ada builds don't compile unrunnable kernels.
+		eapply -p0 \
+			"${FILESDIR}/vllm-flash-attn-${VLLM_FA_COMMIT:0:7}-fa3-only-when-archs.patch"
+		# vllm's PYTHON_COMPAT allows python3_14, but flash-attn's
+		# CMakeLists hard-codes a supported-Python whitelist and
+		# FATAL_ERRORs on 3.14 at configure.  The extension is abi3
+		# (USE_SABI 3), so widening that whitelist is safe.  bug #274
+		eapply -p0 \
+			"${FILESDIR}/vllm-flash-attn-${VLLM_FA_COMMIT:0:7}-py314.patch"
+		popd >/dev/null || die
+	fi
+}
+
+src_configure() {
+	# When the Rust frontend is requested, make its build mandatory so a
+	# failure errors out instead of setuptools-rust silently skipping the
+	# optional extension.
+	use rust && export VLLM_REQUIRE_RUST_FRONTEND=1
+
+	if use cuda || use rocm; then
+		export TRITON_KERNELS_SRC_DIR="${WORKDIR}/triton-${VLLM_TRITON_KERNELS_TAG}/python/triton_kernels/triton_kernels"
+	fi
+
+	if use cuda; then
+		export VLLM_TARGET_DEVICE=cuda
+		# Point every CMake external project at its pre-staged source.
+		export VLLM_CUTLASS_SRC_DIR="${WORKDIR}/cutlass-${VLLM_CUTLASS_TAG}"
+		export DEEPGEMM_SRC_DIR="${WORKDIR}/DeepGEMM-${VLLM_DEEPGEMM_COMMIT}"
+		export FLASH_MLA_SRC_DIR="${WORKDIR}/FlashMLA-${VLLM_FLASHMLA_COMMIT}"
+		export FMHA_SM100_SRC_DIR="${WORKDIR}/MSA-${VLLM_FMHA_SM100_COMMIT}"
+		export QUTLASS_SRC_DIR="${WORKDIR}/qutlass-${VLLM_QUTLASS_COMMIT}"
+		export TML_FA4_SRC_DIR="${WORKDIR}/tml-fa4-${VLLM_TML_FA4_COMMIT}"
+		export FLASH_KDA_SRC_DIR="${WORKDIR}/FlashKDA-${VLLM_FLASHKDA_COMMIT}"
+		export VLLM_FLASH_ATTN_SRC_DIR="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
+		# Select the newest installed compiler supported by this CUDA,
+		# while still respecting an explicit user override.
+		: "${CUDAHOSTCXX:=$(cuda_gccdir)/g++}"
+		export CUDAHOSTCXX
+		export CMAKE_ARGS+=" -DCMAKE_CUDA_HOST_COMPILER=${CUDAHOSTCXX}"
+
+		# vllm's heavy CUDA template instantiations
+		# (paged_attention_v*, layernorm_quant_kernels, w8a8/fp8/...)
+		# can each peak at 3-4 GiB during cudafe++. Unrestricted ninja
+		# parallelism can OOM-kill the compiler
+		# (cudafe++ dies with SIGKILL, "[code=9]"). MAX_JOBS is the
+		# env var vllm's setup.py reads to throttle the CMake build;
+		# CMAKE_BUILD_PARALLEL_LEVEL backs it up for direct cmake
+		# --build invocations. MAX_JOBS=4 is a conservative default that
+		# users can override according to available memory. The OOM threshold was measured
+		# against 0.20.1; 0.21.0's CUDA template set wasn't re-profiled
+		# at bump time but the heavy instantiations (paged_attention,
+		# layernorm_quant, w8a8/fp8) are unchanged, so MAX_JOBS=4 stays
+		# a conservative default. # verified 2026-05-07 against 0.20.1.
+		#
+		# Caller-overridable so users on smaller/larger hosts can adjust
+		# without ebuild-edit (e.g. MAX_JOBS=2 emerge … on a 16 GiB
+		# host).
+		export MAX_JOBS="${MAX_JOBS:-4}"
+		export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-${MAX_JOBS}}"
+	elif use cpu; then
+		export VLLM_TARGET_DEVICE=cpu
+		export FETCHCONTENT_SOURCE_DIR_ONEDNN="${WORKDIR}/oneDNN-${VLLM_ONEDNN_TAG}"
+		# vllm 0.22.x cpu_extension.cmake locates OpenMP via
+		# vllm_prepare_torch_gomp_shim(), which expects a libgomp vendored
+		# inside PyTorch (torch.libs/libgomp-*.so — a PyPI-wheel artifact).
+		# Our source-built sci-ml/caffe2 ships none, so cmake falls back to
+		# find_library(NAMES gomp), which misses Gentoo's libgomp under the
+		# gcc-internal dir. Point CMAKE_LIBRARY_PATH at the toolchain's
+		# libgomp so the fallback resolves. # verified 2026-06-05 (0.22.1)
+		local gomp_dir
+		gomp_dir=$(dirname "$($(tc-getCC) -print-file-name=libgomp.so)")
+		export CMAKE_ARGS+=" -DCMAKE_LIBRARY_PATH=${gomp_dir}"
+	elif use rocm; then
+		export VLLM_TARGET_DEVICE=rocm
+		# caffe2 2.13.0's cmake/public/LoadHIP.cmake (consumed here via
+		# find_package(Torch)) switched to CMake-native HIP and defaults the
+		# compiler to ${ROCM_PATH}/lib/llvm/bin/clang++ (i.e. /usr/lib/llvm/bin),
+		# but Gentoo slots llvm at /usr/lib/llvm/<N>/bin. LoadHIP honours
+		# HIP_CLANG_PATH; point it at the real HIP clang, same as sci-ml/caffe2's
+		# own build does. (torch 2.11's FindHIP path did not need this.)
+		# verified 2026-08-12
+		export HIP_CLANG_PATH="$(hipconfig -l)"
+		filter-lto
+		# rocm.eclass turns AMDGPU_TARGETS into a semicolon-joined
+		# list. vllm's CMakeLists reads PYTORCH_ROCM_ARCH and feeds
+		# it to enable_language(HIP). Same MAX_JOBS throttle as the
+		# cuda branch — HIP template instantiation in csrc/rocm/
+		# (skinny_gemms, attention) hits comparable peak RSS.
+		export PYTORCH_ROCM_ARCH=$(get_amdgpu_flags)
+		export MAX_JOBS="${MAX_JOBS:-4}"
+		export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-${MAX_JOBS}}"
+	else
+		export VLLM_TARGET_DEVICE=empty
+	fi
+	distutils-r1_src_configure
+}
+
+pkg_postinst() {
+	if use cuda; then
+		elog "vllm's CUDA path pulls dev-python/flashinfer-python, which"
+		elog "JIT-compiles GPU kernels with nvcc on first inference. CUDA"
+		elog "13.x nvcc rejects host compilers newer than gcc 15, so if the"
+		elog "active gcc is newer, vllm aborts at first run with a"
+		elog "'Ninja build failed ... unsupported GNU version' error."
+		elog ""
+		elog "Pin nvcc's host compiler to a CUDA-supported gcc when launching vllm:"
+		elog ""
+		elog "  NVCC_PREPEND_FLAGS=\"-ccbin $(cuda_gccdir)/g++\" vllm serve ..."
+		elog ""
+		elog "or switch the system compiler via 'eselect gcc'."
+	fi
+
+	if use cuda && ! use humming; then
+		elog ""
+		elog "The optional 'humming' MXFP4 quantization backend is off by"
+		elog "default. Enable USE=humming to pull dev-python/humming-kernels"
+		elog "if you serve humming-quantized models."
+	fi
+
+	if use rocm; then
+		elog "vllm initializes a torch.distributed process group at engine"
+		elog "start (a TCPStore rendezvous) even for single-GPU inference."
+		elog "Since torch 2.4 the TCPStore defaults to the libuv backend,"
+		elog "but sci-ml/pytorch's ROCm build ships no libuv -- it rides in"
+		elog "via tensorpipe, which is disabled for ROCm. Without it vllm"
+		elog "aborts at engine init with:"
+		elog ""
+		elog "  DistStoreError: use_libuv was requested but PyTorch was"
+		elog "  built without libuv support"
+		elog ""
+		elog "Launch vllm with USE_LIBUV=0 to use the legacy socket store:"
+		elog ""
+		elog "  USE_LIBUV=0 vllm serve ..."
+	fi
+}
