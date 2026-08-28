@@ -9,11 +9,18 @@
     Pre-built ROCm SDK distribution from the AMD ROCm/TheRock super-project.
     TheRock bundles all ROCm subprojects (rocm-runtime, HIP, LLVM-with-AMD,
     rocBLAS, hipBLAS, rocFFT, hipFFT, rocSPARSE, rocSOLVER, MIOpen, RCCL,
-    composable_kernel, rocWMMA, rocPRIM, rocThrust, profilers) at newer
-    commit SHAs than the latest tagged ROCm release, with hardware
-    enablement for newer gfx targets that haven't yet landed in tagged
-    ROCm. This package wraps the per-target Linux tarball into /opt/
-    therock-bin so it coexists with a system ROCm installed in /usr.
+    composable_kernel, rocWMMA, rocPRIM, rocThrust, profilers) into one
+    self-contained SDK, including its own clang. This package slices AMD's
+    official ROCm runfile installer (rocm-installer-VER-BUILD.run, a Makeself
+    archive from repo.radeon.com) and flatten-merges the shared base plus the
+    selected GPU family into /opt/therock-bin, so it coexists with a system
+    ROCm installed in /usr.
+
+    Because it carries its own toolchain it can ship ROCm releases whose
+    from-source build would require a newer LLVM than the system provides:
+    ROCm 10.0 needs clang 23, while ::gentoo's newest keyworded LLVM is
+    22.1.8. It also gets officially-supported gfx1150/gfx1151 sooner than the
+    split /usr stack can.
   </longdescription>
   <upstream>
     <remote-id type="github">ROCm/TheRock</remote-id>

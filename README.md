@@ -140,9 +140,13 @@ plus the `rocm-smi` / `rocminfo` tooling, across `dev-libs/`,
 `dev-util/`, `dev-build/`, and `sci-libs/`.
 
 [`dev-util/therock-bin`](https://github.com/ROCm/TheRock) is a
-/opt-installed ROCm SDK that pulls AMD's nightly TheRock build for a
-per-host `AMDGPU_TARGETS`. Coexists with the /usr ROCm above; an
-nvchecker regex source on AMD's CDN tracks new nightlies.
+/opt-installed ROCm SDK sliced out of AMD's official ROCm runfile
+installer for a per-host `AMDGPU_TARGETS`. Coexists with the /usr ROCm
+above; nvchecker follows upstream's `therock-<major.minor>` tag line.
+Because it bundles its own clang it can ship releases the split /usr
+stack cannot yet build — ROCm 10.0 needs clang 23, and `::gentoo`'s
+newest keyworded LLVM is 22.1.8 — and it carries officially-supported
+gfx1150/gfx1151.
 
 [`dev-util/zluda`](https://github.com/vosen/ZLUDA) — a drop-in CUDA
 runtime for AMD GPUs (an honorable mention as it is ROCm-bound).
