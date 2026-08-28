@@ -1,0 +1,18 @@
+https://github.com/ROCm/rocm-systems/issues/284
+Regenerated for ROCm 10.0: upstream inserted a _WIN32 block and further
+symbols between hsaKmtAisReadWriteFile and the local: *; terminator, so the
+7.1.0 hunk no longer applies. The three exports are still required -- each is
+referenced by three files in the 10.0 tree. Anchored on the terminator instead.
+
+--- a/src/libhsakmt.ver
++++ b/src/libhsakmt.ver
+@@ -111,6 +111,9 @@
+ hsaKmtMemoryCpuMap;
+ hsaKmtSetSigbusDelay;
+ hsaKmtGetAmdGPUDeviceFd;
++hsaKmtCreateQueueExt;
++hsaKmtRegisterGraphicsHandleToNodesExt;
++hsaKmtModelEnabled;
+ local: *;
+ };
+ 
