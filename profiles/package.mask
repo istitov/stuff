@@ -31,3 +31,25 @@ app-portage/portopts
 # users opt in to that runtime self-bootstrap (and the beta status)
 # consciously. Lift once a version reuses system packages, or drop the beta tag.
 sci-ml/unsloth-desktop-bin
+
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-08-28)
+# Partial ROCm 10.0 split-stack cohort. These five build and are correct, but
+# the cohort is incomplete: dev-libs/rocm-device-libs at 10.0 needs clang 23
+# (amdhsa_abi.h, __builtin_amdgcn_struct_buffer_load_format_v4f32) and
+# ::gentoo's newest keyworded LLVM is 22.1.8, so device-libs -> rocm-comgr ->
+# dev-util/hip and every math lib are blocked. Since these share SLOT 0 with
+# the installed 7.2.4 stack, an unmasked world update would upgrade them
+# piecemeal and leave 10.0 components against a 7.2.4 hip - and flip the
+# dev-util/hipcc subslot that four ebuilds pin with :=. Use dev-util/therock-bin
+# for a working ROCm 10.0 (it bundles its own clang 23) until then.
+# NB these still declare LLVM_COMPAT=( 22 ) where they declare one at all
+# (hipcc, roct-thunk-interface), inherited from 7.2.4 -- correct in isolation
+# since both build against llvm:22, but NOT coherent for a ROCm 10.0 stack:
+# hipcc seds lib/llvm/${LLVM_SLOT}/bin, so its wrapper would drive clang 22
+# while device-libs needs 23. Bump both to ( 23 ) as part of unmasking.
+# Lift once ::gentoo keywords llvm-core/llvm:23 and the rest of the cohort lands.
+=dev-build/rocm-cmake-10.0.0
+=dev-libs/rocm-core-10.0.0
+=dev-libs/hipother-10.0.0
+=dev-libs/roct-thunk-interface-10.0.0
+=dev-util/hipcc-10.0.0
