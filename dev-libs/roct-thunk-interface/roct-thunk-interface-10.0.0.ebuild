@@ -3,7 +3,11 @@
 
 EAPI=8
 
-LLVM_COMPAT=( 22 )
+# Tracks the ROCm 10.0 cohort's slot, not the 22 inherited from 7.2.4 --
+# dev-libs/rocm-device-libs-10.0.0 requires clang 23, and the stack is
+# subslot-pinned as one dependency closure, so a mixed 22/23 cohort would ship
+# components compiled by different LLVM majors. verified 2026-08-29.
+LLVM_COMPAT=( 23 )
 ROCM_SKIP_GLOBALS=1
 inherit cmake flag-o-matic linux-info llvm-r2 rocm
 
