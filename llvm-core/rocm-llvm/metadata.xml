@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    AMD's LLVM fork, as shipped with ROCm. Built from the same
+    ROCm/llvm-project source archive that dev-libs/rocm-device-libs,
+    dev-libs/rocm-comgr and dev-util/hipcc already consume, so it adds no new
+    distfile.
+
+    This exists because the ROCm math libraries cannot be compiled by a vanilla
+    LLVM: AMD's fork carries device-code changes that upstream LLVM does not
+    have, notably bf16 signatures for the WMMA intrinsics and AMDGPU assembler
+    support for source modifiers that vanilla rejects. Installed to a private
+    prefix so it never competes with llvm-core/llvm.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">ROCm/llvm-project</remote-id>
+    <bugs-to>https://github.com/ROCm/llvm-project/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
