@@ -1,0 +1,27 @@
+Do not install the test binaries or their CTestTestfile.
+
+Regenerated from rocRAND-7.2.0-no-tests-install.patch for ROCm 10.0: both
+blocks survive verbatim but moved (the per-test rocm_install from line 108 to
+116, and the trailing CTestTestfile block from 139 to 199), so the old hunks no
+longer applied. Behaviour is unchanged. verified 2026-08-29.
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -113,7 +113,6 @@
+           RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test"
+   )
+   add_relative_test(${test_name} ${test_name})
+-  rocm_install(TARGETS ${test_name} COMPONENT tests)
+   if (WIN32 AND NOT DEFINED DLLS_COPIED_TESTS)
+     set(DLLS_COPIED_TESTS "YES")
+     set(DLLS_COPIED_TESTS ${DLLS_COPIED_TESTS} PARENT_SCOPE)
+@@ -195,10 +194,3 @@
+         "${ROCM_LIBRARIES_ROOT}/shared/ctest/TestCategories.cmake - "
+         "skipping rocRAND test category labels")
+ endif()
+-
+-rocm_install(
+-    FILES "${INSTALL_TEST_FILE}"
+-    DESTINATION "${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME}"
+-    COMPONENT tests
+-    RENAME "CTestTestfile.cmake"
+-)
