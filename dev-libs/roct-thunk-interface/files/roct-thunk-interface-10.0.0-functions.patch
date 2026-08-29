@@ -4,15 +4,21 @@ symbols between hsaKmtAisReadWriteFile and the local: *; terminator, so the
 7.1.0 hunk no longer applies. The three exports are still required -- each is
 referenced by three files in the 10.0 tree. Anchored on the terminator instead.
 
+hsaKmtCreateQueueV2 added 2026-08-29: rocr-runtime 10.0 calls it (and so does
+dev-util/rocminfo, transitively), but upstream never listed it in the version
+script. It is defined in src/queues.c with default visibility, so it only
+needs exporting. Without this, linking anything against libhsa-runtime64
+fails with "undefined reference to `hsaKmtCreateQueueV2'".
 --- a/src/libhsakmt.ver
 +++ b/src/libhsakmt.ver
-@@ -111,6 +111,9 @@
+@@ -111,6 +111,10 @@
  hsaKmtMemoryCpuMap;
  hsaKmtSetSigbusDelay;
  hsaKmtGetAmdGPUDeviceFd;
 +hsaKmtCreateQueueExt;
 +hsaKmtRegisterGraphicsHandleToNodesExt;
 +hsaKmtModelEnabled;
++hsaKmtCreateQueueV2;
  local: *;
  };
  

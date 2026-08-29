@@ -1,0 +1,30 @@
+Export the external-semaphore stubs: include the internal libhsakmt.h.
+
+src/extsem.c includes only the PUBLIC hsakmt/hsakmt.h, where HSAKMTAPI expands
+to nothing on Linux. Every other source file includes the INTERNAL src/
+libhsakmt.h, which redefines it:
+
+    #define HSAKMTAPI __attribute__((visibility ("default")))
+
+The library is compiled with -fvisibility=hidden, so extsem.c's four functions
+end up STV_HIDDEN and cannot be exported -- even though they ARE listed in
+src/libhsakmt.ver's global: section. A version script cannot promote a hidden
+symbol, so the entries silently have no effect and consumers fail to link with
+
+    undefined reference to `hsaKmtImportExternalSemaphore'
+    undefined reference to `hsaKmtDestroyExternalSemaphore'
+    undefined reference to `hsaKmtQueueSignalExternalSemaphore'
+    undefined reference to `hsaKmtQueueWaitExternalSemaphore'
+
+Verified 2026-08-29: extsem.c.o has bind=GLOBAL vis=HIDDEN for all four, while
+e.g. openclose.c's hsaKmtOpenKFD has vis=DEFAULT.
+--- a/src/extsem.c
++++ b/src/extsem.c
+@@ -4,6 +4,7 @@
+  * SPDX-License-Identifier: MIT
+  */
+ 
++#include "libhsakmt.h"
+ #include "hsakmt/hsakmt.h"
+ 
+ HSAKMT_STATUS HSAKMTAPI hsaKmtImportExternalSemaphore(
