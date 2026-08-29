@@ -96,13 +96,34 @@ QT5_BUILD_RE = re.compile(r"^\s*inherit\b.*\bqt5-build\b", re.MULTILINE)
 # optionally `prefix` (stripped after selection so drift reports show clean
 # version numbers).
 GITHUB_TAG_FILTERS: list[tuple[re.Pattern, dict]] = [
-    # ROCm org: every project under ROCm/* uses `rocm-X.Y.Z` for stable
-    # releases. Without this filter, max-tag picks up TheRock-style nightly
-    # `YYYYMMDD-NN` tags or `X.Ybeta` previews from the monorepos.
+    # ROCm org: AMD retired the org-wide `rocm-X.Y.Z` release line at
+    # rocm-7.2.4 (2026-05-28). Every ROCm project that is still being released
+    # — the rocm-libraries / rocm-systems monorepos plus the standalone HIPIFY,
+    # llvm-project and rocm-cmake repos — has tagged `therock-X.Y` since, and
+    # ROCm 10.0 (the renumbering of the 7.13 -> 7.14 line, announced
+    # 2026-08-27) exists ONLY on that line.
+    #
+    # Filtering on `rocm-` therefore froze all 33 ROCm entries at 7.2.4
+    # permanently. Five of them surfaced a cosmetic tree-is-ahead `<-` line
+    # once the masked 10.0.0 ebuilds landed; the other 28 read as up to date
+    # while upstream was three releases ahead. That is worse than a silent
+    # entry: the check resolves a version, so silent_entries.py cannot see it
+    # and no amount of drift-report reading would reveal it.
+    # verified 2026-08-29 against each repo's tag list.
+    #
+    # The tag carries only X.Y, so synthesise the PV's third component as `.0`
+    # — same shape as dev-util/therock-bin's SPECIAL_SOURCES entry. Caveat:
+    # a patch release cut against an existing therock-X.Y tag would not be
+    # visible here; AMD has published none since the pivot. The lone
+    # 3-component `therock-7.9.0` tag is excluded deliberately — it predates
+    # the X.Y convention and would defeat the `.0` synthesis.
+    #
     # nvchecker applies include_regex via re.fullmatch, so the pattern must
-    # cover the whole tag — `^rocm-` alone matches only the 5-char prefix.
+    # cover the whole tag — a bare `^therock-` matches only the prefix.
     (re.compile(r"^ROCm/.+"),
-     {"include_regex": r"rocm-[0-9]+\.[0-9]+\.[0-9]+", "prefix": "rocm-"}),
+     {"include_regex": r"^therock-[0-9]+\.[0-9]+$",
+      "from_pattern": r"^therock-([0-9]+\.[0-9]+)$",
+      "to_pattern": r"\1.0"}),
 
     # facebookresearch/faiss has an ancient `v20180223` single-segment tag
     # that lexicographically beats `v1.14.x` semver releases.
@@ -414,12 +435,26 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "sci-ml/pytorch": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
-    # ROCm/aotriton does NOT use the org-wide `rocm-X.Y.Z` release scheme that
-    # the repo-wide ^ROCm/.+ filter assumes — it tags betas bare as `X.Y[.Z]b`
+    # ROCm/rocm_bandwidth_test is the one ROCm project that neither moved to a
+    # `therock-X.Y` tag line nor got vendored into a monorepo: it is not under
+    # rocm-systems/projects/ or rocm-libraries/projects/ at therock-10.0, and
+    # its own repo has no therock-* tag at all. It still takes commits (last
+    # push 2026-07-17) but has not been tagged since rocm-7.2.4, so this is an
+    # upstream release-tagging stall, not a scheme pivot — keep it on the old
+    # line rather than let the ^ROCm/.+ therock- filter empty it out and turn a
+    # frozen-but-honest entry into a silent one. Revisit if a therock-* tag or
+    # a monorepo home appears. verified 2026-08-29.
+    "dev-util/rocm_bandwidth_test": {
+        "include_regex": r"^rocm-[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "rocm-",
+    },
+    # ROCm/aotriton does NOT use the org-wide release scheme that the repo-wide
+    # ^ROCm/.+ filter assumes — it tags betas bare as `X.Y[.Z]b`
     # (0.12b, 0.13b, 0.11.210b), alongside stray `0.12.50tp*`, `0.7preview*`,
-    # and `legal-scan` tags. Under the blanket rocm- filter this entry matched
-    # NOTHING and silently omitted upstream (was hiding 0.12b -> 0.13b). This
-    # per-package override wins over GITHUB_TAG_FILTERS. Tags are bare (no v),
+    # and `legal-scan` tags. Under the blanket ^ROCm/.+ filter this entry
+    # matched NOTHING and silently omitted upstream (was hiding 0.12b ->
+    # 0.13b). This per-package override wins over GITHUB_TAG_FILTERS.
+    # Tags are bare (no v),
     # so prefix "" ; the `b`-suffixed value maps straight to the ebuild PV
     # (aotriton-bin fetches releases/download/<PV>/ with PV=0.12b). verified 2026-07-18
     "sci-libs/aotriton-bin": {
@@ -427,19 +462,19 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "prefix": "",
     },
     # sci-libs/aotriton (from-source) shares aotriton-bin's bare `X.Y[.Z]b`
-    # beta scheme, NOT the org-wide rocm-X.Y.Z — under the blanket ^ROCm/.+
-    # rocm- filter this matched NOTHING and silently omitted upstream. Same
+    # beta scheme, NOT the org-wide release line — under the blanket ^ROCm/.+
+    # filter this matched NOTHING and silently omitted upstream. Same
     # override as sci-libs/aotriton-bin above. verified 2026-08-24: PV 0.13b.
     "sci-libs/aotriton": {
         "include_regex": r"^[0-9]+\.[0-9]+(?:\.[0-9]+)?b$",
         "prefix": "",
     },
     # ROCm/FastFlowLM was adopted into the ROCm org but kept its own
-    # `vX.Y.Z` tags instead of the org-wide `rocm-X.Y.Z` scheme the
-    # ^ROCm/.+ filter assumes — under that blanket filter this entry would
+    # `vX.Y.Z` tags instead of the org-wide release scheme the ^ROCm/.+
+    # filter assumes — under that blanket filter this entry would
     # match NOTHING and silently drop tracking. This per-package override
     # wins over GITHUB_TAG_FILTERS. verified 2026-07-29: all 56 tags are
-    # v-scheme (v0.9.46 latest), zero rocm-* tags.
+    # v-scheme (v0.9.46 latest), zero rocm-*/therock-* tags.
     "sci-ml/fastflowlm": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
@@ -460,6 +495,39 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "from_pattern": r"^v([0-9]+\.[0-9]+\.[0-9]+)-beta$",
         "to_pattern": r"\1_beta",
     },
+}
+
+
+# Packages whose upstream RELEASES moved to a different GitHub repo than the
+# one their SRC_URI still fetches from. Keyed on cat/pkg -> the repo to track.
+# Only the tracked repo changes; tag filters still resolve normally against it
+# (so a ROCm/* replacement still picks up the therock- filter above).
+#
+# This is deliberately separate from GITHUB_TAG_FILTERS_BY_PKG: that answers
+# "the tag scheme in this repo is unusual", this answers "we are watching the
+# wrong repo". Conflating them would mean restating the whole filter per
+# package.
+GITHUB_REPO_OVERRIDES: dict[str, str] = {
+    # rccl, rocRAND, rocSOLVER, rocSPARSE and rocThrust were folded into AMD's
+    # two ROCm monorepos. Their standalone ROCm/* repos are NOT archived and
+    # still take commits (all pushed within the last two weeks as of
+    # 2026-08-29), but release tagging stopped dead at rocm-7.2.4 — every
+    # release since is cut on the monorepo that now vendors the project under
+    # projects/<name>/. Tracking the standalone repo therefore reports 7.2.4
+    # forever, and the still-live commit stream makes it look healthy.
+    #
+    # rccl is the trap: it did receive therock-7.9.0/7.10/7.11 on its own repo
+    # before the move, so the tag line looks like it is on the current scheme
+    # until you notice it stops at 7.11 while the monorepos are at 10.0.
+    #
+    # verified 2026-08-29: each repo's full tag list checked via
+    # git/matching-refs, and each project confirmed present in the target
+    # monorepo's projects/ tree at therock-10.0.
+    "dev-libs/rccl": "ROCm/rocm-systems",
+    "sci-libs/rocRAND": "ROCm/rocm-libraries",
+    "sci-libs/rocSOLVER": "ROCm/rocm-libraries",
+    "sci-libs/rocSPARSE": "ROCm/rocm-libraries",
+    "sci-libs/rocThrust": "ROCm/rocm-libraries",
 }
 
 
@@ -1215,6 +1283,10 @@ def main() -> int:
             egit = expand_vars(first_group(EGIT_REPO_URI_RE.search(text)), pkg_dir.name, my_pn)
 
             cls = classify(pkg_dir.name, text, homepage, src_uri, egit)
+            # Upstream moved the release line to another repo (the ebuild's
+            # SRC_URI may still point at the old one until it is bumped).
+            if cls["kind"] == "github" and entry_name in GITHUB_REPO_OVERRIDES:
+                cls = {**cls, "spec": GITHUB_REPO_OVERRIDES[entry_name]}
             entries_by_kind[cls["kind"]].append((entry_name, str(ebuild), cls))
             counter[cls["kind"]] += 1
 

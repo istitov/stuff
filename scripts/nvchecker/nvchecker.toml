@@ -1245,8 +1245,9 @@ prefix = "v"
 source = "github"
 github = "ROCm/rocm-cmake"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-cpp/backward-cpp"]
 source = "github"
@@ -1291,8 +1292,9 @@ to_pattern = '\1.\2.\3'
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-libs/oocairo"]
 source = "github"
@@ -1302,52 +1304,59 @@ prefix = "v"
 
 ["dev-libs/rccl"]
 source = "github"
-github = "ROCm/rccl"
+github = "ROCm/rocm-systems"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-libs/rocm-comgr"]
 source = "github"
 github = "ROCm/llvm-project"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-libs/rocm-core"]
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-libs/rocm-device-libs"]
 source = "github"
 github = "ROCm/llvm-project"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-libs/rocm-opencl-runtime"]
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-libs/rocr-runtime"]
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-libs/roct-thunk-interface"]
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-libs/xdna-driver"]
 source = "github"
@@ -1833,43 +1842,48 @@ prefix = "v"
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-util/hipcc"]
 source = "github"
 github = "ROCm/llvm-project"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-util/hipify-clang"]
 source = "github"
 github = "ROCm/HIPIFY"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-util/rocm-smi"]
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-util/rocm_bandwidth_test"]
 source = "github"
 github = "ROCm/rocm_bandwidth_test"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
+include_regex = '^rocm-[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "rocm-"
 
 ["dev-util/rocminfo"]
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-util/rtk"]
 source = "github"
@@ -2098,8 +2112,9 @@ prefix = "v"
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/dlpack"]
 source = "github"
@@ -2125,71 +2140,81 @@ prefix = "hdf"
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/hipBLAS-common"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/hipBLASLt"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/hipCUB"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/hipFFT"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/hipRAND"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/hipSOLVER"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/hipSPARSE"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/hipsparselt"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/miopen"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/nexus"]
 source = "github"
@@ -2213,50 +2238,57 @@ prefix = "v"
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/rocFFT"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/rocPRIM"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/rocRAND"]
 source = "github"
-github = "ROCm/rocRAND"
+github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/rocSOLVER"]
 source = "github"
-github = "ROCm/rocSOLVER"
+github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/rocSPARSE"]
 source = "github"
-github = "ROCm/rocSPARSE"
+github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/rocThrust"]
 source = "github"
-github = "ROCm/rocThrust"
+github = "ROCm/rocm-libraries"
 use_max_tag = true
-include_regex = 'rocm-[0-9]+\.[0-9]+\.[0-9]+'
-prefix = "rocm-"
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/suitesparseconfig"]
 source = "github"
