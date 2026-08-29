@@ -1,0 +1,52 @@
+Link the new hotswap rewriter against the LLVM dylib, like the rest of comgr.
+
+ROCm 10.0 adds src/hotswap/rewriter, which resolves its LLVM dependencies with
+an unguarded llvm_map_components_to_libnames(), yielding per-component static
+library names (-lLLVMAMDGPUDesc, -lLLVMMCDisassembler, ...). Distributions that
+build LLVM as a single shared library do not ship those, so the link of
+libamd_comgr.so fails with:
+
+    ld: cannot find -lLLVMAMDGPUDesc: No such file or directory
+    ld: cannot find -lLLVMAMDGPUDisassembler: No such file or directory
+    ld: cannot find -lLLVMAMDGPUInfo: No such file or directory
+
+comgr's own top-level CMakeLists.txt already handles this correctly at line
+554 with an `if (LLVM_LINK_LLVM_DYLIB) set(LLVM_LIBS LLVM ...)` branch; the new
+subdirectory simply did not copy it. Apply the same idiom so both link paths
+stay consistent.
+--- a/src/hotswap/rewriter/CMakeLists.txt
++++ b/src/hotswap/rewriter/CMakeLists.txt
+@@ -71,17 +71,21 @@
+ # BinaryFormat), and query AMDGPU MC descriptions (AMDGPU{Desc,Info,AsmParser,
+ # Disassembler}). It uses no LLVM IR or codegen, so Core and AMDGPUCodeGen are
+ # intentionally omitted; Core is still pulled in transitively where needed.
+-llvm_map_components_to_libnames(hotswap_rewriter_llvm_libs
+-  BinaryFormat
+-  MC
+-  MCDisassembler
+-  MCParser
+-  Object
+-  Support
+-  TargetParser
+-  AMDGPUAsmParser
+-  AMDGPUDesc
+-  AMDGPUDisassembler
+-  AMDGPUInfo)
++if (LLVM_LINK_LLVM_DYLIB)
++  set(hotswap_rewriter_llvm_libs LLVM)
++else()
++  llvm_map_components_to_libnames(hotswap_rewriter_llvm_libs
++    BinaryFormat
++    MC
++    MCDisassembler
++    MCParser
++    Object
++    Support
++    TargetParser
++    AMDGPUAsmParser
++    AMDGPUDesc
++    AMDGPUDisassembler
++    AMDGPUInfo)
++endif()
+ 
+ target_link_libraries(hotswap-rewriter PUBLIC ${hotswap_rewriter_llvm_libs})

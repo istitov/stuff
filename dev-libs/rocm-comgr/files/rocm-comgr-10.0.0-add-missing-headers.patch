@@ -1,0 +1,27 @@
+Add missing <string_view> and <unordered_set> includes.
+
+comgr-compiler.cpp declares
+
+    static inline const std::unordered_set<std::string_view> ValidSpirvFlags{...}
+
+at file scope but includes neither header, relying on them arriving
+transitively through an LLVM header. That does not hold here and the build
+fails with:
+
+    error: 'unordered_set' in namespace 'std' does not name a template type
+    error: 'ValidSpirvFlags' was not declared in this scope
+
+Note this declaration is NOT inside the COMGR_SPIRV_TRANSLATOR_AVAILABLE
+guard, so it is compiled even when configuring with -DCOMGR_DISABLE_SPIRV=ON
+as this ebuild does.
+--- a/src/comgr-compiler.cpp
++++ b/src/comgr-compiler.cpp
+@@ -78,6 +78,8 @@
+ 
+ #include <csignal>
+ #include <sstream>
++#include <string_view>
++#include <unordered_set>
+ 
+ LLD_HAS_DRIVER(elf)
+ 
