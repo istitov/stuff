@@ -3,7 +3,14 @@
 
 EAPI=8
 
-LLVM_COMPAT=( 22 )
+# Must track the slot the rest of the ROCm 10.0 cohort builds against, not the
+# 22 inherited from 7.2.4: src_prepare seds lib/llvm/${LLVM_SLOT}/bin into the
+# installed hipcc wrapper, so a 22 here would ship a hipcc driving clang 22
+# while dev-libs/rocm-device-libs-10.0.0 requires clang 23 (it needs
+# amdhsa_abi.h and the struct_buffer_load_format builtins, both LLVM 23
+# additions). The mismatch builds fine in isolation, which is exactly why it
+# has to be caught here rather than by a build-check. verified 2026-08-29.
+LLVM_COMPAT=( 23 )
 inherit cmake llvm-r2
 
 DESCRIPTION="Radeon Open Compute hipcc"
@@ -56,8 +63,23 @@ src_unpack() {
 src_prepare() {
 	cmake_src_prepare
 
-	sed -e "s:lib/llvm/bin:lib/llvm/${LLVM_SLOT}/bin:" \
-		-e "s:/opt/rocm:/usr:g" \
+	# Point hipcc at Gentoo's SLOTTED clang. Through 7.2.4 the compiler path
+	# was a literal "lib/llvm/bin" string and a plain substitution sufficed.
+	# ROCm 10.0 rewrote HipBinAmd::constructCompilerPath() to append path
+	# components one at a time:
+	#     hipClangPath /= "lib"; hipClangPath /= "llvm"; hipClangPath /= "bin";
+	# so the old anchor matches NOTHING in hipBin_amd.h and only a comment in
+	# hipBin_base.h. `sed` exits 0 on no-match, so the ebuild still built and
+	# installed a hipcc that probes /usr/lib/llvm/bin/clang++ -- a path that
+	# does not exist under Gentoo's versioned layout, leaving hipcc unable to
+	# find any compiler. Re-anchored on the component append, with an assert.
+	# verified 2026-08-29 against therock-10.0.
+	grep -qF 'hipClangPath /= "llvm";' src/hipBin_amd.h ||
+		die "constructCompilerPath component-append anchor moved; hipcc would not find clang"
+	sed -e "s:hipClangPath /= \"llvm\";:hipClangPath /= \"llvm\";\n  hipClangPath /= \"${LLVM_SLOT}\";:" \
+		-i src/hipBin_amd.h || die
+
+	sed -e "s:/opt/rocm:/usr:g" \
 		-i src/hipBin_base.h \
 		-i src/hipBin_amd.h || die
 
