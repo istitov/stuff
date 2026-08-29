@@ -44,9 +44,23 @@ RESTRICT="bindist mirror strip"
 # source tree that is impractical to compile in-tree; the wheel is the
 # upstream-supported form (same posture as dev-python/cuda-tile-bin).
 #
-# Version: torch-2.12.0 pairs with triton 3.7.0 (pytorch
-# .ci/docker/triton_version.txt; torch-2.11.0 paired with 3.6.0). vllm's
-# CUDA kernels (slot mapping, attention, sampling, the
+# Version: this tracks pytorch's .ci/docker/triton_version.txt, NOT the
+# newest triton release. The mapping, re-read from the pytorch tags
+# 2026-08-29:
+#
+#   torch 2.11.0 -> triton 3.6.0
+#   torch 2.12.0 -> triton 3.7.0
+#   torch 2.13.0 -> triton 3.7.1   <- the newest torch in this overlay
+#
+# So 3.7.1 is the correct head of this line for now. triton 3.8.0 is
+# released upstream and shows as drift on every nvchecker run; do NOT bump
+# to it. It pairs with a torch we do not ship, and nothing could reach it
+# anyway -- consumers go through virtual/triton, so a 3.8.0 would also need
+# a virtual/triton-3.8.0, and the actual consumers (vllm, comfyui) still pin
+# ~virtual/triton-3.6.0. Bumping triton is a step in a torch bump, never a
+# standalone drift fix.
+#
+# vllm's CUDA kernels (slot mapping, attention, sampling, the
 # torch.compile/inductor path) are @triton.jit and hard-fail without it.
 # Pairing verified 2026-06-15 against pytorch v2.12.0; not yet
 # end-to-end-tested with vllm[cuda] on this triton (the 3.6.0 ebuild
