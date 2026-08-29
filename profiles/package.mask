@@ -33,31 +33,63 @@ app-portage/portopts
 sci-ml/unsloth-desktop-bin
 
 # Ivan S. Titov <iohann.s.titov@gmail.com> (2026-08-29)
-# Partial ROCm 10.0 split-stack cohort. These six are correct as far as they
-# go, but the cohort is incomplete: rocm-device-libs -> rocm-comgr ->
-# dev-util/hip and every math lib still have to land. Since they share SLOT 0
-# with the installed 7.2.4 stack, an unmasked world update would upgrade them
-# piecemeal and leave 10.0 components against a 7.2.4 hip - and flip the
-# dev-util/hipcc subslot that four ebuilds pin with :=. Use dev-util/therock-bin
-# for a working ROCm 10.0 (it bundles its own clang 23) until then.
+# ROCm 10.0 split stack. The BASE AND RUNTIME layer is complete and
+# build-verified on gfx1150 (rocminfo enumerates the GPU; HIP code compiles,
+# links and runs). The MATH LIBRARIES are not, and cannot be with a vanilla
+# LLVM -- see the second block below.
 #
-# The LLVM 23 half of the old blocker is RESOLVED: ::gentoo keyworded the whole
-# 23.1.0 cohort on 2026-08-29 and clang 23 is installed here, so hipcc,
-# roct-thunk-interface and rocm-device-libs now declare LLVM_COMPAT=( 23 ) --
-# device-libs needs amdhsa_abi.h (clang resource dir, /usr/lib/clang/23/include)
-# and __builtin_amdgcn_struct_buffer_load_format_v4f32, both clang 23 additions
-# absent from 22.
+# Masked because these share SLOT 0 with the 7.2.x stack: an unmasked world
+# update would upgrade them piecemeal, and the subslot flips from 0/7.2 to
+# 0/10.0 (four ebuilds pin dev-util/hipcc with :=). Lift the whole block at
+# once, never individual entries.
 #
-# What still blocks a build is separate from keywording: ::gentoo USE-masks
-# llvm_slot_23 profile-wide (profiles/base/use.mask), so llvm-r2's
-# REQUIRED_USE="exactly-one-of ( llvm_slot_23 )" is unsatisfiable and pkgcheck
-# reports RequiredUseUnsatisfiableIn{Dev,Stable} on any LLVM_COMPAT=( 23 )
-# ebuild. Building the cohort needs a local -llvm_slot_23 in
-# /etc/portage/profile/use.mask until ::gentoo unmasks it.
-# Lift once llvm_slot_23 is unmasked upstream and the rest of the cohort lands.
+# Building any of these needs BOTH a local -llvm_slot_23 in
+# /etc/portage/profile/use.mask (::gentoo keyworded LLVM 23.1.0 on 2026-08-29
+# but still USE-masks that flag profile-wide, which is a separate gate from
+# keywording) and llvm_slot_23 enabled per package -- my.use pins the ROCm
+# packages to llvm_slot_20/22, which the 10.0 versions cannot satisfy.
+#
+# Use dev-util/therock-bin for a fully working ROCm 10.0: it bundles AMD's own
+# clang 23, which is precisely what these math libraries turn out to need.
 =dev-build/rocm-cmake-10.0.0
 =dev-libs/rocm-core-10.0.0
 =dev-libs/hipother-10.0.0
 =dev-libs/roct-thunk-interface-10.0.0
 =dev-libs/rocm-device-libs-10.0.0
+=dev-libs/rocm-comgr-10.0.0
+=dev-libs/rocr-runtime-10.0.0
+=dev-libs/rocm-opencl-runtime-10.0.0
+=dev-libs/rccl-10.0.0
 =dev-util/hipcc-10.0.0
+=dev-util/hip-10.0.0
+=dev-util/hipify-clang-10.0.0
+=dev-util/rocm-smi-10.0.0
+=dev-util/rocminfo-10.0.0
+=dev-util/Tensile-10.0.0
+=dev-util/roctracer-10.0.0
+=sci-libs/hipBLAS-common-10.0.0
+=sci-libs/rocPRIM-10.0.0
+=sci-libs/rocRAND-10.0.0
+
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-08-29)
+# ROCm 10.0 math libraries -- DO NOT BUILD against a vanilla LLVM 23.
+# Packaging is complete and the patch triage is banked, but AMD builds ROCm
+# against its OWN LLVM fork and these two hit divergences that are compiler
+# differences, not packaging problems:
+#
+#   composable-kernel  include/ck/utility/amd_wmma.hpp passes bhalf16_t
+#                      (__bf16 vector) to __builtin_amdgcn_wmma_f32_16x16x16_
+#                      bf16_w32, which vanilla clang 23 declares as taking
+#                      short __attribute__((ext_vector_type(16))). AMD's fork
+#                      uses bf16 types for the WMMA intrinsics.
+#   hipBLASLt          TensileLite GENERATES gfx1150 assembly the vanilla
+#                      assembler rejects ("operands are not valid for this GPU
+#                      or mode" on v_max_f16 with an abs() source modifier).
+#
+# Fixing either means editing numerical kernels or AMD's kernel generator,
+# where a wrong change compiles clean and silently yields wrong GPU results.
+# Tracked as its own project; not a bump. rccl is in the block above rather
+# than here for a different reason: it builds, but upstream's DEFAULT_GPUS
+# still excludes gfx1150 so it cannot be built on this host.
+=sci-libs/composable-kernel-10.0.0
+=sci-libs/hipBLASLt-10.0.0
