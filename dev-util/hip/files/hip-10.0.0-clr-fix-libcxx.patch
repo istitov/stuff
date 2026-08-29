@@ -1,0 +1,24 @@
+Fix compilation with libc++ (ROCM/clr part)
+
+Regenerated from hip-6.3.0-clr-fix-libcxx.patch for ROCm 10.0, keeping only the
+half that is still required.
+
+The dropped half saved and restored the __local macro around the
+<include/cuda_wrappers/*> includes, because libc++'s <queue> uses __local as an
+identifier while HIP defined it as an address-space attribute. ROCm 10.0
+removed `#define __local` from the tree entirely (device_library_decls.h no
+longer defines it anywhere), so that workaround has nothing left to guard.
+
+Still needed: <__clang_cuda_complex_builtins.h> refers to ::max, which arrives
+via <__clang_hip_math.h>; upstream still does not include it first.
+--- a/hipamd/include/hip/amd_detail/amd_hip_runtime.h
++++ b/hipamd/include/hip/amd_detail/amd_hip_runtime.h
+@@ -394,6 +394,8 @@
+ #pragma push_macro("__CUDA__")
+ #define __CUDA__
+ #include <__clang_cuda_math_forward_declares.h>
++// __clang_cuda_complex_builtins wants ::max
++#include <__clang_hip_math.h>
+ #include <__clang_cuda_complex_builtins.h>
+ // Workaround for using libc++ with HIP-Clang.
+ // The following headers requires clang include path before standard C++ include path.
