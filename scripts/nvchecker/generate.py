@@ -435,6 +435,12 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "sci-ml/pytorch": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
+    # caffe2 is tracked against pytorch/pytorch (see GITHUB_REPO_OVERRIDES),
+    # so it needs pytorch's filter too — that repo carries ciflow/* and
+    # trunk/<sha> tags alongside the vX.Y.Z releases.
+    "sci-ml/caffe2": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
     # ROCm/rocm_bandwidth_test is the one ROCm project that neither moved to a
     # `therock-X.Y` tag line nor got vendored into a monorepo: it is not under
     # rocm-systems/projects/ or rocm-libraries/projects/ at therock-10.0, and
@@ -528,6 +534,19 @@ GITHUB_REPO_OVERRIDES: dict[str, str] = {
     "sci-libs/rocSOLVER": "ROCm/rocm-libraries",
     "sci-libs/rocSPARSE": "ROCm/rocm-libraries",
     "sci-libs/rocThrust": "ROCm/rocm-libraries",
+
+    # pyprismatic's SRC_URI builds its path from MYPN="prismatic" (no
+    # underscore). The classifier only expands MY_PN, so it derives
+    # prism-em/pyprismatic, which does not exist. The real repo is
+    # prism-em/prismatic (3 tags, newest v2.0 = the PV we ship).
+    # verified 2026-08-29.
+    "dev-python/pyprismatic": "prism-em/prismatic",
+
+    # caffe2 has no repo of its own: it was absorbed into pytorch/pytorch and
+    # its PV tracks pytorch's releases exactly (both are 2.13.0 here). Track
+    # the pytorch repo, with the same tag filter sci-ml/pytorch uses.
+    # verified 2026-08-29.
+    "sci-ml/caffe2": "pytorch/pytorch",
 }
 
 
@@ -542,6 +561,66 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
     "dev-python/tokenspeed-mla-bin": {
         "source": "pypi",
         "pypi": "tokenspeed-mla",
+    },
+    # latexmk and glossaries are TeX Live-shipped but ALSO have independent
+    # upstream releases, and were skipped as untrackable ("no tag scheme",
+    # "add a regex tracker"). CTAN exposes a machine-readable canonical
+    # version per package at /json/2.0/pkg/<name>, so track that: it is the
+    # authoritative release number, independent of whichever TL snapshot we
+    # happen to ship.
+    #
+    # Deliberately the `regex` source and not `jq`, even though the endpoint is
+    # JSON: nvchecker's jq source imports the `jq` Python binding, which is not
+    # installed here and would have to be added to the GitHub Actions drift job
+    # too. The document contains exactly one `"number"` key (checked), so the
+    # anchored regex is unambiguous.
+    #
+    # verified 2026-08-29: latexmk 4.88 (2026-03-09), glossaries 5.1
+    # (2026-04-21) -- both equal to the PVs the tree ships, so nothing was
+    # being hidden; they were simply invisible.
+    "dev-tex/latexmk": {
+        "source": "regex",
+        "url": "https://www.ctan.org/json/2.0/pkg/latexmk",
+        "regex": r'"number"\s*:\s*"([^"]+)"',
+    },
+    "dev-tex/glossaries": {
+        "source": "regex",
+        "url": "https://www.ctan.org/json/2.0/pkg/glossaries",
+        "regex": r'"number"\s*:\s*"([^"]+)"',
+    },
+    # Both mupdf packages fetch the same Artifex tarball
+    # (mupdf.com/downloads/archive/<P>-source.tar.gz) and were skipped as
+    # "custom upstream, hand-add a regex entry if tracking is wanted". Doing
+    # that now: mupdf.com/releases lists every release as
+    # mupdf-X.Y.Z-source.tar.{gz,lz}, so one regex covers the line. Anchor on
+    # the .gz form -- the .lz is published alongside and would double every
+    # match. verified 2026-08-29: the page lists 1.28.1/1.28.2/1.28.3.
+    #
+    # This WILL report drift the tree is not going to act on immediately, and
+    # that is the point: app-text/mupdf, dev-python/mupdf and
+    # dev-python/PyMuPDF move in lockstep (PyMuPDF pins dev-python/mupdf:= and
+    # builds against its headers), so mupdf cannot lead PyMuPDF. Upstream is at
+    # 1.28.3 while PyPI's PyMuPDF is still 1.28.2 -- previously invisible,
+    # since none of the three could signal it. Bump all three together when
+    # PyMuPDF catches up.
+    "app-text/mupdf": {
+        "source": "regex",
+        "url": "https://mupdf.com/releases",
+        "regex": r"mupdf-([0-9]+\.[0-9]+\.[0-9]+)-source\.tar\.gz",
+    },
+    "dev-python/mupdf": {
+        "source": "regex",
+        "url": "https://mupdf.com/releases",
+        "regex": r"mupdf-([0-9]+\.[0-9]+\.[0-9]+)-source\.tar\.gz",
+    },
+    # tccbox has no SRC_URI the classifier can read (the ebuild is PyPI-driven
+    # but the classifier fell back to HOMEPAGE -> metab0t/tccbox, a repo that
+    # genuinely carries no tags, and the package was skipped as untrackable).
+    # It has been on PyPI all along, at the calver PV we already ship.
+    # verified 2026-08-29: PyPI latest 2025.10.27 == tree PV.
+    "dev-python/tccbox": {
+        "source": "pypi",
+        "pypi": "tccbox",
     },
     "dev-python/tokenspeed-triton-bin": {
         "source": "pypi",
@@ -778,12 +857,20 @@ SKIP_PKGS: dict[str, str] = {
     "sci-libs/colamd":  "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
     "sci-libs/umfpack": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
     # Repositories confirmed to have no release tags (GitHub /git/refs/tags → 404).
-    "dev-python/pyprismatic":              "prism-em/pyprismatic has no GitHub release tags",
-    "dev-python/dlinfo":                   "fphammerle/dlinfo has no GitHub release tags",
-    "x11-apps/skb":                        "polachok/skb has no GitHub release tags",
-    "media-plugins/deadbeef-waveform-seekbar": "cboxdoerfer/deadbeef-waveform-seekbar has no GitHub release tags",
-    "dev-python/tccbox":                   "metab0t/tccbox has no GitHub release tags (private or untagged)",
-    "sci-ml/caffe2":                       "pytorch/caffe2 repo has no tags; caffe2 was absorbed into pytorch/pytorch",
+    #
+    # NB re-audited 2026-08-29: this block used to hold five more packages,
+    # all of them false 404s. The probes had been run against a repo name
+    # guessed from the PACKAGE name, while the ebuild's SRC_URI builds the
+    # real path out of MY_PN / MYPN — so the 404 proved only that the guessed
+    # repo does not exist, never that upstream is untagged. Recovered:
+    # dev-python/dlinfo (fphammerle/python-dlinfo, 5 tags),
+    # media-plugins/deadbeef-waveform-seekbar (cboxdoerfer/ddb_waveform_seekbar,
+    # 5 tags), dev-python/pyprismatic (prism-em/prismatic, 3 tags),
+    # dev-python/tccbox (on PyPI all along), sci-ml/caffe2 (tracks
+    # pytorch/pytorch). All five were silently untracked, and all five turned
+    # out to be current. When adding to this block, probe the repo the SRC_URI
+    # actually resolves to, not <owner>/<PN>.
+    "x11-apps/skb":                        "polachok/skb has no release tags (verified 2026-08-29: 0 tags; the ebuild pins EGIT_COMMIT)",
     # Upstreams that are gone or use non-public distribution channels.
     "sci-physics/demeter":                 "Demeter removed from CPAN; no public upstream tracking possible",
     # (amd-quark-bin / runai-model-streamer-bin were here until 2026-07-18 —
@@ -853,9 +940,7 @@ SKIP_PKGS: dict[str, str] = {
     "dev-tex/bibtexu":                     _TL_SKIP,
     # Ship with TeX Live but have an independent (awkward) upstream — skipped for
     # now; add an nvchecker regex/htmlparser entry if independent drift is wanted.
-    "dev-tex/latexmk":                     "TL-shipped; upstream personal.psu.edu has no tag scheme — add an htmlparser tracker for independent drift",
-    "dev-tex/glossaries":                  "TL-shipped; CTAN upstream — add a regex/htmlparser tracker for independent drift",
-    "dev-tex/tex4ht":                      "engine bootstrapped from svn.gnu.org.ua trunk; SVN-revision versioned, no upstream tags",
+            "dev-tex/tex4ht":                      "engine bootstrapped from svn.gnu.org.ua trunk; SVN-revision versioned, no upstream tags",
 }
 
 

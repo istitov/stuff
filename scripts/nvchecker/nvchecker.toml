@@ -1170,7 +1170,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (200) ---
+# --- github (204) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1474,6 +1474,12 @@ github = "dask/distributed"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/dlinfo"]
+source = "github"
+github = "fphammerle/python-dlinfo"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/en_core_web_sm"]
 source = "github"
 github = "explosion/spacy-models"
@@ -1669,6 +1675,12 @@ prefix = "v"
 ["dev-python/pymupdf-fonts"]
 source = "github"
 github = "pymupdf/pymupdf-fonts"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/pyprismatic"]
+source = "github"
+github = "prism-em/prismatic"
 use_max_tag = true
 prefix = "v"
 
@@ -2042,6 +2054,12 @@ github = "vovochka404/deadbeef-statusnotifier-plugin"
 use_max_tag = true
 prefix = "v"
 
+["media-plugins/deadbeef-waveform-seekbar"]
+source = "github"
+github = "cboxdoerfer/ddb_waveform_seekbar"
+use_max_tag = true
+prefix = "v"
+
 ["media-sound/mpdris2"]
 source = "github"
 github = "eonpatapon/mpDris2"
@@ -2329,6 +2347,13 @@ github = "bitsandbytes-foundation/bitsandbytes"
 use_max_tag = true
 prefix = "v"
 
+["sci-ml/caffe2"]
+source = "github"
+github = "pytorch/pytorch"
+use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
+
 ["sci-ml/fastflowlm"]
 source = "github"
 github = "ROCm/FastFlowLM"
@@ -2597,7 +2622,12 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (16) ---
+# --- special (21) ---
+
+["app-text/mupdf"]
+source = "regex"
+url = "https://mupdf.com/releases"
+regex = 'mupdf-([0-9]+\.[0-9]+\.[0-9]+)-source\.tar\.gz'
 
 ["dev-libs/cudnn"]
 source = "regex"
@@ -2620,6 +2650,11 @@ pypi = "comfy-angle"
 source = "pypi"
 pypi = "comfy-kitchen"
 
+["dev-python/mupdf"]
+source = "regex"
+url = "https://mupdf.com/releases"
+regex = 'mupdf-([0-9]+\.[0-9]+\.[0-9]+)-source\.tar\.gz'
+
 ["dev-python/pynvvideocodec-bin"]
 source = "pypi"
 pypi = "pynvvideocodec"
@@ -2632,6 +2667,10 @@ pypi = "runai-model-streamer"
 source = "pypi"
 pypi = "SimpleITK"
 
+["dev-python/tccbox"]
+source = "pypi"
+pypi = "tccbox"
+
 ["dev-python/tokenspeed-mla-bin"]
 source = "pypi"
 pypi = "tokenspeed-mla"
@@ -2641,6 +2680,16 @@ source = "pypi"
 pypi = "tokenspeed-triton"
 from_pattern = '^(\d+\.\d+\.\d+)\.post(\d+)$'
 to_pattern = '\1_p\2'
+
+["dev-tex/glossaries"]
+source = "regex"
+url = "https://www.ctan.org/json/2.0/pkg/glossaries"
+regex = '"number"\s*:\s*"([^"]+)"'
+
+["dev-tex/latexmk"]
+source = "regex"
+url = "https://www.ctan.org/json/2.0/pkg/latexmk"
+regex = '"number"\s*:\s*"([^"]+)"'
 
 ["dev-util/nvidia-cuda-toolkit"]
 source = "regex"
@@ -2716,7 +2765,6 @@ prefix = "v"
 # ["x11-terms/cool-retro-term"] skipped: live-only ebuild (no release tracking)
 
 # ["app-text/dvipsk"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
-# ["app-text/mupdf"] skipped: custom upstream at mupdf.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["app-text/ps2pkm"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
 # ["app-text/texlive"] skipped: custom upstream at tug.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["app-text/texlive-core"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
@@ -2727,17 +2775,13 @@ prefix = "v"
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/diff-gaussian-rasterization"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["dev-python/diffoctreerast"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
-# ["dev-python/dlinfo"] skipped: fphammerle/dlinfo has no GitHub release tags
-# ["dev-python/mupdf"] skipped: custom upstream at mupdf.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/numpy-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pycairo-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygobject"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygtk"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
-# ["dev-python/pyprismatic"] skipped: prism-em/pyprismatic has no GitHub release tags
 # ["dev-python/pyside"] skipped: custom upstream at wiki.qt.io; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/setuptools-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
-# ["dev-python/tccbox"] skipped: metab0t/tccbox has no GitHub release tags (private or untagged)
 # ["dev-python/unittest-or-fail"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/utils3d"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["dev-python/vox2seq"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
@@ -2766,8 +2810,6 @@ prefix = "v"
 # ["dev-qt/qtx11extras"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-qt/qtxml"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
 # ["dev-tex/bibtexu"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
-# ["dev-tex/glossaries"] skipped: TL-shipped; CTAN upstream — add a regex/htmlparser tracker for independent drift
-# ["dev-tex/latexmk"] skipped: TL-shipped; upstream personal.psu.edu has no tag scheme — add an htmlparser tracker for independent drift
 # ["dev-tex/tex4ht"] skipped: engine bootstrapped from svn.gnu.org.ua trunk; SVN-revision versioned, no upstream tags
 # ["dev-texlive/texlive-basic"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
 # ["dev-texlive/texlive-bibtexextra"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
@@ -2812,7 +2854,6 @@ prefix = "v"
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/comfyui-if-trellis"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["media-plugins/deadbeef-waveform-seekbar"] skipped: cboxdoerfer/deadbeef-waveform-seekbar has no GitHub release tags
 # ["sci-libs/amd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/camd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/ccolamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
@@ -2821,7 +2862,6 @@ prefix = "v"
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-ml/bigcode-eval"] skipped: we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind
-# ["sci-ml/caffe2"] skipped: pytorch/caffe2 repo has no tags; caffe2 was absorbed into pytorch/pytorch
 # ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/demeter"] skipped: Demeter removed from CPAN; no public upstream tracking possible
 # ["sci-physics/ifeffit"] skipped: custom upstream at sourceforge.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
@@ -2833,6 +2873,6 @@ prefix = "v"
 # ["virtual/aotriton"] skipped: no recognizable upstream
 # ["virtual/triton"] skipped: no recognizable upstream
 # ["www-misc/httraqt"] skipped: sourceforge/httraqt — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
-# ["x11-apps/skb"] skipped: polachok/skb has no GitHub release tags
+# ["x11-apps/skb"] skipped: polachok/skb has no release tags (verified 2026-08-29: 0 tags; the ebuild pins EGIT_COMMIT)
 # ["x11-libs/gtk+"] skipped: custom upstream at www.gtk.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["x11-libs/qscintilla"] skipped: custom upstream at www.riverbankcomputing.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
