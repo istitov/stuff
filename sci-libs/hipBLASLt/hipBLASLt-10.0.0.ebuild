@@ -156,6 +156,23 @@ src_prepare() {
 	sed -e 's:\.\./\.\./\.\./\.\./shared/stinkytofu:../../../stinkytofu:' \
 		-i tensilelite/rocisa/CMakeLists.txt || die
 
+	# Do not build stinkytofu with -Werror. hipBLASLt forces
+	# set(STINKYTOFU_ENABLE_WERROR ON), overriding stinkytofu's own default of
+	# OFF, which is wrong for a distribution build: any warning from a
+	# compiler upstream did not test becomes a hard failure.
+	#
+	# It bites immediately here, and instructively. src/ir/asm/StinkyAsmIR.cpp
+	# declares `auto it = IRList::iterator(insertPt);` and then uses it ONLY
+	# inside an assert(). Because src_configure sets -DNDEBUG to match
+	# upstream's Release build, that assert compiles away, `it` becomes an
+	# unused variable, and -Werror turns the resulting -Wunused-variable into
+	# an error. The two upstream choices are individually defensible and
+	# jointly unbuildable. verified 2026-08-30.
+	grep -q 'set(STINKYTOFU_ENABLE_WERROR ON)' tensilelite/rocisa/CMakeLists.txt ||
+		die "STINKYTOFU_ENABLE_WERROR anchor moved"
+	sed -e 's:set(STINKYTOFU_ENABLE_WERROR ON):set(STINKYTOFU_ENABLE_WERROR OFF):' \
+		-i tensilelite/rocisa/CMakeLists.txt || die
+
 	cmake_src_prepare
 
 	# stinkytofu is co-unpacked from its own release asset, so it is built
@@ -176,6 +193,28 @@ src_prepare() {
 
 src_configure() {
 	rocm_use_clang
+
+	# Build the rocisa codegen extension the way upstream ships it: Release,
+	# with NDEBUG. cmake.eclass defaults to RelWithDebInfo AND blanks
+	# CMAKE_CXX_FLAGS_RELWITHDEBINFO, so the standard -DNDEBUG never lands and
+	# C++ assert()s stay live. TensileLite then aborts partway through
+	# generating the assembly kernels:
+	#
+	#   rocisa/src/pass/macro_inline.cpp:315: void rocisa::expandMacroBody(...):
+	#   Assertion `false && "macroToInstruction: unexpected item type in macro
+	#   body"' failed.  ->  Fatal Python error: Aborted
+	#
+	# Be clear about what this does and does not fix: it makes our build match
+	# AMD's, where CMAKE_BUILD_TYPE=Release compiles that assert away. The
+	# underlying rocisa logic still walks the same path in AMD's own shipped
+	# binaries -- it just does not abort there. So this is a build-config
+	# alignment, NOT a fix for the assert's root cause; if hipBLASLt ever
+	# produces visibly wrong kernels, revisit this rather than assuming the
+	# codegen is sound. sci-libs/composable-kernel carries the same idiom.
+	# verified 2026-08-30 against therock-10.0.
+	append-cflags "-DNDEBUG"
+	append-cxxflags "-DNDEBUG"
+	CMAKE_BUILD_TYPE="Release"
 
 	# too many warnings
 	append-cxxflags -Wno-explicit-specialization-storage-class
