@@ -35,9 +35,21 @@ fi
 
 LICENSE="Apache-2.0 MIT"
 SLOT="0/$(ver_cut 1-2)"
-IUSE="debug"
+# amd-llvm: point hipcc at llvm-core/rocm-llvm (AMD's LLVM fork) instead of the
+# system clang. This is the single lever that switches the whole ROCm library
+# stack over: rocm.eclass's rocm_use_clang() derives CC/CXX from
+# `hipconfig --hipclangpath`, so every library that calls it -- composable-
+# kernel, hipBLASLt, rocBLAS, rocPRIM, rocRAND, rccl, Tensile, roctracer --
+# follows automatically with no per-ebuild change.
+#
+# Needed because the ROCm math libraries cannot be compiled by a vanilla LLVM:
+# AMD's fork gives the WMMA intrinsics bf16 signatures and its assembler
+# accepts AMDGPU source modifiers that vanilla rejects. Verified 2026-08-29
+# with minimal reproducers for both.
+IUSE="amd-llvm debug"
 
 DEPEND="
+	amd-llvm? ( llvm-core/rocm-llvm:${SLOT} )
 	$(llvm_gen_dep "
 		llvm-runtimes/compiler-rt:\${LLVM_SLOT}=
 		llvm-core/llvm:\${LLVM_SLOT}=
@@ -76,12 +88,24 @@ src_prepare() {
 	# verified 2026-08-29 against therock-10.0.
 	grep -qF 'hipClangPath /= "llvm";' src/hipBin_amd.h ||
 		die "constructCompilerPath component-append anchor moved; hipcc would not find clang"
-	sed -e "s:hipClangPath /= \"llvm\";:hipClangPath /= \"llvm\";\n  hipClangPath /= \"${LLVM_SLOT}\";:" \
-		-i src/hipBin_amd.h || die
+	if use amd-llvm; then
+		# AMD's fork installs to /usr/lib/rocm-llvm/bin -- one directory, no
+		# per-major slot -- so swap the component rather than inserting a slot.
+		sed -e "s:hipClangPath /= \"llvm\";:hipClangPath /= \"rocm-llvm\";:" \
+			-i src/hipBin_amd.h || die
+	else
+		sed -e "s:hipClangPath /= \"llvm\";:hipClangPath /= \"llvm\";\n  hipClangPath /= \"${LLVM_SLOT}\";:" \
+			-i src/hipBin_amd.h || die
+	fi
 
-	sed -e "s:/opt/rocm:/usr:g" \
-		-i src/hipBin_base.h \
-		-i src/hipBin_amd.h || die
+	# hipBin_amd.h carries no /opt/rocm reference at 10.0, and the single
+	# occurrence left in hipBin_base.h is inside a --help string, not a path
+	# constant -- so this is cosmetic now rather than load-bearing. Kept (the
+	# help text should still say /usr) but narrowed to the file that actually
+	# matches, so a future miss is visible. verified 2026-08-30.
+	grep -q '/opt/rocm' src/hipBin_base.h ||
+		die "/opt/rocm anchor moved in hipBin_base.h"
+	sed -e "s:/opt/rocm:/usr:g" -i src/hipBin_base.h || die
 
 	sed -e "s:amdgcn/bitcode:lib/amdgcn/bitcode:g" \
 		-i src/hipBin_amd.h || die

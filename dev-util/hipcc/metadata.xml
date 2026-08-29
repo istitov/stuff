@@ -23,7 +23,19 @@
     <email>sci@gentoo.org</email>
     <name>Gentoo Science Project</name>
   </maintainer>
+  <use>
+    <flag name="amd-llvm">
+      Point hipcc at <pkg>llvm-core/rocm-llvm</pkg>, AMD's LLVM fork, instead of
+      the system clang. This makes "hipconfig --hipclangpath" report AMD's
+      compiler, which is what rocm.eclass's rocm_use_clang() reads, so every
+      ROCm library built afterwards uses it. Required to build the ROCm math
+      libraries: they use bf16 WMMA intrinsic signatures and generate AMDGPU
+      assembly that a vanilla LLVM rejects.
+    </flag>
+  </use>
   <upstream>
-    <remote-id type="github">ROCm/hipcc</remote-id>
+    <!-- hipcc moved into the llvm-project monorepo; it was its own repo
+         through the rocm-* era. -->
+    <remote-id type="github">ROCm/llvm-project</remote-id>
   </upstream>
 </pkgmetadata>
