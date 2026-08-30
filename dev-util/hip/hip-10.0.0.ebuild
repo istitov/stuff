@@ -162,9 +162,17 @@ src_prepare() {
 		-i "cmake/FindHIP.cmake" || die
 	popd >/dev/null || die
 
+	# -Werror is wrong for a distribution build: any warning from a compiler
+	# upstream did not test becomes a hard failure. A stale anchor here does not
+	# announce itself, it just puts -Werror back.
+	grep -qF ' -Werror' "hipamd/src/CMakeLists.txt" ||
+		die "-Werror anchor moved in hipamd/src/CMakeLists.txt"
 	sed -e "s/ -Werror//g" -i "hipamd/src/CMakeLists.txt" || die
 
-	# do not install /usr/share/doc/${P}-asan
+	# do not install /usr/share/doc/${P}-asan. Silent if the anchor moves: the
+	# build still succeeds and the stray asan doc directory lands in the image.
+	grep -qF 'asan COMPONENT asan' hipamd/packaging/CMakeLists.txt ||
+		die "asan COMPONENT anchor moved; the asan doc dir would be installed"
 	sed -e "/asan COMPONENT asan/d" -i hipamd/packaging/CMakeLists.txt || die
 
 	# `sed` exits 0 on no-match: leaves the placeholder unsubstituted in the installed cmake config
