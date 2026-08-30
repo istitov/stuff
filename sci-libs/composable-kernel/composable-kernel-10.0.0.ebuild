@@ -73,10 +73,10 @@ PATCHES=(
 	#                           option, which src_configure uses instead.
 	# libcxx-includes and expand-isa are regenerated; see their headers for
 	# what 10.0 absorbed. All verified 2026-08-29.
-	"${FILESDIR}"/${PN}-6.3.0-conditional-kernels.patch
-	"${FILESDIR}"/${PN}-10.0.0-libcxx-includes.patch
-	"${FILESDIR}"/${PN}-10.0.0-expand-isa.patch
-	"${FILESDIR}"/${PN}-10.0.0-clang23-buffer-load-types.patch
+	"${FILESDIR}"/${PN}-6.3.0-conditional-kernels.patch.xz
+	"${FILESDIR}"/${PN}-10.0.0-libcxx-includes.patch.xz
+	"${FILESDIR}"/${PN}-10.0.0-expand-isa.patch.xz
+	"${FILESDIR}"/${PN}-10.0.0-clang23-buffer-load-types.patch.xz
 )
 
 ck_check-reqs() {
@@ -113,6 +113,24 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# The files/ patches ship xz-compressed to stay under pkgcheck's 20K
+	# SizeViolation and 50K TotalSizeViolation caps -- the 10.0 libcxx-includes
+	# patch alone was 24.7K uncompressed, and files/ totalled 59.7K. eapply(1)
+	# does NOT decompress (portage's __eapply_patch feeds the file straight to
+	# patch), so expand every files/ patch into ${T} and repoint PATCHES at the
+	# plain-text copies before cmake_src_prepare consumes them. Same shape as
+	# sci-ml/caffe2 and dev-python/cupy.
+	local p b i
+	mkdir "${T}"/patches || die
+	for p in "${FILESDIR}"/*.patch.xz; do
+		b=${p##*/}
+		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
+	done
+	for i in "${!PATCHES[@]}"; do
+		b=${PATCHES[i]##*/}
+		PATCHES[i]="${T}/patches/${b%.xz}"
+	done
+
 	# `sed` exits 0 on no-match, so a silent miss here leaves -Werror in place
 	# and turns any warning a newer compiler emits into a hard build failure.
 	# verified 2026-08-30 against the therock-10.0 source.

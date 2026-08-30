@@ -37,11 +37,11 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-6.1.1-no-git-no-hash.patch
-	"${FILESDIR}"/${PN}-6.3.0-conditional-kernels.patch
-	"${FILESDIR}"/${PN}-7.0.1-conditional-ckprofiler.patch
-	"${FILESDIR}"/${PN}-7.0.1-libcxx-includes.patch
-	"${FILESDIR}"/${PN}-7.1.0-expand-isa.patch
+	"${FILESDIR}"/${PN}-6.1.1-no-git-no-hash.patch.xz
+	"${FILESDIR}"/${PN}-6.3.0-conditional-kernels.patch.xz
+	"${FILESDIR}"/${PN}-7.0.1-conditional-ckprofiler.patch.xz
+	"${FILESDIR}"/${PN}-7.0.1-libcxx-includes.patch.xz
+	"${FILESDIR}"/${PN}-7.1.0-expand-isa.patch.xz
 )
 
 ck_check-reqs() {
@@ -78,6 +78,24 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# The files/ patches ship xz-compressed to stay under pkgcheck's 20K
+	# SizeViolation and 50K TotalSizeViolation caps -- the 10.0 libcxx-includes
+	# patch alone was 24.7K uncompressed, and files/ totalled 59.7K. eapply(1)
+	# does NOT decompress (portage's __eapply_patch feeds the file straight to
+	# patch), so expand every files/ patch into ${T} and repoint PATCHES at the
+	# plain-text copies before cmake_src_prepare consumes them. Same shape as
+	# sci-ml/caffe2 and dev-python/cupy.
+	local p b i
+	mkdir "${T}"/patches || die
+	for p in "${FILESDIR}"/*.patch.xz; do
+		b=${p##*/}
+		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
+	done
+	for i in "${!PATCHES[@]}"; do
+		b=${PATCHES[i]##*/}
+		PATCHES[i]="${T}/patches/${b%.xz}"
+	done
+
 	sed -e '/-Werror/d' -i cmake/EnableCompilerWarnings.cmake || die
 
 	# don't build examples
