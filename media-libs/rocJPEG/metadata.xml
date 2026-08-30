@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    rocJPEG decodes JPEG images on the dedicated hardware decode block of AMD
+    GPUs, reached through VA-API. Decoded frames are handed back as device
+    memory, so an image pipeline that decodes and then runs inference never
+    round-trips the pixels through host memory. It handles batched decode,
+    partial decode of a region, and direct output in several chroma formats.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-systems</remote-id>
+  </upstream>
+</pkgmetadata>
