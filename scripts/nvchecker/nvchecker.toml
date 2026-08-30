@@ -1170,7 +1170,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (204) ---
+# --- github (209) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1303,6 +1303,14 @@ use_max_tag = true
 prefix = "v"
 
 ["dev-libs/rccl"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
+["dev-libs/rocdbgapi"]
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
@@ -1826,11 +1834,27 @@ github = "pgf-tikz/pgf"
 use_max_tag = true
 prefix = "v"
 
+["dev-util/Tensile"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
 ["dev-util/aichat"]
 source = "github"
 github = "sigoden/aichat"
 use_max_tag = true
 prefix = "v"
+
+["dev-util/amdsmi"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["dev-util/argc"]
 source = "github"
@@ -1897,6 +1921,14 @@ include_regex = '^therock-[0-9]+\.[0-9]+$'
 from_pattern = '^therock-([0-9]+\.[0-9]+)$'
 to_pattern = '\1.0'
 
+["dev-util/roctracer"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
 ["dev-util/rtk"]
 source = "github"
 github = "rtk-ai/rtk"
@@ -1918,6 +1950,14 @@ source = "github"
 github = "Dwarf-Therapist/Dwarf-Therapist"
 use_max_tag = true
 prefix = "v"
+
+["llvm-core/rocm-llvm"]
+source = "github"
+github = "ROCm/llvm-project"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["mail-client/tutanota-desktop-bin"]
 source = "github"
