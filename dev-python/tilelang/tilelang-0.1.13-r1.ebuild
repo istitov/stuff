@@ -64,7 +64,12 @@ BDEPEND="
 	')
 "
 
-PATCHES=( "${FILESDIR}/${P}-cudahostcxx.patch" )
+PATCHES=(
+	"${FILESDIR}/${P}-cudahostcxx.patch"
+	# Without this the package does not build at all against
+	# >=dev-python/cython-3.3.
+	"${FILESDIR}/${P}-py-limited-api-310.patch"
+)
 
 # Upstream caps z3-solver at <4.15.5, but Gentoo provides newer versions.
 # Treat it as a tested-version cap unless an incompatibility surfaces. # verified 2026-08-05
