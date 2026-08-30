@@ -77,27 +77,49 @@ PATCHES=(
 CMAKE_USE_DIR="${S}/${PN}/Source"
 
 src_prepare() {
+	# Every substitution below is preceded by an assert that its anchor is
+	# actually present. `sed` exits 0 on no-match, so without these a renamed
+	# upstream symbol yields a silently mis-configured Tensile that still
+	# builds, installs, and is then wrong at runtime for rocBLAS.
+	# All anchors verified 2026-08-30 against the therock-10.0 source.
 	distutils-r1_src_prepare
+	grep -qF '@LLVM_PATH@' "${FILESDIR}/${PN}-5.7.1-gentoopath.patch" ||
+		die "@LLVM_PATH@ placeholder gone from gentoopath.patch; the generated patch would keep the literal placeholder"
 	sed -e "s,\@LLVM_PATH\@,$(get_llvm_prefix),g" \
 		"${FILESDIR}/${PN}-5.7.1-gentoopath.patch" > "${S}"/gentoopath.patch || die
 	eapply $(prefixify_ro "${S}"/gentoopath.patch)
 
 	pushd "${PN}" || die
 
+	grep -qF 'ROCM_SMI_ROOT' Source/cmake/FindROCmSMI.cmake ||
+		die "ROCM_SMI_ROOT anchor moved; rocm_smi would be searched under the wrong libdir"
 	sed -e "/ROCM_SMI_ROOT/s,lib,$(get_libdir)," \
 		-i Source/cmake/FindROCmSMI.cmake || die
+	grep -qF 'TENSILE_USE_LLVM' Source/CMakeLists.txt ||
+		die "TENSILE_USE_LLVM anchor moved; the LLVM path would stay enabled"
 	sed -r -e "/TENSILE_USE_LLVM/s/ON/OFF/" \
 		-i Source/CMakeLists.txt || die
 
 	# ${Tensile_ROOT}/bin does not exists; call command directly
+	grep -qF '${Tensile_ROOT}/bin/' cmake/TensileConfig.cmake ||
+		die "Tensile_ROOT/bin anchor moved; consumers would invoke a nonexistent path"
 	sed -e "s,\${Tensile_ROOT}/bin/,,g" -i cmake/TensileConfig.cmake || die
 
 	local Tensile_share_dir="\"${EPREFIX}/usr/share/${PN}\""
+	grep -q 'HipClangVersion.*0\.0\.0' Common.py ||
+		die "HipClangVersion 0.0.0 placeholder moved; Tensile would misdetect compiler capabilities"
 	sed -e "/HipClangVersion/s/0.0.0/$(hipconfig -v)/" -i Common.py || die
 
+	local f
+	for f in ReplacementKernels.py Common.py "${PN}.py"; do
+		grep -qF 'os.path.dirname(os.path.realpath(__file__))' "${f}" ||
+			die "share-dir anchor moved in ${f}; Tensile would look for its data beside the installed module"
+	done
 	sed -e "s,os.path.dirname(os.path.realpath(__file__)),${Tensile_share_dir},g" \
 		-i ReplacementKernels.py Common.py "${PN}.py" || die
 
+	grep -qF 'os.path.dirname' __init__.py ||
+		die "os.path.dirname anchor moved in __init__.py; the Source path would not be rewritten"
 	sed -e "s|os\.path\.dirname.*$|\"${EPREFIX}/usr/share/Tensile/Source\", end='')|" -i __init__.py || die
 
 	# The v_dot4_i32_i8 syntax fix for clang-20 (bug 949817) is upstream at
@@ -105,8 +127,12 @@ src_prepare() {
 	# operands this sed used to strip, so it matched nothing. Dropped rather
 	# than left as a silent no-op. verified 2026-08-30.
 
-	# Fix compiler "validation"
+	# Fix compiler "validation". TensileLite's Toolchain.py resolves its
+	# compiler and assembler by BARE NAME, so a miss here leaves it validating
+	# against an "amdclang" that Gentoo does not install.
 	rocm_use_clang
+	grep -qF 'amdclang' Utilities/Toolchain.py ||
+		die "amdclang anchor moved in Utilities/Toolchain.py; toolchain validation would look for a compiler that is not installed"
 	sed "s/amdclang/$(basename "$CC")/g" -i Utilities/Toolchain.py || die
 
 	popd || die
