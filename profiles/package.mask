@@ -65,8 +65,18 @@ sci-ml/unsloth-desktop-bin
 #
 # dev-util/rocm_bandwidth_test stays at 7.2.4 -- verified 2026-08-30 that no
 # 10.0 source exists (no asset in rocm-systems therock-10.0, and its own repo
-# stops at rocm-7.2.4). Its dev-util/hip:0/7.2 pin must be dealt with before
-# this block is lifted.
+# stops at rocm-7.2.4). No longer a blocker: 7.2.4-r1 replaces its pins on
+# rocr-runtime and hip with :=, so it rebuilds across the subslot flip instead
+# of refusing to solve against it. The unrevisioned 7.2.4 keeps the old 0/7.2
+# pin and remains only as a rollback target -- an exact pin to it still blocks
+# the lift.
+#
+# llvm-core/rocm-llvm is in the block for a different reason than the rest. It
+# has no 7.2.x version, so neither the piecemeal-upgrade nor the subslot-flip
+# argument above applies to it. It is here because it is reachable only through
+# dev-util/hipcc[amd-llvm], it RDEPENDs the masked rocm-device-libs:0/10.0, and
+# it is a ~30G full-LLVM build -- unmasked, `emerge llvm-core/rocm-llvm` would
+# be permitted and then fail at resolution instead of reporting a mask.
 #
 # dev-util/therock-bin remains an alternative: it bundles AMD's clang 23.
 =dev-build/rocm-cmake-10.0.0
@@ -85,6 +95,7 @@ sci-ml/unsloth-desktop-bin
 =dev-util/rocminfo-10.0.0
 =dev-util/Tensile-10.0.0
 =dev-util/roctracer-10.0.0
+=llvm-core/rocm-llvm-10.0.0
 =sci-libs/hipBLAS-common-10.0.0
 =sci-libs/rocPRIM-10.0.0
 =sci-libs/rocRAND-10.0.0
