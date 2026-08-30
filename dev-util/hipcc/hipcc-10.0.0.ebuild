@@ -107,6 +107,18 @@ src_prepare() {
 		die "/opt/rocm anchor moved in hipBin_base.h"
 	sed -e "s:/opt/rocm:/usr:g" -i src/hipBin_base.h || die
 
+	# Same class as the two seds above: a silent miss leaves hipcc probing
+	# /usr/amdgcn/bitcode instead of /usr/lib/amdgcn/bitcode, so every device
+	# compile fails to find the device libs.
+	#
+	# Unlike dev-libs/rocm-device-libs' OCL.cmake -- where an unanchored
+	# global substitution also hit an already-correct occurrence and produced
+	# lib/lib/amdgcn/bitcode -- hipBin_amd.h has exactly ONE occurrence
+	# (:305 amdgcnBitcode /= "amdgcn/bitcode";) and no already-prefixed
+	# "lib/amdgcn/bitcode", so the s///g cannot double-prefix here.
+	# verified 2026-08-30 against the therock-10.0 source.
+	grep -qF '"amdgcn/bitcode"' src/hipBin_amd.h ||
+		die "amdgcn/bitcode anchor moved in hipBin_amd.h; hipcc would not find the device libs"
 	sed -e "s:amdgcn/bitcode:lib/amdgcn/bitcode:g" \
 		-i src/hipBin_amd.h || die
 }
