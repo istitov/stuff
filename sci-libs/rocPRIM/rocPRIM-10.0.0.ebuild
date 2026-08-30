@@ -34,7 +34,7 @@ DEPEND="
 	dev-util/hip:${SLOT}
 	test? ( dev-cpp/gtest )
 "
-BDEPEND="dev-build/rocm-cmake"
+BDEPEND="dev-build/rocm-cmake:${SLOT}"
 
 RESTRICT="!test? ( test )"
 

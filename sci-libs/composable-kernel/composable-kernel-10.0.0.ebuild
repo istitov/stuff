@@ -37,7 +37,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 BDEPEND="
-	dev-build/rocm-cmake
+	dev-build/rocm-cmake:${SLOT}
 "
 
 PATCHES=(
@@ -108,8 +108,11 @@ src_prepare() {
 	# on no-match, so a silent miss here would quietly reintroduce a build that
 	# exhausts RAM rather than failing fast. verified 2026-08-29: both still
 	# present (twice each) at therock-10.0.
-	grep -q 'amdgpu-early-inline-all' CMakeLists.txt ||
-		die "-amdgpu-early-inline-all anchor moved; build would OOM"
+	local f
+	for f in amdgpu-early-inline-all amdgpu-function-calls; do
+		grep -q -- "${f}" CMakeLists.txt ||
+			die "-${f} anchor moved; build would OOM"
+	done
 	sed -e "/-amdgpu-early-inline-all/d" -e "/-amdgpu-function-calls/d" -i CMakeLists.txt || die
 
 	cmake_src_prepare

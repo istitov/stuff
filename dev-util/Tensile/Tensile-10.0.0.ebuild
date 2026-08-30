@@ -100,8 +100,10 @@ src_prepare() {
 
 	sed -e "s|os\.path\.dirname.*$|\"${EPREFIX}/usr/share/Tensile/Source\", end='')|" -i __init__.py || die
 
-	# bug 949817: fix v_dot4_i32_i8 syntax for clang-20
-	sed  's/ op_sel:\[0,0\] op_sel_hi:\[1,1\]//' -i Components/MAC_I8X4.py || die
+	# The v_dot4_i32_i8 syntax fix for clang-20 (bug 949817) is upstream at
+	# 10.0: Components/MAC_I8X4.py no longer emits the op_sel/op_sel_hi
+	# operands this sed used to strip, so it matched nothing. Dropped rather
+	# than left as a silent no-op. verified 2026-08-30.
 
 	# Fix compiler "validation"
 	rocm_use_clang

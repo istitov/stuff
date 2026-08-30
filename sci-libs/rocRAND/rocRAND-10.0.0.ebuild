@@ -37,9 +37,9 @@ RDEPEND="
 	benchmark? ( >=dev-cpp/benchmark-1.9.1 )
 "
 DEPEND="${RDEPEND}
-	dev-build/rocm-cmake
+	dev-build/rocm-cmake:${SLOT}
 	test? ( dev-cpp/gtest )"
-BDEPEND="dev-build/rocm-cmake"
+BDEPEND="dev-build/rocm-cmake:${SLOT}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-10.0.0-no-tests-install.patch"

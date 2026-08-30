@@ -32,7 +32,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
-	>=dev-build/rocm-cmake-6.0
+	dev-build/rocm-cmake:${SLOT}
 	media-libs/glew
 	test? ( >=x11-apps/mesa-progs-8.5.0[X] )
 "

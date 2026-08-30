@@ -17,4 +17,4 @@ LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
-BDEPEND="dev-build/rocm-cmake"
+BDEPEND="dev-build/rocm-cmake:${SLOT}"
