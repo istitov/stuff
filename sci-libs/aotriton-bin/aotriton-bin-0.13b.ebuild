@@ -15,14 +15,20 @@ IMAGES_URI_PREFIX="${URI_PREFIX}/${MY_P}-images-amd"
 
 # Download libs for all rocm releases (4mb each), but unpack only one.
 # 0.13b adds a standalone gfx1250 image (gfx12xx now split gfx120x + gfx1250).
-# Upstream also ships rocm7.14/7.15 shims for newer HIP, deliberately not wired
-# here: the shim set has a gap (6.4/7.0/7.1/7.2 then 7.14/7.15), so the <7.3 HIP
-# cap below is kept until those HIP versions are confirmed to exist.
+#
+# The 6.4/7.0/7.1/7.2 -> 7.14/7.15 gap in upstream's shim set is AMD's release
+# renumbering, not missing releases: the 7.14/7.15 line was renamed to ROCm
+# 10.0, and dev-util/hip-10.0.0 reports HIP version 7.15.0 (`hipconfig
+# --version`). So rocm7.15 IS the shim for hip-10.0, and src_unpack picks the
+# archive by the installed hip's $(ver_cut 1-2) -- "10.0" -- hence the rename.
+# verified 2026-08-30 against the 0.13b release assets.
 SRC_URI="
 	${SHIM_URI_PREFIX}-rocm6.4-shared.tar.gz
 	${SHIM_URI_PREFIX}-rocm7.0-shared.tar.gz
 	${SHIM_URI_PREFIX}-rocm7.1-shared.tar.gz
 	${SHIM_URI_PREFIX}-rocm7.2-shared.tar.gz
+	${SHIM_URI_PREFIX}-rocm7.15-shared.tar.gz
+		-> ${MY_P}-manylinux_2_28_x86_64-rocm10.0-shared.tar.gz
 
 	amdgpu_targets_gfx90a? ( ${IMAGES_URI_PREFIX}-gfx90a.tar.gz )
 	amdgpu_targets_gfx942? ( ${IMAGES_URI_PREFIX}-gfx942.tar.gz )
@@ -70,15 +76,18 @@ QA_PREBUILT="usr/lib*/libaotriton_v2.so.*"
 # xz-utils:     used to decompress lzma blobs with kernels in runtime
 # dev-util/hip: must be in sync with SRC_URI
 #               and trigger reinstall on sub-slot change.
-#               Shims wired here span rocm6.4..7.2, so floor hip at 6.4 and
-#               cap below 7.3 (matching 0.12b's proven range).
+#               Shims wired here are rocm6.4/7.0/7.1/7.2 and rocm7.15 (= ROCm
+#               10.0 after the renumbering), so floor hip at 6.4 and cap below
+#               11. There is no shim for a hip between 7.3 and 9.x, and none
+#               exists to package -- src_unpack would find no match and unpack
+#               nothing, so keep the cap tied to what SRC_URI actually lists.
 RDEPEND="
 	!!sci-libs/aotriton
 	sys-libs/glibc
 	sys-devel/gcc
 	app-arch/xz-utils
 	>=dev-util/hip-6.4:=
-	<dev-util/hip-7.3:=
+	<dev-util/hip-11:=
 "
 
 src_unpack() {
@@ -87,11 +96,22 @@ src_unpack() {
 	# Instead we decompress only one version for current dev-util/hip.
 	local hippkg=$(best_version dev-util/hip)
 	local rocmver="$(ver_cut 1-2 "${hippkg#*hip-}")"
-	local file
+	local file shim_found=
 	for file in ${A}; do
-		[[ $file == *-rocm${rocmver}-*.tar.gz || $file == *-gfx*.tar.gz ]] &&
+		if [[ $file == *-rocm${rocmver}-*.tar.gz ]]; then
+			shim_found=1
 			unpack "${file}"
+		elif [[ $file == *-gfx*.tar.gz ]]; then
+			unpack "${file}"
+		fi
 	done
+
+	# The RDEPEND range is wider than the set of shims SRC_URI lists, because
+	# upstream skips HIP versions. Without this, an unmatched version unpacks
+	# only the gfx images, and the missing libaotriton_v2.so is not noticed
+	# until src_install has already produced a package with no library in it.
+	[[ -n ${shim_found} ]] ||
+		die "no aotriton shim for dev-util/hip-${rocmver}; SRC_URI lists rocm6.4/7.0/7.1/7.2 and rocm7.15 (as rocm10.0)"
 }
 
 src_install() {
