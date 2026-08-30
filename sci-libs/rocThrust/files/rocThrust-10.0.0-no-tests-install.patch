@@ -1,0 +1,31 @@
+Do not install the test binaries or their CTestTestfile.
+
+Regenerated from rocThrust-6.4.1-no-tests-install.patch for ROCm 10.0 (verified
+2026-08-30): both blocks survive verbatim but moved, and the trailing
+rocm_install(FILES ...) is no longer trailing -- 10.0 appends a
+generate_resource_spec build/install after it -- so the old end-of-file hunk
+could not apply. Behaviour is unchanged.
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -120,7 +120,6 @@
+         )
+         set_property(GLOBAL APPEND PROPERTY ROCTHRUST_TEST_TARGET_RESOURCE_PAIRS "${TEST_TARGET}|${DEFAULT_GPU_RESOURCE}")
+     endif()
+-    rocm_install(TARGETS ${TEST_TARGET} COMPONENT tests)
+     if (WIN32 AND NOT DEFINED DLLS_COPIED)
+       set(DLLS_COPIED "YES")
+       set(DLLS_COPIED ${DLLS_COPIED} PARENT_SCOPE)
+@@ -376,13 +375,6 @@
+     )
+ endif()
+ 
+-rocm_install(
+-    FILES "${INSTALL_TEST_FILE}"
+-    DESTINATION "${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME}"
+-    COMPONENT tests
+-    RENAME "CTestTestfile.cmake"
+-)
+-
+ # Build the executable used for generating the resource spec file.
+ add_executable(generate_resource_spec ${CMAKE_SOURCE_DIR}/test/generate_resource_spec.cpp)
+ set_target_properties(generate_resource_spec PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
