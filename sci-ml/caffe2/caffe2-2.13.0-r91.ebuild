@@ -25,19 +25,6 @@ FLASH_PN=flash-attention
 FLASH_P=${FLASH_PN}-${FLASH_PV}
 FLASH_ATT_URI="https://github.com/Dao-AILab/${FLASH_PN}/archive/refs/tags/v${FLASH_PV}.tar.gz -> ${FLASH_P}.gh.tar.gz"
 
-# DIVERGES FROM UPSTREAM ON PURPOSE. pytorch v2.13.0's
-# cmake/External/aotriton.cmake sets __AOTRITON_VER "0.12b" with
-# __AOTRITON_ROCM_LIST = rocm6.4/7.0/7.1/7.2. But 0.12b ships no rocm7.14/7.15
-# shim at all, and ROCm 10.0 reports HIP 7.15, so caffe2[memefficient] simply
-# cannot be built against the 10.0 stack with 0.12b. 0.13b adds the rocm7.15
-# shim and keeps the same libaotriton_v2 ABI. These variables are documentation
-# only -- aotriton comes from sci-libs/aotriton-bin via
-# AOTRITON_INSTALLED_PREFIX below, not from SRC_URI. verified 2026-08-30.
-AOTRITON_PV=0.13b
-AOTRITON_PN=aotriton
-AOTRITON_P=${AOTRITON_PN}-${AOTRITON_PV}
-AOTRITON_tar=${AOTRITON_P}-manylinux_2_28_x86_64-rocm10.0-shared.tar.gz
-
 DESCRIPTION="A deep learning framework"
 HOMEPAGE="https://pytorch.org/"
 SRC_URI="
@@ -84,6 +71,15 @@ REQUIRED_USE="
 # caps to the 1.4 series until the frozen source is patched for the new API.
 # torch._C moved into this package in 2.13, so older pytorch versions
 # must be removed before the replacement file can be merged.
+
+# The aotriton atom DIVERGES FROM UPSTREAM ON PURPOSE. pytorch v2.13.0's
+# cmake/External/aotriton.cmake pins __AOTRITON_VER "0.12b" with
+# __AOTRITON_ROCM_LIST = rocm6.4/7.0/7.1/7.2. 0.12b ships no rocm7.14/7.15 shim
+# at all, and ROCm 10.0 reports HIP 7.15, so caffe2[memefficient] cannot be
+# built against the 10.0 stack with it. 0.13b adds the rocm7.15 shim and keeps
+# the same libaotriton_v2 ABI, which is what the memefficient? atom below pins.
+# Nothing in this ebuild fetches aotriton: it is a system dependency, found at
+# build time through AOTRITON_INSTALLED_PREFIX. verified 2026-08-30.
 RDEPEND="
 	${PYTHON_DEPS}
 	!!<sci-ml/pytorch-2.13.0
