@@ -47,9 +47,9 @@ BDEPEND="
 		>=dev-python/trove-classifiers-2025.8.6.13[${PYTHON_USEDEP}]
 	')
 	rocm? (
-		dev-util/hip
-		sci-libs/hipBLAS
-		sci-libs/rocBLAS
+		dev-util/hip:=
+		sci-libs/hipBLAS:=
+		sci-libs/rocBLAS:=
 	)
 "
 
