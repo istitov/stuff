@@ -1,0 +1,83 @@
+Coerce ISA-compatible GPUs to the arch whose kernels they can actually run.
+rocBLAS ships no kernels for gfx902/909/912 (Raven/Renoir-class APUs) or
+gfx1013 (Navi12); they are binary-compatible with gfx900 and gfx1010
+respectively, and without this an unmatched arch falls through to
+static_cast<Processor>(0) and no kernel is selected.
+
+Reduced from the 7.0.2 version for ROCm 10.0 (verified 2026-08-30):
+  - the gfx1031..gfx1036 -> gfx1030 case is DROPPED. 10.0 added all six as
+    first-class Processor values with their own getActiveArch() branches, so
+    coercing them now discards native support.
+  - the library/src/handle.cpp hunk is DROPPED. Its strcpy ran after
+    deviceString was already derived, so it never affected getActiveArch()'s
+    return value, and at 10.0 nothing else reads device_properties.gcnArchName.
+  - library/src/tensile_host.cpp no longer derives the arch itself; it calls
+    rocblas_internal_get_arch_name(devId), so only the hipDeviceProp_t stored
+    in m_devicePropMap still needs coercing (Tensile::hip::GetDevice reads it).
+
+--- a/library/src/rocblas_auxiliary.cpp
++++ b/library/src/rocblas_auxiliary.cpp
+@@ -24,6 +24,7 @@
+ #include "logging.hpp"
+ #include "rocblas-auxiliary.h"
+ #include <cctype>
++#include <cstring>
+ #include <cstdlib>
+ #include <memory>
+ #include <string>
+@@ -977,6 +978,21 @@
+ {
+     hipDeviceProp_t deviceProperties;
+     PRINT_IF_HIP_ERROR(hipGetDeviceProperties(&deviceProperties, deviceId));
++    // coerce to a binary-compatible arch: these have no kernels of their own
++    int gcnArch = strncmp(deviceProperties.gcnArchName, "gfx", 3) == 0
++                      ? std::stoi(deviceProperties.gcnArchName + 3)
++                      : 0;
++    switch(gcnArch)
++    {
++    case 902:
++    case 909:
++    case 912:
++        std::strcpy(deviceProperties.gcnArchName, "gfx900");
++        break;
++    case 1013:
++        std::strcpy(deviceProperties.gcnArchName, "gfx1010");
++        break;
++    }
+     return ArchName<hipDeviceProp_t>{}(deviceProperties); // strips : and later
+ }
+ 
+--- a/library/src/tensile_host.cpp
++++ b/library/src/tensile_host.cpp
+@@ -53,6 +53,7 @@
+ #endif
+ #include <atomic>
+ #include <complex>
++#include <cstring>
+ #include <exception>
+ #include <future>
+ #include <iomanip>
+@@ -910,6 +911,23 @@
+ 
+                         // populate device property map, used in finding solutions based on arch
+                         HIP_CHECK_EXC(hipGetDeviceProperties(&prop, devId));
++                        // deviceString is already coerced (it comes from
++                        // rocblas_internal_get_arch_name); coerce the stored
++                        // prop too, Tensile::hip::GetDevice reads gcnArchName
++                        int gcnArch = strncmp(prop.gcnArchName, "gfx", 3) == 0
++                                          ? std::stoi(prop.gcnArchName + 3)
++                                          : 0;
++                        switch(gcnArch)
++                        {
++                        case 902:
++                        case 909:
++                        case 912:
++                            std::strcpy(prop.gcnArchName, "gfx900");
++                            break;
++                        case 1013:
++                            std::strcpy(prop.gcnArchName, "gfx1010");
++                            break;
++                        }
+                         m_devicePropMap[deviceString] = std::make_shared<hipDeviceProp_t>(prop);
+                         m_tensileLazyLoadInit[deviceString].push_back(
+                             deviceLazyArch); // will have only 1 entry
