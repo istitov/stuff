@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    rocprofiler-register is the small brokering library that ROCm runtimes
+    (HIP, HSA, rocDecode and friends) link against so that a profiler can
+    attach to them at runtime. The runtimes call into it at load time; the
+    profiler registers itself with it. It carries no profiling logic of its
+    own and exists to decouple the runtimes from any particular profiler
+    implementation.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-systems</remote-id>
+  </upstream>
+</pkgmetadata>
