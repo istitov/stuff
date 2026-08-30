@@ -1,0 +1,37 @@
+Respect ENABLE_CLANG_TIDY instead of always pulling the monorepo's modules.
+
+stinkytofu declares option(ENABLE_CLANG_TIDY ... OFF) and then unconditionally
+does
+
+    list(APPEND CMAKE_MODULE_PATH ".../../../cmake/modules")
+    include(ClangTidy)
+    add_clang_tidy_custom_target()
+
+That path only resolves inside the rocm-libraries monorepo checkout. When
+stinkytofu is built from its own release tarball -- which is how it is consumed
+here, co-unpacked alongside hipblaslt -- the shared cmake/modules directory is
+not present and configuration dies with
+
+    CMake Error at CMakeLists.txt:366 (include): could not find load file: ClangTidy
+    CMake Error at CMakeLists.txt:367 (add_clang_tidy_custom_target)
+
+Guarding the block with the option it already defines fixes the standalone
+case and is a no-op for the monorepo build, where the option can still be
+turned on.
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -362,9 +362,11 @@
+ # clang-tidy
+ # --------------------------------------------------------------------------- #
+ option(ENABLE_CLANG_TIDY "Enable clang-tidy targets" OFF)
+-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/modules")
+-include(ClangTidy)
+-add_clang_tidy_custom_target()
++if(ENABLE_CLANG_TIDY)
++    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/modules")
++    include(ClangTidy)
++    add_clang_tidy_custom_target()
++endif()
+ 
+ # Build-tree export so find_package() works without installing.
+ # Write targets to stinkytofu-targets.cmake (not stinkytofuConfig.cmake) to

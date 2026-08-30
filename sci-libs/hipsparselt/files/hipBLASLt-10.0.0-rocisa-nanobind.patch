@@ -1,0 +1,42 @@
+Use the system nanobind instead of a network FetchContent.
+
+Package-manager builds run sandboxed with no network access, so the
+FetchContent_Declare(nanobind GIT_REPOSITORY ...) in the rocisa CMakeLists
+fails outright.
+
+Regenerated from hipBLASLt-7.1.0-rocisa-nanobind.patch for ROCm 10.0. Note
+that 10.0 SPLIT this into two branches: a ROCISA_STANDALONE path that already
+calls find_package(nanobind REQUIRED CONFIG) (because scikit-build-core
+pre-installs nanobind and injects its CMake path), and an else() path -- the
+one taken when rocisa is built as a hipblaslt subdirectory, i.e. ours -- which
+still fetches over the network. Only the else() branch needs fixing; this
+patch makes it mirror the standalone branch, including finding Python first
+as nanobind's config requires.
+
+sci-libs/hipsparselt carries its own copy of the 7.1.0 patch and applies it to
+a co-unpacked hipblaslt tree; it needs the same treatment.
+--- a/tensilelite/rocisa/CMakeLists.txt
++++ b/tensilelite/rocisa/CMakeLists.txt
+@@ -49,16 +49,15 @@
+         endif()
+         find_package(nanobind REQUIRED CONFIG)
+     else()
+-        include(FetchContent)
+-        FetchContent_Declare(
+-          nanobind
+-          GIT_REPOSITORY https://github.com/wjakob/nanobind.git
+-          GIT_TAG        9b3afa9dbdc23641daf26fadef7743e7127ff92f # v2.6.1
+-        )
+-        FetchContent_MakeAvailable(nanobind)
++        # Use the system nanobind instead of fetching it over the network:
++        # package-manager builds run sandboxed with no network access. Mirrors
++        # the ROCISA_STANDALONE branch above, which already does exactly this.
+         if(ROCISA_USE_STABLE_ABI)
+             find_package(Python 3.12 COMPONENTS Interpreter Development.Module Development.SABIModule REQUIRED)
++        else()
++            find_package(Python 3.10 COMPONENTS Interpreter Development.Module REQUIRED)
+         endif()
++        find_package(nanobind REQUIRED CONFIG)
+     endif()
+ 
+     # HIP is required to build _rocisa (via hip::host).  Set the search prefix
