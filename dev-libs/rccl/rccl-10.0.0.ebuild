@@ -16,7 +16,12 @@ HOMEPAGE="https://github.com/ROCm/rccl"
 SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/rccl.tar.gz -> rccl-${PV}.tar.gz"
 S="${WORKDIR}/rccl"
 
-LICENSE="BSD"
+# SPDX tags across the 10.0 source: 383 Apache-2.0 (303 of them under src/, so
+# this is compiled code and not just tooling), 43 BSD-3-Clause, 33 Apache-2.0
+# WITH LLVM-exception, 21 MIT, plus a handful marked "Apache-2.0 and BSD-3".
+# The previous LICENSE="BSD" was materially incomplete. verified 2026-08-30.
+# NB dev-libs/rccl-7.2.4 carries the same understated field.
+LICENSE="Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
@@ -69,10 +74,17 @@ src_prepare() {
 	# don't install tests
 	sed -e '/rocm_install/d' -i test/CMakeLists.txt || die
 
-	# too many warnings...
-	sed -e '/target_compile_options(rccl PRIVATE -Wall)/d' -i CMakeLists.txt || die
+	# Warning suppression moved upstream: 10.0 removed the hardcoded
+	# target_compile_options(rccl PRIVATE -Wall) this sed used to delete, and
+	# added option(QUIET_WARNINGS ... OFF) instead -- upstream's own install.sh
+	# passes -DQUIET_WARNINGS=ON. src_configure sets it, so the sed is gone
+	# rather than left to match nothing. verified 2026-08-30.
 
 	# allow to redefine CMAKE_INSTALL_LIBDIR from lib to $(get_libdir)
+	# `sed` exits 0 on no-match: without this the FORCE keeps CMAKE_INSTALL_LIBDIR at lib and everything
+	# installs to /usr/lib instead of $(get_libdir)
+	grep -qF 'CMAKE_INSTALL_LIBDIR' cmake/Dependencies.cmake ||
+		die "CMAKE_INSTALL_LIBDIR anchor moved in cmake/Dependencies.cmake"
 	sed -e '/CMAKE_INSTALL_LIBDIR/ s/ FORCE//' -i cmake/Dependencies.cmake || die
 	cmake_src_prepare
 }
@@ -85,6 +97,9 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DCMAKE_SKIP_RPATH=ON
+		# Replaces the old src_prepare sed that deleted a hardcoded -Wall;
+		# 10.0 provides this option and upstream's install.sh passes it.
+		-DQUIET_WARNINGS=ON
 		-DGPU_TARGETS="$(get_amdgpu_flags)"
 		-DBUILD_TESTS=$(usex test ON OFF)
 		-DROCM_SYMLINK_LIBS=OFF
