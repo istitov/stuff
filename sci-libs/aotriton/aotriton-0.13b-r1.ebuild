@@ -41,13 +41,21 @@ REQUIRED_USE="|| ( ${IUSE_TARGETS[*]} )"
 PROPERTIES="live"
 RESTRICT="network-sandbox test"
 
+# dev-util/hip cap: this is a SOURCE build, so it has none of the shim-archive
+# constraint that bounds sci-libs/aotriton-bin -- upstream's CMakeLists.txt does
+# a bare `find_package(hip REQUIRED)` with no version argument, and nothing else
+# in the tree gates on a HIP version. The old <7.3 here was inherited from the
+# -bin ebuild, where it tracks which *-rocmX.X-shared.tar.gz shims upstream
+# publishes; carried over to the source build it just excluded the ROCm 10.0
+# stack for no reason. Match the -bin at the same upstream version instead:
+# floor 6.4, cap below 11. verified 2026-08-30 against the 0.13b tag.
 RDEPEND="
 	!!sci-libs/aotriton-bin
 	sys-libs/glibc
 	sys-devel/gcc
 	app-arch/xz-utils
 	>=dev-util/hip-6.4:=
-	<dev-util/hip-7.3:=
+	<dev-util/hip-11:=
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
