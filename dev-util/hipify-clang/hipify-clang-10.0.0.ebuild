@@ -41,6 +41,9 @@ src_prepare() {
 	cmake_src_prepare
 
 	# Set clang resource prefix to /usr/lib/clang/...
+	# `sed` exits 0 on no-match: leaves hipify looking for clang headers under the wrong prefix
+	grep -qF '/lib/llvm/lib/clang/' src/main.cpp ||
+		die "/lib/llvm/lib/clang/ anchor moved in src/main.cpp"
 	sed -i 's:/lib/llvm/lib/clang/:/lib/clang/:' src/main.cpp || die
 }
 

@@ -47,7 +47,7 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 BDEPEND="
-	dev-build/rocm-cmake
+	dev-build/rocm-cmake:${SLOT}
 	$(llvm_gen_dep "
 		llvm-core/clang:\${LLVM_SLOT}
 		llvm-core/lld:\${LLVM_SLOT}
@@ -84,9 +84,13 @@ src_unpack() {
 }
 
 src_prepare() {
+	# cmake/Packages.cmake was in this list through 7.2.4 but carries no
+	# amdgcn/bitcode reference at 10.0, so listing it was a silent no-op.
+	# Only OCL.cmake still needs it (twice). verified 2026-08-30.
+	grep -q 'amdgcn/bitcode' cmake/OCL.cmake ||
+		die "amdgcn/bitcode anchor moved in OCL.cmake"
 	sed -e "s:amdgcn/bitcode:lib/amdgcn/bitcode:" \
-		-i cmake/OCL.cmake \
-		-i cmake/Packages.cmake || die
+		-i cmake/OCL.cmake || die
 	# shellcheck disable=SC2016
 	sed -e 's:${CMAKE_INSTALL_DATADIR}/doc/${CPACK_PACKAGE_NAME}:${CMAKE_INSTALL_DOCDIR}:' \
 		-i CMakeLists.txt || die

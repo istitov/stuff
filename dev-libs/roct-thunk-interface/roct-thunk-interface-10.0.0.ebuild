@@ -62,9 +62,17 @@ test_wrapper() {
 }
 
 src_prepare() {
+	# `sed` exits 0 on no-match, so a stale anchor here would silently leave
+	# the library versioned 1.0.0 and its SONAME wrong.
+	grep -qF 'get_version ( "1.0.0" )' CMakeLists.txt ||
+		die 'get_version ( "1.0.0" ) anchor moved in CMakeLists.txt'
 	sed -e "s/get_version ( \"1.0.0\" )/get_version ( \"${PV}\" )/" -i CMakeLists.txt || die
 
 	# https://github.com/ROCm/ROCR-Runtime/issues/263
+	# `sed` exits 0 on no-match, so a stale anchor here would silently build
+	# libhsakmt STATIC and nothing would link against it.
+	grep -qF '${HSAKMT_TARGET} STATIC' CMakeLists.txt ||
+		die 'HSAKMT_TARGET STATIC anchor moved in CMakeLists.txt'
 	sed -e "s/\${HSAKMT_TARGET} STATIC/\${HSAKMT_TARGET}/" -i CMakeLists.txt || die
 
 	cmake_src_prepare
