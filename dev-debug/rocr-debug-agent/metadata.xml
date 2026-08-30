@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    The ROCr Debug Agent is a library loaded into an application through
+    HSA_TOOLS_LIB. When the GPU takes a memory fault or a wavefront hits an
+    exception it prints the state of every active wavefront, the faulting
+    instruction and a disassembly of the surrounding code object, then leaves
+    the process for a debugger to attach to. It reads that state through the
+    same amd-dbgapi interface dev-debug/gdb uses.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-systems</remote-id>
+  </upstream>
+</pkgmetadata>
