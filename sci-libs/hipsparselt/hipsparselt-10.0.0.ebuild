@@ -179,6 +179,28 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
+	# Build the bundled rocisa codegen extension the way upstream ships it:
+	# Release, with NDEBUG. This is the same tensilelite/rocisa source that
+	# sci-libs/hipBLASLt builds -- see that ebuild for the full rationale and
+	# the macro_inline.cpp assert TensileLite otherwise aborts on. cmake.eclass
+	# defaults to RelWithDebInfo AND blanks CMAKE_CXX_FLAGS_RELWITHDEBINFO, so
+	# the standard -DNDEBUG never lands and the assert stays live.
+	#
+	# It also makes the STINKYTOFU_ENABLE_WERROR sed in src_prepare
+	# load-bearing rather than merely defensive: NDEBUG is what compiles that
+	# assert away and leaves the -Wunused-variable which -Werror turns fatal.
+	#
+	# Half-verified here, and be precise about which half. rocisa and its
+	# bundled stinkytofu DO compile on this host, with NDEBUG and through the
+	# -Werror sed. What does not run is the TensileLite codegen pass that trips
+	# the assert: IUSE_TARGETS is gfx942/gfx950 only, so with no target enabled
+	# HIPSPARSELT_ENABLE_DEVICE=OFF and no kernels are generated. Kept in
+	# lockstep with hipBLASLt rather than waiting for hardware that can reach
+	# the remaining half. # build-verified 2026-08-30 against therock-10.0
+	append-cflags "-DNDEBUG"
+	append-cxxflags "-DNDEBUG"
+	CMAKE_BUILD_TYPE="Release"
+
 	# Tensile guesses weirdly how to compile things, ld.bfd won't work, so force lld
 	append-cxxflags -DCMAKE_CXX_FLAGS="-fuse-ld=lld"
 
