@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    rocDecode decodes video on the dedicated VCN block of AMD GPUs through
+    VA-API, covering H.264, HEVC, AV1 and VP9. Decoded frames stay in device
+    memory, so a decode-then-infer pipeline never copies them back through the
+    host. It is the video counterpart to media-libs/rocJPEG and ships a bitstream
+    parser and demuxer helpers alongside the decoder itself.
+  </longdescription>
+  <use>
+    <flag name="ffmpeg">Build the additional host-side software decoder, which falls back to
+      <pkg>media-video/ffmpeg</pkg> for streams the hardware block cannot handle</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-systems</remote-id>
+  </upstream>
+</pkgmetadata>
