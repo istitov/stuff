@@ -54,10 +54,25 @@ DEPEND="
 	llvm-runtimes/openmp
 "
 
+# dev-util/hipcc[amd-llvm] is a build requirement, not documentation.
+# rocm_use_clang() resolves the compiler via `hipconfig --hipclangpath`, and
+# hipcc points that at llvm-core/rocm-llvm only when the flag is set. This
+# package cannot be compiled by a vanilla LLVM: TensileLite GENERATES gfx1150
+# assembly the vanilla assembler rejects ("operands are not valid for this GPU
+# or mode" on v_max_f16 with an abs() source modifier), and being generated it
+# cannot be patched away. Until now that requirement lived only in a
+# profiles/package.mask comment, so building against a hipcc without the flag
+# died deep in compilation with no resolver-level signal.
+#
+# Unconditional deliberately. Every failure on record is a gfx11xx/gfx12xx one,
+# so a narrower amdgpu_targets_*? form may well be correct -- but nobody has
+# built this against a vanilla LLVM for a CDNA-only target, and claiming
+# support that was never verified is the worse error. Narrow it once someone
+# has that build. # verified 2026-08-30
 BDEPEND="
 	${PYTHON_DEPS}
 	dev-build/rocm-cmake:${SLOT}
-	dev-util/hipcc:${SLOT}
+	dev-util/hipcc:${SLOT}[amd-llvm]
 	$(python_gen_any_dep "
 		dev-python/msgpack[\${PYTHON_USEDEP}]
 		dev-python/pyyaml[\${PYTHON_USEDEP}]
