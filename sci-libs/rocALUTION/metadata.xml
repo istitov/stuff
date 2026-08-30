@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    rocALUTION is the sparse iterative solver layer of the ROCm math stack. It
+    provides Krylov subspace solvers (CG, BiCGStab, GMRES and friends),
+    algebraic and geometric multigrid, and the matching preconditioners, on top
+    of the sparse primitives sci-libs/rocSPARSE supplies. Its backend is
+    selectable at runtime, so the same solver code runs on the GPU through HIP
+    or on the host through OpenMP.
+  </longdescription>
+  <use>
+    <flag name="mpi">Build the multi-node backend, enabling distributed matrices and solvers</flag>
+    <flag name="openmp">Build the host backend with OpenMP threading</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-libraries</remote-id>
+  </upstream>
+</pkgmetadata>
