@@ -4,12 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
-# ROCM_VERSION selects rocm.eclass's target-list branch, which sets this
-# package's own amdgpu_targets_* IUSE and ROCM_REQUIRED_USE. The 10.* branch is
-# a superset of 6.1's: it adds gfx1152/gfx1153 and promotes gfx1102/1103/1150/
-# 1151 to official. Nothing here uses ROCM_USEDEP, so this does not constrain
-# the ROCm libraries themselves. verified 2026-08-30.
-ROCM_VERSION=10.0
+ROCM_VERSION=6.1
 inherit python-single-r1 cmake cuda flag-o-matic prefix rocm
 
 MYPN=pytorch
@@ -25,18 +20,10 @@ FLASH_PN=flash-attention
 FLASH_P=${FLASH_PN}-${FLASH_PV}
 FLASH_ATT_URI="https://github.com/Dao-AILab/${FLASH_PN}/archive/refs/tags/v${FLASH_PV}.tar.gz -> ${FLASH_P}.gh.tar.gz"
 
-# DIVERGES FROM UPSTREAM ON PURPOSE. pytorch v2.13.0's
-# cmake/External/aotriton.cmake sets __AOTRITON_VER "0.12b" with
-# __AOTRITON_ROCM_LIST = rocm6.4/7.0/7.1/7.2. But 0.12b ships no rocm7.14/7.15
-# shim at all, and ROCm 10.0 reports HIP 7.15, so caffe2[memefficient] simply
-# cannot be built against the 10.0 stack with 0.12b. 0.13b adds the rocm7.15
-# shim and keeps the same libaotriton_v2 ABI. These variables are documentation
-# only -- aotriton comes from sci-libs/aotriton-bin via
-# AOTRITON_INSTALLED_PREFIX below, not from SRC_URI. verified 2026-08-30.
-AOTRITON_PV=0.13b
+AOTRITON_PV=0.12b
 AOTRITON_PN=aotriton
 AOTRITON_P=${AOTRITON_PN}-${AOTRITON_PV}
-AOTRITON_tar=${AOTRITON_P}-manylinux_2_28_x86_64-rocm10.0-shared.tar.gz
+AOTRITON_tar=${AOTRITON_P}-manylinux_2_28_x86_64-rocm6.4-shared.tar.gz
 
 DESCRIPTION="A deep learning framework"
 HOMEPAGE="https://pytorch.org/"
@@ -121,22 +108,22 @@ RDEPEND="
 		dev-libs/pthreadpool
 	)
 	rocm? (
-		nccl? ( >=dev-libs/rccl-6.3:= <dev-libs/rccl-11:= )
-		>=dev-util/hip-6.3:=       <dev-util/hip-11:=
-		>=dev-util/roctracer-6.3:= <dev-util/roctracer-11:=
-		>=sci-libs/hipBLAS-6.3:=   <sci-libs/hipBLAS-11:=[rocsolver(+)]
-		>=sci-libs/hipBLASLt-6.3:= <sci-libs/hipBLASLt-11:=
-		>=sci-libs/hipFFT-6.3:=    <sci-libs/hipFFT-11:=
-		>=sci-libs/hipRAND-6.3:=   <sci-libs/hipRAND-11:=
-		>=sci-libs/hipSOLVER-6.3:= <sci-libs/hipSOLVER-11:=
-		>=sci-libs/hipSPARSE-6.3:= <sci-libs/hipSPARSE-11:=
-		>=sci-libs/miopen-6.3:=    <sci-libs/miopen-11:=
-		>=sci-libs/rocBLAS-6.3:=   <sci-libs/rocBLAS-11:=
-		>=sci-libs/rocRAND-6.3:=   <sci-libs/rocRAND-11:=
-		>=sci-libs/rocSOLVER-6.3:= <sci-libs/rocSOLVER-11:=
-		memefficient? ( =sci-libs/aotriton-bin-0.13*:= )
-		distributed? ( >=dev-util/rocm-smi-6.3:= <dev-util/rocm-smi-11:= )
-		cusparselt? ( >=sci-libs/hipsparselt-6.3:= <sci-libs/hipsparselt-11:= )
+		nccl? ( >=dev-libs/rccl-6.3:= <dev-libs/rccl-7.3:= )
+		>=dev-util/hip-6.3:=       <dev-util/hip-7.3:=
+		>=dev-util/roctracer-6.3:= <dev-util/roctracer-7.3:=
+		>=sci-libs/hipBLAS-6.3:=   <sci-libs/hipBLAS-7.3:=[rocsolver(+)]
+		>=sci-libs/hipBLASLt-6.3:= <sci-libs/hipBLASLt-7.3:=
+		>=sci-libs/hipFFT-6.3:=    <sci-libs/hipFFT-7.3:=
+		>=sci-libs/hipRAND-6.3:=   <sci-libs/hipRAND-7.3:=
+		>=sci-libs/hipSOLVER-6.3:= <sci-libs/hipSOLVER-7.3:=
+		>=sci-libs/hipSPARSE-6.3:= <sci-libs/hipSPARSE-7.3:=
+		>=sci-libs/miopen-6.3:=    <sci-libs/miopen-7.3:=
+		>=sci-libs/rocBLAS-6.3:=   <sci-libs/rocBLAS-7.3:=
+		>=sci-libs/rocRAND-6.3:=   <sci-libs/rocRAND-7.3:=
+		>=sci-libs/rocSOLVER-6.3:= <sci-libs/rocSOLVER-7.3:=
+		memefficient? ( =sci-libs/aotriton-bin-0.12*:= )
+		distributed? ( >=dev-util/rocm-smi-6.3:= <dev-util/rocm-smi-7.3:= )
+		cusparselt? ( >=sci-libs/hipsparselt-6.3:= <sci-libs/hipsparselt-7.3:= )
 	)
 	distributed? (
 		!rocm? ( sci-ml/tensorpipe[cuda?] )
@@ -166,9 +153,9 @@ DEPEND="
 	cuda? ( >=dev-libs/cutlass-3.9.2[tools(+)] )
 	onednn? ( sci-ml/ideep )
 	rocm? (
-		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-11:=
-		>=sci-libs/rocPRIM-6.3:=   <sci-libs/rocPRIM-11:=
-		>=sci-libs/rocThrust-6.3:= <sci-libs/rocThrust-11:=
+		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-7.3:=
+		>=sci-libs/rocPRIM-6.3:=   <sci-libs/rocPRIM-7.3:=
+		>=sci-libs/rocThrust-6.3:= <sci-libs/rocThrust-7.3:=
 	)
 	qnnpack? ( dev-libs/clog )
 "
