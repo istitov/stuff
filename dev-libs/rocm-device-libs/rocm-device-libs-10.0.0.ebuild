@@ -84,12 +84,28 @@ src_unpack() {
 }
 
 src_prepare() {
+	# INSTALL_ROOT_SUFFIX is relative to CMAKE_INSTALL_PREFIX, so upstream's
+	# bare "amdgcn/bitcode" would install to /usr/amdgcn/bitcode. Prefix it.
+	#
+	# Anchor on the quotes. This is a fix, not just a hardening. OCL.cmake
+	# assigns INSTALL_ROOT_SUFFIX three times:
+	#
+	#   :52  "amdgcn/bitcode"                          <- the one to prefix
+	#   :55  "${..._INSTALL_LOC_NEW}/bitcode"          <- no amdgcn, never matched
+	#   :66  "${CLANG_RSRC_DIR}/lib/amdgcn/bitcode"    <- already correct
+	#
+	# The old unanchored `s:amdgcn/bitcode:lib/amdgcn/bitcode:` hit :66 as well
+	# and rewrote it to ".../lib/lib/amdgcn/bitcode". That stayed latent only
+	# because :66 sits behind ROCM_DEVICE_LIBS_BITCODE_INSTALL_LOC_CLANG_RESOURCE_DIR,
+	# which defaults OFF; turn it on and clang looks for the device libs one
+	# directory above where they landed.
+	#
 	# cmake/Packages.cmake was in this list through 7.2.4 but carries no
 	# amdgcn/bitcode reference at 10.0, so listing it was a silent no-op.
-	# Only OCL.cmake still needs it (twice). verified 2026-08-30.
-	grep -q 'amdgcn/bitcode' cmake/OCL.cmake ||
+	# verified 2026-08-30 against the therock-10.0 source.
+	grep -q '"amdgcn/bitcode"' cmake/OCL.cmake ||
 		die "amdgcn/bitcode anchor moved in OCL.cmake"
-	sed -e "s:amdgcn/bitcode:lib/amdgcn/bitcode:" \
+	sed -e 's:"amdgcn/bitcode":"lib/amdgcn/bitcode":' \
 		-i cmake/OCL.cmake || die
 	# shellcheck disable=SC2016
 	sed -e 's:${CMAKE_INSTALL_DATADIR}/doc/${CPACK_PACKAGE_NAME}:${CMAKE_INSTALL_DOCDIR}:' \
