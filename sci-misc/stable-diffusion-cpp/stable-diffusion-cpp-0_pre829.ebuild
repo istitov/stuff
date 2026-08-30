@@ -47,7 +47,18 @@ LICENSE="MIT"
 SLOT="0"
 CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
-IUSE="openblas blis flexiblas rocm cuda opencl vulkan wmma webm webp"
+# The vendored ggml has no GGML_HIP_ROCWMMA_FATTN option. Verified 2026-08-30
+# against the unpacked tree at GGML_COMMIT 8e800cef: zero hits anywhere in the
+# source, the only occurrences in the whole build being the -D this ebuild
+# passed and the environment file derived from it. CMake silently ignores an
+# unknown -D, so the flag changed nothing about the build while still pulling
+# in sci-libs/rocWMMA -- which ::gentoo ships only up to 7.2.0, so it pinned
+# the ROCm stack at 0/7.2 and made the 10.0 closure unsolvable.
+#
+# Dropped, following sci-misc/llama-cpp at 0.3.0: upstream removed the same
+# option in b10121 (PR #26046, "HIP: remove rocWMMA FlashAttention"), and HIP
+# FlashAttention now runs through the shared ggml-cuda fattn-mma templates.
+IUSE="openblas blis flexiblas rocm cuda opencl vulkan webm webp"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
 REQUIRED_USE="
@@ -59,9 +70,6 @@ REQUIRED_USE="
 	webm? (
 		webp
 	)
-	wmma? (
-		rocm
-	)
 "
 
 CDEPEND="
@@ -71,9 +79,6 @@ CDEPEND="
 	rocm? (
 		>=dev-util/hip-${ROCM_VERSION}:=
 		>=sci-libs/hipBLAS-${ROCM_VERSION}:=
-		wmma? (
-			>=sci-libs/rocWMMA-${ROCM_VERSION}:=
-		)
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	webp? ( media-libs/libwebp:= )
@@ -196,7 +201,6 @@ src_configure() {
 		rocm_use_hipcc
 		mycmakeargs+=(
 			-DSD_HIPBLAS=ON -DAMDGPU_TARGETS=$(get_amdgpu_flags) -DGPU_TARGETS=$(get_amdgpu_flags)
-			-DGGML_HIP_ROCWMMA_FATTN=$(usex wmma)
 		)
 	fi
 
