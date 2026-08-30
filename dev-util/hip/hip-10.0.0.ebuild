@@ -120,6 +120,8 @@ PATCHES=(
 	# libc++-only version.
 	"${FILESDIR}/${PN}-10.0.0-fix-stdlib-noinline.patch"
 	"${FILESDIR}/${PN}-7.1.0-no-hipother-install.patch"
+	# Without this, hipStreamCreate() segfaults outright on an AVX-512 host.
+	"${FILESDIR}/${PN}-10.0.0-aligned-new.patch"
 )
 
 QA_FLAGS_IGNORED="usr/lib.*/libhiprtc-builtins.*"
