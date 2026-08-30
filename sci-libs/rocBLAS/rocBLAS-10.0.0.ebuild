@@ -38,8 +38,25 @@ IUSE="benchmark hipblaslt roctracer test"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
+# dev-util/hipcc[amd-llvm] is a build requirement, not documentation.
+# rocm_use_clang() resolves the compiler via `hipconfig --hipclangpath`, and
+# hipcc points that at llvm-core/rocm-llvm only when the flag is set. This
+# package cannot be compiled by a vanilla LLVM: Tensile GENERATES gfx1150
+# assembly the vanilla assembler rejects ("operands are not valid for this GPU
+# or mode" on v_cvt_f16_f32), and being generated it cannot be patched away.
+# Until now that requirement lived only in a profiles/package.mask comment, so
+# building against a hipcc without the flag died deep in compilation with no
+# resolver-level signal. hipconfig belongs to hipcc and was reached only
+# transitively through dev-util/hip, which cannot carry the USE-dep.
+#
+# Unconditional deliberately. Every failure on record is a gfx11xx/gfx12xx one,
+# so a narrower amdgpu_targets_*? form may well be correct -- but nobody has
+# built this against a vanilla LLVM for a CDNA-only target, and claiming
+# support that was never verified is the worse error. Narrow it once someone
+# has that build. # verified 2026-08-30
 BDEPEND="
 	dev-build/rocm-cmake:${SLOT_NOLIVE}
+	dev-util/hipcc:${SLOT_NOLIVE}[amd-llvm]
 "
 
 RDEPEND="
