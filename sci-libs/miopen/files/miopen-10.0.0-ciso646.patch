@@ -1,0 +1,25 @@
+Use <version> instead of the deprecated <ciso646>.
+
+<ciso646> only ever provided the C++98 alternative-token macros (and, or, not),
+which are keywords on every compiler MIOpen supports. Since C++20 it is no
+longer a standard header, and GCC 16's libstdc++ says so with a #warning --
+which MIOpen's own -Werror turns into a hard build failure:
+
+  /usr/lib/gcc/.../g++-v16/ciso646:49:6: error: "<ciso646> is not a standard
+  header since C++20, use <version> to detect implementation-specific macros"
+  [-Werror,-W#warnings]
+
+<version> is what the warning recommends and what the include was actually
+being used for here (implementation macros). Only one file in the tree includes
+it. verified 2026-08-30.
+--- a/src/include/miopen/serializable.hpp
++++ b/src/include/miopen/serializable.hpp
+@@ -27,7 +27,7 @@
+ #ifndef GUARD_MLOPEN_SERIALIZABLE_HPP
+ #define GUARD_MLOPEN_SERIALIZABLE_HPP
+ 
+-#include <ciso646>
++#include <version>
+ #include <miopen/config.h>
+ #include <iostream>
+ #include <sstream>
