@@ -127,15 +127,25 @@ src_prepare() {
 
 	rocm_use_clang
 
+	grep -qF '$(ROCM_PATH)/bin/amdclang++' tensilelite/Makefile ||
+		die "amdclang++ anchor moved in tensilelite/Makefile"
 	sed -e "s:\$(ROCM_PATH)/bin/amdclang++:$(get_llvm_prefix)/bin/clang++:g" \
 		-i tensilelite/Makefile || die
 
 	# Fix compiler validation (just a validation)
+	local f
+	for f in tensilelite/Tensile/Toolchain/Validators.py \
+		tensilelite/Tensile/Tests/unit/test_MatrixInstructionConversion.py; do
+		grep -qF 'amdclang' "${f}" || die "amdclang anchor moved in ${f}"
+	done
 	sed -e "s/amdclang/$(basename "$CC")/g" \
 		-i tensilelite/Tensile/Toolchain/Validators.py \
 		-i tensilelite/Tensile/Tests/unit/test_MatrixInstructionConversion.py || die
 
-	# Do not install tests
+	# Do not install tests. Silent on no-match -- the build succeeds and the
+	# test binaries are merged into the image.
+	grep -qF 'COMPONENT tests' CMakeLists.txt ||
+		die "COMPONENT tests anchor moved; tests would be installed"
 	sed -e "s/COMPONENT tests/COMPONENT tests EXCLUDE_FROM_ALL/" -i CMakeLists.txt || die
 
 	# Both of these rewrite a monorepo-relative sibling path to where the
