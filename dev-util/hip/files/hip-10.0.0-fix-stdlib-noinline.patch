@@ -1,0 +1,55 @@
+Unsetting __noinline__ before the standard library is parsed breaks libc++ and,
+since GCC 16, libstdc++ too.
+
+HIP's non-HCC (host-only) branch does `#define __noinline__` with an empty
+body. Any standard-library header that spells the GNU attribute as
+`[[__gnu__::__noinline__]]` then expands the macro inside the attribute and
+fails to parse:
+
+  /usr/lib/gcc/.../g++-v16/format:4550:30: error: expected identifier
+   4550 |       [[__gnu__::__noinline__]]
+
+Reproduces with `#include <hip/hip_runtime_api.h>` followed by `<chrono>` on
+BOTH llvm-core/clang:23 and llvm-core/rocm-llvm, so it is a HIP/libstdc++
+issue, not a compiler-fork one. Upstream's own guard in the HCC branch
+(`__has_feature(cuda_noinline_keyword)`) does not help: that feature is absent
+in host-only mode. Redefining the macro cannot help either -- the clash is with
+the NAME -- so the only fix is to parse the affected headers first.
+
+Extends upstream PR https://github.com/ROCm/rocm-systems/pull/1875, which added
+the libc++ <__config> half, to cover libstdc++. verified 2026-08-30.
+--- a/hipamd/include/hip/amd_detail/host_defines.h
++++ b/hipamd/include/hip/amd_detail/host_defines.h
+@@ -397,6 +397,32 @@
+ 
+ #define __global__
+ 
++// Emptying __noinline__ below breaks any standard-library header that spells
++// the GNU attribute as `[[__gnu__::__noinline__]]` or
++// `__attribute__((__noinline__))`: the object-like macro expands inside the
++// attribute and leaves a syntax error. No definition of the macro can avoid
++// that -- only ordering does -- so pull those headers in first, while the
++// name still means the real attribute.
++#if defined(__cplusplus) && defined(__has_include)
++// libc++ caches the answer to __has_attribute(__noinline__) in <__config>.
++#  if __has_include(<__config>)
++#    include <__config>
++#  endif
++// libstdc++ (GCC 16) uses the attribute inline in <format>, <stacktrace> and
++// <bits/shared_ptr_base.h> (via <memory>), so each must be fully parsed here.
++#  if __has_include(<bits/c++config.h>)
++#    if __has_include(<memory>)
++#      include <memory>
++#    endif
++#    if __has_include(<format>)
++#      include <format>
++#    endif
++#    if __has_include(<stacktrace>)
++#      include <stacktrace>
++#    endif
++#  endif
++#endif
++
+ #define __noinline__
+ #define __forceinline__ inline
+ 
