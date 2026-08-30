@@ -59,10 +59,24 @@ BDEPEND="
 
 src_prepare() {
 	# too many warnings from -Wall (applied after user CXXFLAGS)
+	#
+	# Guarded because `sed` exits 0 on no-match, so an upstream that stops
+	# spelling -Wall here would leave the suppression silently inert rather
+	# than failing.
+	#
+	# clients/tests/CMakeLists.txt was in this list through 7.2.4 but carries
+	# no -Wall at 10.0 (the file still exists; the flag is gone), so listing it
+	# was a silent no-op -- dropped rather than left to imply coverage it does
+	# not provide. The guard below is what caught it.
+	# verified 2026-08-30 against the therock-10.0 source.
+	local f
+	for f in clients/benchmarks/CMakeLists.txt library/CMakeLists.txt; do
+		grep -q -- '-Wall' "${f}" ||
+			die "-Wall anchor moved in ${f}; -Wno-unused-value would not apply"
+	done
 	sed -e "s/-Wall/-Wall -Wno-unused-value/g" \
 		-i clients/benchmarks/CMakeLists.txt \
-		-i library/CMakeLists.txt \
-		-i clients/tests/CMakeLists.txt || die
+		-i library/CMakeLists.txt || die
 
 	cmake_src_prepare
 
