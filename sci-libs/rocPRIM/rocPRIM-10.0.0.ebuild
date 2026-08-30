@@ -41,6 +41,17 @@ RESTRICT="!test? ( test )"
 src_prepare() {
 	# install benchmark files
 	if use benchmark; then
+		# Both expressions are load-bearing and both are address-matched, so
+		# `sed` would exit 0 having done nothing if either anchor moved: the
+		# first namespaces the benchmark binaries so they do not collide with
+		# other rocm libraries' benchmarks, the second appends the install()
+		# rule that ships them at all. A silent no-op yields a USE=benchmark
+		# build that looks successful and installs no benchmarks.
+		# verified 2026-08-30 against the therock-10.0 source.
+		grep -q 'get_filename_component' benchmark/CMakeLists.txt ||
+			die "get_filename_component anchor moved; benchmark names would not be namespaced"
+		grep -q 'add_executable' benchmark/CMakeLists.txt ||
+			die "add_executable anchor moved; benchmarks would build but never install"
 		sed -e "/get_filename_component/s,\${BENCHMARK_SOURCE},${PN}_\${BENCHMARK_SOURCE}," \
 			-e "/add_executable/a\  install(TARGETS \${BENCHMARK_TARGET})" -i benchmark/CMakeLists.txt || die
 	fi
