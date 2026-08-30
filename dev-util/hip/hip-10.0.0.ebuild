@@ -94,21 +94,27 @@ RDEPEND="${DEPEND}
 	)
 "
 
-# ${PN}-7.0.2-fix-libcxx-ranges.patch is NOT carried: it pre-included
-# <__ranges/join_view.h> before HIP's `#define __local`, because libc++'s
-# <ranges> uses __local as an identifier. ROCm 10.0 removed `#define __local`
-# from the tree entirely -- device_library_decls.h is now 108 lines and defines
-# it nowhere -- so the workaround has nothing left to guard and its hunk no
-# longer applies.
+# Both libc++ workarounds are obsolete at 10.0 and are NOT carried:
 #
-# ${PN}-6.3.0-clr-fix-libcxx.patch is superseded by the 10.0.0 rewrite below:
-# its __local save/restore half died with the same upstream removal, while its
-# <__clang_hip_math.h> include is still needed. Splitting them keeps the live
-# half from being lost with the dead one.
-# All verified 2026-08-29 by dry-run against the therock-10.0 clr tree.
+#   fix-libcxx-ranges  pre-included <__ranges/join_view.h> ahead of HIP's
+#                      `#define __local`, because libc++'s <ranges> uses
+#                      __local as an identifier. 10.0 removed that #define
+#                      from the tree entirely (device_library_decls.h is now
+#                      108 lines and defines it nowhere).
+#   clr-fix-libcxx     had two halves. The __local save/restore died with the
+#                      same removal. The other half added
+#                      <__clang_hip_math.h> because
+#                      <__clang_cuda_complex_builtins.h> referred to ::max --
+#                      but that header now uses __builtin_fmax/__builtin_fmaxf
+#                      instead, and including the two CUDA headers in the old
+#                      order compiles cleanly without it.
+#
+# An intermediate revision of this ebuild kept a regenerated
+# ${PN}-10.0.0-clr-fix-libcxx.patch for the second half; that was based on the
+# patch's stated rationale rather than on re-reading the 10.0 header, and is
+# dropped. verified 2026-08-30 by compiling the include pair against clang 23.
 PATCHES=(
 	"${FILESDIR}/${PN}-6.3.0-no-isystem-usr-include.patch"
-	"${FILESDIR}/${PN}-10.0.0-clr-fix-libcxx.patch"
 	"${FILESDIR}/${PN}-7.0.2-fix-libcxx-noinline.patch"
 	"${FILESDIR}/${PN}-7.1.0-no-hipother-install.patch"
 )
@@ -156,6 +162,9 @@ src_prepare() {
 	# do not install /usr/share/doc/${P}-asan
 	sed -e "/asan COMPONENT asan/d" -i hipamd/packaging/CMakeLists.txt || die
 
+	# `sed` exits 0 on no-match: leaves the placeholder unsubstituted in the installed cmake config
+	grep -qF '@HIP_INSTALLS_HIPCC@' hipamd/hip-config.cmake.in ||
+		die "@HIP_INSTALLS_HIPCC@ anchor moved in hipamd/hip-config.cmake.in"
 	sed -e "s/@HIP_INSTALLS_HIPCC@/ON/g" -i hipamd/hip-config.cmake.in || die
 
 	# skip installation of hipcc: installed via dev-util/hipcc.
@@ -184,13 +193,16 @@ src_prepare() {
 
 	if use test; then
 		local PATCHES=()
-		sed -e "s/-Werror //" -e "s/-Wall -Wextra //" -i "${TEST_S}/CMakeLists.txt" || die
-
-		# policy not supported by CMake 4.0; and not needed
-		sed -e '/cmake_policy(SET CMP0037 OLD)/d' -i "${TEST_S}/CMakeLists.txt" || die
-
-		sed -e "s:/opt/rocm/bin:${EPREFIX}/usr/bin:" \
-			-i "${TEST_S}/hipTestMain/hip_test_context.cc" || die
+		# Of the four substitutions this branch used to make, only
+		# "-Wall -Wextra " still matches at 10.0. Dropped as silent no-ops:
+		# "-Werror " (gone from the catch CMakeLists),
+		# cmake_policy(SET CMP0037 OLD) (gone), and /opt/rocm/bin (gone from
+		# hipTestMain/hip_test_context.cc). Note RESTRICT="test" means this
+		# branch does not normally run, which is why they went unnoticed.
+		# verified 2026-08-30 against hip-tests-10.0.0.
+		grep -q -- '-Wall -Wextra ' "${TEST_S}/CMakeLists.txt" ||
+			die "hip-tests -Wall -Wextra anchor moved"
+		sed -e "s/-Wall -Wextra //" -i "${TEST_S}/CMakeLists.txt" || die
 
 		hip_test_wrapper cmake_src_prepare
 	fi
