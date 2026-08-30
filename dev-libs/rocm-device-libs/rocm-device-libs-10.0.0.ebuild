@@ -107,6 +107,13 @@ src_prepare() {
 		die "amdgcn/bitcode anchor moved in OCL.cmake"
 	sed -e 's:"amdgcn/bitcode":"lib/amdgcn/bitcode":' \
 		-i cmake/OCL.cmake || die
+	# Same no-match-exits-0 hazard as the sed above: without this guard an
+	# upstream rename would leave the docs installing under CPACK_PACKAGE_NAME
+	# instead of the standard docdir, with a green build.
+	# verified 2026-08-30 against the therock-10.0 source.
+	# shellcheck disable=SC2016
+	grep -q '${CMAKE_INSTALL_DATADIR}/doc/${CPACK_PACKAGE_NAME}' CMakeLists.txt ||
+		die "docdir anchor moved in CMakeLists.txt; docs would install outside the standard docdir"
 	# shellcheck disable=SC2016
 	sed -e 's:${CMAKE_INSTALL_DATADIR}/doc/${CPACK_PACKAGE_NAME}:${CMAKE_INSTALL_DOCDIR}:' \
 		-i CMakeLists.txt || die
