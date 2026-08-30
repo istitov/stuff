@@ -113,9 +113,18 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# `sed` exits 0 on no-match, so a silent miss here leaves -Werror in place
+	# and turns any warning a newer compiler emits into a hard build failure.
+	# verified 2026-08-30 against the therock-10.0 source.
+	grep -q -- '-Werror' cmake/EnableCompilerWarnings.cmake ||
+		die "-Werror anchor moved in EnableCompilerWarnings.cmake"
 	sed -e '/-Werror/d' -i cmake/EnableCompilerWarnings.cmake || die
 
-	# don't build examples
+	# don't build examples -- a silent miss builds and installs the whole
+	# example tree, a large and slow addition that would look like a normal
+	# (just much longer) build. verified 2026-08-30.
+	grep -q 'add_subdirectory(example)' CMakeLists.txt ||
+		die "add_subdirectory(example) anchor moved; the example tree would be built"
 	sed -e "/add_subdirectory(example)/d" -i CMakeLists.txt || die
 
 	# Flag -amdgpu-early-inline-all explodes memory consumption
