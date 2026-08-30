@@ -285,8 +285,19 @@ src_compile() {
 	local -x ROCM_PATH="${EPREFIX}/usr"
 	# set PYTHONPATH to load Tensile from virtualenv, not the system-wide one
 	local -x PYTHONPATH="${S}_build/virtualenv/lib/${EPYTHON}/site-packages"
-	local -x TENSILE_ROCM_ASSEMBLER_PATH="$(get_llvm_prefix)/bin/clang++"
-	# TensileCreateLibrary reads CMAKE_CXX_COMPILER again
+	# TENSILE_ROCM_ASSEMBLER_PATH was exported here through 7.2.4 and is gone:
+	# the vendored TensileLite has zero references to it (checked across
+	# hipblaslt/, origami/ and stinkytofu/ at therock-10.0). It selects its
+	# assembler through Tensile/Toolchain/Validators.py instead, which searches
+	# ROCM_PATH/bin, ROCM_PATH/lib/llvm/bin, /opt/rocm/{bin,lib/llvm/bin} and
+	# then PATH -- so ROCM_PATH above is what actually steers it, and the dead
+	# export only made it look otherwise. verified 2026-08-30.
+	#
+	# CMAKE_CXX_COMPILER, by contrast, IS read from the environment:
+	# Tensile/Common/GlobalParameters.py:869-870 does
+	#     if "CMAKE_CXX_COMPILER" in os.environ:
+	#         globalParameters["CmakeCxxCompiler"] = os.environ.get(...)
+	# so this export is load-bearing, not decoration. verified 2026-08-30.
 	local -x CMAKE_CXX_COMPILER="$(get_llvm_prefix)/bin/clang++"
 	cmake_src_compile
 }
