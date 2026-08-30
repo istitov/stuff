@@ -35,14 +35,19 @@ DEPEND="${RDEPEND}
 	x11-libs/libdrm[video_cards_amdgpu]
 "
 
-# Both 5.7.1 patches are obsolete at 10.0 and are deliberately not carried:
-#   no-strip       - upstream removed the POST_BUILD ${CMAKE_STRIP} custom
-#                    commands entirely; CMAKE_STRIP now appears nowhere in the
-#                    tree, so portage's own stripping is already unopposed.
-#   remove-example - there is no example/ directory and no rocm_smi_ex target
-#                    any more, so there is nothing left to gate on WITH_EXAMPLE.
-# Both were dry-run against the therock-10.0 tree and fail; neither has a
-# surviving target. verified 2026-08-29.
+# ${PN}-5.7.1-no-strip.patch is obsolete at 10.0: upstream removed the
+# POST_BUILD ${CMAKE_STRIP} custom commands entirely (zero occurrences of
+# CMAKE_STRIP in the whole archive), so portage's own stripping is unopposed.
+#
+# remove-example is NOT obsolete and is regenerated below. The example target
+# survives at 10.0 -- rocm_smi/CMakeLists.txt still builds
+# rocm_smi/example/rocm_smi_example.cc -- only the surrounding context moved.
+# (An earlier revision of this ebuild wrongly dropped it after checking for an
+# example/ directory at the archive root instead of under rocm_smi/.)
+# verified 2026-08-30.
+PATCHES=(
+	"${FILESDIR}"/${PN}-10.0.0-remove-example.patch
+)
 
 CONFIG_CHECK="~HSA_AMD ~DRM_AMDGPU"
 
