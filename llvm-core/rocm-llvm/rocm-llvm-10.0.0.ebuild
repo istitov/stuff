@@ -215,13 +215,13 @@ src_install() {
 	# LLVM_LIBDIR_SUFFIX so its resource dir uses lib64/amdgcn, while this
 	# build uses the default and wants lib/amdgcn. Glob the version component
 	# rather than hardcoding the clang major. verified 2026-08-29.
-	local rd
+	local rd found=
 	for rd in "${ED}"/usr/lib/${PN}/lib/clang/*; do
 		[[ -d ${rd} ]] || continue
 		dosym -r /usr/lib/amdgcn "${rd#"${ED}"}/lib/amdgcn"
-		t=found
+		found=1
 	done
-	[[ ${t} == found ]] ||
+	[[ -n ${found} ]] ||
 		die "no clang resource dir under /usr/lib/${PN}/lib/clang; device-lib symlink not placed"
 
 	# No env.d and no symlinks into /usr/bin. This compiler must be reachable
