@@ -71,8 +71,26 @@ RESTRICT="!test? ( test )"
 PATCHES=()
 
 src_prepare() {
-	# don't install tests
+	# Don't install tests. There are TWO install sites in this file, both
+	# reachable only under USE=test (src_configure passes -DBUILD_TESTS), and
+	# both silent on no-match -- sed exits 0 either way, so a stale anchor
+	# merges test content instead of failing the build.
+	#
+	# 1. the per-executable rocm_install(). One complete call per line, so
+	#    deleting the line cannot orphan a block.
+	grep -qF 'rocm_install' test/CMakeLists.txt ||
+		die "rocm_install anchor moved in test/CMakeLists.txt; test binaries would be installed"
 	sed -e '/rocm_install/d' -i test/CMakeLists.txt || die
+
+	# 2. a plain install() for CTestTestfile.cmake. It carries no rocm_install
+	#    token, so the delete above never saw it and it still landed in
+	#    /usr/bin/rccl/. Mark the component excluded rather than delete: the
+	#    call spans six lines, which is not something a sed should attempt.
+	#    verified 2026-08-30 against the therock-10.0 rccl asset.
+	grep -qE '^[[:space:]]*COMPONENT tests$' test/CMakeLists.txt ||
+		die "CTestTestfile install anchor moved; it would be installed"
+	sed -E -e 's/^([[:space:]]*)COMPONENT tests$/\1COMPONENT tests EXCLUDE_FROM_ALL/' \
+		-i test/CMakeLists.txt || die
 
 	# Warning suppression moved upstream: 10.0 removed the hardcoded
 	# target_compile_options(rccl PRIVATE -Wall) this sed used to delete, and
