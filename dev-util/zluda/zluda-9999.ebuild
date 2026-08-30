@@ -48,12 +48,16 @@ BDEPEND="
 #   zluda_fft     → stub, no extra dep
 # LLVM is bundled in-tree via ext/llvm-project since upstream fc204af
 # ("Build and distribute LLVM", #555); libamd_comgr is no longer linked.
+# := on all five: zluda links libamdhip64/librocblas/libhipblaslt/librocsparse
+# directly, so a ROCm subslot bump (7.2 -> 10.0 changes every SONAME) must
+# force a rebuild. Without it the installed binaries silently keep referencing
+# libraries that are no longer there.
 RDEPEND="
-	dev-util/hip
-	dev-util/rocm-smi
-	sci-libs/rocBLAS
-	sci-libs/hipBLASLt
-	sci-libs/rocSPARSE
+	dev-util/hip:=
+	dev-util/rocm-smi:=
+	sci-libs/rocBLAS:=
+	sci-libs/hipBLASLt:=
+	sci-libs/rocSPARSE:=
 "
 DEPEND="${RDEPEND}"
 
