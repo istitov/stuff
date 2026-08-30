@@ -118,8 +118,28 @@ src_prepare() {
 	# too many warnings
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
-	# Do not install tests
+	# Do not install tests. Silent on no-match -- the build succeeds and the
+	# test payload is merged into the image.
+	#
+	# Upstream spells the component TWO ways in this file and both install:
+	# COMPONENT "tests" for the test binary, and an unquoted COMPONENT tests at
+	# end-of-line for the yaml, data and program files. Anchoring only the
+	# quoted spelling left those three installing into /usr/bin under USE=test,
+	# which sets -DHIPSPARSELT_ENABLE_CLIENT=ON and -DHIPSPARSELT_BUILD_TESTING=ON.
+	# sci-libs/hipBLASLt needs only the unquoted form: all 13 of its sites use it.
+	#
+	# The end-of-line anchor is load-bearing. rocm_package_add_rpm_dependencies()
+	# and its deb twin also take COMPONENT tests, mid-line -- they are packaging
+	# metadata, not install() calls, and appending EXCLUDE_FROM_ALL to them would
+	# be wrong. verified 2026-08-30 against the therock-10.0 hipsparselt asset.
+	grep -qF 'COMPONENT "tests"' CMakeLists.txt ||
+		die "COMPONENT \"tests\" anchor moved; the test binary would be installed"
 	sed -e 's/COMPONENT "tests"/COMPONENT "tests" EXCLUDE_FROM_ALL/' \
+		-i CMakeLists.txt || die
+
+	grep -qE 'COMPONENT tests$' CMakeLists.txt ||
+		die "unquoted COMPONENT tests anchor moved; test data would be installed"
+	sed -E -e 's/COMPONENT tests$/COMPONENT tests EXCLUDE_FROM_ALL/' \
 		-i CMakeLists.txt || die
 
 	pushd "${HIPBLASLT_S}" || die
@@ -157,8 +177,12 @@ src_prepare() {
 	python_fix_shebang -q "${shebangs[@]}"
 
 	# Fix compiler validation (just a validation)
+	grep -qF 'amdclang' tensilelite/Tensile/Toolchain/Validators.py ||
+		die "amdclang anchor moved in tensilelite/Tensile/Toolchain/Validators.py"
 	sed -e "s/amdclang/$(basename "$CC")/g" \
 		-i tensilelite/Tensile/Toolchain/Validators.py || die
+	grep -qF '$(ROCM_PATH)/bin/amdclang++' tensilelite/Makefile ||
+		die "amdclang++ anchor moved in tensilelite/Makefile"
 	sed -e "s:\$(ROCM_PATH)/bin/amdclang++:$(get_llvm_prefix)/bin/clang++:g" \
 		-i tensilelite/Makefile || die
 	popd || die
