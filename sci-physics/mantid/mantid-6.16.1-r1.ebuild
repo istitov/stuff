@@ -130,6 +130,23 @@ RDEPEND="
 	)
 "
 
+# dev-python/versioningit is deprecated in ::gentoo, and that deprecation
+# deliberately does NOT apply here. ::gentoo's rationale is that versioningit
+# "does not provide any support for building via GitHub archives" -- but this
+# ebuild inherits git-r3 and builds from a real checkout, so the VCS metadata
+# versioningit needs is present.
+#
+# It is also not a PEP 517 backend here: mantid's pyproject.toml declares no
+# [build-system] at all, only [tool.versioningit.*] config, and
+# buildconfig/CMake/VersionNumber.cmake runs `${Python_EXECUTABLE} -m versioningit`
+# as a build step. Its own comment says the implementation "assumes the build is
+# run from a Git repository". Replacing it with setuptools-scm would mean
+# patching that CMake module and reimplementing the version derivation that
+# feeds mantid's PEP440 check and its user-visible version string -- upstream
+# divergence with no functional gain.
+#
+# Revisit if ::gentoo moves versioningit from deprecated to last-rited; that,
+# not the deprecation itself, is what would break this. verified 2026-08-31.
 BDEPEND="
 	dev-build/cmake
 	dev-build/ninja
