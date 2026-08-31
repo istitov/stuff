@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    The ROCm Data Center Tool exposes AMD GPU telemetry over a gRPC service so
+    a fleet of machines can be monitored centrally. It reports utilisation,
+    power, clocks, temperatures and ECC counters, and can group those readings
+    per compute job so usage is attributable after the fact. It ships the rdcd
+    daemon, the rdci command-line client, and Python bindings for collectd-style
+    integration.
+  </longdescription>
+  <use>
+    <flag name="rocr">Build librdc_rocr.so, the HSA-based GPU diagnostic module</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-systems</remote-id>
+  </upstream>
+</pkgmetadata>
