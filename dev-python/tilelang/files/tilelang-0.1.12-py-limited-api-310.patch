@@ -1,0 +1,28 @@
+Target the Python 3.10 limited API, not 3.8.
+
+dev-python/cython-3.3 refuses to generate limited-API code below 3.9, so the
+generated wrapper fails to compile outright:
+
+  build/tilelang_cython_wrapper.cpp:70:8: error:
+    #error "Cython 3.3 requires the Python Limited API version to be 3.9 or greater."
+
+The cp38 target is upstream's own inconsistency rather than a real constraint:
+the same pyproject.toml declares requires-python = ">=3.10", so the package
+cannot run on 3.8 or 3.9 anyway, and this ebuild only builds for
+PYTHON_COMPAT=( python3_{12..14} ). cp310 matches the declared floor and
+satisfies Cython.
+
+wheel.py-api feeds SKBUILD_SABI_VERSION, which CMakeLists.txt passes to
+python_add_library() as USE_SABI -- that is what becomes -DPy_LIMITED_API.
+verified 2026-08-31 against 0.1.12; the same one-line change as 0.1.13.
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -93,7 +93,7 @@
+ build-backend = "scikit_build_core.build"
+ 
+ [tool.scikit-build]
+-wheel.py-api = "cp38"
++wheel.py-api = "cp310"
+ cmake.version = ">=3.26.1"
+ build-dir = "build"
+ 
