@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    CUID (Component Unified Identifier) builds a deterministic 122-bit
+    identifier for a hardware component out of whatever architectural markers
+    it exposes: a PCIe Device Serial Number capability, an SMBIOS or ACPI
+    serial, or a generated fingerprint where none of those exist, combined with
+    unit and revision IDs. The point is that one device gets the same
+    identifier from every tool that asks, which makes correlating GPUs, CPUs
+    and NICs across a fleet tractable without vendor-specific naming. It ships
+    a library and the amdcuid command-line tool.
+  </longdescription>
+  <use>
+    <flag name="examples">Build and install the example programs</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-systems</remote-id>
+  </upstream>
+</pkgmetadata>
