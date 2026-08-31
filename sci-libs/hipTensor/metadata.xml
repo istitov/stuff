@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    hipTensor is AMD's tensor primitives library, covering contraction,
+    reduction and permutation of arbitrary-rank tensors through an
+    einsum-style descriptor API. It is the ROCm counterpart to NVIDIA's
+    cuTENSOR and is implemented on top of the contraction, reduction and
+    elementwise kernel instances that sci-libs/composable-kernel generates,
+    so it requires that package to be built with USE=hiptensor.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-libraries</remote-id>
+  </upstream>
+</pkgmetadata>
