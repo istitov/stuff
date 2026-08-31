@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    rocSHMEM is a GPU-centric communication runtime following the OpenSHMEM
+    partitioned global address space model. Its distinguishing feature is that
+    device code initiates its own transfers: puts, gets and collectives are
+    called from inside a kernel rather than being marshalled by the host
+    between kernel launches, which suits fine-grained communication that would
+    otherwise force a launch boundary. It can run over an MPI bootstrap for
+    multi-process work, or within a single node over HIP IPC.
+  </longdescription>
+  <use>
+    <flag name="ipc">Enable the HIP IPC conduit for communication between GPUs on one node</flag>
+    <flag name="sdma">Enable the SDMA transport conduit, which upstream documents as MI300X and
+      newer; harmless but not useful on other parts</flag>
+    <flag name="mpi">Use an external MPI implementation for host-side bootstrap and launching</flag>
+    <flag name="single-node">Restrict the build to single-node support only</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-systems</remote-id>
+  </upstream>
+</pkgmetadata>

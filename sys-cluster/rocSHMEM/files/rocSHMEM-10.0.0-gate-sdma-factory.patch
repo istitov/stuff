@@ -1,0 +1,37 @@
+Gate the SDMA factory source on USE_SDMA, like its implementation
+
+src/CMakeLists.txt guards the SDMA backend with `if (USE_SDMA)
+add_subdirectory(sdma) endif()`, so src/sdma/anvil.cpp -- which defines
+everything in namespace sdma_anvil -- is only compiled when USE_SDMA is on.
+But sdma/gin_anvil_sdma_factory.cpp, which CALLS into that namespace, sits in
+the unconditional source list above.
+
+With upstream's own default of USE_SDMA=OFF the library therefore fails to
+link:
+
+  ld: librocshmem.so: undefined reference to `sdma_anvil::initEndpoint()'
+  ld: librocshmem.so: undefined reference to `sdma_anvil::anvil'
+  ld: librocshmem.so: undefined reference to `sdma_anvil::SdmaQueue::deviceHandle() const'
+  ... and more
+
+Move the factory next to the implementation it depends on, so both are
+governed by the same switch.
+
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -46,7 +46,6 @@
+     wf_coal_policy.cpp
+     ipc_policy.cpp
+     sdma_policy.cpp
+-    sdma/gin_anvil_sdma_factory.cpp
+ )
+
+ set(
+--- a/src/sdma/CMakeLists.txt
++++ b/src/sdma/CMakeLists.txt
+@@ -28,4 +28,5 @@
+   ${PROJECT_NAME}
+   PRIVATE
+     anvil.cpp
++    gin_anvil_sdma_factory.cpp
+ )
