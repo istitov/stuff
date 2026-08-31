@@ -1170,13 +1170,21 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (209) ---
+# --- github (220) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
 github = "ggml-org/whisper.cpp"
 use_max_tag = true
 prefix = "v"
+
+["app-admin/rdc"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["app-editors/gobby"]
 source = "github"
@@ -1280,6 +1288,14 @@ github = "dcleblanc/SafeInt"
 use_max_tag = true
 prefix = "v"
 
+["dev-debug/rocr-debug-agent"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
 ["dev-lang/tcc"]
 source = "github"
 github = "TinyCC/tinycc"
@@ -1343,6 +1359,14 @@ from_pattern = '^therock-([0-9]+\.[0-9]+)$'
 to_pattern = '\1.0'
 
 ["dev-libs/rocm-opencl-runtime"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
+["dev-libs/rocprofiler-register"]
 source = "github"
 github = "ROCm/rocm-systems"
 use_max_tag = true
@@ -2037,6 +2061,22 @@ use_max_tag = true
 include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
 
+["media-libs/rocDecode"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
+["media-libs/rocJPEG"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
 ["media-libs/viuer"]
 source = "github"
 github = "atanunq/viuer"
@@ -2258,6 +2298,14 @@ include_regex = '^therock-[0-9]+\.[0-9]+$'
 from_pattern = '^therock-([0-9]+\.[0-9]+)$'
 to_pattern = '\1.0'
 
+["sci-libs/hipTensor"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
 ["sci-libs/hipsparselt"]
 source = "github"
 github = "ROCm/rocm-libraries"
@@ -2291,6 +2339,14 @@ source = "github"
 github = "jamesrhester/pycifrw"
 use_max_tag = true
 prefix = "v"
+
+["sci-libs/rocALUTION"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sci-libs/rocBLAS"]
 source = "github"
@@ -2341,6 +2397,14 @@ from_pattern = '^therock-([0-9]+\.[0-9]+)$'
 to_pattern = '\1.0'
 
 ["sci-libs/rocThrust"]
+source = "github"
+github = "ROCm/rocm-libraries"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
+["sci-libs/rocWMMA"]
 source = "github"
 github = "ROCm/rocm-libraries"
 use_max_tag = true
@@ -2529,11 +2593,27 @@ github = "richard-evans/vampire"
 use_max_tag = true
 prefix = "v"
 
+["sys-apps/cuid"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
+
 ["sys-apps/dkms-gentoo"]
 source = "github"
 github = "megabaks/dkms-gentoo"
 use_max_tag = true
 prefix = "v"
+
+["sys-cluster/rocSHMEM"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["sys-fs/fragview"]
 source = "github"
@@ -2558,6 +2638,14 @@ source = "github"
 github = "megabaks/kernel-cleaner"
 use_max_tag = true
 prefix = "v"
+
+["sys-libs/hipFile"]
+source = "github"
+github = "ROCm/rocm-systems"
+use_max_tag = true
+include_regex = '^therock-[0-9]+\.[0-9]+$'
+from_pattern = '^therock-([0-9]+\.[0-9]+)$'
+to_pattern = '\1.0'
 
 ["www-apps/hollama"]
 source = "github"
