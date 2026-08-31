@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    hipFile is AMD's Infinity Storage library, the ROCm counterpart to NVIDIA's
+    GPUDirect Storage. It lets a file be read or written directly between
+    storage and GPU memory over DMA, skipping the usual staging copy through a
+    host bounce buffer, and offers synchronous, asynchronous and batch I/O
+    entry points. Where the direct path is not available it falls back to
+    ordinary POSIX I/O, so callers need no separate code path. Upstream
+    describes this release as an early-access technology preview.
+  </longdescription>
+  <use>
+    <flag name="examples">Install the example programs</flag>
+    <flag name="tools">Install the ais-stats command-line tool</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ROCm/rocm-systems</remote-id>
+  </upstream>
+</pkgmetadata>
