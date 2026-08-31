@@ -25,7 +25,7 @@ LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
-IUSE="debug profiler test"
+IUSE="debug hiptensor profiler test"
 REQUIRED_USE="${ROCM_REQUIRED_USE} ${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
@@ -187,6 +187,20 @@ src_configure() {
 		# Builds 2x less files, but faster.
 		# See https://github.com/ROCm/TheRock/blob/5cb6abaa43ad664c85a99ac37bd4d3abf9b6260e/ml-libs/CMakeLists.txt#L37
 		-DMIOPEN_REQ_LIBS_ONLY=ON
+
+		# HIPTENSOR_REQ_LIBS_ONLY is the same kind of narrowing switch for
+		# sci-libs/hipTensor's instance set, and the two COMPOSE rather than
+		# conflict: library/src/tensor_operation_instance/gpu/CMakeLists.txt
+		# builds one `required_pattern` by appending "conv" for MIOPEN and
+		# "contract;reduce;element" for HIPTENSOR, so with both ON the filter
+		# is the UNION and MIOpen's instance set is untouched. The paired
+		# guards on the library targets have the matching shape --
+		# `NOT MIOPEN_REQ_LIBS_ONLY OR HIPTENSOR_REQ_LIBS_ONLY` on
+		# device_contraction_operations and device_other_operations,
+		# `NOT HIPTENSOR_REQ_LIBS_ONLY OR MIOPEN_REQ_LIBS_ONLY` on the
+		# convolution ones. So this adds hipTensor's three libraries without
+		# pulling in the full CK instance set. verified 2026-08-30.
+		-DHIPTENSOR_REQ_LIBS_ONLY=$(usex hiptensor ON OFF)
 		-Wno-dev
 	)
 

@@ -23,6 +23,8 @@
     <remote-id type="github">ROCm/composable_kernel</remote-id>
   </upstream>
   <use>
+    <flag name="hiptensor">Additionally build the contraction, reduction and elementwise
+      instance libraries that <pkg>sci-libs/hipTensor</pkg> links against</flag>
     <flag name="profiler">Build and install the Composable Kernal profiler (ckProfiler)</flag>
   </use>
 </pkgmetadata>
