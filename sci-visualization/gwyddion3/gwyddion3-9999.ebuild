@@ -15,7 +15,7 @@ ESVN_PROJECT="gwyddion3-code"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="bzip2 doc fits hdf5 json nls openexr openmp webp X xml"
+IUSE="bzip2 doc fits hdf5 json openexr openmp webp X xml"
 
 RDEPEND="
 	>=dev-libs/glib-2.68:2
@@ -66,13 +66,21 @@ src_configure() {
 	# hardcodes ENABLE_PYGWY to false; the binding has not been ported to
 	# Python 3 / PyGObject). Python is still needed at build time for
 	# AM_PATH_PYTHON and source-generation helpers.
+	#
+	# No --disable-nls: configure.ac hard-errors on it ("NLS support is
+	# required. Since it is required by GLib, you should not ever see this
+	# error."), so an nls USE flag can only ever be a build break. The
+	# release ebuilds dropped it for this reason in 7a5d3e75f; this branch
+	# kept it until now. sys-devel/gettext is already an unconditional
+	# BDEPEND above. Re-checked against the live branch's own configure.ac
+	# 2026-09-01 (svn cat of GWYDDION-UNSTABLE, line 670) -- the check is
+	# there too, not just in the releases.
 	econf \
 		--enable-maintainer-mode \
 		--disable-introspection \
 		--disable-rpath \
 		--without-python \
 		$(use_enable doc gtk-doc) \
-		$(use_enable nls) \
 		$(use_enable openmp) \
 		$(use_with bzip2) \
 		$(use_with fits cfitsio) \
