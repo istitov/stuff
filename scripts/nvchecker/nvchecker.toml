@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (290) ---
+# --- pypi (289) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -329,10 +329,6 @@ pypi = "flexcache"
 ["dev-python/flexparser"]
 source = "pypi"
 pypi = "flexparser"
-
-["dev-python/fsspec"]
-source = "pypi"
-pypi = "fsspec"
 
 ["dev-python/gdown"]
 source = "pypi"
@@ -2903,6 +2899,7 @@ prefix = "v"
 # ["dev-python/certifi-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/diff-gaussian-rasterization"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["dev-python/diffoctreerast"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
+# ["dev-python/fsspec"] skipped: pinned to 2025.9.0 for sci-ml/datasets-4.3.0's <=2025.9.0-r0 ceiling; deliberately older than ::gentoo (2026.6.0/2026.7.0), so it flags every run and can never be bumped — goes away with datasets-4.3.0
 # ["dev-python/numpy-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pycairo-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygobject"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
