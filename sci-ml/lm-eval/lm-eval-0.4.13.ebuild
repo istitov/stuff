@@ -23,7 +23,7 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+api ifeval math sentencepiece statsmodels vllm"
+IUSE="+api ifeval math onnxruntime sentencepiece statsmodels vllm"
 
 # Core deps from pyproject.toml [project.dependencies] at v0.4.13.
 # Optional [project.optional-dependencies] groups are wired as USE flags
@@ -31,24 +31,30 @@ IUSE="+api ifeval math sentencepiece statsmodels vllm"
 #  api          -> aiohttp, requests, tenacity, tqdm, tiktoken
 #  ifeval       -> langdetect, immutabledict, nltk>=3.9.1
 #  math         -> sympy, antlr4-python3-runtime==4.11.*, math-verify
+#  onnxruntime  -> onnxruntime>=1.23, transformers (numpy is already
+#                  unconditional, so it adds nothing)
 #  sentencepiece-> sentencepiece
 #  statsmodels  -> upstream "discrim_eval" extra (statsmodels)
 #  vllm         -> vllm
 # Other extras (hf, multilingual, ruler, wandb, japanese, longbench,
 # libra, ipex, gptq, gptqmodel, optimum, sparsify, audiolm_qwen,
 # unitxt, zeno, ibm_watsonx_ai, acpbench, archiver, litellm,
-# onnxruntime, onnxruntime-genai) gate on packages we do not currently
-# carry; users wanting them must `pip install lm_eval[<extra>]`.
+# onnxruntime-genai) gate on packages we do not currently carry; users
+# wanting them must `pip install lm_eval[<extra>]`.
 #
-# The two onnxruntime extras are NEW at 0.4.13. onnxruntime-genai has no
-# ebuild anywhere. The plain `onnxruntime` one (onnxruntime>=1.23 +
-# transformers + numpy) is the only unwired extra whose deps are all
-# reachable here -- sci-libs/onnxruntime-1.28.0-r2/1.29.0-r2 both carry
-# USE=python -- so it is a candidate for a future USE flag; deliberately
-# not wired in this version bump. Its backends
-# (lm_eval/models/onnxruntime_ort.py, winml.py) import onnxruntime
-# lazily inside the model constructor, so nothing breaks without it.
-# noted 2026-09-01
+# onnxruntime: NEW extra at 0.4.13, wired here because every dep is in
+# tree -- sci-libs/onnxruntime carries USE=python and both 1.28.0-r2 and
+# 1.29.0-r2 clear upstream's >=1.23 floor. (The sibling
+# onnxruntime-genai extra stays unwired: no ebuild exists anywhere.)
+# The flag is purely additive: models/__init__.py registers the backend
+# by dotted-path STRING, "lm_eval.models.onnxruntime_ort:ONNXRuntimeLM",
+# so the module is not imported unless --model onnxruntime is selected,
+# and inside it both heavy imports are function-local -- `import
+# onnxruntime as ort` in onnxruntime_ort.py, `from transformers import
+# AutoTokenizer` in the shared models/_onnx_base.py. Worth having on
+# this overlay specifically: it is the backend that reaches the ROCm and
+# MIGraphX execution providers, which onnxruntime-genai does not build.
+# verified 2026-09-01
 #
 # math: lm_eval/tasks/minerva_math/utils.py asserts
 #   version("antlr4-python3-runtime").startswith("4.11")
@@ -66,6 +72,7 @@ IUSE="+api ifeval math sentencepiece statsmodels vllm"
 RDEPEND="
 	>=sci-ml/datasets-2.16.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/evaluate-0.4.0[${PYTHON_SINGLE_USEDEP}]
+	onnxruntime? ( sci-ml/transformers[${PYTHON_SINGLE_USEDEP}] )
 	vllm? ( >=dev-python/vllm-0.18.0[${PYTHON_SINGLE_USEDEP}] )
 	$(python_gen_cond_dep '
 		dev-python/dill[${PYTHON_USEDEP}]
@@ -97,6 +104,7 @@ RDEPEND="
 			>=dev-python/sympy-1.12[${PYTHON_USEDEP}]
 			~dev-python/math-verify-0.9.0[${PYTHON_USEDEP}]
 		)
+		onnxruntime? ( >=sci-libs/onnxruntime-1.23[python,${PYTHON_USEDEP}] )
 		sentencepiece? ( >=sci-ml/sentencepiece-0.1.98[${PYTHON_USEDEP}] )
 		statsmodels? ( dev-python/statsmodels[${PYTHON_USEDEP}] )
 	')

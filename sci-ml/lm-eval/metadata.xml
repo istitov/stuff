@@ -9,6 +9,7 @@
     <flag name="api">Wire dependencies for OpenAI/HF Inference / generic HTTP API model backends</flag>
     <flag name="ifeval">Enable instruction-following evaluation tasks (leaderboard_ifeval and friends) — checks generated text against structural constraints like length limits, language hints, and required keywords. Auto-downloads the NLTK punkt_tab tokenizer at task-load time (not deferred until eval); seed ~/nltk_data ahead of time on offline hosts.</flag>
     <flag name="math">Enable math-grading tasks (minerva_math, leaderboard math, hendrycks_math, etc.) — parses LaTeX answers and verifies symbolic equality between predicted and ground-truth solutions</flag>
+    <flag name="onnxruntime">Enable the raw ONNX Runtime model backend (<pkg>sci-libs/onnxruntime</pkg> built with USE=python), scoring a Model Builder ONNX export through a plain InferenceSession. Reaches execution providers the onnxruntime-genai backend does not build, notably ROCm and MIGraphX. Implements the log-likelihood path only — loglikelihood, multiple_choice and loglikelihood_rolling tasks; generative tasks are not supported yet.</flag>
     <flag name="sentencepiece">Pull sci-ml/sentencepiece for tasks that tokenise via SentencePiece</flag>
     <flag name="statsmodels">Pull dev-python/statsmodels for the discrim_eval task family</flag>
     <flag name="vllm">Wire dev-python/vllm for the vLLM model backend</flag>
