@@ -847,6 +847,15 @@ _TRELLIS_SNAPSHOT = (
     "so re-pinning is a manual commit-bump rather than a trackable version bump"
 )
 
+_TRITON_TRACKS_TORCH = (
+    "version is dictated by pytorch's .ci/docker/triton_version.txt, not by triton's own "
+    "release stream — v2.11.0 -> 3.6.0, v2.12.0 -> 3.7.0, v2.13.0 -> 3.7.1 (verified against "
+    "the tagged file 2026-09-02). 3.7.1 is the head of the line because 2.13.0 is the newest "
+    "torch in ::stuff or ::gentoo; triton 3.8.0 is pinned only by pytorch main, an unreleased "
+    "torch. Bumping triton is a step in a torch bump, never a standalone drift fix, so "
+    "sci-ml/pytorch is the canary that stays tracked"
+)
+
 SKIP_PKGS: dict[str, str] = {
     "sys-kernel/pf-sources":          _PF_LOCAL_ONLY,
     "sys-kernel/pf-sources-extended": _PF_LOCAL_ONLY,
@@ -879,6 +888,8 @@ SKIP_PKGS: dict[str, str] = {
     # tree hard-asserts on a specific version range.
     "dev-python/antlr4-python3-runtime":   "pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')",
     "dev-python/fsspec":                   "pinned to 2025.9.0 for sci-ml/datasets-4.3.0's <=2025.9.0-r0 ceiling; deliberately older than ::gentoo (2026.6.0/2026.7.0), so it flags every run and can never be bumped — goes away with datasets-4.3.0",
+    "dev-python/triton":                   _TRITON_TRACKS_TORCH,
+    "dev-python/triton-bin":               _TRITON_TRACKS_TORCH,
     # Snapshots ahead of upstream's only tag.
     "sci-ml/bigcode-eval":                 "we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind",
     "dev-python/diff-gaussian-rasterization": _TRELLIS_SNAPSHOT,

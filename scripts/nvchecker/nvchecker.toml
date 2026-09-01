@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (289) ---
+# --- pypi (288) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -978,10 +978,6 @@ pypi = "trampoline"
 source = "pypi"
 pypi = "transforms3d"
 
-["dev-python/triton-bin"]
-source = "pypi"
-pypi = "triton"
-
 ["dev-python/typepy"]
 source = "pypi"
 pypi = "typepy"
@@ -1166,7 +1162,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (220) ---
+# --- github (219) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1794,12 +1790,6 @@ prefix = "v"
 ["dev-python/toml"]
 source = "github"
 github = "uiri/toml"
-use_max_tag = true
-prefix = "v"
-
-["dev-python/triton"]
-source = "github"
-github = "triton-lang/triton"
 use_max_tag = true
 prefix = "v"
 
@@ -2907,6 +2897,8 @@ prefix = "v"
 # ["dev-python/pyside"] skipped: custom upstream at wiki.qt.io; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/setuptools-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/triton"] skipped: version is dictated by pytorch's .ci/docker/triton_version.txt, not by triton's own release stream — v2.11.0 -> 3.6.0, v2.12.0 -> 3.7.0, v2.13.0 -> 3.7.1 (verified against the tagged file 2026-09-02). 3.7.1 is the head of the line because 2.13.0 is the newest torch in ::stuff or ::gentoo; triton 3.8.0 is pinned only by pytorch main, an unreleased torch. Bumping triton is a step in a torch bump, never a standalone drift fix, so sci-ml/pytorch is the canary that stays tracked
+# ["dev-python/triton-bin"] skipped: version is dictated by pytorch's .ci/docker/triton_version.txt, not by triton's own release stream — v2.11.0 -> 3.6.0, v2.12.0 -> 3.7.0, v2.13.0 -> 3.7.1 (verified against the tagged file 2026-09-02). 3.7.1 is the head of the line because 2.13.0 is the newest torch in ::stuff or ::gentoo; triton 3.8.0 is pinned only by pytorch main, an unreleased torch. Bumping triton is a step in a torch bump, never a standalone drift fix, so sci-ml/pytorch is the canary that stays tracked
 # ["dev-python/unittest-or-fail"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/utils3d"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["dev-python/vox2seq"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
