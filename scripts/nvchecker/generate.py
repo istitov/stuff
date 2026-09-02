@@ -758,6 +758,27 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "use_latest_release": True,
         "prefix": "v",
     },
+    # openai/codex tags releases `rust-v<PV>`, not `v<PV>`, and its tag space is
+    # full of CI debris -- `winget-test-rust-v...`, doubled-prefix strays like
+    # `rust-vv0.99.0-alpha.8` and `rust-vrust-v0.147.0-alpha.9`, plus a constant
+    # stream of `-alpha.N` prereleases. The auto-derived stanza (use_max_tag +
+    # prefix "v") resolved to `winget-test-rust-v0.106.0-alpha.9`: junk, and an
+    # OLDER alpha than what we ship, so it would have reported permanent bogus
+    # drift while hiding real releases. use_latest_release skips every tag that
+    # is not a published, non-prerelease release, which is the same gate the
+    # bump itself has to clear anyway.
+    #
+    # The real constraint on bumping codex is downstream of this: the ebuild
+    # fetches its crate tarball from the THIRD-PARTY gentoo-zh-drafts/codex,
+    # which publishes per release. If this flags a version that repo has not
+    # built a tarball for yet, the bump waits. verified 2026-09-02 (resolves
+    # 0.152.1, matching openai/codex releases/latest).
+    "dev-util/codex": {
+        "source": "github",
+        "github": "openai/codex",
+        "use_latest_release": True,
+        "prefix": "rust-v",
+    },
     # stable-diffusion.cpp cuts a GitHub *release* per master commit, tagged
     # master-<build>-<shorthash> (e.g. master-767-885f01a); the overlay PV is
     # 0_pre<build>. use_latest_release (NOT use_max_tag) is mandatory: the raw

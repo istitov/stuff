@@ -2736,7 +2736,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (21) ---
+# --- special (22) ---
 
 ["app-text/mupdf"]
 source = "regex"
@@ -2804,6 +2804,12 @@ regex = '"number"\s*:\s*"([^"]+)"'
 source = "regex"
 url = "https://www.ctan.org/json/2.0/pkg/latexmk"
 regex = '"number"\s*:\s*"([^"]+)"'
+
+["dev-util/codex"]
+source = "github"
+github = "openai/codex"
+use_latest_release = true
+prefix = "rust-v"
 
 ["dev-util/nvidia-cuda-toolkit"]
 source = "regex"
