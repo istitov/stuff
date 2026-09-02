@@ -118,7 +118,7 @@ src_prepare() {
 	# System-mode launch path for the bundled studio backend (skip the
 	# ~/.unsloth/studio venv re-exec + install.sh); inert without USE=studio and
 	# without UNSLOTH_STUDIO_SYSTEM=1 at runtime.
-	use studio && PATCHES+=( "${FILESDIR}/${P}-system-studio.patch" )
+	use studio && PATCHES+=( "${FILESDIR}/${PN}-system-studio.patch" )
 	distutils-r1_src_prepare
 }
 
