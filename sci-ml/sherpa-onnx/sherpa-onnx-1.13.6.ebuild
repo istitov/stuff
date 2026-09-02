@@ -20,6 +20,16 @@ HOMEPAGE="
 # what the cmake modules look for. Sub-deps (kissfft via
 # kaldi-native-fbank, kaldifst via kaldi-decoder) use the same global
 # CMAKE_SOURCE_DIR fallback so the same staging directory works.
+#
+# kissfft is a .zip on purpose -- do NOT "fix" pkgcheck's TarballAvailable
+# here. The archive is not ours to choose: kaldi-native-fbank ships its own
+# cmake/kissfft.cmake, which searches possible_file_locations for the exact
+# name kissfft-<sha>.zip (${CMAKE_SOURCE_DIR}/ among them, which is where
+# src_unpack puts it) and then verifies
+# SHA256=497103e664168ebe39580b757adbe616f6cf85a16572af581ca7bc42d0ab13fd,
+# the hash of the .zip. Switching to the GitHub .tar.gz breaks the filename
+# match and the hash check both. verified 2026-09-02 against
+# kaldi-native-fbank-1.22.3.
 SRC_URI="
 	https://github.com/k2-fsa/sherpa-onnx/archive/refs/tags/v${PV}.tar.gz
 		-> ${P}.gh.tar.gz
