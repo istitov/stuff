@@ -77,6 +77,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=dev-python/kornia-0.7.1[${PYTHON_SINGLE_USEDEP}]
 	)
 	opengl? (
+		dev-python/comfy-angle-bin[${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
 			>=dev-python/pyopengl-3.1.8[${PYTHON_USEDEP}]
 		')
@@ -100,12 +101,19 @@ RDEPEND="${PYTHON_DEPS}
 # exists. verified 2026-06-15.
 #
 # 0.27.0 dropped glfw (no remaining consumer). Its only PyOpenGL consumer,
-# comfy_extras/nodes_glsl.py, now imports comfy_angle first to pre-load the
-# ANGLE EGL/GLES runtime. comfy-angle (a Comfy-Org binary wheel) isn't packaged
-# here yet, so the GLSL shader nodes stay unavailable regardless of USE=opengl;
-# init_builtin_extra_nodes() catches the missing import and skips that node file
-# (no startup crash). USE=opengl still installs PyOpenGL for when comfy-angle
-# lands. verified 2026-07-01.
+# comfy_extras/nodes_glsl.py, imports comfy_angle first to pre-load the ANGLE
+# EGL/GLES runtime, so without it init_builtin_extra_nodes() catches the
+# ImportError and silently skips that node file -- no startup crash, but the
+# GLSL shader nodes are simply absent.
+#
+# comfy-angle HAS since been packaged as dev-python/comfy-angle-bin (it ships
+# the comfy_angle module nodes_glsl.py imports), so USE=opengl now pulls it
+# alongside PyOpenGL instead of installing PyOpenGL for a feature that could
+# not load. Earlier versions predate the package and left USE=opengl inert.
+# Upstream lists comfy-angle unpinned under "non essential dependencies" in
+# requirements.txt, hence the unversioned atom. The node file's own runtime
+# behaviour on a GL-capable session has NOT been re-verified here -- only that
+# the import target now exists. verified 2026-09-03 against v0.34.3
 BDEPEND="${PYTHON_DEPS}"
 
 src_install() {
