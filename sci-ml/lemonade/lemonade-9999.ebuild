@@ -44,9 +44,16 @@ RESTRICT="network-sandbox"
 # ships them; without it the build dies at "libdrm/amdgpu.h: No such file or
 # directory". AMD hosts satisfy this incidentally via VIDEO_CARDS; a non-AMD
 # host does not. verified 2026-07-18
+#
+# No app-arch/brotli: upstream FetchContent-declares and links brotli only
+# inside if(APPLE) blocks, so nothing on the Linux path uses it. zstd carries
+# upstream's floor, MIN_ZSTD_VERSION 1.5.5. Both re-checked against master's
+# CMakeLists.txt (not the release tag) because this ebuild builds master: the
+# brotli mentions sit at 332-339 and 423-442, inside the APPLE guards at
+# 331-339 and 422-442. Keeps -9999 consistent with the released ebuilds, which
+# have carried both facts since 11.8.x. verified 2026-09-03 against master
 RDEPEND="
-	app-arch/brotli:=
-	app-arch/zstd:=
+	>=app-arch/zstd-1.5.5:=
 	>=dev-cpp/cli11-2.4.2
 	>=dev-cpp/cpp-httplib-0.26.0
 	>=dev-cpp/nlohmann_json-3.11.3
