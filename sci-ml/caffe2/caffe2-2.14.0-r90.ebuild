@@ -1,0 +1,618 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{12..14} )
+# ROCM_VERSION selects rocm.eclass's target-list branch, which sets this
+# package's own amdgpu_targets_* IUSE and ROCM_REQUIRED_USE. The 10.* branch is
+# a superset of 6.1's: it adds gfx1152/gfx1153 and promotes gfx1102/1103/1150/
+# 1151 to official. Nothing here uses ROCM_USEDEP, so this does not constrain
+# the ROCm libraries themselves. verified 2026-08-30.
+ROCM_VERSION=10.0
+inherit python-single-r1 cmake cuda flag-o-matic prefix rocm
+
+MYPN=pytorch
+MYP=${MYPN}-${PV}
+
+# caffe2-2.9.0 depends on future version of composable kernel
+# TODO: replace it with DEPEND in the future
+CK_COMMIT=5a74dec07a894484b9489d0c0e00cd3b52652d18
+CK_P=composable_kernel-${CK_COMMIT:0:8}
+
+FLASH_PV=2.7.4
+FLASH_PN=flash-attention
+FLASH_P=${FLASH_PN}-${FLASH_PV}
+FLASH_ATT_URI="https://github.com/Dao-AILab/${FLASH_PN}/archive/refs/tags/v${FLASH_PV}.tar.gz -> ${FLASH_P}.gh.tar.gz"
+
+DESCRIPTION="A deep learning framework"
+HOMEPAGE="https://pytorch.org/"
+SRC_URI="
+	https://github.com/pytorch/${MYPN}/archive/refs/tags/v${PV}.tar.gz -> ${MYP}.tar.gz
+	rocm? (
+		https://github.com/ROCm/composable_kernel/archive/${CK_COMMIT}.tar.gz
+		-> ${CK_P}.tar.gz
+	)
+	cuda? (
+		flash? ( ${FLASH_ATT_URI} )
+		memefficient? ( ${FLASH_ATT_URI} )
+	)
+"
+
+S="${WORKDIR}"/${MYP}
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="cuda cusparselt distributed fbgemm flash gloo kineto memefficient
+	mimalloc mkl mpi nccl nnpack +numpy onednn openblas opencl openmp qnnpack
+	rocm xnnpack"
+RESTRICT="test"
+REQUIRED_USE="
+	${PYTHON_REQUIRED_USE}
+	mpi? ( distributed )
+	gloo? ( distributed )
+	?? ( cuda rocm )
+	rocm? (
+		|| ( ${ROCM_REQUIRED_USE} )
+		memefficient? ( flash )
+	)
+	cusparselt? ( || ( cuda rocm ) )
+	flash? ( || ( cuda rocm ) )
+	memefficient? ( || ( cuda rocm ) )
+	nccl? ( rocm )
+"
+
+# FBGEMM: the 2.11-2.13 incompatibility is GONE at 2.14.0, but the cap is kept
+# deliberately. FBGEMM 1.7 dropped a template parameter from fbgemm::Quantize
+# (was Quantize<T, LEGACY>, now Quantize<T>) and the 2.13 source called the
+# 2-arg form, which is why those ebuilds cap below 1.5. Every call site in
+# 2.14.0 -- aten/src/ATen/native/QuantizedLinear.cpp, quantized/
+# AffineQuantizerBase.cpp and quantized/cpu/kernels/QuantizedOpKernels.cpp --
+# now uses the 1-arg form, and no 2-arg call remains anywhere under aten/.
+#
+# That form compiles against BOTH series, because 1.4's declaration is
+# `template <typename T, bool LEGACY = true>` -- the second parameter is
+# defaulted, so Quantize<int8_t> resolves there too. So the cap is no longer
+# forced by the API. It stays because only the 1.4 series is build-verified
+# here; 1.7 selects the non-LEGACY rounding path and that has NOT been tested
+# against this source. Lift it only after a build+run check against
+# >=sci-ml/FBGEMM-1.7, not on the API reading alone. verified 2026-09-02
+
+# The aotriton atom NO LONGER DIVERGES FROM UPSTREAM. At 2.13.0 we pinned
+# 0.13b against upstream's own __AOTRITON_VER "0.12b", because 0.12b ships no
+# rocm7.14/7.15 shim and ROCm 10.0 reports HIP 7.15, so caffe2[memefficient]
+# could not be built against the 10.0 stack. 2.14.0's
+# cmake/External/aotriton.cmake sets __AOTRITON_VER "0.13b" itself, so upstream
+# has converged on the version this fork already required and the atom below is
+# now simply agreement rather than an override. Nothing in this ebuild fetches
+# aotriton: it is a system dependency, found at build time through
+# AOTRITON_INSTALLED_PREFIX. verified 2026-09-02 against the 2.14.0 tarball.
+#
+# The !!<sci-ml/pytorch-2.13.0 blocker below: torch._C moved into this package
+# in 2.13, so an older pytorch -- which installs its own copy -- has to be
+# removed before the replacement file can be merged. (Comment lives here, not
+# beside the atom: a `#` inside the quoted RDEPEND is swallowed as literal text
+# and silently masks the rest of the depset.)
+RDEPEND="
+	${PYTHON_DEPS}
+	!!<sci-ml/pytorch-2.13.0
+	dev-cpp/abseil-cpp:=
+	dev-cpp/gflags:=
+	>=dev-cpp/glog-0.5.0:=
+	>=dev-libs/cpuinfo-2025.11.14
+	dev-libs/libfmt:=
+	dev-libs/protobuf:=
+	dev-libs/sleef
+	sci-ml/onnx
+	virtual/lapack
+	cuda? (
+		dev-libs/cudnn
+		>=sci-ml/cudnn-frontend-1.12.0:=
+		>=dev-util/nvidia-cuda-toolkit-12.9:=[profiler]
+		cusparselt? ( dev-libs/cusparselt )
+	)
+	fbgemm? ( >=sci-ml/FBGEMM-1.4 <sci-ml/FBGEMM-1.5 )
+	gloo? ( >=sci-ml/gloo-2025.06.04[cuda?,rocm?] )
+	kineto? ( ~sci-ml/kineto-0.4.0_p20260323 )
+	mimalloc? ( dev-libs/mimalloc )
+	mpi? ( virtual/mpi )
+	nnpack? (
+		sci-ml/NNPACK
+		dev-libs/pthreadpool
+	)
+	numpy? ( $(python_gen_cond_dep '
+		dev-python/numpy[${PYTHON_USEDEP}]
+	') )
+	onednn? ( sci-ml/oneDNN )
+	opencl? ( virtual/opencl )
+	qnnpack? (
+		sci-ml/gemmlowp
+		dev-libs/pthreadpool
+	)
+	rocm? (
+		nccl? ( >=dev-libs/rccl-6.3:= <dev-libs/rccl-11:= )
+		>=dev-util/hip-6.3:=       <dev-util/hip-11:=
+		>=dev-util/roctracer-6.3:= <dev-util/roctracer-11:=
+		>=sci-libs/hipBLAS-6.3:=   <sci-libs/hipBLAS-11:=[rocsolver(+)]
+		>=sci-libs/hipBLASLt-6.3:= <sci-libs/hipBLASLt-11:=
+		>=sci-libs/hipFFT-6.3:=    <sci-libs/hipFFT-11:=
+		>=sci-libs/hipRAND-6.3:=   <sci-libs/hipRAND-11:=
+		>=sci-libs/hipSOLVER-6.3:= <sci-libs/hipSOLVER-11:=
+		>=sci-libs/hipSPARSE-6.3:= <sci-libs/hipSPARSE-11:=
+		>=sci-libs/miopen-6.3:=    <sci-libs/miopen-11:=
+		>=sci-libs/rocBLAS-6.3:=   <sci-libs/rocBLAS-11:=
+		>=sci-libs/rocRAND-6.3:=   <sci-libs/rocRAND-11:=
+		>=sci-libs/rocSOLVER-6.3:= <sci-libs/rocSOLVER-11:=
+		memefficient? ( =sci-libs/aotriton-bin-0.13*:= )
+		distributed? ( >=dev-util/rocm-smi-6.3:= <dev-util/rocm-smi-11:= )
+		cusparselt? ( >=sci-libs/hipsparselt-6.3:= <sci-libs/hipsparselt-11:= )
+	)
+	distributed? (
+		!rocm? ( sci-ml/tensorpipe[cuda?] )
+		dev-cpp/cpp-httplib:=
+	)
+	xnnpack? (
+		>=sci-ml/XNNPACK-2024.11
+		dev-libs/pthreadpool
+	)
+	mkl? ( sci-libs/mkl )
+	openblas? ( sci-libs/openblas )
+"
+
+DEPEND="
+	${RDEPEND}
+	dev-cpp/nlohmann_json
+	dev-libs/flatbuffers
+	dev-libs/FXdiv
+	dev-libs/pocketfft
+	dev-libs/psimd
+	sci-ml/FP16
+	$(python_gen_cond_dep '
+		<dev-python/pybind11-3.0.5[${PYTHON_USEDEP}]
+		dev-python/pyyaml[${PYTHON_USEDEP}]
+		dev-python/typing-extensions[${PYTHON_USEDEP}]
+	')
+	cuda? ( >=dev-libs/cutlass-3.9.2[tools(+)] )
+	onednn? ( sci-ml/ideep )
+	rocm? (
+		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-11:=
+		>=sci-libs/rocPRIM-6.3:=   <sci-libs/rocPRIM-11:=
+		>=sci-libs/rocThrust-6.3:= <sci-libs/rocThrust-11:=
+	)
+	qnnpack? ( dev-libs/clog )
+"
+
+# Nineteen patches below, in three groups: eight ${P}-named REBASES, one
+# ${P}-named NEW patch (rocm-hipfile-optional, annotated where it appears), and
+# ten shared ${PN}-<oldver> files carried unchanged from the 2.13.0 ebuilds --
+# so nine ${P} entries in total, of which only the eight were re-derived.
+#
+# Of those eight, three would not apply to 2.14.0 at all; the other five applied
+# only "with fuzz", i.e. patch discarding context lines and guessing placement
+# -- two of them at fuzz 2, the maximum. eapply tolerates fuzz, so those would
+# have built, but a guessed hunk is not a verified one. A patch that still
+# applies exactly keeps its old shared name; do not rename one just because the
+# version moved, or pkgcheck -k DuplicateFiles starts reporting the copies.
+#
+# NB when re-deriving these: the patch baseline is NOT the raw tarball. The
+# src_prepare() below runs its own sed pass (unbundle fmt, drop third_party
+# add_subdirectory, rewrite the aotriton libdir, ...) BEFORE cmake_src_prepare
+# applies PATCHES, and those seds hit the very files the patches touch --
+# cmake/Dependencies.cmake, torch/CMakeLists.txt, CMakeLists.txt,
+# c10/CMakeLists.txt, aten/src/ATen/CMakeLists.txt and
+# cmake/External/aotriton.cmake. Rebasing against the unmodified tarball
+# produces patches that verify green and then die in the real prepare phase.
+# Every patch below was checked against the post-sed tree and applies with zero
+# failures, zero fuzz and zero rejects; only plain line offsets remain.
+#
+# Forking a version-named copy when a shared patch stops applying exactly is
+# this package's existing habit -- aotriton-fixes, mkl-public-scrub,
+# rocm-distributed-link and removekineto already exist in two generations each.
+# verified 2026-09-02
+PATCHES=(
+	"${FILESDIR}"/${P}-unbundle_fmt.patch.xz
+	"${FILESDIR}"/${P}-unbundle_kineto.patch.xz
+	# 2.14.0 renamed ${Torch_SOURCE_DIR} to ${CMAKE_SOURCE_DIR} in the
+	# PocketFFT block, which is the whole reason the 2.8.0 patch missed.
+	"${FILESDIR}"/${P}-unbundle_pocketfft.patch.xz
+	"${FILESDIR}"/${PN}-2.5.1-cudnn_include_fix.patch.xz
+	"${FILESDIR}"/${P}-cpp-httplib.patch.xz
+	"${FILESDIR}"/${PN}-2.5.1-glog-0.6.0.patch.xz
+	"${FILESDIR}"/${PN}-2.7.0-glog-0.7.1.patch.xz
+	# 2.13.0 duplicated the "check if glog is initialized" hack into
+	# c10/util/Exception.cpp, still calling the internal
+	# glog_internal_namespace_::IsGoogleLoggingInitialized(); system glog 0.6.0
+	# only exports the public ::google::IsGoogleLoggingInitialized(), so link
+	# fails. Mirror the Logging.cpp glog patch here. Still needed at 2.14.0,
+	# where the file is unchanged. # verified 2026-09-02
+	"${FILESDIR}"/${PN}-2.13.0-glog-exception-init.patch.xz
+	# Still the shared 2.12.0 patch: its context is ${CMAKE_INSTALL_LIBDIR},
+	# which the libaotriton-path sed in src_prepare puts there, so it applies
+	# exactly at 2.14.0 too.
+	"${FILESDIR}"/${PN}-2.12.0-aotriton-fixes.patch.xz
+	"${FILESDIR}"/${PN}-2.8.0-rocm-minus-flash.patch.xz
+	"${FILESDIR}"/${P}-rocm-distributed-link.patch.xz
+	# NEW AT 2.14.0. Upstream added a REQUIRED find_package(hipfile) for
+	# ROCm >= 7.14, but hipFile is not packaged in ::gentoo or ::stuff (its own
+	# repo is retired; the source moved into ROCm/rocm-systems), so configure
+	# died on the 10.0 stack here. cmake/Dependencies.cmake already contains
+	# upstream's own fallback -- `if(USE_CUFILE AND NOT hipfile_FOUND)` turns
+	# USE_CUFILE off -- which the REQUIRED makes unreachable. This drops only
+	# the REQUIRED, so the fallback runs as written and GPUDirect Storage
+	# (torch.cuda.gds) is simply unavailable. Drop the patch once hipFile is
+	# packaged. # verified 2026-09-02
+	"${FILESDIR}"/${P}-rocm-hipfile-optional.patch.xz
+	"${FILESDIR}"/${PN}-2.9.1-torch_cpu.patch.xz
+	# The third_party include-dir block this drops is intact at 2.14.0, but
+	# upstream appended a perfetto section right after it, so the trailing
+	# context no longer matched.
+	"${FILESDIR}"/${P}-gentoo.patch.xz
+	"${FILESDIR}"/${P}-mimalloc.patch.xz
+	# 2.14.0 adds XPU_RUNTIME/XPU_DRIVER to the orphaned-GPU-activity list in
+	# KinetoEvent::externalId(); both are carried into the inverted, guarded
+	# form so the guard still matches upstream's own set exactly.
+	"${FILESDIR}"/${P}-removekineto-pr178960.patch.xz
+
+	# 2.13.0 moved setup.py's submodule check into cmake/PreBuildSteps.cmake,
+	# which FATAL_ERRORs on the (intentionally empty) third_party submodules of
+	# a tarball build. Guard the whole block behind a .git check so it no-ops
+	# here (deps are system / prestaged). # verified 2026-07-18
+	"${FILESDIR}"/${PN}-2.13.0-prebuildsteps-tarball-guard.patch.xz
+
+	# 2.13.0's cmake/PostBuildSteps.cmake runs wrap_headers.py via install(CODE)
+	# against ${CMAKE_INSTALL_PREFIX}/include with no ${DESTDIR} prefix, so it
+	# writes to the live /usr/include instead of the image (sandbox denies it).
+	# Prepend $ENV{DESTDIR}. # verified 2026-07-18
+	"${FILESDIR}"/${PN}-2.13.0-wrap-headers-destdir.patch.xz
+
+	# stuff overlay only: scrub MKL MPI / cluster libs and force GNU
+	# OpenMP threading in caffe2::mkl's public link interface so that
+	# downstream consumers (vllm, custom torch C++ ext) link cleanly
+	# on hosts with the basic intel-oneapi-mkl package (no Cluster
+	# Edition, no Intel Compiler / libiomp5). Drop when an equivalent
+	# upstream fix lands. # verified 2026-05-08 against 2.11.0;
+	# cmake/public/mkl.cmake context identical at 2.12.0, 2.13.0 and 2.14.0.
+	"${FILESDIR}"/${PN}-2.12.0-mkl-public-scrub.patch.xz
+)
+
+src_prepare() {
+	# files/*.patch ship xz-compressed to stay under pkgcheck's 50K
+	# TotalSizeViolation cap; eapply(1) does not decompress, so expand
+	# every files/ patch into ${T} and repoint PATCHES (and the
+	# composable-kernel patch below) at the plain-text copies.
+	local p b i
+	mkdir -p "${T}"/patches || die
+	for p in "${FILESDIR}"/*.patch.xz; do
+		b=${p##*/}
+		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
+	done
+	for i in "${!PATCHES[@]}"; do
+		b=${PATCHES[i]##*/}
+		PATCHES[i]="${T}/patches/${b%.xz}"
+	done
+
+	if use cuda && ( use flash || use memefficient ); then
+		mv "${WORKDIR}"/${FLASH_P}/* third_party/${FLASH_PN}/ || die
+	fi
+	filter-lto #bug 862672
+
+	# Unbundle fmt
+	sed -i \
+		-e 's|::fmt-header-only||' \
+		c10/CMakeLists.txt \
+		cmake/Dependencies.cmake \
+		torch/CMakeLists.txt \
+		|| die
+
+	# tensorpipe is in system, not a build target of caffe2
+	sed -e '/target_compile_options_if_supported(tensorpipe/d' -i cmake/Dependencies.cmake || die
+
+	# Drop third_party from CMake tree
+	sed -i \
+		-e '/add_subdirectory.*third_party/d' \
+		CMakeLists.txt \
+		cmake/Dependencies.cmake \
+		cmake/ProtoBuf.cmake \
+		aten/src/ATen/CMakeLists.txt \
+		|| die
+
+	# 2.13.0's cmake/FileMirroring.cmake FATAL_ERRORs on CUDA builds when the
+	# bundled cutlass submodule's CuTeDSL grouped_gemm.py example is absent --
+	# it is, because we unbundle cutlass and build against system
+	# dev-libs/cutlass. That file is only an optional Blackwell CuTeDSL
+	# grouped-GEMM template vendored into torch/_inductor; the single
+	# FATAL_ERROR in the file is this check, so downgrade it to STATUS and let
+	# the unbundled build configure. Drop if cutlass is ever prestaged.
+	# verified 2026-08-08
+	sed -i -e 's/message(FATAL_ERROR/message(STATUS/' cmake/FileMirroring.cmake || die
+
+	# 2.13.0 added FMT_NO_UNIQUE_ADDRESS compile-defs on the bundled fmt /
+	# fmt-header-only targets, which no longer exist once fmt is unbundled
+	# (system dev-libs/libfmt, add_subdirectory dropped above); drop those two
+	# lines (2.12.0 had no such block and built fine). # verified 2026-07-18
+	sed -i \
+		-e '/target_compile_definitions(fmt.*FMT_NO_UNIQUE_ADDRESS/d' \
+		cmake/Dependencies.cmake \
+		|| die
+	# Change libc10* path
+	sed -i \
+		-e "/EXPORT/s|DESTINATION lib)|DESTINATION $(get_libdir))|" \
+		c10/cuda/CMakeLists.txt \
+		c10/CMakeLists.txt \
+		c10/hip/CMakeLists.txt \
+		|| die
+
+	# Change libaotriton path
+	sed -i \
+		-e "s|}/lib|}/\${CMAKE_INSTALL_LIBDIR}|g" \
+		-e "/set(__AOTRITON_LIB/s|lib/|\${CMAKE_INSTALL_LIBDIR}/|g" \
+		cmake/External/aotriton.cmake \
+		|| die
+
+	# Noisy warnings from Logging.h
+	sed -i 's/-Wextra-semi//' cmake/public/utils.cmake || die
+
+	cmake_src_prepare
+	pushd torch/csrc/jit/serialization > /dev/null || die
+	flatc --cpp --gen-mutable --scoped-enums mobile_bytecode.fbs || die
+	popd > /dev/null || die
+
+	# prefixify the hardcoded paths, after all patches are applied
+	hprefixify \
+		aten/CMakeLists.txt \
+		caffe2/CMakeLists.txt \
+		cmake/Metal.cmake \
+		cmake/Modules/*.cmake \
+		cmake/Modules_CUDA_fix/FindCUDNN.cmake \
+		cmake/Modules_CUDA_fix/upstream/FindCUDA/make2cmake.cmake \
+		cmake/Modules_CUDA_fix/upstream/FindPackageHandleStandardArgs.cmake \
+		cmake/public/LoadHIP.cmake \
+		cmake/public/cuda.cmake \
+		cmake/Dependencies.cmake \
+		torch/CMakeLists.txt \
+		CMakeLists.txt
+
+	if use rocm; then
+		sed -e "s:/opt/rocm:/usr:" \
+			-e "s:lib/cmake:$(get_libdir)/cmake:g" \
+			-i cmake/public/LoadHIP.cmake || die
+
+		# TODO: delete, when caffe2 depends on systemwide composable_kernel
+		sed -e "s:third_party/composable_kernel:../composable_kernel-${CK_COMMIT}:g" \
+			-i aten/src/ATen/CMakeLists.txt || die
+
+		# Bug 959808: fix for gfx101x targets. Rebased onto the CK commit
+		# 2.14.0 pins and now a SINGLE hunk: upstream CK has since taken
+		# everything else this patch used to add (ck.hpp's buffer-resource and
+		# FMA guards, ck_tile/core/config.hpp's __gfx101__ define and
+		# CK_TILE_BUFFER_RESOURCE_3RD_DWORD, and the gfx101 entries in the six
+		# device_*_dl.hpp headers plus gridwise_tensor_rearrange.hpp). Only
+		# kernel_gemm_dpp still leaves gfx101x out of its ISA guard.
+		# verified 2026-09-02 against composable_kernel-5a74dec0
+		pushd "${WORKDIR}/composable_kernel-${CK_COMMIT}" > /dev/null || die
+		eapply "${T}"/patches/composable-kernel-5a74dec0-expand-isa.patch
+		popd > /dev/null || die
+
+		# Workaround for libc++ issue https://github.com/llvm/llvm-project/issues/100802
+		sed -e 's/std::memcpy/memcpy/g' -i torch/headeronly/util/Half.h || die
+
+		ebegin "HIPifying cuda sources"
+		FBCODE_BUILD_TOOL="buck" ${EPYTHON} tools/amd_build/build_amd.py || die
+		eend $?
+	fi
+}
+
+src_configure() {
+	if use cuda && [[ -z ${TORCH_CUDA_ARCH_LIST} ]]; then
+		ewarn "WARNING: caffe2 is being built with its default CUDA compute capabilities: 3.5 and 7.0."
+		ewarn "These may not be optimal for your GPU."
+		ewarn ""
+		ewarn "To configure caffe2 with the CUDA compute capability that is optimal for your GPU,"
+		ewarn "set TORCH_CUDA_ARCH_LIST in your make.conf, and re-emerge caffe2."
+		ewarn "For example, to use CUDA capability 7.5 & 3.5, add: TORCH_CUDA_ARCH_LIST=7.5 3.5"
+		ewarn "For a Maxwell model GPU, an example value would be: TORCH_CUDA_ARCH_LIST=Maxwell"
+		ewarn ""
+		ewarn "You can look up your GPU's CUDA compute capability at https://developer.nvidia.com/cuda-gpus"
+		ewarn "or by running /opt/cuda/extras/demo_suite/deviceQuery | grep 'CUDA Capability'"
+	fi
+
+	local mycmakeargs=(
+		-DBUILD_CUSTOM_PROTOBUF=OFF
+		-DBUILD_TEST=OFF
+		-DLIBSHM_INSTALL_LIB_SUBDIR="${EPREFIX}"/usr/$(get_libdir)
+		-DPython_EXECUTABLE="${PYTHON}"
+		-DTORCH_INSTALL_LIB_DIR="${EPREFIX}"/usr/$(get_libdir)
+		-DUSE_CCACHE=OFF
+		-DUSE_CUDA=$(usex cuda)
+		-DUSE_DISTRIBUTED=$(usex distributed)
+		-DUSE_FBGEMM=$(usex fbgemm)
+		-DUSE_FLASH_ATTENTION=$(usex flash)
+		-DUSE_GFLAGS=ON
+		-DUSE_GLOG=ON
+		-DUSE_GLOO=$(usex gloo)
+		-DUSE_ITT=OFF
+		-DUSE_KINETO=$(usex kineto)
+		-DUSE_KLEIDIAI=OFF # TODO
+		-DUSE_MAGMA=OFF # TODO: In GURU as sci-libs/magma
+		-DUSE_MEM_EFF_ATTENTION=$(usex memefficient)
+		-DUSE_MIMALLOC=$(usex mimalloc)
+		-DUSE_MKLDNN=$(usex onednn)
+		-DUSE_MPI=$(usex mpi)
+		-DUSE_NCCL=OFF
+		-DUSE_NNPACK=$(usex nnpack)
+		-DUSE_NUMA=OFF
+		-DUSE_NUMPY=$(usex numpy)
+		-DUSE_OPENCL=$(usex opencl)
+		-DUSE_OPENMP=$(usex openmp)
+		-DUSE_PYTORCH_QNNPACK=$(usex qnnpack)
+		-DUSE_PYTORCH_METAL=OFF
+		-DUSE_ROCM=$(usex rocm)
+		-DUSE_SYSTEM_CPUINFO=ON
+		-DUSE_SYSTEM_EIGEN_INSTALL=ON
+		-DUSE_SYSTEM_FP16=ON
+		-DUSE_SYSTEM_FXDIV=ON
+		-DUSE_SYSTEM_GLOO=ON
+		-DUSE_SYSTEM_NVTX=ON
+		-DUSE_SYSTEM_ONNX=ON
+		-DUSE_SYSTEM_PSIMD=ON
+		-DUSE_SYSTEM_PTHREADPOOL=ON
+		-DUSE_SYSTEM_PYBIND11=ON
+		-DUSE_SYSTEM_SLEEF=ON
+		-DUSE_SYSTEM_XNNPACK=$(usex xnnpack)
+		-DUSE_TENSORPIPE=$(usex distributed $(usex !rocm))
+		-DUSE_UCC=OFF
+		-DUSE_VALGRIND=OFF
+		-DUSE_XNNPACK=$(usex xnnpack)
+		-DUSE_XPU=OFF
+		-Wno-dev
+	)
+
+	if use mkl; then
+		mycmakeargs+=(-DBLAS=MKL)
+	elif use openblas; then
+		mycmakeargs+=(-DBLAS=OpenBLAS)
+	else
+		mycmakeargs+=(-DBLAS=Generic -DBLAS_LIBRARIES=)
+	fi
+
+	if use cuda; then
+		# bug 867706 926116
+		cuda_add_sandbox
+		addpredict "/dev/char/"
+
+		mycmakeargs+=(
+			-DUSE_CUDNN=ON
+			-DTORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST:-3.5 7.0}"
+			-DUSE_NCCL=OFF # TODO: NVIDIA Collective Communication Library
+			-DCMAKE_CUDA_FLAGS="$(cuda_gccdir -f | tr -d \")"
+			-DUSE_CUSPARSELT=$(usex cusparselt)
+		)
+
+		[[ -v CUDACXX ]] && export PYTORCH_NVCC="${CUDACXX}"
+
+		if use flash; then
+			export FLASH_ATTENTION_FORCE_BUILD="TRUE"
+			export FLASH_ATTN_CUDA_ARCHS="${CUDAARCHS:-${TORCH_CUDA_ARCH_LIST:-3.5 7.0}}"
+		fi
+
+	elif use rocm; then
+		export PYTORCH_ROCM_ARCH="$(get_amdgpu_flags)"
+
+		# 2.13.0's cmake/public/LoadHIP.cmake switched to CMake-native HIP and
+		# defaults the compiler to ${ROCM_PATH}/lib/llvm/bin/clang++ (i.e.
+		# /usr/lib/llvm/bin), but Gentoo slots llvm at /usr/lib/llvm/<N>/bin.
+		# Point HIP_CLANG_PATH at the real HIP clang. # verified 2026-07-18
+		export HIP_CLANG_PATH="$(hipconfig -l)"
+
+		if use memefficient; then
+			export AOTRITON_INSTALLED_PREFIX="${ESYSROOT}/usr"
+		fi
+
+		mycmakeargs+=(
+			-DUSE_NCCL=$(usex nccl)
+			-DUSE_SYSTEM_NCCL=ON
+			-DCMAKE_REQUIRE_FIND_PACKAGE_HIP=ON
+			-DCMAKE_DISABLE_FIND_PACKAGE_hipsparselt=$(usex !cusparselt) # disable automagic
+			-DUSE_ROCM_CK_SDPA=OFF # requires flash + aiter, works only on gfx90a/gfx942/gfx950
+		)
+
+		# ROCm libraries produce too much warnings
+		append-cxxflags -Wno-deprecated-declarations -Wno-unused-result -Wno-unused-value
+	fi
+
+	if use onednn; then
+		mycmakeargs+=(
+			-DMKLDNN_FOUND=ON
+			-DMKLDNN_LIBRARIES=dnnl
+			-DMKLDNN_INCLUDE_DIR="${ESYSROOT}/usr/include/oneapi/dnnl"
+		)
+	fi
+
+	cmake_src_configure
+}
+
+src_compile() {
+	PYTORCH_BUILD_VERSION=${PV} \
+	PYTORCH_BUILD_NUMBER=0 \
+	cmake_src_compile
+}
+
+python_install() {
+	python_domodule python/torch
+	mkdir "${D}"$(python_get_sitedir)/torch/bin || die
+	mkdir "${D}"$(python_get_sitedir)/torch/lib || die
+	mkdir "${D}"$(python_get_sitedir)/torch/include || die
+	ln -s ../../../../../include/torch \
+		"${D}$(python_get_sitedir)"/torch/include/torch || die # bug 923269
+	ln -s ../../../../../bin/torch_shm_manager \
+		"${D}"/$(python_get_sitedir)/torch/bin/torch_shm_manager || die
+	ln -s ../../../../../$(get_libdir)/libtorch_global_deps.so \
+		"${D}"/$(python_get_sitedir)/torch/lib/libtorch_global_deps.so || die
+}
+
+src_install() {
+	cmake_src_install
+
+	# 2.13.0's cmake/External/aotriton.cmake unconditionally bundles the system
+	# libaotriton_v2.so* + aotriton.images into DESTINATION "lib" (-> /usr/lib),
+	# which trips multilib-strict (64-bit ELF outside libdir) and duplicates
+	# sci-libs/aotriton-bin. aotriton is a system dep here (torch_hip links the
+	# /usr/$(get_libdir) copy), not bundled, so drop the stray /usr/lib copy.
+	# verified 2026-07-18
+	if use rocm && use memefficient; then
+		rm -rf "${ED}"/usr/lib/libaotriton_v2* "${ED}"/usr/lib/aotriton.images || die
+	fi
+
+	# 2.13.0 folds the torch *Python* package install into cmake (torch._C +
+	# version.py via DESTINATION "." plus cmake/PackageData.cmake), relative to
+	# CMAKE_INSTALL_PREFIX = /usr where upstream assumes the wheel's <root>/torch.
+	# So the payload leaks into /usr/ root and drops stray /usr/lib symlinks --
+	# /usr/lib/terminfo collides with sys-libs/ncurses and aborts the merge.
+	# Keep only the compiled torch._C: 2.13.0 moved its build to cmake and
+	# sci-ml/pytorch skips cmake (dontbuildagain patch), so nothing else ships it
+	# and `import torch` fails without it. Relocate _C into site-packages/torch
+	# (its NEEDED libtorch* resolve from /usr/lib64); the pure-python package is
+	# sci-ml/pytorch's, so whitelist the FHS dirs and drop the rest.
+	# verified 2026-07-22
+	# Do NOT make this conditional: an unmatched glob leaves the literal
+	# pattern in _c_ext[0], so a silent `if [[ -f ... ]]` skip would drop the
+	# extension, the whitelist loop below would then delete it along with the
+	# rest of the /usr leak, and the package would merge green while
+	# `import torch` died at runtime loading the torch/_C stub directory
+	# instead. That is exactly the consumption bug the 2.13.0 forge shipped
+	# once already, and `ebuild install` cannot catch it. Upstream has moved
+	# this destination twice (setuptools -> cmake at 2.13, cmake ->
+	# scikit-build-core at 2.14), so fail loudly when it moves again.
+	local _c_ext=( "${ED}"/usr/_C.cpython-*.so )
+	[[ -f ${_c_ext[0]} ]] || die "torch._C not found at ${ED}/usr/ -- upstream moved its install destination"
+	local _torchdir="${D}$(python_get_sitedir)/torch"
+	mkdir -p "${_torchdir}" || die
+	cp -p "${_c_ext[0]}" "${_torchdir}/" || die
+	local d
+	for d in "${ED}"/usr/*; do
+		case ${d##*/} in
+			bin|include|lib|lib64|share) ;;
+			*) rm -rf "${d}" || die ;;
+		esac
+	done
+	# caffe2 owns nothing directly under /usr/lib but the python site-packages
+	# tree (added by python_install below); drop the stray leaked symlinks.
+	# Gated on get_libdir: this is only true while the real libdir is lib64.
+	# On a libdir=lib profile every installed libtorch*/libc10* lands in
+	# /usr/lib -- which the whitelist loop above deliberately keeps -- and this
+	# find would delete the entire payload, merging an empty package.
+	if [[ $(get_libdir) != lib && -d ${ED}/usr/lib ]]; then
+		find "${ED}"/usr/lib -mindepth 1 -maxdepth 1 ! -name 'python*' \
+			-exec rm -rf {} + || die
+	fi
+
+	# Used by pytorch ebuild
+	insinto "/var/lib/${PN}"
+	doins "${BUILD_DIR}"/CMakeCache.txt
+
+	rm -rf python
+	mkdir -p python/torch || die
+	cp torch/version.py python/torch/ || die
+	python_install
+}
