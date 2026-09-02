@@ -27,7 +27,14 @@ REQUIRED_USE=${PYTHON_REQUIRED_USE}
 # torch.fx, jinja2 and filelock from the inductor codegen and its compile
 # cache, fsspec from torch.load/save on remote paths, setuptools from
 # torch.utils.cpp_extension. Lazy does not mean optional: upstream marks none
-# of them as an extra. verified 2026-07-27
+# of them as an extra. Restored as a frozen rollback for the vllm(torch==2.11)
+# stack (2.13.0-r91 forward otherwise). One deliberate deviation from torch
+# 2.11.0's Requires-Dist: it caps setuptools<82, but that cap is unsatisfiable
+# here -- it forces setuptools-79, which collides with any installed consumer
+# needing >=80 (e.g. dev-python/ipython) since no setuptools exists in [80,82).
+# The identical 2.13.0-r91 frontend runs on setuptools 83, and the cap only
+# guards torch's cpp_extension, so relax to the same >=77.0.3 floor (no upper
+# cap). verified 2026-08-08 against torch-2.11.0
 RDEPEND="
 	${PYTHON_DEPS}
 	~sci-ml/caffe2-${PV}[${PYTHON_SINGLE_USEDEP}]
@@ -53,10 +60,6 @@ PATCHES=(
 )
 
 src_prepare() {
-	# Replace placeholders added by cpp-extension.patch
-	sed -e "s|%LIB_DIR%|$(get_libdir)|g" \
-		-i torch/utils/cpp_extension.py || die
-
 	# Set build dir for pytorch's setup
 	sed -e "/BUILD_DIR/s|build|/var/lib/caffe2/|" \
 		-i tools/setup_helpers/env.py || die
@@ -66,6 +69,22 @@ src_prepare() {
 		-i pyproject.toml || die
 
 	distutils-r1_src_prepare
+
+	# Replace the placeholder introduced by cpp-extension-multilib.patch.
+	# This MUST run after distutils-r1_src_prepare, which is what applies
+	# PATCHES: the placeholder does not exist upstream, the patch puts it
+	# there, so running the sed first matched nothing, exited 0 and shipped
+	# the literal -- library_paths() then handed ROCm C++ extension builds
+	# /usr/%LIB_DIR% and $HIP_HOME/%LIB_DIR%. Same defect and same fix as
+	# 2.13.0-r92; only the ROCm branch is affected, since the CUDA and CPU
+	# branches compute lib_dir in Python. # verified 2026-09-03
+	sed -e "s|%LIB_DIR%|$(get_libdir)|g" \
+		-i torch/utils/cpp_extension.py || die
+	# Fail loudly if the placeholder ever stops being present, rather than
+	# silently shipping an unsubstituted path again.
+	if grep -q '%LIB_DIR%' torch/utils/cpp_extension.py; then
+		die "%LIB_DIR% placeholder survived substitution"
+	fi
 
 	hprefixify tools/setup_helpers/env.py
 }
