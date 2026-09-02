@@ -928,6 +928,19 @@ REQUIRED_USE="
 # 0.1.11 (0.1.10 raises TypeError at `import vllm`). Upstream rocm.txt still
 # pins tvm-ffi 0.1.10, but that is too old for the shipped xgrammar, so ROCm is
 # bumped to ~0.1.11 here to match CUDA (rocm import-verified 2026-08-12).
+#
+# pkgcheck reports UncheckableDep on this depset ("could not be checked due to
+# pkgcore limitation"). That is pkgcore declining to evaluate, not a defect it
+# found: it cannot statically resolve the protobuf any-of below --
+# `|| ( ~dev-python/protobuf-5.29.6 >=dev-python/protobuf-6.33.5 )` -- whose
+# branches carry version ranges and USE deps together. It is deliberate: vllm
+# works against the old 5.29 pin or a modern 6.33+, but not the range between
+# -- so do NOT flatten it to silence the check; that would misstate the real
+# constraint.
+#
+# Worth knowing when editing: the skip covers the WHOLE of RDEPEND, not just
+# the any-of. A typo or a nonexistent atom anywhere below will not be caught
+# by the linter here. Verify dep edits by hand. verified 2026-09-02
 RDEPEND="
 	~sci-ml/pytorch-2.13.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed,gloo]
