@@ -60,10 +60,22 @@ DEPEND="
 	llvm-runtimes/openmp
 "
 
+# dev-util/hipcc[amd-llvm] for the same reason as sci-libs/hipBLASLt: this
+# package builds the SAME TensileLite/rocisa machinery, from the bundled
+# hipblaslt.tar.gz + origami.tar.gz release assets unpacked above, and that
+# generator emits gfx11xx assembly the vanilla assembler rejects. rocm_use_clang()
+# only reaches llvm-core/rocm-llvm when the flag is set, so without it a build
+# dies deep in compilation with no resolver-level signal.
+#
+# NOT build-verified here, unlike hipBLASLt's: this package excludes gfx1150,
+# the only GPU on this host, so it has never been compiled locally. The
+# constraint is carried across by symmetry with the generator it shares. If it
+# ever turns out that hipsparselt's slice of TensileLite does not emit the
+# offending instructions, this is the line to revisit. # verified 2026-09-02
 BDEPEND="
 	${PYTHON_DEPS}
 	dev-build/rocm-cmake:${SLOT}
-	dev-util/hipcc:${SLOT}
+	dev-util/hipcc:${SLOT}[amd-llvm]
 	$(python_gen_any_dep "
 		dev-python/msgpack[\${PYTHON_USEDEP}]
 		dev-python/pyyaml[\${PYTHON_USEDEP}]
