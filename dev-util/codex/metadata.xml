@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Codex CLI is an AI-powered coding agent from OpenAI that runs in your
+    terminal. It can understand your codebase, execute commands, and help
+    you write, debug, and refactor code using natural language.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">openai/codex</remote-id>
+    <bugs-to>https://github.com/openai/codex/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
