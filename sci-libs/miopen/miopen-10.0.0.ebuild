@@ -21,7 +21,7 @@ LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
-IUSE="composable-kernel debug +hipblaslt +rocblas roctracer test"
+IUSE="composable-kernel debug +hipblaslt +rocblas roctracer"
 
 REQUIRED_USE="
 	${ROCM_REQUIRED_USE}
@@ -30,7 +30,8 @@ REQUIRED_USE="
 	)
 "
 
-# tests can freeze machine depending on gpu/kernel
+# Upstream's tests can freeze the machine depending on the GPU and kernel.
+# Do not expose dead USE=test plumbing while the test phase is restricted.
 RESTRICT="test"
 
 RDEPEND="
@@ -58,8 +59,6 @@ DEPEND="
 	dev-cpp/nlohmann_json
 	>=dev-libs/half-1.12.0-r1
 	hipblaslt? ( sci-libs/hipBLAS-common:${SLOT} )
-	test? ( dev-cpp/gtest )
-
 	amdgpu_targets_gfx908? ( =dev-cpp/frugally-deep-0.15* dev-cpp/eigen:3 )
 	amdgpu_targets_gfx940? ( =dev-cpp/frugally-deep-0.15* dev-cpp/eigen:3 )
 	amdgpu_targets_gfx941? ( =dev-cpp/frugally-deep-0.15* dev-cpp/eigen:3 )
@@ -71,7 +70,6 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-10.0.0-build-all-tests.patch
 	"${FILESDIR}"/${PN}-10.0.0-ciso646.patch
 )
 
@@ -127,7 +125,7 @@ src_configure() {
 		-DMIOPEN_USE_ROCBLAS=$(usex rocblas ON OFF)
 		-DMIOPEN_USE_HIPBLASLT=$(usex hipblaslt ON OFF)
 		-DMIOPEN_USE_COMPOSABLEKERNEL=$(usex composable-kernel ON OFF)
-		-DBUILD_TESTING=$(usex test ON OFF)
+		-DBUILD_TESTING=OFF
 		-DROCM_SYMLINK_LIBS=OFF
 		-DMIOPEN_HIP_COMPILER="${ESYSROOT}/usr/bin/hipcc"
 		# Take these from the toolchain rocm_use_clang just selected, not from
@@ -142,23 +140,7 @@ src_configure() {
 		-DMIOPEN_ENABLE_AI_KERNEL_TUNING=${use_ai_tuning}
 		-DMIOPEN_ENABLE_AI_IMMED_MODE_FALLBACK=${use_ai_tuning}
 	)
-
-	if use test; then
-		mycmakeargs+=(
-			-DMIOPEN_TEST_ALL=ON
-			-DMIOPEN_TEST_GDB=OFF
-		)
-		# needed by rocminfo
-		addpredict /dev/random
-		check_amdgpu
-	fi
-
 	cmake_src_configure
-}
-
-src_test() {
-	check_amdgpu
-	LD_LIBRARY_PATH="${BUILD_DIR}"/lib MIOPEN_SYSTEM_DB_PATH="${BUILD_DIR}"/share/miopen/db/ cmake_src_test -j1
 }
 
 src_install() {
