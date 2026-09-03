@@ -1,0 +1,20 @@
+Fixes multilib: %LIB_DIR% is substituted by the ebuild after PATCHES are
+applied (see src_prepare). ROCm is the only branch that needs it -- the CUDA
+and CPU branches derive lib_dir in Python.
+
+Rebased for 2.14.0, where the 2.10.0 patch applied only with fuzz 2.
+--- a/torch/utils/cpp_extension.py
++++ b/torch/utils/cpp_extension.py
+@@ -1786,10 +1786,10 @@
+         paths.extend([TORCH_LIB_PATH])
+ 
+     if device_type == "cuda" and IS_HIP_EXTENSION:
+-        lib_dir = 'lib'
++        lib_dir = '%LIB_DIR%'
+         paths.append(_join_rocm_home(lib_dir))
+         if HIP_HOME is not None:
+-            paths.append(os.path.join(HIP_HOME, 'lib'))
++            paths.append(os.path.join(HIP_HOME, '%LIB_DIR%'))
+     elif device_type == "cuda":
+         if cross_target_platform == "windows":
+             lib_dir = os.path.join('lib', 'x64')
