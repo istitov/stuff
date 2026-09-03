@@ -38,10 +38,11 @@ else
 fi
 
 LICENSE="MIT"
-IUSE="client test"
+IUSE="client"
 REQUIRED_USE="client? ( ${ROCM_REQUIRED_USE} )"
 
-# tests can freeze machine depending on gpu/kernel
+# Upstream's tests can freeze the machine depending on the GPU and kernel.
+# Do not expose dead USE=test plumbing while the test phase is restricted.
 RESTRICT="test"
 
 RDEPEND="${PYTHON_DEPS}
@@ -57,15 +58,6 @@ RDEPEND="${PYTHON_DEPS}
 	")
 "
 DEPEND="${RDEPEND}"
-BDEPEND="
-	test? (
-		dev-python/filelock[${PYTHON_USEDEP}]
-		dev-python/joblib[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=( pytest-{forked,xdist} )
-distutils_enable_tests pytest
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-5.4.2-fix-arch-parse.patch
@@ -188,10 +180,4 @@ src_install() {
 
 	# Remove extra copy
 	rm -rf "${ED}"/usr/cmake || die
-}
-
-# Test suite fails to start without this
-python_test() {
-	export ROCM_PATH="${EPREFIX}/usr"
-	epytest
 }
