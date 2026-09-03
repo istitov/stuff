@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    h5json provides a JSON representation of the HDF5 data model, together
+    with the h5tojson, jsontoh5 and h5jvalidate command line tools. It is the
+    serialization layer used by the HDF REST API and is a runtime requirement
+    of h5pyd from 1.0.0 onward.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">HDFGroup/hdf5-json</remote-id>
+    <remote-id type="pypi">h5json</remote-id>
+  </upstream>
+</pkgmetadata>
