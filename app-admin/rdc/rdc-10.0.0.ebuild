@@ -55,6 +55,9 @@ RDEPEND="
 	rocr? ( dev-libs/rocr-runtime:${SLOT} )
 "
 DEPEND="${RDEPEND}"
+BDEPEND="
+	>=net-libs/grpc-1.78.1
+"
 
 src_configure() {
 	local mycmakeargs=(
