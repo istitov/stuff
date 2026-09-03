@@ -21,7 +21,6 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_SUBMODULES=()
 	EGIT_REPO_URI="https://github.com/ROCm/rocm-systems.git"
 	S="${WORKDIR}/${P}/projects/clr"
-	TEST_S="${WORKDIR}/${P}/projects/hip-tests"
 	HIP_S="${WORKDIR}/${P}/projects/hip"
 	SLOT="0/10.0"
 else
@@ -34,12 +33,8 @@ else
 	SRC_URI="
 		${MY_BASE}/clr.tar.gz -> rocm-clr-${PV}.tar.gz
 		${MY_BASE}/${PN}.tar.gz -> ${P}.tar.gz
-		test? (
-			${MY_BASE}/hip-tests.tar.gz -> hip-tests-${PV}.tar.gz
-		)
 	"
 	S="${WORKDIR}/clr/"
-	TEST_S="${WORKDIR}/hip-tests/catch"
 	HIP_S="${WORKDIR}/hip"
 	KEYWORDS="~amd64"
 	SLOT="0/$(ver_cut 1-2)"
@@ -47,9 +42,10 @@ fi
 
 LICENSE="MIT"
 
-IUSE="debug +hip numa opencl test video_cards_amdgpu video_cards_nvidia"
+IUSE="debug +hip numa opencl video_cards_amdgpu video_cards_nvidia"
 
-# many tests are broken; also tests run against installed version, not built one
+# Many tests are broken and the suite tests the installed runtime instead of
+# the build tree. Do not expose dead USE=test plumbing while it is restricted.
 RESTRICT="test"
 
 REQUIRED_USE="
@@ -71,12 +67,6 @@ DEPEND="
 BDEPEND="
 	video_cards_amdgpu? (
 		dev-util/hipcc:${SLOT}
-	)
-	test? (
-		media-libs/freeglut
-		$(llvm_gen_dep "
-			dev-util/spirv-llvm-translator:\${LLVM_SLOT}
-		")
 	)
 "
 RDEPEND="${DEPEND}
@@ -130,17 +120,9 @@ src_unpack() {
 	# rocm 7.2.4 release-asset tarballs carry their own clr/, hip/ and
 	# hip-tests/ top-level directories (7.2.3's unpacked flat, hence the
 	# manual wrapper dirs previously). Unpack directly into ${WORKDIR} so
-	# the tarball roots land where S=/HIP_S=/TEST_S= already expect them.
+	# the tarball roots land where S= and HIP_S= already expect them.
 	unpack "rocm-clr-${PV}.tar.gz"
 	unpack "${P}.tar.gz"
-	use test && unpack "hip-tests-${PV}.tar.gz"
-}
-
-hip_test_wrapper() {
-	local CMAKE_USE_DIR="${TEST_S}"
-	local BUILD_DIR="${TEST_S}_build"
-	cd "${TEST_S}" || die
-	"${@}"
 }
 
 src_prepare() {
@@ -203,22 +185,6 @@ src_prepare() {
 		-i opencl/khronos/headers/opencl2.2/tests/CMakeLists.txt || die
 
 	cmake_src_prepare
-
-	if use test; then
-		local PATCHES=()
-		# Of the four substitutions this branch used to make, only
-		# "-Wall -Wextra " still matches at 10.0. Dropped as silent no-ops:
-		# "-Werror " (gone from the catch CMakeLists),
-		# cmake_policy(SET CMP0037 OLD) (gone), and /opt/rocm/bin (gone from
-		# hipTestMain/hip_test_context.cc). Note RESTRICT="test" means this
-		# branch does not normally run, which is why they went unnoticed.
-		# verified 2026-08-30 against hip-tests-10.0.0.
-		grep -q -- '-Wall -Wextra ' "${TEST_S}/CMakeLists.txt" ||
-			die "hip-tests -Wall -Wextra anchor moved"
-		sed -e "s/-Wall -Wextra //" -i "${TEST_S}/CMakeLists.txt" || die
-
-		hip_test_wrapper cmake_src_prepare
-	fi
 }
 
 src_configure() {
@@ -271,38 +237,6 @@ src_configure() {
 	fi
 
 	cmake_src_configure
-
-	if use test; then
-		local mycmakeargs=(
-			-DCMAKE_MODULE_PATH="${TEST_S}/external/Catch2/cmake/Catch2"
-			-DROCM_PATH="${EPREFIX}/usr"
-			-DCMAKE_NO_SYSTEM_FROM_IMPORTED=ON
-			-Wno-dev
-
-			# 1) Use custom build of hipamd instead of system one
-			# 2) Build fails with libc++: https://github.com/llvm/llvm-project/issues/119076
-			-DCMAKE_CXX_FLAGS="-I${BUILD_DIR}/hipamd/include -stdlib=libstdc++"
-			-DCMAKE_EXE_LINKER_FLAGS="-L${BUILD_DIR}/hipamd/lib"
-		)
-		if use video_cards_amdgpu; then
-			mycmakeargs+=(
-				-DHIP_PLATFORM="amd"
-			)
-		elif use video_cards_nvidia; then
-			mycmakeargs+=(
-				-DHIP_PLATFORM="nvidia"
-			)
-		fi
-		hip_test_wrapper cmake_src_configure
-	fi
-}
-
-src_compile() {
-	cmake_src_compile
-
-	if use test; then
-		hip_test_wrapper cmake_src_compile build_tests
-	fi
 }
 
 src_install() {
@@ -326,27 +260,4 @@ src_install() {
 	if [[ $(get_libdir) != lib ]]; then
 		dosym -r "/usr/$(get_libdir)/libamdhip64.so" /usr/lib/libamdhip64.so
 	fi
-}
-
-src_test() {
-	check_amdgpu
-	export LD_LIBRARY_PATH="${BUILD_DIR}/hipamd/lib"
-	export ROCM_PATH="${EPREFIX}/usr"
-
-	# TODO: research how to test Vulkan-related features.
-	local CMAKE_SKIP_TESTS=(
-		Unit_hipExternalMemoryGetMappedBuffer_Vulkan_Positive_Read_Write
-		Unit_hipExternalMemoryGetMappedBuffer_Vulkan_Negative_Parameters
-		Unit_hipImportExternalMemory_Vulkan_Negative_Parameters
-		Unit_hipWaitExternalSemaphoresAsync_Vulkan_Positive_Binary_Semaphore
-		Unit_hipWaitExternalSemaphoresAsync_Vulkan_Positive_Multiple_Semaphores
-		Unit_hipWaitExternalSemaphoresAsync_Vulkan_Negative_Parameters
-		Unit_hipSignalExternalSemaphoresAsync_Vulkan_Positive_Binary_Semaphore
-		Unit_hipSignalExternalSemaphoresAsync_Vulkan_Positive_Multiple_Semaphores
-		Unit_hipSignalExternalSemaphoresAsync_Vulkan_Negative_Parameters
-		Unit_hipImportExternalSemaphore_Vulkan_Negative_Parameters
-		Unit_hipDestroyExternalSemaphore_Vulkan_Negative_Parameters
-	)
-
-	hip_test_wrapper cmake_src_test -j1
 }
