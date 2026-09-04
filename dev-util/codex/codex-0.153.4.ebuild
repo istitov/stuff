@@ -71,7 +71,7 @@ RUST_MIN_VER="1.95.0"
 # python3 .github/scripts/rusty_v8_bazel.py resolved-v8-crate-version
 RUSTY_V8_TAG="150.4.0"
 
-inherit cargo check-reqs toolchain-funcs
+inherit cargo check-reqs multiprocessing toolchain-funcs
 
 CHECKREQS_MEMORY="15G"
 CHECKREQS_DISK_BUILD="20G"
@@ -173,6 +173,21 @@ src_compile() {
 
 	# codex-core trait resolution overflows rustc's default 8MiB stack
 	export RUST_MIN_STACK=16777216
+
+	# The CHECKREQS_MEMORY gate above tests *total* RAM, but the OOM risk is
+	# really parallelism x per-rustc RAM: codex's codegen tail (codex-core,
+	# codex-tui, codex-exec) peaks ~5 GiB resident per rustc. So a host can
+	# clear the 15 GiB gate and still be OOM-killed at a high job count (e.g.
+	# 8 cores -> -j8 ~= 40 GiB). Clamp jobs so peak ~= jobs * 5 GiB fits total
+	# RAM; roomy hosts keep full parallelism, only memory-tight ones throttle.
+	local rustc_gib=5 memtotal_gib memjobs
+	memtotal_gib=$(($(awk '/^MemTotal:/{print $2}' /proc/meminfo) / 1048576))
+	memjobs=$(( memtotal_gib / rustc_gib ))
+	(( memjobs < 1 )) && memjobs=1
+	if (( $(makeopts_jobs) > memjobs )); then
+		einfo "Capping rustc jobs $(makeopts_jobs) -> ${memjobs} to fit ${memtotal_gib} GiB RAM (~${rustc_gib} GiB/rustc)"
+		local -x MAKEOPTS="-j${memjobs}"
+	fi
 
 	RUSTY_V8_ARCHIVE="${DISTDIR}/rusty_v8_${RUSTY_V8_TAG}_librusty_v8_release_${rusty_v8_triple}.a.gz" \
 	RUSTY_V8_SRC_BINDING_PATH="${DISTDIR}/rusty_v8_${RUSTY_V8_TAG}_src_binding_release_${rusty_v8_triple}.rs" \
