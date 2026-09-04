@@ -1,0 +1,31 @@
+Take the version from uv-dynamic-versioning instead of the monorepo script.
+
+griffelib is published out of the mkdocstrings/griffe monorepo, and its
+pyproject.toml reads the version by executing ../../scripts/get_version.py --
+a path two levels above the package root that the sdist does not ship. Left
+alone, hatchling dies in the build phase looking for it.
+
+The previous fix hardcoded `version = "<PV>"` into [project] and deleted the
+dynamic marker, which meant a fresh, version-named patch on every bump. The
+project already configures [tool.uv-dynamic-versioning] and build-requires
+uv-dynamic-versioning, so pointing the hatch version source at it instead is
+both smaller and version-independent: the ebuild supplies the value through
+UV_DYNAMIC_VERSIONING_BYPASS=${PV}, and this patch serves every release.
+
+Not reported upstream: the sdist layout is deliberate on their side (the
+force-include block pulls README/LICENSE/CHANGELOG the same way), so this is
+a downstream packaging concern rather than an upstream bug. verified
+2026-09-04.
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -48,9 +48,7 @@
+ pattern = '(?P<base>\d+\.\d+\.\d+)'
+ 
+ [tool.hatch.version]
+-source = "code"
+-path = "../../scripts/get_version.py"
+-expression = "get_version()"
++source = "uv-dynamic-versioning"
+ 
+ [tool.hatch.build.targets.sdist.force-include]
+ "../../CHANGELOG.md" = "CHANGELOG.md"
