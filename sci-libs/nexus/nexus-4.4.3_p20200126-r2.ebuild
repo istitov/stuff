@@ -23,7 +23,7 @@ RDEPEND="
 	dev-libs/libxml2
 	media-libs/libjpeg-turbo:=
 	sys-libs/readline
-	hdf4? ( sci-libs/hdf )
+	hdf4? ( <sci-libs/hdf-4.4:= )
 	hdf5? (
 		sci-libs/hdf5[zlib]
 		virtual/zlib:=
