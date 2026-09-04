@@ -23,5 +23,11 @@ RDEPEND="
 	>=dev-python/scipy-1.7.3[${PYTHON_USEDEP}]
 "
 
-EPYTEST_PLUGINS=()
+# 0.11.1's test suite imports hypothesis in five modules (test_fornberg,
+# test_nd_scipy, test_nd_statsmodels, test_nd_algopy, test_numdifftools)
+# and pyproject.toml's test extra declares hypothesis>=3.6, so the plugin
+# has to be loaded for USE=test to run at all. The whole chain
+# (hypothesis, hypothesis-gentoo, sortedcontainers) is stable on x86, so
+# this costs no keyword. verified 2026-09-04
+EPYTEST_PLUGINS=( hypothesis )
 distutils_enable_tests pytest
