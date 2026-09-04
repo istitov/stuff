@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    pla-util manages HomePlug AV2 power line adapters built around a Broadcom
+    system-on-a-chip (BCM60333, BCM60355, BCM60500). It talks to the adapter
+    directly over raw Ethernet, and can discover adapters on the subnet, read
+    identification, capability, network and PHY-rate information, check and set
+    the network membership key and the human-friendly id, and restart or
+    factory-reset the device.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">serock/pla-util</remote-id>
+    <bugs-to>https://github.com/serock/pla-util/issues</bugs-to>
+    <changelog>https://github.com/serock/pla-util/blob/main/CHANGELOG.md</changelog>
+  </upstream>
+</pkgmetadata>
