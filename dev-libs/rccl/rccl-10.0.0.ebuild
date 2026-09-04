@@ -68,9 +68,19 @@ RESTRICT="!test? ( test )"
 # header. ROCm 10.0 removed that include from ras.cc entirely, so there is
 # nothing left to guard and the hunks no longer apply.
 # verified 2026-08-29 against the therock-10.0 rccl asset.
-PATCHES=()
+PATCHES=(
+	"${FILESDIR}/${PN}-10.0.0-fix-missing-includes.patch"
+	"${FILESDIR}/${PN}-10.0.0-fix-nvtx-disabled.patch"
+)
 
 src_prepare() {
+	# ipc_init.cu uses std::cerr without including <iostream>.  This source file
+	# has CRLF line endings, so use an anchored edit instead of a patch hunk.
+	grep -qF '#include "ipc_mem_handler.h"' src/ipc_init.cu ||
+		die "ipc_mem_handler include anchor moved in src/ipc_init.cu"
+	sed -e '/#include "ipc_mem_handler.h"/a #include <iostream>' \
+		-i src/ipc_init.cu || die
+
 	# Don't install tests. There are TWO install sites in this file, both
 	# reachable only under USE=test (src_configure passes -DBUILD_TESTS), and
 	# both silent on no-match -- sed exits 0 either way, so a stale anchor

@@ -1,0 +1,49 @@
+From 29cad6bea8118b940ca919ebf5452d4ff661d593 Mon Sep 17 00:00:00 2001
+From: Gentoo <gentoo@localhost>
+Date: Fri, 4 Sep 2026 02:00:00 +0200
+Subject: [PATCH] Fix build with NVTX disabled
+
+Several translation units include nvtx.h directly after core.h has already
+selected nvtx_stub.h.  When NVTX_NO_IMPL is defined this declares nccl_domain
+twice.  Make nvtx.h honor the same switch as core.h, and provide the missing
+no-op NCCL_NVTX3_FUNC_RANGE macro in the stub.
+---
+ src/include/nvtx.h      | 4 ++++
+ src/include/nvtx_stub.h | 1 +
+ 2 files changed, 5 insertions(+)
+
+diff --git a/src/include/nvtx.h b/src/include/nvtx.h
+index 36182f5..b34fc0c 100644
+--- a/src/include/nvtx.h
++++ b/src/include/nvtx.h
+@@ -8,6 +8,9 @@
+ #ifndef NCCL_NVTX_H_
+ #define NCCL_NVTX_H_
+ 
++#ifdef NVTX_NO_IMPL
++#include "nvtx_stub.h"
++#else
+ #include "nvtx3/nvtx3.hpp"
+ #include "roctx.h"
+ 
+@@ -215,4 +218,5 @@ class ncclNvtxRange {
+ 
+ extern void initNvtxRegisteredEnums();
+ 
++#endif  // NVTX_NO_IMPL
+ #endif
+diff --git a/src/include/nvtx_stub.h b/src/include/nvtx_stub.h
+index 0fe8ae5..c6b0f0f 100644
+--- a/src/include/nvtx_stub.h
++++ b/src/include/nvtx_stub.h
+@@ -13,6 +13,7 @@ struct nccl_domain {
+ };
+ 
+ #define NVTX3_FUNC_RANGE_IN(domain)
++#define NCCL_NVTX3_FUNC_RANGE
+ #define nvtxNameOsThreadA(syscall, thread)
+ #define NVTX3_FUNC_WITH_PARAMS(N, T, P)
+ #define NVTX3_PAYLOAD(...) __VA_ARGS__
+-- 
+2.51.0
+

@@ -1,0 +1,40 @@
+From 8dc63870b267d66a497f08e53589bd6c8e675dfd Mon Sep 17 00:00:00 2001
+From: Gentoo <gentoo@localhost>
+Date: Fri, 4 Sep 2026 02:15:00 +0200
+Subject: [PATCH] Add headers required by direct uses
+
+rccl_common.h uses the NCCL algorithm and protocol counts provided by
+nccl_tuner.h without including it, which leaves users that do not reach it
+transitively unable to compile.  transport/net.cc also directly uses std::map
+without including map.
+---
+ src/include/rccl_common.h | 1 +
+ src/transport/net.cc      | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/src/include/rccl_common.h b/src/include/rccl_common.h
+index 4da8947..0b6356f 100644
+--- a/src/include/rccl_common.h
++++ b/src/include/rccl_common.h
+@@ -21,6 +21,7 @@ THE SOFTWARE.
+ */
+ #ifndef RCCL_COMMON_H_
+ #define RCCL_COMMON_H_
++#include "nccl_tuner.h"
+ #include "nccl_common.h"
+ #include "nccl.h"
+ #include "param.h"
+diff --git a/src/transport/net.cc b/src/transport/net.cc
+index a54e608..bbcc2eb 100644
+--- a/src/transport/net.cc
++++ b/src/transport/net.cc
+@@ -28,6 +28,7 @@
+ #include <dirent.h>
+ #include <linux/limits.h>
+ #include <mutex>
++#include <map>
+ 
+ static_assert(sizeof(ncclNetHandle_t) <= CONNECT_SIZE, "NET Connect info is too large");
+ 
+-- 
+2.51.0
