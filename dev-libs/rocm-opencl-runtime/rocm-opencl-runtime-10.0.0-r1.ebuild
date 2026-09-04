@@ -39,6 +39,10 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-6.2.4-fix-lib-version.patch"
+	# Without this, clCreateCommandQueue() segfaults outright on an AVX-512
+	# host. Same hunk as dev-util/hip's hip-10.0.0-aligned-new.patch -- both
+	# packages build amd::roc::VirtualGPU from the shared clr.tar.gz asset.
+	"${FILESDIR}/${PN}-10.0.0-aligned-new.patch"
 )
 
 src_unpack() {

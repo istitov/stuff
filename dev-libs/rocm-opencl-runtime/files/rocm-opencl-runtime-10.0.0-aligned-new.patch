@@ -1,0 +1,68 @@
+Honour over-aligned types in amd::ReferenceCountedObject.
+
+clCreateCommandQueue() segfaults on an AVX-512 host (-march=znver5):
+
+  amd::roc::VirtualGPU::VirtualGPU(...)                  <-- SIGSEGV
+  amd::roc::Device::createVirtualDevice(amd::CommandQueue*)
+  amd::HostQueue::HostQueue(...)
+  clCreateCommandQueueWithProperties
+  clCreateCommandQueue
+
+The faulting instruction is `vmovdqa64 %zmm0,-0x128(%rdi)` -- a 64-byte-ALIGNED
+AVX-512 store -- to an address that is only 16-byte aligned (observed: object
+base and store address both 48 mod 64), hence a general protection fault rather
+than a page fault.
+
+VirtualGPU declares `alignas(64) hsa_barrier_and_packet_t barrier_packet_ {}`
+and `alignas(64) hsa_amd_barrier_value_packet_t barrier_value_packet_ {}`
+(device/rocm/rocvirtual.hpp), so alignof(VirtualGPU) is 64. But it derives from
+amd::ReferenceCountedObject, which declares `operator new(size_t)`. A
+class-scope operator new HIDES the C++17 over-aligned overloads, so name lookup
+stops there and `new VirtualGPU(...)` never reaches
+::operator new(size_t, align_val_t). The object gets 16-byte-guaranteed memory
+while the compiler emits stores that assume 64.
+
+Without AVX-512 the vectorizer uses at most 32-byte stores, which the returned
+alignment happened to satisfy -- so this is invisible on pre-Zen-5 hardware.
+Whether the allocation lands 64-byte aligned anyway is heap-layout dependent,
+so a standalone clCreateCommandQueue() test case can pass on a runtime that is
+broken for a real client. Reproduced with media-gfx/darktable-5.6.1:
+darktable-cltest faults in dt_opencl_init() when a second ICD (dev-util/xrt's
+amdxrt) is installed alongside, and survives when /etc/OpenCL/vendors holds
+amdocl64 alone -- loading the second vendor library moves the allocation off
+64. A/B under one OCL_ICD_VENDORS dir carrying both ICDs, swapping only
+libamdocl64.so: unpatched SIGSEGV, patched exit 0.
+
+This is the same defect, and the same hunk, as
+dev-util/hip/files/hip-10.0.0-aligned-new.patch. Both packages build
+amd::roc::VirtualGPU out of the same shared clr.tar.gz release asset, so fixing
+only dev-util/hip left libamdocl64.so faulting.
+
+Upstream is aware of the shape of this problem elsewhere: device/pal/
+palvirtual.hpp already declares an align_val_t placement overload. This adds
+the ordinary aligned new/delete to the shared base so every over-aligned
+derived type gets the alignment it declares. verified 2026-09-04.
+--- a/rocclr/include/top.hpp
++++ b/rocclr/include/top.hpp
+@@ -164,6 +164,21 @@
+ 
+   void* operator new(size_t size) { return ::operator new(size); }
+   void operator delete(void* p) { return ::operator delete(p); }
++  // Declaring operator new(size_t) above HIDES the C++17 over-aligned
++  // overloads for every derived class. amd::roc::VirtualGPU has alignas(64)
++  // members, so alignof(VirtualGPU) is 64, but `new VirtualGPU(...)` in
++  // Device::createVirtualDevice() resolves to the size_t form above and gets
++  // memory aligned to __STDCPP_DEFAULT_NEW_ALIGNMENT__ (16). The compiler
++  // still trusts the declared alignment and zero-inits barrier_packet_ /
++  // barrier_value_packet_ with aligned 64-byte vector stores, which fault.
++  // Forward to the aligned global operators so over-aligned derived types get
++  // the alignment they declare.
++  void* operator new(size_t size, std::align_val_t align) {
++    return ::operator new(size, align);
++  }
++  void operator delete(void* p, std::align_val_t align) {
++    return ::operator delete(p, align);
++  }
+   void* operator new(size_t size, size_t extSize) {
+     return ReferenceCountedObject::operator new(size + extSize);
+   };
