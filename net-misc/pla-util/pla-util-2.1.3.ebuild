@@ -19,7 +19,7 @@ SRC_URI="https://github.com/serock/${PN}/archive/refs/tags/${PV}.tar.gz
 # reads plain "GPL-3.0"; the file headers are authoritative, so GPL-3+.
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 REQUIRED_USE="${ADA_REQUIRED_USE}"
 
