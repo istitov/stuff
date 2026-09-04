@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    mc6 is a fork of GNU Midnight Commander, based on 4.8.33, whose panel
+    contents can come from dynamically loaded plugins: git, docker, Kubernetes,
+    MongoDB, S3, FTP/FTPS, SFTP, Samba, systemd, shell connections and an
+    archive manager. It replaces the built-in ftpfs, sftpfs, tarfs and cpiofs
+    VFS modules with those plugins, adds the mcstruct structured binary viewer
+    and a Lua runtime extension, and installs as /usr/bin/mc, so it cannot be
+    installed alongside app-misc/mc.
+  </longdescription>
+  <use>
+    <flag name="edit">Build the internal editor (mcedit)</flag>
+    <flag name="ftp">Build the FTP/FTPS panel plugin (needs net-misc/curl)</flag>
+    <flag name="lua">Build the Lua runtime extension</flag>
+    <flag name="mongodb">Build the MongoDB browser panel plugin</flag>
+    <flag name="s3">Build the S3 object storage panel plugin (needs net-misc/curl with AWS SigV4)</flag>
+    <flag name="sftp">Build the SFTP panel plugin and use net-libs/libssh2 as the shell-link transport</flag>
+    <flag name="slang">Use sys-libs/slang instead of sys-libs/ncurses as the screen library</flag>
+    <flag name="spell">Pull in a spell-checking backend (app-text/aspell or app-text/hunspell) for the internal editor; it is opened at run time, so nothing is built differently</flag>
+    <flag name="sqlite">Build the read-only SQLite database browser panel plugin</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">blue-panels/mc6</remote-id>
+  </upstream>
+</pkgmetadata>

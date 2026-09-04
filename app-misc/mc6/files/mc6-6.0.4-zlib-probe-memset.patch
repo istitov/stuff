@@ -1,0 +1,35 @@
+The zlib link probe compiles a program that calls memset() with only <zlib.h>
+included. Since GCC 14 an implicit function declaration is an error, so the
+probe fails on every current toolchain, HAVE_ZLIB is left undefined and
+mcstruct loses the inflate support it is meant to gate -- silently, because
+the check is a bare AC_CHECK_HEADERS with no --enable switch to report on and
+nothing in configure's summary mentions zlib.
+
+Both the generated configure and configure.ac are patched: the tarball is
+bootstrapped and we do not autoreconf, but leaving configure.ac wrong would
+undo the fix for anyone who does.
+
+Not reported upstream yet.
+
+--- a/configure
++++ b/configure
+@@ -27189,6 +27189,7 @@
+ printf %s "checking for inflateInit_ in -lz... " >&6; }
+     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
++#include <string.h>
+ #include <zlib.h>
+ int
+ main (void)
+--- a/configure.ac
++++ b/configure.ac
+@@ -612,7 +612,8 @@
+     mc_saved_LIBS="$LIBS"
+     LIBS="$LIBS -lz"
+     AC_MSG_CHECKING([for inflateInit_ in -lz])
+-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <zlib.h>]],
++    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <string.h>
++#include <zlib.h>]],
+                                     [[z_stream z; memset (&z, 0, sizeof (z));
+                                       inflateInit (&z); inflateEnd (&z);]])],
+         [AC_MSG_RESULT([yes])

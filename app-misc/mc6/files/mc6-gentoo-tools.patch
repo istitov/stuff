@@ -1,0 +1,15 @@
+On Gentoo mpv_identify.sh is only installed by media-video/mpv[tools], so
+naming the bare package sends the user to a build that still lacks the helper.
+Carried over from app-misc/mc's mc-4.8.29-gentoo-tools.patch.
+
+--- a/misc/ext.d/video.sh
++++ b/misc/ext.d/video.sh
+@@ -21,7 +21,7 @@
+         elif command -v mpv_identify.sh >/dev/null 2>&1; then
+             mpv_identify.sh "${MC_EXT_FILENAME}"
+         else
+-            echo "Please install either mplayer or mpv to get information for this file"
++            echo "Please install either mplayer or mpv[tools] to get information for this file"
+         fi
+         ;;
+     esac
