@@ -14,7 +14,7 @@ SRC_URI="https://github.com/blue-panels/mc6/releases/download/v${PV}/${P}.tar.gz
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+edit ftp gpm lua mongodb nls s3 samba sftp +slang spell sqlite test X"
 
 # Spell check is compiled into the internal editor.
