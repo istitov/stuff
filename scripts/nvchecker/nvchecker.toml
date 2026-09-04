@@ -1166,7 +1166,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (220) ---
+# --- github (221) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1191,6 +1191,12 @@ prefix = "v"
 ["app-editors/manpageeditor"]
 source = "github"
 github = "KeithDHedger/ManPageEditor"
+use_max_tag = true
+prefix = "v"
+
+["app-misc/mc6"]
+source = "github"
+github = "blue-panels/mc6"
 use_max_tag = true
 prefix = "v"
 
