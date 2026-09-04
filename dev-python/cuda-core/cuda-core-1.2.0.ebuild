@@ -21,6 +21,17 @@ HOMEPAGE="
 # NVIDIA's cuda-python is a monorepo; cuda-core tags use the
 # "cuda-core-v<PV>" prefix form (matches cuda-pathfinder; cuda-bindings
 # uses bare v<PV>). Verified 2026-09-03 against 1.2.0.
+#
+# Manifest re-pinned 2026-09-04: the archive GitHub generates for this
+# tag changed size (3190447 -> 3190454 bytes), so the old pin stopped
+# being fetchable. Verified: the current archive's pax header carries
+# 53b43746e501f1a0b627f951604991636f77cd9c, which is the commit the
+# cuda-core-v1.2.0 ref resolves to, and the 1.1.1 archive still matches
+# its pin byte for byte (so this is not a repo-wide gzip change). The
+# superseded archive was not available on this host, so its provenance
+# could not be checked directly; a 7-byte delta plus an unmoved 1.1.1
+# is consistent with re-encoding rather than a moved tag, but that part
+# is inference, not verification.
 SRC_URI="
 	https://github.com/NVIDIA/cuda-python/archive/refs/tags/${MY_TAG}.tar.gz
 		-> ${P}.gh.tar.gz
