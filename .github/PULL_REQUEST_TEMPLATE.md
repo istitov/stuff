@@ -21,8 +21,15 @@ Short PR descriptions are fine — the diff carries the detail.
 
 - [ ] One package per commit (or a single cross-cutting infra change).
 - [ ] Commit subjects follow `category/pkg: <action> [version]`.
-- [ ] `pkgcheck scan --commits` is clean locally.
-- [ ] `pkgdev manifest` was re-run for any `SRC_URI` change.
+- [ ] Dependencies and upstream's build interface were reassessed for bumps.
+- [ ] Relevant test and install/merge paths were exercised, including
+      minimal/maximal feature sets where USE flags materially change them.
+- [ ] `pkgcheck scan --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords
+      --commits <base>` exits clean locally (the framing and exit set CI uses).
+- [ ] `pkgdev manifest` was re-run if resolved distfiles or checksums changed,
+      including for an ordinary version bump.
+- [ ] `scripts/nvchecker/nvchecker.toml` was regenerated for package-set or
+      upstream-mapping changes (in a separate infrastructure commit).
 - [ ] Copyright header on any new/edited ebuild is current-year
       (`# Copyright 1999-<year> Gentoo Authors`).
 - [ ] No `metadata/md5-cache/` files are staged.
@@ -41,5 +48,5 @@ Aider", etc. Helps reviewers know where to look more carefully.
 <!--
 Anything non-obvious: a deliberate KEYWORDS choice, a workaround
 for upstream breakage, a pkgcheck suppression you're adding or
-removing, etc.
+removing, or validation that could not be run.
 -->

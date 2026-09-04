@@ -33,9 +33,13 @@ What we mostly cover:
   demeter, vampire, bornagain, …)
 - **DeaDBeeF plugin ecosystem** — the [DeaDBeeF](https://deadbeef.sf.net/)
   audio player's third-party plugins
-- **AMD Ryzen-AI application layer** — fastflowlm, lemonade, kokoros,
-  amd-gaia, therock-bin, and the local LLM tooling around them
-- **ROCm leadership** — typically a release ahead of `::gentoo`
+- **Local AI / ML** — ComfyUI, Unsloth, local LLM runtimes, evaluation and
+  RAG tooling, plus the split PyTorch/Caffe2 and ONNX ecosystems
+- **GPU and accelerator stacks** — AMD Ryzen-AI / XDNA, source and binary
+  ROCm distributions, and CUDA-facing packages, typically ahead of
+  `::gentoo`
+- **TeX Live and legacy GUI support** — current TeX Live collections and
+  the Qt5 revival retained for consumers that have not completed Qt6 ports
 - **The `pf-sources` line** — two deliberately co-installable tiers,
   both maintained separately from the upstream pf-kernel cadence:
   `pf-sources` (the full pf patchset, GA-frozen, with surgical CVE
@@ -54,12 +58,12 @@ first is cheap and usually clearer than guessing.
   `eselect repository enable stuff` and `emerge --sync stuff`, or
   point your own overlay config at the working tree.
 - Install the tooling: `dev-util/pkgdev` and `dev-util/pkgcheck`.
-- Keep `dev-python/tree-sitter` at 0.25.2-r1. 0.26.0 crashes the bash
-  parser `pkgcheck` uses, and it does so *silently*: the affected
-  results are dropped and the scan still exits 0, so a broken
-  toolchain looks like a clean tree. If a scan suddenly reports
-  nothing, check that version before believing it.
-  (verified 2026-07-28)
+- Keep `dev-python/tree-sitter` below 0.26.0 (today that means
+  0.25.2-r1). 0.26.0 crashes the bash parser `pkgcheck` uses, and it
+  does so *silently*: the affected results are dropped and the scan
+  still exits 0, so a broken toolchain looks like a clean tree. If a
+  scan suddenly reports nothing, check that version before believing
+  it. (verified 2026-07-28)
 - The repo declares `masters = gentoo` and `thin-manifests = true`
   — every package depends on `::gentoo` being available, and
   `Manifest` files only carry `DIST` lines.
@@ -71,9 +75,16 @@ cross-cutting infrastructure (eclasses, profiles, masks).
 
 - [ ] The change is scoped to a single `category/pkg/` directory
       (or a single eclass / profile file).
-- [ ] If `SRC_URI` changed, `pkgdev manifest` has been re-run.
+- [ ] If the resolved distfile set or checksums changed — including for an
+      ordinary version bump whose `SRC_URI` still uses the same `${PV}`
+      expression — `pkgdev manifest` has been re-run.
+- [ ] If a package was added, dropped, or retargeted, `generate.py` has
+      regenerated `scripts/nvchecker/nvchecker.toml` — in its own
+      `scripts/nvchecker:` commit, not this one (see step 7 below).
 - [ ] `pkgcheck scan <category>/<pkg>` is clean, or any new warning
       is documented in the commit body or `metadata/pkgcheck.conf`.
+- [ ] The relevant build, test and install phases have been exercised; any
+      validation that could not be run is identified in the commit body.
 - [ ] The copyright header on any new/edited ebuild reads
       `# Copyright 1999-<current year> Gentoo Authors`.
 - [ ] Commit message follows the shape below.
@@ -90,7 +101,8 @@ the staged diff. The body is on you.
   - `media-plugins/deadbeef-jack: patch for current deadbeef API`
 - **Blank line.**
 - **Body** — two or three short paragraphs explaining *why*, not
-  *what*. The diff shows what. The body should cover:
+  *what*, hard-wrapped at 72 columns. The diff shows what. The body
+  should cover:
   - Why this change is needed now (upstream release, bug, policy).
   - Any non-obvious decision (e.g. "kept `~amd64` only because the
     dep is `~amd64`-only in this overlay").
@@ -99,35 +111,78 @@ the staged diff. The body is on you.
 Single-line commits are fine for truly trivial edits (typo fixes,
 one-line metadata tweaks). Default to subject+body otherwise.
 
+Review fixups made before publication belong in the commit that introduced
+the change. Squash them rather than retaining follow-up `fix`, `drop`,
+`restore`, or similar repair commits. A package addition and a later version
+drop remain separate commits as described below.
+
 ## Per-package workflow
 
 The loop the maintainer uses:
 
-1. `pkgcheck scan <category>/<pkg>` — see the starting baseline.
-2. Edit. For ebuild changes, prefer copying the newest ebuild and
-   adjusting, rather than editing in place, when bumping versions.
-3. Build-check: either a local emerge against the overlay, or at
-   least a successful `ebuild <pkg>.ebuild clean prepare compile`.
-4. `pkgcheck scan <category>/<pkg>` again — confirm no regression.
-5. `pkgdev manifest` if `SRC_URI` changed.
-6. `pkgdev commit` with a body.
+1. `pkgcheck scan <category>/<pkg>` — record the starting baseline. Scan
+   without `--exit`: the point here is to read every finding, not to get a
+   pass/fail.
+2. For a bump, copy the newest ebuild as a starting point, then reassess it
+   against the new release. Inspect upstream's build metadata and source tree
+   for changed build, runtime and test dependencies; renamed options;
+   automagic feature detection; bundled libraries; and compiler or language
+   requirements. A clean textual copy is not evidence that the build
+   interface stayed unchanged.
+3. Check each meaningful USE combination. At minimum cover the smallest
+   supported feature set and the largest relevant set when optional modules
+   alter dependencies or installed files. Verify that disabled features do
+   not build through host autodetection.
+4. Exercise the full build and staged install, not only compilation. A local
+   `emerge -1 =category/pkg-version` is preferred; otherwise run at least
+   `ebuild <pkg>.ebuild clean install`, and where practical merge into a
+   throwaway `ROOT=` on real disk — under `/var/tmp/`, not `/tmp`, which is
+   a RAM-backed tmpfs on many systems and will not survive staging a large
+   package. Then read the result: the image should hold the files you
+   expect, and a staged merge's VDB the dependencies you declared. A green
+   build is not that evidence — an automagic probe can fail silently and
+   drop a whole feature without changing the exit status. Run the upstream
+   test phase when it is usable.
+5. `pkgcheck scan <category>/<pkg>` again — confirm no regression against
+   that baseline.
+6. Run `pkgdev manifest` if the resolved distfiles or checksums changed,
+   including for ordinary version bumps.
+7. If the package set or upstream mapping changed, run
+   `./scripts/nvchecker/generate.py` and verify the resulting entry. Keep the
+   generated-config update in a separate `scripts/nvchecker:` infrastructure
+   commit so the package commit remains single-package.
+8. `pkgdev commit` with a body that records non-obvious decisions and any
+   validation limitation.
 
 Do one package at a time. Do not batch unrelated packages into a
 single commit — it makes reverts and bisects painful.
 
 ## Before pushing
 
-- [ ] `pkgcheck scan --commits` is clean on your branch
-      (same check CI runs on push/PR).
+- [ ] `pkgcheck scan --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords
+      --commits <base>` exits clean on your branch, using the same explicit
+      base-ref framing and exit set as CI. `--exit` selects what fails the
+      run, not what gets reported: findings outside that set still print, and
+      still deserve a look.
 - [ ] No `metadata/md5-cache/` files are staged — the directory
       is gitignored and must stay that way.
 - [ ] No secrets, distfile payloads, or binary blobs snuck in.
 
-CI (`.github/workflows/pkgcheck.yml`) will re-run
-`pkgcheck scan --commits` on push and PR. A separate 3-day cron
-runs `pkgcheck scan` repo-wide. URL-liveness checks
-(`pkgcheck scan --net`) are not part of CI — run them locally if
-you change an upstream URL.
+What CI actually runs — the canonical list; README links here rather than
+repeating it:
+
+- `.github/workflows/pkgcheck.yml` re-runs the commit-diff scan on pull
+  requests and relevant pushes to `master`; a 3-day cron runs a repo-wide
+  scan; and a change to `metadata/layout.conf` or `metadata/pkgcheck.conf`
+  triggers an immediate full validation.
+- `.github/workflows/nvchecker.yml` checks on pull requests and relevant
+  pushes that the generated `nvchecker.toml` is current, and runs a weekly
+  upstream drift scan.
+- `.github/workflows/dusty.yml` runs quarterly and reports packages
+  untouched for more than 60 days.
+
+URL-liveness checks (`pkgcheck scan --net`) are not part of CI — run them
+locally if you change an upstream URL.
 
 ## 🧩 Conventions
 

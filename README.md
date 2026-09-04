@@ -1,31 +1,42 @@
 # stuff
 
 A [Gentoo](https://wiki.gentoo.org/wiki/Main_Page) ebuild overlay that
-ships hard-to-package software as first-class portage citizens —
-dependency-resolved, built from source, and managed with `emerge` like
-everything else on the system, instead of through manual git builds,
-vendor `.deb`s, or conda environments that leave the package manager
-blind to what's installed.
+ships hard-to-package software as first-class Portage citizens —
+dependency-resolved, built from source where practical (or packaged from a
+named upstream binary distribution when that is the maintained packaging
+route), and managed with `emerge` like everything else on the system, instead
+of through manual git builds or conda environments that leave the package
+manager blind to what's installed.
 
-No single flagship — a curated, multi-niche overlay.
-Front-door slices: **local AI & GPU compute** (AMD Ryzen-AI / NPU ·
-AMD ROCm · NVIDIA CUDA, with LLM runtimes and the PyTorch / ONNX
-ecosystem) · **materials science** (SAXS / SANS / XAFS / XRD /
-Rietveld · electron microscopy · SPM · micromagnetism) ·
-**`pf-sources`** (full pf-kernel patchset, GA-frozen with CVE
-backports, plus a stable-tracking `pf-sources-extended` tier) ·
-**DeaDBeeF** plugins · **TeX Live** · a **Qt5** revival mirror ·
-a **Python 2** legacy preservation layer.
+No single flagship — a curated, multi-niche overlay. The front-door slices:
+
+- **Local AI & GPU compute** — AMD Ryzen-AI / NPU, AMD ROCm, NVIDIA CUDA,
+  with LLM runtimes and the PyTorch / ONNX ecosystem.
+- **Materials science** — SAXS / SANS / XAFS / XRD / Rietveld, electron
+  microscopy, SPM, micromagnetism.
+- **`pf-sources`** — the full pf-kernel patchset, GA-frozen with CVE
+  backports, plus a stable-tracking `pf-sources-extended` tier.
+- **DeaDBeeF** plugins, **TeX Live**, a **Qt5** revival mirror, and a
+  **Python 2** legacy preservation layer.
+
+With `app-eselect/eselect-repository` installed:
 
 ```sh
 eselect repository enable stuff
 emerge --sync stuff
 ```
 
+Packages are primarily `~amd64`, with growing `~arm64` coverage. Stable users
+should accept testing keywords only for the packages they intend to install;
+the [setup guide](https://istitov.github.io/stuff/setup/) covers the
+overlay-wide form and how to scope it per package.
+
 [![Package checks](https://github.com/istitov/stuff/actions/workflows/pkgcheck.yml/badge.svg)](https://github.com/istitov/stuff/actions/workflows/pkgcheck.yml)
 
 See [**Overlay:Stuff**](https://wiki.gentoo.org/wiki/Overlay:Stuff) on the
-Gentoo Wiki for enabling the overlay and a package-area overview.
+Gentoo Wiki for enabling the overlay and a package-area overview. The
+[overlay documentation](https://istitov.github.io/stuff/) provides setup,
+hardware-selection and stack-specific guides.
 
 ## Mirrors
 
@@ -83,6 +94,11 @@ other OpenAI-compatible endpoint:
 - [`dev-util/argc`](https://github.com/sigoden/argc) — Bash CLI
   framework + Argcfile.sh task runner; infrastructure for sigoden's
   tooling cluster.
+- [`dev-util/codex`](https://github.com/openai/codex) — OpenAI's terminal
+  coding agent, built from its vendored Rust dependency set.
+- [`app-misc/qdrant`](https://github.com/qdrant/qdrant) — vector database
+  and similarity-search service for local RAG workloads, with systemd and
+  OpenRC integration.
 - `sci-ml/lm-eval` (lm-evaluation-harness), `sci-ml/evalplus`
   (HumanEval+ / MBPP+), and
   [`sci-ml/bigcode-eval`](https://github.com/bigcode-project/bigcode-evaluation-harness)
@@ -106,11 +122,16 @@ ASR, speaker diarization, and audio DSP packages:
   + [`sci-ml/julius`](https://github.com/adefossez/julius) — neural-net
   friendly audio DSP / augmentation building blocks.
 
-### PyTorch / ONNX ecosystem additions
+### PyTorch / ONNX ecosystem
 
-General-purpose ML infrastructure not covered by `::gentoo`,
-pulled in alongside the speech stack above and broadly useful on
-their own:
+The overlay carries a split PyTorch stack: `sci-ml/caffe2` builds and owns
+the C++/libtorch side plus `torch._C`, while `sci-ml/pytorch` installs the
+matching Python package without rebuilding libtorch. Each supported line is
+joined by a matching `sci-ml/torchvision`; CUDA, ROCm and CPU feature sets
+remain selected through the Caffe2 ebuild.
+
+Other general-purpose ML infrastructure not covered by `::gentoo`, pulled in
+alongside the speech stack above and broadly useful on its own:
 
 - [`sci-ml/lightning`](https://lightning.ai/) + `sci-ml/lightning-utilities`
   — PyTorch Lightning training framework.
@@ -132,21 +153,21 @@ their own:
 
 ### ROCm stack
 
-Local bumps of the [ROCm](https://rocm.docs.amd.com/) / HIP 7.2 stable
-line (7.2.3 and 7.2.4) ahead of `::gentoo`: the full runtime, compiler,
-and math / communication libraries (`rocm-core`, `hip`, `hipBLAS` /
-`rocBLAS`, `hipFFT` / `rocFFT`, `MIOpen`, `composable-kernel`, `rccl`, …)
-plus the `rocm-smi` / `rocminfo` tooling, across `dev-libs/`,
-`dev-util/`, `dev-build/`, and `sci-libs/`.
+An unmasked, source-built [ROCm](https://rocm.docs.amd.com/) / HIP 10.0
+cohort ahead of `::gentoo`: AMD's LLVM 23 fork (`llvm-core/rocm-llvm`), the
+runtime and compiler, math / communication libraries (`rocm-core`, `hip`,
+`hipBLAS` / `rocBLAS`, `hipFFT` / `rocFFT`, `MIOpen`,
+`composable-kernel`, `rccl`, …), debugging and profiling tools, media
+libraries, and `rocm-smi` / `rocminfo`. The 7.2.4 line is kept as the last
+7.x rollback anchor.
 
 [`dev-util/therock-bin`](https://github.com/ROCm/TheRock) is a
 /opt-installed ROCm SDK sliced out of AMD's official ROCm runfile
-installer for a per-host `AMDGPU_TARGETS`. Coexists with the /usr ROCm
-above; nvchecker follows upstream's `therock-<major.minor>` tag line.
-Because it bundles its own clang it can ship releases the split /usr
-stack cannot yet build — ROCm 10.0 needs clang 23, and `::gentoo`'s
-newest keyworded LLVM is 22.1.8 — and it carries officially-supported
-gfx1150/gfx1151.
+installer for a per-host `AMDGPU_TARGETS`. It coexists with the split `/usr`
+stack above and remains the lower-build-cost alternative because it bundles
+AMD's compiler and libraries. Nvchecker follows upstream's
+`therock-<major.minor>` tag line; the distribution carries official
+gfx1150/gfx1151 support.
 
 [`dev-util/zluda`](https://github.com/vosen/ZLUDA) — a drop-in CUDA
 runtime for AMD GPUs (an honorable mention as it is ROCm-bound).
@@ -165,10 +186,23 @@ quantization).
 
 ### RAPIDS GPU computing
 
-GPU-accelerated dataframes and distributed compute (RAPIDS 26.6), not
-in `::gentoo`: `dev-python/rmm` + `dev-python/librmm` (GPU memory
-manager), `dev-python/dask-cuda` (multi-GPU Dask clusters), plus
+GPU-accelerated dataframes and distributed compute, carried on two parallel
+RAPIDS release lines and not in `::gentoo`: `dev-python/rmm` + `dev-python/librmm`
+(GPU memory manager), `dev-python/dask-cuda` (multi-GPU Dask clusters), plus
 `dev-python/rapids-logger` and `dev-python/rapids-dask-dependency`.
+
+### Generative-AI applications
+
+- [`media-gfx/comfyui`](https://github.com/comfy-org/comfyui) —
+  node-graph generative-media application, packaged with its frontend,
+  workflow-template family and optional CUDA / ROCm / CPU PyTorch backend.
+- [`sci-ml/unsloth`](https://github.com/unslothai/unsloth) — model
+  fine-tuning stack, with an optional system-packaged Studio backend.
+  `sci-ml/unsloth-desktop-bin` remains masked because the vendor binary
+  self-bootstraps a private Python/PyTorch environment outside Portage.
+- [`sci-misc/stable-diffusion-cpp`](https://github.com/leejet/stable-diffusion.cpp)
+  and [`sci-misc/koboldcpp`](https://github.com/LostRuins/koboldcpp) — native
+  local inference frontends for image and language models.
 
 ### 3D generative (Gaussian splatting / mesh)
 
@@ -249,7 +283,7 @@ latexmk, minted, pgf, tex4ht, …}` build tooling.
 ## Qt5 revival mirror
 
 `::gentoo` last-rited the entire `dev-qt:5` set on 2026-05-15
-(bug #948836) and is treecleaning its Qt5 consumers, but
+(bug #948836) and has since removed it, but
 `sci-physics/mantid` and a few others still need Qt5. This overlay
 carries the full 23-module `dev-qt/*` slot:5 set at
 **v5.15.19-lts-lgpl** — the
@@ -291,7 +325,9 @@ consumers follow.
 - **Niche tools** — [`dev-lang/tcc`](https://repo.or.cz/w/tinycc.git),
   [`dev-vcs/fossil`](https://fossil-scm.org/),
   [`app-office/mytetra`](http://webhamster.ru/site/page/index/articles/projectcode/138),
-  `app-misc/tudu`,
+  `app-misc/tudu`, [`app-misc/mc6`](https://github.com/blue-panels/mc6)
+  (Midnight Commander fork with panel plugins; installs `/usr/bin/mc` and
+  therefore blocks `app-misc/mc`),
   [`sys-fs/google-drive-ocamlfuse`](https://github.com/astrada/google-drive-ocamlfuse),
   [`app-text/pandoc-crossref-bin`](https://github.com/lierdakil/pandoc-crossref),
   [`app-portage/portconf`](https://github.com/istitov/portconf)
@@ -308,10 +344,12 @@ consumers follow.
   `*_py2` eclasses, py2 forks of core libs (`dev-python/numpy-python2`,
   `certifi-python2`, `pycairo-python2`, …), and py2-only legacy packages
   (`pygobject-2.28.6`, `pygtk-2.24.0`, `unittest-or-fail`).
-- **Masked but kept**: `net-misc/ipx-utils` (IPX removed from Linux in 4.18),
-  `app-portage/portopts` (upstream dormant since 2014). Each mask in
-  `profiles/package.mask` carries a comment explaining why and when it
-  should lift.
+- **Masked but kept** — legacy, rollback and opt-in packages. Examples include
+  `net-misc/ipx-utils` (IPX left the kernel in 4.18), `app-portage/portopts`
+  (upstream dormant since 2014), and `sci-ml/unsloth-desktop-bin`
+  (self-bootstraps a private runtime outside Portage). Every entry in
+  `profiles/package.mask` carries a dated comment saying why it is masked and
+  what would lift it.
 
 ## Repository layout and conventions
 
@@ -323,28 +361,33 @@ consumers follow.
 - **Patches** live in `<category>/<package>/files/` and are applied via
   `PATCHES=()` or `src_prepare()`.
 - **Commit messages** use subject + body form (72-char subject, blank line,
-  rationale). Single-line messages only for truly trivial edits.
+  rationale hard-wrapped at 72). Single-line messages only for truly trivial
+  edits.
 - **`metadata/pkgcheck.conf`** documents *which* checks are suppressed and
   *why* (not just that they're suppressed).
-- **CI** runs `pkgcheck scan` on every PR and push (delta only), plus a
-  full repo scan every three days via scheduled workflow. URL-liveness
-  checks (`pkgcheck scan --net`) are not part of CI; run them locally
-  if you change an upstream URL.
+- **CI** gates every pull request and relevant push to `master`, and runs
+  scheduled repo-wide and staleness scans on top.
+  [`CONTRIBUTING.md`](CONTRIBUTING.md#before-pushing) is the canonical
+  description — this bullet deliberately does not restate it, so the two
+  cannot drift apart.
 - **Documentation** — [`CONTRIBUTING.md`](CONTRIBUTING.md) (house-style
   checklist, AI/LLM disclosure expectation),
-  [`SECURITY.md`](SECURITY.md) (vulnerability reporting via GitHub
-  private advisories), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
+  [`SECURITY.md`](SECURITY.md) (vulnerability reporting — GitHub private
+  advisories, or mail the maintainer),
+  [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
 - **News items** — `eselect news read` after `emerge --sync stuff`
   surfaces GLEP-42 announcements for migrations, mask windows, and
   CVE-sensitive notices. Items live in
   [`metadata/news/`](metadata/news/).
 - **Upstream version tracking** —
   [`scripts/nvchecker/`](scripts/nvchecker/) holds the
-  generated `nvchecker.toml` plus a local-cron runner
-  (`run.sh`) and the regenerator (`generate.py`). A weekly CI
-  job at [`.github/workflows/nvchecker.yml`](.github/workflows/nvchecker.yml)
-  runs the same config against the tree as baseline and uploads
-  a drift artifact.
+  generated `nvchecker.toml`, its generator and audit helpers, and a local
+  cron runner. Pull requests and relevant pushes verify that the generated
+  config is current; a weekly CI job at
+  [`.github/workflows/nvchecker.yml`](.github/workflows/nvchecker.yml) runs
+  the same config against the tree as baseline, detects entries that return
+  no upstream version, uploads a 30-day artifact and maintains a rolling
+  drift issue.
 
 ## Credits
 
