@@ -67,11 +67,14 @@ first_run=false
 
 # Run version checks. --logger pretty keeps output readable if the user ever
 # runs this interactively; -l error silences the per-entry INFO noise in cron.
-# Do not pass --failures: transient network errors should not spam mail.
+# Do not pass --failures: a transient network error should not make the whole
+# run exit nonzero. Errors are still logged to stderr at this level and may
+# therefore generate cron mail; persistent missing entries are handled by the
+# two-run detector below.
 #
 # If a nvchecker keyfile exists at the standard XDG location, pass it — the
 # GitHub source needs a token to avoid the 60-req/hour unauthenticated rate
-# limit, which is trivially exceeded by this config's ~60 GitHub entries.
+# limit, which is trivially exceeded by this config's 200+ GitHub entries.
 KEYFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nvchecker/keyfile.toml"
 if [[ -f "$KEYFILE" ]]; then
     nvchecker -c "$RUN_CFG" -k "$KEYFILE" -l error --logger pretty

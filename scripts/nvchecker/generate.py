@@ -1088,15 +1088,16 @@ def classify(pkg_name: str, ebuild_text: str, homepage: str | None, src_uri: str
                 "note": "py2-pinned: upstream has moved past py2 support; "
                         "drift tracking would produce permanent false positives"}
 
-    # Qt5 component (qt5-build eclass). These live in the overlay as snapshots
-    # of ::gentoo's Qt 5 packages (eclass dropped from the main tree). Upstream
-    # for our purposes is ::gentoo, not Qt's public release cadence — tracking
-    # qt.io releases would not match the PV we ship.
+    # Qt5 component (qt5-build eclass). These are fixed 5.15.19 snapshots of
+    # the KDE Qt5 Patch Collection; ::gentoo has removed slot 5 entirely.
+    # Public Qt release tracking would not match the PV these ebuilds ship,
+    # while KDE branch-tip movement is monitored through the maintainer-only
+    # STUFF_NVCHECKER_LOCAL_TOML hook in run.sh.
     if QT5_BUILD_RE.search(ebuild_text):
         return {"kind": "unknown",
-                "note": "qt5-build component; tracked in ::gentoo rather than "
-                        "upstream Qt, so standalone drift tracking would not "
-                        "match the PV ebuilds ship here"}
+                "note": "qt5-build snapshot; release-version tracking is "
+                        "intentionally skipped because KDE branch-tip "
+                        "movement is a maintainer-local check"}
     """Return a dict describing how nvchecker should track this package.
 
     Keys:

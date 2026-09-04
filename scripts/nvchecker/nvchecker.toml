@@ -2924,30 +2924,30 @@ prefix = "v"
 # ["dev-python/unittest-or-fail"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/utils3d"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["dev-python/vox2seq"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
-# ["dev-qt/linguist-tools"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtconcurrent"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtcore"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/linguist-tools"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtconcurrent"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtcore"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qtdatavis3d"] skipped: no recognizable upstream
-# ["dev-qt/qtdbus"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtdeclarative"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtgraphicaleffects"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtgui"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qthelp"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtmultimedia"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtnetwork"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtopengl"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtprintsupport"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtquickcontrols"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtquickcontrols2"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtsql"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtsvg"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qttest"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qttranslations"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtwayland"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtwebchannel"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtwidgets"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtx11extras"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
-# ["dev-qt/qtxml"] skipped: qt5-build component; tracked in ::gentoo rather than upstream Qt, so standalone drift tracking would not match the PV ebuilds ship here
+# ["dev-qt/qtdbus"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtdeclarative"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtgraphicaleffects"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtgui"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qthelp"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtmultimedia"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtnetwork"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtopengl"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtprintsupport"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtquickcontrols"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtquickcontrols2"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtsql"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtsvg"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qttest"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qttranslations"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtwayland"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtwebchannel"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtwidgets"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtx11extras"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtxml"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-tex/bibtexu"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
 # ["dev-tex/tex4ht"] skipped: engine bootstrapped from svn.gnu.org.ua trunk; SVN-revision versioned, no upstream tags
 # ["dev-texlive/texlive-basic"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
