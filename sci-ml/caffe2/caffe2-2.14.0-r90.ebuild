@@ -234,14 +234,14 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.8.0-rocm-minus-flash.patch.xz
 	"${FILESDIR}"/${P}-rocm-distributed-link.patch.xz
 	# NEW AT 2.14.0. Upstream added a REQUIRED find_package(hipfile) for
-	# ROCm >= 7.14, but hipFile is not packaged in ::gentoo or ::stuff (its own
-	# repo is retired; the source moved into ROCm/rocm-systems), so configure
-	# died on the 10.0 stack here. cmake/Dependencies.cmake already contains
-	# upstream's own fallback -- `if(USE_CUFILE AND NOT hipfile_FOUND)` turns
-	# USE_CUFILE off -- which the REQUIRED makes unreachable. This drops only
-	# the REQUIRED, so the fallback runs as written and GPUDirect Storage
-	# (torch.cuda.gds) is simply unavailable. Drop the patch once hipFile is
-	# packaged. # verified 2026-09-02
+	# ROCm >= 7.14, although PyTorch's USE_CUFILE option remains CUDA-only and
+	# no hipfile target is consumed by the ROCm build. ::stuff does package the
+	# early-access sys-libs/hipFile, but forcing it (and rocprofiler-register)
+	# into every PyTorch ROCm closure would provide no PyTorch GDS support.
+	# Keep discovery optional: an installed hipFile is found, while its absence
+	# leaves the already-disabled USE_CUFILE path unchanged. Revisit when
+	# PyTorch consumes hip::hipfile or exposes a ROCm storage option.
+	# verified 2026-09-03
 	"${FILESDIR}"/${P}-rocm-hipfile-optional.patch.xz
 	"${FILESDIR}"/${PN}-2.9.1-torch_cpu.patch.xz
 	# The third_party include-dir block this drops is intact at 2.14.0, but
