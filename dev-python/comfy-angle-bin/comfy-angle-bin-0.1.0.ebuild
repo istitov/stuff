@@ -24,7 +24,12 @@ SLOT="0"
 KEYWORDS="-* ~amd64"
 RESTRICT="strip"
 
-BDEPEND="dev-python/installer[${PYTHON_SINGLE_USEDEP}]"
+# dev-python/installer is multi-impl (python-r1), so it carries
+# PYTHON_TARGETS, not PYTHON_SINGLE_TARGET: the dep has to go through
+# python_gen_cond_dep to pick up ${PYTHON_USEDEP} in a single-impl ebuild.
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/comfy_angle/libs/*"
 
