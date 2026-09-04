@@ -119,7 +119,7 @@ RDEPEND="
 	dev-cpp/gtest
 	dev-python/euphonic[${PYTHON_SINGLE_USEDEP}]
 	sci-libs/gsl
-	sci-libs/hdf
+	<sci-libs/hdf-4.4:=
 	sci-libs/hdf5[cxx]
 	dev-libs/jemalloc
 	dev-libs/jsoncpp
