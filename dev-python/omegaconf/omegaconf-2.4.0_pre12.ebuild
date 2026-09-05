@@ -32,3 +32,7 @@ KEYWORDS="~amd64"
 RDEPEND="
 	>=dev-python/pyyaml-5.1.0[${PYTHON_USEDEP}]
 "
+
+BDEPEND="
+	>=virtual/jre-1.8:*
+"
