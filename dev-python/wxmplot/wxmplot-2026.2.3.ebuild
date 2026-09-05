@@ -13,11 +13,7 @@ HOMEPAGE="https://newville.github.io/wxmplot/"
 
 LICENSE="MIT"
 SLOT="0"
-# 2026.2.0 grew a hard dependency on dev-python/vispy (image_canvas/line_plot
-# import it at module import time), which is ~amd64-only because its own
-# freetype-py dep is ~amd64 in ::gentoo -- so this version drops the ~arm64/~x86
-# keywords 2026.1.0 carried. verified 2026-07-26
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/wxpython-4.2.3:*[${PYTHON_USEDEP}]
