@@ -35,7 +35,7 @@ else
 			-> ${PN}-ggml-${GGML_COMMIT}.tar.gz
 	"
 	S="${WORKDIR}/stable-diffusion.cpp-${MY_PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 # For the -9999 (git-r3) build the guard added by this patch is a no-op and
