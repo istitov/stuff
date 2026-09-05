@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # This is deliberately OLDER than ::gentoo, which ships 2026.6.0 and 2026.7.0.
 # Do not "fix" the apparent drift by bumping it: this version exists solely to
