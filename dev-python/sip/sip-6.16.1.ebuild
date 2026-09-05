@@ -11,7 +11,7 @@ DESCRIPTION="Python bindings generator for C/C++ libraries"
 HOMEPAGE="https://github.com/Python-SIP/sip/"
 LICENSE="BSD-2"
 SLOT="5"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
