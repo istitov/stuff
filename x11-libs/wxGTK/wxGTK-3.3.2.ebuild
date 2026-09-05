@@ -25,7 +25,7 @@ S="${WORKDIR}/wxWidgets-${PV}"
 
 LICENSE="wxWinLL-3 GPL-2 doc? ( wxWinFDL-3 )"
 SLOT="${WXRELEASE}/3.3"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+X curl doc debug keyring gstreamer libnotify +lzma opengl pch sdl +spell test tiff wayland webkit webp X"
 REQUIRED_USE="test? ( tiff ) tiff? ( X ) webp? ( X ) spell? ( X ) keyring? ( X )"
 RESTRICT="!test? ( test )"
