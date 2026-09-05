@@ -18,7 +18,7 @@ SRC_URI="$(pypi_sdist_url --no-normalize "${PN}" "${PV}" .zip)"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	media-libs/freetype
