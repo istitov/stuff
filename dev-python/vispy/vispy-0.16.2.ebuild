@@ -14,9 +14,7 @@ HOMEPAGE="https://vispy.org/ https://github.com/vispy/vispy"
 
 LICENSE="BSD"
 SLOT="0"
-# dev-python/freetype-py, a hard RDEPEND, is ~amd64-only in ::gentoo, which caps
-# this to ~amd64; upstream also ships no 32-bit x86 wheels. verified 2026-07-26
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # The single Cython extension (vispy/visuals/text/_sdf_cpu) is compiled against
 # the numpy headers, so numpy is a build dep too (DEPEND=${RDEPEND}).
