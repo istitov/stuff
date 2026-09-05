@@ -21,7 +21,7 @@ HOMEPAGE="
 
 LICENSE="wxWinLL-3"
 SLOT="4.0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="test webkit"
 RESTRICT="!test? ( test )"
 
