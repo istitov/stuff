@@ -2752,7 +2752,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (22) ---
+# --- special (23) ---
 
 ["app-text/mupdf"]
 source = "regex"
@@ -2820,6 +2820,11 @@ regex = '"number"\s*:\s*"([^"]+)"'
 source = "regex"
 url = "https://www.ctan.org/json/2.0/pkg/latexmk"
 regex = '"number"\s*:\s*"([^"]+)"'
+
+["dev-util/claude-code"]
+source = "regex"
+url = "https://downloads.claude.ai/claude-code-releases/latest"
+regex = '([0-9]+(?:\.[0-9]+)+)'
 
 ["dev-util/codex"]
 source = "github"

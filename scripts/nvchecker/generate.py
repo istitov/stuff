@@ -588,6 +588,23 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "url": "https://www.ctan.org/json/2.0/pkg/glossaries",
         "regex": r'"number"\s*:\s*"([^"]+)"',
     },
+    # claude-code ships from a plain release bucket with no tag scheme, so the
+    # generator skips it as "custom upstream". Upstream exposes two channel
+    # pointers and the choice is load-bearing: /stable resolves to 2.1.236
+    # while ::gentoo already ships 2.1.241, so tracking `stable` would report
+    # this package as permanently AHEAD of upstream and hide every real bump.
+    # Track `latest`, the channel ::gentoo and this overlay actually follow.
+    # The endpoint returns the bare version string and nothing else.
+    #
+    # Not the `github` source: anthropics/claude-code is the issue tracker, and
+    # its tags do not correspond to these binary releases.
+    #
+    # verified 2026-09-05: latest -> 2.1.261, stable -> 2.1.236.
+    "dev-util/claude-code": {
+        "source": "regex",
+        "url": "https://downloads.claude.ai/claude-code-releases/latest",
+        "regex": r"([0-9]+(?:\.[0-9]+)+)",
+    },
     # Both mupdf packages fetch the same Artifex tarball
     # (mupdf.com/downloads/archive/<P>-source.tar.gz) and were skipped as
     # "custom upstream, hand-add a regex entry if tracking is wanted". Doing
