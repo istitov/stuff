@@ -910,7 +910,7 @@ LICENSE="MIT"
 # Dependent crate licenses (vendored via CRATES).
 LICENSE+=" Apache-2.0 Boost-1.0 BSD BSD-2 ISC MIT MPL-2.0 Unicode-DFS-2016 ZLIB"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 IUSE="heif"
 
