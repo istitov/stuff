@@ -17,7 +17,7 @@ S="${WORKDIR}/${PN}-${PV}"
 # (MIT_LICENSE_GGML_SDCPP_LLAMACPP_ONLY.md).
 LICENSE="AGPL-3+ MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Vulkan is upstream's official GPU acceleration for both AMD and NVIDIA.
 # CUDA (koboldcpp_cublas) and ROCm/hipBLAS (an unofficial upstream fork) are
