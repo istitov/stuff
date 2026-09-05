@@ -40,6 +40,12 @@ src_unpack() {
 
 src_compile() {
 	export CARGO_HOME="${T}/cargo"
+	# Fat LTO exhausts memory on common arm64 builders and spends hours
+	# thrashing in swap.  Thin LTO retains cross-crate optimization with a
+	# substantially smaller link-time working set.
+	if [[ ${ARCH} == arm64 ]]; then
+		export CARGO_PROFILE_RELEASE_LTO="thin"
+	fi
 	# --locked builds exactly the Cargo.lock graph; network-sandbox is lifted
 	# (RESTRICT) so cargo can fetch crates.io and the pinned git dependencies.
 	cargo build --release --locked --bin qdrant \
