@@ -10,7 +10,7 @@ DESCRIPTION="Python bindings for NVIDIA Tools Extension"
 HOMEPAGE="https://github.com/NVIDIA/NVTX"
 LICENSE="Apache-2.0-with-LLVM-exceptions"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 BDEPEND=">=dev-python/cython-3.1[${PYTHON_USEDEP}]"
 
 EPYTEST_PLUGINS=()
