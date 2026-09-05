@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # cryptography is NEW in 0.4.0 and is unconditional, not an optional
 # integration: the new agent_idp module does a module-scope `from
