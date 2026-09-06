@@ -32,6 +32,11 @@ RESTRICT="test"
 # wxpython is installed for any reason. Pull the whole stack always.
 RDEPEND="
 	>=dev-python/larixite-2026.1.0[${PYTHON_SINGLE_USEDEP}]
+	amd64? (
+		$(python_gen_cond_dep '
+			dev-python/mkl-fft[${PYTHON_USEDEP}]
+		')
+	)
 	$(python_gen_cond_dep '
 		>=dev-python/asteval-1.0.8[${PYTHON_USEDEP}]
 		dev-python/charset-normalizer[${PYTHON_USEDEP}]
@@ -43,7 +48,6 @@ RDEPEND="
 		dev-python/imageio[${PYTHON_USEDEP}]
 		>=dev-python/lmfit-1.3.1[${PYTHON_USEDEP}]
 		>=dev-python/matplotlib-3.10[${PYTHON_USEDEP}]
-		dev-python/mkl-fft[${PYTHON_USEDEP}]
 		>=dev-python/numdifftools-0.9.41[${PYTHON_USEDEP}]
 		>=dev-python/numpy-2.2.0[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
