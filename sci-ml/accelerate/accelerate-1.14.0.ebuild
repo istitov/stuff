@@ -28,12 +28,16 @@ RDEPEND="
 	')
 "
 DEPEND="${RDEPEND}"
+# The gloo test dependency sits on caffe2 (where the flag lives in this
+# tree) and only on amd64: gloo requires caffe2[distributed], and both
+# flags are profile-masked everywhere else. verified 2026-09-06
 BDEPEND="test? (
 	$(python_gen_cond_dep '
 		dev-python/networkx[${PYTHON_USEDEP}]
 		sci-ml/clearml[${PYTHON_USEDEP}]
 	')
-	>=sci-ml/pytorch-2.13.0[gloo]
+	>=sci-ml/pytorch-2.13.0
+	amd64? ( >=sci-ml/caffe2-2.13.0[gloo] )
 	sci-ml/evaluate[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchdata[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]

@@ -29,13 +29,16 @@ RDEPEND="
 	')
 "
 DEPEND="${RDEPEND}"
+# The gloo test dependency applies on amd64 only: gloo requires
+# caffe2[distributed], and both flags are profile-masked everywhere
+# else. verified 2026-09-06
 BDEPEND="test? (
 	$(python_gen_cond_dep '
 		dev-python/networkx[${PYTHON_USEDEP}]
 		dev-python/parameterized[${PYTHON_USEDEP}]
 		sci-ml/clearml[${PYTHON_USEDEP}]
 	')
-	sci-ml/caffe2[gloo]
+	amd64? ( sci-ml/caffe2[gloo] )
 	sci-ml/evaluate[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchdata[${PYTHON_SINGLE_USEDEP}]
 )"
