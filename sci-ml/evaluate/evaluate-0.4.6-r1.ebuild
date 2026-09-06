@@ -47,7 +47,7 @@ RDEPEND="
 		sci-ml/transformers[${PYTHON_SINGLE_USEDEP}]
 	)
 	torch? (
-		sci-ml/caffe2[${PYTHON_SINGLE_USEDEP},distributed]
+		sci-ml/caffe2[${PYTHON_SINGLE_USEDEP}]
 		sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	)
 "
