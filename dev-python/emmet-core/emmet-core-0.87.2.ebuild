@@ -20,7 +20,7 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 # Upstream's test suite expects the full Materials Project test data
 # fixtures from the emmet monorepo; not shipped in the emmet-core
 # sdist, so the bundled tests directory is unrunnable on its own.
