@@ -20,7 +20,7 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"	# plotly is amd64-only in ::gentoo
+KEYWORDS="~amd64 ~arm64"
 # Upstream test suite expects its own large test-data tree; skip.
 RESTRICT="test"
 
