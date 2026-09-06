@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (289) ---
+# --- pypi (291) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -329,6 +329,10 @@ pypi = "flexcache"
 ["dev-python/flexparser"]
 source = "pypi"
 pypi = "flexparser"
+
+["dev-python/freetype-py"]
+source = "pypi"
+pypi = "freetype-py"
 
 ["dev-python/gdown"]
 source = "pypi"
@@ -758,6 +762,10 @@ pypi = "pymupdf4llm"
 source = "pypi"
 pypi = "pynida"
 
+["dev-python/pyopengl-accelerate"]
+source = "pypi"
+pypi = "pyopengl-accelerate"
+
 ["dev-python/pyqode-core"]
 source = "pypi"
 pypi = "pyqode-core"
@@ -1166,7 +1174,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (221) ---
+# --- github (227) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1442,6 +1450,12 @@ github = "mewwts/addict"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/blake3"]
+source = "github"
+github = "oconnor663/blake3-py"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/catalogue"]
 source = "github"
 github = "explosion/catalogue"
@@ -1697,6 +1711,12 @@ prefix = "v"
 ["dev-python/pipcl"]
 source = "github"
 github = "ArtifexSoftware/pipcl"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/portalocker"]
+source = "github"
+github = "WoLpH/portalocker"
 use_max_tag = true
 prefix = "v"
 
@@ -2414,6 +2434,12 @@ include_regex = '^therock-[0-9]+\.[0-9]+$'
 from_pattern = '^therock-([0-9]+\.[0-9]+)$'
 to_pattern = '\1.0'
 
+["sci-libs/spglib"]
+source = "github"
+github = "spglib/spglib"
+use_max_tag = true
+prefix = "v"
+
 ["sci-libs/suitesparseconfig"]
 source = "github"
 github = "DrTimothyAldenDavis/SuiteSparse"
@@ -2441,6 +2467,12 @@ use_max_tag = true
 prefix = "v"
 # note: from HOMEPAGE
 
+["sci-ml/accelerate"]
+source = "github"
+github = "huggingface/accelerate"
+use_max_tag = true
+prefix = "v"
+
 ["sci-ml/amd-gaia"]
 source = "github"
 github = "amd/gaia"
@@ -2458,6 +2490,12 @@ source = "github"
 github = "pytorch/pytorch"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
+
+["sci-ml/evaluate"]
+source = "github"
+github = "huggingface/evaluate"
+use_max_tag = true
 prefix = "v"
 
 ["sci-ml/fastflowlm"]
@@ -2520,6 +2558,12 @@ prefix = "v"
 ["sci-ml/sherpa-onnx"]
 source = "github"
 github = "k2-fsa/sherpa-onnx"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/tokenizers"]
+source = "github"
+github = "huggingface/tokenizers"
 use_max_tag = true
 prefix = "v"
 
