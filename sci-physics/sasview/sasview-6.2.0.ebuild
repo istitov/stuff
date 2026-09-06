@@ -21,6 +21,7 @@ KEYWORDS="~amd64"
 IUSE="opencl"
 
 RDEPEND="
+	amd64? ( dev-python/pyausaxs[${PYTHON_USEDEP}] )
 	dev-python/bumps[${PYTHON_USEDEP}]
 	dev-python/cffi[${PYTHON_USEDEP}]
 	dev-python/docutils[${PYTHON_USEDEP}]
@@ -38,7 +39,6 @@ RDEPEND="
 	dev-python/packaging[${PYTHON_USEDEP}]
 	dev-python/periodictable[${PYTHON_USEDEP}]
 	dev-python/platformdirs[${PYTHON_USEDEP}]
-	dev-python/pyausaxs[${PYTHON_USEDEP}]
 	dev-python/pybind11[${PYTHON_USEDEP}]
 	dev-python/pylint[${PYTHON_USEDEP}]
 	dev-python/pyopengl[${PYTHON_USEDEP}]
@@ -72,11 +72,10 @@ BDEPEND="
 # SasView runs without it; only the PDF export feature breaks.
 #
 # 6.1.x pinned pyausaxs==1.0.4; 6.2.0 unpinned it. We now depend on the
-# real dev-python/pyausaxs (the AUSAXS C++ wrapper, unversioned) so
-# SasView's SANS Debye path runs the accelerated backend instead of the
-# pure-Python fallback (ausaxs_sans_debye.py still try/excepts, so a
-# missing/broken lib degrades gracefully). x86_64-only: the wheel ships a
-# prebuilt libausaxs.so, matching sasview's ~amd64-only KEYWORDS.
+# real dev-python/pyausaxs (the AUSAXS C++ wrapper, unversioned) on amd64
+# so SasView's SANS Debye path runs the accelerated backend instead of the
+# pure-Python fallback. pyausaxs ships an x86-64-only prebuilt libausaxs.so;
+# other architectures use the fallback in ausaxs_sans_debye.py.
 # verified 2026-07-31
 
 src_prepare() {
