@@ -128,11 +128,15 @@ src_prepare() {
 
 	# remove vendored C sources to ensure we don't use accidentally
 	rm -r c_impl/vendor || die
+
+	cat > c_impl/pyproject.toml <<-EOF || die
+		[build-system]
+		requires = ["setuptools"]
+		build-backend = "setuptools.build_meta"
+	EOF
 }
 
 python_compile() {
-	local DISTUTILS_USE_PEP517=$(usex rust maturin setuptools)
-
 	if ! use rust; then
 		export FORCE_SYSTEM_BLAKE3=1
 		cd c_impl || die
