@@ -19,7 +19,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 # Upstream tests are largely network-driven (AMCSD, MP API, XrayDB
 # remote queries) and expect the full lmfit/hyperspy/... fixtures.
 RESTRICT="test"
