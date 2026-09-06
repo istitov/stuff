@@ -11,7 +11,7 @@ ACCT_USER_HOME=/var/lib/ollama
 ACCT_USER_HOME_PERMS=0750
 ACCT_USER_GROUPS=( ollama )
 
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 IUSE="cuda"
 
