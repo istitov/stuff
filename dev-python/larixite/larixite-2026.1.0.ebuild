@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 # Upstream's test suite needs an internet connection to AMCSD / the
 # Materials Project API; not runnable at package build time.
 RESTRICT="test"
