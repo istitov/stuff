@@ -36,7 +36,7 @@ LLAMACPP_S="${WORKDIR}/llama.cpp-${LLAMACPP_COMMIT}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # cuda  -> cuda_v13 llama-server backend (this overlay tracks CUDA 13.x;
 #          cuda_v12 is intentionally not wired).
