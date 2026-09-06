@@ -64,7 +64,7 @@ BDEPEND="
 	dev-python/hatch-requirements-txt[${PYTHON_USEDEP}]
 	dev-python/hatch-sphinx[${PYTHON_USEDEP}]
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
-	dev-python/pyside[${PYTHON_USEDEP},datavis(-),qml,quick,webchannel,webengine]
+	dev-python/pyside[${PYTHON_USEDEP},datavis(-),qml,quick,tools,webchannel,webengine]
 "
 
 # dev-python/xhtml2pdf is a soft upstream dep used for PDF report
