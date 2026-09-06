@@ -24,6 +24,13 @@ KEYWORDS="~amd64"
 # remote queries) and expect the full lmfit/hyperspy/... fixtures.
 RESTRICT="test"
 
+src_prepare() {
+	distutils-r1_src_prepare
+	if use arm64; then
+		rm -r larch/bin/{darwin64,linux64,win64} || die
+	fi
+}
+
 # The wx stack (wxpython/wxmplot/wxutils/darkdetect) is needed at runtime
 # even for non-GUI use: larch/plot/__init__.py unconditionally imports
 # wxmplot_xafsplots, which imports larch.wxlib.plotter once wxpython is
