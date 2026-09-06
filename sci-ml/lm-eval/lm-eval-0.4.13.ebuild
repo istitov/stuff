@@ -22,7 +22,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+api ifeval math onnxruntime sentencepiece statsmodels vllm"
 
 # Core deps from pyproject.toml [project.dependencies] at v0.4.13.
