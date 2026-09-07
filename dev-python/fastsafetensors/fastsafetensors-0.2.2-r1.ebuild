@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # The PyPI sdist contains tests but omits conftest.py and platform_utils.py,
 # which are required even to collect them. # verified 2026-08-04.
