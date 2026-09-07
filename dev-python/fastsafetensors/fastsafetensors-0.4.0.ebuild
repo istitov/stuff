@@ -19,7 +19,7 @@ HOMEPAGE="
 # The sdist installs Microsoft's MIT-licensed DirectStorage headers.
 LICENSE="Apache-2.0 MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # PyTorch is the default and only packaged framework backend.  Tqdm is
 # optional, while Typer is listed in upstream metadata but has no import or
