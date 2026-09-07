@@ -20,9 +20,11 @@ S="${WORKDIR}/${MYP}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="+pyqt6 pyside wx"
+REQUIRED_USE="^^ ( pyqt6 pyside wx )"
 
 RDEPEND="
 	>=dev-python/hyperspy-2.3.0[${PYTHON_USEDEP}]
 	>=dev-python/traits-6.3[${PYTHON_USEDEP}]
-	>=dev-python/traitsui-7.3[${PYTHON_USEDEP}]
+	>=dev-python/traitsui-7.3[${PYTHON_USEDEP},pyqt6=,pyside=,wx=]
 "

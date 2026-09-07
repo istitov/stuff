@@ -4,6 +4,11 @@
   <maintainer type="person">
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
+  <use>
+    <flag name="pyqt6">Install support for the PyQt6 backend</flag>
+    <flag name="pyside">Install support for the PySide backend</flag>
+    <flag name="wx">Install support for the wxPython backend</flag>
+  </use>
   <upstream>
     <remote-id type="pypi">Hyperspy_gui_traitsui</remote-id>
   </upstream>
