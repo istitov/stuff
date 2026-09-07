@@ -33,7 +33,7 @@ SLOT="0"
 # (src/CMakeLists.txt:34, no wxGTK 3.3 slot in ::gentoo -- provided by ::stuff's
 # x11-libs/wxGTK-3.3.* slot + forked wxwidgets.eclass, selected via
 # WX_GTK_VER=3.3-gtk3 above). verified 2026-06-20.
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="test"
 
 RESTRICT="!test? ( test )"
