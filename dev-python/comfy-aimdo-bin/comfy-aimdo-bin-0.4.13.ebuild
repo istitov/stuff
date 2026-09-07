@@ -24,7 +24,7 @@ S="${WORKDIR}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-IUSE="+cuda"
+IUSE="cuda"
 RESTRICT="bindist mirror strip"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/comfy_aimdo/*"
