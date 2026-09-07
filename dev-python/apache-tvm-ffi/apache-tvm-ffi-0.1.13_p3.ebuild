@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0 BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/typing-extensions-4.5[${PYTHON_USEDEP}]
