@@ -1174,7 +1174,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (227) ---
+# --- github (228) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2552,6 +2552,12 @@ prefix = "v"
 ["sci-ml/sentence-transformers"]
 source = "github"
 github = "huggingface/sentence-transformers"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/sentencepiece"]
+source = "github"
+github = "google/sentencepiece"
 use_max_tag = true
 prefix = "v"
 
