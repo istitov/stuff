@@ -66,6 +66,7 @@ PATCHES=(
 	# g_object_set("audio-sink") with g_object_class_find_property.
 	"${FILESDIR}/${PN}-2.4.0-link-webkit2gtk.patch"
 	"${FILESDIR}/${PN}-2.4.0-mediactrl-audio-sink-guard.patch"
+	"${FILESDIR}/${PN}-2.4.1-optional-wayland.patch"
 	# Static-link the customized vendored Clipper2 (no system equivalent -- it
 	# ships a bespoke clipper2_z Z-coordinate variant), and build md4c against
 	# the system lib instead of the vendored copy. Both otherwise build shared
@@ -183,7 +184,11 @@ src_configure() {
 	# and the header-only libigl/CGAL templates it pulls all instantiate against
 	# this private Eigen 5. verified 2026-06-20.
 	local eigen5_root="${WORKDIR}/eigen5-root"
+	# Keep cross-distcc builds on the target compiler instead of the build
+	# host's generic c++.
 	cmake -S "${WORKDIR}/eigen-${EIGEN5_PV}" -B "${WORKDIR}/eigen5-build" \
+		-DCMAKE_C_COMPILER="$(tc-getCC)" \
+		-DCMAKE_CXX_COMPILER="$(tc-getCXX)" \
 		-DCMAKE_INSTALL_PREFIX="${eigen5_root}/usr" \
 		-DEIGEN_BUILD_TESTING=OFF \
 		-DEIGEN_BUILD_DOC=OFF \

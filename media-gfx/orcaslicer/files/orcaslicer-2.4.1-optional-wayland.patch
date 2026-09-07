@@ -1,0 +1,23 @@
+--- a/src/slic3r/CMakeLists.txt
++++ b/src/slic3r/CMakeLists.txt
+@@ -777,11 +777,17 @@
+     target_link_libraries(libslic3r_gui
+         OpenGL::EGL
+         ${DBUS_LIBRARIES}
+-        ${WAYLAND_SERVER_LIBRARIES}
+-        ${WAYLAND_EGL_LIBRARIES}
+-        ${WAYLAND_CLIENT_LIBRARIES}
+         ${CURL_LIBRARIES}
+     )
++    if (WAYLAND_SERVER_LIBRARIES AND
++        WAYLAND_EGL_LIBRARIES AND
++        WAYLAND_CLIENT_LIBRARIES)
++        target_link_libraries(libslic3r_gui
++            ${WAYLAND_SERVER_LIBRARIES}
++            ${WAYLAND_EGL_LIBRARIES}
++            ${WAYLAND_CLIENT_LIBRARIES}
++        )
++    endif()
+ elseif (APPLE)
+     if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.0")
+         target_link_libraries(libslic3r_gui ${DISKARBITRATION_LIBRARY} "-framework Security" "-framework OpenGL")
