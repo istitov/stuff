@@ -17,7 +17,7 @@ S="${WORKDIR}/ao-${PV}"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Hardware-specific tests require supported accelerator devices.
 RESTRICT="test"
