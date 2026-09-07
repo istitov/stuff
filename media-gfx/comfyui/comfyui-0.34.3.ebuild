@@ -24,7 +24,7 @@ KEYWORDS="~amd64"
 # those fallbacks + triton-bin, whose Triton backend supplies
 # comfy_kitchen.apply_rope on AMD. cuda/rocm are mutually exclusive; neither = CPU.
 # USE=compile adds triton-bin for torch.compile + comfy_kitchen's Triton backend.
-IUSE="+cuda compile +templates extra opengl rocm audio"
+IUSE="cuda compile +templates extra opengl rocm audio"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	?? ( cuda rocm )"
