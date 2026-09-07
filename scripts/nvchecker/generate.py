@@ -130,6 +130,18 @@ GITHUB_TAG_FILTERS: list[tuple[re.Pattern, dict]] = [
     (re.compile(r"^facebookresearch/faiss$"),
      {"include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$"}),
 
+    # google/sentencepiece carries one stray unprefixed `1.0.0` tag among 33
+    # `vX.Y.Z` ones. `prefix` is NOT a pre-filter -- nvchecker picks the max
+    # over the RAW tag list and only strips the prefix afterwards -- so the
+    # bare tag outranks every real release and the entry reported a phantom
+    # 1.0.0, masking the genuine 0.2.1 -> 0.2.2 bump. It is not a release:
+    # PyPI stops at 0.2.2 and the tag points at a different commit
+    # (302b95ed) than v0.2.2 (e0cce7d3). Excluding the `pre` forms too, since
+    # upstream tags `vX.Y.Zpre1` ahead of the final and we do not track
+    # prereleases here. # verified 2026-09-07 against the upstream tag list.
+    (re.compile(r"^google/sentencepiece$"),
+     {"include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$"}),
+
     # mantidproject/mantid runs `vX.Y.YYYYMMDD.HHMM` nightly tags alongside
     # `vX.Y.Z(.W)(_rcN)?` releases; restrict to the release form (≤3 digits
     # in the second/third segments rules out the 8-digit YYYYMMDD).
