@@ -39,11 +39,7 @@ src_unpack() {
 
 src_compile() { :; }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+python_install() {
 	${EPYTHON} -m installer --destdir="${D}" "${WORKDIR}/${A}" || die
 	python_optimize
 }
