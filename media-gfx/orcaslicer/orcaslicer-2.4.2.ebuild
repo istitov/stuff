@@ -12,6 +12,11 @@ EIGEN5_PV="5.0.1"
 
 inherit check-reqs cmake multiprocessing wxwidgets xdg
 
+# cmake.eclass recursively finds CMake 3.0 declarations in the unused deps/
+# superbuild and disabled sandboxes.  The configured top-level project requires
+# CMake 3.13 and sets its own CMake 4 policy floor.
+CMAKE_QA_COMPAT_SKIP=1
+
 DESCRIPTION="Open-source 3D printer slicer (PrusaSlicer/Bambu Studio fork)"
 HOMEPAGE="https://www.orcaslicer.com/
 	https://github.com/OrcaSlicer/OrcaSlicer"
