@@ -289,7 +289,7 @@ LICENSE+="
 	CDLA-Permissive-2.0 MIT MPL-2.0 openssl Unicode-3.0 ZLIB
 "
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 BDEPEND="
 	test? ( dev-python/pydantic[${PYTHON_USEDEP}] )
