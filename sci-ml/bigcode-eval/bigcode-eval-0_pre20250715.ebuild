@@ -20,7 +20,7 @@ S="${WORKDIR}/bigcode-evaluation-harness-${EGIT_COMMIT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Core deps from requirements.txt at HEAD; pyext dropped in src_prepare.
 #
