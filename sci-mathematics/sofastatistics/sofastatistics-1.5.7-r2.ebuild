@@ -15,7 +15,7 @@ S="${WORKDIR}/sofastats-${PV}"
 
 LICENSE="AGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 LANGS="br ca de en es fr gl hr it mn pt ru sl tr"
 for lang in ${LANGS}; do
