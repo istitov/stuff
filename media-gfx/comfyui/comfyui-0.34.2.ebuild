@@ -17,7 +17,7 @@ S="${WORKDIR}/ComfyUI-${PV}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 # comfy_aimdo / comfy_kitchen are hard imports. USE=cuda picks their CUDA
 # wheels via the cuda= propagation below; otherwise the py3-none-any fallbacks
 # (eager kernels, no GPU offload). USE=rocm builds the AMD path: caffe2[rocm] +
