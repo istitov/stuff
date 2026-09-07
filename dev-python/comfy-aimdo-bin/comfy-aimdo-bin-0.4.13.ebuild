@@ -23,7 +23,7 @@ S="${WORKDIR}"
 # verified 2026-06-16
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="-* ~amd64"
+KEYWORDS="-* ~amd64 ~arm64"
 IUSE="cuda"
 RESTRICT="bindist mirror strip"
 
