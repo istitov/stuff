@@ -46,6 +46,10 @@ PATCHES=(
 	# prop), so the unguarded call was a silent no-op that only ever
 	# produced a GLib-GObject-CRITICAL on every wxMediaCtrl2 ctor.
 	"${FILESDIR}/${P}-mediactrl-audio-sink-guard.patch"
+	# Linux builds only need Wayland libraries when GTK was built with the
+	# Wayland backend. This patch also applies cleanly to 2.3.2.
+	"${FILESDIR}/${PN}-2.4.1-optional-wayland.patch"
+	"${FILESDIR}/${PN}-2.4.0-clipper2-static.patch"
 )
 
 RDEPEND="
@@ -153,4 +157,14 @@ src_configure() {
 	)
 
 	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+
+	# Upstream installs its license at the prefix root.
+	if [[ -f ${ED}/usr/LICENSE.txt ]]; then
+		dodir /usr/share/doc/${PF}
+		mv "${ED}/usr/LICENSE.txt" "${ED}/usr/share/doc/${PF}/LICENSE.txt" || die
+	fi
 }
