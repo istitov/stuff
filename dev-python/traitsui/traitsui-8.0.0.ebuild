@@ -15,7 +15,7 @@ SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-IUSE="+wx +pyqt6 +pyside +demo"
+IUSE="wx +pyqt6 pyside +demo"
 
 RDEPEND="
 	>=dev-python/traits-6.2[${PYTHON_USEDEP}]
