@@ -18,7 +18,7 @@ SRC_URI="$(pypi_sdist_url "${MYPN^}" "${PV}")"
 S="${WORKDIR}/${MYP}"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/hyperspy-2.3.0[${PYTHON_USEDEP}]
