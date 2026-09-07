@@ -49,6 +49,8 @@ src_prepare() {
 		-e '/^pyext\b/d' \
 		-e 's/^mosestokenizer==.*/mosestokenizer/' \
 		requirements.txt || die
+	# Upstream omits the version, which makes setuptools generate 0.0.0.
+	sed -i '/^setup(/a\\    version="0.dev20250715",' setup.py || die
 	distutils-r1_src_prepare
 }
 
