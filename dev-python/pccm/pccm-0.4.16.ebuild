@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # fire is reached only through pccm/main.py: __init__.py imports builder,
 # core, middlewares and targets, and upstream ships an empty console_scripts
