@@ -10,7 +10,7 @@ MY_PN="OrcaSlicer"
 # in src_configure rather than depended on. See the eigen block there.
 EIGEN5_PV="5.0.1"
 
-inherit check-reqs cmake multiprocessing wxwidgets xdg
+inherit check-reqs cmake multiprocessing toolchain-funcs wxwidgets xdg
 
 # cmake.eclass recursively finds CMake 3.0 declarations in the unused deps/
 # superbuild and disabled sandboxes.  The configured top-level project requires
