@@ -1,0 +1,45 @@
+From 7c1d91e66eea9218472fe203636023452222b8d2 Mon Sep 17 00:00:00 2001
+From: Ivan S. Titov <iohann.s.titov@gmail.com>
+Date: Tue, 8 Sep 2026 09:40:00 +0200
+Subject: [PATCH] use matching types for inplace inputs and outputs
+
+PDL 2.100 rejects inplace PP operations whose input and output have
+different type specifications.  This matches the declaration used by
+newer PDL-Stats releases.
+---
+ GLM/glm.pd | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/GLM/glm.pd b/GLM/glm.pd
+index ee05ae9..66fb12d 100644
+--- a/GLM/glm.pd
++++ b/GLM/glm.pd
+@@ -60,7 +60,7 @@ pp_addhdr('
+ );
+ 
+ pp_def('fill_m',
+-  Pars      => 'a(n); float+ [o]b(n)',
++  Pars      => 'a(n); [o]b(n)',
+   Inplace   => 1,
+   GenericTypes => [F, D],
+   HandleBad => 1,
+@@ -197,7 +197,7 @@ pp_def('fill_rand',
+ );
+ 
+ pp_def('dev_m',
+-  Pars      => 'a(n); float+ [o]b(n)',
++  Pars      => 'a(n); [o]b(n)',
+   Inplace   => 1,
+   GenericTypes => [F, D],
+   HandleBad => 1,
+@@ -246,7 +246,7 @@ pp_def('dev_m',
+ );
+ 
+ pp_def('stddz',
+-  Pars      => 'a(n); float+ [o]b(n)',
++  Pars      => 'a(n); [o]b(n)',
+   Inplace   => 1,
+   GenericTypes => [F, D],
+   HandleBad => 1,
+-- 
+2.51.0

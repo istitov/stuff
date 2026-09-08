@@ -7,6 +7,8 @@ DIST_AUTHOR=ETJ
 DIST_VERSION=${PV}
 inherit perl-module
 
+PATCHES=( "${FILESDIR}/${P}-pdl-2.100.patch" )
+
 DESCRIPTION="A collection of statistics modules in Perl Data Language"
 
 SLOT="0"
