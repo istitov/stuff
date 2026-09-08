@@ -19,6 +19,11 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
+src_prepare() {
+	default
+	sed -i '1s|#!/sbin/runscript|#!/sbin/openrc-run|' dkms-gentoo/dkms || die
+}
+
 src_install() {
 	dosbin dkms-gentoo/dkms-gentoo
 	newinitd dkms-gentoo/dkms dkms
