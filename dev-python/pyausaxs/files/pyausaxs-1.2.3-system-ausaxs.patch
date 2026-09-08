@@ -1,0 +1,35 @@
+--- a/pyausaxs/config.py
++++ b/pyausaxs/config.py
+@@ -1 +1 @@
+-architecture_runtime_validation = True
+\ No newline at end of file
++architecture_runtime_validation = False
+\ No newline at end of file
+--- a/pyausaxs/integration.py
++++ b/pyausaxs/integration.py
+@@ -3,7 +3,7 @@
+ from enum import Enum
+ 
+ from pyausaxs.config import architecture_runtime_validation
+-from pyausaxs.loader import bundled_lib_path, get_relink_path
++from pyausaxs.loader import find_lib_path, get_relink_path
+ from pyausaxs.architecture import CPUFeatures, is_architecture_compatible
+ from pyausaxs.signatures import LazyLib
+ 
+@@ -15,7 +15,7 @@ class AUSAXSLIB:
+     def __init__(self):
+         self.functions: LazyLib = None # type: ignore[assignment]
+         self.state = self.STATE.UNINITIALIZED
+-        self.lib_path = bundled_lib_path()
++        self.lib_path = find_lib_path()
+ 
+         self._check_cpu_compatibility()
+         self._attach_hooks()
+--- a/pyausaxs/loader.py
++++ b/pyausaxs/loader.py
+@@ -54,4 +54,4 @@ def find_lib_path() -> str:
+     if cached:
+         return cached
+ 
+-    return bundled_lib_path()
++    return "@GENTOO_LIBAUSAXS@"
