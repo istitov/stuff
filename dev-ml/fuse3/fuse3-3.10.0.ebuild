@@ -20,7 +20,7 @@ S="${WORKDIR}/ocamlfuse-${PV}"
 # "GPL-1.0-or-later" is looser than the actual file. verified 2026-06-23
 LICENSE="GPL-2"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="ocamlopt"
 
 RDEPEND="
