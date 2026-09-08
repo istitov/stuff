@@ -12,7 +12,7 @@ PATCHES=( "${FILESDIR}/${P}-pdl-2.100.patch" )
 DESCRIPTION="A collection of statistics modules in Perl Data Language"
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="test"
 RESTRICT="!test? ( test )"
 # Upstream META.json for this release requires PDL 2.057 at runtime and
