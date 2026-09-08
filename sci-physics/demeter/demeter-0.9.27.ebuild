@@ -88,7 +88,8 @@ src_configure() {
 }
 
 src_compile() {
-	./Build
+	./Build || die
+	[[ -d blib/lib/Demeter ]] || die "Build did not produce the Demeter modules"
 }
 
 src_test() {
@@ -97,11 +98,12 @@ src_test() {
 
 src_install() {
 	perl_set_version
-	./Build --install_path lib="${D}"/${SITE_LIB} \
-		--install_path arch="${D}"/${SITE_LIB} \
-		--install_path bin="${D}"/bin \
-		--install_path script="${D}"/bin \
-		--install_path bindoc=`pwd`/man/ \
-		--install_path libdoc=`pwd`/man/ \
-		install
+	./Build --install_path lib="${D}${VENDOR_LIB}" \
+		--install_path arch="${D}${VENDOR_ARCH}" \
+		--install_path bin="${D}/usr/bin" \
+		--install_path script="${D}/usr/bin" \
+		--install_path bindoc="${D}/usr/share/man/man1" \
+		--install_path libdoc="${D}/usr/share/man/man3" \
+		install || die
+	[[ -d ${D}${VENDOR_LIB}/Demeter ]] || die "Demeter modules were not installed"
 }
