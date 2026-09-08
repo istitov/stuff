@@ -24,6 +24,7 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="ocamlopt"
 
 RDEPEND="
+	!dev-ml/ocamlfuse
 	dev-ml/camlidl:=
 	>=sys-fs/fuse-3.10.0:3
 "
