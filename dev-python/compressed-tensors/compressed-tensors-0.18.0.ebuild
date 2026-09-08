@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream's install_requires omits modules imported directly by the package;
 # do not rely on transformers to pull them in transitively. # verified 2026-08-08
