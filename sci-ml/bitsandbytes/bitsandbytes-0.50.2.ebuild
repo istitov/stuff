@@ -24,7 +24,7 @@ SRC_URI="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Default backend is CPU; USE=rocm builds the HIP/ROCm backend. The ROCm
 # gfx coverage includes the consumer RDNA3 (gfx1100) and Strix-Halo
