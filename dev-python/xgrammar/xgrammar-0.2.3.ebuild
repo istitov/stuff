@@ -19,7 +19,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0 BSD-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
 # gcc:15 is a runtime dep because the CUDA token-bitmask kernel is
