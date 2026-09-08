@@ -19,7 +19,7 @@ S="${WORKDIR}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-* ~amd64"
+KEYWORDS="-* ~amd64 ~arm64"
 
 # The Linux binary is compiled against pandoc 3.10.1 and pandoc-crossref does
 # an exact pandoc-version string check that warns "not supported" on any
