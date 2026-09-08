@@ -33,6 +33,8 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
+PATCHES=( "${FILESDIR}/${P}-no-opam-probe.patch" )
+
 src_compile() {
 	tc-export CPP
 	dune_src_compile
