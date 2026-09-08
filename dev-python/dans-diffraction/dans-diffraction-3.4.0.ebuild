@@ -22,3 +22,12 @@ RDEPEND="
 	>=dev-python/scipy-0.15[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 "
+
+src_prepare() {
+	default
+
+	# Upstream declares the same launcher as both a console and GUI script.
+	# installer refuses to overwrite the first generated file with the second.
+	sed -i -e '/^\[project.gui-scripts\]/,/^$/s/^dansdiffraction = .*//' \
+		pyproject.toml || die
+}
