@@ -44,7 +44,7 @@ S="${WORKDIR}"
 # Rust/PyO3 dependency graph in-tree.
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="-* ~amd64"
+KEYWORDS="-* ~amd64 ~arm64"
 RESTRICT="bindist mirror strip"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/kornia_rs/*"
