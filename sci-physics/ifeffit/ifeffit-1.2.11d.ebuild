@@ -14,7 +14,7 @@ SRC_URI="https://archive.ubuntu.com/ubuntu/pool/multiverse/${P:0:1}/${PN}/${PN}_
 S="${WORKDIR}/${PN}-${PV}"
 LICENSE="BSD GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	media-libs/libpng:=
