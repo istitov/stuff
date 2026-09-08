@@ -1,0 +1,82 @@
+--- a/Framework/LegacyNexus/src/napi4.cpp
++++ b/Framework/LegacyNexus/src/napi4.cpp
+@@ -90,13 +90,24 @@
+   assert(pRes->iNXID == NXSIGNATURE);
+   return pRes;
+ }
++
++static int32 NXIgetname(int32 vgroup, char *name) {
++  size_t size = sizeof(NXname);
++  return Vgetname(vgroup, name, &size);
++}
++
++static int32 NXIgetclass(int32 vgroup, char *name) {
++  size_t size = sizeof(NXname);
++  return Vgetclass(vgroup, name, &size);
++}
++
+ /*----------------------------------------------------------------------*/
+ static int findNapiClass(pLgcyNexusFile pFile, int groupRef, NXname nxclass) {
+   NXname classText;
+   int32 tags[2], attID, linkID, groupID;
+ 
+   groupID = Vattach(pFile->iVID, groupRef, "r");
+-  Vgetclass(groupID, classText);
++  NXIgetclass(groupID, classText);
+   if (strcmp(classText, "NAPIlink") != 0) {
+     /* normal group */
+     strcpy(nxclass, classText);
+@@ -108,7 +119,7 @@
+       Vgetattr(groupID, attID, tags);
+       linkID = Vattach(pFile->iVID, tags[1], "r");
+       NXname linkClass;
+-      Vgetclass(linkID, linkClass);
++      NXIgetclass(linkID, linkClass);
+       Vdetach(groupID);
+       Vdetach(linkID);
+       strcpy(nxclass, linkClass);
+@@ -144,7 +155,7 @@
+     /* loop and check */
+     for (i = 0; i < iN; i++) {
+       iNew = Vattach(pFile->iVID, pArray[i], "r");
+-      Vgetname(iNew, pText);
++      NXIgetname(iNew, pText);
+       Vdetach(iNew);
+       if (strcmp(pText, name) == 0) {
+         pArray[i] = findNapiClass(pFile, pArray[i], pText);
+@@ -165,7 +176,7 @@
+       Vgettagref(pFile->iCurrentVG, i, &iTag, &iRef);
+       if (iTag == DFTAG_VG) {
+         iNew = Vattach(pFile->iVID, iRef, "r");
+-        Vgetname(iNew, pText);
++        NXIgetname(iNew, pText);
+         Vdetach(iNew);
+         if (strcmp(pText, name) == 0) {
+           iRef = findNapiClass(pFile, iRef, pText);
+@@ -347,7 +358,7 @@
+     strncat(buffer, "/", bufLen - strlen(buffer));
+     groupID = Vattach(pFile->iVID, pFile->iStack[i].iVref, "r");
+     if (groupID != -1) {
+-      if (Vgetname(groupID, pText) != -1) {
++      if (NXIgetname(groupID, pText) != -1) {
+         strncat(buffer, pText, bufLen - strlen(buffer));
+       } else {
+         NXReportError("ERROR: NXIbuildPath cannot get vgroup name");
+@@ -707,7 +718,7 @@
+       NXReportError("ERROR: HDF cannot attach to Vgroup");
+       return NXstatus::NX_ERROR;
+     }
+-    Vgetname(iTemp, name);
++    NXIgetname(iTemp, name);
+     Vdetach(iTemp);
+     findNapiClass(pFile, pFile->iStack[pFile->iStackPtr].iRefDir[iCurDir], nxclass);
+     *datatype = static_cast<NXnumtype>(DFTAG_VG);
+@@ -720,7 +731,7 @@
+         NXReportError("ERROR: HDF cannot attach to Vgroup");
+         return NXstatus::NX_ERROR;
+       }
+-      Vgetname(iTemp, name);
++      NXIgetname(iTemp, name);
+       Vdetach(iTemp);
+       findNapiClass(pFile, pFile->iStack[pFile->iStackPtr].iRefDir[iCurDir], nxclass);
+       *datatype = static_cast<NXnumtype>(DFTAG_VG);
