@@ -5,8 +5,8 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
 DISTUTILS_SINGLE_IMPL=1
-# Capped to 3.12-3.13 by the kornia-rs-bin dep (no cp314 wheel upstream).
-PYTHON_COMPAT=( python3_{12..13} )
+# Capped by the implementations supported by kornia-rs-bin.
+PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1 pypi
 
