@@ -129,6 +129,14 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
+	# Upstream hardcodes lib and turns imported CMake targets and absolute
+	# library paths into invalid -l arguments in the generated file.
+	local private_libs="-lm -ljpeg -lz$(usex szip ' -lsz' '')"
+	sed -i \
+		-e "s|^libdir=.*|libdir=\${exec_prefix}/$(get_libdir)|" \
+		-e "s|^Libs.private:.*|Libs.private: ${private_libs}|" \
+		"${ED}/usr/$(get_libdir)/pkgconfig/hdf.pc" || die
+
 	# 4.4.0 renamed release_notes/ to release_docs/ and dropped
 	# bugs_fixed.txt and misc_docs.txt from it.
 	dodoc release_docs/{RELEASE,HISTORY}.txt
