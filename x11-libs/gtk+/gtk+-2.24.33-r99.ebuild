@@ -12,7 +12,7 @@ HOMEPAGE="https://www.gtk.org/"
 
 LICENSE="LGPL-2+"
 SLOT="2"
-KEYWORDS="~amd64 ~arm ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="aqua cups examples +introspection test vim-syntax xinerama"
 REQUIRED_USE="xinerama? ( !aqua )"
 
