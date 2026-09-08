@@ -21,23 +21,8 @@ LICENSE="NCSA-HDF"
 # symlink, but it produces nothing here -- execute_process swallows its own
 # failure -- so the old names are simply gone.
 #
-# The subslot is not enough for the two consumers in this tree, though.
-# 4.4.0 also adds a size_t out-parameter to Vgetname and Vgetclass, and
-# both sci-physics/mantid and sci-libs/nexus[hdf4] call the old
-# two-argument form in their vendored NeXus napi4 sources, so they fail
-# to compile rather than merely needing a relink. Both are capped at
-# <sci-libs/hdf-4.4 until that code is adapted. verified 2026-09-04
 SLOT="0/11"
-KEYWORDS=""
-# Unkeyworded deliberately, unlike every earlier version: unmask the exact
-# version to install it. 4.4.0 builds and installs cleanly, but its API
-# break takes both in-tree consumers with it -- sci-physics/mantid and
-# sci-libs/nexus[hdf4] cap at <sci-libs/hdf-4.4 because their vendored
-# NeXus napi4 sources call the two-argument Vgetname/Vgetclass. Shipping
-# it ~arch would put a version into the normal upgrade path that cannot
-# coexist with the packages that consume it. Restore the keywords from
-# 4.3.1 once those call sites are adapted to the three-argument form.
-# verified 2026-09-04
+KEYWORDS="~arm64"
 IUSE="examples fortran szip static-libs test"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="test? ( szip )"
