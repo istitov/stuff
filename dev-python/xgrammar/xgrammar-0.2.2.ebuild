@@ -19,7 +19,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0 BSD-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
 # The packaged-library lookup patch uses load_lib_module(extra_lib_paths=...),
