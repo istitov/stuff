@@ -14,7 +14,7 @@ S="${WORKDIR}/${PN}-${PV}"
 
 LICENSE="Artistic GPL-1+"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="doc test"
 
 RDEPEND="
