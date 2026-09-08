@@ -17,7 +17,7 @@ HOMEPAGE="https://github.com/dask/dask-labextension"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 # Upstream's test suite spins up a live JupyterLab instance and
 # talks to it over HTTP; not runnable at package build time.
 RESTRICT="test"
