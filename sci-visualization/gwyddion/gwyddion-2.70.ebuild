@@ -11,7 +11,7 @@ SRC_URI="https://gwyddion.net/download/${PV}/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="bzip2 doc fits jansson hdf5 nls openexr openmp perl python ruby sourceview unique xml X zlib"
 
 # --enable-pygwy is Python 2.7 only (upstream requirement). pygwy's
