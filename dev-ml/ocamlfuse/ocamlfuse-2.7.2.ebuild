@@ -25,8 +25,9 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 BDEPEND="
 	dev-ml/dune-configurator
-	dev-ml/opam
 "
+
+PATCHES=( "${FILESDIR}/${P}-no-opam-probe.patch" )
 
 src_compile() {
 	tc-export CPP

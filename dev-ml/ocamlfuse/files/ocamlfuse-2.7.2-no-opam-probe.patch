@@ -1,0 +1,5 @@
+--- a/lib/config/discover.ml
++++ b/lib/config/discover.ml
+@@ -37 +37 @@ let () =
+-            (Printf.sprintf "opam var camlidl:lib > %s" calmidl_fname)
++            (Printf.sprintf "ocamlc -where > %s" calmidl_fname)
