@@ -37,7 +37,7 @@ S="${WORKDIR}/${PN}-${PV}"
 
 LICENSE="Apache-2.0 BSD-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
 # transformers is capped <5 upstream: v5 breaks tokenizer loading for several
