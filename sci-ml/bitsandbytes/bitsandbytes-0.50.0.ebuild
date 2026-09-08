@@ -24,7 +24,7 @@ SRC_URI="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # Default backend is CPU; CUDA and ROCm backends are mutually exclusive.
 IUSE="cuda rocm"
