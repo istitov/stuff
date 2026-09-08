@@ -4,7 +4,16 @@ EAPI=8
 
 DESCRIPTION="Pandoc filter for cross-references"
 HOMEPAGE="https://github.com/lierdakil/pandoc-crossref"
-SRC_URI="https://github.com/lierdakil/pandoc-crossref/releases/download/v${PV}/pandoc-crossref-Linux-X64.tar.xz -> ${P}.tar.xz"
+SRC_URI="
+	amd64? (
+		https://github.com/lierdakil/pandoc-crossref/releases/download/v${PV}/pandoc-crossref-Linux-X64.tar.xz
+			-> ${P}-amd64.tar.xz
+	)
+	arm64? (
+		https://github.com/lierdakil/pandoc-crossref/releases/download/v${PV}/pandoc-crossref-Linux-ARM64.tar.xz
+			-> ${P}-arm64.tar.xz
+	)
+"
 
 S="${WORKDIR}"
 
