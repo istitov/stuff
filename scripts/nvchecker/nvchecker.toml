@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (291) ---
+# --- pypi (292) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -817,6 +817,10 @@ pypi = "python-socketio"
 ["dev-python/pyvista"]
 source = "pypi"
 pypi = "pyvista"
+
+["dev-python/pyvista-validation"]
+source = "pypi"
+pypi = "pyvista-validation"
 
 ["dev-python/pyvistaqt"]
 source = "pypi"
