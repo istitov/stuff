@@ -1,0 +1,84 @@
+--- a/pgfun.c
++++ b/pgfun.c
+@@ -25,9 +25,9 @@
+ /* Prototypes */
+ 
+ static SV*  pgfunname[2];
+-float pgfun1();
+-float pgfun2();
+-void   pgfunplot();
++float pgfun1(float *x);
++float pgfun2(float *x);
++void   pgfunplot(int *visible,float *x, float *y, float *z);
+ void PGFUNX(float fy(), int *n, float *xmin, float *xmax, int *pgflag);
+ void PGFUNY(float fx(), int *n, float *ymin, float *ymax, int *pgflag);
+ void PGFUNT(float fx(), float fy(), int *n, float *tmin, float *tmax, int *pgflag);
+@@ -71,8 +71,7 @@
+ 
+ /* pgplot called function perl intermediate number 1 */
+ 
+-float pgfun1(x)  
+-   float *x; {
++float pgfun1(float *x) {
+ 
+    dSP ;
+    int count;
+@@ -111,8 +110,7 @@
+ 
+ /* pgplot called function perl intermediate number 2 */
+ 
+-float pgfun2(x)  
+-   float *x; {
++float pgfun2(float *x) {
+ 
+    dSP ;
+    int count;
+@@ -149,9 +147,7 @@
+ 
+ /* pgplot called function perl intermediate for PGCONX */
+ 
+-void pgfunplot(visible,x,y,z)  
+-   int *visible;
+-   float *x,*y,*z; {
++void pgfunplot(int *visible, float *x, float *y, float *z) {
+ 
+    dSP ;
+    int count;
+--- a/PGPLOT.xs
++++ b/PGPLOT.xs
+@@ -306,7 +306,7 @@ pgconx(a,idim,jdim,i1,i2,j1,j2,c,nc,plot)
+   CODE:
+     DEBUG_PRINT(pgconx);
+     pgfunname[0] = plot;
+-    cpgconx(a,idim,jdim,i1,i2,j1,j2,c,nc,pgfunplot);
++    cpgconx(a,idim,jdim,i1,i2,j1,j2,c,nc,(void(*)(void))pgfunplot);
+ 
+ 
+ void
+@@ -462,7 +462,7 @@ pgfunt(fx,fy,n,tmin,tmax,pgflag)
+     DEBUG_PRINT(pgfunt);
+     pgfunname[0] = fx;
+     pgfunname[1] = fy;
+-    cpgfunt(pgfun1,pgfun2,n,tmin,tmax,pgflag);
++    cpgfunt((float(*)(void))pgfun1,(float(*)(void))pgfun2,n,tmin,tmax,pgflag);
+ 
+ 
+ void
+@@ -475,7 +475,7 @@ pgfunx(fy,n,xmin,xmax,pgflag)
+   CODE:
+     DEBUG_PRINT(pgfunx);
+     pgfunname[0] = fy;
+-    cpgfunx(pgfun1,n,xmin,xmax,pgflag);
++    cpgfunx((float(*)(void))pgfun1,n,xmin,xmax,pgflag);
+ 
+ 
+ void
+@@ -488,7 +488,7 @@ pgfuny(fx,n,ymin,ymax,pgflag)
+   CODE:
+     DEBUG_PRINT(pgfuny);
+     pgfunname[0] = fx;
+-    cpgfuny(pgfun1,n,ymin,ymax,pgflag);
++    cpgfuny((float(*)(void))pgfun1,n,ymin,ymax,pgflag);
+ 
+ 
+ void
