@@ -16,6 +16,7 @@ case ${ARCH} in
 	amd64) MY_WHEEL=${AMD64_WHEEL} ;;
 	arm64) MY_WHEEL=${ARM64_WHEEL} ;;
 esac
+MUPDF_PV=1.28.3
 
 DESCRIPTION="PyMuPDF document-layout analysis extension (binary wheel)"
 HOMEPAGE="
@@ -36,7 +37,7 @@ RESTRICT="bindist mirror strip"
 
 RDEPEND="
 	~dev-python/PyMuPDF-${PV}[${PYTHON_USEDEP}]
-	~dev-python/mupdf-${PV}:=[${PYTHON_USEDEP}]
+	~dev-python/mupdf-${MUPDF_PV}:=[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 	sci-libs/onnxruntime[python,${PYTHON_USEDEP}]
@@ -65,9 +66,9 @@ python_install() {
 	local mod
 	for mod in _features.so _tgif.so; do
 		patchelf --replace-needed "libmupdf.so.${PV#1.}" \
-			"libmupdf.so.${PV}" "${D}$(python_get_sitedir)/pymupdf/${mod}" || die
+			"libmupdf.so.${MUPDF_PV}" "${D}$(python_get_sitedir)/pymupdf/${mod}" || die
 		patchelf --replace-needed "libmupdfcpp.so.${PV#1.}" \
-			"libmupdfcpp.so.${PV}" "${D}$(python_get_sitedir)/pymupdf/${mod}" || die
+			"libmupdfcpp.so.${MUPDF_PV}" "${D}$(python_get_sitedir)/pymupdf/${mod}" || die
 	done
 	python_optimize
 }
