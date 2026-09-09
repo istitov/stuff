@@ -43,6 +43,6 @@ src_compile() {
 }
 
 src_install() {
-	insinto /usr/$(get_libdir)/deadbeef
-	doins ddb_archive_reader.so
+	exeinto /usr/$(get_libdir)/deadbeef
+	doexe ddb_archive_reader.so
 }
