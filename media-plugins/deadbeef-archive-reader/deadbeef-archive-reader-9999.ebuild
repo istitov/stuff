@@ -30,12 +30,10 @@ RDEPEND="
 DEPEND="
 	${DEPEND_COMMON}
 	"
-#PATCHES=(
-#	"${FILESDIR}"/fix-blargg_ok-declaration.patch
-#)
-
 src_prepare() {
 	default
+	sed -e 's/#define debug_printf 1 ? (void)0 : (void)/#define debug_printf(...) ((void)0)/' \
+		-i fex/unrar/unrar.cpp || die
 }
 
 src_compile() {
