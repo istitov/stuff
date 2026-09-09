@@ -574,6 +574,18 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "source": "pypi",
         "pypi": "tokenspeed-mla",
     },
+    # sci-ml/unsloth builds from the upstream git tag (PyPI withdrew the
+    # sdists), so the SRC_URI heuristic would classify it as a github source.
+    # It must NOT: unslothai/unsloth is a monorepo whose only tags are the
+    # DESKTOP releases (v0.1.807-beta), so use_max_tag would resolve a
+    # desktop version, compare it against a CalVer PV, and hide every real
+    # library release behind a phantom. PyPI still publishes the library
+    # (wheels, just no sdist), so it stays the correct version oracle even
+    # though it is no longer the download source. # verified 2026-09-09
+    "sci-ml/unsloth": {
+        "source": "pypi",
+        "pypi": "unsloth",
+    },
     # latexmk and glossaries are TeX Live-shipped but ALSO have independent
     # upstream releases, and were skipped as untrackable ("no tag scheme",
     # "add a regex tracker"). CTAN exposes a machine-readable canonical
