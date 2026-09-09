@@ -1,0 +1,8 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -132,4 +132,5 @@ AC_ARG_ENABLE(converter,      [AS_HELP_STRING([--enable-converter      ], [build
+ AC_ARG_ENABLE(medialib, [AS_HELP_STRING([--enable-medialib      ], [build media library plugin (default: auto)])], [enable_medialib=$enableval], [enable_medialib=yes])
++AC_ARG_ENABLE(mpris, [AS_HELP_STRING([--disable-mpris      ], [disable MPRIS plugin (default: enabled)])], [enable_mpris=$enableval], [enable_mpris=yes])
+ AC_ARG_ENABLE(dumb,      [AS_HELP_STRING([--enable-dumb      ], [build DUMB plugin (default: auto)])], [enable_dumb=$enableval], [enable_dumb=yes])
+ AC_ARG_ENABLE(shn,      [AS_HELP_STRING([--enable-shn      ], [build SHN plugin (default: auto)])], [enable_shn=$enableval], [enable_shn=yes])
+ AC_ARG_ENABLE(psf,      [AS_HELP_STRING([--enable-psf      ], [build AOSDK-based PSF(,QSF,SSF,DSF) plugin (default: auto)])], [enable_psf=$enableval], [enable_psf=yes])
