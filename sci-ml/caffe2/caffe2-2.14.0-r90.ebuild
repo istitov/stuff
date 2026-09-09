@@ -4,19 +4,15 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
-# ROCM_VERSION selects rocm.eclass's target-list branch, which sets this
-# package's own amdgpu_targets_* IUSE and ROCM_REQUIRED_USE. The 10.* branch is
-# a superset of 6.1's: it adds gfx1152/gfx1153 and promotes gfx1102/1103/1150/
-# 1151 to official. Nothing here uses ROCM_USEDEP, so this does not constrain
-# the ROCm libraries themselves. verified 2026-08-30.
+# Select ROCm 10 target flags; dependency atoms below constrain the stack.
+# verified 2026-08-30
 ROCM_VERSION=10.0
 inherit python-single-r1 cmake cuda flag-o-matic prefix rocm
 
 MYPN=pytorch
 MYP=${MYPN}-${PV}
 
-# caffe2-2.9.0 depends on future version of composable kernel
-# TODO: replace it with DEPEND in the future
+# Build against upstream's pinned composable-kernel revision.
 CK_COMMIT=5a74dec07a894484b9489d0c0e00cd3b52652d18
 CK_P=composable_kernel-${CK_COMMIT:0:8}
 
@@ -63,37 +59,12 @@ REQUIRED_USE="
 	nccl? ( rocm )
 "
 
-# FBGEMM: the 2.11-2.13 incompatibility is GONE at 2.14.0, but the cap is kept
-# deliberately. FBGEMM 1.7 dropped a template parameter from fbgemm::Quantize
-# (was Quantize<T, LEGACY>, now Quantize<T>) and the 2.13 source called the
-# 2-arg form, which is why those ebuilds cap below 1.5. Every call site in
-# 2.14.0 -- aten/src/ATen/native/QuantizedLinear.cpp, quantized/
-# AffineQuantizerBase.cpp and quantized/cpu/kernels/QuantizedOpKernels.cpp --
-# now uses the 1-arg form, and no 2-arg call remains anywhere under aten/.
-#
-# That form compiles against BOTH series, because 1.4's declaration is
-# `template <typename T, bool LEGACY = true>` -- the second parameter is
-# defaulted, so Quantize<int8_t> resolves there too. So the cap is no longer
-# forced by the API. It stays because only the 1.4 series is build-verified
-# here; 1.7 selects the non-LEGACY rounding path and that has NOT been tested
-# against this source. Lift it only after a build+run check against
-# >=sci-ml/FBGEMM-1.7, not on the API reading alone. verified 2026-09-02
-
-# The aotriton atom NO LONGER DIVERGES FROM UPSTREAM. At 2.13.0 we pinned
-# 0.13b against upstream's own __AOTRITON_VER "0.12b", because 0.12b ships no
-# rocm7.14/7.15 shim and ROCm 10.0 reports HIP 7.15, so caffe2[memefficient]
-# could not be built against the 10.0 stack. 2.14.0's
-# cmake/External/aotriton.cmake sets __AOTRITON_VER "0.13b" itself, so upstream
-# has converged on the version this fork already required and the atom below is
-# now simply agreement rather than an override. Nothing in this ebuild fetches
-# aotriton: it is a system dependency, found at build time through
-# AOTRITON_INSTALLED_PREFIX. verified 2026-09-02 against the 2.14.0 tarball.
-#
-# The !!<sci-ml/pytorch-2.13.0 blocker below: torch._C moved into this package
-# in 2.13, so an older pytorch -- which installs its own copy -- has to be
-# removed before the replacement file can be merged. (Comment lives here, not
-# beside the atom: a `#` inside the quoted RDEPEND is swallowed as literal text
-# and silently masks the rest of the depset.)
+# The one-argument Quantize API works with FBGEMM 1.4 and 1.7, but 1.7's
+# new rounding path is untested; retain the build-verified 1.4 cap.
+# verified 2026-09-02
+# aotriton-0.13b now matches upstream and supplies ROCm 10's rocm7.15 shim.
+# verified 2026-09-02
+# torch._C lives here; block older pytorch copies before merge.
 RDEPEND="
 	${PYTHON_DEPS}
 	!!<sci-ml/pytorch-2.13.0
@@ -183,104 +154,48 @@ DEPEND="
 	qnnpack? ( dev-libs/clog )
 "
 
-# Nineteen patches below, in three groups: eight ${P}-named REBASES, one
-# ${P}-named NEW patch (rocm-hipfile-optional, annotated where it appears), and
-# ten shared ${PN}-<oldver> files carried unchanged from the 2.13.0 ebuilds --
-# so nine ${P} entries in total, of which only the eight were re-derived.
-#
-# Of those eight, three would not apply to 2.14.0 at all; the other five applied
-# only "with fuzz", i.e. patch discarding context lines and guessing placement
-# -- two of them at fuzz 2, the maximum. eapply tolerates fuzz, so those would
-# have built, but a guessed hunk is not a verified one. A patch that still
-# applies exactly keeps its old shared name; do not rename one just because the
-# version moved, or pkgcheck -k DuplicateFiles starts reporting the copies.
-#
-# NB when re-deriving these: the patch baseline is NOT the raw tarball. The
-# src_prepare() below runs its own sed pass (unbundle fmt, drop third_party
-# add_subdirectory, rewrite the aotriton libdir, ...) BEFORE cmake_src_prepare
-# applies PATCHES, and those seds hit the very files the patches touch --
-# cmake/Dependencies.cmake, torch/CMakeLists.txt, CMakeLists.txt,
-# c10/CMakeLists.txt, aten/src/ATen/CMakeLists.txt and
-# cmake/External/aotriton.cmake. Rebasing against the unmodified tarball
-# produces patches that verify green and then die in the real prepare phase.
-# Every patch below was checked against the post-sed tree and applies with zero
-# failures, zero fuzz and zero rejects; only plain line offsets remain.
-#
-# Forking a version-named copy when a shared patch stops applying exactly is
-# this package's existing habit -- aotriton-fixes, mkl-public-scrub,
-# rocm-distributed-link and removekineto already exist in two generations each.
-# verified 2026-09-02
+# Rebase against the post-sed source tree and keep shared patch names while
+# their context remains exact. All patches apply without fuzz. verified 2026-09-02
 PATCHES=(
 	"${FILESDIR}"/${P}-unbundle_fmt.patch.xz
 	"${FILESDIR}"/${P}-unbundle_kineto.patch.xz
-	# 2.14.0 renamed ${Torch_SOURCE_DIR} to ${CMAKE_SOURCE_DIR} in the
-	# PocketFFT block, which is the whole reason the 2.8.0 patch missed.
+	# Rebased for the Torch_SOURCE_DIR rename.
 	"${FILESDIR}"/${P}-unbundle_pocketfft.patch.xz
 	"${FILESDIR}"/${PN}-2.5.1-cudnn_include_fix.patch.xz
 	"${FILESDIR}"/${P}-cpp-httplib.patch.xz
 	"${FILESDIR}"/${PN}-2.5.1-glog-0.6.0.patch.xz
 	"${FILESDIR}"/${PN}-2.7.0-glog-0.7.1.patch.xz
-	# 2.13.0 duplicated the "check if glog is initialized" hack into
-	# c10/util/Exception.cpp, still calling the internal
-	# glog_internal_namespace_::IsGoogleLoggingInitialized(); system glog 0.6.0
-	# only exports the public ::google::IsGoogleLoggingInitialized(), so link
-	# fails. Mirror the Logging.cpp glog patch here. Still needed at 2.14.0,
-	# where the file is unchanged. # verified 2026-09-02
+	# Use glog's public initialization API; the internal symbol does not link.
+	# verified 2026-09-02
 	"${FILESDIR}"/${PN}-2.13.0-glog-exception-init.patch.xz
-	# Still the shared 2.12.0 patch: its context is ${CMAKE_INSTALL_LIBDIR},
-	# which the libaotriton-path sed in src_prepare puts there, so it applies
-	# exactly at 2.14.0 too.
+	# Applies after the libaotriton-path rewrite below.
 	"${FILESDIR}"/${PN}-2.12.0-aotriton-fixes.patch.xz
 	"${FILESDIR}"/${PN}-2.8.0-rocm-minus-flash.patch.xz
 	"${FILESDIR}"/${P}-rocm-distributed-link.patch.xz
-	# NEW AT 2.14.0. Upstream added a REQUIRED find_package(hipfile) for
-	# ROCm >= 7.14, although PyTorch's USE_CUFILE option remains CUDA-only and
-	# no hipfile target is consumed by the ROCm build. ::stuff does package the
-	# early-access sys-libs/hipFile, but forcing it (and rocprofiler-register)
-	# into every PyTorch ROCm closure would provide no PyTorch GDS support.
-	# Keep discovery optional: an installed hipFile is found, while its absence
-	# leaves the already-disabled USE_CUFILE path unchanged. Revisit when
-	# PyTorch consumes hip::hipfile or exposes a ROCm storage option.
-	# verified 2026-09-03
+	# hipFile is discovered but unused by PyTorch's CUDA-only CUFILE path; keep
+	# it optional until ROCm storage support exists. verified 2026-09-03
 	"${FILESDIR}"/${P}-rocm-hipfile-optional.patch.xz
 	"${FILESDIR}"/${PN}-2.9.1-torch_cpu.patch.xz
-	# The third_party include-dir block this drops is intact at 2.14.0, but
-	# upstream appended a perfetto section right after it, so the trailing
-	# context no longer matched.
+	# Rebased around the new adjacent perfetto section.
 	"${FILESDIR}"/${P}-gentoo.patch.xz
 	"${FILESDIR}"/${P}-mimalloc.patch.xz
-	# 2.14.0 adds XPU_RUNTIME/XPU_DRIVER to the orphaned-GPU-activity list in
-	# KinetoEvent::externalId(); both are carried into the inverted, guarded
-	# form so the guard still matches upstream's own set exactly.
+	# Preserve 2.14's expanded activity list while guarding Kineto.
 	"${FILESDIR}"/${P}-removekineto-pr178960.patch.xz
 
-	# 2.13.0 moved setup.py's submodule check into cmake/PreBuildSteps.cmake,
-	# which FATAL_ERRORs on the (intentionally empty) third_party submodules of
-	# a tarball build. Guard the whole block behind a .git check so it no-ops
-	# here (deps are system / prestaged). # verified 2026-07-18
+	# Skip the submodule check for tarballs with system/prestaged deps.
+	# verified 2026-07-18
 	"${FILESDIR}"/${PN}-2.13.0-prebuildsteps-tarball-guard.patch.xz
 
-	# 2.13.0's cmake/PostBuildSteps.cmake runs wrap_headers.py via install(CODE)
-	# against ${CMAKE_INSTALL_PREFIX}/include with no ${DESTDIR} prefix, so it
-	# writes to the live /usr/include instead of the image (sandbox denies it).
-	# Prepend $ENV{DESTDIR}. # verified 2026-07-18
+	# Route install-time header wrapping through DESTDIR. verified 2026-07-18
 	"${FILESDIR}"/${PN}-2.13.0-wrap-headers-destdir.patch.xz
 
-	# stuff overlay only: scrub MKL MPI / cluster libs and force GNU
-	# OpenMP threading in caffe2::mkl's public link interface so that
-	# downstream consumers (vllm, custom torch C++ ext) link cleanly
-	# on hosts with the basic intel-oneapi-mkl package (no Cluster
-	# Edition, no Intel Compiler / libiomp5). Drop when an equivalent
-	# upstream fix lands. # verified 2026-05-08 against 2.11.0;
-	# cmake/public/mkl.cmake context identical at 2.12.0, 2.13.0 and 2.14.0.
+	# Remove MKL cluster libs from the public link interface and force GNU OpenMP
+	# so downstreams need neither Cluster Edition nor libiomp5. verified 2026-05-08
 	"${FILESDIR}"/${PN}-2.12.0-mkl-public-scrub.patch.xz
 )
 
 src_prepare() {
-	# files/*.patch ship xz-compressed to stay under pkgcheck's 50K
-	# TotalSizeViolation cap; eapply(1) does not decompress, so expand
-	# every files/ patch into ${T} and repoint PATCHES (and the
-	# composable-kernel patch below) at the plain-text copies.
+	# Decompress patches into T because eapply cannot read xz payloads.
 	local p b i
 	mkdir -p "${T}"/patches || die
 	for p in "${FILESDIR}"/*.patch.xz; do
@@ -297,7 +212,6 @@ src_prepare() {
 	fi
 	filter-lto #bug 862672
 
-	# Unbundle fmt
 	sed -i \
 		-e 's|::fmt-header-only||' \
 		c10/CMakeLists.txt \
@@ -308,7 +222,6 @@ src_prepare() {
 	# tensorpipe is in system, not a build target of caffe2
 	sed -e '/target_compile_options_if_supported(tensorpipe/d' -i cmake/Dependencies.cmake || die
 
-	# Drop third_party from CMake tree
 	sed -i \
 		-e '/add_subdirectory.*third_party/d' \
 		CMakeLists.txt \
@@ -317,25 +230,17 @@ src_prepare() {
 		aten/src/ATen/CMakeLists.txt \
 		|| die
 
-	# 2.13.0's cmake/FileMirroring.cmake FATAL_ERRORs on CUDA builds when the
-	# bundled cutlass submodule's CuTeDSL grouped_gemm.py example is absent --
-	# it is, because we unbundle cutlass and build against system
-	# dev-libs/cutlass. That file is only an optional Blackwell CuTeDSL
-	# grouped-GEMM template vendored into torch/_inductor; the single
-	# FATAL_ERROR in the file is this check, so downgrade it to STATUS and let
-	# the unbundled build configure. Drop if cutlass is ever prestaged.
+	# System cutlass lacks an optional CuTeDSL example; do not fail mirroring.
+	# Drop if cutlass starts installing it.
 	# verified 2026-08-08
 	sed -i -e 's/message(FATAL_ERROR/message(STATUS/' cmake/FileMirroring.cmake || die
 
-	# 2.13.0 added FMT_NO_UNIQUE_ADDRESS compile-defs on the bundled fmt /
-	# fmt-header-only targets, which no longer exist once fmt is unbundled
-	# (system dev-libs/libfmt, add_subdirectory dropped above); drop those two
-	# lines (2.12.0 had no such block and built fine). # verified 2026-07-18
+	# The bundled fmt targets do not exist with system libfmt.
+	# verified 2026-07-18
 	sed -i \
 		-e '/target_compile_definitions(fmt.*FMT_NO_UNIQUE_ADDRESS/d' \
 		cmake/Dependencies.cmake \
 		|| die
-	# Change libc10* path
 	sed -i \
 		-e "/EXPORT/s|DESTINATION lib)|DESTINATION $(get_libdir))|" \
 		c10/cuda/CMakeLists.txt \
@@ -343,14 +248,13 @@ src_prepare() {
 		c10/hip/CMakeLists.txt \
 		|| die
 
-	# Change libaotriton path
 	sed -i \
 		-e "s|}/lib|}/\${CMAKE_INSTALL_LIBDIR}|g" \
 		-e "/set(__AOTRITON_LIB/s|lib/|\${CMAKE_INSTALL_LIBDIR}/|g" \
 		cmake/External/aotriton.cmake \
 		|| die
 
-	# Noisy warnings from Logging.h
+	# Silence known Logging.h noise.
 	sed -i 's/-Wextra-semi//' cmake/public/utils.cmake || die
 
 	cmake_src_prepare
@@ -358,7 +262,7 @@ src_prepare() {
 	flatc --cpp --gen-mutable --scoped-enums mobile_bytecode.fbs || die
 	popd > /dev/null || die
 
-	# prefixify the hardcoded paths, after all patches are applied
+	# Prefix hardcoded paths after applying patches.
 	hprefixify \
 		aten/CMakeLists.txt \
 		caffe2/CMakeLists.txt \
@@ -378,23 +282,17 @@ src_prepare() {
 			-e "s:lib/cmake:$(get_libdir)/cmake:g" \
 			-i cmake/public/LoadHIP.cmake || die
 
-		# TODO: delete, when caffe2 depends on systemwide composable_kernel
+		# Drop when composable-kernel becomes a system dependency.
 		sed -e "s:third_party/composable_kernel:../composable_kernel-${CK_COMMIT}:g" \
 			-i aten/src/ATen/CMakeLists.txt || die
 
-		# Bug 959808: fix for gfx101x targets. Rebased onto the CK commit
-		# 2.14.0 pins and now a SINGLE hunk: upstream CK has since taken
-		# everything else this patch used to add (ck.hpp's buffer-resource and
-		# FMA guards, ck_tile/core/config.hpp's __gfx101__ define and
-		# CK_TILE_BUFFER_RESOURCE_3RD_DWORD, and the gfx101 entries in the six
-		# device_*_dl.hpp headers plus gridwise_tensor_rearrange.hpp). Only
-		# kernel_gemm_dpp still leaves gfx101x out of its ISA guard.
-		# verified 2026-09-02 against composable_kernel-5a74dec0
+		# Keep the remaining gfx101x ISA guard missing upstream. bug #959808;
+		# verified 2026-09-02
 		pushd "${WORKDIR}/composable_kernel-${CK_COMMIT}" > /dev/null || die
 		eapply "${T}"/patches/composable-kernel-5a74dec0-expand-isa.patch
 		popd > /dev/null || die
 
-		# Workaround for libc++ issue https://github.com/llvm/llvm-project/issues/100802
+		# Work around LLVM issue https://github.com/llvm/llvm-project/issues/100802.
 		sed -e 's/std::memcpy/memcpy/g' -i torch/headeronly/util/Half.h || die
 
 		ebegin "HIPifying cuda sources"
@@ -499,10 +397,8 @@ src_configure() {
 	elif use rocm; then
 		export PYTORCH_ROCM_ARCH="$(get_amdgpu_flags)"
 
-		# 2.13.0's cmake/public/LoadHIP.cmake switched to CMake-native HIP and
-		# defaults the compiler to ${ROCM_PATH}/lib/llvm/bin/clang++ (i.e.
-		# /usr/lib/llvm/bin), but Gentoo slots llvm at /usr/lib/llvm/<N>/bin.
-		# Point HIP_CLANG_PATH at the real HIP clang. # verified 2026-07-18
+		# LoadHIP assumes an unslotted LLVM path; use Gentoo's HIP clang.
+		# verified 2026-07-18
 		export HIP_CLANG_PATH="$(hipconfig -l)"
 
 		if use memefficient; then
@@ -517,7 +413,7 @@ src_configure() {
 			-DUSE_ROCM_CK_SDPA=OFF # requires flash + aiter, works only on gfx90a/gfx942/gfx950
 		)
 
-		# ROCm libraries produce too much warnings
+		# Silence excessive ROCm warnings.
 		append-cxxflags -Wno-deprecated-declarations -Wno-unused-result -Wno-unused-value
 	fi
 
@@ -554,36 +450,17 @@ python_install() {
 src_install() {
 	cmake_src_install
 
-	# 2.13.0's cmake/External/aotriton.cmake unconditionally bundles the system
-	# libaotriton_v2.so* + aotriton.images into DESTINATION "lib" (-> /usr/lib),
-	# which trips multilib-strict (64-bit ELF outside libdir) and duplicates
-	# sci-libs/aotriton-bin. aotriton is a system dep here (torch_hip links the
-	# /usr/$(get_libdir) copy), not bundled, so drop the stray /usr/lib copy.
+	# Drop the bundled /usr/lib aotriton copy; use the system libdir copy.
 	# verified 2026-07-18
 	if use rocm && use memefficient; then
 		rm -rf "${ED}"/usr/lib/libaotriton_v2* "${ED}"/usr/lib/aotriton.images || die
 	fi
 
-	# 2.13.0 folds the torch *Python* package install into cmake (torch._C +
-	# version.py via DESTINATION "." plus cmake/PackageData.cmake), relative to
-	# CMAKE_INSTALL_PREFIX = /usr where upstream assumes the wheel's <root>/torch.
-	# So the payload leaks into /usr/ root and drops stray /usr/lib symlinks --
-	# /usr/lib/terminfo collides with sys-libs/ncurses and aborts the merge.
-	# Keep only the compiled torch._C: 2.13.0 moved its build to cmake and
-	# sci-ml/pytorch skips cmake (dontbuildagain patch), so nothing else ships it
-	# and `import torch` fails without it. Relocate _C into site-packages/torch
-	# (its NEEDED libtorch* resolve from /usr/lib64); the pure-python package is
-	# sci-ml/pytorch's, so whitelist the FHS dirs and drop the rest.
+	# CMake leaks wheel-layout files into /usr; keep only torch._C in
+	# site-packages because pytorch supplies the pure-Python package.
 	# verified 2026-07-22
-	# Do NOT make this conditional: an unmatched glob leaves the literal
-	# pattern in _c_ext[0], so a silent `if [[ -f ... ]]` skip would drop the
-	# extension, the whitelist loop below would then delete it along with the
-	# rest of the /usr leak, and the package would merge green while
-	# `import torch` died at runtime loading the torch/_C stub directory
-	# instead. That is exactly the consumption bug the 2.13.0 forge shipped
-	# once already, and `ebuild install` cannot catch it. Upstream has moved
-	# this destination twice (setuptools -> cmake at 2.13, cmake ->
-	# scikit-build-core at 2.14), so fail loudly when it moves again.
+	# Require the extension glob to match: silently deleting torch._C would pass
+	# install yet break imports. Its destination has changed across releases.
 	local _c_ext=( "${ED}"/usr/_C.cpython-*.so )
 	[[ -f ${_c_ext[0]} ]] || die "torch._C not found at ${ED}/usr/ -- upstream moved its install destination"
 	local _torchdir="${D}$(python_get_sitedir)/torch"
@@ -596,18 +473,14 @@ src_install() {
 			*) rm -rf "${d}" || die ;;
 		esac
 	done
-	# caffe2 owns nothing directly under /usr/lib but the python site-packages
-	# tree (added by python_install below); drop the stray leaked symlinks.
-	# Gated on get_libdir: this is only true while the real libdir is lib64.
-	# On a libdir=lib profile every installed libtorch*/libc10* lands in
-	# /usr/lib -- which the whitelist loop above deliberately keeps -- and this
-	# find would delete the entire payload, merging an empty package.
+	# On lib64 profiles remove leaked /usr/lib symlinks; never do this when
+	# lib is the real payload directory.
 	if [[ $(get_libdir) != lib && -d ${ED}/usr/lib ]]; then
 		find "${ED}"/usr/lib -mindepth 1 -maxdepth 1 ! -name 'python*' \
 			-exec rm -rf {} + || die
 	fi
 
-	# Used by pytorch ebuild
+	# pytorch reuses this configuration.
 	insinto "/var/lib/${PN}"
 	doins "${BUILD_DIR}"/CMakeCache.txt
 
