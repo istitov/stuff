@@ -14,7 +14,7 @@ S="${WORKDIR}/ddb_quick_search-${COMMIT}"
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~arm64"
 IUSE="+gtk3 gtk2"
 REQUIRED_USE="|| ( gtk2 gtk3 )"
 
