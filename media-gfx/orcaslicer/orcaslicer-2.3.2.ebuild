@@ -8,9 +8,8 @@ MY_PN="OrcaSlicer"
 
 inherit check-reqs cmake multiprocessing wxwidgets xdg
 
-# cmake.eclass recursively finds CMake 3.0 declarations in the unused deps/
-# superbuild.  The configured top-level project requires CMake 3.13 and sets
-# its own CMake 4 policy floor.
+# Ignore old CMake declarations in the unused deps superbuild; the configured
+# top-level project requires 3.13 and sets its own CMake 4 policy floor.
 CMAKE_QA_COMPAT_SKIP=1
 
 DESCRIPTION="Open-source 3D printer slicer (PrusaSlicer/Bambu Studio fork)"
@@ -36,18 +35,12 @@ PATCHES=(
 	"${FILESDIR}/${P}-occt-7.8-tkdestep.patch"
 	"${FILESDIR}/${P}-opencv-no-world.patch"
 	"${FILESDIR}/${P}-wx-set-values-ambig.patch"
-	# Silence wx assertions at runtime: upstream's bundled wx build
-	# sets wxBUILD_DEBUG_LEVEL=0 (deps/wxWidgets/wxWidgets.cmake) so
-	# bad sizer/widget calls never raise; system wxGTK ships with
-	# wxDEBUG_LEVEL=1 and the modal assert dialog wedges startup.
+	# System wxGTK enables assertions unlike upstream's bundled build; suppress
+	# the modal assertion dialog that otherwise wedges startup.
 	"${FILESDIR}/${P}-wx-noop-assert-handler.patch"
-	# Skip g_object_set("audio-sink") when the backend lacks the
-	# property: wx 3.2's media lib wraps a GstPlayer (no audio-sink
-	# prop), so the unguarded call was a silent no-op that only ever
-	# produced a GLib-GObject-CRITICAL on every wxMediaCtrl2 ctor.
+	# wx 3.2's GstPlayer lacks audio-sink; guard it to avoid a GLib critical.
 	"${FILESDIR}/${P}-mediactrl-audio-sink-guard.patch"
-	# Linux builds only need Wayland libraries when GTK was built with the
-	# Wayland backend. This patch also applies cleanly to 2.3.2.
+	# Link Wayland only when GTK provides its backend.
 	"${FILESDIR}/${PN}-2.4.1-optional-wayland.patch"
 	"${FILESDIR}/${PN}-2.4.0-clipper2-static.patch"
 )
@@ -103,11 +96,8 @@ BDEPEND="
 
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != binary ]]; then
-		# Several CGAL/Eigen-heavy translation units (CutSurface, MeshBoolean,
-		# Arrange, BuildVolume, ...) peak around 4-5 GiB of resident RAM each
-		# while cc1plus instantiates templates. Scale the requirement with
-		# MAKEOPTS jobs so the merge fails up front instead of getting OOM
-		# killed mid-link.
+		# CGAL/Eigen translation units use 4-5 GiB each; scale with MAKEOPTS to
+		# reject likely OOM builds before compilation.
 		local jobs
 		jobs=$(makeopts_jobs)
 		local CHECKREQS_DISK_BUILD="12G"
@@ -132,8 +122,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Replace +UNKNOWN suffix with overlay tag (upstream's build_linux.sh sets
-	# this to a date; we use a stable identifier instead).
+	# Replace the build-script date placeholder with a stable overlay tag.
 	sed -i -e "s/+UNKNOWN/_Gentoo/" version.inc || die
 
 	cmake_src_prepare
@@ -162,7 +151,7 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# Upstream installs its license at the prefix root.
+	# Relocate upstream's FHS-violating /usr/LICENSE.txt.
 	if [[ -f ${ED}/usr/LICENSE.txt ]]; then
 		dodir /usr/share/doc/${PF}
 		mv "${ED}/usr/LICENSE.txt" "${ED}/usr/share/doc/${PF}/LICENSE.txt" || die
