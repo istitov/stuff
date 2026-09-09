@@ -101,6 +101,27 @@ src_unpack() {
 }
 
 src_configure() {
+	# LDFLAGS is filtered rather than dropped: -Wl,* is handed to the linker
+	# verbatim by any driver and -L is only a search path, so both keep
+	# their meaning across the compiler swap below, and clearing them
+	# outright would cost the user's link-time hardening and any search
+	# path they depend on. A whitelist on purpose -- the GCC-only hazards
+	# in LDFLAGS are driver options (-flto-partition=none,
+	# -fuse-linker-plugin), and anything not matched here is dropped
+	# without having to be enumerated.
+	local sub_ldflags= f
+	for f in ${LDFLAGS}; do
+		[[ ${f} == -Wl,* || ${f} == -L* ]] &&
+			sub_ldflags+="${sub_ldflags:+ }${f}"
+	done
+
+	# One semicolon-separated string per sub-build: cmake reads it as a list
+	# and passes each element to that sub-build's own cmake invocation.
+	local sub_flags="-DCMAKE_C_FLAGS=;-DCMAKE_CXX_FLAGS=;-DCMAKE_ASM_FLAGS="
+	sub_flags+=";-DCMAKE_EXE_LINKER_FLAGS=${sub_ldflags}"
+	sub_flags+=";-DCMAKE_SHARED_LINKER_FLAGS=${sub_ldflags}"
+	sub_flags+=";-DCMAKE_MODULE_LINKER_FLAGS=${sub_ldflags}"
+
 	local mycmakeargs=(
 		# AMD installs its compiler under <rocm>/lib/llvm. We deliberately do
 		# NOT use /usr/lib/llvm/<n>, which is Gentoo's slot root for
@@ -116,6 +137,26 @@ src_configure() {
 		# every HIP target; without it consumers fail at link time with
 		# "libclang_rt.builtins.a ... missing and no known rule to make it".
 		-DLLVM_ENABLE_RUNTIMES="compiler-rt"
+		# compiler-rt is not built here: LLVM hands it to two nested
+		# ExternalProjects (builtins and runtimes) that are configured
+		# part-way through the build and compiled with the clang this
+		# package has just produced, not with the compiler that built the
+		# host side. Those nested cmake runs inherit our environment, and
+		# cmake seeds CMAKE_<LANG>_FLAGS from CFLAGS / CXXFLAGS, and the
+		# three CMAKE_*_LINKER_FLAGS from LDFLAGS, whenever the variable is
+		# not set explicitly -- so a GCC-only flag in make.conf
+		# (-fipa-pta, -fgraphite-identity, -flto-partition=none, ...) is
+		# handed to clang, which rejects it and ends a build that has
+		# already spent hours compiling the compiler itself. Passing the
+		# variables here beats the environment and leaves the sub-builds on
+		# cmake's own per-build-type defaults. The cost is that compiler-rt
+		# is then compiled without any user CFLAGS/CXXFLAGS -- no user
+		# optimisation, no -march. Only the linker side is preserved, and
+		# only the portable part of it; see sub_ldflags above. Everything
+		# else in this package is still built with the full set.
+		# verified 2026-09-09, https://github.com/istitov/stuff/issues/282
+		-DBUILTINS_CMAKE_ARGS="${sub_flags}"
+		-DRUNTIMES_CMAKE_ARGS="${sub_flags}"
 
 		# Match the system LLVM's packaging shape so consumers that resolve
 		# components (e.g. llvm_map_components_to_libnames) get the dylib
@@ -145,7 +186,6 @@ src_configure() {
 		-DLLVM_INCLUDE_EXAMPLES=OFF
 		-DLLVM_ENABLE_OCAMLDOC=OFF
 		-DLLVM_ENABLE_BINDINGS=OFF
-		-DLLVM_ENABLE_TERMINFO=OFF
 		-DLLVM_INSTALL_UTILS=OFF
 
 		# Explicit, like llvm-core/llvm. Necessary but NOT sufficient on its
@@ -179,7 +219,17 @@ src_configure() {
 		# codegen is sound. verified 2026-08-30.
 		append-cflags "-DNDEBUG"
 		append-cxxflags "-DNDEBUG"
-		mycmakeargs+=( -DCMAKE_BUILD_TYPE=Release )
+
+		# Set through the eclass variable, not -DCMAKE_BUILD_TYPE: the
+		# eclass appends its own after mycmakeargs, so a -D here loses and
+		# the build silently stays RelWithDebInfo. It makes no difference
+		# to this build's own flags -- the eclass blanks the per-config
+		# variables for whichever type is active -- but the two compiler-rt
+		# sub-builds above are handed ${CMAKE_BUILD_TYPE} and are not
+		# eclass-managed, so this is what moves their per-config default
+		# from -O2 -g -DNDEBUG to -O3 -DNDEBUG. compiler-rt still layers
+		# its own per-target flags on top. verified 2026-09-09
+		CMAKE_BUILD_TYPE=Release
 	fi
 
 	cmake_src_configure
