@@ -45,26 +45,33 @@ RESTRICT="bindist mirror strip"
 # upstream-supported form (same posture as dev-python/cuda-tile-bin).
 #
 # Version: this tracks pytorch's .ci/docker/triton_version.txt, NOT the
-# newest triton release. The mapping, re-read from the pytorch tags
-# 2026-08-29:
+# newest triton release. The mapping (2.11.0, 2.13.0 and 2.14.0 read from
+# the release tarballs 2026-09-09; 2.12.0 from the 2026-08-29 pass):
 #
 #   torch 2.11.0 -> triton 3.6.0
 #   torch 2.12.0 -> triton 3.7.0
-#   torch 2.13.0 -> triton 3.7.1   <- the newest torch in this overlay
+#   torch 2.13.0 -> triton 3.7.1
+#   torch 2.14.0 -> triton 3.8.0
 #
-# So 3.7.1 is the correct head of this line for now. triton 3.8.0 is
-# released upstream and shows as drift on every nvchecker run; do NOT bump
-# to it. It pairs with a torch we do not ship, and nothing could reach it
-# anyway -- consumers go through virtual/triton, so a 3.8.0 would also need
-# a virtual/triton-3.8.0, and the actual consumers (vllm, comfyui) still pin
-# ~virtual/triton-3.6.0. Bumping triton is a step in a torch bump, never a
-# standalone drift fix.
+# 3.7.1 is the pairing for the torch 2.13.0 line, which is what vllm
+# 0.27.1 and 0.28.0 pin. comfyui does not pin a torch at all -- it depends
+# on caffe2 and torchvision unversioned -- so it takes an unversioned
+# virtual/triton and enforces no pairing of its own.
+# triton 3.8.0 is released upstream and shows as drift on
+# every nvchecker run, but it is not a standalone drift fix: it belongs to
+# the torch 2.14.0 line, which entered the tree on 2026-09-03 and so far
+# carries only torchvision-0.29.0. Landing it needs a virtual/triton-3.8.0
+# as well, since every consumer goes through the virtual, and a consumer on
+# the 2.14 line that actually wants Triton. Bump it inside a torch bump,
+# never on its own.
 #
 # vllm's CUDA kernels (slot mapping, attention, sampling, the
 # torch.compile/inductor path) are @triton.jit and hard-fail without it.
-# Pairing verified 2026-06-15 against pytorch v2.12.0; not yet
-# end-to-end-tested with vllm[cuda] on this triton (the 3.6.0 ebuild
-# carries that run for the torch-2.11 pairing).
+# This wheel has had no end-to-end vllm[cuda] run: the run on record is on
+# the 3.6.0 ebuild, for the torch-2.11 pairing, and that gap now matters
+# because vllm pins this version rather than 3.6.0. (An earlier note here
+# claimed a 2026-06-15 verification against pytorch v2.12.0, which cannot
+# apply to this ebuild -- 2.12.0 pairs with 3.7.0, per the table above.)
 
 RDEPEND="!!dev-python/triton"
 QA_PREBUILT="usr/lib/python3.*/site-packages/triton/*"
