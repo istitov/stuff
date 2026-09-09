@@ -3,22 +3,14 @@
 
 EAPI=8
 
-# supports ROCM/HIP >=5.5, but we define 7.0 to match the rest of the overlay
+# Match the overlay stack despite upstream supporting ROCm 5.5+.
 ROCM_VERSION="7.0"
 
 inherit cuda rocm cmake flag-o-matic go-module linux-info multiprocessing systemd
 
-# Upstream's CMake superbuild (cmake/local.cmake) builds the GGML/llama.cpp
-# inference backends from a pinned llama.cpp fetched via ExternalProject. The
-# pinned commit lives in the LLAMA_CPP_VERSION file in the ollama source tree;
-# we prestage that exact tree as a distfile, patch the ExternalProject download
-# to a no-op (ollama-no-llama-cpp-download.patch), and symlink the tree into
-# _deps/llama_cpp-src in src_configure so the build never touches the network
-# AND upstream's own compat-patch step (llama/compat/**) stays active. Re-check
-# on every bump: `cat LLAMA_CPP_VERSION` in the matching ollama tag.
-# verified 2026-09-04: v0.33.3 moves LLAMA_CPP_VERSION from b10630 to b10760,
-# so the prestaged llama.cpp distfile changes with it -- this is exactly the
-# bump where reusing the old pin would have built the wrong backend.
+# Prestage the exact llama.cpp pin from LLAMA_CPP_VERSION, while preserving
+# upstream's compat-patch step. Recheck every bump; v0.33.3 moved the pin from
+# b10630 to b10760. verified 2026-09-04
 LLAMACPP_COMMIT="b10760"
 
 DESCRIPTION="Get up and running with Llama 3, Mistral, Gemma, and other language models"
@@ -39,16 +31,11 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# cuda  -> cuda_v13 llama-server backend (this overlay tracks CUDA 13.x;
-#          cuda_v12 is intentionally not wired).
-# rocm  -> rocm_v7_2 (Linux) llama-server backend.
-# vulkan-> vulkan llama-server backend.
-# The CPU backend (all microarch variants) is always built and the right one
-# is dlopen'd at runtime, so no cpu_flags_x86 USE flags are needed.
+# GPU flags select cuda_v13, rocm_v7_2, or vulkan; CPU microarchitecture
+# variants are always built and selected at runtime.
 IUSE="cuda openrc rocm systemd vulkan"
 
-# Upstream tests pull models from the network; the dependency tarball is a
-# GitHub release asset that must not be mirrored.
+# Tests fetch models; the dependency release asset must not be mirrored.
 RESTRICT="mirror test"
 
 CDEPEND="
@@ -83,11 +70,7 @@ PATCHES=(
 
 pkg_pretend() {
 	if use cuda || use rocm; then
-		# The GPU backend compiles ~600 CUDA/HIP template-instance TUs in a
-		# nested cmake sub-build whose job count follows MAKEOPTS (wired via
-		# -DOLLAMA_BUILD_PARALLEL in src_configure). Each concurrent nvcc/clang
-		# pipeline is memory-hungry, so a high -j on a RAM-constrained host can
-		# be OOM-killed mid-compile.
+		# Nested GPU builds compile ~600 memory-heavy template units using MAKEOPTS.
 		ewarn "The GPU backend compiles ~600 CUDA/HIP template units; their"
 		ewarn "parallelism follows MAKEOPTS. On a RAM-constrained host a high -j"
 		ewarn "may be OOM-killed mid-compile -- cap jobs for this package with a"
@@ -108,42 +91,30 @@ pkg_setup() {
 
 src_unpack() {
 	if use rocm; then
-		# ROCm/HIP rejects some LTO flags; filter before the Go env captures
-		# them into CGO_*. 963401
+		# Filter before Go captures unsupported ROCm flags in CGO_*. bug #963401
 		strip-unsupported-flags
 		export CXXFLAGS="$(test-flags-HIPCXX "${CXXFLAGS}")"
 	fi
 
-	# Unpacks the ollama source, the prestaged llama.cpp tree, and the Go
-	# dependency tarball (the latter into GOMODCACHE).
+	# Also unpacks prestaged llama.cpp and Go dependencies into GOMODCACHE.
 	go-module_src_unpack
 }
 
 src_prepare() {
 	cmake_src_prepare
 
-	# GCC 17 header hygiene for the bundled llama.cpp: common.h uses
-	# std::ofstream without including <fstream>. Applied from the llama.cpp tree
-	# so the patch stays independent of the pinned commit. Upstream llama.cpp
-	# added the include itself as of ~b10488, so guard on it to avoid a duplicate
-	# include -- and to keep applying it should a future pin land on a tree that
-	# still lacks it. b10760 still carries the include, so the guard skipped the
-	# patch on this bump, as intended. verified 2026-09-04
+	# Patch missing <fstream> for GCC 17 only when the pinned llama.cpp lacks
+	# upstream's fix. b10760 includes it. verified 2026-09-04
 	pushd "${LLAMACPP_S}" >/dev/null || die
 	if ! grep -q '#include <fstream>' common/common.h; then
 		eapply "${FILESDIR}/${PN}-gcc17-fstream.patch"
 	fi
 	popd >/dev/null || die
 
-	# NB: we do NOT re-apply llama/compat/**/*.patch here. Because the prestaged
-	# tree is dropped into _deps/llama_cpp-src via a symlink (see src_configure)
-	# rather than FETCHCONTENT_SOURCE_DIR_LLAMA_CPP, OLLAMA_LLAMA_CPP_SKIP_COMPAT_PATCH
-	# is not forced on, so upstream's own apply-patch.cmake applies the compat
-	# set (the linked-in models/*.patch architectures included).
+	# Do not apply llama/compat here: the symlinked ExternalProject retains
+	# upstream's apply-patch step, including model architecture patches.
 
-	# The Go binary resolves its runtime payload at exeDir/../lib/ollama
-	# (ml/path.go). We install to $(get_libdir)/ollama (lib64 on multilib), so
-	# teach the binary to look there. No-op on lib (32-bit) layouts.
+	# Match runtime lookup to Gentoo's multilib install path.
 	sed -i -e "s/\"lib\", \"ollama\"/\"$(get_libdir)\", \"ollama\"/g" \
 		ml/path.go || die "libdir sed failed"
 }
@@ -159,39 +130,27 @@ src_configure() {
 		-DOLLAMA_LIB_DIR="$(get_libdir)/ollama"
 		-DGGML_CCACHE=OFF
 		-DOLLAMA_LLAMA_BACKENDS="$(IFS=';'; echo "${backends[*]}")"
-		# Cap the nested llama-server sub-builds' parallelism. cmake/local.cmake
-		# runs each backend's `cmake --build --parallel` with NO job count, so
-		# those ExternalProject builds ignore MAKEOPTS *and*
-		# CMAKE_BUILD_PARALLEL_LEVEL and fan out to the generator default (all
-		# cores). For ggml-cuda's ~600 fat template-instance TUs that OOM-kills
-		# the compile on constrained-RAM hosts. OLLAMA_BUILD_PARALLEL supplies
-		# the missing `--parallel <N>`; tie it to MAKEOPTS so a per-package env
-		# job cap governs the nested CUDA/HIP build too.
+		# Upstream nested builds otherwise ignore MAKEOPTS and use all cores;
+		# propagate the job cap to avoid GPU-template OOMs.
 		-DOLLAMA_BUILD_PARALLEL="$(makeopts_jobs)"
 	)
 
 	if use rocm; then
-		# Forward the configured GPU arch(s); the superbuild then selects the
-		# rocm_v7_2_user_arch preset and passes AMDGPU_TARGETS down to ggml-hip.
+		# Select the user-arch preset and forward targets to ggml-hip.
 		mycmakeargs+=( -DAMDGPU_TARGETS="$(get_amdgpu_flags)" )
 	fi
 
 	cmake_src_configure
 
-	# The llama.cpp ExternalProject download is a no-op (see PATCHES); drop the
-	# prestaged tree into the source dir the sub-build expects so it patches and
-	# compiles our pinned llama.cpp in place instead of cloning from the network.
+	# Supply the prestaged tree where the patched ExternalProject expects it.
 	rm -rf "${BUILD_DIR}/_deps/llama_cpp-src" || die
 	ln -s "${LLAMACPP_S}" "${BUILD_DIR}/_deps/llama_cpp-src" || die
 }
 
 src_compile() {
 	if use cuda; then
-		# nvcc rejects gcc newer than CUDA supports; cuda_gccdir picks a
-		# compatible slot. The CUDA backend is built by a nested CMake project
-		# (ExternalProject) during this phase, so the host-compiler choice and
-		# the device-node sandbox allowances must be in effect here, not in
-		# src_configure. CMake reads CUDAHOSTCXX into CMAKE_CUDA_HOST_COMPILER.
+		# The nested CUDA build reads CUDAHOSTCXX here; select a supported GCC and
+		# grant its device probes during compilation.
 		local -x CUDAHOSTCXX
 		CUDAHOSTCXX="$(cuda_gccdir)/g++"
 		cuda_add_sandbox -w
@@ -199,12 +158,8 @@ src_compile() {
 	fi
 
 	if use rocm; then
-		# ggml-hip is built by a nested CMake project that uses
-		# enable_language(HIP); CMake needs the ROCm clang as the HIP compiler
-		# (the hipcc wrapper isn't recognized). Point HIPCXX at the clang ROCm
-		# itself uses, leaving CC/CXX as gcc for the CPU backend and Go cgo.
-		# Pre-seed the device list so the HIP compiler's GPU enumeration doesn't
-		# reach /dev/kfd inside the sandbox (no GPU present at build time).
+		# Nested CMake requires ROCm Clang, not the hipcc wrapper. Keep GCC for CPU
+		# and cgo, and preseed targets to avoid sandboxed GPU enumeration.
 		local hipclangpath
 		hipclangpath="$(hipconfig --hipclangpath 2>/dev/null)" || die "hipconfig failed"
 		[[ -x ${hipclangpath}/clang++ ]] || die "ROCm clang not found at ${hipclangpath}"
@@ -220,12 +175,8 @@ src_compile() {
 }
 
 src_install() {
-	# NB: not cmake_src_install. That runs `cmake --build --target install`,
-	# which re-enters the BUILD_ALWAYS llama-server ExternalProjects; since each
-	# carries an absolute CMAKE_INSTALL_PREFIX (the superbuild staging dir), the
-	# re-run drops a duplicate payload at ${D}/<buildpath> once DESTDIR is set.
-	# Running the top-level install script directly installs the Go binary and
-	# the already-staged lib/ollama payload without re-entering the sub-builds.
+	# Avoid cmake_src_install: it rebuilds BUILD_ALWAYS subprojects and installs
+	# duplicate payloads under D. Run only the top-level install script.
 	DESTDIR="${D}" cmake --install "${BUILD_DIR}" || die
 
 	if use openrc; then
