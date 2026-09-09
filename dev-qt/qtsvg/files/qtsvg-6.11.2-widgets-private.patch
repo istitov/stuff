@@ -1,0 +1,5 @@
+--- a/src/svgwidgets/CMakeLists.txt
++++ b/src/svgwidgets/CMakeLists.txt
+@@ -6,0 +7,2 @@
++find_package(Qt6WidgetsPrivate 6.11.2 EXACT REQUIRED)
++
