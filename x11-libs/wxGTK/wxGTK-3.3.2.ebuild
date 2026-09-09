@@ -3,18 +3,13 @@
 
 EAPI=8
 
-# Overlay (::stuff) 3.3-gtk3 slot: ::gentoo ships only 3.2-gtk3 as of
-# 2026-06-20, but media-gfx/orcaslicer-2.4.0 requires wxWidgets >=3.3
-# (find_package(wxWidgets 3.3 REQUIRED)). Forked from ::gentoo's
-# wxGTK-3.2.8.1-r2 to the 3.3.2 release, slot 3.3-gtk3; eselect-owned
-# aclocal/bakefile installs are renamed to "33" for parallel install with
-# the system 3.2-gtk3 slot, and the overlay's forked wxwidgets.eclass
-# accepts 3.3-gtk3. Re-sync with ::gentoo once it carries a 3.3 slot.
+# media-gfx/orcaslicer requires wxWidgets 3.3, absent from ::gentoo as of
+# 2026-06-20. Slot-suffixed eselect files permit parallel 3.2/3.3 installs;
+# the overlay wxwidgets.eclass supports 3.3-gtk3. Resync once Gentoo does.
 
 inherit edo multilib-minimal flag-o-matic toolchain-funcs
 
-# Make sure that this matches the number of components in ${PV}
-WXRELEASE="$(ver_cut 1-2)-gtk3"			# 3.3-gtk3
+WXRELEASE="$(ver_cut 1-2)-gtk3"
 
 DESCRIPTION="GTK version of wxWidgets, a cross-platform C++ GUI toolkit"
 HOMEPAGE="https://wxwidgets.org/"
@@ -75,16 +70,11 @@ BDEPEND="
 	>=app-eselect/eselect-wxwidgets-20131230
 	virtual/pkgconfig"
 
-# Note about the gst-plugin-base dep: The build system queries for it,
-# but doesn't link it for some reason?  Either way - probably best to
-# depend on it anyway.
-# Note about the wayland dep: Appears to be only required for the OpenGL
-# canvas, and it seems impossible to disable the X dependency, unless
-# I'm missing something.  This is an automagic header dep, though.
+# gst-plugins-base is detected but apparently not linked; keep the dependency.
+# Wayland is an automagic GLCanvas header dep and does not replace X for GUI builds.
 
-# Patch set trimmed for 3.3.2: ::gentoo's 3.2 configure-tests and
-# wayland-control patches are obsolete -- 3.3.2 has native --enable-tests
-# and --with-wayland (see src_configure). The remaining two apply fuzz=0.
+# wxWidgets 3.3 has native test and Wayland configure switches, superseding
+# Gentoo's 3.2 patches. The retained Gentoo patches apply with fuzz=0.
 PATCHES=(
 	"${FILESDIR}/${PN}-3.2.1-prefer-lib64-in-tests.patch"
 	"${FILESDIR}/${PN}-3.2.5-dont-break-flags.patch"
@@ -94,10 +84,9 @@ multilib_src_configure() {
 	# bug #952961
 	tc-is-lto && filter-flags -fno-semantic-interposition
 
-	# Workaround for bug #915154
+	# bug #915154
 	append-ldflags $(test-flags-CCLD -Wl,--undefined-version)
 
-	# X independent options
 	local myeconfargs=(
 		--with-zlib=sys
 		--with-expat=sys
@@ -105,48 +94,24 @@ multilib_src_configure() {
 		--enable-xrc
 		$(use_with sdl)
 		$(use_with lzma liblzma)
-		# Currently defaults to curl, could change.  Watch the VDB!
+		# Pin the current curl default.
 		$(use_enable curl webrequest)
 
-		# PCHes are unstable and are disabled in-tree where possible
-		# See bug #504204
-		# Commits 8c4774042b7fdfb08e525d8af4b7912f26a2fdce, fb809aeadee57ffa24591e60cfb41aecd4823090
+		# PCH is unstable and disabled where possible. bug #504204
 		$(use_enable pch precomp-headers)
 
-		# Don't hard-code libdir's prefix for wx-config
+		# Avoid a hard-coded wx-config libdir prefix.
 		--libdir='${prefix}'/$(get_libdir)
 	)
 
-	# By default, we now build with the GLX GLCanvas because some software like
-	# PrusaSlicer does not yet support EGL:
-	#
-	# https://github.com/prusa3d/PrusaSlicer/issues/9774 .
-	#
-	# A solution for this is being developed upstream:
-	#
-	# https://github.com/wxWidgets/wxWidgets/issues/22325 .
-	#
-	# Any software that needs to use OpenGL under Wayland can be patched like
-	# this to run under xwayland:
-	#
-	# https://github.com/visualboyadvance-m/visualboyadvance-m/commit/aca206a721265366728222d025fec30ee500de82 .
-	#
-	# Check that the macro wxUSE_GLCANVAS_EGL is set to 1.
-	#
+	# Default to GLX: PrusaSlicer lacks EGL support (PrusaSlicer#9774), pending
+	# wxWidgets#22325. Wayland applications can run via XWayland.
 	myeconfargs+=( "--disable-glcanvasegl" )
 
-	# debug in >=2.9
-	# there is no longer separate debug libraries (gtk2ud)
-	# wxDEBUG_LEVEL=1 is the default and we will leave it enabled
-	# wxDEBUG_LEVEL=2 enables assertions that have expensive runtime costs.
-	# apps can disable these features by building w/ -NDEBUG or wxDEBUG_LEVEL_0.
-	# http://docs.wxwidgets.org/3.0/overview_debugging.html
-	# https://groups.google.com/group/wx-dev/browse_thread/thread/c3c7e78d63d7777f/05dee25410052d9c
+	# debug=max enables costly level-2 assertions; no separate debug libs exist.
 	use debug && myeconfargs+=( --enable-debug=max )
 
-	# wxGTK options
-	#   --enable-graphics_ctx - needed for webkit, editra
-	#   --without-gnomevfs - bug #203389
+	# graphics_ctx is required by webkit/editra; disable gnomevfs per bug #203389.
 	use X && myeconfargs+=(
 		--enable-graphics_ctx
 		--with-gtkprint
@@ -155,8 +120,7 @@ multilib_src_configure() {
 		--with-libpng=sys
 		--with-libjpeg=sys
 
-		# Choosing to enable this unconditionally seems fair, pcre2 is
-		# almost certain to be installed.
+		# PCRE2 is an unconditional dependency.
 		--with-regex=sys
 		--without-gnomevfs
 		$(use_enable gstreamer mediactrl)
@@ -164,26 +128,19 @@ multilib_src_configure() {
 		$(use_with libnotify)
 		$(use_with opengl)
 		$(use_with tiff libtiff sys)
-		# WebP is new in wx 3.3 and auto-detects system libwebp, silently
-		# falling back to the bundled builtin when "sys" but missing. Gate on
-		# USE to avoid that automagic dep; webp? guarantees the sys lib.
+		# Avoid WebP autodetection and bundled fallback; USE guarantees the sys lib.
 		$(use_with webp libwebp sys)
 		$(use_enable keyring secretstore)
 		$(use_enable spell spellcheck)
 		$(use_enable test tests)
 
-		# 3.3.2 has native wayland control; --with-wayland replaces the
-		# 3.2-era GENTOO_GTK_HIDE_WAYLAND cppflag hack + wayland-control patch.
+		# Native in 3.3; replaces the 3.2 cppflag hack and control patch.
 		$(use_with wayland)
 	)
 
-	# wxBase options
 	! use X && myeconfargs+=( --disable-gui )
 
-	# wxWidgets installs a configuration file with a reference to EGREP.
-	# Autoconf discovers these programs via full paths, which is
-	# unnecessary and fails if a build happened on a merged-usr system
-	# but is being used on a split-usr system.  Bug #927920.
+	# Keep build-host paths out of installed config across merged/split usr. bug #927920
 	export ac_cv_path_SED="sed"
 	export ac_cv_path_EGREP="grep -E"
 	export ac_cv_path_EGREP_TRADITIONAL="grep -E"
@@ -198,8 +155,7 @@ multilib_src_test() {
 	pushd tests >/dev/null || die
 
 	emake
-	# TODO: Use --success for verbose logs, but it seems to change test results?
-	# TODO: test_gui too with xvfb-run, as Fedora does?
+	# TODO: investigate --success changing results and test_gui under xvfb.
 	edo ./test '~[.]~[net]'
 
 	popd >/dev/null || die
@@ -214,14 +170,13 @@ multilib_src_install_all() {
 	use doc && HTML_DOCS=( "${WORKDIR}"/wxWidgets-${PV}-docs-html/. )
 	einstalldocs
 
-	# Unversioned links
+	# Eselect owns the unversioned links.
 	rm "${ED}"/usr/bin/wx-config || die
 	rm "${ED}"/usr/bin/wxrc || die
-	# wxwin.m4 is owned by eselect-wxwidgets. Key the rename to this slot ("33")
-	# so it coexists with the system 3.2 slot's wxwin32-gtk3.m4.
+	# Slot suffix avoids collision with eselect's 3.2 file.
 	mv "${ED}"/usr/share/aclocal/wxwin.m4 "${ED}"/usr/share/aclocal/wxwin33-gtk3.m4 || die
 
-	# version bakefile presets (slot-keyed "33gtk3" to coexist with 3.2's "32gtk3")
+	# Slot-key bakefile presets for parallel 3.2/3.3 installs.
 	pushd "${ED}"/usr/share/bakefile/presets >/dev/null || die
 	local f
 	for f in wx*; do
