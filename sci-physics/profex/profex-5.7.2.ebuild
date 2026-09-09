@@ -7,6 +7,9 @@ inherit desktop qmake-utils xdg
 
 DESCRIPTION="Open source XRD and Rietveld refinement (Qt6)"
 HOMEPAGE="https://www.profex-xrd.org"
+# Upstream is a WordPress site: the upload path carries the month the
+# release was posted, so it is not derivable from ${PV}. 5.7.2 is under
+# 2026/08. # verified 2026-09-09
 SRC_URI="https://www.profex-xrd.org/wp-content/uploads/2026/08/${P}.tar.gz"
 S="${WORKDIR}/${PN}-${PV}"
 
