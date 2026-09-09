@@ -24,7 +24,7 @@ LICENSE="MIT"
 # scrapes out of lib/include/amd_cuid.h (0.x here), matching the rest of the
 # stack.
 SLOT="0/$(ver_cut 1-2)"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 IUSE="examples test"
 RESTRICT="!test? ( test )"
