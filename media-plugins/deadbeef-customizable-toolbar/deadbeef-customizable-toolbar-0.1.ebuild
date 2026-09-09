@@ -12,7 +12,7 @@ S="${WORKDIR}/ddb_customizabletb-${PV}"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~arm64"
 IUSE="+gtk3 gtk2"
 REQUIRED_USE="|| ( gtk2 gtk3 )"
 
