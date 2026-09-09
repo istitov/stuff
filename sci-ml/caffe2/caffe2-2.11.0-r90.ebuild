@@ -10,8 +10,7 @@ inherit python-single-r1 cmake cuda flag-o-matic prefix rocm toolchain-funcs
 MYPN=pytorch
 MYP=${MYPN}-${PV}
 
-# caffe2-2.9.0 depends on future version of composable kernel
-# TODO: replace it with DEPEND in the future
+# Build against upstream's pinned composable-kernel revision.
 CK_COMMIT=7fe50dc3da2069d6645d9deb8c017a876472a977
 CK_P=composable_kernel-${CK_COMMIT:0:8}
 
@@ -63,12 +62,8 @@ REQUIRED_USE="
 	nccl? ( rocm )
 "
 
-# FBGEMM 1.7 dropped a template parameter from fbgemm::Quantize (was
-# Quantize<T, LEGACY>, now Quantize<T>), breaking this frozen pytorch-2.11
-# tree's aten/.../QuantizedLinear.cpp (no matching Quantize<int8_t, false>).
-# The last good build (2026-07-22) linked FBGEMM-1.4.0.2025.12.10; 1.7 landed
-# 2026-08-06 and fails to compile. The fbgemm? dep below caps to the 1.4
-# series until the frozen source is patched for the new API. verified 2026-08-07
+# FBGEMM 1.7 removed Quantize's LEGACY template argument used by this tree;
+# stay on build-verified 1.4. verified 2026-08-07
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-cpp/abseil-cpp:=
@@ -179,20 +174,13 @@ PATCHES=(
 	# verified 2026-06-02
 	"${FILESDIR}"/${P}-list-inl-gcc15.patch.xz
 
-	# stuff overlay only: scrub MKL MPI / cluster libs and force GNU
-	# OpenMP threading in caffe2::mkl's public link interface so that
-	# downstream consumers (vllm, custom torch C++ ext) link cleanly
-	# on hosts with the basic intel-oneapi-mkl package (no Cluster
-	# Edition, no Intel Compiler / libiomp5). Drop when an equivalent
-	# upstream fix lands. # verified 2026-05-08 against 2.11.0.
+	# Remove MKL cluster libs from the public link interface and force GNU OpenMP
+	# so downstreams need neither Cluster Edition nor libiomp5. verified 2026-05-08
 	"${FILESDIR}"/${P}-mkl-public-scrub.patch.xz
 )
 
 src_prepare() {
-	# files/*.patch ship xz-compressed to stay under pkgcheck's 50K
-	# TotalSizeViolation cap; eapply(1) does not decompress, so expand
-	# every files/ patch into ${T} and repoint PATCHES (and the
-	# composable-kernel patch below) at the plain-text copies.
+	# Decompress patches into T because eapply cannot read xz payloads.
 	local p b i
 	mkdir "${T}"/patches || die
 	for p in "${FILESDIR}"/*.patch.xz; do
@@ -209,7 +197,6 @@ src_prepare() {
 	fi
 	filter-lto #bug 862672
 
-	# Unbundle fmt
 	sed -i \
 		-e 's|::fmt-header-only||' \
 		c10/CMakeLists.txt \
@@ -220,7 +207,6 @@ src_prepare() {
 	# tensorpipe is in system, not a build target of caffe2
 	sed -e '/target_compile_options_if_supported(tensorpipe/d' -i cmake/Dependencies.cmake || die
 
-	# Drop third_party from CMake tree
 	sed -i \
 		-e '/add_subdirectory.*third_party/d' \
 		CMakeLists.txt \
@@ -228,7 +214,6 @@ src_prepare() {
 		cmake/ProtoBuf.cmake \
 		aten/src/ATen/CMakeLists.txt \
 		|| die
-	# Change libc10* path
 	sed -i \
 		-e "/EXPORT/s|DESTINATION lib)|DESTINATION $(get_libdir))|" \
 		c10/cuda/CMakeLists.txt \
@@ -236,14 +221,13 @@ src_prepare() {
 		c10/hip/CMakeLists.txt \
 		|| die
 
-	# Change libaotriton path
 	sed -i \
 		-e "s|}/lib|}/\${CMAKE_INSTALL_LIBDIR}|g" \
 		-e "/set(__AOTRITON_LIB/s|lib/|\${CMAKE_INSTALL_LIBDIR}/|g" \
 		cmake/External/aotriton.cmake \
 		|| die
 
-	# Noisy warnings from Logging.h
+	# Silence known Logging.h noise.
 	sed -i 's/-Wextra-semi//' cmake/public/utils.cmake || die
 
 	cmake_src_prepare
@@ -251,7 +235,7 @@ src_prepare() {
 	flatc --cpp --gen-mutable --scoped-enums mobile_bytecode.fbs || die
 	popd > /dev/null || die
 
-	# prefixify the hardcoded paths, after all patches are applied
+	# Prefix hardcoded paths after applying patches.
 	hprefixify \
 		aten/CMakeLists.txt \
 		caffe2/CMakeLists.txt \
@@ -271,23 +255,22 @@ src_prepare() {
 			-e "s:lib/cmake:$(get_libdir)/cmake:g" \
 			-i cmake/public/LoadHIP.cmake || die
 
-		# TODO: delete, when caffe2 depends on systemwide composable_kernel
+		# Drop when composable-kernel becomes a system dependency.
 		sed -e "s:third_party/composable_kernel:../composable_kernel-${CK_COMMIT}:g" \
 			-i aten/src/ATen/CMakeLists.txt || die
 
-		# Bug 959808: fix for gfx101x targets
+		# Fix gfx101x targets. bug #959808
 		pushd "${WORKDIR}/composable_kernel-${CK_COMMIT}" > /dev/null || die
 		eapply "${T}"/patches/composable-kernel-7fe50dc-expand-isa.patch
 		popd > /dev/null || die
 
 		if tc-is-clang; then
-			# Systemwide gcc (for absl and at::TensorBase) + hipcc (llvm>=18) need abi-compat=17.
-			# But systemwide clang>=18 + hipcc (>=llvm-18) need opposite!
-			# See also: https://github.com/llvm/llvm-project/issues/102443#issuecomment-2329726287
+			# A Clang-only toolchain must not inherit GCC's ABI-17 workaround.
+			# https://github.com/llvm/llvm-project/issues/102443#issuecomment-2329726287
 			sed -e '/-fclang-abi-compat=17/d' -i cmake/Dependencies.cmake || die
 		fi
 
-		# Workaround for libc++ issue https://github.com/llvm/llvm-project/issues/100802
+		# Work around LLVM issue https://github.com/llvm/llvm-project/issues/100802.
 		sed -e 's/std::memcpy/memcpy/g' -i torch/headeronly/util/Half.h || die
 
 		ebegin "HIPifying cuda sources"
@@ -370,7 +353,7 @@ src_configure() {
 	fi
 
 	if use cuda; then
-		# bug 867706 926116
+		# bugs #867706, #926116
 		cuda_add_sandbox
 		addpredict "/dev/char/"
 
@@ -404,7 +387,7 @@ src_configure() {
 			-DUSE_ROCM_CK_SDPA=OFF # requires flash + aiter, works only on gfx90a/gfx942/gfx950
 		)
 
-		# ROCm libraries produce too much warnings
+		# Silence excessive ROCm warnings.
 		append-cxxflags -Wno-deprecated-declarations -Wno-unused-result -Wno-unused-value
 	fi
 
@@ -441,7 +424,7 @@ python_install() {
 src_install() {
 	cmake_src_install
 
-	# Used by pytorch ebuild
+	# pytorch reuses this configuration.
 	insinto "/var/lib/${PN}"
 	doins "${BUILD_DIR}"/CMakeCache.txt
 
