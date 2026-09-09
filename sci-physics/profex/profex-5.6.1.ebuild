@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit desktop qmake-utils
+inherit desktop qmake-utils xdg
 
 DESCRIPTION="Open source XRD and Rietveld refinement (Qt6)"
 HOMEPAGE="https://www.profex-xrd.org"
@@ -53,6 +53,8 @@ src_install() {
 }
 
 pkg_postinst() {
+	xdg_pkg_postinst
+
 	if ! use bgmn; then
 		elog "Install ${PN} with USE=bgmn to use the BGMN refinement backend."
 		elog "Without it, the data viewer, conversion tools, peak fitting, and"
