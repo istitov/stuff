@@ -16,7 +16,7 @@ S="${WORKDIR}/vfs_rar-${COMMIT}"
 
 LICENSE="GPL-2+ unRAR"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~arm64"
 
 DEPEND="media-sound/deadbeef"
 RDEPEND="${DEPEND}"
