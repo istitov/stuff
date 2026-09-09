@@ -4,4 +4,7 @@
   <maintainer type="person">
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
+  <use>
+    <flag name="bgmn">Install the <pkg>sci-physics/bgmn</pkg> refinement backend</flag>
+  </use>
 </pkgmetadata>

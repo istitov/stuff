@@ -13,13 +13,13 @@ S="${WORKDIR}/${PN}-${PV}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="bgmn"
 
 # zlib, quazip and alglib are bundled and built via profex's own subdir
 # qmake projects; building against system copies would require
 # significant patching and the upstream Qt6 port expects the bundles.
 RDEPEND="
-	sci-physics/bgmn
-	dev-qt/qt5compat:6
+	bgmn? ( sci-physics/bgmn )
 	dev-qt/qtbase:6=[concurrent,gui,network,sql,widgets,xml]
 	dev-qt/qtdeclarative:6
 	dev-qt/qtimageformats:6
@@ -58,4 +58,12 @@ src_install() {
 	doins org.profex_xrd.Profex.appdata.xml
 
 	dodoc changelog.txt
+}
+
+pkg_postinst() {
+	if ! use bgmn; then
+		elog "Install ${PN} with USE=bgmn to use the BGMN refinement backend."
+		elog "Without it, the data viewer, conversion tools, peak fitting, and"
+		elog "support for an externally installed FullProf backend remain available."
+	fi
 }
