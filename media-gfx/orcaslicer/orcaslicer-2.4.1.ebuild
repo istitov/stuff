@@ -5,16 +5,12 @@ EAPI=8
 
 WX_GTK_VER="3.3-gtk3"
 MY_PN="OrcaSlicer"
-# Vendored Eigen: 2.4.0 hard-requires Eigen 5, which shares main SLOT 3 with
-# the system Eigen 3.4 and cannot coexist -- prestaged + privately installed
-# in src_configure rather than depended on. See the eigen block there.
 EIGEN5_PV="5.0.1"
 
 inherit check-reqs cmake multiprocessing toolchain-funcs wxwidgets xdg
 
-# cmake.eclass recursively finds CMake 3.0 declarations in the unused deps/
-# superbuild and disabled sandboxes.  The configured top-level project requires
-# CMake 3.13 and sets its own CMake 4 policy floor.
+# Ignore old CMake declarations in unused deps/sandboxes; the configured
+# top-level project requires 3.13 and sets its own CMake 4 policy floor.
 CMAKE_QA_COMPAT_SKIP=1
 
 DESCRIPTION="Open-source 3D printer slicer (PrusaSlicer/Bambu Studio fork)"
@@ -28,61 +24,38 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 # MPL-2.0 covers the vendored Eigen 5 compiled into the binary (src_configure).
 LICENSE="AGPL-3 Apache-2.0 Boost-1.0 GPL-2 LGPL-2.1+ LGPL-3 MIT MPL-2.0"
 SLOT="0"
-# 2.4.0 needs two things ::gentoo doesn't provide for this consumer: Eigen 5
-# (vendored in src_configure -- see the eigen block there) and wxWidgets >=3.3
-# (src/CMakeLists.txt:34, no wxGTK 3.3 slot in ::gentoo -- provided by ::stuff's
-# x11-libs/wxGTK-3.3.* slot + forked wxwidgets.eclass, selected via
-# WX_GTK_VER=3.3-gtk3 above). verified 2026-06-20.
+# Requires private Eigen 5 and the overlay's wxGTK 3.3 slot. verified 2026-06-20
 KEYWORDS="~amd64 ~arm64"
 IUSE="test"
 
 RESTRICT="!test? ( test )"
 
 PATCHES=(
-	# Unchanged from 2.3.2 (apply cleanly to 2.4.1) -- reference the original
-	# files rather than per-version copies to avoid DuplicateFiles.
+	# Reuse matching older patches rather than create DuplicateFiles copies.
 	"${FILESDIR}/${PN}-2.3.2-boost-1.90.patch"
 	"${FILESDIR}/${PN}-2.3.2-boost-process-v1.patch"
 	"${FILESDIR}/${PN}-2.3.2-boost-asio-fs.patch"
-	# The five 2.4.0-introduced patches below apply unchanged to 2.4.1
-	# (verified 2026-06-29, zero fuzz/offset) -- referenced by their 2.4.0
-	# filenames literally to avoid per-version DuplicateFiles copies, same
-	# as the 2.3.2 set above.
-	# New in 2.4.0: reserve_loopback_port() still uses the removed
-	# boost::asio::io_service type; switch it to io_context (Boost 1.87+).
+	# Replace removed boost::asio::io_service with io_context for Boost 1.87+.
 	"${FILESDIR}/${PN}-2.4.0-boost-asio-io_context.patch"
 	"${FILESDIR}/${PN}-2.3.2-cgal-6.patch"
 	"${FILESDIR}/${PN}-2.3.2-occt-7.8-tkdestep.patch"
 	"${FILESDIR}/${PN}-2.3.2-opencv-no-world.patch"
-	# wx-set-values-ambig dropped for 2.4.0: upstream already ships
-	# set_values(std::vector<std::string>{...}) at PhysicalPrinterDialog.cpp.
-	# Silence wx assertions at runtime: upstream's bundled wx build
-	# sets wxBUILD_DEBUG_LEVEL=0 (deps/wxWidgets/wxWidgets.cmake) so
-	# bad sizer/widget calls never raise; system wxGTK ships with
-	# wxDEBUG_LEVEL=1 and the modal assert dialog wedges startup.
+	# System wxGTK enables assertions unlike upstream's bundled build; suppress
+	# the modal assertion dialog that otherwise wedges startup.
 	"${FILESDIR}/${PN}-2.3.2-wx-noop-assert-handler.patch"
-	# Rebased for 2.4.0 (upstream context shifted): force unconditional
-	# X11/webkit2gtk linking (was FLATPAK-only), and guard the
-	# g_object_set("audio-sink") with g_object_class_find_property.
+	# Link X11/webkit2gtk outside Flatpak and guard the optional audio-sink property.
 	"${FILESDIR}/${PN}-2.4.0-link-webkit2gtk.patch"
 	"${FILESDIR}/${PN}-2.4.0-mediactrl-audio-sink-guard.patch"
 	"${FILESDIR}/${PN}-2.4.1-optional-wayland.patch"
-	# Static-link the customized vendored Clipper2 (no system equivalent -- it
-	# ships a bespoke clipper2_z Z-coordinate variant), and build md4c against
-	# the system lib instead of the vendored copy. Both otherwise build shared
-	# but uninstalled, resolving to system libs after the install rpath strip.
+	# Static-link customized clipper2_z; use system md4c. Uninstalled shared
+	# copies would resolve incorrectly after install-rpath stripping.
 	"${FILESDIR}/${PN}-2.4.0-clipper2-static.patch"
 	"${FILESDIR}/${PN}-2.4.0-md4c-system.patch"
 )
 
-# orca-slicer links OpenSSL (OpenSSL::SSL/Crypto via find_package) and the
-# system md4c (the vendored md4c is unbundled to the system lib by the
-# md4c-system patch) -- both real build+runtime deps. The vendored clipper2 is
-# static-linked instead (clipper2-static patch; it ships a customized clipper2_z
-# variant the system lib lacks), so it is baked in and is NOT a dependency.
-# libspnav is build-time only -- the 3D-mouse support links it statically
-# (CMakeLists find_library libspnav.a) -- so it lives in DEPEND, not RDEPEND.
-# verified 2026-06-20.
+# OpenSSL and unbundled md4c are runtime links; customized Clipper2 is static.
+# libspnav is build-only because 3D-mouse support links libspnav.a.
+# verified 2026-06-20
 RDEPEND="
 	app-crypt/libsecret
 	dev-cpp/nlohmann_json:=
@@ -131,11 +104,8 @@ BDEPEND="
 
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != binary ]]; then
-		# Several CGAL/Eigen-heavy translation units (CutSurface, MeshBoolean,
-		# Arrange, BuildVolume, ...) peak around 4-5 GiB of resident RAM each
-		# while cc1plus instantiates templates. Scale the requirement with
-		# MAKEOPTS jobs so the merge fails up front instead of getting OOM
-		# killed mid-link.
+		# CGAL/Eigen translation units use 4-5 GiB each; scale with MAKEOPTS to
+		# reject likely OOM builds before compilation.
 		local jobs
 		jobs=$(makeopts_jobs)
 		local CHECKREQS_DISK_BUILD="12G"
@@ -160,10 +130,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# 2.4.1's version.inc hardcodes a clean "2.4.1" with no "+UNKNOWN" build
-	# sentinel (2.4.0 carried one that we rewrote to "_Gentoo"). The only
-	# remaining "+UNKNOWN" lives in upstream's build_linux.sh, which we do not
-	# use -- so no version-string fixup is needed here. verified 2026-06-29
 	cmake_src_prepare
 }
 
@@ -172,20 +138,12 @@ src_configure() {
 
 	setup-wxwidgets
 
-	# Vendored Eigen 5 (header-only). 2.4.0 hard-requires Eigen 5.0.1
-	# (find_package(Eigen3 5.0.1 REQUIRED) at CMakeLists.txt:1044), but
-	# ::gentoo's dev-cpp/eigen-5.0.1 is SLOT="3/5.0" -- the same main slot as
-	# the system Eigen 3.4 -- so it cannot be installed alongside without
-	# replacing it and force-rebuilding every eigen:3 consumer (cgal, libigl,
-	# opencv, ...). Instead configure+install a private Eigen 5 into the work
-	# dir and point find_package at it (the onnxruntime vendoring pattern),
-	# leaving the system eigen:3 untouched. Eigen is header-only, so the
-	# "install" is just headers + the generated Eigen3Config.cmake. orcaslicer
-	# and the header-only libigl/CGAL templates it pulls all instantiate against
-	# this private Eigen 5. verified 2026-06-20.
+	# Upstream requires Eigen 5.0.1, which shares Gentoo's main slot with 3.4.
+	# Stage the header-only library privately to avoid replacing Eigen 3.4 and
+	# rebuilding its consumers. libigl/CGAL instantiate against this copy.
+	# verified 2026-06-20
 	local eigen5_root="${WORKDIR}/eigen5-root"
-	# Keep cross-distcc builds on the target compiler instead of the build
-	# host's generic c++.
+	# Keep cross-distcc on the target compiler.
 	cmake -S "${WORKDIR}/eigen-${EIGEN5_PV}" -B "${WORKDIR}/eigen5-build" \
 		-DCMAKE_C_COMPILER="$(tc-getCC)" \
 		-DCMAKE_CXX_COMPILER="$(tc-getCXX)" \
@@ -208,9 +166,7 @@ src_configure() {
 		-DSLIC3R_PCH=OFF
 		-DSLIC3R_STATIC=OFF
 		-DOPENVDB_FIND_MODULE_PATH="/usr/$(get_libdir)/cmake/OpenVDB"
-		# Resolve find_package(Eigen3 5.0.1) to the vendored copy above; it is
-		# searched ahead of the system prefix, so the system eigen-3.4 config
-		# (which fails the 5.0.1 version check anyway) is never selected.
+		# Resolve Eigen before the incompatible system-3.4 config.
 		-DCMAKE_PREFIX_PATH="${eigen5_root}/usr"
 		-DEigen3_ROOT="${eigen5_root}/usr"
 		-Wno-dev
@@ -222,9 +178,7 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# Upstream's CMake installs LICENSE.txt at the install-prefix root
-	# (/usr/LICENSE.txt), which trips the FHS/Gentoo-policy QA check. Relocate
-	# it to the standard per-package docs directory.
+	# Relocate upstream's FHS-violating /usr/LICENSE.txt.
 	if [[ -f ${ED}/usr/LICENSE.txt ]]; then
 		dodir /usr/share/doc/${PF}
 		mv "${ED}/usr/LICENSE.txt" "${ED}/usr/share/doc/${PF}/LICENSE.txt" || die
