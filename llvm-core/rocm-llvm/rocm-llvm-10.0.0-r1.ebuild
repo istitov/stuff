@@ -7,11 +7,8 @@ PYTHON_COMPAT=( python3_{12..14} )
 
 inherit check-reqs cmake flag-o-matic python-any-r1 toolchain-funcs
 
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); everything
-# since is tagged therock-<major.minor>. This is the SAME source archive that
-# dev-libs/rocm-device-libs, dev-libs/rocm-comgr and dev-util/hipcc already
-# fetch -- they unpack the amd/ subdirectory, we unpack the compiler itself --
-# so MY_P must stay byte-identical to theirs to share one DIST entry.
+# ROCm now uses therock-<major.minor> tags. Keep this archive name identical to
+# rocm-device-libs, rocm-comgr, and hipcc so Portage shares one distfile.
 MY_P=llvm-project-therock-$(ver_cut 1-2)
 
 DESCRIPTION="AMD's LLVM fork, as shipped with ROCm"
@@ -20,23 +17,18 @@ SRC_URI="https://github.com/ROCm/llvm-project/archive/therock-$(ver_cut 1-2).tar
 S="${WORKDIR}/${MY_P}/llvm"
 
 LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA BSD public-domain rc"
-# Subslot tracks the ROCm release, matching the rest of the split stack: this
-# compiler is only meaningful paired with the ROCm it shipped with.
+# This compiler must match the ROCm release that shipped it.
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 IUSE="debug"
 
-# The point of this package is to be a device-code compiler, so nothing here
-# is a runtime dependency of anything except the ROCm build tooling.
 RDEPEND="
 	dev-libs/libxml2:=
 	virtual/zlib:=
 	app-arch/zstd:=
 	dev-libs/rocm-device-libs:${SLOT}
 "
-# binutils-libs is here only for plugin-api.h, which the gold LTO plugin
-# enabled in src_configure compiles against. ld dlopens the finished
-# plugin, so nothing from binutils is needed at runtime.
+# Only plugin-api.h is needed to build LLVMgold; ld loads the result at runtime.
 DEPEND="${RDEPEND}
 	sys-libs/binutils-libs
 "
@@ -46,9 +38,7 @@ BDEPEND="
 	dev-build/cmake
 "
 
-# ROCm's LLVM is a full compiler build. Scoped down hard in src_configure
-# (two targets, three projects, no tests/docs/bindings), but it is still LLVM.
-# Numbers measured on the first build; revisit if the project list grows.
+# Measured with the restricted project set below; revisit if it grows.
 CHECKREQS_DISK_BUILD="30G"
 
 pkg_pretend() {
@@ -63,31 +53,11 @@ pkg_setup() {
 }
 
 src_unpack() {
-	# The archive carries the whole llvm-project monorepo (~263 MB compressed,
-	# every subproject including flang, mlir, lldb and libsycl). Extract only
-	# what the compiler build reads: cmake/ for the shared modules, llvm/ as
-	# S=, and the three projects enabled below. This turns a multi-GB unpack
-	# into a fraction of it.
-	#
-	# Two of these are needed despite their PROJECT being disabled, both found
-	# by build failure rather than inspection -- verified 2026-08-29:
-	#   libc/   llvm's CMakeLists does an unconditional
-	#           include(FindLibcCommonUtils) and FATAL_ERRORs without the
-	#           header-only llvm-libc-common-utilities target from
-	#           libc/src/__support.
-	#   openmp/ AMD-fork-specific: clang/lib/CodeGen/CGEmitEmissaryExec.cpp
-	#           hard-includes "../../openmp/device/include/EmissaryIds.h" for
-	#           AMD's Emissary offload feature. Unconditional, so it is needed
-	#           even with the openmp project off.
-	#   libunwind/include/mach-o/
-	#           lld builds its MachO backend unconditionally and takes
-	#           <mach-o/compact_unwind_encoding.h> from libunwind's include
-	#           tree (lld/MachO/CMakeLists.txt adds
-	#           ${LLVM_MAIN_SRC_DIR}/../libunwind/include). ::gentoo's
-	#           llvm-core/lld extracts exactly this path for the same reason.
-	# The mlir/ and libunwind/ references under clang/ are ClangIR-only
-	# (tools/cir-*, unittests/CIR) and stay unreachable while CLANG_ENABLE_CIR
-	# is off, so the rest of libunwind is deliberately not extracted.
+	# Extract only the compiler inputs. libc supplies an unconditional common
+	# utilities target; AMD clang directly includes openmp's EmissaryIds.h; and
+	# lld's always-built MachO backend needs libunwind's compact-unwind header.
+	# ClangIR-only mlir and the rest of libunwind remain unnecessary.
+	# verified 2026-08-29
 	local want=(
 		"${MY_P}/cmake"
 		"${MY_P}/llvm"
@@ -106,123 +76,62 @@ src_unpack() {
 }
 
 src_configure() {
-	# ::gentoo filters LTO out of its own llvm-core/llvm build, for GCC only,
-	# citing ODR violations and GCC being the likelier of the two compilers
-	# to miscompile LLVM under LTO (Gentoo bugs 917536 and 926529). Same
-	# sources, same exposure. This is about building this compiler, not about
-	# the -flto consumers hand to it afterwards -- that is what the gold
-	# plugin below is for. Adopted from ::gentoo 2026-09-09; the miscompile
-	# was not re-derived here.
+	# Match ::gentoo's GCC-only LTO filter for LLVM ODR/miscompile risks.
+	# bugs #917536, #926529; adopted 2026-09-09
 	tc-is-gcc && filter-lto
 
-	# Upstream llvm-project issue 219693, carried unconditionally on
-	# ::gentoo's llvm-23. Adopted 2026-09-09; likewise not re-derived.
+	# Match ::gentoo's workaround for upstream issue #219693; adopted 2026-09-09.
 	append-flags -fno-strict-aliasing
 
-	# LDFLAGS is filtered rather than dropped: -Wl,* is handed to the linker
-	# verbatim by any driver and -L is only a search path, so both keep
-	# their meaning across the compiler swap below, and clearing them
-	# outright would cost the user's link-time hardening and any search
-	# path they depend on. A whitelist on purpose -- the GCC-only hazards
-	# in LDFLAGS are driver options (-flto-partition=none,
-	# -fuse-linker-plugin), and anything not matched here is dropped
-	# without having to be enumerated.
+	# Nested Clang builds may reject GCC driver flags. Retain only portable
+	# linker arguments and search paths, including user hardening.
 	local sub_ldflags= f
 	for f in ${LDFLAGS}; do
 		[[ ${f} == -Wl,* || ${f} == -L* ]] &&
 			sub_ldflags+="${sub_ldflags:+ }${f}"
 	done
 
-	# One semicolon-separated string per sub-build: cmake reads it as a list
-	# and passes each element to that sub-build's own cmake invocation.
+	# CMake forwards this semicolon-separated list to each nested build.
 	local sub_flags="-DCMAKE_C_FLAGS=;-DCMAKE_CXX_FLAGS=;-DCMAKE_ASM_FLAGS="
 	sub_flags+=";-DCMAKE_EXE_LINKER_FLAGS=${sub_ldflags}"
 	sub_flags+=";-DCMAKE_SHARED_LINKER_FLAGS=${sub_ldflags}"
 	sub_flags+=";-DCMAKE_MODULE_LINKER_FLAGS=${sub_ldflags}"
 
 	local mycmakeargs=(
-		# AMD installs its compiler under <rocm>/lib/llvm. We deliberately do
-		# NOT use /usr/lib/llvm/<n>, which is Gentoo's slot root for
-		# llvm-core/llvm -- a private prefix is what keeps this package from
-		# competing with the system LLVM at all.
+		# A private prefix prevents conflicts with Gentoo's slotted LLVM.
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr/lib/${PN}"
 
-		# AMDGPU is the entire reason this package exists; X86 is needed for
-		# the host side of any HIP compile.
+		# HIP needs AMDGPU device code and an X86 host compiler.
 		-DLLVM_TARGETS_TO_BUILD="AMDGPU;X86"
 		-DLLVM_ENABLE_PROJECTS="clang;lld"
-		# compiler-rt supplies libclang_rt.builtins, which clang links into
-		# every HIP target; without it consumers fail at link time with
-		# "libclang_rt.builtins.a ... missing and no known rule to make it".
+		# HIP links libclang_rt.builtins into every target.
 		-DLLVM_ENABLE_RUNTIMES="compiler-rt"
-		# compiler-rt is not built here: LLVM hands it to two nested
-		# ExternalProjects (builtins and runtimes) that are configured
-		# part-way through the build and compiled with the clang this
-		# package has just produced, not with the compiler that built the
-		# host side. Those nested cmake runs inherit our environment, and
-		# cmake seeds CMAKE_<LANG>_FLAGS from CFLAGS / CXXFLAGS, and the
-		# three CMAKE_*_LINKER_FLAGS from LDFLAGS, whenever the variable is
-		# not set explicitly -- so a GCC-only flag in make.conf
-		# (-fipa-pta, -fgraphite-identity, -flto-partition=none, ...) is
-		# handed to clang, which rejects it and ends a build that has
-		# already spent hours compiling the compiler itself. Passing the
-		# variables here beats the environment and leaves the sub-builds on
-		# cmake's own per-build-type defaults. The cost is that compiler-rt
-		# is then compiled without any user CFLAGS/CXXFLAGS -- no user
-		# optimisation, no -march. Only the linker side is preserved, and
-		# only the portable part of it; see sub_ldflags above. Everything
-		# else in this package is still built with the full set.
+		# LLVM builds compiler-rt with its newly built Clang. Clear inherited
+		# CFLAGS/CXXFLAGS so GCC-only flags cannot break these late nested builds;
+		# preserve only the portable LDFLAGS selected above.
 		# verified 2026-09-09, https://github.com/istitov/stuff/issues/282
 		-DBUILTINS_CMAKE_ARGS="${sub_flags}"
 		-DRUNTIMES_CMAKE_ARGS="${sub_flags}"
 
-		# Build the gold LTO plugin. GNU ld is this compiler's default
-		# linker, and clang puts
-		#     -plugin <its own bin dir>/../lib/LLVMgold.so
-		# on the ld command line for every -flto link. Without that file,
-		# any ROCm library configured through rocm_use_clang() fails at the
-		# CMake compiler test the moment a user carries -flto in their
-		# flags: "error loading plugin: ... No such file or directory".
-		# clang skips the plugin entirely for lld, so only the default
-		# GNU-linker path is affected.
-		#
-		# Not put behind a USE flag. plugin-api.h comes from
-		# sys-libs/binutils-libs, needed at build time only, and it is the
-		# same header llvm-core/llvm already pulls for its own default
-		# +binutils-plugin -- which this package reaches anyway through its
-		# dev-libs/rocm-device-libs dependency. Switching it off would buy
-		# nothing but a way back into this failure for everyone who has not
-		# also moved to lld.
-		#
-		# Deliberately NOT paired with llvm-core/llvmgold the way
-		# llvm-core/llvm is: that package symlinks the plugin into
-		# /usr/<CHOST>/binutils-bin/lib/bfd-plugins, where ld autoloads it
-		# for every link on the system, and this compiler stays out of
-		# shared paths. https://github.com/istitov/stuff/issues/284
+		# GNU ld is the default, so Clang requires its private LLVMgold.so for
+		# -flto compiler tests. Build it unconditionally, but do not register it
+		# system-wide through llvmgold; this compiler must remain isolated.
+		# https://github.com/istitov/stuff/issues/284
 		-DLLVM_BINUTILS_INCDIR="${ESYSROOT}"/usr/include
 
-		# Match the system LLVM's packaging shape so consumers that resolve
-		# components (e.g. llvm_map_components_to_libnames) get the dylib
-		# rather than per-component archives.
+		# Match system LLVM so component resolution selects the dylib.
 		-DLLVM_BUILD_LLVM_DYLIB=ON
 		-DLLVM_LINK_LLVM_DYLIB=ON
-		# LLVM refuses BUILD_SHARED_LIBS together with LLVM_LINK_LLVM_DYLIB
-		# ("we recommend disabling BUILD_SHARED_LIBS"); the two are different
-		# strategies for the same goal. The single libLLVM.so is the one we
-		# want, matching how llvm-core/llvm is built.
+		# Use one libLLVM.so, not per-component shared libraries.
 		-DBUILD_SHARED_LIBS=OFF
 
 		-DLLVM_ENABLE_ZLIB=FORCE_ON
 		-DLLVM_ENABLE_ZSTD=FORCE_ON
 		-DLLVM_ENABLE_LIBXML2=FORCE_ON
-		# Detected automagically otherwise, putting an undeclared
-		# DT_NEEDED on libedit.so.0 into libLLVM. Nothing here is used
-		# interactively -- this compiler exists to be driven by
-		# rocm_use_clang() -- so turn it off rather than take the
-		# dependency. verified 2026-08-30 by readelf on libLLVM.so.
+		# Avoid an automagic libedit DT_NEEDED; this compiler is non-interactive.
+		# verified 2026-08-30 with readelf
 		-DLLVM_ENABLE_LIBEDIT=OFF
 
-		# Nothing here is consumed; skip it all to keep the build bounded.
 		-DLLVM_BUILD_TESTS=OFF
 		-DLLVM_INCLUDE_TESTS=OFF
 		-DLLVM_INCLUDE_BENCHMARKS=OFF
@@ -231,16 +140,10 @@ src_configure() {
 		-DLLVM_ENABLE_BINDINGS=OFF
 		-DLLVM_INSTALL_UTILS=OFF
 
-		# Explicit, like llvm-core/llvm. Necessary but NOT sufficient on its
-		# own -- see the append-cflags below.
+		# NDEBUG still needs explicit handling below.
 		-DLLVM_ENABLE_ASSERTIONS=$(usex debug)
-		# With assertions off, llvm_unreachable() degrades to
-		# __builtin_unreachable(): reaching one stops being a crash and
-		# becomes undefined behaviour the optimiser may exploit. OFF makes it
-		# a guaranteed trap instead. This package already carries one recorded
-		# case of LLVM's own invariants being violated in AMDGPU codegen (see
-		# the note below), so a trap is worth more here than a quietly
-		# miscompiled kernel. Matches ::gentoo's llvm-23; adopted 2026-09-09.
+		# Trap on violated llvm_unreachable() assumptions instead of invoking UB;
+		# matches ::gentoo's llvm-23. adopted 2026-09-09
 		-DLLVM_UNREACHABLE_OPTIMIZE=OFF
 
 		-DPython3_EXECUTABLE="${PYTHON}"
@@ -248,38 +151,15 @@ src_configure() {
 	)
 
 	if ! use debug; then
-		# LLVM_ENABLE_ASSERTIONS=no only stops LLVM from UN-defining NDEBUG;
-		# it counts on CMake's own CMAKE_CXX_FLAGS_RELEASE to DEFINE it. But
-		# cmake.eclass blanks the per-config flag variables so they cannot
-		# override user CXXFLAGS, so nothing defines NDEBUG and every assert()
-		# in LLVM stays live -- `clang-23 --version` then reports
-		# "Build config: +assertions" despite the option being off.
-		#
-		# That is not cosmetic. sci-ml/caffe2 aborts building rocPRIM's
-		# merge-sort kernels for gfx1150:
-		#
-		#   clang-23: llvm/lib/CodeGen/LiveRegUnits.cpp:45:
-		#     void llvm::LiveRegUnits::stepBackward(...): Assertion failed
-		#   ... Running pass 'SI optimize exec mask operations'
-		#
-		# As with sci-libs/hipBLASLt and sci-libs/composable-kernel, this
-		# aligns the build config with AMD's shipped Release compiler; it does
-		# not address why that invariant is violated in the first place. AMD's
-		# own binaries take the same code path without aborting. If ROCm ever
-		# produces visibly wrong kernels, revisit this rather than assume the
-		# codegen is sound. verified 2026-08-30.
+		# cmake.eclass clears release flags, so LLVM_ENABLE_ASSERTIONS=OFF alone
+		# leaves assertions active. They abort gfx1150 rocPRIM codegen; match AMD's
+		# Release compiler, but revisit if kernels miscompile. verified 2026-08-30
 		append-cflags "-DNDEBUG"
 		append-cxxflags "-DNDEBUG"
 
-		# Set through the eclass variable, not -DCMAKE_BUILD_TYPE: the
-		# eclass appends its own after mycmakeargs, so a -D here loses and
-		# the build silently stays RelWithDebInfo. It makes no difference
-		# to this build's own flags -- the eclass blanks the per-config
-		# variables for whichever type is active -- but the two compiler-rt
-		# sub-builds above are handed ${CMAKE_BUILD_TYPE} and are not
-		# eclass-managed, so this is what moves their per-config default
-		# from -O2 -g -DNDEBUG to -O3 -DNDEBUG. compiler-rt still layers
-		# its own per-target flags on top. verified 2026-09-09
+		# Set the eclass variable because its later argument wins. This selects
+		# Release defaults for the unmanaged compiler-rt sub-builds.
+		# verified 2026-09-09
 		CMAKE_BUILD_TYPE=Release
 	fi
 
@@ -289,15 +169,8 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# rocm.eclass's rocm_use_clang() does
-	#     export CC="${hipclangpath}/${CHOST}-clang"
-	#     export CXX="${hipclangpath}/${CHOST}-clang++"
-	# i.e. it expects Gentoo's CHOST-prefixed wrapper names, which
-	# llvm-core/clang provides as symlinks. AMD's build installs only the
-	# unprefixed clang/clang++ (plus its own amdclang* aliases), so without
-	# these every ROCm library configured through rocm_use_clang fails with
-	# "CMAKE_CXX_COMPILER ... is not a full path to an existing compiler tool".
-	# Mirror llvm-core/clang's layout. verified 2026-08-29.
+	# rocm_use_clang expects Gentoo's CHOST-prefixed names; AMD installs only
+	# unprefixed drivers. Mirror llvm-core/clang's layout. verified 2026-08-29
 	local t
 	for t in clang clang++; do
 		[[ -e ${ED}/usr/lib/${PN}/bin/${t} ]] ||
@@ -305,17 +178,9 @@ src_install() {
 		dosym "${t}" "/usr/lib/${PN}/bin/${CHOST}-${t}"
 	done
 
-	# Let this clang find dev-libs/rocm-device-libs. Clang looks for the ROCm
-	# device bitcode under <its resource dir>/lib/amdgcn/bitcode;
-	# rocm-device-libs installs the real files to /usr/lib/amdgcn/bitcode and
-	# symlinks them into the SYSTEM clang's resource dir only, so AMD's clang
-	# otherwise fails every HIP compile with "cannot find ROCm device
-	# library".
-	#
-	# Note the subdirectory differs by build: Gentoo's llvm sets
-	# LLVM_LIBDIR_SUFFIX so its resource dir uses lib64/amdgcn, while this
-	# build uses the default and wants lib/amdgcn. Glob the version component
-	# rather than hardcoding the clang major. verified 2026-08-29.
+	# Link the system ROCm bitcode into this Clang's private resource directory.
+	# Its layout uses lib rather than system LLVM's lib64; glob the Clang major.
+	# verified 2026-08-29
 	local rd found=
 	for rd in "${ED}"/usr/lib/${PN}/lib/clang/*; do
 		[[ -d ${rd} ]] || continue
@@ -325,15 +190,8 @@ src_install() {
 	[[ -n ${found} ]] ||
 		die "no clang resource dir under /usr/lib/${PN}/lib/clang; device-lib symlink not placed"
 
-	# No env.d and no symlinks into /usr/bin. This compiler must be reachable
-	# only when something asks for it explicitly -- shadowing the system
-	# clang would be a much worse outcome than the problem it solves. The
-	# consumer-side hook is dev-util/hipcc[amd-llvm], which makes
-	# `hipconfig --hipclangpath` report the path below; rocm.eclass's
-	# rocm_use_clang() then routes every ROCm library build through it.
-	# clang's scan-build ships a man page into the shared /usr/share/man,
-	# which breaks the "everything stays in the private prefix" property and
-	# advertises a tool that is deliberately not in PATH. Drop it.
+	# Keep this compiler out of PATH and shared locations. hipcc[amd-llvm]
+	# exposes it through hipconfig; remove scan-build's shared man page.
 	rm -rf "${ED}/usr/share/man" || die
 
 	elog "AMD's LLVM is installed to ${EPREFIX}/usr/lib/${PN}"
