@@ -14,7 +14,7 @@ S="${WORKDIR}/deadbeef-fb-${COMMIT}"
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~arm64"
 
 DEPEND="
 	media-sound/deadbeef
