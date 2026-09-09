@@ -7,9 +7,7 @@ DOCS_BUILDER="doxygen"
 DOCS_DEPEND="media-gfx/graphviz"
 ROCM_SKIP_GLOBALS=1
 
-# Tracks the ROCm 10.0 cohort's LLVM slot. The stack is subslot-pinned as a
-# single dependency closure, so all of it must be compiled by one LLVM major;
-# dev-libs/rocm-device-libs-10.0.0 requires clang 23.
+# The subslot-pinned ROCm stack must use one LLVM major.
 LLVM_COMPAT=( 23 )
 
 inherit cmake docs flag-o-matic llvm-r2 rocm
@@ -24,11 +22,8 @@ if [[ ${PV} == 9999 ]]; then
 	HIP_S="${WORKDIR}/${P}/projects/hip"
 	SLOT="0/10.0"
 else
-	# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-	# per-component assets ship under therock-<major.minor> tags now. ROCm 10.0
-	# is the renumbering of the 7.13 -> 7.14 line (2026-08-27), not a jump of
-	# three majors. The clr.tar.gz asset is shared with
-	# dev-libs/rocm-opencl-runtime.
+	# ROCm assets now use therock-<major.minor>; clr.tar.gz is shared with
+	# rocm-opencl-runtime.
 	MY_BASE="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)"
 	SRC_URI="
 		${MY_BASE}/clr.tar.gz -> rocm-clr-${PV}.tar.gz
@@ -44,8 +39,7 @@ LICENSE="MIT"
 
 IUSE="debug +hip numa opencl video_cards_amdgpu video_cards_nvidia"
 
-# Many tests are broken and the suite tests the installed runtime instead of
-# the build tree. Do not expose dead USE=test plumbing while it is restricted.
+# The broken suite tests an installed runtime, not the build tree.
 RESTRICT="test"
 
 REQUIRED_USE="
@@ -84,30 +78,9 @@ RDEPEND="${DEPEND}
 	)
 "
 
-# Both libc++ workarounds are obsolete at 10.0 and are NOT carried:
-#
-#   fix-libcxx-ranges  pre-included <__ranges/join_view.h> ahead of HIP's
-#                      `#define __local`, because libc++'s <ranges> uses
-#                      __local as an identifier. 10.0 removed that #define
-#                      from the tree entirely (device_library_decls.h is now
-#                      108 lines and defines it nowhere).
-#   clr-fix-libcxx     had two halves. The __local save/restore died with the
-#                      same removal. The other half added
-#                      <__clang_hip_math.h> because
-#                      <__clang_cuda_complex_builtins.h> referred to ::max --
-#                      but that header now uses __builtin_fmax/__builtin_fmaxf
-#                      instead, and including the two CUDA headers in the old
-#                      order compiles cleanly without it.
-#
-# An intermediate revision of this ebuild kept a regenerated
-# ${PN}-10.0.0-clr-fix-libcxx.patch for the second half; that was based on the
-# patch's stated rationale rather than on re-reading the 10.0 header, and is
-# dropped. verified 2026-08-30 by compiling the include pair against clang 23.
 PATCHES=(
 	"${FILESDIR}/${PN}-6.3.0-no-isystem-usr-include.patch"
-	# Supersedes ${PN}-7.0.2-fix-libcxx-noinline.patch: same defect, but GCC 16's
-	# libstdc++ hits it too, not just libc++. The 7.2.x ebuilds keep the older,
-	# libc++-only version.
+	# GCC 16's libstdc++ also needs the former libc++-only noinline fix.
 	"${FILESDIR}/${PN}-10.0.0-fix-stdlib-noinline.patch"
 	"${FILESDIR}/${PN}-7.1.0-no-hipother-install.patch"
 	# Without this, hipStreamCreate() segfaults outright on an AVX-512 host.
@@ -117,10 +90,7 @@ PATCHES=(
 QA_FLAGS_IGNORED="usr/lib.*/libhiprtc-builtins.*"
 
 src_unpack() {
-	# rocm 7.2.4 release-asset tarballs carry their own clr/, hip/ and
-	# hip-tests/ top-level directories (7.2.3's unpacked flat, hence the
-	# manual wrapper dirs previously). Unpack directly into ${WORKDIR} so
-	# the tarball roots land where S= and HIP_S= already expect them.
+	# Release assets provide the top-level directories expected by S and HIP_S.
 	unpack "rocm-clr-${PV}.tar.gz"
 	unpack "${P}.tar.gz"
 }
@@ -128,13 +98,9 @@ src_unpack() {
 src_prepare() {
 	pushd "${HIP_S}" >/dev/null || die
 
-	# hipamd is itself built by cmake, and should never provide a
-	# FindHIP.cmake module. But the reality is some package relies on it.
-	# Set HIP and HIP Clang paths directly, don't search using heuristics
-	# These two anchor on COMMENT TEXT, which upstream can reword at any time,
-	# and `sed` exits 0 on no-match so `|| die` would never fire. A silent miss
-	# here means FindHIP.cmake falls back to path heuristics instead of Gentoo's
-	# real prefixes. Assert both. verified 2026-08-29: still present at 10.0.
+	# Some consumers still use FindHIP.cmake. Replace its comment anchors with
+	# Gentoo paths and require both matches before sed can silently miss them.
+	# verified 2026-08-29
 	grep -q '# Search for HIP installation' cmake/FindHIP.cmake ||
 		die "FindHIP.cmake 'Search for HIP installation' comment anchor moved"
 	grep -q '#Set HIP_CLANG_PATH' cmake/FindHIP.cmake ||
@@ -144,36 +110,29 @@ src_prepare() {
 		-i "cmake/FindHIP.cmake" || die
 	popd >/dev/null || die
 
-	# -Werror is wrong for a distribution build: any warning from a compiler
-	# upstream did not test becomes a hard failure. A stale anchor here does not
-	# announce itself, it just puts -Werror back.
+	# Disable upstream -Werror; require the anchor so it cannot return silently.
 	grep -qF ' -Werror' "hipamd/src/CMakeLists.txt" ||
 		die "-Werror anchor moved in hipamd/src/CMakeLists.txt"
 	sed -e "s/ -Werror//g" -i "hipamd/src/CMakeLists.txt" || die
 
-	# do not install /usr/share/doc/${P}-asan. Silent if the anchor moves: the
-	# build still succeeds and the stray asan doc directory lands in the image.
+	# Require the anchor so ASan documentation cannot silently enter the image.
 	grep -qF 'asan COMPONENT asan' hipamd/packaging/CMakeLists.txt ||
 		die "asan COMPONENT anchor moved; the asan doc dir would be installed"
 	sed -e "/asan COMPONENT asan/d" -i hipamd/packaging/CMakeLists.txt || die
 
-	# `sed` exits 0 on no-match: leaves the placeholder unsubstituted in the installed cmake config
+	# Do not leave the installed CMake placeholder unsubstituted.
 	grep -qF '@HIP_INSTALLS_HIPCC@' hipamd/hip-config.cmake.in ||
 		die "@HIP_INSTALLS_HIPCC@ anchor moved in hipamd/hip-config.cmake.in"
 	sed -e "s/@HIP_INSTALLS_HIPCC@/ON/g" -i hipamd/hip-config.cmake.in || die
 
-	# skip installation of hipcc: installed via dev-util/hipcc.
-	# Load-bearing: without it hip installs its own hipcc and collides with
-	# dev-util/hipcc, so a silent no-match would be a file collision at merge.
+	# Prevent a colliding bundled hipcc; require the anchor before rewriting it.
 	grep -qF 'NOT ${HIPCC_BIN_DIR}' "hipamd/CMakeLists.txt" ||
 		die "HIPCC_BIN_DIR anchor moved; hip would install a colliding hipcc"
 	sed -e "s/NOT \${HIPCC_BIN_DIR}/INSTALL_HIPCC AND NOT \${HIPCC_BIN_DIR}/" \
 		-i "hipamd/CMakeLists.txt" || die
 
-	# hipamd/src/hiprtc/cmake/hiprtc-config.cmake.in was in this list through
-	# 7.2.4 but carries no cmake_minimum_required at all at 10.0, so listing it
-	# would be a silent no-op. Only the two vendored Khronos files still need
-	# it. verified 2026-08-29.
+	# Only the vendored Khronos files retain the old CMake floor.
+	# verified 2026-08-29
 	local f
 	for f in opencl/khronos/icd/CMakeLists.txt \
 		opencl/khronos/headers/opencl2.2/tests/CMakeLists.txt; do
@@ -188,18 +147,13 @@ src_prepare() {
 }
 
 src_configure() {
-	# -Werror=strict-aliasing
-	# https://bugs.gentoo.org/858383
-	# https://github.com/ROCm/clr/issues/64
-	#
-	# Do not trust it for LTO either
+	# Avoid strict-aliasing and LTO miscompiles. bug #858383; ROCm/clr#64
 	append-flags -fno-strict-aliasing
 	filter-lto
 
 	use debug && CMAKE_BUILD_TYPE="Debug"
 
-	# Fix ld.lld linker error: https://github.com/ROCm/HIP/issues/3382
-	# See also: https://github.com/gentoo/gentoo/pull/29097
+	# Accept versioned symbols with lld. ROCm/HIP#3382; gentoo/gentoo#29097
 	append-ldflags $(test-flags-CCLD -Wl,--undefined-version)
 
 	local mycmakeargs=(
@@ -223,9 +177,7 @@ src_configure() {
 			-DHIP_PLATFORM="amd"
 			-DOpenGL_GL_PREFERENCE="GLVND"
 			-DUSE_PROF_API=OFF
-			# clr 7.2.3 dropped its find_package(NUMA), so cmake silently
-			# ignores these; kept aligned with ::gentoo in case upstream
-			# restores NUMA detection — verified inert 2026-05-08.
+			# Currently inert; retain for restored NUMA detection. verified 2026-05-08
 			-DCMAKE_DISABLE_FIND_PACKAGE_NUMA="$(usex !numa)"
 			-DCMAKE_REQUIRE_FIND_PACKAGE_NUMA="$(usex numa)"
 		)
@@ -242,21 +194,9 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# clang 23's HIP toolchain appends the HIP runtime to the link line as a
-	# HARDCODED "<hip-path>/lib/libamdhip64.so" -- note the literal "lib",
-	# which assumes a non-multilib ROCm layout. On Gentoo the library lives in
-	# $(get_libdir) (lib64 here), so every HIP link fails with
-	#     ld: cannot find /usr/lib/libamdhip64.so: No such file or directory
-	# even though CMake itself passes the correct lib64 path via the
-	# hip::amdhip64 imported target.
-	#
-	# Neither --rocm-path nor --hip-path changes the "lib" component (verified
-	# 2026-08-29 with clang 23.1.0: both still emit /usr/lib/libamdhip64.so),
-	# and clang 22 did not add the library at all, so this is new in 23 and
-	# cannot be worked around per-consumer. Ship a compat symlink.
-	#
-	# Guarded so it is a no-op on a profile whose libdir already IS "lib",
-	# where the link would otherwise point at itself.
+	# Clang 23 hardcodes <hip-path>/lib/libamdhip64.so regardless of --hip-path
+	# or --rocm-path. Provide a multilib compat link, except when lib is already
+	# the native libdir. verified 2026-08-29 with clang 23.1.0
 	if [[ $(get_libdir) != lib ]]; then
 		dosym -r "/usr/$(get_libdir)/libamdhip64.so" /usr/lib/libamdhip64.so
 	fi
