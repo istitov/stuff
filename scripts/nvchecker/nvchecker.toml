@@ -1178,7 +1178,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (228) ---
+# --- github (233) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2109,6 +2109,12 @@ github = "danpla/ddb_copy_info"
 use_max_tag = true
 prefix = "v"
 
+["media-plugins/deadbeef-customizable-toolbar"]
+source = "github"
+github = "kravich/ddb_customizabletb"
+use_max_tag = true
+prefix = "v"
+
 ["media-plugins/deadbeef-discord-presence"]
 source = "github"
 github = "kuba160/ddb_discord_presence"
@@ -2136,9 +2142,21 @@ github = "tokiclover/deadbeef-plugins-jack"
 use_max_tag = true
 prefix = "v"
 
+["media-plugins/deadbeef-musical-spectrum"]
+source = "github"
+github = "cboxdoerfer/ddb_musical_spectrum"
+use_max_tag = true
+prefix = "v"
+
 ["media-plugins/deadbeef-pulse2"]
 source = "github"
 github = "saivert/ddb_output_pulse2"
+use_max_tag = true
+prefix = "v"
+
+["media-plugins/deadbeef-quick-search"]
+source = "github"
+github = "cboxdoerfer/ddb_quick_search"
 use_max_tag = true
 prefix = "v"
 
@@ -2151,6 +2169,18 @@ prefix = "v"
 ["media-plugins/deadbeef-statusnotifier"]
 source = "github"
 github = "vovochka404/deadbeef-statusnotifier-plugin"
+use_max_tag = true
+prefix = "v"
+
+["media-plugins/deadbeef-vfs-rar"]
+source = "github"
+github = "DeaDBeeF-Player/vfs_rar"
+use_max_tag = true
+prefix = "v"
+
+["media-plugins/deadbeef-vgmstream"]
+source = "github"
+github = "jchv/deadbeef-vgmstream"
 use_max_tag = true
 prefix = "v"
 
@@ -2710,7 +2740,13 @@ github = "fmaclen/hollama"
 use_max_tag = true
 prefix = ""
 
-# --- gitlab (3) ---
+# --- gitlab (4) ---
+
+["media-plugins/deadbeef-fb"]
+source = "gitlab"
+gitlab = "zykure/deadbeef-fb"
+use_max_tag = true
+prefix = "v"
 
 ["sci-libs/libformfactor"]
 source = "gitlab"
@@ -2946,18 +2982,12 @@ prefix = "v"
 # ["media-plugins/deadbeef-archive-reader"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-bookmark-manager"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-bs2b"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-customizable-toolbar"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-fb"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-gnome"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-musical-spectrum"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-playback-order"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-playback-status"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-quick-search"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-replaygain-control"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-spectrogram"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-stereo-widener"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-vfs-rar"] skipped: live-only ebuild (no release tracking)
-# ["media-plugins/deadbeef-vgmstream"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-vu-meter"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/frei0r-plugins"] skipped: live-only ebuild (no release tracking)
 # ["media-sound/amulet"] skipped: live-only ebuild (no release tracking)
@@ -3062,6 +3092,7 @@ prefix = "v"
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/comfyui-if-trellis"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["media-sound/deadbeef"] skipped: sourceforge/deadbeef — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-libs/amd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/camd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/ccolamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
