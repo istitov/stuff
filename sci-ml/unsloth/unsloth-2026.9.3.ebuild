@@ -26,7 +26,7 @@ HOMEPAGE="
 # current bytes and must be deliberately re-pinned if GitHub rehashes it.
 # verified 2026-09-09
 MY_TAG="v0.1.807-beta"
-SRC_URI="https://github.com/unslothai/unsloth/archive/refs/tags/${MY_TAG}.tar.gz -> ${P}.gh.tar.gz"
+SRC_URI="https://github.com/unslothai/unsloth/archive/refs/tags/${MY_TAG}.tar.gz -> unsloth-monorepo-${MY_TAG#v}.gh.tar.gz"
 S="${WORKDIR}/${PN}-${MY_TAG#v}"
 
 # Apache-2.0: the core library. USE=studio also builds/installs the studio
