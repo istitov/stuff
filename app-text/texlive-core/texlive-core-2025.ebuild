@@ -20,8 +20,7 @@ SRC_URI="
 		-> ${PN}-2023-mplib-h.patch
 "
 
-# Macros that are not a part of texlive-sources or or pulled in from collection-binextra
-# but still needed for other packages during installation.
+# Extra macros required while installing other packages.
 TL_CORE_EXTRA_CONTENTS="
 	autosp.r69814
 	axodraw2.r77677
@@ -77,11 +76,6 @@ TL_CORE_EXTRA_DOC_CONTENTS="
 	xindy.doc.r65958
 	xml2pmx.doc.r57972
 "
-# TL_CORE_EXTRA_SRC_CONTENTS omitted: axodraw2.source (only TL2024
-# srcfiles entry) dropped in TL2025 (upstream container_split stopped
-# emitting its srcfiles tarball); nothing else ships srcfiles, so the
-# variable and its `source? ( )` SRC_URI block are gone (empty is unparseable).
-
 TEXLIVE_MODULE_BINSCRIPTS="
 	texmf-dist/scripts/extractbb/extractbb.lua
 	texmf-dist/scripts/m-tx/m-tx.lua
@@ -138,10 +132,8 @@ MODULAR_X_DEPEND="
 		x11-libs/libXmu
 	)"
 
-# ptexenc floor is 1.5.1 (not the inherited 1.4.6): TL2025's uptex
-# (USE=cjk) calls ptenc_ucs_to_8bit_code, added to ptexenc's unicode.h
-# in 1.5.1. Against an older system ptexenc the call is an implicit
-# declaration that GCC>=14 rejects as an error. verified 2026-05-28
+# upTeX calls ptenc_ucs_to_8bit_code, added in ptexenc-1.5.1; GCC 14 rejects
+# the older header's implicit declaration. verified 2026-05-28
 COMMON_DEPEND="
 	${MODULAR_X_DEPEND}
 	sci-libs/mpfi
@@ -221,52 +213,40 @@ src_prepare() {
 	local patch_dir="${WORKDIR}/tex-patches-${GENTOO_TEX_PATCHES_NUM}"
 	eapply "${patch_dir}"
 
-	# ICU 75+ removed the underscored UVS_* names that upTeX's
-	# kanji.h macros redirected to; drop the macros so the
-	# camelCase call sites resolve to the live ICU symbols.
+	# ICU 75 removed underscored UVS_* aliases; use the live camelCase symbols.
 	eapply "${FILESDIR}/texlive-core-icu-uvs-drop-macros.patch"
 
 	default
 
 	elibtoolize
 
-	# Drop this once cairo's and mplibdir's (texlive-core-2023-mplib-h.patch)
-	# autoconf patches are gone. See bug #927714#c4, bug #853121 for cairo,
-	# and bug #837875 for mplibdir (in web2c).
+	# Needed while the cairo and mplibdir autoconf patches remain.
+	# bugs #927714, #853121, #837875
 	"${S}"/reautoconf libs/cairo || die
 }
 
 src_configure() {
-	# TODO: report upstream
-	# bug #915223
+	# bug #915223; needs upstreaming
 	append-flags -fno-strict-aliasing
 	filter-lto
 
 	# bug #946142
 	append-cflags -std=gnu17
 
-	# Needed for 32bit architectures, bug 928096
-	# This is upstream recommendation for the moment, see also
-	# https://www.tug.org/texlive/build.html
-	# I'm fairly sure it just hides a real bug in pdftex, keeping 928096
-	# thus open, but hey, at least it's not a regression...
+	# Upstream's temporary 32-bit workaround; likely masks a pdfTeX bug.
+	# bug #928096
 	append-cflags -Wno-incompatible-pointer-types
 
-	# bug #966834
-	# running reautoconf would also fix the issue; however, there are several
-	# configure scripts, so adding the flag is a much faster approach.
+	# Avoid reautoconfing several scripts for bug #966834.
 	append-cxxflags $(test-flags-CXX -std=gnu++17)
 
-	# It fails on alpha without this
+	# Required on alpha.
 	use alpha && append-ldflags "-Wl,--no-relax"
 
-	# Too many regexps use A-Z a-z constructs, what causes problems with locales
-	# that don't have the same alphabetical order than ascii. Bug #242430
-	# So we set LC_ALL to C in order to avoid problems.
+	# Regex ranges assume ASCII collation. bug #242430
 	export LC_ALL=C
 
-	# Disable freetype-config as this is considered obsolete.
-	# Also only pkg-config works for prefix as described in bug #690094
+	# Only pkg-config handles prefixes correctly. bug #690094
 	export ac_cv_prog_ac_ct_FT2_CONFIG=no
 
 	local my_conf=(
@@ -367,10 +347,8 @@ src_configure() {
 		# web2c afm2pl chktex dtl dvi2tty dvidvi dviljk dviout-util dvipdfm-x gregorio
 	)
 
-	# Enable the following on version bumps. While it makes the build
-	# always fail, presumably because texlive passes these configure
-	# options to sub-configures, it still points out dropped
-	# options. See https://bugs.gentoo.org/828591
+	# Temporarily enable on bumps to detect dropped options; it breaks sub-configures.
+	# bug #828591
 	my_conf+=(
 		# --enable-option-checking=fatal
 	)
@@ -388,8 +366,7 @@ src_compile() {
 	emake AR="$(tc-getAR)" SHELL="${EPREFIX}"/bin/sh texmf="${EPREFIX}"${TEXMF_PATH:-/usr/share/texmf-dist}
 
 	cd "${S}" || die
-	# Mimic updmap --syncwithtrees to enable only fonts installed
-	# Code copied from updmap script
+	# Mirror updmap --syncwithtrees for installed fonts only.
 	while read -r i; do
 		texlive-common_is_file_present_in_texmf "${i}" || echo "${i}"
 	done > "${T}/updmap_update" < <(grep -E '^(Mixed|Kanji)?Map' "texmf-dist/web2c/updmap.cfg" | sed 's@.* @@')
@@ -423,12 +400,11 @@ src_install() {
 	emake DESTDIR="${D}" texmf="${ED}${TEXMF_PATH:-/usr/share/texmf-dist}" run_texlinks="true" run_mktexlsr="true" install
 
 	cd "${S}" || die
-	dodir /usr/share # just in case
+	dodir /usr/share
 	cp -pR texmf-dist "${ED}/usr/share/" || die "failed to install texmf trees"
 	cp -pR "${WORKDIR}"/tlpkg "${ED}/usr/share/" || die "failed to install tlpkg files"
 
-	# When X is disabled mf-nowin doesn't exist but some scripts expect it to
-	# exist. Instead, it is called mf, so we symlink it to please everything.
+	# Scripts expect mf-nowin even when X-disabled builds provide only mf.
 	use X || dosym mf /usr/bin/mf-nowin
 
 	docinto texk
@@ -453,23 +429,18 @@ src_install() {
 	CONFIG_PROTECT_MASK="/etc/texmf/web2c /etc/texmf/language.dat.d /etc/texmf/language.def.d /etc/texmf/updmap.d"
 	EOF
 
-	# populate /etc/texmf
 	keepdir /etc/texmf/web2c
 
-	# take care of updmap.cfg and language.d files
 	keepdir /etc/texmf/{updmap.d,language.dat.d,language.def.d,language.dat.lua.d}
 
 	mv "${ED}${TEXMF_PATH}/web2c/updmap.cfg" "${ED}/etc/texmf/updmap.d/00updmap.cfg" || die "moving updmap.cfg failed"
 
-	# Remove fmtutil.cnf, it will be regenerated from /etc/texmf/fmtutil.d files
-	# by texmf-update
+	# texmf-update regenerates this from /etc/texmf/fmtutil.d.
 	rm "${ED}${TEXMF_PATH}/web2c/fmtutil.cnf" || die
 
 	if use cjk; then
-		# Drop the standalone ptex/uptex engines; Gentoo keeps only the
-		# extended euptex (the ptex/uptex *names* are provided as symlinks
-		# by texlive-langjapanese). Use -f so a TL release that no longer
-		# installs a standalone ptex binary does not abort the install.
+		# Keep only euptex; texlive-langjapanese supplies the ptex/uptex names.
+		# Tolerate releases that omit the standalone ptex binary.
 		rm -f "${ED}/usr/bin/"{,u}ptex || die
 	fi
 
@@ -491,10 +462,7 @@ src_install() {
 
 	texlive-common_handle_config_files
 
-	# the virtex symlink is not installed
-	# The links has to be relative, since the targets
-	# is not present at this stage and MacOS doesn't
-	# like non-existing targets
+	# Provide missing virtex links; keep them relative for absent staged targets.
 	dosym tex /usr/bin/virtex
 	dosym pdftex /usr/bin/pdfvirtex
 
@@ -502,14 +470,8 @@ src_install() {
 }
 
 pkg_postinst() {
-	# Note that the etexmf-update and efmtutil-sys use nonfatal. We are
-	# pkg_postinst, so invoking die will merely print an error message
-	# but not abort the installation as it already happened. However,
-	# unlike the texlive modules, we observed fmtutil-sys failures in
-	# texlive-core.
-
-	# TODO: Research the rationale of calling etexmf-update and
-	# eftmutil-sys here and the reasons why it sometimes fails.
+	# Post-install die cannot roll back a merge, and fmtutil-sys failures occur
+	# here; keep both updates nonfatal. Their intermittent failures need study.
 	nonfatal etexmf-update
 	nonfatal efmtutil-sys
 
