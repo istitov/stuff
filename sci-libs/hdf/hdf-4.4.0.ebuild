@@ -13,67 +13,40 @@ SRC_URI="https://github.com/HDFGroup/hdf4/archive/refs/tags/hdf${PV}.tar.gz -> $
 S="${WORKDIR}/hdf4-hdf${PV}"
 
 LICENSE="NCSA-HDF"
-# Subslot tracks the SONAME major, which 4.4.0 moves for the first time in
-# this package's history: the CMake build renames libdf to libhdf and
-# derives the SONAME from lt_vers.am differently than autotools did, so
-# libdf.so.0 / libmfhdf.so.0 become libhdf.so.11 / libmfhdf.so.11.
-# Upstream does have an install(CODE) rule meant to leave a libdf compat
-# symlink, but it produces nothing here -- execute_process swallows its own
-# failure -- so the old names are simply gone.
-#
+# The CMake port replaces libdf.so.0/libmfhdf.so.0 with libhdf.so.11 and
+# libmfhdf.so.11. Its intended libdf compatibility symlink fails silently.
 SLOT="0/11"
 KEYWORDS="~amd64 ~arm64"
 IUSE="examples fortran szip static-libs test"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="test? ( szip )"
 
-# No XDR dependency. 4.3.x bundled its own (mfhdf/libsrc/h4_xdr.c); 4.4.0
-# has no XDR sources at all and no tirpc lookup, because XDR existed only
-# to serve the netCDF-2 interface this release removes. So libtirpc stays
-# out, as it has since 4.3.x, but now for a different reason.
-# verified 2026-09-04
+# No XDR dependency: 4.4 removes the netCDF-2 interface and all XDR sources;
+# there is no tirpc lookup. verified 2026-09-04
 RDEPEND="virtual/zlib
 	media-libs/libjpeg-turbo:=
 	szip? ( virtual/szip )"
 DEPEND="${RDEPEND}
 	test? ( virtual/szip )"
 
-# 4.4.0 drops the autotools build entirely -- there is no configure.ac,
-# no Makefile.am and no bootstrap script left in the tarball, only
-# CMakeLists.txt. So this is a port rather than a bump, and the autotools
-# machinery the 4.3.1 ebuild carried goes with it:
-#
-#   - the three configure.ac seds that let --enable-shared survive
-#     --enable-fortran. CMake builds both library kinds from the same
-#     switches, so the conflict they worked around does not exist.
-#   - --disable-netcdf / --disable-netcdf-tools. There is nothing left to
-#     disable: RELEASE.txt records the netCDF interface being removed from
-#     both C and Fortran, mfhdf/ncdump and mfhdf/ncgen are gone from the
-#     source tree, and the HDF4_ENABLE_NETCDF option was deleted. The
-#     hdf4_netcdf.h and hdf2netcdf.h headers 4.3.1 installed are gone with
-#     it -- upstream states they are no longer distributed.
-#   - the config/commence.am -R -> -L rpath sed, which had no CMake
-#     counterpart to begin with.
-# verified 2026-09-04 against the 4.4.0 tarball
+# 4.4 is CMake-only. Removal of netCDF-2 and its headers makes the old disable
+# switches obsolete; CMake also needs none of the shared/Fortran or rpath
+# autotools workarounds. verified 2026-09-04
 
 src_configure() {
-	# -Werror=strict-aliasing, -Werror=lto-type-mismatch
-	# https://bugs.gentoo.org/862720
+	# -Werror=strict-aliasing and lto-type-mismatch. bug #862720
 	append-flags -fno-strict-aliasing
 	filter-lto
 
 	if use fortran; then
 		[[ $(tc-getFC) = *gfortran ]] && append-fflags -fno-range-check
-		# GCC 10 workaround, bug #723014
+		# bug #723014
 		append-fflags $(test-flags-FC -fallow-argument-mismatch)
 	fi
 
 	local mycmakeargs=(
-		# HDF4 routes every install through its own HDF4_INSTALL_*_DIR
-		# variables and never consults GNUInstallDirs, so the
-		# CMAKE_INSTALL_LIBDIR that cmake.eclass sets is ignored: left
-		# alone it puts libraries in /usr/lib on a multilib profile (caught
-		# by multilib-strict) and the CMake package files in /usr/cmake.
+		# HDF4 ignores GNUInstallDirs; set every path to avoid multilib-strict
+		# violations and /usr/cmake.
 		-DHDF4_INSTALL_BIN_DIR=bin
 		-DHDF4_INSTALL_LIB_DIR=$(get_libdir)
 		-DHDF4_INSTALL_INCLUDE_DIR=include
@@ -86,22 +59,13 @@ src_configure() {
 		-DHDF4_BUILD_FORTRAN=$(usex fortran ON OFF)
 		-DHDF4_ENABLE_SZIP_SUPPORT=$(usex szip ON OFF)
 		-DHDF4_BUILD_TOOLS=ON
-		# Not redundant with BUILD_TOOLS, which only covers hdfls, hdfed
-		# and the mfhdf four. HDF4_BUILD_UTILS defaults to OFF and gates
-		# seventeen more binaries under hdf/util -- the raster, palette
-		# and GIF/JPEG converters plus vshow/vmake. Leaving it off drops
-		# them silently: the sources still ship, so nothing warns.
+		# BUILD_TOOLS omits 17 hdf/util converters; BUILD_UTILS defaults off.
 		-DHDF4_BUILD_UTILS=ON
 		-DHDF4_BUILD_JAVA=OFF
 		-DHDF4_BUILD_DOC=OFF
-		# Upstream still ships the example sources; they are installed as
-		# documentation in src_install, matching what 4.3.1 did, so there
-		# is nothing to gain from compiling them.
+		# Install example sources as documentation; do not compile them.
 		-DHDF4_BUILD_EXAMPLES=OFF
-		# Default is already "NO", but say it: the GIT and TGZ values make
-		# the configure step fetch zlib/jpeg/szip itself, which would turn
-		# a green build into one that silently ignores the system copies
-		# this package depends on.
+		# Prevent configure-time fetching and silent replacement of system libs.
 		-DHDF4_ALLOW_EXTERNAL_SUPPORT=NO
 		-DZLIB_USE_EXTERNAL=OFF
 		-DJPEG_USE_EXTERNAL=OFF
@@ -114,26 +78,20 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# Upstream hardcodes lib and turns imported CMake targets and absolute
-	# library paths into invalid -l arguments in the generated file.
+	# Fix hard-coded libdir and invalid imported-target paths in hdf.pc.
 	local private_libs="-lm -ljpeg -lz$(usex szip ' -lsz' '')"
 	sed -i \
 		-e "s|^libdir=.*|libdir=\${exec_prefix}/$(get_libdir)|" \
 		-e "s|^Libs.private:.*|Libs.private: ${private_libs}|" \
 		"${ED}/usr/$(get_libdir)/pkgconfig/hdf.pc" || die
 
-	# 4.4.0 renamed release_notes/ to release_docs/ and dropped
-	# bugs_fixed.txt and misc_docs.txt from it.
+	# 4.4 renamed release_notes and dropped its other two text files.
 	dodoc release_docs/{RELEASE,HISTORY}.txt
 
-	# CMake installs COPYING and two of its own docs loose under
-	# share/hdf4; the licence is already in ${ED}/usr/share/doc via
-	# LICENSE and the CMake notes describe a build users do not run.
+	# Drop duplicate license and build-only CMake notes outside docdir.
 	rm -r "${ED}"/usr/share/hdf4 || die
 
-	# 4.3.x dropped the install rule for the example tree; the sources are
-	# still shipped under HDF4Examples/. Copy them verbatim so users still
-	# get them under USE=examples.
+	# Upstream no longer installs its shipped example tree.
 	if use examples; then
 		docinto examples
 		dodoc -r HDF4Examples/.
