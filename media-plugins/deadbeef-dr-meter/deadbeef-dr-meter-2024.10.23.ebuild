@@ -14,7 +14,7 @@ S="${WORKDIR}/${PN}-${MY_TAG#v}"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+gtk3 gtk2"
 REQUIRED_USE="|| ( gtk2 gtk3 )"
 
