@@ -257,8 +257,8 @@ CRATES="
 	mimalloc@0.1.52
 	mime@0.3.17
 	mime_guess@2.0.5
-	minijinja-contrib@2.18.0
-	minijinja@2.18.0
+	minijinja-contrib@2.22.0
+	minijinja@2.22.0
 	minimal-lexical@0.2.1
 	miniz_oxide@0.8.9
 	mio@1.2.1
