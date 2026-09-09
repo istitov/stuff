@@ -12,7 +12,7 @@ S="${WORKDIR}/${PN}-${PV}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="bgmn"
 
 # zlib, quazip and alglib are bundled and built via profex's own subdir
