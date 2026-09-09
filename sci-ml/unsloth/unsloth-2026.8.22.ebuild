@@ -7,13 +7,27 @@ DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_SINGLE_IMPL=1
 PYTHON_COMPAT=( python3_{12..14} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="Fine-tune and run large language models efficiently"
 HOMEPAGE="
 	https://github.com/unslothai/unsloth
 	https://pypi.org/project/unsloth/
 "
+# Built from the upstream git tag, not the PyPI sdist: upstream withdrew the
+# sdists (the simple index stops at 2026.6.2, and 2026.9.2's file now 404s),
+# leaving the published releases unfetchable.  unslothai/unsloth is a monorepo
+# whose desktop tags are full snapshots -- v0.1.804-beta declares library
+# version 2026.8.22 in unsloth/_version.py, and its unsloth/ tree is
+# byte-identical to the 2026.8.22 sdist.  The tag/version map moves in
+# lockstep, so a bump picks the tag whose _version.py matches ${PV}.
+#
+# The GitHub-generated archive is not immutable. Its Manifest digest pins the
+# current bytes and must be deliberately re-pinned if GitHub rehashes it.
+# verified 2026-09-09
+MY_TAG="v0.1.804-beta"
+SRC_URI="https://github.com/unslothai/unsloth/archive/refs/tags/${MY_TAG}.tar.gz -> ${P}.gh.tar.gz"
+S="${WORKDIR}/${PN}-${MY_TAG#v}"
 
 # Apache-2.0: the core library. USE=studio also builds/installs the studio
 # frontend (AGPL-3, studio/LICENSE.AGPL-3.0) and its bundled Figtree/Inter/
