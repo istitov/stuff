@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (291) ---
+# --- pypi (292) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -369,6 +369,10 @@ pypi = "h5json"
 ["dev-python/hatch-build-scripts"]
 source = "pypi"
 pypi = "hatch-build-scripts"
+
+["dev-python/hatch-cython"]
+source = "pypi"
+pypi = "hatch-cython"
 
 ["dev-python/hatch-requirements-txt"]
 source = "pypi"
@@ -2803,7 +2807,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (24) ---
+# --- special (25) ---
 
 ["app-text/mupdf"]
 source = "regex"
@@ -2913,6 +2917,11 @@ to_pattern = '0_pre\1'
 ["sci-ml/unsloth"]
 source = "pypi"
 pypi = "unsloth"
+
+["sci-physics/profex"]
+source = "regex"
+url = "https://www.profex-xrd.org/download/linux-2/"
+regex = 'profex-([0-9][0-9.]*)\.tar\.gz'
 
 ["sci-visualization/gwyddion3"]
 source = "regex"
@@ -3065,7 +3074,6 @@ prefix = "v"
 # ["sci-physics/demeter"] skipped: Demeter removed from CPAN; no public upstream tracking possible
 # ["sci-physics/ifeffit"] skipped: custom upstream at sourceforge.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/oommf"] skipped: custom upstream at math.nist.gov; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["sci-physics/profex"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-visualization/gwyddion"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sys-kernel/pf-sources"] skipped: branch-tip signal tracked in maintainer-local nvchecker-local.toml — pf-sources uses a GA-only curated-patch model where 'ship vs upstream tag' is not the right drift question; what matters is when codeberg pf-kernel/linux gains a new -pfN tag we want to evaluate for inclusion
 # ["sys-kernel/pf-sources-extended"] skipped: branch-tip signal tracked in maintainer-local nvchecker-local.toml — pf-sources uses a GA-only curated-patch model where 'ship vs upstream tag' is not the right drift question; what matters is when codeberg pf-kernel/linux gains a new -pfN tag we want to evaluate for inclusion

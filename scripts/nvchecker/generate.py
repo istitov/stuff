@@ -602,6 +602,21 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
     # verified 2026-08-29: latexmk 4.88 (2026-03-09), glossaries 5.1
     # (2026-04-21) -- both equal to the PVs the tree ships, so nothing was
     # being hidden; they were simply invisible.
+    # profex has no tags, no PyPI, no release API -- upstream is a WordPress
+    # site -- so the SRC_URI heuristic classified it "unknown" and it was
+    # skipped, meaning no drift report has ever looked at it. It went from
+    # 5.7.1 to 5.7.2 unnoticed and was caught by hand on 2026-09-09.
+    #
+    # The Linux download page lists the source tarballs by name, so match
+    # those. Deliberately lowercase `profex-`: the same page also offers
+    # `Profex-<ver>-linux-x86_64-bin.tar.gz`, the prebuilt binary, which this
+    # pattern must not pick up. Several versions are listed at once and
+    # nvchecker takes the maximum. # verified 2026-09-09
+    "sci-physics/profex": {
+        "source": "regex",
+        "url": "https://www.profex-xrd.org/download/linux-2/",
+        "regex": r"profex-([0-9][0-9.]*)\.tar\.gz",
+    },
     "dev-tex/latexmk": {
         "source": "regex",
         "url": "https://www.ctan.org/json/2.0/pkg/latexmk",
