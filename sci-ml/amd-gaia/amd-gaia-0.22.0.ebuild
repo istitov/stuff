@@ -19,65 +19,27 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="+api audio +mcp eval image talk ui"
 
-# ui implies api: upstream's ui extra restates fastapi/uvicorn/python-
-# multipart on top of its own RAG deps.
+# Upstream's UI extra includes the API dependencies.
 REQUIRED_USE="ui? ( api )"
 
-# Upstream pytest config marks tests as needing a live Lemonade server,
-# Docker, the Gmail API, and other integration targets that aren't
-# reachable from a sandboxed build. RESTRICT until someone wants to
-# split out a unit-only subset.
+# Tests require live Lemonade, Docker, Gmail, and other integration services;
+# restrict until a unit-only subset is available.
 RESTRICT="test"
 
-# Core install_requires per setup.py (verified against v0.22.0 sdist
-# 2026-07-17).
-# Lemonade Server is the AMD-recommended backend but not a hard dep — gaia
-# speaks any OpenAI-compatible endpoint (see pkg_postinst).
-#
-# python-multipart — base install_requires since v0.20.1: base `gaia-mcp`
-# console_script imports python_multipart at import time, so needed even
-# without USE=api. Dropped from api? as redundant. verified 2026-06-19.
-#
-# keyring — v0.21.0 promotes it from ui/api extras to base install_requires
-# (upstream #1621): gaia.connectors.{store,mcp_server} import keyring at
-# module load, and `gaia connectors` is a base CLI command. >=24,<26 is
-# upstream's supply-chain pin. Dropped from ui? as redundant. verified
-# 2026-06-19.
-#
-# tavily-python — v0.21.2 adds it to base install_requires (>=0.5.0), but
-# it's a SOFT dep: gaia/web/tavily.py guards `from tavily import` in
-# try/except (TAVILY_SDK_AVAILABLE) and falls back to DuckDuckGo. Not
-# packaged, so omitted — web search degrades gracefully. verified 2026-06-19.
-#
-# apscheduler + tomli-w — v0.22.0 adds a cron-based scheduler (upstream #892):
-# apscheduler drives the daemon, tomli-w writes ~/.gaia/schedules.toml. Both
-# are base install_requires now. (Upstream also lists tomli for python_version
-# < 3.11, omitted here — PYTHON_COMPAT floors at 3.12 where tomllib is stdlib.)
-# verified 2026-07-17.
-#
-# audio? — gaia only `import torch`s (gaia/audio/whisper_asr.py), never
-# torchvision/torchaudio (re-grepped src/ 2026-07-17). Upstream's audio
-# extra caps torch<2.14 for old-era openai-whisper deps; cap is stale
-# (verified 2026-06-04: current openai-whisper unbounded torch, no
-# torchvision), so we ship uncapped on sci-ml/pytorch alone.
-#
-# ui? — the ui/rag extras ingest .pptx (python-pptx>=0.6.21, since 0.20.0)
-# and .docx (python-docx>=1.1.0, new in v0.22.0) via lazy imports. Both are
-# now packaged in this overlay, so both are carried. verified 2026-07-17.
-#
-# httpx (ui?) — hard upstream req: ui extra declares httpx>=0.27.0 and 9
-# src/gaia modules import it. ::gentoo-deprecated 2026-04-01 (no drop-in
-# replacement), so the DeprecatedDep warning is knowingly accepted.
-# verified 2026-06-20.
-#
-# eval? — v0.21.2 adds tiktoken>=0.7.0,<1 to the eval extra (token-cost
-# accounting in gaia/eval/tool_cost.py; lazy import, char-count fallback).
-# Carried uncapped. Upstream also caps numpy>=2.0,<2.3.0 here, but ::gentoo
-# ships numpy 2.4+ so that cap is left off (would make USE=eval unsolvable).
-# verified 2026-06-19.
-#
-# talk? — v0.21.0 adds `pip` to the talk extra: Kokoro/misaki TTS downloads
-# its spaCy model at runtime via pip. verified 2026-06-19.
+# Dependency mapping verified against v0.22.0 on 2026-07-17.
+# Lemonade is recommended, not required; any OpenAI-compatible endpoint works.
+# python-multipart is core because gaia-mcp imports it at startup.
+# keyring is core for connector imports; preserve upstream's >=24,<26 pin.
+# Tavily is a declared core dependency, though imports retain DuckDuckGo fallback.
+# apscheduler and tomli-w implement scheduling; Python >=3.12 supplies tomllib.
+# audio imports only torch. Ignore upstream's stale <2.14 cap and unused
+# torchvision/torchaudio declarations. rechecked 2026-07-17
+# UI lazily imports python-pptx and python-docx for document ingestion.
+# httpx is required by UI; accept its Gentoo deprecation because no replacement
+# exists. verified 2026-06-20
+# Eval's tiktoken import has a char-count fallback; carry it without upstream's
+# <1 cap. Omit numpy's <2.3 cap because Gentoo carries 2.4+.
+# Talk needs pip because Kokoro/misaki installs its spaCy model at runtime.
 RDEPEND="
 	${PYTHON_DEPS}
 	sci-ml/accelerate[${PYTHON_SINGLE_USEDEP}]
