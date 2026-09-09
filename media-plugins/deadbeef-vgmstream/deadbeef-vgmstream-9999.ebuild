@@ -15,7 +15,9 @@ SLOT="0"
 DEPEND_COMMON="
 	media-sound/deadbeef
 	media-libs/libvorbis
-	media-sound/mpg123"
+	media-sound/mpg123
+	media-video/ffmpeg
+"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
@@ -35,7 +37,7 @@ src_compile() {
 	emake CFLAGS="${CFLAGS} -fPIC"
 }
 
-src_install(){
-	insinto /usr/$(get_libdir)/deadbeef
-	doins vgm.so
+src_install() {
+	exeinto /usr/$(get_libdir)/deadbeef
+	doexe vgm.so
 }
