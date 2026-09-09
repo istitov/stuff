@@ -34,7 +34,12 @@ RDEPEND="
 	app-arch/zstd:=
 	dev-libs/rocm-device-libs:${SLOT}
 "
-DEPEND="${RDEPEND}"
+# binutils-libs is here only for plugin-api.h, which the gold LTO plugin
+# enabled in src_configure compiles against. ld dlopens the finished
+# plugin, so nothing from binutils is needed at runtime.
+DEPEND="${RDEPEND}
+	sys-libs/binutils-libs
+"
 BDEPEND="
 	${PYTHON_DEPS}
 	app-alternatives/ninja
@@ -157,6 +162,31 @@ src_configure() {
 		# verified 2026-09-09, https://github.com/istitov/stuff/issues/282
 		-DBUILTINS_CMAKE_ARGS="${sub_flags}"
 		-DRUNTIMES_CMAKE_ARGS="${sub_flags}"
+
+		# Build the gold LTO plugin. GNU ld is this compiler's default
+		# linker, and clang puts
+		#     -plugin <its own bin dir>/../lib/LLVMgold.so
+		# on the ld command line for every -flto link. Without that file,
+		# any ROCm library configured through rocm_use_clang() fails at the
+		# CMake compiler test the moment a user carries -flto in their
+		# flags: "error loading plugin: ... No such file or directory".
+		# clang skips the plugin entirely for lld, so only the default
+		# GNU-linker path is affected.
+		#
+		# Not put behind a USE flag. plugin-api.h comes from
+		# sys-libs/binutils-libs, needed at build time only, and it is the
+		# same header llvm-core/llvm already pulls for its own default
+		# +binutils-plugin -- which this package reaches anyway through its
+		# dev-libs/rocm-device-libs dependency. Switching it off would buy
+		# nothing but a way back into this failure for everyone who has not
+		# also moved to lld.
+		#
+		# Deliberately NOT paired with llvm-core/llvmgold the way
+		# llvm-core/llvm is: that package symlinks the plugin into
+		# /usr/<CHOST>/binutils-bin/lib/bfd-plugins, where ld autoloads it
+		# for every link on the system, and this compiler stays out of
+		# shared paths. https://github.com/istitov/stuff/issues/284
+		-DLLVM_BINUTILS_INCDIR="${ESYSROOT}"/usr/include
 
 		# Match the system LLVM's packaging shape so consumers that resolve
 		# components (e.g. llvm_map_components_to_libnames) get the dylib
