@@ -71,6 +71,7 @@ else
 		https://github.com/opencv/opencv/commit/54b03cc2f84cfe83222c59b747e17cb378a9744c.patch
 		-> ${P}-fix_videowriter_raw_return_code.patch
 	"
+	# Install-verified on amd64 and arm64.
 	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86"
 fi
 
@@ -192,8 +193,7 @@ REQUIRED_USE="
 
 RESTRICT="!test? ( test )"
 
-# NOTE
-# dev-libs/flatbuffers is header only, but we still want to rebuild on sub-slot changes
+# Rebuild for flatbuffers subslot changes despite its header-only API.
 COMMON_DEPEND="
 	dev-libs/protobuf:=[protoc(+),protobuf(+),${MULTILIB_USEDEP}]
 	virtual/zlib:=[${MULTILIB_USEDEP}]
@@ -389,13 +389,6 @@ PATCHES=(
 
 	"${FILESDIR}/${PN}-4.11.0-ffmpeg8.patch" # PR 27691
 	"${DISTDIR}/${P}-fix_videowriter_raw_return_code.patch"
-
-	# TODO applied in src_prepare
-	# "${FILESDIR}/${PN}_contrib-4.8.1-rgbd.patch"
-
-	# "${FILESDIR}/${PN}_contrib-4.8.1-NVIDIAOpticalFlowSDK-2.0.tar.gz.patch"
-
-	# "${FILESDIR}/${PN}_contrib-4.12.0-cuda-13.0.patch"
 )
 
 cuda_get_host_compiler() {
@@ -415,39 +408,23 @@ cuda_get_host_compiler() {
 		die "$(tc-get-compiler-type) compiler is not supported"
 	fi
 
-	# compiler with CHOST prefix
-	# x86_64-pc-linux-gnu-g++
 	local compiler
-
-	# gcc or clang
 	local compiler_type
-
-	# major version of the current compiler. 15
 	local compiler_version
-
-	# cat/pkg of the compiler
-	# sys-devel/gcc, llvm-core/clang
 	local package
-
-	# QPN of the package we are checking
-	# sys-devel/gcc, <sys-devel/gcc-15
 	local package_version
 
-	# system compiler e.g. tc-getCXX plus version
-	# used to skip rechecking, as we check NVCC_CCBIN first
-	# x86_64-pc-linux-gnu-g++-15
+	# Skip the already-tested default while walking older compiler slots.
 	local NVCC_CCBIN_default
 
 	compiler_type="$(tc-get-compiler-type)"
 	compiler_version="$("${compiler_type}-major-version")"
 
-	# try the default compiler first
 	NVCC_CCBIN="$(tc-getCXX)"
 	NVCC_CCBIN_default="${NVCC_CCBIN}-${compiler_version}"
 
 	compiler="${NVCC_CCBIN/%-${compiler_version}}"
 
-	# store the package so we can re-use it later
 	if tc-is-gcc; then
 		package="sys-devel/${compiler_type}"
 	elif tc-is-clang; then
@@ -471,7 +448,6 @@ cuda_get_host_compiler() {
 		eend 1
 
 		while true; do
-			# prepare next version
 			local package_version_next
 			package_version_next="$(best_version "${package_version}")"
 
@@ -486,7 +462,6 @@ cuda_get_host_compiler() {
 
 			NVCC_CCBIN="${compiler}-$(ver_cut 1 "${package_version/#<${package}-/}")"
 
-			# skip the next version equals the already checked system default
 			[[ "${NVCC_CCBIN}" != "${NVCC_CCBIN_default}" ]] && break
 		done
 		ebegin "testing ${NVCC_CCBIN}"
@@ -503,7 +478,6 @@ cuda_get_host_native_arch() {
 		return
 	fi
 
-	# TODO nvptx-arch ?
 	__nvcc_device_query || die "failed to query the native device"
 }
 
@@ -519,8 +493,7 @@ pkg_pretend() {
 		einfo "The CUDA architecture tuple for your device can be found at https://developer.nvidia.com/cuda-gpus."
 	fi
 
-	# When building binpkgs you probably want to include all targets
-	# TODO CUDAARCHS
+	# Binpkgs should cover every CUDA architecture.
 	if use cuda && [[ ${MERGE_TYPE} == "buildonly" ]] && [[ -v CUDA_GENERATION || -v CUDA_ARCH_BIN ]]; then
 		local info_message="When building a binary package it's recommended to unset CUDA_GENERATION and CUDA_ARCH_BIN"
 		einfo "$info_message so all available architectures are build."
@@ -533,8 +506,7 @@ pkg_setup() {
 	use java && java-pkg-opt-2_pkg_setup
 
 	if use cuda && [[ ! -e /dev/nvidia-uvm ]]; then
-		# NOTE We try to load nvidia-uvm and nvidia-modeset here,
-		# so __nvcc_device_query does not fail later.
+		# Let nvidia-smi load modules needed by __nvcc_device_query.
 
 		nvidia-smi -L &> /dev/null || true
 	fi
@@ -558,26 +530,19 @@ src_unpack() {
 		default
 	fi
 
-	# remove bundled stuff
+	# Remove bundled libraries in favor of system copies.
 	local files_3rdparty=(
-		# cpufeatures
-		# fastcv
 		ffmpeg
-		# flatbuffers
 		include/{opencl,vulkan}
-		# ippicv
-		# ittnotify
 		libjasper
 		libjpeg
 		libjpeg-turbo
 		libpng
 		libspng
 		libtiff
-		# libtim-vx
 		libwebp
 		openexr
 		openjpeg
-		# orbbecsdk
 		protobuf
 		quirc
 		tbb
@@ -615,24 +580,11 @@ src_prepare() {
 		eapply "${FILESDIR}/${PN}_contrib-4.8.1-rgbd.patch"
 		eapply "${FILESDIR}/${PN}_contrib-4.8.1-NVIDIAOpticalFlowSDK-2.0.tar.gz.patch"
 		eapply "${FILESDIR}/${PN}_contrib-4.12.0-cuda-13.0.patch"
-		# istitov/stuff#271: cudev ptr2d/zip.hpp opens the libcu++ std namespace via
-		# _LIBCUDACXX_BEGIN_NAMESPACE_STD to specialize tuple_size/tuple_element; CUDA
-		# 13.2+ reorganized CCCL so that macro no longer compiles and the build dies at
-		# the first CUDA TU (core/src/cuda/gpu_mat.cu). Backport the upstream-master
-		# version guard selecting _CCCL_*_NAMESPACE_CUDA_STD for CUDA >= 13.2. Verified
-		# opencv[cuda] build + cv2.cuda kernels (cudaarithm threshold == CPU) on CUDA
-		# 13.3 / sm_86, 2026-06-06. Drop once ::gentoo opencv ships the upstream fix.
+		# CUDA 13.2 changed libcu++ namespace macros; backport upstream's guard.
+		# CUDA 13.3/sm_86 build and runtime verified 2026-06-06. #271
 		eapply "${FILESDIR}/${PN}_contrib-4.12.0-cudev-cuda13-namespace.patch"
-		# istitov/stuff#271: videostab global_motion.cu uses thrust::make_tuple /
-		# make_zip_iterator but only includes thrust/{device_ptr,remove,functional}.h,
-		# which pulled tuple.h + the zip iterator transitively until the CUDA 13.3 CCCL
-		# reshuffle dropped that (TU then fails "thrust has no member make_tuple").
-		# Include the owning headers directly (inert on older CUDA). Second, independent
-		# CUDA-13 regression after the cudev one above, surfacing only on 13.3; no
-		# upstream 4.x fix (5.0.0 dropped the thrust tuples). Anchors on the post-cuda-
-		# 13.0-patch include block, which differs from 4.13.0's, so each tag carries its
-		# own copy. Verified isolated nvcc compile of the TU on CUDA 13.3 / sm_86,
-		# 2026-06-07.
+		# CUDA 13.3 stopped transitively including Thrust tuple/zip headers; include
+		# their owners directly. Isolated CUDA 13.3/sm_86 compile verified 2026-06-07. #271
 		eapply "${FILESDIR}/${PN}_contrib-4.12.0-videostab-cuda13-thrust-tuple.patch"
 		[[ -n "${PATCHES_CONTRIB_USER[*]}" ]] && eapply "${PATCHES_CONTRIB_USER[@]}"
 		popd >/dev/null || die
@@ -728,7 +680,7 @@ src_prepare() {
 	if use java; then
 		java-pkg-opt-2_src_prepare
 
-		# set encoding so even this cmake build will pick it up.
+		# Pass the required encoding through CMake's Ant invocation.
 		ANT_OPTS+=" -Dfile.encoding=iso-8859-1"
 		ANT_OPTS+=" -Dant.build.javac.source=$(java-pkg_get-source)"
 		ANT_OPTS+=" -Dant.build.javac.target=$(java-pkg_get-target)"
@@ -742,27 +694,25 @@ src_prepare() {
 }
 
 multilib_src_configure() {
-	# bug #919101 and https://github.com/opencv/opencv/issues/19020
+	# LTO is unsupported upstream. bug #919101, opencv/opencv#19020
 	filter-lto
 
 	append-cppflags "$(usex debug '-DDEBUG' '-DNDEBUG')"
 
-	# please don't sort here, order is the same as in CMakeLists.txt
+	# Keep CMakeLists.txt order.
 	local mycmakeargs=(
 		-DMIN_VER_CMAKE=3.26
 
 		-DCMAKE_POLICY_DEFAULT_CMP0148="OLD" # FindPythonInterp
 
-		# for protobuf
+		# Required by protobuf.
 		-DCMAKE_CXX_STANDARD=17
 
-	# Optional 3rd party components
-	# ===================================================
+	# Optional third-party components
 		-DOPENCV_ENABLE_NONFREE="$(usex non-free)"
 		-DWITH_QUIRC="$(usex quirc)"
 		-DWITH_FLATBUFFERS="$(multilib_native_usex contribdnn)"
 		-DWITH_1394="$(usex ieee1394)"
-		# -DWITH_AVFOUNDATION="no" # IOS
 		-DWITH_VTK="$(multilib_native_usex vtk)"
 		-DWITH_EIGEN="$(usex eigen)"
 		-DWITH_VFW="no" # Video windows support
@@ -788,8 +738,6 @@ multilib_src_configure() {
 		-DWITH_GIGEAPI="no"
 		-DWITH_ARAVIS="no"
 		-DWITH_WIN32UI="no"              # Windows only
-		# -DWITH_QUICKTIME="no"
-		# -DWITH_QTKIT="no"
 		-DWITH_TBB="$(usex tbb)"
 		-DWITH_OPENMP="$(usex openmp)"
 		-DWITH_PTHREADS_PF="yes"
@@ -797,7 +745,6 @@ multilib_src_configure() {
 		-DWITH_UNICAP="no"               # Not packaged
 		-DWITH_V4L="$(usex v4l)"
 		-DWITH_LIBV4L="$(usex v4l)"
-		# -DWITH_DSHOW="yes"                 # direct show supp
 		-DWITH_MSMF="no"
 		-DWITH_XIMEA="no"        # Windows only
 		-DWITH_XINE="$(multilib_native_usex xine)"
@@ -819,20 +766,15 @@ multilib_src_configure() {
 		-DWITH_FREETYPE="$(usex truetype)"
 		-DWITH_VULKAN="$(usex vulkan)"
 		-DWITH_WAYLAND="$(usex wayland)"
-	# ===================================================
-	# CUDA build components: nvidia-cuda-toolkit
-	# ===================================================
+	# CUDA
 		-DWITH_CUDA="$(multilib_native_usex cuda)"
 		-DWITH_CUBLAS="$(multilib_native_usex cuda)"
 		-DWITH_CUFFT="$(multilib_native_usex cuda)"
 		-DWITH_CUDNN="$(multilib_native_usex cudnn)"
-		# NOTE set this via MYCMAKEARGS if needed
 		-DWITH_NVCUVID="no" # TODO needs NVIDIA Video Codec SDK
 		-DWITH_NVCUVENC="no" # TODO needs NVIDIA Video Codec SDK
 		-DCUDA_NPP_LIBRARY_ROOT_DIR="$(usex cuda "${CUDA_PATH:-${ESYSROOT}/opt/cuda}" "")"
-	# ===================================================
-	# OpenCV build components
-	# ===================================================
+	# Build
 		-DBUILD_SHARED_LIBS="yes"
 		-DBUILD_JAVA="$(multilib_native_usex java)" # Ant needed, no compile flag
 		-DBUILD_ANDROID_EXAMPLES="no"
@@ -842,28 +784,21 @@ multilib_src_configure() {
 		-DBUILD_TESTS="$(multilib_native_usex test "yes" "$(multilib_native_usex testprograms)")"
 		-DBUILD_PERF_TESTS="no"
 
-		# -DBUILD_WITH_STATIC_CRT="no"
 		-DBUILD_WITH_DYNAMIC_IPP="no"
 		-DBUILD_FAT_JAVA_LIB="no"
-		# -DBUILD_ANDROID_SERVICE="no"
 		-DBUILD_CUDA_STUBS="$(multilib_native_usex cuda)"
 		-DOPENCV_EXTRA_MODULES_PATH="$(usex contrib "${WORKDIR}/${PN}_contrib-${PV}/modules" "")"
-	# ===================================================
-	# OpenCV installation options
-	# ===================================================
+	# Install
 		-DINSTALL_CREATE_DISTRIB="no"
 		-DINSTALL_BIN_EXAMPLES="$(multilib_native_usex examples)"
 		-DINSTALL_C_EXAMPLES="$(multilib_native_usex examples)"
 		-DINSTALL_TESTS="$(multilib_native_usex testprograms)"
-		# -DINSTALL_ANDROID_EXAMPLES="no"
 		-DINSTALL_TO_MANGLED_PATHS="no"
 		-DOPENCV_GENERATE_PKGCONFIG="yes"
 		# opencv uses both ${CMAKE_INSTALL_LIBDIR} and ${LIB_SUFFIX}
 		# to set its destination libdir
 		-DLIB_SUFFIX=
-	# ===================================================
-	# OpenCV build options
-	# ===================================================
+	# Build behavior
 		-DENABLE_CCACHE="no"
 		# bug 733796, but PCH is a risky game in CMake anyway
 		-DBUILD_USE_SYMLINKS="yes"
@@ -883,29 +818,21 @@ multilib_src_configure() {
 		-DENABLE_IMPL_COLLECTION="no"
 		-DENABLE_INSTRUMENTATION="no"
 		-DGENERATE_ABI_DESCRIPTOR="no"
-	# ===================================================
-	# things we want to be hard off or not yet figured out
-	# ===================================================
+	# Unsupported packaging mode
 		-DBUILD_PACKAGE="no"
-	# ===================================================
-	# Not building protobuf but update files bug #631418
-	# ===================================================
+	# Use system protobuf and regenerate sources. bug #631418
 		-DWITH_PROTOBUF="yes"
 		-DBUILD_PROTOBUF="no"
 		-DPROTOBUF_UPDATE_FILES="yes"
 		-DProtobuf_MODULE_COMPATIBLE="yes"
-	# ===================================================
-	# things we want to be hard enabled not worth useflag
-	# ===================================================
+	# Fixed install policy
 		-DOPENCV_DOC_INSTALL_PATH="share/doc/${PF}"
 		-DOPENCV_SAMPLES_BIN_INSTALL_PATH="libexec/${PN}/bin/samples"
 
 		-DBUILD_IPP_IW="no"
 		-DBUILD_ITT="no"
 
-	# ===================================================
-	# configure modules to be build
-	# ===================================================
+	# Modules
 		-DBUILD_opencv_dnn="$(usex contribdnn)"
 		-DBUILD_opencv_gapi="$(usex ffmpeg yes "$(usex gstreamer)")"
 		-DBUILD_opencv_features2d="$(usex features2d)"
@@ -921,8 +848,6 @@ multilib_src_configure() {
 		-DBUILD_opencv_videoio="$(usex ffmpeg yes "$(usex gstreamer)")"
 
 		-DBUILD_opencv_cudalegacy="no"
-
-		# -DBUILD_opencv_world="yes"
 
 		-DOPENCV_PLUGIN_VERSION=".$(ver_rs 1-2 '' "$(ver_cut 1-2)")"
 		-DOPENCV_PLUGIN_ARCH=".${ARCH}"
@@ -965,10 +890,7 @@ multilib_src_configure() {
 		)
 	fi
 
-	# ==================================================
-	# cpu flags, should solve 633900
-	#===================================================
-	# TODO binhost https://github.com/opencv/opencv/wiki/CPU-optimizations-build-options
+	# CPU baseline flags. bug #633900
 
 	local CPU_BASELINE=""
 	for i in "${CPU_FEATURES_MAP[@]}" ; do
@@ -1006,12 +928,7 @@ multilib_src_configure() {
 		)
 	fi
 
-	# ===================================================
-	# OpenCV Contrib Modules
-	# ===================================================
-	# NOTE
-	# we remove unused modules,
-	# so we shouldn't need to disable options for unused modules
+	# Contrib modules; unused module trees were removed in src_prepare.
 	if use contrib; then
 		mycmakeargs+=(
 			-DBUILD_opencv_cvv="$(usex contribcvv)"
@@ -1025,32 +942,15 @@ multilib_src_configure() {
 		)
 	fi
 
-	# workaround for bug 413429
+	# bug #413429
 	tc-export CC CXX
 
 	if multilib_native_use cuda; then
-		# Check if we can get the arch from the present gpu
+		# Native detection needs writable /dev/nvidiactl.
 		if ! SANDBOX_WRITE=/dev/nvidiactl test -w /dev/nvidiactl; then
 
-			# Needs write access to /dev/nvidiactl.
-			# /dev/nvidiactl usually is 660 root:video .
-
-			# eqawarn "Can't access the GPU at /dev/nvidiactl."
-			# eqawarn "User $(id -nu) is not in the group \"video\"."
-
-			# export CUDAARCHS="all"
-			# build all targets
+			# OpenMP rejects CMake's "all" architecture, so clear its CUDA probe.
 			mycmakeargs+=(
-				# can't use "all" as that breaks openmp
-				# nvcc fatal   : Unsupported gpu architecture 'compute_all'
-				# -DCMAKE_CUDA_ARCHITECTURES="all"
-
-				# with openmp -> CUDA_ARCHITECTURES is empty for target "cmTC_0088f"
-				# -DCUDA_GENERATION="Auto" # requires access to GPU
-
-				# wrong arch....
-				# -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS:-50}" # breaks with openmp otherwise..
-
 				-DOpenMP_CUDA_FLAGS=""
 				-DOpenMP_CUDA_LIB_NAMES=""
 			)
@@ -1065,37 +965,30 @@ multilib_src_configure() {
 		addwrite "/proc/self/task"
 		addpredict "/dev/char/"
 
-		# order of preference CMAKE_CUDA_ARCHITECTURES > CUDA_GENERATION > CUDA_ARCH_BIN and/or CUDA_ARCH_PTX
-		# CMAKE_CUDA_ARCHITECTURES is set from the CUDAARCHS env var
+		# Preserve upstream's architecture-variable precedence.
 		if [[ -v CUDAARCHS ]]; then
-			# eqawarn "CUDAARCHS ${CUDAARCHS}"
 			mycmakeargs+=(
 				-DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
 			)
 		elif [[ -v CUDA_GENERATION ]]; then
-			# eqawarn "CUDA_GENERATION ${CUDA_GENERATION}"
 			mycmakeargs+=(
 				-DCUDA_GENERATION="${CUDA_GENERATION}"
 			)
 		elif [[ -v CUDA_ARCH_BIN ]]; then
-			# eqawarn "CUDA_ARCH_BIN ${CUDA_ARCH_BIN}"
 			mycmakeargs+=(
 				-DCUDA_ARCH_BIN="${CUDA_ARCH_BIN}"
 			)
 			if [[ -v CUDA_ARCH_PTX ]]; then
-				# eqawarn "CUDA_ARCH_PTX ${CUDA_ARCH_PTX}"
 				mycmakeargs+=(
 					-DCUDA_ARCH_PTX="${CUDA_ARCH_PTX}"
 				)
 			fi
 		else
-			# eqawarn "CUDA_DEVICE_ACCESS ${CUDA_DEVICE_ACCESS}"
 			if [[ "${CUDA_DEVICE_ACCESS}" == "false" ]]; then
 				mycmakeargs+=(
 					-DCUDA_GENERATION="Auto"
 				)
 			else
-				# eqawarn "detect"
 				: "${CUDAARCHS:="$(cuda_get_host_native_arch)"}"
 				export CUDAARCHS
 				mycmakeargs+=(
@@ -1110,8 +1003,7 @@ multilib_src_configure() {
 		CUDAHOSTLD="$(tc-getCXX)"
 
 		if tc-is-gcc; then
-			# Filter out IMPLICIT_LINK_DIRECTORIES picked up by CMAKE_DETERMINE_COMPILER_ABI(CUDA)
-			# See /usr/share/cmake/Help/variable/CMAKE_LANG_IMPLICIT_LINK_DIRECTORIES.rst
+			# Drop host GCC paths CMake mistakes for CUDA implicit link paths.
 			CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES_EXCLUDE=$(
 				"${CUDAHOSTLD}" -E -v - <<<"int main(){}" |& \
 				grep LIBRARY_PATH | cut -d '=' -f 2 | cut -d ':' -f 1
@@ -1138,7 +1030,7 @@ multilib_src_configure() {
 		)
 	fi
 
-	# according to modules/java/jar/CMakeLists.txt:23-26
+	# Match modules/java/jar/CMakeLists.txt.
 	if use java; then
 		mycmakeargs+=(
 			-DOPENCV_JAVA_SOURCE_VERSION="$(java-pkg_get-source)"
@@ -1174,7 +1066,6 @@ multilib_src_configure() {
 		fi
 	fi
 
-	# NOTE set this via MYCMAKEARGS if needed
 	if use opencl; then
 		mycmakeargs+=( -DOPENCL_INCLUDE_DIR="${ESYSROOT}/usr/include" )
 		if has_version sci-libs/clfft; then
@@ -1194,10 +1085,9 @@ multilib_src_configure() {
 		)
 	fi
 
-	# NOTE due to multilib we can't do
-	# if multilib_native_use test; then
+	# Tests are configured for every ABI but run only for the native one.
 	if use test; then
-		# opencv tests assume to be build in Release mode
+		# Tests assume a Release build.
 		local -x CMAKE_BUILD_TYPE="Release"
 		mycmakeargs+=(
 			-DOPENCV_TEST_DATA_PATH="${WORKDIR}/${PN}_extra-${PV}/testdata"
@@ -1210,7 +1100,7 @@ multilib_src_configure() {
 	fi
 
 	if multilib_native_use testprograms; then
-		# NOTE do this so testprograms do not fail
+		# Give installed test programs a stable destination.
 		mycmakeargs+=(
 			-DOPENCV_TEST_INSTALL_PATH="libexec/${PN}/bin/test"
 		)
@@ -1223,18 +1113,15 @@ multilib_src_configure() {
 	if multilib_native_use python; then
 		# shellcheck disable=SC2329
 		python_configure() {
-			# Set all python variables to load the correct Gentoo paths
+			# Pin every Python path to the active Gentoo implementation.
 			local mycmakeargs=(
 				"${mycmakeargs[@]}"
-				# python_setup alters PATH and sets this as wrapper
-				# to the correct interpreter we are building for
 				-DBUILD_opencv_python3="yes"
 				-DBUILD_opencv_python_bindings_generator="yes"
 				-DBUILD_opencv_python_tests="$(usex test)"
 				-DPYTHON_DEFAULT_EXECUTABLE="${EPYTHON}"
 				-DPYTHON_EXECUTABLE="${EPYTHON}" # check
 				-DINSTALL_PYTHON_EXAMPLES="$(usex examples)"
-				# -DPYTHON3_LIMITED_API="yes"
 			)
 			cmake_src_configure
 		}
@@ -1284,10 +1171,10 @@ virtwl() {
 }
 
 multilib_src_test() {
-	# no tests on ABI_X86_32
+	# Tests run only for the native ABI.
 	! multilib_is_native_abi && return
 
-	# NOTE we don't run the tests
+	# testprograms requests installation, not execution.
 	use testprograms && return
 
 	declare -xA OPENCV_SKIP_TESTS
@@ -1319,11 +1206,6 @@ multilib_src_test() {
 	)
 
 	if ! use gtk3 && ! use qt6; then
-		# TODO Compositor doesn't have required interfaces in function 'init'
-		# && ! use wayland
-		# local -x OPENCV_SKIP_TESTS_highgui=(
-		# 	'Highgui_GUI.*'
-		# )
 		:
 	else
 		addpredict /dev/fuse
@@ -1412,7 +1294,6 @@ multilib_src_test() {
 			local -x OPENCV_SKIP_TESTS_stitching=( "CUDA_*" )
 			OPENCV_SKIP_TESTS_video+=( "CUDA_*" )
 		else
-			# local -x OPENCV_PARALLEL_BACKEND="threads"
 			local -x DNN_BACKEND_OPENCV="cuda"
 			cuda_add_sandbox -w
 			addwrite "/dev/dri/"
@@ -1424,14 +1305,9 @@ multilib_src_test() {
 	opencv_test() {
 		cd "${BUILD_DIR}" || die
 
-		# directories to search for _core_ plugins
 		local -x OPENCV_CORE_PLUGIN_PATH="${BUILD_DIR}/lib"
-		# directories to search for _dnn_ plugins
 		local -x OPENCV_DNN_PLUGIN_PATH="${BUILD_DIR}/lib"
-		# directories to search for _videoio_ plugins
 		local -x OPENCV_VIDEOIO_PLUGIN_PATH="${BUILD_DIR}/lib"
-		# # path to extra OpenVINO plugins
-		# local -x OPENCV_DNN_IE_EXTRA_PLUGIN_PATH="${BUILD_DIR}/lib"
 
 		local -x OPENCV_TEMP_PATH="${T%/}"
 
@@ -1445,9 +1321,6 @@ multilib_src_test() {
 			--skip_unstable=1
 			--test_threads="$(makeopts_jobs)"
 			--test_debug="$(usex debug 2 0)"
-			# --test_require_data=1 # OPENCV_TEST_REQUIRE_DATA="true"
-			# --test_bigdata=1
-			# --test_tag_enable="verylong,mem_6gb" #,skip_other,dnn_skip_cuda,dnn_skip_cuda_fp16,dnn_skip_parser
 		)
 
 		local results=()
@@ -1518,7 +1391,7 @@ multilib_src_test() {
 		virtx_cmd=virtx
 	fi
 
-	# NOTE we do this to defeat pkgcheck saying virtualx.eclass is unused, as it can't detect it being called from a var
+	# Keep virtualx.eclass visible to pkgcheck despite indirect invocation.
 	[[ -z "${virtx_cmd}" ]] && virtx
 
 	local -x MESA_SHADER_CACHE_DISABLE=true
