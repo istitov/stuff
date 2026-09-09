@@ -17,18 +17,13 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="fastflowlm openrc system-kokoro system-llamacpp system-sdcpp system-whispercpp systemd tauri webui"
 
-# Upstream's CMake detects nlohmann_json/curl/zstd/CLI11 via pkg-config or
-# find_path, but cpp-httplib detection requires a .pc file (which ::gentoo
-# doesn't ship) and libwebsockets isn't required at runtime in many ::gentoo
-# stacks — so both fall back to FetchContent at configure time. Allow
-# network access for that, matching sci-ml/fastflowlm's pattern.
+# Missing cpp-httplib pkg-config metadata and optional libwebsockets cause
+# upstream FetchContent downloads at configure time.
 PROPERTIES="live"
 RESTRICT="network-sandbox"
 
-# acct-user/lemonade backs the systemd unit's User=lemonade. Pulled
-# unconditionally (matching sci-ml/ollama's acct-user) so toggling
-# USE=systemd can't orphan the /var/lib/lemonade state dir; the OpenRC
-# service ignores this account and runs as LEMONADE_USER instead.
+# Keep the systemd account and state directory across USE changes; OpenRC uses
+# LEMONADE_USER instead.
 RDEPEND="
 	app-arch/brotli:=
 	app-arch/zstd:=
@@ -69,43 +64,17 @@ BDEPEND="
 src_prepare() {
 	cmake_src_prepare
 
-	# ::gentoo ships cpp-httplib's CMake config but no pkg-config .pc,
-	# while upstream detects it only via pkg_search_module — so the build
-	# FetchContents cpp-httplib at v${MIN_HTTPLIB_VERSION} (0.26.0).
-	# That tag's own CMakeLists.txt has a malformed
-	# `if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND VERSION_LESS 10.0.0)`
-	# which CMake 4 rejects ("Unknown arguments specified"). Pin the
-	# fetch to v0.38.0 — the CMake-4-clean version we ship as
-	# dev-cpp/cpp-httplib, API-compatible with the >=0.26.0 floor lemonade
-	# actually needs. verified 2026-06-10
+	# Gentoo lacks the .pc file used for cpp-httplib detection. Repin the
+	# CMake-4-broken fallback to compatible v0.38.0. verified 2026-06-10
 	sed -i \
 		-e 's|GIT_TAG v${MIN_HTTPLIB_VERSION}|GIT_TAG v0.38.0|' \
 		CMakeLists.txt || die
 }
 
 src_configure() {
-	# BUILD_WEB_APP (USE=webui) builds the bundled React SPA that lemond
-	# serves at the server root (/); without it lemond serves a static
-	# "built without a web app" placeholder there. The build runs `npm ci`
-	# (fetching the JS dependency tree from the npm registry — hence the
-	# network build, already the case here for FetchContent) then webpack.
-	# net-libs/nodejs provides node+npm. Upstream's USE_SYSTEM_NODEJS_MODULES
-	# path (system webpack + distro JS libs under /usr/share/nodejs) would
-	# avoid the npm fetch, but ::gentoo doesn't package those modules, so the
-	# npm fetch is the only viable route. USE=tauri additionally builds the
-	# Tauri desktop app -- a native webkit2gtk window wrapping the same
-	# renderer -- but BUILD_TAURI_APP stays OFF deliberately: upstream's ON
-	# path builds the app during the *configure* step (fails on a clean build
-	# -- no CMakeCache.txt yet) and gates its install() rules on the binary
-	# already existing at configure time. The `tauri-app` custom target is
-	# defined whenever node+npm+cargo are found (independent of this flag), so
-	# src_compile builds it and src_install places the artifacts by hand.
-	#
-	# Upstream defaults to /opt as the prefix for Linux, but lemond's
-	# get_resource_path() searches /usr/share/lemonade-server/ and
-	# /opt/share/lemonade-server/ — the /opt branch wants resources at
-	# the *top* of /opt, not under /opt/lemonade/. /usr matches their
-	# .deb/.rpm layout and lets the resources resolve cleanly.
+	# webui uses npm. BUILD_TAURI_APP builds during configure before CMakeCache
+	# exists; build its independent target later and install it manually.
+	# Use /usr because upstream's resource lookup does not support /opt/lemonade.
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="/usr"
 		-DBUILD_WEB_APP=$(usex webui ON OFF)
@@ -117,11 +86,7 @@ src_configure() {
 src_compile() {
 	cmake_src_compile
 
-	# Build the Tauri desktop app. `tauri-app` is a standalone CMake target
-	# (not part of `all`): it runs `npm ci` in src/app then
-	# `tauri build --no-bundle` (webpack renderer + cargo host, LTO release).
-	# The npm + crates.io fetches ride the same network build the rest of the
-	# ebuild already needs. The built binary lands at ${BUILD_DIR}/app/.
+	# This standalone target is not part of all.
 	if use tauri; then
 		cmake_src_compile tauri-app
 	fi
@@ -130,30 +95,14 @@ src_compile() {
 src_install() {
 	cmake_src_install
 
-	# FetchContent-built libwebsockets installs its static archive into
-	# the prefix; we don't need it shipped (lemond linked against it
-	# statically already, no consumers).
+	# Do not ship the FetchContent dependency's private static archive.
 	find "${ED}" -name 'libwebsockets.a' -delete || die
 
-	# Upstream's CPack "if(UNIX AND NOT APPLE)" block unconditionally installs
-	# a full systemd payload: the system + user lemond.service units, a
-	# sysusers.d snippet, an /etc/lemonade/conf.d secrets EnvironmentFile, and
-	# a migrate-to-systemd helper. Gate the lot behind USE=systemd -- the
-	# system unit runs as User=lemonade (provided by acct-user/lemonade).
-	# Without USE=systemd, strip all of it so OpenRC (or unit-less) installs
-	# don't carry dead systemd files. zz-secrets.conf especially is worse than
-	# dead on OpenRC: the init reads /etc/conf.d/lemonade, so an API key
-	# dropped in /etc/lemonade/conf.d/ is silently ignored (no auth) rather
-	# than applied. sysusers.d/lemonade.conf is redundant with the unconditional
-	# acct-user/lemonade; keep it under systemd (idempotent), drop it here.
-	#
-	# The paths below mirror exactly what upstream's CMake installs as of
-	# v10.10.0. On a bump, re-confirm each basename/dir -- a rename upstream
-	# turns any of these `rm ... || die` into a build failure.
+	# Upstream installs systemd files unconditionally. Remove them when disabled;
+	# OpenRC reads a different secrets file. Recheck exact paths on bumps.
 	# verified 2026-07-15
 	if ! use systemd; then
-		# systemd_get_*unitdir already carries EPREFIX, so pair it with
-		# ${D} (not ${ED}) to avoid a doubled prefix.
+		# Unit directories include EPREFIX; pair them with D, not ED.
 		rm "${D}$(systemd_get_systemunitdir)/lemond.service" || die
 		rm "${D}$(systemd_get_userunitdir)/lemond.service" || die
 		rm "${ED}/usr/lib/sysusers.d/lemonade.conf" || die
@@ -168,31 +117,11 @@ src_install() {
 		newconfd "${FILESDIR}/${PN}.confd" "${PN}"
 	fi
 
-	# Repoint lemond's fetch-by-default backends at the portage-managed
-	# binaries so it reuses them instead of downloading an upstream prebuilt
-	# into ~/.cache/lemonade/bin/ at runtime. lemond seeds a fresh config.json
-	# from the config-seed defaults file (the ${def} set below -- NOT the
-	# byte-identical resources/ copy): new installs reuse automatically,
-	# existing users run `lemonade config set` (see pkg_postinst).
-	#
-	# Each section pins `backend` AND the matching <backend>_bin. Pinning the
-	# backend is REQUIRED -- lemond's "auto" resolves per-backend and only reads
-	# the resolved backend's *_bin, so setting *_bin alone is a silent no-op
-	# that still fetches. But the pinned value is only lemond's routing to the
-	# binary; it does NOT pick the GPU. Once launched, the binary uses whichever
-	# ggml backend it registered first (gpu_device 0) -- on a multi-backend
-	# build ROCm/CUDA register before Vulkan, so the deps carry no backend USE
-	# constraint and pkg_postinst tells the user to build the package with the
-	# backend they want. whispercpp's section has no vulkan_bin key (only
-	# cpu/npu), so it MUST route via cpu_bin whatever the build -- do not
-	# "correct" it to vulkan. kokoro has no `backend` key at all (CPU-only).
-	# backend/*_bin keys recur across sections -> edit by key with jq, not sed.
-	# The has() guard fails the build loudly if a future lemonade renames or
-	# moves a section (jq would otherwise auto-vivify a stray key and lemond
-	# would silently fall back to fetching). Routing is by config key, not a
-	# capability probe -- a cpu/vulkan pin launches a cuda-built server that
-	# still runs on its own GPU (device 0). End-to-end reuse (fresh config, no
-	# fetch, GPU device 0) cross-checked on a CUDA host. verified 2026-07-12
+	# Route fetch-by-default backends to packaged binaries. Set both backend and
+	# its matching *_bin: "auto" otherwise ignores the path. whispercpp has only
+	# cpu_bin, and kokoro has no backend selector. These keys route binaries, not
+	# GPU implementations, so do not add backend USE constraints. Guard sections
+	# before jq can create misplaced keys. verified 2026-07-12
 	local -a jqf=() sections=()
 	if use system-llamacpp; then
 		jqf+=( '.llamacpp.backend="vulkan" | .llamacpp.vulkan_bin="/usr/bin/llama-server"' )
@@ -211,13 +140,8 @@ src_install() {
 		sections+=( kokoro )
 	fi
 	if [[ ${#jqf[@]} -gt 0 ]]; then
-		# Pin the CONFIG-SEED template, /usr/share/lemonade/defaults.json --
-		# NOT /usr/share/lemonade-server/resources/defaults.json. lemond ships
-		# BOTH (byte-identical) but seeds a fresh ~/.cache/lemonade/config.json
-		# only from the former; edits to the resources/ copy never reach a
-		# fresh config, so reuse silently no-ops and fetches. Identical content
-		# makes the wrong file easy to pick -- do not "simplify" to the
-		# resources/ path. verified 2026-07-12 (sentinel-seeded a fresh config)
+		# Patch the config seed, not its byte-identical resources copy.
+		# verified 2026-07-12 with a fresh config
 		local def="${ED}/usr/share/lemonade/defaults.json"
 		local s
 		for s in "${sections[@]}"; do
@@ -231,10 +155,7 @@ src_install() {
 	fi
 
 	if use tauri; then
-		# Install the Tauri desktop binary by hand (upstream's install() rules
-		# are unusable -- see src_configure). The .desktop launches it as
-		# `lemonade-app` (a URL-scheme handler for lemonade://), so dobin to
-		# /usr/bin; the icon resolves Icon=lemonade-app from hicolor.
+		# Upstream's configure-time install rules are unusable; install manually.
 		dobin "${BUILD_DIR}/app/lemonade-app"
 		domenu "${S}/data/lemonade-app.desktop"
 		newicon -s scalable "${S}/src/app/assets/logo.svg" lemonade-app.svg
