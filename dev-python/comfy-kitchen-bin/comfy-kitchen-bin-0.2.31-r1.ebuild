@@ -10,12 +10,20 @@ inherit distutils-r1
 
 DESCRIPTION="Fast diffusion-inference kernel library (RoPE + FP8/FP4 quant, binary wheel)"
 HOMEPAGE="https://pypi.org/project/comfy-kitchen/"
+# The cuda branch is per-arch: this ebuild is keyworded ~arm64 and upstream
+# ships an aarch64 build, but the single x86_64 URL installed an x86_64 .so
+# on arm64 that fails at import. Revbumped so affected installs are
+# rebuilt. # verified 2026-09-09
+#
 # No sdist upstream. USE=cuda installs the cp312-abi3 x86_64 manylinux wheel
 # (CUDA + Triton kernels); without cuda the py3-none-any wheel -- eager + Triton
 # backends, no CUDA -- for CPU/ROCm (its Triton backend rides on dev-python/
 # triton-bin's AMD/CPU support).
 SRC_URI="
-	cuda? ( https://files.pythonhosted.org/packages/db/5d/7df83ccb2b3fc4b9660dd337dcc56f7c65926318ae0303840a1e5b72493d/comfy_kitchen-${PV}-cp312-abi3-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl )
+	cuda? (
+		amd64? ( https://files.pythonhosted.org/packages/db/5d/7df83ccb2b3fc4b9660dd337dcc56f7c65926318ae0303840a1e5b72493d/comfy_kitchen-${PV}-cp312-abi3-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl )
+		arm64? ( https://files.pythonhosted.org/packages/fc/7c/bcabb37a3401163dfe6e61042206e44470072ee9088b4330518a2715f552/comfy_kitchen-${PV}-cp312-abi3-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl )
+	)
 	!cuda? ( https://files.pythonhosted.org/packages/27/d1/e53410260b81610233cb56c2fac1a9f3d39887be3cbb983cd8baa6a07528/comfy_kitchen-${PV}-py3-none-any.whl )
 "
 S="${WORKDIR}"
