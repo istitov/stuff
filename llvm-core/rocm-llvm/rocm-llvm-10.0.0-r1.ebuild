@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
 
-inherit check-reqs cmake flag-o-matic python-any-r1
+inherit check-reqs cmake flag-o-matic python-any-r1 toolchain-funcs
 
 # AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); everything
 # since is tagged therock-<major.minor>. This is the SAME source archive that
@@ -106,6 +106,19 @@ src_unpack() {
 }
 
 src_configure() {
+	# ::gentoo filters LTO out of its own llvm-core/llvm build, for GCC only,
+	# citing ODR violations and GCC being the likelier of the two compilers
+	# to miscompile LLVM under LTO (Gentoo bugs 917536 and 926529). Same
+	# sources, same exposure. This is about building this compiler, not about
+	# the -flto consumers hand to it afterwards -- that is what the gold
+	# plugin below is for. Adopted from ::gentoo 2026-09-09; the miscompile
+	# was not re-derived here.
+	tc-is-gcc && filter-lto
+
+	# Upstream llvm-project issue 219693, carried unconditionally on
+	# ::gentoo's llvm-23. Adopted 2026-09-09; likewise not re-derived.
+	append-flags -fno-strict-aliasing
+
 	# LDFLAGS is filtered rather than dropped: -Wl,* is handed to the linker
 	# verbatim by any driver and -L is only a search path, so both keep
 	# their meaning across the compiler swap below, and clearing them
@@ -221,6 +234,14 @@ src_configure() {
 		# Explicit, like llvm-core/llvm. Necessary but NOT sufficient on its
 		# own -- see the append-cflags below.
 		-DLLVM_ENABLE_ASSERTIONS=$(usex debug)
+		# With assertions off, llvm_unreachable() degrades to
+		# __builtin_unreachable(): reaching one stops being a crash and
+		# becomes undefined behaviour the optimiser may exploit. OFF makes it
+		# a guaranteed trap instead. This package already carries one recorded
+		# case of LLVM's own invariants being violated in AMDGPU codegen (see
+		# the note below), so a trap is worth more here than a quietly
+		# miscompiled kernel. Matches ::gentoo's llvm-23; adopted 2026-09-09.
+		-DLLVM_UNREACHABLE_OPTIMIZE=OFF
 
 		-DPython3_EXECUTABLE="${PYTHON}"
 		-Wno-dev
