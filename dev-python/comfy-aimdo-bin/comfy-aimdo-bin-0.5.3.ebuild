@@ -11,11 +11,19 @@ inherit distutils-r1
 
 DESCRIPTION="PyTorch VRAM allocator with on-demand weight offloading (binary wheel)"
 HOMEPAGE="https://pypi.org/project/comfy-aimdo/"
-# No sdist upstream. USE=cuda installs the cp39-abi3 x86_64 manylinux CUDA wheel
-# (NVIDIA, on-demand GPU offloading); without cuda the py3-none-any pure-python
-# wheel -- importable everywhere but a no-op allocator (CPU/ROCm fallback).
+# No sdist upstream. USE=cuda installs the cp39-abi3 manylinux CUDA wheel for
+# the host arch (NVIDIA, on-demand GPU offloading); without cuda the
+# py3-none-any pure-python wheel -- importable everywhere but a no-op allocator
+# (CPU/ROCm fallback).
+#
+# The cuda branch is per-arch: this ebuild is keyworded ~arm64 as well, and
+# upstream ships an aarch64 build, so a single x86_64 URL would install an
+# x86_64 .so on arm64 and fail at import. # verified 2026-09-09
 SRC_URI="
-	cuda? ( https://files.pythonhosted.org/packages/1a/bc/aa38d79aed78aee21d1186e056f8b8e348c6af78874d6f7ed257a6dddf5d/comfy_aimdo-${PV}-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl )
+	cuda? (
+		amd64? ( https://files.pythonhosted.org/packages/1a/bc/aa38d79aed78aee21d1186e056f8b8e348c6af78874d6f7ed257a6dddf5d/comfy_aimdo-${PV}-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl )
+		arm64? ( https://files.pythonhosted.org/packages/96/5a/f38fd0c29a75daf40e62ee7b78b4889a622f12666e7e87e847eab7b8979f/comfy_aimdo-${PV}-cp39-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl )
+	)
 	!cuda? ( https://files.pythonhosted.org/packages/e4/ef/9a94b88981e51dea163f2fdf98cd28424276fab6a31dc7e22ce89018778f/comfy_aimdo-${PV}-py3-none-any.whl )
 "
 S="${WORKDIR}"
