@@ -37,7 +37,7 @@ S="${WORKDIR}/${PN}-${PV}"
 
 LICENSE="Apache-2.0 BSD-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
 # 0.2.6 drops the upstream <5 transformers cap: the pyproject now declares a
