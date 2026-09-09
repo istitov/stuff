@@ -12,7 +12,7 @@ S="${WORKDIR}/ddb_misc_headerbar_GTK3-${PV}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # configure.ac PKG_CHECK_MODULES() both glib-2.0 and gio-2.0, and looks up
 # glib-compile-resources via AC_PATH_PROG - each failure is a hard
