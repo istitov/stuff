@@ -10,7 +10,7 @@ S="${WORKDIR}/ddb_output_pulse2-${PV}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 DEPEND="
 	media-libs/libpulse
