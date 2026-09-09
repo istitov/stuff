@@ -7,9 +7,8 @@ inherit flag-o-matic optfeature
 
 DESCRIPTION="Midnight Commander fork with dynamically loaded panel plugins"
 HOMEPAGE="https://blue-panels.github.io/mc6/ https://github.com/blue-panels/mc6"
-# Release asset, not the /archive/ tarball: bootstrapped (ships configure and
-# mc-version.h), so no autoreconf, and an uploaded blob, so it cannot be
-# rehashed under us.
+# Use the bootstrapped release asset (configure and mc-version.h), not GitHub's
+# generated archive; its bytes do not change with archive regeneration.
 SRC_URI="https://github.com/blue-panels/mc6/releases/download/v${PV}/${P}.tar.gz"
 
 LICENSE="GPL-3+"
@@ -21,14 +20,9 @@ IUSE="+edit ftp gpm lua mongodb nls s3 samba sftp +slang spell sqlite test X"
 REQUIRED_USE="spell? ( edit )"
 RESTRICT="!test? ( test )"
 
-# Unconditional, not USE-gated:
-#   libarchive - arcmc replaces the tarfs and cpiofs VFS modules this fork
-#     deleted; without it mc6 opens no archive at all.
-#   libmagic   - bare AC_CHECK_HEADERS for core MIME matching, on top of the
-#     mctree use --enable-mctree-magic gates. A USE flag would turn off only
-#     the latter and leave the automagic.
-#   zlib       - same shape, bare AC_CHECK_HEADERS([zlib.h]); mcstruct inflate.
-# verified 2026-09-04 against the 6.0.4 tarball
+# libarchive backs arcmc, the only remaining archive VFS. libmagic and zlib use
+# unconditional header probes in core code, so gating them would be automagic.
+# verified against 6.0.4 on 2026-09-04
 COMMON_DEPEND="
 	>=dev-libs/glib-2.58:2
 	>=app-arch/libarchive-3.0:=
@@ -56,13 +50,8 @@ DEPEND="
 	X? ( x11-base/xorg-proto )
 "
 
-# spell has no configure switch: the checker is compiled into the internal
-# editor and g_module_opens libaspell.so.N, then libhunspell, at run time.
-#
-# PACKAGE stays "mc" upstream (gettext domain and every data path derive from
-# it), so this owns /usr/bin/mc, the mcedit/mcview/mcdiff/mctree symlinks,
-# /usr/share/mc and /usr/libexec/mc -- app-misc/mc's files. Upstream's Debian
-# packaging says the same with Conflicts/Replaces/Provides: mc.
+# spell has no switch: the built-in editor dlopens libaspell, then libhunspell.
+# Upstream keeps PACKAGE="mc", so its binaries and data collide with app-misc/mc.
 RDEPEND="
 	${COMMON_DEPEND}
 	dev-lang/perl
@@ -76,10 +65,8 @@ RDEPEND="
 	!!app-misc/mc
 "
 
-# groff: configure probes nroff for -mandoc, -c and -Tlatin1 and substitutes
-# the answers into misc/ext.d/text.sh and misc/mc.menu, both installed. Absent,
-# they fall back to "-man" with no flags, so installed content would vary by
-# build host. Not in @system. verified 2026-09-04, configure.ac:84-133
+# configure bakes nroff capabilities into installed scripts; require groff so
+# their contents do not vary by build host. verified 2026-09-04, configure.ac:84-133
 BDEPEND="
 	dev-lang/perl
 	sys-apps/groff
@@ -92,34 +79,26 @@ DOCS=( AUTHORS CHANGELOG.md README.md doc/{FAQ,NEWS,PLUGINS,README,TODO} )
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-gentoo-tools.patch
-	# ${P}, not ${PN}: patches the generated configure by line context, so a
-	# bump must re-verify it rather than inherit it silently.
+	# Versioned because the generated-configure patch needs review on each bump.
 	"${FILESDIR}"/${P}-zlib-probe-memset.patch
 )
 
 src_configure() {
-	# GCC 15 + LTO leaves the recursion in mctree_node_expand_to_depth unrun,
-	# so mctree opens collapsed. Reproduced 2026-09-04, GCC 15.3.1, -O2
-	# -flto=12: mctree_view fails 1/7 --
-	# test_collapse_from_transparent_child_focuses_visible_parent asserts
-	# row_count == 3, gets 2. GCC 16.2.0, same flags: 7/7.
+	# GCC 15.3.1 + LTO miscompiles mctree_node_expand_to_depth (mctree_view 1/7
+	# fails); GCC 16.2.0 passes. reproduced 2026-09-04 with -O2 -flto=12
 	filter-lto
 
-	# AC_PATH_PROG probes gating Lua handlers on the build host's PATH. Pinned
-	# off so USE=lua installs the same set everywhere; lua-sixel still uses
-	# chafa at run time, and procyon is unpackaged.
+	# Disable PATH-based Lua-handler probes for reproducible contents; lua-sixel
+	# still discovers chafa at runtime, while procyon is unpackaged.
 	local -x CHAFA=no PROCYON=no
 
 	local myeconfargs=(
 		--disable-static
 		--enable-vfs
-		# slang or ncurses only -- app-misc/mc's ncursesw value is now an
-		# error, and there is no USE=unicode to pass on: the ncurses branch
-		# AC_SEARCH_LIBS runs ncursesw then ncurses with no way to force the
-		# narrow one. verified 2026-09-04, m4.include/mc-with-screen*.m4
+		# ncursesw is no longer a valid value; the ncurses branch probes wide first.
+		# verified 2026-09-04, m4.include/mc-with-screen*.m4
 		--with-screen=$(usex slang slang ncurses)
-		# As app-misc/mc: mclib exposes no headers, is linked only into the
-		# mc binary, and collides with sci-libs/mc (bug #685938).
+		# Internal-only mclib also collides with sci-libs/mc (bug #685938).
 		--disable-mclib
 		$(use_enable kernel_linux ext2fs-attr)
 		$(use_enable nls)
@@ -128,9 +107,7 @@ src_configure() {
 		$(use_with X x)
 		$(use_with edit internal-edit)
 
-		# Every switch below defaults to "auto" and drops its plugin silently
-		# when the library is missing; pinning makes the feature set follow
-		# USE. The =yes ones turn that silence into a hard error.
+		# Pin auto-detected plugins to USE; =yes makes core plugin failures fatal.
 		--enable-mctree-magic=yes
 		--enable-panel-plugin-arcmc=yes
 		# Works over an external ssh; USE=sftp only adds libssh2 password auth.
@@ -150,9 +127,7 @@ src_configure() {
 src_install() {
 	default
 
-	# Panel plugins and the Lua runtime are GModule-dlopened modules, so the
-	# .la files describe a link step nothing performs. (Editor plugins --
-	# spell, ctags, etags -- are compiled into the editor, not modules.)
+	# GModule loads panel and Lua plugins directly; their .la files are unused.
 	find "${ED}" -name '*.la' -delete || die
 
 	# bug #334383
@@ -166,8 +141,7 @@ pkg_postinst() {
 	optfeature "Git panel" dev-vcs/git
 	optfeature "Docker panel" app-containers/docker-cli
 	optfeature "Kubernetes panel" sys-cluster/kubectl
-	# BDEPEND only, so portage will not keep it merged; ext.d/text.sh runs
-	# nroff on every man page.
+	# BDEPEND does not keep nroff installed for ext.d/text.sh at runtime.
 	optfeature "viewing man pages" sys-apps/groff
 	if use lua ; then
 		optfeature "image previews in the Lua viewer" "media-gfx/chafa[tools]"
