@@ -644,6 +644,7 @@ VLLM_FMHA_SM100_CUTLASS_COMMIT="eb61c911471867a5fd2466bfd8f29306cea6ebf8"
 VLLM_ONEDNN_TAG="3.13"
 VLLM_QUTLASS_COMMIT="e74319e3405ce6d71965732880f5dc1f52371f64"
 VLLM_FLASHKDA_COMMIT="053de1b716ef3255873e02d2d28f4adf09951978"
+VLLM_FLASHKDA_CUTLASS_COMMIT="5c149f52a436782210263fb2f19b354443a61c6a"
 VLLM_TML_FA4_COMMIT="b206834606ed5b5f21f8eed6b0683f528ea9cf7d"
 VLLM_TRITON_KERNELS_TAG="3.5.1"
 
@@ -686,6 +687,8 @@ SRC_URI+="
 			-> vllm-tml-fa4-${VLLM_TML_FA4_COMMIT:0:7}.gh.tar.gz
 		https://github.com/vllm-project/FlashKDA/archive/${VLLM_FLASHKDA_COMMIT}.tar.gz
 			-> vllm-FlashKDA-${VLLM_FLASHKDA_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_FLASHKDA_CUTLASS_COMMIT}.tar.gz
+			-> vllm-FlashKDA-cutlass-${VLLM_FLASHKDA_CUTLASS_COMMIT:0:7}.gh.tar.gz
 		https://github.com/triton-lang/triton/archive/refs/tags/v${VLLM_TRITON_KERNELS_TAG}.tar.gz
 			-> vllm-triton-kernels-${VLLM_TRITON_KERNELS_TAG}.gh.tar.gz
 	)
@@ -1165,6 +1168,7 @@ src_prepare() {
 		# Populate the gitlinks omitted by GitHub-generated archives.
 		local deepgemm_dir="${WORKDIR}/DeepGEMM-${VLLM_DEEPGEMM_COMMIT}"
 		local fa_dir="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
+		local flashkda_dir="${WORKDIR}/FlashKDA-${VLLM_FLASHKDA_COMMIT}"
 		local flashmla_dir="${WORKDIR}/FlashMLA-${VLLM_FLASHMLA_COMMIT}"
 		local fmha_dir="${WORKDIR}/MSA-${VLLM_FMHA_SM100_COMMIT}"
 
@@ -1177,6 +1181,9 @@ src_prepare() {
 		rmdir "${fa_dir}/csrc/cutlass" || die
 		mv "${WORKDIR}/cutlass-${VLLM_FA_CUTLASS_COMMIT}" \
 			"${fa_dir}/csrc/cutlass" || die
+		rmdir "${flashkda_dir}/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_FLASHKDA_CUTLASS_COMMIT}" \
+			"${flashkda_dir}/cutlass" || die
 		rmdir "${flashmla_dir}/csrc/cutlass" || die
 		mv "${WORKDIR}/cutlass-${VLLM_FLASHMLA_CUTLASS_COMMIT}" \
 			"${flashmla_dir}/csrc/cutlass" || die
