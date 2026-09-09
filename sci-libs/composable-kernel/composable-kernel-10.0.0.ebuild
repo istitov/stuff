@@ -13,9 +13,7 @@ GTEST_FILE="gtest-1.14.0_p20220421.tar.gz"
 
 DESCRIPTION="High Performance Composable Kernel for AMD GPUs"
 HOMEPAGE="https://github.com/ROCm/composable_kernel"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now. Note the
-# asset name has no separator: composablekernel.tar.gz.
+# ROCm assets now use therock-<major.minor>; this asset has no name separator.
 MY_BASE="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)"
 SRC_URI="${MY_BASE}/composablekernel.tar.gz -> ${P}.tar.gz
 	test? ( https://github.com/google/googletest/archive/${GTEST_COMMIT}.tar.gz -> ${GTEST_FILE} )"
@@ -36,43 +34,15 @@ RDEPEND="
 
 DEPEND="${RDEPEND}"
 
-# dev-util/hipcc[amd-llvm] is a build requirement, not documentation.
-# rocm_use_clang() resolves the compiler via `hipconfig --hipclangpath`, and
-# hipcc points that at llvm-core/rocm-llvm only when the flag is set. This
-# package cannot be compiled by a vanilla LLVM: amd_wmma.hpp passes bhalf16_t
-# (a __bf16 vector) to __builtin_amdgcn_wmma_f32_16x16x16_bf16_w32, which
-# vanilla clang 23 declares as taking short __attribute__((ext_vector_type(16))).
-# Until now that requirement lived only in a profiles/package.mask comment, so
-# building against a hipcc without the flag died deep in compilation with no
-# resolver-level signal. hipconfig belongs to hipcc and was reached only
-# transitively through dev-util/hip, which cannot carry the USE-dep.
-#
-# Unconditional deliberately. Every failure on record is a gfx11xx/gfx12xx one,
-# so a narrower amdgpu_targets_*? form may well be correct -- but nobody has
-# built this against a vanilla LLVM for a CDNA-only target, and claiming
-# support that was never verified is the worse error. Narrow it once someone
-# has that build. # verified 2026-08-30
+# Vanilla Clang 23 gives amd_wmma.hpp's bf16 builtin an incompatible vector
+# type, so select AMD LLVM through hipcc. Keep this unconditional until a
+# vanilla-LLVM CDNA build is verified. verified 2026-08-30
 BDEPEND="
 	dev-build/rocm-cmake:${SLOT}
 	dev-util/hipcc:${SLOT}[amd-llvm]
 "
 
 PATCHES=(
-	# no-git-no-hash and conditional-ckprofiler are both obsolete at 10.0:
-	#   no-git-no-hash        - it downgraded find_package(Git REQUIRED) so
-	#                           release tarballs without .git would configure.
-	#                           Upstream rewrote the block to do exactly that:
-	#                           plain find_package(Git), a COMMIT_ID default of
-	#                           "unknown", an if(GIT_FOUND) guard and
-	#                           RESULT_VARIABLE/ERROR_QUIET to "degrade
-	#                           gracefully when building from a release tarball
-	#                           without a .git directory".
-	#   conditional-ckprofiler - it added a CK_USE_PROFILER escape hatch so the
-	#                           multi-GB ckprofiler could be skipped. Upstream
-	#                           now gates it on its own BUILD_CK_PROFILER
-	#                           option, which src_configure uses instead.
-	# libcxx-includes and expand-isa are regenerated; see their headers for
-	# what 10.0 absorbed. All verified 2026-08-29.
 	"${FILESDIR}"/${PN}-6.3.0-conditional-kernels.patch.xz
 	"${FILESDIR}"/${PN}-10.0.0-libcxx-includes.patch.xz
 	"${FILESDIR}"/${PN}-10.0.0-expand-isa.patch.xz
@@ -89,7 +59,7 @@ ck_check-reqs() {
 		ewarn "Please consider setting AMDGPU_TARGETS USE_EXPAND variable to a single architecture."
 	fi
 
-	# It takes ~3GB of RAM per build thread
+	# CHECKREQS reserves 3 GiB/job; the advisory limit uses 2 GiB/job.
 	local user_jobs=$(makeopts_jobs)
 	local available_memory_mb=$(free -m | awk '/Mem:/ {print $7}')
 	local max_jobs=$(( available_memory_mb / 2048 ))
@@ -113,13 +83,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# The files/ patches ship xz-compressed to stay under pkgcheck's 20K
-	# SizeViolation and 50K TotalSizeViolation caps -- the 10.0 libcxx-includes
-	# patch alone was 24.7K uncompressed, and files/ totalled 59.7K. eapply(1)
-	# does NOT decompress (portage's __eapply_patch feeds the file straight to
-	# patch), so expand every files/ patch into ${T} and repoint PATCHES at the
-	# plain-text copies before cmake_src_prepare consumes them. Same shape as
-	# sci-ml/caffe2 and dev-python/cupy.
+	# Decompress oversized patches into T because eapply cannot read xz payloads.
 	local p b i
 	mkdir "${T}"/patches || die
 	for p in "${FILESDIR}"/*.patch.xz; do
@@ -131,27 +95,20 @@ src_prepare() {
 		PATCHES[i]="${T}/patches/${b%.xz}"
 	done
 
-	# `sed` exits 0 on no-match, so a silent miss here leaves -Werror in place
-	# and turns any warning a newer compiler emits into a hard build failure.
-	# verified 2026-08-30 against the therock-10.0 source.
+	# Require the anchor so upstream -Werror cannot return silently.
+	# verified 2026-08-30
 	grep -q -- '-Werror' cmake/EnableCompilerWarnings.cmake ||
 		die "-Werror anchor moved in EnableCompilerWarnings.cmake"
 	sed -e '/-Werror/d' -i cmake/EnableCompilerWarnings.cmake || die
 
-	# don't build examples -- a silent miss builds and installs the whole
-	# example tree, a large and slow addition that would look like a normal
-	# (just much longer) build. verified 2026-08-30.
+	# Require the anchor so the large example tree cannot return silently.
+	# verified 2026-08-30
 	grep -q 'add_subdirectory(example)' CMakeLists.txt ||
 		die "add_subdirectory(example) anchor moved; the example tree would be built"
 	sed -e "/add_subdirectory(example)/d" -i CMakeLists.txt || die
 
-	# Flag -amdgpu-early-inline-all explodes memory consumption
-	# https://github.com/llvm/llvm-project/issues/86332
-	# Load-bearing: these two -mllvm flags make the compiler inline every
-	# device function, which OOMs the build (llvm-project#86332). `sed` exits 0
-	# on no-match, so a silent miss here would quietly reintroduce a build that
-	# exhausts RAM rather than failing fast. verified 2026-08-29: both still
-	# present (twice each) at therock-10.0.
+	# These forced-inlining flags exhaust memory; require both anchors.
+	# llvm-project#86332; verified 2026-08-29
 	local f
 	for f in amdgpu-early-inline-all amdgpu-function-calls; do
 		grep -q -- "${f}" CMakeLists.txt ||
@@ -165,6 +122,8 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
+	# Match AMD's Release build; active assertions abort gfx1150 codegen.
+	# verified 2026-08-30
 	if ! use debug; then
 		append-cflags "-DNDEBUG"
 		append-cxxflags "-DNDEBUG"
@@ -179,32 +138,19 @@ src_configure() {
 		-DGPU_TARGETS="$(get_amdgpu_flags)"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DBUILD_TESTING=$(usex test ON OFF)
-		# Was -DCK_USE_PROFILER, a flag introduced by our own
-		# conditional-ckprofiler patch. ROCm 10.0 provides BUILD_CK_PROFILER
-		# upstream, so the patch is dropped and we drive the real option.
+		# Upstream now provides this profiler switch.
 		-DBUILD_CK_PROFILER=$(usex profiler ON OFF)
 
-		# Builds 2x less files, but faster.
-		# See https://github.com/ROCm/TheRock/blob/5cb6abaa43ad664c85a99ac37bd4d3abf9b6260e/ml-libs/CMakeLists.txt#L37
+		# Restrict instances to MIOpen's required set.
 		-DMIOPEN_REQ_LIBS_ONLY=ON
 
-		# HIPTENSOR_REQ_LIBS_ONLY is the same kind of narrowing switch for
-		# sci-libs/hipTensor's instance set, and the two COMPOSE rather than
-		# conflict: library/src/tensor_operation_instance/gpu/CMakeLists.txt
-		# builds one `required_pattern` by appending "conv" for MIOPEN and
-		# "contract;reduce;element" for HIPTENSOR, so with both ON the filter
-		# is the UNION and MIOpen's instance set is untouched. The paired
-		# guards on the library targets have the matching shape --
-		# `NOT MIOPEN_REQ_LIBS_ONLY OR HIPTENSOR_REQ_LIBS_ONLY` on
-		# device_contraction_operations and device_other_operations,
-		# `NOT HIPTENSOR_REQ_LIBS_ONLY OR MIOPEN_REQ_LIBS_ONLY` on the
-		# convolution ones. So this adds hipTensor's three libraries without
-		# pulling in the full CK instance set. verified 2026-08-30.
+		# This unions hipTensor's contract/reduce/element instances with MIOpen's
+		# convolution set without enabling the full CK set. verified 2026-08-30
 		-DHIPTENSOR_REQ_LIBS_ONLY=$(usex hiptensor ON OFF)
 		-Wno-dev
 	)
 
-	# Since 6.4.1 "fallback" DL kernels should be enabled manually...
+	# Enable fallback DL kernels for supported Navi targets.
 	if use amdgpu_targets_gfx1010 || use amdgpu_targets_gfx1011 || use amdgpu_targets_gfx1012 \
 	|| use amdgpu_targets_gfx1030 || use amdgpu_targets_gfx1031 ; then
 		mycmakeargs+=(-DDL_KERNELS=ON)
@@ -216,8 +162,7 @@ src_configure() {
 		)
 	fi
 
-	# rocminfo call during configuration; should not happen
-	# Bug: https://github.com/ROCm/composable_kernel/issues/2994
+	# Configuration calls rocminfo. ROCm/composable_kernel#2994
 	rocm_add_sandbox -w
 	addpredict /dev/random
 
@@ -231,7 +176,7 @@ src_install() {
 	installation() {
 		python_domodule python/ck4inductor
 
-		# install package-data manually, as there is no PEP517 compliance
+		# Install package data manually; upstream is not PEP 517 compliant.
 		shopt -s globstar
 		package_data=(
 			include/ck/**/*.hpp
