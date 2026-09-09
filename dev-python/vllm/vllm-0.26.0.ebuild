@@ -11,13 +11,8 @@ ROCM_VERSION=7.2
 
 RUST_MIN_VER="1.89.0"
 
-# vllm 0.22.0 ships a Rust frontend binary (vllm-rs) built via
-# setuptools-rust from the bundled rust/ workspace.  Vendor its crate
-# dependencies (generated from rust/Cargo.lock) rather than relying on a
-# network-sandbox bypass, per the overlay's Rust+Python convention.  The
-# frontend is opt-in at runtime (VLLM_USE_RUST_FRONTEND=1, default off);
-# vllm's Python API server stays the default, so the binary is a
-# performance option, not load-bearing.
+# vllm-rs is optional at runtime. Vendor its Cargo.lock dependencies for an
+# offline USE=rust build; the Python API server remains the default.
 CRATES="
 	adler2@2.0.1
 	ahash@0.8.12
@@ -619,17 +614,12 @@ declare -A GIT_CRATES=(
 	[oss-harmony]='https://github.com/oss-harmony/harmony;76e849426cc092f84509e31a17027755f67d662a;harmony-%commit%'
 )
 
-# The Rust frontend (vllm-rs) is opt-in at runtime (VLLM_USE_RUST_FRONTEND=1,
-# default off) and a heavy 600+-crate build, so gate it behind USE=rust rather
-# than building it for every install. CARGO_OPTIONAL stops the cargo eclass from
-# auto-adding its BDEPEND/SRC_URI/phase functions; we wire those under rust?
-# below and call cargo_src_unpack manually.
+# Avoid cargo.eclass's unconditional deps and phases; USE=rust wires them below.
 CARGO_OPTIONAL=1
 
 inherit cargo cuda distutils-r1 flag-o-matic pypi rocm toolchain-funcs
 
-# Revisions pinned by vllm's CMake files.  Keep these in lockstep with
-# upstream: all CMake dependencies are pre-staged so builds stay offline.
+# Match upstream's CMake revisions and pre-stage every dependency for offline builds.
 VLLM_CUTLASS_TAG="4.4.2"
 VLLM_DEEPGEMM_COMMIT="a6b593d2826719dcf4892609af7b84ee23aaf32a"
 VLLM_DEEPGEMM_CUTLASS_COMMIT="f3fde58372d33e9a5650ba7b80fc48b3b49d40c8"
@@ -700,207 +690,40 @@ LICENSE+="
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="cpu cuda humming rocm rust"
-# VLLM_TARGET_DEVICE is single-valued; cpu, cuda, and rocm paths are
-# mutually exclusive. Default (none) → empty target. USE=rust is
-# orthogonal — it builds the optional vllm-rs Rust serving frontend
-# (opt-in at runtime via VLLM_USE_RUST_FRONTEND=1) and combines with any
-# target.
+# VLLM_TARGET_DEVICE is single-valued; USE=rust is independent of the backend.
 REQUIRED_USE="
 	?? ( cpu cuda rocm )
 	rocm? ( || ( ${ROCM_REQUIRED_USE} ) )
 	humming? ( cuda )
 "
 
-# USE=cpu (default off): build with VLLM_TARGET_DEVICE=cpu so the
-# Python entrypoints can actually drive inference on CPU hardware.
-# Pulls torchaudio + numba (vllm's cpu.txt also lists intel-openmp on
-# x86_64, but Intel ships it as a proprietary blob — we omit it; vllm
-# falls back to the pthreads OpenMP shipped with sci-libs/openblas etc.)
+# cpu.txt lists proprietary intel-openmp; omit it in favor of system OpenMP.
+# The r90 caffe2 floor avoids its former public MKL/MPI link pollution.
 #
-# CAVEAT (historical): ::gentoo sci-ml/pytorch's caffe2::mkl public
-# link interface used to drag MKL's MPI / cluster libs (scalapack,
-# cdft, blacs_intelmpi) and Intel-OpenMP threading (intel_thread)
-# into every consumer link, breaking the build on hosts without
-# Intel Cluster Edition + Compiler. We pin >=sci-ml/caffe2-2.11.0-r90
-# below — this overlay's r90 fork ships a scrub patch on
-# cmake/public/mkl.cmake that filters those libs and forces
-# gnu_thread. Drop the pin once an equivalent upstream fix lands.
+# amd-quark is needed only when loading Quark models and supports only Python
+# 3.11/3.12, so users install it separately instead of constraining vllm.
 #
-# USE=cuda: build with VLLM_TARGET_DEVICE=cuda. Pulls torchaudio +
-# torchvision + numba and the full Tier-0..5 CUDA stack (flashinfer
-# + tilelang + nvidia-cutlass-dsl + cuda-bindings + nvidia-cudnn-
-# frontend + ...). Compiles the _C / _moe_C / _vllm_fa* CUDA C++
-# extensions in setup.py via nvcc and the system CUDA toolkit at
-# /opt/cuda. CMAKE_CUDA_HOST_COMPILER is selected through cuda.eclass
-# because nvcc rejects unsupported host compiler versions.
-# All CMake dependencies are pre-staged from SRC_URI below.
-#
-# Same MKL-MPI link-pollution caveat as USE=cpu (above): without the
-# >=sci-ml/caffe2-2.11.0-r90 pin the cumem_allocator link fails with
-# "cannot find -lmkl_scalapack_ilp64" after all 339 CUDA objects build.
-#
-# USE=rocm: build with VLLM_TARGET_DEVICE=rocm. Pulls torchaudio +
-# torchvision + numba + the runai-streamer/tensorizer/conch-triton
-# trio from upstream's requirements/rocm.txt, plus the HIP libs that
-# vllm's CMake `enable_language(HIP)` and the linked libtorch_hip
-# resolve at link time (hipBLAS / hipBLASLt / hipFFT / hipRAND /
-# hipSOLVER / hipSPARSE / hipCUB). Compiles the _C / _moe_C / _rocm_C
-# extensions and csrc/rocm/*.cu via hipcc and the system ROCm
-# toolchain at /opt/rocm. Inherits sci-ml/caffe2's MKL-MPI scrub
-# (>=2.11.0-r90) — same link-pollution caveat as the cuda path.
-# PYTORCH_ROCM_ARCH is derived from AMDGPU_TARGETS via rocm.eclass's
-# get_amdgpu_flags.
-#
-# amd-quark (in requirements/rocm.txt as "for Quark quantization on
-# ROCm") is deliberately omitted from RDEPEND: no direct `import` from
-# vllm core code, only used by vllm.model_executor.layers.quantization.
-# quark internals when Quark-quantized models are loaded.
-# dev-python/amd-quark-bin in this overlay caps PYTHON_COMPAT at
-# 3.{11,12}, which would block vllm on 3.13/3.14. Users wanting Quark
-# quantization install amd-quark-bin separately.
-#
-# Upstream requirements/cuda.txt pins nvidia-cutlass-dsl[cu13]==4.6.0,
-# tilelang==0.1.9 and flashinfer-python==0.6.14 exactly; we pin
-# ~nvidia-cutlass-dsl-4.6.0 and ~flashinfer-python-0.6.14 to match.
-# quack-kernels floor is now >=0.4.0 (0.26.0 cuda.txt, "Required for
-# tml-fa4") but we KEEP an upper cap at <0.6.2. cutlass-dsl moved to 4.6.0
-# this bump; quack-kernels 0.6.1 pins ~nvidia-cutlass-dsl-4.6.0 (compatible),
-# but 0.6.2+ bumped to ~nvidia-cutlass-dsl-4.6.1 (their JIT kernels ABI-lock
-# to 4.6.1). vllm's ~4.6.0 pin (upstream cuda.txt ==4.6.0) is incompatible
-# with 4.6.1, so an uncapped floor lets -uDN pull quack 0.6.3 -> cutlass 4.6.1
-# and conflict with our own cutlass pin. Cap at <0.6.2 keeps quack on 0.6.1
-# (~4.6.0). Do NOT relax to 4.6.1: not blessed by this vllm release.
+# Match requirements/cuda.txt's exact flashinfer and cutlass pins. Keep
+# quack-kernels below 0.6.2 because newer releases require cutlass-dsl-4.6.1,
+# while vllm pins 4.6.0. The cutlass metapackage supplies cu13 libs transitively.
 # verified 2026-08-07
-# The cutlass-dsl metapackage pulls nvidia-cutlass-dsl-libs-cu13
-# transitively, so it already covers the [cu13] extra. The
-# nvidia-cudnn-frontend floor stays >=1.19.1; that dep lives on the
-# flashinfer-python ebuild — vllm has zero direct cudnn_frontend imports;
-# it is for flashinfer's internal use. fastsafetensors floor >=0.3.2.
-# 0.25.0 also adds torchcodec>=0.14 (GPU video decode) to cuda.txt; pulled
-# in cuda? here.
-# 0.25.1 (2026-07-14): patch release; both packaging AND build inputs are
-# byte-identical to 0.25.0 -- rust/Cargo.lock (575 crates), GIT_CRATES
-# (oss-harmony, llm-multimodal), every requirements/*.txt, the flash-attn
-# pin, requires-python, setup.py, CMakeLists.txt, cmake/ and all of csrc/
-# are unchanged; only 7 .py files differ (5 runtime vllm modules, the version
-# stamp, and one test), all py_compile-clean. So the 0.25.0 audit below
-# carries over verbatim and the compiled result is identical -- not
-# separately rebuilt.
-# static cuda.txt audit done 2026-07-12 against vllm-0.25.0 -- deltas vs
-# 0.24.0: flashinfer-python 0.6.12->0.6.13, humming-kernels 0.1.4->0.1.10,
-# +torchcodec>=0.14, flash-attn pin dd62dac->2c839c3; PyNvVideoCodec + nvtx
-# omitted (see below). rocm gfx1150 + cpu + empty + USE=rust build-verified
-# 2026-07-12; cuda sm_86 build+run verified 2026-07-12 on an
-# NVIDIA host (A4500, CUDA 13.3, nvcc -ccbin g++-15): FA2 builds, FA3 stubbed
-# on sm_86, opt-125m generate() OK, USE=humming registry loads. 0.25.0 adds a
-# new ninja target _vllm_fa4_cutedsl_C (cutedsl) that builds clean and needs
-# no patch -- watch it alongside the FA3 stub on future bumps.
-# 0.26.0 (2026-07-26): common.txt drops diskcache (outlines disk-cache removed).
-# cuda.txt deltas vs 0.25.1: flashinfer-python/cubin 0.6.13->0.6.14, apache-tvm-ffi
-# 0.1.9->0.1.10, nvidia-cutlass-dsl 4.5.2->4.6.0,
-# quack-kernels >=0.3.3,<0.6.0 -> >=0.4.0,<0.6.2 (floor raised, cap moved to
-# 0.6.2 for the cutlass-4.6.1 boundary, see above); tokenspeed-mla
-# 0.1.2->0.1.8 is now pulled (see below); amd-quark 0.8.99->0.12 stays
-# omitted. cpu.txt unchanged (torch
-# still ==2.11.0). flash-attn pin 2c839c3->caaa4eb (fa3-skip + py314 patches apply
-# clean, regenerated as caaa4eb copies). CRATES 561->594, GIT_CRATES llm-multimodal
-# rev 7d74582->5390032 (still v1.7.1), oss-harmony unchanged. The rocm and cuda
-# targets are not yet verified against the shipped ~2.11.0 torch pin.
 #
-# requirements/cuda.txt pins tokenspeed-mla 0.1.8, PyNvVideoCodec 2.0.4
-# and nvtx 0.2.15; all three are now packaged and pulled into cuda?'s
-# RDEPEND to match the exact upstream set. The TokenSpeed kernels target
-# Blackwell SM100/SM103 (irrelevant on Ampere/Hopper) and both nvtx
-# (profiling markers, imported lazily in vllm/v1/utils.py) and
-# PyNvVideoCodec (GPU video-decode backend, imported lazily inside
-# decode_frames_pynvvideocodec() at vllm/multimodal/video.py) load
-# lazily, so on hosts that never touch those paths they are inert weight;
-# they are kept for parity with the upstream dependency set.
-# verified lazy 2026-07-12; dependency set completed 2026-08-17.
+# TokenSpeed, PyNvVideoCodec, and nvtx are lazy or hardware-specific, but remain
+# required for parity with requirements/cuda.txt. verified 2026-08-17
+# USE=humming enables an optional quantizer that is otherwise imported lazily.
+# verified without humming-kernels 2026-07-05
 #
-# humming-kernels[cu13] (requirements/cuda.txt, ==0.1.10 "for quantization
-# gemm") provides the optional `humming` quant backend -- pulled only
-# under USE=humming. As of 0.24.0 vllm lazily imports the external
-# `humming` package via vllm.utils.humming (vllm-project/vllm#44921), so
-# the quant registry imports fine without it and a Humming-quantized
-# model only errors at load time under USE=-humming. No import-guard
-# patch is needed here -- verified 2026-07-05 that
-# vllm.model_executor.layers.quantization.humming imports with
-# humming-kernels absent (0.23.0 and earlier predate #44921 and still
-# ship the guard patch).
+# caffe2[distributed,gloo] is required even for one GPU: vllm creates a CPU
+# coordination group and uses gloo when NCCL is unavailable. verified 2026-06-14
+# GPU kernels require Triton 3.6.0, paired with PyTorch 2.11. CUDA and ROCm
+# inference verified 2026-06-14.
 #
-# gfx1150 (Strix Point iGPU) rocm build verified on
-# caffe2[rocm,amdgpu_targets_gfx1150,-nccl,-cusparselt] with
-# AMDGPU_TARGETS=gfx1150.  Produces the HIP extensions (_C,
-# _C_stable_libtorch, _moe_C, _rocm_C, cumem_allocator, spinloop) and
-# installs cleanly.
-# verified 2026-05-08 for 0.20.1, 2026-05-16 for 0.21.0, 2026-06-13 for
-# 0.23.0, 2026-07-12 for 0.25.0 (with pytorch/caffe2 2.11.0; cpu + empty +
-# USE=rust also OK).
+# xgrammar-0.2.2 needs apache-tvm-ffi-0.1.11's extra_lib_paths API, despite
+# upstream pinning 0.1.10. verified 2026-08-16
 #
-# RTX A4500 Laptop (sm_86 Ampere) cuda build verified on
-# caffe2-2.11.0-r90 + CUDA-13.2 + CUDAHOSTCXX=g++-15 + MAX_JOBS=4.
-# Pre-FA3-skip baseline: ~2h30m wallclock, 339 CUDA template files
-# (FA3 .cu compiled at nvcc's default arch — wasted on Ampere).
-# Post-FA3-skip (next commit, files/vllm-flash-attn-...-fa3-only-
-# when-archs.patch): ~1h35m wallclock, 144 CUDA template files.
-# Peak ~14 GiB RSS in either case (16 GiB free headroom on 31 GiB
-# host).  Smoke test in both shapes: `from vllm import LLM`
-# succeeds, torch.cuda.is_available() True, torch reports "NVIDIA
-# RTX A4500 Laptop GPU"; FA2 kernels build for sm_80+PTX (forward-
-# compat with sm_86); FA3 (Hopper) does NOT build on sm_86 in the
-# post-patch shape (FA3_AVAILABLE=False at runtime, vllm picks FA2).
-# verified 2026-05-17 for 0.21.0 on sm_86 + CUDA 13.2 (both shapes).
-#
-# USE=-cpu -cuda -rocm (default): build with VLLM_TARGET_DEVICE=empty
-# — Python entrypoints import cleanly, backend kernels fail at first
-# model-load. Useful if you only want the API surface for development.
-#
-# vllm resolves its runtime platform from the host hardware (not the
-# VLLM_TARGET_DEVICE built below). platforms/cuda.py / rocm.py import
-# torch.distributed.PrefixStore + ProcessGroup unconditionally at module
-# load (needs USE=distributed), and at engine init vllm builds a CPU
-# coordination group on the gloo backend. Since our caffe2 builds CUDA
-# with USE_NCCL=OFF, vllm's nccl device group also falls back to gloo, so
-# USE=gloo is required too. Both flags are default-off: without
-# caffe2[distributed,gloo] vllm ImportErrors at startup, or
-# AssertionErrors ("Fallback Gloo backend is not available") at engine
-# init. verified 2026-06-14, bug #274
-#
-# vllm's GPU kernels (slot mapping, attention, sampling, and the
-# torch.compile/inductor path) are @triton.jit on both the cuda and
-# rocm targets -- on ROCm, vllm's custom paged-attention also falls
-# back to a Triton kernel on gfx targets without it (e.g. gfx1150).
-# Gentoo's source-built torch does not pull Triton the way upstream's
-# PyPI wheels do, so the cuda? and rocm? targets require
-# virtual/triton or vllm dies at first GPU inference with
-# "'function' object is not subscriptable". torch-2.11.0 pairs with
-# triton 3.6.0; its AMD backend JITs gfx kernels via hipcc. cuda
-# verified 2026-06-14 (bug #274); rocm gfx1150 verified 2026-06-14
-# (opt-125m generated, inductor path + Triton _fwd_kernel).
-# Upstream pins lark==1.2.2 and numba==0.65.0, neither of which is in the
-# active repositories.  Stay within their compatible major/minor series.
-# common.txt allows xgrammar 0.2.1..<1, but xgrammar 0.2.2 floors
-# >=apache-tvm-ffi-0.1.11 (the load_lib_module extra_lib_paths arg lands
-# in 0.1.11), so CUDA and ROCm both pin apache-tvm-ffi 0.1.11. xgrammar
-# 0.2.2 is the newest release compatible with that FFI and with
-# transformers 5, so constrain it on those backends. verified 2026-08-16.
-# Upstream pins apache-tvm-ffi-0.1.10 for CUDA, but the packaged
-# xgrammar-0.2.2 needs >=0.1.11 for its extra library search path.
-# Keep the newer pin so the complete CUDA dependency graph is solvable.
-#
-# pkgcheck reports UncheckableDep on this depset ("could not be checked due to
-# pkgcore limitation"). That is pkgcore declining to evaluate, not a defect it
-# found: it cannot statically resolve the protobuf any-of below --
-# `|| ( ~dev-python/protobuf-5.29.6 >=dev-python/protobuf-6.33.5 )` -- whose
-# branches carry version ranges and USE deps together. It is deliberate: vllm
-# works against the old 5.29 pin or a modern 6.33+, but not the range between
-# -- so do NOT flatten it to silence the check; that would misstate the real
-# constraint.
-#
-# Worth knowing when editing: the skip covers the WHOLE of RDEPEND, not just
-# the any-of. A typo or a nonexistent atom anywhere below will not be caught
-# by the linter here. Verify dep edits by hand. verified 2026-09-02
+# pkgcore cannot check RDEPEND because of the versioned protobuf any-of. Keep
+# the valid 5.29.6-or-6.33.5+ gap and review every atom manually.
+# verified 2026-09-02
 RDEPEND="
 	~sci-ml/pytorch-2.11.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed,gloo]
@@ -1038,14 +861,8 @@ RDEPEND="
 		>=sci-libs/hipCUB-7.2:=
 	)
 "
-# Upstream pyproject.toml caps setuptools at <81.0.0; dropped from
-# BDEPEND because (a) gentoo only ships 79.0.1 + 82.0.1 (nothing in
-# the 80.x/81.x line), and downgrading to 79.0.1 fights pkg-resources-
-# 81.0.0 (which has !<setuptools-82 and is pulled in by html5lib /
-# opcodes / python-xlib among others); and (b) vllm's setup.py uses
-# only the standard setuptools surface (Extension, setup, build_ext)
-# — no pkg_resources imports, no setuptools.command.* removed in 81+.
-# Cap re-evaluate on bump. # verified 2026-05-16 against setup.py.
+# Gentoo has no viable setuptools <81 slot; setup.py uses no removed APIs.
+# Recheck the upstream cap on bumps. verified 2026-05-16
 BDEPEND="
 	>=dev-build/cmake-3.26.1
 	app-alternatives/ninja
@@ -1073,21 +890,12 @@ BDEPEND="
 # Tests need a model+inference setup; not wired up here.
 RESTRICT="test"
 
-# 0.20.x carried a patch to relax cmake/cpu_extension.cmake's libgomp
-# probe so it would fall back to the system gcc-runtime libgomp when
-# torch.libs/ contains no vendored copy.  Upstream 0.21.0's cmake now
-# has an equivalent fallback (find_library(OPEN_MP NAMES gomp REQUIRED)
-# without NO_DEFAULT_PATH) when VLLM_TORCH_GOMP_SHIM_DIR is empty, so
-# the local patch is no longer needed.
-
 # Pretend the version so setuptools-scm doesn't probe git.
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 
 src_unpack() {
 	if use rust; then
-		# Vendor the vllm-rs crate deps and set up CARGO_HOME for the
-		# offline build (cargo_src_unpack also unpacks the sdist + any
-		# cuda? flash-attn tarball normally).
+		# Vendor vllm-rs and initialize CARGO_HOME for the offline build.
 		cargo_src_unpack
 	else
 		default
@@ -1098,12 +906,8 @@ src_prepare() {
 	distutils-r1_src_prepare
 
 	if ! use rust; then
-		# vllm's setup.py unconditionally wires the vllm-rs RustExtension.
-		# With USE=-rust we ship no crates and set up no cargo, so drop the
-		# extension list to keep setup.py from attempting a cargo build.
-		# Guard the sed: it exits 0 on a no-match, so a future upstream
-		# rename of this kwarg would silently leave the rust build active
-		# and break the -rust build. Fail loudly instead.
+		# setup.py wires vllm-rs unconditionally; disable it without USE=rust.
+		# Guard the sed because a no-match otherwise succeeds silently.
 		grep -q 'rust_extensions=rust_extensions,' setup.py ||
 			die "vllm-rs RustExtension wiring changed; revisit the USE=rust gate"
 		sed -i 's/rust_extensions=rust_extensions,/rust_extensions=[],/' \
@@ -1133,20 +937,14 @@ src_prepare() {
 		mv "${WORKDIR}/cutlass-${VLLM_FMHA_SM100_CUTLASS_COMMIT}" \
 			"${fmha_dir}/python/fmha_sm100/cutlass" || die
 
-		# Pre-stage vllm-flash-attn and apply our local patches before
-		# vllm's CMake FetchContent reaches it.  vllm honours
-		# VLLM_FLASH_ATTN_SRC_DIR (set in src_configure) and skips the
-		# git fetch when the dir already exists.
+		# Patch pre-staged flash-attn before FetchContent consumes it.
 		[[ -d ${fa_dir} ]] || die "expected ${fa_dir} from SRC_URI unpack"
 		pushd "${fa_dir}" >/dev/null || die
 		# Skip the FA3 (Hopper) target body when no Hopper arch is in
 		# CUDA_ARCHS so Ampere/Ada builds don't compile unrunnable kernels.
 		eapply -p0 \
 			"${FILESDIR}/vllm-flash-attn-${VLLM_FA_COMMIT:0:7}-fa3-only-when-archs.patch"
-		# vllm's PYTHON_COMPAT allows python3_14, but flash-attn's
-		# CMakeLists hard-codes a supported-Python whitelist and
-		# FATAL_ERRORs on 3.14 at configure.  The extension is abi3
-		# (USE_SABI 3), so widening that whitelist is safe.  bug #274
+		# flash-attn's abi3 extension supports 3.14 despite its CMake whitelist.
 		eapply -p0 \
 			"${FILESDIR}/vllm-flash-attn-${VLLM_FA_COMMIT:0:7}-py314.patch"
 		popd >/dev/null || die
@@ -1154,9 +952,7 @@ src_prepare() {
 }
 
 src_configure() {
-	# When the Rust frontend is requested, make its build mandatory so a
-	# failure errors out instead of setuptools-rust silently skipping the
-	# optional extension.
+	# Make requested Rust builds fatal instead of silently optional.
 	use rust && export VLLM_REQUIRE_RUST_FRONTEND=1
 
 	if use cuda || use rocm; then
@@ -1179,46 +975,22 @@ src_configure() {
 		export CUDAHOSTCXX
 		export CMAKE_ARGS+=" -DCMAKE_CUDA_HOST_COMPILER=${CUDAHOSTCXX}"
 
-		# vllm's heavy CUDA template instantiations
-		# (paged_attention_v*, layernorm_quant_kernels, w8a8/fp8/...)
-		# can each peak at 3-4 GiB during cudafe++. Unrestricted ninja
-		# parallelism can OOM-kill the compiler
-		# (cudafe++ dies with SIGKILL, "[code=9]"). MAX_JOBS is the
-		# env var vllm's setup.py reads to throttle the CMake build;
-		# CMAKE_BUILD_PARALLEL_LEVEL backs it up for direct cmake
-		# --build invocations. MAX_JOBS=4 is a conservative default that
-		# users can override according to available memory. The OOM threshold was measured
-		# against 0.20.1; 0.21.0's CUDA template set wasn't re-profiled
-		# at bump time but the heavy instantiations (paged_attention,
-		# layernorm_quant, w8a8/fp8) are unchanged, so MAX_JOBS=4 stays
-		# a conservative default. # verified 2026-05-07 against 0.20.1.
-		#
-		# Caller-overridable so users on smaller/larger hosts can adjust
-		# without ebuild-edit (e.g. MAX_JOBS=2 emerge … on a 16 GiB
-		# host).
+		# CUDA templates use 3-4 GiB per job; retain an overridable safe default.
+		# verified 2026-05-07
 		export MAX_JOBS="${MAX_JOBS:-4}"
 		export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-${MAX_JOBS}}"
 	elif use cpu; then
 		export VLLM_TARGET_DEVICE=cpu
 		export FETCHCONTENT_SOURCE_DIR_ONEDNN="${WORKDIR}/oneDNN-${VLLM_ONEDNN_TAG}"
-		# vllm 0.22.x cpu_extension.cmake locates OpenMP via
-		# vllm_prepare_torch_gomp_shim(), which expects a libgomp vendored
-		# inside PyTorch (torch.libs/libgomp-*.so — a PyPI-wheel artifact).
-		# Our source-built sci-ml/caffe2 ships none, so cmake falls back to
-		# find_library(NAMES gomp), which misses Gentoo's libgomp under the
-		# gcc-internal dir. Point CMAKE_LIBRARY_PATH at the toolchain's
-		# libgomp so the fallback resolves. # verified 2026-06-05 (0.22.1)
+		# Source-built PyTorch has no wheel-vendored libgomp; expose GCC's copy.
+		# verified 2026-06-05
 		local gomp_dir
 		gomp_dir=$(dirname "$($(tc-getCC) -print-file-name=libgomp.so)")
 		export CMAKE_ARGS+=" -DCMAKE_LIBRARY_PATH=${gomp_dir}"
 	elif use rocm; then
 		export VLLM_TARGET_DEVICE=rocm
 		filter-lto
-		# rocm.eclass turns AMDGPU_TARGETS into a semicolon-joined
-		# list. vllm's CMakeLists reads PYTORCH_ROCM_ARCH and feeds
-		# it to enable_language(HIP). Same MAX_JOBS throttle as the
-		# cuda branch — HIP template instantiation in csrc/rocm/
-		# (skinny_gemms, attention) hits comparable peak RSS.
+		# HIP templates need the same parallelism limit as CUDA.
 		export PYTORCH_ROCM_ARCH=$(get_amdgpu_flags)
 		export MAX_JOBS="${MAX_JOBS:-4}"
 		export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-${MAX_JOBS}}"
