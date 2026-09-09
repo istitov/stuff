@@ -70,7 +70,11 @@ src_install() {
 	dobin "${PN}"
 
 	insinto /usr/share/${PN}
-	doins config.example.yaml
+	# Upstream keeps only a one-line "moved to docs/" pointer at the source
+	# root; the real ~770-line reference config lives under docs/. Installing
+	# the root file shipped a 37-byte comment as the example that
+	# pkg_postinst tells users to copy. # verified 2026-09-09
+	doins docs/config.example.yaml
 
 	if use openrc; then
 		newinitd "${FILESDIR}/${PN}.initd" "${PN}"
