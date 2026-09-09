@@ -50,10 +50,20 @@ IUSE="cuda"
 # in ${PN}-0.2.2-cuda-host-compiler.patch: when a CUDA bump raises this
 # slot, update that patch's fallback in the same commit. cuda_gccdir cannot
 # resolve it -- it runs on the user's machine at JIT time, not at build.
+#
+# virtual/triton is arch-gated rather than CUDA-gated: upstream's own marker
+# is platform_machine == 'x86_64', and the auto backend selects the Triton
+# kernel for any tensor whose device.type is "cuda" -- which ROCm tensors
+# also report -- so gating on the cuda flag would make an AMD host raise
+# ImportError("Triton is not installed") at first GPU use. The virtual
+# carries both the nvidia and amd backends and is itself ~amd64, so keying
+# it to the arch also keeps the dep resolvable on arm64. # verified 2026-09-09
 RDEPEND="
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
 		sys-devel/gcc:15
+	)
+	amd64? (
 		$(python_gen_cond_dep '
 			virtual/triton[${PYTHON_USEDEP}]
 		')
