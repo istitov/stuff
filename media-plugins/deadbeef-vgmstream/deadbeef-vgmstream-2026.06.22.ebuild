@@ -18,7 +18,7 @@ S="${WORKDIR}/deadbeef-vgmstream-${MY_PV}"
 
 LICENSE="vgmstream"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~arm64"
 
 DEPEND_COMMON="
 	media-sound/deadbeef
