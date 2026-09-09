@@ -18,7 +18,7 @@ LICENSE="
 "
 SLOT="0"
 if [[ ${PV} != *beta* && ${PV} != *rc* ]]; then
-	KEYWORDS="amd64 ~riscv x86"
+	KEYWORDS="amd64 ~arm64 ~riscv x86"
 fi
 IUSE="
 	deadbeef_plugins_aac deadbeef_plugins_adplug deadbeef_plugins_alac
