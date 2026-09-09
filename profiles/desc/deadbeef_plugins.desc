@@ -1,0 +1,54 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+aac - AAC decoder using FAAD2
+adplug - Bundled AdPlug player
+alac - Bundled Apple Lossless decoder
+alsa - ALSA output
+ape - Bundled Monkey's Audio decoder
+artwork - Album artwork loading
+cdda - Audio CD playback and ripping
+converter - File format converter
+curl - HTTP streaming and network artwork fetching
+dts - DTS audio decoder
+dumb - Bundled DUMB module player
+ffmpeg - FFmpeg audio decoder
+flac - FLAC audio decoder
+gme - Bundled Game Music Emu player
+gtk2 - GTK 2 user interface
+gtk3 - GTK 3 user interface
+hotkeys - Global keyboard shortcuts
+lastfm - last.fm and Libre.fm scrobbling
+libretro - Libretro resampler
+libsamplerate - Secret Rabbit Code resampler
+lyrics - Lyrics viewer
+m3u - M3U playlist support
+medialib - Media library
+mms - Bundled MMS streaming support
+mono2stereo - Mono-to-stereo DSP
+mp3 - MP3 decoder using mpg123
+mpris - MPRIS D-Bus control
+musepack - Musepack audio decoder
+notify - Desktop notifications
+nullout - Dummy output driver
+opus - Opus audio decoder
+oss - Open Sound System output
+pipewire - PipeWire output
+playlist-browser - Playlist browser
+psf - Bundled PlayStation Sound Format player
+pulseaudio - PulseAudio output
+replaygain - ReplayGain scanner
+sc68 - Bundled Atari ST and Amiga music player
+shellexec - Custom shell commands for tracks
+shorten - Bundled Shorten lossless audio decoder
+sid - Bundled Commodore 64 SID player
+sndfile - PCM audio support using libsndfile
+soundtouch - Bundled SoundTouch DSP
+supereq - SuperEQ equalizer
+tta - Bundled True Audio decoder
+vorbis - Ogg Vorbis audio decoder
+vtx - Bundled VTX ZX Spectrum music player
+wavpack - WavPack audio decoder
+wildmidi - Bundled WildMIDI player
+wma - Bundled WMA decoder
+zip - ZIP archive reader
