@@ -10,7 +10,7 @@ S="${WORKDIR}/ddb_copy_info-${PV}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+gtk3 gtk2"
 REQUIRED_USE="|| ( gtk2 gtk3 )"
 
