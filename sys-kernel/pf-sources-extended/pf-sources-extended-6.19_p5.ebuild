@@ -51,7 +51,7 @@ SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 
 S="${WORKDIR}/linux-${SHPV}"
 
-KEYWORDS=""
+KEYWORDS="~arm64"
 
 K_EXTRAEINFO="For more info on pf-kernel and details on how to report problems,
 	see: ${HOMEPAGE}."
