@@ -689,8 +689,12 @@ HOMEPAGE="
 	https://unsloth.ai/docs/desktop
 	https://github.com/unslothai/unsloth
 "
+# Shared distfile name: sci-ml/unsloth builds the library from this same
+# monorepo tag, so keying the name to the tag rather than to ${P} lets the two
+# packages share one 60M download instead of storing it twice.
 SRC_URI="
-	https://github.com/unslothai/unsloth/archive/refs/tags/v${PV/_beta/-beta}.tar.gz -> ${P}.gh.tar.gz
+	https://github.com/unslothai/unsloth/archive/refs/tags/v${PV/_beta/-beta}.tar.gz
+		-> unsloth-monorepo-${PV/_beta/-beta}.gh.tar.gz
 	${CARGO_CRATE_URIS}
 "
 S="${WORKDIR}/unsloth-${PV/_beta/-beta}"
