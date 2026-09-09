@@ -34,7 +34,19 @@ KEYWORDS="~amd64"
 # The upstream suite requires supported NVIDIA or AMD accelerator hardware.
 RESTRICT="test"
 
-RDEPEND="!!dev-python/triton-bin"
+# TRITON_OFFLINE_BUILD=1 suppresses upstream's download of the NVIDIA tools,
+# and the source tarball carries none, so the CUDA backend has no ptxas at all.
+# knobs.py resolves it through env_nvidia_tool, which tries $TRITON_PTXAS_PATH
+# and then triton/backends/nvidia/bin/<tool> and raises RuntimeError -- there is
+# no PATH fallback, so having /opt/cuda/bin on PATH does not help. Without the
+# symlinks in python_install this package installs and imports cleanly and then
+# dies at the first CUDA JIT with "Cannot find ptxas". The binary wheel bundles
+# the tools instead, which is why only this provider is affected.
+# # verified 2026-09-09 against the staged image and knobs.py:193-217
+RDEPEND="
+	!!dev-python/triton-bin
+	dev-util/nvidia-cuda-toolkit
+"
 BDEPEND="
 	dev-build/cmake
 	dev-build/ninja
@@ -64,4 +76,17 @@ python_install() {
 	distutils-r1_python_install
 	rm -r "${D}$(python_get_sitedir)/triton/plugins" || die
 	rm "${D}$(python_get_sitedir)/triton/instrumentation/libGPUInstrumentationTestLib.so" || die
+
+	# Point the CUDA backend at the toolkit's tools; see the RDEPEND comment.
+	# ptxas-blackwell has no toolkit counterpart -- it is an upstream-only
+	# variant for sm_100 and later, so those targets still need
+	# TRITON_PTXAS_BLACKWELL_PATH set by hand.
+	# python_get_sitedir already carries EPREFIX, which dodir/dosym prepend
+	# again, so strip it back off for the helpers.
+	local tool bindir="$(python_get_sitedir)"
+	bindir="${bindir#"${EPREFIX}"}/triton/backends/nvidia/bin"
+	dodir "${bindir}"
+	for tool in ptxas cuobjdump nvdisasm; do
+		dosym -r "/opt/cuda/bin/${tool}" "${bindir}/${tool}"
+	done
 }
