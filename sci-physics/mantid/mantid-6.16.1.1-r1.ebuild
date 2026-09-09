@@ -24,7 +24,7 @@ fi
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~arm64"
 # ~amd64 — both toolkits run the full src_unpack/prepare/configure/
 # compile/install pipeline clean, verified 2026-07-27 against gcc-16 +
 # Boost-1.90 + Python 3.13:
@@ -108,8 +108,7 @@ RESTRICT="!test? ( test )"
 # expressible as a dep atom; emerge --autounmask proposes the rest from
 # the atoms (nexus cxx, nexus' own doxygen[dot], and per toolkit either
 # qtbase concurrent/gui/network/widgets + qttools assistant + qscintilla
-# qt6, or the dev-qt:5 set + qscintilla qt5). KEYWORDS is empty — unmask
-# the wanted version to install.
+# qt6, or the dev-qt:5 set + qscintilla qt5).
 
 RDEPEND="
 	dev-libs/boost
