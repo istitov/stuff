@@ -19,9 +19,9 @@ K_NOSETEXTRAVERSION="1"
 
 # K_SECURITY_UNSUPPORTED is set because the curated pf delta is not
 # covered by Gentoo's security
-# team — bugs in the pf-specific portions (BBRv3, x86 ISA levels, TEO
-# cpuidle governor, ovpn data-channel offload, zstd bump, v4l2loopback,
-# DDCCI) need to be reported to natalenko or the overlay maintainers.
+# team — bugs in the pf-specific portions (x86 ISA levels, TEO
+# cpuidle governor, ovpn data-channel offload, dma-buf/IOMMU, vmstat and
+# SMB changes) need to be reported to natalenko or the overlay maintainers.
 K_SECURITY_UNSUPPORTED="1"
 
 K_WANT_GENPATCHES="base extras"
@@ -79,9 +79,14 @@ src_prepare() {
 	# is the entire point of this revision.
 	eapply "${WORKDIR}"/*.patch
 
-	# Curated pf-kernel delta on top of gentoo-sources state.
-	# See pkg_postinst for the kept/dropped breakdown.
-	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
+	# 0002-bbr3 assumes TCP core API additions which are absent from the
+	# fetchable 6.19.12 genpatches base.  Its tcp_output.c changes otherwise
+	# fail to compile due to missing tx.in_flight, tso_segs and ECN support.
+	# Keep it out until the curated series is regenerated for this base.
+	eapply "${WORKDIR}/pf-curated-${SHPV}"/0001-fixes-stable-backports.patch
+	eapply "${FILESDIR}/${PN}-6.19-revert-partial-slab-update.patch"
+	eapply "${WORKDIR}/pf-curated-${SHPV}"/0003-cpuidle.patch
+	eapply "${WORKDIR}/pf-curated-${SHPV}"/0004-kbuild-tweaks.patch
 
 	default
 }
@@ -96,11 +101,14 @@ pkg_postinst() {
 	elog "via Gentoo's genpatches, plus a curated subset of natalenko's pf-kernel"
 	elog "delta. CVE backports now arrive automatically with each gentoo-sources"
 	elog "stable bump. 6.19 is the youngest active branch, so the curated subset"
-	elog "is small (34 files / ~4k lines)."
+	elog "is small."
 	elog ""
-	elog "Curated pf features kept: BBRv3, x86 ISA levels (arch/x86/Kconfig.cpu +"
-	elog "Makefile), TEO cpuidle governor + haltpoll, zstd bump, v4l2loopback,"
-	elog "ovpn (OpenVPN data-channel offload), and fs/smb/client tweaks."
+	elog "Curated pf features kept: x86 ISA levels (arch/x86/Kconfig.cpu +"
+	elog "Makefile), TEO cpuidle governor + haltpoll, ovpn data-channel offload,"
+	elog "and dma-buf/IOMMU, vmstat, and fs/smb/client tweaks."
+	elog ""
+	elog "BBRv3 is omitted on this slot: the curated patch assumes TCP core API"
+	elog "from a newer base than the fetchable 6.19.12 genpatches stack."
 	elog ""
 	elog "pf changes overlapping gentoo-sources' newer form (scheduler/futex"
 	elog "tweaks) are dropped in favour of stable."
