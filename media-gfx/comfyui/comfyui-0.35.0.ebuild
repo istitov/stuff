@@ -18,27 +18,18 @@ S="${WORKDIR}/ComfyUI-${PV}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-# comfy_aimdo / comfy_kitchen are hard imports. USE=cuda picks their CUDA
-# wheels via the cuda= propagation below; otherwise the py3-none-any fallbacks
-# (eager kernels, no GPU offload). USE=rocm builds the AMD path: caffe2[rocm] +
-# those fallbacks + triton-bin, whose Triton backend supplies
-# comfy_kitchen.apply_rope on AMD. cuda/rocm are mutually exclusive; neither = CPU.
-# USE=compile adds triton-bin for torch.compile + comfy_kitchen's Triton backend.
+# comfy_aimdo/kitchen are hard dependencies. CUDA selects their GPU wheels;
+# ROCm uses pure-Python fallbacks plus Triton for apply_rope; neither flag is CPU.
+# compile also enables Triton. CUDA and ROCm are exclusive.
 IUSE="cuda compile +templates extra opengl rocm audio"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	?? ( cuda rocm )"
 
-# comfy_aimdo is imported unconditionally at module load -- 0.35.0 widens that
-# from four call sites to nine (main.py, execution.py and seven comfy/ modules,
-# among them model_management.py, ops.py and model_patcher.py), all bare
-# module-level imports with no try/except. verified 2026-09-09; comfy_kitchen
-# provides the RoPE/quant kernels comfy.quant_ops.ck.apply_rope uses
-# unconditionally for the flux/lumina/z-image families. Both are hard deps:
-# comfy_kitchen's import is try/except-wrapped but the wrapper only degrades the
-# fp8/fp4 *message* -- the RoPE path assumes ck is present, so those models
-# crash at sampling without it. The gguf freeze entry is the ComfyUI-GGUF custom
-# node, not core, and is excluded.
+# 0.35 imports comfy_aimdo unguarded at nine module-load sites. comfy_kitchen's
+# guarded import only degrades FP messages; Flux/Lumina/Z-Image RoPE still needs
+# it at sampling. The GGUF freeze entry belongs to a custom node, not core.
+# verified 2026-09-09
 RDEPEND="${PYTHON_DEPS}
 	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP},cuda?,rocm?]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
@@ -96,35 +87,14 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	audio? ( sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}] )
 "
-# virtual/triton is deliberately unversioned. Triton pairs with one torch
-# (pytorch's .ci/docker/triton_version.txt), but caffe2 and torchvision are
-# depended on here without a version, so the torch this runs against is whatever
-# the tree resolves -- torchvision 0.28.0 selects 2.13, 0.29.0 selects 2.14. A
-# fixed ~virtual/triton-3.6.0 asserted a pairing this ebuild does not constrain,
-# and made comfyui unco-installable with anything pinning a different virtual,
-# since SLOT 0 admits one. Pinning the torch stack is the real fix; until then
-# the virtual floats with it. # verified 2026-09-09
-#
-# USE=audio pulls torchaudio for the audio nodes (comfy.audio_encoders, lumina
-# audio VAE), imported lazily and degrading gracefully if absent. torchaudio
-# tops out at 2.11 (pins ~sci-ml/pytorch-2.11) and conflicts with the
-# pytorch-2.12 stack, so USE=audio only resolves once a matching torchaudio
-# exists. verified 2026-06-15.
-#
-# 0.27.0 dropped glfw (no remaining consumer). Its only PyOpenGL consumer,
-# comfy_extras/nodes_glsl.py, imports comfy_angle first to pre-load the ANGLE
-# EGL/GLES runtime, so without it init_builtin_extra_nodes() catches the
-# ImportError and silently skips that node file -- no startup crash, but the
-# GLSL shader nodes are simply absent.
-#
-# comfy-angle HAS since been packaged as dev-python/comfy-angle-bin (it ships
-# the comfy_angle module nodes_glsl.py imports), so USE=opengl now pulls it
-# alongside PyOpenGL instead of installing PyOpenGL for a feature that could
-# not load. Earlier versions predate the package and left USE=opengl inert.
-# Upstream lists comfy-angle unpinned under "non essential dependencies" in
-# requirements.txt, hence the unversioned atom. The node file's own runtime
-# behaviour on a GL-capable session has NOT been re-verified here -- only that
-# the import target now exists. verified 2026-09-03 against v0.34.3
+# Triton floats because caffe2/torchvision do not pin a torch version; pinning
+# one SLOT-0 virtual would impose a pairing this ebuild does not. Pin the full
+# torch stack before Triton. verified 2026-09-09
+# Audio imports lazily. Available torchaudio revisions pair with torch 2.11 or
+# 2.13, so USE=audio cannot resolve with 2.14. rechecked 2026-09-10
+# nodes_glsl needs both PyOpenGL and comfy_angle; without the latter it is
+# silently skipped. The import target exists, but GL runtime remains unverified.
+# verified against 0.34.3 on 2026-09-03
 BDEPEND="${PYTHON_DEPS}"
 
 src_install() {
@@ -138,16 +108,12 @@ src_install() {
 
 	python_optimize "${ED}${dest}"
 
-	# System-wide custom_nodes dir (for admin/emerge-dropped nodes); ComfyUI
-	# auto-loads extra_model_paths.yaml from its root and merges this path with
-	# the per-user <base>/custom_nodes.
+	# Merge system-managed custom nodes with each user's base directory.
 	printf 'comfyui_system:\n    base_path: %s/usr/share/%s/\n    custom_nodes: custom_nodes/\n' \
 		"${EPREFIX}" "${PN}" > "${ED}${dest}/extra_model_paths.yaml" || die
 	keepdir "/usr/share/${PN}/custom_nodes"
 
-	# Launcher: ComfyUI runs from its own directory; per-user writable state
-	# (models, custom_nodes, input, output, user, temp) is redirected to a base
-	# dir via --base-directory so the /opt tree stays read-only.
+	# Redirect writable state to a per-user base, keeping /opt read-only.
 	newbin - "${PN}" <<-EOF
 		#!/bin/sh
 		: "\${COMFYUI_BASE:=\${XDG_DATA_HOME:-\$HOME/.local/share}/${PN}}"
