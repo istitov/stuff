@@ -84,16 +84,25 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	compile? (
 		$(python_gen_cond_dep '
-			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
+			virtual/triton[${PYTHON_USEDEP}]
 		')
 	)
 	rocm? (
 		$(python_gen_cond_dep '
-			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
+			virtual/triton[${PYTHON_USEDEP}]
 		')
 	)
 	audio? ( sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}] )
 "
+# virtual/triton is deliberately unversioned. Triton pairs with one torch
+# (pytorch's .ci/docker/triton_version.txt), but caffe2 and torchvision are
+# depended on here without a version, so the torch this runs against is whatever
+# the tree resolves -- torchvision 0.28.0 selects 2.13, 0.29.0 selects 2.14. A
+# fixed ~virtual/triton-3.6.0 asserted a pairing this ebuild does not constrain,
+# and made comfyui unco-installable with anything pinning a different virtual,
+# since SLOT 0 admits one. Pinning the torch stack is the real fix; until then
+# the virtual floats with it. # verified 2026-09-09
+#
 # USE=audio pulls torchaudio for the audio nodes (comfy.audio_encoders, lumina
 # audio VAE), imported lazily and degrading gracefully if absent. torchaudio
 # tops out at 2.11 (pins ~sci-ml/pytorch-2.11) and conflicts with the
