@@ -916,10 +916,21 @@ REQUIRED_USE="
 # Gentoo's source-built torch does not pull Triton the way upstream's
 # PyPI wheels do, so the cuda? and rocm? targets require
 # virtual/triton or vllm dies at first GPU inference with
-# "'function' object is not subscriptable". torch-2.11.0 pairs with
-# triton 3.6.0; its AMD backend JITs gfx kernels via hipcc. cuda
-# verified 2026-06-14 (bug #274); rocm gfx1150 verified 2026-06-14
-# (opt-125m generated, inductor path + Triton _fwd_kernel).
+# "'function' object is not subscriptable". The pin follows pytorch's
+# .ci/docker/triton_version.txt rather than the newest triton release:
+# torch-2.11.0 -> 3.6.0, 2.12.0 -> 3.7.0, 2.13.0 -> 3.7.1. This version
+# is on torch 2.13.0, so 3.7.1 is the matching pairing; the 3.6.0 that
+# stood here was the 2.11 pairing carried across two torch bumps. That
+# also broke resolution in practice: the unversioned virtual/triton in
+# xgrammar and quack-kernels does admit 3.6.0, but the resolver reaches for
+# the head of the line first, and since virtual/triton-3.7.1 offers two
+# mutually blocking providers the disagreement arrives as a blocker on top
+# of a slot conflict rather than as a version it can simply backtrack over
+# (bug #283). Triton's AMD backend lowers to LLVM in-process and emits an
+# hsaco; it does not shell out to hipcc. cuda verified 2026-06-14 (bug #274) and
+# rocm gfx1150 verified 2026-06-14 (opt-125m generated, inductor path +
+# Triton _fwd_kernel), both on the 2.11/3.6.0 pairing; 3.7.1 is re-read
+# from the pytorch tag and not yet re-run end to end. # verified 2026-09-09
 # Upstream pins lark==1.2.2 and numba==0.65.0, neither of which is in the
 # active repositories.  Stay within their compatible major/minor series.
 # common.txt allows xgrammar 0.2.1..<1; constrain it to ~0.2.2 on CUDA/ROCm
@@ -1047,7 +1058,7 @@ RDEPEND="
 			>=dev-python/fastsafetensors-0.3.3[${PYTHON_SINGLE_USEDEP}]
 			>=dev-python/nvidia-cudnn-frontend-1.19.1[${PYTHON_USEDEP}]
 			~dev-python/nvidia-cutlass-dsl-4.6.2[${PYTHON_USEDEP}]
-			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
+			~virtual/triton-3.7.1[${PYTHON_USEDEP}]
 		')
 		dev-util/nvidia-cuda-toolkit:=
 	)
@@ -1064,7 +1075,7 @@ RDEPEND="
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 			~dev-python/conch-triton-kernels-1.2.1[${PYTHON_USEDEP}]
-			~virtual/triton-3.6.0[${PYTHON_USEDEP}]
+			~virtual/triton-3.7.1[${PYTHON_USEDEP}]
 			>=dev-util/amdsmi-7.0.2[${PYTHON_USEDEP}]
 			>=dev-python/fastsafetensors-0.3.3[${PYTHON_SINGLE_USEDEP}]
 		')
