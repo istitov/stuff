@@ -10,35 +10,25 @@ inherit python-single-r1
 DESCRIPTION="ROCm SDK pre-built distribution from TheRock (AMDGPU_TARGETS-selected)"
 HOMEPAGE="https://github.com/ROCm/TheRock"
 
-# The ROCm 7.14.0 RELEASE ships only as a Makeself runfile installer -- AMD
-# publishes no per-arch release tarball (those exist as nightly a<DATE>
-# snapshots at rocm.nightlies.amd.com/tarball-multi-arch/ only, and the
-# therock-X.Y GitHub releases carry zero assets). The .run (Makeself 2.4.2,
-# COMPRESS=none) bundles a shared component-rocm/content-base.tar.xz plus one
-# component-rocm/content-gfx<family>.tar.xz per GPU family; each unpacks to
-# <component>/rocm/core-7.14/{bin,lib,include,share,libexec}. We slice the
-# uncompressed tar payload out of the .run (no install-init.sh run), extract
-# base + the selected arch's family, and flatten-merge the rocm/core-7.14
-# trees into /opt/therock-bin. The libs are $ORIGIN-rpath relocatable, so no
-# patchelf is needed. The .run is internally 7.14.0rc3 (BUILDINFO) but is the
-# official ROCm 7.14.0 release; MY_BUILD is the installer revision
-# (rocm-installer-${PV}-${MY_BUILD}.run) -- revbump when AMD reissues it.
+# AMD publishes this release only as a Makeself 2.4.2 runfile; GitHub has no
+# binary assets and per-arch SDK tarballs are nightly-only. Its uncompressed
+# payload contains a shared base and one family tarball, rooted at
+# <component>/rocm/core-7.14. Extract it without running the installer and merge
+# the selected family under /opt/therock-bin; $ORIGIN rpaths need no patching.
+# BUILDINFO says 7.14.0rc3, but AMD labels the runfile 7.14.0. MY_BUILD is the
+# installer revision; revbump if AMD reissues it.
 MY_BUILD="7"
 MY_RUN="rocm-installer-${PV}-${MY_BUILD}.run"
 SRC_URI="https://repo.radeon.com/rocm/installer/rocm-runfile-installer/rocm-rel-${PV%.*}/${MY_RUN}"
 S="${WORKDIR}"
 
-# TheRock bundles ROCm components from many upstream subprojects under their
-# respective licenses; the union below matches a ROCm distribution and the
-# canonical texts ship inside the tree under share/doc.
+# The SDK combines ROCm subprojects under these licenses; texts ship in share/doc.
 LICENSE="MIT BSD Apache-2.0 UoI-NCSA Boost-1.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# GPU targets the 7.14.0 release build ships (fine-grained -- the installer is
-# multi-arch, per .gfx-lists). Each maps to a content-gfx<family>.tar.xz whose
-# <arch>/ subdir we install (see _therock_family). NB vs the nightly ebuild:
-# the release drops gfx900/gfx906/gfx101x and covers the RDNA/CDNA arches here.
+# Release targets from component-rocm/.gfx-lists; fine arches map to the family
+# payloads below. Re-derive on each bump.
 AMDGPU_ARCHS=(
 	gfx1030 gfx1100 gfx1101 gfx1102 gfx1103
 	gfx1150 gfx1151 gfx1152 gfx1153
@@ -46,22 +36,17 @@ AMDGPU_ARCHS=(
 )
 IUSE="${AMDGPU_ARCHS[*]/#/amdgpu_targets_}"
 
-# One runfile carries the whole SDK; only one target lives under
-# /opt/therock-bin/ at a time.
+# One target may own /opt/therock-bin at a time.
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
 	^^ ( ${AMDGPU_ARCHS[*]/#/amdgpu_targets_} )
 "
 
-# bindist:  conservative -- TheRock bundles many third-party components.
-# mirror:   not redistributable from Gentoo mirrors.
-# strip:    pre-built; upstream stripping is final.
+# Bundled third-party prebuilt: do not redistribute, mirror, or strip.
 RESTRICT="bindist mirror strip"
 
-# TheRock vendors most system deps as librocm_sysdeps_*.so under its own
-# lib/rocm_sysdeps/, but a subset of binaries and scripts still use the system.
-# Same dep set across arches (same vendoring strategy); re-verify via ldd on a
-# bump.
+# Most libraries are vendored as lib/rocm_sysdeps/librocm_sysdeps_*.so; these
+# remain system consumers. Recheck with ldd on each bump.
 RDEPEND="
 	app-arch/zstd:=
 	dev-lang/perl
@@ -75,8 +60,7 @@ RDEPEND="
 
 QA_PREBUILT="opt/therock-bin/*"
 
-# Coarse content-gfx<family>.tar.xz for a fine arch (mirrors the runfile's
-# component-rocm/.gfx-lists GFX_FINE_TO_COARSE map).
+# Map a fine arch to its .gfx-lists payload family.
 _therock_family() {
 	case $1 in
 		gfx1030) echo gfx103x ;;
@@ -91,7 +75,6 @@ _therock_family() {
 	esac
 }
 
-# The single selected fine arch (REQUIRED_USE guarantees exactly one).
 _therock_arch() {
 	local a
 	for a in "${AMDGPU_ARCHS[@]}"; do
@@ -105,13 +88,9 @@ src_unpack() {
 	arch=$(_therock_arch)
 	family=$(_therock_family "${arch}")
 
-	# Makeself 2.4.2 with COMPRESS=none appends a raw tar after the shell
-	# header; its byte offset = filesize - the header's `filesizes` var.
-	# Slicing there extracts the payload without executing the installer and
-	# tolerates header-size drift across bumps.
-	# NB stat -L: portage symlinks the distfile into the sandbox, and a bare
-	# stat -c%s reports the symlink's own size (target path length), not the
-	# .run -- dereference it or the offset goes negative.
+	# Makeself appends a raw tar; locate it from `filesizes` instead of executing
+	# the installer. Dereference Portage's distfile symlink or the offset uses the
+	# link length and goes negative.
 	local filesizes offset
 	filesizes=$(grep -a -m1 '^filesizes=' "${run}") || die "no filesizes marker"
 	filesizes=${filesizes#filesizes=\"}
@@ -133,12 +112,8 @@ src_install() {
 	arch=$(_therock_arch)
 
 	dodir "${dest}"
-	# Flatten-merge every component's rocm/core-7.14 subtree -- the shared base
-	# components plus the selected arch's gfx kernels -- into one relocatable
-	# ROCm root. All base + gfx components root uniformly at
-	# <component>/rocm/core-7.14/, so stripping that prefix yields the standard
-	# /opt/therock-bin/{bin,lib,include,...} layout (same as the nightly ebuild).
-	# Component trees root at rocm/core-<major.minor> (core-7.14 for 7.14.x).
+	# Merge shared and selected-family component roots into one relocatable SDK.
+	# Component paths use core-<major.minor>, including for point releases.
 	local core="core-${PV%.*}" found=
 	for c in "${WORKDIR}"/base/*/rocm/"${core}" \
 		"${WORKDIR}/${arch}"/*/rocm/"${core}"; do
