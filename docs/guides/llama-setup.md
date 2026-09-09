@@ -284,6 +284,12 @@ Keep model servers bound to loopback unless authentication and network exposure
 have been configured deliberately. After enabling a service, verify its listen
 address with `ss -ltnp` rather than assuming an upstream default is private.
 
+## Benchmarks
+
+For measured generation-speed tuning, see
+[Speculative decoding on Radeon 890M](../benchmarks/speculative-decoding-on-890M.md).
+It compares MTP configurations on four models using llama.cpp's Vulkan backend.
+
 ## Troubleshooting
 
 - **The AMD GPU is slower with ROCm than expected** — compare the Vulkan build

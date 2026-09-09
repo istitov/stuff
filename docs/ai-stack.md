@@ -36,6 +36,10 @@ packaging.
     [ZLUDA](https://github.com/vosen/ZLUDA) (`dev-util/zluda`) runs CUDA-only
     software on AMD GPUs.
 
+For measurements on packaged runtimes, see the [benchmark section](benchmarks/index.md),
+starting with [MTP speculative decoding on Radeon 890M](benchmarks/speculative-decoding-on-890M.md).
+Each study records its hardware, workload, and software snapshot.
+
 ## Hardware backends
 
 - **NPU** — `dev-libs/xdna-driver` (the `amdxdna` module + firmware),

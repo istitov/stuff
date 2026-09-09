@@ -44,6 +44,9 @@ nav:
       - ComfyUI + TRELLIS: guides/comfyui.md
       - Qt5 LTS: guides/qt5-lts.md
       - TeX Live: guides/texlive.md
+  - Benchmarks:
+      - Overview: benchmarks/index.md
+      - Speculative decoding on Radeon 890M: benchmarks/speculative-decoding-on-890M.md
 
 markdown_extensions:
   - admonition
