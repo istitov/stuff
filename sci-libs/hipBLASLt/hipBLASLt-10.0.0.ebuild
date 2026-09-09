@@ -6,8 +6,7 @@ EAPI=8
 ROCM_SKIP_GLOBALS=1
 PYTHON_COMPAT=( python3_{12..14} )
 
-# Tracks the ROCm 10.0 cohort's LLVM slot. The stack is subslot-pinned as one
-# dependency closure, so all of it must be compiled by a single LLVM major.
+# The subslot-pinned ROCm stack must use one LLVM major.
 LLVM_COMPAT=( 23 )
 
 inherit cmake flag-o-matic multiprocessing llvm-r2 python-any-r1 rocm
@@ -22,11 +21,8 @@ SRC_URI="
 
 S="${WORKDIR}/hipblaslt"
 ORIGAMI_S="${WORKDIR}/origami"
-# NEW at ROCm 10.0: tensilelite/rocisa now requires "stinkytofu", looking for it
-# either via find_package or as a monorepo sibling at ../../../../shared/
-# stinkytofu, and hard-FATAL_ERRORs when neither is present. It is not packaged
-# separately, so co-unpack the release asset the same way as origami and point
-# the sibling lookup at it. verified 2026-08-29.
+# rocisa requires unpackaged stinkytofu; co-unpack its release asset and redirect
+# the monorepo sibling lookup. verified 2026-08-29
 STINKYTOFU_S="${WORKDIR}/stinkytofu"
 
 LICENSE="MIT"
@@ -54,21 +50,9 @@ DEPEND="
 	llvm-runtimes/openmp
 "
 
-# dev-util/hipcc[amd-llvm] is a build requirement, not documentation.
-# rocm_use_clang() resolves the compiler via `hipconfig --hipclangpath`, and
-# hipcc points that at llvm-core/rocm-llvm only when the flag is set. This
-# package cannot be compiled by a vanilla LLVM: TensileLite GENERATES gfx1150
-# assembly the vanilla assembler rejects ("operands are not valid for this GPU
-# or mode" on v_max_f16 with an abs() source modifier), and being generated it
-# cannot be patched away. Until now that requirement lived only in a
-# profiles/package.mask comment, so building against a hipcc without the flag
-# died deep in compilation with no resolver-level signal.
-#
-# Unconditional deliberately. Every failure on record is a gfx11xx/gfx12xx one,
-# so a narrower amdgpu_targets_*? form may well be correct -- but nobody has
-# built this against a vanilla LLVM for a CDNA-only target, and claiming
-# support that was never verified is the worse error. Narrow it once someone
-# has that build. # verified 2026-08-30
+# TensileLite generates gfx1150 assembly rejected by vanilla LLVM, so require
+# hipcc to select AMD LLVM. Keep this unconditional until a vanilla-LLVM CDNA
+# build is verified. verified 2026-08-30
 BDEPEND="
 	${PYTHON_DEPS}
 	dev-build/rocm-cmake:${SLOT}
@@ -87,19 +71,11 @@ BDEPEND="
 	)
 "
 
-# Since 7.1.0 to build tests one needs to build benchmarks (which will be installed)
-# TODO: make build of tests independent benchmarks
+# Upstream couples tests to the installed benchmark clients.
 REQUIRED_USE="test? ( benchmark )"
 
-# ${PN}-7.1.0-no-git.patch is obsolete at 10.0: cmake/dependencies.cmake no
-# longer calls find_package(Git) at all, so there is nothing to remove.
-#
-# The nanobind patch is still REQUIRED, regenerated for 10.0. Upstream split
-# the logic in two: a ROCISA_STANDALONE branch that calls
-# find_package(nanobind REQUIRED CONFIG), and an else() branch -- the one taken
-# when rocisa builds as a hipblaslt subdirectory, which is our case -- that
-# still does a network FetchContent. Only the else() branch needs patching.
-# verified 2026-08-29 against the therock-10.0 hipblaslt asset.
+# The embedded rocisa branch still FetchContents nanobind; use the system
+# package. The standalone branch already does so. verified 2026-08-29
 PATCHES=(
 	"${FILESDIR}"/${PN}-10.0.0-rocisa-nanobind.patch
 )
@@ -128,9 +104,7 @@ pkg_pretend() {
 }
 
 src_unpack() {
-	# rocm 7.2.4's release-asset tarballs carry their own hipblaslt/ and
-	# origami/ top-level directories (7.2.3's unpacked flat, hence the manual
-	# wrapper dirs previously). Unpack directly so S=/ORIGAMI_S= resolve.
+	# Release assets provide their own top-level directories.
 	unpack "hipblaslt-${PV}.tar.gz"
 	unpack "origami-${PV}.tar.gz"
 	unpack "stinkytofu-${PV}.tar.gz"
@@ -147,7 +121,7 @@ src_prepare() {
 	sed -e "s:\$(ROCM_PATH)/bin/amdclang++:$(get_llvm_prefix)/bin/clang++:g" \
 		-i tensilelite/Makefile || die
 
-	# Fix compiler validation (just a validation)
+	# Make validation accept the selected Clang driver.
 	local f
 	for f in tensilelite/Tensile/Toolchain/Validators.py \
 		tensilelite/Tensile/Tests/unit/test_MatrixInstructionConversion.py; do
@@ -157,42 +131,26 @@ src_prepare() {
 		-i tensilelite/Tensile/Toolchain/Validators.py \
 		-i tensilelite/Tensile/Tests/unit/test_MatrixInstructionConversion.py || die
 
-	# Do not install tests. Silent on no-match -- the build succeeds and the
-	# test binaries are merged into the image.
+	# A missed rewrite silently installs test binaries, so require its anchor.
 	grep -qF 'COMPONENT tests' CMakeLists.txt ||
 		die "COMPONENT tests anchor moved; tests would be installed"
 	sed -e "s/COMPONENT tests/COMPONENT tests EXCLUDE_FROM_ALL/" -i CMakeLists.txt || die
 
-	# Both of these rewrite a monorepo-relative sibling path to where the
-	# co-unpacked release asset actually lands in ${WORKDIR}. `sed` exits 0 on
-	# no-match, and a miss means CMake falls back to a network fetch (origami)
-	# or a hard FATAL_ERROR (stinkytofu), so assert each anchor.
-	# verified 2026-08-29 against therock-10.0.
+	# Redirect monorepo sibling paths to co-unpacked assets. A missed rewrite
+	# fetches origami or fails to find stinkytofu, so require both anchors.
+	# verified 2026-08-29
 	grep -q '\.\./\.\./shared/origami' CMakeLists.txt ||
 		die "origami sibling-path anchor moved"
 	sed -e 's:../../shared/origami:../origami:' -i CMakeLists.txt || die
 
-	# stinkytofu is new at 10.0 and is looked up from tensilelite/rocisa, four
-	# levels up: hipblaslt/tensilelite/rocisa/../../../../shared/stinkytofu.
-	# Our co-unpacked copy sits at ${WORKDIR}/stinkytofu, which from that same
-	# directory is ../../../stinkytofu.
 	grep -q '\.\./\.\./\.\./\.\./shared/stinkytofu' tensilelite/rocisa/CMakeLists.txt ||
 		die "stinkytofu sibling-path anchor moved"
 	sed -e 's:\.\./\.\./\.\./\.\./shared/stinkytofu:../../../stinkytofu:' \
 		-i tensilelite/rocisa/CMakeLists.txt || die
 
-	# Do not build stinkytofu with -Werror. hipBLASLt forces
-	# set(STINKYTOFU_ENABLE_WERROR ON), overriding stinkytofu's own default of
-	# OFF, which is wrong for a distribution build: any warning from a
-	# compiler upstream did not test becomes a hard failure.
-	#
-	# It bites immediately here, and instructively. src/ir/asm/StinkyAsmIR.cpp
-	# declares `auto it = IRList::iterator(insertPt);` and then uses it ONLY
-	# inside an assert(). Because src_configure sets -DNDEBUG to match
-	# upstream's Release build, that assert compiles away, `it` becomes an
-	# unused variable, and -Werror turns the resulting -Wunused-variable into
-	# an error. The two upstream choices are individually defensible and
-	# jointly unbuildable. verified 2026-08-30.
+	# hipBLASLt overrides stinkytofu's default and enables -Werror. With NDEBUG,
+	# an assert-only iterator becomes unused and breaks the build; restore the
+	# subproject default. verified 2026-08-30
 	grep -q 'set(STINKYTOFU_ENABLE_WERROR ON)' tensilelite/rocisa/CMakeLists.txt ||
 		die "STINKYTOFU_ENABLE_WERROR anchor moved"
 	sed -e 's:set(STINKYTOFU_ENABLE_WERROR ON):set(STINKYTOFU_ENABLE_WERROR OFF):' \
@@ -200,9 +158,7 @@ src_prepare() {
 
 	cmake_src_prepare
 
-	# stinkytofu is co-unpacked from its own release asset, so it is built
-	# outside the rocm-libraries monorepo and cannot reach the shared
-	# cmake/modules its unconditional clang-tidy block includes.
+	# Outside the monorepo, stinkytofu cannot reach shared clang-tidy modules.
 	pushd "${STINKYTOFU_S}" || die
 		local PATCHES=(
 			"${FILESDIR}"/stinkytofu-10.0.0-optional-clang-tidy.patch
@@ -219,39 +175,25 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# Build the rocisa codegen extension the way upstream ships it: Release,
-	# with NDEBUG. cmake.eclass defaults to RelWithDebInfo AND blanks
-	# CMAKE_CXX_FLAGS_RELWITHDEBINFO, so the standard -DNDEBUG never lands and
-	# C++ assert()s stay live. TensileLite then aborts partway through
-	# generating the assembly kernels:
-	#
-	#   rocisa/src/pass/macro_inline.cpp:315: void rocisa::expandMacroBody(...):
-	#   Assertion `false && "macroToInstruction: unexpected item type in macro
-	#   body"' failed.  ->  Fatal Python error: Aborted
-	#
-	# Be clear about what this does and does not fix: it makes our build match
-	# AMD's, where CMAKE_BUILD_TYPE=Release compiles that assert away. The
-	# underlying rocisa logic still walks the same path in AMD's own shipped
-	# binaries -- it just does not abort there. So this is a build-config
-	# alignment, NOT a fix for the assert's root cause; if hipBLASLt ever
-	# produces visibly wrong kernels, revisit this rather than assuming the
-	# codegen is sound. sci-libs/composable-kernel carries the same idiom.
-	# verified 2026-08-30 against therock-10.0.
+	# cmake.eclass clears release flags, leaving rocisa assertions active and
+	# aborting macro expansion. Match AMD's NDEBUG Release build; this does not
+	# fix the underlying invariant, so revisit if kernels miscompile.
+	# verified 2026-08-30
 	append-cflags "-DNDEBUG"
 	append-cxxflags "-DNDEBUG"
 	CMAKE_BUILD_TYPE="Release"
 
-	# too many warnings
+	# Silence known ROCm source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
-	# Tensile guesses weirdly how to compile things, ld.bfd won't work, so force lld
+	# Tensile's generated code requires lld.
 	append-cxxflags -DCMAKE_CXX_FLAGS="-fuse-ld=lld"
 
 	local targets="$(get_amdgpu_flags)"
 	local Tensile_SKIP_BUILD=$([ "${AMDGPU_TARGETS[*]}" = "" ] && echo ON || echo OFF )
 	local HIPBLASLT_ENABLE_DEVICE=$([ "${AMDGPU_TARGETS[*]}" != "" ] && echo ON || echo OFF )
 
-	# targets has a trailing semicolon, this trips up Tensile's input parser, so carefully prune
+	# Tensile rejects get_amdgpu_flags' trailing semicolon.
 	local mycmakeargs=(
 		-DGPU_TARGETS="${targets::-1}"
 		-DHIPBLASLT_ENABLE_CLIENT="$(usex benchmark ON $(usex test ON OFF))"
@@ -270,7 +212,6 @@ src_configure() {
 	)
 
 	if use test || use benchmark; then
-		# HIPBLASLT_ENABLE_CLIENT=ON branch
 		mycmakeargs+=(
 			-DBLA_PKGCONFIG_BLAS=ON
 			-DBLA_VENDOR=FlexiBLAS
@@ -283,21 +224,11 @@ src_configure() {
 
 src_compile() {
 	local -x ROCM_PATH="${EPREFIX}/usr"
-	# set PYTHONPATH to load Tensile from virtualenv, not the system-wide one
+	# Load the build's Tensile, not a system copy.
 	local -x PYTHONPATH="${S}_build/virtualenv/lib/${EPYTHON}/site-packages"
-	# TENSILE_ROCM_ASSEMBLER_PATH was exported here through 7.2.4 and is gone:
-	# the vendored TensileLite has zero references to it (checked across
-	# hipblaslt/, origami/ and stinkytofu/ at therock-10.0). It selects its
-	# assembler through Tensile/Toolchain/Validators.py instead, which searches
-	# ROCM_PATH/bin, ROCM_PATH/lib/llvm/bin, /opt/rocm/{bin,lib/llvm/bin} and
-	# then PATH -- so ROCM_PATH above is what actually steers it, and the dead
-	# export only made it look otherwise. verified 2026-08-30.
-	#
-	# CMAKE_CXX_COMPILER, by contrast, IS read from the environment:
-	# Tensile/Common/GlobalParameters.py:869-870 does
-	#     if "CMAKE_CXX_COMPILER" in os.environ:
-	#         globalParameters["CmakeCxxCompiler"] = os.environ.get(...)
-	# so this export is load-bearing, not decoration. verified 2026-08-30.
+	# TensileLite ignores the old TENSILE_ROCM_ASSEMBLER_PATH and follows
+	# ROCM_PATH, but still reads CMAKE_CXX_COMPILER from the environment.
+	# verified 2026-08-30
 	local -x CMAKE_CXX_COMPILER="$(get_llvm_prefix)/bin/clang++"
 	cmake_src_compile
 }
@@ -305,15 +236,13 @@ src_compile() {
 src_install() {
 	cmake_src_install
 
-	# Stop llvm-strip from removing .strtab section from *.hsaco files,
-	# otherwise rocclr/elf/elf.cpp complains with "failed: null sections(STRTAB)" and crashes
+	# Stripping .strtab from HSACO files crashes rocclr's ELF loader.
 	dostrip -x /usr/$(get_libdir)/hipblaslt/library/
 }
 
 src_test() {
 	check_amdgpu
 
-	# Expected time for 7900 XTX: 340s (full) or 5s with GTEST_FILTER='*quick*'
-	# Fails in `MatrixTransformTest.MultipleDevices` in dGPU+iGPU combination
+	# Avoid the known dGPU+iGPU MatrixTransformTest.MultipleDevices failure.
 	HIP_VISIBLE_DEVICES=0 cmake_src_test
 }
