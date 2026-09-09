@@ -5,9 +5,8 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..15} )
 
-# *.bc / *.dll under llvm_zluda/src/device-libs are git-lfs blobs; llvm_zluda's
-# build.rs panics on lfs stubs. GitHub tag tarballs don't carry resolved LFS
-# blobs, so git-r3 + EGIT_LFS=yes is the only viable fetch path even for tags.
+# Device-library binaries use Git LFS; tag archives contain stubs that break
+# llvm_zluda, so even releases require git-r3 with LFS.
 EGIT_LFS=yes
 
 inherit git-r3 python-any-r1
@@ -16,27 +15,22 @@ DESCRIPTION="Drop-in replacement for CUDA on AMD GPUs"
 HOMEPAGE="https://github.com/vosen/ZLUDA"
 
 EGIT_REPO_URI="https://github.com/vosen/ZLUDA.git"
-# Pin to the upstream release tag; bump = rename the .ebuild. The substitution
-# maps PV to the tag: 6 -> v6, 6_pre79 -> v6-preview.79. v6 (2026-06-29) is
-# upstream's first stable release, same commit as the v6-preview.79 tag.
+# Maps to upstream v6, its first stable tag; identical to v6-preview.79.
 EGIT_COMMIT="v${PV/_pre/-preview.}"
 EGIT_SUBMODULES=( '*' )
 
-# Dual-licensed; LLVM submodule (used at build time) is Apache-2.0 with the
-# LLVM linking exception.
+# The bundled LLVM submodule adds its linking-exception license.
 LICENSE="|| ( Apache-2.0 MIT ) Apache-2.0-with-LLVM-exceptions"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# cargo fetches deps at build time and git-r3 pulls submodules + LFS blobs;
-# both need the network. PROPERTIES=live marks the binary non-deterministic
-# between rebuilds despite the tag-pinned source revision.
+# Cargo, submodules, and LFS fetch at build time; generated crate inputs make
+# rebuilds nondeterministic despite the pinned tag.
 PROPERTIES="live"
 RESTRICT="network-sandbox test"
 
-# build deps: no CRATES — fetches crates online, matching upstream's
-# "cargo xtask --release" flow (edition 2024). cmake + python3 + C++ are
-# documented build requirements for the LLVM submodule build.
+# No CRATES list; follow upstream's online edition-2024 xtask build. LLVM needs
+# CMake, Python, and C++.
 BDEPEND="
 	|| ( >=dev-lang/rust-1.85 >=dev-lang/rust-bin-1.85 )
 	>=dev-build/cmake-3.20
@@ -44,20 +38,9 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
-# runtime: AMD ROCm/HIP stack. cdylibs we install link these via ext/*
-# sys-crates (verified 2026-05-28 via ldd against the v6-preview.75 install):
-#   zluda         -> hip_runtime-sys -> libamdhip64 (+ statically-bundled lz4)
-#   zluda_ml      -> rocm_smi-sys    -> librocm_smi64
-#   zluda_blas    -> rocblas-sys     -> librocblas    (+ libamdhip64)
-#   zluda_blaslt  -> hipblaslt-sys   -> libhipblaslt  (+ libamdhip64)
-#   zluda_sparse  -> rocsparse-sys   -> librocsparse
-#   zluda_fft     -> stub, no extra dep
-# LLVM is bundled in-tree via ext/llvm-project since upstream fc204af
-# ("Build and distribute LLVM", #555); libamd_comgr is no longer linked.
-# := on all five: zluda links libamdhip64/librocblas/libhipblaslt/librocsparse
-# directly, so a ROCm subslot bump (7.2 -> 10.0 changes every SONAME) must
-# force a rebuild. Without it the installed binaries silently keep referencing
-# libraries that are no longer there.
+# Installed cdylibs directly link HIP, rocm-smi, rocBLAS, hipBLASLt, and
+# rocSPARSE; := forces rebuilds across ROCm SONAME changes. FFT is a stub, while
+# LZ4 and LLVM are bundled; amd-comgr is no longer linked. verified 2026-05-28
 RDEPEND="
 	dev-util/hip:=
 	dev-util/rocm-smi:=
@@ -68,19 +51,11 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_compile() {
-	# Default xtask invocation per upstream docs/src/building.md: `cargo build
-	# --release` on the workspace default-members (zluda, zluda_ml, zluda_inject,
-	# zluda_redirect, compiler), creating the libnvcuda.so -> libcuda.so{,.1}
-	# symlinks from zluda/Cargo.toml's [package.metadata.zluda].linux_symlinks.
+	# Build default members and their declared Linux CUDA symlinks.
 	cargo xtask --release || die "cargo xtask --release failed"
 
-	# Math-library replacements (cuFFT / cuBLAS / cuBLASLt / cuSPARSE) live
-	# in the workspace but aren't default-members, so xtask skips them. Build
-	# them here so /opt/zluda can satisfy the corresponding libcufft.so.12 /
-	# libcublas.so.12 / etc. lookups when a CUDA app is run with
-	# LD_LIBRARY_PATH=/opt/zluda. Note: there is no zluda_curand crate, so
-	# applications that use cuRAND (e.g. mumax3 with thermal noise) still
-	# fall through to the NVIDIA stub or fail.
+	# xtask omits math replacements; build them explicitly. No cuRAND replacement
+	# exists, so those applications still fall through or fail.
 	local extra_pkgs=( zluda_fft zluda_blas zluda_blaslt zluda_sparse )
 	local p
 	for p in "${extra_pkgs[@]}"; do
@@ -89,23 +64,17 @@ src_compile() {
 }
 
 src_install() {
-	# Install to /opt/zluda (flat layout, matching upstream's prebuilt zip);
-	# users opt in via LD_LIBRARY_PATH per upstream docs/src/quick_start.md.
-	# Dropping libcuda.so into the default search path would shadow
-	# nvidia-drivers' libcuda for any user with both installed.
+	# Keep the upstream flat /opt layout opt-in; a default libcuda would shadow
+	# nvidia-drivers on mixed systems.
 	local zdir="/opt/zluda"
 
 	insinto "${zdir}"
-	# cdylibs built by xtask on Linux. Names follow each crate's [lib].name:
-	#   zluda    -> libnvcuda.so
-	#   zluda_ml -> libnvml.so
-	#   zluda_ld -> libzluda_ld.so
-	# (zluda_inject / zluda_redirect are windows_only, compiler is debug_only.)
+	# Core Linux cdylibs; omit Windows-only and debug-only outputs.
 	doins target/release/libnvcuda.so
 	doins target/release/libnvml.so
 	doins target/release/libzluda_ld.so
 
-	# Symlinks declared in each crate's [package.metadata.zluda].linux_symlinks.
+	# Upstream-declared Linux aliases.
 	dosym libnvcuda.so "${zdir}/libcuda.so"
 	dosym libnvcuda.so "${zdir}/libcuda.so.1"
 	dosym libnvml.so "${zdir}/libnvidia-ml.so"
@@ -113,8 +82,7 @@ src_install() {
 	# LD_AUDIT entry point (extension-less filename per quick_start.md).
 	dosym libzluda_ld.so "${zdir}/zluda_ld"
 
-	# Math-library cdylibs + their versioned-soname symlinks (see each
-	# crate's [package.metadata.zluda].linux_symlinks).
+	# Math cdylibs and upstream-declared SONAME aliases.
 	doins target/release/libcufft.so
 	dosym libcufft.so "${zdir}/libcufft.so.10"
 	dosym libcufft.so "${zdir}/libcufft.so.11"
@@ -125,9 +93,7 @@ src_install() {
 	dosym libcublas.so "${zdir}/libcublas.so.12"
 	dosym libcublas.so "${zdir}/libcublas.so.13"
 
-	# zluda_blaslt's [lib].name = "cublaslt" (lowercase), so the real
-	# cdylib is libcublaslt.so; libcublasLt.so (capital L) is one of the
-	# linux_symlinks pointing at it, matching NVIDIA's filename casing.
+	# Rust emits lowercase libcublaslt; aliases match NVIDIA's capital-L spelling.
 	doins target/release/libcublaslt.so
 	dosym libcublaslt.so "${zdir}/libcublasLt.so"
 	dosym libcublaslt.so "${zdir}/libcublasLt.so.11"
