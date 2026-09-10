@@ -18,9 +18,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# phonemizer-fork is a re-published fork of bootphon/phonemizer to PyPI;
-# the upstream project_urls still point at bootphon's repo. PyPI sdist
-# is the canonical source for the fork.
+# The PyPI sdist is canonical; fork metadata still points to bootphon upstream.
 RDEPEND="
 	${PYTHON_DEPS}
 	app-accessibility/espeak-ng
