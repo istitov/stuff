@@ -22,7 +22,7 @@ KEYWORDS="~amd64 ~arm64"
 
 PATCHES=( "${FILESDIR}/${P}-disable-accelerator-probe.patch" )
 
-# The test suite primarily exercises accelerator kernels.
+# Tests primarily exercise unavailable accelerator kernels.
 RESTRICT="test"
 
 RDEPEND="
@@ -34,7 +34,7 @@ BDEPEND="
 	dev-build/ninja
 "
 
-# Build the portable CPU extension without probing accelerator device nodes.
+# Build the CPU extension without probing accelerator device nodes.
 export CUDA_VISIBLE_DEVICES=""
 export HIP_VISIBLE_DEVICES=""
 export ROCR_VISIBLE_DEVICES=""
