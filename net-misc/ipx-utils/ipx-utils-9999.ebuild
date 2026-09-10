@@ -9,7 +9,7 @@ DESCRIPTION="The IPX Utilities"
 HOMEPAGE="https://github.com/pasis/ipx-utils"
 EGIT_REPO_URI="https://github.com/pasis/${PN}.git"
 
-# GPL-2 only for the init script
+# GPL-2 covers only the init script.
 LICENSE="ipx-utils GPL-2"
 SLOT="0"
 
