@@ -35,7 +35,7 @@ BDEPEND="
 distutils_enable_tests unittest
 
 src_configure() {
-	# otherwise it'll start with -L/usr/lib, sigh
+	# Avoid injecting the unslotted /usr/lib search path.
 	export PYFFTW_INCLUDE_DIR="${EPREFIX}/usr/include"
 	export PYFFTW_LIB_DIR="${EPREFIX}/usr/$(get_libdir)"
 }
