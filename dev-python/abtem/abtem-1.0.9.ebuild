@@ -40,7 +40,7 @@ RDEPEND="
 	dev-python/tqdm[${PYTHON_USEDEP}]
 	dev-python/zarr[${PYTHON_USEDEP}]
 "
-DEPEND="${RDEPEND}
+BDEPEND="
 	test? (
 		dev-python/deepdiff[${PYTHON_USEDEP}]
 		dev-python/hypothesis[${PYTHON_USEDEP}]
