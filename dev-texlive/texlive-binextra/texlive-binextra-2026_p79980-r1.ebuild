@@ -210,8 +210,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	texplate.source.r71963
 	tlcockpit.source.r54857
 "
-# Removed in target tlpdb: texdef.source
-
 inherit texlive-module
 
 DESCRIPTION="TeXLive TeX auxiliary programs"
