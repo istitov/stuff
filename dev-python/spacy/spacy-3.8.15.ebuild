@@ -23,8 +23,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Pinned to 3.8.x: this is the version-line that solves against
-# thinc 8.3.x. spacy 3.9+ might want thinc 9.x; revisit when bumping.
+# spaCy 3.8 requires Thinc 8.3; revisit for spaCy 3.9/Thinc 9.
 RDEPEND="
 	${PYTHON_DEPS}
 	>=dev-python/spacy-legacy-3.0.11[${PYTHON_USEDEP}]
