@@ -9,17 +9,11 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="FabIO is an I/O library for images produced by 2D X-ray detectors"
 HOMEPAGE="https://github.com/silx-kit/fabio"
-#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="MIT"
 SLOT="0"
-# x86 retained here as the fallback: 2025.10.0 added a hard
-# dev-python/hdf5plugin dep, which is not keyworded ~x86 in
-# ::gentoo, so the newer version cannot solve on x86. pkgcheck
-# DroppedKeywords on the bump is therefore informational and
-# expected; do not "fix" by chasing parity.
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
