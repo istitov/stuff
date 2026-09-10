@@ -24,22 +24,17 @@ RDEPEND="
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
 	dev-python/regex[${PYTHON_USEDEP}]
 "
-# meson.build resolves bison/flex via find_program() and generates the
-# parser at build time, so the v2 hand-rolled grammar/lexer rebuild dance
-# is gone — these are pure build tools now.
+# Meson generates the parser at build time, so bison and flex are build-only.
 BDEPEND="
 	>=sys-devel/bison-3.8.0
 	>=sys-devel/flex-2.6.4
 "
 
-# The suite uses only stock pytest + unittest (self.subTest is built-in,
-# not pytest-subtests), so load no third-party plugins.
+# Load no third-party pytest plugins.
 EPYTEST_PLUGINS=()
 
 EPYTEST_DESELECT=(
-	# Both call find_repository_root() to locate the top-level examples/
-	# ledgers, which live in the source tree only — not installed as part
-	# of the Python package, so they cannot pass against the install tree.
+	# These require source-only example ledgers and fail against the install tree.
 	projects/export_test.py::TestExport::test_export_basic
 	scripts/check_examples_test.py::TestCheckExamples::test_example_files
 )
@@ -47,9 +42,7 @@ EPYTEST_DESELECT=(
 distutils_enable_tests pytest
 
 python_test() {
-	# Run against the installed copy from an empty dir: the C _parser
-	# extension is built into the meson install tree, not in-place in
-	# ${S}, so collecting tests from the source tree fails to import it.
+	# Run from an empty directory so pytest imports the installed C extension.
 	cd "${T}" || die
 	epytest --pyargs beancount
 }
