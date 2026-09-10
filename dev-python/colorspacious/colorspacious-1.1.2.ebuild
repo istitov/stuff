@@ -30,13 +30,6 @@ BDEPEND="${RDEPEND}
 
 PATCHES=( "${FILESDIR}"/${P}-fix-deprecated-confpy.patch )
 
-#distutils_enable_tests nose
-# FileNotFoundError: [Errno 2] No such file or directory: '_static/colorspacious-graph.dot'
-#distutils_enable_sphinx doc dev-python/sphinxcontrib-bibtex \
-#	dev-python/sphinx-rtd-theme \
-#	dev-python/ipython \
-#	dev-python/matplotlib
-
 python_compile_all() {
 	if use doc; then
 		VARTEXFONTS="${T}"/fonts MPLCONFIGDIR="${T}" PYTHONPATH="${BUILD_DIR}"/lib \
@@ -44,7 +37,3 @@ python_compile_all() {
 		HTML_DOCS=( doc/_build/html/. )
 	fi
 }
-
-#python_test() {
-#	nosetests -v --all-modules || die "Tests fail with ${EPYTHON}"
-#}
