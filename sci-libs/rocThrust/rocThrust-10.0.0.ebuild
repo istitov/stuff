@@ -14,9 +14,8 @@ SRC_URI="
 	${MY_URI}/rocthrust.tar.gz -> rocthrust-${PV}.tar.gz
 	test? ( https://www.sqlite.org/2023/sqlite-amalgamation-3430200.zip )
 "
-# ROCm/rocThrust was FOLDED INTO the rocm-libraries monorepo for 10.0: the
-# standalone repo has no therock-* tags at all, so the git-archive form is
-# gone and S= follows the release asset's own root. verified 2026-08-30.
+# ROCm 10 ships rocThrust as a rocm-libraries component asset; its archive
+# root is rocthrust. verified 2026-08-30
 S="${WORKDIR}/rocthrust"
 
 LICENSE="Apache-2.0"
@@ -50,8 +49,7 @@ PATCHES=(
 )
 
 src_prepare() {
-	# `sed` exits 0 on no-match, so a stale anchor here would silently install
-	# the CMake package config under /usr/lib on a multilib profile.
+	# Guard the multilib libdir rewrite because sed succeeds on a stale anchor.
 	grep -qF 'set(ROCM_INSTALL_LIBDIR lib)' cmake/ROCMExportTargetsHeaderOnly.cmake ||
 		die 'ROCM_INSTALL_LIBDIR anchor moved in cmake/ROCMExportTargetsHeaderOnly.cmake'
 	sed -e "s:set(ROCM_INSTALL_LIBDIR lib):set(ROCM_INSTALL_LIBDIR $(get_libdir)):" \
@@ -83,6 +81,6 @@ src_configure() {
 
 src_test() {
 	check_amdgpu
-	# uses HMM to fit tests to default <512M iGPU VRAM
+	# HMM lets tests fit the default sub-512 MiB iGPU VRAM limit.
 	ROCTHRUST_USE_HMM="1" cmake_src_test -j1
 }
