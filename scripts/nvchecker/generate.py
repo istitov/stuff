@@ -989,8 +989,9 @@ SKIP_PKGS: dict[str, str] = {
     "dev-python/triton":                   _TRITON_TRACKS_TORCH,
     "dev-python/triton-bin":               _TRITON_TRACKS_TORCH,
     # Snapshots ahead of upstream's only tag.
-    "sci-ml/bigcode-eval":                 "we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind",
-    "dev-python/diff-gaussian-rasterization": _TRELLIS_SNAPSHOT,
+	"sci-ml/bigcode-eval":                 "we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind",
+	"media-plugins/deadbeef-fb":            "we track a 2023 main snapshot; upstream's newest release tag is 20160216",
+	"dev-python/diff-gaussian-rasterization": _TRELLIS_SNAPSHOT,
     "dev-python/diffoctreerast":           _TRELLIS_SNAPSHOT,
     "dev-python/vox2seq":                  _TRELLIS_SNAPSHOT,
     "dev-python/utils3d":                  _TRELLIS_SNAPSHOT,

@@ -2731,13 +2731,7 @@ github = "fmaclen/hollama"
 use_max_tag = true
 prefix = ""
 
-# --- gitlab (4) ---
-
-["media-plugins/deadbeef-fb"]
-source = "gitlab"
-gitlab = "zykure/deadbeef-fb"
-use_max_tag = true
-prefix = "v"
+# --- gitlab (3) ---
 
 ["sci-libs/libformfactor"]
 source = "gitlab"
@@ -3094,6 +3088,7 @@ prefix = "v"
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/comfyui-if-trellis"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["media-plugins/deadbeef-fb"] skipped: we track a 2023 main snapshot; upstream's newest release tag is 20160216
 # ["media-sound/deadbeef"] skipped: sourceforge/deadbeef — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-libs/amd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/camd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
