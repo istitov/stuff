@@ -22,17 +22,10 @@ KEYWORDS="~amd64 ~arm64"
 # Tests require network access and many optional backends.
 RESTRICT="test"
 
-# Upstream still requires deprecated httpx<1; httpx2 is not compatible.
-# verified 2026-09-10
-#
-# Portage cannot express fsspec[http] because fsspec exposes aiohttp only as an
-# optfeature; depend on aiohttp directly for a working HTTP backend.
-#
-# The relaxed dill, multiprocess, and fsspec ceilings now admit Gentoo's
-# available versions. datasets-4.3.0 still needs overlay fsspec-2025.9.0.
-# verified 2026-09-10
-#
-# -r9999 admits Gentoo revisions of upstream's maximum fsspec version.
+# Upstream still needs deprecated httpx<1; httpx2 is incompatible.
+# Depend on aiohttp because Portage cannot express fsspec's HTTP optfeature.
+# Relaxed dill/multiprocess/fsspec caps admit tree versions; -r9999 includes
+# Gentoo revisions of the fsspec maximum. verified 2026-09-10
 RDEPEND="
 	>=sci-ml/huggingface_hub-0.25.0[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/huggingface_hub-2[${PYTHON_SINGLE_USEDEP}]
