@@ -14,6 +14,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
+# Test configuration exits during collection.
 RESTRICT="test"
 
 RDEPEND="media-video/ffmpeg:="
@@ -22,7 +23,3 @@ BDEPEND="
 	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-77[${PYTHON_USEDEP}]
 "
-
-#distutils_enable_tests setup.py
-# The configuration file (or one of the modules it imports) called sys.exit()
-# distutils_enable_sphinx docs
