@@ -28,7 +28,6 @@ S="${WORKDIR}"
 LICENSE="NVIDIA-CUDA"
 
 SLOT="0/${PV}" # UNSLOTTED
-# SLOT="${PV}" # SLOTTED
 
 KEYWORDS="-* ~amd64 ~arm64"
 IUSE="debugger examples profiler rdma sanitizer"
@@ -36,8 +35,7 @@ RESTRICT="bindist mirror strip test"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# since CUDA 11, the bundled toolkit driver (== ${DRIVER_PV}) and the
-# actual required minimum driver version are different.
+# Since CUDA 11, the bundled and minimum required driver versions differ.
 RDEPEND="
 	|| (
 		<sys-devel/gcc-$(( GCC_MAX_VER + 1 ))_pre[cxx]
@@ -59,7 +57,6 @@ BDEPEND="
 	')
 "
 
-# CUDA_PATH="/opt/cuda-${PV}" #950207
 CUDA_PATH="/opt/cuda"
 QA_PREBUILT="${CUDA_PATH#/}/*"
 
@@ -91,10 +88,9 @@ cuda_verify() {
 		fi
 	fi
 
-	# rest only works in with unpacked sources
+	# Remaining checks require unpacked sources.
 	[[ "${EBUILD_PHASE}" != prepare ]] && return
 
-	# run self checks
 	local compiler_versions GCC_HAS_VER CLANG_HAS_VER
 	compiler_versions="$(
 		grep -oP "unsupported (GNU|clang) version.*(gcc versions later than|clang version must be less than) [0-9]*" \
@@ -119,7 +115,7 @@ pkg_pretend() {
 pkg_setup() {
 	cuda-toolkit_check_reqs
 
-	# we need python for manifest parsing and to determine the supported python versions for cuda-gdb
+	# Parse manifests and select supported cuda-gdb Python implementations.
 	python_setup
 
 	if use amd64; then
@@ -249,14 +245,14 @@ src_install() {
 	chmod -x "${fix_executable_bit[@]}" || die "failed chmod"
 	popd >/dev/null || die
 
-	ebegin "parsing manifest" "${S}/manifests/cuda_"*.xml # {{{
+	ebegin "parsing manifest" "${S}/manifests/cuda_"*.xml
 
 	"${EPYTHON}" "${FILESDIR}/parse_manifest.py" "${S}/manifests/cuda_"*".xml" &> "${T}/install.sh" \
 		|| die "failed to parse manifest"
 	# shellcheck disable=SC1091
 	source "${T}/install.sh" || die "failed  to source install script"
 
-	eend $? # }}}
+	eend $?
 
 	if use debugger; then
 		if [[ -d "${ED}/${CUDA_PATH}/extras/Debugger/lib64" ]]; then
@@ -273,22 +269,18 @@ src_install() {
 		done
 	fi
 
-	# remove rdma libs (unless USE=rdma)
 	if ! use rdma; then
 		rm "${ED}/${CUDA_PATH}/targets/${narch}-linux/lib/libcufile_rdma"* || die "failed to remove rdma files"
 	fi
 
-	# CUDA 13.0.3 added the cuda_crt component which drops its headers
-	# at /opt/cuda/include/crt/ (arch-independent). Fold them into the
-	# per-arch include tree so the /opt/cuda/include -> targets/.../include
-	# symlink below remains the canonical entry point.
+	# Fold cuda_crt headers into the target tree so /opt/cuda/include remains
+	# the canonical entry point.
 	if [[ -d "${ED}/${CUDA_PATH}/include/crt" ]]; then
 		mv "${ED}/${CUDA_PATH}/include/crt" \
 			"${ED}/${CUDA_PATH}/targets/${narch}-linux/include/" || die
 		rmdir "${ED}/${CUDA_PATH}/include" || die
 	fi
 
-	# Add include and lib symlinks
 	dosym "targets/${narch}-linux/include" "${CUDA_PATH}/include"
 	dosym "targets/${narch}-linux/lib" "${CUDA_PATH}/lib64"
 
@@ -306,20 +298,19 @@ src_install() {
 		LDPATH=${EPREFIX}${CUDA_PATH}/lib64:${EPREFIX}${CUDA_PATH}/nvvm/lib64${ldpathextradirs}
 	EOF
 
-	# CUDA prepackages libraries, don't revdep-build on them
+	# Prebuilt libraries should not trigger revdep-rebuild.
 	insinto /etc/revdep-rebuild
 	newins - "80${PN}${revord}" <<-EOF
 		SEARCH_DIRS_MASK="${EPREFIX}${CUDA_PATH}"
 	EOF
 
-	# https://bugs.gentoo.org/926116
+	# Permit CUDA thread probes (bug #926116).
 	insinto /etc/sandbox.d
 	newins - "80${PN}" <<-EOF
 		SANDBOX_PREDICT="/proc/self/task"
 	EOF
 
-	# TODO drop and replace with runtime detection similar to what python does {{{
-	# ATTENTION: change requires revbump, see link below for supported GCC # versions
+	# Keep aligned with toolkit-supported GCC versions; changes require a revbump.
 	# https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements
 	local cuda_supported_gcc=( 8.5 9.5 10 11 12 13 14 "${GCC_MAX_VER}" )
 
@@ -327,13 +318,6 @@ src_install() {
 		-e "s:CUDA_SUPPORTED_GCC:${cuda_supported_gcc[*]}:g" \
 		"${FILESDIR}"/cuda-config.in > "${ED}/${CUDA_PATH}/bin/cuda-config" || die
 	fperms +x "${CUDA_PATH}/bin/cuda-config"
-	# }}}
-
-	# skip til cudnn has been changed #950207
-	# if [[ "${SLOT}" != "${PV}" ]]; then
-	# 	dosym "${CUDA_PATH}" "${CUDA_PATH%"-${PV}"}"
-	# fi
-
 	fowners -R root:root "${CUDA_PATH}"
 }
 
