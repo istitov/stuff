@@ -29,17 +29,25 @@ KEYWORDS="~amd64 ~arm64"
 # `lightning.*` umbrella import path, so we deliberately omit it. Users
 # needing `import pytorch_lightning` can pip-install it separately.
 RDEPEND="
-	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
-	>=sci-ml/torchmetrics-0.7.1[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/pytorch-2.1[${PYTHON_SINGLE_USEDEP}]
+	<sci-ml/pytorch-4[${PYTHON_SINGLE_USEDEP}]
+	>sci-ml/torchmetrics-0.7.0-r0[${PYTHON_SINGLE_USEDEP}]
+	<sci-ml/torchmetrics-3[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
-		>=dev-python/pyyaml-5.4[${PYTHON_USEDEP}]
+		>dev-python/pyyaml-5.4-r0[${PYTHON_USEDEP}]
+		<dev-python/pyyaml-8[${PYTHON_USEDEP}]
 		>=dev-python/fsspec-2022.5.0[${PYTHON_USEDEP}]
+		<dev-python/fsspec-2028[${PYTHON_USEDEP}]
 		dev-python/aiohttp[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 		>=sci-ml/lightning-utilities-0.10.0[${PYTHON_USEDEP}]
+		<sci-ml/lightning-utilities-2[${PYTHON_USEDEP}]
 		>=dev-python/packaging-23.0[${PYTHON_USEDEP}]
+		<dev-python/packaging-27[${PYTHON_USEDEP}]
 		>=dev-python/tqdm-4.57.0[${PYTHON_USEDEP}]
-		>=dev-python/typing-extensions-4.5.0[${PYTHON_USEDEP}]
+		<dev-python/tqdm-6[${PYTHON_USEDEP}]
+		>dev-python/typing-extensions-4.5.0-r0[${PYTHON_USEDEP}]
+		<dev-python/typing-extensions-6[${PYTHON_USEDEP}]
 	')
 "
 
