@@ -71,7 +71,7 @@ BDEPEND="
 	>=app-eselect/eselect-wxwidgets-20131230
 	virtual/pkgconfig"
 
-# gst-plugins-base is detected but apparently not linked; keep the dependency.
+# Configure probes gst-plugins-base without linking it; retain the dependency.
 # Wayland is an automagic GLCanvas header dep and does not replace X for GUI builds.
 
 # wxWidgets 3.3 has native test and Wayland configure switches, superseding
@@ -136,7 +136,7 @@ multilib_src_configure() {
 		$(use_enable spell spellcheck)
 		$(use_enable test tests)
 
-		# Native in 3.3; replaces the 3.2 cppflag hack and control patch.
+		# Native since 3.3; replaces the old cppflag and control patch.
 		$(use_with wayland)
 	)
 
