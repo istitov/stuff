@@ -20,5 +20,5 @@ KEYWORDS="~amd64 ~arm64"
 
 BDEPEND=">=dev-python/setuptools-77.0[${PYTHON_USEDEP}]"
 
-# Upstream does not declare the test runner in project metadata.
+# Tests require an undeclared runner.
 RESTRICT="test"
