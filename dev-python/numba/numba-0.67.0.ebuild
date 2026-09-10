@@ -20,9 +20,8 @@ KEYWORDS="~amd64 ~arm64"
 IUSE+=" openmp threads"
 RESTRICT="bindist mirror"
 
-# setup.py imports NumPy to obtain headers, and requires NumPy >=2.0.0rc1
-# while retaining compatibility with NumPy >=1.22 at runtime. numba 0.67.0
-# raises the NumPy run cap to 2.6 (max_numpy_run_version). # verified 2026-08-11
+# Building imports NumPy >=2; runtime supports NumPy >=1.22,<2.7.
+# The 2.6 runtime cap was verified 2026-08-11.
 DEPEND+="
 	>=dev-python/numpy-2.0.0[${PYTHON_USEDEP}]
 	<dev-python/numpy-2.7[${PYTHON_USEDEP}]
