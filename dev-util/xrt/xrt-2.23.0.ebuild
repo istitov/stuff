@@ -9,9 +9,8 @@ inherit shell-completion cmake python-any-r1
 DESCRIPTION="Runtime for AIE and FPGA based platforms"
 HOMEPAGE="https://github.com/Xilinx/XRT"
 
-# Official releases use the date-prefixed tag scheme YYYYMM.2.XX.YYY[_name]
-# (this is the 2026.1 "Canonical" release == version 2.23.0); the plain
-# 2.YY.ZZ point tags (e.g. 2.21.75) are a separate NPU-aligned stream.
+# Canonical releases use date-prefixed tags; plain point tags are a separate
+# NPU-aligned stream.
 MY_TAG="202610.2.23.0_Canonical"
 
 if [[ ${PV} == 999999 ]] ; then
@@ -110,13 +109,12 @@ src_prepare() {
 
 	sed -e 's/-Werror//' -i src/runtime_src/core/common/aiebu/cmake/linux.cmake || die
 
-	# Enable <CL/cl_icd.h> instead of <ocl_icd.h>
+	# Use the system OpenCL ICD header.
 	sed -e "/OPENCL_ICD_LOADER/c #if 1" \
 		-i src/runtime_src/xocl/api/icd/ocl_icd_bindings.h \
 		-i src/runtime_src/xocl/api/icd/ocl_icd_bindings.cpp || die
 
-	# template for isa.h is damaged in git, skip regeneration
-	# Bug: https://github.com/Xilinx/aiebu/issues/144
+	# Keep the shipped isa.h; its Git template is damaged (aiebu issue 144).
 	sed -e '/BYPRODUCTS .*isa\.h/d' \
 		-i src/runtime_src/core/common/aiebu/specification/aie2ps/CMakeLists.txt || die
 
@@ -139,11 +137,8 @@ src_configure() {
 		-DSPEC_TOOL_DEPS_DOWNLOADED=ON
 		-DXRT_ENABLE_WERROR=OFF
 		-DXRT_NPU=ON
-		# 2.23 added an unconditional add_subdirectory(xdp); we vendor only
-		# the minimal NPU submodule set (aie-rt/aiebu/elf), so the xdp
-		# (profiling) placeholder dir has no CMakeLists. Exclude it via XRT's
-		# own subset-build mechanism rather than vendoring the submodule.
-		# verified 2026-06-21.
+		# Exclude unvendored XDP through XRT's subset-build mechanism.
+		# verified 2026-06-21
 		-DXRT_EXCLUDE_SUB_DIRECTORY=src/runtime_src/xdp
 		-Wno-dev
 	)
