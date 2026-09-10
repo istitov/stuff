@@ -70,18 +70,15 @@ python_check_deps() {
 }
 
 src_prepare() {
-	# If BUILD_WITH_ROCBLAS is ON, make rocblas required (with any version)
-	# Bug: https://github.com/ROCm/rocm-libraries/issues/2074
+	# Require rocBLAS when enabled (ROCm issue 2074).
 	sed -e "/find_package(rocblas / s/ 4.1.0 QUIET/ REQUIRED/" -i CMakeLists.txt || die
 
 	cmake_src_prepare
 
-	# Test need download data from https://sparse-files.engr.tamu.edu (or other mirror site), check MD5,
-	# unpack and convert them into csr format
-	# This process is handled default by ${S}/cmake/ClientMatrices.cmake, but should be the responsibility of portage.
+	# Convert Portage-fetched test matrices instead of using CMake downloads.
 	if use test; then
 		mkdir -p "${BUILD_DIR}"/clients/matrices
-		# compile and use the mtx2csr converter. Do not use any optimization flags, because it causes error!
+		# Optimization breaks the mtx2csr converter.
 		edo $(tc-getCXX) deps/convert.cpp -o deps/convert
 		find "${WORKDIR}" -maxdepth 2 -regextype egrep -regex ".*/(.*)/\1\.mtx" -print0 |
 			while IFS= read -r -d '' mtxfile; do
@@ -96,7 +93,7 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# tons of warnings in tests
+	# Silence known ROCm test noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
 	local mycmakeargs=(
