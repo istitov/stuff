@@ -20,8 +20,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# scipy is undeclared in upstream pyproject.toml but imported at module
-# top level by utils/{distance,cluster,hierarchy}.py — verified 2026-05-16.
+# scipy is absent from pyproject but imported at module load by utils.
+# Verified 2026-05-16.
 RDEPEND="
 	>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
 	>=dev-python/pandas-2.2.3[${PYTHON_USEDEP}]
@@ -29,5 +29,5 @@ RDEPEND="
 	>=dev-python/sortedcontainers-2.4.0[${PYTHON_USEDEP}]
 "
 
-# Tests rely on matplotlib + scaffolding not wired up here.
+# Tests require matplotlib and additional scaffolding.
 RESTRICT="test"
