@@ -21,7 +21,8 @@ SRC_URI="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-RESTRICT="test"	# Upstream test suite is flaky / network-dependent.
+# Tests are flaky and network-dependent.
+RESTRICT="test"
 
 RDEPEND="
 	>=dev-python/click-8.0[${PYTHON_USEDEP}]
