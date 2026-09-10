@@ -712,9 +712,7 @@ LICENSE+="
 SLOT="0"
 KEYWORDS="-* ~amd64"
 
-PROPERTIES="live"
-# cargo.eclass exports src_test (cargo_src_test); the workspace's tests want a
-# display/network, so keep them off like the base unsloth and unsloth[studio].
+# npm ci fetches integrity-pinned frontend deps; tests need display/network.
 RESTRICT="network-sandbox test"
 
 DEPEND="
