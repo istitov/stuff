@@ -14,10 +14,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 
-# Upstream links -lopusfile -lopus -logg -lm, plus -lopusurl -lssl -lcrypto
-# because USE_OPUSURL defaults to true and we do not override it, so opus.so
-# has a direct DT_NEEDED on libopus and libssl/libcrypto. Both currently
-# arrive through opusfile[http], which is not ours to depend on.
+# Default USE_OPUSURL gives direct dependencies on opus, OpenSSL, and opusurl.
+# Declare the first two instead of relying on opusfile[http] transitively.
 # verified 2026-07-27
 DEPEND_COMMON="
 	media-sound/deadbeef
@@ -29,11 +27,8 @@ DEPEND_COMMON="
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
-#QA_PRESTRIPPED="usr/$(get_libdir)/deadbeef/opus.so"
-
 src_prepare(){
-	# Upstream hardcodes an -I into /usr/local, which must not leak into a
-	# sandboxed build.
+	# Remove the forbidden /usr/local include path.
 	sed -e 's|-I/usr/local/include/opus||' -i Makefile || die
 
 	if use x86;then
