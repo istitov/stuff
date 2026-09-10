@@ -99,21 +99,10 @@ CPU_FEATURES_MAP=(
 	cpu_flags_arm_neon:NEON
 	cpu_flags_arm_vfpv3:VFPV3
 
-	# cpu_flags_arm_fp:FP16
-
 	cpu_flags_arm_asimddp:NEON_DOTPROD
-	# cpu_flags_arm_neon_fp16:NEON_FP16
-	# cpu_flags_arm_neon_bf16:NEON_BF16
-
-	# cpu_flags_loong_lsx:LSX
-	# cpu_flags_loong_lasx:LASX
-
-	# cpu_flags_mips_msa:MSA
 
 	cpu_flags_ppc_vsx:VSX   # (always available on Power8)
 	cpu_flags_ppc_vsx3:VSX3 # (always available on Power9)
-
-	# cpu_flags_riscv_rvv:RVV
 
 	cpu_flags_x86_sse:SSE   # (always available on 64-bit CPUs)
 	cpu_flags_x86_sse2:SSE2 # (always available on 64-bit CPUs)
@@ -186,8 +175,6 @@ REQUIRED_USE="
 	wayland? ( !vtk )
 	wechat-qrcode? ( contribdnn )
 "
-# 	?? ( gtk3 qt6 wayland )
-
 RESTRICT="!test? ( test )"
 
 # Rebuild for flatbuffers subslot changes despite its header-only API.
@@ -713,7 +700,7 @@ multilib_src_configure() {
 		-DWITH_FFMPEG="$(usex ffmpeg)"
 		-DWITH_GSTREAMER="$(usex gstreamer)"
 		-DWITH_GTK="$(usex gtk3)"
-		-DWITH_GTK_2_X="no" # only want gtk3 nowadays
+		-DWITH_GTK_2_X="no" # GTK 3 only.
 		-DWITH_IMGCODEC_GIF="$(usex gif)"
 		-DWITH_IPP="no"
 		-DWITH_JULIA="no"
@@ -744,7 +731,7 @@ multilib_src_configure() {
 		-DWITH_XINE="$(multilib_native_usex xine)"
 		-DWITH_CLP="no"
 		-DWITH_OPENCL="$(usex opencl)"
-		-DWITH_OPENCL_SVM="no" # "$(usex opencl)"
+		-DWITH_OPENCL_SVM="no"
 		-DWITH_DIRECTX="no"
 		-DWITH_INTELPERC="no"
 		-DWITH_IPP_A="no"
@@ -773,7 +760,7 @@ multilib_src_configure() {
 		-DBUILD_JAVA="$(multilib_native_usex java)" # Ant needed, no compile flag
 		-DBUILD_ANDROID_EXAMPLES="no"
 		-DBUILD_opencv_apps="$(usex opencvapps)"
-		-DBUILD_DOCS="$(usex doc)" # Doesn't install anyways.
+		-DBUILD_DOCS="$(usex doc)" # Built but not installed.
 		-DBUILD_EXAMPLES="$(multilib_native_usex examples)"
 		-DBUILD_TESTS="$(multilib_native_usex test "yes" "$(multilib_native_usex testprograms)")"
 		-DBUILD_PERF_TESTS="no"
@@ -789,7 +776,7 @@ multilib_src_configure() {
 		-DINSTALL_TESTS="$(multilib_native_usex testprograms)"
 		-DINSTALL_TO_MANGLED_PATHS="no"
 		-DOPENCV_GENERATE_PKGCONFIG="yes"
-		# opencv uses both ${CMAKE_INSTALL_LIBDIR} and ${LIB_SUFFIX}
+		# OpenCV uses both ${CMAKE_INSTALL_LIBDIR} and ${LIB_SUFFIX}
 		# to set its destination libdir
 		-DLIB_SUFFIX=
 	# Build behavior
@@ -1142,7 +1129,7 @@ multilib_src_compile() {
 	fi
 }
 
-# from firefox/thunderbird
+# Adapted from firefox/thunderbird ebuilds.
 virtwl() {
 	debug-print-function "${FUNCNAME[*]}" "$@"
 
