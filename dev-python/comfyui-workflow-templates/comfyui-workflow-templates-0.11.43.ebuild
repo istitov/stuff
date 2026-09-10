@@ -23,8 +23,7 @@ BDEPEND="$(python_gen_cond_dep '
 	>=dev-python/setuptools-61[${PYTHON_USEDEP}]
 ')"
 
-# Upstream requires_dist pins each split to an exact version; ~ atoms track
-# that == pin (any revision). Single-impl propagation via PYTHON_SINGLE_USEDEP.
+# Match upstream's exact split-package pins while allowing Gentoo revisions.
 RDEPEND="
 	~dev-python/comfyui-workflow-templates-core-0.3.314[${PYTHON_SINGLE_USEDEP}]
 	~dev-python/comfyui-workflow-templates-json-0.1.49[${PYTHON_SINGLE_USEDEP}]
