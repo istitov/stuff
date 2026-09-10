@@ -10,10 +10,8 @@ HOMEPAGE="
 	https://github.com/mostlygeek/llama-swap
 "
 
-# Vendored upstream source bundle hosted on extra-stuff to keep the
-# Go module set network-sandbox-friendly. Bundle filename has no
-# revision; the tag carries -rN-N (extra-stuff convention) and the
-# rename suffix matches.
+# extra-stuff vendors the Go module set for network-sandboxed builds; its tag,
+# not the bundle filename, carries the revision.
 MY_EXTRA_TAG="${PN}-${PV}-r0-0"
 MY_EXTRA_PATH="sci-misc/${PN}/${PN}-${PV}.tar.xz"
 MY_EXTRA_DISTFILE="${MY_EXTRA_TAG}.tar.xz"
@@ -33,30 +31,20 @@ BDEPEND="
 	ui? ( net-libs/nodejs[npm] )
 "
 
-# Svelte UI is fetched from the npm registry via `npm install` when
-# USE=ui is set; can't be pre-vendored sanely (npm dep set is huge
-# and re-resolves on every upstream UI bump). Mirrors how
-# sci-misc/llama-cpp provisions its own webui at configure time.
+# USE=ui fetches the large, bump-sensitive Svelte dependency set from npm,
+# matching sci-misc/llama-cpp's web UI model.
 PROPERTIES="ui? ( live )"
 RESTRICT="ui? ( network-sandbox )"
 
 src_compile() {
-	# 251 renamed ui-svelte -> ui and moved the vite output to
-	# internal/server/ui_dist (ui/vite.config.ts). internal/server/embed.go
-	# embeds it only under the `embed_ui` build tag; without that tag,
-	# embed_notag.go supplies the no-UI implementation, so USE=-ui needs no
-	# stub (unlike 250, which always-embedded proxy/ui_dist). Re-checked at
-	# 255: ui/ and its package-lock are still there, vite still writes to
-	# ../internal/server/ui_dist, the embed_ui/!embed_ui pair is unchanged,
-	# and main.version still exists for the -X ldflag to land on (it is
-	# llama-swap.go:37 in a `package main`, not a cmd/ subdir).
-	# verified 2026-09-06
+	# Since 251, embed_ui controls Vite output in internal/server/ui_dist;
+	# !embed_ui supplies the no-UI implementation. At 255 the lockfile, output,
+	# tag pair, and main.version ldflag target remain valid. # verified 2026-09-06
 	local build_tags=()
 	if use ui; then
 		pushd ui > /dev/null || die
-		# `npm ci` needs the committed package-lock (upstream ships it);
-		# fall back to `npm install` if the lock and package.json drift.
-		npm ci --no-audit --no-fund || die "npm install failed"
+		# npm ci requires upstream's committed lockfile.
+		npm ci --no-audit --no-fund || die "npm ci failed"
 		npm run build || die "vite build failed"
 		popd > /dev/null || die
 		build_tags=( -tags embed_ui )
@@ -71,10 +59,8 @@ src_install() {
 	dobin "${PN}"
 
 	insinto /usr/share/${PN}
-	# Upstream keeps only a one-line "moved to docs/" pointer at the source
-	# root; the real ~770-line reference config lives under docs/. Installing
-	# the root file shipped a 37-byte comment as the example that
-	# pkg_postinst tells users to copy. # verified 2026-09-09
+	# The root file is only a pointer; install the real reference config.
+	# verified 2026-09-09
 	doins docs/config.example.yaml
 
 	if use openrc; then
