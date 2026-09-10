@@ -16,10 +16,8 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/ROCm/rocm-systems.git"
 	S="${WORKDIR}/${P}/projects/rocm-smi-lib"
 else
-	# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-	# per-component assets ship under therock-<major.minor> tags now. ROCm 10.0
-	# is the renumbering of the 7.13 -> 7.14 line (2026-08-27), not a jump of
-	# three majors. Only the tag changes; the asset name carries no version.
+	# Post-7.2.4 component assets use therock-* tags; ROCm 10 renumbers the
+	# 7.13/7.14 line. The asset itself remains unversioned.
 	SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/rocm-smi-lib.tar.gz -> rocm-smi-${PV}.tar.gz"
 	KEYWORDS="~amd64"
 	S="${WORKDIR}/rocm-smi-lib"
@@ -35,16 +33,8 @@ DEPEND="${RDEPEND}
 	x11-libs/libdrm[video_cards_amdgpu]
 "
 
-# ${PN}-5.7.1-no-strip.patch is obsolete at 10.0: upstream removed the
-# POST_BUILD ${CMAKE_STRIP} custom commands entirely (zero occurrences of
-# CMAKE_STRIP in the whole archive), so portage's own stripping is unopposed.
-#
-# remove-example is NOT obsolete and is regenerated below. The example target
-# survives at 10.0 -- rocm_smi/CMakeLists.txt still builds
-# rocm_smi/example/rocm_smi_example.cc -- only the surrounding context moved.
-# (An earlier revision of this ebuild wrongly dropped it after checking for an
-# example/ directory at the archive root instead of under rocm_smi/.)
-# verified 2026-08-30.
+# The unwanted example target remains under rocm_smi/, despite its absence at
+# the archive root. # verified 2026-08-30
 PATCHES=(
 	"${FILESDIR}"/${PN}-10.0.0-remove-example.patch
 )
@@ -54,15 +44,8 @@ CONFIG_CHECK="~HSA_AMD ~DRM_AMDGPU"
 src_prepare() {
 	cmake_src_prepare
 
-	# Disable code that relies on missing .git directory.
-	# Just silences potential "git: command not found" QA warnings.
-	#
-	# `sed` exits 0 when it matches nothing, so `|| die` can never catch a
-	# stale anchor -- assert each pattern first. 10.0 respelled the first one:
-	# it was `find_program (GIT NAMES git)` through 7.2.4 and is now
-	# `find_program(GIT NAMES git)` with no space, so the old anchor silently
-	# matched nothing. Match both spellings. The other two are unchanged at
-	# 10.0 (utils.cmake:130, rsmiBindingsInit.py.in). verified 2026-08-29.
+	# Disable .git probes and guard sed anchors because no-match succeeds. Match
+	# both historical find_program spellings. # verified 2026-08-29
 	grep -qE 'find_program ?\(GIT NAMES git\)' CMakeLists.txt ||
 		die "GIT find_program anchor moved"
 	sed -e "/find_program \?(GIT NAMES git)/d" -i CMakeLists.txt || die
