@@ -4,9 +4,7 @@
 EAPI=8
 
 DESCRIPTION="Open source XRD and Rietveld refinement engine"
-# www.bgmn.de serves only http (no TLS at all on :443 as of 2026-05-09);
-# leave that one as http to silence pkgcheck SSLCertificateError without
-# pretending it has https.
+# bgmn.de has no TLS endpoint. verified 2026-05-09
 HOMEPAGE="https://www.profex-xrd.org http://www.bgmn.de/"
 SRC_URI="https://www.profex-xrd.org/wp-content/uploads/2022/10/${P}-x86_64.tar.gz"
 S="${WORKDIR}/${PN}-${PV}"
@@ -15,23 +13,14 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Pre-built upstream binaries; do not strip and do not assume any
-# external libraries beyond glibc. ldd shows only libpthread/libm/libc.
+# Prebuilt binaries; ldd shows only glibc libraries. Do not strip.
 RESTRICT="strip mirror"
 
 QA_PREBUILT="opt/bgmn/*"
 
 src_install() {
-	# bgmn binaries look up atomic-form-factor / wavelength /
-	# space-group / error-message / template data through the EFLECH
-	# environment variable; without it, every binary aborts with
-	# "*** undefined environment EFLECH". Install the whole upstream
-	# tarball verbatim under /opt/bgmn/ (FHS-style for vendor
-	# pre-built blobs) and ship /usr/bin/ wrappers that point EFLECH
-	# at it before exec'ing the real binary.
+	# Binaries require EFLECH to locate their data; install under /opt and wrap.
 	insinto /opt/${PN}
-	# 4.2.23 ships no *.xml (older releases did); the stale glob expands
-	# to a literal '*.xml' and aborts doins. Drop it.
 	doins *.dat *.lam *.mdr *.ano *.cfg err.msg \
 		spacegrp index output plot1 weight.mol \
 		gertest lamtest verzerr
