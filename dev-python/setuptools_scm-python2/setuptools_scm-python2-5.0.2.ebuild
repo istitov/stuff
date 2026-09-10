@@ -19,20 +19,8 @@ S="${WORKDIR}/${MYP}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-#IUSE="test"
-#RESTRICT="!test? ( test )"
-
-#	test? (
-#		dev-python/pytest[${PYTHON_USEDEP}]
-#		dev-python/toml[${PYTHON_USEDEP}]
-#		dev-vcs/git
-#		!sparc? ( dev-vcs/mercurial ) )"
-
-# DISTUTILS_OPTIONAL suppresses the eclass's PYTHON_DEPS and
-# PYTHON_REQUIRED_USE. The interpreter was declared here as a literal atom,
-# but REQUIRED_USE was left empty, so nothing forced a python target to be
-# selected. Take both from the eclass variables instead, which also keeps any
-# future PYTHON_REQ_USE working. verified 2026-07-27
+# DISTUTILS_OPTIONAL suppresses interpreter dependencies and target constraints;
+# supply both from the eclass variables. verified 2026-07-27
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="${PYTHON_DEPS}
@@ -40,9 +28,9 @@ RDEPEND="${PYTHON_DEPS}
 "
 src_prepare() {
 	default
-	# network access
+	# Disable the network-dependent pip download test.
 	sed -i -e 's:test_pip_download:_&:' testing/test_regressions.py || die
-	# all fetch specific setuptools versions
+	# Drop the suite that downloads specific setuptools releases.
 	rm testing/test_setuptools_support.py || die
 
 	distutils-r1_python_prepare_all
