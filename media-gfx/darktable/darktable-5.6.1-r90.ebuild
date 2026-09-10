@@ -20,7 +20,6 @@ if [[ ${PV} == *9999* ]]; then
 
 	LANGS=" af ca cs da de el es fi fr gl he hu it ja nb nl pl pt-BR pt-PT ro ru sk sl sq sv th uk zh-CN zh-TW"
 else
-	#DOC_PV=$(ver_cut 1-2)
 	DOC_PV="4.6"
 	MY_PV="${PV/_/}"
 	MY_P="${P/_/.}"
@@ -35,9 +34,8 @@ else
 		)"
 
 	KEYWORDS="~amd64 ~arm64 -x86"
-	# Keep in sync with the release po/ set: 5.6.0 dropped Italian (it) and
-	# added Norwegian Bokmaal (nb) + Russian (ru); a stale entry makes the
-	# src_install locale-prune rm die. verified against 5.6.0 po/ 2026-07-04
+	# Keep synchronized with release po/: stale entries make locale pruning die.
+	# verified 2026-07-04
 	LANGS=" cs de es fi fr hu ja nb nl pl pt-BR ru sl sq sv uk zh-CN zh-TW"
 fi
 
@@ -47,16 +45,8 @@ IUSE="X ai avif colord cpu_flags_x86_avx cpu_flags_x86_sse3 cups doc gamepad geo
 REQUIRED_USE="lua? ( ${LUA_REQUIRED_USE} )"
 RESTRICT="!test? ( test )"
 
-# It is sometimes requested, by both users and certain devs, to have sys-devel/gcc[graphite]
-# in BDEPEND. This has not been done *on purpose*, for the following reason:
-#  - darktable can also be built with llvm-core/clang so we'd have to have that, as an alternative,
-#    in BDEPEND too
-#  - there are at least two darktable dependencies (media-libs/mesa and dev-lang/rust) which
-#    by default pull in llvm-core/clang
-#  - as a result of the above, for most gcc users adding the above to BDEPEND is a no-op
-#    (and curiously enough, empirical observations suggest current versions of Portage are
-#    more likely to pull in Clang to build darktable with than to request enabling USE=graphite
-#    on GCC; that might be a bug though)
+# Do not force gcc[graphite]: Clang is a valid alternative and common
+# dependencies already pull it in. pkg_pretend validates the selected GCC.
 BDEPEND="dev-util/intltool
 	sys-devel/gettext
 	virtual/pkgconfig
@@ -111,7 +101,7 @@ PATCHES=(
 
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != binary ]]; then
-		# Bug #695658
+		# Gentoo bug 695658.
 		if tc-is-gcc; then
 			if ! test-flags-CC -floop-block &> /dev/null; then
 				eerror "Building ${PN} with GCC requires Graphite support."
@@ -144,8 +134,9 @@ src_configure() {
 		-DBUILD_CURVE_TOOLS=$(usex tools)
 		-DBUILD_NOISE_TOOLS=$(usex tools)
 		-DBUILD_PRINT=$(usex cups)
-		-DCUSTOM_CFLAGS=ON # honor user choice
-		-DRAWSPEED_MARCH= # honor user choice #946892
+		# Preserve user flags and architecture (Gentoo bug 946892).
+		-DCUSTOM_CFLAGS=ON
+		-DRAWSPEED_MARCH=
 		-DDONT_USE_INTERNAL_LUA=ON
 		-DRAWSPEED_ENABLE_LTO=$(usex lto)
 		-DRAWSPEED_ENABLE_WERROR=OFF
@@ -173,9 +164,7 @@ src_configure() {
 		-DWANT_JSON_VALIDATION=$(usex test)
 	)
 
-	# darktable's bundled FindONNXRuntime.cmake otherwise auto-downloads a
-	# prebuilt ONNX Runtime at configure time; force offline so USE=ai links
-	# the system sci-libs/onnxruntime instead.
+	# Prevent FindONNXRuntime from downloading a binary; use the system library.
 	use ai && mycmakeargs+=( -DONNXRUNTIME_OFFLINE=ON )
 
 	cmake_src_configure
@@ -183,7 +172,6 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	# This USE flag is masked for -9999
 	if use doc; then
 		dodoc "${DISTDIR}"/${PN}-usermanual-${DOC_PV}.en.pdf
 		use l10n_uk && dodoc "${DISTDIR}"/${PN}-usermanual-${DOC_PV}.uk.pdf
