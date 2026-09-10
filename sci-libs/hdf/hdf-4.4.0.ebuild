@@ -40,7 +40,7 @@ src_configure() {
 
 	if use fortran; then
 		[[ $(tc-getFC) = *gfortran ]] && append-fflags -fno-range-check
-		# bug #723014
+		# Allow legacy Fortran argument mismatches (bug #723014).
 		append-fflags $(test-flags-FC -fallow-argument-mismatch)
 	fi
 
