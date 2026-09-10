@@ -7,10 +7,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Ogg Opus decoder plugin for DeaDBeeF audio player"
 HOMEPAGE="https://bitbucket.org/Lithopsian/deadbeef-opus/overview"
-# Upstream stopped uploading release tarballs to bitbucket downloads/
-# at 0.6; switch to the per-tag git archive instead. The archive's top
-# directory is named Lithopsian-deadbeef-opus-<sha12>/, which we rename
-# to ${P} in src_unpack so the rest of the ebuild keeps using S=${P}.
+# Releases after 0.6 use tag archives with hash-suffixed roots, renamed below.
 SRC_URI="https://bitbucket.org/Lithopsian/deadbeef-opus/get/v${PV}.tar.gz -> ${P}.tar.gz"
 
 S="${WORKDIR}/${P}"
@@ -18,10 +15,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 
-# Upstream links -lopusfile -lopus -logg -lm, plus -lopusurl -lssl -lcrypto
-# because USE_OPUSURL defaults to true and we do not override it, so opus.so
-# has a direct DT_NEEDED on libopus and libssl/libcrypto. Both currently
-# arrive through opusfile[http], which is not ours to depend on.
+# USE_OPUSURL is enabled and creates direct Opus/OpenSSL link dependencies;
+# declare them rather than relying on opusfile[http].
 # verified 2026-07-27
 DEPEND_COMMON="
 	media-sound/deadbeef
@@ -35,16 +30,13 @@ DEPEND="${DEPEND_COMMON}"
 
 PATCHES=( "${FILESDIR}/${PN}-gcc16.patch" )
 
-#QA_PRESTRIPPED="usr/$(get_libdir)/deadbeef/opus.so"
-
 src_unpack() {
 	default
 	mv "${WORKDIR}"/Lithopsian-deadbeef-opus-* "${S}" || die
 }
 
 src_prepare(){
-	# Upstream hardcodes an -I into /usr/local, which must not leak into a
-	# sandboxed build.
+	# Remove the hardcoded /usr/local include path.
 	sed -e 's|-I/usr/local/include/opus||' -i Makefile || die
 
 	if use x86;then
