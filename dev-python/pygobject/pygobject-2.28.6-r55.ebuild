@@ -47,8 +47,9 @@ src_prepare() {
 	# Skip introspection tests when the feature is disabled.
 	eapply "${FILESDIR}/${P}-tests-no-introspection.patch"
 
-	# Suppress known warning noise.
+	# Avoid set_qdata on NULL objects.
 	eapply "${FILESDIR}/${P}-set_qdata.patch"
+	# Match GIO flag types from GLib.
 	eapply "${FILESDIR}/${P}-gio-types-2.32.patch"
 
 	# Support GLib 2.36+ (Gentoo bug 486602).
