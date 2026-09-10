@@ -25,7 +25,7 @@ LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
-# From hipsparselt_supported_architectures.cmake
+# From hipsparselt_supported_architectures.cmake.
 SUPPORTED_GPUS=( gfx942 gfx950 )
 IUSE_TARGETS=( "${SUPPORTED_GPUS[@]/#/amdgpu_targets_}" )
 IUSE="${IUSE_TARGETS[*]/#/+} benchmark roctracer test"
@@ -89,10 +89,7 @@ pkg_pretend() {
 }
 
 src_unpack() {
-	# rocm 7.2.4's release-asset tarballs carry their own hipsparselt/,
-	# origami/ and hipblaslt/ top-level directories (7.2.3's unpacked flat,
-	# hence the manual wrapper dirs previously). Unpack directly so
-	# S=/ORIGAMI_S=/HIPBLASLT_S= resolve.
+	# Release assets provide their own top-level directories.
 	unpack "hipsparselt-${PV}.tar.gz"
 	unpack "origami-${PV}.tar.gz"
 	unpack "hipblaslt-${PV}.tar.gz"
@@ -101,10 +98,10 @@ src_unpack() {
 src_prepare() {
 	rocm_use_clang
 
-	# too many warnings
+	# Silence known ROCm source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
-	# Do not install tests
+	# Exclude test binaries from installation.
 	sed -e 's/COMPONENT "tests"/COMPONENT "tests" EXCLUDE_FROM_ALL/' \
 		-i CMakeLists.txt || die
 
@@ -116,7 +113,7 @@ src_prepare() {
 	local shebangs=($(grep -rl "#!/usr/bin/env python3" tensilelite/Tensile || die))
 	python_fix_shebang -q "${shebangs[@]}"
 
-	# Fix compiler validation (just a validation)
+	# Make validation accept the selected Clang driver.
 	sed -e "s/amdclang/$(basename "$CC")/g" \
 		-i tensilelite/Tensile/Toolchain/Validators.py || die
 	sed -e "s:\$(ROCM_PATH)/bin/amdclang++:$(get_llvm_prefix)/bin/clang++:g" \
@@ -129,13 +126,13 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# Tensile guesses weirdly how to compile things, ld.bfd won't work, so force lld
+	# Tensile's generated code requires lld.
 	append-cxxflags -DCMAKE_CXX_FLAGS="-fuse-ld=lld"
 
 	local targets="$(get_amdgpu_flags)"
 	local HIPSPARSELT_ENABLE_DEVICE=$([ "${AMDGPU_TARGETS[*]}" != "" ] && echo ON || echo OFF )
 
-	# targets has a trailing semicolon, this trips up Tensile's input parser, so carefully prune
+	# Tensile rejects get_amdgpu_flags' trailing semicolon.
 	local mycmakeargs=(
 		-DGPU_TARGETS="${targets::-1}"
 		-DHIPSPARSELT_ENABLE_SAMPLES=OFF
@@ -172,10 +169,10 @@ src_configure() {
 
 src_compile() {
 	local -x ROCM_PATH="${EPREFIX}/usr"
-	# set PYTHONPATH to load Tensile from virtualenv, not the system-wide one
+	# Load the build virtualenv's Tensile, not a system copy.
 	local -x PYTHONPATH="${S}_build/virtualenv/lib/${EPYTHON}/site-packages"
 	local -x TENSILE_ROCM_ASSEMBLER_PATH="$(get_llvm_prefix)/bin/clang++"
-	# TensileCreateLibrary reads CMAKE_CXX_COMPILER again
+	# TensileCreateLibrary rereads the compiler from the environment.
 	local -x CMAKE_CXX_COMPILER="$(get_llvm_prefix)/bin/clang++"
 	cmake_src_compile
 }
@@ -183,13 +180,12 @@ src_compile() {
 src_install() {
 	cmake_src_install
 
-	# Stop llvm-strip from removing .strtab section from *.hsaco files,
-	# otherwise rocclr/elf/elf.cpp complains with "failed: null sections(STRTAB)" and crashes
+	# Preserve .strtab in HSACO files; rocclr's ELF loader crashes without it.
 	dostrip -x /usr/$(get_libdir)/hipsparselt/library/
 }
 
 src_test() {
 	check_amdgpu
-	# Non-instinct GPUs: tests just succeed without testing anything
+	# Unsupported GPUs report success without exercising kernels.
 	HIP_VISIBLE_DEVICES=0 cmake_src_test
 }
