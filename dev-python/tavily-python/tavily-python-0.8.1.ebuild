@@ -24,6 +24,5 @@ RDEPEND="
 	>=dev-python/tiktoken-0.5.1[${PYTHON_USEDEP}]
 "
 
-# Upstream ships no offline test suite — the tests drive the live Tavily
-# API (needs an API key), so there is nothing to run in a sandboxed build.
+# Tests require live Tavily API access and credentials.
 RESTRICT="test"
