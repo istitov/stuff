@@ -21,11 +21,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm64"
 
-# The Linux binary is compiled against pandoc 3.10.1 and pandoc-crossref does
-# an exact pandoc-version string check that warns "not supported" on any
-# mismatch. ::gentoo now carries pandoc-bin-3.10.1, so pin it for an exact
-# match (no stderr warning); the source >=pandoc-3 fallback may warn on a
-# version mismatch. verified 2026-08-05
+# Upstream binaries target pandoc 3.10.1 and warn on mismatches. Prefer the
+# matching pandoc-bin; the source fallback may warn. Verified 2026-08-05.
 RDEPEND="
 || ( ~app-text/pandoc-bin-3.10.1 >=app-text/pandoc-3 )
 "
