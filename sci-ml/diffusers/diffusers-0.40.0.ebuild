@@ -19,11 +19,11 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Tests download models and require a large collection of optional backends.
+# Tests download models and require numerous optional backends.
 RESTRICT="test"
 
-# dev-python/httpx is deprecated in ::gentoo since 2026-04-01, but httpx2 is
-# not a drop-in replacement and upstream requires httpx<1. verified 2026-08-23.
+# httpx is deprecated in ::gentoo, but upstream requires <1 and httpx2 is
+# incompatible. Verified 2026-08-23.
 RDEPEND="
 	>=sci-ml/huggingface_hub-1.23.0[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/huggingface_hub-2[${PYTHON_SINGLE_USEDEP}]
