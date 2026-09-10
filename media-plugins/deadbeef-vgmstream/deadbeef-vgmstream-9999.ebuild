@@ -22,7 +22,7 @@ DEPEND_COMMON="
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
-src_prepare(){
+src_prepare() {
 	sed \
 		-e "s|-I\$(DEADBEEF_ROOT)/include|-I/usr/include/deadbeef|" \
 		-e "s|-I\$(DEADBEEF_ROOT)/lib|-I/usr/$(get_libdir)/deadbeef|" \
@@ -31,9 +31,7 @@ src_prepare(){
 }
 
 src_compile() {
-	# The bundled vgmstream sources link into a shared object, so every
-	# TU needs -fPIC; upstream's Makefile doesn't force it and binutils
-	# rejects the final link without it. # verified 2026-07-06
+	# Bundled sources require -fPIC for the shared-object link. Verified 2026-07-06.
 	emake CFLAGS="${CFLAGS} -fPIC"
 }
 
