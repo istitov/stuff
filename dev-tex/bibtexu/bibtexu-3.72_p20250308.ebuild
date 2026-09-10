@@ -7,7 +7,7 @@ inherit flag-o-matic texlive-common
 
 DESCRIPTION="8-bit Implementation of BibTeX 0.99 with a Very Large Capacity"
 HOMEPAGE="https://tug.org/texlive/"
-# 2025 hardcoded in the historic URL; bump on TL2026 adoption.
+# Utah's historical mirror is release-year-specific.
 SRC_URI="
 	https://mirrors.ctan.org/systems/texlive/Source/texlive-${PV#*_p}-source.tar.xz
 	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/texlive-${PV#*_p}-source.tar.xz
@@ -40,7 +40,7 @@ DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
 
 src_configure() {
-	# bug #943986
+	# Keep pre-C23 semantics; https://bugs.gentoo.org/943986
 	append-cflags -std=gnu17
 
 	econf \
