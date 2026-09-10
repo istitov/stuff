@@ -29,11 +29,8 @@ src_prepare() {
 }
 
 src_configure() {
-	# We only DEPEND on gtk+:3, so build the GTK3 plugin only. Upstream's
-	# configure also builds a GTK2 variant whenever gtk+:2 headers happen
-	# to be present, and that variant no longer compiles against modern
-	# GTK2 (deprecated GTypeDebugFlags, hard-errored by Makefile.am's
-	# -Werror under gcc-16). # verified 2026-07-05
+	# Disable automagic GTK2; its undeclared variant fails under GCC 16 -Werror.
+	# verified 2026-07-05
 	econf --disable-gtk2
 }
 
