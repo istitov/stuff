@@ -24,10 +24,8 @@ RDEPEND="
 "
 
 src_prepare() {
-	# Upstream finished the split: phase_diagram, chempot_diagram, and
-	# reaction_calculator now live exclusively in pymatgen-core (no longer
-	# shipped in this sdist). The pmg CLI entry still leaks though, so drop
-	# it to keep pymatgen-core as the canonical CLI provider.
+	# The module split is complete, but this sdist still exposes pmg; keep
+	# pymatgen-core as its canonical provider.
 	grep -qF 'pmg = "pymatgen.cli.pmg:main"' pyproject.toml ||
 		die "pmg script anchor moved"
 	sed -i -e '/^pmg = "pymatgen\.cli\.pmg:main"$/d' pyproject.toml || die
