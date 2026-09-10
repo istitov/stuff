@@ -18,7 +18,7 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/wbolster/jsonlines"
 else
-	# tests not distributed through PyPI sdist; fetch GitHub archive
+	# Use GitHub sources because PyPI omits tests.
 	SRC_URI="https://github.com/wbolster/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.gh.tar.gz"
 	KEYWORDS="~amd64 ~arm64 ~x86"
 fi
