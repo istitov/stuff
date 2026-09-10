@@ -154,7 +154,6 @@ HOMEPAGE="
 SRC_URI+=" ${CARGO_CRATE_URIS}"
 
 LICENSE="MIT"
-# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions MIT MPL-2.0 UoI-NCSA
 	Unicode-3.0
@@ -164,7 +163,7 @@ KEYWORDS="~amd64 ~arm64"
 
 QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/jiter/jiter.*.so"
 
-# Tests pull dirty-equals (::guru-only); skip in fork.
+# Tests require ::guru-only dirty-equals.
 RESTRICT="test"
 
 src_unpack() {
