@@ -7,16 +7,14 @@ inherit flag-o-matic texlive-common
 
 DESCRIPTION="8-bit Implementation of BibTeX 0.99 with a Very Large Capacity"
 HOMEPAGE="https://tug.org/texlive/"
-# 2026 hardcoded in the historic URL; bump on TL2027 adoption.
+# Keep the historic URL year aligned with the TeX Live snapshot.
 SRC_URI="
 	https://mirrors.ctan.org/systems/texlive/Source/texlive-${PV#*_p}-source.tar.xz
 	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2026/texlive-${PV#*_p}-source.tar.xz
 	https://dev.gentoo.org/~flow/distfiles/texlive/texlive-${PV#*_p}-source.tar.xz
 "
 
-# bibtex8 and bibtexu shared one TL_REVISION through TL2025, but
-# diverged in TL2026 (bibtex8 r75712, bibtexu still r66186), so they
-# need separate revision variables now.
+# bibtex8 and bibtexu revisions diverged in TL2026; track them separately.
 BIBTEX8_REVISION=75712
 BIBTEXU_REVISION=66186
 EXTRA_TL_MODULES="bibtex8.r${BIBTEX8_REVISION} bibtexu.r${BIBTEXU_REVISION}"
@@ -44,7 +42,7 @@ DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
 
 src_configure() {
-	# bug #943986
+	# Avoid GCC 16's C23 default (bug 943986).
 	append-cflags -std=gnu17
 
 	econf \
@@ -60,7 +58,7 @@ src_install() {
 		install
 	dodoc 00bibtex8-readme.txt 00bibtex8-history.txt ChangeLog csf/csfile.txt
 
-	dodir /usr/share # just in case
+	dodir /usr/share
 	cp -pR "${WORKDIR}"/texmf-dist "${ED}/usr/share/" || die "failed to install texmf trees"
 	if use source ; then
 		cp -pR "${WORKDIR}"/tlpkg "${ED}/usr/share/" || die "failed to install tlpkg files"
