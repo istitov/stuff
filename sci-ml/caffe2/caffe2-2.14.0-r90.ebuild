@@ -254,7 +254,7 @@ src_prepare() {
 		cmake/External/aotriton.cmake \
 		|| die
 
-	# Silence known Logging.h noise.
+	# Logging.h is incompatible with -Wextra-semi.
 	sed -i 's/-Wextra-semi//' cmake/public/utils.cmake || die
 
 	cmake_src_prepare
@@ -414,7 +414,6 @@ src_configure() {
 			-DUSE_ROCM_CK_SDPA=OFF # requires flash + aiter, works only on gfx90a/gfx942/gfx950
 		)
 
-		# Silence excessive ROCm warnings.
 		append-cxxflags -Wno-deprecated-declarations -Wno-unused-result -Wno-unused-value
 	fi
 
