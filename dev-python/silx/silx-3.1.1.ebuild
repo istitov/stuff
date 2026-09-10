@@ -21,12 +21,8 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="gui h5pyd opencl"
 REQUIRED_USE="gui? ( opencl )"
 
-# Upstream pyproject.toml [project].dependencies block lists numpy,
-# packaging, h5py>=3, fabio, pydantic>=2 and filelock unconditionally
-# (filelock is new in 3.1.0); opencl pulls pyopencl + Mako, full_no_qt
-# builds on top with the GUI/extras stack, full = full_no_qt +
-# PySide6>=6.5, and h5pyd>=0.20 hides behind its own [h5pyd] extra.
-# verified 2026-08-19 against 3.1.1
+# Mirror core requirements and map upstream's opencl, GUI, and h5pyd extras to
+# USE flags. filelock became mandatory in 3.1. verified 2026-08-19
 RDEPEND="
 	dev-python/fabio[${PYTHON_USEDEP}]
 	dev-python/filelock[${PYTHON_USEDEP}]
@@ -54,7 +50,7 @@ RDEPEND="
 	)
 "
 
-# pyproject build-system requires cython>=3.1,<3.3 (3.1.0).
+# Match the upstream Cython >=3.1,<3.3 build constraint.
 BDEPEND="
 	>=dev-python/cython-3.1[${PYTHON_USEDEP}]
 	<dev-python/cython-3.3[${PYTHON_USEDEP}]
