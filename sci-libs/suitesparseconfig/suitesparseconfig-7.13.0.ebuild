@@ -17,8 +17,7 @@ SLOT="0/7"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="openmp"
 
-# we need to depend on blas as the cmake file looks for it.
-# It is also a runtime dependency as it has headers to link with blas
+# SuiteSparse_config links BLAS, so retain it for consumers at runtime.
 DEPEND="virtual/blas"
 RDEPEND="${DEPEND}"
 
@@ -31,10 +30,8 @@ pkg_setup() {
 }
 
 src_configure() {
-	# The SuiteSparse 7.x option scheme; NSTATIC/NFORTRAN/NOPENMP are gone.
-	# Pin BLAS to the reference implementation (virtual/blas provides
-	# libblas.so.3) so CMake's BLAS detection does not pick up a stray
-	# Intel MKL install from /opt.
+	# SuiteSparse 7 uses positive options. Restrict BLAS discovery to libblas.so
+	# so CMake cannot select an untracked MKL under /opt.
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=ON
 		-DBUILD_STATIC_LIBS=OFF
