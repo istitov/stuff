@@ -9,12 +9,8 @@ inherit cmake rocm
 
 DESCRIPTION="Generate pseudo-random and quasi-random numbers"
 HOMEPAGE="https://github.com/ROCm/rocRAND"
-# ROCm/rocRAND was FOLDED INTO the rocm-libraries monorepo for 10.0: the
-# standalone repo has no therock-* tags at all (its last tag is rocm-7.2.4),
-# and the 10.0 sources ship only as the rocrand.tar.gz release asset. So this
-# is a source-shape change, not just a tag swap -- the git-archive form is gone
-# and S= follows the asset's own root instead of ${PN}-rocm-${PV}.
-# verified 2026-08-29.
+# ROCm 10 ships rocRAND from rocm-libraries release assets, not standalone
+# repository tags. verified 2026-08-29
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/rocrand.tar.gz -> rocrand-${PV}.tar.gz"
 S="${WORKDIR}/rocrand"
 
@@ -26,12 +22,8 @@ REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
 RESTRICT="!test? ( test )"
 
-# cmake/Dependencies.cmake does find_package(benchmark 1.9.1 QUIET) and, on
-# failure, falls through to a FetchContent clone of github.com/google/benchmark,
-# which cannot work inside portage's network sandbox. ::gentoo still ships 1.8.4
-# next to the 1.9.x line, so an existing 1.8.4 install satisfied the bare atom,
-# got no upgrade, and sent USE=benchmark builds down the fetch path.
-# verified 2026-07-27
+# Require benchmark 1.9.1; older installed versions trigger a sandboxed
+# FetchContent fallback. verified 2026-07-27
 RDEPEND="
 	dev-util/hip:${SLOT}
 	benchmark? ( >=dev-cpp/benchmark-1.9.1 )
@@ -64,7 +56,7 @@ src_configure() {
 src_test() {
 	check_amdgpu
 	export LD_LIBRARY_PATH="${BUILD_DIR}/library"
-	# uses HMM to fit tests to default <512M iGPU VRAM
+	# Use HMM to fit tests within default sub-512 MiB iGPU VRAM.
 	ROCRAND_USE_HMM="1" cmake_src_test -j1
 }
 
