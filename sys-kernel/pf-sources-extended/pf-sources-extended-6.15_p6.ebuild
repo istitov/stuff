@@ -3,12 +3,8 @@
 
 EAPI=8
 
-# 6.15 is a non-LTS kernel that reached end-of-life upstream (linux-stable
-# stopped at 6.15.12). genpatches' last bundle for this branch (-13)
-# tracks stable through 6.15.11 — one stable release short of upstream
-# EOL. ::gentoo no longer ships gentoo-sources-6.15.X, but alicef's
-# release tarballs remain available on dev.gentoo.org, which is what
-# this ebuild fetches.
+# EOL non-LTS branch; genpatches-13 stops at 6.15.11, one release before the
+# final 6.15.12. ::gentoo dropped 6.15, but alicef's archives remain available.
 
 ETYPE="sources"
 
@@ -60,8 +56,7 @@ src_unpack() {
 src_prepare() {
 	eapply "${WORKDIR}"/*.patch
 
-	# Curated pf-kernel delta on top of gentoo-sources state.
-	# See pkg_postinst for the kept/dropped breakdown.
+	# Apply the curated pf delta; pkg_postinst lists its scope.
 	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
