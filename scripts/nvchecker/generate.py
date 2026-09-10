@@ -174,12 +174,6 @@ PYPI_NAME_BY_PKG: dict[str, str] = {
 
 
 GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
-    # lierdakil/pandoc-crossref publishes alpha/rc tags for next releases;
-    # restrict to stable tags (3- or 4-part version, with optional trailing
-    # letter like `0.3.23a`, but no hyphenated pre-release suffixes).
-    "app-text/pandoc-crossref-bin": {
-        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+[0-9a-z.]*$",
-    },
     # TinyCC tags releases as release_X_Y_Z while the ebuild uses X.Y.Z.
     "dev-lang/tcc": {
         "include_regex": r"^release_[0-9]+_[0-9]+_[0-9]+$",
@@ -813,6 +807,32 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "github": "wxWidgets/wxWidgets",
         "use_latest_release": True,
         "prefix": "v",
+    },
+    # A trailing letter marks an upstream re-release of the same version:
+    # pandoc-crossref's v0.3.25a is 0.3.25 rebuilt against a newer pandoc, and
+    # pgf released 3.1.11a after 3.1.11. use_max_tag cannot see those. It sorts
+    # tags with PEP 440, which reads "0.3.25a" as the pre-release 0.3.25a0 and
+    # ranks it below the bare 0.3.25, so the entry resolved to the version
+    # already shipped and v0.3.25a went unreported. releases/latest returns
+    # the most recently created full release and compares no version strings.
+    # Each of the latest twelve GitHub releases of both projects is a version
+    # release, and pandoc-crossref-bin downloads its binaries from those
+    # releases anyway. The include_regex this replaces kept out
+    # pandoc-crossref's hyphenated alpha and beta tags; every one of those is
+    # published as a prerelease, which releases/latest skips. A hyphenated
+    # full release such as v0.3.12.1-pandoc-2.14 would still come through, as
+    # a visible drift row rather than a silent miss. verified 2026-09-10
+    # (resolves v0.3.25a and 3.1.12)
+    "app-text/pandoc-crossref-bin": {
+        "source": "github",
+        "github": "lierdakil/pandoc-crossref",
+        "use_latest_release": True,
+        "prefix": "v",
+    },
+    "dev-tex/pgf": {
+        "source": "github",
+        "github": "pgf-tikz/pgf",
+        "use_latest_release": True,
     },
     # openai/codex tags releases `rust-v<PV>`, not `v<PV>`, and its tag space is
     # full of CI debris -- `winget-test-rust-v...`, doubled-prefix strays like

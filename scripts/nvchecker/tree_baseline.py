@@ -14,10 +14,10 @@ upstream has now," which is the right framing for CI-driven bump
 detection (drift relative to the tree, not relative to time).
 
 Versioned sort order: packaging.version.Version is used after normalising
-Portage-specific suffixes (_pN, _rcN, _alphaN, _betaN, _preN, -rN) to
-their PEP 440 equivalents.  Versions that still can't be parsed fall back
-to a tuple-of-int-parts key so multi-digit segments (e.g. 0.100.0 vs
-0.86.0) always rank correctly.
+Portage-specific suffixes (_pN, _rcN, _alphaN, _betaN, _preN, -rN, and a
+trailing letter such as 0.3.25a) to their PEP 440 equivalents.  Versions
+that still can't be parsed fall back to a tuple-of-int-parts key so
+multi-digit segments (e.g. 0.100.0 vs 0.86.0) always rank correctly.
 """
 
 from __future__ import annotations
@@ -47,6 +47,13 @@ _PORTAGE_TO_PEP440 = [
     # digits) is legal in Portage and still maps to .dev0.
     (re.compile(r'_pre(\d+)$'),   r'.dev\1'),
     (re.compile(r'_pre$'),        r'.dev0'),
+    # A trailing letter right after a digit is Portage's letter suffix, which
+    # ranks above the bare version: 0.3.25 < 0.3.25a < 0.3.26. PEP 440 reads
+    # "0.3.25a" as the pre-release 0.3.25a0 and ranks it below 0.3.25, so with
+    # both ebuilds in the tree the baseline picked 0.3.25. As a local version
+    # label, 0.3.25+a sorts between 0.3.25 and 0.3.26. Only the sort key sees
+    # it; the emitted baseline stays the raw PV. verified 2026-09-10
+    (re.compile(r'(\d)([a-z])$'), r'\1+\2'),
 ]
 
 

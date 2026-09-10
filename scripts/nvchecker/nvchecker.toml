@@ -1178,7 +1178,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (233) ---
+# --- github (231) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1254,13 +1254,6 @@ prefix = "v"
 source = "github"
 github = "mgieseki/dvisvgm"
 use_max_tag = true
-prefix = "v"
-
-["app-text/pandoc-crossref-bin"]
-source = "github"
-github = "lierdakil/pandoc-crossref"
-use_max_tag = true
-include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+[0-9a-z.]*$'
 prefix = "v"
 
 ["dev-build/rocm-cmake"]
@@ -1871,12 +1864,6 @@ github = "gpoore/minted"
 use_max_tag = true
 include_regex = '^latex/v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "latex/v"
-
-["dev-tex/pgf"]
-source = "github"
-github = "pgf-tikz/pgf"
-use_max_tag = true
-prefix = "v"
 
 ["dev-util/Tensile"]
 source = "github"
@@ -2843,12 +2830,18 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (25) ---
+# --- special (27) ---
 
 ["app-text/mupdf"]
 source = "regex"
 url = "https://mupdf.com/releases"
 regex = 'mupdf-([0-9]+\.[0-9]+\.[0-9]+)-source\.tar\.gz'
+
+["app-text/pandoc-crossref-bin"]
+source = "github"
+github = "lierdakil/pandoc-crossref"
+use_latest_release = true
+prefix = "v"
 
 ["dev-libs/cudnn"]
 source = "regex"
@@ -2911,6 +2904,11 @@ regex = '"number"\s*:\s*"([^"]+)"'
 source = "regex"
 url = "https://www.ctan.org/json/2.0/pkg/latexmk"
 regex = '"number"\s*:\s*"([^"]+)"'
+
+["dev-tex/pgf"]
+source = "github"
+github = "pgf-tikz/pgf"
+use_latest_release = true
 
 ["dev-util/claude-code"]
 source = "regex"
