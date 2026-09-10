@@ -27,8 +27,9 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 src_prepare() {
 	sed -e "/CPACK_RESOURCE_FILE_LICENSE/d" -i CMakeLists.txt || die
+	# Avoid querying Git when building the release tarball.
 	sed -e "/num_change_since_prev_pkg(/cset(NUM_COMMITS 0)" \
-		-i cmake_modules/utils.cmake || die # Fix QA issue on "git not found"
+		-i cmake_modules/utils.cmake || die
 	cmake_src_prepare
 }
 
