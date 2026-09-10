@@ -64,8 +64,7 @@ src_configure() {
 	# Upstream accepts only Release or Debug.
 	local CMAKE_BUILD_TYPE=Release
 
-	# BA_PY_PACK assembles the package tree consumed in src_install. We never run
-	# ba_wheel, so its auditwheel/pip/wheel checks are unnecessary.
+	# BA_PY_PACK builds the install tree without ba_wheel's packaging checks.
 	local mycmakeargs=(
 		-DBA_TESTS=OFF
 		-DBA_DOCS=OFF
