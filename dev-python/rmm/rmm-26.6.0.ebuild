@@ -9,9 +9,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
 
-# GitHub zero-pads the calendar version in the tag (26.06.00); PyPI
-# normalises it to 26.6.0 (${PV}). rmm/VERSION carries 26.06.00 for the
-# scikit-build regex version provider.
+# Git tags and rmm/VERSION zero-pad the calendar version; PyPI uses ${PV}.
 MY_PV="26.06.00"
 
 DESCRIPTION="RAPIDS Memory Manager — Python (Cython) bindings"
@@ -29,11 +27,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# The Cython build pulls rapids-cmake (branch-26.06) and the rapids
-# cython helpers through CPM at configure time, and compiles against the
-# CPM-fetched CCCL, so it is non-deterministic and needs network access.
-# librmm (rmm-config.cmake) is found from the installed package via its
-# cmake.prefix entry point.
+# CPM fetches rapids-cmake, Cython helpers, and CCCL; installed librmm provides
+# rmm-config.cmake. The build therefore needs network access.
 PROPERTIES="live"
 RESTRICT="network-sandbox test"
 
@@ -54,17 +49,14 @@ BDEPEND="
 "
 
 python_prepare_all() {
-	# Bypass rapids_build_backend for the scikit_build_core.build it wraps
-	# (same rationale as dev-python/dask-cuda and dev-python/librmm).
+	# Use the wrapped scikit-build-core backend directly.
 	sed -i \
 		-e 's/build-backend = "rapids_build_backend.build"/build-backend = "scikit_build_core.build"/' \
 		-e '/"rapids-build-backend>=0.4.0,<0.5.0",/d' \
 		pyproject.toml || die
 
-	# Same CCCL <cuda/stream_ref> deprecation guard as librmm: the Cython
-	# modules compile against rmm's headers (which still include the
-	# deprecated path) and may build -Werror against the slightly newer
-	# CPM-fetched CCCL. Define the upstream escape macro globally.
+	# RMM headers use deprecated cuda/stream_ref; tolerate it against the newer
+	# fetched CCCL under -Werror.
 	# verified 2026-06-10
 	sed -i \
 		-e '/^  LANGUAGES CXX)/a add_compile_definitions(CCCL_IGNORE_DEPRECATED_STREAM_REF_HEADER)' \
