@@ -16,9 +16,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="gui opencl"
 
-# Upstream pyproject.toml [project].dependencies block lists numpy>=1.10,
-# h5py, fabio, silx>=2, numexpr (!= 2.8.6), scipy, matplotlib unconditionally;
-# pyside6 sits in the optional `gui` extra and pyopencl in `opencl`.
+# Core dependencies are unconditional upstream; PySide6 and PyOpenCL are extras.
 RDEPEND="
 	dev-python/fabio[${PYTHON_USEDEP}]
 	dev-python/h5py[${PYTHON_USEDEP}]
