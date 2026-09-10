@@ -431,7 +431,6 @@ HOMEPAGE="
 SRC_URI+=" ${CARGO_CRATE_URIS}"
 
 LICENSE="MIT"
-# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD CDLA-Permissive-2.0
 	ISC MIT Unicode-3.0 ZLIB
@@ -441,7 +440,7 @@ KEYWORDS="~amd64 ~arm64"
 
 QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/primp.*.so"
 
-# The upstream suite requires live network access.
+# Tests require live network access.
 RESTRICT="test"
 
 src_unpack() {
