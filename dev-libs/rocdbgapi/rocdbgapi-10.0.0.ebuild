@@ -7,17 +7,9 @@ inherit cmake
 
 DESCRIPTION="AMD Debugger API"
 HOMEPAGE="https://github.com/ROCm/rocm-systems/tree/develop/projects/rocdbgapi"
-# Forked into ::stuff for ROCm 10.0. ::gentoo stops at 7.2.x, and rocdbgapi
-# RDEPENDs on dev-libs/rocm-comgr:${SLOT} -- a RUNTIME subslot pin, so an
-# installed 7.2.0 keeps the whole 7.2 closure alive and makes the 10.0 stack
-# unresolvable for @world. It is not orphaned either: dev-debug/gdb pulls it
-# in for AMD GPU debugging, so dropping it is not an option. verified
-# 2026-08-30.
-#
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the 10.0
-# source ships as the rocdbgapi.tar.gz asset on the rocm-systems
-# therock-<major.minor> release, the same shape dev-util/roctracer and
-# dev-util/amdsmi use.
+# ::gentoo stops at 7.2, whose runtime subslot pin would retain that closure;
+# gdb still needs rocdbgapi. Post-7.2.4 sources use therock-* assets.
+# verified 2026-08-30
 SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/${PN}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}"
 
@@ -43,16 +35,9 @@ DEPEND="
 	dev-libs/rocr-runtime:${SLOT}
 "
 
-# ::gentoo carries rocdbgapi-6.3.0-fix-libcxx.patch. Not forked in: it is not
-# applied by the 7.2.0 ebuild either (that ebuild declares no PATCHES at all),
-# so it is dead weight in ::gentoo rather than something 10.0 dropped.
-
 src_prepare() {
-	# Each substitution asserts its anchor first. `sed` exits 0 on no-match, so
-	# without these an upstream rename leaves the edit silently inert with a
-	# green build -- and three of the four decide install paths, which is the
-	# quietest way for this to go wrong.
-	# All anchors verified 2026-08-30 against the therock-10.0 source.
+	# Guard substitutions because sed succeeds on missing anchors; three alter
+	# install paths. # verified 2026-08-30 against therock-10.0
 	grep -q -- '-Werror' CMakeLists.txt ||
 		die "-Werror gone from CMakeLists.txt; upstream likely dropped it, so drop that expression"
 	# shellcheck disable=SC2016
