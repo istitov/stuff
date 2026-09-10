@@ -16,16 +16,14 @@ HOMEPAGE="
 	https://pypi.org/project/fastsafetensors/
 "
 
-# The sdist installs Microsoft's MIT-licensed DirectStorage headers.
+# Includes Microsoft's MIT-licensed DirectStorage headers.
 LICENSE="Apache-2.0 MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# PyTorch is the default and only packaged framework backend.  Tqdm is
-# optional, while Typer is listed in upstream metadata but has no import or
-# entry point.  The 0.4.0 "threefs" extra is likewise unreachable: its
-# fastsafetensor_3fs_reader import sits inside a try in a method body, so the
-# package imports without it. # verified 2026-09-07 against 0.4.0.
+# PyTorch is the only packaged backend; retain metadata-required Typer while
+# keeping tqdm optional. The guarded threefs import also remains optional.
+# verified 2026-09-07
 RDEPEND="
 	>=sci-ml/pytorch-2.10.0[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
@@ -39,9 +37,8 @@ BDEPEND="
 	')
 "
 
-# The extension links only the C++ runtime.  CUDA, ROCm, GDS and NUMA support
-# are discovered with dlopen at runtime, and CPU loading works without them.
-# verified 2026-09-07 against 0.4.0.
+# CUDA, ROCm, GDS, and NUMA are loaded dynamically; CPU use needs only the C++
+# runtime. verified 2026-09-07
 pkg_postinst() {
 	optfeature "progress reporting" dev-python/tqdm
 	optfeature "CUDA and GPUDirect Storage support" dev-util/nvidia-cuda-toolkit
