@@ -7,10 +7,7 @@ DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_SINGLE_IMPL=1
 PYTHON_COMPAT=( python3_{12..15} )
 
-# Upstream PyPI name ends in "-01" (a bundle/shard number); a Gentoo package
-# name may not end in a hyphen followed by digits (PMS package-name syntax),
-# so the package is named ...media-assets01 and PYPI_PN maps back to the real
-# project for the sdist URL.
+# PMS forbids names ending in -<digits>; map assets01 to upstream's assets-01.
 PYPI_PN="comfyui-workflow-templates-media-assets-01"
 
 inherit distutils-r1 pypi
