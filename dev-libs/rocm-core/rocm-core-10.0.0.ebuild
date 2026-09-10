@@ -7,12 +7,9 @@ inherit cmake
 
 DESCRIPTION="Library that provides ROCm release version and install path information"
 HOMEPAGE="https://github.com/ROCm/rocm-systems/tree/develop/projects/rocm-core"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28). Everything
-# since ships under therock-<major.minor> tags on the same two monorepos, with
-# the same per-component tarball assets -- so only the tag changes, not the
-# fetch model. ROCm 10.0 is the renumbering of the 7.13 -> 7.14 line announced
-# 2026-08-27, not a jump of three majors. verified 2026-08-28: therock-10.0
-# carries rocm-core.tar.gz among its 31 assets.
+# ROCm 10 uses therock tags after the 7.2.4 rocm-* line, while retaining
+# per-component assets. It renumbers the former 7.13/7.14 line.
+# verified 2026-08-28
 SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/${PN}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/rocm-core"
 
@@ -27,7 +24,7 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	# too broad for standard directory
+	# Remove the duplicate version file from nonstandard /usr/.info.
 	rm "${ED}"/usr/.info/version || die
 }
 
