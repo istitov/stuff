@@ -7,34 +7,21 @@ inherit cmake
 
 DESCRIPTION="Component Unified Identifier: deterministic hardware IDs for GPUs, CPUs and NICs"
 HOMEPAGE="https://github.com/ROCm/rocm-systems/tree/develop/projects/cuid"
-# New package; ::gentoo carries nothing of it. CUID derives a deterministic
-# 122-bit identifier for a hardware component from PCIe DSN capabilities,
-# SMBIOS/ACPI serials and similar architectural markers, so the same device can
-# be referred to consistently across vendors and tools. Vendor-neutral and not
-# GPU-specific despite shipping in the ROCm tree, hence sys-apps.
-#
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the 10.0
-# source ships as the cuid.tar.gz asset on the rocm-systems
-# therock-<major.minor> release.
+# AMD retired rocm-* releases; use the cuid asset from the matching TheRock
+# release.
 SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/cuid.tar.gz -> cuid-${PV}.tar.gz"
 S="${WORKDIR}/cuid"
 
 LICENSE="MIT"
-# Versioned by the ROCm release rather than upstream's own version, which it
-# scrapes out of lib/include/amd_cuid.h (0.x here), matching the rest of the
-# stack.
+# Slot by ROCm release, not upstream's 0.x library version.
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64 ~arm64"
 
 IUSE="examples test"
 RESTRICT="!test? ( test )"
 
-# OpenSSL is load-bearing in a way worth stating: upstream does
-# find_package(OpenSSL QUIET) and, if it is NOT found, falls back to
-# FetchContent-cloning janbar/openssl-cmake at configure time -- which cannot
-# work under network-sandbox and would pull in a second, vendored OpenSSL if it
-# could. Declaring the dependency is what keeps the system copy in play.
-# verified 2026-08-31.
+# Without system OpenSSL, upstream FetchContent-clones a vendored copy during
+# configuration, violating network sandbox. # verified 2026-08-31
 RDEPEND="
 	dev-libs/openssl:=
 "
@@ -42,12 +29,10 @@ DEPEND="${RDEPEND}"
 
 src_configure() {
 	local mycmakeargs=(
-		# Plain `set(... CACHE STRING ...)` with no FORCE upstream, so -D wins.
+		# Override upstream's non-forced "lib" cache default.
 		-DCMAKE_INSTALL_LIBDIR="$(get_libdir)"
-		# Upstream default is OFF and it stays OFF: the daemon ships a
-		# systemd unit template plus a postinst script, so wiring it up would
-		# need an OpenRC service and an acct-user of its own. The library and
-		# the amdcuid CLI are the useful parts. Revisit if anyone wants it.
+		# The daemon needs an account and OpenRC integration not provided here;
+		# retain upstream's OFF default.
 		-DBUILD_DAEMON=OFF
 		-DBUILD_EXAMPLES=$(usex examples)
 		-DBUILD_TESTS=$(usex test)
@@ -60,12 +45,7 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# amdcuid_postinst.sh / amdcuid_prerm.sh are dpkg lifecycle hooks, not
-	# tools: they exist to be run by the .deb's maintainer scripts, and both
-	# dispatch to amdcuid_daemon_{postinst,prerm}.sh and ../../bin/amdcuid_daemon
-	# -- none of which exist here, since BUILD_DAEMON is off. They would be
-	# broken by construction. amdcuid_setup_hmac.sh stays: it is the real
-	# provisioning step and is documented in pkg_postinst below.
+	# Drop dpkg hooks for the disabled daemon; keep the documented HMAC setup tool.
 	rm "${ED}"/usr/share/amdcuid/amdcuid_postinst.sh || die
 	rm "${ED}"/usr/share/amdcuid/amdcuid_prerm.sh || die
 }
