@@ -19,9 +19,7 @@ RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
 
 src_configure() {
-	# Upstream's acr-based configure does a WIDEC_CURSES link test without
-	# linking against ncursesw, which fails even when the library is
-	# present. Inject the link flags via LDFLAGS.
+	# acr omits ncursesw from its WIDEC_CURSES link test; inject its flags.
 	LDFLAGS="${LDFLAGS} $($(tc-getPKG_CONFIG) --libs ncursesw)" econf
 }
 
