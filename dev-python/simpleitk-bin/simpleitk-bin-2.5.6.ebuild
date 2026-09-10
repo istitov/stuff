@@ -10,10 +10,8 @@ PYTHON_COMPAT=( python3_{12..14} )
 inherit distutils-r1
 
 MY_PN=${PN%-bin}
-# Upstream ships a single cp311-abi3 wheel: the stable-ABI build loads on
-# CPython 3.11 and every later release, so one wheel covers the whole
-# PYTHON_COMPAT range. A source build would compile a bundled ITK
-# (multi-hour, multi-GB); ::gentoo has no Insight Toolkit, hence -bin.
+# One cp311-abi3 wheel supports every target. A source build compiles a bundled,
+# multi-hour/multi-GB ITK unavailable in ::gentoo, hence -bin.
 AMD64_WHEEL="${MY_PN}-${PV}-cp311-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
 ARM64_WHEEL="${MY_PN}-${PV}-cp311-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl"
 
@@ -47,17 +45,13 @@ RDEPEND="
 QA_PREBUILT="usr/lib/python3.*/site-packages/SimpleITK/*.so*"
 
 src_unpack() {
-	# distutils-r1 with DISTUTILS_USE_PEP517=no and a wheel SRC_URI would
-	# try to unpack the .whl into S. Stash it and feed it to `installer`
-	# per impl instead.
+	# Prevent default wheel unpacking; install it per implementation below.
 	mkdir -p "${S}/wheel" || die
 	cp "${DISTDIR}/${MY_WHEEL}" "${S}/wheel/" || die
 }
 
 python_install() {
-	# One abi3 wheel installs into every enabled implementation;
-	# distutils-r1 runs this phase per impl. python_optimize byte-compiles
-	# all levels (installer alone misses the opt-2 .pyc).
+	# installer misses opt-2 bytecode; compile all levels explicitly.
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${MY_WHEEL}" || die
 	python_optimize
 }
