@@ -19,12 +19,11 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The test suite requires network access and a broad set of optional storage,
-# ML, and database backends.
+# Tests require network access and numerous optional backends.
 RESTRICT="test"
 
-# dev-python/httpx is deprecated in ::gentoo since 2026-04-01, but httpx2 is
-# not a drop-in replacement and upstream requires httpx<1. verified 2026-08-23.
+# httpx is deprecated in ::gentoo, but upstream requires httpx<1 and httpx2 is
+# incompatible. Verified 2026-08-23.
 RDEPEND="
 	>=sci-ml/huggingface_hub-0.25.0[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/huggingface_hub-2[${PYTHON_SINGLE_USEDEP}]
