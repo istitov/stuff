@@ -16,8 +16,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The single Cython extension (vispy/visuals/text/_sdf_cpu) is compiled against
-# the numpy headers, so numpy is a build dep too (DEPEND=${RDEPEND}).
+# The Cython extension uses NumPy headers, so NumPy is also a build dependency.
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/freetype-py[${PYTHON_USEDEP}]
@@ -26,12 +25,8 @@ RDEPEND="
 	dev-python/packaging[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
-# 0.17.0 moved the build off setuptools: the backend is hatchling, the version
-# comes from hatch-vcs instead of setuptools-scm, and the single Cython
-# extension is now driven by the hatch-cython build hook
-# ([tool.hatch.build.targets.wheel.hooks.cython], which names hatch-cython in
-# its own dependencies). setuptools stays a build requirement because upstream
-# still lists it. # verified 2026-09-09
+# hatchling uses hatch-vcs for versioning and hatch-cython for the extension;
+# upstream still declares setuptools. verified 2026-09-09
 BDEPEND="
 	>=dev-python/cython-3.0[${PYTHON_USEDEP}]
 	dev-python/hatch-cython[${PYTHON_USEDEP}]
@@ -40,13 +35,9 @@ BDEPEND="
 	>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
 "
 
-# hatch-vcs derives the version from git and writes vispy/version.py; there is
-# no .git in the sandbox, so pin it. hatch-vcs is a setuptools_scm wrapper and
-# still reads SETUPTOOLS_SCM_PRETEND_VERSION, but only the unsuffixed form --
-# the _FOR_VISPY variant that the setuptools build honoured is not consulted.
-# verified 2026-09-09
+# No Git metadata is available; hatch-vcs honors only setuptools-scm's
+# unsuffixed override. verified 2026-09-09
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 
-# vispy's test suite needs a live OpenGL context / display (a GL app backend),
-# which is unavailable in the build sandbox.
+# Tests require a live OpenGL context and display.
 RESTRICT="test"
