@@ -15,7 +15,7 @@ HOMEPAGE="
 	https://github.com/janaindrajit/primePy
 	https://pypi.org/project/primePy/
 "
-# Predates PEP 625; sdist filename preserves camelCase PyPI name.
+# The legacy sdist preserves PyPI's camel-case name.
 SRC_URI="$(pypi_sdist_url --no-normalize)"
 S="${WORKDIR}/${PYPI_PN}-${PV}"
 
