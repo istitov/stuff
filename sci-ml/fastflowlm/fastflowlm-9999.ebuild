@@ -16,11 +16,9 @@ EGIT_SUBMODULES=( '*' )
 
 LICENSE="MIT FastFlowLM-Binary"
 SLOT="0"
-# No KEYWORDS for live ebuild.
 IUSE="openrc systemd"
 
-# Cargo (inside tokenizers-cpp/rust) fetches crates at build time —
-# same as the tagged ebuilds, hence both PROPERTIES=live + RESTRICT.
+# tokenizers-cpp fetches Rust crates during the live build.
 PROPERTIES="live"
 RESTRICT="network-sandbox"
 
@@ -66,10 +64,8 @@ src_install() {
 	exec /opt/fastflowlm/bin/flm "\$@"
 	EOF
 
-	# Helper that patches HuggingFace Whisper config.json so FLM's
-	# decoder-only LM_Config validator doesn't crash on it. Idempotent;
-	# user runs once after `flm pull whisper-v3:turbo`.
-	# Upstream bug: https://github.com/ROCm/FastFlowLM/issues/545
+	# Install the idempotent workaround for Whisper's incompatible config shape
+	# (upstream issue 545).
 	newbin "${FILESDIR}/flm-patch-whisper" flm-patch-whisper
 
 	newenvd - 99fastflowlm <<-EOF
