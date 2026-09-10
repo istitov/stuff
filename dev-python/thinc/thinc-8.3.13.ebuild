@@ -20,9 +20,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Pinned to 8.3.x: dev-python/spacy 3.8.14 caps thinc<8.4.0,>=8.3.12.
-# thinc 9.x ships on PyPI but spacy doesn't accept it. Verify when
-# spacy bumps its thinc cap upstream.
+# spaCy 3.8 requires Thinc >=8.3.12,<8.4; Thinc 9 is incompatible.
 RDEPEND="
 	${PYTHON_DEPS}
 	>=dev-python/blis-1.3.0[${PYTHON_USEDEP}]
