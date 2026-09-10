@@ -41,8 +41,7 @@ CONFIG_CHECK="~HSA_AMD ~DRM_AMDGPU"
 src_prepare() {
 	cmake_src_prepare
 
-	# Disable code that relies on missing .git directory.
-	# Just silences potential "git: command not found" QA warnings.
+	# Avoid Git probes in release archives.
 	grep -qF 'find_program (GIT NAMES git)' CMakeLists.txt || die "Git anchor moved"
 	sed -e "/find_program (GIT NAMES git)/d" -i CMakeLists.txt || die
 	grep -qF 'num_change_since_prev_pkg(${VERSION_PREFIX})' cmake_modules/utils.cmake ||
