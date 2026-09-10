@@ -74,9 +74,8 @@ DEPEND="
 	>=app-text/texlive-core-2026[xetex]
 "
 
-# TL2026 dropped the context-texlive package: the texexec/texmfstart
-# stubs moved to scripts/context/stubs/, and the stubs-mkiv jit wrappers
-# (contextjit/luatools/mtxrunjit) were removed upstream.
+# TL2026 moved texexec/texmfstart into scripts/context/stubs and removed the
+# contextjit, luatools, and mtxrunjit wrappers.
 TEXLIVE_MODULE_BINSCRIPTS="
 	texmf-dist/scripts/context/stubs/unix/texexec
 	texmf-dist/scripts/context/stubs/unix/texmfstart
@@ -84,7 +83,6 @@ TEXLIVE_MODULE_BINSCRIPTS="
 
 src_prepare() {
 	default
-	# No need to install these .cmd Windows stubs
 	rm -r texmf-dist/scripts/context/stubs/win64 || die
 }
 
