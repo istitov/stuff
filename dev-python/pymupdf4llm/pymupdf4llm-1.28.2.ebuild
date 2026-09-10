@@ -29,6 +29,5 @@ BDEPEND="dev-python/pipcl[${PYTHON_USEDEP}]"
 
 PATCHES=( "${FILESDIR}/${P}-sdist-no-git.patch" )
 
-# Upstream does not declare the suite's test dependencies, and several tests
-# exercise optional OCR engines and external lint tools.
+# Tests require undeclared OCR engines and external lint tools.
 RESTRICT="test"
