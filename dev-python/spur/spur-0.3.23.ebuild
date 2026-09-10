@@ -33,6 +33,6 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 EPYTEST_IGNORE=(
-	# TODO: set up a local SSH server?
+	# Requires an SSH server.
 	tests/ssh_tests.py
 )
