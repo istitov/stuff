@@ -74,9 +74,13 @@ src_prepare() {
 	cmake_src_prepare
 
 	# Remove RPATH's, fixes multilib compatibility
+	grep -qF 'apply_omp_settings' clients/CMakeLists.txt ||
+		die 'apply_omp_settings anchor moved in clients/CMakeLists.txt'
 	sed -e "/apply_omp_settings/a return()" -i clients/CMakeLists.txt || die
 
 	# Disable automagic linking with roctracer
+	grep -qF 'if(ROCTRACER_INCLUDE_DIR' library/CMakeLists.txt ||
+		die 'ROCTRACER_INCLUDE_DIR anchor moved in library/CMakeLists.txt'
 	sed -e "s/if(ROCTRACER_INCLUDE_DIR/if(ROCBLAS_ENABLE_MARKER AND ROCTRACER_INCLUDE_DIR/" \
 		-i library/CMakeLists.txt || die
 }
