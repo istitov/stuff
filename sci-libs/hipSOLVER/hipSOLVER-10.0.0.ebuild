@@ -9,8 +9,7 @@ inherit cmake rocm
 
 DESCRIPTION="CU / ROCM agnostic marshalling library for LAPACK routines on the GPU"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipsolver"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now.
+# Post-7.2.4 component assets use therock-* tags.
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/hipsolver.tar.gz -> hipsolver-${PV}.tar.gz"
 S="${WORKDIR}/hipsolver"
 
@@ -48,25 +47,13 @@ src_configure() {
 		-DBUILD_FILE_REORG_BACKWARD_COMPATIBILITY=OFF
 		-DROCM_SYMLINK_LIBS=OFF
 		-DBUILD_WITH_SPARSE=$(usex sparse ON OFF)
-		# New at 10.0 and defaulting to ON: it ExternalProject_Add()s OpenBLAS
-		# straight from GitHub, which the sandbox has no network for, and
-		# statically bundles it. The else() branch takes LAPACK from
-		# find_package instead. Nothing is lost -- upstream wants it only for
-		# geev, which needs the plain Fortran ?geev_ symbols any LAPACK
-		# provides, and hipsolver links lapack_libraries unconditionally
-		# either way. verified 2026-08-30.
+		# Avoid the default static OpenBLAS network build; system LAPACK supplies
+		# the required geev symbols. # verified 2026-08-30
 		-DHIPSOLVER_INTERNAL_LAPACK_BUILD=OFF
-		# ... and with the internal build off, LAPACK is found for real. This
-		# one defaults to ON ("Skip module mode search for LAPACK"), which wants
-		# a LAPACKConfig.cmake; virtual/lapack providers ship no CMake package
-		# config, so use CMake's own FindLAPACK module instead.
+		# Providers lack LAPACKConfig.cmake; use CMake's FindLAPACK module.
 		-DHIPSOLVER_FIND_PACKAGE_LAPACK_CONFIG=OFF
-		# Pin the provider. Left to itself CMake's FindLAPACK walked off into
-		# /opt/intel/oneapi/mkl and linked an MKL nothing declares a dependency
-		# on -- automagic, and not reproducible on another host. FlexiBLAS is
-		# the same pattern sci-libs/rocBLAS uses, and it dispatches at RUNTIME
-		# to whichever provider the user selected, so pinning it here is the
-		# least restrictive choice rather than the most. verified 2026-08-30.
+		# Prevent automagic host MKL selection. FlexiBLAS matches rocBLAS and
+		# retains runtime provider choice. # verified 2026-08-30
 		-DBLA_PREFER_PKGCONFIG=ON
 		-DBLA_PKGCONFIG_BLAS=flexiblas
 		-DBLA_PKGCONFIG_LAPACK=flexiblas
