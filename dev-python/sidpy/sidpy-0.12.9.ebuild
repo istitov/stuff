@@ -41,6 +41,5 @@ RDEPEND="
 	>=dev-python/pyswarms-1.3.0[${PYTHON_USEDEP}]
 "
 
-# Test suite requires SciFiReaders (a downstream reverse-dep of sidpy)
-# plus bundled HDF5 fixtures; circular and fragile out of tree.
+# Tests require the downstream SciFiReaders package and bundled HDF5 fixtures.
 RESTRICT="test"
