@@ -19,11 +19,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Pinned to 2.5.x: spacy and thinc cap srsly<3.0.0. PyPI sdist is
-# the canonical source — github tags only go up to v2.4.8, which fails
-# to build with current Cython 3.x due to PyInt_Check / Python-2-isms
-# in srsly/msgpack/_packer.pyx; the fix lives only in the PyPI 2.5.x
-# release. (verified 2026-05-09)
+# spaCy and Thinc cap Srsly below 3. PyPI is canonical after GitHub 2.4.8,
+# whose Python 2 Cython code fails with Cython 3. verified 2026-05-09
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-python/catalogue[${PYTHON_USEDEP}]
