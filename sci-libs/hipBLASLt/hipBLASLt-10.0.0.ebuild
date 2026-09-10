@@ -183,7 +183,6 @@ src_configure() {
 	append-cxxflags "-DNDEBUG"
 	CMAKE_BUILD_TYPE="Release"
 
-	# Silence known ROCm source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
 	# Tensile's generated code requires lld.
