@@ -13,7 +13,7 @@ inherit qt5-build
 
 DESCRIPTION="Set of components for creating classic desktop-style UIs for the Qt5 framework"
 
-# keep IUSE defaults in sync with qtgui
+# Match qtgui's USE defaults.
 IUSE="dbus gles2-only gtk +png +X"
 REQUIRED_USE="gtk? ( dbus )"
 
