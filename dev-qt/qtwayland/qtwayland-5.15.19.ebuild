@@ -3,8 +3,7 @@
 
 EAPI=8
 
-# Looking for Qt 6? It is packaged differently to Qt 5 with different
-# package names: https://wiki.gentoo.org/wiki/Project:Qt/Qt6_migration_notes
+# Qt 6 uses different packages; https://wiki.gentoo.org/wiki/Project:Qt/Qt6_migration_notes
 
 if [[ ${PV} != *9999* ]]; then
 	QT5_KDEPATCHSET_REV="r0-0"
