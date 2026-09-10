@@ -10,14 +10,11 @@ HOMEPAGE="
 	https://github.com/astrada/ocamlfuse
 	https://opam.ocaml.org/packages/fuse3/
 "
-# Upstream renamed the opam package ocamlfuse (FUSE 2) -> fuse3 (FUSE 3)
-# at v3.x but kept the GitHub repo name "ocamlfuse"; the tarball unpacks
-# to ocamlfuse-${PV}.
+# The package was renamed to fuse3, but release archives remain ocamlfuse-${PV}.
 SRC_URI="https://github.com/astrada/ocamlfuse/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/ocamlfuse-${PV}"
 
-# LICENSE file ships GPL v2 verbatim; the fuse3.opam metadata's
-# "GPL-1.0-or-later" is looser than the actual file. verified 2026-06-23
+# LICENSE contains GPL-2 despite opam declaring GPL-1+. Verified 2026-06-23.
 LICENSE="GPL-2"
 SLOT="0/${PV}"
 KEYWORDS="~amd64 ~arm64"
