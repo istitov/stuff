@@ -16,10 +16,8 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream pyproject lists `pyaml>=16.9`, but skopt's source uses
-# `import yaml` (PyYAML) — the dep is mislabelled upstream, so keep
-# dev-python/pyyaml here. matplotlib is upstream's `[plots]` extra
-# but commonly used; kept unconditional for now.
+# Source imports PyYAML directly despite declaring pyaml; retain both.
+# matplotlib is the commonly used plots extra.
 RDEPEND="
 	>=dev-python/joblib-0.11[${PYTHON_USEDEP}]
 	>=dev-python/pyaml-16.9[${PYTHON_USEDEP}]
