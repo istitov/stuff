@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Set of Python modules for atomistic simulations"
 HOMEPAGE="https://wiki.fysik.dtu.dk/ase"
-#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="LGPL-2.1+"
@@ -27,5 +26,4 @@ RDEPEND="${PYTHON_DEPS}
 	dev-python/typing-extensions
 	dev-python/psycopg
 	"
-#psycopg2-binary
 DEPEND="dev-python/setuptools"
