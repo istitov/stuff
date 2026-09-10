@@ -250,11 +250,17 @@ jobs:
 
             // Parse "atom old -> new" lines from nvcmp; skip malformed
             // (transient fetch-error lines slip into drift.txt because
-            // nvcmp captures stderr).
+            // nvcmp captures stderr). nvcmp orders versions with PEP 440,
+            // which reads a trailing letter as a pre-release, so an
+            // upstream re-release of the version we ship prints backwards:
+            // "0.3.25 <- 0.3.25a". Keep that one "<-" shape, where upstream
+            // is exactly our version plus one lowercase letter; every other
+            // "<-" row is a we-ship-newer false positive and stays out.
             const driftRows = driftLines
-              .map(l => l.match(/^(\S+)\s+(\S+)\s+->\s+(\S+)$/))
-              .filter(m => m)
-              .map(m => ({ atom: m[1], old: m[2], next: m[3] }));
+              .map(l => l.match(/^(\S+)\s+(\S+)\s+(->|<-)\s+(\S+)$/))
+              .filter(m => m && (m[3] === '->' ||
+                (m[4].startsWith(m[2]) && /^[a-z]$/.test(m[4].slice(m[2].length)))))
+              .map(m => ({ atom: m[1], old: m[2], next: m[4] }));
 
             core.setOutput('when', when);
             core.setOutput('drift_count', String(driftRows.length));
