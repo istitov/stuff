@@ -26,9 +26,8 @@ REQUIRED_USE="
 	?? ( cuda rocm )
 "
 
-# torchvision 0.26.0 requires torch==2.11.0 (exact); pair with our
-# sci-ml/pytorch-2.11 frontend. Restored as a frozen rollback for the
-# vllm(torch==2.11) stack (0.28.0 forward otherwise).
+# Frozen rollback for vllm's torch 2.11 stack; torchvision 0.26 requires that
+# exact PyTorch line.
 RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/numpy[${PYTHON_USEDEP}]
@@ -41,9 +40,7 @@ RDEPEND="
 	=sci-ml/pytorch-2.11*[${PYTHON_SINGLE_USEDEP}]
 "
 
-# Test suite not re-vetted for this frozen rollback (the 0.28.0 deselect set
-# is version-specific); restored purely to keep the torch-2.11 stack
-# installable.
+# Tests remain restricted because newer-version deselections are not portable.
 RESTRICT="test"
 
 src_prepare() {
