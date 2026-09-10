@@ -62,19 +62,8 @@ src_prepare() {
 src_configure() {
 	use doc && export GTK_DOC_PATH=/usr/share/gtk-doc
 
-	# --without-python: pygwy is upstream-disabled in 3.x (configure.ac
-	# hardcodes ENABLE_PYGWY to false; the binding has not been ported to
-	# Python 3 / PyGObject). Python is still needed at build time for
-	# AM_PATH_PYTHON and source-generation helpers.
-	#
-	# No --disable-nls: configure.ac hard-errors on it ("NLS support is
-	# required. Since it is required by GLib, you should not ever see this
-	# error."), so an nls USE flag can only ever be a build break. The
-	# release ebuilds dropped it for this reason in 7a5d3e75f; this branch
-	# kept it until now. sys-devel/gettext is already an unconditional
-	# BDEPEND above. Re-checked against the live branch's own configure.ac
-	# 2026-09-01 (svn cat of GWYDDION-UNSTABLE, line 670) -- the check is
-	# there too, not just in the releases.
+	# pygwy remains disabled upstream, but configure and generators need Python.
+	# NLS is mandatory; gettext is unconditional. verified 2026-09-01
 	econf \
 		--enable-maintainer-mode \
 		--disable-introspection \
