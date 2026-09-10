@@ -38,6 +38,9 @@ RDEPEND="
 		dev-python/sympy[${PYTHON_USEDEP}]
 	')
 "
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
 
 src_unpack() {
 	cp "${DISTDIR}/${A}" "${WORKDIR}/" || die
