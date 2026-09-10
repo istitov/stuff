@@ -18,8 +18,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-# typepy[datetime] extra is what every dependent package actually wants;
-# wire its three deps unconditionally
+# Include the commonly required datetime extra.
 RDEPEND="
 	dev-python/mbstrdecoder[${PYTHON_USEDEP}]
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
