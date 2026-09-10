@@ -11,12 +11,9 @@ if [[ ${QT6_BUILD_TYPE} == release ]]; then
 	KEYWORDS="~amd64 ~arm64"
 fi
 
-# QtDataVisualization is an OpenGL-based 3D scatter/surface/bar viewer.
-# Deprecated upstream as of Qt 6.6 in favour of QtGraphs but still
-# shipped through Qt 6.10. Resurrected in this overlay because
-# sci-physics/sasview's Shape2SAS calculator hard-imports
-# PySide6.QtDataVisualization and ::gentoo dropped this submodule
-# during the Qt6 import.
+# Deprecated in favor of QtGraphs but retained because SasView's Shape2SAS
+# calculator imports PySide6.QtDataVisualization; ::gentoo dropped this Qt6
+# submodule.
 
 RDEPEND="
 	~dev-qt/qtbase-${PV}:6[gui,opengl,widgets]
