@@ -44,8 +44,7 @@ RDEPEND="
 		>=dev-python/typer-0.16.0[${PYTHON_USEDEP}]
 	)
 "
-# Tests pull pytest-examples (depends on missing ruff Python bindings)
-# plus a pile of dev-python/* deps; not worth running in our overlay.
+# Tests require pytest-examples and unavailable Ruff Python bindings.
 RESTRICT="test"
 
 pkg_postinst() {
