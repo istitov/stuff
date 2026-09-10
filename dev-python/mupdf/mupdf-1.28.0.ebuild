@@ -50,16 +50,14 @@ python_compile() {
 }
 
 src_compile() {
-	# libmupdfcpp (C++ wrapper around system app-text/mupdf C lib —
-	# the python.diff patch keeps libmupdf.so itself out of the build,
-	# since we link against system libmupdf instead).
+	# Build libmupdfcpp against system libmupdf; python.diff excludes its copy.
 	LD_LIBRARY_PATH="$(get_llvm_prefix)/$(get_libdir)" \
 	tc-env_build ./scripts/mupdfwrap.py \
 			--dir-so "build/shared-release" \
 			--build 01 \
 			|| die
-	mv build/shared-release/libmupdfcpp.so{,.${PV}} .
-	# _mupdf.so (Python C extension via SWIG)
+	mv build/shared-release/libmupdfcpp.so{,.${PV}} . || die
+	# Build the SWIG Python extension.
 	distutils-r1_src_compile
 }
 
