@@ -9,13 +9,10 @@ inherit python-single-r1
 DESCRIPTION="ROCm SDK pre-built distribution from TheRock (AMDGPU_TARGETS-selected)"
 HOMEPAGE="https://github.com/ROCm/TheRock"
 
-# AMD publishes this release only as a Makeself 2.4.2 runfile; GitHub has no
-# binary assets and per-arch SDK tarballs are nightly-only. Its uncompressed
-# payload contains a shared base and one family tarball, rooted at
-# <component>/rocm/core-7.13. Extract it without running the installer and merge
-# the selected family under /opt/therock-bin; $ORIGIN rpaths need no patching.
-# VERSION says 7.13.0rc2, but AMD labels the runfile 7.13.0. MY_BUILD is the
-# installer revision; revbump if AMD reissues it.
+# AMD publishes only a Makeself runfile; GitHub lacks release SDK binaries.
+# Extract its shared base and family payload without running the installer;
+# $ORIGIN rpaths work under /opt/therock-bin. VERSION says 7.13.0rc2, while AMD
+# labels it 7.13.0. MY_BUILD tracks reissued installers.
 MY_BUILD="3"
 MY_RUN="rocm-installer-${PV}-${MY_BUILD}.run"
 SRC_URI="https://repo.radeon.com/rocm/installer/rocm-runfile-installer/rocm-rel-${PV%.*}/${MY_RUN}"
