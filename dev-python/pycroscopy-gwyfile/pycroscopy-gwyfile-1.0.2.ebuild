@@ -18,8 +18,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Bundled test suite fails to collect under current pytest; the package
-# imports cleanly and is upstream-tested.
+# Tests fail collection under current pytest; the package imports cleanly.
 RESTRICT="test"
 
 RDEPEND="
