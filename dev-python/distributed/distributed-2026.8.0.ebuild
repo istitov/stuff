@@ -25,8 +25,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 RESTRICT="test"	# Upstream test suite is flaky / network-dependent.
 
-# Upstream also excludes tblib 3.2.0/3.2.1 (broken releases); neither is in
-# ::gentoo (only 3.2.2), so the != atoms are moot and omitted. verified 2026-07-14
+# Broken tblib 3.2.0/3.2.1 are absent from ::gentoo. Verified 2026-07-14.
 RDEPEND="
 	>=dev-python/click-8.0[${PYTHON_USEDEP}]
 	>=dev-python/cloudpickle-3.0.0[${PYTHON_USEDEP}]
