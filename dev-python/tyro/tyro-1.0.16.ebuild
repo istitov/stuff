@@ -18,7 +18,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# flax/torch are only the dev-nn extra; the core is small and pure-Python.
+# Flax and PyTorch belong only to the optional dev-nn extra.
 RDEPEND="
 	>=dev-python/docstring-parser-0.16[${PYTHON_USEDEP}]
 	>=dev-python/typeguard-4.0.0[${PYTHON_USEDEP}]
