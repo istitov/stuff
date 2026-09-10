@@ -28,9 +28,8 @@ RDEPEND="
 	')
 "
 DEPEND="${RDEPEND}"
-# The gloo test dependency sits on caffe2 (where the flag lives in this
-# tree) and only on amd64: gloo requires caffe2[distributed], and both
-# flags are profile-masked everywhere else. verified 2026-09-06
+# gloo lives on caffe2, requires caffe2[distributed], and is profile-masked
+# outside amd64. Verified 2026-09-06.
 BDEPEND="test? (
 	$(python_gen_cond_dep '
 		dev-python/networkx[${PYTHON_USEDEP}]
