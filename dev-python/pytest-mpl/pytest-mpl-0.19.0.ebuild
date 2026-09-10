@@ -15,7 +15,8 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="examples"
-RESTRICT="test"	# Test phase runs with fails
+# The upstream suite currently fails in the ebuild environment.
+RESTRICT="test"
 
 RDEPEND="
 	>=dev-python/pytest-6.2.5[${PYTHON_USEDEP}]
