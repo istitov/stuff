@@ -23,7 +23,7 @@ DEPEND="
 	dev-texlive/texlive-plaingeneric
 "
 RDEPEND="${DEPEND}"
-# biblatex and biber must always have compatible versions
+# Match biber to biblatex's minor version.
 PDEPEND="biber? ( ~dev-tex/biber-2.$(ver_cut 2) )"
 BDEPEND="
 	doc? (
