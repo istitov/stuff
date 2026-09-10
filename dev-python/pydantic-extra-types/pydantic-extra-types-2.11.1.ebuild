@@ -23,9 +23,7 @@ RDEPEND="
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
 
-# dev-python/uuid-utils is ::guru-only, and the rest of the test harness
-# pulls a sprawl of dev-python/* deps not needed at runtime. Skip tests
-# in our overlay's fork.
+# Tests require ::guru-only uuid-utils and many runtime-irrelevant dependencies.
 RESTRICT="test"
 
 pkg_postinst() {
