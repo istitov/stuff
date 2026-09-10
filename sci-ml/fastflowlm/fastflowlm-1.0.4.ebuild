@@ -82,6 +82,8 @@ src_prepare() {
 	# own wrapper via newbin + env.d below.
 	sed -i '/if.*NOT WIN32.*CMAKE_INSTALL_PREFIX/,/endif()/d' \
 		"${S}/src/CMakeLists.txt" || die
+	# Exclude a backup binary caught by upstream's *.so* install glob.
+	rm "${S}/src/lib/xrt/libq4_npu_eXpress.so.bak-20260826" || die
 	cmake_src_prepare
 }
 
@@ -114,14 +116,16 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
+	local flm_libdir="/opt/fastflowlm/$(get_libdir)"
+
 	# Wrapper so flm finds XRT and its own libs at runtime
 	# (lemonade-sdk/lemonade#1315).
-	newbin - flm <<-'EOF'
+	newbin - flm <<-EOF
 	#!/usr/bin/env bash
 	set -euo pipefail
-	export LD_LIBRARY_PATH="/opt/fastflowlm/lib:/opt/xilinx/xrt/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
-	export FLM_CONFIG_PATH="${FLM_CONFIG_PATH:-/opt/fastflowlm/share/flm/model_list.json}"
-	exec /opt/fastflowlm/bin/flm "$@"
+	export LD_LIBRARY_PATH="${flm_libdir}:/opt/xilinx/xrt/lib\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}"
+	export FLM_CONFIG_PATH="\${FLM_CONFIG_PATH:-/opt/fastflowlm/share/flm/model_list.json}"
+	exec /opt/fastflowlm/bin/flm "\$@"
 	EOF
 
 	# Helper that patches HuggingFace Whisper config.json so FLM's
@@ -130,8 +134,8 @@ src_install() {
 	# Upstream bug: https://github.com/ROCm/FastFlowLM/issues/545
 	newbin "${FILESDIR}/flm-patch-whisper" flm-patch-whisper
 
-	newenvd - 99fastflowlm <<-'EOF'
-	LDPATH="/opt/fastflowlm/lib"
+	newenvd - 99fastflowlm <<-EOF
+	LDPATH="${flm_libdir}"
 	PATH="/opt/fastflowlm/bin"
 	FLM_CONFIG_PATH="/opt/fastflowlm/share/flm/model_list.json"
 	EOF
