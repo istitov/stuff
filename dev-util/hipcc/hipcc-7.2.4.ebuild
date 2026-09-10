@@ -62,6 +62,6 @@ src_prepare() {
 
 src_install() {
 	cmake_src_install
-	# remove bat files...
+	# Drop Windows launchers installed under /usr/hip.
 	rm -rf "${ED}/usr/hip" || die
 }
