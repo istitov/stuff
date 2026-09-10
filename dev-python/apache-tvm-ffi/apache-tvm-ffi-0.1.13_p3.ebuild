@@ -39,13 +39,9 @@ BDEPEND="
 EPYTEST_PLUGINS=( pytest-xdist )
 distutils_enable_tests pytest
 
-# Upstream's pyproject.toml [tool.scikit-build] sets a cmake.args list
-# that includes -DTVM_FFI_BUILD_PYTHON_MODULE=ON. The Gentoo PEP517
-# helper writes its own --config-json with cmake.args, which replaces
-# the pyproject.toml value, so the option falls back to its CMakeLists
-# default (OFF) and the cython core extension is skipped, leaving an
-# unimportable installed package. Re-pass the option via DISTUTILS_ARGS
-# so it survives the override. # verified 2026-08-10 against 0.1.13.post3.
+# Gentoo's PEP 517 config replaces upstream cmake.args; repeat this option or
+# the Cython extension stays disabled and the package cannot import.
+# verified 2026-08-10
 DISTUTILS_ARGS=(
 	-DTVM_FFI_BUILD_PYTHON_MODULE=ON
 )
