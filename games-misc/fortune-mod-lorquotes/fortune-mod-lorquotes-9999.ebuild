@@ -14,7 +14,8 @@ SLOT="0"
 KEYWORDS=""
 
 RDEPEND="games-misc/fortune-mod"
-BDEPEND="games-misc/fortune-mod"	# provides strfile
+# Provides strfile.
+BDEPEND="games-misc/fortune-mod"
 
 src_compile() {
 	strfile lor || die
