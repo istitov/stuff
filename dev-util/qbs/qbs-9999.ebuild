@@ -16,7 +16,7 @@ KEYWORDS=""
 IUSE="doc test"
 RESTRICT="!test? ( test )"
 
-# uses CorePrivate wrt qtbase:=
+# Uses Qt CorePrivate; rebuild with qtbase subslot changes.
 RDEPEND="
 	dev-qt/qt5compat:6
 	dev-qt/qtbase:6=[concurrent,gui,network,widgets,xml]
@@ -33,11 +33,8 @@ BDEPEND="
 "
 
 CMAKE_SKIP_TESTS=(
-	# QBS does not inherit toolchain/flags knowledge from cmake, and
-	# while can use ${BUILD_DIR}/bin/qbs-config to improve this it
-	# remains very fickle and will fail in varied ways with clang,
-	# musl, -native-symlinks, and libc++. After consideration it feels
-	# not worth worrying about affected tests here (even if notable).
+	# QBS test projects do not inherit the CMake toolchain and fail variably with
+	# clang, musl, -native-symlinks, and libc++.
 	tst_api
 	tst_blackbox # also skips blackbox-* (intended)
 	tst_language
@@ -49,7 +46,7 @@ PATCHES=(
 )
 
 python_check_deps() {
-	# _find_python_module in cmake/QbsDocumentation.cmake
+	# Required by QbsDocumentation.cmake.
 	python_has_version "dev-python/beautifulsoup4[${PYTHON_USEDEP}]" &&
 	python_has_version "dev-python/lxml[${PYTHON_USEDEP}]"
 }
@@ -59,11 +56,10 @@ pkg_setup() {
 }
 
 src_configure() {
-	# temporary workaround for musl-1.2.4 (bug #906929), this ideally
-	# needs fixing in qtbase as *64 usage comes from its headers' macros
+	# Work around Qt header macros on musl (bug 906929).
 	use elibc_musl && append-lfs-flags
 
-	# tests build failure w/ gcc:14 + -O3 (bug #933187, needs looking into)
+	# Tests fail with GCC 14+ at -O3 (bug 933187).
 	use test && tc-is-gcc && [[ $(gcc-major-version) -ge 14 ]] &&
 		replace-flags -O3 -O2
 
