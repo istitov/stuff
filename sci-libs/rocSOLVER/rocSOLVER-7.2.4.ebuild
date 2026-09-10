@@ -47,7 +47,7 @@ PATCHES=(
 src_configure() {
 	rocm_use_clang
 
-	# too many warnings
+	# Silence Clang's explicit-specialization storage-class warning.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
 	local mycmakeargs=(
@@ -75,8 +75,7 @@ src_configure() {
 src_test() {
 	check_amdgpu
 	cd "${BUILD_DIR}"/clients/staging || die
-	# No filters: 64m28s on gfx1100
-	# 'checkin*-*known_bug*': 1m35s
+	# Full suite takes 64m28s on gfx1100; keep checkin and targeted coverage.
 	HIP_VISIBLE_DEVICES=0 LD_LIBRARY_PATH="${BUILD_DIR}/library/src" \
 		edob ./rocsolver-test \
 		--gtest_filter='checkin*-*known_bug*:*GVD*batched*:*STEDCX*/74:*BDSVDX*:*SYGVDX_INPLACE.__float*'
