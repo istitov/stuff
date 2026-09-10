@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
 
-# Github tarball loses .git/ — setuptools-scm needs the version via env.
+# Supply the version because GitHub archives lack SCM metadata.
 export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_DLINFO="${PV}"
 
 BDEPEND="dev-python/setuptools-scm[${PYTHON_USEDEP}]"
