@@ -30,7 +30,6 @@ RDEPEND="
 	media-libs/portaudio
 	numpy? ( dev-python/numpy[${PYTHON_USEDEP}] )
 "
-DEPEND="${RDEPEND}"
 BDEPEND="
 	dev-python/cffi[${PYTHON_USEDEP}]
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
