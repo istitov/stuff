@@ -24,7 +24,7 @@ RDEPEND+="
 "
 
 pkg_setup() {
-	# sci-ml/ollama[cuda]
+	# CUDA device access requires video group membership.
 	if use cuda; then
 		ACCT_USER_GROUPS+=( video )
 	fi
