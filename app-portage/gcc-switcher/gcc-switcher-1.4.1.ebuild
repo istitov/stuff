@@ -25,7 +25,7 @@ src_install() {
 }
 
 pkg_preinst() {
-	# Preserve existing user config across reinstalls.
+	# Keep user configuration across reinstalls.
 	local f
 	for f in package.compilers package.compilers-full; do
 		if [[ -f "${EROOT}/etc/portage/${f}" ]]; then
