@@ -31,7 +31,6 @@ if [[ ${PKGBUMPING} != ${PVR} ]]; then
 fi
 
 LICENSE="Apache-2.0"
-# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD ISC MIT MPL-2.0
 	Unicode-DFS-2016
@@ -83,10 +82,7 @@ src_compile() {
 }
 
 src_test() {
-	cd tokenizers
-	# Tests do not work
-	#cargo_src_test
-	cd ../bindings/python
+	cd bindings/python || die
 	local -x EPYTEST_IGNORE=( benches/ )
 	local -x EPYTEST_DESELECT=(
 		tests/bindings/test_encoding.py::TestEncoding::test_sequence_ids
@@ -136,7 +132,6 @@ src_test() {
 }
 
 src_install() {
-	cd tokenizers
-	cd ../bindings/python
+	cd bindings/python || die
 	distutils-r1_src_install
 }
