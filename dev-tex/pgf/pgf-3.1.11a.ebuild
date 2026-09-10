@@ -19,8 +19,7 @@ IUSE="doc source"
 
 RDEPEND="dev-texlive/texlive-latexrecommended"
 
-# ADJUST ON BUMPS: The date of the according release tag. See also
-# upstream's build.lua
+# Keep synchronized with the release date in upstream build.lua.
 PGF_VERSION_DATE="2025-08-29"
 
 src_install() {
@@ -43,7 +42,7 @@ EOF
 	if use doc; then
 		cd "${S}/doc/generic/pgf" || die
 		docinto texdoc
-		# pgfmanual is now split from the main tar archive
+		# pgfmanual ships as a separate release asset.
 		newdoc "${DISTDIR}/${P}-pgfmanual.pdf" pgfmanual.pdf
 		doins -r images
 
