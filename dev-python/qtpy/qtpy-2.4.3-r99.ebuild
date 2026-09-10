@@ -19,16 +19,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86"
 
-# This is a fork of ::gentoo's dev-python/qtpy-2.4.3-r2 with one
-# functional change: a `pyqt5` USE flag that suppresses the
-# PyQt5-disabling sed in src_prepare. ::gentoo unconditionally patches
-# qtpy/__init__.py so the PyQt5 import path raises ImportError
-# (Gentoo's Qt5 deprecation policy), which means any qtpy consumer
-# that targets Qt5 (notably sci-physics/mantid) cannot actually
-# load — the import chain dies on `from qtpy.QtWidgets import
-# QDesktopWidget` because qtpy falls through to PyQt6 and PyQt6
-# removed QDesktopWidget. With USE=pyqt5 enabled, qtpy honours
-# QT_API=pyqt5 and routes through dev-python/pyqt5 normally.
+# Fork adds USE=pyqt5 for Qt5-only consumers such as Mantid. ::gentoo disables
+# that path by policy, causing fallback to PyQt6 where QDesktopWidget is gone;
+# enabling the flag preserves QT_API=pyqt5.
 _IUSE_QT_MODULES="
 	bluetooth dbus designer +gui help multimedia +network nfc opengl pdfium
 	positioning printsupport qml quick quick3d remoteobjects scxml sensors
@@ -99,9 +92,7 @@ distutils_enable_tests pytest
 src_prepare() {
 	distutils-r1_src_prepare
 
-	# Disable PyQt5 only when USE=pyqt5 is off — preserves ::gentoo's
-	# default Qt5-deprecation behaviour. When USE=pyqt5 is on, leave
-	# the PyQt5 detection path intact.
+	# Preserve ::gentoo's Qt5-deprecation default unless explicitly enabled.
 	if ! use pyqt5; then
 		sed \
 			-e '/from PyQt5.QtCore import/,/)/c\ \ \ \ \ \ \ \ raise ImportError #/' \
@@ -109,14 +100,11 @@ src_prepare() {
 			-i qtpy/__init__.py || die
 	fi
 
-	# Always promote the next sys.modules check to a fresh `if` so a
-	# disabled binding above doesn't strand it as `elif`.
+	# Do not strand the next binding check as elif.
 	sed -e 's/elif "PySide2" in sys.modules:/if "PySide2" in sys.modules:/g' \
 		-i qtpy/__init__.py || die
 
-	# Always disable PySide2 — there is no `pyside2` USE flag here
-	# either; if a future use case demands it the same pattern as the
-	# pyqt5 gate applies.
+	# PySide2 has no supported USE flag; disable it unconditionally.
 	sed \
 		-e "s/from PySide2 import/raise ImportError #/" \
 		-e "s/from PySide2.QtCore import/raise ImportError #/" \
