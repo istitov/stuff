@@ -14,8 +14,7 @@ HOMEPAGE="
 	https://github.com/chiahao3/ptyrad
 	https://pypi.org/project/ptyrad/
 "
-# The PyPI sdist ships no tests; use the GitHub release archive so the
-# tests/ tree is present for src_test.
+# Use the GitHub archive because the PyPI sdist omits tests/.
 SRC_URI="
 	https://github.com/chiahao3/ptyrad/archive/refs/tags/v${PV}.tar.gz
 		-> ${P}.gh.tar.gz
@@ -26,12 +25,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="examples"
 
-# pytorch, torchvision and accelerate are themselves DISTUTILS_SINGLE_IMPL,
-# so they take ${PYTHON_SINGLE_USEDEP}; the rest are ordinary multi-impl
-# modules. numpy is imported directly throughout ptyrad but is absent from
-# upstream's pyproject (it rides in transitively via torch) -- declare it.
-# jupyter is pulled only to *run* the bundled starter notebooks; no ptyrad
-# module imports it, so it is gated behind USE=examples.
+# Use single-implementation deps for the PyTorch stack. Declare numpy because
+# ptyrad imports it directly despite omitting it upstream; jupyter is needed
+# only to run bundled examples.
 RDEPEND="
 	>=sci-ml/pytorch-2.4[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
@@ -55,7 +51,6 @@ RDEPEND="
 	)
 "
 
-# The suite is plain pytest (tmp_path, parametrize, raises, subprocess) with
-# no third-party plugins.
+# Load no third-party pytest plugins.
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
