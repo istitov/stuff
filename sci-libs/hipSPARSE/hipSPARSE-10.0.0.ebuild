@@ -9,9 +9,7 @@ inherit cmake rocm
 
 DESCRIPTION="ROCm SPARSE marshalling library"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipsparse"
-# share some test datasets with rocSPARSE
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now.
+# ROCm 10 component assets use therock tags; rocm tags end at 7.2.4.
 MY_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)"
 SRC_URI="${MY_URI}/hipsparse.tar.gz -> hipsparse-${PV}.tar.gz"
 S="${WORKDIR}/hipsparse"
@@ -22,8 +20,7 @@ KEYWORDS="~amd64"
 IUSE="benchmark"
 REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
-# The tests heavily abuse out-of-bounds array access and fail with hardened
-# libc++. Do not expose dead USE=test plumbing while the phase is restricted.
+# Tests perform out-of-bounds accesses and fail with hardened libc++.
 RESTRICT="test"
 
 RDEPEND="
@@ -37,17 +34,8 @@ BDEPEND="
 "
 
 src_prepare() {
-	# too many warnings from -Wall (applied after user CXXFLAGS)
-	#
-	# Guarded because `sed` exits 0 on no-match, so an upstream that stops
-	# spelling -Wall here would leave the suppression silently inert rather
-	# than failing.
-	#
-	# clients/tests/CMakeLists.txt was in this list through 7.2.4 but carries
-	# no -Wall at 10.0 (the file still exists; the flag is gone), so listing it
-	# was a silent no-op -- dropped rather than left to imply coverage it does
-	# not provide. The guard below is what caught it.
-	# verified 2026-08-30 against the therock-10.0 source.
+	# Upstream adds -Wall after user flags; guard its remaining anchors before
+	# adding the required suppression. verified 2026-08-30
 	local f
 	for f in clients/benchmarks/CMakeLists.txt library/CMakeLists.txt; do
 		grep -q -- '-Wall' "${f}" ||
