@@ -41,8 +41,6 @@ EGIT_BRANCH="master"
 LICENSE="GPL-2"
 SLOT="0"
 
-#QA_FLAGS_IGNORED="usr/bin/${PN}"
-
 src_unpack() {
 	git-r3_checkout
 	cargo_src_unpack
@@ -50,5 +48,4 @@ src_unpack() {
 
 src_configure() {
 	cargo_gen_config
-	#ln -s ../cargo_home/config ../cargo_home/config.toml
 }
