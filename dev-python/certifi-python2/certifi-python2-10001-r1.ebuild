@@ -25,10 +25,8 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# DISTUTILS_OPTIONAL suppresses the eclass's PYTHON_DEPS and
-# PYTHON_REQUIRED_USE and leaves them to the ebuild; neither was supplied, so
-# this resolved with no Python 2 interpreter and no target constraint.
-# verified 2026-07-27
+# DISTUTILS_OPTIONAL omits interpreter dependencies and constraints; declare
+# both explicitly. Verified 2026-07-27.
 RDEPEND="${PYTHON_DEPS}
 	app-misc/ca-certificates
 "
