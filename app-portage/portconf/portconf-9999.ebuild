@@ -12,8 +12,6 @@ EGIT_REPO_URI="https://github.com/istitov/portconf.git"
 LICENSE="GPL-3+"
 SLOT="0"
 PROPERTIES="live"
-# No KEYWORDS — live ebuilds are unkeyworded by Gentoo convention and
-# must be unmasked per-system via package.accept_keywords.
 IUSE="+bash-completion +zsh-completion test"
 RESTRICT="!test? ( test )"
 
@@ -26,10 +24,8 @@ RDEPEND="
 	sys-apps/portage
 	bash-completion? ( app-shells/bash-completion )
 "
-# Live builds start from a git checkout, not a `make dist` tarball, so
-# autoconf + automake are needed to generate configure / Makefile.in.
-# Test BDEPEND also mirrors RDEPEND so the integration tier gets its
-# runtime tools guaranteed-installed-before-build (see release ebuild).
+# Generate Autotools files for the live checkout. Mirror runtime tools into
+# test BDEPEND for the integration tier.
 BDEPEND="
 	dev-build/autoconf
 	dev-build/automake
@@ -61,7 +57,7 @@ src_configure() {
 src_test() {
 	bats tests/unit/ || die "bats unit tests failed"
 
-	# See release ebuild for the eix-cache rationale.
+	# Integration tests require a populated eix cache.
 	if ! eix -qe sys-apps/portage >/dev/null 2>&1; then
 		ewarn "eix cache is empty or stale on this system."
 		ewarn "Run \`eix-update\` as root before re-running tests."
