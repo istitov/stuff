@@ -25,9 +25,7 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="test webkit"
 RESTRICT="!test? ( test )"
 
-# wxPython doesn't seem to be able to optionally disable features. webkit is
-# optionally patched out because it's so huge, but other elements are not,
-# which makes us have to require all features from wxGTK
+# Only WebKit can be disabled; require wxGTK's other features.
 DEPEND="
 	>=x11-libs/wxGTK-3.3.3:${WX_GTK_VER}=[gstreamer,libnotify,opengl,sdl,tiff,webkit?,X]
 	media-libs/libpng:=
@@ -85,19 +83,15 @@ src_configure() {
 }
 
 python_compile() {
-	# Patch will fail if copy of refreshed sip file is not restored
-	# if using multiple Python implementations.
-	# TODO: Could we do this in python_compile_all() instead? It would
-	# save a lot of time.
+	# Preserve the regenerated SIP source across Python implementations.
 	DOXYGEN="$(type -P doxygen)" ${PYTHON} build.py dox touch etg sip --nodoc || die
 
 	cp "${S}/sip/cpp/sip_corewxAppTraits.cpp" "${S}" || die
 
 	distutils-r1_python_compile
 
-	# This package's built system relies on copying extensions back
-	# to source directory for setuptools to pick them up.  This is
-	# hopeless.
+	# Setuptools copies extensions into the source tree; remove them before
+	# building the next Python implementation.
 	find -name "*$(get_modname)" -delete || die
 
 	cp "${S}/sip_corewxAppTraits.cpp" "${S}/sip/cpp/" || die
@@ -105,7 +99,7 @@ python_compile() {
 
 python_test() {
 	local EPYTEST_DESELECT=(
-		# Tests requiring persistent display state or input fail under Xvfb.
+		# Xvfb lacks the persistent display/input state these tests require.
 		unittests/test_display.py::display_Tests::test_display
 		unittests/test_dirctrl.py::dirctrl_Tests::test_dirctrlGetPath
 		unittests/test_dirctrl.py::dirctrl_Tests::test_dirctrlGetPaths
@@ -116,18 +110,18 @@ python_test() {
 		unittests/test_uiaction.py::uiaction_KeyboardTests::test_uiactionKeyboardText
 		unittests/test_uiaction.py::uiaction_MouseTests
 
-		# assertion (TODO)
+		# Known assertion failures.
 		unittests/test_aboutdlg.py::aboutdlg_Tests::test_aboutdlgGeneric
 		unittests/test_lib_agw_piectrl.py::lib_agw_piectrl_Tests::test_lib_agw_piectrlCtor
 
-		# seems to rely on state from a previous test (sigh)
+		# Order-dependent tests.
 		unittests/test_lib_agw_persist_persistencemanager.py::lib_agw_persist_persistencemanager_Tests::test_persistencemanagerRestore
 		unittests/test_lib_agw_persist_persistencemanager.py::lib_agw_persist_persistencemanager_Tests::test_persistencemanagerPersistValue
 
-		# requires Spanish localization
+		# Requires a Spanish locale.
 		unittests/test_intl.py::intl_Tests::test_intlGetString
 
-		# TODO
+		# Other known failures.
 		unittests/test_tipwin.py::tipwin_Tests::test_tipwinCtor
 		unittests/test_lib_pubsub_provider.py::lib_pubsub_Except::test1
 		unittests/test_windowid.py::IdManagerTest::test_newIdRef03
@@ -138,7 +132,6 @@ python_test() {
 	fi
 
 	rm -rf wx || die
-	# We use pytest-forked as opensuse does to avoid tests corrupting each
-	# other.
+	# Isolate tests that corrupt shared process state.
 	virtx epytest --forked unittests
 }
