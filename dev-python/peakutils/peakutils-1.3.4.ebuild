@@ -24,4 +24,3 @@ RDEPEND="
 	>=dev-python/numpy-1.8[${PYTHON_USEDEP}]
 	>=dev-python/scipy-0.11[${PYTHON_USEDEP}]
 "
-#dev-python/PyQt4
