@@ -43,9 +43,8 @@ IUSE="cuda python test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
-# cmake/deps.txt pins the final ONNX 1.22.0 release. The system-libraries
-# patch turns that FetchContent entry into a required find_package call, so
-# keep the system package at the exact upstream floor.
+# The system-libraries patch turns upstream's ONNX 1.22.0 pin into a required
+# find_package call; retain that exact floor.
 RDEPEND="
 	!cuda? ( dev-cpp/abseil-cpp:= )
 	dev-libs/cpuinfo
@@ -100,10 +99,8 @@ PATCHES=(
 
 CMAKE_USE_DIR="${S}/cmake"
 
-# Throttle nvcc during the compile phase only: flash-attention nvcc jobs
-# each consume more than 3 GiB, so cap concurrency to avoid OOM while
-# preserving any lower user limit. Not applied to the install phase, which
-# only copies files and spawns no compiler.
+# CUDA compilation uses >3 GiB per nvcc job; cap it at four without raising a
+# lower user limit. Installation does not need throttling.
 onnxruntime_cmake_phase() {
 	local jobs=$(makeopts_jobs)
 	if use cuda && (( jobs > 4 )); then
@@ -123,7 +120,7 @@ src_prepare() {
 }
 
 src_configure() {
-	# Python is used at build time unconditionally
+	# Python is an unconditional build tool.
 	python_setup
 
 	local mycmakeargs=(
@@ -133,29 +130,20 @@ src_configure() {
 		-Donnxruntime_ENABLE_PYTHON=$(usex python)
 		-Donnxruntime_USE_CUDA=$(usex cuda)
 
-		# Use vendored Eigen at a specific 3.4-branch commit (2025-02-15).
-		# ::gentoo's dev-cpp/eigen-3.4.0-r3 (Aug 2021) lacks 3+ years of
-		# fixes onnxruntime depends on; eigen-3.4.9999 (live) would work
-		# but a live ebuild as a build-dep is fragile. Eigen 5.0.1
-		# (released 2026) is a major API break; onnxruntime's CMakeLists
-		# doesn't yet support it. Drop the vendor when ::gentoo carries
-		# a tagged 3.4.x release post-2025-02 or when upstream supports
-		# Eigen 5.x. Verified 2026-05-16.
+		# Gentoo's Eigen 3.4.0 lacks required fixes, while 5.x is unsupported.
+		# Use upstream's pinned 3.4 commit until a newer tagged 3.4.x lands or
+		# onnxruntime gains Eigen 5 support. # verified 2026-05-16
 		-DFETCHCONTENT_SOURCE_DIR_EIGEN3="${WORKDIR}/eigen-${EIGEN_COMMIT}"
 
-		# This makes it possible for `find_path` to find the `onnx-ml.proto` file
+		# Expose installed onnx-ml.proto to find_path.
 		-DCMAKE_INCLUDE_PATH="$(python_get_sitedir)"
 
 		-Wno-dev
 	)
 
 	if use cuda; then
-		# nvcc rejects gcc newer than the active CUDA toolkit supports
-		# (CUDA 13 tops out at gcc 15). cuda_gccdir picks the newest
-		# supported slot; pin ordinary C++, CUDA host compilation, and
-		# final linking to it so all three share one libstdc++ ABI. The
-		# cuda? sys-devel/gcc:15 BDEPEND guarantees a compatible slot is
-		# installed for cuda_gccdir to find.
+		# CUDA 13 rejects gcc >15. Use cuda_gccdir for C++, nvcc hosting, and
+		# linking so all stages share one libstdc++ ABI; BDEPEND guarantees it.
 		local cuda_gcc_bindir
 		cuda_gcc_bindir="$(cuda_gccdir)" || die
 		local -x CC="${cuda_gcc_bindir}/gcc"
@@ -177,13 +165,8 @@ src_configure() {
 		-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST="${WORKDIR}/googletest-${GTEST_VERSION}"
 	)
 
-	# 1.29.0 adds a non-Windows telemetry path (1DS SDK: cpp_client_telemetry
-	# plus a bundled static curl + mbedTLS) as three new cmake/deps.txt
-	# FetchContent entries. They are gated behind onnxruntime_USE_TELEMETRY
-	# (option default OFF, cmake/CMakeLists.txt), which we do not enable, so
-	# none of the three are fetched -- no new system deps and nothing to fetch
-	# under portage's network sandbox. Revisit if USE_TELEMETRY is ever wired.
-	# verified 2026-08-12 against onnxruntime-1.29.0
+	# Telemetry's 1DS/curl/mbedTLS FetchContent deps remain inactive while its
+	# default-off option is unwired. Revisit if enabling it. # verified 2026-08-12
 	append-ldflags -Wl,-z,noexecstack
 	cmake_src_configure
 }
@@ -211,7 +194,6 @@ src_test() {
 	fi
 }
 
-# There is some custom logic in `setup.py`
 python_install() {
 	cd "${S}/cmake_build" || die
 	edo "${EPYTHON}" ../setup.py install \
