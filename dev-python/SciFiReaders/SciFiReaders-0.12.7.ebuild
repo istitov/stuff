@@ -41,19 +41,13 @@ RDEPEND="
 	tiff? ( dev-python/tifffile[${PYTHON_USEDEP}] )
 "
 
-# pillow is declared upstream under the optional [image] extra, but the
-# image reader does an unconditional `import PIL` that runs on every
-# `import SciFiReaders`, so it is effectively a core dependency.
-#
-# The igor2 extra is omitted: igor2 is not packaged, and the Igor reader
-# guards its import and only fails when an Igor file is actually opened.
-#
-# Test suite downloads remote fixtures via gdown and needs igor2/aicspylibczi.
+# pillow is effectively mandatory: every SciFiReaders import reaches an
+# unconditional PIL import. Omit unavailable igor2 because its reader guards
+# the import. Tests need remote fixtures plus igor2 and aicspylibczi.
 RESTRICT="test"
 
 python_prepare_all() {
-	# setuptools auto-discovery installs the top-level examples/ dir as a
-	# stray namespace package; widen the packages.find exclude to drop it.
+	# Exclude examples/ from setuptools namespace discovery.
 	sed -i \
 		-e 's/"tests"\]/"tests", "examples", "examples.*", "docs", "docs.*"]/' \
 		pyproject.toml || die
