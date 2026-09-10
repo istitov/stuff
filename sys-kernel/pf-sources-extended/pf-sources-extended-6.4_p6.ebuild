@@ -3,27 +3,19 @@
 
 EAPI=8
 
-# 6.4 is a non-LTS kernel that reached end-of-life upstream (linux-stable
-# stopped at 6.4.16). The trunk-pinned patches captured here track stable
-# all the way to 6.4.16 — full coverage for this EOL branch.
+# EOL at 6.4.16; the bundled genpatches cover the complete stable branch.
 
 ETYPE="sources"
 
 # Curated pf delta sets EXTRAVERSION via the patch itself.
 K_NOSETEXTRAVERSION="1"
 
-# K_SECURITY_UNSUPPORTED is set because the curated pf delta is not
-# covered by Gentoo's security
-# team — bugs in the pf-specific portions (BBRv3, x86 ISA levels, zstd
-# bump, DDCCI driver, syscall.tbl additions) need to be reported to
-# natalenko or the overlay maintainers. Note that 6.4 itself is EOL
-# upstream, so no further linux-stable backports will arrive.
+# Gentoo security does not cover the curated pf delta; report its bugs to
+# pf-kernel or the overlay. This branch is also EOL upstream.
 K_SECURITY_UNSUPPORTED="1"
 
-# Map "6.4_p6" → "6.4" for the kernel.org tarball + genpatches.
 SHPV="${PV/_p*/}"
 
-# Pretend version visible in /lib/modules and /usr/src.
 PFPV="${PV/_p/-pf}"
 
 inherit kernel-2 optfeature
@@ -32,12 +24,8 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# No genpatches release tarball exists for the 6.4 branch (dev.gentoo.org
-# stops at 6.3), so this uses a per-slot snapshot of alicef's genpatches
-# trunk (a live working dir), bundled as pf-genpatches-${SHPV}.tar.xz on the
-# sister overlay extra-stuff (https://github.com/istitov/extra-stuff), pinned
-# by immutable tag -r70-1 (refresh = new tag suffix). The bundle is the
-# durable reference.
+# No 6.4 genpatches release tarball exists. An immutable extra-stuff tag
+# snapshots alicef's otherwise-live trunk; refreshes use a new tag suffix.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
@@ -68,18 +56,15 @@ src_unpack() {
 }
 
 src_prepare() {
-	# Apply the genpatches stack (stable backports + non-stable additions).
 	eapply "${WORKDIR}/pf-genpatches-${SHPV}"/*.patch
 
-	# Curated pf-kernel delta on top of gentoo-sources state.
-	# See pkg_postinst for the kept/dropped breakdown.
 	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
 }
 
 pkg_postinst() {
-	# Fixes "wrongly" detected directory name, bgo#862534.
+	# Override the misdetected directory name (Gentoo bug 862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postinst
 
@@ -105,7 +90,7 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	# Same here, bgo#862534.
+	# Likewise for removal (Gentoo bug 862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postrm
 }
