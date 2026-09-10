@@ -105,13 +105,12 @@ src_prepare() {
 
 	sed -e 's/-Werror//' -i src/runtime_src/core/common/aiebu/cmake/linux.cmake || die
 
-	# Enable <CL/cl_icd.h> instead of <ocl_icd.h>
+	# Use Khronos ICD headers.
 	sed -e "/OPENCL_ICD_LOADER/c #if 1" \
 		-i src/runtime_src/xocl/api/icd/ocl_icd_bindings.h \
 		-i src/runtime_src/xocl/api/icd/ocl_icd_bindings.cpp || die
 
-	# template for isa.h is damaged in git, skip regeneration
-	# Bug: https://github.com/Xilinx/aiebu/issues/144
+	# Skip broken isa.h regeneration; https://github.com/Xilinx/aiebu/issues/144
 	sed -e '/BYPRODUCTS .*isa\.h/d' \
 		-i src/runtime_src/core/common/aiebu/specification/aie2ps/CMakeLists.txt || die
 
