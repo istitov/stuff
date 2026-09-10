@@ -86,11 +86,10 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	audio? ( sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}] )
 "
-# Triton floats because caffe2/torchvision do not pin a torch version; pinning
-# one SLOT-0 virtual would impose a pairing this ebuild does not. Pin the full
-# torch stack before Triton. verified 2026-09-09
-# Audio imports lazily. Available torchaudio revisions pair with torch 2.11 or
-# 2.13, so USE=audio cannot resolve with 2.14. rechecked 2026-09-10
+# Triton floats because caffe2/torchvision do not pin torch; pin the full stack
+# before Triton. verified 2026-09-09
+# Audio is lazy; packaged torchaudio pairs with torch 2.11/2.13, not 2.14.
+# rechecked 2026-09-10
 # nodes_glsl needs both PyOpenGL and comfy_angle; without the latter it is
 # silently skipped. The import target exists, but GL runtime remains unverified.
 # verified against 0.34.3 on 2026-09-03
