@@ -44,13 +44,8 @@ distutils_enable_tests pytest
 src_prepare() {
 	distutils-r1_src_prepare
 
-	# 1.28.2 added an autovenv.enter() bootstrap at the top of
-	# scripts/wrap/__main__.py that re-execs the C++/SWIG build inside a
-	# fresh venv WITHOUT system site-packages. That hides the
-	# BDEPEND-provided dev-python/pipcl and fires a network
-	# `pip install --upgrade pipcl` the build sandbox rejects. Drop the
-	# call so the build stays in the system Python and imports pipcl from
-	# site-packages. verified 2026-08-07 against 1.28.2
+	# Disable autovenv: it hides system pipcl and attempts a sandboxed network
+	# install. verified 2026-08-07
 	grep -q '^autovenv\.enter()$' scripts/wrap/__main__.py \
 		|| die "autovenv.enter() bootstrap gone; re-audit the pipcl handling"
 	sed -i -e '/^autovenv\.enter()$/d' scripts/wrap/__main__.py || die
@@ -66,16 +61,13 @@ python_compile() {
 }
 
 src_compile() {
-	# libmupdfcpp (C++ wrapper around system app-text/mupdf C lib —
-	# the python.diff patch keeps libmupdf.so itself out of the build,
-	# since we link against system libmupdf instead).
+	# Build only the C++ wrapper; python.diff links it to system libmupdf.
 	LD_LIBRARY_PATH="$(get_llvm_prefix)/$(get_libdir)" \
 	tc-env_build ./scripts/mupdfwrap.py \
 			--dir-so "build/shared-release" \
 			--build 01 \
 			|| die
 	mv build/shared-release/libmupdfcpp.so{,.${PV}} .
-	# _mupdf.so (Python C extension via SWIG)
 	distutils-r1_src_compile
 }
 
