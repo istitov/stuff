@@ -33,7 +33,7 @@ src_install() {
 }
 
 pkg_preinst() {
-	# Preserve existing database across reinstalls.
+	# Keep the existing database across reinstalls.
 	if [[ -f "${EROOT}/var/lib/portage/dkms_db" ]]; then
 		cp "${EROOT}/var/lib/portage/dkms_db" \
 			"${D}/var/lib/portage/dkms_db" || die
