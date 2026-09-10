@@ -13,23 +13,10 @@ HOMEPAGE="
 	https://github.com/k2-fsa/sherpa-onnx
 "
 
-# Upstream's CMake build vendors every dep via FetchContent with a
-# `possible_file_locations` fallback that includes ${CMAKE_SOURCE_DIR}/.
-# Pre-fetch all the tarballs and drop them into ${S} during src_unpack;
-# no network needed during build. Renames keep the filenames matching
-# what the cmake modules look for. Sub-deps (kissfft via
-# kaldi-native-fbank, kaldifst via kaldi-decoder) use the same global
-# CMAKE_SOURCE_DIR fallback so the same staging directory works.
-#
-# kissfft is a .zip on purpose -- do NOT "fix" pkgcheck's TarballAvailable
-# here. The archive is not ours to choose: kaldi-native-fbank ships its own
-# cmake/kissfft.cmake, which searches possible_file_locations for the exact
-# name kissfft-<sha>.zip (${CMAKE_SOURCE_DIR}/ among them, which is where
-# src_unpack puts it) and then verifies
-# SHA256=497103e664168ebe39580b757adbe616f6cf85a16572af581ca7bc42d0ab13fd,
-# the hash of the .zip. Switching to the GitHub .tar.gz breaks the filename
-# match and the hash check both. verified 2026-09-02 against
-# kaldi-native-fbank-1.22.3.
+# FetchContent searches CMAKE_SOURCE_DIR for exact archive names, including
+# transitive kissfft and kaldifst; prefetch and stage them to keep builds offline.
+# Keep kissfft as ZIP despite TarballAvailable: kaldi-native-fbank verifies that
+# filename and archive hash, so GitHub's tarball fails. Verified 2026-09-02.
 SRC_URI="
 	https://github.com/k2-fsa/sherpa-onnx/archive/refs/tags/v${PV}.tar.gz
 		-> ${P}.gh.tar.gz
@@ -79,14 +66,8 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="cuda +portaudio +python +tts +websocket"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-# sherpa-onnx vendors and statically links portaudio (PA_BUILD_STATIC=ON
-# in cmake/portaudio.cmake), so the USE=portaudio flag adds no system
-# dep — just toggles whether the mic-recording demo CLIs get built.
-# media-libs/alsa-lib *is* needed: a handful of *-alsa demo binaries
-# link against -lasound regardless of USE flags.
-#
-# Blocks the -bin ebuild: both ship sherpa_onnx into site-packages
-# (under USE=python, which is the default here), they'd collide.
+# portaudio is vendored and static; its flag only controls microphone demo CLIs.
+# ALSA demos always link libasound. Block -bin because both install sherpa_onnx.
 RDEPEND="
 	!sci-ml/sherpa-onnx-bin
 	sci-libs/onnxruntime:=[cuda?]
@@ -97,7 +78,6 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}"
-# kaldi-native-fbank's CMake fallback consumes kissfft as a ZIP archive.
 BDEPEND="
 	app-arch/unzip
 	python? (
@@ -108,15 +88,11 @@ BDEPEND="
 	)
 "
 
-# /opt/sherpa-onnx/lib contains a pile of vendored .a + private .so
-# files (cargs, kaldi-*, kissfft, sherpa-onnx-fst, ...) that are
-# prebuilt and don't need stripping or world-readable scanning.
+# Private vendored libraries under /opt are outside the system ABI.
 QA_PREBUILT="opt/sherpa-onnx/lib/*"
 
 src_unpack() {
-	# Only unpack the main sherpa-onnx tarball; the vendored dep
-	# tarballs stay archived and get copied into ${S} where the cmake
-	# modules' possible_file_locations check picks them up.
+	# Leave dependency archives intact for FetchContent's source-directory lookup.
 	unpack "${P}.gh.tar.gz"
 
 	# A is a space-separated string of distfile names (not an array).
@@ -135,8 +111,7 @@ src_configure() {
 	use python && python_setup
 
 	local mycmakeargs=(
-		# Self-contained install under /opt to keep the ~23 CLI tools
-		# and vendored helper libs (cargs etc.) out of /usr/{bin,lib}.
+		# Isolate the many CLI tools and vendored libraries under /opt.
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/opt/sherpa-onnx"
 		-DBUILD_SHARED_LIBS=ON
 		-DSHERPA_ONNX_USE_PRE_INSTALLED_ONNXRUNTIME_IF_AVAILABLE=ON
@@ -155,8 +130,7 @@ src_configure() {
 	)
 
 	if use cuda; then
-		# CUDA 13.x nvcc rejects gcc>15; pin the host compiler to the
-		# gcc-15 slot via CUDAHOSTCXX.
+		# CUDA 13 nvcc rejects GCC >15.
 		export CUDAHOSTCXX="/usr/bin/g++-15"
 	fi
 
@@ -166,19 +140,14 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# Expose /opt/sherpa-onnx/bin on PATH + lib on LDPATH so the
-	# unprefixed `sherpa-onnx` command works and the libs resolve
-	# transparently.
+	# Expose the isolated commands and private libraries system-wide.
 	newenvd - 99sherpa-onnx <<-EOF
 		PATH="${EPREFIX}/opt/sherpa-onnx/bin"
 		LDPATH="${EPREFIX}/opt/sherpa-onnx/lib"
 	EOF
 
 	if use python; then
-		# Python bindings still need to live under site-packages so
-		# `import sherpa_onnx` works without PYTHONPATH gymnastics. The
-		# pybind11 module dlopens libsherpa-onnx-c-api.so etc. — those
-		# are reached via LDPATH from the env.d file above.
+		# Put bindings in site-packages; their private libraries resolve via LDPATH.
 		local opt_pylib="${ED}/opt/sherpa-onnx/lib"
 		local pylib_dst_rel="$(python_get_sitedir)/sherpa_onnx/lib"
 
@@ -189,7 +158,6 @@ src_install() {
 			mv "${so}" "${ED}/${pylib_dst_rel}/" || die
 		done
 
-		# Python source files
 		python_moduleinto sherpa_onnx
 		python_domodule "${S}/sherpa-onnx/python/sherpa_onnx"/*.py
 	fi
