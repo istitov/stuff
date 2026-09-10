@@ -37,8 +37,7 @@ PATCHES=( "${FILESDIR}/${P}-no-refleak.patch" )
 
 EPYTEST_PLUGINS=( pytest-cov pytest-qt )
 EPYTEST_DESELECT=(
-	# VTK probes the DRM device and exits the process when no usable render
-	# device is available, even with Xvfb and Mesa's software renderer.
+	# VTK exits without a DRM renderer, even under Xvfb and software Mesa.
 	tests/test_plotting.py::test_depth_peeling
 )
 
@@ -49,8 +48,7 @@ src_test() {
 }
 
 python_test() {
-	# pytest-qt otherwise may import a different binding before QtPy chooses
-	# one, which aborts the process when more than one binding is installed.
+	# Match pytest-qt to QtPy's binding to avoid mixed-binding aborts.
 	local -x QT_API
 	QT_API=$("${EPYTHON}" -c 'import qtpy; print(qtpy.API)') || die
 	local -x PYTEST_QT_API=${QT_API}
