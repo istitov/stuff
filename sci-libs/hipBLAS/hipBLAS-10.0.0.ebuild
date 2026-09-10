@@ -8,8 +8,7 @@ ROCM_VERSION=${PV}
 inherit cmake fortran-2 rocm
 DESCRIPTION="ROCm BLAS marshalling library"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblas"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now.
+# Component assets moved from rocm-* to therock-* tags after 7.2.4.
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/hipblas.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/hipblas"
 
@@ -38,7 +37,7 @@ src_configure() {
 	rocm_use_clang
 
 	local mycmakeargs=(
-		# currently hipBLAS is a wrapper of rocBLAS which has tests, so no need to perform test here
+		# rocBLAS provides coverage for this wrapper.
 		-DBUILD_CLIENTS_TESTS=OFF
 		-DBUILD_CLIENTS_BENCHMARKS=OFF
 		-DROCM_SYMLINK_LIBS=OFF
