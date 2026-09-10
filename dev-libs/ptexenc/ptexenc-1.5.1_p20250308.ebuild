@@ -7,9 +7,8 @@ inherit libtool
 
 DESCRIPTION="Library for Japanese pTeX providing a better way of handling character encodings"
 HOMEPAGE="https://tutimura.ath.cx/ptexlive/?ptexenc"
-# 2025 hardcoded in the historic URL because PV's "_p<YYYYMMDD>" date
-# format makes the four-digit year non-trivial to extract via Portage
-# parameter expansion at SRC_URI time. Bump on TL2026 adoption.
+# The historic mirror needs a year separate from ${PV#*_p}; keep it aligned
+# with this TeX Live release.
 SRC_URI="
 	https://mirrors.ctan.org/systems/texlive/Source/texlive-${PV#*_p}-source.tar.xz
 	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/texlive-${PV#*_p}-source.tar.xz
@@ -30,11 +29,11 @@ RDEPEND="${DEPEND}"
 src_prepare() {
 	default
 
-	# https://bugs.gentoo.org/show_bug.cgi?id=377141
+	# Link against kpathsea; bug 377141.
 	sed -i '/^LIBS/s:@LIBS@:@LIBS@ @KPATHSEA_LIBS@:' Makefile.in || die
 
 	cd "${WORKDIR}/texlive-${PV#*_p}-source" || die
-	S="${WORKDIR}/texlive-${PV#*_p}-source" elibtoolize #sane .so versionning on gfbsd
+	S="${WORKDIR}/texlive-${PV#*_p}-source" elibtoolize
 }
 
 src_configure() {
