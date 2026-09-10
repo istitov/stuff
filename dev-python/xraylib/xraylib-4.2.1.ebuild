@@ -28,9 +28,8 @@ BDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 "
 
-# The PyPI sdist bakes its meson setup args into pyproject.toml
-# ([tool.meson-python.args]): the C library is built static and only the
-# classic + numpy Python bindings are installed (Fortran disabled).
+# pyproject's Meson args build a static C library with classic/numpy bindings
+# and no Fortran.
 PATCHES=(
 	"${FILESDIR}"/${P}-meson-install-tag-scalar.patch
 )
