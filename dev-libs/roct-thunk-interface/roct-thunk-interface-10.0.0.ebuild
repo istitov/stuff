@@ -74,7 +74,6 @@ src_prepare() {
 src_configure() {
 	llvm_prepend_path "${LLVM_SLOT}"
 
-	# Silence known source noise.
 	append-cxxflags -Wno-unused-value
 
 	local mycmakeargs=(
