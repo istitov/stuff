@@ -20,14 +20,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="torch"
 
-# Three upstream requirements carry a major cap that is not mirrored here -
-# click<9.0.0, hf-xet<2.0.0 and httpx<1. None binds: the newest anywhere is
-# click-8.4.2, hf_xet-1.5.2 and httpx-0.28.1-r1. The click floor (raised to
-# 8.4.2 to skip 8.4.0/8.4.1, which shipped a broken fish completion script)
-# and the hf-xet floor (1.27.0 raised it to 1.5.2) are both mirrored.
-# httpx is deprecated in ::gentoo, but it remains a mandatory upstream
-# dependency. Keep it until huggingface_hub provides a supported replacement.
-# verified 2026-09-10 against 1.31.0
+# Mirror upstream's click, hf-xet, and httpx major caps. The click floor skips
+# broken fish completions in 8.4.0/8.4.1; 1.27 raised hf-xet to 1.5.2. httpx is
+# deprecated in ::gentoo but remains mandatory upstream. Verified 2026-09-10.
 RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/click-8.4.2[${PYTHON_USEDEP}]
@@ -137,9 +132,8 @@ src_test() {
 }
 
 python_test() {
-	# These are explicitly marked calls to the production Hub rather than unit
-	# tests; staging integrations above are excluded by module or node.
-	# Keep agent detection stable before and after the autouse fixture resets it.
+	# Exclude tests explicitly marked for the production Hub.
+	# Keep agent detection stable before and after its fixture resets the cache.
 	local -x HF_HOME="${T}/hf-home"
 	mkdir -p "${HF_HOME}" || die
 	printf '%s\n' '{"standardEnvVars":[],"harnesses":{}}' \
