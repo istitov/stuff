@@ -47,7 +47,6 @@ PATCHES=(
 src_configure() {
 	rocm_use_clang
 
-	# Silence Clang's explicit-specialization storage-class warning.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
 	local mycmakeargs=(
