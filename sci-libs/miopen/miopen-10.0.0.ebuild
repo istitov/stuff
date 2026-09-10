@@ -4,16 +4,14 @@
 EAPI=8
 
 ROCM_VERSION=${PV}
-# Tracks the ROCm 10.0 cohort's LLVM slot; the stack is subslot-pinned as a
-# single dependency closure, so all of it must use one LLVM major.
+# Keep the subslot-pinned ROCm closure on one LLVM major.
 LLVM_COMPAT=( 23 )
 
 inherit cmake flag-o-matic llvm-r2 rocm
 
 DESCRIPTION="AMD's Machine Intelligence Library"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/miopen"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now.
+# AMD retired rocm-* releases; use the matching TheRock component asset.
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/miopen.tar.gz -> miopen-${PV}.tar.gz"
 S="${WORKDIR}/miopen"
 
@@ -30,8 +28,7 @@ REQUIRED_USE="
 	)
 "
 
-# Upstream's tests can freeze the machine depending on the GPU and kernel.
-# Do not expose dead USE=test plumbing while the test phase is restricted.
+# Upstream tests can freeze some GPU/kernel combinations.
 RESTRICT="test"
 
 RDEPEND="
@@ -48,12 +45,8 @@ RDEPEND="
 	roctracer? ( dev-util/roctracer:${SLOT} )
 "
 
-# hipblaslt? pulls hipblas-common too: CMakeLists.txt does a second
-# find_package(hipblas-common REQUIRED) right after the hipblaslt one, inside
-# the same if(MIOPEN_USE_HIPBLASLT) block. sci-libs/hipBLASLt carries
-# hipBLAS-common in its own DEPEND, which does not propagate, so a depcleaned
-# system loses the cmake config and configure fails. Build-time only - the
-# package ships no library we link against. verified 2026-07-27
+# hipBLASLt's non-propagating DEPEND does not satisfy MIOpen's separate required
+# hipblas-common lookup; add it as build-only. # verified 2026-07-27
 DEPEND="
 	${RDEPEND}
 	dev-cpp/nlohmann_json
@@ -76,9 +69,7 @@ PATCHES=(
 src_prepare() {
 	cmake_src_prepare
 
-	# `sed` exits 0 on no-match: a stale anchor here would silently restore
-	# clang-tidy as a hard build error, and re-add the -s that strips the
-	# libraries before portage can.
+	# Assert anchors before disabling fatal clang-tidy and upstream stripping.
 	grep -qF 'MIOPEN_TIDY_ERRORS ALL' CMakeLists.txt ||
 		die 'MIOPEN_TIDY_ERRORS ALL anchor moved in CMakeLists.txt'
 	grep -qF 'FLAGS_RELEASE} -s' CMakeLists.txt ||
@@ -86,12 +77,6 @@ src_prepare() {
 	sed -e '/MIOPEN_TIDY_ERRORS ALL/d' \
 		-e 's/FLAGS_RELEASE} -s/FLAGS_RELEASE}/g' \
 		-i CMakeLists.txt || die
-
-	# The add_test --build sed is GONE at 10.0: test/CMakeLists.txt now emits
-	# `--build ${CMAKE_BINARY_DIR}`, i.e. the top-level build dir, which is
-	# exactly the ${BUILD_DIR} the sed used to substitute in. It previously read
-	# CMAKE_CURRENT_BINARY_DIR, which in test/ resolved one level too deep.
-	# Carrying the sed forward would have been a silent no-op. verified 2026-08-30.
 }
 
 src_configure() {
@@ -111,7 +96,7 @@ src_configure() {
 		use_ai_tuning=ON
 	fi
 
-	# Too many warnings
+	# Suppress noisy Clang thread-safety diagnostics.
 	append-cxxflags -Wno-thread-safety-analysis
 
 	local mycmakeargs=(
@@ -128,12 +113,9 @@ src_configure() {
 		-DBUILD_TESTING=OFF
 		-DROCM_SYMLINK_LIBS=OFF
 		-DMIOPEN_HIP_COMPILER="${ESYSROOT}/usr/bin/hipcc"
-		# Take these from the toolchain rocm_use_clang just selected, not from
-		# the system LLVM slot. Otherwise MIOpen's GPU code is COMPILED by one
-		# clang and ASSEMBLED by another; with hipcc[amd-llvm] that split is
-		# fatal, because vanilla clang rejects the gfx assembly AMD's toolchain
-		# emits. Resolves to the same paths when hipcc points at the system
-		# LLVM. verified 2026-08-30.
+		# Use rocm_use_clang's toolchain for compilation and assembly. Mixing it
+		# with system LLVM fails when hipcc[amd-llvm] emits AMD-only gfx assembly.
+		# verified 2026-08-30
 		-DMIOPEN_AMDGCN_ASSEMBLER="${CC}"
 		-DMIOPEN_OFFLOADBUNDLER_BIN="${CC%/*}/clang-offload-bundler"
 		-DHIP_OC_COMPILER="${CC}"
