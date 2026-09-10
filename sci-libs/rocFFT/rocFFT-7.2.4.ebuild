@@ -17,11 +17,11 @@ LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
-# RDEPEND: perfscripts? dev-python/plotly[${PYTHON_USEDEP}] # currently masked by arch/amd64/x32/package.mask
 RDEPEND="
 	dev-db/sqlite:3
 	dev-util/hip:=
 	perfscripts? (
+		dev-python/plotly[${PYTHON_USEDEP}]
 		media-gfx/asymptote
 		dev-texlive/texlive-latex
 		dev-tex/latexmk
@@ -69,18 +69,17 @@ required_mem() {
 		echo "52G"
 	else
 		if [[ -n "${AMDGPU_TARGETS}" ]]; then
-			# count how many archs user specified in ${AMDGPU_TARGETS}
 			local NARCH=$(($(awk -F";" '{print NF-1}' <<< "${AMDGPU_TARGETS}" || die)+1))
 		else
-			# The default number of AMDGPU_TARGETS for rocFFT-4.3.0. May change in the future.
 			local NARCH=7
 		fi
-		echo "$(($(makeopts_jobs)*${NARCH}*25+2200))M" # A linear function estimating how much memory required
+		# Estimate peak memory from parallelism and selected targets.
+		echo "$(($(makeopts_jobs)*${NARCH}*25+2200))M"
 	fi
 }
 
 pkg_pretend() {
-	return # leave the disk space check to pkg_setup phase
+	return # Defer the disk check to pkg_setup.
 }
 
 pkg_setup() {
@@ -92,7 +91,7 @@ pkg_setup() {
 src_prepare() {
 	if use perfscripts; then
 		pushd scripts/perf || die
-		sed -e "/\/opt\/rocm/d" -e "/rocmversion/s,rocm_info.strip(),\"${PV}\"," -i perflib/specs.py || dir
+		sed -e "/\/opt\/rocm/d" -e "/rocmversion/s,rocm_info.strip(),\"${PV}\"," -i perflib/specs.py || die
 		sed -e "/^top/,+1d" -i rocfft-perf suites.py || die
 		sed -e "s,perflib,${PN}_perflib,g" -i rocfft-perf suites.py perflib/*.py || die
 		sed -e "/^top = /s,__file__).*$,\"${EPREFIX}/usr/share/${PN}-perflib\")," \
@@ -136,7 +135,7 @@ src_install() {
 		dosym rocfft-bench /usr/bin/dyna-rocfft-rider
 
 		if ! use perfscripts; then
-			# prevent collision with dev-util/perf
+			# Avoid collision with dev-util/perf.
 			rm -rf "${ED}"/usr/bin/perf || die
 		fi
 	fi
