@@ -17,7 +17,6 @@ S=${WORKDIR}/${P}
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-#IUSE="mrcz tests"
 IUSE="doc test"
 
 RDEPEND="
