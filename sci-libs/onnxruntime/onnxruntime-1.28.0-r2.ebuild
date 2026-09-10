@@ -43,15 +43,8 @@ IUSE="cuda python test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
-# cmake/deps.txt for v1.28.0 pins onnx v1.22.0, and the
-# use-system-libraries patch rewrites that FetchContent entry to
-# FIND_PACKAGE_ARGS ... REQUIRED, so the system onnx is what gets used with
-# no version guard of its own. That floor is not expressible: sci-ml/onnx
-# exists only in ::gentoo and tops out at 1.20.1. Floored at 1.20.1 to keep
-# 1.18.0-r1 out, which is further still from the pin. Whether 1.20.1 is
-# actually sufficient has NOT been established -- raise this to
-# >=sci-ml/onnx-1.22.0 once onnx is packaged that far.
-# verified 2026-07-27
+# Upstream pins ONNX 1.22.0, but this revision still permits the unvalidated
+# 1.20.1 fallback. Raise the dependency in a follow-up logic change.
 RDEPEND="
 	!cuda? ( dev-cpp/abseil-cpp:= )
 	dev-libs/cpuinfo
@@ -116,7 +109,7 @@ src_prepare() {
 }
 
 src_configure() {
-	# Python is used at build time unconditionally
+	# Python is an unconditional build tool.
 	python_setup
 
 	local mycmakeargs=(
@@ -126,29 +119,20 @@ src_configure() {
 		-Donnxruntime_ENABLE_PYTHON=$(usex python)
 		-Donnxruntime_USE_CUDA=$(usex cuda)
 
-		# Use vendored Eigen at a specific 3.4-branch commit (2025-02-15).
-		# ::gentoo's dev-cpp/eigen-3.4.0-r3 (Aug 2021) lacks 3+ years of
-		# fixes onnxruntime depends on; eigen-3.4.9999 (live) would work
-		# but a live ebuild as a build-dep is fragile. Eigen 5.0.1
-		# (released 2026) is a major API break; onnxruntime's CMakeLists
-		# doesn't yet support it. Drop the vendor when ::gentoo carries
-		# a tagged 3.4.x release post-2025-02 or when upstream supports
-		# Eigen 5.x. Verified 2026-05-16.
+		# Gentoo's Eigen 3.4.0 lacks required fixes, while 5.x is unsupported.
+		# Use upstream's pinned 3.4 commit until a newer tagged 3.4.x lands or
+		# onnxruntime gains Eigen 5 support. # verified 2026-05-16
 		-DFETCHCONTENT_SOURCE_DIR_EIGEN3="${WORKDIR}/eigen-${EIGEN_COMMIT}"
 
-		# This makes it possible for `find_path` to find the `onnx-ml.proto` file
+		# Expose installed onnx-ml.proto to find_path.
 		-DCMAKE_INCLUDE_PATH="$(python_get_sitedir)"
 
 		-Wno-dev
 	)
 
 	if use cuda; then
-		# nvcc rejects gcc newer than the active CUDA toolkit supports
-		# (CUDA 13 tops out at gcc 15). cuda_gccdir picks the newest
-		# supported slot; pin ordinary C++, CUDA host compilation, and
-		# final linking to it so all three share one libstdc++ ABI. The
-		# cuda? sys-devel/gcc:15 BDEPEND guarantees a compatible slot is
-		# installed for cuda_gccdir to find.
+		# CUDA 13 rejects gcc >15. Use cuda_gccdir for C++, nvcc hosting, and
+		# linking so all stages share one libstdc++ ABI; BDEPEND guarantees it.
 		local cuda_gcc_bindir
 		cuda_gcc_bindir="$(cuda_gccdir)" || die
 		local -x CC="${cuda_gcc_bindir}/gcc"
@@ -193,7 +177,6 @@ src_test() {
 	fi
 }
 
-# There is some custom logic in `setup.py`
 python_install() {
 	cd "${S}/cmake_build" || die
 	edo "${EPYTHON}" ../setup.py install \
