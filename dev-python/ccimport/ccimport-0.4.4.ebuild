@@ -18,10 +18,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream also lists 'ninja' (the python build helper) and 'requests'. Neither
-# is needed to import prebuilt extension modules (spconv-cuXXX, cumm-cuXXX) --
-# they only drive ccimport's JIT compilation path, which is unused here. The
-# lone module-level ninja_syntax import is made optional by the patch below.
+# Keep ninja and requests for JIT compilation; make the module-level
+# ninja_syntax import optional so prebuilt modules import without Python ninja.
 # verified 2026-06-17
 RDEPEND="
 	dev-build/ninja
@@ -34,8 +32,7 @@ PATCHES=(
 )
 
 src_prepare() {
-	# Upstream's sdist omits version.txt (a source-tree build artifact) yet
-	# setup.py reads it because the VERSION constant is left unset. Recreate it.
+	# Recreate version.txt, omitted from the sdist but required by setup.py.
 	echo "${PV}" > version.txt || die
 	distutils-r1_src_prepare
 }
