@@ -36,7 +36,7 @@ RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
 
 src_configure() {
-	# bug #943911
+	# GCC 15 compatibility (bug #943911).
 	append-cflags -std=gnu17
 
 	econf --with-system-kpathsea
