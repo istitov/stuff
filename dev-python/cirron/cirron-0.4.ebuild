@@ -6,7 +6,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 
-# upstream sdist uses uppercase project name (Cirron-0.4.tar.gz)
+# Preserve the capitalized PyPI sdist name.
 PYPI_PN="Cirron"
 PYPI_NO_NORMALIZE=1
 
@@ -22,15 +22,11 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# strace is invoked at runtime by the optional Tracer; perf_event_open is
-# kernel-side and always available on stock Gentoo.
+# Tracer invokes strace; perf_event_open needs no userspace dependency.
 RDEPEND="dev-debug/strace"
 
 src_prepare() {
-	# Upstream lazily compiles cirronlib.cpp at first import, writing into
-	# its own site-packages dir — that fails as a normal user on a
-	# system-wide Gentoo install. Pre-build the .so during src_compile and
-	# add it to package_data so it ships pre-baked.
+	# Prebuild the extension instead of writing to site-packages on first import.
 	sed -i \
 		-e 's|"cirronlib.cpp",|"cirronlib.cpp", "cirronlib.so",|' \
 		setup.py || die
