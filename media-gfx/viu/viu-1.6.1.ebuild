@@ -179,7 +179,6 @@ SRC_URI="
 "
 
 LICENSE="MIT"
-# Dependent crate licenses
 LICENSE+="
 	BSD-2 BSD LGPL-3+ MIT UoI-NCSA Unicode-3.0
 	|| ( Apache-2.0 CC0-1.0 )
