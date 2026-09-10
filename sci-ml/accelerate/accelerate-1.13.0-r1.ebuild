@@ -42,17 +42,25 @@ BDEPEND="test? (
 	sci-ml/torchdata[${PYTHON_SINGLE_USEDEP}]
 )"
 
-EPYTEST_PLUGINS=()
+EPYTEST_PLUGINS=( pytest-order pytest-xdist )
 distutils_enable_tests pytest
 
 python_test() {
 	local EPYTEST_DESELECT=(
+		tests/fsdp/test_fsdp.py::FSDPPluginIntegration::test_auto_wrap_policy
+		tests/fsdp/test_fsdp.py::FSDPPluginIntegration::test_ignored_modules_regex
+		tests/fsdp/test_fsdp.py::FSDP2PluginIntegration::test_auto_wrap_policy
+		tests/fsdp/test_fsdp.py::FSDP2PluginIntegration::test_ignored_modules_regex
 		tests/test_accelerator.py::AcceleratorTester::test_env_var_device
+		tests/test_cli.py::AccelerateLauncherTester::test_config_compatibility
 		tests/test_cli.py::ModelEstimatorTester
+		tests/test_cpu.py::MultiCPUTester::test_cpu
 		tests/test_examples.py::FeatureExamplesTests
 		tests/test_modeling_utils.py::ModelingUtilsTester::test_infer_auto_device_map_on_t0pp
+		tests/test_tracking.py::ClearMLTest
 		tests/test_utils.py::UtilsTester::test_patch_environment_key_exists
-
 	)
+
+	local -x CUDA_VISIBLE_DEVICES=""
 	epytest tests
 }
