@@ -19,14 +19,11 @@ S="${WORKDIR}/humming_kernels-${PV}"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
-# Bundled tests need a CUDA device + nvcc JIT (SM75+); unrunnable in the
-# build sandbox. # 2026-06-14
+# Tests require a CUDA device and SM75+ nvcc JIT. verified 2026-06-14
 RESTRICT="test"
 
-# Pure Python package; its bundled CUDA sources and launcher are JIT-compiled
-# at use time.  The system CUDA toolkit replaces upstream's cu12/cu13 wheel
-# extras.  Humming calls g++ directly for its native helpers and uses PyTorch's
-# Ninja-based C++ extension loader for the launcher.
+# Bundled CUDA and native helpers JIT at runtime with system CUDA, g++, and
+# PyTorch's Ninja extension loader.
 RDEPEND="
 	app-alternatives/ninja
 	dev-util/nvidia-cuda-toolkit:=
