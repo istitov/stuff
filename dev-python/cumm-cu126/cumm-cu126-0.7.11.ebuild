@@ -15,9 +15,7 @@ HOMEPAGE="
 	https://github.com/FindDefinition/cumm
 	https://pypi.org/project/cumm-cu126/
 "
-# Prebuilt manylinux CUDA-12.6 wheel; bundles its own compiled CUDA kernels and
-# loads them through the backward-compatible NVIDIA driver interface. Retained
-# because spconv-cu126 caps cumm at <0.8.0.
+# Prebuilt CUDA 12.6 kernels use the driver ABI; spconv-cu126 requires cumm<0.8.
 SRC_URI="
 	https://files.pythonhosted.org/packages/98/e3/361e39619ad4323fa0e570e83032819f0d32b64b6a8832d0adc83c8c49ba/${MY_PN}-${PV}-cp313-cp313-manylinux_2_28_x86_64.whl
 "
