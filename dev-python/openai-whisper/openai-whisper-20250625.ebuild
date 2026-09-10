@@ -23,22 +23,11 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream's optional `triton>=2` dep (gated to x86_64 Linux) enables a
-# fused-attention decoder fastpath. The fastpath is primarily a CUDA
-# acceleration story — on a Strix Point host (gfx1150 / iGPU + NPU)
-# the value is small to nonexistent: triton's ROCm backend doesn't
-# bless gfx1150, and CPU-only triton is functional but doesn't beat
-# the pure-PyTorch fallback meaningfully. Wire up when (a) sci-ml/triton
-# lands in this overlay AND (b) a real workload measures a win on a
-# CUDA-equipped host. Until then the comment is the design record.
-#
-# IUSE="+triton"
-# RDEPEND+=" triton? ( sci-ml/triton[${PYTHON_SINGLE_USEDEP}] )"
+# Leave upstream's optional x86_64 Triton fast path undeclared: gfx1150 showed
+# no useful gain, and virtual/triton remains unvalidated here on CUDA. The
+# pure-PyTorch fallback is functional.
 
-# OpenAI's openai-whisper and Graphite's dev-python/whisper both install
-# a top-level Python module named `whisper`. Only one can win at
-# `import whisper`. Blocker is unavoidable; the projects are unrelated
-# (Graphite's is a round-robin time-series database).
+# Block Graphite's unrelated dev-python/whisper; both install `whisper`.
 RDEPEND="
 	!dev-python/whisper
 	${PYTHON_DEPS}
@@ -54,8 +43,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
 
-# Tests need network (downloads model checkpoints from huggingface.co)
-# and large GPU memory; no unit-only subset upstream.
+# Tests download model checkpoints and require substantial GPU memory.
 RESTRICT="test"
 
 pkg_postinst() {
