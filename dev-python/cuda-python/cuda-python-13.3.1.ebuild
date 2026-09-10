@@ -24,15 +24,11 @@ S="${WORKDIR}"
 LICENSE="NVIDIA-CUDA"
 SLOT="0"
 KEYWORDS="~amd64"
-# NVIDIA-CUDA is an EULA license — distfile must not be mirrored,
-# resulting binpkgs must not be redistributed.
+# The NVIDIA EULA forbids mirroring and binary redistribution.
 RESTRICT="bindist mirror"
 
-# Trivial meta-wheel — empty package whose entire purpose is to pull
-# cuda-bindings + cuda-pathfinder via runtime deps. Source is just
-# pyproject.toml in the cuda-python/ subdir of NVIDIA/cuda-python with
-# no Python code; packaging the wheel directly is exactly equivalent
-# and avoids carrying the monorepo tarball for an empty payload.
+# Install the empty metadata wheel instead of fetching the monorepo; its sole
+# purpose is to pull the CUDA Python components.
 RDEPEND="
 	~dev-python/cuda-bindings-${PV}[${PYTHON_USEDEP}]
 	dev-python/cuda-core[${PYTHON_USEDEP}]
