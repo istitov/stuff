@@ -19,7 +19,7 @@ BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 "
 
-# The suite requires multiple optional development-only pytest plugins.
+# Tests require optional pytest plugins.
 RESTRICT="test"
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
