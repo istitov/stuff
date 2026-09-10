@@ -29,16 +29,17 @@ SLOT="0"
 KEYWORDS="-* ~amd64"
 RESTRICT="bindist mirror strip"
 
-# Wheel-only on PyPI — CUDA-13-specific binary kernels of NVIDIA's
-# CUTLASS Python DSL. Selected by the parent nvidia-cutlass-dsl when
-# the cu13 extra is enabled. The wheel's dependency metadata is implemented by
-# the base/core split below. # verified 2026-08-26 against 4.7.1.
+# CUDA 13 kernel wheel selected by the parent package; base/core carry shared
+# dependencies. Verified 2026-08-26.
 RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-base-${PV}[${PYTHON_USEDEP}]
 	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.10.0[${PYTHON_USEDEP}]
 "
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/nvidia_cutlass_dsl/*"
 
