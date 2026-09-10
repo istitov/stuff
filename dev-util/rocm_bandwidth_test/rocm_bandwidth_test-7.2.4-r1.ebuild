@@ -17,14 +17,9 @@ KEYWORDS="~amd64"
 
 REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
-# The ROCm deps used to be pinned to :${SLOT}, i.e. to THIS package's own
-# version. That only ever worked because the tool was released in lockstep with
-# ROCm. AMD stopped that: ROCm/rocm_bandwidth_test's newest tag is rocm-7.2.4,
-# there is no rocm_bandwidth_test asset in rocm-systems therock-10.0, and no
-# therock-* tag on the repo at all -- so the version can no longer track the
-# stack, and pinning 0/7.2 just makes the package uninstallable once the stack
-# moves to 0/10.0. Use := instead: link against whatever ROCm is installed and
-# rebuild on a subslot change. verified 2026-08-30.
+# Upstream stopped tagging this tool after ROCm 7.2.4 and ships no therock
+# asset. Use := to follow the installed ROCm subslot and rebuild on changes.
+# verified 2026-08-30
 RDEPEND="
 	dev-libs/rocr-runtime:=
 	dev-util/hip:=
@@ -52,13 +47,9 @@ tb_plugin_wrapper() {
 }
 
 src_prepare() {
-	# rocm_bandwidth_test cmake files reinvents variables for everything:
-	# installation paths, flags, generator, compiler, linker selection, etc.
-	# Then cmake calls bash, which calls another cmake, which ignores niceness, verbose logs, CXX, etc.
-	# That code is objectively bad, a lot of patches go below.
-	# See also: https://github.com/ROCm/rocm_bandwidth_test/issues/131
+	# Upstream's nested CMake flow ignores the outer toolchain and install
+	# settings; see ROCm/rocm_bandwidth_test#131.
 
-	# Relax version checks
 	sed -e "s/ \${FMT_PKG_MINIMUM_REQUIRED_VERSION}//" -i cmake/build_utils.cmake || die
 	sed -e "s/ \${SPDLOG_PKG_MINIMUM_REQUIRED_VERSION}//" -i cmake/build_utils.cmake || die
 	sed -e "s/ \${CATCH2_PKG_MINIMUM_REQUIRED_VERSION}//" -i cmake/build_utils.cmake || die
@@ -88,14 +79,11 @@ src_prepare() {
 
 	sed -e "s:./rocm_bandwidth_test:rocm_bandwidth_test:" -i bin/rbt_run_tb || die
 
-	# Let the user decide, which programs to use (definitely not `gcc -fuse-ld=lld`)
-	# Bug: https://bugs.gentoo.org/965916
+	# Respect the selected compiler, linker, and cache (Gentoo bug 965916).
 	sed -e '/find_program(CCACHE_PATH/d' -e '/find_program(LD_LLD_PATH/d' \
 		-e '/find_program(LD_MOLD_PATH/d' -i  cmake/build_utils.cmake || die
 
-	# Cleanup build script as we build in src_compile.
-	# This shell script basically calls "cmake ... && cmake install",
-	# we replace it with normal cmake.eclass functions with tb_plugin_wrapper.
+	# Replace the nested configure/install script with cmake.eclass phases.
 	echo "" > plugins/tb/transferbench/build_libamd_tb.sh || die
 
 	cmake_src_prepare
@@ -103,7 +91,7 @@ src_prepare() {
 }
 
 src_configure() {
-	# Configure plugin launcher (can be compiled with any compiler)
+	# The plugin launcher is compiler-agnostic.
 	local mycmakeargs=(
 		-DROCM_PATH="${EPREFIX}/usr"
 		-DUSE_LOCAL_FMT_LIB=ON
@@ -122,7 +110,7 @@ src_configure() {
 	)
 	cmake_src_configure
 
-	# Configure tb plugin (HIP code)
+	# The transferbench plugin contains HIP code.
 	rocm_use_clang
 	mycmakeargs=(
 		-DBUILD_INTERNAL_BINARY_VERSION=$(< VERSION)
@@ -134,7 +122,7 @@ src_configure() {
 }
 
 src_compile() {
-	# tb plugin must be compiled before transferbench
+	# transferbench links the plugin built here.
 	tb_plugin_wrapper cmake_src_compile
 	cp "${S}"/plugins/tb/transferbench/build/libamd_tb.* "${S}/plugins/tb/lib" || die
 
