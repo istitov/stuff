@@ -3,15 +3,12 @@
 
 EAPI=8
 
-# Define what default functions to run.
 ETYPE="sources"
 
-# Use genpatches but don't include the 'experimental' use flag.
 K_EXP_GENPATCHES_NOUSE="1"
 
-# Genpatches version - normally "1". -pf already includes vanilla updates, so bump only for
-# important fixes; src_prepare() then deletes the redundant vanilla patches.
-# See https://archives.gentoo.org/gentoo-kernel/ (or subscribe to the list) to see all patches.
+# -pf includes vanilla updates; bumped genpatches add only important fixes after
+# src_prepare removes duplicate vanilla patches.
 K_GENPATCHES_VER="9"
 
 # -pf patch set already sets EXTRAVERSION to kernel Makefile.
@@ -20,13 +17,10 @@ K_NOSETEXTRAVERSION="1"
 # pf-sources is not officially supported/covered by the Gentoo security team.
 K_SECURITY_UNSUPPORTED="1"
 
-# Genpatches parts to use - experimental is already in the -pf patch set.
 K_WANT_GENPATCHES="base extras"
 
-# Major kernel version, e.g. 5.14.
 SHPV="${PV/_p*/}"
 
-# Replace "_p" with "-pf", since using "-pf" is not allowed for an ebuild name by PMS.
 PFPV="${PV/_p/-pf}"
 
 inherit kernel-2 optfeature
@@ -58,34 +52,29 @@ pkg_setup() {
 }
 
 src_unpack() {
-	# Codeberg-hosted pf-sources include full kernel sources, so override src_unpack manually;
-	# kernel-2_src_unpack() does unwanted magic here.
+	# The Codeberg archive contains full sources; bypass kernel-2 unpack logic.
 	unpack ${A}
 
 	mv linux linux-${PFPV} || die "Failed to move source directory"
 }
 
 src_prepare() {
-	# A bumped genpatches base carries vanilla updates already in -pf; drop to avoid conflicts.
+	# Drop vanilla updates already present in -pf.
 	if [[ ${K_GENPATCHES_VER} -ne 1 ]]; then
 		find "${WORKDIR}"/ -type f -name '10*linux*patch' -delete ||
 			die "Failed to delete vanilla linux patches in src_prepare."
 	fi
 
-	# v7.0-pf4 source includes natalenko cherry-pick f8e23c169fe5
-	# ("net: skbuff: propagate shared-frag marker through frag-transfer
-	# helpers"). genpatches-7.0-9 ships the same fix as 1500_net-skbuff-
-	# prop-shared-frag-marker-through-pskb-copy.patch — drop the
-	# duplicate to avoid a same-content collision in src_prepare.
+	# v7.0-pf4 already includes f8e23c169fe5, duplicated by genpatches 1500.
 	rm -f "${WORKDIR}"/1500_net-skbuff*.patch || die
 
-	# kernel-2_src_prepare doesn't apply PATCHES(). Chosen genpatches are also applied here.
+	# kernel-2_src_prepare does not apply PATCHES.
 	eapply "${WORKDIR}"/*.patch
 	default
 }
 
 pkg_postinst() {
-	# Fixes "wrongly" detected directory name, bgo#862534.
+	# Override the misdetected directory name (Gentoo bug 862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postinst
 
@@ -93,7 +82,7 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	# Same here, bgo#862534.
+	# Likewise for removal (Gentoo bug 862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postrm
 }
