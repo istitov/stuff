@@ -44,13 +44,10 @@ tb_plugin_wrapper() {
 }
 
 src_prepare() {
-	# rocm_bandwidth_test cmake files reinvents variables for everything:
-	# installation paths, flags, generator, compiler, linker selection, etc.
-	# Then cmake calls bash, which calls another cmake, which ignores niceness, verbose logs, CXX, etc.
-	# That code is objectively bad, a lot of patches go below.
-	# See also: https://github.com/ROCm/rocm_bandwidth_test/issues/131
+	# Normalize upstream's recursive build wrappers to eclass paths and tools.
+	# https://github.com/ROCm/rocm_bandwidth_test/issues/131
 
-	# Relax version checks
+	# Relax package version checks.
 	sed -e "s/ \${FMT_PKG_MINIMUM_REQUIRED_VERSION}//" -i cmake/build_utils.cmake || die
 	sed -e "s/ \${SPDLOG_PKG_MINIMUM_REQUIRED_VERSION}//" -i cmake/build_utils.cmake || die
 	sed -e "s/ \${CATCH2_PKG_MINIMUM_REQUIRED_VERSION}//" -i cmake/build_utils.cmake || die
@@ -80,14 +77,11 @@ src_prepare() {
 
 	sed -e "s:./rocm_bandwidth_test:rocm_bandwidth_test:" -i bin/rbt_run_tb || die
 
-	# Let the user decide, which programs to use (definitely not `gcc -fuse-ld=lld`)
-	# Bug: https://bugs.gentoo.org/965916
+	# Honor selected compiler, cache, and linker tools (Gentoo bug 965916).
 	sed -e '/find_program(CCACHE_PATH/d' -e '/find_program(LD_LLD_PATH/d' \
 		-e '/find_program(LD_MOLD_PATH/d' -i  cmake/build_utils.cmake || die
 
-	# Cleanup build script as we build in src_compile.
-	# This shell script basically calls "cmake ... && cmake install",
-	# we replace it with normal cmake.eclass functions with tb_plugin_wrapper.
+	# Disable the recursive script; cmake.eclass builds the plugin separately.
 	echo "" > plugins/tb/transferbench/build_libamd_tb.sh || die
 
 	cmake_src_prepare
@@ -95,7 +89,7 @@ src_prepare() {
 }
 
 src_configure() {
-	# Configure plugin launcher (can be compiled with any compiler)
+	# Configure the host launcher.
 	local mycmakeargs=(
 		-DROCM_PATH="${EPREFIX}/usr"
 		-DUSE_LOCAL_FMT_LIB=ON
@@ -114,7 +108,7 @@ src_configure() {
 	)
 	cmake_src_configure
 
-	# Configure tb plugin (HIP code)
+	# Configure the HIP plugin.
 	rocm_use_clang
 	mycmakeargs=(
 		-DBUILD_INTERNAL_BINARY_VERSION=$(< VERSION)
@@ -126,7 +120,7 @@ src_configure() {
 }
 
 src_compile() {
-	# tb plugin must be compiled before transferbench
+	# The plugin must precede transferbench.
 	tb_plugin_wrapper cmake_src_compile
 	cp "${S}"/plugins/tb/transferbench/build/libamd_tb.* "${S}/plugins/tb/lib" || die
 
