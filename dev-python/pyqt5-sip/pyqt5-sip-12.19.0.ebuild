@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-# keep compat in sync with pyqt5 or else it confuses some revdeps
+# Match PyQt5's supported implementations for reverse dependencies.
 PYTHON_COMPAT=( python3_{12..14} )
 inherit distutils-r1 pypi
 
