@@ -18,15 +18,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 IUSE="+cuda"
-# Upstream 14.x split cuDNN, cuSPARSELt, and cuTENSOR integration out
-# of the main package into separate cupy-cudnn / cupy-cusparselt /
-# cupy-cutensor PyPI distributions, so the previous cudnn / cusparselt
-# USE flags here were no-ops (deps got pulled but no extension module
-# was built). Drop them rather than mislead.
-#
-# Upstream 14.x also dropped fastrlock (no longer imported anywhere),
-# bumped numpy to >=2.0, and conditionally appends
-# cuda-pathfinder>=1.3.4,==1.* for non-HIP builds in setup.py.
+# CuPy 14 moved cuDNN, cuSPARSELt, and cuTENSOR integrations to separate
+# distributions; this core package follows its NumPy and CUDA-pathfinder bounds.
 DEPEND="
 	>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
 	<dev-python/numpy-2.6[${PYTHON_USEDEP}]
@@ -48,12 +41,6 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
-	# The 14.1.x cusparse-spgeam-cuda133 patch is obsolete here: upstream
-	# 14.2.0 restructured cupy_backends/cuda/libs/cusparse.pxd to declare
-	# the cusparseSpGEAM* symbols unconditionally as `cpdef enum` members
-	# (matching modern cuSPARSE headers), dropping the #ifndef stub block
-	# the patch guarded on CUSPARSE_VERSION. No patch is needed. Source-
-	# verified only; a full compile is CUDA-host-gated. verified 2026-08-20
 	default
 	eprefixify cupy/cuda/compiler.py
 	use cuda && cuda_src_prepare
