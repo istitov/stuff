@@ -22,17 +22,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cli"
 
-# Note: actually running speaker diarization at runtime additionally
-# requires a pretrained model from HuggingFace Hub (e.g. the
-# pyannote/speaker-diarization-3.1 repo), which the user fetches
-# themselves with `huggingface-cli login` after accepting the model
-# terms on https://huggingface.co/pyannote/. The Python package
-# itself doesn't need it to import.
-#
-# scipy, scikit-learn, networkx, tqdm, and pyyaml are absent from
-# upstream pyproject.toml but imported at module top level by core
-# pipeline modules (clustering, signal, vbx, calibration, permutation,
-# __main__, pipeline) — re-verified against the 4.0.5 source 2026-06-23.
+# Diarization needs a separately accepted/downloaded Hugging Face model; import
+# does not. Add undeclared top-level imports used by core pipelines.
+# verified 2026-06-23
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}]
@@ -65,5 +57,5 @@ RDEPEND="
 	')
 "
 
-# Tests need papermill + a pre-downloaded HF model bundle.
+# Tests require papermill and a predownloaded model bundle.
 RESTRICT="test"
