@@ -24,102 +24,22 @@ fi
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-# No keywords: 6.16.1.1-r1 is the keyworded revision, and this one stays
-# only for systems still on sci-libs/hdf below 4.4, which the HDF 4.4
-# patch in -r1 cannot build against. Nothing else that affects the build
-# differs between the two, so the dependency set and the Python 3.13
-# backport here are the ones verified on -r1 on 2026-09-10. This ebuild
-# itself was only checked through configure, against hdf-4.4.0, because no
-# hdf-4.3 install was at hand to compile against.
+# Retain this unkeyworded revision for hdf<4.4 systems; -r1 carries the HDF
+# 4.4 API patch. Other logic matches the fully validated -r1. This variant was
+# configure-checked only. Verified 2026-09-10.
 #
-# 6.16.1.1 added MANTID_QT_VERSION (5 or 6), so this ebuild exposes both
-# toolkits as mutually exclusive USE flags rather than hardcoding one.
-# Upstream's own default moved twice inside a month — 6.16.1.1 picks 6 on
-# Linux but 5 on Windows/macOS, and main hardcoded 6 for every platform on
-# 2026-07-27 (#41896) — so src_configure passes the version explicitly and
-# never inherits the platform default.
-#
-# Upstream still offers Qt5 deliberately — CMakeLists.txt keeps
-# `set_property(CACHE MANTID_QT_VERSION PROPERTY STRINGS 5 6)` and a real
-# find_package(QT 5.15 NAMES Qt5 ... REQUIRED), and #41896 changed only
-# the default — but at this tag that path does NOT build unpatched. The
-# deprecation-guard rename described in src_prepare breaks it, and USE=qt5
-# depends on the workaround there. Treat the predicted bitrot as already
-# under way rather than hypothetical: no platform defaults to Qt5 on Linux
-# any more, so upstream CI does not compile this configuration and the
-# next bump may well need a fresh fix. verified 2026-07-27
-#
-# Everything the Qt6 path needs is in ::gentoo: the qtbase and qttools
-# floors below are upstream's QT6_MIN_VERSION of 6.11, and QtHelp comes
-# from qttools[assistant]. The Qt5 path additionally needs
-# dev-python/pyqt5 and dev-python/pyqt5-sip, which ::gentoo has removed
-# and only this overlay still carries — that dependency is the standing
-# cost of keeping the flag.
-#
-# pyrcc5 is a build-time requirement of the Qt5 path only, and pyqt5
-# covers it: qt/CMakeLists.txt resolves PYRCC5_CMD under
-# `MANTID_QT_VERSION EQUAL 5` and FATAL_ERRORs when neither
-# PyQt5.pyrcc_main nor a pyrcc5 binary is found. Under Qt6 that block is
-# skipped entirely — PyQt6 ships no Python resource compiler, so upstream
-# compiles a binary .rcc with Qt's own rcc instead.
-#
-# dev-python/lz4 is a hard runtime requirement on Linux specifically, and
-# a clean build does not reveal it: mantidqt/dialogs/errorreports/
-# run_pystack.py does a bare `if is_linux(): import lz4.frame` at module
-# scope, and the workbench's exception handler imports that module during
-# startup. Without it the framework and `import mantidqt` both still work
-# and only the GUI fails. Upstream lists it under the Linux-only branch of
-# conda/recipes/mantidworkbench/recipe.yaml. verified 2026-07-27
-#
-# The `pystack` upstream lists beside it is NOT declared here: it is in no
-# Gentoo repo, and run_pystack.py only ever shells out to it
-# (`["pystack", "core", ...]`) when analysing a core dump. Missing, it
-# degrades crash reporting and nothing else. ipykernel is likewise not
-# declared - mantid never imports it, and dev-python/qtconsole already
-# requires >=ipykernel-4.1.
-#
-# quasielasticbayes and quickBayes, which upstream's recipe also lists, are
-# in no Gentoo repo either. BayesQuasi and BayesQuasi2 import them inside
-# the algorithm body, so without them those two algorithms fail when run
-# and nothing else is affected. verified 2026-09-10
-#
-# The dev-qt/qtsql:5 the Qt5 branch carries has no Qt6 counterpart:
-# mantid itself asks for no Sql component, and dev-qt/qttools[assistant]
-# already pulls ~dev-qt/qtbase:6[concurrent,network,sql,sqlite] for
-# QtHelp's own database, so declaring sql here would only duplicate it.
-# QtHelp is found at configure time, but neither it nor libQt6Sql ends up
-# linked into the Qt6 image. verified 2026-09-10
-#
-# The earlier HDF4-probe blocker (Gentoo bug 942866) is resolved by this
-# overlay's sci-libs/hdf from 4.2.16 on; this revision is capped below 4.4,
-# whose API its vendored NeXus code predates. Install lands ~227 MiB under
-# /opt/mantid/{bin,include,instrument,lib,lib64,plugins,scripts}.
-# Upstream removed all QtWebEngineWidgets usage in 6.15.0.4rc1 and it
-# stays gone in 6.16.x.
-#
-# Note: as of 6.16.x mantid has no GPU offload — the build system uses
-# only TBB + OpenMP for parallelism, and the source tree contains no
-# .cu/.cuh files or find_package(CUDA) calls. There is no `cuda` IUSE
-# to add here even when nvidia-cuda-toolkit is installed.
+# Select Qt5 or Qt6 explicitly because upstream defaults vary by platform.
+# Qt5 needs the deprecation-guard workaround and overlay-only PyQt5; Qt6 needs
+# upstream's 6.11 floor. pyqt5 supplies the Qt5-only pyrcc5 build tool.
+# lz4 is required by the GUI crash handler. Omit unavailable pystack,
+# quasielasticbayes, and quickBayes; only their crash/algorithm paths degrade.
+# No CUDA sources or build integration exist.
 IUSE="qt5 +qt6 test"
 RESTRICT="!test? ( test )"
 
-# Build-host note: sci-libs/hdf5[cxx] (below) trips hdf5's REQUIRED_USE
-# at-most-one-of( cxx mpi ), so on an mpi-enabled hdf5 you also need
-# USE=unsupported on sci-libs/hdf5 (the cxx+mpi combo is upstream-
-# "unsupported" but builds fine). That is the only host USE-config not
-# expressible as a dep atom; emerge --autounmask proposes the rest from
-# the atoms (per toolkit, either the qtbase flags + qttools assistant +
-# qscintilla qt6, or the dev-qt:5 set + qscintilla qt5).
-
-# Every shared library the installed image links (its NEEDED entries),
-# other than the toolchain's own and libpython, is declared below, with :=
-# where the provider carries a subslot.
-# sci-libs/nexus is not among them: 6.16.x carries its own copy of the NeXus
-# C API under Framework/LegacyNexus and neither links nor includes the
-# system one. Build-only tools (ccache, pre-commit, gtest, eigen, pip) and
-# the docs toolchain are out of RDEPEND, and jemalloc and mesa-progs had no
-# consumer at all. verified 2026-09-10
+# hdf5[cxx,mpi] additionally needs hdf5[unsupported].
+# Runtime atoms mirror -r1's installed NEEDED set; Mantid vendors its NeXus API.
+# Build-only tools, docs dependencies, and unused libraries stay out of RDEPEND.
 RDEPEND="
 	dev-python/euphonic[${PYTHON_SINGLE_USEDEP}]
 	sci-libs/gsl:=
