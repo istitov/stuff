@@ -836,9 +836,7 @@ CRATES="
 	zstd@0.13.3
 "
 
-# 1.6.3 raised the workspace rust-version to 1.94.1 (1.6.1/1.6.2 were 1.91.1
-# and emitted no notice); the cargo eclass QA notice now requires it declared.
-# verified 2026-08-22.
+# Match the workspace's raised rust-version. # verified 2026-08-22
 RUST_MIN_VER="1.94.1"
 
 inherit cargo distutils-r1
@@ -849,20 +847,8 @@ HOMEPAGE="
 	https://pypi.org/project/deltalake/
 	https://delta-io.github.io/delta-rs/
 "
-# 1.6.0 is wheel-only on PyPI (no sdist), so source comes from the
-# delta-io/delta-rs monorepo at the python-v${PV} tag. The maturin
-# project lives in python/; its Cargo.lock is NOT committed upstream
-# (gitignored) — CRATES above was generated from `cargo generate-lockfile`
-# (workspace: crates/* + python). See the deltalake memory for the recipe.
-#
-# 1.6.3 moved delta_kernel (package buoyant_kernel) + buoyant_kernel_engine
-# BACK onto crates.io (version = "0.25.0,<0.25.100") from the buoyant-data
-# git fork that 1.6.1/1.6.2 pinned, so the GIT_CRATES + KERNEL_COMMIT +
-# src_prepare repoint those carried are gone: the lock resolves them as
-# plain registry crates (buoyant_kernel@0.25.1, buoyant_kernel_engine@0.25.0,
-# buoyant_kernel_derive@1.1.0). verified 2026-08-22 against the 1.6.3
-# workspace Cargo.toml (delta_kernel `version =` line active, git/path
-# variants commented out; zero git sources in the generated lock).
+# PyPI is wheel-only. The monorepo omits Cargo.lock, so CRATES comes from a
+# generated workspace lock; see the deltalake memory for the recipe.
 SRC_URI="
 	https://github.com/delta-io/delta-rs/archive/refs/tags/python-v${PV}.tar.gz -> ${P}.gh.tar.gz
 	${CARGO_CRATE_URIS}
@@ -870,7 +856,6 @@ SRC_URI="
 S="${WORKDIR}/delta-rs-python-v${PV}/python"
 
 LICENSE="Apache-2.0"
-# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD CC0-1.0
 	CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0 ZLIB BZIP2
