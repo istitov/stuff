@@ -10,15 +10,9 @@ inherit distutils-r1
 
 DESCRIPTION="Fast diffusion-inference kernel library (RoPE + FP8/FP4 quant, binary wheel)"
 HOMEPAGE="https://pypi.org/project/comfy-kitchen/"
-# The cuda branch is per-arch: this ebuild is keyworded ~arm64 and upstream
-# ships an aarch64 build, but the single x86_64 URL installed an x86_64 .so
-# on arm64 that fails at import. Revbumped so affected installs are
-# rebuilt. # verified 2026-09-09
-#
-# No sdist upstream. USE=cuda installs the cp312-abi3 x86_64 manylinux wheel
-# (CUDA + Triton kernels); without cuda the py3-none-any wheel -- eager + Triton
-# backends, no CUDA -- for CPU/ROCm (its Triton backend rides on dev-python/
-# triton-bin's AMD/CPU support).
+# No sdist. cuda selects the host architecture's abi3 CUDA/Triton wheel;
+# otherwise install the portable eager/Triton wheel. Per-arch URLs fix arm64
+# imports. verified 2026-09-09
 SRC_URI="
 	cuda? (
 		amd64? ( https://files.pythonhosted.org/packages/db/5d/7df83ccb2b3fc4b9660dd337dcc56f7c65926318ae0303840a1e5b72493d/comfy_kitchen-${PV}-cp312-abi3-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl )
@@ -28,8 +22,7 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-# Apache-2.0 per upstream's classifier and the wheel's bundled LICENSE.
-# verified 2026-07-01
+# Wheel LICENSE and classifier specify Apache-2.0. verified 2026-07-01
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm64"
@@ -38,8 +31,7 @@ RESTRICT="bindist mirror strip"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/comfy_kitchen/*"
 
-# Provides comfy_kitchen.apply_rope (used unconditionally by ComfyUI's flux/
-# lumina/z-image RoPE path via comfy.quant_ops.ck) plus FP8/FP4 quant kernels.
+# ComfyUI unconditionally uses apply_rope; the package also supplies FP8/FP4.
 
 src_unpack() {
 	cp "${DISTDIR}/${A}" "${WORKDIR}/" || die
