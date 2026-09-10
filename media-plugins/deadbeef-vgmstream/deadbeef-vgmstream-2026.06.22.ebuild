@@ -45,9 +45,7 @@ src_prepare() {
 }
 
 src_compile() {
-	# The bundled vgmstream sources link into a shared object, so every
-	# TU needs -fPIC; upstream's Makefile doesn't force it and binutils
-	# rejects the final link without it. # verified 2026-07-06
+	# Bundled sources require -fPIC for the shared-object link. Verified 2026-07-06.
 	emake CFLAGS="${CFLAGS} -fPIC"
 }
 
