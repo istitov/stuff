@@ -8,10 +8,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
 
-# GitHub zero-pads the calendar version in the tag (26.06.00); PyPI
-# normalises it to 26.6.0, which is our ${PV}. The in-tree dask_cuda/VERSION
-# file already carries the clean 26.06.00 string that setuptools' dynamic
-# version reads, so no version patching is needed here.
+# GitHub and VERSION use zero-padded 26.06.00; PyPI normalizes to ${PV}.
 MY_PV="26.06.00"
 
 DESCRIPTION="Utilities for running Dask workers on CUDA-enabled systems"
@@ -29,11 +26,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# dask-cuda is pure-Python; RMM-based device-memory spilling is optional
-# (sci-libs RMM is not packaged) and not a hard dependency. cuda-core is
-# satisfied by our dev-python/cuda-python stack; nvidia-ml-py (pynvml) is
-# the GPU telemetry binding. rapids-dask-dependency pulls the dask /
-# distributed pair (see that package for the relaxed-pin rationale).
+# RMM-based spilling is optional. cuda-core provides CUDA access, nvidia-ml-py
+# provides telemetry, and rapids-dask-dependency supplies dask/distributed.
 RDEPEND="
 	>=dev-python/click-8.1[${PYTHON_USEDEP}]
 	>=dev-python/cuda-core-0.3.2[${PYTHON_USEDEP}]
@@ -45,15 +39,9 @@ RDEPEND="
 "
 
 python_prepare_all() {
-	# Upstream builds through rapids_build_backend, a RAPIDS PEP517 shim
-	# whose only effects are (a) appending a CUDA suffix (-cu13) to
-	# dependency names and (b) sourcing deps from dependencies.yaml. We
-	# want neither — our deps are unsuffixed and already static in
-	# [project.dependencies] — and its declared inner backend is plain
-	# setuptools.build_meta. Swap to setuptools directly so we don't have
-	# to package rapids-build-backend + rapids-dependency-file-generator
-	# for byte-identical output. The dynamic version still resolves from
-	# dask_cuda/VERSION via [tool.setuptools.dynamic]. verified 2026-06-10
+	# Bypass RAPIDS's wrapper, which adds CUDA suffixes and reads dependencies.yaml;
+	# our dependencies are already unsuffixed and static. The wrapped setuptools
+	# backend still reads VERSION. # verified 2026-06-10
 	sed -i \
 		-e 's/build-backend = "rapids_build_backend.build"/build-backend = "setuptools.build_meta"/' \
 		-e '/"rapids-build-backend>=0.4.0,<0.5.0",/d' \
