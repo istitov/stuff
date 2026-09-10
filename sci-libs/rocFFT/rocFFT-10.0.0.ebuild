@@ -73,12 +73,13 @@ required_mem() {
 			# Upstream's default target count.
 			local NARCH=7
 		fi
-		echo "$(($(makeopts_jobs)*${NARCH}*25+2200))M" # A linear function estimating how much memory required
+		# Estimate peak memory from parallelism and selected targets.
+		echo "$(($(makeopts_jobs)*${NARCH}*25+2200))M"
 	fi
 }
 
 pkg_pretend() {
-	return # leave the disk space check to pkg_setup phase
+	return # Defer the disk check to pkg_setup.
 }
 
 pkg_setup() {
