@@ -28,17 +28,15 @@ src_prepare() {
 	default
 	sed -i 's|/usr/local/bin|/usr/bin|' app/app.pro || die
 
-	# Qt6: upstream still uses QTextCodec, QRegExp etc. which live in Qt5Compat.
+	# Legacy text and regex APIs require Qt5Compat under Qt 6.
 	sed -i '/^greaterThan(QT_MAJOR_VERSION, 4): QT += widgets/i\
 greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat' \
 		app/app.pro || die
 
-	# mimetex.c is pre-C99 and fails to build with GCC 14+ which defaults to
-	# -std=c23. Force an older C standard for the mimetex subproject only.
+	# Build pre-C99 mimetex as GNU89; GCC 14+ defaults to C23.
 	sed -i '1i QMAKE_CFLAGS += -std=gnu89' thirdParty/mimetex/mimetex.pro || die
 
-	# mimetex defines its own strcasestr with a signature that conflicts with
-	# glibc's. Rename the local copy.
+	# Avoid conflicting with glibc's strcasestr declaration.
 	sed -i 's|\bstrcasestr\b|mt_strcasestr|g' \
 		thirdParty/mimetex/mimetex.c || die
 }
