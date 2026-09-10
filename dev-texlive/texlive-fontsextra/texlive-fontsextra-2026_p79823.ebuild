@@ -837,8 +837,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	venturisadf.source.r79618
 	yfonts.source.r79618
 "
-# Removed in target tlpdb: gentium-tug.source
-
 inherit texlive-module
 
 DESCRIPTION="TeXLive Additional fonts"
