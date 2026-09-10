@@ -41,6 +41,9 @@ src_prepare() {
 	# The sdist has no VCS metadata and therefore publishes version 0.0.0.
 	# Pin the release version and avoid invoking versioningit in the gitless
 	# build tree.
+	grep -qF '"versioningit >= 1,< 4", ' pyproject.toml ||
+		die "versioningit anchor moved"
+	grep -qF 'dynamic = ["version"]' pyproject.toml || die "version anchor moved"
 	sed -i \
 		-e 's/"versioningit >= 1,< 4", //' \
 		-e 's/dynamic = \["version"\]/version = "'"${PV}"'"/' \
