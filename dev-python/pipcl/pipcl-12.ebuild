@@ -24,6 +24,7 @@ KEYWORDS="~amd64 ~arm64"
 # DISTUTILS_USE_PEP517=standalone does not auto-install build
 # requirements — declare it. verified 2026-06-19.
 BDEPEND="dev-python/packaging[${PYTHON_USEDEP}]"
+RDEPEND="dev-python/packaging[${PYTHON_USEDEP}]"
 
 # Tests pip-install extra tooling (piprepo, a pinned setuptools) over the
 # network and build sample wheels — not runnable in a sandboxed build.
