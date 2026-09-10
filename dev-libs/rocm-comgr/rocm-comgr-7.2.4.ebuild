@@ -63,9 +63,7 @@ src_prepare() {
 	sed -e "s:\${CLANG_CMAKE_DIR}/../../../\*:${EPREFIX}/usr/lib/clang/${LLVM_SLOT}/include:" \
 		-i cmake/opencl_header.cmake || die
 
-	# Backports for llvm-22 from amd-staging:
-	# https://github.com/ROCm/llvm-project/commit/ebcaa3d9226921c8761a5291526291e54611e4a4
-	# https://github.com/ROCm/llvm-project/commit/ccb14ba83fd6bdc01423f71944b4676f740b97cc
+	# LLVM 22 backports from amd-staging commits ebcaa3d92269 and ccb14ba83fd6.
 	sed -e "s:Driver/Options.h:Options/Options.h:" \
 		-e "s/clang::driver::options/clang::options/" \
 		-e "s/Driver::GetResourcesPath/GetResourcesPath/" \
