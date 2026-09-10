@@ -7,11 +7,8 @@ inherit desktop xdg
 
 DESCRIPTION="Desktop client for Tutanota, the secure e-mail service"
 HOMEPAGE="https://tuta.com/secure-email"
-# The .sig file is vendored under files/ rather than fetched: upstream's
-# app.tuta.com/desktop/linux-sig.bin is a floating endpoint that always
-# serves the *current* release's signature, so SRC_URI-fetching it would
-# break this ebuild the moment upstream cycles past ${PV}. At 256 bytes,
-# committing the per-PV sig in-tree is cheaper than mirror infrastructure.
+# Vendor the 256-byte signature: upstream's floating endpoint serves only the
+# current release and would break older ebuilds.
 SRC_URI="
 	https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${PV}/tutanota-desktop-linux.AppImage -> ${P}.AppImage
 	https://github.com/tutao/tutanota/raw/tutanota-desktop-release-${PV}/tutao-pub.pem -> ${P}-tutao-pub.pem
@@ -24,9 +21,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 RESTRICT="bindist mirror strip"
 
-# The tutanota-desktop binary carries a direct DT_NEEDED on libudev.so.1 and
-# nothing else here provides it: media-libs/mesa pulls virtual/libudev only
-# under USE=vulkan, and none of the other members reference udev at all.
+# The binary directly needs libudev.so.1; Mesa provides it only with Vulkan.
 # verified 2026-08-26
 RDEPEND="
 	app-accessibility/at-spi2-core:2
