@@ -44,7 +44,7 @@ src_install() {
 		narch="sbsa"
 	fi
 
-	# allow slotted install
+	# Keep each cuDNN slot under CUDA's target tree.
 	local CUDNN_PATH="${CUDNN_PATH:-${EPREFIX}/opt/cuda}"
 
 	cd "${WORKDIR}/cudnn-linux-${narch}-${PV}_cuda13-archive" || die
@@ -55,7 +55,6 @@ src_install() {
 		"${ED}${CUDNN_PATH}/targets/${narch}-linux" \
 		|| die
 
-	# Add include and lib symlinks
 	dosym -r "${CUDNN_PATH}/targets/${narch}-linux/include" "${CUDNN_PATH}/include"
 	dosym -r "${CUDNN_PATH}/targets/${narch}-linux/lib" "${CUDNN_PATH}/$(get_libdir)"
 
