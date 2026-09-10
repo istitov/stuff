@@ -27,7 +27,7 @@ RDEPEND="
 "
 
 src_prepare() {
-	# sdist has no git info; pin dynamic version to PV.
+	# Pin the version in the VCS-less sdist.
 	grep -qE '^dynamic[[:space:]]*=' pyproject.toml || die "dynamic anchor moved"
 	grep -qF '[project]' pyproject.toml || die "project anchor moved"
 	sed -i -e "/^dynamic\s*=/d" \
@@ -38,8 +38,7 @@ src_prepare() {
 
 python_install_all() {
 	distutils-r1_python_install_all
-	# Drop legacy pkgutil-style namespace stub so multiple
-	# diffpy.* distributions coexist via PEP 420 implicit namespace.
+	# Share the PEP 420 namespace across diffpy distributions.
 	find "${ED}" -path '*/site-packages/diffpy/__init__.py' -delete || die
 	find "${ED}" -path '*/site-packages/diffpy/__pycache__/__init__.*' -delete || die
 }
