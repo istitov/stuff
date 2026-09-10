@@ -21,7 +21,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# The suite exercises Triton kernels and requires supported accelerator hardware.
+# Triton kernel tests require supported accelerator hardware.
 RESTRICT="test"
 
 RDEPEND="
