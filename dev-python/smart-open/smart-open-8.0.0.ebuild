@@ -32,7 +32,6 @@ BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 
-# 8.0.0 switched to setuptools_scm for versioning. The GitHub archive tarball
-# carries no .git, so setuptools_scm would fall back to 0.1.dev0+gitnotfound;
-# pin the real version instead. verified 2026-06-28
+# Archives lack VCS metadata; supply the setuptools_scm version.
+# Verified 2026-06-28.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
