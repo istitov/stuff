@@ -40,10 +40,8 @@ BDEPEND="
 
 PATCHES=( "${FILESDIR}"/tests.diff )
 
-# Test deselects forked from ::4nykey 2026-05-09 — most are upstream
-# regression tests for specific GitHub issue numbers (test_NNNN),
-# others need OCR (tesseract), lint tools at test time (codespell,
-# pylint), or test data not in distfile. Re-verify on PyMuPDF bumps.
+# Deselect issue-specific regressions and tests requiring OCR, lint tools, or
+# absent data. Forked from ::4nykey 2026-05-09; recheck on bumps.
 EPYTEST_DESELECT=(
 	tests/test_4505.py::test_4505
 	tests/test_widgets.py::test_2391
@@ -76,8 +74,7 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_compile() {
-	# Use system app-text/mupdf via dev-python/mupdf for headers/lib;
-	# don't let upstream setup.py rebuild MuPDF from a bundled copy.
+	# Build against system MuPDF instead of upstream's bundled copy.
 	local _i=( $($(tc-getPKG_CONFIG) mupdf --cflags-only-I) )
 	PYMUPDF_SETUP_FLAVOUR='p' \
 	PYMUPDF_SETUP_MUPDF_BUILD= \
