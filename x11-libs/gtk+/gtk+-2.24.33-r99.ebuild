@@ -16,8 +16,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="aqua cups examples +introspection test vim-syntax xinerama"
 REQUIRED_USE="xinerama? ( !aqua )"
 
-# Upstream wants us to do their job:
-# https://bugzilla.gnome.org/show_bug.cgi?id=768663#c1
+# Upstream leaves test maintenance downstream (GNOME #768663).
 RESTRICT="test"
 
 COMMON_DEPEND="
@@ -60,14 +59,13 @@ RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/adwaita-icon-theme-3.14
 	x11-themes/gnome-themes-standard
 "
-# librsvg for svg icons (PDEPEND to avoid circular dep), bug #547710
+# PDEPEND avoids a librsvg cycle (bug #547710).
 PDEPEND="
 	gnome-base/librsvg[${MULTILIB_USEDEP}]
 	x11-themes/gtk-engines-adwaita
 	vim-syntax? ( app-vim/gtk-syntax )
 "
-# docbook-4.1.2 and xsl required for man pages
-# docbook-4.3 required for gtk-doc
+# DocBook 4.1.2/XSL build man pages; 4.3 builds gtk-doc.
 BDEPEND="
 	app-text/docbook-xml-dtd:4.1.2
 	app-text/docbook-xml-dtd:4.3
@@ -122,7 +120,7 @@ set_gtk2_confdir() {
 }
 
 src_prepare() {
-	# Various glib marshaller churn could break build against a different glib version, force regeneration
+	# Regenerate marshallers to tolerate GLib version churn.
 	rm -v gdk/gdkmarshalers.{c,h} gtk/gtkmarshal.{c,h} gtk/gtkmarshalers.{c,h} \
 		perf/marshalers.{c,h} gtk/gtkaliasdef.c gtk/gtkalias.h || die
 
@@ -137,17 +135,15 @@ src_prepare() {
 	append-flags -std=gnu17
 
 	if ! use test ; then
-		# don't waste time building tests
 		strip_builddir SRC_SUBDIRS tests Makefile.{am,in}
 		strip_builddir SUBDIRS tests gdk/Makefile.{am,in} gtk/Makefile.{am,in}
 	else
-		# Non-working test in gentoo's env
+		# Disable a key-event UI test that fails in Gentoo's environment.
 		sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
 			-i gtk/tests/testing.c || die "sed 1 failed"
 
-		# Cannot work because glib is too clever to find real user's home
-		# gentoo bug #285687, upstream bug #639832
-		# XXX: /!\ Pay extra attention to second sed when bumping /!\
+		# GLib resolves the real home, breaking recentmanager tests. Recheck the
+		# multiline Makefile.in anchor on bumps (bugs #285687, GNOME #639832).
 		sed '/TEST_PROGS.*recentmanager/d' -i gtk/tests/Makefile.am \
 			|| die "failed to disable recentmanager test (1)"
 		sed '/^TEST_PROGS =/,+3 s/recentmanager//' -i gtk/tests/Makefile.in \
@@ -155,7 +151,7 @@ src_prepare() {
 		sed 's:\({ "GtkFileChooserButton".*},\):/*\1*/:g' -i gtk/tests/object.c \
 			|| die "failed to disable recentmanager test (3)"
 
-		# https://bugzilla.gnome.org/show_bug.cgi?id=617473
+		# Disable the broken PLT check (GNOME #617473).
 		sed -i -e 's:pltcheck.sh:$(NULL):g' \
 			gtk/Makefile.am || die
 
@@ -170,7 +166,6 @@ src_prepare() {
 	fi
 
 	if ! use examples; then
-		# don't waste time building demos
 		strip_builddir SRC_SUBDIRS demos Makefile.{am,in}
 	fi
 
@@ -194,7 +189,7 @@ multilib_src_configure() {
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
 		CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config"
 
-	# work-around gtk-doc out-of-source brokedness
+	# Work around gtk-doc's out-of-source build handling.
 	if multilib_is_native_abi; then
 		local d
 		for d in gdk gtk libgail-util; do
@@ -212,8 +207,7 @@ multilib_src_install() {
 }
 
 multilib_src_install_all() {
-	# see bug #133241
-	# Also set more default variables in sync with gtk3 and other distributions
+	# Match GTK 3 and distribution defaults (bug #133241).
 	insinto /usr/share/gtk-2.0
 	newins - gtkrc <<- 'EOF'
 	gtk-fallback-icon-theme = "gnome"
@@ -223,9 +217,9 @@ multilib_src_install_all() {
 	EOF
 
 	einstalldocs
-	rm "${ED}"/usr/share/doc/${PF}/ChangeLog || die # empty file
+	rm "${ED}"/usr/share/doc/${PF}/ChangeLog || die
 
-	# dev-util/gtk-builder-convert split off into a separate package, #402905
+	# gtk-builder-convert is packaged separately (bug #402905).
 	rm "${ED}"/usr/bin/gtk-builder-convert || die
 	rm "${ED}"/usr/share/man/man1/gtk-builder-convert.* || die
 
@@ -236,7 +230,7 @@ pkg_preinst() {
 	gnome2_pkg_preinst
 
 	multilib_pkg_preinst() {
-		# Make immodules.cache belongs to gtk+ alone
+		# Preserve GTK's ownership of immodules.cache.
 		local cache="/usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache"
 
 		if [[ -e "${EROOT}${cache}" ]]; then
@@ -272,14 +266,14 @@ pkg_postinst() {
 		rm -f "${EROOT}${GTK2_CONFDIR}/gtk.immodules"
 	fi
 
-	# pixbufs are now handled by x11-libs/gdk-pixbuf
+	# Migrate the cache now owned by gdk-pixbuf.
 	if [[ -e "${EROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders" ]]; then
 		elog "File ${EROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders is now handled by x11-libs/gdk-pixbuf"
 		elog "Removing deprecated file."
 		rm -f "${EROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 	fi
 
-	# two checks needed since we dropped multilib conditional
+	# Also handle the pre-multilib path.
 	if [[ -e "${EROOT}/etc/gtk-2.0/gdk-pixbuf.loaders" ]]; then
 		elog "File ${EROOT}/etc/gtk-2.0/gdk-pixbuf.loaders is now handled by x11-libs/gdk-pixbuf"
 		elog "Removing deprecated file."
