@@ -12,9 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# 3.19+ is purely header-only — upstream dropped CMakeLists.txt,
-# safe_math.{h,_impl.h}, and the build/install scaffolding the
-# 3.0.28a ebuild had to patch in.  Just ship the header.
+# Header-only since 3.19; upstream removed its build system.
 
 src_install() {
 	doheader SafeInt.hpp
