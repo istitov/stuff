@@ -15,9 +15,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="bgmn"
 
-# zlib, quazip and alglib are bundled and built via profex's own subdir
-# qmake projects; building against system copies would require
-# significant patching and the upstream Qt6 port expects the bundles.
+# The Qt 6 build expects bundled zlib, quazip, and alglib; system copies require
+# substantial patching.
 RDEPEND="
 	bgmn? ( sci-physics/bgmn )
 	dev-qt/qt5compat:6
@@ -34,15 +33,10 @@ src_configure() {
 }
 
 src_install() {
-	# Upstream's qmake tree has no install rules. The resulting
-	# bin/ holds the main GUI (profex), module GUIs shipped as
-	# separate binaries with profex* prefixes (profexed, profexsc,
-	# profexst, profexwp, ...), and a handful of px* command-line
-	# tools. Install them all.
+	# Upstream has no install rules; bin/ contains all GUIs and CLI tools.
 	dobin bin/*
 
-	# Upstream sets Version= to the app version (5.1.0) instead of
-	# the Desktop Entry spec version; trips desktop-file-validate.
+	# Version= denotes the Desktop Entry spec, not the application version.
 	sed -i -e 's/^Version=.*/Version=1.5/' profex5.desktop || die
 	domenu profex5.desktop
 
