@@ -42,9 +42,7 @@ PATCHES=(
 src_prepare() {
 	default
 
-	# fix pointers for 64 bits — the X drivers stash pointers in a Fortran
-	# INTEGER (4 bytes), which truncates on any LP64 ABI. arm64/aarch64 is
-	# LP64 just like amd64/ia64, so it needs the INTEGER*8 widening too.
+	# X drivers store pointers in 4-byte Fortran INTEGERs; widen them on LP64.
 	if use amd64 || use arm64 || use ia64; then
 		sed -e 's/INTEGER PIXMAP/INTEGER*8 PIXMAP/g' \
 			-i drivers/{gi,pp,wd}driv.f || die "sed 64bits failed"
@@ -71,25 +69,17 @@ src_prepare() {
 }
 
 src_configure() {
-	# -Werror=lto-type-mismatch
-	# https://bugs.gentoo.org/862918
-	#
-	# Upstream contact method is email. I have sent one.
+	# LTO type mismatch: Gentoo bug 862918; upstream has no issue tracker.
 	filter-lto
 
-	# drivers/figdisp_comm.c uses K&R-style prototypes (`void f();` meaning
-	# unspecified args, then called with arguments). gcc 16's default
-	# (-std=gnu23) treats `()` as `(void)` and rejects the calls with
-	# 'too many arguments to function ...; expected 0, have N'. Pin the
-	# C standard to gnu89 so K&R survives. verified 2026-05-09.
+	# GCC 16's gnu23 treats K&R `void f()` as `(void)`, rejecting calls with
+	# arguments in figdisp_comm.c; retain gnu89. # verified 2026-05-09
 	append-cflags -std=gnu89
 
-	# GCC 10 workaround
-	# bug #722190
+	# GCC 10 workaround (Gentoo bug 722190).
 	append-fflags $(test-flags-FC -fallow-argument-mismatch)
 
 	./makemake . linux
-	# post makefile creation prefix hack
 	sed -i -e "s|/usr|${EPREFIX}/usr|g" makefile || die
 }
 
@@ -112,16 +102,13 @@ src_compile() {
 		pdflatex pgplot-routines.tex
 	fi
 
-	# this just cleans out not needed files
 	emake -j1 clean
 }
 
 src_test() {
-	# i can go to 16
 	local i j
 	for i in 1 2 3; do
 		emake pgdemo${i}
-		# j can also be LATEX CPS...
 		for j in NULL PNG PS CPS LATEX; do
 			local testexe=./test_${j}_${i}
 			echo "LD_LIBRARY_PATH=. ./pgdemo${i} <<EOF" > ${testexe}
@@ -141,7 +128,6 @@ src_install() {
 	dolib.so libpgplot.so*
 	dobin pgxwin_server pgdisp
 
-	# C binding
 	insinto /usr/include
 	doins cpgplot.h
 	dolib.so libcpgplot.so*
@@ -160,7 +146,6 @@ src_install() {
 
 	use static-libs && dolib.a lib*pgplot.a
 
-	# minimal doc
 	dodoc aaaread.me pgplot.doc
 	newdoc pgdispd/aaaread.me pgdispd.txt
 
