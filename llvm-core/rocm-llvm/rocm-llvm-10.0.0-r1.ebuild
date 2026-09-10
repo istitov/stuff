@@ -77,7 +77,7 @@ src_unpack() {
 
 src_configure() {
 	# Match ::gentoo's GCC-only LTO filter for LLVM ODR/miscompile risks.
-	# bugs #917536, #926529; adopted 2026-09-09
+	# (bugs #917536 and #926529; adopted 2026-09-09).
 	tc-is-gcc && filter-lto
 
 	# Match ::gentoo's workaround for upstream issue #219693; adopted 2026-09-09.
