@@ -43,9 +43,7 @@ pkg_setup() {
 }
 
 src_configure() {
-	# SuiteSparse 7.x dropped the per-module NCHOLESKY/NMATRIXOPS/etc.
-	# toggles; CHOLMOD_GPL controls the GPL-licensed submodules
-	# (Matrix_ops, Modify, Partition, Supernodal) as a group.
+	# SuiteSparse 7 replaces per-module toggles with the grouped CHOLMOD_GPL.
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=ON
 		-DBUILD_STATIC_LIBS=OFF
@@ -60,11 +58,8 @@ src_configure() {
 		-DBLA_VENDOR=Generic
 	)
 
-	# SuiteSparse defaults SUITESPARSE_CUDA_ARCHITECTURES to "52;75;80",
-	# but CUDA 13 dropped support for compute_52 (and anything below
-	# 7.5). Drop the obsolete arch when building against CUDA >= 13.
-	# Honour an explicit SUITESPARSE_CUDA_ARCHITECTURES env override
-	# regardless of CUDA version.
+	# CUDA 13 rejects SuiteSparse's default compute_52; use 75/80 unless the
+	# user explicitly sets SUITESPARSE_CUDA_ARCHITECTURES.
 	if use cuda; then
 		if [[ -n ${SUITESPARSE_CUDA_ARCHITECTURES} ]]; then
 			mycmakeargs+=(
