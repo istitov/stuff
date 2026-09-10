@@ -14,16 +14,15 @@ HOMEPAGE="
 	https://github.com/explosion/curated-tokenizers
 	https://pypi.org/project/curated-tokenizers/
 "
-# PyPI source-dir alias missing for this old version; hash-pinned URL.
+# This old release lacks a PyPI source alias; use a hash-pinned URL.
 SRC_URI="https://files.pythonhosted.org/packages/fc/fa/b2d55f0d53c7c7f5dc0b6dbb48cc4344ee84fb572f23de28040bf2cde89d/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Pinned to 0.0.x: dev-python/spacy-curated-transformers 0.3.1 caps
-# this at <0.1.0,>=0.0.9. The 0.9.x line is for the unrelated 2.x
-# release branch.
+# The 0.0 line matches spacy-curated-transformers 0.3; 0.9 belongs to its
+# unrelated 2.x branch.
 RDEPEND="
 	${PYTHON_DEPS}
 	>=dev-python/regex-2022.0.0[${PYTHON_USEDEP}]
