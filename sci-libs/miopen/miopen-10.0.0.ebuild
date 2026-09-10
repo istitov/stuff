@@ -96,7 +96,6 @@ src_configure() {
 		use_ai_tuning=ON
 	fi
 
-	# Suppress noisy Clang thread-safety diagnostics.
 	append-cxxflags -Wno-thread-safety-analysis
 
 	local mycmakeargs=(
