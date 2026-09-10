@@ -136,8 +136,12 @@ src_unpack() {
 }
 
 src_prepare() {
+	grep -qF 'Unknown Linux package flavor' CMake/pkg.cmake ||
+		die "package-flavor anchor moved"
 	sed -e "/Unknown Linux package flavor/ s/FATAL_ERROR/MESSAGE/" -i "CMake/pkg.cmake" || die
 
+	grep -qF 'set (XRT_UPSTREAM 0)' xrt/src/CMake/settings.cmake ||
+		die "XRT_UPSTREAM anchor moved"
 	sed -e "s/set (XRT_UPSTREAM 0)/set (XRT_UPSTREAM 1)/" -i xrt/src/CMake/settings.cmake || die
 
 	cmake_src_prepare
