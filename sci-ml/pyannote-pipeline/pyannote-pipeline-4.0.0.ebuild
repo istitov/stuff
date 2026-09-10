@@ -19,9 +19,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# scipy is undeclared in upstream pyproject.toml but imported at module
-# top level by optimizer.py (scipy.stats.bayes_mvs); optimizer.py is loaded
-# via the package __init__ — verified 2026-05-16.
+# scipy is absent from pyproject but imported at module load via optimizer.py.
+# Verified 2026-05-16.
 RDEPEND="
 	>=dev-python/filelock-3.17.0[${PYTHON_USEDEP}]
 	>=dev-python/optuna-4.2.0[${PYTHON_USEDEP}]
