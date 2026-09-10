@@ -17,9 +17,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="dbus mpd taglib"
 
-# Upstream .po filename -> Gentoo l10n USE flag
-# (identical except where the USE flag drops the country qualifier:
-# Greek ships as el_GR.po but Gentoo only has an `el` flag.)
+# Map upstream locale filenames to Gentoo l10n flags; el_GR maps to el.
 LANGS_MAP=(
 	ar:ar be:be ca:ca cs:cs da:da de:de el_GR:el es:es et:et fi:fi
 	fr:fr hi:hi it:it ja:ja ko:ko nl:nl pl:pl pt_BR:pt-BR ru:ru sk:sk
