@@ -1,8 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# CRATES inlined from xet-core v1.5.2 hf_xet/Cargo.lock (fork of
-# ::gentoo's hf_xet, which fetches a maintainer crates tarball instead)
+# CRATES copied from xet-core v1.5.2 hf_xet/Cargo.lock.
 
 EAPI=8
 
@@ -436,7 +435,6 @@ SRC_URI+=" ${CARGO_CRATE_URIS}"
 S="${WORKDIR}"/xet-core-${PV}/hf_xet
 
 LICENSE="Apache-2.0"
-# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD CDDL
 	CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0
