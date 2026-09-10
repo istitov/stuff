@@ -41,7 +41,6 @@ src_prepare() {
 	# Support multiple Python versions (upstream bug 648292).
 	eapply "${FILESDIR}/${PN}-2.28.3-support_multiple_python_versions.patch"
 
-	# Disable known failures.
 	eapply "${FILESDIR}/${P}-disable-failing-tests.patch"
 
 	# Skip introspection tests when the feature is disabled.
