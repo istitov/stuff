@@ -48,9 +48,7 @@ PATCHES=(
 src_prepare() {
 	default
 
-	# CUDA 13 dropped sm_60 support; bump the hard-coded -arch=sm_60
-	# in CMakeLists.txt to sm_75 only when building against CUDA >= 13.
-	# CUDA 12 still accepts sm_60, so leave it alone there.
+	# CUDA 13 dropped sm_60; use sm_75 while retaining sm_60 for CUDA 12.
 	if use gpu; then
 		local cuda_ver=$(awk '/^#define CUDA_VERSION/ {print $3; exit}' \
 			"${ESYSROOT}"/opt/cuda/include/cuda.h 2>/dev/null)
