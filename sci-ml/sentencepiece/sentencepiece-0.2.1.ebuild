@@ -43,6 +43,9 @@ PATCHES=(
 )
 
 src_prepare() {
+	grep -qF 'third_party/darts_clone/darts.h' \
+		src/model_interface.h src/normalizer.h src/normalizer.cc \
+		src/unigram_model.h src/builder.cc || die "Darts include anchor moved"
 	sed -i \
 		-e "s:third_party/darts_clone/darts.h:darts.h:" \
 		src/model_interface.h \
@@ -53,6 +56,9 @@ src_prepare() {
 		|| die
 	distutils-r1_src_prepare
 	cmake_prepare
+	grep -qF '@libprotobuf_lite@' ${PN}.pc.in || die "protobuf anchor moved"
+	grep -qF '@includedir_for_pc_file@' ${PN}.pc.in || die "includedir anchor moved"
+	grep -qF '@libdir_for_pc_file@' ${PN}.pc.in || die "libdir anchor moved"
 	sed \
 		-e 's|@libprotobuf_lite@|protobuf-lite|' \
 		-e "s|@includedir_for_pc_file@|${S}/src|" \
@@ -61,6 +67,7 @@ src_prepare() {
 		> python/${PN}.pc \
 		|| die
 
+	grep -q 'CMAKE_CXX_STANDARD ' CMakeLists.txt || die "C++ standard anchor moved"
 	sed -e '/CMAKE_CXX_STANDARD /{s/)/ CACHE STRING "")/g}' -i CMakeLists.txt || die
 }
 
