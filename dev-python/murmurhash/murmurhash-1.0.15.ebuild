@@ -19,8 +19,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# PyPI sdist used (github tags lag). thinc caps murmurhash<1.1.0;
-# 1.0.15 fits.
+# GitHub tags lag PyPI; Thinc requires MurmurHash <1.1.
 RDEPEND="${PYTHON_DEPS}"
 DEPEND="${RDEPEND}"
 BDEPEND="
