@@ -25,57 +25,17 @@ fi
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-# This tracks upstream HEAD, which has moved away from 6.16.1.1 in ways the
-# tagged ebuilds do not share (checked 2026-09-10 at 737f77e15ec):
-#   - Qt 6 only. CMakeLists.txt offers MANTID_QT_VERSION=6 alone and
-#     FATAL_ERRORs on anything else, so there are no qt5/qt6 flags here
-#     and no Qt5 deprecation-guard workaround.
-#   - pyproject.toml requires Python >=3.13, hence PYTHON_COMPAT.
-#   - The Python 3.13 port the tagged ebuilds backport is already in.
-#   - The vendored NeXus C API is still byte-identical to 6.16.1.1's, so
-#     that release's HDF 4.4 patch applies; src_prepare applies it only
-#     while the old two-argument calls are still there.
-#
-# The earlier HDF4-probe blocker (Gentoo bug 942866) is resolved by this
-# overlay's sci-libs/hdf from 4.2.16 on.
-#
-# Verified through configure only, against main at 737f77e15ec; a compile
-# would validate a tree that moves tomorrow. The dependency set is the one
-# read from 6.16.1.1-r1's installed image, whose build and runtime checks
-# are recorded in that ebuild.
-#
-# Note: as of 6.16.x mantid has no GPU offload — the build system uses
-# only TBB + OpenMP for parallelism, and the source tree contains no
-# .cu/.cuh files or find_package(CUDA) calls. There is no `cuda` IUSE
-# to add here even when nvidia-cuda-toolkit is installed.
+# HEAD is Qt6-only and requires Python 3.13. It includes the tagged release's
+# Python port, while the HDF 4.4 NeXus patch remains conditionally applicable.
+# Configure-checked at 737f77e15ec on 2026-09-10; dependency coverage follows
+# the fully built 6.16.1.1-r1 image. No CUDA integration exists.
 IUSE="test"
 RESTRICT="!test? ( test )"
 
-# Build-host note: sci-libs/hdf5[cxx] (below) trips hdf5's REQUIRED_USE
-# at-most-one-of( cxx mpi ), so on an mpi-enabled hdf5 you also need
-# USE=unsupported on sci-libs/hdf5 (the cxx+mpi combo is upstream-
-# "unsupported" but builds fine). That is the only host USE-config not
-# expressible as a dep atom; emerge --autounmask proposes the rest from
-# the atoms.
-#
-# dev-python/lz4 is a hard runtime requirement on Linux and a clean build
-# does not reveal it: the workbench exception handler imports
-# mantidqt/dialogs/errorreports/run_pystack.py, whose module scope runs a
-# bare `if is_linux(): import lz4.frame`. Without it the framework and
-# `import mantidqt` still work and only the GUI fails. pystack itself is
-# NOT declared - it is in no Gentoo repo and is only ever shelled out to
-# when analysing a core dump.
-#
-# quickBayes, which upstream's recipe also lists, is in no Gentoo repo
-# either. BayesQuasi2 imports it inside the algorithm body, so without it
-# that one algorithm fails when run and nothing else is affected.
-# verified 2026-09-10
-
-# The shared-library set below is the one read from 6.16.1.1-r1's
-# installed image (its NEEDED entries), with := where the provider carries
-# a subslot; see that ebuild. sci-libs/nexus is not among them: mantid
-# carries its own copy of the NeXus C API under Framework/LegacyNexus.
-# Build-only tools and the docs toolchain are out of RDEPEND.
+# hdf5[cxx,mpi] additionally needs hdf5[unsupported].
+# lz4 is required by the GUI crash handler. Omit unavailable pystack and
+# quickBayes; only their crash/algorithm paths degrade.
+# Runtime atoms mirror the tagged installed NEEDED set; Mantid vendors NeXus.
 RDEPEND="
 	dev-python/euphonic[${PYTHON_SINGLE_USEDEP}]
 	sci-libs/gsl:=
