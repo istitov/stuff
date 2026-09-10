@@ -18,6 +18,4 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-# No runtime deps on Linux — upstream's only requires_dist is
-# pyobjc-framework-Cocoa, gated by `extra == 'macos-listener'` and
-# `platform_system == "Darwin"`.
+# Linux has no runtime dependencies; upstream's sole dependency is macOS-only.
