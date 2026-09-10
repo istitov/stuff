@@ -223,21 +223,20 @@ src_prepare() {
 
 	elibtoolize
 
-	# Needed while the cairo and mplibdir autoconf patches remain.
-	# bugs #927714, #853121, #837875
+	# Re-run autoconf while the cairo and mplibdir patches remain
+	# (bugs #927714, #853121, #837875).
 	"${S}"/reautoconf libs/cairo || die
 }
 
 src_configure() {
-	# bug #915223; needs upstreaming
+	# Avoid aliasing and LTO miscompilations (bug #915223; pending upstream).
 	append-flags -fno-strict-aliasing
 	filter-lto
 
-	# bug #946142
+	# GCC 15 compatibility (bug #946142).
 	append-cflags -std=gnu17
 
-	# Upstream's temporary 32-bit workaround; likely masks a pdfTeX bug.
-	# bug #928096
+	# Silence upstream's temporary 32-bit pdfTeX mismatch (bug #928096).
 	append-cflags -Wno-incompatible-pointer-types
 
 	# Avoid reautoconfing several scripts for bug #966834.
@@ -352,11 +351,8 @@ src_configure() {
 		# web2c afm2pl chktex dtl dvi2tty dvidvi dviljk dviout-util dvipdfm-x gregorio
 	)
 
-	# Temporarily enable on bumps to detect dropped options; it breaks sub-configures.
-	# bug #828591
-	my_conf+=(
-		# --enable-option-checking=fatal
-	)
+	# During bumps, fatal option checking finds removed options but breaks
+	# sub-configures (bug #828591).
 
 	tc-export CC CXX AR RANLIB
 	cd "${BUILDDIR}" || die
