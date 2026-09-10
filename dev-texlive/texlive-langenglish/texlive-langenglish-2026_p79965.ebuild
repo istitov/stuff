@@ -82,7 +82,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	wrapstuff-doc-en.doc.r71835
 	yet-another-guide-latex2e.doc.r77842
 "
-# Removed in target tlpdb: tex-refs.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	latexfileinfo-pkgs.source.r79618
 "
