@@ -34,8 +34,7 @@ BDEPEND="
 
 src_prepare() {
 	default
-	# Rename binary, automake symbols, and data paths from upstream's
-	# legacy 'gobby-0.5' suffix to match the actual package version.
+	# Replace upstream's obsolete gobby-0.5 install paths and symbols.
 	local f
 	while read -r f; do
 		sed -i \
