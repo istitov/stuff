@@ -94,7 +94,6 @@ src_configure() {
 		use_ai_tuning=ON
 	fi
 
-	# Silence known ROCm source noise.
 	append-cxxflags -Wno-thread-safety-analysis
 
 	local mycmakeargs=(
