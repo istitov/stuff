@@ -62,8 +62,7 @@ src_configure() {
 
 src_test() {
 	check_amdgpu
-	# Expected time on gfx1100 (-j32) is 85s
-	# HipcubDeviceHistogramMultiEven/0.MultiEven in 6.4.1 has bad array access (probably fixed in the future release)
+	# Histogram test has an out-of-bounds access; gfx1100 takes ~85s at -j32.
 	local CMAKE_SKIP_TESTS=(hipcub.DeviceHistogram)
 	cmake_src_test
 }
