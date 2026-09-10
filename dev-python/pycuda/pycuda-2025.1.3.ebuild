@@ -20,9 +20,6 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="examples test"
 
-# Upstream 2026.1 install_requires dropped appdirs (replaced by
-# platformdirs) and dropped decorator entirely; everything else is
-# unchanged from ::gentoo's 2024.1 ebuild.
 RDEPEND="
 	dev-libs/boost:=[python,${PYTHON_USEDEP}]
 	dev-python/decorator[${PYTHON_USEDEP}]
@@ -35,8 +32,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
-# We need write acccess /dev/nvidia0 and /dev/nvidiactl and the portage
-# user is (usually) not in the video group
+# GPU tests need device access unavailable under userpriv.
 RESTRICT="test? ( userpriv ) !test? ( test )"
 
 EPYTEST_PLUGINS=()
@@ -73,14 +69,14 @@ python_configure() {
 }
 
 python_test() {
-	# we need write access to this to run the tests
+	# Permit access to the NVIDIA devices used by tests.
 	addwrite /dev/nvidia0
 	addwrite /dev/nvidiactl
 	addwrite /dev/nvidia-uvm
 	addwrite /dev/nvidia-uvm-tools
 
 	EPYTEST_DESELECT=(
-		# needs investigation, perhaps failure is hardware-specific
+		# Possibly hardware-specific; needs investigation.
 		test/test_driver.py::test_pass_cai_array
 		test/test_driver.py::test_pointer_holder_base
 	)
