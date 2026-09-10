@@ -22,8 +22,7 @@ PATCHES=( "${FILESDIR}/${PN}-0.4-format-security.patch" )
 
 src_prepare() {
 	default
-	# Drop the strip invocations from Makefile so Portage's debug
-	# machinery stays in control.
+	# Let Portage control stripping and debug files.
 	grep -q '@strip' Makefile || die "strip anchor moved"
 	sed -i '/@strip/d' Makefile || die
 }
