@@ -23,8 +23,7 @@ RDEPEND="
 	>=dev-python/typing-extensions-4.9.0[${PYTHON_USEDEP}]
 "
 
-# tests/unitutil/cxml.py builds the XML fixtures with pyparsing (upstream
-# requirements-test.txt); most of the suite imports it during collection.
+# The XML fixture helper requires pyparsing during collection.
 BDEPEND="
 	test? (
 		dev-python/pyparsing[${PYTHON_USEDEP}]
