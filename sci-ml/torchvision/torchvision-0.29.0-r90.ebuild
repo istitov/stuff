@@ -38,6 +38,10 @@ RDEPEND="
 	=sci-ml/pytorch-2.14*[${PYTHON_SINGLE_USEDEP}]
 "
 
+# setup.py imports torch and compiles against caffe2's installed headers, and
+# pyproject.toml lists torch as a build requirement, so the runtime set has to
+# be present at build time too. verified 2026-09-10
+DEPEND="${RDEPEND}"
 BDEPEND="
 	test? (
 		$(python_gen_cond_dep '
@@ -72,7 +76,9 @@ python_compile() {
 	fi
 
 	# ffmpeg USE + TORCHVISION_USE_FFMPEG/_VIDEO_CODEC dropped as dead knobs:
-	# neither 0.27.0 nor 0.28.0 setup.py reads them. # verified 2026-07-22
+	# neither 0.27.0 nor 0.28.0 setup.py reads them (verified 2026-07-22), and
+	# 0.29.0's reads only the JPEG, NVJPEG, PNG and WEBP switches, so the two
+	# that ::gentoo's 0.29.0-r1 re-added still do nothing. verified 2026-09-10
 	export TORCHVISION_USE_PNG=$(usex png 1 0)
 	export TORCHVISION_USE_JPEG=$(usex jpeg 1 0)
 	export TORCHVISION_USE_WEBP=$(usex webp 1 0)
