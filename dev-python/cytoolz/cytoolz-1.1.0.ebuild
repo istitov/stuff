@@ -22,21 +22,17 @@ KEYWORDS="~amd64 ~arm64"
 RDEPEND=">=dev-python/toolz-0.8.0[${PYTHON_USEDEP}]"
 BDEPEND=">=dev-python/cython-0.29[${PYTHON_USEDEP}]"
 
-# Plain pytest suite, no third-party plugins.
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
-	# Test the installed extension (the source tree ships only .pyx); run
-	# from ${T} so cytoolz's strict pyproject pytest config does not apply.
+	# Test the installed extension outside the source-tree pytest configuration.
 	cd "${T}" || die
 	epytest --pyargs cytoolz
 }
 
 python_prepare_all() {
-	# setuptools-git-versioning derives the version from git, which the
-	# PyPI sdist lacks (yielding 0.0.0). Pin it statically and disable the
-	# plugin so the build records ${PV}.
+	# The sdist lacks git metadata; disable dynamic versioning and pin ${PV}.
 	sed -i \
 		-e 's/^dynamic = \["version"\]/version = "'${PV}'"/' \
 		-e 's/^enabled = true/enabled = false/' \
