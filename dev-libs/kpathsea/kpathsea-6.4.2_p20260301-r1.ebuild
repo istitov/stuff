@@ -9,9 +9,8 @@ MY_SOURCE_FILE="texlive-${PV#*_p}-source.tar.xz"
 
 DESCRIPTION="Path searching library for TeX-related files"
 HOMEPAGE="https://tug.org/texlive/"
-# 2026 hardcoded in the historic URL because PV's "_p<YYYYMMDD>" date
-# format makes the four-digit year non-trivial to extract via Portage
-# parameter expansion at SRC_URI time. Bump on TL2027 adoption.
+# Portage expansion cannot conveniently extract the year from _pYYYYMMDD;
+# update the hardcoded historic URL annually.
 SRC_URI="
 	https://mirrors.ctan.org/systems/texlive/Source/${MY_SOURCE_FILE}
 	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2026/${MY_SOURCE_FILE}
@@ -37,9 +36,6 @@ IUSE="doc static-libs"
 
 TEXMF_PATH=/usr/share/texmf-dist
 
-# c23 patch dropped: backport from TL trunk r74888 (Apr 2025) is already
-# in TL2025 source (kpathsea revision 79498 > 74888). musl patch kept;
-# still applicable to TL2025 getopt.[ch] shipped here.
 PATCHES=(
 	"${FILESDIR}"/kpathsea-getopt-musl.patch
 )
@@ -53,13 +49,10 @@ src_prepare() {
 }
 
 src_configure() {
-	# Too many regexps use A-Z a-z constructs, what causes problems with locales
-	# that don't have the same alphabetical order than ascii. Bug #347798
-	# So we set LC_ALL to C in order to avoid problems.
+	# Upstream A-Z/a-z regexes assume ASCII collation (bug #347798).
 	export LC_ALL=C
 
-	# Disable largefile because it seems to cause problems on big endian 32 bits
-	# systems...
+	# Large-file support breaks 32-bit big-endian systems.
 	econf \
 		--disable-largefile \
 		"$(use_enable static-libs static)"
@@ -69,23 +62,16 @@ src_install() {
 	emake DESTDIR="${D}" web2cdir="${EPREFIX}/usr/share/texmf-dist/web2c" install
 	find "${D}" -name '*.la' -delete || die
 
-	dodir /usr/share # just in case
+	dodir /usr/share
 	cp -pR "${WORKDIR}"/texmf-dist "${ED}/usr/share/" || die "failed to install texmf trees"
 
-	# Take care of fmtutil.cnf and texmf.cnf
 	dodir /etc/texmf/{fmtutil.d,texmf.d}
 
-	# Remove default texmf.cnf to ship our own, greatly based on texlive dvd's
-	# texmf.cnf
-	# It will also be generated from /etc/texmf/texmf.d files by texmf-update
+	# Replace the default with texmf-update's generated configuration.
 	rm -f "${ED}${TEXMF_PATH}/web2c/texmf.cnf" || die
 
-	# Vendored from ::gentoo's kpathsea-texmf.d-11 distfile (installed
-	# verbatim from /etc/texmf/texmf.d). Sam's tarball isn't on flow's
-	# distfile mirror anymore; carrying the 5 *.cnf files directly is
-	# cleaner than chasing the distfile location. 10standardpaths.cnf
-	# is xz-compressed in files/ to stay under pkgcheck SizeViolation;
-	# decompress all .cnf.xz to ${T}/texmf.d/ before doins.
+	# Carry Gentoo's five configuration files locally because their old distfile
+	# vanished. Decompress 10standardpaths.cnf to stay below SizeViolation.
 	local cnf_stage="${T}/texmf.d"
 	mkdir -p "${cnf_stage}" || die
 	local cnf
@@ -100,8 +86,7 @@ src_install() {
 	insinto /etc/texmf/texmf.d
 	doins "${cnf_stage}/"*.cnf
 
-	# Remove fmtutil.cnf, it will be regenerated from /etc/texmf/fmtutil.d files
-	# by texmf-update
+	# texmf-update regenerates fmtutil.cnf.
 	rm -f "${ED}${TEXMF_PATH}/web2c/fmtutil.cnf" || die
 
 	dosym ../../../../etc/texmf/web2c/fmtutil.cnf ${TEXMF_PATH}/web2c/fmtutil.cnf
@@ -109,13 +94,12 @@ src_install() {
 
 	newsbin "${S}/texmf-update" texmf-update
 
-	# Keep it as that's where the formats will go
+	# Runtime formats are written here.
 	keepdir /var/lib/texmf
 
 	dodoc ChangeLog NEWS PROJECTS README
 
-	# The default configuration expects it to be world writable, bug #266680
-	# People can still change it with texconfig though.
+	# Default configuration requires world-writable state (bug #266680).
 	dotmpfiles "${FILESDIR}"/kpathsea.conf
 }
 
