@@ -20,9 +20,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream caps rfc3986<2, but the tree only carries rfc3986-2.0.0 and
-# csvw's URI handling works against it; ship the bare dep rather than an
-# unsatisfiable cap. # verified 2026-07-06
+# Upstream's rfc3986<2 cap is unsatisfiable in ::gentoo; 2.0 works.
+# Verified 2026-07-06.
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-python/babel[${PYTHON_USEDEP}]
