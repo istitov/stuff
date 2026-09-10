@@ -9,11 +9,7 @@ DESCRIPTION="Converts DVI files to SVG"
 HOMEPAGE="https://dvisvgm.de/"
 SRC_URI="https://github.com/mgieseki/dvisvgm/releases/download/${PV}/${P}.tar.gz"
 
-# dvisvgm: GPL-3
-# Boost (tiny part, one header): Boost-1.0
-# md5: || ( public-domain BSD-1 )
-# clipper: Boost-1.0
-# variant: Boost-1.0
+# Bundled Boost, clipper, and variant code is Boost-1.0; md5 is PD or BSD-1.
 LICENSE="GPL-3 Boost-1.0 || ( public-domain BSD-1 )"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
@@ -43,7 +39,7 @@ BDEPEND="
 "
 
 src_configure() {
-	# ODR violation but only reported with -fno-semantic-interposition?
+	# LTO exposes an ODR violation with -fno-semantic-interposition.
 	filter-lto
 
 	local myargs=(
