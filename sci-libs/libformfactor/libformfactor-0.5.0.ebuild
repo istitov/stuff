@@ -9,8 +9,7 @@ MY_P="${PN}-v${PV}"
 DESCRIPTION="Computes Fourier shape transforms (form factors) for BornAgain"
 HOMEPAGE="https://jugit.fz-juelich.de/mlz/lib/formfactor"
 SRC_URI="https://jugit.fz-juelich.de/mlz/lib/formfactor/-/archive/v${PV}/${MY_P}.tar.gz"
-# jugit's v<ver> tag archive unpacks to formfactor-v<ver>-<full-sha> (the mlz
-# project path moved to mlz/lib/formfactor); pin the tag commit so S resolves.
+# Jugit appends the full tag commit to its archive root; pin it for S.
 # verified 2026-08-05
 COMMIT="e534de540b66df43878100b66859e84df4af0c5e"
 S="${WORKDIR}/formfactor-v${PV}-${COMMIT}"
@@ -19,10 +18,8 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# find_package(LibHeinz REQUIRED) carries no version; 0.5.0's ff/CMakeLists
-# uses the LibHeinz::LibHeinz target exported since LibHeinz 3.0 (older
-# versions get an INTERFACE fallback). 2.0.1 is still in tree; floor at 4.0
-# to match the current libheinz major. # verified 2026-08-05
+# CMake requests no version; require the current LibHeinz major and avoid the
+# legacy interface fallback. verified 2026-08-05
 DEPEND=">=sci-libs/libheinz-4.0"
 RDEPEND="${DEPEND}"
 
