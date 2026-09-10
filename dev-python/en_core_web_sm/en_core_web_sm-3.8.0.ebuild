@@ -13,8 +13,7 @@ HOMEPAGE="
 	https://spacy.io/models/en
 	https://github.com/explosion/spacy-models
 "
-# Not on PyPI; spaCy ships models as wheels on GitHub releases. The py3-none-any
-# wheel is pure model data + a thin loader and is tied to the spaCy minor series.
+# GitHub hosts the pure-data wheel, tied to the spaCy minor series.
 SRC_URI="
 	https://github.com/explosion/spacy-models/releases/download/${P}/${P}-py3-none-any.whl
 "
