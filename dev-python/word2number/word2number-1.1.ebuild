@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://pypi.org/project/word2number/
 "
 
-# upstream sdist on PyPI is .zip, override pypi.eclass default of .tar.gz
+# PyPI publishes a ZIP sdist; override pypi.eclass's tarball default.
 SRC_URI="$(pypi_sdist_url "${PYPI_PN}" "${PV}" .zip)"
 
 LICENSE="MIT"
