@@ -8,9 +8,7 @@ inherit cmake flag-o-matic rocm
 
 DESCRIPTION="HIP parallel primitives for developing performant GPU-accelerated code on ROCm"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocprim"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now. ROCm 10.0 is
-# the renumbering of the 7.13 -> 7.14 line (2026-08-27).
+# ROCm 10 component assets use therock tags; rocm tags end at 7.2.4.
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/rocprim.tar.gz -> rocprim-${PV}.tar.gz"
 S="${WORKDIR}/rocprim"
 
@@ -39,15 +37,10 @@ BDEPEND="dev-build/rocm-cmake:${SLOT}"
 RESTRICT="!test? ( test )"
 
 src_prepare() {
-	# install benchmark files
+	# Install namespaced benchmark binaries.
 	if use benchmark; then
-		# Both expressions are load-bearing and both are address-matched, so
-		# `sed` would exit 0 having done nothing if either anchor moved: the
-		# first namespaces the benchmark binaries so they do not collide with
-		# other rocm libraries' benchmarks, the second appends the install()
-		# rule that ships them at all. A silent no-op yields a USE=benchmark
-		# build that looks successful and installs no benchmarks.
-		# verified 2026-08-30 against the therock-10.0 source.
+		# Guard both sed anchors; otherwise collisions return or nothing installs.
+		# verified 2026-08-30
 		grep -q 'get_filename_component' benchmark/CMakeLists.txt ||
 			die "get_filename_component anchor moved; benchmark names would not be namespaced"
 		grep -q 'add_executable' benchmark/CMakeLists.txt ||
@@ -62,7 +55,7 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# too many warnings in tests
+	# Silence known test-source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class -Wno-deprecated-declarations
 
 	local mycmakeargs=(
@@ -78,6 +71,6 @@ src_configure() {
 
 src_test() {
 	check_amdgpu
-	# uses HMM to fit tests to default <512M iGPU VRAM
+	# Use HMM to fit tests within default sub-512 MiB iGPU VRAM.
 	ROCPRIM_USE_HMM="1" cmake_src_test -j1
 }
