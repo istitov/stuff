@@ -17,12 +17,8 @@ HOMEPAGE="
 	https://pypi.org/project/sherpa-onnx/
 "
 
-# Upstream ships two co-installable wheels: sherpa-onnx-core (the C++
-# shared libs, Python-version-agnostic) + sherpa-onnx (the Python
-# bindings, per-CPython-ABI). The per-Python wheel's _sherpa_onnx.so
-# has RPATH "$ORIGIN" and dlopen()s libonnxruntime.so from the same
-# directory; sherpa-onnx-core drops it there. Both must install into
-# the same sherpa_onnx/ tree.
+# Install the ABI-specific bindings and ABI-independent core wheel together;
+# $ORIGIN lookup requires their libraries in one sherpa_onnx tree.
 AMD64_WHEEL_TAIL="manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
 ARM64_WHEEL_TAIL="manylinux2014_aarch64.manylinux_2_17_aarch64.whl"
 AMD64_CORE_WHEEL="sherpa_onnx_core-${PV}-py3-none-manylinux2014_x86_64.whl"
@@ -64,12 +60,8 @@ QA_PREBUILT="
 	usr/lib/python3.*/site-packages/sherpa_onnx.libs/*
 "
 
-# click is lazy-imported in sherpa_onnx.cli with an explicit prompt to
-# install it if missing; we make it a hard runtime dep so the
-# sherpa-onnx-cli entry point works out of the box.
-#
-# Blocks the source ebuild: both ship sherpa_onnx into site-packages,
-# they'd collide. Pick one or the other.
+# Require lazy-imported click so the CLI works. Block the colliding source
+# package.
 RDEPEND="
 	!sci-ml/sherpa-onnx
 	$(python_gen_cond_dep '
