@@ -7,9 +7,7 @@ inherit desktop qmake-utils xdg
 
 DESCRIPTION="Open source XRD and Rietveld refinement (Qt6)"
 HOMEPAGE="https://www.profex-xrd.org"
-# Upstream is a WordPress site: the upload path carries the month the
-# release was posted, so it is not derivable from ${PV}. 5.7.2 is under
-# 2026/08. # verified 2026-09-09
+# WordPress upload dates are not derivable from PV. verified 2026-09-09
 SRC_URI="https://www.profex-xrd.org/wp-content/uploads/2026/08/${P}.tar.gz"
 S="${WORKDIR}/${PN}-${PV}"
 
@@ -18,9 +16,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="bgmn"
 
-# zlib, quazip and alglib are bundled and built via profex's own subdir
-# qmake projects; building against system copies would require
-# significant patching and the upstream Qt6 port expects the bundles.
+# Upstream's Qt 6 build expects bundled zlib, QuaZIP, and ALGLIB projects.
 RDEPEND="
 	bgmn? ( sci-physics/bgmn )
 	dev-qt/qtbase:6=[concurrent,gui,network,sql,widgets,xml]
@@ -36,15 +32,10 @@ src_configure() {
 }
 
 src_install() {
-	# Upstream's qmake tree has no install rules. The resulting
-	# bin/ holds the main GUI (profex), module GUIs shipped as
-	# separate binaries with profex* prefixes (profexed, profexsc,
-	# profexst, profexwp, ...), and a handful of px* command-line
-	# tools. Install them all.
+	# The qmake tree has no install rules; install all generated tools.
 	dobin bin/*
 
-	# Upstream sets Version= to the app version (5.1.0) instead of
-	# the Desktop Entry spec version; trips desktop-file-validate.
+	# Version is the desktop-file format, not the application version.
 	sed -i -e 's/^Version=.*/Version=1.5/' profex5.desktop || die
 	domenu profex5.desktop
 
