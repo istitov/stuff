@@ -19,9 +19,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# PyYAML is in upstream extras_require, imported lazily in utils/config.py;
-# omit here since downstream sci-ml/pyannote-audio pulls dev-python/pyyaml
-# anyway via its own dep chain.
+# PyYAML supports the optional config loader and is absent from core imports.
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}]
