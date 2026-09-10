@@ -68,12 +68,11 @@ src_prepare() {
 }
 
 src_configure() {
-	# Do not trust CMake with autoselecting Clang, as it autoselects the latest one
-	# producing too modern LLVM bitcode and causing linker errors in other packages.
+	# Pin Clang; CMake may choose a newer compiler and emit incompatible bitcode.
 	llvm_prepend_path "${LLVM_SLOT}"
 	local -x CC=${CHOST}-clang
 	local -x CXX=${CHOST}-clang++
-	# Clean up unsupported flags for the switched compiler, see #936099
+	# Strip flags unsupported by the selected compiler (bug 936099).
 	strip-unsupported-flags
 
 	cmake_src_configure
@@ -81,14 +80,13 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	# install symlink, so that clang won't ask for "--rocm-device-lib-path" flag anymore
+	# Expose bitcode in Clang's resource directory without an extra path flag.
 	local bitcodedir="$(clang -print-resource-dir)/$(get_libdir)/amdgcn/bitcode"
 	dosym -r "/usr/lib/amdgcn/bitcode" "${bitcodedir#"${EPREFIX}"}"
 }
 
 src_test() {
-	# https://github.com/ROCm/llvm-project/issues/76
-	# "Failing tests are on gfx that are not supported"
+	# Skip unsupported GPU targets (ROCm llvm-project issue 76).
 	local CMAKE_SKIP_TESTS=(
 		compile_frexp__gfx600
 		compile_fract__gfx600
