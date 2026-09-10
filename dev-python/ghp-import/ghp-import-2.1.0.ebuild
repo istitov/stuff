@@ -6,8 +6,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 
-# 2.1.0 (2021) predates PEP 625, so its sdist keeps the legacy hyphenated
-# filename ghp-import-2.1.0.tar.gz rather than the normalized ghp_import-.
+# Preserve the pre-PEP 625 sdist's hyphenated filename.
 PYPI_NO_NORMALIZE=1
 
 inherit distutils-r1 pypi
