@@ -30,12 +30,8 @@ KEYWORDS="-* ~amd64"
 # The CUTLASS EULA prohibits redistributing the binary payload.
 RESTRICT="bindist mirror strip"
 
-# Wheel-only on PyPI (binary CUDA-shared bits with no source release).
-# Sub-package of the nvidia-cutlass-dsl umbrella. 4.6.0 split the
-# pure-Python core into ~libs-core (pulled below). The generated iket profiler
-# module is the sole protobuf importer. It works with protobuf 7.35.1, so keep
-# upstream's lower bound while relaxing its unnecessary <7 cap.
-# # verified 2026-08-04 against 4.6.0.
+# Binary-only split wheel. iket is its sole protobuf consumer and works with
+# 7.35.1, so omit upstream's <7 cap. verified 2026-08-04
 RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-core-${PV}[${PYTHON_USEDEP}]
 	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
@@ -54,14 +50,8 @@ src_unpack() {
 	done
 }
 
-# 4.6.0 restructured the split: this wheel ships only the generic
-# nvidia_cutlass_dsl/dsl_packages/{cutlass,iket} bits and the sibling
-# cu13 wheel ships only nvidia_cutlass_dsl/cu13/* plus its one
-# CUDA-13 _cutlass_ir.cu13*.so. The two file sets are now disjoint
-# (0 overlap; was ~179 shared paths through 4.5.2), so the old
-# keep-only-unique dedup is gone. The `import cutlass` path is set up
-# by nvidia_cutlass_dsl_packages.pth, now shipped by the parent
-# metapackage wheel. # verified 2026-08-04 against 4.6.0.
+# Since 4.6.0, base and cu13 payloads are disjoint; no collision dedup is
+# needed. The parent wheel's .pth enables `import cutlass`. verified 2026-08-04
 python_install() {
 	local pyver=${EPYTHON#python}
 	local cptag=cp${pyver//./}
