@@ -6,10 +6,9 @@ EAPI=8
 inherit cmake
 DESCRIPTION="Common files shared by hipBLAS and hipBLASLt"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblas-common"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now. ROCm 10.0 is
-# the renumbering of the 7.13 -> 7.14 line (2026-08-27), not a jump of three
-# majors. Only the tag changes -- the asset name is version-independent.
+# Component assets moved from rocm-* to therock-* tags after 7.2.4; ROCm 10
+# renumbers the 7.13/7.14 line. Asset names remain version-independent.
+# Verified 2026-08-27.
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/hipblas-common.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/hipblas-common"
 
