@@ -48,15 +48,12 @@ src_configure() {
 		-DWHISPER_SDL2=$(usex sdl2)
 	)
 	if use cuda; then
-		# CUDA 13.x nvcc rejects gcc>15; pin host compiler when gcc-15 is present
-		# (verified 2026-05-14: gcc-16 active, CUDA 13.2)
+		# CUDA 13 rejects GCC >15; prefer GCC 15 when installed. Verified 2026-05-14.
 		local g15=/usr/bin/x86_64-pc-linux-gnu-g++-15
 		[[ -x ${g15} ]] && mycmakeargs+=( -DCMAKE_CUDA_HOST_COMPILER="${g15}" )
 	fi
 	if use blas; then
-		# ggml-blas calls cblas_sgemm; without an explicit vendor, CMake's
-		# FindBLAS picks the Fortran-only libblas.so and the link dies on
-		# undefined cblas_sgemm. openblas (already a dep) ships cblas.
+		# Generic FindBLAS may select a library without cblas_sgemm.
 		mycmakeargs+=( -DGGML_BLAS_VENDOR=OpenBLAS )
 	fi
 	cmake_src_configure
