@@ -73,12 +73,12 @@ PATCHES=(
 src_prepare() {
 	cmake_src_prepare
 
-	# Remove RPATH's, fixes multilib compatibility
+	# Disable client RPATHs for multilib; guard against sed anchor drift.
 	grep -qF 'apply_omp_settings' clients/CMakeLists.txt ||
 		die 'apply_omp_settings anchor moved in clients/CMakeLists.txt'
 	sed -e "/apply_omp_settings/a return()" -i clients/CMakeLists.txt || die
 
-	# Disable automagic linking with roctracer
+	# Gate automagic roctracer linking; guard against sed anchor drift.
 	grep -qF 'if(ROCTRACER_INCLUDE_DIR' library/CMakeLists.txt ||
 		die 'ROCTRACER_INCLUDE_DIR anchor moved in library/CMakeLists.txt'
 	sed -e "s/if(ROCTRACER_INCLUDE_DIR/if(ROCBLAS_ENABLE_MARKER AND ROCTRACER_INCLUDE_DIR/" \
@@ -89,7 +89,6 @@ src_configure() {
 	llvm_prepend_path "${LLVM_SLOT}"
 	rocm_use_clang
 
-	# too many warnings
 	append-cxxflags -Wno-explicit-specialization-storage-class -Wno-unused-value
 
 	local mycmakeargs=(
@@ -133,7 +132,7 @@ src_test() {
 	export ROCBLAS_TEST_TIMEOUT=3600 ROCBLAS_TENSILE_LIBPATH="${BUILD_DIR}/Tensile/library"
 	export LD_LIBRARY_PATH="${BUILD_DIR}/clients:${BUILD_DIR}/library/src"
 
-	# `--gtest_filter=*quick*:*pre_checkin*-*known_bug*` is >1h on 7900XTX
+	# The broader quick/pre_checkin filter takes over an hour on a 7900XTX.
 	edob ./rocblas-test --yaml rocblas_smoke.yaml
 }
 
@@ -146,7 +145,6 @@ src_install() {
 		dobin clients/staging/rocblas-bench
 	fi
 
-	# Stop llvm-strip from removing .strtab section from *.hsaco files,
-	# otherwise rocclr/elf/elf.cpp complains with "failed: null sections(STRTAB)" and crashes
+	# Removing HSACO .strtab makes rocclr reject the kernels as null sections.
 	dostrip -x "/usr/$(get_libdir)/rocblas/library/"
 }
