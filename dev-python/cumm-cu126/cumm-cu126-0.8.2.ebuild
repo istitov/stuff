@@ -15,8 +15,7 @@ HOMEPAGE="
 	https://github.com/FindDefinition/cumm
 	https://pypi.org/project/cumm-cu126/
 "
-# Prebuilt manylinux CUDA-12.6 wheel; bundles its own compiled CUDA kernels and
-# loads them through the backward-compatible NVIDIA driver interface.
+# Prebuilt CUDA 12.6 kernels use the backward-compatible driver ABI.
 SRC_URI="
 	https://files.pythonhosted.org/packages/54/b6/ff4eb87df5da67c56006a8d9fe5bf114cb69bb420194bde08192e5ad8573/${MY_PN}-${PV}-cp313-cp313-manylinux_2_28_x86_64.whl
 "
