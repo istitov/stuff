@@ -13,8 +13,7 @@ HOMEPAGE="
 	https://gitlab.com/ferreum/trampoline
 	https://pypi.org/project/trampoline/
 "
-# Upstream publishes no sdist -- only a pure-python py3-none-any wheel -- and
-# the GitLab repo carries no release tags, so install the wheel directly.
+# Upstream provides only a universal wheel and no release tags; install it directly.
 SRC_URI="$(pypi_wheel_url "${PN}")"
 S="${WORKDIR}"
 
@@ -22,9 +21,10 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
+BDEPEND="dev-python/installer[${PYTHON_USEDEP}]"
+
 src_unpack() {
-	# A PEP517=no distutils-r1 would try to build from the wheel; stash it
-	# and feed it to `installer` per impl instead.
+	# Keep the wheel intact for per-implementation installer calls.
 	cp "${DISTDIR}/${A}" "${WORKDIR}/" || die
 }
 
