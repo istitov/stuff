@@ -28,6 +28,8 @@ src_prepare() {
 
 	# Upstream declares the same launcher as both a console and GUI script.
 	# installer refuses to overwrite the first generated file with the second.
+	grep -qF '[project.gui-scripts]' pyproject.toml ||
+		die "project.gui-scripts anchor moved"
 	sed -i -e '/^\[project.gui-scripts\]/,/^$/s/^dansdiffraction = .*//' \
 		pyproject.toml || die
 }
