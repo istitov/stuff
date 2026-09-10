@@ -14,11 +14,9 @@ HOMEPAGE="
 	https://pypi.org/project/xatlas/
 "
 
-LICENSE="MIT"
+LICENSE="BSD MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The sdist bundles both the xatlas C++ and pybind11 under extern/ (plain
-# add_subdirectory, no FetchContent), so the scikit-build-core/cmake build is
-# fully offline and needs no system pybind11. No runtime deps (numpy/scipy/
-# trimesh are upstream test-only extras).
+# The sdist bundles xatlas and pybind11 for an offline build; numpy, scipy, and
+# trimesh are test-only.
