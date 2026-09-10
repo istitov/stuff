@@ -17,12 +17,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="wx +pyqt6 pyside"
 
-# importlib-metadata / importlib-resources are upstream conditional
-# deps for python_version<3.10 / <3.9 respectively; PYTHON_COMPAT here
-# is 3.12+, so they're not needed.
-# Upstream lists numpy under the [numpy] optional-extra, but pyface
-# imports it directly (e.g. pyface/data_view/abstract_value_type.py),
-# so keep it unconditional.
+# Python 3.12+ needs neither importlib backport. NumPy is optional upstream but
+# imported unconditionally, so retain it.
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 	>=dev-python/traits-6.2[${PYTHON_USEDEP}]
