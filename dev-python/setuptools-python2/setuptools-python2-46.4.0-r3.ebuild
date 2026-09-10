@@ -24,18 +24,13 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# DISTUTILS_OPTIONAL suppresses the eclass's PYTHON_DEPS and
-# PYTHON_REQUIRED_USE, so the ebuild has to supply both. RDEPEND had neither:
-# a package of Python 2 modules that depended on no interpreter. The literal
-# dev-lang/python:2.7 that was in BDEPEND also dropped the PYTHON_REQ_USE
-# above, so nothing required python built with xml support.
-# verified 2026-07-27
+# DISTUTILS_OPTIONAL suppresses PYTHON_DEPS/REQUIRED_USE, so declare them to
+# retain the interpreter's xml requirement. # verified 2026-07-27
 RDEPEND="${PYTHON_DEPS}"
 BDEPEND="${RDEPEND}
 	app-arch/unzip
 "
-# installing plugins apparently breaks stuff at runtime, so let's pull
-# it early
+# Install plugins after setuptools to avoid runtime breakage.
 PDEPEND="
 	>=dev-python/certifi-python2-2016.9.26[${PYTHON_USEDEP}]
 	dev-python/setuptools_scm-python2[${PYTHON_USEDEP}]"
@@ -45,22 +40,20 @@ DISTUTILS_IN_SOURCE_BUILD=1
 DOCS=( {CHANGES,README}.rst docs/{easy_install.txt,pkg_resources.txt,setuptools.txt} )
 
 src_prepare_all() {
-	# silence the py2 warning that is awfully verbose and breaks some
-	# packages by adding unexpected output
-	# (also, we know!)
+	# Silence verbose Python 2 warnings that break output-sensitive consumers.
 	sed -i -e '/py2_warn/d' pkg_resources/__init__.py || die
 
-	# disable tests requiring a network connection
+	# Requires network access.
 	rm setuptools/tests/test_packageindex.py || die
 
-	# don't run integration tests
+	# Omit integration tests.
 	rm setuptools/tests/test_integration.py || die
 
-	# xpass-es for me on py3
+	# Correct the Python 3 xpass marker.
 	sed -e '/xfail.*710/s:(:(six.PY2, :' \
 		-i setuptools/tests/test_archive_util.py || die
 
-	# avoid pointless dep on flake8
+	# Avoid a flake8-only test dependency.
 	sed -i -e 's:--flake8::' pytest.ini || die
 
 	distutils-r1_python_prepare_all
@@ -73,8 +66,7 @@ python_test() {
 	fi
 
 	distutils_install_for_testing
-	# test_easy_install raises a SandboxViolation due to ${HOME}/.pydistutils.cfg
-	# It tries to sandbox the test in a tempdir
+	# Keep test_easy_install's ~/.pydistutils.cfg access inside the sandbox.
 	HOME="${PWD}" pytest -vv ${MYPN} || die "Tests failed under ${EPYTHON}"
 }
 
