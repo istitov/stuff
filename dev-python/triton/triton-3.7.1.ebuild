@@ -18,15 +18,9 @@ SRC_URI="https://github.com/triton-lang/triton/archive/refs/tags/v${PV}.tar.gz
 	https://oaitriton.blob.core.windows.net/public/llvm-builds/llvm-${LLVM_REV}-ubuntu-x64-1.tar.gz
 	-> ${P}.llvm.tar.gz"
 
-# Triton itself is MIT, but the build links upstream's prebuilt LLVM from the
-# second SRC_URI and that code reaches the installed tree twice: statically
-# into triton/_C/libtriton.so (162 MiB, no external libLLVM in ldd, llvm*
-# symbols exported) and verbatim as triton/FileCheck. Both are covered by
-# LLVM's licence, so declare it. The AMD backend also installs six HSA headers
-# under triton/backends/amd/include/hsa carrying the University of
-# Illinois/NCSA licence; python_install does not remove them. Every term here
-# is cumulative, not an any-of choice.
-# # verified 2026-09-09 against the staged image
+# Prebuilt LLVM is installed statically in libtriton.so and as FileCheck; the
+# AMD backend also installs UoI-NCSA HSA headers. All license terms are
+# cumulative. # verified 2026-09-09 against the staged image
 LICENSE="MIT Apache-2.0-with-LLVM-exceptions UoI-NCSA"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -34,15 +28,9 @@ KEYWORDS="~amd64"
 # The upstream suite requires supported NVIDIA or AMD accelerator hardware.
 RESTRICT="test"
 
-# TRITON_OFFLINE_BUILD=1 suppresses upstream's download of the NVIDIA tools,
-# and the source tarball carries none, so the CUDA backend has no ptxas at all.
-# knobs.py resolves it through env_nvidia_tool, which tries $TRITON_PTXAS_PATH
-# and then triton/backends/nvidia/bin/<tool> and raises RuntimeError -- there is
-# no PATH fallback, so having /opt/cuda/bin on PATH does not help. Without the
-# symlinks in python_install this package installs and imports cleanly and then
-# dies at the first CUDA JIT with "Cannot find ptxas". The binary wheel bundles
-# the tools instead, which is why only this provider is affected.
-# # verified 2026-09-09 against the staged image and knobs.py:193-217
+# Offline mode omits NVIDIA tools, and Triton has no PATH fallback. Without the
+# installed toolkit symlinks, the first CUDA JIT fails to find ptxas.
+# verified 2026-09-09 against the staged image and knobs.py:193-217
 RDEPEND="
 	!!dev-python/triton-bin
 	dev-util/nvidia-cuda-toolkit
@@ -53,7 +41,7 @@ BDEPEND="
 	dev-python/pybind11[${PYTHON_USEDEP}]
 "
 
-# Use upstream's pinned LLVM toolchain and forbid setup.py's network downloads.
+# Use upstream's pinned LLVM and forbid setup.py downloads.
 export TRITON_OFFLINE_BUILD=1
 export TRITON_BUILD_PROTON=OFF
 
@@ -66,8 +54,7 @@ src_unpack() {
 
 python_compile() {
 	local -x LLVM_SYSPATH="${WORKDIR}/llvm/llvm-${LLVM_REV}-ubuntu-x64-1"
-	# Several LLVM translation units need multiple GiB each and can OOM with
-	# common MAKEOPTS values.  Match the overlay's other large ML builds.
+	# LLVM translation units use multiple GiB each; cap default concurrency.
 	local -x MAX_JOBS="${MAX_JOBS:-4}"
 	distutils-r1_python_compile
 }
@@ -77,12 +64,9 @@ python_install() {
 	rm -r "${D}$(python_get_sitedir)/triton/plugins" || die
 	rm "${D}$(python_get_sitedir)/triton/instrumentation/libGPUInstrumentationTestLib.so" || die
 
-	# Point the CUDA backend at the toolkit's tools; see the RDEPEND comment.
-	# ptxas-blackwell has no toolkit counterpart -- it is an upstream-only
-	# variant for sm_100 and later, so those targets still need
-	# TRITON_PTXAS_BLACKWELL_PATH set by hand.
-	# python_get_sitedir already carries EPREFIX, which dodir/dosym prepend
-	# again, so strip it back off for the helpers.
+	# Link toolkit tools into Triton's lookup path. ptxas-blackwell has no toolkit
+	# counterpart, so sm_100+ needs TRITON_PTXAS_BLACKWELL_PATH.
+	# Strip EPREFIX because dodir/dosym add it themselves.
 	local tool bindir="$(python_get_sitedir)"
 	bindir="${bindir#"${EPREFIX}"}/triton/backends/nvidia/bin"
 	dodir "${bindir}"
