@@ -30,5 +30,5 @@ BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 
-# pyproject.toml drives version from setuptools_scm; the sdist has no .git
+# Supply the version because the sdist lacks SCM metadata.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
