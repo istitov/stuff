@@ -41,6 +41,7 @@ RESTRICT="test"
 
 python_prepare_all() {
 	# Dont install fastapi executable as fastapi-cli is supposed to handle it
+	grep -qF '[project.scripts]' pyproject.toml || die "project.scripts anchor moved"
 	sed -i -e '/\[project.scripts\]/,/^$/d' pyproject.toml || die
 
 	distutils-r1_python_prepare_all
