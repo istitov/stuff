@@ -29,7 +29,7 @@ RDEPEND="
 	>=dev-python/fake-useragent-2.2.0[${PYTHON_USEDEP}]
 "
 
-# Most tests query live public search services.
+# Tests query live public search services.
 RESTRICT="test"
 
 PATCHES=( "${FILESDIR}/${P}-httpx2.patch" )
