@@ -34,9 +34,8 @@ RDEPEND="
 	>=dev-python/requests-2.30[${PYTHON_USEDEP}]
 "
 
-# Extra build-backend plugins from [build-system].requires: version comes
-# from package.json (hatch-nodejs-version), runtime deps from requirements.txt
-# (hatch-requirements-txt), and the "Framework :: MkDocs" trove classifier.
+# Build plugins provide package.json versioning, requirements.txt metadata,
+# and the MkDocs trove classifier.
 BDEPEND="
 	dev-python/hatch-nodejs-version[${PYTHON_USEDEP}]
 	dev-python/hatch-requirements-txt[${PYTHON_USEDEP}]
