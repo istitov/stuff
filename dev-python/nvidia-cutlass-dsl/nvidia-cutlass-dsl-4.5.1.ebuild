@@ -26,9 +26,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 RESTRICT="bindist mirror"
 
-# Metadata-only wheel with no payload files. Upstream requires libs-base and
-# exposes libs-cu13 as an extra; select that extra directly because this overlay
-# packages only the CUDA 13 backend.
+# Select the packaged cu13 extra in place of upstream's default backend.
 RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-base-${PV}[${PYTHON_USEDEP}]
 	~dev-python/nvidia-cutlass-dsl-libs-cu13-${PV}[${PYTHON_USEDEP}]
