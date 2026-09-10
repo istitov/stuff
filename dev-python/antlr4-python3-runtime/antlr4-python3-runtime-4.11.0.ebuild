@@ -25,20 +25,11 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Older 4.11.0 kept alongside ::gentoo's 4.13.2 because lm-eval's math
-# task does `assert version("antlr4-python3-runtime").startswith("4.11")`
-# at task-load (lm_eval/tasks/minerva_math/utils.py); upstream
-# math_verify[antlr4_11_0] / latex2sympy2_extended[antlr4_11_0] also pin
-# to 4.11.0 exactly. Consumers in ::gentoo (moto, coq) leave the version
-# unpinned (verified 2026-05-11), so taking the downgrade is structurally
-# safe across the dep graph.
+# Retain 4.11 for lm-eval's exact runtime assertion and math packages' exact
+# pins; ::gentoo consumers are unversioned. verified 2026-05-11
 
 src_prepare() {
-	# Same assertEquals/assertEqual fix as ::gentoo's 4.13.2 ebuild,
-	# upstream PR https://github.com/antlr/antlr4/pull/4593. Re-verified
-	# at 4.11.0 on 2026-05-11: tests/TestIntervalSet.py contains 7
-	# assertEquals usages at this tag and the post-sed test phase runs
-	# 16 tests with no failures.
+	# Backport upstream's assertEqual rename; 16 tests pass. verified 2026-05-11
 	sed -i -e 's:assertEquals:assertEqual:' tests/TestIntervalSet.py || die
 
 	distutils-r1_src_prepare
