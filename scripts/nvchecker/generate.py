@@ -168,6 +168,7 @@ GITHUB_TAG_FILTERS: list[tuple[re.Pattern, dict]] = [
 # PN carries a -bin suffix that is NOT the PyPI project name. Map them to the
 # real project so drift queries the right thing.
 PYPI_NAME_BY_PKG: dict[str, str] = {
+    "instanttensor-bin": "instanttensor",
     "pymupdf-layout-bin": "pymupdf-layout",
     "sqlite-vec-bin": "sqlite-vec",
 }

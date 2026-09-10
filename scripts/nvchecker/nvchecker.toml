@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (292) ---
+# --- pypi (293) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -417,6 +417,10 @@ pypi = "hyperspy-gui-traitsui"
 ["dev-python/hyperspyui"]
 source = "pypi"
 pypi = "hyperspyui"
+
+["dev-python/instanttensor-bin"]
+source = "pypi"
+pypi = "instanttensor"
 
 ["dev-python/interegular"]
 source = "pypi"
@@ -3037,7 +3041,7 @@ prefix = "v"
 # ["dev-qt/qtquickcontrols"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qtquickcontrols2"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qtsql"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
-# ["dev-qt/qtsvg"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
+# ["dev-qt/qtsvg"] skipped: no recognizable upstream
 # ["dev-qt/qttest"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qttranslations"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qtwayland"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
