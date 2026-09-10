@@ -47,5 +47,7 @@ python_test() {
 	# Upstream pins --cov/--cov-fail-under=95 in pyproject addopts, but
 	# epytest loads pytest with -p no:cov, so those turn into unrecognised
 	# arguments and pytest exits before collecting anything.
+	# Run outside the source package so it does not shadow the built extension.
+	cd tests || die
 	epytest -o addopts=
 }
