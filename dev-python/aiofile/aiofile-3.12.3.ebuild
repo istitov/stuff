@@ -20,5 +20,5 @@ RDEPEND="
 	<dev-python/caio-0.13[${PYTHON_USEDEP}]
 "
 
-# The upstream suite requires unpackaged test-only plugins.
+# Tests require unpackaged plugins.
 RESTRICT="test"
