@@ -2,15 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 EAPI=8
 
-# Define what default functions to run.
 ETYPE="sources"
 # -pf patch set already sets EXTRAVERSION to kernel Makefile.
 K_NOSETEXTRAVERSION="1"
 # pf-sources is not officially supported/covered by the Gentoo security team.
 K_SECURITY_UNSUPPORTED="1"
-# Major kernel version, e.g. 5.14.
 SHPV="${PV/_p*/}"
-# Replace "_p" with "-pf", since using "-pf" is not allowed for an ebuild name by PMS.
 PFPV="${PV/_p/-pf}"
 inherit kernel-2 optfeature
 detect_version
@@ -18,12 +15,8 @@ DESCRIPTION="Linux kernel fork that includes the pf-kernel patchset and Gentoo's
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Genpatches for this branch live only in alicef's trunk dir (no
-# release tarball was ever cut). To pin immutable bytes we bundle
-# the trunk patches into pf-genpatches-${SHPV}.tar.xz on extra-stuff
-# and reuse the same tarball as the -r70 slot. GENPATCHES_PATCHES
-# below selects the subset this -r1 ebuild needs (no stable
-# backports — pf-kernel's codeberg base already includes them).
+# No release tarball exists. Share the immutable extra-stuff trunk snapshot
+# with -r70, selecting only additions absent from pf's stable-inclusive base.
 GENPATCHES_PATCHES=(
 	1500_XATTR_USER_PREFIX.patch
 	1510_fs-enable-link-security-restrictions-by-default.patch
@@ -59,29 +52,27 @@ pkg_setup() {
 	kernel-2_pkg_setup
 }
 src_unpack() {
-	# Codeberg-hosted pf-sources include full kernel sources; override
-	# kernel-2_src_unpack() to avoid its tarball-naming magic.
+	# The Codeberg archive contains full sources; bypass kernel-2 unpack logic.
 	unpack linux-${PFPV}.tar.gz pf-genpatches-${SHPV}-r70-0.tar.xz
 	mv linux linux-${PFPV} || die "Failed to move source directory"
-	# Stage individual genpatches into WORKDIR for src_prepare to apply.
 	local p
 	for p in "${GENPATCHES_PATCHES[@]}"; do
 		cp "${WORKDIR}/pf-genpatches-${SHPV}/${p}" "${WORKDIR}/" || die "Failed to stage ${p}"
 	done
 }
 src_prepare() {
-	# kernel-2_src_prepare doesn't apply PATCHES(). Chosen genpatches are also applied here.
+	# kernel-2_src_prepare does not apply PATCHES.
 	eapply "${WORKDIR}"/*.patch
 	default
 }
 pkg_postinst() {
-	# Fixes "wrongly" detected directory name, bgo#862534.
+	# Override the misdetected directory name (Gentoo bug 862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postinst
 	optfeature "userspace KSM helper" sys-process/uksmd
 }
 pkg_postrm() {
-	# Same here, bgo#862534.
+	# Likewise for removal (Gentoo bug 862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postrm
 }
