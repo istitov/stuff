@@ -20,9 +20,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# typing_extensions is not in upstream Requires-Dist but the retrieval
-# submodule imports it at top level; declare explicitly rather than rely
-# on torch's transitive pull.
+# retrieval imports typing_extensions at module load despite missing upstream
+# metadata; do not rely on torch's transitive dependency.
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
@@ -33,5 +32,5 @@ RDEPEND="
 	')
 "
 
-# Tests pull a long tail of extras (transformers, librosa, torchvision, ...).
+# Tests require numerous optional integrations.
 RESTRICT="test"
