@@ -34,17 +34,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
-# Upstream dropped the transformers <5 cap: the 5.0 tiktoken and 5.13 mlx_lm
-# regressions were fixed in their next releases. Tree 5.16.1 is past both.
-# verified 2026-09-09
-#
-# CUDA kernels JIT through PyTorch, so gcc:15 is a runtime dependency; CUDA 13
-# rejects newer hosts. Keep its slot synchronized with the compiler fallback in
-# ${PN}-0.2.2-cuda-host-compiler.patch; cuda_gccdir cannot run at JIT time.
-#
-# Gate virtual/triton like upstream's x86_64 marker, not by USE=cuda: ROCm
-# tensors also report device.type="cuda" and select Triton. The virtual covers
-# both backends and is unavailable on arm64. # verified 2026-09-09
+# transformers-5.16.1 includes the fixes that made the former <5 cap necessary.
+# CUDA JIT needs GCC 15 at runtime; synchronize its slot with the patch fallback.
+# cuda_gccdir cannot run at JIT time, and CUDA 13 rejects newer hosts.
+# Gate Triton by amd64, not USE=cuda: ROCm also reports device.type="cuda".
+# The virtual covers both backends and is unavailable on arm64. verified 2026-09-09
 RDEPEND="
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
