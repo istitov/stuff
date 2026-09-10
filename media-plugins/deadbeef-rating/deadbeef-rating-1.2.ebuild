@@ -20,7 +20,7 @@ RDEPEND="${DEPEND}"
 PATCHES=( "${FILESDIR}/${P}-gcc16.patch" )
 
 src_compile() {
-	# rating.c does #include <deadbeef.h>, so point at the SDK headers.
+	# deadbeef.h is installed in the SDK subdirectory.
 	$(tc-getCC) ${CFLAGS} ${CPPFLAGS} -I"${ESYSROOT}/usr/include/deadbeef" \
 		-Wall -fPIC -std=c99 -shared -o rating.so rating.c ${LDFLAGS} || die
 }
