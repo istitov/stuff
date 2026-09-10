@@ -27,18 +27,15 @@ SRC_URI="
 	https://github.com/gabime/spdlog/archive/refs/tags/v${SPDLOG_PV}.tar.gz
 		-> spdlog-${SPDLOG_PV}.gh.tar.gz
 "
-# The installable Python package + its scikit-build CMake driver live in
-# python/rapids-logger; that CMake reaches back up to the repo root to
-# build the C++ logger library.
+# Build from the Python subdirectory; its CMake driver reaches the root C++
+# library.
 S="${WORKDIR}/${PN}-${PV}/python/rapids-logger"
 
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream's CPM setup normally fetches rapids-cmake and spdlog while
-# configuring. Their exact release sources are provided in SRC_URI and routed
-# through FetchContent's source overrides so the build stays offline.
+# Route CPM's rapids-cmake and spdlog sources through local overrides.
 RESTRICT="test"
 
 BDEPEND="
