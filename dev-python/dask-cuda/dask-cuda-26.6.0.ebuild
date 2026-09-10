@@ -39,9 +39,8 @@ RDEPEND="
 "
 
 python_prepare_all() {
-	# Bypass RAPIDS's wrapper, which adds CUDA suffixes and reads dependencies.yaml;
-	# our dependencies are already unsuffixed and static. The wrapped setuptools
-	# backend still reads VERSION. # verified 2026-06-10
+	# Static unsuffixed deps and VERSION work without RAPIDS's CUDA-suffix wrapper.
+	# verified 2026-06-10
 	sed -i \
 		-e 's/build-backend = "rapids_build_backend.build"/build-backend = "setuptools.build_meta"/' \
 		-e '/"rapids-build-backend>=0.4.0,<0.5.0",/d' \
