@@ -36,7 +36,7 @@ BDEPEND="dev-build/rocm-cmake"
 RESTRICT="!test? ( test )"
 
 src_prepare() {
-	# install benchmark files
+	# Install benchmark binaries.
 	if use benchmark; then
 		sed -e "/get_filename_component/s,\${BENCHMARK_SOURCE},${PN}_\${BENCHMARK_SOURCE}," \
 			-e "/add_executable/a\  install(TARGETS \${BENCHMARK_TARGET})" -i benchmark/CMakeLists.txt || die
@@ -48,7 +48,7 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# too many warnings in tests
+	# Suppress Clang warnings in test code.
 	append-cxxflags -Wno-explicit-specialization-storage-class -Wno-deprecated-declarations
 
 	local mycmakeargs=(
@@ -64,6 +64,6 @@ src_configure() {
 
 src_test() {
 	check_amdgpu
-	# uses HMM to fit tests to default <512M iGPU VRAM
+	# HMM lets tests fit the default <512 MiB iGPU VRAM.
 	ROCPRIM_USE_HMM="1" cmake_src_test -j1
 }
