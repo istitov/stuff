@@ -24,8 +24,8 @@ RDEPEND="
 "
 BDEPEND="dev-python/setuptools-scm[${PYTHON_USEDEP}]"
 
-# setuptools_scm cannot derive a version from the gitless sdist.
+# Pin the version in the VCS-less sdist.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 
-# Test suite is a heavy numba/hypothesis matrix; upstream-tested.
+# Tests are a large Numba/Hypothesis matrix.
 RESTRICT="test"
