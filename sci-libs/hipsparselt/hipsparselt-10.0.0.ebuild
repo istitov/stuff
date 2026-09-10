@@ -109,7 +109,6 @@ src_unpack() {
 src_prepare() {
 	rocm_use_clang
 
-	# Silence known ROCm source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
 	# Exclude both quoted binary and end-anchored data test components. Mid-line
