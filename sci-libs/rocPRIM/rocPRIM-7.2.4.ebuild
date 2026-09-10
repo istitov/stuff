@@ -48,7 +48,6 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# Suppress Clang warnings in test code.
 	append-cxxflags -Wno-explicit-specialization-storage-class -Wno-deprecated-declarations
 
 	local mycmakeargs=(
