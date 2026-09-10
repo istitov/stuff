@@ -20,5 +20,5 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# ctypes wrapper that dlopens libglfw at runtime.
+# The ctypes wrapper loads libglfw at runtime.
 RDEPEND="media-libs/glfw"
