@@ -40,6 +40,8 @@ PATCHES=(
 )
 
 src_prepare() {
+	grep -qF 'set(ROCM_INSTALL_LIBDIR lib)' cmake/ROCMExportTargetsHeaderOnly.cmake ||
+		die "install-libdir anchor moved"
 	sed -e "s:set(ROCM_INSTALL_LIBDIR lib):set(ROCM_INSTALL_LIBDIR $(get_libdir)):" \
 		-i cmake/ROCMExportTargetsHeaderOnly.cmake || die
 
