@@ -7,13 +7,8 @@ PYTHON_COMPAT=( python3_{12..13} )
 
 inherit python-single-r1
 
-# Upstream's newest tag, 0.1.1, predates its own default branch by two months
-# (2025-01-06 vs the 2025-03-09 commit below), so the tags are not the release
-# line - pin the commit. The repo bundles its own copy of
-# Microsoft's TRELLIS library under trellis/ (plus a wheels/ dir of prebuilt
-# CUDA extensions and an extensions/ source tree we do not use -- those ship as
-# their own ebuilds). MY_NODE is the on-disk custom_nodes directory name ComfyUI
-# scans for; keep upstream's spelling so bundled workflows resolve.
+# The latest tag predates this default-branch commit, so pin the commit.
+# Preserve MY_NODE's upstream spelling for bundled workflow lookup.
 COMMIT="51bdfc6fae11bb3966f0cbe22239c13ba612c57e"
 MY_NODE="ComfyUI-IF_Trellis"
 
@@ -31,24 +26,12 @@ KEYWORDS="~amd64"
 IUSE="mesh"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# The node loads trellis/ at ComfyUI import time, which eagerly pulls torch, the
-# renderers (nvdiffrast/diff-gaussian-rasterization), cv2, plyfile, trimesh,
-# etc. The sparse/attention CUDA extensions (spconv, flash-attn, diffoctreerast,
-# vox2seq) import lazily but are required at generation time, so they are hard
-# deps too. spconv is the sparse-conv backend: the TRELLIS pretrained weights
-# are spconv-format, so torchsparse (different weight naming/layout) cannot load
-# them -- the loader auto-selects spconv when present.
-#
-# imageio-ffmpeg is unconditional even though it only matters when the node's
-# render_video widget is on (it defaults to off): imageio.mimsave() writes an
-# .mp4 preview, which plain imageio cannot do without the ffmpeg plugin.
-# verified 2026-07-27
-#
-# USE=mesh pulls the textured/solid mesh (.glb) post-processing stack
-# (xatlas UV unwrap, pyvista decimation, python-igraph hole-fill). Without it the
-# node still loads and the Gaussian (.ply) path works -- patches 0002/0003 make
-# those imports optional -- but save_glb=True then errors. kaolin/open3d remain
-# unpackaged and are stubbed/avoided.
+# TRELLIS imports the core image/GPU stack eagerly. Its lazy CUDA extensions
+# remain hard dependencies because generation needs them; pretrained weights
+# use spconv's format and are incompatible with torchsparse.
+# imageio-ffmpeg supplies the optional .mp4 preview backend (verified 2026-07-27).
+# USE=mesh adds .glb post-processing; without it the patched Gaussian .ply path
+# works, while save_glb=True fails. Unpackaged kaolin/open3d are stubbed/avoided.
 RDEPEND="
 	${PYTHON_DEPS}
 	media-gfx/comfyui[${PYTHON_SINGLE_USEDEP}]
@@ -87,22 +70,16 @@ RDEPEND="
 "
 
 PATCHES=(
-	# Defer rembg to call time -- only auto-masking of non-alpha inputs needs
-	# it, so the node loads (and RGBA inputs work) without dev-python/rembg.
+	# Only automatic masking of non-alpha inputs needs unpackaged rembg.
 	"${FILESDIR}/0001-rembg-lazy-import.patch"
-	# Make the mesh-only post-processing deps optional so the Gaussian .ply
-	# pipeline imports cleanly. .glb export lights up if they are installed.
 	"${FILESDIR}/0002-postprocess-optional-mesh-deps.patch"
-	# kaolin only backs optional FlexiCubes shape asserts; stub it out.
+	# kaolin only provides optional FlexiCubes shape assertions.
 	"${FILESDIR}/0003-flexicube-optional-kaolin.patch"
-	# Guard an unconditional texture_image.shape log so the gaussian-only path
-	# (save_glb=False) does not crash before the .ply write.
 	"${FILESDIR}/0004-gaussian-only-texture-guard.patch"
 )
 
 src_prepare() {
-	# IF_Trellis.py ships with CRLF line endings (the bundled trellis/ files are
-	# LF); normalise it so the LF 0004 patch applies.
+	# Normalize CRLF so 0004 applies.
 	sed -i 's/\r$//' IF_Trellis.py || die
 	default
 }
@@ -112,10 +89,7 @@ src_install() {
 
 	local dest="/usr/share/comfyui/custom_nodes/${MY_NODE}"
 	insinto "${dest}"
-	# Ship the node sources + bundled trellis library + example workflows and
-	# assets. Exclude the prebuilt wheels/ (wrong ABI -- we build the CUDA
-	# extensions from source) and extensions/ (their own ebuilds), plus the pip
-	# install scaffolding and VCS/CI leftovers.
+	# Exclude incompatible prebuilt wheels and separately packaged extensions.
 	doins -r \
 		__init__.py \
 		IF_Trellis.py \
