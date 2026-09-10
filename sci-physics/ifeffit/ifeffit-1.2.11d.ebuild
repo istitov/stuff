@@ -41,11 +41,8 @@ PATCHES=(
 )
 
 src_configure() {
-	# src/cmdline/iff_shell.c uses K&R prototypes (e.g. `char *stripwhite()`
-	# then defined with arguments). gcc 16's default (-std=gnu23) treats
-	# the empty `()` as `(void)` and rejects the definitions with
-	# 'conflicting types'. Pin to gnu89 so K&R survives. verified
-	# 2026-05-09.
+	# Preserve K&R definitions rejected by GCC 16's default gnu23 mode.
+	# verified 2026-05-09
 	append-cflags -std=gnu89
 
 	python_setup
@@ -58,8 +55,7 @@ src_install() {
 	emake DESTDIR="${D}" install
 	rm "${ED}"/usr/$(get_libdir)/libnopgplot.a || die
 
-	# Autoconf includes compiler-specific -L paths in FLIBS.  They become
-	# stale after a compiler upgrade and are unnecessary in standard paths.
+	# Remove compiler-specific FLIBS paths that become stale after upgrades.
 	local config
 	for config in Config.mak Makefile.PL TclSetup.in site_install.py; do
 		sed -E -i 's|-L/[^[:space:]"]+[[:space:]]*||g' \
