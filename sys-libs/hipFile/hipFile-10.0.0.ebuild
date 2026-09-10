@@ -36,13 +36,10 @@ DEPEND="
 	dev-libs/rocr-runtime:${SLOT}
 "
 
-# Upstream labels this an early-access preview; recheck that status each bump.
-# Direct DMA requires PCI_P2PDMA and a filesystem directly on the device;
-# LVM/device-mapper, multipath, dm-crypt, MD RAID, and loopback force POSIX mode.
-# The ebuild can check only the kernel option. On haarmek without P2PDMA and
-# with LVM, setup calls succeeded but hipFileRead returned unmapped error -999
-# instead of hipFileIONotSupported or falling back. Retest on bump.
-# verified 2026-08-31
+# Early-access preview; recheck on each bump. Direct DMA needs PCI_P2PDMA and a
+# filesystem directly on the device; mapped/stacked storage forces POSIX mode.
+# Only the kernel option is checkable. On haarmek with LVM and no P2PDMA,
+# hipFileRead returned -999 instead of unsupported/fallback. verified 2026-08-31
 CONFIG_CHECK="~PCI_P2PDMA"
 
 pkg_setup() {
