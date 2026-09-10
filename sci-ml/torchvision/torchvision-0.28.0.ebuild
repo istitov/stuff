@@ -63,7 +63,7 @@ src_configure() {
 
 python_compile() {
 	addpredict /dev/kfd
-	# bug #968112
+	# The build probes /dev/random (bug #968112).
 	addpredict /dev/random
 
 	export FORCE_CUDA=0
