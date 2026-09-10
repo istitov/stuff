@@ -9,40 +9,28 @@ inherit cmake python-any-r1
 
 DESCRIPTION="HSA runtime debug agent that dumps GPU state when a kernel faults"
 HOMEPAGE="https://github.com/ROCm/rocm-systems/tree/develop/projects/rocr-debug-agent"
-# New package; ::gentoo carries no part of this. Loaded into an application via
-# HSA_TOOLS_LIB=librocm-debug-agent.so.2, it prints wavefront state, the
-# faulting instruction and a disassembly when the GPU traps -- the same
-# amd-dbgapi surface dev-debug/gdb already uses through dev-libs/rocdbgapi, so
-# it belongs next to gdb rather than in dev-libs.
-#
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the 10.0
-# source ships as the rocr-debug-agent.tar.gz asset on the rocm-systems
-# therock-<major.minor> release, the same shape dev-libs/rocdbgapi uses.
+# HSA_TOOLS_LIB loads GPU-fault diagnostics through amd-dbgapi, also used by
+# gdb; hence dev-debug. Post-7.2.4 sources use therock-* tags.
 SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/${PN}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}"
 
 LICENSE="MIT"
-# Versioned by the ROCm release, not upstream's own project(VERSION 2.1.0),
-# matching the rest of the stack. The soname still carries the real 2.
+# Slot by ROCm release; the soname retains upstream's project major 2.
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
 IUSE="test"
 RESTRICT="!test? ( test )"
 
-# elfutils covers both of upstream's separate lookups: libdw (elfutils/libdw.h,
-# -ldw) and libelf (libelf.h, -lelf). amd-dbgapi is dev-libs/rocdbgapi, which is
-# the one hard ROCm dependency -- it is find_package(... REQUIRED) rather than
-# QUIET-with-fallback like the others. verified 2026-08-30.
+# elfutils supplies both libdw and libelf; amd-dbgapi maps to the required
+# rocdbgapi dependency. # verified 2026-08-30
 RDEPEND="
 	dev-libs/elfutils
 	dev-libs/rocdbgapi:${SLOT}
 	dev-libs/rocr-runtime:${SLOT}
 "
 DEPEND="${RDEPEND}"
-# The test harness drives the built agent from a Python script
-# (find_package(Python3 REQUIRED COMPONENTS Interpreter) in test/CMakeLists.txt),
-# so the interpreter is a build-time dependency of the tests only.
+# Only the test harness requires a Python interpreter at build time.
 BDEPEND="
 	test? (
 		${PYTHON_DEPS}
@@ -55,12 +43,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# -Werror on a library built against three external header sets is a
-	# recipe for a build that fails on an unrelated deprecation. Anchor is
-	# asserted first: `sed` exits 0 on no-match, so if upstream drops -Werror
-	# this would silently become a no-op and the intent would be lost.
-	# verified 2026-08-30 -- present as
-	# target_compile_options(... -Werror -Wall ...).
+	# External-header deprecations must not become fatal; guard sed's anchor.
+	# verified 2026-08-30
 	grep -q -- '-Werror' CMakeLists.txt ||
 		die "-Werror gone from CMakeLists.txt; upstream likely dropped it, so drop this sed"
 	sed -e 's/ -Werror//' -i CMakeLists.txt || die
