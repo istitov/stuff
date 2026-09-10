@@ -27,10 +27,8 @@ BDEPEND="
 "
 
 src_prepare() {
-	# Vendored c-blosc 1.x has `typedef _Bool bool;` in shuffle.c, which is a
-	# hard error under C23 (bool is now a keyword). GCC 15 defaults to gnu23,
-	# so pin the C standard down to gnu17 for the vendored sources.
-	# verified 2026-06-04
+	# Vendored c-blosc 1.x conflicts with C23's bool keyword; use GNU17.
+	# Verified 2026-06-04.
 	append-cflags -std=gnu17
 	distutils-r1_src_prepare
 }
