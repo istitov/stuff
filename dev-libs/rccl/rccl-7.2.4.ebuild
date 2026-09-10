@@ -15,7 +15,7 @@ LICENSE="BSD"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
-# not supported on some GPUs like gfx1151
+# gfx1151 remains unsupported.
 IUSE_TARGETS=( gfx906 gfx908 gfx90a gfx942 gfx950 gfx1030 gfx1100 gfx1101 gfx1102 gfx1200 gfx1201 )
 IUSE_TARGETS=( "${IUSE_TARGETS[@]/#/amdgpu_targets_}" )
 ROCM_USEDEP_OPTFLAGS=${IUSE_TARGETS[*]/%/(-)?}
@@ -48,13 +48,19 @@ PATCHES=(
 )
 
 src_prepare() {
-	# don't install tests
+	# Do not install tests; guard against silent sed misses.
+	grep -qF 'rocm_install' test/CMakeLists.txt ||
+		die 'rocm_install anchor moved in test/CMakeLists.txt'
 	sed -e '/rocm_install/d' -i test/CMakeLists.txt || die
 
-	# too many warnings...
+	# Drop upstream's blanket -Wall; guard the exact anchor.
+	grep -qF 'target_compile_options(rccl PRIVATE -Wall)' CMakeLists.txt ||
+		die 'rccl -Wall anchor moved in CMakeLists.txt'
 	sed -e '/target_compile_options(rccl PRIVATE -Wall)/d' -i CMakeLists.txt || die
 
-	# allow to redefine CMAKE_INSTALL_LIBDIR from lib to $(get_libdir)
+	# Honor the profile libdir; guard the rewrite anchor.
+	grep -qF 'CMAKE_INSTALL_LIBDIR' cmake/Dependencies.cmake ||
+		die 'CMAKE_INSTALL_LIBDIR anchor moved in cmake/Dependencies.cmake'
 	sed -e '/CMAKE_INSTALL_LIBDIR/ s/ FORCE//' -i cmake/Dependencies.cmake || die
 	cmake_src_prepare
 }
@@ -62,7 +68,7 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# lto flags make compilation fail with "undefined hidden symbol"
+	# LTO fails with undefined hidden symbols.
 	filter-lto
 
 	local mycmakeargs=(
@@ -85,6 +91,6 @@ src_configure() {
 src_test() {
 	check_amdgpu
 	cd "${BUILD_DIR}" || die
-	# APU (as second device, if any) expectedly breaks tests
+	# Hide a secondary APU that breaks the tests.
 	HIP_VISIBLE_DEVICES=0 LD_LIBRARY_PATH="${BUILD_DIR}" edob test/rccl-UnitTests
 }
