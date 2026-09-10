@@ -11,8 +11,7 @@ HOMEPAGE="
 	https://github.com/ROCm/FastFlowLM
 "
 
-# Fixed submodule revisions used by the 1.0.5 tag. tokenizers-cpp's nested
-# sentencepiece and msgpack revisions match these archives.
+# Pinned tokenizers-cpp tree and its nested submodules; recheck on bumps.
 TOKENIZERS_CPP_COMMIT="acbdc5a27ae01ba74cda756f94da698d40f11dfe"
 SENTENCEPIECE_COMMIT="11051e3b73b3a6222a52acd720e39805dc7545ab"
 MSGPACK_COMMIT="092bc69b6e815980bce7808595c914dd3a29f905"
@@ -29,8 +28,7 @@ SRC_URI="
 "
 S="${WORKDIR}/FastFlowLM-${PV}"
 
-# The CLI is MIT-licensed; bundled NPU kernels use FastFlowLM-Binary
-# (assets/superseded/LICENSE_BINARY.txt).
+# CLI is MIT; bundled NPU kernels use FastFlowLM-Binary.
 LICENSE="MIT FastFlowLM-Binary"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -77,8 +75,7 @@ src_unpack() {
 }
 
 src_prepare() {
-	# Drop upstream's symlink-into-/usr/local/bin block; we provide our
-	# own wrapper via newbin + env.d below.
+	# Replace upstream's /usr/local symlink with an env.d-backed wrapper.
 	sed -i '/if.*NOT WIN32.*CMAKE_INSTALL_PREFIX/,/endif()/d' \
 		"${S}/src/CMakeLists.txt" || die
 	# Exclude a backup binary caught by upstream's *.so* install glob.
@@ -87,10 +84,10 @@ src_prepare() {
 }
 
 src_configure() {
-	# The upstream preset supplies these values; set them explicitly because
-	# cmake.eclass does not use it. NPU_VERSION is upstream's unchanged
-	# Windows-driver marker. CMAKE_XCLBIN_PREFIX fixes runtime data lookup
-	# (ROCm/FastFlowLM#269). Keep the unpackaged HRX backend disabled.
+	# Set preset-only values explicitly. CMAKE_XCLBIN_PREFIX must match the install
+	# path or runtime searches beside the executable (#269); NPU_VERSION only
+	# satisfies a Linux guard. Keep unpackaged HRX disabled to retain XRT.
+	# Verified 2026-09-10.
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="/opt/fastflowlm"
 		-DCMAKE_XCLBIN_PREFIX="/opt/fastflowlm/share/flm"
@@ -106,8 +103,7 @@ src_install() {
 
 	local flm_libdir="/opt/fastflowlm/$(get_libdir)"
 
-	# Wrapper so flm finds XRT and its own libs at runtime
-	# (lemonade-sdk/lemonade#1315).
+	# Expose XRT and bundled libraries at runtime (lemonade-sdk/lemonade#1315).
 	newbin - flm <<-EOF
 	#!/usr/bin/env bash
 	set -euo pipefail
@@ -116,10 +112,8 @@ src_install() {
 	exec /opt/fastflowlm/bin/flm "\$@"
 	EOF
 
-	# Helper that patches HuggingFace Whisper config.json so FLM's
-	# decoder-only LM_Config validator doesn't crash on it. Idempotent;
-	# user runs once after `flm pull whisper-v3:turbo`.
-	# Upstream bug: https://github.com/ROCm/FastFlowLM/issues/545
+	# Idempotently adapt Whisper configs to the decoder-only validator
+	# (FastFlowLM#545).
 	newbin "${FILESDIR}/flm-patch-whisper" flm-patch-whisper
 
 	newenvd - 99fastflowlm <<-EOF
