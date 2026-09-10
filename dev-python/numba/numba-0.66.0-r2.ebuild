@@ -20,8 +20,7 @@ KEYWORDS="~amd64 ~arm64"
 IUSE+=" openmp threads"
 RESTRICT="bindist mirror"
 
-# setup.py imports NumPy to obtain headers, and requires NumPy >=2.0.0rc1
-# while retaining compatibility with NumPy >=1.22 at runtime. # verified 2026-07-27
+# Building imports NumPy >=2; runtime supports >=1.22. Verified 2026-07-27.
 DEPEND+="
 	>=dev-python/numpy-2.0.0[${PYTHON_USEDEP}]
 	<dev-python/numpy-2.5[${PYTHON_USEDEP}]
