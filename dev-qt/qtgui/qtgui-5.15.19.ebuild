@@ -3,8 +3,8 @@
 
 EAPI=8
 
-# Looking for Qt 6? It is packaged differently to Qt 5 with different
-# package names: https://wiki.gentoo.org/wiki/Project:Qt/Qt6_migration_notes
+# Qt 6 uses different package names:
+# https://wiki.gentoo.org/wiki/Project:Qt/Qt6_migration_notes
 
 if [[ ${PV} != *9999* ]]; then
 	QT5_KDEPATCHSET_REV="r0-0"
@@ -133,10 +133,10 @@ QT5_GENTOO_PRIVATE_CONFIG=(
 )
 
 src_prepare() {
-	# don't add -O3 to CXXFLAGS, bug 549140
+	# Preserve the user optimization level; bug 549140.
 	sed -i -e '/CONFIG\s*+=/s/optimize_full//' src/gui/gui.pro || die
 
-	# egl_x11 is activated when both egl and X are enabled
+	# Enable egl_x11 only with both egl and X.
 	use egl && QT5_GENTOO_CONFIG+=(X:egl_x11:) || QT5_GENTOO_CONFIG+=(egl:egl_x11:)
 
 	qt_use_disable_config dbus dbus \
