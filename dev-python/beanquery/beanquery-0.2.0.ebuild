@@ -25,16 +25,12 @@ RDEPEND="
 	dev-python/tatsu-lts[${PYTHON_USEDEP}]
 "
 
-# Stock pytest only; no third-party plugins.
+# Load no third-party pytest plugins.
 EPYTEST_PLUGINS=()
 
-# query_render assertions hard-code exact column widths that predate
-# beancount 3.2.x reserving a leading sign-alignment column; against the
-# beancount we ship (3.2.3) every rendered amount gains a leading space,
-# so these width-exact tests fail. The renderer itself is correct (the
-# diffs show well-formed tables, only shifted by the sign space) and
-# 0.2.0 is the latest beanquery — upstream simply hasn't refreshed these
-# expectations. Verified cosmetic 2026-06-02; revisit on the next bump.
+# Beancount 3.2 added a sign-alignment column, invalidating these exact-width
+# assertions without breaking output. Revisit after upstream updates them.
+# verified 2026-06-02
 EPYTEST_DESELECT=(
 	beanquery/query_render_test.py::TestAmountRenderer::test_amount
 	beanquery/query_render_test.py::TestAmountRenderer::test_currency_padding
@@ -55,9 +51,7 @@ EPYTEST_DESELECT=(
 distutils_enable_tests pytest
 
 python_prepare_all() {
-	# Upstream's bare `find = {}` auto-discovery sweeps the top-level
-	# docs/ tree into site-packages as a stray top-level package (the
-	# PyPI wheel ships it the same way). Scope discovery to the library.
+	# Limit package discovery; upstream's bare find also installs docs/.
 	grep -q '^find = {}$' pyproject.toml || die "package-discovery stanza moved"
 	sed -i \
 		-e 's/^\[tool\.setuptools\.packages\]$/[tool.setuptools.packages.find]/' \
