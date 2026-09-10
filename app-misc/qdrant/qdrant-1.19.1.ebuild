@@ -14,17 +14,13 @@ HOMEPAGE="
 "
 SRC_URI="https://github.com/qdrant/qdrant/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 
-# Qdrant itself is Apache-2.0; its ~870 crate dependencies carry the usual
-# permissive Rust mix (MIT/Apache-2.0/BSD/...), fetched by cargo at build time.
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="openrc systemd"
 
-# Cargo.lock pulls crates from git that are not on crates.io -- tikv/raft-rs
-# and a qdrant fork of tonic, both at pinned revs -- so the dependency graph is
-# fetched by cargo at build time rather than vendored via CRATES. Hence network
-# access + the non-determinism marker. verified 2026-09-04 against 1.19.1
+# Cargo.lock includes pinned git-only raft-rs and tonic revisions, requiring
+# live network fetching. # verified 2026-09-04
 PROPERTIES="live"
 RESTRICT="network-sandbox test"
 
@@ -40,14 +36,11 @@ src_unpack() {
 
 src_compile() {
 	export CARGO_HOME="${T}/cargo"
-	# Fat LTO exhausts memory on common arm64 builders and spends hours
-	# thrashing in swap.  Thin LTO retains cross-crate optimization with a
-	# substantially smaller link-time working set.
+	# Fat LTO exhausts common arm64 builders; Thin retains cross-crate optimization.
 	if [[ ${ARCH} == arm64 ]]; then
 		export CARGO_PROFILE_RELEASE_LTO="thin"
 	fi
-	# --locked builds exactly the Cargo.lock graph; network-sandbox is lifted
-	# (RESTRICT) so cargo can fetch crates.io and the pinned git dependencies.
+	# --locked fixes the graph while RESTRICT permits its network fetches.
 	cargo build --release --locked --bin qdrant \
 		|| die "cargo build failed"
 }
@@ -55,12 +48,8 @@ src_compile() {
 src_install() {
 	dobin target/release/qdrant
 
-	# Config with the storage/snapshot paths pointed at /var/lib/qdrant and
-	# the service bound to loopback by default (privacy-first; widen in
-	# /etc/qdrant/config.yaml if remote access is wanted). All three anchors
-	# re-checked against upstream's config.yaml -- a sed matching nothing
-	# would exit 0 and ship an ebuild writing into the CWD.
-	# verified 2026-09-04 against 1.19.1
+	# Move mutable data under /var and bind to loopback. Anchors verified because
+	# sed silently accepts no matches. # verified 2026-09-04
 	sed -e 's#\./storage#/var/lib/qdrant/storage#' \
 		-e 's#\./snapshots#/var/lib/qdrant/snapshots#' \
 		-e 's#host: 0\.0\.0\.0#host: 127.0.0.1#' \
@@ -68,9 +57,7 @@ src_install() {
 	insinto /etc/qdrant
 	newins "${T}/config.yaml" config.yaml
 
-	# Note: the web-UI dashboard is a separate upstream release
-	# (qdrant/qdrant-web-ui) and is not bundled in the server source, so it
-	# is not installed here; the REST and gRPC APIs work without it.
+	# The separately released web UI is not bundled; REST/gRPC work without it.
 
 	keepdir /var/lib/qdrant/storage /var/lib/qdrant/snapshots /var/log/qdrant
 	fowners -R qdrant:qdrant /var/lib/qdrant /var/log/qdrant
