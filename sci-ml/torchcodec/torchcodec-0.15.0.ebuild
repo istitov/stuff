@@ -25,8 +25,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
-# Upstream supports FFmpeg majors 4..8 (compiled separately and dlopen'd
-# at runtime); ::gentoo's media-video/ffmpeg covers the live 7.x/8.x slot.
+# Upstream dlopens FFmpeg 4-8; ::gentoo supplies the live 7/8 slot.
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	media-video/ffmpeg:=
@@ -46,21 +45,16 @@ BDEPEND="
 RESTRICT="test"
 
 python_compile() {
-	# torchcodec's setup.py invokes cmake itself; use env vars to drive it.
+	# setup.py drives CMake through environment variables.
 	export CMAKE_BUILD_TYPE=Release
 	export BUILD_VERSION="${PV}"
 
-	# Upstream defaults to vendoring FFmpeg from S3 to skirt the wheel-
-	# distribution licensing question; we link against media-video/ffmpeg
-	# instead and have to ack the opt-out env var. Self-built local
-	# install is not redistributing a binary, so no GPL concerns.
+	# Link system FFmpeg instead of the S3-vendored wheel payload; acknowledge
+	# upstream's redistribution guard for this local source build.
 	export I_CONFIRM_THIS_IS_NOT_A_LICENSE_VIOLATION=1
 
-	# CUDA 13.x nvcc rejects gcc>15. Caffe2's cmake config is included
-	# unconditionally by find_package(Torch) and tries to enable_language(CUDA)
-	# whenever it finds /opt/cuda — even for our CPU-only build path. Pin
-	# the host compiler always; this requires gcc-15 installed alongside
-	# whatever newer gcc is the active system slot.
+	# Caffe2 enables CUDA whenever /opt/cuda exists, even for CPU builds; CUDA 13
+	# rejects GCC >15, so pin the declared GCC 15 host compiler.
 	export CUDAHOSTCXX="/usr/bin/g++-15"
 
 	if use cuda; then
