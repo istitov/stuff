@@ -20,14 +20,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The lightning wheel ships its own self-contained code under the
-# lightning/ namespace (lightning.fabric, lightning.pytorch, lightning.data).
-# Upstream's Requires-Dist lists pytorch-lightning as a runtime dep, but
-# that's a co-installable redundancy: pytorch-lightning ships the same code
-# under the legacy pytorch_lightning + lightning_fabric top-level names.
-# Downstream consumers in this overlay (sci-ml/pyannote-audio) only use the
-# `lightning.*` umbrella import path, so we deliberately omit it. Users
-# needing `import pytorch_lightning` can pip-install it separately.
+# Omit redundant pytorch-lightning: this wheel contains the `lightning.*`
+# namespace used by overlay consumers; the legacy package adds other imports.
 RDEPEND="
 	>=sci-ml/pytorch-2.1[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/pytorch-4[${PYTHON_SINGLE_USEDEP}]
@@ -51,13 +45,11 @@ RDEPEND="
 	')
 "
 
-# Tests pull a long tail (deepspeed, hydra, jsonargparse, ...).
+# Tests require a large optional dependency stack.
 RESTRICT="test"
 
 src_prepare() {
-	# Lightning's setup.py reads PACKAGE_NAME from env to choose between the
-	# `lightning` umbrella and `pytorch-lightning` build artifacts. The sdist
-	# defaults to building `lightning`, but make it explicit.
+	# Select the umbrella artifact explicitly.
 	export PACKAGE_NAME="lightning"
 	distutils-r1_src_prepare
 }
