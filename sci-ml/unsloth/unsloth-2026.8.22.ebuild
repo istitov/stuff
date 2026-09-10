@@ -122,7 +122,7 @@ RDEPEND="
 "
 BDEPEND="
 	$(python_gen_cond_dep '
-		dev-python/setuptools-scm[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-scm-9.2.0[${PYTHON_USEDEP}]
 	')
 	studio? ( net-libs/nodejs[npm] )
 "
