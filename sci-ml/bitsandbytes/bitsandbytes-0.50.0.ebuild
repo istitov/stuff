@@ -4,10 +4,7 @@
 EAPI=8
 
 DISTUTILS_EXT=1
-# Upstream's build-backend is scikit_build_core.setuptools.build_meta (a
-# setuptools shim that drives CMake; wheel.cmake=false), not
-# scikit_build_core.build -- so use standalone, not the eclass's
-# scikit-build-core value.
+# Upstream uses scikit_build_core.setuptools.build_meta, not its native backend.
 DISTUTILS_USE_PEP517=standalone
 DISTUTILS_SINGLE_IMPL=1
 PYTHON_COMPAT=( python3_{12..14} )
@@ -30,24 +27,9 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="cuda rocm"
 REQUIRED_USE="?? ( cuda rocm )"
 
-# The ROCm atoms are RDEPEND, not BDEPEND: with USE=rocm the built extension
-# links them and calls them at runtime. Declared only as BDEPEND they were
-# invisible to the installed package, so depclean was free to unmerge the
-# stack out from under it. Mirrors the cuda? atom.
-#
-# The list is what upstream's CMakeLists.txt requires under BUILD_HIP, read
-# from the unpacked source rather than inferred:
-#   hipBLAS    find_package(hipblas REQUIRED), links roc::hipblas
-#   hipRAND    find_package(hiprand REQUIRED), links hip::hiprand
-#   hipBLASLt  find_package(hipblaslt), links roc::hipblaslt -- taken whenever
-#              `hipconfig --version` reports HIP >= 6.1, so always here: ROCm
-#              10.0 reports 7.15. The <6.1 branch only defines NO_HIPBLASLT.
-#   rocBLAS    linked explicitly on WIN32 only; on Linux it arrives
-#              transitively through roc::hipblas. Kept regardless, because
-#              csrc/ops.cuh declares rocblas_handle members -- its headers and
-#              ABI are a real dependency, so := must still fire on a rocBLAS
-#              subslot flip.
-# verified 2026-08-30 against the 0.50.0 source
+# The HIP extension links and uses these ROCm libraries at runtime. Upstream
+# requires hipBLAS, hipRAND, and hipBLASLt; rocBLAS links transitively on Linux
+# but remains a direct header/ABI dependency, so retain :=. # verified 2026-08-30
 RDEPEND="
 	>=sci-ml/pytorch-2.4[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/pytorch-3[${PYTHON_SINGLE_USEDEP}]
@@ -79,9 +61,7 @@ src_prepare() {
 }
 
 src_compile() {
-	# COMPUTE_BACKEND defaults to cpu in the CMakeLists. scikit-build-core
-	# honors CMAKE_ARGS; bitsandbytes reads AMDGPU_TARGETS for
-	# CMAKE_HIP_ARCHITECTURES.
+	# CMAKE_ARGS selects the backend and forwards its architecture targets.
 	local cmake_args=()
 	if use cuda; then
 		local gccdir target capability
