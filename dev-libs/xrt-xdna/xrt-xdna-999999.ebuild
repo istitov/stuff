@@ -58,7 +58,6 @@ RDEPEND="
 	sys-apps/util-linux
 "
 
-# Mostly thowaway dependencies, not actually used in final lib...
 DEPEND="
 	sys-apps/util-linux
 	dev-debug/systemtap
@@ -121,7 +120,6 @@ src_unpack() {
 			ln -s "${WORKDIR}/${url_prefix##*/}-${commit_hash}" "$k" || die
 		done
 
-		# Sanity check for new versions
 		local actual_vtd_hash=$(grep -oP 'VTD/raw/\K[0-9a-f]+' tools/info.json | head -n1)
 		[[ "${actual_vtd_hash}" == "" ]] && die "Failed to extract VTD hash"
 		[[ "${actual_vtd_hash}" != "${VTD_HASH}" ]] && \
@@ -166,6 +164,6 @@ src_install() {
 	insinto /usr/share/xrt/amdxdna/bins
 	doins amdxdna_bins/vtd_archives/*
 
-	# belongs to dev-util/xrt
+	# Installed by dev-util/xrt.
 	rm -rf "${ED}/bins" || die
 }
