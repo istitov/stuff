@@ -17,4 +17,3 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 RDEPEND="
 	dev-python/wxpython:*[${PYTHON_USEDEP}]
 "
-#dev-python/PyQt4
