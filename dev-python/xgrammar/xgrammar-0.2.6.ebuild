@@ -10,14 +10,9 @@ DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
 
-# dlpack is a git submodule (3rdparty/dlpack); its headers sit on
-# XGRAMMAR_INCLUDE_PATH and are installed by the top-level CMakeLists, so it is
-# required at build time. GitHub's archive tarball omits submodule contents, so
-# stage the pinned commit separately (git ls-tree v${PV} -- 3rdparty/dlpack).
-# The other two submodules stay unbuilt with our options: googletest only under
-# XGRAMMAR_BUILD_CXX_TESTS (default OFF) and cpptrace under XGRAMMAR_ENABLE_CPPTRACE
-# (default OFF, scikit-build passes no cmake.args); picojson is vendored in-tree
-# and ships in the archive. Re-check the commit on every bump. # verified 2026-07-24
+# GitHub archives omit required dlpack headers, so fetch the tag's submodule
+# commit separately and recheck it on bumps. googletest/cpptrace stay disabled;
+# picojson is included in the archive. # verified 2026-07-24
 DLPACK_COMMIT="bbd2f4d32427e548797929af08cfe2a9cbb3cf12"
 
 DESCRIPTION="Efficient, flexible structured generation engine for LLMs"
@@ -26,8 +21,7 @@ HOMEPAGE="
 	https://github.com/mlc-ai/xgrammar
 	https://pypi.org/project/xgrammar/
 "
-# PyPI stopped shipping sdists at 0.2.4 (wheels only), so build from the GitHub
-# release tag rather than pypi_sdist_url. # verified 2026-07-24
+# PyPI has shipped only wheels since 0.2.4. # verified 2026-07-24
 SRC_URI="
 	https://github.com/mlc-ai/xgrammar/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz
 	https://github.com/dmlc/dlpack/archive/${DLPACK_COMMIT}.tar.gz
@@ -40,28 +34,17 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
-# 0.2.6 drops the upstream <5 transformers cap: the pyproject now declares a
-# bare transformers>=4.38.0 and documents the reasoning -- 5.0.0 cannot
-# initialize remote-code tiktoken tokenizers and 5.13.0 breaks `import
-# mlx_lm`, but each was fixed in the very next release, so upstream excludes
-# neither and declines a blanket cap that would force resolver conflicts on
-# downstream packages. The tree ships 5.16.1, past both. # verified 2026-09-09
+# Upstream dropped the transformers <5 cap: the 5.0 tiktoken and 5.13 mlx_lm
+# regressions were fixed in their next releases. Tree 5.16.1 is past both.
+# verified 2026-09-09
 #
-# gcc:15 is a runtime dep because the CUDA token-bitmask kernel is
-# JIT-compiled at import via torch.utils.cpp_extension, and nvcc rejects a
-# host gcc newer than the toolkit supports (CUDA 13 tops out at gcc 15).
-# The slot here MUST track the /usr/bin/gcc-15 and /usr/bin/g++-15 fallback
-# in ${PN}-0.2.2-cuda-host-compiler.patch: when a CUDA bump raises this
-# slot, update that patch's fallback in the same commit. cuda_gccdir cannot
-# resolve it -- it runs on the user's machine at JIT time, not at build.
+# CUDA kernels JIT through PyTorch, so gcc:15 is a runtime dependency; CUDA 13
+# rejects newer hosts. Keep its slot synchronized with the compiler fallback in
+# ${PN}-0.2.2-cuda-host-compiler.patch; cuda_gccdir cannot run at JIT time.
 #
-# virtual/triton is arch-gated rather than CUDA-gated: upstream's own marker
-# is platform_machine == 'x86_64', and the auto backend selects the Triton
-# kernel for any tensor whose device.type is "cuda" -- which ROCm tensors
-# also report -- so gating on the cuda flag would make an AMD host raise
-# ImportError("Triton is not installed") at first GPU use. The virtual
-# carries both the nvidia and amd backends and is itself ~amd64, so keying
-# it to the arch also keeps the dep resolvable on arm64. # verified 2026-09-09
+# Gate virtual/triton like upstream's x86_64 marker, not by USE=cuda: ROCm
+# tensors also report device.type="cuda" and select Triton. The virtual covers
+# both backends and is unavailable on arm64. # verified 2026-09-09
 RDEPEND="
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
@@ -97,9 +80,7 @@ PATCHES=(
 
 src_unpack() {
 	default
-	# GitHub's archive omits submodule contents; drop the empty 3rdparty/dlpack
-	# placeholder and stage the pinned dlpack commit where the include path and
-	# the header-install rule expect it.
+	# Replace the empty submodule placeholder with the pinned dlpack tree.
 	rmdir "${S}/3rdparty/dlpack" || die
 	mv "${WORKDIR}/dlpack-${DLPACK_COMMIT}" "${S}/3rdparty/dlpack" || die
 }
