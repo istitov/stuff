@@ -18,8 +18,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Layered on top of stock opentelemetry-semantic-conventions in ::gentoo.
-# opentelemetry-python 1.38.0 contains semantic-conventions 0.59b0.
+# Extends the stock OpenTelemetry semantic conventions.
 RDEPEND="
 	>=dev-python/opentelemetry-sdk-1.38.0[${PYTHON_USEDEP}]
 	<dev-python/opentelemetry-sdk-2[${PYTHON_USEDEP}]
