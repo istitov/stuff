@@ -12,38 +12,20 @@ HOMEPAGE="https://github.com/LostRuins/koboldcpp"
 SRC_URI="https://github.com/LostRuins/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 S="${WORKDIR}/${PN}-${PV}"
 
-# AGPL-3.0 covers the koboldcpp code + the embedded KoboldAI Lite UI; the
-# bundled ggml / llama.cpp / stable-diffusion.cpp / TTS.cpp libraries are MIT
-# (MIT_LICENSE_GGML_SDCPP_LLAMACPP_ONLY.md).
+# Koboldcpp and its UI are AGPL-3+; bundled inference libraries are MIT.
 LICENSE="AGPL-3+ MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Vulkan is upstream's official GPU acceleration for both AMD and NVIDIA.
-# CUDA (koboldcpp_cublas) and ROCm/hipBLAS (an unofficial upstream fork) are
-# intentionally not wired here yet: neither has been build-verified for this
-# overlay (ROCm's Makefile GPU_TARGETS handling needs work). Prefer Vulkan.
+# Vulkan is the only build-verified GPU backend here; CUDA and the unofficial
+# ROCm path remain unwired, with ROCm GPU_TARGETS still unresolved.
 IUSE="+vulkan"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# koboldcpp.py dlopen()s the compiled backend .so files, and the image/speech/
-# TTS features all live in the C++ libraries -- but the launcher is NOT pure
-# stdlib, as this comment previously claimed. Audited 2026-08-29 against the
-# 1.120 tree:
-#
-#   jinja2       - format_jinja() imports jinja2.ext/jinja2.sandbox for chat
-#                  templates. The whole function body sits in a try:, so it
-#                  degrades rather than crashing, but chat-template handling
-#                  is a normal runtime path. Declared.
-#   psutil       - imported inside try: at two spots (process priority, RAM
-#                  reporting). Genuinely optional; left as an optfeature.
-#   customtkinter- the launcher GUI. NOT PACKAGED in ::gentoo or ::stuff, so
-#                  it cannot be declared; see the CLI-only note below.
-#
-# Upstream's requirements.txt is repo-wide, not the launcher's dep list: it
-# also pins numpy/transformers/sentencepiece/gguf/protobuf for the
-# convert_hf_to_gguf.py conversion scripts, none of which koboldcpp.py
-# imports (verified: zero import sites for each).
+# The launcher dlopens C++ backends but uses Jinja2 for chat templates. psutil is
+# optional; customtkinter is unpackaged, so this remains CLI-only. Repo-wide
+# requirements for conversion scripts are not launcher dependencies.
+# verified against 1.120 on 2026-08-29
 RDEPEND="
 	${PYTHON_DEPS}
 	$(python_gen_cond_dep '
@@ -66,14 +48,10 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	# The release build strips the .so at link time (-s); leave stripping
-	# to Portage so splitdebug/nostrip are honored and the pre-stripped QA
-	# notice is silenced. Keep -DNDEBUG (it no-ops assert()).
+	# Leave stripping to Portage for splitdebug/nostrip; retain -DNDEBUG.
 	sed -i -e 's/-DNDEBUG -s/-DNDEBUG/g' Makefile || die
 
-	# Drop the bundled prebuilt shader compilers so the Vulkan build uses
-	# the system media-libs/shaderc glslc (LLAMA_USE_BUNDLED_GLSLC= empty
-	# in src_compile). Their absence also removes the only executed blob.
+	# Drop bundled shader compilers and select system glslc below.
 	rm -f glslc-linux glslc.exe || die
 }
 
@@ -82,9 +60,7 @@ src_compile() {
 
 	local targets=( koboldcpp_default )
 	local makeargs=(
-		# Empty (not 0) so the Makefile's `[ -n "$LLAMA_USE_BUNDLED_GLSLC" ]`
-		# test is false and it selects the system glslc (media-libs/shaderc)
-		# for Vulkan shader generation instead of the bundled binary.
+		# Must be empty, not 0: the Makefile tests string length.
 		LLAMA_USE_BUNDLED_GLSLC=
 	)
 
@@ -101,17 +77,13 @@ src_install() {
 
 	insinto "${dest}"
 	doins koboldcpp.py
-	# The compiled backends (koboldcpp_default.so and, with USE=vulkan,
-	# koboldcpp_vulkan.so) sit beside the launcher, which locates them via
-	# os.path.dirname(__file__).
+	# The launcher finds backends beside its own file.
 	doins koboldcpp_*.so
-	# Embedded web UI (KoboldAI Lite), API docs, SD/TTS resources and the
-	# chat-format adapters, read from <script_dir>/embd_res and kcpp_adapters.
+	# Runtime UI, model resources, and chat adapters.
 	doins -r embd_res kcpp_adapters
 
 	python_fix_shebang "${ED}${dest}/koboldcpp.py"
 
-	# Thin launcher on PATH.
 	make_wrapper "${PN}" "${EPYTHON} ${EPREFIX}${dest}/koboldcpp.py"
 
 	dodoc README.md
