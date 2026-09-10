@@ -19,8 +19,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream's install_requires omits modules imported directly by the package;
-# do not rely on transformers to pull them in transitively. # verified 2026-08-04
+# Declare direct imports omitted upstream. verified 2026-08-04
 RDEPEND="
 	sci-ml/huggingface_hub[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/pytorch-1.7.0[${PYTHON_SINGLE_USEDEP}]
@@ -43,14 +42,11 @@ BDEPEND="
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
-# setuptools-scm derives the version from git tags; the sdist bundles
-# the version but the build still introspects, so pretend the version.
-# Upstream's pyproject.toml pins setuptools_scm==8.2.0 but the
-# format_next_version / format_with API is stable across 8/9/10 and
-# the strict pin would force an old setuptools-scm into our overlay.
+# Pin the VCS-derived sdist version. Accept setuptools-scm >=8 because the used
+# formatting API remains stable across 8-10.
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 
-# The full suite requires multiple accelerators and downloads model fixtures.
+# Run only offline, accelerator-independent tests.
 python_test() {
 	local -x HF_HUB_OFFLINE=1
 	local -x TRANSFORMERS_OFFLINE=1
