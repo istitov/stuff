@@ -3,26 +3,11 @@
 
 EAPI=8
 
-# 6.11 is a non-LTS kernel that reached end-of-life upstream (linux-stable
-# stopped at 6.11.11). The trunk-pinned patches captured here track
-# stable all the way to 6.11.11 — full coverage for this EOL branch.
-#
-# Per-branch judgment on 5xxx (genpatches "experimental" category):
-#   * 5010_enable-cpu-optimizations-universal: NOT included. Same
-#     pf-flavored-vanilla mismatch as 6.9/6.10.
-#   * 5020_BMQ-and-PDS-io-scheduler + 5021_BMQ-and-PDS-gentoo-defaults:
-#     NOT included. Out of scope for the model.
-#
-# x86 ISA-level Kconfig is NOT promoted into the curated subset on this
-# slot. Reason: 1009_linux-6.11.10 (stack protector guard rename) and
-# 2980_GCC15-gnu23-to-gnu11-fix both modify arch/x86/Makefile, while pf's
-# arch/x86/Makefile would revert both. Hand-promoting pf's Makefile would
-# regress 1009 (a security backport) and 2980 (a build correctness fix
-# for GCC 15+). Without pf's Makefile, pf's Kconfig.cpu (with MK8SSE3,
-# MZEN, MZEN2 etc.) would advertise options the compiler can't actually
-# act on, so we drop both arch/x86/Kconfig.cpu and arch/x86/Makefile from
-# the curated subset. Users see standard vanilla x86 family selection;
-# this is the price of keeping linux-stable security+build fixes.
+# EOL at 6.11.11; the bundled genpatches cover the complete stable branch.
+# Exclude experimental 5010 (pf/vanilla mismatch) and BMQ/PDS (out of scope).
+# Also exclude pf's x86 Kconfig/Makefile pair: it would revert stable's stack-
+# protector security backport and GCC 15 fix, while Kconfig alone advertises
+# ISA levels the compiler cannot apply.
 
 ETYPE="sources"
 
@@ -39,10 +24,8 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Per-slot snapshot of alicef's genpatches trunk (a live working dir),
-# bundled as pf-genpatches-${SHPV}.tar.xz on the sister overlay extra-stuff
-# (https://github.com/istitov/extra-stuff), pinned by immutable tag -r70-1
-# (refresh = new tag suffix). The bundle is the durable reference.
+# Immutable extra-stuff tag snapshots alicef's otherwise-live genpatches trunk;
+# refreshes use a new tag suffix.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
