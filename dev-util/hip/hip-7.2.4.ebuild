@@ -40,7 +40,7 @@ LICENSE="MIT"
 
 IUSE="debug +hip numa opencl test video_cards_amdgpu video_cards_nvidia"
 
-# many tests are broken; also tests run against installed version, not built one
+# Many tests are broken and exercise the installed rather than built version.
 RESTRICT="test"
 
 REQUIRED_USE="
@@ -96,10 +96,8 @@ PATCHES=(
 QA_FLAGS_IGNORED="usr/lib.*/libhiprtc-builtins.*"
 
 src_unpack() {
-	# rocm 7.2.4 release-asset tarballs carry their own clr/, hip/ and
-	# hip-tests/ top-level directories (7.2.3's unpacked flat, hence the
-	# manual wrapper dirs previously). Unpack directly into ${WORKDIR} so
-	# the tarball roots land where S=/HIP_S=/TEST_S= already expect them.
+	# Unlike 7.2.3, these archives contain the clr/, hip/, and hip-tests/ roots
+	# expected by S, HIP_S, and TEST_S.
 	unpack "rocm-clr-${PV}.tar.gz"
 	unpack "${P}.tar.gz"
 	use test && unpack "hip-tests-${PV}.tar.gz"
@@ -115,9 +113,7 @@ hip_test_wrapper() {
 src_prepare() {
 	pushd "${HIP_S}" >/dev/null || die
 
-	# hipamd is itself built by cmake, and should never provide a
-	# FindHIP.cmake module. But the reality is some package relies on it.
-	# Set HIP and HIP Clang paths directly, don't search using heuristics
+	# Consumers rely on hipamd's FindHIP.cmake; avoid its path heuristics.
 	sed -e "s:# Search for HIP installation:set(HIP_ROOT_DIR \"${EPREFIX}/usr\"):" \
 		-e "s:#Set HIP_CLANG_PATH:set(HIP_CLANG_PATH \"$(get_llvm_prefix -d)/bin\"):" \
 		-i "cmake/FindHIP.cmake" || die
@@ -125,12 +121,11 @@ src_prepare() {
 
 	sed -e "s/ -Werror//g" -i "hipamd/src/CMakeLists.txt" || die
 
-	# do not install /usr/share/doc/${P}-asan
 	sed -e "/asan COMPONENT asan/d" -i hipamd/packaging/CMakeLists.txt || die
 
 	sed -e "s/@HIP_INSTALLS_HIPCC@/ON/g" -i hipamd/hip-config.cmake.in || die
 
-	# skip installation of hipcc: installed via dev-util/hipcc
+	# hipcc is packaged separately.
 	sed -e "s/NOT \${HIPCC_BIN_DIR}/INSTALL_HIPCC AND NOT \${HIPCC_BIN_DIR}/" \
 		-i "hipamd/CMakeLists.txt" || die
 
@@ -145,7 +140,7 @@ src_prepare() {
 		local PATCHES=()
 		sed -e "s/-Werror //" -e "s/-Wall -Wextra //" -i "${TEST_S}/CMakeLists.txt" || die
 
-		# policy not supported by CMake 4.0; and not needed
+		# CMake 4 removed this unnecessary OLD policy.
 		sed -e '/cmake_policy(SET CMP0037 OLD)/d' -i "${TEST_S}/CMakeLists.txt" || die
 
 		sed -e "s:/opt/rocm/bin:${EPREFIX}/usr/bin:" \
@@ -156,18 +151,14 @@ src_prepare() {
 }
 
 src_configure() {
-	# -Werror=strict-aliasing
-	# https://bugs.gentoo.org/858383
-	# https://github.com/ROCm/clr/issues/64
-	#
-	# Do not trust it for LTO either
+	# Work around -Werror=strict-aliasing (Gentoo bug 858383; ROCm/clr#64);
+	# this code is also unsafe under LTO.
 	append-flags -fno-strict-aliasing
 	filter-lto
 
 	use debug && CMAKE_BUILD_TYPE="Debug"
 
-	# Fix ld.lld linker error: https://github.com/ROCm/HIP/issues/3382
-	# See also: https://github.com/gentoo/gentoo/pull/29097
+	# Work around ROCm/HIP#3382; see gentoo/gentoo#29097.
 	append-ldflags $(test-flags-CCLD -Wl,--undefined-version)
 
 	local mycmakeargs=(
@@ -191,9 +182,8 @@ src_configure() {
 			-DHIP_PLATFORM="amd"
 			-DOpenGL_GL_PREFERENCE="GLVND"
 			-DUSE_PROF_API=OFF
-			# clr 7.2.3 dropped its find_package(NUMA), so cmake silently
-			# ignores these; kept aligned with ::gentoo in case upstream
-			# restores NUMA detection — verified inert 2026-05-08.
+			# Inert since clr 7.2.3 dropped NUMA detection; retain for its return.
+			# verified 2026-05-08
 			-DCMAKE_DISABLE_FIND_PACKAGE_NUMA="$(usex !numa)"
 			-DCMAKE_REQUIRE_FIND_PACKAGE_NUMA="$(usex numa)"
 		)
@@ -213,8 +203,7 @@ src_configure() {
 			-DCMAKE_NO_SYSTEM_FROM_IMPORTED=ON
 			-Wno-dev
 
-			# 1) Use custom build of hipamd instead of system one
-			# 2) Build fails with libc++: https://github.com/llvm/llvm-project/issues/119076
+			# Test against the built hipamd; libc++ fails (llvm-project#119076).
 			-DCMAKE_CXX_FLAGS="-I${BUILD_DIR}/hipamd/include -stdlib=libstdc++"
 			-DCMAKE_EXE_LINKER_FLAGS="-L${BUILD_DIR}/hipamd/lib"
 		)
