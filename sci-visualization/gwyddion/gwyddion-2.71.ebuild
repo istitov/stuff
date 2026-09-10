@@ -14,15 +14,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="bzip2 doc fits jansson hdf5 nls openexr openmp perl python ruby sourceview unique xml X zlib"
 
-# --enable-pygwy is Python 2.7 only (upstream requirement). pygwy's
-# C bindings need the python gobject/gtk/gtk.gdk modules at runtime;
-# the bundled modules/pygwy/pygtk-embed only ships build-time headers
-# and codegen, not the runtime CPython bindings, so system pygtk:2
-# (which pulls pygobject:2 and pycairo-python2) is required for a
-# working 'import gwy'.
-# Keep GtkSourceView 2 for the optional Pygwy console: it embeds a
-# GtkSourceView widget in this GTK 2 application. GtkSourceView 3 uses
-# GTK 3 types and cannot be substituted without porting the application.
+# pygwy is Python 2-only and its bundled pygtk-embed lacks runtime bindings;
+# require system pygtk:2. Its GTK 2 console cannot use GtkSourceView 3.
 RDEPEND="
 	>=dev-libs/glib-2.32
 	dev-libs/libzip
@@ -67,10 +60,9 @@ src_prepare() {
 	eautoreconf
 }
 
-# 3D OpenGL rendering is not built: it requires deprecated GTK-2
-# x11-libs/gtkglext, which has been removed from ::gentoo.
+# Disable 3D rendering; its GTK 2 gtkglext dependency is gone from ::gentoo.
 src_configure() {
-	# hack for bug 741840
+	# Locate gtk-doc data (Gentoo bug 741840).
 	use doc && export GTK_DOC_PATH=/usr/share/gtk-doc
 
 	econf \
