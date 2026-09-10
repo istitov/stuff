@@ -12,8 +12,7 @@ inherit distutils-r1
 DESCRIPTION="Framework for evaluating autoregressive code generation language models"
 HOMEPAGE="https://github.com/bigcode-project/bigcode-evaluation-harness"
 
-# upstream has not tagged a release since v0.1.0 (2024-04-20); the project is
-# alive but slow-moving. Pin to main HEAD as of 2025-07-15.
+# No release since 0.1.0; pin main as of 2025-07-15.
 EGIT_COMMIT="8fc5bae6479c4fbbb28c3f8b644f6a15b3f3b5bd"
 SRC_URI="https://github.com/bigcode-project/bigcode-evaluation-harness/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/bigcode-evaluation-harness-${EGIT_COMMIT}"
@@ -22,10 +21,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Core deps from requirements.txt at HEAD; pyext dropped in src_prepare.
-#
-# single-impl: the entire sci-ml/* stack here is SINGLE_IMPL; only the two
-# dev-python/* helpers are multi-impl, wrapped via python_gen_cond_dep.
+# Snapshot requirements, except pyext removed below.
 RDEPEND="
 	>=sci-ml/accelerate-0.13.2[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/datasets-2.6.1[${PYTHON_SINGLE_USEDEP}]
@@ -40,16 +36,13 @@ RDEPEND="
 "
 
 src_prepare() {
-	# pyext is in requirements.txt but never statically imported (only the
-	# ds1000 adapter pulls it at runtime via dynamic code generation); it would
-	# also fail to install on Py3.11+ (uses inspect.getargspec at import time),
-	# so drop it. The `mosestokenizer==1.0.0` pin is wishful — upstream CI uses
-	# 1.2.x, and the API surface bigcode touches is unchanged.
+	# pyext is only dynamically used by ds1000 and fails on Python 3.11+.
+	# Upstream CI uses mosestokenizer 1.2 with a compatible API.
 	sed -i \
 		-e '/^pyext\b/d' \
 		-e 's/^mosestokenizer==.*/mosestokenizer/' \
 		requirements.txt || die
-	# Upstream omits the version, which makes setuptools generate 0.0.0.
+	# Supply the snapshot version; upstream defaults to 0.0.0.
 	sed -i '/^setup(/a\\    version="0.dev20250715",' setup.py || die
 	distutils-r1_src_prepare
 }
@@ -57,9 +50,7 @@ src_prepare() {
 python_install_all() {
 	distutils-r1_python_install_all
 
-	# Ship the top-level driver script + a thin /usr/bin wrapper. Upstream
-	# expects users to clone-and-run; we mirror that by installing main.py
-	# under /usr/share/ and exposing it as `bigcode-eval`.
+	# Install upstream's clone-and-run driver under /usr/share with a wrapper.
 	insinto /usr/share/bigcode-evaluation-harness
 	doins main.py
 
