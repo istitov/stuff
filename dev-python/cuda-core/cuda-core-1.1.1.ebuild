@@ -18,9 +18,7 @@ HOMEPAGE="
 	https://pypi.org/project/cuda-core/
 "
 
-# NVIDIA's cuda-python is a monorepo; cuda-core tags use the
-# "cuda-core-v<PV>" prefix form (matches cuda-pathfinder; cuda-bindings
-# uses bare v<PV>). Verified 2026-05-30 against 1.0.1.
+# cuda-core uses cuda-core-v* monorepo tags, unlike cuda-bindings' v* tags.
 SRC_URI="
 	https://github.com/NVIDIA/cuda-python/archive/refs/tags/${MY_TAG}.tar.gz
 		-> ${P}.gh.tar.gz
@@ -31,14 +29,9 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# build_hooks.py reads cuda.h from /opt/cuda/include via cuda.pathfinder
-# and generates Cython sources at build time. Cython is pinned to 3.2.x
-# by upstream's build-system requires; ::gentoo's cython-3.2.4 matches.
-# cuda-bindings is needed at build time too — cuda-core's .pyx files
-# do `from cuda.bindings cimport cydriver`, which requires the
-# installed package's .pxd headers. Upstream pyproject.toml declares
-# cuda-bindings only under the cu12/cu13 runtime extras, but the build
-# can't proceed without it.
+# build_hooks.py reads cuda.h and generates Cython sources with upstream's
+# pinned 3.2.x series. The .pyx files cimport cuda-bindings headers, making its
+# nominally runtime-extra package a build dependency too.
 RDEPEND="
 	>=dev-python/cuda-pathfinder-1.4.2[${PYTHON_USEDEP}]
 	dev-python/cuda-bindings[${PYTHON_USEDEP}]
@@ -55,17 +48,10 @@ BDEPEND="
 	>=dev-python/setuptools-80[${PYTHON_USEDEP}]
 "
 
-# CUDA_HOME drives build_hooks.py's _get_cuda_path; without it the
-# header parser raises RuntimeError. dev-util/nvidia-cuda-toolkit
-# installs to /opt/cuda on this overlay's amd64 profile.
+# build_hooks.py needs CUDA_HOME to locate cuda.h; the toolkit uses /opt/cuda.
 export CUDA_HOME=/opt/cuda
 
-# setuptools_scm is configured with root=".." pointing at the
-# cuda-python monorepo root; the GitHub archive has no .git so the
-# dynamic version would fail. SETUPTOOLS_SCM_PRETEND_VERSION_FOR_* is
-# used verbatim and bypasses tag_regex, so it must be the LITERAL
-# version, not the "v"-prefixed tag form. packaging.version normalises
-# "v1.0.1" away in the dist metadata, but the raw string still leaks
-# into cuda.core.__version__, which breaks consumers that parse it (the
-# same class of bug fixed in cuda-bindings). verified 2026-06-10
+# The archive lacks .git, while setuptools-scm searches the monorepo root.
+# Its override bypasses tag_regex and leaks verbatim into __version__, so use
+# the literal version rather than the v-prefixed tag. # verified 2026-06-10
 export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_CUDA_CORE="${PV}"
