@@ -8,11 +8,8 @@ inherit cmake-multilib
 DESCRIPTION="Open h.265 video codec implementation"
 HOMEPAGE="https://github.com/strukturag/libde265"
 
-# Upstream commit 8b305cb ('remove en265 and dev-tools from distribution
-# tarball') strips enc265/ and dev-tools/ from the release tarball. The
-# live (git) ebuild fetches the full tree and can therefore expose
-# USE=enc265 and USE=tools; the release ebuild's IUSE is the narrower
-# buildable subset. Verified 2026-05-26 against v1.1.0.
+# Release tarballs omit enc265/ and dev-tools/ since commit 8b305cb; only the
+# live ebuild can expose their USE flags. verified 2026-05-26
 if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/strukturag/${PN}.git"
 	inherit git-r3
@@ -35,8 +32,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 multilib_src_configure() {
-	# sherlock265 (Qt visual inspector) needs media-libs/libvideogfx (not
-	# in ::gentoo) or media-libs/libswscale; force-disabled.
+	# Disable sherlock265; neither supported graphics dependency is packaged.
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=ON
 		-DENABLE_SIMD=ON
