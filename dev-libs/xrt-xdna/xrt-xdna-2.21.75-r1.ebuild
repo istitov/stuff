@@ -30,8 +30,7 @@ else
 	submodules["xrt/src/runtime_src/core/common/aiebu"]=https://github.com/Xilinx/aiebu.git@9065273e0c0a4ac5930fff904ac245cf38dd3087
 	submodules["xrt/src/runtime_src/core/common/elf"]=https://github.com/serge1/ELFIO.git@f849001fc229c2598f8557e0df22866af194ef98
 
-	# Same upstream archive as dev-libs/xdna-driver; share the distfile name
-	# to avoid a MatchingChksums hit and let users hardlink/dedup distdir.
+	# Reuse xdna-driver's distfile name to avoid duplicate checksums and storage.
 	SRC_URI="
 		https://github.com/amd/xdna-driver/archive/refs/tags/${PV}.tar.gz -> xdna-driver-${PV}.tar.gz
 		https://github.com/Xilinx/VTD/raw/${VTD_HASH}/archive/strx/xrt_smi_strx.a -> xrt_smi_strx-${VTD_HASH:0:8}.a
@@ -59,7 +58,6 @@ RDEPEND="
 	sys-apps/util-linux
 "
 
-# Mostly thowaway dependencies, not actually used in final lib...
 DEPEND="
 	sys-apps/util-linux
 	dev-debug/systemtap
@@ -123,7 +121,6 @@ src_unpack() {
 			ln -s "${WORKDIR}/${url_prefix##*/}-${commit_hash}" "$k" || die
 		done
 
-		# Sanity check for new versions
 		local actual_vtd_hash=$(grep -oP 'VTD/raw/\K[0-9a-f]+' tools/info.json | head -n1)
 		[[ "${actual_vtd_hash}" == "" ]] && die "Failed to extract VTD hash"
 		[[ "${actual_vtd_hash}" != "${VTD_HASH}" ]] && \
@@ -164,6 +161,6 @@ src_install() {
 	insinto /usr/share/xrt/amdxdna/bins
 	doins amdxdna_bins/vtd_archives/*
 
-	# belongs to dev-util/xrt
+	# Owned by dev-util/xrt.
 	rm -rf "${ED}/bins" || die
 }
