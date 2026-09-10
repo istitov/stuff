@@ -13,16 +13,12 @@ HOMEPAGE="
 	https://github.com/wasi-master/rich-rst
 	https://pypi.org/project/rich-rst/
 "
-# Upstream's 2.0.x PyPI sdist omits tests/conftest.py (fixture
-# definitions) plus tests/test_sphinx_{directives,roles}.py and
-# tests/test_tables.py — MANIFEST.in misses them.  Pull the github
-# archive instead so the bundled-in-repo test suite runs.
+# PyPI omits test helpers and modules required for collection; use the GitHub
+# archive so the full test suite runs.
 SRC_URI="https://github.com/wasi-master/rich-rst/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 S="${WORKDIR}/${PN}-${PV}"
 
-# Bundled docutils subset (BSD-2 + public-domain) in rich_rst/_vendor/;
-# upstream vendored to remove GPL code from the dep tree.  See
-# rich_rst/_vendor/LICENSES.txt + VENDORED.md for the full rationale.
+# The vendored docutils subset is BSD-2/public-domain and excludes GPL code.
 LICENSE="MIT BSD-2 public-domain"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
