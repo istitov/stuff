@@ -33,6 +33,11 @@ src_prepare() {
 	# setuptools_scm-driven dynamic version resolution can't run. Rewrite
 	# pyproject.toml to use a static version and write the _version.py
 	# stub that setuptools_scm would otherwise generate.
+	grep -qF 'name = "cuda-pathfinder"' pyproject.toml || die "project name anchor moved"
+	grep -qF 'dynamic = ["version", "readme"]' pyproject.toml ||
+		die "dynamic version anchor moved"
+	grep -qF '[tool.setuptools_scm]' pyproject.toml ||
+		die "setuptools_scm section moved"
 	sed -i \
 		-e '/setuptools_scm/d' \
 		-e 's/dynamic = \["version", "readme"\]/dynamic = ["readme"]/' \
