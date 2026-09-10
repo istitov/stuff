@@ -28,9 +28,7 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
-	# The JS/TypeScript lab extension is built separately (in a separate
-	# ipympl-jupyterlab package). Strip the hatch jupyter-builder hook so
-	# the Python wheel does not try to `jlpm install` from npm at build time.
+	# The separate lab-extension package handles npm; remove its Hatch hook.
 	grep -qF '[tool.hatch.build.hooks.jupyter-builder]' pyproject.toml ||
 		die "jupyter-builder anchor moved"
 	sed -i '/^\[tool\.hatch\.build\.hooks\.jupyter-builder/,/^\[/{/^\[tool\.hatch\.build\.hooks\.jupyter-builder/d;/^\[/!d}' \
