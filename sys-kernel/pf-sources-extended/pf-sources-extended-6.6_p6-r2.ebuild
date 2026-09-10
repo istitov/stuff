@@ -5,20 +5,16 @@ EAPI=8
 
 ETYPE="sources"
 
-# Curated pf delta sets EXTRAVERSION via the patch itself.
+# The curated delta sets EXTRAVERSION.
 K_NOSETEXTRAVERSION="1"
 
-# K_SECURITY_UNSUPPORTED is set because the curated pf delta is not
-# covered by Gentoo's security
-# team — bugs in the pf-specific portions (BBRv3, x86 ISA generic-v2/v3/v4
-# levels, zstd bump, v4l2loopback, DDCCI) need to be reported to natalenko
-# or the overlay maintainers.
+# Gentoo security does not cover the curated pf delta; report its bugs upstream
+# or to overlay maintainers.
 K_SECURITY_UNSUPPORTED="1"
 
-# Map "6.6_p6" → "6.6" for the kernel.org tarball + bundle names.
 SHPV="${PV/_p*/}"
 
-# Pretend version visible in /lib/modules and /usr/src.
+# Preserve -pf identity in module and source directory names.
 PFPV="${PV/_p/-pf}"
 
 inherit kernel-2 optfeature
@@ -27,15 +23,9 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Vanilla 6.6 from kernel.org + a pinned snapshot of Gentoo's genpatches
-# (genpatches-6.6-158 base + extras: the linux-stable backport chain plus
-# the Gentoo Kconfig additions) + our curated pf delta. 6.6-158 has aged
-# out of every Gentoo genpatches host, so it is repackaged as
-# pf-genpatches-6.6.tar.xz on the sister overlay extra-stuff
-# (https://github.com/istitov/extra-stuff), pinned by immutable tag -r70-1
-# (refresh = new tag suffix), exactly like the other pf-sources-extended
-# slots. The codeberg pf-kernel tarball is intentionally not fetched — its
-# content is replaced by the much smaller curated patch. verified 2026-08-16.
+# Gentoo's genpatches-6.6-158 has aged off official hosts; use an immutable
+# extra-stuff snapshot of its stable chain and extras. A smaller curated delta
+# replaces the full pf-kernel archive. # verified 2026-08-16
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
@@ -62,31 +52,22 @@ pkg_setup() {
 }
 
 src_unpack() {
-	# Vanilla kernel.org tarball unpacks to linux-${SHPV} directly; no
-	# rename needed.
 	unpack ${A}
 }
 
 src_prepare() {
-	# Apply the genpatches base+extras snapshot: the linux-stable backport
-	# chain (1000_linux-${SHPV}.1.patch through 1NNN_linux-${SHPV}.X.patch)
-	# plus the extras (Gentoo Kconfig, firmware-info). Filename order is
-	# apply order.
+	# Apply the stable chain and Gentoo extras in filename order.
 	eapply "${WORKDIR}/pf-genpatches-${SHPV}"/*.patch
 
-	# Curated pf-kernel delta on top of gentoo-sources state, as a
-	# numbered series of per-feature patches re-cut from natalenko's
-	# pf-kernel branches (codeberg.org/pf-kernel/linux). Filename order
-	# is apply order; each patch's header explains which natalenko
-	# branch + tip SHA it was derived from. See pkg_postinst for the
-	# kept/dropped breakdown.
+	# Apply the curated pf series in filename order; patch headers record
+	# provenance and pkg_postinst summarizes its scope.
 	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
 }
 
 pkg_postinst() {
-	# Fixes "wrongly" detected directory name, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postinst
 
@@ -112,7 +93,7 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	# Same here, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postrm
 }
