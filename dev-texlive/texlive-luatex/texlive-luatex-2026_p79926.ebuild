@@ -288,8 +288,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	semesterplannerlua.source.r71322
 	texfindpkg.source.r72937
 "
-# Removed in target tlpdb: cloze.source
-
 inherit prefix texlive-module
 
 DESCRIPTION="TeXLive LuaTeX packages"
@@ -316,6 +314,6 @@ TEXLIVE_MODULE_BINSCRIPTS="
 
 src_prepare() {
 	default
-	# https://bugs.gentoo.org/865203
+	# Prefix luaotfload paths; https://bugs.gentoo.org/865203
 	hprefixify texmf-dist/tex/luatex/luaotfload/luaotfload-database.lua
 }
