@@ -11,10 +11,8 @@ inherit cmake edo flag-o-matic python-any-r1 toolchain-funcs rocm
 DESCRIPTION="Basic Linear Algebra Subroutines for sparse computation"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocsparse"
 
-# ROCm/rocSPARSE was FOLDED INTO the rocm-libraries monorepo for 10.0: the
-# standalone repo has no therock-* tags at all (it stops at rocm-7.2.4), so the
-# git-archive form is gone and S= follows the release asset's own root.
-# verified 2026-08-30.
+# ROCm 10 ships rocSPARSE from rocm-libraries release assets, not standalone
+# repository tags. verified 2026-08-30
 MY_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)"
 SRC_URI="${MY_URI}/rocsparse.tar.gz -> rocsparse-${PV}.tar.gz
 test? (
@@ -75,22 +73,12 @@ python_check_deps() {
 }
 
 src_prepare() {
-	# The find_package(rocblas 4.1.0 QUIET) -> REQUIRED sed is GONE at 10.0:
-	# https://github.com/ROCm/rocm-libraries/issues/2074 is fixed upstream.
-	# CMakeLists.txt now calls find_package(rocblas REQUIRED) under
-	# if(BUILD_WITH_ROCBLAS) and checks the version separately against
-	# MIN_ROCBLAS_VERSION, which is what the sed was emulating. Carrying it
-	# forward would have been a silent no-op -- sed exits 0 on no-match.
-	# verified 2026-08-30.
-
 	cmake_src_prepare
 
-	# Test need download data from https://sparse-files.engr.tamu.edu (or other mirror site), check MD5,
-	# unpack and convert them into csr format
-	# This process is handled default by ${S}/cmake/ClientMatrices.cmake, but should be the responsibility of portage.
+	# Let Portage fetch test matrices, then convert them locally to CSR.
 	if use test; then
 		mkdir -p "${BUILD_DIR}"/clients/matrices
-		# compile and use the mtx2csr converter. Do not use any optimization flags, because it causes error!
+		# Optimization flags break the mtx2csr converter build.
 		edo $(tc-getCXX) deps/convert.cpp -o deps/convert
 		find "${WORKDIR}" -maxdepth 2 -regextype egrep -regex ".*/(.*)/\1\.mtx" -print0 |
 			while IFS= read -r -d '' mtxfile; do
@@ -105,7 +93,7 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# tons of warnings in tests
+	# Silence known test-source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
 	local mycmakeargs=(
