@@ -20,13 +20,11 @@ BDEPEND="
 	>=dev-python/uv-dynamic-versioning-0.7.0[${PYTHON_USEDEP}]
 "
 
-# The sdist lacks the monorepo version helper referenced by pyproject.toml, so
-# the patch redirects hatchling at uv-dynamic-versioning and the bypass below
-# supplies the value. Version-independent on purpose -- the older ${P}-named
-# patch hardcoded the version and needed rewriting every bump.
+# The version-independent patch replaces the absent monorepo version helper
+# with uv-dynamic-versioning; the bypass supplies ${PV}.
 PATCHES=( "${FILESDIR}/${PN}-static-version.patch" )
 
 export UV_DYNAMIC_VERSIONING_BYPASS=${PV}
 
-# The suite requires the separately published CLI and documentation tools.
+# Tests require the separately published CLI and documentation tools.
 RESTRICT="test"
