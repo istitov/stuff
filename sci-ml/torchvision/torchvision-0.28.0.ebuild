@@ -71,8 +71,8 @@ python_compile() {
 	  export FORCE_CUDA=1
 	fi
 
-	# ffmpeg USE + TORCHVISION_USE_FFMPEG/_VIDEO_CODEC dropped as dead knobs:
-	# neither 0.27.0 nor 0.28.0 setup.py reads them. # verified 2026-07-22
+	# setup.py no longer reads the legacy FFMPEG/VIDEO_CODEC knobs.
+	# verified 2026-09-10
 	export TORCHVISION_USE_PNG=$(usex png 1 0)
 	export TORCHVISION_USE_JPEG=$(usex jpeg 1 0)
 	export TORCHVISION_USE_WEBP=$(usex webp 1 0)
@@ -85,21 +85,20 @@ python_compile() {
 }
 
 python_test() {
-	# import the installed torchvision (compiled ops), not the source checkout
+	# Import the installed compiled extension, not the source tree.
 	rm -rf torchvision || die
 	local EPYTEST_DESELECT=(
-		# network: pull pretrained weights / dataset URLs (sandbox is offline)
+		# Require pretrained weights or remote datasets.
 		test/test_extended_models.py::TestHandleLegacyInterface::test_pretrained_pos
 		test/test_extended_models.py::TestHandleLegacyInterface::test_equivalent_behavior_weights
 		test/test_extended_models.py::test_get_model[lraspp_mobilenet_v3_large-LRASPP]
 		test/test_internet.py::TestDatasetUtils::test_download_url_dispatch_download_from_google_drive[True]
 		test/test_internet.py::TestDatasetUtils::test_download_url_dispatch_download_from_google_drive[False]
-		# earth.gif (git-LFS) is absent from the archive tarball, so only [*-earth]
-		# fail; ::gentoo's bare test_decode_gif was over-broad. # verified 2026-07-22
+		# earth.gif is absent from the archive; deselect only its parameters.
+		# verified 2026-07-22
 		test/test_image.py::test_decode_gif[True-earth]
 		test/test_image.py::test_decode_gif[False-earth]
 	)
-	# NB: ::gentoo's bbox_correctness[*-XYWHR] deselects pass in 0.28.0, dropped.
-	# verified 2026-07-22
+	# ::gentoo's deselected XYWHR cases pass here. verified 2026-07-22
 	epytest
 }
