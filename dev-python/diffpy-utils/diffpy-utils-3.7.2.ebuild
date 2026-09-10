@@ -28,6 +28,8 @@ RDEPEND="
 
 src_prepare() {
 	# sdist has no git info; pin dynamic version to PV.
+	grep -qE '^dynamic[[:space:]]*=' pyproject.toml || die "dynamic anchor moved"
+	grep -qF '[project]' pyproject.toml || die "project anchor moved"
 	sed -i -e "/^dynamic\s*=/d" \
 		-e "/^\[project\]$/a version = \"${PV}\"" \
 		pyproject.toml || die
