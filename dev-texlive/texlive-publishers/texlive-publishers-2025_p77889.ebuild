@@ -321,7 +321,6 @@ TEXLIVE_MODULE_CONTENTS="
 	rwth-ci.r77893
 	sysuthesis.r77677
 "
-# Removed in target tlpdb: afparticle
 TEXLIVE_MODULE_DOC_CONTENTS="
 	aastex.doc.r75970
 	abnt.doc.r55471
@@ -639,7 +638,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	rwth-ci.doc.r77893
 	sysuthesis.doc.r77677
 "
-# Removed in target tlpdb: afparticle.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	acmart.source.r76177
 	acmconf.source.r15878
@@ -804,7 +802,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	rwth-ci.source.r77893
 	sysuthesis.source.r77677
 "
-# Removed in target tlpdb: afparticle.source
 
 inherit texlive-module
 
