@@ -30,18 +30,9 @@ BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 "
 
-# cyclopts uses hatch-vcs to derive its version from git tags. PyPI
-# sdist tarballs ship a _version.py with the version baked in, but
-# hatch-vcs still re-introspects from git when the source tree looks
-# like one; pretend the version explicitly to keep the sandboxed
-# build off git.
+# Prevent hatch-vcs from re-introspecting Git despite the sdist's baked version.
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 
-# The PyPI sdist ships only the package: pyproject.toml sets
-# [tool.hatch.build.targets.sdist] include = ["/cyclopts"], so tests/ is not
-# in the tarball and pytest collects 0 items, which epytest treats as a
-# failure. distutils_enable_tests would therefore fail for anyone building
-# with USE=test -- it was latent only because the flag is off by default.
-# Testing would mean fetching the GitHub archive instead of the sdist.
-# verified 2026-09-08 against the 4.24.0, 4.25.0 and 4.25.1 sdists.
+# The sdist omits tests, so pytest collects nothing; testing requires the
+# GitHub archive. verified 2026-09-08
 RESTRICT="test"
