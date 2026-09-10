@@ -15,10 +15,8 @@ HOMEPAGE="
 	https://github.com/traveller59/spconv
 	https://pypi.org/project/spconv-cu126/
 "
-# Prebuilt manylinux CUDA-12.6 wheel. spconv is the sparse-conv backend that
-# matches the TRELLIS pretrained weights (they are spconv-format; torchsparse
-# uses incompatible weight naming/layout). spconv 2.x bundles its own CUDA
-# kernels and does not link libtorch, so it is torch-version-independent.
+# CUDA 12.6 wheel matching TRELLIS's spconv-format weights; torchsparse is
+# incompatible. Bundled kernels do not link libtorch, so no torch pin is needed.
 SRC_URI="
 	https://files.pythonhosted.org/packages/af/fd/c52d71468849d09b333123f9d0cac27b4a3815a8faecff21ebd66d9c7b45/${MY_PN}-${PV}-cp313-cp313-manylinux_2_28_x86_64.whl
 "
@@ -41,6 +39,9 @@ RDEPEND="
 		dev-python/numpy[${PYTHON_USEDEP}]
 	')
 "
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
 
 src_unpack() {
 	cp "${DISTDIR}/${A}" "${WORKDIR}/" || die
