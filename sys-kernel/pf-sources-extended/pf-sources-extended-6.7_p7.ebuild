@@ -3,24 +3,11 @@
 
 EAPI=8
 
-# 6.7 is a non-LTS kernel that reached end-of-life upstream (linux-stable
-# stopped at 6.7.12). The trunk-pinned patches captured here track stable
-# all the way to 6.7.12 — full coverage for this EOL branch.
-#
-# Per-branch judgment on 5xxx (genpatches "experimental" category):
-#   * 5010_enable-cpu-optimizations-universal: NOT included on this slot.
-#     Stable backport 1005_linux-6.7.6 modifies arch/x86/Kconfig.cpu (one
-#     small `MCRUSOE` removal), shifting line numbers enough that 5010's
-#     hunk #10 cannot relocate within fuzz tolerance. Rather than drop
-#     1005 (loses all 6.7.6 stable fixes) we drop 5010 and hand-promote
-#     pf's own arch/x86/Kconfig{,.cpu} into the curated subset — partition
-#     normally classifies them as both-touched (1005 also touches), but
-#     here we override that and let the curated diff turn gentoo's
-#     post-1005 state into pf's state. User sees pf-style ISA levels
-#     (MNATIVE/X86_64_ISA_LEVEL) plus pf's AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
-#     and AMD-pstate-friendly SCHED_MC_PRIO depend tweak.
-#   * 5020_BMQ-and-PDS-io-scheduler: NOT included. Out of scope for the
-#     "minimal pf identity on gentoo-sources" model.
+# EOL at 6.7.12; the bundled genpatches cover the complete stable branch.
+# Exclude experimental 5010 because stable patch 1005 changes Kconfig.cpu.
+# Keep 1005 and hand-promote pf's Kconfig pair, preserving its ISA levels,
+# AMD_MEM_ENCRYPT default, and AMD-pstate SCHED_MC_PRIO tweak. BMQ/PDS remains
+# outside this minimal pf-on-gentoo model.
 
 ETYPE="sources"
 
@@ -37,10 +24,8 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Per-slot snapshot of alicef's genpatches trunk (a live working dir),
-# bundled as pf-genpatches-${SHPV}.tar.xz on the sister overlay extra-stuff
-# (https://github.com/istitov/extra-stuff), pinned by immutable tag -r70-1
-# (refresh = new tag suffix). The bundle is the durable reference.
+# Immutable extra-stuff tag snapshots alicef's otherwise-live genpatches trunk;
+# refreshes use a new tag suffix.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
