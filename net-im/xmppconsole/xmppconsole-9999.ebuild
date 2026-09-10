@@ -36,6 +36,8 @@ src_prepare() {
 
 	# Readline's rl_command_func_t is int(*)(int, int); callbacks declared
 	# with () pass under old GCC / pre-C23 but not with GCC 15's default.
+	grep -qE '^static int ui_ncurses_(pageup|pagedown|up|down)_cb\(\)' \
+		src/ui_ncurses.c || die "Readline callback anchor moved"
 	sed -i -E \
 		-e 's/^(static int ui_ncurses_(pageup|pagedown|up|down)_cb)\(\)/\1(int count, int key)/' \
 		src/ui_ncurses.c || die
