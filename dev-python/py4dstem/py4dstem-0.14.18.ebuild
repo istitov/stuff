@@ -17,21 +17,12 @@ HOMEPAGE="
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-# Upstream's test fixtures are large datasets pulled from Google
-# Drive at test-time; not runnable at package build time.
+# Tests download large fixtures from Google Drive.
 RESTRICT="test"
 
-# 0.14.18's setup.py caps numpy<2, ncempy<=1.11.2 and scikit-learn<1.5.
-# distutils-r1 with PEP 517 uses pip --no-deps at install time, so
-# these caps don't block the build - but numpy 2 also tripped actual
-# API uses in three source files (np.string_ -> np.bytes_, etc.).
-# Carry upstream PR #712 to fix those (merged post-release on
-# 2025-03-17). scikit-learn-1.5+ was similarly unpinned upstream on
-# 2025-04-30 but has no accompanying source fixes, so runtime may
-# still hit the occasional sklearn-sensitive code path. The ncempy
-# upper bound is dropped here: 1.11.2 is no longer in the overlay and
-# current ncempy (1.13+) keeps the io.read() surface py4dstem actually
-# calls.
+# Carry upstream's post-release NumPy 2 fixes. Drop stale ncempy and
+# scikit-learn caps; ncempy 1.13 retains the used io.read API, while newer
+# scikit-learn remains a runtime compatibility risk.
 RDEPEND="
 	>=dev-python/colorspacious-1.1.2[${PYTHON_USEDEP}]
 	>=dev-python/dask-2.3.0[${PYTHON_USEDEP}]
