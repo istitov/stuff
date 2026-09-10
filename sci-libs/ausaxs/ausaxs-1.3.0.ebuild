@@ -20,11 +20,8 @@ SLOT="0/1.3"
 KEYWORDS="~amd64 ~arm64"
 IUSE="doc executables test"
 
-# The library API used here does not need dlib minimizers. Keeping DLIB off
-# also avoids upstream's unpackageable dlib FetchContent path.
-#
-# pyausaxs loads its bundled six-symbol libausaxs.so by absolute path, so it
-# does not collide with this system library's broader ABI.
+# Disable unused dlib minimizers and their unpackageable FetchContent path.
+# pyausaxs loads its distinct bundled ABI by absolute path, so it can coexist.
 RDEPEND="net-misc/curl:="
 DEPEND="
 	${RDEPEND}
@@ -40,7 +37,7 @@ BDEPEND="
 RESTRICT="!test? ( test )"
 
 src_prepare() {
-	# Use Gentoo's dynamic toolchain and user-selected optimization flags.
+	# Use the dynamic toolchain and user flags.
 	sed -i \
 		-e 's/-static-libgcc//g' \
 		-e 's/-static-libstdc++//g' \
@@ -56,7 +53,7 @@ src_prepare() {
 		-e 's/"-Os /"/' \
 		tests/CMakeLists.txt || die
 
-	# The helpers are embedded in the binaries; avoid their parallel copy race.
+	# Embedded helpers need no racy parallel copies.
 	sed -i '/^add_plot_scripts_to_target(/d' \
 		executable/CMakeLists.txt || die
 
