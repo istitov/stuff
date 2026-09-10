@@ -63,7 +63,6 @@ TEXLIVE_MODULE_CONTENTS="
 	hyphen-vietnamese.r74032
 	tuzuk.r74620
 "
-# Removed in target tlpdb: padauk
 TEXLIVE_MODULE_DOC_CONTENTS="
 	aalok.doc.r76924
 	akshar.doc.r76924
@@ -116,7 +115,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xetex-devanagari.doc.r34296
 	tuzuk.doc.r74620
 "
-# Removed in target tlpdb: padauk.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	aalok.source.r76924
 	akshar.source.r76924
