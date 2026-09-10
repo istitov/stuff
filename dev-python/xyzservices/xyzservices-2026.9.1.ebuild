@@ -22,18 +22,14 @@ BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 
-# test_providers.py imports mercantile at module scope, and mercantile is
-# packaged neither in ::gentoo nor here -- the ImportError aborts collection for
-# the whole suite, so nothing ran at all before this. Ignoring that one file lets
-# test_lib.py run offline. Little is lost: 10 of the 11 tests in
-# test_providers.py carry the `request` marker and fetch tiles from live
-# servers, which the network sandbox blocks anyway. verified 2026-09-04.
+# Ignore test_providers.py: unpackaged mercantile aborts collection, and 10
+# of its 11 tests require live tile servers. verified 2026-09-04
 EPYTEST_IGNORE=( xyzservices/tests/test_providers.py )
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
-	# setuptools_scm needs the tag or SETUPTOOLS_SCM_PRETEND_VERSION
+	# Pin the version without Git metadata.
 	export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 	distutils-r1_src_prepare
 }
