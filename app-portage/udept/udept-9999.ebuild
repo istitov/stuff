@@ -32,8 +32,7 @@ DOCS=( ChangeLog README.md )
 
 src_prepare() {
 	default
-	# Live tree doesn't ship the release-tarball-generated autotools
-	# bootstrap (configure, Makefile.in, COPYING via automake --add-missing).
+	# Live checkouts omit the autotools files generated for release tarballs.
 	eautoreconf
 }
 
