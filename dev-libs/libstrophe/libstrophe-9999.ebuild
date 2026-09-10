@@ -37,7 +37,7 @@ src_prepare() {
 }
 
 src_configure() {
-	# bug #944913
+	# GCC 15 compatibility (bug #944913).
 	append-cflags -std=gnu17
 	local myeconf=(
 		--enable-tls
