@@ -11,8 +11,6 @@ inherit distutils-r1 pypi
 DESCRIPTION="Hatchling plugin to read project dependencies from requirements.txt"
 HOMEPAGE="https://github.com/repo-helper/hatch-requirements-txt"
 SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
-#S=${WORKDIR}/${P^}
-
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
