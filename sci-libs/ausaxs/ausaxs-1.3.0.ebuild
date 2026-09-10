@@ -51,6 +51,10 @@ src_prepare() {
 		-e '/^[[:space:]]*-pipe$/d' \
 		-e '/list(APPEND CompilerFlags ${MARCH_FLAG})/d' \
 		cmake/setup_compile_commands.cmake || die
+	sed -i \
+		-e '/^set(CMAKE_CXX_FLAGS "")/d' \
+		-e 's/"-Os /"/' \
+		tests/CMakeLists.txt || die
 
 	# The helpers are embedded in the binaries; avoid their parallel copy race.
 	sed -i '/^add_plot_scripts_to_target(/d' \
