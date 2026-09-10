@@ -11,9 +11,8 @@ inherit distutils-r1 cuda
 
 DESCRIPTION="Voxel <-> space-filling-curve (Morton/Hilbert) sequence CUDA ops for TRELLIS"
 HOMEPAGE="https://github.com/microsoft/TRELLIS"
-# A TRELLIS-local extension (extensions/vox2seq) that upstream later removed from
-# the repo; sourced from the if-ai/ComfyUI-IF_Trellis bundle and vendored on
-# the istitov/extra-stuff distfile repo. MIT (TRELLIS).
+# TRELLIS removed this local extension; use the copy vendored from
+# ComfyUI-IF_Trellis in extra-stuff.
 SRC_URI="https://raw.githubusercontent.com/istitov/extra-stuff/${P}-r0-0/dev-python/${PN}/${P}.tar.xz -> ${P}-r0-0.tar.xz"
 S="${WORKDIR}/${P}"
 
@@ -39,12 +38,8 @@ src_compile() {
 	local gccdir
 	gccdir=$(cuda_gccdir) || die
 	export CC="${gccdir}/gcc" CXX="${gccdir}/g++"
-	# Build only for the GPU(s) actually present. An explicit
-	# TORCH_CUDA_ARCH_LIST (e.g. from make.conf) always wins; otherwise
-	# probe the native compute capability with nvcc's device query
-	# (e.g. 86 -> 8.6) so each host compiles just what it can run. If no
-	# GPU is visible at build time (headless / binhost), leave it unset
-	# and let torch's cpp_extension fall back to its full arch list.
+	# Respect TORCH_CUDA_ARCH_LIST; otherwise target the visible GPU. With no
+	# GPU, let cpp_extension choose its fallback architecture list.
 	if [[ -z ${TORCH_CUDA_ARCH_LIST} ]]; then
 		cuda_add_sandbox -w
 		local native_cc
