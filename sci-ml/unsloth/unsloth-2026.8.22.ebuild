@@ -29,10 +29,9 @@ MY_TAG="v0.1.804-beta"
 SRC_URI="https://github.com/unslothai/unsloth/archive/refs/tags/${MY_TAG}.tar.gz -> unsloth-monorepo-${MY_TAG#v}.gh.tar.gz"
 S="${WORKDIR}/${PN}-${MY_TAG#v}"
 
-# Apache-2.0: the core library. USE=studio also builds/installs the studio
-# frontend (AGPL-3, studio/LICENSE.AGPL-3.0) and its bundled Figtree/Inter/
-# Space-Grotesk web fonts (OFL-1.1); the proprietary Hellix font is stripped.
-LICENSE="Apache-2.0 studio? ( AGPL-3 OFL-1.1 )"
+# The wheel always includes the Apache-2.0 core and AGPL-3 CLI/backend.
+# USE=studio also installs the OFL-1.1 web fonts; proprietary Hellix is stripped.
+LICENSE="Apache-2.0 AGPL-3 studio? ( OFL-1.1 )"
 SLOT="0"
 KEYWORDS="~amd64"
 # USE=studio enables the bundled Unsloth Studio web backend (studio/backend, a
