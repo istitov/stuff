@@ -20,9 +20,7 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 
-# Upstream 1.0.10 excludes dask 2025.12.*, 2026.1.0 and 2026.1.1 for an
-# incompatibility. The overlay doesn't carry any of those (we have
-# 2025.9.2 and 2026.3.0), so no explicit blocker is needed here.
+# Incompatible Dask 2025.12/2026.1 releases are absent from available repos.
 RDEPEND="
 	dev-python/ase[${PYTHON_USEDEP}]
 	>=dev-python/dask-2022.12.1[${PYTHON_USEDEP}]
