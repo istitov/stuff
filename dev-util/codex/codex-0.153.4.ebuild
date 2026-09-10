@@ -3,14 +3,14 @@
 
 EAPI=8
 
-# Use gentoo-zh-drafts' generated crate tarball: 1,218 CRATES entries exceed
-# pkgcheck's 300-entry limit and fail GentooCI. Audit its workflow at
+# Use gentoo-zh-drafts' crate tarball: 1,218 CRATES entries exceed pkgcheck's
+# 300-entry limit. Audit its workflow at
 # https://github.com/gentoo-zh-drafts/codex/blob/crate-dist/.github/workflows/crates.yml
 # Treat this third-party artifact as untrusted: its checksum files authenticate
-# packages but have empty file maps, while Manifest only pins received bytes.
-# Gate every bump on byte-for-byte crates.io verification:
+# packages but have empty file maps; Manifest pins only the received archive.
+# Verify every bump byte-for-byte against crates.io:
 #   tar xJf "${DISTDIR}"/codex-rust-v${PV}-crates.tar.xz -C /tmp/cx
-#   ~/Public/stuff-claude/bin/verify-crate-tarball.py \
+#   ../bin/verify-crate-tarball.py \
 #       <src>/codex-rs/Cargo.lock /tmp/cx/cargo_home/gentoo
 # 0.153.4: all 1,218 crates and the Cargo.lock set matched. GIT_CRATES and
 # RUSTY_V8_TAG=150.4.0 were re-derived from the lock/upstream script.
