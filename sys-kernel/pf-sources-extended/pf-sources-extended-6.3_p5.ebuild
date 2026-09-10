@@ -3,37 +3,24 @@
 
 EAPI=8
 
-# 6.3 is a non-LTS kernel that reached end-of-life upstream (linux-stable
-# stopped at 6.3.13). genpatches' last bundle for this branch (-12) tracks
-# stable through 6.3.9. ::gentoo no longer ships gentoo-sources-6.3.X,
-# but alicef's release tarballs remain available on dev.gentoo.org, which
-# is what this ebuild fetches.
+# EOL 6.3 ended at 6.3.13; the last available genpatches covers only 6.3.9.
 
 ETYPE="sources"
 
-# Last genpatches release for the 6.3 branch; tracks linux-stable through
-# 6.3.9 (linux-stable itself ended at 6.3.13, so users on this slot are
-# missing the final four stable releases — this is the upper bound of
-# what's available without hand-cherry-picking from linux-stable).
 K_GENPATCHES_VER="12"
 
-# Curated pf delta sets EXTRAVERSION via the patch itself.
+# The curated delta sets EXTRAVERSION.
 K_NOSETEXTRAVERSION="1"
 
-# K_SECURITY_UNSUPPORTED is set because the curated pf delta is not
-# covered by Gentoo's security
-# team — bugs in the pf-specific portions (BBRv3, x86 ISA levels, zstd
-# bump, DDCCI driver, syscall.tbl additions) need to be reported to
-# natalenko or the overlay maintainers. Note that 6.3 itself is EOL
-# upstream, so no further linux-stable backports will arrive.
+# Gentoo security does not cover the curated pf delta; report its bugs upstream
+# or to overlay maintainers. This EOL branch receives no stable backports.
 K_SECURITY_UNSUPPORTED="1"
 
 K_WANT_GENPATCHES="base extras"
 
-# Map "6.3_p5" → "6.3" for the kernel.org tarball + genpatches.
 SHPV="${PV/_p*/}"
 
-# Pretend version visible in /lib/modules and /usr/src.
+# Preserve -pf identity in module and source directory names.
 PFPV="${PV/_p/-pf}"
 
 inherit kernel-2 optfeature
@@ -42,10 +29,7 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Vanilla 6.3 from kernel.org + Gentoo's genpatches (stable + non-stable)
-# + our curated pf delta. The codeberg pf-kernel tarball is intentionally
-# not fetched — its content is replaced by the much smaller curated
-# patch in files/.
+# Build vanilla Linux with Gentoo genpatches and a smaller curated pf delta.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
@@ -71,27 +55,21 @@ pkg_setup() {
 }
 
 src_unpack() {
-	# Vanilla kernel.org tarball unpacks to linux-${SHPV} directly; no
-	# rename needed.
 	unpack ${A}
 }
 
 src_prepare() {
-	# Apply genpatches stack. Unlike pf-sources -r1, we DO NOT delete
-	# `1*linux*.patch` — the linux-stable backport chain
-	# (1000_linux-${SHPV}.1.patch through 1008_linux-${SHPV}.9.patch)
-	# is the entire point of this revision.
+	# Keep the 1* linux-stable chain that pf-sources drops.
 	eapply "${WORKDIR}"/*.patch
 
-	# Curated pf-kernel delta on top of gentoo-sources state.
-	# See pkg_postinst for the kept/dropped breakdown.
+	# Apply the curated pf delta; pkg_postinst summarizes its scope.
 	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
 }
 
 pkg_postinst() {
-	# Fixes "wrongly" detected directory name, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postinst
 
@@ -116,7 +94,7 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	# Same here, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postrm
 }
