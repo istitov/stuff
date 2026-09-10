@@ -44,8 +44,7 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
-	# sdist has no git info; pin dynamic version to PV so the dist-info
-	# directory is named correctly instead of bokeh-0.0.0.
+	# Pin the version in the VCS-less sdist.
 	grep -qF 'dynamic = ' pyproject.toml || die "dynamic anchor moved"
 	grep -qF '[project]' pyproject.toml || die "project anchor moved"
 	grep -qF '[tool.setuptools-git-versioning]' pyproject.toml ||
@@ -58,7 +57,7 @@ src_prepare() {
 }
 
 python_test() {
-	# disable tests having network calls
+	# Skip network-dependent tests.
 	local SKIP_TESTS=" \
 		not (test___init__ and TestWarnings and test_filters) and \
 		not (test_json__subcommands and test_no_script) and \
