@@ -48,6 +48,7 @@ KEYWORDS="-* ~amd64 ~arm64"
 RESTRICT="bindist mirror strip"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/kornia_rs/*"
+BDEPEND="dev-python/installer[${PYTHON_USEDEP}]"
 
 src_unpack() {
 	# distutils-r1 (PEP517=no) would try to build from the wheel; stash the
