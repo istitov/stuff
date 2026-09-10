@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="An implementation of chunked, compressed, N-dimensional arrays for Python"
 HOMEPAGE="https://github.com/zarr-developers/zarr-python"
-#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="GPL-3"
