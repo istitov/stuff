@@ -18,11 +18,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# PyPI sdist used (github max v0.4.1; PyPI 1.0.0 lives only in PyPI).
-# spacy caps weasel<2.0.0,>=1.0.0 — only the PyPI 1.0.x line solves.
-# Accepted DeprecatedDep on dev-python/httpx — gentoo flagged the
-# package on 2026-04-01 (upstream stopped accepting bug reports);
-# weasel hard-depends on it, no workaround.
+# The 1.0 line exists only on PyPI and satisfies spaCy's >=1,<2 constraint.
+# httpx is deprecated in ::gentoo but remains mandatory upstream.
 RDEPEND="
 	${PYTHON_DEPS}
 	>=dev-python/cloudpathlib-0.7.0[${PYTHON_USEDEP}]
