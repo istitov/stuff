@@ -38,10 +38,8 @@ RDEPEND="${CDEPEND}
 BDEPEND="vulkan? ( media-libs/shaderc )"
 
 src_prepare() {
-	# 1.9.3's talk-llama example (built only under USE=sdl2) FetchContent-clones
-	# llama.cpp at configure time, which the network sandbox forbids. Drop the
-	# example -- it is a niche voice-chat demo; the other SDL2 examples
-	# (stream/command/lsp) are unaffected. verified 2026-08-24
+	# Drop talk-llama: it fetches llama.cpp during configure. Other SDL2 examples
+	# remain available. verified 2026-08-24
 	sed -i '/add_subdirectory(talk-llama)/d' examples/CMakeLists.txt || die
 	cmake_src_prepare
 }
@@ -61,15 +59,13 @@ src_configure() {
 		-DWHISPER_SDL2=$(usex sdl2)
 	)
 	if use cuda; then
-		# CUDA 13.x nvcc rejects gcc>15; pin host compiler when gcc-15 is present
-		# (verified 2026-05-14: gcc-16 active, CUDA 13.2)
+		# Pin GCC 15 when available; CUDA 13 rejects newer hosts.
+		# verified 2026-05-14 with CUDA 13.2 and active GCC 16
 		local g15=/usr/bin/x86_64-pc-linux-gnu-g++-15
 		[[ -x ${g15} ]] && mycmakeargs+=( -DCMAKE_CUDA_HOST_COMPILER="${g15}" )
 	fi
 	if use blas; then
-		# ggml-blas calls cblas_sgemm; without an explicit vendor, CMake's
-		# FindBLAS picks the Fortran-only libblas.so and the link dies on
-		# undefined cblas_sgemm. openblas (already a dep) ships cblas.
+		# Require OpenBLAS: generic FindBLAS may choose libblas without cblas_sgemm.
 		mycmakeargs+=( -DGGML_BLAS_VENDOR=OpenBLAS )
 	fi
 	cmake_src_configure
