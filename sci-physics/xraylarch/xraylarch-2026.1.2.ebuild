@@ -20,8 +20,7 @@ HOMEPAGE="
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-# Upstream tests are largely network-driven (AMCSD, MP API, XrayDB
-# remote queries) and expect the full lmfit/hyperspy/... fixtures.
+# Tests require remote scientific databases and the full optional fixture stack.
 RESTRICT="test"
 
 src_prepare() {
@@ -31,12 +30,8 @@ src_prepare() {
 	fi
 }
 
-# The wx stack (wxpython/wxmplot/wxutils/darkdetect) is needed at runtime
-# even for non-GUI use: larch/plot/__init__.py unconditionally imports
-# wxmplot_xafsplots, which imports larch.wxlib.plotter once wxpython is
-# detectable — and that does an unguarded `from wxmplot import ...`.
-# So gating on a wxgui USE flag would silently break `larch` whenever
-# wxpython is installed for any reason. Pull the whole stack always.
+# Always include the wx stack: plot imports become unguarded whenever wxpython
+# is detectable.
 RDEPEND="
 	>=dev-python/larixite-2025.5.1[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
