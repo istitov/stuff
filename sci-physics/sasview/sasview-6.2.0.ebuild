@@ -67,34 +67,21 @@ BDEPEND="
 	dev-python/pyside[${PYTHON_USEDEP},datavis(-),qml,quick,tools,webchannel,webengine]
 "
 
-# dev-python/xhtml2pdf is a soft upstream dep used for PDF report
-# export; it cascades into a large pyHanko dep tree. Skipped here —
-# SasView runs without it; only the PDF export feature breaks.
-#
-# 6.1.x pinned pyausaxs==1.0.4; 6.2.0 unpinned it. We now depend on the
-# real dev-python/pyausaxs (the AUSAXS C++ wrapper, unversioned) on amd64
-# so SasView's SANS Debye path runs the accelerated backend instead of the
-# pure-Python fallback. pyausaxs ships an x86-64-only prebuilt libausaxs.so;
-# other architectures use the fallback in ausaxs_sans_debye.py.
-# verified 2026-07-31
+# Omit soft xhtml2pdf: only PDF export needs its large pyHanko stack.
+# pyausaxs accelerates SANS Debye on amd64; its x86-64-only binary leaves other
+# architectures on SasView's Python fallback. # verified 2026-07-31
 
 src_prepare() {
-	# 6.2.0 ships pyproject.toml and build_tools/requirements.txt with CRLF
-	# line endings; the $-anchored table-header seds below assume LF (a
-	# trailing \r defeats the `]$` anchor and leaves the force-include in),
-	# so normalise both first. verified 2026-07-31
+	# Normalize CRLF so the following $-anchored table matches work.
+	# verified 2026-07-31
 	sed -i -e 's/\r$//' pyproject.toml build_tools/requirements.txt || die
 
-	# Drop all [[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
-	# array-of-tables blocks. The range ends at the next regular table
-	# header (`[foo]`, not `[[foo]]`) so consecutive sphinx entries are
-	# handled correctly.
+	# Stop at the next regular table, preserving consecutive array tables.
 	sed -i \
 		-e '/^\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/,/^\[[^[]/{/^\[[^[]/!d}' \
 		pyproject.toml || die
 
-	# Drop the force-include of a pre-built sas/docs/ tree; nothing
-	# produces it in this build path.
+	# Nothing in this build produces the force-included sas/docs tree.
 	sed -i \
 		-e '/^\[tool\.hatch\.build\.targets\.wheel\.force-include\]$/,/^\[/{/build\/doc\/html/d}' \
 		pyproject.toml || die
