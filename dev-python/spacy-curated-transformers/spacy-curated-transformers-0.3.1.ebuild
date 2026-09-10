@@ -19,10 +19,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Pinned to 0.3.x: this version-line uses curated-transformers 0.1.x
-# and curated-tokenizers 0.0.x and works with spacy 3.8 + thinc 8.3.
-# The 2.x line targets a different spacy major (4.x) with thinc 9.x —
-# incompatible with our 3.8.x stack.
+# The 0.3 line matches curated-transformers 0.1, curated-tokenizers 0.0,
+# spaCy 3.8, and thinc 8.3; 2.x requires spaCy 4 and thinc 9.
 RDEPEND="
 	${PYTHON_DEPS}
 	>=dev-python/curated-transformers-0.1.0[${PYTHON_SINGLE_USEDEP}]
