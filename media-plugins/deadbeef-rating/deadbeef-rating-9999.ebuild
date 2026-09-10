@@ -17,9 +17,7 @@ DEPEND="media-sound/deadbeef"
 RDEPEND="${DEPEND}"
 
 src_compile() {
-	# Upstream's \`build.sh\` insists on a --deadbeef-headers arg; do
-	# the gcc call directly instead.
-	# rating.c does #include <deadbeef.h>, so point at the SDK headers.
+	# Bypass build.sh and compile directly against the installed SDK headers.
 	$(tc-getCC) ${CFLAGS} ${CPPFLAGS} -I"${ESYSROOT}/usr/include/deadbeef" \
 		-Wall -fPIC -std=c99 -shared -o rating.so rating.c ${LDFLAGS} || die
 }
