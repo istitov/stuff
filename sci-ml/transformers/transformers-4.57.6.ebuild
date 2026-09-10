@@ -20,7 +20,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="torch"
-RESTRICT="test" # Need network, too long to execute
+# Tests require network access and are prohibitively slow.
+RESTRICT="test"
 
 RDEPEND="
 	>=sci-ml/huggingface_hub-0.34.0[${PYTHON_SINGLE_USEDEP}]
