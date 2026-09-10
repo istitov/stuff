@@ -8,9 +8,8 @@ inherit cmake
 MY_P="${PN}-v${PV}"
 DESCRIPTION="Header-only C++ vector/rotation primitives used by MLZ scientific software"
 HOMEPAGE="https://jugit.fz-juelich.de/mlz/lib/heinz"
-# jugit moved mlz/libheinz into the mlz/lib/ subgroup, regenerating the tag
-# archive: it now unpacks to heinz-v<ver>-<full-sha> (subgroup project name +
-# commit), so pin the tag commit for S=. verified 2026-08-10
+# The tag archive's root includes its full commit; pin it for S.
+# verified 2026-08-10
 COMMIT="92c1aea016a17f9657d2bb54fe38f301891b6be5"
 SRC_URI="https://jugit.fz-juelich.de/mlz/lib/heinz/-/archive/v${PV}/${MY_P}.tar.gz"
 S="${WORKDIR}/heinz-v${PV}-${COMMIT}"
@@ -20,18 +19,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 src_prepare() {
-	# install(FILES ... DESTINATION cmake) → ${CMAKE_INSTALL_LIBDIR}/cmake/LibHeinz
-	# Upstream installs LibHeinzConfig.cmake to ${prefix}/cmake/ which CMake's
-	# find_package() doesn't search by default. Patch to a standard location
-	# so consumers (libformfactor, bornagain) resolve LibHeinz without
-	# needing a LibHeinz_DIR override.
+	# Install package files where find_package searches by default.
 	sed -i 's|DESTINATION cmake |DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/LibHeinz |' \
 		CMakeLists.txt || die
 
-	# Upstream's configure_package_config_file still references a
-	# vestigial "lib/cmake/example" template path — patch to match the
-	# real install destination so the generated config's relative-path
-	# math stays correct if upstream ever adds imported targets.
+	# Keep generated relative paths aligned with the corrected destination.
 	sed -i 's|INSTALL_DESTINATION "lib/cmake/example"|INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/LibHeinz"|' \
 		CMakeLists.txt || die
 
