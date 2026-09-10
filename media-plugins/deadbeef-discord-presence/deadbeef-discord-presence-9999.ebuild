@@ -8,7 +8,7 @@ inherit git-r3
 DESCRIPTION="Discord Rich Presence plugin for the DeaDBeeF audio player"
 HOMEPAGE="https://github.com/kuba160/ddb_discord_presence"
 EGIT_REPO_URI="https://github.com/kuba160/ddb_discord_presence.git"
-# Pulls in discord-rpc as a submodule.
+# discord-rpc is a required submodule.
 EGIT_SUBMODULES=( '*' )
 
 LICENSE="CC0-1.0"
