@@ -3,8 +3,7 @@
 
 EAPI=8
 
-# 0.16.0 moved the build backend from setuptools to scikit_build_core.build
-# (pyproject.toml build-system); the standalone setuptools path is gone.
+# 0.16.0 replaced its removed setuptools path with scikit-build-core.
 DISTUTILS_USE_PEP517=scikit-build-core
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_EXT=1
@@ -27,8 +26,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
-# Upstream supports FFmpeg majors 4..8 (compiled separately and dlopen'd
-# at runtime); ::gentoo's media-video/ffmpeg covers the live 7.x/8.x slot.
+# Upstream dlopens FFmpeg 4..8; ::gentoo supplies the live 7.x/8.x slot.
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	media-video/ffmpeg:=
@@ -48,29 +46,21 @@ BDEPEND="
 RESTRICT="test"
 
 python_compile() {
-	# 0.16.0's scikit-build-core backend drives cmake and maps these env vars
-	# to cmake defines ([tool.scikit-build.cmake.define] in pyproject.toml); the
-	# torchcodec_version provider still honors BUILD_VERSION for the version.
+	# scikit-build-core maps these variables to CMake; its version provider
+	# still honors BUILD_VERSION.
 	export CMAKE_BUILD_TYPE=Release
 	export BUILD_VERSION="${PV}"
 
-	# 0.16.0 added image decoders (JPEG/PNG/WebP/AVIF/GIF/HEIC), ON by default
-	# and *required* -- a missing codec lib fails the build loudly. Keep the
-	# 0.15.0 video-only scope: TORCHCODEC_BUILD_IMAGE=0 disables all of them and
-	# the decode_* image ops raise at runtime instead. verified 2026-08-14
+	# Image decoders became mandatory-by-default in 0.16. Disable them to retain
+	# video-only scope; their operations then fail at runtime. # verified 2026-08-14
 	export TORCHCODEC_BUILD_IMAGE=0
 
-	# Upstream defaults to vendoring FFmpeg from S3 to skirt the wheel-
-	# distribution licensing question; we link against media-video/ffmpeg
-	# instead and have to ack the opt-out env var. Self-built local
-	# install is not redistributing a binary, so no GPL concerns.
+	# Acknowledge upstream's licensing guard while linking system FFmpeg instead
+	# of redistributing its S3-vendored binary.
 	export I_CONFIRM_THIS_IS_NOT_A_LICENSE_VIOLATION=1
 
-	# CUDA 13.x nvcc rejects gcc>15. Caffe2's cmake config is included
-	# unconditionally by find_package(Torch) and tries to enable_language(CUDA)
-	# whenever it finds /opt/cuda — even for our CPU-only build path. Pin
-	# the host compiler always; this requires gcc-15 installed alongside
-	# whatever newer gcc is the active system slot.
+	# Torch's CMake enables CUDA whenever /opt/cuda exists, even for CPU builds;
+	# CUDA 13 rejects GCC >15, so pin the host compiler unconditionally.
 	export CUDAHOSTCXX="/usr/bin/g++-15"
 
 	if use cuda; then
