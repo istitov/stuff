@@ -21,13 +21,11 @@ else
 	SRC_URI="https://github.com/amd/xdna-driver/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64"
 
-	# For live ebuild firmware is fetched from amd-ipu-staging branch of https://gitlab.com/kernel-firmware/drm-firmware.
-	# For release commit, see https://github.com/amd/xdna-driver/issues/1236
-	# (requires manual date-based commit selection)
+	# Firmware comes from amd-ipu-staging; releases require manual commit
+	# selection (xdna-driver issue 1236).
 	FW_COMMIT=9c532be0fe8d6ac30e8a5e1c0b54a88ae94f50b6
 
-	# To regenerate, run:
-	# ebuild xdna-driver-<version>.ebuild info
+	# Regenerate with: ebuild xdna-driver-<version>.ebuild info
 	declare -Ag FIRMWARES=(
 		[1502_00/npu.sbin.1.5.5.391]=npu.dev.sbin
 		[17f1_10/npu.sbin.1.1.0.206]=npu.dev.sbin
@@ -49,7 +47,7 @@ fi
 S="${WORKDIR}/${P}/src/driver/amdxdna"
 LICENSE="GPL-2 linux-fw-redistributable"
 SLOT="0"
-# Re-use compress-* USE flags from sys-kernel/linux-firmware.
+# Match linux-firmware's compression flags.
 IUSE="compress-xz compress-zstd"
 REQUIRED_USE="?? ( compress-xz compress-zstd )"
 
@@ -163,11 +161,8 @@ src_install() {
 		popd &>/dev/null || die
 	fi
 
-	# Prefer the out-of-tree driver over kernel/drivers/accel/amdxdna/amdxdna.ko
-	# (in-tree as of 6.10).  depmod lists the extra/ copy first in
-	# modules.dep, so plain `modprobe amdxdna` resolves to ours with normal
-	# lsmod / modprobe -r semantics.  Verified 2026-05-16; matches the
-	# convention used by ::guru for the same package.
+	# Prefer the out-of-tree module over Linux 6.10+'s in-tree copy through
+	# normal depmod ordering. verified 2026-05-16
 	insinto /etc/depmod.d
 	newins - amdxdna.conf <<-EOF
 		override amdxdna * extra
