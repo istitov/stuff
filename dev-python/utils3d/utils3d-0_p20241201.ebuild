@@ -8,8 +8,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
 
-# No PyPI release carries the API TRELLIS uses; pin the exact commit TRELLIS's
-# setup.sh installs (EasternJournalist/utils3d @ 9a4eb15e, 2024-12-01).
+# TRELLIS requires unreleased API from commit 9a4eb15e (2024-12-01).
 COMMIT="9a4eb15e4021b67b12c460c7057d642626897ec8"
 
 DESCRIPTION="Easy 3D geometry processing utilities for numpy and pytorch"
