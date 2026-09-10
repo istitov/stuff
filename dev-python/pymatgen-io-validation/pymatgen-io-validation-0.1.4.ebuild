@@ -38,9 +38,7 @@ BDEPEND="
 "
 
 src_prepare() {
-	# The sdist has no VCS metadata and therefore publishes version 0.0.0.
-	# Pin the release version and avoid invoking versioningit in the gitless
-	# build tree.
+	# Pin the version in the VCS-less sdist and remove versioningit.
 	grep -qF '"versioningit >= 1,< 4", ' pyproject.toml ||
 		die "versioningit anchor moved"
 	grep -qF 'dynamic = ["version"]' pyproject.toml || die "version anchor moved"
