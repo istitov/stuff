@@ -20,9 +20,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="examples test"
 
-# Upstream 2026.1 install_requires dropped appdirs (replaced by
-# platformdirs) and dropped decorator entirely; everything else is
-# unchanged from ::gentoo's 2024.1 ebuild.
+# 2026.1 replaces appdirs with platformdirs and drops decorator.
 RDEPEND="
 	dev-libs/boost:=[python,${PYTHON_USEDEP}]
 	dev-python/mako[${PYTHON_USEDEP}]
@@ -38,8 +36,7 @@ BDEPEND="
 	dev-python/wheel[${PYTHON_USEDEP}]
 "
 
-# We need write acccess /dev/nvidia0 and /dev/nvidiactl and the portage
-# user is (usually) not in the video group
+# GPU tests need device access unavailable under userpriv.
 RESTRICT="test? ( userpriv ) !test? ( test )"
 
 EPYTEST_PLUGINS=()
@@ -50,9 +47,7 @@ src_prepare() {
 
 	local nvcc_flag
 	nvcc_flag="--compiler-bindir=$(cuda_gccdir)" || die
-	# sed exits 0 on no-match, so guard the substitution target explicitly:
-	# a silent upstream rename would otherwise leave the default nvcc host
-	# compiler (rejected by CUDA 13) and only fail at runtime JIT.
+	# Guard against silently losing the CUDA-compatible JIT compiler setting.
 	grep -q '"PYCUDA_DEFAULT_NVCC_FLAGS", ""' pycuda/compiler.py || die
 	sed "s|\"PYCUDA_DEFAULT_NVCC_FLAGS\", \"\"|\"PYCUDA_DEFAULT_NVCC_FLAGS\", \"${nvcc_flag}\"|" \
 		-i pycuda/compiler.py || die
@@ -84,14 +79,14 @@ python_configure() {
 python_test() {
 	local -x SANDBOX_ON=0
 
-	# we need write access to this to run the tests
+	# Permit access to the NVIDIA devices used by tests.
 	addwrite /dev/nvidia0
 	addwrite /dev/nvidiactl
 	addwrite /dev/nvidia-uvm
 	addwrite /dev/nvidia-uvm-tools
 
 	EPYTEST_DESELECT=(
-		# needs investigation, perhaps failure is hardware-specific
+		# Possibly hardware-specific; needs investigation.
 		test/test_driver.py::test_pass_cai_array
 		test/test_driver.py::test_pointer_holder_base
 	)
