@@ -26,5 +26,5 @@ BDEPEND="
 	dev-python/wheel[${PYTHON_USEDEP}]
 "
 
-# Tests need sse-starlette + a network fixture stack — skip in fork.
+# Tests require unpackaged sse-starlette and network fixtures.
 RESTRICT="test"
