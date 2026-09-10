@@ -5,17 +5,13 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-#wait for the fix: https://github.com/pyFFTW/pyFFTW/issues/372
 PYTHON_COMPAT=( python3_{12..14} )
 inherit distutils-r1
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_BRANCH="master"
-	#lock to a current commit temporary until python 3.12 patch is merged
-#	EGIT_OVERRIDE_COMMIT_PYFFTW_PYFFTW="82ae9eafac5fdd411f38852a1d379bb013526460"
 	EGIT_REPO_URI="https://github.com/pyFFTW/pyFFTW.git"
 	inherit git-r3
-#	PATCHES=( "{FILESDIR}/370_python312.patch" )
 else
 	PYPI_NO_NORMALIZE=1
 	inherit pypi
@@ -49,7 +45,7 @@ BDEPEND="
 distutils_enable_tests unittest
 
 src_configure() {
-	# otherwise it'll start with -L/usr/lib, sigh
+	# Avoid placing /usr/lib ahead of the profile libdir.
 	export PYFFTW_INCLUDE_DIR="${EPREFIX}/usr/include"
 	export PYFFTW_LIB_DIR="${EPREFIX}/usr/$(get_libdir)"
 }
