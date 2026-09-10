@@ -18,6 +18,15 @@ RDEPEND=">=net-libs/bctoolbox-5.3.0:="
 DEPEND="${RDEPEND}"
 BDEPEND="doc? ( app-text/doxygen )"
 
+src_prepare() {
+	cmake_src_prepare
+
+	sed -i \
+		-e 's|set(libdir ${prefix}/lib)|set(libdir ${prefix}/${CMAKE_INSTALL_LIBDIR})|' \
+		-e "s|doc/ortp-\${ORTP_VERSION}|doc/${PF}|g" \
+		CMakeLists.txt || die
+}
+
 src_configure() {
 	local mycmakeargs=(
 		-DENABLE_DOC=$(usex doc)
