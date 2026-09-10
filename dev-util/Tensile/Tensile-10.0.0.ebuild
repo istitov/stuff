@@ -6,9 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
 ROCM_VERSION=${PV}
-# Tracks the ROCm 10.0 cohort's LLVM slot (::gentoo's 7.2.0 ebuild this was
-# forked from still says 22). The stack is subslot-pinned as one dependency
-# closure, so all of it must be compiled by a single LLVM major.
+# Keep the subslot-pinned ROCm closure on one LLVM major.
 LLVM_COMPAT=( 23 )
 
 inherit cmake distutils-r1 llvm-r2 prefix rocm
@@ -24,12 +22,8 @@ if [[ "${PV}" == 9999 ]] ; then
 	SLOT="0/9999"
 	SLOT_NOLIVE="0/10.0"
 else
-	# Forked into ::stuff for ROCm 10.0: ::gentoo stops at 7.2.x, but
-	# sci-libs/rocBLAS pins dev-util/Tensile:${SLOT}, so a 10.0 rocBLAS needs a
-	# matching-subslot Tensile that ::gentoo does not provide.
-	#
-	# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-	# per-component assets ship under therock-<major.minor> tags now.
+	# rocBLAS requires a matching Tensile subslot absent from ::gentoo.
+	# AMD moved post-7.2.4 component assets to therock-* tags.
 	SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/tensile.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/tensile"
 	SLOT="0/$(ver_cut 1-2)"
@@ -41,8 +35,7 @@ LICENSE="MIT"
 IUSE="client"
 REQUIRED_USE="client? ( ${ROCM_REQUIRED_USE} )"
 
-# Upstream's tests can freeze the machine depending on the GPU and kernel.
-# Do not expose dead USE=test plumbing while the test phase is restricted.
+# Tests can freeze the machine on some GPU/kernel combinations.
 RESTRICT="test"
 
 RDEPEND="${PYTHON_DEPS}
@@ -69,11 +62,8 @@ PATCHES=(
 CMAKE_USE_DIR="${S}/${PN}/Source"
 
 src_prepare() {
-	# Every substitution below is preceded by an assert that its anchor is
-	# actually present. `sed` exits 0 on no-match, so without these a renamed
-	# upstream symbol yields a silently mis-configured Tensile that still
-	# builds, installs, and is then wrong at runtime for rocBLAS.
-	# All anchors verified 2026-08-30 against the therock-10.0 source.
+	# Guard substitutions because sed succeeds on missing anchors. Anchors
+	# verified 2026-08-30 against therock-10.0.
 	distutils-r1_src_prepare
 	grep -qF '@LLVM_PATH@' "${FILESDIR}/${PN}-5.7.1-gentoopath.patch" ||
 		die "@LLVM_PATH@ placeholder gone from gentoopath.patch; the generated patch would keep the literal placeholder"
@@ -92,7 +82,7 @@ src_prepare() {
 	sed -r -e "/TENSILE_USE_LLVM/s/ON/OFF/" \
 		-i Source/CMakeLists.txt || die
 
-	# ${Tensile_ROOT}/bin does not exists; call command directly
+	# Commands are installed outside nonexistent ${Tensile_ROOT}/bin.
 	grep -qF '${Tensile_ROOT}/bin/' cmake/TensileConfig.cmake ||
 		die "Tensile_ROOT/bin anchor moved; consumers would invoke a nonexistent path"
 	sed -e "s,\${Tensile_ROOT}/bin/,,g" -i cmake/TensileConfig.cmake || die
@@ -114,14 +104,8 @@ src_prepare() {
 		die "os.path.dirname anchor moved in __init__.py; the Source path would not be rewritten"
 	sed -e "s|os\.path\.dirname.*$|\"${EPREFIX}/usr/share/Tensile/Source\", end='')|" -i __init__.py || die
 
-	# The v_dot4_i32_i8 syntax fix for clang-20 (bug 949817) is upstream at
-	# 10.0: Components/MAC_I8X4.py no longer emits the op_sel/op_sel_hi
-	# operands this sed used to strip, so it matched nothing. Dropped rather
-	# than left as a silent no-op. verified 2026-08-30.
-
-	# Fix compiler "validation". TensileLite's Toolchain.py resolves its
-	# compiler and assembler by BARE NAME, so a miss here leaves it validating
-	# against an "amdclang" that Gentoo does not install.
+	# Toolchain.py resolves compiler and assembler by bare name; Gentoo does
+	# not install amdclang.
 	rocm_use_clang
 	grep -qF 'amdclang' Utilities/Toolchain.py ||
 		die "amdclang anchor moved in Utilities/Toolchain.py; toolchain validation would look for a compiler that is not installed"
@@ -129,7 +113,8 @@ src_prepare() {
 
 	popd || die
 
-	use client && PATCHES='' cmake_src_prepare  # do not apply patches again in cmake_src_prepare
+	# Avoid applying the shared patch list twice.
+	use client && PATCHES='' cmake_src_prepare
 }
 
 src_configure() {
@@ -178,6 +163,6 @@ src_install() {
 		dobin client/tensile_client
 	fi
 
-	# Remove extra copy
+	# Drop duplicate top-level CMake metadata.
 	rm -rf "${ED}"/usr/cmake || die
 }
