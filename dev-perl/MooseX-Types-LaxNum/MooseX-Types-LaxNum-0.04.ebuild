@@ -18,15 +18,6 @@ RDEPEND="
 	dev-perl/Moose
 	virtual/perl-ExtUtils-MakeMaker
 "
-#	dev-perl/Moose-Util-TypeConstraints
-#	dev-perl/Scalar-Util
-
 DEPEND="${RDEPEND}
 	>=virtual/perl-ExtUtils-MakeMaker-6.420.0
 "
-#	test? (
-#		dev-perl/File-Find
-#		dev-perl/File-Temp
-#		dev-perl/Test-Fatal
-#		dev-perl/Test-More
-#	)
