@@ -7,9 +7,7 @@ inherit latex-package
 
 DESCRIPTION="Create glossaries and lists of acronyms"
 HOMEPAGE="https://www.ctan.org/pkg/glossaries/"
-# The real origin of this is
-# https://mirrors.ctan.org/macros/latex/contrib/glossaries.zip, which
-# is, unfortunately, unversioned.
+# CTAN's source is unversioned; use Gentoo's versioned mirror.
 SRC_URI="https://dev.gentoo.org/~flow/distfiles/glossaries/${P}.zip"
 
 S=${WORKDIR}/${PN}
