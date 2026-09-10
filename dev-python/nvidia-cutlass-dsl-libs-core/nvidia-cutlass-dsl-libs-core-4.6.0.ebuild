@@ -27,16 +27,9 @@ KEYWORDS="-* ~amd64"
 # The CUTLASS EULA restricts redistribution.
 RESTRICT="bindist mirror"
 
-# New sibling in 4.6.0: NVIDIA split the pure-Python cutlass DSL core
-# (nvidia_cutlass_dsl/dsl_packages/cutlass/...) out of libs-base into
-# this arch-agnostic wheel. libs-base now carries only the _mlir/iket
-# generated bits and libs-cu13 only the CUDA-13 runtime; all three file
-# sets are disjoint (0 overlap).
-#
-# Upstream duplicates its protobuf metadata here, but this payload has no
-# protobuf importer; libs-base owns that dependency. The nvdisasm lookup is
-# patched to accept the system CUDA toolkit instead of requiring a PyPI wheel.
-# # verified 2026-08-04 against 4.6.0.
+# Arch-independent pure-Python core; base and cu13 payloads are disjoint. Omit
+# duplicated protobuf metadata because this wheel never imports it; patch
+# nvdisasm lookup for system CUDA. verified 2026-08-04
 RDEPEND="
 	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
