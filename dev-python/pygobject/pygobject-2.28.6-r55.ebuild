@@ -8,7 +8,6 @@ _PYTHON_ALLOW_PY27=1
 PYTHON_COMPAT=( python2_7 )
 
 inherit autotools gnome2 python-r1_py2
-#GCONF_DEBUG="no"
 DESCRIPTION="GLib's GObject library bindings for Python"
 HOMEPAGE="https://pygobject.gnome.org"
 
@@ -33,26 +32,26 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}"
 
 src_prepare() {
-	# Fix FHS compliance, see upstream bug #535524
+	# Fix code-generator FHS path (upstream bug 535524).
 	eapply "${FILESDIR}/${PN}-2.28.3-fix-codegen-location.patch"
 
-	# Do not build tests if unneeded, bug #226345
+	# Honor disabled tests (upstream bug 226345).
 	eapply "${FILESDIR}/${PN}-2.28.3-make_check.patch"
 
-	# Support installation for multiple Python versions, upstream bug #648292
+	# Support multiple Python versions (upstream bug 648292).
 	eapply "${FILESDIR}/${PN}-2.28.3-support_multiple_python_versions.patch"
 
-	# Disable tests that fail
+	# Disable known failures.
 	eapply "${FILESDIR}/${P}-disable-failing-tests.patch"
 
-	# Disable introspection tests when we build with --disable-introspection
+	# Skip introspection tests when the feature is disabled.
 	eapply "${FILESDIR}/${P}-tests-no-introspection.patch"
 
-	# Fix warning spam
+	# Suppress known warning noise.
 	eapply "${FILESDIR}/${P}-set_qdata.patch"
 	eapply "${FILESDIR}/${P}-gio-types-2.32.patch"
 
-	# Fix glib-2.36 compatibility, bug #486602
+	# Support GLib 2.36+ (Gentoo bug 486602).
 	eapply "${FILESDIR}/${P}-glib-2.36-class_init.patch"
 
 	sed -i \
@@ -66,7 +65,7 @@ src_prepare() {
 	python_copy_sources
 
 	convert_shebangs() {
-		# Make a backup with unconverted shebangs to keep python_doscript happy
+		# Preserve an unconverted copy for python_doscript.
 		cp codegen/codegen.py pygobject-codegen-2.0
 		sed -e "s%#! \?/usr/bin/env python%#!${PYTHON}%" \
 			-i codegen/*.py || die "shebang convertion failed"
@@ -77,8 +76,7 @@ src_prepare() {
 src_configure() {
 	local myconf
 	DOCS="AUTHORS ChangeLog* NEWS README"
-	# --disable-introspection and --disable-cairo because we use pygobject:3
-	# for introspection support
+	# pygobject:3 provides introspection support.
 	myconf="${myconf}
 		--enable-debug=no
 		--disable-introspection
@@ -92,7 +90,7 @@ src_compile() {
 	python_foreach_impl run_in_build_dir gnome2_src_compile
 }
 
-# FIXME: With python multiple ABI support, tests return 1 even when they pass
+# Multi-ABI tests return 1 even when successful.
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	export GIO_USE_VFS="local" # prevents odd issues with deleting ${T}/.gvfs
@@ -114,7 +112,7 @@ src_install() {
 
 		python_doscript pygobject-codegen-2.0
 
-		# Don't keep multiple copies of pygobject-codegen-2.0 script
+		# Share one pygobject-codegen-2.0 script across implementations.
 		prefixed_sitedir=$(python_get_sitedir)
 		dosym "${prefixed_sitedir#${EPREFIX}}/gtk-2.0/codegen/codegen.py" \
 			"/usr/lib/python-exec/${EPYTHON}/pygobject-codegen-2.0"
