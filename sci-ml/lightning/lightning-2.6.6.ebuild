@@ -20,9 +20,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The lightning wheel contains the lightning.* namespace. Upstream also lists
-# pytorch-lightning, but that only adds the legacy pytorch_lightning and
-# lightning_fabric names; overlay consumers use lightning.*.
+# Omit redundant pytorch-lightning: this wheel contains the `lightning.*`
+# namespace used by overlay consumers; the legacy package adds other imports.
 RDEPEND="
 	>=sci-ml/pytorch-2.1[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/pytorch-4[${PYTHON_SINGLE_USEDEP}]
@@ -46,11 +45,11 @@ RDEPEND="
 	')
 "
 
-# Tests pull a long tail (deepspeed, hydra, jsonargparse, ...).
+# Tests require a large optional dependency stack.
 RESTRICT="test"
 
 src_prepare() {
-	# Select the umbrella distribution rather than pytorch-lightning.
+	# Select the umbrella artifact explicitly.
 	export PACKAGE_NAME="lightning"
 	distutils-r1_src_prepare
 }
