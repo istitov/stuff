@@ -7,7 +7,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Tool that converts a PostScript type1 font into a corresponding TeX PK font"
 HOMEPAGE="https://tug.org/texlive/"
-# 2025 hardcoded in the historic URL; bump on TL2026 adoption.
+# The historical mirror year must match this TeX Live snapshot.
 SRC_URI="
 	https://mirrors.ctan.org/systems/texlive/Source/texlive-${PV#*_p}-source.tar.xz
 	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/texlive-${PV#*_p}-source.tar.xz
@@ -26,7 +26,7 @@ BDEPEND="virtual/pkgconfig"
 DOCS=( "ChangeLog" "CHANGES.type1" "README" "README.14m" "README.type1" )
 
 src_configure() {
-	# bug #944098
+	# GCC 15 compatibility (bug #944098).
 	append-cflags -std=gnu17
 
 	econf \
