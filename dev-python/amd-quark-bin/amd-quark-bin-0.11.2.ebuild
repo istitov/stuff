@@ -27,21 +27,10 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="-* ~amd64"
 
-# Wheel-only on PyPI; upstream pins requires_python = "<3.13,>=3.9".
-# Required by dev-python/vllm in the rocm path.
-#
-# Two upstream caps relaxed because ::gentoo doesn't carry the older
-# versions:
-#   - numpy<=2.1.3 (upstream) → ::gentoo only has >=2.2.6. Likely
-#     conservative; runtime issues on numpy >=2.2 if hit will be
-#     visible as AttributeError on internal code paths.
-#   - onnx<=1.19.0 (upstream) → ::gentoo has 1.18.0 + 1.20.1; pinned
-#     to 1.18.x to stay below the upstream cap.
-#
-# onnxscript and onnxslim (declared as install-time deps of the wheel)
-# are unpackaged in ::gentoo + ::guru — runtime paths that touch ONNX
-# export will fail with ImportError, but the PyTorch-only quantization
-# paths vllm normally invokes don't need them.
+# Binary-only vLLM ROCm quantizer; upstream requires Python below 3.13.
+# Relax NumPy <=2.1.3 because the tree starts at 2.2.6; keep ONNX 1.18 below
+# upstream's 1.19 cap. ONNX export also needs unpackaged onnxscript/onnxslim,
+# while vLLM's PyTorch paths do not import them.
 RDEPEND="
 	sci-ml/evaluate[${PYTHON_SINGLE_USEDEP}]
 	app-alternatives/ninja
