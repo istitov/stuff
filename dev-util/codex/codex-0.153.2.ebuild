@@ -109,6 +109,7 @@ KEYWORDS="-* ~amd64 ~arm64"
 RESTRICT="test"
 
 DEPEND="
+	app-arch/xz-utils:=
 	dev-libs/openssl:=
 	sys-apps/dbus
 "
