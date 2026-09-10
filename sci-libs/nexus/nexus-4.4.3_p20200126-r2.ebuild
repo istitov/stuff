@@ -42,12 +42,8 @@ src_prepare() {
 	xzcat "${FILESDIR}/474.patch.xz" > "${T}/474.patch" || die
 	eapply "${T}/474.patch"
 
-	# NeXus' C++ API wraps the C "napi" layer and calls only the HDF5 C API
-	# (no <H5Cpp.h> / H5:: usage in the tree), but CMakeLists requires the
-	# HDF5 CXX component (libhdf5_cpp) under ENABLE_CXX. That pulls in
-	# sci-libs/hdf5[cxx], which collides with hdf5's REQUIRED_USE
-	# at-most-one-of( cxx mpi ) on mpi-enabled systems. Require only the C +
-	# HL components that are actually linked. verified 2026-06-21.
+	# The C++ wrapper links only HDF5 C/HL; avoid the unnecessary CXX component,
+	# which conflicts with MPI-enabled HDF5. verified 2026-06-21
 	sed -e 's/COMPONENTS CXX HL REQUIRED/COMPONENTS C HL REQUIRED/' \
 		-i CMakeLists.txt || die
 
@@ -56,13 +52,10 @@ src_prepare() {
 }
 
 src_configure() {
-	# This 2020 source snapshot uses the 2-argument std::allocator::
-	# allocate(n, hint) overload (NXtranslate/nexus_retriever.cpp), which
-	# is deprecated in C++17 and removed in C++20. GCC defaults to a newer
-	# standard, so pin C++17 where the overload still exists.
+	# Pin C++17; this snapshot uses allocator::allocate(n, hint), removed in C++20.
 	append-cxxflags -std=gnu++17
 
-	# no fortran, doesn't compile
+	# Fortran bindings do not compile.
 	local mycmakeargs=(
 		-DENABLE_APPS=ON
 		-DENABLE_CONTRIB=ON
