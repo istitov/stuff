@@ -13,8 +13,8 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://repo.or.cz/r/tinycc.git"
 	inherit git-r3
 elif [[ ${PV} == *_p* ]] ; then
-	# The canonical snapshot endpoint serves a JavaScript challenge instead of
-	# an archive. This mirror carries the same immutable Git object.
+	# The canonical snapshot endpoint serves a JavaScript challenge; use the
+	# same immutable Git object from GitHub.
 	SRC_URI="https://github.com/TinyCC/tinycc/archive/${MY_COMMIT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/tinycc-${MY_COMMIT}"
 else
@@ -34,43 +34,39 @@ RESTRICT="!test? ( test )"
 src_prepare() {
 	default
 
-	# Don't strip
+	# Prevent the upstream install target from stripping.
 	sed -i \
 		-e 's|$(INSTALL) -s|$(INSTALL)|' \
 		-e 's|STRIP_yes = -s|STRIP_yes =|' \
 		Makefile || die
 
-	# Fix examples
+	# Make examples directly executable with tcc.
 	sed -i -e '1{
 		i#! /usr/bin/tcc -run
 		/^#!/d
 	}' examples/ex*.c || die
 	sed -i -e '1s/$/ -lX11/' examples/ex4.c || die
 
-	# bug 888115
+	# Use the installed tcc path (Gentoo bug 888115).
 	sed -i -e "s|/usr/local/bin/tcc|/usr/bin/tcc|g" tcc-doc.texi || die
 
-	# Fix texi2html invocation
+	# Remove unsupported texi2html options.
 	sed -i -e 's/-number//' Makefile || die
 	sed -i -e 's/--sections//' Makefile || die
 }
 
 src_configure() {
-	# fails tests
-	# https://bugs.gentoo.org/866815
-	#
-	# Also distributes static libraries:
-	# https://bugs.gentoo.org/926120
+	# LTO breaks tests and static archives (Gentoo bugs 866815, 926120).
 	filter-lto
 
 	local libc
 
-	use test && unset CFLAGS LDFLAGS # Tests run with CC=tcc etc, they will fail hard otherwise
-					# better fixes welcome, it feels wrong to hack the env like this
+	# Tests invoke tcc as CC and reject inherited consumer flags.
+	use test && unset CFLAGS LDFLAGS
 
 	use elibc_musl && libc=musl
 
-	# not autotools, so call configure directly
+	# This is not an Autoconf script.
 	./configure --cc="$(tc-getCC)" \
 		${libc:+--config-${libc}} \
 		--prefix="${EPREFIX}/usr" \
@@ -83,7 +79,7 @@ src_compile() {
 }
 
 src_test() {
-	# this is using tcc bits that don't know as-needed etc.
+	# tcc's linker does not understand consumer as-needed flags.
 	TCCFLAGS="" emake test
 }
 
@@ -91,7 +87,6 @@ src_install() {
 	emake DESTDIR="${D}" install
 
 	dodoc Changelog README TODO VERSION
-	#dohtml tcc-doc.html
 	exeinto /usr/share/doc/${PF}/examples
 	doexe examples/ex*.c
 }
