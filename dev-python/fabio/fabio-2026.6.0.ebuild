@@ -36,7 +36,6 @@ BDEPEND="
 	>=dev-python/cython-3.1[${PYTHON_USEDEP}]
 "
 
-# The package ships 64 test modules, but they download a test-image
-# corpus from a remote server (edna-site.org) at runtime, so they can't
-# run in a sandboxed build. verified 2026-06-19.
+# Tests download their image corpus from edna-site.org.
+# Verified 2026-06-19.
 RESTRICT="test"
