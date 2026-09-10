@@ -27,26 +27,22 @@ RDEPEND="
 		>=dev-python/typing-extensions-4.4[${PYTHON_USEDEP}]
 	' python3_12)
 "
-# numpy is a BUILD dep too, and at a higher floor than at runtime: setup.py
-# calls np.get_include() and compiles against the NumPy 2 API, while
-# NPY_TARGET_VERSION keeps the result loadable on the 1.21 runtime floor.
+# Build against NumPy 2 while NPY_TARGET_VERSION preserves the 1.21 runtime
+# floor.
 BDEPEND="
 	>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-64[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
 "
 
-# Version comes from setuptools-scm, which derives it from VCS; the sdist is
-# not a checkout, so pin it explicitly or the build records 0.1.dev1.
+# The sdist lacks VCS metadata and otherwise records version 0.1.dev1.
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
-	# Upstream pins --cov/--cov-fail-under=95 in pyproject addopts, but
-	# epytest loads pytest with -p no:cov, so those turn into unrecognised
-	# arguments and pytest exits before collecting anything.
+	# Drop upstream coverage arguments because epytest disables pytest-cov.
 	# Run outside the source package so it does not shadow the built extension.
 	cd tests || die
 	epytest -o addopts=
