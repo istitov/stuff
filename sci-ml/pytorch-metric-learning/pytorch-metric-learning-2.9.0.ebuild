@@ -20,9 +20,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# scipy is undeclared in upstream setup.py but imported at module top
-# level by utils/common_functions.py and losses/large_margin_softmax_loss.py
-# — verified 2026-05-16.
+# scipy is absent from setup.py but imported at module load. Verified 2026-05-16.
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
@@ -33,5 +31,5 @@ RDEPEND="
 	')
 "
 
-# Tests pull faiss + tensorboard fixtures.
+# Tests require faiss and tensorboard fixtures.
 RESTRICT="test"
