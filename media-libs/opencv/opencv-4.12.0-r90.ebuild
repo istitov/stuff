@@ -97,7 +97,6 @@ IUSE+=" openmp tbb"
 IUSE+=" atlas lapack mkl"
 
 # from cmake/OpenCVCompilerOptimizations.cmake
-# TODO make this only relevant for binhost
 CPU_FEATURES_MAP=(
 	cpu_flags_arm_neon:NEON
 	cpu_flags_arm_vfpv3:VFPV3
@@ -484,7 +483,8 @@ cuda_get_host_native_arch() {
 pkg_pretend() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 
-	if use cuda && [[ -z "${CUDA_GENERATION}" ]] && [[ -z "${CUDA_ARCH_BIN}" ]]; then # TODO CUDAARCHS
+	# This legacy-variable check does not cover CUDAARCHS.
+	if use cuda && [[ -z "${CUDA_GENERATION}" ]] && [[ -z "${CUDA_ARCH_BIN}" ]]; then
 		einfo "The target CUDA architecture can be set via one of:"
 		einfo "  - CUDA_GENERATION set to one of Maxwell, Pascal, Volta, Turing, Ampere, Lovelace, Hopper, Auto"
 		einfo "  - CUDA_ARCH_BIN, (and optionally CUDA_ARCH_PTX) in the form of x.y tuples."
@@ -771,8 +771,8 @@ multilib_src_configure() {
 		-DWITH_CUBLAS="$(multilib_native_usex cuda)"
 		-DWITH_CUFFT="$(multilib_native_usex cuda)"
 		-DWITH_CUDNN="$(multilib_native_usex cudnn)"
-		-DWITH_NVCUVID="no" # TODO needs NVIDIA Video Codec SDK
-		-DWITH_NVCUVENC="no" # TODO needs NVIDIA Video Codec SDK
+		-DWITH_NVCUVID="no" # Requires the NVIDIA Video Codec SDK.
+		-DWITH_NVCUVENC="no" # Requires the NVIDIA Video Codec SDK.
 		-DCUDA_NPP_LIBRARY_ROOT_DIR="$(usex cuda "${CUDA_PATH:-${ESYSROOT}/opt/cuda}" "")"
 	# Build
 		-DBUILD_SHARED_LIBS="yes"
@@ -800,7 +800,7 @@ multilib_src_configure() {
 		-DLIB_SUFFIX=
 	# Build behavior
 		-DENABLE_CCACHE="no"
-		# bug 733796, but PCH is a risky game in CMake anyway
+		# CMake PCH integration is fragile (bug #733796).
 		-DBUILD_USE_SYMLINKS="yes"
 		-DENABLE_PRECOMPILED_HEADERS="no"
 		-DENABLE_SOLUTION_FOLDERS="no"
@@ -942,7 +942,7 @@ multilib_src_configure() {
 		)
 	fi
 
-	# bug #413429
+	# Nested builds need exported compiler paths (bug #413429).
 	tc-export CC CXX
 
 	if multilib_native_use cuda; then
@@ -1094,7 +1094,7 @@ multilib_src_configure() {
 		)
 		if use vtk; then
 			mycmakeargs+=(
-				-DVTK_MPI_NUMPROCS="$(makeopts_jobs)" # TODO
+				-DVTK_MPI_NUMPROCS="$(makeopts_jobs)"
 			)
 		fi
 	fi
