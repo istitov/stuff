@@ -3,8 +3,7 @@
 
 EAPI=8
 
-# Please check upstream git regularly for relevant security-related commits
-# to backport.
+# Check upstream git regularly for security fixes to backport.
 
 inherit desktop flag-o-matic toolchain-funcs xdg
 
@@ -19,9 +18,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~mips ~ppc ~ppc64 ~riscv ~s390 
 IUSE="archive barcode brotli +javascript +jpeg2k opengl ssl X"
 REQUIRED_USE="opengl? ( javascript )"
 
-# Although we use the bundled, patched version of freeglut in mupdf (because of
-# bug #653298), the best way to ensure that its dependencies are present is to
-# install system's freeglut.
+# Bundled patched freeglut still relies on the system package for dependencies
+# (bug #653298).
 RDEPEND="
 	archive? ( app-arch/libarchive )
 	barcode? ( media-libs/zxing-cpp:= )
@@ -52,9 +50,6 @@ BDEPEND="virtual/pkgconfig"
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.15-CFLAGS.patch
 	"${FILESDIR}"/${P}-Makefile.patch
-	# jpx.patch dropped: 1.28.0 ships the `#if FZ_ENABLE_JPX` guards around
-	# ffi_Pixmap_saveAsJPX + its registration in source/tools/murun.c
-	# upstream, so the patch's hunks now duplicate existing code. verified 2026-06-29
 	"${FILESDIR}"/${PN}-1.24.8-add-desktop-pc-files.patch
 	"${FILESDIR}"/${P}-cross-fixes.patch
 	"${FILESDIR}"/${PN}-1.24.1-darwin.patch
@@ -90,38 +85,15 @@ src_prepare() {
 		-e "1imujs = $(usex javascript)" \
 		-i Makerules || die "Failed adding build variables to Makerules in src_prepare()"
 
-	# Adjust MuPDF version in .pc file created by the
-	# [...]-add-desktop-pc-files.patch file
 	sed -e "s/Version: \(.*\)/Version: ${PV}/" \
 		-i platform/debian/${PN}.pc || die "Failed substituting version in ${PN}.pc"
 }
 
 _emake() {
-	# When HAVE_OBJCOPY is yes, we end up with a lot of QA warnings.
-	#
-	# Bundled libs
-	# * General
-	# Note that USE_SYSTEM_LIBS=yes is a metaoption which will set to upstream's
-	# recommendations. It does not mean "always use system libs".
-	# See [0] below for what it means in a specific version.
-	#
-	# * freeglut
-	# We don't use system's freeglut because upstream has a special modified
-	# version of it that gives mupdf clipboard support. See bug #653298
-	#
-	# * mujs
-	# As of v1.15.0, mupdf started using symbols in mujs that were not part
-	# of any release. We then went back to using the bundled version of it.
-	# But v1.17.0 looks ok, so we'll go unbundled again. Be aware of this risk
-	# when bumping and check!
-	# See bug #685244
-	#
-	# * lmms2
-	# mupdf uses a bundled version of lcms2 [0] because Artifex have forked it [1].
-	# It is therefore not appropriate for us to unbundle it at this time.
-	#
-	# [0] https://git.ghostscript.com/?p=mupdf.git;a=blob;f=Makethird;h=c4c540fa4a075df0db85e6fdaab809099881f35a;hb=HEAD#l9
-	# [1] https://www.ghostscript.com/doc/lcms2mt/doc/WhyThisFork.txt
+	# HAVE_OBJCOPY=yes produces QA warnings; USE_SYSTEM_LIBS selects upstream's
+	# recommended mix, not every system library. Keep patched freeglut for
+	# clipboard support (#653298) and Artifex's lcms2 fork. Recheck system mujs
+	# compatibility on bumps (#685244).
 	local myemakeargs=(
 		GENTOO_PV=${PV}
 		HAVE_GLUT=$(usex opengl)
