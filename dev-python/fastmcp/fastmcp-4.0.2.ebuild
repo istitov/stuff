@@ -14,32 +14,17 @@ HOMEPAGE="
 	https://pypi.org/project/fastmcp/
 "
 
-# The root project is an empty metapackage.  Build the implementation that it
-# pins and bundles in the same release sdist.
+# Build the bundled implementation instead of the empty root metapackage.
 S="${WORKDIR}/${P}/fastmcp_slim"
 
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The root fastmcp metapackage resolves to fastmcp-slim[client,server], and
-# both of those extras pull fastmcp-slim[mcp] -- so what we ship is the union
-# of the base deps plus the mcp, client and server groups. Grouped that way
-# below to keep it checkable against fastmcp_slim/pyproject.toml. The other
-# extras (anthropic, apps, azure, code-mode, gemini, openai) are provider
-# integrations the metapackage does not pull; their deps -- prefab-ui,
-# azure-identity, pydantic-monty, google-genai -- are unpackaged anyway.
-#
-# 4.0.0 restructured this substantially versus 3.4.7: mcp-types and httpx2 are
-# new, mcp moved from the 1.x line to 2.x, and several floors were raised.
-# Read from ${WORKDIR}/fastmcp-4.0.0/fastmcp_slim/pyproject.toml 2026-09-01.
-#
-# Neither 4.0.1 nor 4.0.2 moves any of this: the base, mcp, client and server
-# groups in fastmcp_slim/pyproject.toml are unchanged since 4.0.0. Note that the
-# root package's own PyPI Requires-Dist is useless for auditing this -- it lists
-# only `fastmcp-slim[...]==${PV}` pins, so a diff of it shows every entry
-# "changing" between releases while the real dependency set is untouched. Always
-# read the bundled fastmcp_slim pyproject instead. verified 2026-09-04.
+# Ship the union of fastmcp-slim's base, mcp, client, and server groups; provider
+# extras are outside the root metapackage and depend on unpackaged integrations.
+# Audit bundled fastmcp_slim/pyproject.toml, not root Requires-Dist, which only
+# pins slim extras. These groups are unchanged since 4.0.0. # verified 2026-09-04
 RDEPEND="
 	>=dev-python/mcp-types-2.0.0[${PYTHON_USEDEP}]
 	<dev-python/mcp-types-3[${PYTHON_USEDEP}]
@@ -80,16 +65,8 @@ BDEPEND="
 	>=dev-python/uv-dynamic-versioning-0.7.0[${PYTHON_USEDEP}]
 "
 
-# The 3.4.7 note about leaving the HTTPX runtime transitive through mcp no
-# longer applies: at 4.0.0 upstream declares httpx2 directly in the mcp extra,
-# with the comment "FastMCP uses httpx2 exclusively". httpx2 is a separate
-# ::gentoo package from the deprecated dev-python/httpx, so depending on it
-# directly carries none of the old objection.
-#
-# py-key-value-aio is requested as [filetree,keyring,memory]. Our ebuild has no
-# IUSE and pulls aiofile+anyio (filetree), keyring (keyring) and cachetools
-# (memory) unconditionally, so all three extras are already satisfied by the
-# plain atom. verified 2026-09-01
+# The plain py-key-value-aio atom already supplies the requested filetree,
+# keyring, and memory extras. # verified 2026-09-01
 
 # The upstream suite requires its full development workspace and live service
 # integrations, including Node-based MCP conformance tests.
