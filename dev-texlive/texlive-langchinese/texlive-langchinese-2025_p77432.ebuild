@@ -100,7 +100,7 @@ DEPEND="
 	${COMMON_DEPEND}
 "
 
-# Avoids collision with app-text/ttf2pk2
+# Avoid a collision with app-text/ttf2pk2.
 src_prepare() {
 	default
 	local i=texmf-dist/source/fonts/zhmetrics/ttfonts.map
