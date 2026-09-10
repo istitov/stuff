@@ -4309,6 +4309,5 @@ TEXLIVE_MODULE_BINSCRIPTS="
 "
 
 pkg_postinst() {
-	# https://bugs.gentoo.org/928388
 	optfeature "Install for SVG (Scalable Vector Graphics) support" media-gfx/inkscape
 }
