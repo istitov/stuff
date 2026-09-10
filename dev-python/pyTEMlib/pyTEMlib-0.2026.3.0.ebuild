@@ -40,5 +40,4 @@ RDEPEND="
 	dev-python/xraylib[${PYTHON_USEDEP}]
 "
 
-# Upstream ships no test suite in the sdist (testpaths point at tests/
-# and docs/, neither of which is packaged); nothing to run here.
+# The sdist omits both configured test directories.
