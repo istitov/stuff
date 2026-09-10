@@ -137,6 +137,9 @@ src_install() {
 	insinto /usr/include/ausaxs
 	doins -r include/api/.
 	doins -r include/core/.
+	doins -r include/em/.
+	doins -r include/math/.
+	doins -r include/rigidbody/.
 
 	if use doc; then
 		HTML_DOCS=( "${BUILD_DIR}/html/." )
