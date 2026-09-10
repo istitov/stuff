@@ -19,11 +19,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream pins torch>=1.7.0 in setup.py; SINGLE_IMPL inherited from
-# sci-ml/pytorch.
 RDEPEND="
-	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/pytorch-1.7.0[${PYTHON_SINGLE_USEDEP}]
 "
 
-# Tests exist but pull resampy + onnxruntime + audio fixtures we don't carry.
+# Tests require resampy, onnxruntime, and audio fixtures.
 RESTRICT="test"
