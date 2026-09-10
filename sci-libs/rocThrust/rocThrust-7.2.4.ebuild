@@ -75,6 +75,6 @@ src_configure() {
 
 src_test() {
 	check_amdgpu
-	# uses HMM to fit tests to default <512M iGPU VRAM
+	# HMM keeps tests within the default <512 MiB iGPU VRAM budget.
 	ROCTHRUST_USE_HMM="1" cmake_src_test -j1
 }
