@@ -6,7 +6,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 
-# upstream sdist uses non-normalized name (underscore)
+# Upstream's sdist uses the non-normalized underscore name.
 PYPI_PN="rouge_score"
 PYPI_NO_NORMALIZE=1
 
