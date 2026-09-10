@@ -59,6 +59,12 @@ EPYTEST_PLUGINS=( pytest-asyncio pytest-mock )
 distutils_enable_tests pytest
 
 src_test() {
+	# Keep agent detection stable before and after its fixture resets the cache.
+	local -x HF_HOME="${T}/hf-home"
+	mkdir -p "${HF_HOME}" || die
+	printf '%s\n' '{"standardEnvVars":[],"harnesses":{}}' \
+		> "${HF_HOME}/.agent_harnesses.json" || die
+
 	local EPYTEST_IGNORE=(
 		tests/test_file_download.py
 		tests/test_hf_api.py
