@@ -14,8 +14,7 @@ HOMEPAGE="
 	https://pypi.org/project/fastmcp/
 "
 
-# The root project is an empty metapackage.  Build the implementation that it
-# pins and bundles in the same release sdist.
+# Build the bundled implementation instead of the empty root metapackage.
 S="${WORKDIR}/${P}/fastmcp_slim"
 
 LICENSE="Apache-2.0"
@@ -59,11 +58,9 @@ BDEPEND="
 	>=dev-python/uv-dynamic-versioning-0.7.0[${PYTHON_USEDEP}]
 "
 
-# mcp carries the exact upstream-required HTTPX runtime.  Keeping it
-# transitive avoids adding a direct dependency Gentoo has deprecated.
+# mcp supplies upstream's exact httpx runtime; avoid a deprecated direct atom.
 
-# The upstream suite requires its full development workspace and live service
-# integrations, including Node-based MCP conformance tests.
+# Tests require the full development workspace and live service integrations.
 RESTRICT="test"
 
 export UV_DYNAMIC_VERSIONING_BYPASS=${PV}
