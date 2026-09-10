@@ -39,7 +39,7 @@ IUSE="openrc systemd"
 
 # Cargo (inside tokenizers-cpp/rust) fetches crates at build time.
 # Proper GURU submission would require pre-vendored crates via cargo.eclass.
-RESTRICT="network-sandbox"
+RESTRICT="mirror network-sandbox"
 
 BDEPEND="
 	>=dev-build/cmake-3.22
