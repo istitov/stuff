@@ -16,8 +16,7 @@ HOMEPAGE="https://llvmlite.pydata.org/
 EGIT_REPO_URI="https://github.com/numba/llvmlite.git"
 
 LICENSE="BSD-2 Apache-2.0-with-LLVM-exceptions"
-# Subslot tracks the (single) LLVM major llvmlite builds against -- the
-# binding's ABI axis -- so a numba llvmlite:= dep rebuilds on an LLVM bump.
+# Track the LLVM ABI major so llvmlite:= consumers rebuild on bumps.
 SLOT="0/${LLVM_COMPAT[0]}"
 KEYWORDS=""
 
