@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-# Upstream PyPI requires-python = "<3.13,>=3.10" (verified 2026-05-30).
+# src_prepare applies upstream's Python 3.13 metadata fix.
 PYTHON_COMPAT=( python3_{12..13} )
 DISTUTILS_SINGLE_IMPL=1
 
@@ -35,11 +35,8 @@ DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
 
 src_prepare() {
-	# Cap-relax. Upstream commit dfb907a0 (2025-08-06, "Enable Python
-	# 3.13 (#244)") relaxes the requires-python cap from <3.13 to <3.14
-	# — a one-line pyproject change with no code edits, confirming
-	# py3.13 works as-is. The 0.9.4 PyPI release predates that commit;
-	# the sed below applies the same change verified 2026-05-09.
+	# Upstream dfb907a0 relaxed this cap without code changes; mirror it for 3.13.
+	# verified 2026-05-30
 	sed -i 's|>=3.10, <3.13|>=3.10, <3.14|' pyproject.toml || die
 	distutils-r1_src_prepare
 }
