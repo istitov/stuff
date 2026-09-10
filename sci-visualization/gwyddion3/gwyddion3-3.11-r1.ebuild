@@ -60,10 +60,8 @@ src_prepare() {
 src_configure() {
 	append-cppflags -I"${S}/modules"
 
-	# --without-python: pygwy is upstream-disabled in 3.x (configure.ac
-	# hardcodes ENABLE_PYGWY and HAVE_PYTHON2 to false; the C binding
-	# has not been ported to Python 3 / PyGObject). Python is still
-	# needed at build time for AM_PATH_PYTHON path substitution.
+	# pygwy remains disabled and unported to Python 3; Python is build-only for
+	# AM_PATH_PYTHON substitution.
 	econf \
 		--disable-introspection \
 		--disable-rpath \
