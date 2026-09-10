@@ -20,7 +20,7 @@ BDEPEND="
 	>=dev-python/uv-dynamic-versioning-0.7.0[${PYTHON_USEDEP}]
 "
 
-# The sdist lacks the monorepo version helper referenced by pyproject.toml.
+# The sdist omits its monorepo version helper.
 PATCHES=( "${FILESDIR}/${P}-static-version.patch" )
 
 # The suite requires the separately published CLI and documentation tools.
