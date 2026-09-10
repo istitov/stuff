@@ -49,11 +49,16 @@ BDEPEND="test? (
 	sci-ml/caffe2[distributed]
 )"
 
-EPYTEST_PLUGINS=()
+EPYTEST_PLUGINS=( pytest-xdist )
 distutils_enable_tests pytest
 
 python_test() {
-	epytest tests/models/bert \
+	local EPYTEST_DESELECT=(
+		# Optional dev-python/blobfile is not packaged.
+		tests/models/gpt2/test_tokenization_gpt2.py::GPT2TokenizationTest::test_tokenization_tiktoken
+	)
+	epytest -n auto --maxprocesses=8 --dist loadfile \
+		tests/models/bert \
 		tests/models/gpt2 \
 		tests/models/roberta \
 		tests/models/distilbert
