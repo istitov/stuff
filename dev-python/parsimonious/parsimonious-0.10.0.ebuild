@@ -11,8 +11,6 @@ inherit distutils-r1 pypi
 DESCRIPTION="pure-Python PEG parser"
 HOMEPAGE="https://github.com/erikrose/parsimonious/
 	https://pypi.org/project/parsimonious/"
-#S=${WORKDIR}/${P^}
-
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
