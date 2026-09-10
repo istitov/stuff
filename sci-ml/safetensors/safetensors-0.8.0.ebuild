@@ -75,7 +75,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 QA_FLAGS_IGNORED="usr/lib/.*"
-RESTRICT="test" #depends on single pkg ( pytorch )
+# The PyTorch test dependency is single-implementation.
+RESTRICT="test"
 
 BDEPEND="
 	dev-python/setuptools-rust[${PYTHON_USEDEP}]
