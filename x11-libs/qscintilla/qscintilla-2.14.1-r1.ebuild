@@ -15,13 +15,14 @@ S=${WORKDIR}/${MY_P}
 LICENSE="GPL-3"
 SLOT="0/15"
 KEYWORDS="~amd64 ~arm64"
-# Qt5 designer plugin dropped: dev-qt/designer:5 is last-rited in
-# ::gentoo. Designer is still available with USE=qt6.
+# The designer plugin is Qt6-only; its Qt5 dependency was last-rited.
 IUSE="designer doc qt5 +qt6"
 
-REQUIRED_USE="|| ( qt5 qt6 )"
+REQUIRED_USE="
+	|| ( qt5 qt6 )
+	designer? ( qt6 )
+"
 
-# no tests
 RESTRICT="test"
 
 RDEPEND="
@@ -45,7 +46,7 @@ pkg_setup() {
 src_unpack() {
 	default
 
-	# Sub-slot sanity check
+	# Keep the subslot synchronized with upstream's ABI major.
 	local subslot=${SLOT#*/}
 	local version=$(sed -nre 's:.*VERSION\s*=\s*([0-9\.]+):\1:p' "${S}"/src/qscintilla.pro || die)
 	local major=${version%%.*}
@@ -70,15 +71,14 @@ qsci_run_in() {
 
 src_configure() {
 	if use designer; then
-		# prevent building against system version (bug 466120)
+		# Build the plugin against this source tree (bug 466120).
 		append-cxxflags -I../src
 		append-ldflags -L../src
 	fi
 	my_src_configure() {
 		case ${MULTIBUILD_VARIANT} in
 			qt5)
-				qsci_run_in "${BUILD_DIR}"/src eqmake5;
-				use designer && qsci_run_in "${BUILD_DIR}"/designer eqmake5;;
+				qsci_run_in "${BUILD_DIR}"/src eqmake5;;
 			qt6)
 				qsci_run_in "${BUILD_DIR}"/src eqmake6;
 				use designer && qsci_run_in "${BUILD_DIR}"/designer eqmake6;;
@@ -91,7 +91,9 @@ src_configure() {
 src_compile() {
 	my_src_compile() {
 		qsci_run_in "${BUILD_DIR}"/src emake
-		use designer && qsci_run_in "${BUILD_DIR}"/designer emake
+		if use designer && [[ ${MULTIBUILD_VARIANT} == qt6 ]]; then
+			qsci_run_in "${BUILD_DIR}"/designer emake
+		fi
 	}
 
 	multibuild_foreach_variant my_src_compile
@@ -100,7 +102,9 @@ src_compile() {
 src_install() {
 	my_src_install() {
 		qsci_run_in "${BUILD_DIR}"/src emake INSTALL_ROOT="${D}" install
-		use designer && qsci_run_in "${BUILD_DIR}"/designer emake INSTALL_ROOT="${D}" install
+		if use designer && [[ ${MULTIBUILD_VARIANT} == qt6 ]]; then
+			qsci_run_in "${BUILD_DIR}"/designer emake INSTALL_ROOT="${D}" install
+		fi
 	}
 
 	multibuild_foreach_variant my_src_install
