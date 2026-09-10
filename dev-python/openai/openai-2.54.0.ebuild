@@ -32,5 +32,5 @@ BDEPEND="
 	dev-python/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
 "
 
-# Tests need the same Stainless mock-server stack as anthropic.
+# Tests require the unpackaged Stainless mock server.
 RESTRICT="test"
