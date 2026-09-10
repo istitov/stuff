@@ -14,15 +14,9 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="bzip2 doc fits jansson hdf5 nls openexr openmp perl python ruby sourceview unique xml X zlib"
 
-# --enable-pygwy is Python 2.7 only (upstream requirement). pygwy's
-# C bindings need the python gobject/gtk/gtk.gdk modules at runtime;
-# the bundled modules/pygwy/pygtk-embed only ships build-time headers
-# and codegen, not the runtime CPython bindings, so system pygtk:2
-# (which pulls pygobject:2 and pycairo-python2) is required for a
-# working 'import gwy'.
-# Keep GtkSourceView 2 for the optional Pygwy console: it embeds a
-# GtkSourceView widget in this GTK 2 application. GtkSourceView 3 uses
-# GTK 3 types and cannot be substituted without porting the application.
+# pygwy requires Python 2.7 and system PyGTK runtime bindings; bundled
+# pygtk-embed supplies only build headers/codegen. Its GTK 2 console also
+# requires GtkSourceView 2 rather than ABI-incompatible 3.
 RDEPEND="
 	>=dev-libs/glib-2.32
 	dev-libs/libzip
@@ -53,10 +47,8 @@ RDEPEND="
 	zlib? ( virtual/zlib:= )
 "
 DEPEND="${RDEPEND}"
-# Building from SVN regenerates the pixmap PNGs from src/*.svg at build
-# time (release tarballs ship them pre-built). We rewire the rules in
-# src_prepare to call rsvg-convert directly instead of inkscape so this
-# is a much smaller dep -- not pulled in for 2.70/2.71.
+# SVN builds regenerate pixmaps; src_prepare uses rsvg-convert instead of the
+# heavier Inkscape dependency used upstream.
 BDEPEND="
 	gnome-base/librsvg
 	media-gfx/pngcrush
@@ -71,20 +63,12 @@ PATCHES=(
 
 src_prepare() {
 	default
-	# Upstream ships config.rpath, a populated po/, and po/POTFILES.in
-	# only in release tarballs; the SVN tree expects autogen.sh to lay
-	# them down. Do the equivalent here so eautoreconf/make can
-	# succeed.
+	# Recreate release-only gettext files expected by the SVN build.
 	cp "${BROOT}"/usr/share/gettext/config.rpath . || die
 	sh utils/update-potfiles.sh || die
 	eautopoint -f
 
-	# Rewire pixmaps/Makefile.am to render SVGs via rsvg-convert instead
-	# of inkscape. Each rule body resolves to:
-	#   $(INKSCAPE_EXPORT) --export-width=N --export-height=N \
-	#       $(INKSCAPE_EXPORT_PNGFILE)="OUT.png" "IN.svg"
-	# After our seds it becomes:
-	#   rsvg-convert --width=N --height=N --output="OUT.png" "IN.svg"
+	# Translate Inkscape's width/height/output flags to rsvg-convert.
 	sed -i \
 		-e 's|^INKSCAPE_EXPORT = .*$|INKSCAPE_EXPORT = rsvg-convert|' \
 		-e 's|^INKSCAPE_EXPORT_PNGFILE = .*$|INKSCAPE_EXPORT_PNGFILE = --output|' \
@@ -95,10 +79,9 @@ src_prepare() {
 	eautoreconf
 }
 
-# 3D OpenGL rendering is not built: it requires deprecated GTK-2
-# x11-libs/gtkglext, which has been removed from ::gentoo.
+# 3D rendering requires removed GTK 2 gtkglext.
 src_configure() {
-	# hack for bug 741840
+	# Work around gtk-doc lookup (bug #741840).
 	use doc && export GTK_DOC_PATH=/usr/share/gtk-doc
 
 	econf \
