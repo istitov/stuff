@@ -21,9 +21,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Sister of sci-ml/torchvision; built CPU-only here. CUDA/ROCm modes
-# need the same setup_helpers env-var dance torchvision does — defer
-# until a USE-flag-driven cycle.
+# Build CPU-only; accelerator modes need USE-driven setup_helpers integration.
 RDEPEND="
 	=sci-ml/pytorch-2.11*[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
@@ -31,7 +29,7 @@ RDEPEND="
 	')
 "
 
-# Tests pull soundfile + a network corpus; not wired up.
+# Tests require soundfile and a network corpus.
 RESTRICT="test"
 
 python_compile() {
