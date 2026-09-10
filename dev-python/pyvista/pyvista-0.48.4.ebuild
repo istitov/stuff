@@ -25,6 +25,7 @@ KEYWORDS="~amd64 ~arm64"
 # acceptable per the cap.
 RDEPEND="
 	>=sci-libs/vtk-9.2.2[python,${PYTHON_SINGLE_USEDEP}]
+	<sci-libs/vtk-9.7.0[python,${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/cyclopts-4.0.0[${PYTHON_USEDEP}]
 		>=dev-python/matplotlib-3.0.1[${PYTHON_USEDEP}]
