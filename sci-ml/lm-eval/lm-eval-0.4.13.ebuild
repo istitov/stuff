@@ -24,13 +24,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="+api ifeval math onnxruntime sentencepiece statsmodels vllm"
 
-# Expose only upstream extras whose full dependency sets are packaged.
-# The 0.4.13 ONNX backend imports its dependencies only when selected;
-# onnxruntime-genai remains unpackaged. rechecked 2026-09-10
-# math asserts antlr4-python3-runtime 4.11 at task load; keep the minor pin.
-# ifeval requires nltk>=3.9.1 to avoid punkt RCEs (upstream #2210, nltk #3266).
-# Both bounds verified upstream 2026-05-13.
-# datasets and evaluate are single-impl; wrap the remaining Python dependencies.
+# Expose only fully packaged extras; omit lazy ONNX backend's unpackaged
+# onnxruntime-genai. rechecked 2026-09-10
+# math asserts antlr4 4.11 at task load; ifeval needs nltk>=3.9.1 for punkt fixes
+# (#2210, nltk #3266). verified 2026-05-13
+# datasets/evaluate are single-impl; wrap the remaining Python dependencies.
 RDEPEND="
 	>=sci-ml/datasets-2.16.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/evaluate-0.4.0[${PYTHON_SINGLE_USEDEP}]
