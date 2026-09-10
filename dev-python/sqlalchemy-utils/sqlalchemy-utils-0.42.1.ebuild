@@ -20,8 +20,7 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-# Upstream test suite requires a live PostgreSQL/MySQL/etc. server;
-# not runnable at package build time.
+# Tests require live database servers.
 RESTRICT="test"
 
 RDEPEND="
