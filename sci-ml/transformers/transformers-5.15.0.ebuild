@@ -27,24 +27,27 @@ RDEPEND="
 	=sci-ml/tokenizers-0.22*[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/filelock[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
-		dev-python/packaging[${PYTHON_USEDEP}]
-		dev-python/pyyaml[${PYTHON_USEDEP}]
-		dev-python/regex[${PYTHON_USEDEP}]
-		dev-python/tqdm[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.17[${PYTHON_USEDEP}]
+		>=dev-python/packaging-20.0[${PYTHON_USEDEP}]
+		>=dev-python/pyyaml-5.1[${PYTHON_USEDEP}]
+		>=dev-python/regex-2025.10.22[${PYTHON_USEDEP}]
+		>=dev-python/tqdm-4.60[${PYTHON_USEDEP}]
 		dev-python/typer[${PYTHON_USEDEP}]
 		>=sci-ml/safetensors-0.8.0[${PYTHON_USEDEP}]
 	')
 	torch? (
-		sci-ml/accelerate[${PYTHON_SINGLE_USEDEP}]
+		>=sci-ml/accelerate-1.1.0[${PYTHON_SINGLE_USEDEP}]
 		sci-ml/caffe2[${PYTHON_SINGLE_USEDEP}]
-		sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
-	)
-	test? (
-		sci-ml/datasets[${PYTHON_SINGLE_USEDEP}]
-		sci-ml/caffe2[distributed]
+		>=sci-ml/pytorch-2.5[${PYTHON_SINGLE_USEDEP}]
 	)
 "
+BDEPEND="test? (
+	$(python_gen_cond_dep '
+		>=dev-python/parameterized-0.9[${PYTHON_USEDEP}]
+	')
+	sci-ml/datasets[${PYTHON_SINGLE_USEDEP}]
+	sci-ml/caffe2[distributed]
+)"
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
