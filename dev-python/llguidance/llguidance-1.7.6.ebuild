@@ -374,7 +374,6 @@ SRC_URI+="
 "
 
 LICENSE="MIT"
-# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD CDLA-Permissive-2.0
 	ISC MIT MIT-0 MPL-2.0 MPL-2.0 Unicode-3.0
@@ -389,7 +388,7 @@ python_test() {
 }
 
 src_test() {
-	# Some integration tests download tokenizers from Hugging Face.
+	# Exclude integration tests that fetch Hugging Face tokenizers.
 	cargo_src_test --package llguidance --package toktrie --lib
 	distutils-r1_src_test
 }
