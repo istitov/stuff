@@ -15,7 +15,7 @@ HOMEPAGE="
 	https://github.com/pyQode/pyqode.python/
 	https://pypi.org/project/pyqode.python/
 "
-# Upstream's 4.0.2 sdist kept the dotted filename on pypi.
+# PyPI keeps the dotted project name in this sdist.
 SRC_URI="
 	https://files.pythonhosted.org/packages/98/2e/d0dc38269c6a704c800493ed5412dba9856d6d68f2b48904e0192432c076/${MY_PN}-${PV}.tar.gz
 "
@@ -25,9 +25,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-# Upstream's metadata still names the long-renamed \`pep8\` package,
-# but the actual imports (backend/workers.py, backend/pep8utils.py)
-# are all against \`pycodestyle\` - the post-rename name.
+# Metadata still names pep8, but source imports its successor pycodestyle.
 RDEPEND="
 	dev-python/pyqode-core[${PYTHON_USEDEP}]
 	dev-python/qtawesome[${PYTHON_USEDEP}]
