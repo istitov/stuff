@@ -24,9 +24,8 @@ done
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# The PostgreSQL backend only uses connect(), cursor(), execute(), fetchall()
-# and close(), plus the DB-API %s placeholder. Psycopg 3 provides this API;
-# src_prepare updates the module name used by the exact 1.5.7 source.
+# The PostgreSQL backend uses only DB-API calls supported by Psycopg 3;
+# src_prepare updates its import name.
 RDEPEND="
 	${PYTHON_DEPS}
 	$(python_gen_cond_dep '
@@ -50,13 +49,10 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	# 2026-04-29: dev-python/PyPDF2 is gone from ::gentoo; the modern
-	# fork (dev-python/pypdf) is API-compatible for PdfReader, which is
-	# all this module uses. Drop the PyPDF2 alias.
+	# Use the packaged pypdf fork; this code needs only compatible PdfReader.
 	sed -i -e 's/import PyPDF2 as pypdf/import pypdf/' \
 		sofa_main/exporting/export_output_pdfs.py || die
-	# Psycopg 3 retains the DB-API calls used by this backend but changed
-	# its import name from psycopg2 to psycopg.
+	# Update the Psycopg 3 import name.
 	sed -i -e 's/import psycopg2 as pg/import psycopg as pg/' \
 		sofa_main/dbe_plugins/dbe_postgresql.py || die
 }
