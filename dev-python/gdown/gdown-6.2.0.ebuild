@@ -17,18 +17,11 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-# Upstream's tests download from Google Drive; not viable at build
-# time.
+# Tests download from Google Drive.
 RESTRICT="test"
 
-# distutils-r1 contributes only dev-python/hatchling for
-# DISTUTILS_USE_PEP517=hatchling. Upstream's build-system requires two
-# further plugins, and both are wired up rather than vestigial:
-# [tool.hatch.version] source = "vcs" and a fancy-pypi-readme metadata
-# hook, with dynamic = ["readme", "version"] driving them. Gentoo builds
-# with --no-build-isolation, so they have to be installed already. They
-# were never declared here -- the build passes on any host that happens
-# to have them. verified 2026-09-04 against the 6.1.1 sdist
+# Dynamic version and readme metadata require hatch-vcs and
+# hatch-fancy-pypi-readme under no-build-isolation. verified 2026-09-04
 BDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
