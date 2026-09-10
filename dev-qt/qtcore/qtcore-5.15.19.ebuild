@@ -3,9 +3,6 @@
 
 EAPI=8
 
-# Looking for Qt 6? It is packaged differently to Qt 5 with different
-# package names: https://wiki.gentoo.org/wiki/Project:Qt/Qt6_migration_notes
-
 if [[ ${PV} != *9999* ]]; then
 	QT5_KDEPATCHSET_REV="r0-0"
 	KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~loong ~ppc ~ppc64 ~riscv ~x86"
@@ -27,13 +24,9 @@ DEPEND="
 	icu? ( dev-libs/icu:= )
 	!icu? ( virtual/libiconv )
 "
-# pkgcheck reports every blocker below as NonexistentBlocker, because this
-# overlay only ever shipped these modules at 5.15.19 and ::gentoo has since
-# removed its dev-qt:5 set outright -- so nothing in repo history matches.
-# They still do their job: a user migrating off ::gentoo's Qt5 can have older
-# modules *installed*, and Qt refuses to work across mismatched module
-# versions, so the blockers are what force the whole split set to move
-# together. Do not drop them to silence the warning. verified 2026-07-27
+# NonexistentBlocker warnings are expected because older Qt 5 left the repos,
+# but may remain installed. Keep these blockers: split Qt modules cannot mix
+# versions. # verified 2026-07-27
 RDEPEND="${DEPEND}
 	!<dev-qt/qtconcurrent-${QT5_PV}:5
 	!<dev-qt/qtdbus-${QT5_PV}:5
@@ -83,35 +76,24 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	# don't add -O3 to CXXFLAGS, bug 549140
+	# Prevent upstream -O3 (bug #549140).
 	sed -i -e '/CONFIG\s*+=/s/optimize_full//' src/corelib/corelib.pro || die
 
-	# fix missing qt_version_tag symbol w/ LTO, bug 674382
+	# Preserve qt_version_tag with LTO (bug #674382).
 	sed -i -e 's/^gcc:ltcg/gcc/' src/corelib/global/global.pri || die
 
-	# Broken with FORTIFY_SOURCE=3
-	#
-	# Our toolchain sets F_S=2 by default w/ >= -O2, so we need
-	# to unset F_S first, then explicitly set 2, to negate any default
-	# and anything set by the user if they're choosing 3 (or if they've
-	# modified GCC to set 3).
-	#
-	# Refs:
-	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105078
-	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105709
-	# https://bugreports.qt.io/browse/QTBUG-103782
-	# bug #847145
+	# Qt breaks with _FORTIFY_SOURCE=3. Replace toolchain or user settings with 2
+	# when optimization permits (bug #847145, GCC #105078/#105709, QTBUG-103782).
 	if tc-enables-fortify-source ; then
-		# We can't unconditionally do this b/c we fortify needs
-		# some level of optimisation.
+		# Fortification requires optimization.
 		filter-flags -D_FORTIFY_SOURCE=3
-		# (Qt doesn't seem to respect CPPFLAGS?)
+		# Qt does not reliably respect CPPFLAGS here.
 		append-flags -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2
 	fi
 
 	qt5-build_src_prepare
 
-	# workaround for a79a370c (...Annotate-QMutex-...patch) adding a header
+	# Regenerate headers added by the QMutex patch.
 	qt5_syncqt_version
 }
 
