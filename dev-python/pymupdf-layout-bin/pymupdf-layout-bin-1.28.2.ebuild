@@ -61,8 +61,7 @@ src_unpack() {
 python_install() {
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${MY_WHEEL}" || die
 
-	# The wheel expects the MuPDF libraries bundled beside the upstream
-	# PyMuPDF wheel.  Link to our exact-version source-built libraries instead.
+	# Retarget the wheel to the exact-version source-built MuPDF libraries.
 	local mod
 	for mod in _features.so _tgif.so; do
 		patchelf --replace-needed "libmupdf.so.${PV#1.}" \
