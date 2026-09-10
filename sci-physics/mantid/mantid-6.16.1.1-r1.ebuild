@@ -23,18 +23,21 @@ fi
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~arm64"
-# ~amd64 — both toolkits run the full src_unpack/prepare/configure/
-# compile/install pipeline clean, verified 2026-07-27 against gcc-16 +
-# Boost-1.90 + Python 3.13:
-#   USE=qt6  Qt-6.11.1, 3028/3028 steps, 227 MiB, image links no libQt5
-#            and carries no Qt5-named artefact. Runtime-checked too: the
-#            framework runs algorithms, qtpy binds PyQt6, the
-#            QScintilla-backed ScriptEditor instantiates and the workbench
-#            MainWindow constructs.
-#   USE=qt5  Qt-5.15.19, 3028/3028 steps, 230 MiB, image links only
-#            libQt5{Core,Widgets,Gui,Xml,PrintSupport} and no Qt6 at all.
-#            Compile/install only — not runtime-exercised.
+KEYWORDS="~amd64 ~arm64"
+# ~amd64 — verified 2026-09-10 against gcc-16.2, Boost-1.90, Python 3.13,
+# sci-libs/hdf-4.4.0, Qt-6.11.2 and Qt-5.15.19:
+#   USE=qt6  merged; 3028/3028 steps, 227 MiB. The image links no libQt5,
+#            and HDF4 only as libhdf.so.11/libmfhdf.so.11. At runtime the
+#            framework runs algorithms through mantid.simpleapi with
+#            keyword arguments and names the outputs of a tuple
+#            assignment correctly, qtpy binds PyQt6, the QScintilla-backed
+#            code editor instantiates, the workbench MainWindow constructs
+#            and the lz4 import the GUI needs resolves.
+#   USE=qt5  install phase only; 3028/3028 steps, 230 MiB. The image links
+#            libQt5{Core,Gui,PrintSupport,Widgets,Xml} and no Qt6 at all.
+#            Not runtime-exercised.
+# The HDF 4.4 patch is covered only as far as compiling and linking: no
+# HDF4 NeXus file was at hand to exercise its read path.
 #
 # 6.16.1.1 added MANTID_QT_VERSION (5 or 6), so this ebuild exposes both
 # toolkits as mutually exclusive USE flags rather than hardcoding one.
