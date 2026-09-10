@@ -198,8 +198,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xkeyval.source.r77682
 	xltxtra.source.r77682
 "
-# Removed in target tlpdb: pdfmanagement-testphase.source
-
 inherit texlive-module
 
 DESCRIPTION="TeXLive LaTeX recommended packages"
