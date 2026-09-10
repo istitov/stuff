@@ -9,8 +9,7 @@ inherit cmake rocm
 
 DESCRIPTION="Wrapper of rocPRIM or CUB for GPU parallel primitives"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipcub"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now.
+# Per-component assets moved from rocm-* to therock-X.Y after 7.2.4.
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/hipcub.tar.gz -> hipcub-${PV}.tar.gz"
 S="${WORKDIR}/hipcub"
 
@@ -42,8 +41,7 @@ PATCHES=(
 )
 
 src_prepare() {
-	# `sed` exits 0 on no-match, so a stale anchor here would silently install
-	# the CMake package config under /usr/lib on a multilib profile.
+	# Guard the multilib libdir rewrite because sed succeeds on a stale anchor.
 	grep -qF 'set(ROCM_INSTALL_LIBDIR lib)' cmake/ROCMExportTargetsHeaderOnly.cmake ||
 		die 'ROCM_INSTALL_LIBDIR anchor moved in cmake/ROCMExportTargetsHeaderOnly.cmake'
 	sed -e "s:set(ROCM_INSTALL_LIBDIR lib):set(ROCM_INSTALL_LIBDIR $(get_libdir)):" \
@@ -66,8 +64,7 @@ src_configure() {
 
 src_test() {
 	check_amdgpu
-	# Expected time on gfx1100 (-j32) is 85s
-	# HipcubDeviceHistogramMultiEven/0.MultiEven in 6.4.1 has bad array access (probably fixed in the future release)
+	# gfx1100: ~85s at -j32; DeviceHistogram is skipped for an invalid access.
 	local CMAKE_SKIP_TESTS=(hipcub.DeviceHistogram)
 	cmake_src_test
 }
