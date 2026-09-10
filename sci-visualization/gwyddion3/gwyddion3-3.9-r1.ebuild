@@ -71,10 +71,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# The three pygwy stage patches ship in a tarball from the sister
-	# overlay extra-stuff (see SRC_URI). unpack drops them at
-	# ${WORKDIR}/${PN}-${PV}-pygwy/. Pinning is via tag in SRC_URI; bumping
-	# patches means a new tag suffix (-r1-1, -r1-2, ...).
+	# Apply pygwy patches from the tagged extra-stuff tarball; bump its tag suffix
+	# for patch revisions.
 	local f
 	for f in "${WORKDIR}/${PN}-${PV}-pygwy"/${PN}-${PV}-pygwy-stage-*.patch; do
 		PATCHES+=( "${f}" )
