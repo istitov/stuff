@@ -19,19 +19,19 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Hardware-specific tests require supported accelerator devices.
+# Accelerator tests require hardware.
 RESTRICT="test"
 
 RDEPEND="sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]"
 BDEPEND="${RDEPEND}"
 
-# The pure-Python kernels are usable without building CUDA/ROCm extensions.
+# Keep pure-Python kernels; disable CUDA/ROCm extensions.
 export USE_CPP=0
-# Release archives lack Git metadata; keep the wheel version equal to ${PV}.
+# Release archives lack Git metadata; retain ${PV}.
 export VERSION_SUFFIX=""
 
 python_prepare_all() {
-	# Upstream's package discovery otherwise installs this as top-level "test".
+	# Avoid installing test as a top-level package.
 	rm -r test || die
 	distutils-r1_python_prepare_all
 }
