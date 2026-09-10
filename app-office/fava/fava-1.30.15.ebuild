@@ -19,10 +19,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# beanquery is capped tight (<0.3): fava couples to its BQL API surface
-# and upstream tracks it minor-by-minor. The remaining deps carry only
-# their lower bounds — upstream's speculative next-major caps are not
-# mirrored.
+# Preserve beanquery's <0.3 BQL API bound; omit speculative caps elsewhere.
 RDEPEND="
 	>=app-office/beancount-3.2.0[${PYTHON_USEDEP}]
 	>=dev-python/babel-2.11[${PYTHON_USEDEP}]
@@ -40,30 +37,24 @@ RDEPEND="
 	>=dev-python/watchfiles-0.20.0[${PYTHON_USEDEP}]
 	>=dev-python/werkzeug-2.2[${PYTHON_USEDEP}]
 "
-# The custom Hatchling build hook imports Babel to compile the .po catalogues
-# and hatch-vcs obtains the version through setuptools-scm. Upstream's Babel
-# <3 cap is not mirrored because 2.18.0 is the only version in tree.
+# The build hook compiles catalogs with Babel; hatch-vcs supplies the version.
 BDEPEND="
 	>=dev-python/babel-2.7[${PYTHON_USEDEP}]
 	>=dev-python/hatch-vcs-0.4[${PYTHON_USEDEP}]
 	>=dev-python/hatchling-1.27[${PYTHON_USEDEP}]
 "
 
-# setuptools_scm has no VCS in the unpacked sdist; feed it the version.
+# The sdist lacks VCS metadata; provide the version to setuptools-scm.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 
-# Stock pytest only (the test suite is gated on the full chain being
-# installed; not run at package time).
+# Use stock pytest; the complete suite runs only against an installed stack.
 EPYTEST_PLUGINS=()
 
 distutils_enable_tests pytest
 
 python_prepare_all() {
-	# The frontend bundle (src/fava/static/*.js) and .mo catalogues ship
-	# pre-built in the sdist. hatch_build._compile_frontend() would
-	# otherwise shell out to npm to rebuild them; neutralise it so the
-	# bundled assets are used and no Node toolchain is needed. The .mo
-	# compilation step is left intact (pure Babel, a build dep).
+	# Use the sdist's prebuilt frontend instead of invoking npm; keep Babel's
+	# catalog compilation.
 	grep -q '^    source_mtime = max(p\.stat' hatch_build.py ||
 		die "frontend-build guard not found; re-audit hatch_build.py"
 	sed -i \
