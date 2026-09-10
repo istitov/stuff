@@ -24,12 +24,9 @@ REQUIRED_USE="^^ ( cuda rocm )"
 # The suite requires a supported GPU and JIT-compiles a large kernel matrix.
 RESTRICT="test"
 
-# torch-c-dlpack-ext is gated python_version<3.14 by upstream. Mirror
-# that with python_targets_python3_{12..13} guards. # verified
-# 2026-06-08 against 0.1.11.
-#
-# TileLang compiles TVM against tvm-ffi-0.1.11 and loads the separately
-# installed Python package's library at runtime. Keep both ABIs exact.
+# Mirror upstream's Python <3.14 gate for torch-c-dlpack-ext.
+# verified 2026-06-08
+# Keep TVM's build and runtime tvm-ffi ABIs exact.
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	>=sci-mathematics/z3-4.13.0:=[python,${PYTHON_SINGLE_USEDEP}]
@@ -68,24 +65,11 @@ PATCHES=(
 	"${FILESDIR}/${P}-cudahostcxx.patch"
 )
 
-# No py-limited-api patch here: 0.1.14 raised wheel.py-api from "cp38" to
-# "cp39" upstream, which is exactly what dev-python/cython-3.3 demands
-# ("Cython 3.3 requires the Python Limited API version to be 3.9 or greater"),
-# so the build no longer breaks and the patch has nothing left to fix. Our
-# version carried cp310 to match upstream's own requires-python = ">=3.10",
-# but that was a tidiness argument on top of the build fix -- cp39 is a more
-# conservative stable-ABI target and works fine for PYTHON_COMPAT 3_12..14.
-# Build-verified against cython-3.3.0 without the patch. verified 2026-09-02
-
 # Upstream caps z3-solver at <4.15.5, but Gentoo provides newer versions.
 # Treat it as a tested-version cap unless an incompatibility surfaces. # verified 2026-08-05
 
-# Upstream's bundled cmake/pypi-z3/FindZ3.cmake looks for libz3 and
-# headers ONLY inside the PyPI z3-solver wheel's bundled site-packages
-# layout (NO_DEFAULT_PATH). On Gentoo the system z3 lives in the target
-# sysroot's standard include and ABI library directories. Pre-setting
-# Z3_INCLUDE_DIR and Z3_LIBRARY makes CMake's find_path / find_library
-# skip the lookup and create z3::libz3 with the correct paths.
+# Upstream's Z3 finder searches wheel paths only. Preseed system paths so it
+# creates z3::libz3 from the packaged library.
 python_prepare_all() {
 	# Keep TVM's compiled FFI ABI aligned with the installed Python package.
 	local tvm_ffi_dir="${ESYSROOT}$(python_get_sitedir)/tvm_ffi"
@@ -97,8 +81,7 @@ python_prepare_all() {
 	cp -a "${tvm_ffi_dir}"/share/cmake/tvm_ffi \
 		3rdparty/tvm/3rdparty/tvm-ffi/cmake || die
 
-	# CMake's imported CUDA targets are not initialized correctly before
-	# project() has loaded the platform on Linux.
+	# Load the platform before initializing imported CUDA targets.
 	sed -e '\|include(${CMAKE_CURRENT_LIST_DIR}/cmake/FindPipCUDAToolkit.cmake)|d' \
 		-e '/project(TILE_LANG C CXX)/a include(${CMAKE_CURRENT_LIST_DIR}/cmake/FindPipCUDAToolkit.cmake)' \
 		-i CMakeLists.txt || die
@@ -133,8 +116,7 @@ DISTUTILS_ARGS=(
 python_install_all() {
 	distutils-r1_python_install_all
 
-	# Drop wheel-only z3 and nvidia paths; keep the packaged libraries and
-	# tvm_ffi's nonstandard library directory reachable.
+	# Drop wheel-only paths while preserving tvm_ffi's nonstandard libdir.
 	local so
 	while IFS= read -r -d '' so; do
 		patchelf --set-rpath \
