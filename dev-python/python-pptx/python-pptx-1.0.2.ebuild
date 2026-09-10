@@ -25,8 +25,7 @@ RDEPEND="
 	>=dev-python/xlsxwriter-0.5.7[${PYTHON_USEDEP}]
 "
 
-# tests/unitutil/cxml.py builds the XML fixtures with pyparsing (same test
-# helper as python-docx); most of the suite imports it during collection.
+# The shared XML fixture helper requires pyparsing during collection.
 BDEPEND="
 	test? (
 		dev-python/pyparsing[${PYTHON_USEDEP}]
