@@ -22,24 +22,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
-# The packaged-library lookup patch uses load_lib_module(extra_lib_paths=...),
-# which apache-tvm-ffi added in 0.1.11.
-#
-# gcc:15 is a runtime dep because the CUDA token-bitmask kernel is
-# JIT-compiled at import via torch.utils.cpp_extension, and nvcc rejects a
-# host gcc newer than the toolkit supports (CUDA 13 tops out at gcc 15).
-# The slot here MUST track the /usr/bin/gcc-15 and /usr/bin/g++-15 fallback
-# in ${PN}-0.2.2-cuda-host-compiler.patch: when a CUDA bump raises this
-# slot, update that patch's fallback in the same commit. cuda_gccdir cannot
-# resolve it -- it runs on the user's machine at JIT time, not at build.
-#
-# virtual/triton is arch-gated rather than CUDA-gated: upstream's own marker
-# is platform_machine == 'x86_64', and the auto backend selects the Triton
-# kernel for any tensor whose device.type is "cuda" -- which ROCm tensors
-# also report -- so gating on the cuda flag would make an AMD host raise
-# ImportError("Triton is not installed") at first GPU use. The virtual
-# carries both the nvidia and amd backends and is itself ~amd64, so keying
-# it to the arch also keeps the dep resolvable on arm64. # verified 2026-09-09
+# Packaged-library lookup needs apache-tvm-ffi's extra_lib_paths API from 0.1.11.
+# CUDA JIT needs GCC 15 at runtime; keep its slot synchronized with the patch's
+# /usr/bin fallback when CUDA raises its compiler ceiling.
+# Gate Triton by amd64, not USE=cuda: ROCm tensors also report device.type
+# "cuda", and the virtual supplies both backends. # verified 2026-09-09
 RDEPEND="
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
