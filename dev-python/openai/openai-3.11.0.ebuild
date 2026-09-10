@@ -18,18 +18,10 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# 3.6.0 dropped the distro dependency: _base_client.py now reads
-# platform.freedesktop_os_release() from the stdlib instead (verified in the
-# 3.6.0 sdist -- no `import distro` remains). The pydantic floor also rose
-# 1.9.0 -> 1.10.13; upstream additionally excludes pydantic 2.0.*-2.3.*, which
-# is unreachable here since ::gentoo's oldest pydantic is 2.13.4 -- so only
-# the `<3` half of that constraint is transcribed.
-# Upstream's other major ceilings are carried too: without them a future
-# ::gentoo bump to jiter 1.x, anyio 5.x or typing-extensions 5.x would be
-# silently accepted. sniffio is deliberately left unbounded -- openai declares
-# it bare, unlike anthropic which pins <2.
-# verified 2026-08-29 against the 3.6.0 sdist PKG-INFO; every constraint above
-# re-verified unchanged against the 3.11.0 sdist. verified 2026-09-10
+# 3.6.0 replaced distro with platform.freedesktop_os_release(). Mirror the
+# pydantic floor/<3 cap and other upstream major caps; omitted pydantic 2.0-2.3
+# is unavailable here, while sniffio is deliberately unbounded upstream.
+# Verified against 3.11.0 metadata on 2026-09-10.
 RDEPEND="
 	>=dev-python/anyio-4.10.0[${PYTHON_USEDEP}]
 	<dev-python/anyio-5[${PYTHON_USEDEP}]
@@ -43,12 +35,7 @@ RDEPEND="
 	>=dev-python/typing-extensions-4.14[${PYTHON_USEDEP}]
 	<dev-python/typing-extensions-5[${PYTHON_USEDEP}]
 "
-# No hatch-fancy-pypi-readme: 3.6.0's build-system is bare
-# requires = ["hatchling==1.27.0"] with no [tool.hatch.metadata.hooks.fancy-pypi-readme]
-# section. 3.5.0 and earlier did use it, so the dep was carried forward stale
-# by the copy. (anthropic still needs it -- its build-system keeps
-# hatch-fancy-pypi-readme>=22.4,<26 and the hook.) verified 2026-08-29 against
-# the 3.6.0 sdist pyproject.toml.
+# The build system uses only hatchling; the former fancy-readme hook is gone.
 
-# Tests need the same Stainless mock-server stack as anthropic.
+# Tests require the unpackaged Stainless mock server.
 RESTRICT="test"
