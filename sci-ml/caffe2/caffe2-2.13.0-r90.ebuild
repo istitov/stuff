@@ -321,8 +321,9 @@ src_configure() {
 		-DUSE_GLOO=$(usex gloo)
 		-DUSE_ITT=OFF
 		-DUSE_KINETO=$(usex kineto)
-		-DUSE_KLEIDIAI=OFF # TODO
-		-DUSE_MAGMA=OFF # TODO: In GURU as sci-libs/magma
+		# KleidiAI and MAGMA are not packaged.
+		-DUSE_KLEIDIAI=OFF
+		-DUSE_MAGMA=OFF
 		-DUSE_MEM_EFF_ATTENTION=$(usex memefficient)
 		-DUSE_MIMALLOC=$(usex mimalloc)
 		-DUSE_MKLDNN=$(usex onednn)
@@ -365,14 +366,14 @@ src_configure() {
 	fi
 
 	if use cuda; then
-		# bug 867706 926116
+		# Permit CUDA device probing in the sandbox (bugs #867706, #926116).
 		cuda_add_sandbox
 		addpredict "/dev/char/"
 
 		mycmakeargs+=(
 			-DUSE_CUDNN=ON
 			-DTORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST:-3.5 7.0}"
-			-DUSE_NCCL=OFF # TODO: NVIDIA Collective Communication Library
+			-DUSE_NCCL=OFF # CUDA NCCL is not packaged; nccl controls RCCL.
 			-DCMAKE_CUDA_FLAGS="$(cuda_gccdir -f | tr -d \")"
 			-DUSE_CUSPARSELT=$(usex cusparselt)
 		)
