@@ -18,12 +18,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Packaged as the build backend plugin dev-python/vispy needs from 0.17.0:
-# upstream moved off setuptools to hatchling plus this cython build hook.
-# It is a BDEPEND of that package, not a runtime import for anything.
-#
-# typing-extensions is upstream-gated on python_version < 3.10, below the
-# floor here, so it is deliberately absent. # verified 2026-09-09
+# Build-backend plugin required by vispy since 0.17. typing-extensions applies
+# only below this package's Python floor. # verified 2026-09-09
 RDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/hatchling[${PYTHON_USEDEP}]
@@ -41,24 +37,17 @@ BDEPEND="
 
 EPYTEST_PLUGINS=( pytest-cov )
 EPYTEST_DESELECT=(
-	# Upstream bug, not a packaging one: the fixture config gates a flag on
-	# marker = "python_version == '3.9'", and hatch-cython emits it anyway on
-	# 3.13, so the parsed args carry an extra -py39. Its marker evaluation
-	# does not handle two-digit minor versions. dev-python/vispy, the only
-	# consumer here, configures the hook without markers and is unaffected.
-	# verified 2026-09-09
+	# Marker parsing mishandles two-digit Python minors and emits a py39 flag;
+	# vispy uses no markers. # verified 2026-09-09
 	tests/test_config.py::test_config_parser
 )
 distutils_enable_tests pytest
 
 python_test() {
-	# tests/ is a package (it has __init__.py) and upstream ships no pytest
-	# rootdir config, so `tests.*` only resolves with the source tree on the
-	# path.
+	# Upstream lacks pytest rootdir config; expose its tests package.
 	local -x PYTHONPATH="${S}"
 
-	# Only tests/ is unit-level. test_libraries/ are integration fixtures that
-	# import example packages which upstream builds first with hatch; without
-	# that step they cannot even be collected. # verified 2026-09-09
+	# test_libraries contains unbuilt Hatch integration fixtures.
+	# verified 2026-09-09
 	epytest tests
 }
