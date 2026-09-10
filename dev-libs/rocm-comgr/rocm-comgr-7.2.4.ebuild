@@ -40,7 +40,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
-# Circular dependency: to build tests, hip compiler must be functional
+# Tests require a functional HIP compiler, creating a dependency cycle.
 BDEPEND="test? ( dev-util/hip:${SLOT} )"
 
 CMAKE_BUILD_TYPE=Release
@@ -78,11 +78,12 @@ src_configure() {
 	llvm_prepend_path "${LLVM_SLOT}"
 
 	local mycmakeargs=(
-		-DCMAKE_STRIP=""  # disable stripping defined at lib/comgr/CMakeLists.txt:58
+		-DCMAKE_STRIP=""  # Upstream CMakeLists strips unconditionally.
 		-DBUILD_TESTING=$(usex test ON OFF)
-		-DCOMGR_DISABLE_SPIRV=ON  # requires ROCm/SPIRV-LLVM-Translator (fork of dev-util/spirv-llvm-translator)
+		# Requires ROCm's fork of spirv-llvm-translator.
+		-DCOMGR_DISABLE_SPIRV=ON
 	)
-	# Prevent CMake from finding systemwide hip, which breaks tests
+	# A system HIP installation breaks the tests.
 	use test && mycmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_hip=ON )
 	cmake_src_configure
 }
