@@ -36,7 +36,7 @@ src_configure() {
 	rocm_use_clang
 
 	local mycmakeargs=(
-		# currently hipBLAS is a wrapper of rocBLAS which has tests, so no need to perform test here
+		# rocBLAS tests already cover this wrapper.
 		-DBUILD_CLIENTS_TESTS=OFF
 		-DBUILD_CLIENTS_BENCHMARKS=OFF
 		-DROCM_SYMLINK_LIBS=OFF
