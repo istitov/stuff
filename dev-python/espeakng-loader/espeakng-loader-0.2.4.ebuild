@@ -12,10 +12,8 @@ HOMEPAGE="
 	https://github.com/thewh1teagle/espeakng-loader
 	https://pypi.org/project/espeakng-loader/
 "
-# No SRC_URI: upstream's PyPI distribution is wheels-only with
-# bundled libespeak-ng.so binaries — Gentoo-hostile vendoring. Our
-# module is hand-written in files/ to match upstream's tiny API
-# surface (4 functions) but return system paths.
+# Upstream ships only wheels with bundled libespeak-ng; provide its
+# four-function API from files/ using system paths.
 S="${WORKDIR}"
 
 LICENSE="MIT"
@@ -32,7 +30,6 @@ src_unpack() {
 	mkdir -p "${S}/espeakng_loader" || die
 	cp "${FILESDIR}/__init__.py" "${S}/espeakng_loader/__init__.py" || die
 
-	# Bake system paths into the module at unpack time.
 	local lib_path="/usr/$(get_libdir)/libespeak-ng.so.1"
 	local data_path="/usr/share/espeak-ng-data"
 	sed -i \
