@@ -24,13 +24,11 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-LICENSE="all-rights-reserved"
+LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-RESTRICT="bindist mirror"
 
-# NVIDIA publishes only proprietary wheels; -bin is the only available shape.
-# Required by vllm's CUDA stack through flashinfer-python. verified 2026-05-29
+# Upstream publishes only wheels; required through flashinfer-python.
 RDEPEND="
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
