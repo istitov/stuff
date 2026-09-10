@@ -23,8 +23,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="numpy"
 
-# CFFI runtime dlopen — system libportaudio is loaded at module import,
-# not linked at build time. No C compilation step in this ebuild.
+# CFFI loads system PortAudio at runtime; no link step is required.
 RDEPEND="
 	dev-python/cffi[${PYTHON_USEDEP}]
 	media-libs/portaudio
