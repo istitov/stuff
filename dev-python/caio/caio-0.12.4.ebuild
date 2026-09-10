@@ -20,5 +20,5 @@ BDEPEND="
 	>=dev-python/setuptools-77[${PYTHON_USEDEP}]
 "
 
-# The upstream suite requires unpackaged test-only aiomisc.
+# Tests require unpackaged aiomisc.
 RESTRICT="test"
