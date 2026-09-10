@@ -29,9 +29,8 @@ KEYWORDS="-* ~amd64"
 # The CUTLASS EULA prohibits redistributing the binary payload.
 RESTRICT="bindist mirror strip"
 
-# Wheel-only on PyPI (binary CUDA-shared bits with no source release).
-# Sub-package of the nvidia-cutlass-dsl umbrella; required by the
-# parent's base install. # verified 2026-08-04 against 4.5.2.
+# Wheel-only binary subpackage required by nvidia-cutlass-dsl's base install.
+# verified 2026-08-04
 RDEPEND="
 	>=dev-python/cuda-python-12.8[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
@@ -55,19 +54,10 @@ python_install() {
 	[[ -f ${S}/wheel/${whl} ]] || die "expected wheel ${whl} not found"
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${whl}" || die
 
-	# This wheel and the sibling nvidia-cutlass-dsl-libs-cu13 wheel
-	# overlap on most file paths but ship subtly different *contents*
-	# at those paths (CUDA-13 builds vs the base build). pip's
-	# behaviour when both are installed is "cu13 overwrites base";
-	# Portage's collision-protect would error instead. We mirror
-	# pip's end state here by keeping only this wheel's *unique*
-	# files — LICENSE in 4.5.2. (In 4.5.0 the set was three:
-	# libcuda_dialect_runtime_static.a and utils/block.py were also
-	# unique to base but moved into the cu13 wheel by 4.5.2, so the
-	# regex drops them now to avoid collision-protect.) The cu13
-	# ebuild installs everything else, including its own variants of
-	# the shared paths.
-	# # verified 2026-08-04 against 4.5.2 (1 unique, 180 shared).
+	# The base and cu13 wheels overlap with differing content. Mirror pip's
+	# cu13-overwrites-base result by retaining only base's unique LICENSE;
+	# Portage would otherwise reject the collision. # verified 2026-08-04:
+	# 1 unique, 180 shared
 	local sp="${D}$(${EPYTHON} -c 'import sysconfig; print(sysconfig.get_path("purelib"))')"
 	local nvdir="${sp}/nvidia_cutlass_dsl"
 	local keep_re='^LICENSE$'
@@ -78,12 +68,8 @@ python_install() {
 			rm -f "${f}" || die "rm ${f} failed"
 		fi
 	done < <(find "${nvdir}" -type f -print0)
-	# Drop any now-empty subdirs.
 	find "${nvdir}" -type d -empty -delete
-	# .pth is a top-level sibling of the package dir and the cu13
-	# wheel ships an identical one — let cu13 own it. (The .pth
-	# enables nvidia_cutlass_dsl/python_packages/ as an extra import
-	# path, which is what makes `import cutlass` work.)
+	# Let cu13 own its identical .pth that enables the cutlass import path.
 	rm -f "${sp}/nvidia_cutlass_dsl.pth" || die
 	python_optimize
 }
