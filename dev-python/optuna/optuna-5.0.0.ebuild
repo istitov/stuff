@@ -40,13 +40,10 @@ BDEPEND="
 	)
 "
 
-# Test-dependency suppressions verified 2026-09-07 against 5.0.0 by a full
-# run: 2501 passed, 39 skipped, 197 deselected.  cmaes and lupa remain
-# unpackaged, and every ignored path and deselected id below still resolves
-# (pytest errors on a --deselect id it cannot find, so a green run proves the
-# ids are live rather than silently stale).
+# Full run: 2501 passed, 39 skipped, 197 deselected; all exclusions resolve.
+# cmaes and lupa remain unpackaged. verified 2026-09-07
 EPYTEST_IGNORE=(
-	# require optional dependencies
+	# Optional dependencies.
 	tests/artifacts_tests/test_boto3.py
 	tests/artifacts_tests/test_gcs.py
 	tests/gp_tests
@@ -60,23 +57,19 @@ EPYTEST_IGNORE=(
 	tests/visualization_tests
 )
 EPYTEST_DESELECT=(
-	# require cmaes, which is not packaged
+	# cmaes is unpackaged.
 	"tests/pruners_tests/test_hyperband.py::test_hyperband_filter_study[<lambda>3]"
 	"tests/pruners_tests/test_hyperband.py::test_hyperband_no_filter_study[<lambda>3]"
 	"tests/pruners_tests/test_hyperband.py::test_hyperband_no_call_of_filter_study_in_should_prune[<lambda>3]"
-	# pytest injects its own handlers into the logger under test
+	# pytest injects handlers into the logger under test.
 	tests/test_logging.py::test_default_handler
 	tests/test_logging.py::test_propagation
-	# Upstream masks only psycopg2 to force the "no DB driver" ImportError,
-	# but SQLAlchemy 2.x resolves postgresql:// to psycopg 3.  With
-	# dev-python/psycopg installed the driver loads, no ImportError is
-	# raised, and the test falls through to a real connection attempt that
-	# dies on DNS.  Not a 5.0.0 regression -- the test is byte-identical in
-	# 4.9.0. # verified 2026-09-07
+	# psycopg3 escapes upstream's psycopg2-only mask, causing a real DB lookup.
+	# verified 2026-09-07
 	tests/storages_tests/rdb_tests/test_storage.py::test_init_db_module_import_error
 )
 
 python_test() {
-	# require fakeredis[lua], whose lupa dependency is not packaged
+	# fakeredis[lua] requires unpackaged lupa.
 	epytest -k "not (journal_redis or redis_default or redis_with_use_cluster)"
 }
