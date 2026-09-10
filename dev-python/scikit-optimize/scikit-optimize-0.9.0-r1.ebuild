@@ -26,9 +26,9 @@ RDEPEND="
 "
 
 PATCHES=(
-	# https://github.com/scikit-optimize/scikit-optimize/pull/1187
+	# NumPy 1.24 compatibility (upstream PR #1187).
 	"${FILESDIR}/${P}-numpy-1.24.patch"
-	# https://github.com/scikit-optimize/scikit-optimize/pull/1184/files
+	# scikit-learn 1.2 compatibility (upstream PR #1184).
 	"${FILESDIR}/${P}-scikit-learn-1.2.0.patch"
 )
 
