@@ -905,20 +905,16 @@ SRC_URI="
 	${CARGO_CRATE_URIS}
 "
 
-# Main package is MIT; the bundled crates add further licenses.
 LICENSE="MIT"
-# Dependent crate licenses (vendored via CRATES).
+# Bundled crates add these licenses.
 LICENSE+=" Apache-2.0 Boost-1.0 BSD BSD-2 ISC MIT MPL-2.0 Unicode-DFS-2016 ZLIB"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 IUSE="heif"
 
-# Runtime shared libs pulled by notan (GL), rfd (gtk3) and the image
-# codec -sys crates. turbojpeg/openjpeg/lcms2 are built vendored from the
-# corresponding -sys crates (hence nasm+cmake in BDEPEND), so they are not
-# system deps; aom/libwebp/expat/freetype/gtk3/cairo are linked at runtime.
-# Mirrors upstream's own PKGBUILD (res/pkgbuild).
+# notan, rfd, and codec crates link the listed libraries. turbojpeg, openjpeg,
+# and lcms2 remain vendored; this matches upstream's PKGBUILD.
 DEPEND="
 	dev-libs/expat
 	media-libs/freetype
@@ -937,17 +933,12 @@ BDEPEND="
 "
 
 src_configure() {
-	# glsl-to-spirv 0.1.7 (the notan shader compiler) bundles an ancient
-	# glslang whose CMakeLists declares cmake_minimum_required below 3.5,
-	# which CMake 4 refuses outright. Let CMake 4 honour the old floor.
-	# verified 2026-07-08 against cmake-4.3.4.
+	# Bundled glslang declares a pre-3.5 floor rejected by CMake 4.
+	# verified 2026-07-08 with CMake 4.3.4
 	export CMAKE_POLICY_VERSION_MINIMUM=3.5
 
-	# Drop the default 'update' feature: it pulls self_update + reqwest to
-	# let the binary download and overwrite itself from GitHub, which is
-	# pointless for a package-manager-installed root-owned binary and drags
-	# in a network/TLS stack. Re-enable the remaining default features
-	# explicitly, plus optional heif.
+	# Exclude self-update and its network/TLS stack from a managed binary;
+	# restore the remaining defaults explicitly.
 	local myfeatures=(
 		turbo
 		avif_native
@@ -971,10 +962,7 @@ src_install() {
 pkg_postinst() {
 	xdg_pkg_postinst
 
-	# This release pins notan 0.12 -> winit 0.28 -> wayland-client 0.29,
-	# whose old client stack aborts at startup on wl_shm v2 compositors
-	# (recent wlroots/sway, Mutter, ...). The 0.9.2_p20260406 master
-	# snapshot bumps notan/winit/wayland and renders under native Wayland.
+	# Its old notan/winit stack aborts on wl_shm v2; the live snapshot fixes it.
 	ewarn "On wl_shm v2 Wayland compositors (recent wlroots/sway, Mutter),"
 	ewarn "oculante ${PV} aborts at startup with:"
 	ewarn "  [wayland-client error] Attempted to dispatch unknown opcode 0"
