@@ -55,7 +55,6 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# Silence known test-source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class -Wno-deprecated-declarations
 
 	local mycmakeargs=(
