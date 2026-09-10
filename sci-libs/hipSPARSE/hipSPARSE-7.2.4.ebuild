@@ -9,7 +9,7 @@ inherit cmake edo rocm toolchain-funcs
 
 DESCRIPTION="ROCm SPARSE marshalling library"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipsparse"
-# share some test datasets with rocSPARSE
+# Share test datasets with rocSPARSE.
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/hipsparse.tar.gz -> hipsparse-${PV}.tar.gz
 test? (
 http://sparse-files.engr.tamu.edu/MM/SNAP/amazon0312.tar.gz -> rocSPARSE_amazon0312.tar.gz
@@ -40,7 +40,7 @@ KEYWORDS="~amd64"
 IUSE="benchmark test"
 REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
-# It seems that the tests heavily abuse out-of-bounds array access, causing failures with hardened libc++
+# Tests rely on out-of-bounds access and fail with hardened libc++.
 RESTRICT="test"
 
 RDEPEND="
@@ -55,7 +55,7 @@ BDEPEND="
 "
 
 src_prepare() {
-	# too many warnings from -Wall (applied after user CXXFLAGS)
+	# Suppress unused-value warnings added after user CXXFLAGS.
 	sed -e "s/-Wall/-Wall -Wno-unused-value/g" \
 		-i clients/benchmarks/CMakeLists.txt \
 		-i library/CMakeLists.txt \
@@ -65,7 +65,7 @@ src_prepare() {
 
 	if use test; then
 		mkdir -p "${BUILD_DIR}"/clients/matrices
-		# compile and use the mtx2bin converter. Do not use any optimization flags!
+		# Build mtx2bin without optimization.
 		edo $(tc-getCXX) deps/convert.cpp -o deps/convert
 		find "${WORKDIR}" -maxdepth 2 -regextype egrep -regex ".*/(.*)/\1\.mtx" -print0 |
 			while IFS= read -r -d '' mtxfile; do
