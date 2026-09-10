@@ -10,10 +10,8 @@ inherit cmake edo flag-o-matic rocm
 DESCRIPTION="Implementation of a subset of LAPACK functionality on the ROCm platform"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocsolver"
 
-# ROCm/rocSOLVER was FOLDED INTO the rocm-libraries monorepo for 10.0: the
-# standalone repo has no therock-* tags at all (it stops at rocm-7.2.4), so the
-# git-archive form is gone and S= follows the release asset's own root.
-# verified 2026-08-30.
+# ROCm 10 ships rocSOLVER from rocm-libraries release assets, not standalone
+# repository tags. verified 2026-08-30
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/rocsolver.tar.gz -> rocsolver-${PV}.tar.gz"
 S="${WORKDIR}/rocsolver"
 
@@ -44,15 +42,10 @@ BDEPEND="
 
 RESTRICT="!test? ( test )"
 
-# ${PN}-7.1.0-fix-sparse.patch dropped: https://github.com/ROCm/rocm-libraries/issues/2585
-# is fixed upstream at 10.0. library/src/refact/rocsolver_rfinfo.cpp now wraps
-# the dlopen/dlsym fallback in exactly the #ifndef HAVE_ROCSPARSE guard the
-# patch added. verified 2026-08-30.
-
 src_configure() {
 	rocm_use_clang
 
-	# too many warnings
+	# Silence known ROCm source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
 	local mycmakeargs=(
@@ -80,8 +73,7 @@ src_configure() {
 src_test() {
 	check_amdgpu
 	cd "${BUILD_DIR}"/clients/staging || die
-	# No filters: 64m28s on gfx1100
-	# 'checkin*-*known_bug*': 1m35s
+	# gfx1100: 64m28s full; 1m35s for checkin minus known bugs.
 	HIP_VISIBLE_DEVICES=0 LD_LIBRARY_PATH="${BUILD_DIR}/library/src" \
 		edob ./rocsolver-test \
 		--gtest_filter='checkin*-*known_bug*:*GVD*batched*:*STEDCX*/74:*BDSVDX*:*SYGVDX_INPLACE.__float*'
