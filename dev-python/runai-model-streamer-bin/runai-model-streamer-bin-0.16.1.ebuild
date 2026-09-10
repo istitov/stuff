@@ -34,10 +34,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm64"
 
-# Upstream publishes architecture-specific manylinux wheels alongside a
-# Bazel-based source build. The object-storage extras are split into separate
-# upstream wheels that are not packaged yet; local-file loading works without
-# them.
+# Object-storage backends are separate, unpackaged wheels; these architecture-
+# specific wheels support local-file streaming without them.
 RDEPEND="
 	>=sci-ml/pytorch-2.0.0[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/pytorch-3[${PYTHON_SINGLE_USEDEP}]
