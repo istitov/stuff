@@ -18,13 +18,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# numpy and Triton are the runtime deps. The Triton kernels are accessed
-# lazily inside kernel functions; upstream gates Triton behind the
-# [cpu]/[cuda]/[rocm]/[xpu] extras (each pinning a different accelerator
-# Triton build). We ship a single virtual/triton (mainline, with
-# both the nvidia and amd backends), so declare it directly rather than
-# leave it to the consumer -- the original "can't declare it" note
-# predated triton-bin landing in-tree (2026-06-14).
+# Map accelerator extras to unified virtual/triton; 1.3 also imports torch
+# through Caffe2. virtual/triton entered the tree on 2026-06-14.
 RDEPEND="
 	>=dev-python/numpy-1.26.4[${PYTHON_USEDEP}]
 	>=virtual/triton-3.3[${PYTHON_USEDEP}]
