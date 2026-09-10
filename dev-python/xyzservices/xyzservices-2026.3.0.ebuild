@@ -26,7 +26,7 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
-	# setuptools_scm needs the tag or SETUPTOOLS_SCM_PRETEND_VERSION
+	# Supply the version because the sdist lacks SCM metadata.
 	export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 	distutils-r1_src_prepare
 }
