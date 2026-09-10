@@ -855,8 +855,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	yb-book.source.r79714
 	york-thesis.source.r23348
 "
-# Removed in target tlpdb: afparticle.source
-
 inherit texlive-module
 
 DESCRIPTION="TeXLive Publisher styles, theses, etc."
