@@ -6,6 +6,7 @@ EAPI=8
 inherit cmake
 
 PATCHES=(
+	"${FILESDIR}/${PN}-1.2-tests-no-dlib.patch"
 	"${FILESDIR}/${PN}-1.3.0-simd-unaligned-access.patch"
 )
 
@@ -17,7 +18,7 @@ S="${WORKDIR}/AUSAXS-${PV}"
 LICENSE="LGPL-3+"
 SLOT="0/1.2"
 KEYWORDS="~amd64 ~arm64"
-IUSE="doc executables"
+IUSE="doc executables test"
 
 # dlib FetchContent path is always taken when DLIB=ON (there is no
 # USE_SYSTEM_DLIB toggle upstream), which would require network access
@@ -48,7 +49,11 @@ RDEPEND="
 	dev-cpp/bshoshany-thread-pool
 "
 DEPEND="${RDEPEND}"
-BDEPEND="doc? ( app-text/doxygen )"
+BDEPEND="
+	doc? ( app-text/doxygen )
+	test? ( dev-cpp/catch )
+"
+RESTRICT="!test? ( test )"
 
 src_prepare() {
 	# Upstream hardcodes -static-libgcc -static-libstdc++; strip them
@@ -66,15 +71,16 @@ src_prepare() {
 		-e '/list(APPEND CompilerFlags ${MARCH_FLAG})/d' \
 		cmake/setup_compile_commands.cmake || die
 
-	# Drop the tests subdirectory: it is EXCLUDE_FROM_ALL and we never
-	# build it (no test IUSE, src_compile builds only the lib + CLI
-	# targets), but its unconditional find_package(Catch2 REQUIRED) under
-	# USE_SYSTEM_CATCH=ON would pull in an otherwise-undeclared Catch2
-	# build dep at configure time. Removing it keeps the ebuild
-	# self-contained. verified 2026-06-10
-	sed -i \
-		-e '/^add_subdirectory(tests)/d' \
-		CMakeLists.txt || die
+	if use test; then
+		sed -i '/^add_subdirectory(tests)/i enable_testing()' \
+			CMakeLists.txt || die
+		sed -i \
+			-e '/^set(CMAKE_CXX_FLAGS "")/d' \
+			-e 's/"-Os /"/' \
+			tests/CMakeLists.txt || die
+	else
+		sed -i '/^add_subdirectory(tests)/d' CMakeLists.txt || die
+	fi
 
 	# Strip the per-executable POST_BUILD plotting-script copy. All four
 	# executables share one output dir (bin/) and each attaches a
@@ -114,11 +120,16 @@ src_compile() {
 	# explicitly.
 	local targets=( ausaxs libausaxs )
 	use executables && targets+=( saxs_fitter em_fitter rigidbody_optimizer )
+	use test && targets+=( tests )
 	cmake_src_compile "${targets[@]}"
 
 	if use doc; then
 		cmake_src_compile doc
 	fi
+}
+
+src_test() {
+	cmake_src_test -j 8
 }
 
 src_install() {

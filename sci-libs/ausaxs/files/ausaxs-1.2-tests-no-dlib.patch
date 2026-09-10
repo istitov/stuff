@@ -1,0 +1,49 @@
+Skip tests that require dlib.
+
+--- a/tests/feature/fitter/fitter.cpp
++++ b/tests/feature/fitter/fitter.cpp
+@@ -172,6 +172,7 @@ TEST_CASE("fitter: correct dof", "[files]") {
+         REQUIRE(res->dof == size-2);
+     }
+ 
++#ifdef DLIB_AVAILABLE
+     SECTION("SmartFitter") {
+         auto fit_and_check = [size, &protein, &data] (unsigned int dof) {
+             fitter::SmartFitter fitter(data);
+@@ -258,10 +259,12 @@ TEST_CASE("fitter: correct dof", "[files]") {
+             fit_and_check(7);
+         }
+     }
++#endif
+ }
+ 
+ // Check that the SmartFitter produces consistent fits when using different q-ranges
+ // This is a good but rather long test for potential memory issues or inconsistencies in the various histogram managers
++#ifdef DLIB_AVAILABLE
+ TEST_CASE("SmartFitter: consistent fits using different q-ranges") {
+     settings::flags::max_bin_count = constants::axes::d_axis.bins;
+     settings::general::verbose = false;
+@@ -303,4 +306,5 @@ TEST_CASE("SmartFitter: consistent fits using different q-ranges") {
+             }
+         }
+     }
+-}
+\ No newline at end of file
++}
++#endif
+
+--- a/tests/unit/fitter/fitter.cpp
++++ b/tests/unit/fitter/fitter.cpp
+@@ -108,6 +108,7 @@ TEST_CASE("Fitter::fit_chi2_only") {
+     REQUIRE(chi2 >= 0.0);
+ }
+ 
++#ifdef DLIB_AVAILABLE
+ TEST_CASE("Fitter::set_algorithm") {
+     std::vector<double> data = {1.0, 2.0, 3.0};
+     std::vector<double> model = {2.0, 4.0, 6.0};
+@@ -115,3 +116,4 @@ TEST_CASE("Fitter::set_algorithm") {
+     
+     fitter.set_algorithm(mini::algorithm::BFGS);
+ }
++#endif
