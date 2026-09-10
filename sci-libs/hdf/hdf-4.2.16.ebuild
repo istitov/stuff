@@ -9,8 +9,7 @@ inherit fortran-2 toolchain-funcs autotools flag-o-matic
 
 DESCRIPTION="General purpose library and format for storing scientific data"
 HOMEPAGE="https://www.hdfgroup.org/solutions/hdf4/ https://github.com/HDFGroup/hdf4"
-# Upstream tag is "hdf-${MM}_${mm}_${pp}-2" with the trailing -2 being the
-# patchlevel; convert dotted PV into the underscore form on the fly.
+# Tags use hdf-X_Y_Z-2; the suffix is the patch level.
 SRC_URI="https://github.com/HDFGroup/hdf4/archive/refs/tags/hdf-$(ver_rs 1- _)-2.tar.gz -> ${P}.gh.tar.gz"
 S="${WORKDIR}/hdf4-hdf-$(ver_rs 1- _)-2"
 
@@ -35,13 +34,13 @@ PATCHES=(
 src_prepare() {
 	default
 
-	sed -i -e 's/-R/-L/g' config/commence.am || die #rpath
+	# Do not encode library search paths as RPATHs.
+	sed -i -e 's/-R/-L/g' config/commence.am || die
 	eautoreconf
 }
 
 src_configure() {
-	# -Werror=strict-aliasing, -Werror=lto-type-mismatch
-	# https://bugs.gentoo.org/862720
+	# Avoid strict-aliasing and LTO type errors (bug 862720).
 	append-flags -fno-strict-aliasing
 	filter-lto
 
