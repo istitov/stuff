@@ -18,12 +18,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# fire is reached only through pccm/main.py: __init__.py imports builder,
-# core, middlewares and targets, and upstream ships an empty console_scripts
-# list, so nothing cumm/spconv import at runtime touches it. Declared anyway,
-# because main.py is installed and does a module-level `import fire` - leaving
-# it out ships a module that cannot be imported. dev-python/fire carries the
-# same PYTHON_COMPAT, so this costs no targets. verified 2026-07-27
+# fire is used only by installed pccm/main.py, not the cumm/spconv import path;
+# declare it so every installed module remains importable. verified 2026-07-27
 RDEPEND="
 	dev-python/ccimport[${PYTHON_USEDEP}]
 	dev-python/fire[${PYTHON_USEDEP}]
@@ -33,8 +29,7 @@ RDEPEND="
 "
 
 src_prepare() {
-	# Upstream's sdist omits version.txt (a source-tree build artifact) yet
-	# setup.py reads it because the VERSION constant is left unset. Recreate it.
+	# Recreate version.txt, omitted from the sdist but required by setup.py.
 	echo "${PV}" > version.txt || die
 	distutils-r1_src_prepare
 }
