@@ -65,15 +65,11 @@ pkg_setup() {
 }
 
 src_configure() {
-	# Upstream rejects any CMAKE_BUILD_TYPE other than Release or Debug
-	# (cmake/BornAgain/CompilerInfo.cmake), so override the eclass default.
+	# Upstream accepts only Release or Debug.
 	local CMAKE_BUILD_TYPE=Release
 
-	# BA_PY_PACK assembles the bornagain/ Python package tree in the build
-	# dir (init + SWIG .py wrappers + POST_BUILD-copied .so files) — we
-	# consume it directly from src_install. The ba_wheel custom target is
-	# never invoked, so auditwheel / pip / wheel aren't actually needed
-	# (covered by the skip-wheel-py-deps-check patch).
+	# BA_PY_PACK creates the package tree consumed directly in src_install;
+	# the unused wheel target's auditwheel/pip/wheel dependencies are skipped.
 	local mycmakeargs=(
 		-DBA_TESTS=OFF
 		-DBA_DOCS=OFF
@@ -97,18 +93,14 @@ src_install() {
 
 		[[ -d ${py_pkg_dir} ]] || die "Python package layout missing at ${py_pkg_dir}"
 
-		# .py files: package __init__ + helpers (ba_plot, ba_check, ...)
-		# and the SWIG-generated lib/libBornAgain*.py wrappers.
+		# Install package helpers and SWIG wrappers.
 		insinto "${sitedir}/bornagain"
 		doins "${py_pkg_dir}"/*.py
 		insinto "${sitedir}/bornagain/lib"
 		doins "${py_pkg_dir}/lib"/*.py
 
-		# The _libBornAgain*.so files are dual-purpose — linkable C++ libs
-		# in /usr/lib64/ and Python C extensions imported via the bornagain
-		# package. Symlink rather than duplicate ~14 MiB of binaries.
-		# Relative path: sitedir is /usr/lib/pythonX.Y/site-packages, libdir
-		# is /usr/<lib|lib64>, so package's lib/ subdir is 5 levels deep.
+		# Reuse the installed C++ libraries as Python extensions via relative
+		# symlinks instead of duplicating them.
 		local sopath soname rel
 		rel=$(realpath -m --relative-to="${sitedir}/bornagain/lib" \
 			"/usr/$(get_libdir)") || die "realpath failed"
