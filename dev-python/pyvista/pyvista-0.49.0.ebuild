@@ -20,13 +20,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# vtk: 0.49 raises the range to 9.3.1 <= vtk < 9.8.0, still excluding 9.4.0
-# and 9.4.1. Those two exclusions are not expressible as one atom and are
-# moot anyway -- ::gentoo ships only 9.5.2, which satisfies the range.
-#
-# pyvista-validation is new in 0.49: upstream moved pyvista._validation into
-# its own distribution and == pins it, importing it at module scope in 29
-# places, so it is mandatory rather than an extra. # verified 2026-09-08
+# Match VTK >=9.3.1,<9.8; excluded 9.4.0/9.4.1 are absent from ::gentoo.
+# 0.49 splits module-level validation imports into an exactly pinned package.
+# verified 2026-09-08
 RDEPEND="
 	>=sci-libs/vtk-9.3.1[python,${PYTHON_SINGLE_USEDEP}]
 	<sci-libs/vtk-9.8.0[python,${PYTHON_SINGLE_USEDEP}]
