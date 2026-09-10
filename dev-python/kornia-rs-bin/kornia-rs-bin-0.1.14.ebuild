@@ -39,9 +39,8 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-# Project is Apache-2.0; the wheel statically links permissively-licensed
-# Rust crates (MIT/Apache-2.0/BSD). Shipped as -bin to avoid vendoring the
-# Rust/PyO3 dependency graph in-tree.
+# Wheel metadata and bundled license identify Apache-2.0; -bin avoids packaging
+# the Rust/PyO3 source graph.
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm64"
@@ -51,8 +50,7 @@ QA_PREBUILT="usr/lib/python3.*/site-packages/kornia_rs/*"
 BDEPEND="dev-python/installer[${PYTHON_USEDEP}]"
 
 src_unpack() {
-	# distutils-r1 (PEP517=no) would try to build from the wheel; stash the
-	# per-impl wheels and feed them to `installer` instead.
+	# Preserve per-implementation wheels for python_install().
 	mkdir -p "${S}/wheel" || die
 	local f
 	for f in ${A}; do
