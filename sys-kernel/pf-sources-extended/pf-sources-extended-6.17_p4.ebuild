@@ -3,16 +3,11 @@
 
 EAPI=8
 
-# 6.17 is a non-LTS kernel that reached end-of-life upstream (linux-stable
-# stopped at 6.17.13). genpatches' last bundle for this branch (-16)
-# tracks stable through 6.17.13 — full coverage. ::gentoo no longer
-# ships gentoo-sources-6.17.X, but alicef's release tarballs remain
-# available on dev.gentoo.org, which is what this ebuild fetches.
+# EOL non-LTS branch; genpatches-16 covers its final stable release, 6.17.13.
+# ::gentoo dropped 6.17, but alicef's release archives remain available.
 
 ETYPE="sources"
 
-# Last genpatches release for the 6.17 branch tracks linux-stable
-# through 6.17.13 (full coverage; linux-stable ended at .13).
 K_GENPATCHES_VER="16"
 
 K_NOSETEXTRAVERSION="1"
@@ -61,8 +56,7 @@ src_unpack() {
 src_prepare() {
 	eapply "${WORKDIR}"/*.patch
 
-	# Curated pf-kernel delta on top of gentoo-sources state.
-	# See pkg_postinst for the kept/dropped breakdown.
+	# Apply the curated pf delta; pkg_postinst lists its scope.
 	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
