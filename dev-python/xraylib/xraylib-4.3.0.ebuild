@@ -28,11 +28,5 @@ BDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 "
 
-# The PyPI sdist bakes its meson setup args into pyproject.toml
-# ([tool.meson-python.args]): the C library is built static and only the
-# classic + numpy Python bindings are installed (Fortran disabled).
-#
-# 4.3.0 dropped the need for the 4.2.x meson-install-tag-scalar patch:
-# upstream now passes scalar install_tag on both extension_module targets
-# and a matching 2-element array on the 2-output SWIG custom_target, all
-# valid under Meson 1.11's tightened install_tag rules.
+# PyPI's Meson configuration builds a static C library and installs only the
+# classic and NumPy Python bindings; Fortran is disabled.
