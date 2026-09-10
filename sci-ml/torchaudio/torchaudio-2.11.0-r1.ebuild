@@ -21,17 +21,9 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Sister of sci-ml/torchvision; built CPU-only here. CUDA/ROCm modes
-# need the same setup_helpers env-var dance torchvision does — defer
-# until a USE-flag-driven cycle.
-#
-# torchaudio 2.11.0 is upstream's latest (pytorch/audio lags torch), so
-# unlike torchvision there is no distinct 2.13 release to pin. Instead the
-# single 2.11.0 source is offered as two revisions against the two torch
-# frontends this overlay carries: r0 (=pytorch-2.11*, for vllm-0.26.0) and
-# this r1 (=pytorch-2.13*, for vllm-0.27.1). Both build clean from the same
-# tree; consumers' `~torchaudio-2.11.0` lets portage backtrack to the rev
-# whose torch pin matches the resolved pytorch. # verified 2026-08-12
+# CPU-only pending USE-driven CUDA/ROCm setup. Upstream audio remains 2.11;
+# revisions pin the matching PyTorch 2.11 or 2.13 frontend so Portage can
+# backtrack between them. verified 2026-08-12
 RDEPEND="
 	=sci-ml/pytorch-2.13*[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
@@ -39,7 +31,7 @@ RDEPEND="
 	')
 "
 
-# Tests pull soundfile + a network corpus; not wired up.
+# Tests require soundfile and a network corpus.
 RESTRICT="test"
 
 python_compile() {
