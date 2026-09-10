@@ -16,9 +16,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="test"
 RESTRICT="!test? ( test )"
-# 2.0.0 moved matplotlib to an examples-only extra; the core module imports
-# only scipy (>=1.9 for cKDTree.query_ball_point workers) and numpy.
-# verified 2026-08-05
+# Since 2.0.0, matplotlib is examples-only; core needs SciPy >=1.9 for workers.
+# Verified 2026-08-05.
 RDEPEND="
 	>=dev-python/scipy-1.9[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
