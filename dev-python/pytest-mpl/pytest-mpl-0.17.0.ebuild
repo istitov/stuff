@@ -16,7 +16,8 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="examples"
-RESTRICT="test"	# Test phase runs with fails
+# The upstream suite currently fails in the ebuild environment.
+RESTRICT="test"
 
 RDEPEND="dev-python/pytest[${PYTHON_USEDEP}]
 	dev-python/jinja2[${PYTHON_USEDEP}]
