@@ -18,7 +18,6 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# upstream declares its only runtime deps as pydantic + typing-extensions.
 RDEPEND="
 	>=dev-python/pydantic-2.12.0[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.13.0[${PYTHON_USEDEP}]
@@ -27,9 +26,8 @@ BDEPEND="
 	>=dev-python/uv-dynamic-versioning-0.8.0[${PYTHON_USEDEP}]
 "
 
-# The sdist ships no test suite (types-only package).
+# The types-only sdist omits tests.
 RESTRICT="test"
 
-# Version source is the uv-dynamic-versioning hatch plugin, which derives from
-# VCS; the sdist is not a checkout, so pin the version explicitly.
+# The sdist lacks VCS metadata; bypass uv-dynamic-versioning with ${PV}.
 export UV_DYNAMIC_VERSIONING_BYPASS=${PV}
