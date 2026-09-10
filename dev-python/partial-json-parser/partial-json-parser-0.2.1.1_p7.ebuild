@@ -27,9 +27,7 @@ KEYWORDS="~amd64 ~arm64"
 
 PATCHES=( "${FILESDIR}/${P}-fix-empty-error-match.patch" )
 
-# No required runtime deps; the only optional extra is `playground` which
-# pulls dev-python/rich and ships the json-playground console script.
-# Enable that extra by default — the binary is otherwise broken.
+# json-playground is installed unconditionally, so enable its rich dependency.
 RDEPEND="
 	dev-python/rich[${PYTHON_USEDEP}]
 "
@@ -43,6 +41,6 @@ EPYTEST_PLUGINS=( hypothesis )
 distutils_enable_tests pytest
 
 python_test() {
-	# test_performance.py runs benchmarks rather than correctness tests.
+	# Exclude performance benchmarks.
 	epytest tests/test_examples.py tests/test_hypotheses.py
 }
