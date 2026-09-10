@@ -53,7 +53,7 @@ inherit texlive-module
 
 src_install() {
 	if use doc; then
-		# texlive-core installs these man pages with the hitex binaries.
+		# texlive-core already installs these man pages.
 		rm texmf-dist/doc/man/man1/{texprof,texprofile}.1 || die
 	fi
 
