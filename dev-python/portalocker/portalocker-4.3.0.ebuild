@@ -38,7 +38,6 @@ distutils_enable_tests pytest
 src_prepare() {
 	default
 
-	# Disable code coverage in tests.
 	sed -i '/--cov/d' pyproject.toml || die
 }
 
