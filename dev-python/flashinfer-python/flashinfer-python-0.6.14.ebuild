@@ -18,15 +18,12 @@ HOMEPAGE="
 LICENSE="Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD Boost-1.0 MIT NVIDIA-CUDA NVIDIA-SDK"
 SLOT="0"
 KEYWORDS="~amd64"
-# Required JIT sources carry NVIDIA proprietary and TensorRT source-code
-# notices.  The sdist has no runnable project test suite; its testing helpers
-# and meaningful JIT checks require a CUDA device and nvcc.
+# JIT sources carry proprietary NVIDIA/TensorRT notices; meaningful tests need
+# a CUDA device and nvcc, and the sdist has no standalone suite.
 RESTRICT="bindist mirror test"
 
-# The wheel build itself is pure Python, but the installed CUDA sources and
-# vendored CUTLASS, spdlog and CCCL headers are compiled with nvcc on demand.
-# Keep the runtime JIT self-contained rather than relying on an undeclared
-# user-provided CUDA toolchain.
+# The pure-Python wheel installs CUDA and vendor sources JIT-compiled by nvcc;
+# keep the runtime toolchain explicit.
 RDEPEND="
 	app-alternatives/ninja
 	dev-util/nvidia-cuda-toolkit:=
@@ -64,23 +61,17 @@ BDEPEND="
 "
 
 src_prepare() {
-	# The sdist only contains LICENSE; setuptools warns that the second glob
-	# matches nothing and will reject it once the deprecation becomes an error.
+	# Remove the unmatched license glob before setuptools makes it fatal.
 	sed -e 's/\["LICENSE", "LICENSE\*\.txt"\]/["LICENSE"]/' \
 		-i pyproject.toml || die
 
-	# The PEP-517 backend tries to install five CUDA compiler wheels with uv or
-	# pip.  Package-manager builds must not mutate their environment or access
-	# PyPI; use the packaged cuda-tile API and system CUDA compiler instead.
+	# Prevent PEP-517 from installing CUDA compiler wheels; use packaged tools.
 	grep -q '^[[:space:]]*_install_cuda_tile_compile_deps()$' \
 		build_backend.py || die
 	sed -e '/^[[:space:]]*_install_cuda_tile_compile_deps()$/d' \
 		-i build_backend.py || die
 
-	# setuptools discovers mapped vendor directories as namespace packages,
-	# pulling in much more than pyproject.toml's declared header subsets.  Drop
-	# examples, tests, CI/docs and Python tooling before the wheel is built,
-	# while preserving every directory referenced by flashinfer.jit.env.
+	# Namespace discovery over-includes vendor trees; retain only JIT-used paths.
 	rm -rf \
 		3rdparty/cccl/{benchmarks,ci,docs,python} \
 		3rdparty/cccl/cub/benchmarks \
@@ -95,19 +86,14 @@ src_prepare() {
 python_install_all() {
 	distutils-r1_python_install_all
 
-	# Upstream's [tool.setuptools] py-modules = ["build_backend",
-	# "build_utils"] would leak both PEP-517 backend wrappers into
-	# top-level site-packages, polluting the global namespace and
-	# pulling setuptools into runtime. Same shape as the
-	# dev-python/torch-c-dlpack-ext fix; drop both in install_all.
-	# verified 2026-05-07 against 0.6.8.post1.
+	# Remove PEP-517 helpers leaked into top-level site-packages; they also add a
+	# false runtime setuptools dependency. verified 2026-05-07
 	rm -f "${ED}"/usr/lib/python*/site-packages/build_backend.py || die
 	rm -f "${ED}"/usr/lib/python*/site-packages/build_utils.py || die
 	rm -rf "${ED}"/usr/lib/python*/site-packages/__pycache__/build_backend.* || die
 	rm -rf "${ED}"/usr/lib/python*/site-packages/__pycache__/build_utils.* || die
 
-	# The flashinfer.data mapping also duplicates both backend modules inside
-	# the package data directory; remove those copies and their bytecode.
+	# Remove the same helpers duplicated in flashinfer.data.
 	local data
 	for data in "${ED}"/usr/lib/python*/site-packages/flashinfer/data; do
 		[[ -d ${data} ]] || continue
