@@ -54,7 +54,7 @@ ck_check-reqs() {
 		ewarn "Please consider setting AMDGPU_TARGETS USE_EXPAND variable to a single architecture."
 	fi
 
-	# It takes ~3GB of RAM per build thread
+	# check-reqs budgets about 3 GiB per build thread.
 	local user_jobs=$(makeopts_jobs)
 	local available_memory_mb=$(free -m | awk '/Mem:/ {print $7}')
 	local max_jobs=$(( available_memory_mb / 2048 ))
@@ -78,13 +78,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# The files/ patches ship xz-compressed to stay under pkgcheck's 20K
-	# SizeViolation and 50K TotalSizeViolation caps -- the 10.0 libcxx-includes
-	# patch alone was 24.7K uncompressed, and files/ totalled 59.7K. eapply(1)
-	# does NOT decompress (portage's __eapply_patch feeds the file straight to
-	# patch), so expand every files/ patch into ${T} and repoint PATCHES at the
-	# plain-text copies before cmake_src_prepare consumes them. Same shape as
-	# sci-ml/caffe2 and dev-python/cupy.
+	# files/ patches are compressed for pkgcheck size limits, but eapply does not
+	# decompress them. Expand into ${T} and repoint PATCHES before preparation.
 	local p b i
 	mkdir "${T}"/patches || die
 	for p in "${FILESDIR}"/*.patch.xz; do
@@ -98,11 +93,9 @@ src_prepare() {
 
 	sed -e '/-Werror/d' -i cmake/EnableCompilerWarnings.cmake || die
 
-	# don't build examples
 	sed -e "/add_subdirectory(example)/d" -i CMakeLists.txt || die
 
-	# Flag -amdgpu-early-inline-all explodes memory consumption
-	# https://github.com/llvm/llvm-project/issues/86332
+	# -amdgpu-early-inline-all explodes memory use (llvm-project#86332).
 	sed -e "/-amdgpu-early-inline-all/d" -e "/-amdgpu-function-calls/d" -i CMakeLists.txt || die
 
 	cmake_src_prepare
@@ -127,13 +120,12 @@ src_configure() {
 		-DBUILD_TESTING=$(usex test ON OFF)
 		-DCK_USE_PROFILER=$(usex profiler ON OFF)
 
-		# Builds 2x less files, but faster.
-		# See https://github.com/ROCm/TheRock/blob/5cb6abaa43ad664c85a99ac37bd4d3abf9b6260e/ml-libs/CMakeLists.txt#L37
+		# Build the smaller, faster MIOpen-required kernel subset.
 		-DMIOPEN_REQ_LIBS_ONLY=ON
 		-Wno-dev
 	)
 
-	# Since 6.4.1 "fallback" DL kernels should be enabled manually...
+	# Since 6.4.1, these architectures need fallback DL kernels explicitly.
 	if use amdgpu_targets_gfx1010 || use amdgpu_targets_gfx1011 || use amdgpu_targets_gfx1012 \
 	|| use amdgpu_targets_gfx1030 || use amdgpu_targets_gfx1031 ; then
 		mycmakeargs+=(-DDL_KERNELS=ON)
@@ -145,8 +137,7 @@ src_configure() {
 		)
 	fi
 
-	# rocminfo call during configuration; should not happen
-	# Bug: https://github.com/ROCm/composable_kernel/issues/2994
+	# Configure calls rocminfo unexpectedly (ROCm/composable_kernel#2994).
 	rocm_add_sandbox -w
 	addpredict /dev/random
 
@@ -160,7 +151,7 @@ src_install() {
 	installation() {
 		python_domodule python/ck4inductor
 
-		# install package-data manually, as there is no PEP517 compliance
+		# Install package data manually; upstream is not PEP 517-compliant.
 		shopt -s globstar
 		package_data=(
 			include/ck/**/*.hpp
