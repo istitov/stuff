@@ -43,9 +43,7 @@ BDEPEND="
 "
 
 src_prepare() {
-	# Drop all [[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
-	# array-of-tables blocks and the force-include of build/doc that
-	# the sphinx hook was supposed to create.
+	# Remove Sphinx hook tables and force-includes for documentation not built here.
 	grep -qF '[[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]' pyproject.toml ||
 		die "Sphinx hook anchor moved"
 	grep -qF '[tool.hatch.build.targets.wheel.force-include]' pyproject.toml ||
