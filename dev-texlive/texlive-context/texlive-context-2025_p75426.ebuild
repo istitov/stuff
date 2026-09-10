@@ -27,7 +27,7 @@ TEXLIVE_MODULE_CONTENTS="
 	jmn.r45751
 	context-animation.r75386
 "
-# Removed in target tlpdb: context-companion-fonts, context-texlive
+# context-companion-fonts and context-texlive were removed upstream.
 TEXLIVE_MODULE_DOC_CONTENTS="
 	context.doc.r78011
 	context-calendar-examples.doc.r66947
@@ -51,7 +51,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	context-visualcounter.doc.r47085
 	context-animation.doc.r75386
 "
-# Removed in target tlpdb: context-companion-fonts.doc, context-texlive.doc
+# Their documentation modules were removed upstream too.
 TEXLIVE_MODULE_SRC_CONTENTS="
 	context-visualcounter.source.r47085
 "
@@ -75,9 +75,7 @@ DEPEND="
 	>=app-text/texlive-core-2025[xetex]
 "
 
-# TL2025 dropped the context-texlive package: the texexec/texmfstart
-# stubs moved to scripts/context/stubs/, and the stubs-mkiv jit wrappers
-# (contextjit/luatools/mtxrunjit) were removed upstream.
+# TL2025 moved texexec/texmfstart into context/stubs and removed the JIT wrappers.
 TEXLIVE_MODULE_BINSCRIPTS="
 	texmf-dist/scripts/context/stubs/unix/texexec
 	texmf-dist/scripts/context/stubs/unix/texmfstart
@@ -85,7 +83,7 @@ TEXLIVE_MODULE_BINSCRIPTS="
 
 src_prepare() {
 	default
-	# No need to install these .cmd Windows stubs
+	# Drop Windows command stubs.
 	rm -r texmf-dist/scripts/context/stubs/win64 || die
 }
 
