@@ -1,0 +1,145 @@
+From 5e428e9e29f9a05f3572b5a3a342d790fb0f9b98 Mon Sep 17 00:00:00 2001
+From: Ivan S. Titov <iohann.s.titov@gmail.com>
+Date: Thu, 10 Sep 2026 23:35:00 +0200
+Subject: [PATCH] SIMD: allow unaligned compact-coordinate buffers
+
+The compact coordinate and four-element result types only guarantee
+four-byte alignment. Use the unaligned SSE operations when accessing
+them, including the SSE loads embedded in AVX-512 broadcasts.
+---
+ .../hist/detail/data/CompactCoordinatesXYZFF.h | 18 +++++++++---------
+ .../hist/detail/data/CompactCoordinatesXYZW.h  | 18 +++++++++---------
+ 2 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/include/core/hist/detail/data/CompactCoordinatesXYZFF.h b/include/core/hist/detail/data/CompactCoordinatesXYZFF.h
+index 45d55c6..22d7de4 100644
+--- a/include/core/hist/detail/data/CompactCoordinatesXYZFF.h
++++ b/include/core/hist/detail/data/CompactCoordinatesXYZFF.h
+@@ -424,7 +424,7 @@ namespace ausaxs::hist::detail {
+         __m128i ff_bins = xyzff::ff_bin_index<vbw>(this->value.ff,
+             _mm_movehl_ps(_mm_unpackhi_ps(r3, r4), _mm_unpackhi_ps(r1, r2)));
+ 
+-        __m128 sv = _mm_load_ps(this->data.data());
++        __m128 sv = _mm_loadu_ps(this->data.data());
+         __m128 d1 = _mm_sub_ps(sv, r1);
+         __m128 d2 = _mm_sub_ps(sv, r2);
+         __m128 d3 = _mm_sub_ps(sv, r3);
+@@ -448,9 +448,9 @@ namespace ausaxs::hist::detail {
+         __m128 dist_binf = _mm_mul_ps(dist_sqrt, _mm_set_ps1(get_inv_width()));
+         __m128i dist_bin = _mm_cvtps_epi32(dist_binf);
+ 
+-        _mm_store_ps(dist_out, dist_sqrt);
+-        _mm_store_si128(reinterpret_cast<__m128i*>(bin_out), dist_bin);
+-        _mm_store_si128(reinterpret_cast<__m128i*>(ff_out), ff_bins);
++        _mm_storeu_ps(dist_out, dist_sqrt);
++        _mm_storeu_si128(reinterpret_cast<__m128i*>(bin_out), dist_bin);
++        _mm_storeu_si128(reinterpret_cast<__m128i*>(ff_out), ff_bins);
+     }
+ 
+     template<bool vbw>
+@@ -477,7 +477,7 @@ namespace ausaxs::hist::detail {
+         __m128i ff_bins = xyzff::ff_bin_index<vbw>(this->value.ff,
+             _mm_movehl_ps(_mm_unpackhi_ps(r3, r4), _mm_unpackhi_ps(r1, r2)));
+ 
+-        __m128 sv = _mm_load_ps(this->data.data());
++        __m128 sv = _mm_loadu_ps(this->data.data());
+         __m128 d1 = _mm_sub_ps(sv, r1);
+         __m128 d2 = _mm_sub_ps(sv, r2);
+         __m128 d3 = _mm_sub_ps(sv, r3);
+@@ -500,8 +500,8 @@ namespace ausaxs::hist::detail {
+         __m128 dist_binf = _mm_mul_ps(dist_sqrt, _mm_set_ps1(get_inv_width()));
+         __m128i dist_bin = _mm_cvtps_epi32(dist_binf);
+ 
+-        _mm_store_si128(reinterpret_cast<__m128i*>(dist_out), dist_bin);
+-        _mm_store_si128(reinterpret_cast<__m128i*>(ff_out), ff_bins);
++        _mm_storeu_si128(reinterpret_cast<__m128i*>(dist_out), dist_bin);
++        _mm_storeu_si128(reinterpret_cast<__m128i*>(ff_out), ff_bins);
+     }
+ 
+     template<bool vbw>
+@@ -649,7 +649,7 @@ namespace ausaxs::hist::detail {
+         __m512i ff_bins = _mm512_cvtps_epi32(_mm512_add_ps(ff_all_float, ff1_scaled));
+ 
+-        // compute squared differences (square-first for ILP)
+-        __m512 svv = _mm512_broadcast_f32x4(_mm_load_ps(this->data.data()));
++        // compute squared differences (square-first for ILP)
++        __m512 svv = _mm512_broadcast_f32x4(_mm_loadu_ps(this->data.data()));
+         __m512 d03   = _mm512_sub_ps(svv, v03);
+         __m512 d47   = _mm512_sub_ps(svv, v47);
+         __m512 d811  = _mm512_sub_ps(svv, v811);
+@@ -705,7 +705,7 @@ namespace ausaxs::hist::detail {
+         __m512 ff1_scaled = _mm512_set1_ps(static_cast<float>(this->value.ff*xyzff::ff_stride()));
+         __m512i ff_bins = _mm512_cvtps_epi32(_mm512_add_ps(ff_all_float, ff1_scaled));
+ 
+-        __m512 svv = _mm512_broadcast_f32x4(_mm_load_ps(this->data.data()));
++        __m512 svv = _mm512_broadcast_f32x4(_mm_loadu_ps(this->data.data()));
+         __m512 d03   = _mm512_sub_ps(svv, v03);
+         __m512 d47   = _mm512_sub_ps(svv, v47);
+         __m512 d811  = _mm512_sub_ps(svv, v811);
+diff --git a/include/core/hist/detail/data/CompactCoordinatesXYZW.h b/include/core/hist/detail/data/CompactCoordinatesXYZW.h
+index da70cc3..5298a92 100644
+--- a/include/core/hist/detail/data/CompactCoordinatesXYZW.h
++++ b/include/core/hist/detail/data/CompactCoordinatesXYZW.h
+@@ -393,7 +393,7 @@ namespace ausaxs::hist::detail {
+         __m128 weights = _mm_mul_ps(_mm_set_ps1(value.w),
+             _mm_movehl_ps(_mm_unpackhi_ps(r3, r4), _mm_unpackhi_ps(r1, r2)));
+ 
+-        __m128 sv = _mm_load_ps(this->data.data());
++        __m128 sv = _mm_loadu_ps(this->data.data());
+         __m128 d1 = _mm_sub_ps(sv, r1);
+         __m128 d2 = _mm_sub_ps(sv, r2);
+         __m128 d3 = _mm_sub_ps(sv, r3);
+@@ -417,9 +417,9 @@ namespace ausaxs::hist::detail {
+         __m128 dist_binf = _mm_mul_ps(dist_sqrt, _mm_set_ps1(get_inv_width()));
+         __m128i dist_bin = _mm_cvtps_epi32(dist_binf);
+ 
+-        _mm_store_ps(dist_out, dist_sqrt);
+-        _mm_store_si128(reinterpret_cast<__m128i*>(bin_out), dist_bin);
+-        _mm_store_ps(wt_out, weights);
++        _mm_storeu_ps(dist_out, dist_sqrt);
++        _mm_storeu_si128(reinterpret_cast<__m128i*>(bin_out), dist_bin);
++        _mm_storeu_ps(wt_out, weights);
+     }
+ 
+     template<bool vbw>
+@@ -446,7 +446,7 @@ namespace ausaxs::hist::detail {
+         __m128 weights = _mm_mul_ps(_mm_set_ps1(value.w),
+             _mm_movehl_ps(_mm_unpackhi_ps(r3, r4), _mm_unpackhi_ps(r1, r2)));
+ 
+-        __m128 sv = _mm_load_ps(this->data.data());
++        __m128 sv = _mm_loadu_ps(this->data.data());
+         __m128 d1 = _mm_sub_ps(sv, r1);
+         __m128 d2 = _mm_sub_ps(sv, r2);
+         __m128 d3 = _mm_sub_ps(sv, r3);
+@@ -469,8 +469,8 @@ namespace ausaxs::hist::detail {
+         __m128 dist_binf = _mm_mul_ps(dist_sqrt, _mm_set_ps1(get_inv_width()));
+         __m128i dist_bin = _mm_cvtps_epi32(dist_binf);
+ 
+-        _mm_store_si128(reinterpret_cast<__m128i*>(dist_out), dist_bin);
+-        _mm_store_ps(wt_out, weights);
++        _mm_storeu_si128(reinterpret_cast<__m128i*>(dist_out), dist_bin);
++        _mm_storeu_ps(wt_out, weights);
+     }
+ 
+     template<bool vbw>
+@@ -616,7 +616,7 @@ namespace ausaxs::hist::detail {
+             _mm512_insertf32x8(_mm512_castps256_ps512(w_lo), w_hi, 1));
+ 
+-        // compute squared differences (square-first for ILP)
+-        __m512 svv = _mm512_broadcast_f32x4(_mm_load_ps(this->data.data()));
++        // compute squared differences (square-first for ILP)
++        __m512 svv = _mm512_broadcast_f32x4(_mm_loadu_ps(this->data.data()));
+         __m512 d03   = _mm512_sub_ps(svv, v03);
+         __m512 d47   = _mm512_sub_ps(svv, v47);
+         __m512 d811  = _mm512_sub_ps(svv, v811);
+@@ -670,7 +670,7 @@ namespace ausaxs::hist::detail {
+         __m512 weights = _mm512_mul_ps(_mm512_set1_ps(value.w),
+             _mm512_insertf32x8(_mm512_castps256_ps512(w_lo), w_hi, 1));
+ 
+-        __m512 svv = _mm512_broadcast_f32x4(_mm_load_ps(this->data.data()));
++        __m512 svv = _mm512_broadcast_f32x4(_mm_loadu_ps(this->data.data()));
+         __m512 d03   = _mm512_sub_ps(svv, v03);
+         __m512 d47   = _mm512_sub_ps(svv, v47);
+         __m512 d811  = _mm512_sub_ps(svv, v811);
+-- 
+2.51.0

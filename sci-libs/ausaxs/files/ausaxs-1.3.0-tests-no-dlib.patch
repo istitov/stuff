@@ -1,0 +1,79 @@
+From 502269bbdc9dd629c16e8a6bf00ca2aa59349112 Mon Sep 17 00:00:00 2001
+From: Ivan S. Titov <iohann.s.titov@gmail.com>
+Date: Thu, 10 Sep 2026 18:00:00 +0200
+Subject: [PATCH] tests: enable CTest and support builds without dlib
+
+Register the test suite with CTest. The BFGS enum member is only defined
+when DLIB_AVAILABLE is set, so guard its test accordingly.
+---
+ CMakeLists.txt                   | 1 +
+ tests/feature/fitter/fitter.cpp | 4 ++++
+ tests/unit/fitter/fitter.cpp    | 2 ++
+ 3 files changed, 7 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1138de4..746d0d4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -180,6 +180,7 @@
+ 
+ add_subdirectory(source)
+ if (BUILD_TESTS)
++	enable_testing()
+ 	add_subdirectory(tests)
+ endif()
+ if (BUILD_EXECUTABLES)
+
+diff --git a/tests/feature/fitter/fitter.cpp b/tests/feature/fitter/fitter.cpp
+index a1d9a96..27234bc 100644
+--- a/tests/feature/fitter/fitter.cpp
++++ b/tests/feature/fitter/fitter.cpp
+@@ -173,6 +173,7 @@ TEST_CASE("fitter: correct dof", "[files]") {
+         REQUIRE(res->dof == size-2);
+     }
+ 
++#ifdef DLIB_AVAILABLE
+     SECTION("SmartFitter") {
+         auto fit_and_check = [size, &protein, &data] (unsigned int dof) {
+             fitter::SmartFitter fitter(data);
+@@ -258,10 +259,12 @@ TEST_CASE("fitter: correct dof", "[files]") {
+             fit_and_check(7);
+         }
+     }
++#endif
+ }
+ 
+ // Check that the SmartFitter produces consistent fits when using different q-ranges
+ // This is a good but rather long test for potential memory issues or inconsistencies in the various histogram managers
++#ifdef DLIB_AVAILABLE
+ TEST_CASE("SmartFitter: consistent fits using different q-ranges") {
+     settings::flags::max_bin_count = constants::axes::d_axis.bins;
+     settings::general::verbose = false;
+@@ -303,4 +306,5 @@ TEST_CASE("SmartFitter: consistent fits using different q-ranges") {
+             }
+         }
+     }
+-}
+\ No newline at end of file
++}
++#endif
+
+diff --git a/tests/unit/fitter/fitter.cpp b/tests/unit/fitter/fitter.cpp
+index a3547d5..ed55170 100644
+--- a/tests/unit/fitter/fitter.cpp
++++ b/tests/unit/fitter/fitter.cpp
+@@ -108,6 +108,7 @@ TEST_CASE("Fitter::fit_chi2_only") {
+     REQUIRE(chi2 >= 0.0);
+ }
+ 
++#ifdef DLIB_AVAILABLE
+ TEST_CASE("Fitter::set_algorithm") {
+     std::vector<double> data = {1.0, 2.0, 3.0};
+     std::vector<double> model = {2.0, 4.0, 6.0};
+@@ -115,3 +116,4 @@ TEST_CASE("Fitter::set_algorithm") {
+     
+     fitter.set_algorithm(mini::algorithm::BFGS);
+ }
++#endif
+-- 
+2.51.0

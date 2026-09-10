@@ -14,7 +14,7 @@
     <pkg>dev-python/pyausaxs</pkg> wrapper.
   </longdescription>
   <use>
-    <flag name="executables">Install the saxs_fitter, em_fitter and rigidbody_optimizer CLI tools</flag>
+    <flag name="executables">Install the ausaxs, saxs_fitter, em_fitter and rigidbody_optimizer CLI tools</flag>
   </use>
   <upstream>
     <remote-id type="github">AUSAXS/AUSAXS</remote-id>
