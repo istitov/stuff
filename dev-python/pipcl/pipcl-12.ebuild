@@ -20,13 +20,11 @@ LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# v9's build-system.requires lists packaging, and
-# DISTUTILS_USE_PEP517=standalone does not auto-install build
-# requirements — declare it. verified 2026-06-19.
+# standalone omits build requirements; pipcl also imports packaging at runtime.
+# verified 2026-06-19
 BDEPEND="dev-python/packaging[${PYTHON_USEDEP}]"
 RDEPEND="dev-python/packaging[${PYTHON_USEDEP}]"
 
-# Tests pip-install extra tooling (piprepo, a pinned setuptools) over the
-# network and build sample wheels — not runnable in a sandboxed build.
-# verified 2026-06-19.
+# Tests install extra tooling over the network and build sample wheels.
+# verified 2026-06-19
 RESTRICT="test"
