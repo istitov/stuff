@@ -3,7 +3,11 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit cmake
+
+PATCHES=(
+	"${FILESDIR}/${PN}-1.3.0-simd-unaligned-access.patch"
+)
 
 DESCRIPTION="Efficient small-angle X-ray scattering (SAXS) fitting and analysis"
 HOMEPAGE="https://github.com/AUSAXS/AUSAXS"
@@ -54,14 +58,12 @@ src_prepare() {
 		-e 's/-static-libstdc++//g' \
 		CMakeLists.txt || die
 
-	# 1.2.4 relocated the optimisation flags out of CMakeLists.txt into
-	# cmake/setup_compile_commands.cmake. Upstream bakes in -ffast-math
-	# (now -O3-based, no longer -Ofast); strip it since fast-math changes
-	# FP results and is unsafe for scientific code. -mavx is gone too —
-	# -march is now driven by the ARCH cache var (set to x86-64 below),
-	# so no separate AVX strip is needed. verified 2026-06-10
+	# Use user-selected optimization and architecture flags.
 	sed -i \
-		-e 's/-ffast-math//g' \
+		-e '/^[[:space:]]*-O3$/d' \
+		-e '/^[[:space:]]*-ffast-math$/d' \
+		-e '/^[[:space:]]*-pipe$/d' \
+		-e '/list(APPEND CompilerFlags ${MARCH_FLAG})/d' \
 		cmake/setup_compile_commands.cmake || die
 
 	# Drop the tests subdirectory: it is EXCLUDE_FROM_ALL and we never
@@ -89,28 +91,12 @@ src_prepare() {
 }
 
 src_configure() {
-	# Keep finite-math assumptions off; upstream pairs -ffast-math (which
-	# we strip in src_prepare) with -fno-finite-math-only, so retain the
-	# latter explicitly to stay conservative on scientific FP.
-	append-flags -fno-finite-math-only
-
-	# CONSTEXPR_TABLES was dropped upstream in 1.2.4. ARCH keys into
-	# cmake/setup_compile_commands.cmake's MARCH_FLAGS: amd64/x86 take a
-	# generic -march=x86-64 baseline (no illegal instructions on old CPUs);
-	# arm64 takes -march=armv8-a. Upstream's bare "x86-64" is invalid on
-	# aarch64 (g++ rejects -march=x86-64), so select per-arch.
-	local march
-	case ${ARCH} in
-		amd64|x86) march="x86-64" ;;
-		arm64)     march="armv8-a" ;;
-		*)         march="auto" ;;
-	esac
 	local mycmakeargs=(
 		-DCMAKE_BUILD_TYPE=Release
 		-DGUI=OFF
 		-DDLIB=OFF
 		-DBUILD_PLOT_EXE=OFF
-		-DARCH="${march}"
+		-DARCH=auto
 		-DUSE_SYSTEM_GCEM=ON
 		-DUSE_SYSTEM_BACKWARD=ON
 		-DUSE_SYSTEM_CLI11=ON
