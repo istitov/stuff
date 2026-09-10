@@ -4,14 +4,12 @@
 EAPI=8
 
 PYPI_PN=dans_diffraction
-#PYPI_NO_NORMALIZE=1
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi
 
 DESCRIPTION="Generate diffracted intensities from crystals"
 HOMEPAGE="https://danporter.github.io/Dans_Diffraction/"
-#SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -26,8 +24,7 @@ RDEPEND="
 src_prepare() {
 	default
 
-	# Upstream declares the same launcher as both a console and GUI script.
-	# installer refuses to overwrite the first generated file with the second.
+	# Drop the duplicate GUI entry; installer will not overwrite the console script.
 	grep -qF '[project.gui-scripts]' pyproject.toml ||
 		die "project.gui-scripts anchor moved"
 	sed -i -e '/^\[project.gui-scripts\]/,/^$/s/^dansdiffraction = .*//' \
