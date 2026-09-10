@@ -19,8 +19,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# PyPI sdist used (github tags lag — max v2.0.9a13 vs PyPI 2.0.13).
-# spacy / thinc cap cymem<2.1.0; 2.0.13 fits.
+# GitHub tags lag PyPI; spaCy/Thinc require Cymem <2.1.
 RDEPEND="${PYTHON_DEPS}"
 DEPEND="${RDEPEND}"
 BDEPEND="
