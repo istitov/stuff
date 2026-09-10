@@ -55,6 +55,7 @@ src_prepare() {
 		local cuda_ver=$(awk '/^#define CUDA_VERSION/ {print $3; exit}' \
 			"${ESYSROOT}"/opt/cuda/include/cuda.h 2>/dev/null)
 		if [[ -n ${cuda_ver} && ${cuda_ver} -ge 13000 ]]; then
+			grep -q -- '-arch=sm_60 ' CMakeLists.txt || die "CUDA arch anchor moved"
 			sed -i -e 's/-arch=sm_60 /-arch=sm_75 /' \
 				CMakeLists.txt || die
 		fi
