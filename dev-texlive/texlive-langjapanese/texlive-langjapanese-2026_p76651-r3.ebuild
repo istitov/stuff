@@ -180,14 +180,14 @@ TEXLIVE_MODULE_BINSCRIPTS="
 src_prepare() {
 	default
 
-	# e(u)ptex are installed by texlive-core[cjk]
+	# texlive-core[cjk] provides e(u)ptex.
 	grep -qF 'AddFormat name=eptex ' tlpkg/tlpobj/ptex.tlpobj || die "eptex anchor moved"
 	grep -qF 'AddFormat name=euptex ' tlpkg/tlpobj/uptex.tlpobj || die "euptex anchor moved"
 	sed -i '/AddFormat name=eptex /d' tlpkg/tlpobj/ptex.tlpobj || die
 	sed -i '/AddFormat name=euptex /d' tlpkg/tlpobj/uptex.tlpobj || die
 
 	if use doc; then
-		# ptekf.1 is installed by dev-libs/ptexenc
+		# dev-libs/ptexenc provides ptekf.1.
 		rm texmf-dist/doc/man/man1/ptekf.1 || die
 	fi
 }
