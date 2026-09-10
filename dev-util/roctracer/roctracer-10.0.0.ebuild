@@ -10,13 +10,8 @@ inherit cmake flag-o-matic prefix python-any-r1 rocm toolchain-funcs
 
 DESCRIPTION="Callback/Activity Library for Performance tracing AMD GPU's"
 HOMEPAGE="https://github.com/ROCm/rocm-systems/tree/develop/projects/roctracer"
-# Forked into ::stuff for ROCm 10.0: ::gentoo stops at 7.2.x, but
-# sci-libs/rocSPARSE depends on dev-util/roctracer:${SLOT} UNCONDITIONALLY (not
-# USE-gated), so a 10.0 rocSPARSE needs a matching-subslot roctracer that
-# ::gentoo does not provide. Several other stack members take it optionally.
-#
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now.
+# rocSPARSE requires a matching roctracer subslot beyond Gentoo's 7.2.x.
+# AMD retired rocm-* releases; use the matching TheRock component asset.
 SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/${PN}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}"
 
@@ -60,16 +55,11 @@ src_prepare() {
 
 	hprefixify script/*.py
 
-	# Every sed below asserts its anchor first: `sed` exits 0 on no-match, so
-	# an upstream rename would otherwise leave the substitution silently inert
-	# with a green build. Where the sed works around an upstream bug rather
-	# than adapting upstream to Gentoo, the die message says so -- in those
-	# cases a future failure most likely means upstream fixed it and the sed
-	# should be dropped, not re-anchored.
-	# All anchors verified present 2026-08-30 against the therock-10.0 source.
+	# Assert every sed anchor to catch silent upstream drift; bug-workaround
+	# failures may mean the sed can be dropped. # verified 2026-08-30
 	local f
 
-	# Install libs directly into /usr/lib64
+	# Avoid a package-specific library subdirectory.
 	for f in src/CMakeLists.txt plugin/file/CMakeLists.txt; do
 		grep -qF '${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}' "${f}" ||
 			die "libdir anchor moved in ${f}; libs would install to a ${PN}/ subdirectory"
@@ -77,28 +67,27 @@ src_prepare() {
 	sed -e "s:\${CMAKE_INSTALL_LIBDIR}/\${PROJECT_NAME}:\${CMAKE_INSTALL_LIBDIR}:g" \
 		-i src/CMakeLists.txt plugin/file/CMakeLists.txt || die
 
-	# Remove all install commands for tests
+	# Do not install test binaries.
 	grep -qE '^ *install\(' test/CMakeLists.txt ||
 		die "test install() anchor moved; test binaries would be installed"
 	sed -E '/^ *install\(.+/d' -i test/CMakeLists.txt || die
 
-	# Test fails: https://github.com/ROCm/roctracer/issues/109
+	# Fails upstream (ROCtracer#109).
 	grep -qF 'load_unload_reload_test' test/run.sh ||
 		die "load_unload_reload_test gone from test/run.sh; check whether ROCm/roctracer#109 was fixed and drop this sed"
 	sed '/load_unload_reload_test/d' -i test/run.sh || die
 
-	# Fix search path for HIP cmake
+	# Point tests at Gentoo's HIP CMake directory.
 	grep -qF '${ROCM_PATH}/lib/cmake' test/CMakeLists.txt ||
 		die "ROCM_PATH/lib/cmake anchor moved; the test build would not find HIP's cmake files"
 	sed -e "s,\${ROCM_PATH}/lib/cmake,/usr/$(get_libdir)/cmake,g" -i test/CMakeLists.txt || die
 
-	# bug #892732 -- still present at 10.0 as
-	# add_compile_options(-Wall -Wno-error=ignored-attributes -Werror)
+	# Remove upstream -Werror (bug #892732).
 	grep -q -- '-Werror' CMakeLists.txt ||
 		die "-Werror gone from CMakeLists.txt; upstream likely dropped it, so drop this sed"
 	sed -e 's/-Werror//' -i CMakeLists.txt || die
 
-	# libc++ has no experimental/filesystem
+	# libc++ has no experimental/filesystem.
 	for f in plugin/file/file.cpp src/hip_stats/hip_stats.cpp \
 			src/roctracer/loader.h src/tracer_tool/tracer_tool.cpp; do
 		grep -qF 'experimental' "${f}" ||
@@ -108,9 +97,7 @@ src_prepare() {
 		-i plugin/file/file.cpp src/hip_stats/hip_stats.cpp \
 		src/roctracer/loader.h src/tracer_tool/tracer_tool.cpp || die
 
-	# Use clang set by rocm_use_clang instead of any clang. Both expressions
-	# matter: the first picks the compiler, the second drops the bare-name
-	# clang dependency that would otherwise still be required to exist.
+	# Use rocm_use_clang's compiler and remove the bare-name clang dependency.
 	grep -qF 'COMMAND clang' test/CMakeLists.txt ||
 		die "COMMAND clang anchor moved; the test build would use whatever clang is on PATH"
 	grep -qF 'DEPENDS ${INPUT_FILE} clang' test/CMakeLists.txt ||
@@ -131,7 +118,7 @@ src_configure() {
 	rocm_use_clang
 
 	if [[ $(tc-get-cxx-stdlib) == "libc++" ]] ; then
-		# https://releases.llvm.org/9.0.0/projects/libcxx/docs/UsingLibcxx.html#using-filesystem
+		# libc++ needs its filesystem support library.
 		append-libs "-lc++fs"
 	fi
 
@@ -151,6 +138,6 @@ src_configure() {
 src_test() {
 	check_amdgpu
 	cd "${BUILD_DIR}" || die
-	# if LD_LIBRARY_PATH not set, dlopen cannot find correct lib
+	# Ensure dlopen uses the just-built library.
 	LD_LIBRARY_PATH="${EPREFIX}/usr/$(get_libdir):${LD_LIBRARY_PATH}" bash run.sh || die
 }
