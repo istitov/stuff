@@ -20,20 +20,11 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Tests need a TTY that supports the various graphics protocols (kitty,
-# iterm2, sixel) and aren't sandbox-friendly. Skip until someone wants
-# a sub-suite split.
+# Tests require a TTY with kitty, iTerm2, and Sixel protocols.
 RESTRICT="test"
 
-# Upstream setup.py pins pillow<11. The cap is auto-bumped via Dependabot
-# per the commit log ("deps: Bump pillow from 10.4.0 to 11.1.0" #157),
-# not a knowledge claim. Empirically verified 2026-05-09 against in-tree
-# pillow-12.2.0: every Pillow API term-image actually uses (Image.open,
-# Image.frombytes, UnidentifiedImageError, mode/size/format/info/n_frames/
-# is_animated attrs, tobytes/save/seek methods) works unchanged. Sed the
-# cap rather than wait for upstream's next release — last tag is
-# 2024-09-15; main has pillow<12 + py3.13 since 2025-04-04 but no new
-# tagged release. typing_extensions added on main only, not v0.7.2.
+# Relax Dependabot's Pillow <11 cap; all used APIs work with in-tree 12.2.0.
+# Main has updated the cap but has no newer release. verified 2026-05-09
 RDEPEND="
 	${PYTHON_DEPS}
 	>=dev-python/pillow-9.1[${PYTHON_USEDEP}]
@@ -43,7 +34,6 @@ DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
 
 src_prepare() {
-	# verified 2026-05-09: cap is unfounded, see comment above RDEPEND.
 	sed -i 's/"pillow>=9\.1,<11"/"pillow>=9.1"/' setup.py || die
 	distutils-r1_src_prepare
 }
