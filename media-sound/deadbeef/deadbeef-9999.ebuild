@@ -142,12 +142,12 @@ src_prepare() {
 	eautopoint --force
 	eautoreconf
 
-	# Get rid of bundled gettext. (Avoid build failures with musl)
+	# Bundled gettext fails on musl.
 	drop_and_stub "${S}/intl"
 
 }
 
-src_configure () {
+src_configure() {
 	if ! tc-is-clang; then
 		AR=llvm-ar
 		CC=${CHOST}-clang
@@ -240,7 +240,7 @@ src_install() {
 
 	find "${ED}" -name '*.la' -delete || die
 
-	# if compressed, help doesn't work
+	# The player cannot read compressed help files.
 	docompress -x /usr/share/doc/${PF}
 }
 
