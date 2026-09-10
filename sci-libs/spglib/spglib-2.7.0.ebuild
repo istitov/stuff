@@ -34,6 +34,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	python? ( dev-python/pybind11[${PYTHON_USEDEP}] )
+	test? ( dev-cpp/gtest )
 "
 BDEPEND="
 	python? (
@@ -42,7 +43,6 @@ BDEPEND="
 		dev-python/setuptools-scm[${PYTHON_USEDEP}]
 		test? ( dev-python/pyyaml[${PYTHON_USEDEP}] )
 	)
-	test? ( dev-cpp/gtest )
 "
 
 PATCHES=(
