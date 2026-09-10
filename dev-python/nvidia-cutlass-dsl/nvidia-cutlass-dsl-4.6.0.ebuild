@@ -33,6 +33,9 @@ RDEPEND="
 	~dev-python/nvidia-cutlass-dsl-libs-base-${PV}[${PYTHON_USEDEP}]
 	~dev-python/nvidia-cutlass-dsl-libs-cu13-${PV}[${PYTHON_USEDEP}]
 "
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
 
 src_unpack() {
 	mkdir -p "${S}/wheel" || die
