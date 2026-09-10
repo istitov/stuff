@@ -181,6 +181,8 @@ src_prepare() {
 	default
 
 	# e(u)ptex are installed by texlive-core[cjk]
+	grep -qF 'AddFormat name=eptex ' tlpkg/tlpobj/ptex.tlpobj || die "eptex anchor moved"
+	grep -qF 'AddFormat name=euptex ' tlpkg/tlpobj/uptex.tlpobj || die "euptex anchor moved"
 	sed -i '/AddFormat name=eptex /d' tlpkg/tlpobj/ptex.tlpobj || die
 	sed -i '/AddFormat name=euptex /d' tlpkg/tlpobj/uptex.tlpobj || die
 
