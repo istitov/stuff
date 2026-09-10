@@ -26,8 +26,7 @@ BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 
-# Upstream places tests in test/ (singular), not the default tests/
-# that distutils-r1 auto-discovers — point pytest at it explicitly.
+# Upstream uses the nondefault test/ directory.
 EPYTEST_PATHS=( test )
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
