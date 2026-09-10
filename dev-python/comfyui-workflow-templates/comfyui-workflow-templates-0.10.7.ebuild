@@ -19,8 +19,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream requires_dist pins each split to an exact version; ~ atoms track
-# that == pin (any revision). Single-impl propagation via PYTHON_SINGLE_USEDEP.
+# Match upstream's exact split-package pins while allowing Gentoo revisions.
 RDEPEND="
 	~dev-python/comfyui-workflow-templates-core-0.3.263[${PYTHON_SINGLE_USEDEP}]
 	~dev-python/comfyui-workflow-templates-media-api-0.3.81[${PYTHON_SINGLE_USEDEP}]
