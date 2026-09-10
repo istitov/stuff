@@ -226,15 +226,10 @@ SRC_URI="
 	${CARGO_CRATE_URIS}
 "
 
-# Apache-2.0 per the shipped LICENSE file and Cargo.toml (upstream's
-# Cargo.toml mislabelled this MIT through 0.42.x; corrected to "Apache 2.0"
-# as of 0.43.0, verified 2026-06-28). The bundled crate set carries the
-# usual permissive mix (Apache-2.0 / MIT / BSD / ISC / MPL-2.0 /
-# Unicode-3.0 / Unlicense); the cargo eclass surfaces those at unpack.
+# Upstream corrected Cargo.toml's former MIT mislabel to Apache-2.0 in 0.43.
+# verified 2026-06-28
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# rusqlite 0.31 is pulled in with the "bundled" feature so SQLite is
-# compiled into the binary; flate2 builds against miniz_oxide (pure
-# Rust) by default. No system C library deps.
+# Bundled rusqlite and pure-Rust miniz_oxide avoid system C dependencies.
