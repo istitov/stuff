@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
-# sdist has no git metadata; keep setuptools_scm happy.
+# Pin the version without Git metadata.
 export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_HYPERSPYUI=${PV}
 
 inherit distutils-r1 pypi virtualx
@@ -28,12 +28,9 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 
-# Upstream's [pyqt] extra pulls PyQt5 + PyQtWebEngine, but PyQt5 stack is
-# deprecated in ::gentoo (no PyQt5-WebEngine ebuild). qtpy with gui+widgets
-# is enough for the main app; the EELS-database plugin needs WebEngine but
-# self-disables when it's absent (see optional-qtwebengine patch). Users
-# who want EELSDB add dev-python/pyqt6-webengine themselves (or set
-# qtpy[webengine] in package.use). Reported 2026-05-14.
+# Avoid deprecated PyQt5 WebEngine: qtpy[gui,widgets] runs the main app, while
+# the patched EELSDB plugin disables itself without WebEngine. Users may add
+# pyqt6-webengine. reported 2026-05-14
 RDEPEND="
 	>=dev-python/autopep8-1.5.0[${PYTHON_USEDEP}]
 	>=dev-python/exspy-0.3.1[${PYTHON_USEDEP}]
