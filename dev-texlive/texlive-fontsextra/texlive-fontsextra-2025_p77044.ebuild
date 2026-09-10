@@ -379,7 +379,6 @@ TEXLIVE_MODULE_CONTENTS="
 	pennstander-otf.r77677
 	splentinex.r77677
 "
-# Removed in target tlpdb: gentium-tug
 TEXLIVE_MODULE_DOC_CONTENTS="
 	aboensis.doc.r77677
 	academicons.doc.r77677
@@ -750,7 +749,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pennstander-otf.doc.r77677
 	splentinex.doc.r77677
 "
-# Removed in target tlpdb: gentium-tug.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	adforn.source.r78143
 	adfsymbols.source.r78144
@@ -835,7 +833,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	venturisadf.source.r77677
 	yfonts.source.r77677
 "
-# Removed in target tlpdb: gentium-tug.source
 
 inherit texlive-module
 
