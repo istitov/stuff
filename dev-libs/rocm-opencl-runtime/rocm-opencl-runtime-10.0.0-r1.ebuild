@@ -9,10 +9,8 @@ inherit cmake edo flag-o-matic rocm
 DESCRIPTION="Radeon Open Compute OpenCL Compatible Runtime"
 HOMEPAGE="https://github.com/ROCm/rocm-systems/tree/develop/projects/clr"
 
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now. ROCm 10.0 is
-# the renumbering of the 7.13 -> 7.14 line (2026-08-27). The clr.tar.gz asset
-# is shared with dev-util/hip.
+# AMD retired rocm-* releases; use the matching TheRock clr asset shared with
+# dev-util/hip.
 SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/clr.tar.gz -> rocm-clr-${PV}.tar.gz"
 S="${WORKDIR}/clr"
 
@@ -39,26 +37,19 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-6.2.4-fix-lib-version.patch"
-	# Without this, clCreateCommandQueue() segfaults outright on an AVX-512
-	# host. Same hunk as dev-util/hip's hip-10.0.0-aligned-new.patch -- both
-	# packages build amd::roc::VirtualGPU from the shared clr.tar.gz asset.
+	# Prevent clCreateCommandQueue() from crashing on AVX-512; shared with HIP's
+	# VirtualGPU build.
 	"${FILESDIR}/${PN}-10.0.0-aligned-new.patch"
 )
 
 src_unpack() {
-	# rocm 7.2.4's clr release-asset tarball carries its own clr/ top-level
-	# directory (7.2.3's unpacked flat, hence the manual wrapper previously).
-	# Unpack directly into ${WORKDIR} so the root lands where S= expects it.
+	# Preserve the archive's clr/ top-level directory expected by S.
 	unpack "rocm-clr-${PV}.tar.gz"
 }
 
 src_prepare() {
-	# Compatibility with CMake < 3.10 will be removed.
-	# `sed` exits 0 on no-match, so a bumped vendored Khronos minimum would
-	# silently leave the old floor in place; assert both files first. Note the
-	# pattern matches only 3.5, while dev-util/hip's equivalent matches 3.[35]
-	# -- kept as-is because both vendored files are still on 3.5 here.
-	# verified 2026-08-29 against therock-10.0.
+	# Raise vendored Khronos' obsolete CMake floor; assert both 3.5 anchors.
+	# verified 2026-08-29
 	local f
 	for f in opencl/khronos/icd/CMakeLists.txt \
 		opencl/khronos/headers/opencl2.2/tests/CMakeLists.txt; do
@@ -71,18 +62,14 @@ src_prepare() {
 }
 
 src_configure() {
-	# -Werror=strict-aliasing
-	# https://bugs.gentoo.org/856088
-	# https://github.com/ROCm/clr/issues/64
-	#
-	# Do not trust it for LTO either
+	# Avoid strict-aliasing and LTO failures (bug #856088, ROCm/clr#64).
 	append-flags -fno-strict-aliasing
 	filter-lto
 
-	# Fix ld.lld linker error: https://github.com/RadeonOpenCompute/ROCm-OpenCL-Runtime/issues/155
+	# Fix the ld.lld link (ROCm-OpenCL-Runtime#155).
 	append-ldflags $(test-flags-CCLD -Wl,--undefined-version)
 
-	# Reported upstream: https://github.com/RadeonOpenCompute/ROCm-OpenCL-Runtime/issues/120
+	# Restore legacy common symbols (ROCm-OpenCL-Runtime#120).
 	append-cflags -fcommon
 
 	local mycmakeargs=(
@@ -93,9 +80,8 @@ src_configure() {
 		-DBUILD_ICD=ON
 		-DCLR_BUILD_OCL=ON
 		-DCMAKE_DISABLE_FIND_PACKAGE_Git=ON
-		# clr 7.2.3 dropped its find_package(NUMA), so cmake silently
-		# ignores these; kept aligned with ::gentoo in case upstream
-		# restores NUMA detection — verified inert 2026-05-08.
+		# NUMA discovery remains absent, so these are inert; retain for a future
+		# restoration. # verified 2026-09-10 against TheRock 10.0
 		-DCMAKE_DISABLE_FIND_PACKAGE_NUMA="$(usex !numa)"
 		-DCMAKE_REQUIRE_FIND_PACKAGE_NUMA="$(usex numa)"
 	)
