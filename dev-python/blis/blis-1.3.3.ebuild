@@ -19,24 +19,13 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# This is the Python wrapper from explosion/cython-blis (different
-# from sci-libs/blis which is the C library on its own). Upstream
-# bundles its own copy of the BLIS sources and builds them at install
-# time — that's the explicit ExplosionAI design choice for thinc's
-# performance story; system sci-libs/blis isn't a drop-in (different
-# vendoring layer + version pinning).
+# This Python wrapper vendors BLIS for thinc; system sci-libs/blis is not a
+# drop-in replacement for that pinned layer.
 
-# verified 2026-05-09: bundled BLIS 0.7.0's linux-x86_64.jsonl build
-# rules trip gcc-16 because they reference Knights Landing (KNL)
-# flags removed from modern gcc (-march=knl, -mavx512pf, -mavx512er;
-# Intel deprecated KNL in 2017). Stripping the KNL kernel entries
-# isn't enough — the dispatch table hard-references KNL symbols, so
-# the link succeeds but runtime imports fail with "undefined symbol:
-# bli_cgemmsup_c_knl_ref". Force BLIS_ARCH=generic instead, which
-# selects linux-generic.jsonl (298 lines, no KNL anywhere). Loses
-# SIMD perf relative to the SKX kernels — see Layer 3 ebuild bump
-# todo for a sustainable fix (track upstream cython-blis bumps to
-# vendored BLIS that drop KNL outright).
+# Bundled BLIS 0.7.0 references KNL flags removed by GCC 16; deleting only its
+# kernels leaves dispatch symbols unresolved. Use generic until upstream's
+# vendored BLIS drops KNL, accepting reduced SIMD performance.
+# verified 2026-05-09
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-python/numpy[${PYTHON_USEDEP}]
@@ -48,7 +37,6 @@ BDEPEND="
 "
 
 src_compile() {
-	# Force generic kernel set — see comment above RDEPEND for why.
 	export BLIS_ARCH="generic"
 	distutils-r1_src_compile
 }
