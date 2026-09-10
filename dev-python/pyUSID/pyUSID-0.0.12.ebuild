@@ -6,8 +6,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 
-# Legacy sdist keeps the mixed-case "pyUSID-" filename PyPI no longer
-# normalizes, so skip the eclass name normalization.
+# Preserve the legacy sdist's mixed-case filename.
 PYPI_NO_NORMALIZE=1
 
 inherit distutils-r1 pypi
