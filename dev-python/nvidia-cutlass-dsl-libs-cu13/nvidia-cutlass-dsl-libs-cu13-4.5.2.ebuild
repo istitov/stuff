@@ -38,6 +38,9 @@ RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/nvidia_cutlass_dsl/*"
 
