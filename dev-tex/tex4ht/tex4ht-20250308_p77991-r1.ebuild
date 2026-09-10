@@ -9,11 +9,8 @@ MY_P_TEXLIVE="${PN}.r$(ver_cut 3).tar.xz"
 MY_P_TEXLIVE_DOC="${PN}.doc.r$(ver_cut 3).tar.xz"
 MY_P_TEXLIVE_SRC="${PN}.source.r$(ver_cut 3).tar.xz"
 
-# The postprocessor engine (tex4ht.c/t4ht.c + java) is built from the TeX
-# Live source tarball's texk/tex4htk/ tree -- the same durable, mirror-hosted
-# source that kpathsea/ptexenc/dvipsk pin -- rather than a separately-hosted
-# tex4ht-sources-<N> bundle. This keeps the engine in lockstep with the
-# TL2025 runtime data and needs no extra distfile hosting.
+# Build the postprocessor from TeX Live's durable source archive, keeping it in
+# lockstep with TL2025 data without a separate hosted source bundle.
 MY_SOURCE_FILE="texlive-${PV%_p*}-source.tar.xz"
 TEX4HTK_SUBDIR="texlive-${PV%_p*}-source/texk/tex4htk"
 
@@ -22,7 +19,7 @@ HOMEPAGE="
 	https://tug.org/tex4ht/
 	https://puszcza.gnu.org.ua/projects/tex4ht/
 "
-# 2025 hardcoded in the historic TL-data URL; bump on TL2027 adoption.
+# Historic fallback paths must match this TeX Live snapshot.
 SRC_URI="
 	https://mirrors.ctan.org/systems/texlive/Source/${MY_SOURCE_FILE}
 	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/${MY_SOURCE_FILE}
@@ -69,13 +66,8 @@ DEPEND="
 
 BDEPEND="virtual/pkgconfig"
 
-# No longtable-caption patch. ::gentoo backported the upstream fix
-# (svn r1745/r1747, 2025-10) onto its TL2024 tex4ht data, but that
-# patch is cut against the TL2024 longtable.4ht/html4.4ht layout and
-# does not apply to TL2025's evolved r77991 data. The fix only affects
-# HTML validity of longtable captions (not the build or core
-# function); re-cutting it against r77991 is out of scope. TL2026 data
-# (r79447) carries the fix upstream.
+# ::gentoo's TL2024 longtable-caption backport does not apply to r77991. It
+# affects only caption HTML validity; TL2026 data carries the upstream fix.
 
 src_prepare() {
 	mv texmf-dist texmf || die
@@ -108,9 +100,7 @@ src_compile() {
 
 	if use java; then
 		einfo "Compiling java files..."
-		# TL source layout: engine java lives under java/, java/xtpipes/
-		# and java/xtpipes/util/, with xv4ht.java at the tex4htk root.
-		# Stage them together and jar as the runtime expects.
+		# Stage the split TL Java sources together for the runtime jar.
 		cp "${S}/${TEX4HTK_SUBDIR}/xv4ht.java" "${S}/${TEX4HTK_SUBDIR}/java/" || die
 		pushd "${S}/${TEX4HTK_SUBDIR}/java" > /dev/null || die
 		ejavac *.java xtpipes/*.java xtpipes/util/*.java || die "javac failed"
@@ -121,17 +111,13 @@ src_compile() {
 }
 
 src_install() {
-	# install the binaries
 	dobin "${S}/${TEX4HTK_SUBDIR}/tex4ht" "${S}/${TEX4HTK_SUBDIR}/t4ht"
-	# install the mk4ht driver
 	newbin texmf/scripts/tex4ht/mk4ht.pl mk4ht
 
-	# install the .4ht scripts
 	insinto ${TEXMF}/tex/generic/tex4ht
 	doins "${S}"/texmf/tex/generic/tex4ht/*
 
 	if use doc; then
-		# install the documentation
 		insinto ${TEXMF}/doc/generic/tex4ht
 		doins "${S}"/texmf/doc/generic/tex4ht/*
 	fi
@@ -141,21 +127,17 @@ src_install() {
 		doins "${S}"/texmf/source/generic/tex4ht/*
 	fi
 
-	# install the special htf fonts
 	insinto ${TEXMF}/tex4ht
 	doins -r "${S}/texmf/tex4ht/ht-fonts"
 
 	if use java; then
-		# install the java files
 		doins -r "${S}/texmf/tex4ht/bin"
 		java-pkg_jarinto ${TEXMF}/tex4ht/bin
 		java-pkg_dojar "${S}/${PN}.jar"
 	fi
 
-	# install the .4xt files
 	doins -r "${S}/texmf/tex4ht/xtpipes"
 
-	# install the env file
 	insinto ${TEXMF}/tex4ht/base
 	newins "${S}/texmf/tex4ht/base/unix/tex4ht.env" tex4ht.env
 
