@@ -26,7 +26,7 @@ REQUIRED_USE="
 	)
 "
 
-# tests can freeze machine depending on gpu/kernel
+# Tests can freeze some GPU/kernel combinations.
 RESTRICT="test"
 
 RDEPEND="
@@ -43,12 +43,8 @@ RDEPEND="
 	roctracer? ( dev-util/roctracer:${SLOT} )
 "
 
-# hipblaslt? pulls hipblas-common too: CMakeLists.txt does a second
-# find_package(hipblas-common REQUIRED) right after the hipblaslt one, inside
-# the same if(MIOPEN_USE_HIPBLASLT) block. sci-libs/hipBLASLt carries
-# hipBLAS-common in its own DEPEND, which does not propagate, so a depcleaned
-# system loses the cmake config and configure fails. Build-time only - the
-# package ships no library we link against. verified 2026-07-27
+# hipBLASLt's non-propagating DEPEND does not provide the hipblas-common CMake
+# config here; declare it as build-only. verified 2026-07-27
 DEPEND="
 	${RDEPEND}
 	dev-cpp/nlohmann_json
@@ -98,7 +94,7 @@ src_configure() {
 		use_ai_tuning=ON
 	fi
 
-	# Too many warnings
+	# Silence known ROCm source noise.
 	append-cxxflags -Wno-thread-safety-analysis
 
 	local mycmakeargs=(
@@ -127,7 +123,7 @@ src_configure() {
 			-DMIOPEN_TEST_ALL=ON
 			-DMIOPEN_TEST_GDB=OFF
 		)
-		# needed by rocminfo
+		# Needed by rocminfo.
 		addpredict /dev/random
 		check_amdgpu
 	fi
