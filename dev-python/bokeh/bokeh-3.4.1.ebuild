@@ -9,9 +9,6 @@ inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="Statistical and interactive HTML plots for Python"
 HOMEPAGE="https://bokeh.org/"
-#SRC_URI+="
-#	https://raw.githubusercontent.com/bokeh/bokeh/${PV}/conftest.py -> conftest-${P}.py
-#"
 
 LICENSE="BSD"
 SLOT="0"
@@ -46,13 +43,8 @@ BDEPEND="
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
-python_prepare_all(){
-	#cp "${DISTDIR}"/conftest-${P}.py "${S}"/conftest.py || die
-	distutils-r1_python_prepare_all
-}
-
 python_test() {
-	# disable tests having network calls
+	# Skip network-dependent tests.
 	local SKIP_TESTS=" \
 		not (test___init__ and TestWarnings and test_filters) and \
 		not (test_json__subcommands and test_no_script) and \
