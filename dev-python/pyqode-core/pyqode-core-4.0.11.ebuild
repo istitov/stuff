@@ -15,8 +15,7 @@ HOMEPAGE="
 	https://github.com/pyQode/pyqode.core/
 	https://pypi.org/project/pyqode.core/
 "
-# Upstream's sdist filename was dash-normalized by pypi's packaging
-# pipeline (\`pyqode-core-4.0.11.tar.gz\`, not \`pyqode.core-...\`).
+# PyPI dash-normalized this legacy sdist's filename.
 SRC_URI="
 	https://files.pythonhosted.org/packages/3c/ee/d0c56ae99c5ba1a44b566227798abedaa893c898b4b197af6993952eacd6/${PN}-${PV}.tar.gz
 "
@@ -26,9 +25,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-# Upstream still lists \`future\` as a runtime dep for its Py2/3
-# coexistence era, but the code only does \`from __future__ import ...\`
-# (stdlib) - no pypi \`future\` import remains, so skip that dep.
+# Upstream retains future for Python 2 compatibility, but no runtime imports
+# remain.
 RDEPEND="
 	dev-python/qtawesome[${PYTHON_USEDEP}]
 	dev-python/pathspec[${PYTHON_USEDEP}]
