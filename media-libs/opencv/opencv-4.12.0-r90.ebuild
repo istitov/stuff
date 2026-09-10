@@ -71,7 +71,7 @@ else
 		https://github.com/opencv/opencv/commit/54b03cc2f84cfe83222c59b747e17cb378a9744c.patch
 		-> ${P}-fix_videowriter_raw_return_code.patch
 	"
-	# Install-verified with ~amd64 and ~arm64.
+	# Install-verified on ~amd64 and ~arm64.
 	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86"
 fi
 
