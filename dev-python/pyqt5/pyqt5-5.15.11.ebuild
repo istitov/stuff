@@ -22,8 +22,7 @@ IUSE="
 	network opengl printsupport sql +ssl svg testlib widgets x11extras
 "
 
-# The requirements below were extracted from the qmake_QT declarations
-# in project.py and from the output of 'grep -r "%Import " ${S}/sip'
+# Derived from project.py qmake_QT declarations and SIP imports.
 REQUIRED_USE="
 	declarative? ( gui network )
 	multimedia? ( gui network )
@@ -68,9 +67,8 @@ BDEPEND="
 src_prepare() {
 	default
 
-	# hack: PyQt-builder runs qmake without our arguments and calls g++
-	# or clang++ depending on what qtbase was built with, not used for
-	# building but fails with -native-symlinks
+	# PyQt-builder probes qmake's compiler outside our arguments; expose only
+	# available compilers to support -native-symlinks.
 	mkdir "${T}"/cxx || die
 	local cxx
 	! cxx=$(type -P "${CHOST}"-g++) || ln -s -- "${cxx}" "${T}"/cxx/g++ || die
@@ -79,7 +77,7 @@ src_prepare() {
 }
 
 python_configure_all() {
-	append-cxxflags ${CPPFLAGS} # respect CPPFLAGS notably for DISTUTILS_EXT=1
+	append-cxxflags ${CPPFLAGS} # DISTUTILS_EXT must respect CPPFLAGS.
 
 	pyqt_use_enable() {
 		local state=$(usex ${1} --enable= --disable=)
@@ -115,7 +113,7 @@ python_configure_all() {
 		$(pyqt_use_enable x11extras QtX11Extras)
 		--enable=QtXml
 
-		# no longer supported in Gentoo for PyQt5, use PyQt6
+		# Use PyQt6 for unsupported modules.
 		--disable=QtBluetooth
 		--disable=QtDesigner
 		--disable=QtHelp
@@ -132,9 +130,7 @@ python_configure_all() {
 		$(usev debug '--debug --qml-debug --tracing')
 
 		$(usev !dbus --no-dbus-python)
-		# note: upstream currently intentionally skips installing these two
-		# plugins when using wheels w/ pep517 so, *if* something does need
-		# them, it will need to be handled manually
+		# PEP 517 wheels intentionally omit the designer and QML plugins.
 		$(usev !declarative --no-qml-plugin)
 
 		$(usev gles2-only --disabled-feature=PyQt_Desktop_OpenGL)
