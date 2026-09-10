@@ -13,7 +13,7 @@ URI_PREFIX="https://github.com/ROCm/${MY_PN}/releases/download/${PV}"
 SHIM_URI_PREFIX="${URI_PREFIX}/${MY_P}-manylinux_2_28_x86_64"
 IMAGES_URI_PREFIX="${URI_PREFIX}/${MY_P}-images-amd"
 
-# Download libs for all rocm releases (4mb each), but unpack only one.
+# Fetch every ROCm shim (4 MiB each), but unpack only the installed version.
 # 0.12b dropped the rocm6.3 shim; images split gfx11xx -> gfx110x + gfx115x.
 SRC_URI="
 	${SHIM_URI_PREFIX}-rocm6.4-shared.tar.gz
@@ -61,11 +61,8 @@ IUSE="${IUSE_TARGETS[*]/#/+}"
 RESTRICT="strip"
 QA_PREBUILT="usr/lib*/libaotriton_v2.so.*"
 
-# glibc & gcc:  linked with manylinux version, no rebuild required
-# xz-utils:     used to decompress lzma blobs with kernels in runtime
-# dev-util/hip: must be in sync with SRC_URI
-#               and trigger reinstall on sub-slot change.
-#               0.12b's lowest shim is rocm6.4, so floor hip at 6.4.
+# The manylinux shim needs glibc/GCC; xz decompresses kernel blobs at runtime.
+# Keep HIP within the available 6.4-7.2 shims and rebuild on subslot changes.
 RDEPEND="
 	!!sci-libs/aotriton
 	sys-libs/glibc
@@ -76,9 +73,7 @@ RDEPEND="
 "
 
 src_unpack() {
-	# *-rocmX.X-shared.tar.gz archives with host code have the same structure,
-	# so decompression of all of them would overwrite files of each other.
-	# Instead we decompress only one version for current dev-util/hip.
+	# Host-code archives overlap, so unpack only the installed HIP version.
 	local hippkg=$(best_version dev-util/hip)
 	local rocmver="$(ver_cut 1-2 "${hippkg#*hip-}")"
 	local file
