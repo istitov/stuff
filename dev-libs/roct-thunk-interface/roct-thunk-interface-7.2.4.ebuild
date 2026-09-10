@@ -61,8 +61,7 @@ src_prepare() {
 		die 'get_version ( "1.0.0" ) anchor moved in CMakeLists.txt'
 	sed -e "s/get_version ( \"1.0.0\" )/get_version ( \"${PV}\" )/" -i CMakeLists.txt || die
 
-	# Build shared libhsakmt; guard the anchor because sed accepts no matches.
-	# https://github.com/ROCm/ROCR-Runtime/issues/263
+	# Build shared libhsakmt (ROCR-Runtime#263); guard sed's anchor.
 	grep -qF '${HSAKMT_TARGET} STATIC' CMakeLists.txt ||
 		die 'HSAKMT_TARGET STATIC anchor moved in CMakeLists.txt'
 	sed -e "s/\${HSAKMT_TARGET} STATIC/\${HSAKMT_TARGET}/" -i CMakeLists.txt || die
