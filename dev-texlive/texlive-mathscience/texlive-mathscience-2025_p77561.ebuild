@@ -299,7 +299,6 @@ TEXLIVE_MODULE_CONTENTS="
 	tkz-interval.r76924
 	zeckendorf.r77677
 "
-# Removed in target tlpdb: thmlist
 TEXLIVE_MODULE_DOC_CONTENTS="
 	12many.doc.r15878
 	accents.doc.r77677
@@ -594,7 +593,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tkz-interval.doc.r76924
 	zeckendorf.doc.r77677
 "
-# Removed in target tlpdb: thmlist.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	12many.source.r15878
 	alg.source.r15878
@@ -751,7 +749,7 @@ COMMON_DEPEND="
 	>=dev-texlive/texlive-fontsrecommended-2025
 	>=dev-texlive/texlive-latex-2025
 "
-# quantikz relocated from texlive-pictures in TL2025 (verified 2026-05-28)
+# quantikz moved from texlive-pictures in TL2025. Verified 2026-05-28.
 RDEPEND="
 	${COMMON_DEPEND}
 	!<dev-texlive/texlive-latexextra-2024
