@@ -21,8 +21,7 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-# Upstream test suite talks to api.materialsproject.org and needs
-# an MP_API_KEY; not runnable at package build time.
+# Tests require api.materialsproject.org access and an MP_API_KEY.
 RESTRICT="test"
 
 RDEPEND="
