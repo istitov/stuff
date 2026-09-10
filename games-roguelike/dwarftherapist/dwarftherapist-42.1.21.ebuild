@@ -42,9 +42,7 @@ RDEPEND="${DEPEND}"
 
 src_prepare() {
 	if use qt6; then
-		# Upstream is Qt5-only; USE=qt6 applies a local port. Upstream ships
-		# many sources with CRLF line endings; normalise to LF so the Qt6
-		# patch applies cleanly.
+		# Normalize upstream CRLF sources before applying the local Qt6 port.
 		find src CMakeLists.txt -type f \
 			\( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' -o -name '*.ui' -o -name 'CMakeLists.txt' \) \
 			-exec sed -i 's/\r$//' {} + || die
