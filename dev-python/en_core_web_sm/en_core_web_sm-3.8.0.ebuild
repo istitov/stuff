@@ -29,6 +29,9 @@ RDEPEND="
 	>=dev-python/spacy-3.8.0[${PYTHON_USEDEP}]
 	<dev-python/spacy-3.9.0[${PYTHON_USEDEP}]
 "
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
 
 src_unpack() {
 	cp "${DISTDIR}/${A}" "${WORKDIR}/" || die
