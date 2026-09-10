@@ -242,6 +242,12 @@ MY_PREFIX="/opt/mantid"
 src_prepare() {
 	eapply "${FILESDIR}/${PN}-6.16.1.1-hdf-4.4.patch"
 
+	# Upstream's Python 3.13 port (#41974) landed after this tag.
+	# Without it, every mantid.simpleapi call with keyword arguments
+	# fails on 3.13; the patch header lists what was taken and why.
+	# verified 2026-09-10
+	eapply "${FILESDIR}/${PN}-6.16.1.1-python3.13.patch"
+
 	# The no-qt5-webwidgets patch removes a "Prefer WebEngineWidgets
 	# over WebKitWidgets" block that fatal-errors when neither is
 	# available; the block is present in v6.15.0.3 but already gone
