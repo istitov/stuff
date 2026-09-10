@@ -67,7 +67,7 @@ BDEPEND="
 src_prepare() {
 	default
 
-	# PyQt-builder probes qmake's compiler outside our arguments; expose only
+	# PyQt-builder probes qmake's compiler outside ebuild arguments; expose only
 	# available compilers to support -native-symlinks.
 	mkdir "${T}"/cxx || die
 	local cxx
