@@ -22,10 +22,8 @@ RDEPEND="
 	>=dev-lang/tcc-0.9.27_p20251027
 "
 
-# Upstream tccbox bundles a prebuilt TCC inside the wheel; no sdist is
-# published. This shim exposes the same three-function API
-# (tcc_bin_path, tcc_lib_dir, tcc_include_dir) pointing at the system
-# dev-lang/tcc install instead of a bundled copy.
+# Upstream ships only a wheel with bundled TCC; this three-function shim returns
+# system dev-lang/tcc paths instead.
 
 src_unpack() {
 	mkdir -p "${S}/tccbox" || die
