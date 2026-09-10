@@ -9,8 +9,7 @@ inherit cmake rocm
 
 DESCRIPTION="CU / ROCM agnostic hip FFT implementation"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipfft"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now.
+# Component assets moved from rocm-* to therock-* tags after 7.2.4.
 SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/hipfft.tar.gz -> hipfft-${PV}.tar.gz"
 S="${WORKDIR}/hipfft"
 
