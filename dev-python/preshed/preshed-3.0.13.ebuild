@@ -19,8 +19,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# PyPI sdist used (github tags lag — v3.0.9 vs PyPI 3.0.13). spacy /
-# thinc cap preshed<3.1.0; 3.0.13 fits.
+# GitHub tags lag PyPI; spaCy/Thinc require Preshed <3.1.
 RDEPEND="
 	${PYTHON_DEPS}
 	>=dev-python/cymem-2.0.2[${PYTHON_USEDEP}]
