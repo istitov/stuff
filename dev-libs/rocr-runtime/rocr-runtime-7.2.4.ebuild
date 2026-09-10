@@ -36,21 +36,23 @@ DEPEND="${COMMON_DEPEND}
 		")
 "
 RDEPEND="${DEPEND}"
+# xxd provider.
 BDEPEND="app-editors/vim-core"
-	# vim-core is needed for "xxd"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-7.2.0-use-system-hsakmt.patch"
 	"${FILESDIR}/${PN}-7.2.0-fix-libcxx.patch"
 )
 
-# skip false positive detection in samples, bug #958188
+# Skip false-positive sample detection (bug 958188).
 CMAKE_QA_COMPAT_SKIP=1
 
 src_prepare() {
 	cd "${S}/runtime/hsa-runtime" || die
 
-	# Gentoo installs "*.bc" to "/usr/lib" instead of a "[path]/bitcode" directory ...
+	# Point device bitcode at /usr/lib; guard the brittle -O2 anchor.
+	grep -q -- '-O2' image/blit_src/CMakeLists.txt ||
+		die "blit_src -O2 anchor moved; device bitcode path would not be set"
 	sed -e "s:-O2:--rocm-path=${EPREFIX}/usr/lib/ -O2:" -i image/blit_src/CMakeLists.txt || die
 
 	cd "${S}" || die
@@ -58,9 +60,7 @@ src_prepare() {
 }
 
 src_configure() {
-	# -Werror=odr
-	# https://bugs.gentoo.org/856091
-	# https://github.com/ROCm/ROCR-Runtime/issues/182
+	# LTO triggers -Werror=odr (Gentoo bug 856091; upstream issue 182).
 	filter-lto
 
 	use debug || append-cxxflags "-DNDEBUG"
