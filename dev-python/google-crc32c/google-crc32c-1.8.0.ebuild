@@ -29,5 +29,5 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
-# Link the C extension against system dev-libs/crc32c.
+# Use the system crc32c library.
 export CRC32C_INSTALL_PREFIX="${EPREFIX}/usr"
