@@ -28,7 +28,6 @@ MULTILIB_WRAPPED_HEADERS=( /usr/include/jconfig.h )
 
 src_unpack() {
 	git-r3_src_unpack
-	# Unpack the debian extras tarball from SRC_URI.
 	unpack "${A}"
 }
 
@@ -62,7 +61,7 @@ multilib_src_configure() {
 		-DWITH_TESTS="$(usex test)"
 	)
 
-	# Avoid ARM ABI issues by disabling SIMD for CPUs without NEON, bug #792810
+	# Disable SIMD without NEON to avoid ARM ABI failures (bug 792810).
 	if use arm || use arm64; then
 		mycmakeargs+=(
 			-DWITH_SIMD=$(usex cpu_flags_arm_neon)
@@ -70,16 +69,14 @@ multilib_src_configure() {
 		)
 	fi
 
-	# We should tell the test suite which floating-point flavor we are
-	# expecting: https://github.com/libjpeg-turbo/libjpeg-turbo/issues/597
+	# Select the expected floating-point mode (upstream issue 597).
 	if use loong; then
 		mycmakeargs+=(
 			-DFLOATTEST=fp-contract
 		)
 	fi
 
-	# Mostly for Prefix, ensure that we use our yasm if installed and
-	# not pick up host-provided nasm
+	# Prefer installed yasm over a host nasm, especially on Prefix.
 	if has_version -b dev-lang/yasm && ! has_version -b dev-lang/nasm; then
 		mycmakeargs+=(
 			-DCMAKE_ASM_NASM_COMPILER=$(type -P yasm)
