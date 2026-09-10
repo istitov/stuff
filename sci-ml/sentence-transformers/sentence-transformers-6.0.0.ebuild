@@ -22,8 +22,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Tests download models from huggingface.co at runtime; sandbox forbids
-# network. No unit-only subset is split out upstream.
+# Tests require network-fetched Hugging Face models; no unit-only subset exists.
 RESTRICT="test"
 
 RDEPEND="
