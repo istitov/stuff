@@ -11,7 +11,7 @@ inherit distutils-r1
 DESCRIPTION="Google Generative AI (Gemini) Python client library"
 HOMEPAGE="https://github.com/google-gemini/deprecated-generative-ai-python"
 
-# PyPI distributes wheels only; build from the (archived) GitHub repo.
+# PyPI is wheel-only; use the archived GitHub source.
 SRC_URI="https://github.com/google-gemini/deprecated-generative-ai-python/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 S="${WORKDIR}/deprecated-generative-ai-python-${PV}"
 
