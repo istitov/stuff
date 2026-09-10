@@ -18,8 +18,7 @@ SRC_URI="https://github.com/HDFGroup/h5pyd/archive/refs/tags/v${PV}.tar.gz -> ${
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-# The test suite spins up a live HSDS server and talks to it over
-# HTTP; not runnable at package build time.
+# Tests require a live HSDS server.
 RESTRICT="test"
 
 RDEPEND="
