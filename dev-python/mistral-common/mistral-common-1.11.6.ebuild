@@ -21,9 +21,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="image"
 
-# vllm uses mistral_common[image] which adds opencv-python-headless;
-# media-libs/opencv with USE=python serves the same role.  The installed
-# console script also imports the server dependencies directly.
+# image replaces opencv-python-headless with media-libs/opencv[python]; the
+# installed CLI also imports its server dependencies.
 RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/pydantic-2.7[${PYTHON_USEDEP}]
@@ -57,7 +56,7 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
-	# Other tests need optional extras or fixtures omitted from the sdist.
+	# Other tests require optional extras or omitted fixtures.
 	epytest \
 		tests/test_base.py \
 		tests/test_deprecation.py \
