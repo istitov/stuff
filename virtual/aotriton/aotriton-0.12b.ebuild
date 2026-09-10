@@ -8,7 +8,7 @@ DESCRIPTION="Virtual for the AOTriton math library (binary package or source bui
 SLOT="0/${PV%b}"
 KEYWORDS="-* ~amd64"
 
-# No from-source sci-libs/aotriton exists at this version; only the binary.
+# No matching source build is packaged.
 RDEPEND="
 	~sci-libs/aotriton-bin-${PV}
 "
