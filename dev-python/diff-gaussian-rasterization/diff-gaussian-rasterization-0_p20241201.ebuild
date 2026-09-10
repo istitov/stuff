@@ -11,19 +11,15 @@ inherit distutils-r1 cuda
 
 DESCRIPTION="Differentiable antialiased Gaussian rasterization (mip-splatting) for TRELLIS"
 HOMEPAGE="https://github.com/autonomousvision/mip-splatting"
-# The antialiased diff-gaussian-rasterization that TRELLIS/mip-splatting use is a
-# git submodule with a bundled glm and no cleanly pinnable upstream tag, so the
-# self-contained source is vendored in the istitov/extra-stuff distfile repo
-# (glm rides along).
+# Pin the untagged submodule and bundled GLM through extra-stuff.
 SRC_URI="https://raw.githubusercontent.com/istitov/extra-stuff/${P}-r0-0/dev-python/${PN}/${P}.tar.xz -> ${P}-r0-0.tar.xz"
 S="${WORKDIR}/${P}"
 
-# Package code: Inria/MPII Gaussian-Splatting License (research/non-commercial).
-# Bundled third_party/glm: MIT (Happy Bunny / MIT dual -> MIT).
+# Package code is research-only; bundled GLM is MIT.
 LICENSE="Gaussian-Splatting MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-# Non-commercial license: do not mirror or redistribute binaries.
+# The non-commercial license forbids binary redistribution.
 RESTRICT="bindist mirror"
 
 RDEPEND="sci-ml/caffe2[${PYTHON_SINGLE_USEDEP}]"
@@ -40,17 +36,12 @@ src_prepare() {
 }
 
 src_compile() {
-	# torch cpp_extension reads CC/CXX for nvcc's -ccbin; pin to the
-	# cuda-eclass gcc (<=15 for CUDA 13.x).
+	# cpp_extension uses CC/CXX as nvcc's host compiler; select cuda.eclass GCC.
 	local gccdir
 	gccdir=$(cuda_gccdir) || die
 	export CC="${gccdir}/gcc" CXX="${gccdir}/g++"
-	# Build only for the GPU(s) actually present. An explicit
-	# TORCH_CUDA_ARCH_LIST (e.g. from make.conf) always wins; otherwise
-	# probe the native compute capability with nvcc's device query
-	# (e.g. 86 -> 8.6) so each host compiles just what it can run. If no
-	# GPU is visible at build time (headless / binhost), leave it unset
-	# and let torch's cpp_extension fall back to its full arch list.
+	# Respect explicit targets; otherwise probe the native GPU. Headless builds
+	# leave the variable unset and use cpp_extension's fallback list.
 	if [[ -z ${TORCH_CUDA_ARCH_LIST} ]]; then
 		cuda_add_sandbox -w
 		local native_cc
