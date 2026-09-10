@@ -46,6 +46,10 @@ src_prepare() {
 	# Drop all [[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
 	# array-of-tables blocks and the force-include of build/doc that
 	# the sphinx hook was supposed to create.
+	grep -qF '[[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]' pyproject.toml ||
+		die "Sphinx hook anchor moved"
+	grep -qF '[tool.hatch.build.targets.wheel.force-include]' pyproject.toml ||
+		die "force-include anchor moved"
 	sed -i \
 		-e '/^\[\[tool\.hatch\.build\.targets\.wheel\.hooks\.sphinx/,/^\[[^[]/{/^\[[^[]/!d}' \
 		-e '/^\[tool\.hatch\.build\.targets\.wheel\.force-include\]/,/^\[/{/build\/doc/d}' \
