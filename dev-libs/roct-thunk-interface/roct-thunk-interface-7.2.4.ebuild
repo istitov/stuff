@@ -13,8 +13,7 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	S="${WORKDIR}/${P}/projects/rocr-runtime/libhsakmt"
 else
-	# Same upstream archive as dev-libs/rocr-runtime; share the distfile name
-	# to avoid a MatchingChksums hit and let users hardlink/dedup distdir.
+	# Share rocr-runtime's identical archive and distfile name.
 	SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/rocm-${PV}/rocr-runtime.tar.gz -> rocr-runtime-${PV}.tar.gz"
 	S="${WORKDIR}/rocr-runtime/libhsakmt"
 	KEYWORDS="~amd64"
@@ -57,9 +56,15 @@ test_wrapper() {
 }
 
 src_prepare() {
+	# Guard the version anchor; a stale sed would preserve the wrong SONAME.
+	grep -qF 'get_version ( "1.0.0" )' CMakeLists.txt ||
+		die 'get_version ( "1.0.0" ) anchor moved in CMakeLists.txt'
 	sed -e "s/get_version ( \"1.0.0\" )/get_version ( \"${PV}\" )/" -i CMakeLists.txt || die
 
+	# Build shared libhsakmt; guard the anchor because sed accepts no matches.
 	# https://github.com/ROCm/ROCR-Runtime/issues/263
+	grep -qF '${HSAKMT_TARGET} STATIC' CMakeLists.txt ||
+		die 'HSAKMT_TARGET STATIC anchor moved in CMakeLists.txt'
 	sed -e "s/\${HSAKMT_TARGET} STATIC/\${HSAKMT_TARGET}/" -i CMakeLists.txt || die
 
 	cmake_src_prepare
@@ -68,18 +73,18 @@ src_prepare() {
 src_configure() {
 	llvm_prepend_path "${LLVM_SLOT}"
 
-	# QA warnings
+	# Silence known source noise.
 	append-cxxflags -Wno-unused-value
 
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DBUILD_SHARED_LIBS=ON
-		-DCMAKE_DISABLE_FIND_PACKAGE_NUMA=ON # skip warning - will use find_library anyways
+		-DCMAKE_DISABLE_FIND_PACKAGE_NUMA=ON # find_library handles NUMA
 	)
 	cmake_src_configure
 
 	if use test; then
-		# ODR violations (bug #956958)
+		# Avoid test ODR violations (Gentoo bug 956958).
 		filter-lto
 
 		export LIBHSAKMT_PATH="${BUILD_DIR}"
@@ -97,7 +102,7 @@ src_compile() {
 src_test() {
 	check_amdgpu
 	cd "${S}/tests/kfdtest_build/" || die
-	# Bug: https://github.com/ROCm/rocm-systems/issues/3635
+	# Known hardware-specific failures: rocm-systems issue 3635.
 	local skipped_tests=(
 		KFDMemoryTest.LargestSysBufferTest   # OOMs with gfx1151
 		KFDMemoryTest.LargestVramBufferTest  # OOMs with gfx1151
