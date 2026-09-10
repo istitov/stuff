@@ -20,9 +20,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Core install only — cloud-backend extras (s3, gs, azure) bring boto3,
-# google-cloud-storage, azure-* respectively. Not pulled here; opt in
-# via downstream packages or upstream pip if needed.
+# Cloud-backend extras (S3, GS, Azure) are optional and omitted.
 RDEPEND="${PYTHON_DEPS}"
 DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
