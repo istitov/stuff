@@ -29,6 +29,8 @@ src_prepare() {
 	# pymatgen 2026.3.23 sdist was cut before that split and still
 	# ships them, which collides with pymatgen-core 2026.3.9+.
 	# Drop our copies so pymatgen-core provides the canonical files.
+	grep -qF 'pmg = "pymatgen.cli.pmg:main"' pyproject.toml ||
+		die "pmg script anchor moved"
 	sed -i -e '/^pmg = "pymatgen\.cli\.pmg:main"$/d' pyproject.toml || die
 	rm src/pymatgen/analysis/{phase_diagram,chempot_diagram,reaction_calculator}.py \
 		|| die
