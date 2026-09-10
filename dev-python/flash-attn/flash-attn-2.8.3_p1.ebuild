@@ -9,10 +9,8 @@ DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi cuda
 
-# csrc/cutlass is a git submodule that the PyPI sdist does NOT bundle (the
-# 8.4MB sdist carries only flash-attn's own kernels). Supply it as a second
-# distfile pinned to the exact submodule commit recorded in v${PV}'s tree
-# (== CUTLASS 4.0.0) and stage it into csrc/cutlass before the build.
+# PyPI omits csrc/cutlass; fetch the submodule commit recorded by v${PV}
+# (CUTLASS 4.0.0) separately.
 CUTLASS_COMMIT="dc4817921edda44a549197ff3a9dcf5df0636e7b"
 
 DESCRIPTION="Fast and memory-efficient exact attention (FlashAttention-2)"
@@ -48,8 +46,7 @@ BDEPEND="
 "
 
 src_prepare() {
-	# Stage the pinned CUTLASS into the submodule path setup.py expects;
-	# without it the build aborts at the csrc/cutlass/include/cutlass.h check.
+	# Populate the submodule path expected by setup.py.
 	rmdir csrc/cutlass 2>/dev/null
 	mv "${WORKDIR}/cutlass-${CUTLASS_COMMIT}" csrc/cutlass || die
 
@@ -59,13 +56,11 @@ src_prepare() {
 src_compile() {
 	local gccdir
 	gccdir=$(cuda_gccdir) || die
-	# torch's cpp_extension passes CC/CXX to nvcc as -ccbin; CUDA 13.x rejects
-	# gcc>15, so pin the cuda-eclass gcc.
+	# Pin cpp_extension's nvcc host compiler to the CUDA-compatible GCC.
 	export CC="${gccdir}/gcc" CXX="${gccdir}/g++"
 	export FLASH_ATTN_CUDA_ARCHS="${FLASH_ATTN_CUDA_ARCHS:-80;90}"
 	export FORCE_CUDA=1 FLASH_ATTENTION_FORCE_BUILD=TRUE
-	# The flash_bwd_hdim128 kernels peak ~10-13GB each under cicc; at the
-	# upstream default MAX_JOBS they OOM a 32GB host. Cap parallelism.
+	# flash_bwd_hdim128 uses 10-13 GiB per cicc process; cap parallelism.
 	export MAX_JOBS="${MAX_JOBS:-2}" NVCC_THREADS="${NVCC_THREADS:-2}"
 
 	distutils-r1_src_compile
