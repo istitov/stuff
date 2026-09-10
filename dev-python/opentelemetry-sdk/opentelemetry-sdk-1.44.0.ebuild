@@ -33,8 +33,7 @@ RDEPEND="
 "
 
 EPYTEST_PLUGINS=( pytest-rerunfailures )
-# Tests cannot handle xdist with high makeopts
-# https://bugs.gentoo.org/928132
+# High-MAKEOPTS xdist runs fail (bug #928132).
 distutils_enable_tests pytest
 
 EPYTEST_DESELECT=(
