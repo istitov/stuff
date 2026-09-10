@@ -4259,7 +4259,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	zref-vario.source.r77682
 	zugferd.source.r79761
 "
-# Removed in target tlpdb: fundus-sueterlin.source, zebra-goodies.source
 
 inherit optfeature texlive-module
 
@@ -4273,7 +4272,7 @@ COMMON_DEPEND="
 	>=dev-texlive/texlive-pictures-2026
 	dev-perl/Spreadsheet-ParseExcel
 "
-# realscripts relocated from texlive-xetex in TL2026 (verified 2026-05-28)
+# realscripts moved from texlive-xetex in TL2026. Verified 2026-05-28.
 RDEPEND="
 	${COMMON_DEPEND}
 	!<dev-texlive/texlive-xetex-2026
