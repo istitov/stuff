@@ -16,13 +16,11 @@ SRC_URI="https://github.com/NVlabs/nvdiffrast/archive/refs/tags/v${PV}.tar.gz ->
 LICENSE="NVIDIA-nvdiffrast"
 SLOT="0"
 KEYWORDS="~amd64"
-# NVIDIA Source Code License (non-commercial): no mirroring / binary redist.
+# The non-commercial NVIDIA license forbids mirroring and binary redistribution.
 RESTRICT="bindist mirror"
 
-# nvdiffrast 0.4.0 compiles its CUDA ops (_nvdiffrast_c) at build time via
-# torch's cpp_extension (older versions JIT'd at first use). torch reads CC/CXX
-# for nvcc's -ccbin, so pin them to the cuda-eclass gcc (<=15 for CUDA 13.x).
-# ninja stays a runtime dep for the GL-context plugin nvdiffrast still JITs.
+# 0.4.0 builds _nvdiffrast_c through torch cpp_extension; pin CC/CXX to the
+# CUDA-compatible GCC. ninja remains needed for the JIT-built GL plugin.
 RDEPEND="
 	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP}]
 	app-alternatives/ninja
@@ -47,12 +45,8 @@ src_compile() {
 	local gccdir
 	gccdir=$(cuda_gccdir) || die
 	export CC="${gccdir}/gcc" CXX="${gccdir}/g++"
-	# Build only for the GPU(s) actually present. An explicit
-	# TORCH_CUDA_ARCH_LIST (e.g. from make.conf) always wins; otherwise
-	# probe the native compute capability with nvcc's device query
-	# (e.g. 86 -> 8.6) so each host compiles just what it can run. If no
-	# GPU is visible at build time (headless / binhost), leave it unset
-	# and let torch's cpp_extension fall back to its full arch list.
+	# Respect TORCH_CUDA_ARCH_LIST; otherwise target the visible GPU. With no
+	# GPU, let cpp_extension choose its fallback architecture list.
 	if [[ -z ${TORCH_CUDA_ARCH_LIST} ]]; then
 		cuda_add_sandbox -w
 		local native_cc
