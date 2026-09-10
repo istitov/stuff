@@ -3,15 +3,9 @@
 
 EAPI=8
 
-# 6.8 is a non-LTS kernel that reached end-of-life upstream (linux-stable
-# stopped at 6.8.12). The trunk-pinned patches captured here track stable
-# all the way to 6.8.12 — full coverage for this EOL branch.
-#
-# Per-branch judgment on 5xxx (genpatches "experimental" category):
-#   * 5010_enable-cpu-optimizations-universal: NOT included (pf-flavored
-#     vanilla mismatch pattern observed on 6.9-6.13).
-#   * 5020_BMQ-and-PDS-io-scheduler + 5021_BMQ-and-PDS-gentoo-defaults:
-#     NOT included.
+# Linux 6.8 is EOL at 6.8.12; these pinned patches cover its final release.
+# Omit 5010 because its pf-flavored anchors reject the pristine base; omit
+# BMQ/PDS from this package's minimal pf identity.
 
 ETYPE="sources"
 
@@ -28,10 +22,8 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Per-slot snapshot of alicef's genpatches trunk (a live working dir),
-# bundled as pf-genpatches-${SHPV}.tar.xz on the sister overlay extra-stuff
-# (https://github.com/istitov/extra-stuff), pinned by immutable tag -r70-1
-# (refresh = new tag suffix). The bundle is the durable reference.
+# Pin alicef's mutable genpatches trunk through extra-stuff's -r70-1 tag;
+# refresh snapshots under a new tag suffix.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
