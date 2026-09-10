@@ -3,30 +3,25 @@
 
 EAPI=8
 
-# Define what default functions to run.
 ETYPE="sources"
 
-# Use genpatches but don't include the 'experimental' use flag.
+# -pf already includes the experimental patches.
 K_EXP_GENPATCHES_NOUSE="1"
 
-# Genpatches version - normally "1". -pf already includes vanilla updates, so bump only for
-# important fixes; src_prepare() then deletes the redundant vanilla patches.
-# See https://archives.gentoo.org/gentoo-kernel/ (or subscribe to the list) to see all patches.
+# -pf includes vanilla updates; bump only for important fixes, then drop duplicates.
 K_GENPATCHES_VER="11"
 
-# -pf patch set already sets EXTRAVERSION to kernel Makefile.
+# -pf sets EXTRAVERSION itself.
 K_NOSETEXTRAVERSION="1"
 
 # pf-sources is not officially supported/covered by the Gentoo security team.
 K_SECURITY_UNSUPPORTED="1"
 
-# Genpatches parts to use - experimental is already in the -pf patch set.
 K_WANT_GENPATCHES="base extras"
 
-# Major kernel version, e.g. 5.14.
 SHPV="${PV/_p*/}"
 
-# Replace "_p" with "-pf", since using "-pf" is not allowed for an ebuild name by PMS.
+# PMS forbids -pf in ebuild versions.
 PFPV="${PV/_p/-pf}"
 
 inherit kernel-2 optfeature
@@ -61,48 +56,39 @@ pkg_setup() {
 }
 
 src_unpack() {
-	# Codeberg-hosted pf-sources include full kernel sources, so override src_unpack manually;
-	# kernel-2_src_unpack() does unwanted magic here.
+	# Avoid kernel-2 unpack handling for Codeberg's full source archive.
 	unpack ${A}
 
 	mv linux linux-${PFPV} || die "Failed to move source directory"
 }
 
 src_prepare() {
-	# A bumped genpatches base carries vanilla updates already in -pf; drop to avoid conflicts.
+	# Drop vanilla updates already present in -pf.
 	if [[ ${K_GENPATCHES_VER} -ne 1 ]]; then
 		find "${WORKDIR}"/ -type f -name '10*linux*patch' -delete ||
 			die "Failed to delete vanilla linux patches in src_prepare."
 	fi
 
-	# kernel-2_src_prepare doesn't apply PATCHES(). Chosen genpatches are also applied here.
+	# kernel-2_src_prepare does not apply these genpatches.
 	eapply "${WORKDIR}"/*.patch
 
-	# CVE-2026-31431 ("Copy Fail") — local privilege escalation via
-	# algif_aead in-place AAD copy. Mainline fix is upstream commit
-	# a664bf3d603d (2026-03-26) reverting the 2017 in-place
-	# optimization. pf-kernel branches off Linux GA only and never
-	# picks up linux-stable, so 6.16-pfN ships unpatched 6.16.0 source.
+	# CVE-2026-31431: algif_aead local privilege escalation. GA-based -pf never
+	# receives stable fixes, so carry upstream revert a664bf3d603d.
 	eapply "${WORKDIR}/pf-cves-surgical/cve-2026-31431-algif_aead-revert-out-of-place.patch"
 
-	# CVE-2026-43037 — IPv6 tunnel ip4ip6_err() stack overflow via
-	# inet6_skb_parm/inet_skb_parm cb[] reuse on cloned skb. Mainline
-	# fix 2edfa31769a4 clears IPCB(skb2) and adds minimal IPv4 header
-	# validation. 6.16 has no linux-stable continuation; pf-kernel
-	# 6.16.0 is the relevant base. Same GA-only gap as 31431.
+	# CVE-2026-43037: IPv6 tunnel cb[] confusion causing stack overflow. This
+	# branch has no stable continuation; carry upstream fix 2edfa31769a4.
 	eapply "${WORKDIR}/pf-cves-surgical/cve-2026-43037-ip6_tunnel-clear-skb-cb.patch"
 
-	# CVE-2026-43038 — IPv6 ICMP ip6_err_gen_icmpv6_unreach() OOB read
-	# via the same cb[] type-confusion pattern, reachable via forged
-	# ICMPv4 error with CIPSO option. Mainline fix 86ab3e55673a clears
-	# IP6CB(skb2). Same orphan-slot caveat.
+	# CVE-2026-43038: related IPv6 ICMP cb[] confusion causing an OOB read.
+	# Carry upstream fix 86ab3e55673a across the same orphan-branch gap.
 	eapply "${WORKDIR}/pf-cves-surgical/cve-2026-43038-icmpv6-clear-skb-cb.patch"
 
 	default
 }
 
 pkg_postinst() {
-	# Fixes "wrongly" detected directory name, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postinst
 
@@ -110,7 +96,7 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	# Same here, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postrm
 }
