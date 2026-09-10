@@ -3,9 +3,9 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..14} )
+# main's pyproject.toml requires Python >=3.13. verified 2026-09-10
+PYTHON_COMPAT=( python3_{13,14} )
 DISTUTILS_SINGLE_IMPL=1
-PYPI_NO_NORMALIZE=1
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 git-r3 cmake
 
@@ -25,40 +25,30 @@ fi
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-# This tracks upstream HEAD. main sets MANTID_QT_VERSION to 6
-# unconditionally - the per-platform default that 6.16.1.1 introduced was
-# removed again by "Move Windows and macOs to Qt6" (#41896, 2026-07-27) -
-# but it still accepts 5, keeping `set_property(CACHE MANTID_QT_VERSION
-# PROPERTY STRINGS 5 6)` and a real find_package(QT 5.15 NAMES Qt5 ...
-# REQUIRED). So the qt5/qt6 flags this ebuild carries mirror 6.16.1.1.
-# src_configure pins the value rather than inheriting it, because that
-# default has now moved twice in a month.
-#
-# USE=qt5 is the fragile one here, much more so than on a fixed tag.
-# Nothing on Linux defaults to Qt5 upstream any more, so their CI never
-# compiles this configuration, and HEAD is free to break it between one
-# rebuild and the next. It already did once: see the deprecation-guard
-# workaround in src_prepare, which is applied conditionally here rather
-# than with a hard die precisely because HEAD may rename or drop that
-# flag again.
+# This tracks upstream HEAD, which has moved away from 6.16.1.1 in ways the
+# tagged ebuilds do not share (checked 2026-09-10 at 737f77e15ec):
+#   - Qt 6 only. CMakeLists.txt offers MANTID_QT_VERSION=6 alone and
+#     FATAL_ERRORs on anything else, so there are no qt5/qt6 flags here
+#     and no Qt5 deprecation-guard workaround.
+#   - pyproject.toml requires Python >=3.13, hence PYTHON_COMPAT.
+#   - The Python 3.13 port the tagged ebuilds backport is already in.
+#   - The vendored NeXus C API is still byte-identical to 6.16.1.1's, so
+#     that release's HDF 4.4 patch applies; src_prepare applies it only
+#     while the old two-argument calls are still there.
 #
 # The earlier HDF4-probe blocker (Gentoo bug 942866) is resolved by this
-# overlay's sci-libs/hdf-4.2.16. Install lands ~230 MiB under
-# /opt/mantid/{bin,lib,lib64,plugins,instrument,scripts}.
+# overlay's sci-libs/hdf from 4.2.16 on.
 #
-# Verification here is inherited, not fresh. Both toolkits were run
-# through the full unpack/prepare/configure/compile/install pipeline on
-# 2026-07-27 against the 6.16.1.1 tag (gcc-16, Boost-1.90, Python 3.13,
-# Qt-6.11.1 and Qt-5.15.19), and the Qt6 result was additionally
-# runtime-checked there. Neither was re-run against HEAD, whose content
-# changes daily - so re-verify on each rebuild, and treat a USE=qt5
-# failure here as expected drift rather than a packaging regression.
+# Verified through configure only, against main at 737f77e15ec; a compile
+# would validate a tree that moves tomorrow. The dependency set is the one
+# read from 6.16.1.1-r1's installed image, whose build and runtime checks
+# are recorded in that ebuild.
 #
 # Note: as of 6.16.x mantid has no GPU offload — the build system uses
 # only TBB + OpenMP for parallelism, and the source tree contains no
 # .cu/.cuh files or find_package(CUDA) calls. There is no `cuda` IUSE
 # to add here even when nvidia-cuda-toolkit is installed.
-IUSE="doc python qt5 +qt6 test"
+IUSE="test"
 RESTRICT="!test? ( test )"
 
 # Build-host note: sci-libs/hdf5[cxx] (below) trips hdf5's REQUIRED_USE
@@ -66,10 +56,7 @@ RESTRICT="!test? ( test )"
 # USE=unsupported on sci-libs/hdf5 (the cxx+mpi combo is upstream-
 # "unsupported" but builds fine). That is the only host USE-config not
 # expressible as a dep atom; emerge --autounmask proposes the rest from
-# the atoms (nexus cxx, nexus' own doxygen[dot], and per toolkit either
-# qtbase concurrent/gui/network/widgets + qttools assistant + qscintilla
-# qt6, or the dev-qt:5 set + qscintilla qt5). KEYWORDS is empty — unmask
-# the wanted version to install.
+# the atoms.
 #
 # dev-python/lz4 is a hard runtime requirement on Linux and a clean build
 # does not reveal it: the workbench exception handler imports
@@ -78,90 +65,58 @@ RESTRICT="!test? ( test )"
 # `import mantidqt` still work and only the GUI fails. pystack itself is
 # NOT declared - it is in no Gentoo repo and is only ever shelled out to
 # when analysing a core dump.
+#
+# quickBayes, which upstream's recipe also lists, is in no Gentoo repo
+# either. BayesQuasi2 imports it inside the algorithm body, so without it
+# that one algorithm fails when run and nothing else is affected.
+# verified 2026-09-10
 
+# The shared-library set below is the one read from 6.16.1.1-r1's
+# installed image (its NEEDED entries), with := where the provider carries
+# a subslot; see that ebuild. sci-libs/nexus is not among them: mantid
+# carries its own copy of the NeXus C API under Framework/LegacyNexus.
+# Build-only tools and the docs toolchain are out of RDEPEND.
 RDEPEND="
-	dev-libs/boost
-	dev-util/ccache
-	app-text/doxygen
-	dev-cpp/eigen
-	dev-cpp/gtest
 	dev-python/euphonic[${PYTHON_SINGLE_USEDEP}]
-	sci-libs/gsl
-	<sci-libs/hdf-4.4:=
-	sci-libs/hdf5[cxx]
-	dev-libs/jemalloc
-	dev-libs/jsoncpp
-	dev-libs/librdkafka
-	dev-cpp/muParser
-	sci-libs/nexus[cxx]
-	dev-libs/poco
+	sci-libs/gsl:=
+	>=sci-libs/hdf-4.4:=
+	sci-libs/hdf5:=[cxx]
+	dev-libs/jsoncpp:=
+	dev-libs/librdkafka:=
+	dev-cpp/muParser:=
+	dev-libs/openssl:=
+	dev-libs/poco:=[crypt,net,util,xml]
 	dev-python/pyvista[${PYTHON_SINGLE_USEDEP}]
 	dev-python/pyvistaqt[${PYTHON_SINGLE_USEDEP}]
-	qt6? (
-		x11-libs/qscintilla[qt6(+)]
-		dev-qt/qtbase:6[concurrent,gui,network,widgets]
-		dev-qt/qttools:6[assistant]
-	)
-	qt5? (
-		x11-libs/qscintilla[qt5(-)]
-		dev-qt/qtconcurrent:5
-		dev-qt/qtgui:5
-		dev-qt/qthelp:5
-		dev-qt/qtnetwork:5
-		dev-qt/qtprintsupport:5
-		dev-qt/qtsql:5
-		dev-qt/qtwidgets:5
-		dev-qt/qtxml:5
-	)
-	dev-cpp/tbb
-	sci-libs/opencascade
-	app-text/texlive-core
-	media-libs/mesa
-	x11-apps/mesa-progs
-	dev-vcs/pre-commit
+	x11-libs/qscintilla:=[qt6(+)]
+	>=dev-qt/qtbase-6.11:6[concurrent,gui,network,opengl,widgets,xml]
+	>=dev-qt/qttools-6.11:6[assistant]
+	dev-cpp/tbb:=
+	sci-libs/opencascade:=
+	virtual/glu
+	virtual/opengl
 	$(python_gen_cond_dep '
-		dev-python/graphviz[${PYTHON_USEDEP}]
+		dev-libs/boost:=[python,${PYTHON_USEDEP}]
 		>=dev-python/h5py-3.2.0[${PYTHON_USEDEP}]
 		dev-python/matplotlib[${PYTHON_USEDEP}]
-		>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
-		dev-python/pip[${PYTHON_USEDEP}]
+		>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
 		>=dev-python/pydantic-2.11.4[${PYTHON_USEDEP}]
 		<dev-python/pydantic-3[${PYTHON_USEDEP}]
 		sci-libs/pycifrw[${PYTHON_USEDEP}]
-		qt6? ( dev-python/pyqt6[${PYTHON_USEDEP},gui,widgets,printsupport] )
-		qt5? ( dev-python/pyqt5[${PYTHON_USEDEP},gui,widgets,printsupport] )
-		dev-python/python-dateutil[${PYTHON_USEDEP}]
+		dev-python/pyqt6[${PYTHON_USEDEP},gui,widgets,printsupport]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/orsopy[${PYTHON_USEDEP}]
 		dev-python/qtconsole[${PYTHON_USEDEP}]
-		qt6? ( dev-python/qtpy[${PYTHON_USEDEP},pyqt6(-)] )
-		qt5? ( dev-python/qtpy[${PYTHON_USEDEP},pyqt5(-)] )
+		dev-python/qtpy[${PYTHON_USEDEP},pyqt6(-)]
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/superqt[${PYTHON_USEDEP}]
 		dev-python/scipy[${PYTHON_USEDEP}]
 		dev-python/setuptools[${PYTHON_USEDEP}]
-		dev-python/sphinx[${PYTHON_USEDEP}]
-		dev-python/sphinx-bootstrap-theme[${PYTHON_USEDEP}]
 		dev-python/toml[${PYTHON_USEDEP}]
 		dev-python/joblib[${PYTHON_USEDEP}]
 		dev-python/lz4[${PYTHON_USEDEP}]
 	')
-	test? (
-		sys-apps/pciutils
-		x11-libs/libXcomposite
-		x11-libs/libXcursor
-		x11-libs/libXdamage
-		x11-libs/libXi
-		x11-libs/libXScrnSaver
-		x11-libs/libXtst
-		dev-util/cppcheck
-		dev-util/gcovr
-		dev-vcs/pre-commit[${PYTHON_SINGLE_USEDEP}]
-		$(python_gen_cond_dep '
-			dev-python/black[${PYTHON_USEDEP}]
-		')
-	)
 "
 
 # dev-python/versioningit is deprecated in ::gentoo, and that deprecation
@@ -185,17 +140,26 @@ BDEPEND="
 	dev-build/cmake
 	dev-build/ninja
 	$(python_gen_cond_dep '
+		dev-python/pip[${PYTHON_USEDEP}]
+		dev-python/setuptools[${PYTHON_USEDEP}]
 		dev-python/versioningit[${PYTHON_USEDEP}]
 	')
 "
 
-DEPEND="${BDEPEND}
-	${RDEPEND}
-"
-
-REQUIRED_USE="
-	python? ( ${PYTHON_REQUIRED_USE} )
-	^^ ( qt5 qt6 )
+# gtest is found unconditionally and needed to configure, but is not
+# linked into the installed image.
+DEPEND="${RDEPEND}
+	dev-cpp/eigen
+	dev-cpp/gtest
+	test? (
+		sys-apps/pciutils
+		x11-libs/libXcomposite
+		x11-libs/libXcursor
+		x11-libs/libXdamage
+		x11-libs/libXi
+		x11-libs/libXScrnSaver
+		x11-libs/libXtst
+	)
 "
 
 # Install under /opt rather than /usr: upstream's CMake drops data into
@@ -206,6 +170,16 @@ REQUIRED_USE="
 MY_PREFIX="/opt/mantid"
 
 src_prepare() {
+	# The vendored NeXus C API still makes HDF 4.3's two-argument
+	# Vgetname and Vgetclass calls, byte-identical to 6.16.1.1's, so
+	# that release's HDF 4.4 patch applies. It is applied only while
+	# those calls are there, so an upstream fix does not break the
+	# build. verified 2026-09-10
+	if grep -q 'Vgetclass(groupID, classText);' \
+			Framework/LegacyNexus/src/napi4.cpp; then
+		eapply "${FILESDIR}/${PN}-6.16.1.1-hdf-4.4.patch"
+	fi
+
 	# The no-qt5-webwidgets patch removes a "Prefer WebEngineWidgets
 	# over WebKitWidgets" block that fatal-errors when neither is
 	# available; the block is present in v6.15.0.3 but already gone
@@ -216,35 +190,6 @@ src_prepare() {
 		eapply "${FILESDIR}/${PN}-no-qt5-webwidgets.patch"
 	fi
 
-	if use qt5; then
-		# 6.16.1.1 renamed the deprecation guard from
-		# QT_DISABLE_DEPRECATED_UP_TO (6.16.0, 6.16.1) to
-		# QT_DISABLE_DEPRECATED_BEFORE, keeping the value 0x050F00, and
-		# main still carries the new spelling. That is inert under Qt6 but
-		# breaks Qt5: Qt 5.15's qglobal.h knows only _BEFORE, feeding
-		# QT_DEPRECATED_SINCE(major, minor), defined as
-		# QT_VERSION_CHECK(major, minor, 0) > QT_DISABLE_DEPRECATED_BEFORE.
-		# For an API deprecated in 5.15 that is 0x050F00 > 0x050F00, i.e.
-		# false, so everything deprecated up to AND INCLUDING 5.15 is
-		# compiled out - among it QMutex::RecursionMode, which
-		# WorkspaceTreeWidget.cpp still uses inside its own
-		# `#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)` guard.
-		#
-		# Unlike the fixed-tag ebuild this is advisory rather than fatal:
-		# HEAD is free to fix the spelling, change the value or drop the
-		# flag, and none of those should fail the build here. A warning
-		# when the pattern is gone is the signal to re-check whether
-		# USE=qt5 still needs help at all. verified 2026-07-27
-		if grep -q 'QT_DISABLE_DEPRECATED_BEFORE=0x050F00' CMakeLists.txt; then
-			sed -i -e 's/QT_DISABLE_DEPRECATED_BEFORE=0x050F00/QT_DISABLE_DEPRECATED_UP_TO=0x050F00/' \
-				CMakeLists.txt || die
-		else
-			ewarn "Upstream's QT_DISABLE_DEPRECATED_BEFORE=0x050F00 is gone;"
-			ewarn "the Qt5 deprecation-guard workaround was not applied."
-			ewarn "If USE=qt5 now fails on removed Qt-5.15 APIs, re-check it."
-		fi
-	fi
-
 	# Gentoo's opencascade installs to /usr/{include,lib64}/opencascade
 	# instead of /opt/OpenCASCADE; retarget the finder.
 	sed -i -e 's:/OpenCASCADE:/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
@@ -253,7 +198,7 @@ src_prepare() {
 
 	# gcc:13+ include-hygiene: PreviewManager.h transitively relied on
 	# <vector> pulling in <stdexcept>; be explicit.
-	sed -iez 's:#include <vector>:#include <vector>\n#include <stdexcept>:' \
+	sed -i -e 's:#include <vector>:#include <vector>\n#include <stdexcept>:' \
 		Framework/API/inc/MantidAPI/PreviewManager.h || die
 
 	# No qt.conf rewrite here, unlike the Qt5 ebuilds. The
@@ -316,12 +261,17 @@ src_configure() {
 	python_setup
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="${MY_PREFIX}"
-		-DENABLE_DOCS=$(usex doc)
-		# Pass the toolkit explicitly rather than inheriting upstream's
-		# default, which has already moved twice in a month. HEAD is Qt6
-		# everywhere now, so without this a USE=qt5 build would silently
-		# produce a Qt6 one. REQUIRED_USE makes this exactly one of two.
-		-DMANTID_QT_VERSION=$(usex qt6 6 5)
+		# The docs need mantid_sphinx_theme, which no Gentoo
+		# repo ships, so they stay off rather than sit behind a
+		# doc flag that could never build. verified 2026-09-10
+		-DENABLE_DOCS=OFF
+		# Both default ON. USE_CCACHE wraps every compile in
+		# ccache whenever one is installed, regardless of
+		# FEATURES, and ENABLE_PRECOMMIT stops configure without
+		# pre-commit and otherwise runs `pre-commit install` in
+		# the source checkout.
+		-DENABLE_PRECOMMIT=OFF
+		-DUSE_CCACHE=OFF
 	)
 	cmake_src_configure
 }
@@ -349,7 +299,7 @@ src_install() {
 	# select PyQt5 and abort with "No module named 'mantidqt._commonqt5'".
 	# ${QT_API:-...} keeps an explicit user override working.
 	# verified 2026-07-27
-	local qt_api=$(usex qt6 pyqt6 pyqt5)
+	local qt_api=pyqt6
 	sed -i \
 		-e "s|\${INSTALLDIR}/bin/python|${EPYTHON}|" \
 		-e "s|LOCAL_PYTHONPATH=\${INSTALLDIR}/bin:\${INSTALLDIR}/lib:\${INSTALLDIR}/plugins|LOCAL_PYTHONPATH=${sp_dir}:\${INSTALLDIR}/bin:\${INSTALLDIR}/lib:\${INSTALLDIR}/plugins|" \
@@ -398,8 +348,8 @@ pkg_postinst() {
 	elog
 	elog "    mantidpython yourscript.py       # or: mantidpython  (REPL)"
 	elog
-	local qt_api=$(usex qt6 pyqt6 pyqt5)
-	elog "This build links Qt$(usex qt6 6 5) and its Python layer binds"
+	local qt_api=pyqt6
+	elog "This build links Qt6 and its Python layer binds"
 	elog "${qt_api}. qtpy does not pick the newest binding available - it"
 	elog "reads QT_API and falls back to pyqt5 - so the launcher below"
 	elog "exports QT_API=${qt_api} for you. Use it rather than invoking"
