@@ -1634,7 +1634,6 @@ TEXLIVE_MODULE_CONTENTS="
 	xstix2.r78230
 	xtufte.r76952
 "
-# Removed in target tlpdb: isosafety, litebook, litesolution
 TEXLIVE_MODULE_DOC_CONTENTS="
 	2up.doc.r55076
 	a0poster.doc.r54071
@@ -3257,7 +3256,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xstix2.doc.r78230
 	xtufte.doc.r76952
 "
-# Removed in target tlpdb: isosafety.doc, litebook.doc, litesolution.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	abspos.source.r76924
 	abstract.source.r77677
