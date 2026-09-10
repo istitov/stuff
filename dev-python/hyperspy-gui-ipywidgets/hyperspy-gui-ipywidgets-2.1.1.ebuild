@@ -12,7 +12,6 @@ MYP="${MYPN}-${PV}"
 
 DESCRIPTION="Interactive analysis of multidimensional datasets tools"
 HOMEPAGE="https://hyperspy.org/"
-#SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
 SRC_URI="$(pypi_sdist_url "${MYPN^}" "${PV}")"
 
 S="${WORKDIR}/${MYP}"
