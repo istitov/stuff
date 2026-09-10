@@ -40,9 +40,9 @@ BDEPEND="
 	)
 "
 
-# Test-dependency suppressions verified 2026-08-05: cmaes and lupa are unpackaged.
+# Skip optional integrations; cmaes and fakeredis[lua]'s lupa are unpackaged.
+# Verified 2026-08-05.
 EPYTEST_IGNORE=(
-	# require optional dependencies
 	tests/artifacts_tests/test_boto3.py
 	tests/artifacts_tests/test_gcs.py
 	tests/gp_tests
@@ -56,16 +56,15 @@ EPYTEST_IGNORE=(
 	tests/visualization_tests
 )
 EPYTEST_DESELECT=(
-	# require cmaes, which is not packaged
 	"tests/pruners_tests/test_hyperband.py::test_hyperband_filter_study[<lambda>3]"
 	"tests/pruners_tests/test_hyperband.py::test_hyperband_no_filter_study[<lambda>3]"
 	"tests/pruners_tests/test_hyperband.py::test_hyperband_no_call_of_filter_study_in_should_prune[<lambda>3]"
-	# pytest injects its own handlers into the logger under test
+	# Pytest injects handlers into the logger under test.
 	tests/test_logging.py::test_default_handler
 	tests/test_logging.py::test_propagation
 )
 
 python_test() {
-	# require fakeredis[lua], whose lupa dependency is not packaged
+	# Exclude fakeredis[lua]; lupa is unpackaged.
 	epytest -k "not (journal_redis or redis_default or redis_with_use_cluster)"
 }
