@@ -3,7 +3,6 @@
 
 EAPI=8
 
-#PYPI_NO_NORMALIZE=0
 PYPI_PN="abtem"
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
