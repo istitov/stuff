@@ -36,7 +36,7 @@ RDEPEND="
 "
 
 EPYTEST_IGNORE=(
-	# require network access to download example data
+	# Downloads example data.
 	orix/tests/test_data/test_data.py
 )
 
