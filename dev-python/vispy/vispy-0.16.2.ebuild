@@ -16,8 +16,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The single Cython extension (vispy/visuals/text/_sdf_cpu) is compiled against
-# the numpy headers, so numpy is a build dep too (DEPEND=${RDEPEND}).
+# The Cython extension needs NumPy headers at build time.
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/freetype-py[${PYTHON_USEDEP}]
@@ -31,12 +30,9 @@ BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 
-# The sdist ships vispy/version.py + PKG-INFO, but there is no .git in the
-# sandbox; pin the version so setuptools_scm is deterministic. (Upstream's
-# pyproject also has a [tools.setuptools_scm] table-name typo, so its own scm
-# config is silently ignored regardless.)
+# Pin the version without Git metadata; upstream also misspells its
+# setuptools_scm configuration table.
 export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VISPY="${PV}"
 
-# vispy's test suite needs a live OpenGL context / display (a GL app backend),
-# which is unavailable in the build sandbox.
+# Tests require a live OpenGL display.
 RESTRICT="test"
