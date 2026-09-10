@@ -28,9 +28,9 @@ RDEPEND="
 
 EPYTEST_PLUGINS=()
 EPYTEST_DESELECT=(
-	# upstream documents this as failing due to its indentation expectation
+	# Upstream records this expected indentation failure.
 	TestDrel.py::SingleSimpleStatementTestCase::testlongstring
-	# require the separately absent tests/drel/cif_core.dic fixture
+	# tests/drel/cif_core.dic is absent.
 	TestDrel.py::MoreComplexTestCase::test_fancy_assign
 	TestDrel.py::WithDictTestCase
 )
@@ -39,10 +39,10 @@ distutils_enable_tests pytest
 src_prepare() {
 	distutils-r1_src_prepare
 
-	# The release sdist has generated modules but omits its test fixtures.
+	# The sdist provides generated modules; GitHub supplies omitted fixtures.
 	cp -R "${WORKDIR}/${P}"/{dictionaries,tests} . || die
 
-	# Python 3.13 removed this deprecated unittest assertion alias.
+	# Replace an assertion alias removed in Python 3.13.
 	sed -e 's/\.failUnless(/.assertTrue(/g' -i Test{Drel,PyCIFRW}.py || die
 }
 
