@@ -20,13 +20,11 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The PyPI sdist contains tests but omits conftest.py and platform_utils.py,
-# which are required even to collect them. # verified 2026-08-04.
+# The sdist omits test helpers required during collection. verified 2026-08-04
 RESTRICT="test"
 
-# Importing fastsafetensors imports both torch and tqdm.  Typer is listed in
-# upstream metadata but the sdist has no Typer import or entry point.
-# verified 2026-08-04 against 0.2.2.
+# torch and tqdm are imported; retain metadata-required Typer despite no code
+# use. verified 2026-08-04
 RDEPEND="
 	>=sci-ml/pytorch-2.5.1[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
@@ -40,10 +38,9 @@ BDEPEND="
 	')
 "
 
-# The extension uses self-contained CUDA ABI declarations and loads libcudart,
-# libcufile and libnuma at runtime.  Upstream's setup.py otherwise switches to
-# a ROCm-specific, linked build solely when /opt/rocm exists; keep the generic
-# CPU/CUDA build deterministic. # verified 2026-08-04 against 0.2.2.
+# Keep the generic build deterministic: setup.py switches to ROCm merely when
+# /opt/rocm exists; CUDA/GDS/NUMA libraries are loaded at runtime.
+# verified 2026-08-04
 python_compile() {
 	local -x ROCM_PATH=
 	distutils-r1_python_compile
