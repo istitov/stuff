@@ -20,11 +20,8 @@ REQUIRED_USE="${ROCM_REQUIRED_USE}"
 
 RESTRICT="!test? ( test )"
 
-# cmake/Dependencies.cmake does find_package(benchmark 1.9.1 QUIET) and, on
-# failure, falls through to a FetchContent clone of github.com/google/benchmark,
-# which cannot work inside portage's network sandbox. ::gentoo still ships 1.8.4
-# next to the 1.9.x line, so an existing 1.8.4 install satisfied the bare atom,
-# got no upgrade, and sent USE=benchmark builds down the fetch path.
+# Require benchmark >=1.9.1 to prevent CMake falling back to a sandboxed fetch
+# when an installed 1.8.4 satisfies a bare atom.
 # verified 2026-07-27
 RDEPEND="
 	dev-util/hip:${SLOT}
@@ -58,7 +55,7 @@ src_configure() {
 src_test() {
 	check_amdgpu
 	export LD_LIBRARY_PATH="${BUILD_DIR}/library"
-	# uses HMM to fit tests to default <512M iGPU VRAM
+	# Use HMM to fit tests within default iGPU VRAM.
 	ROCRAND_USE_HMM="1" cmake_src_test -j1
 }
 
