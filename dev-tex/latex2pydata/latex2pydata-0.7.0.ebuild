@@ -13,16 +13,8 @@ HOMEPAGE="
 	https://github.com/gpoore/latex2pydata
 	https://pypi.org/project/latex2pydata/
 "
-# PV tracks the LaTeX release, not the python one. Upstream tags the two
-# halves independently -- python/ tops out at v0.5.0 while latex/ is at v0.7.0
-# -- and this package lives in dev-tex because the .sty is the reason it
-# exists. Earlier ebuilds fetched the python/vX.Y.Z tag, which picks up
-# whatever unreleased state latex/ happened to be in: python/v0.5.0 ships
-# latex2pydata.sty [2025/03/03 v0.5.0dev2], a development build. dev-tex/minted
-# 3.8.0 hard-gates on \IfPackageAtLeastTF{latex2pydata}{2026/02/25} and
-# fatal-errors below it, which that dev .sty does not satisfy.
-# The python package inside this tag is still 0.5.0 final, identical to what
-# the 0.5.0 ebuild installs, so nothing regresses on that side.
+# PV follows the independently tagged LaTeX component; its Python package
+# remains 0.5.0. minted 3.8 rejects the development .sty in python/v0.5.0.
 # verified 2026-07-27
 SRC_URI="
 	https://github.com/gpoore/${PN}/archive/refs/tags/latex/v${PV}.tar.gz
@@ -35,8 +27,7 @@ LICENSE="LPPL-1.3c"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# fontsextra for fourier.sty
-# latexextra for upquote.sty
+# fourier.sty and upquote.sty.
 BDEPEND="
 	>=dev-texlive/texlive-fontsextra-2024
 	>=dev-texlive/texlive-latexextra-2024
