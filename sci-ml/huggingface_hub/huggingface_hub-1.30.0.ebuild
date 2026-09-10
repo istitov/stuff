@@ -138,5 +138,10 @@ src_test() {
 python_test() {
 	# These are explicitly marked calls to the production Hub rather than unit
 	# tests; staging integrations above are excluded by module or node.
+	# Keep agent detection stable before and after its fixture resets the cache.
+	local -x HF_HOME="${T}/hf-home"
+	mkdir -p "${HF_HOME}" || die
+	printf '%s\n' '{"standardEnvVars":[],"harnesses":{}}' \
+		> "${HF_HOME}/.agent_harnesses.json" || die
 	epytest -m "not production"
 }
