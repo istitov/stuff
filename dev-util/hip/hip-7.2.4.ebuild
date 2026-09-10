@@ -233,7 +233,7 @@ src_test() {
 	export LD_LIBRARY_PATH="${BUILD_DIR}/hipamd/lib"
 	export ROCM_PATH="${EPREFIX}/usr"
 
-	# TODO: research how to test Vulkan-related features.
+	# Vulkan tests require an unconfigured graphics fixture.
 	local CMAKE_SKIP_TESTS=(
 		Unit_hipExternalMemoryGetMappedBuffer_Vulkan_Positive_Read_Write
 		Unit_hipExternalMemoryGetMappedBuffer_Vulkan_Negative_Parameters
