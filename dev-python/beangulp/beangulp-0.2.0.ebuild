@@ -27,17 +27,12 @@ RDEPEND="
 	>=dev-python/python-magic-0.4.12[${PYTHON_USEDEP}]
 "
 
-# Suite uses only stock pytest + rst doctests (--doctest-glob, set in
-# the upstream pyproject), no third-party plugins.
 EPYTEST_PLUGINS=()
 
 distutils_enable_tests pytest
 
 python_prepare_all() {
-	# Upstream's bare `find = {}` auto-discovery sweeps the top-level
-	# examples/ and tools/ trees into site-packages as stray top-level
-	# packages (the PyPI wheel does the same; pip tolerates it, the
-	# eclass does not). Scope discovery to the library proper.
+	# Bare find={} also installs examples and tools; limit discovery to beangulp.
 	grep -q '^find = {}$' pyproject.toml || die "package-discovery stanza moved"
 	sed -i \
 		-e 's/^\[tool\.setuptools\.packages\]$/[tool.setuptools.packages.find]/' \
