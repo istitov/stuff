@@ -86,7 +86,7 @@ src_compile() {
 
 src_test() {
 	CMAKE_SKIP_TESTS=(
-		# the testsuites are already quite extensive
+		# Full suites already cover the examples.
 		example-*
 	)
 	local -x LD_LIBRARY_PATH="${BUILD_DIR}:${BUILD_DIR}/fortran"
@@ -97,7 +97,7 @@ src_test() {
 python_install() {
 	distutils-r1_python_install
 
-	# remove duplicate headers/lib
+	# Use the CMake-installed headers and library.
 	rm -r "${ED}"/$(python_get_sitedir)/spglib/{$(get_libdir),include} || die
 }
 
