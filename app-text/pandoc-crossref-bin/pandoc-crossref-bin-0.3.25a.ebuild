@@ -21,21 +21,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm64"
 
-# 0.3.25a is 0.3.25 rebuilt against pandoc 3.11: upstream changed only build
-# pins between the two tags, and the binary still reports v0.3.25. Both are
-# built with pandoc-types 1.23.1.2, so the filter's JSON interface is the
-# same under pandoc 3.10.1 and 3.11.
-#
-# pandoc-crossref compares its build-time pandoc version with the one running
-# it and, on any mismatch, prints a "not supported" warning but still
-# resolves references. 0.3.25 pinned ~pandoc-bin-3.10.1 to avoid the warning,
-# and that broke dependency resolution instead: pandoc-bin is normally only a
-# dependency, not in the world file, so once ::gentoo carried a newer
-# pandoc-bin, a deep @world update resolved the || group through >=pandoc-3,
-# i.e. pandoc-cli and dev-lang/ghc built from source. A lower bound keeps the
-# binary alternative across pandoc-bin bumps; a mismatch costs only the
-# warning.
-# verified 2026-09-10
+# 0.3.25a rebuilds 0.3.25 for pandoc 3.11 without changing its JSON interface.
+# The filter only warns on pandoc version mismatch. A lower bound keeps
+# pandoc-bin viable after bumps; an exact pin instead makes Portage select the
+# source pandoc/GHC stack. Verified 2026-09-10.
 RDEPEND="
 || ( >=app-text/pandoc-bin-3.10.1 >=app-text/pandoc-3 )
 "
