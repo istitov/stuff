@@ -57,7 +57,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	# Bug 690828.
+	# Search lib64 for Tcl (bug #690828).
 	"${FILESDIR}"/fossil-2.10-check-lib64-for-tcl.patch
 )
 
