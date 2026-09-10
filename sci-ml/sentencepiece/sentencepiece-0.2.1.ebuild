@@ -17,7 +17,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# depends on abseil-cpp via protobuf targets
+# Protobuf targets require Abseil.
 RDEPEND="
 	dev-cpp/abseil-cpp:=
 	dev-libs/protobuf:=
@@ -79,7 +79,7 @@ src_configure() {
 	)
 
 	if has_version ">=dev-cpp/abseil-cpp-20260107.0"; then
-		# needs >=c++20
+		# Abseil >=20260107 requires C++20.
 		mycmakeargs+=(
 			-DCMAKE_CXX_STANDARD=20
 		)
