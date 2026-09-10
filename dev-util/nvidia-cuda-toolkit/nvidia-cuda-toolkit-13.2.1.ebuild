@@ -193,7 +193,7 @@ src_install() {
 		fi
 
 		if [[ -e "${ED}${_DESTDIR}/$(basename "${1}")" ]]; then
-			# skip noisy warnings
+			# include and lib64 are shared destinations.
 			if [[ "$(basename "${1}")" == "include" ]] ||
 				[[ "$(basename "${1}")" == "lib64" ]]; then
 				return
