@@ -20,12 +20,8 @@ RDEPEND="${DEPEND}"
 src_prepare() {
 	default
 
-	# CUDA 13 promoted cuCtxCreate to cuCtxCreate_v4, which takes an
-	# extra CUctxCreateParams* second arg. The legacy 3-arg
-	# cuCtxCreate_v2 is gated behind __CUDA_API_VERSION_INTERNAL and
-	# isn't reachable from cgo. Detect the new typedef in the
-	# installed cuda.h and pass NULL for the new arg only then; on
-	# CUDA 12 the original 3-arg signature works unchanged.
+	# CUDA 13 adds a CUctxCreateParams argument to cuCtxCreate; apply the
+	# compatibility patch only when that type exists, preserving CUDA 12.
 	if grep -q '\bCUctxCreateParams\b' \
 			"${ESYSROOT}"/opt/cuda/include/cuda.h 2>/dev/null; then
 		eapply "${FILESDIR}/mumax-cuda13-cuCtxCreate.patch"
