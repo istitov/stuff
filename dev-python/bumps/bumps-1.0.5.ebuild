@@ -41,6 +41,8 @@ src_prepare() {
 	# The sdist bakes bumps/_version.py with the final version string,
 	# so versioningit is not needed at build time. Drop it from
 	# build-system.requires to avoid pulling in a deprecated dep.
+	grep -qE ',[[:space:]]*"versioningit"' pyproject.toml ||
+		die "versioningit anchor moved"
 	sed -i -e 's/, *"versioningit"//' pyproject.toml || die
 	distutils-r1_src_prepare
 }
