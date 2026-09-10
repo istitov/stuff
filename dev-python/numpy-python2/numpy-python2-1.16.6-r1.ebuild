@@ -31,11 +31,8 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="doc lapack"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# DISTUTILS_OPTIONAL stops the eclass contributing PYTHON_DEPS and
-# PYTHON_REQUIRED_USE, leaving the ebuild to supply both. They were missing, so
-# a package consisting of Python 2 modules depended on no interpreter at all
-# and offered no target constraint. ${PYTHON_DEPS} rather than a literal
-# dev-lang/python:2.7 so the PYTHON_REQ_USE above is honoured.
+# DISTUTILS_OPTIONAL suppresses the eclass's interpreter dependency and target
+# constraint; supply both explicitly. PYTHON_DEPS respects PYTHON_REQ_USE.
 # verified 2026-07-27
 RDEPEND="${PYTHON_DEPS}
 	lapack? (
@@ -106,30 +103,26 @@ src_prepare() {
 
 	append-flags -fno-strict-aliasing
 
-	# See progress in http://projects.scipy.org/scipy/numpy/ticket/573
-	# with the subtle difference that we don't want to break Darwin where
-	# -shared is not a valid linker argument
+	# NumPy needs -shared except on Darwin, where the flag is invalid.
 	if [[ ${CHOST} != *-darwin* ]]; then
 		append-ldflags -shared
 	fi
 
-	# only one fortran to link with:
-	# linking with cblas and lapack library will force
-	# autodetecting and linking to all available fortran compilers
+	# Avoid autodetecting and linking every available Fortran compiler.
 	append-fflags -fPIC
 	if use lapack; then
 		NUMPY_FCONFIG="config_fc --noopt --noarch"
-		# workaround bug 335908
+		# Select gfortran explicitly (Gentoo bug 335908).
 		[[ $(tc-getFC) == *gfortran* ]] && NUMPY_FCONFIG+=" --fcompiler=gnu95"
 	fi
 
-	# don't version f2py, we will handle it.
+	# Keep f2py unversioned; package selection handles coexistence.
 	sed -i -e '/f2py_exe/s: + os\.path.*$::' numpy/f2py/setup.py || die
 
-	# disable fuzzed tests
+	# Disable fuzz tests.
 	find numpy/*/tests -name '*.py' -exec sed -i \
 		-e 's:def \(.*_fuzz\):def _\1:' {} + || die
-	# very memory- and disk-hungry
+	# Disable the memory- and disk-intensive large ZIP test.
 	sed -i -e 's:test_large_zip:_&:' numpy/lib/tests/test_io.py || die
 
 	python_foreach_impl _distutils-r1_copy_egg_info
@@ -156,6 +149,6 @@ src_install() {
 		DOCS+=( "${DISTDIR}"/${MY_PN}-{user,ref}-${DOC_PV}.pdf )
 	fi
 
-	# Let latest version to provide f2py link
+	# Let the current Python 3 NumPy own the unversioned f2py link.
 	rm "${ED}"/usr/bin/f2py || die
 }
