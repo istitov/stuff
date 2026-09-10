@@ -7,15 +7,10 @@ inherit latex-package
 
 DESCRIPTION="Create glossaries and lists of acronyms"
 HOMEPAGE="https://www.ctan.org/pkg/glossaries/"
-# CTAN publishes this only as an unversioned glossaries.zip, whose content
-# changes under a fixed filename and so cannot back a reproducible Manifest,
-# and gentoo's dev mirror carries 4.55 but not 5.1. Re-hosted on extra-stuff
-# as a source-only bundle instead: glossaries.ins and glossaries.dtx generate
-# the 57 style files we install (plus sample .tex files the eclass skips),
-# makeglossaries is a shipped script rather than a generated one, and CHANGES
-# is installed as documentation. The user and code manuals and the sample
-# documents are omitted -- they are the bulk of the 16 MiB upstream archive
-# against 193 KB here. verified 2026-07-28
+# CTAN's mutable, unversioned zip cannot back a reproducible Manifest, and the
+# Gentoo mirror lacks 5.1. Use a 193 KiB source-only bundle containing the
+# generators, makeglossaries, and CHANGES; omit bulky manuals and samples.
+# verified 2026-07-28
 MY_BUNDLE="${PN}-${PV}-src"
 SRC_URI="https://raw.githubusercontent.com/istitov/extra-stuff/${MY_BUNDLE}-r0-0/dev-tex/${PN}/${MY_BUNDLE}.tar.xz
 	-> ${MY_BUNDLE}-r0-0.tar.xz"
