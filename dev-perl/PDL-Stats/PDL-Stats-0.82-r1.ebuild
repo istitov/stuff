@@ -15,12 +15,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="test"
 RESTRICT="!test? ( test )"
-# Upstream META.json for this release requires PDL 2.057 at runtime and
-# PDL::Core 2.008 to build and configure; gentoo's PDL versioning maps the perl
-# 2.0NN form onto 2.NN.0, so 2.057 is 2.57.0. ExtUtils::MakeMaker runs
-# Makefile.PL and is not needed once installed, so it moves to BDEPEND.
-# Tests additionally want Test::PDL, which is not packaged in any repo.
-# verified 2026-07-27
+# Map upstream PDL 2.057 to Gentoo's 2.57.0 floor. MakeMaker is build-only;
+# tests need unpackaged Test::PDL. verified 2026-07-27
 RDEPEND="
 	>=dev-perl/PDL-2.57.0
 "
