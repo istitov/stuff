@@ -14,17 +14,9 @@ HOMEPAGE="
 	https://github.com/unslothai/unsloth
 	https://pypi.org/project/unsloth/
 "
-# Built from the upstream git tag, not the PyPI sdist: upstream withdrew the
-# sdists (the simple index stops at 2026.6.2, and 2026.9.2's file now 404s),
-# leaving the published releases unfetchable.  unslothai/unsloth is a monorepo
-# whose desktop tags are full snapshots -- v0.1.808-beta declares library
-# version 2026.9.4 in unsloth/_version.py.  The tag/version map moves in
-# lockstep, so a bump picks the tag whose _version.py matches ${PV}.
-# 2026.9.4 has no sdist at all, so the tag is the only source.
-#
-# The GitHub-generated archive is not immutable. Its Manifest digest pins the
-# current bytes and must be deliberately re-pinned if GitHub rehashes it.
-# verified 2026-09-10
+# PyPI withdrew recent sdists; use the monorepo desktop tag whose _version.py
+# matches ${PV}. GitHub archives are mutable, so review any Manifest rehash.
+# Verified 2026-09-10.
 MY_TAG="v0.1.808-beta"
 SRC_URI="https://github.com/unslothai/unsloth/archive/refs/tags/${MY_TAG}.tar.gz -> unsloth-monorepo-${MY_TAG#v}.gh.tar.gz"
 S="${WORKDIR}/${PN}-${MY_TAG#v}"
@@ -34,32 +26,18 @@ S="${WORKDIR}/${PN}-${MY_TAG#v}"
 LICENSE="Apache-2.0 AGPL-3 studio? ( OFL-1.1 )"
 SLOT="0"
 KEYWORDS="~amd64"
-# USE=studio enables the bundled Unsloth Studio web backend (studio/backend, a
-# FastAPI server driven by the `unsloth studio` CLI command) to run against the
-# system interpreter, instead of the desktop app's self-downloaded venv. It pulls
-# the server's runtime deps and applies a patch adding a UNSLOTH_STUDIO_SYSTEM
-# in-process launch path, and builds the React web UI (studio/frontend) with npm
-# so the backend serves the full app (not just the API).
+# Studio runs its FastAPI backend in the system interpreter instead of a
+# downloaded venv and builds the bundled React UI with npm.
 IUSE="studio"
 
-# Tests require model downloads and supported accelerator hardware. USE=studio's
-# frontend build (npm) fetches its dependency set from the registry, which the
-# network sandbox forbids, so it is live + network like the overlay's other
-# web-UI-bundling ebuilds (sci-misc/llama-swap[ui]).
+# Tests need model downloads and accelerator hardware; Studio's npm build needs
+# registry access.
 RESTRICT="test studio? ( network-sandbox )"
 PROPERTIES="studio? ( live )"
 
-# USE=studio dep-version notes -- the studio server deps below are intentionally
-# newer than the studio backend's own requirements pins, verified API-compatible
-# 2026-08-24 (comments here, not in RDEPEND: a `#` inside a quoted dep silently
-# masks it):
-#  - pymupdf4llm: upstream pins ==0.3.4 (+ pymupdf 1.27.2.3); we ship the
-#    PyMuPDF-matched 1.28.2 pair. The backend calls only pymupdf4llm.to_markdown()
-#    (core/rag/parsers.py, routes/data_recipe/seed.py), stable across the
-#    0.3->1.28 versioning realignment. 1.28.2 hard-deps pymupdf-layout
-#    (onnxruntime), which 0.3.x kept optional -- accepted, onnxruntime is in-tree.
-#  - ddgs: upstream pins ==9.14.4; we ship 9.15.0 (patch). The backend uses only
-#    DDGS() + the DDGSException/RatelimitException classes, both present in 9.15.0.
+# Studio pins older dependencies. Overlay pymupdf4llm/PyMuPDF 1.28.2 preserves
+# its to_markdown API but adds pymupdf-layout/onnxruntime; accept that in-tree dep.
+# ddgs 9.15 retains the used DDGS and exception APIs. Verified 2026-08-24.
 
 RDEPEND="
 	>=dev-python/unsloth-zoo-2026.9.3[${PYTHON_SINGLE_USEDEP}]
@@ -129,16 +107,11 @@ BDEPEND="
 "
 
 src_prepare() {
-	# System-mode launch path for the bundled studio backend (skip the
-	# ~/.unsloth/studio venv re-exec + install.sh); inert without USE=studio and
-	# without UNSLOTH_STUDIO_SYSTEM=1 at runtime.
+	# Add the system-interpreter path selected by UNSLOTH_STUDIO_SYSTEM.
 	use studio && PATCHES+=( "${FILESDIR}/${PN}-system-studio.patch" )
 
-	# The git tree carries unsloth/kernels/moe/tests as a real package
-	# (it has __init__.py, and the setuptools exclude only covers a
-	# top-level tests*), so find_packages would install ~88K of test code
-	# that upstream's own 2026.9.4 wheel does not ship. Drop it so the
-	# installed set matches the published one. # verified 2026-09-10
+	# find_packages includes 88 KiB of MoE tests absent from upstream's wheel.
+	# Verified 2026-09-10.
 	rm -r unsloth/kernels/moe/tests || die
 
 	distutils-r1_src_prepare
@@ -146,14 +119,12 @@ src_prepare() {
 
 src_compile() {
 	if use studio; then
-		# Build the React web UI (studio/frontend) that the backend serves. The
-		# sdist ships no prebuilt dist; vite writes it to studio/frontend/dist.
+		# Build the unbundled React UI served by the backend.
 		einfo "Building the Unsloth Studio web frontend (npm ci + vite build)"
 		pushd studio/frontend > /dev/null || die
 		npm ci --no-audit --no-fund || die "npm ci failed"
 		npm run build || die "vite build failed"
-		# Strip the proprietary Hellix font (copied public/ -> dist/); the OFL-1.1
-		# @fontsource fonts (Figtree/Inter/Space-Grotesk) stay.
+		# Remove proprietary Hellix; retain OFL-1.1 fonts.
 		find dist -iname '*hellix*' -exec rm -rf {} + || die
 		popd > /dev/null || die
 	fi
@@ -164,10 +135,7 @@ python_install() {
 	distutils-r1_python_install
 
 	if use studio; then
-		# setuptools' package-data glob (studio/frontend/dist/**) already bundles
-		# the vite-built UI into the wheel, but it also drags in the whole
-		# studio/frontend source tree (TS sources, tests, configs). Only the built
-		# dist/ is served at runtime, so drop the rest to trim the install.
+		# Package data also captures frontend sources/tests; runtime needs only dist.
 		local fe="${D}$(python_get_sitedir)/studio/frontend"
 		if [[ -d ${fe} ]]; then
 			find "${fe}" -mindepth 1 -maxdepth 1 ! -name dist \
@@ -180,9 +148,7 @@ python_install_all() {
 	distutils-r1_python_install_all
 
 	if use studio; then
-		# Launcher that serves the studio UI/API in-process against the system
-		# interpreter (the base package already installs the `unsloth` CLI + the
-		# studio/backend package). See the system-studio patch.
+		# System-interpreter launcher for the installed Studio UI/API.
 		newbin - unsloth-studio <<-'EOF'
 			#!/bin/sh
 			export UNSLOTH_STUDIO_SYSTEM=1
