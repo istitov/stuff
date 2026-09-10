@@ -19,12 +19,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-# defusedxml is new in 3.10.0 (3.9.4 does not require it) and is not
-# optional: __init__.py imports nltk.downloader at module scope, which
-# imports defusedxml.ElementTree at module scope, so a plain `import nltk`
-# raises ImportError without it. Also imported the same way by
-# corpus/reader/xmldocs.py and nombank.py, where upstream switched to
-# defusedxml to reject entity-expansion attacks in untrusted corpus XML.
+# defusedxml became mandatory in 3.10: plain nltk imports reach it through the
+# downloader, and corpus readers use it for untrusted XML.
 # verified 2026-07-27
 RDEPEND="
 	dev-python/click[${PYTHON_USEDEP}]
