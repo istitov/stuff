@@ -36,6 +36,5 @@ BDEPEND="dev-python/hatch-vcs[${PYTHON_USEDEP}]"
 # hatch-vcs (setuptools_scm) cannot derive a version from the gitless sdist.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 
-# Test suite spins up a distributed cluster and exercises the full ML
-# matrix (xgboost, tensorflow); fragile out of tree, upstream-tested.
+# Tests require a distributed cluster and optional ML stacks.
 RESTRICT="test"
