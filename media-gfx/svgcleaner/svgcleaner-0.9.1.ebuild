@@ -31,8 +31,6 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-#QA_FLAGS_IGNORED="usr/bin/${PN}"
-
 src_unpack() {
 	unpack ${P}.tar.gz
 	cargo_src_unpack
