@@ -21,7 +21,7 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	# too broad for standard directory
+	# Drop the unnamespaced /usr/.info/version metadata file.
 	rm "${ED}"/usr/.info/version || die
 }
 
