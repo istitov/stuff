@@ -199,6 +199,5 @@ SRC_URI="
 "
 
 LICENSE="Apache-2.0"
-# The bundled Rust crates carry the usual permissive MIT/Apache-2.0/BSD mix.
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
