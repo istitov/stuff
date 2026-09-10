@@ -43,6 +43,10 @@ RESTRICT="strip"
 # same app). Block co-installation rather than ship a file collision.
 RDEPEND="
 	!!sci-ml/unsloth[studio]
+	|| (
+		net-misc/curl
+		net-misc/wget
+	)
 	dev-libs/glib:2
 	net-libs/libsoup:3.0
 	net-libs/webkit-gtk:4.1
