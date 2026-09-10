@@ -12,10 +12,8 @@ DESCRIPTION="Monitor file changes"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-# lib/File/Monitor/Lite.pm uses all four at module scope: File::Spec::Functions,
-# File::Find::Rule and File::Monitor by name, and Class::Accessor::Fast via
-# `use base` plus mk_accessors. Matches upstream's Makefile.PL PREREQ_PM, minus
-# File::Touch which only the test files use. verified 2026-07-27
+# Runtime modules mirror Makefile.PL except test-only File::Touch.
+# Verified 2026-07-27.
 RDEPEND="
 	dev-perl/Class-Accessor
 	dev-perl/File-Find-Rule
