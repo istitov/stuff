@@ -25,21 +25,12 @@ KEYWORDS="~amd64 ~arm64"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# pyausaxs initializes bundled_lib_path() before consulting its relink cache,
-# so merely deleting the x86-64 library or setting a cache entry cannot work on
-# arm64. Point the initial lookup at the system library and disable the wheel's
-# x86 AVX2 runtime check: sci-libs/ausaxs is compiled for the target system.
-# All 57 ctypes symbols registered by pyausaxs-1.2.3 resolve against
-# sci-libs/ausaxs-1.2.12, and its subprocess integration test passes on arm64.
+# The loader initializes its bundled path before its relink cache, so patch it to
+# the system library and bypass the wheel's x86 AVX2 check. All 57 ctypes symbols
+# and the subprocess integration test pass with ausaxs-1.2.12 on arm64.
 # verified 2026-09-08
-# 1.2.0 moved matplotlib and scipy out of the base requirements into a
-# "plots" extra; both are imported lazily (matplotlib inside FitResult's
-# plotting methods behind an importlib.util.find_spec guard that raises a
-# clear ImportError, scipy inside plot/plot_helper), so `import pyausaxs`
-# and the whole ctypes API need only numpy + py-cpuinfo. They are
-# advertised via optfeature instead of hard-depended. The "gui" extra's
-# tkinterdnd2 is unpackaged, so that path stays unavailable. verified
-# 2026-07-28
+# matplotlib/scipy are lazy "plots" imports; tkinterdnd2 for the "gui" extra is
+# unpackaged. Advertise the plotting stack via optfeature. # verified 2026-07-28
 RDEPEND="
 	${PYTHON_DEPS}
 	~sci-libs/ausaxs-1.2.12
@@ -66,12 +57,8 @@ src_prepare() {
 _install_one() {
 	python_domodule pyausaxs
 
-	# Ship the .dist-info so importlib.metadata.version("pyausaxs")
-	# and pip's view of the installed packages match upstream. The wheel
-	# names it "${P}.dist-info" (a literal hyphen before the version, per
-	# the wheel spec — "pyausaxs" needs no name normalisation), so use
-	# ${P} directly; the historical ${P/-/_} mangled the name-version
-	# separator and silently skipped the copy. verified 2026-06-10
+	# Keep dist-info for importlib.metadata; ${P/-/_} would corrupt the wheel's
+	# literal name-version separator. # verified 2026-06-10
 	local distinfo="${P}.dist-info"
 	if [[ -d ${distinfo} ]]; then
 		local sitedir
