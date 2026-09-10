@@ -2,23 +2,18 @@
 # Distributed under the terms of the GNU General Public License v2
 EAPI=8
 
-# Define what default functions to run.
 ETYPE="sources"
-# Use genpatches but don't include the 'experimental' use flag.
+# -pf already includes the experimental patches.
 K_EXP_GENPATCHES_NOUSE="1"
-# Genpatches version - normally "1". -pf already includes vanilla updates, so bump only for
-# important fixes; src_prepare() then deletes the redundant vanilla patches.
-# See https://archives.gentoo.org/gentoo-kernel/ (or subscribe to the list) to see all patches.
+# -pf includes vanilla updates; bump only for important fixes, then drop duplicates.
 K_GENPATCHES_VER="178"
-# -pf patch set already sets EXTRAVERSION to kernel Makefile.
+# -pf sets EXTRAVERSION itself.
 K_NOSETEXTRAVERSION="1"
 # pf-sources is not officially supported/covered by the Gentoo security team.
 K_SECURITY_UNSUPPORTED="1"
-# Genpatches parts to use - experimental is already in the -pf patch set.
 K_WANT_GENPATCHES="base extras"
-# Major kernel version, e.g. 5.14.
 SHPV="${PV/_p*/}"
-# Replace "_p" with "-pf", since using "-pf" is not allowed for an ebuild name by PMS.
+# PMS forbids -pf in ebuild versions.
 PFPV="${PV/_p/-pf}"
 inherit kernel-2 optfeature
 detect_version
@@ -45,50 +40,39 @@ pkg_setup() {
 	kernel-2_pkg_setup
 }
 src_unpack() {
-	# Codeberg-hosted pf-sources include full kernel sources, so override src_unpack manually;
-	# kernel-2_src_unpack() does unwanted magic here.
+	# Avoid kernel-2 unpack handling for Codeberg's full source archive.
 	unpack ${A}
 	mv linux linux-${PFPV} || die "Failed to move source directory"
 }
 src_prepare() {
-	# A bumped genpatches base carries vanilla updates already in -pf; drop to avoid conflicts.
+	# Drop vanilla updates already present in -pf.
 	if [[ ${K_GENPATCHES_VER} -ne 1 ]]; then
 		find "${WORKDIR}"/ -type f -name '1*linux*.patch' -delete ||
 			die "Failed to delete vanilla linux patches in src_prepare."
 	fi
-	# kernel-2_src_prepare doesn't apply PATCHES(). Chosen genpatches are also applied here.
+	# kernel-2_src_prepare does not apply these genpatches.
 	eapply "${WORKDIR}"/*.patch
 
-	# CVE-2026-31431 ("Copy Fail") — local privilege escalation via
-	# algif_aead in-place AAD copy. Mainline fix is upstream commit
-	# a664bf3d603d (2026-03-26); the linux-stable backport landed in
-	# 6.1.170. Since pf-sources ships v6.1.0 + pf and the stable
-	# backport's context targets a later 6.1.X codebase, carry a
-	# cumulative diff (v6.1 → v6.1.170 over the 4 affected crypto
-	# files) instead — picks up the CVE fix together with other
-	# algif_aead/af_alg fixes from 6.1.X stable.
+	# CVE-2026-31431: algif_aead local privilege escalation. Its 6.1.170
+	# stable backport does not apply to GA-based -pf; carry the affected crypto
+	# files cumulatively through 6.1.170.
 	eapply "${WORKDIR}/pf-cves-cumulative-6.1/cve-2026-31431-algif_aead-cumulative-6.1.patch"
 
-	# CVE-2026-43037 + CVE-2026-43038 — twin IPv6 cb[] type-confusion
-	# fixes (Eric Dumazet, 20260326155138.2429480-1):
-	#   * 43037: ip6_tunnel.c::ip4ip6_err()         — stack OOB write
-	#   * 43038: icmp.c::ip6_err_gen_icmpv6_unreach — OOB read
-	# Both backported into 6.1.168. Same surgical-context-mismatch
-	# situation as 31431 — carry a cumulative v6.1 → v6.1.170 diff
-	# restricted to net/ipv6/ip6_tunnel.c + net/ipv6/icmp.c. Same
-	# window as the crypto cumulative for consistency.
+	# CVE-2026-43037/43038: IPv6 cb[] confusion causing an OOB write/read.
+	# The 6.1.168 fixes do not apply to GA-based -pf; carry the affected IPv6
+	# files cumulatively through 6.1.170.
 	eapply "${WORKDIR}/pf-cves-cumulative-6.1/cve-2026-43037-43038-cumulative-6.1.patch"
 
 	default
 }
 pkg_postinst() {
-	# Fixes "wrongly" detected directory name, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postinst
 	optfeature "userspace KSM helper" sys-process/uksmd
 }
 pkg_postrm() {
-	# Same here, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postrm
 }
