@@ -22,8 +22,7 @@ KEYWORDS="~amd64 ~arm64"
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 "
-# CMakeLists uses find_package(nanobind CONFIG REQUIRED) against the system
-# install; the MeshFix C++ ships bundled under src/, so the build is offline.
+# CMake finds system nanobind; MeshFix remains bundled.
 BDEPEND="
 	dev-python/nanobind[${PYTHON_USEDEP}]
 "
