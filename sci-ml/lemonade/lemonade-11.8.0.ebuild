@@ -25,14 +25,10 @@ REQUIRED_USE="?? ( system-rocm system-therock )"
 PROPERTIES="live"
 RESTRICT="network-sandbox"
 
-# Keep the systemd account and state directory across USE changes; OpenRC uses
-# LEMONADE_USER instead.
-#
-# Linux builds unconditionally include and link libdrm_amdgpu, even on non-AMD
-# hosts; require the flag explicitly. verified 2026-07-18
-#
-# Derive the TheRock range from backend_versions.json. AMD renumbered 7.14 to
-# 10.0, so <7.15 intentionally excludes 10.x. verified 2026-08-27
+# Keep the systemd account/state across USE changes; OpenRC uses LEMONADE_USER.
+# Linux always links libdrm_amdgpu; require its flag. verified 2026-07-18
+# backend_versions.json maps TheRock 7.14 to 10.0, so <7.15 excludes 10.x.
+# verified 2026-08-27
 # brotli is macOS-only; zstd-1.5.5 is upstream's floor. verified 2026-08-27
 RDEPEND="
 	app-arch/brotli:=
