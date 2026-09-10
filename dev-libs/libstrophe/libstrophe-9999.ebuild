@@ -10,7 +10,7 @@ HOMEPAGE="https://strophe.im/libstrophe/"
 EGIT_REPO_URI="https://github.com/strophe/${PN}.git"
 
 LICENSE="|| ( MIT GPL-3 )"
-# Subslot: ${SONAME}.1 to differentiate from previous versions without SONAME
+# Track SONAME .1; older releases lacked one.
 SLOT="0/0.1"
 KEYWORDS=""
 IUSE="doc expat gnutls"
@@ -32,8 +32,7 @@ DOCS=( ChangeLog )
 
 src_prepare() {
 	default
-	# Release tarballs ship a generated configure; the git checkout
-	# doesn't, so regen the autotools plumbing.
+	# Live checkouts omit generated configure files.
 	eautoreconf
 }
 
