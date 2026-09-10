@@ -273,8 +273,6 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	pst-uml.source.r15878
 	uml.source.r17476
 "
-# Removed in target tlpdb: pst-tvz.source
-
 inherit texlive-module
 
 DESCRIPTION="TeXLive PSTricks"
