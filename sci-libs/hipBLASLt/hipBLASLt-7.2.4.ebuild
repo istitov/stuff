@@ -62,8 +62,7 @@ BDEPEND="
 	)
 "
 
-# Since 7.1.0 to build tests one needs to build benchmarks (which will be installed)
-# TODO: make build of tests independent benchmarks
+# Upstream couples tests to the installed benchmark clients.
 REQUIRED_USE="test? ( benchmark )"
 
 PATCHES=(
@@ -95,9 +94,7 @@ pkg_pretend() {
 }
 
 src_unpack() {
-	# rocm 7.2.4's release-asset tarballs carry their own hipblaslt/ and
-	# origami/ top-level directories (7.2.3's unpacked flat, hence the manual
-	# wrapper dirs previously). Unpack directly so S=/ORIGAMI_S= resolve.
+	# Release assets provide their own top-level directories.
 	unpack "hipblaslt-${PV}.tar.gz"
 	unpack "origami-${PV}.tar.gz"
 }
@@ -111,12 +108,12 @@ src_prepare() {
 	sed -e "s:\$(ROCM_PATH)/bin/amdclang++:$(get_llvm_prefix)/bin/clang++:g" \
 		-i tensilelite/Makefile || die
 
-	# Fix compiler validation (just a validation)
+	# Make validation accept the selected Clang driver.
 	sed -e "s/amdclang/$(basename "$CC")/g" \
 		-i tensilelite/Tensile/Toolchain/Validators.py \
 		-i tensilelite/Tensile/Tests/unit/test_MatrixInstructionConversion.py || die
 
-	# Do not install tests
+	# Exclude test binaries from installation.
 	sed -e "s/COMPONENT tests/COMPONENT tests EXCLUDE_FROM_ALL/" -i CMakeLists.txt || die
 
 	sed -e 's:../../shared/origami:../origami:' -i CMakeLists.txt || die
@@ -132,17 +129,17 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# too many warnings
+	# Silence known ROCm source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
-	# Tensile guesses weirdly how to compile things, ld.bfd won't work, so force lld
+	# Tensile's generated code requires lld.
 	append-cxxflags -DCMAKE_CXX_FLAGS="-fuse-ld=lld"
 
 	local targets="$(get_amdgpu_flags)"
 	local Tensile_SKIP_BUILD=$([ "${AMDGPU_TARGETS[*]}" = "" ] && echo ON || echo OFF )
 	local HIPBLASLT_ENABLE_DEVICE=$([ "${AMDGPU_TARGETS[*]}" != "" ] && echo ON || echo OFF )
 
-	# targets has a trailing semicolon, this trips up Tensile's input parser, so carefully prune
+	# Tensile rejects get_amdgpu_flags' trailing semicolon.
 	local mycmakeargs=(
 		-DGPU_TARGETS="${targets::-1}"
 		-DHIPBLASLT_ENABLE_CLIENT="$(usex benchmark ON $(usex test ON OFF))"
@@ -161,7 +158,6 @@ src_configure() {
 	)
 
 	if use test || use benchmark; then
-		# HIPBLASLT_ENABLE_CLIENT=ON branch
 		mycmakeargs+=(
 			-DBLA_PKGCONFIG_BLAS=ON
 			-DBLA_VENDOR=FlexiBLAS
@@ -174,10 +170,10 @@ src_configure() {
 
 src_compile() {
 	local -x ROCM_PATH="${EPREFIX}/usr"
-	# set PYTHONPATH to load Tensile from virtualenv, not the system-wide one
+	# Load the build virtualenv's Tensile, not a system copy.
 	local -x PYTHONPATH="${S}_build/virtualenv/lib/${EPYTHON}/site-packages"
 	local -x TENSILE_ROCM_ASSEMBLER_PATH="$(get_llvm_prefix)/bin/clang++"
-	# TensileCreateLibrary reads CMAKE_CXX_COMPILER again
+	# TensileCreateLibrary rereads the compiler from the environment.
 	local -x CMAKE_CXX_COMPILER="$(get_llvm_prefix)/bin/clang++"
 	cmake_src_compile
 }
@@ -185,15 +181,14 @@ src_compile() {
 src_install() {
 	cmake_src_install
 
-	# Stop llvm-strip from removing .strtab section from *.hsaco files,
-	# otherwise rocclr/elf/elf.cpp complains with "failed: null sections(STRTAB)" and crashes
+	# Preserve .strtab in HSACO files; rocclr's ELF loader crashes without it.
 	dostrip -x /usr/$(get_libdir)/hipblaslt/library/
 }
 
 src_test() {
 	check_amdgpu
 
-	# Expected time for 7900 XTX: 340s (full) or 5s with GTEST_FILTER='*quick*'
-	# Fails in `MatrixTransformTest.MultipleDevices` in dGPU+iGPU combination
+	# 7900 XTX: 340s full; 5s with GTEST_FILTER='*quick*'.
+	# Pin the dGPU to avoid the known dGPU+iGPU MultipleDevices failure.
 	HIP_VISIBLE_DEVICES=0 cmake_src_test
 }
