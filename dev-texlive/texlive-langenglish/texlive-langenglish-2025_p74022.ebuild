@@ -84,7 +84,6 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	xetexref.doc.r73885
 	yet-another-guide-latex2e.doc.r77849
 "
-# Removed in target tlpdb: tex-refs.doc
 TEXLIVE_MODULE_SRC_CONTENTS="
 	latexfileinfo-pkgs.source.r26760
 "
