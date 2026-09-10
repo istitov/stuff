@@ -44,7 +44,6 @@ EPYTEST_PLUGINS=( pytest-rerunfailures )
 distutils_enable_tests pytest
 
 EPYTEST_DESELECT=(
-	# TODO
 	tests/metrics/test_measurement_consumer.py::TestSynchronousMeasurementConsumer::test_collect_deadline
 )
 
