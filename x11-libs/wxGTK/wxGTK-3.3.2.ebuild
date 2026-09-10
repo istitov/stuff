@@ -81,10 +81,10 @@ PATCHES=(
 )
 
 multilib_src_configure() {
-	# bug #952961
+	# LTO conflicts with -fno-semantic-interposition (bug #952961).
 	tc-is-lto && filter-flags -fno-semantic-interposition
 
-	# bug #915154
+	# Permit version scripts to reference absent symbols (bug #915154).
 	append-ldflags $(test-flags-CCLD -Wl,--undefined-version)
 
 	local myeconfargs=(
@@ -155,7 +155,7 @@ multilib_src_test() {
 	pushd tests >/dev/null || die
 
 	emake
-	# TODO: investigate --success changing results and test_gui under xvfb.
+	# Run the reliable non-network subset; GUI tests still need Xvfb.
 	edo ./test '~[.]~[net]'
 
 	popd >/dev/null || die
