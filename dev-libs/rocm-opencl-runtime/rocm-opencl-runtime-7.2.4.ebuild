@@ -68,7 +68,7 @@ src_configure() {
 		-DBUILD_ICD=ON
 		-DCLR_BUILD_OCL=ON
 		-DCMAKE_DISABLE_FIND_PACKAGE_Git=ON
-		# Currently inert; retain ::gentoo parity. verified 2026-05-08
+		# Retain ::gentoo's inert NUMA toggles; verified 2026-05-08.
 		-DCMAKE_DISABLE_FIND_PACKAGE_NUMA="$(usex !numa)"
 		-DCMAKE_REQUIRE_FIND_PACKAGE_NUMA="$(usex numa)"
 	)
