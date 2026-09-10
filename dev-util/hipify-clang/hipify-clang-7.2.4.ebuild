@@ -31,13 +31,12 @@ PATCHES=(
 src_prepare() {
 	cmake_src_prepare
 
-	# Set clang resource prefix to /usr/lib/clang/...
+	# Use Gentoo's unslotted Clang resource path.
 	sed -i 's:/lib/llvm/lib/clang/:/lib/clang/:' src/main.cpp || die
 }
 
 src_configure() {
-	# 928906: CMakeLists.txt ignores CC/CXX, switches compiler to clang
-	# and fails if non-compatible CFLAGS/CXXFLAGS are used
+	# Upstream forces Clang; filter incompatible user flags (bug 928906).
 	strip-unsupported-flags
 
 	local mycmakeargs=(
