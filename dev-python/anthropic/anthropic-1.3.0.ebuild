@@ -18,19 +18,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# guru's ebuild fetched from GitHub for npm-driven mock-server tests;
-# we strip that and use the PyPI sdist directly.
-#
-# 1.0.0 migrated the HTTP stack from httpx to httpx2 (>=2.0.0, from
-# ::gentoo) and dropped the distro dependency; py-floor rose to 3.10
-# (within our compat). verified 2026-08-21 against the 1.0.0 PyPI
-# Requires-Dist, re-verified 2026-09-01 against the 1.3.0 sdist -- the
-# runtime dep set is unchanged from 1.0.0.
-# Upstream's major ceilings are carried through as well as the floors: these
-# are real API-compat bounds Anthropic declares, not Dependabot noise, and
-# without them a future ::gentoo bump to e.g. jiter 1.x or anyio 5.x would be
-# silently accepted by this ebuild. verified 2026-09-01 against the 1.3.0
-# sdist Requires-Dist.
+# Use the PyPI sdist; GitHub adds only npm mock-server test fixtures. Since
+# 1.0, upstream uses httpx2 and no longer depends on distro. Preserve its
+# declared major ceilings as API bounds. verified 2026-09-01
 RDEPEND="
 	>=dev-python/anyio-3.5.0[${PYTHON_USEDEP}]
 	<dev-python/anyio-5[${PYTHON_USEDEP}]
@@ -47,15 +37,13 @@ RDEPEND="
 	>=dev-python/typing-extensions-4.14[${PYTHON_USEDEP}]
 	<dev-python/typing-extensions-5[${PYTHON_USEDEP}]
 "
-# anthropic (unlike openai 3.6.0) still uses the fancy-pypi-readme metadata
-# hook; its build-system declares hatch-fancy-pypi-readme>=22.4,<26.
+# Upstream builds README metadata with hatch-fancy-pypi-readme>=22.4,<26.
 BDEPEND="
 	>=dev-python/hatch-fancy-pypi-readme-22.4[${PYTHON_USEDEP}]
 	<dev-python/hatch-fancy-pypi-readme-26[${PYTHON_USEDEP}]
 "
 
-# Tests need a Stainless mock-server stack (Node.js + npm registry
-# fixtures); not worth running in our overlay.
+# Tests require Stainless's Node/npm mock server.
 RESTRICT="test"
 
 pkg_postinst() {
