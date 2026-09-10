@@ -36,43 +36,29 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-	# Order matters: the codegen-location patch references ${libdir}
-	# in pygtk-2.0.pc, and libdir-pc is what adds ${libdir} to the
-	# .pc template, so libdir-pc must apply first.
+	# libdir-pc must precede codegen-location, which uses its ${libdir}.
 	"${FILESDIR}/${PN}-2.14.1-libdir-pc.patch"
-	# codegendir set to ${libdir}/python2.7/site-packages/gtk-2.0/codegen.
-	# Earlier revisions of this patch routed through ${pyexecdir},
-	# which embeds ${PYTHON_EXEC_PREFIX} as a literal in the .pc and
-	# pkg-config substitutes it to empty, yielding /lib64/... — broken
-	# on split-usr setups where /lib64 isn't a symlink to /usr/lib64.
-	# ${libdir} resolves to a literal /usr/lib64 (or /usr/lib on x86)
-	# regardless of usr-merge state. 2026-05-05.
+	# ${pyexecdir} expands an empty PYTHON_EXEC_PREFIX in pkg-config; ${libdir}
+	# yields the correct /usr path on split-usr. # verified 2026-05-05
 	"${FILESDIR}/${PN}-2.13.0-fix-codegen-location.patch"
-	# Fix leaks of Pango objects
 	"${FILESDIR}/${PN}-2.24.0-fix-leaks.patch"
-	# Fail when tests are failing, bug #391307
 	"${FILESDIR}/${PN}-2.24.0-test-fail.patch"
-	# Fix broken tests, https://bugzilla.gnome.org/show_bug.cgi?id=709304
 	"${FILESDIR}/${P}-test_dialog.patch"
-	# Fix build on Darwin
 	"${FILESDIR}/${PN}-2.24.0-quartz-objc.patch"
-	# x11-libs/pango-1.44
 	"${FILESDIR}/${PN}-2.24.0-pango-1.44.patch"
-	# x11-libs/pango >= 1.50: drop further removed bindings
-	# (pango_font_metrics_new, pango_font_map_get_shape_engine_type)
-	# so generated pango.c no longer references missing symbols.
+	# Drop bindings removed by Pango 1.50 so generated code still links.
 	"${FILESDIR}/${PN}-2.24.0-pango-1.50.patch"
 )
 
 src_prepare() {
 	default
 
-	# Examples is handled "manually"
+	# Install examples only through USE=examples below.
 	sed -e 's/\(SUBDIRS = .* \)examples/\1/' \
 		-i Makefile.am Makefile.in || die
 
 	sed -e 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' \
-		-i configure.ac || die #466968
+		-i configure.ac || die
 
 	AT_M4DIR="m4" eautoreconf
 
@@ -99,7 +85,7 @@ src_compile() {
 }
 
 src_test() {
-	# Let tests pass without permissions problems, bug #245103
+	# Avoid test permission failures (Gentoo bug 245103).
 	gnome2_environment_reset
 	unset DBUS_SESSION_BUS_ADDRESS
 
