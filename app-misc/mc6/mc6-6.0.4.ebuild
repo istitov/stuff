@@ -130,7 +130,7 @@ src_install() {
 	# GModule loads panel and Lua plugins directly; their .la files are unused.
 	find "${ED}" -name '*.la' -delete || die
 
-	# bug #334383
+	# cons.saver needs setgid tty for console access (bug #334383).
 	if use kernel_linux && [[ ${EUID} == 0 ]] ; then
 		fowners root:tty /usr/libexec/mc/cons.saver
 		fperms g+s /usr/libexec/mc/cons.saver
