@@ -28,6 +28,8 @@ src_prepare() {
 	# reaction_calculator now live exclusively in pymatgen-core (no longer
 	# shipped in this sdist). The pmg CLI entry still leaks though, so drop
 	# it to keep pymatgen-core as the canonical CLI provider.
+	grep -qF 'pmg = "pymatgen.cli.pmg:main"' pyproject.toml ||
+		die "pmg script anchor moved"
 	sed -i -e '/^pmg = "pymatgen\.cli\.pmg:main"$/d' pyproject.toml || die
 	distutils-r1_src_prepare
 }
