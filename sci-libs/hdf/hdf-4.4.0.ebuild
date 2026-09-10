@@ -22,7 +22,7 @@ LICENSE="NCSA-HDF"
 # failure -- so the old names are simply gone.
 #
 SLOT="0/11"
-KEYWORDS="~arm64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="examples fortran szip static-libs test"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="test? ( szip )"
