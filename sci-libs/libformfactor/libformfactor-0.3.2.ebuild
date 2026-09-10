@@ -9,8 +9,7 @@ MY_P="${PN}-v${PV}"
 DESCRIPTION="Computes Fourier shape transforms (form factors) for BornAgain"
 HOMEPAGE="https://jugit.fz-juelich.de/mlz/lib/formfactor"
 SRC_URI="https://jugit.fz-juelich.de/mlz/lib/formfactor/-/archive/v${PV}/${MY_P}.tar.gz"
-# jugit's tag archive unpacks to formfactor-v<ver>-<full-sha> (mlz/libformfactor
-# moved to mlz/lib/formfactor upstream), so pin the tag commit for S=.
+# The tag archive's root includes its full commit; pin it for S.
 # verified 2026-08-10
 COMMIT="7e235d29b1ab60f2e4788e7c819d7c0277aa2954"
 S="${WORKDIR}/formfactor-v${PV}-${COMMIT}"
@@ -19,29 +18,21 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Built against the libheinz 2.x API; cap below 3 so the libheinz-4.0
-# co-release of libformfactor-0.4.0 / bornagain-24.0 can't be pulled in here.
+# This release uses the libheinz 2 API; exclude the 4.0 co-release stack.
 DEPEND=">=sci-libs/libheinz-2.0.0 <sci-libs/libheinz-3"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	# Honor multilib layout: upstream hardcodes "DESTINATION lib" for the
-	# shared library, which lands files in /usr/lib on amd64 instead of
-	# /usr/lib64 and trips multilib-strict.
+	# Replace upstream's hardcoded lib directory with the multilib path.
 	sed -i -e 's|DESTINATION lib$|DESTINATION ${CMAKE_INSTALL_LIBDIR}|' \
 		-e 's|DESTINATION lib)|DESTINATION ${CMAKE_INSTALL_LIBDIR})|' \
 		ff/CMakeLists.txt || die
 
-	# install(FILES ... DESTINATION cmake) → ${CMAKE_INSTALL_LIBDIR}/cmake/formfactor
-	# Same fix as LibHeinz: install CMake package files where find_package()
-	# searches by default (upstream targets ${prefix}/cmake/ which CMake
-	# doesn't probe without a *_DIR hint).
+	# Install package files where find_package searches by default.
 	sed -i 's|DESTINATION cmake)|DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/formfactor)|g' \
 		CMakeLists.txt || die
 
-	# configure_package_config_file(... INSTALL_DESTINATION cmake) too,
-	# so the generated formfactorConfig.cmake's PACKAGE_PREFIX_DIR math
-	# resolves correctly from the new install location.
+	# Keep PACKAGE_PREFIX_DIR relative to the corrected config location.
 	sed -i 's|INSTALL_DESTINATION cmake|INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/formfactor|' \
 		CMakeLists.txt || die
 
