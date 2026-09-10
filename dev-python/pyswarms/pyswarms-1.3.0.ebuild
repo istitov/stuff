@@ -18,8 +18,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The bundled test suite predates current matplotlib/numpy (e.g. imports
-# the removed matplotlib.axes._subplots private API); upstream-tested.
+# Tests use private Matplotlib/NumPy APIs removed from current releases.
 RESTRICT="test"
 
 RDEPEND="
@@ -32,15 +31,13 @@ RDEPEND="
 "
 
 python_prepare_all() {
-	# Drop the py2 past.builtins.xrange shim (→ range); avoids a runtime
-	# dependency on the deprecated dev-python/future.
+	# Replace the Python 2 xrange shim to avoid deprecated dev-python/future.
 	sed -i \
 		-e '/from past.builtins import xrange/d' \
 		-e 's/\bxrange(/range(/g' \
 		pyswarms/utils/search/random_search.py || die
 
-	# find_packages(exclude=["docs","tests"]) lets the top-level tests
-	# package leak into site-packages; broaden to glob patterns.
+	# Exclude package subtrees, not only their top-level directories.
 	sed -i -e 's/exclude=\["docs", "tests"\]/exclude=["docs", "docs.*", "tests", "tests.*"]/' setup.py || die
 	distutils-r1_python_prepare_all
 }
