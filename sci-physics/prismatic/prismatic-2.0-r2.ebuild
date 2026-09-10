@@ -29,12 +29,8 @@ RDEPEND="
 	gpu? ( dev-util/nvidia-cuda-toolkit )
 "
 DEPEND="${RDEPEND}"
-# nvidia-cuda-toolkit was BDEPEND-only, which is wrong in both directions:
-# CMakeLists.txt builds the binaries with cuda_add_executable() +
-# cuda_add_cufft_to_target(), so libcudart and libcufft are needed at link
-# time (DEPEND) and stay in DT_NEEDED afterwards (RDEPEND). BDEPEND is also
-# CBUILD-scoped, so it was the wrong side of a cross build. It stays here for
-# nvcc itself. verified 2026-07-27
+# CUDA supplies nvcc at build time and DT_NEEDED libcudart/libcufft at runtime;
+# therefore it belongs on both dependency axes. # verified 2026-07-27
 BDEPEND="
 	gpu? ( dev-util/nvidia-cuda-toolkit )
 "
@@ -49,9 +45,7 @@ src_prepare() {
 	cmake_src_prepare
 	use qt6 && eapply "${FILESDIR}/${P}-qt6-port.patch"
 
-	# CUDA 13 dropped sm_60 support; bump the hard-coded -arch=sm_60
-	# in CMakeLists.txt to sm_75 only when building against CUDA >= 13.
-	# CUDA 12 still accepts sm_60, so leave it alone there.
+	# CUDA 13 dropped sm_60; retain it for older toolkits and use sm_75 with 13+.
 	if use gpu; then
 		local cuda_ver=$(awk '/^#define CUDA_VERSION/ {print $3; exit}' \
 			"${ESYSROOT}"/opt/cuda/include/cuda.h 2>/dev/null)
@@ -61,12 +55,8 @@ src_prepare() {
 		fi
 	fi
 
-	# Building the prismatic-gui shared CUDA library compiles .cu
-	# files that pull in Qt6 headers. gcc-15 promotes -Wtemplate-body
-	# and -Wchanges-meaning to errors on Qt6's QHash::TryEmplaceResult
-	# (the field 'iterator' shadows the type 'iterator'). Plain g++
-	# accepts the code, but nvcc's -Werror chain bites here. Forward
-	# the suppressions through nvcc -> host gcc.
+	# nvcc promotes GCC 15 diagnostics from Qt6's QHash headers to errors; pass
+	# their suppressions through to the host compiler.
 	if use gpu && use gui; then
 		sed -i \
 			-e 's/-Xcompiler -fPIC"/-Xcompiler -fPIC -Xcompiler=-Wno-template-body -Xcompiler=-Wno-changes-meaning"/' \
@@ -82,9 +72,7 @@ src_configure() {
 		-DPRISMATIC_ENABLE_DOUBLE_PRECISION=$(usex double-precision 1 0)
 	)
 
-	# CUDA 13's host_config.h refuses gcc>15. When gcc-15 is installed
-	# alongside a newer active gcc, point nvcc at g++-15 explicitly so
-	# the build doesn't depend on which slot gcc-config has selected.
+	# CUDA 13 rejects GCC >15; select the parallel-installed g++-15 explicitly.
 	if use gpu; then
 		local g15=/usr/bin/x86_64-pc-linux-gnu-g++-15
 		[[ -x ${g15} ]] && mycmakeargs+=( -DCUDA_HOST_COMPILER="${g15}" )
