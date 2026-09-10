@@ -34,8 +34,3 @@ PATCHES=(
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
-# No such file or directory: image/logo.png
-#distutils_enable_sphinx doc \
-#	dev-python/numpydoc \
-#	dev-python/sphinx-issues \
-#	dev-python/sphinx-gallery
