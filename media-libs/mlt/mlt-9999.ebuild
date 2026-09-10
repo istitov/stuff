@@ -19,9 +19,8 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 RESTRICT="!test? ( test )"
 
-# rtaudio will use OSS on non linux OSes
-# Qt already needs FFTW/PLUS so let's just always have it on to ensure
-# MLT is useful: bug #603168.
+# RtAudio uses OSS off Linux. Keep FFTW unconditional for the always-enabled
+# PLUS module (bug 603168).
 RDEPEND="
 	dev-libs/glib:2
 	>=media-libs/libebur128-1.2.2:=
@@ -96,26 +95,26 @@ pkg_setup() {
 }
 
 src_unpack() {
-	# The sole submodule is only needed by the Qt 6 glaxnimate module.
+	# Only the Qt 6 glaxnimate module needs the submodule.
 	use qt6 || EGIT_SUBMODULES=()
 	git-r3_src_unpack
 }
 
 src_prepare() {
-	# Respect CFLAGS LDFLAGS when building shared libraries. Bug #308873
+	# Respect CFLAGS/LDFLAGS in shared libraries (bug 308873).
 	if use python; then
 		sed -i "/mlt.so/s/ -lmlt++ /& ${CFLAGS} ${LDFLAGS} /" src/swig/python/build || die
 		python_fix_shebang src/swig/python
 	fi
 
-	# Kwalify is only used to validate YAML and is not needed to build MLT.
+	# Do not require the YAML-only Kwalify validator.
 	sed -e '/find_package(Kwalify/ s/REQUIRED//' -i CMakeLists.txt || die
 
 	cmake_src_prepare
 }
 
 src_configure() {
-	# Workaround for bug #919981
+	# Work around bug 919981.
 	append-ldflags $(test-flags-CCLD -Wl,--undefined-version)
 
 	local mycmakeargs=(
@@ -166,7 +165,6 @@ src_configure() {
 }
 
 src_test() {
-	# See setenv in the upstream repository.
 	local -x MLT_REPOSITORY="${BUILD_DIR}/out/lib/mlt"
 	local -x MLT_DATA="${BUILD_DIR}/out/share/mlt"
 	local -x MLT_PROFILES_PATH="${BUILD_DIR}/out/share/mlt/profiles"
@@ -186,7 +184,6 @@ src_install() {
 	insinto /usr/share/${PN}
 	doins -r demo
 
-	# Install SWIG bindings
 	docinto swig
 	if use python; then
 		dodoc "${S}"/src/swig/python/play.py
