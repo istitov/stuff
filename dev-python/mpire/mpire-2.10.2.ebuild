@@ -15,10 +15,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="dashboard dill numpy"
 
-# Upstream optional-extras mapped to USE flags:
-#   dashboard -> flask (mpire/dashboard/dashboard.py)
-#   dill      -> multiprocess (try/except in context.py for dill backend)
-#   numpy     -> numpy (try/except for ndarray progress tracking)
+# Map upstream extras to USE flags; multiprocess implements the dill backend.
 RDEPEND="
 	>=dev-python/pygments-2.0[${PYTHON_USEDEP}]
 	>=dev-python/tqdm-4.27[${PYTHON_USEDEP}]
