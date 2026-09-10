@@ -12,23 +12,16 @@ HOMEPAGE="https://github.com/LostRuins/koboldcpp"
 SRC_URI="https://github.com/LostRuins/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 S="${WORKDIR}/${PN}-${PV}"
 
-# AGPL-3.0 covers the koboldcpp code + the embedded KoboldAI Lite UI; the
-# bundled ggml / llama.cpp / stable-diffusion.cpp / TTS.cpp libraries are MIT
-# (MIT_LICENSE_GGML_SDCPP_LLAMACPP_ONLY.md).
+# Koboldcpp and its UI are AGPL-3+; bundled inference libraries are MIT.
 LICENSE="AGPL-3+ MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Vulkan is upstream's official GPU acceleration for both AMD and NVIDIA.
-# CUDA (koboldcpp_cublas) and ROCm/hipBLAS (an unofficial upstream fork) are
-# intentionally not wired here yet: neither has been build-verified for this
-# overlay (ROCm's Makefile GPU_TARGETS handling needs work). Prefer Vulkan.
+# Vulkan is the only build-verified GPU backend here; CUDA and the unofficial
+# ROCm path remain unwired, with ROCm GPU_TARGETS still unresolved.
 IUSE="+vulkan"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-# koboldcpp.py is a pure-stdlib launcher that dlopen()s the compiled backend
-# .so files; the image/speech/TTS features all live in the C++ libraries, so
-# there are no third-party Python runtime dependencies.
 RDEPEND="
 	${PYTHON_DEPS}
 	vulkan? ( media-libs/vulkan-loader )
@@ -48,14 +41,10 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	# The release build strips the .so at link time (-s); leave stripping
-	# to Portage so splitdebug/nostrip are honored and the pre-stripped QA
-	# notice is silenced. Keep -DNDEBUG (it no-ops assert()).
+	# Leave stripping to Portage for splitdebug/nostrip; retain -DNDEBUG.
 	sed -i -e 's/-DNDEBUG -s/-DNDEBUG/g' Makefile || die
 
-	# Drop the bundled prebuilt shader compilers so the Vulkan build uses
-	# the system media-libs/shaderc glslc (LLAMA_USE_BUNDLED_GLSLC= empty
-	# in src_compile). Their absence also removes the only executed blob.
+	# Drop bundled shader compilers and select system glslc below.
 	rm -f glslc-linux glslc.exe || die
 }
 
@@ -64,9 +53,7 @@ src_compile() {
 
 	local targets=( koboldcpp_default )
 	local makeargs=(
-		# Empty (not 0) so the Makefile's `[ -n "$LLAMA_USE_BUNDLED_GLSLC" ]`
-		# test is false and it selects the system glslc (media-libs/shaderc)
-		# for Vulkan shader generation instead of the bundled binary.
+		# Must be empty, not 0: the Makefile tests string length.
 		LLAMA_USE_BUNDLED_GLSLC=
 	)
 
@@ -83,17 +70,13 @@ src_install() {
 
 	insinto "${dest}"
 	doins koboldcpp.py
-	# The compiled backends (koboldcpp_default.so and, with USE=vulkan,
-	# koboldcpp_vulkan.so) sit beside the launcher, which locates them via
-	# os.path.dirname(__file__).
+	# The launcher finds backends beside its own file.
 	doins koboldcpp_*.so
-	# Embedded web UI (KoboldAI Lite), API docs, SD/TTS resources and the
-	# chat-format adapters, read from <script_dir>/embd_res and kcpp_adapters.
+	# Runtime UI, model resources, and chat adapters.
 	doins -r embd_res kcpp_adapters
 
 	python_fix_shebang "${ED}${dest}/koboldcpp.py"
 
-	# Thin launcher on PATH.
 	make_wrapper "${PN}" "${EPYTHON} ${EPREFIX}${dest}/koboldcpp.py"
 
 	dodoc README.md
