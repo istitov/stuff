@@ -25,10 +25,8 @@ RDEPEND="
 	>=dev-python/urllib3-1.26[${PYTHON_USEDEP}]
 "
 
-# Upstream's `dev` extra also lists pytest-mock, but the suite never uses the
-# `mocker` fixture -- every test mocks with stdlib unittest.mock. responses is
-# the only real test dep, and it is used as a plain library (@responses.activate),
-# not as a pytest plugin, hence the empty EPYTEST_PLUGINS. verified 2026-08-29
+# The suite uses stdlib mocks; responses is a library, not a pytest plugin.
+# verified 2026-08-29
 BDEPEND="
 	test? (
 		>=dev-python/responses-0.20[${PYTHON_USEDEP}]
@@ -39,10 +37,7 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
-	# Upstream marks the cases that hit the live ModelScope API with a
-	# `remote` pytest marker and documents them as needing .env credentials
-	# (see [tool.pytest.ini_options] in pyproject.toml). Deselect that marker
-	# rather than RESTRICT the whole suite -- the sdist has shipped a tests/
-	# tree since 0.2.0 and it was going unrun. verified 2026-08-29
+	# Exclude credentialed live-API tests marked remote.
+	# verified 2026-08-29
 	epytest -m "not remote"
 }
