@@ -28,5 +28,5 @@ BDEPEND="
 	<dev-python/uv-build-0.12[${PYTHON_USEDEP}]
 "
 
-# The suite requires numerous optional backend and development dependencies.
+# Tests require optional backends and development dependencies.
 RESTRICT="test"
