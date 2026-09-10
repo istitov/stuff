@@ -3,8 +3,7 @@
 
 EAPI=8
 
-# Upstream tags releases by build date/hour (v2024_10_23_h14); map that to a
-# date-based PV and pin the exact tag for the tarball.
+# Map the date-based PV to upstream's date/hour tag.
 MY_TAG="v2024_10_23_h14"
 
 DESCRIPTION="Dynamic Range meter plugin for the DeaDBeeF audio player"
@@ -42,8 +41,7 @@ src_compile() {
 }
 
 src_install() {
-	# The libdrmeter shared lib lives next to the plugin so deadbeef
-	# can find it without polluting /usr/lib64.
+	# Keep libdrmeter beside the plugin without polluting the global libdir.
 	exeinto /usr/$(get_libdir)/deadbeef
 	doexe dr_meter/lib/libdrmeter.so* dr_plugin/ddb_dr_meter.so
 	use gtk2 && doexe dr_plugin_gui/ddb_dr_meter_gtk2.so
