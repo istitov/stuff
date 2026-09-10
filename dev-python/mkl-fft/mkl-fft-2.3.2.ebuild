@@ -38,7 +38,7 @@ python_test() {
 	local testdir="${BUILD_DIR}/install$(python_get_sitedir)/mkl_fft/tests"
 
 	cd "${T}" || die
-	# The optional SciPy interface requires the unpackaged mkl-service dependency.
+	# SciPy-interface tests require unpackaged mkl-service.
 	epytest "${testdir}" \
 		--ignore="${testdir}/third_party/scipy" \
 		-k 'not scipy'
