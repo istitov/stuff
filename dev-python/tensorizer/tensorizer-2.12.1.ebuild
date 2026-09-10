@@ -35,6 +35,6 @@ RDEPEND="
 distutils_enable_tests unittest
 
 python_test() {
-	# Other tests require network access, Redis, moto or CUDA.
+	# Remaining tests require network access, Redis, moto, or CUDA.
 	eunittest -p 'test_syscalls.py' tests/
 }
