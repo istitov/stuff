@@ -21,8 +21,7 @@ IUSE="debug fusefs json system-sqlite +ssl static tcl tcl-stubs
 
 RESTRICT="test"
 
-# Please check sqlite minimum version on every release. This can be done with:
-#     ./configure --print-minimum-sqlite-version
+# Recheck each release with ./configure --print-minimum-sqlite-version.
 RDEPEND="
 	virtual/zlib:=
 	|| (
@@ -34,7 +33,7 @@ RDEPEND="
 	tcl? ( dev-lang/tcl:0= )
 "
 
-# Either tcl or jimtcl need to be present to build Fossil (Bug #675778)
+# Building requires Tcl or Jim Tcl (bug 675778).
 DEPEND="${RDEPEND}
 	static? (
 		virtual/zlib[static-libs]
@@ -58,14 +57,12 @@ BDEPEND="
 "
 
 PATCHES=(
-	# fossil-2.10-check-lib64-for-tcl.patch: Bug 690828
+	# Bug 690828.
 	"${FILESDIR}"/fossil-2.10-check-lib64-for-tcl.patch
 )
 
 src_configure() {
-	# this is not an autotools situation so don't make it seem like one
-	# --with-tcl: works
-	# --without-tcl: dies
+	# This is not Autotools; omit --without-tcl because it fails.
 	local myconf
 	myconf=(--with-openssl="$(usex ssl auto none)")
 	use debug         && myconf+=(--fossil-debug)
