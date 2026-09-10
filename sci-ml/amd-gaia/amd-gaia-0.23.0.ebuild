@@ -26,22 +26,19 @@ REQUIRED_USE="ui? ( api )"
 # restrict until a unit-only subset is available.
 RESTRICT="test"
 
-# Dependency mapping verified against v0.23.0 on 2026-08-14.
-# cryptography is now core: skill installation verifies Ed25519 signatures.
-# cvss is absent from Gentoo and this overlay; omit the lazy eval-only scorer.
-# pywin32 only protects sidecar secrets on Windows and is irrelevant here.
+# Dependency map checked against v0.23.0 on 2026-08-14.
+# Skill installation needs cryptography for Ed25519 verification.
+# Omit unpackaged lazy eval-only cvss and Windows-only pywin32.
 # Lemonade is recommended, not required; any OpenAI-compatible endpoint works.
-# python-multipart is core because gaia-mcp imports it at startup.
-# keyring is core for connector imports; preserve upstream's >=24,<26 pin.
+# gaia-mcp imports python-multipart at startup; connectors need keyring >=24,<26.
 # Tavily is a declared core dependency, though imports retain DuckDuckGo fallback.
 # apscheduler and tomli-w implement scheduling; Python >=3.12 supplies tomllib.
-# audio imports only torch. Ignore upstream's stale <2.14 cap and unused
-# torchvision/torchaudio declarations. rechecked 2026-07-17
+# Audio imports only torch; ignore its stale <2.14 cap and unused vision/audio deps.
+# rechecked 2026-07-17
 # UI lazily imports python-pptx and python-docx for document ingestion.
-# httpx is required by UI and API daemon relaying. Accept its Gentoo deprecation
-# because no replacement exists. verified 2026-08-14
-# Eval's tiktoken import has a char-count fallback; carry it without upstream's
-# <1 cap. Omit numpy's <2.3 cap because Gentoo carries 2.4+.
+# UI/API relaying needs httpx; accept its deprecation because no replacement exists.
+# verified 2026-08-14
+# Eval has a char-count fallback for tiktoken; omit its <1 and numpy's <2.3 caps.
 # Talk needs pip because Kokoro/misaki installs its spaCy model at runtime.
 RDEPEND="
 	${PYTHON_DEPS}
