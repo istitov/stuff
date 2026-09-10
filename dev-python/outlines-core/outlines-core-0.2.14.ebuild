@@ -283,7 +283,6 @@ SRC_URI+="
 "
 
 LICENSE="Apache-2.0"
-# Dependent crate licenses
 LICENSE+="
 	0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD ISC
 	CDLA-Permissive-2.0 MIT MPL-2.0 openssl Unicode-3.0 ZLIB
@@ -307,13 +306,13 @@ EPYTEST_DESELECT=(
 distutils_enable_tests pytest
 
 src_test() {
-	# The default feature and its doctests require Hugging Face model downloads.
+	# Avoid model downloads required by default-feature doctests.
 	cargo_src_test --lib --no-default-features
 	distutils-r1_src_test
 }
 
 python_test() {
-	# Remaining tests requiring network/scientific-stack/downloads are deselected.
+	# Run only tests without network, model, or scientific-stack requirements.
 	cd "${T}" || die
 	epytest \
 		"${S}"/tests/test_guide.py \
