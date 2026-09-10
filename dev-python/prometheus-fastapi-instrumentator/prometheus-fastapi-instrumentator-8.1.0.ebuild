@@ -18,15 +18,12 @@ LICENSE="ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream pairs both floors with a poetry-style major cap
-# (prometheus-client<1.0.0, starlette<2.0.0), carried unchanged since at
-# least 8.0.2. Neither binds: the newest in either repo is
-# prometheus-client-0.26.0 and starlette-1.3.1, both well inside. Mirroring
-# them would only pre-commit us to a major bump nobody has evaluated, so
-# the floors alone are declared. verified 2026-07-27
+# Preserve upstream's major compatibility caps. verified 2026-07-27
 RDEPEND="
 	>=dev-python/starlette-1.0.0[${PYTHON_USEDEP}]
+	<dev-python/starlette-2[${PYTHON_USEDEP}]
 	>=dev-python/prometheus-client-0.8.0[${PYTHON_USEDEP}]
+	<dev-python/prometheus-client-1[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests unittest
