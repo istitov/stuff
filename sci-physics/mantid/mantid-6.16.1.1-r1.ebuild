@@ -5,7 +5,6 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
-PYPI_NO_NORMALIZE=1
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 git-r3 cmake
 
@@ -54,11 +53,12 @@ KEYWORDS="~arm64"
 # any more, so upstream CI does not compile this configuration and the
 # next bump may well need a fresh fix. verified 2026-07-27
 #
-# Everything the Qt6 path needs is in ::gentoo: qtbase-6.11.1 satisfies
-# upstream's QT6_MIN_VERSION of 6.11, and QtHelp comes from
-# qttools[assistant]. The Qt5 path additionally needs dev-python/pyqt5 and
-# dev-python/pyqt5-sip, which ::gentoo has removed and only this overlay
-# still carries — that dependency is the standing cost of keeping the flag.
+# Everything the Qt6 path needs is in ::gentoo: the qtbase and qttools
+# floors below are upstream's QT6_MIN_VERSION of 6.11, and QtHelp comes
+# from qttools[assistant]. The Qt5 path additionally needs
+# dev-python/pyqt5 and dev-python/pyqt5-sip, which ::gentoo has removed
+# and only this overlay still carries — that dependency is the standing
+# cost of keeping the flag.
 #
 # pyrcc5 is a build-time requirement of the Qt5 path only, and pyqt5
 # covers it: qt/CMakeLists.txt resolves PYRCC5_CMD under
@@ -82,23 +82,30 @@ KEYWORDS="~arm64"
 # declared - mantid never imports it, and dev-python/qtconsole already
 # requires >=ipykernel-4.1.
 #
+# quasielasticbayes and quickBayes, which upstream's recipe also lists, are
+# in no Gentoo repo either. BayesQuasi and BayesQuasi2 import them inside
+# the algorithm body, so without them those two algorithms fail when run
+# and nothing else is affected. verified 2026-09-10
+#
 # The dev-qt/qtsql:5 the Qt5 branch carries has no Qt6 counterpart:
-# mantid itself asks for no Sql component. The Qt6 build does still link
-# libQt6Sql, because dev-qt/qttools[assistant] pulls
-# ~dev-qt/qtbase:6[concurrent,network,sql,sqlite] for QtHelp's own
-# database. Declaring sql there would duplicate a constraint qttools
-# already enforces.
+# mantid itself asks for no Sql component, and dev-qt/qttools[assistant]
+# already pulls ~dev-qt/qtbase:6[concurrent,network,sql,sqlite] for
+# QtHelp's own database, so declaring sql here would only duplicate it.
+# QtHelp is found at configure time, but neither it nor libQt6Sql ends up
+# linked into the Qt6 image. verified 2026-09-10
 #
 # The earlier HDF4-probe blocker (Gentoo bug 942866) is resolved by this
-# overlay's sci-libs/hdf-4.2.16. Install lands ~230 MiB under
-# /opt/mantid/{bin,lib,lib64,plugins,instrument,scripts}. Upstream removed
-# all QtWebEngineWidgets usage in 6.15.0.4rc1 and it stays gone in 6.16.x.
+# overlay's sci-libs/hdf from 4.2.16 on; this revision needs 4.4, for the
+# vendored NeXus API patch in src_prepare. Install lands ~227 MiB under
+# /opt/mantid/{bin,include,instrument,lib,lib64,plugins,scripts}.
+# Upstream removed all QtWebEngineWidgets usage in 6.15.0.4rc1 and it
+# stays gone in 6.16.x.
 #
 # Note: as of 6.16.x mantid has no GPU offload — the build system uses
 # only TBB + OpenMP for parallelism, and the source tree contains no
 # .cu/.cuh files or find_package(CUDA) calls. There is no `cuda` IUSE
 # to add here even when nvidia-cuda-toolkit is installed.
-IUSE="doc python qt5 +qt6 test"
+IUSE="qt5 +qt6 test"
 RESTRICT="!test? ( test )"
 
 # Build-host note: sci-libs/hdf5[cxx] (below) trips hdf5's REQUIRED_USE
@@ -106,35 +113,36 @@ RESTRICT="!test? ( test )"
 # USE=unsupported on sci-libs/hdf5 (the cxx+mpi combo is upstream-
 # "unsupported" but builds fine). That is the only host USE-config not
 # expressible as a dep atom; emerge --autounmask proposes the rest from
-# the atoms (nexus cxx, nexus' own doxygen[dot], and per toolkit either
-# qtbase concurrent/gui/network/widgets + qttools assistant + qscintilla
-# qt6, or the dev-qt:5 set + qscintilla qt5).
+# the atoms (per toolkit, either the qtbase flags + qttools assistant +
+# qscintilla qt6, or the dev-qt:5 set + qscintilla qt5).
 
+# Every shared library the installed image links (its NEEDED entries),
+# other than the toolchain's own and libpython, is declared below, with :=
+# where the provider carries a subslot.
+# sci-libs/nexus is not among them: 6.16.x carries its own copy of the NeXus
+# C API under Framework/LegacyNexus and neither links nor includes the
+# system one. Build-only tools (ccache, pre-commit, gtest, eigen, pip) and
+# the docs toolchain are out of RDEPEND, and jemalloc and mesa-progs had no
+# consumer at all. verified 2026-09-10
 RDEPEND="
-	dev-libs/boost
-	dev-util/ccache
-	app-text/doxygen
-	dev-cpp/eigen
-	dev-cpp/gtest
 	dev-python/euphonic[${PYTHON_SINGLE_USEDEP}]
-	sci-libs/gsl
+	sci-libs/gsl:=
 	>=sci-libs/hdf-4.4:=
-	sci-libs/hdf5[cxx]
-	dev-libs/jemalloc
-	dev-libs/jsoncpp
-	dev-libs/librdkafka
-	dev-cpp/muParser
-	sci-libs/nexus[cxx]
-	dev-libs/poco
+	sci-libs/hdf5:=[cxx]
+	dev-libs/jsoncpp:=
+	dev-libs/librdkafka:=
+	dev-cpp/muParser:=
+	dev-libs/openssl:=
+	dev-libs/poco:=[crypt,net,util,xml]
 	dev-python/pyvista[${PYTHON_SINGLE_USEDEP}]
 	dev-python/pyvistaqt[${PYTHON_SINGLE_USEDEP}]
 	qt6? (
-		x11-libs/qscintilla[qt6(+)]
-		dev-qt/qtbase:6[concurrent,gui,network,widgets]
-		dev-qt/qttools:6[assistant]
+		x11-libs/qscintilla:=[qt6(+)]
+		>=dev-qt/qtbase-6.11:6[concurrent,gui,network,opengl,widgets,xml]
+		>=dev-qt/qttools-6.11:6[assistant]
 	)
 	qt5? (
-		x11-libs/qscintilla[qt5(-)]
+		x11-libs/qscintilla:=[qt5(-)]
 		dev-qt/qtconcurrent:5
 		dev-qt/qtgui:5
 		dev-qt/qthelp:5
@@ -144,25 +152,21 @@ RDEPEND="
 		dev-qt/qtwidgets:5
 		dev-qt/qtxml:5
 	)
-	dev-cpp/tbb
-	sci-libs/opencascade
-	app-text/texlive-core
-	media-libs/mesa
-	x11-apps/mesa-progs
-	dev-vcs/pre-commit
+	dev-cpp/tbb:=
+	sci-libs/opencascade:=
+	virtual/glu
+	virtual/opengl
 	$(python_gen_cond_dep '
-		dev-python/graphviz[${PYTHON_USEDEP}]
+		dev-libs/boost:=[python,${PYTHON_USEDEP}]
 		>=dev-python/h5py-3.2.0[${PYTHON_USEDEP}]
 		dev-python/matplotlib[${PYTHON_USEDEP}]
-		>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
-		dev-python/pip[${PYTHON_USEDEP}]
+		>=dev-python/numpy-2.0[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
 		>=dev-python/pydantic-2.11.4[${PYTHON_USEDEP}]
 		<dev-python/pydantic-3[${PYTHON_USEDEP}]
 		sci-libs/pycifrw[${PYTHON_USEDEP}]
 		qt6? ( dev-python/pyqt6[${PYTHON_USEDEP},gui,widgets,printsupport] )
 		qt5? ( dev-python/pyqt5[${PYTHON_USEDEP},gui,widgets,printsupport] )
-		dev-python/python-dateutil[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/orsopy[${PYTHON_USEDEP}]
 		dev-python/qtconsole[${PYTHON_USEDEP}]
@@ -172,27 +176,10 @@ RDEPEND="
 		dev-python/superqt[${PYTHON_USEDEP}]
 		dev-python/scipy[${PYTHON_USEDEP}]
 		dev-python/setuptools[${PYTHON_USEDEP}]
-		dev-python/sphinx[${PYTHON_USEDEP}]
-		dev-python/sphinx-bootstrap-theme[${PYTHON_USEDEP}]
 		dev-python/toml[${PYTHON_USEDEP}]
 		dev-python/joblib[${PYTHON_USEDEP}]
 		dev-python/lz4[${PYTHON_USEDEP}]
 	')
-	test? (
-		sys-apps/pciutils
-		x11-libs/libXcomposite
-		x11-libs/libXcursor
-		x11-libs/libXdamage
-		x11-libs/libXi
-		x11-libs/libXScrnSaver
-		x11-libs/libXtst
-		dev-util/cppcheck
-		dev-util/gcovr
-		dev-vcs/pre-commit[${PYTHON_SINGLE_USEDEP}]
-		$(python_gen_cond_dep '
-			dev-python/black[${PYTHON_USEDEP}]
-		')
-	)
 "
 
 # dev-python/versioningit is deprecated in ::gentoo, and that deprecation
@@ -216,18 +203,34 @@ BDEPEND="
 	dev-build/cmake
 	dev-build/ninja
 	$(python_gen_cond_dep '
+		dev-python/pip[${PYTHON_USEDEP}]
+		dev-python/setuptools[${PYTHON_USEDEP}]
 		dev-python/versioningit[${PYTHON_USEDEP}]
 	')
 "
 
-DEPEND="${BDEPEND}
-	${RDEPEND}
+# gtest (found unconditionally) and, on Qt5, the OpenGL and Test modules
+# (both REQUIRED) are needed to configure but are not linked into the
+# installed image. Qt6 ships both inside qtbase.
+DEPEND="${RDEPEND}
+	dev-cpp/eigen
+	dev-cpp/gtest
+	qt5? (
+		dev-qt/qtopengl:5
+		dev-qt/qttest:5
+	)
+	test? (
+		sys-apps/pciutils
+		x11-libs/libXcomposite
+		x11-libs/libXcursor
+		x11-libs/libXdamage
+		x11-libs/libXi
+		x11-libs/libXScrnSaver
+		x11-libs/libXtst
+	)
 "
 
-REQUIRED_USE="
-	python? ( ${PYTHON_REQUIRED_USE} )
-	^^ ( qt5 qt6 )
-"
+REQUIRED_USE="^^ ( qt5 qt6 )"
 
 # Install under /opt rather than /usr: upstream's CMake drops data into
 # top-level /usr children (instrument/, plugins/, scripts/) that aren't
@@ -281,7 +284,7 @@ src_prepare() {
 
 	# gcc:13+ include-hygiene: PreviewManager.h transitively relied on
 	# <vector> pulling in <stdexcept>; be explicit.
-	sed -iez 's:#include <vector>:#include <vector>\n#include <stdexcept>:' \
+	sed -i -e 's:#include <vector>:#include <vector>\n#include <stdexcept>:' \
 		Framework/API/inc/MantidAPI/PreviewManager.h || die
 
 	# No qt.conf rewrite here, unlike the Qt5-only ebuilds that preceded
@@ -345,7 +348,16 @@ src_configure() {
 	python_setup
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="${MY_PREFIX}"
-		-DENABLE_DOCS=$(usex doc)
+		# The docs need mantid_sphinx_theme, which no Gentoo repo
+		# ships, so they stay off rather than sit behind a doc flag
+		# that could never build. verified 2026-09-10
+		-DENABLE_DOCS=OFF
+		# Both default ON. USE_CCACHE wraps every compile in ccache
+		# whenever one is installed, regardless of FEATURES, and
+		# ENABLE_PRECOMMIT stops configure without pre-commit and
+		# otherwise runs `pre-commit install` in the source checkout.
+		-DENABLE_PRECOMMIT=OFF
+		-DUSE_CCACHE=OFF
 		# Pass the toolkit explicitly rather than inheriting upstream's
 		# default, which has already moved twice — 6.16.1.1 varies it by
 		# platform and main hardcoded 6. REQUIRED_USE makes this exactly
