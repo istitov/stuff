@@ -24,6 +24,7 @@ src_prepare() {
 	default
 	# Drop the strip invocations from Makefile so Portage's debug
 	# machinery stays in control.
+	grep -q '@strip' Makefile || die "strip anchor moved"
 	sed -i '/@strip/d' Makefile || die
 }
 
