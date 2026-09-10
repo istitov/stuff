@@ -12,7 +12,6 @@ MYP="${MYPN}-${PV}"
 
 DESCRIPTION="Provides traitsui graphic user interface (GUI) elements for hyperspy"
 HOMEPAGE="https://hyperspy.org/"
-#SRC_URI="mirror://pypi/${P:0:1}/${MYPN}/${MYP}.tar.gz"
 SRC_URI="$(pypi_sdist_url "${MYPN^}" "${PV}")"
 
 S="${WORKDIR}/${MYP}"
