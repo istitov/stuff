@@ -5,10 +5,8 @@ EAPI=8
 
 DESCRIPTION="ROCclr runtime implementation for non-AMD HIP platforms, like NVIDIA"
 HOMEPAGE="https://github.com/ROCm/rocm-systems/tree/develop/projects/hipother"
-# AMD retired the rocm-* line at rocm-7.2.4 (2026-05-28); every ROCm repo has
-# published under therock-<major.minor> since. ROCm 10.0 is the renumbering of
-# the 7.13 -> 7.14 line (2026-08-27), not a jump of three majors.
-# verified 2026-08-28.
+# Assets moved from rocm-* to therock-* after 7.2.4; ROCm 10 renumbers the
+# 7.13/7.14 line. Verified 2026-08-28.
 SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/${PN}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/hipother"
 
