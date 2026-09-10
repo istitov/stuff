@@ -4,13 +4,13 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=no
-# Python 3.15 remains unkeyworded in ::gentoo (verified 2026-08-04).
+# Python 3.15 remains unkeyworded in ::gentoo; defer pkgcheck's suggestion.
+# rechecked 2026-09-10
 PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
 
-# Translate Gentoo's _pN suffix back to PyPI's .postN for upstream
-# wheel filenames; Gentoo's PMS version syntax forbids ".postN".
+# Map Gentoo's _pN suffix to the wheel's .postN.
 MY_PV="${PV/_p/.post}"
 MY_WHEEL="${PN//-/_}-${MY_PV}-py3-none-any.whl"
 
@@ -19,9 +19,7 @@ HOMEPAGE="
 	https://github.com/flashinfer-ai/flashinfer
 	https://pypi.org/project/flashinfer-cubin/
 "
-# 0.6.16.post3 is not on PyPI (the cubin package lags flashinfer-python);
-# the wheel ships as a GitHub release asset on the main flashinfer repo.
-# The Manifest hash is the load-bearing pin regardless of fetch host.
+# Versions after 0.6.13 are GitHub-only release wheels. rechecked 2026-09-10
 SRC_URI="
 	https://github.com/flashinfer-ai/flashinfer/releases/download/v${MY_PV}/${MY_WHEEL}
 "
@@ -32,11 +30,9 @@ SLOT="0"
 KEYWORDS="-* ~amd64 ~arm64"
 RESTRICT="bindist mirror strip"
 
-# The binary wheel has no license payload or reproducible source mapping.
-# Its metadata claims Apache-2.0, but the pre-compiled artifacts come from
-# NVIDIA's artifactory, so retain the conservative redistribution policy.
-# Imported as a dependency-free runtime sidecar by flashinfer-python.
-# verified 2026-08-08 against 0.6.16.post3.
+# The wheel has no license files or reproducible source mapping. Its metadata
+# says Apache-2.0, but the cubins originate from NVIDIA's artifactory; retain
+# conservative redistribution restrictions.
 
 BDEPEND+="
 	$(python_gen_cond_dep '
@@ -57,9 +53,7 @@ python_install() {
 }
 
 python_install_all() {
-	# Upstream packaged one empty download lock beside every artifact.  These
-	# are cache residue, not runtime data; remove them and their stale RECORD
-	# entries rather than consuming more than sixteen thousand inodes.
+	# Drop over 16,000 empty cache locks and their stale RECORD entries.
 	find "${ED}" -type f -name '*.lock' -delete || die
 	local record
 	for record in "${ED}"/usr/lib/python*/site-packages/*.dist-info/RECORD; do
