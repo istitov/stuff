@@ -14,10 +14,8 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-# platformdirs is NEW in 1.9.10 (1.9.9's requires-dist has no such entry) and is
-# a top-level `import platformdirs` in pyshortcuts/utils.py, which the package
-# root imports -- so it is unconditional, not a lazy per-platform import despite
-# also appearing in windows.py/darwin.py. verified 2026-09-01
+# platformdirs became an unconditional top-level import in 1.9.10.
+# Verified 2026-09-01.
 RDEPEND="
 	dev-python/charset-normalizer[${PYTHON_USEDEP}]
 	>=dev-python/platformdirs-4.11.3[${PYTHON_USEDEP}]
