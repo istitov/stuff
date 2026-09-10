@@ -177,7 +177,7 @@ src_configure() {
 			-DHIP_PLATFORM="amd"
 			-DOpenGL_GL_PREFERENCE="GLVND"
 			-DUSE_PROF_API=OFF
-			# Currently inert; retain for restored NUMA detection. verified 2026-05-08
+			# Retain for restored NUMA detection; inert as of 2026-05-08.
 			-DCMAKE_DISABLE_FIND_PACKAGE_NUMA="$(usex !numa)"
 			-DCMAKE_REQUIRE_FIND_PACKAGE_NUMA="$(usex numa)"
 		)
