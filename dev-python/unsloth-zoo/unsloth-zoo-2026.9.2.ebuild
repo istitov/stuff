@@ -21,7 +21,7 @@ LICENSE="LGPL-3+"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Tests require model downloads and supported accelerator hardware.
+# Tests download models and require supported accelerator hardware.
 RESTRICT="test"
 
 RDEPEND="
