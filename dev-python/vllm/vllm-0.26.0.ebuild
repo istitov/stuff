@@ -697,33 +697,22 @@ REQUIRED_USE="
 	humming? ( cuda )
 "
 
-# cpu.txt lists proprietary intel-openmp; omit it in favor of system OpenMP.
-# The r90 caffe2 floor avoids its former public MKL/MPI link pollution.
-#
-# amd-quark is needed only when loading Quark models and supports only Python
-# 3.11/3.12, so users install it separately instead of constraining vllm.
-#
-# Match requirements/cuda.txt's exact flashinfer and cutlass pins. Keep
-# quack-kernels below 0.6.2 because newer releases require cutlass-dsl-4.6.1,
-# while vllm pins 4.6.0. The cutlass metapackage supplies cu13 libs transitively.
+# Use system OpenMP instead of cpu.txt's proprietary intel-openmp. Require
+# caffe2-r90+ to avoid its former public MKL/MPI link pollution.
+# amd-quark is Quark-only and supports Python 3.11/3.12; install it separately.
+# Match cuda.txt's flashinfer/cutlass pins. quack-kernels-0.6.2+ needs
+# cutlass-dsl-4.6.1, but vllm pins 4.6.0; cutlass supplies cu13 libs transitively.
 # verified 2026-08-07
-#
-# TokenSpeed, PyNvVideoCodec, and nvtx are lazy or hardware-specific, but remain
-# required for parity with requirements/cuda.txt. verified 2026-08-17
-# USE=humming enables an optional quantizer that is otherwise imported lazily.
-# verified without humming-kernels 2026-07-05
-#
-# caffe2[distributed,gloo] is required even for one GPU: vllm creates a CPU
-# coordination group and uses gloo when NCCL is unavailable. verified 2026-06-14
-# GPU kernels require Triton 3.6.0, paired with PyTorch 2.11. CUDA and ROCm
-# inference verified 2026-06-14.
-#
-# xgrammar-0.2.2 needs apache-tvm-ffi-0.1.11's extra_lib_paths API, despite
-# upstream pinning 0.1.10. verified 2026-08-16
-#
-# pkgcore cannot check RDEPEND because of the versioned protobuf any-of. Keep
-# the valid 5.29.6-or-6.33.5+ gap and review every atom manually.
-# verified 2026-09-02
+# TokenSpeed, PyNvVideoCodec, and nvtx remain for cuda.txt parity despite lazy or
+# hardware-specific imports. verified 2026-08-17
+# humming is optional and lazy; verified without humming-kernels 2026-07-05.
+# Single-GPU mode still uses caffe2[distributed,gloo] for CPU coordination and
+# NCCL fallback. verified 2026-06-14
+# PyTorch 2.11 GPU kernels require Triton 3.6.0; CUDA/ROCm verified 2026-06-14.
+# xgrammar-0.2.2 needs apache-tvm-ffi-0.1.11's extra_lib_paths despite upstream's
+# 0.1.10 pin. verified 2026-08-16
+# pkgcore cannot validate the protobuf any-of; preserve its 5.29.6-or-6.33.5+
+# gap and review atoms manually. verified 2026-09-02
 RDEPEND="
 	~sci-ml/pytorch-2.11.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed,gloo]
