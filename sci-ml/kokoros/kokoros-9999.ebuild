@@ -43,13 +43,9 @@ src_compile() {
 }
 
 src_install() {
-	# Vendored espeak-ng bakes its temporary $OUT_DIR data path into koko.
-	# After merge, synthesis silently returns a fixed ~0.48 s WAV and status 0.
-	# espeak-rs-sys exposes no data-path or system-library build control, so a
-	# wrapper sets the first runtime lookup hook for Lemonade and direct users.
-	# Validate rather than default: Lemonade exports a bundle-relative path that
-	# is invalid for distro installs; preserve only overrides containing phontab.
-	# verified 2026-07-28
+	# Vendored espeak-ng embeds $OUT_DIR; installed synthesis then returns a fixed
+	# ~0.48 s WAV. No build-time path control exists, so a wrapper sets the runtime
+	# hook while preserving valid phontab-containing overrides. verified 2026-07-28
 	exeinto /usr/libexec/${PN}
 	doexe target/release/koko
 
