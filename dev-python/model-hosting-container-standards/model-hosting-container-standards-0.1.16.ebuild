@@ -37,7 +37,6 @@ EPYTEST_PLUGINS=( pytest-asyncio )
 distutils_enable_tests pytest
 
 python_test() {
-	# Integration tests create venvs and install packages, or launch real
-	# supervisor trees.
+	# Integration tests install into venvs or launch Supervisor trees.
 	epytest --ignore=tests/integration
 }
