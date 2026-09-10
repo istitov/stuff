@@ -54,7 +54,7 @@ src_configure() {
 src_install() {
 	qt5-build_src_install
 
-	# workaround for bug 652650
+	# Mark OpenSSL as linked in the generated config (bug 652650).
 	if use ssl; then
 		sed -e "/^#define QT_LINKED_OPENSSL/s/$/ true/" \
 			-i "${D}${QT5_HEADERDIR}"/Gentoo/${PN}-qconfig.h || die
