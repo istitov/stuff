@@ -44,8 +44,7 @@ tb_plugin_wrapper() {
 }
 
 src_prepare() {
-	# Normalize upstream's recursive build wrappers to eclass paths and tools.
-	# https://github.com/ROCm/rocm_bandwidth_test/issues/131
+	# Normalize recursive build wrappers to eclass paths/tools (upstream #131).
 
 	# Relax package version checks.
 	sed -e "s/ \${FMT_PKG_MINIMUM_REQUIRED_VERSION}//" -i cmake/build_utils.cmake || die
