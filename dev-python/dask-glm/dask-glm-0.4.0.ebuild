@@ -31,8 +31,8 @@ RDEPEND="
 "
 BDEPEND="dev-python/setuptools-scm[${PYTHON_USEDEP}]"
 
-# setuptools_scm cannot derive a version from the gitless sdist.
+# Pin the version in the VCS-less sdist.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 
-# Test suite needs a dask cluster + the full ML matrix; upstream-tested.
+# Tests require a Dask cluster and the full ML stack.
 RESTRICT="test"
