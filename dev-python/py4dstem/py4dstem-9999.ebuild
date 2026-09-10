@@ -16,14 +16,11 @@ EGIT_REPO_URI="https://github.com/py4dstem/py4DSTEM.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-# Upstream's test fixtures are large datasets pulled from Google
-# Drive at test-time; not runnable at package build time.
+# Tests fetch large fixtures from Google Drive.
 RESTRICT="test"
 
-# HEAD (post-0.14.18) has unpinned numpy, ncempy, and scikit-learn
-# relative to the release, and added pymatgen as a mandatory dep.
-# Match that; no patches needed here since the numpy-2 api fixes
-# have been merged.
+# HEAD adds mandatory pymatgen and relaxes NumPy, ncempy, and scikit-learn
+# pins; its NumPy 2 fixes are already merged.
 RDEPEND="
 	>=dev-python/pymatgen-2022.11.7[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
