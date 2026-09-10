@@ -16,14 +16,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="spell"
 
-# The editor shells out through system() and popen() for most of what it
-# does, so these are runtime tools rather than link-time libraries:
-# src/files.cpp runs `man -l`, `man -w` and `gunzip --stdout` to locate,
-# decompress and render the page being edited, and src/callbacks.cpp runs
-# `groff -man -Tps` to export. Only xdg-open and aspell were declared.
-# Deliberately not hard dependencies: ps2pdf (app-text/ghostscript-gpl) and
-# lp (net-print/cups), both reached only from the export-to-PDF and print
-# actions in callbacks.cpp. verified 2026-07-27
+# Runtime subprocesses require man, gzip, and groff. Keep ps2pdf and lp optional
+# because only PDF-export and print actions use them. verified 2026-07-27
 RDEPEND="
 	app-arch/gzip
 	sys-apps/groff
