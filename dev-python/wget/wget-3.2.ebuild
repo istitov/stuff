@@ -11,7 +11,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="Pure-python download utility (PyPI 'wget' module)"
 HOMEPAGE="https://pypi.org/project/wget/"
 
-# upstream sdist on PyPI is .zip
+# PyPI publishes a ZIP sdist.
 SRC_URI="$(pypi_sdist_url "${PYPI_PN}" "${PV}" .zip)"
 
 LICENSE="public-domain"
