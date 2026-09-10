@@ -6,16 +6,11 @@ EAPI=8
 inherit udev
 
 DESCRIPTION="Image Scan! for Linux data files"
-# Epson took the whole download.ebz.epson.net portal offline (HTTP 403
-# on every path, verified 2026-05-10). The Wayback snapshot preserves
-# the original landing page; pointing HOMEPAGE there matches what we
-# did for SRC_URI and gives users a working reference for what this
-# package was packaged from.
+# Epson's portal returns HTTP 403; use its archived landing page.
+# verified 2026-05-10
 HOMEPAGE="https://web.archive.org/web/20191230072555/http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
-# Upstream Epson removed this tarball (HTTP 403) and the Gentoo
-# distfiles mirror never had it (HTTP 404). Verified 2026-05-02. The
-# Wayback Machine still serves the byte-identical 2019 snapshot;
-# the `if_` token returns raw bytes (no archive-page rewriting).
+# Upstream and Gentoo mirrors lack the tarball; Wayback serves the byte-identical
+# 2019 snapshot, with `if_` requesting raw bytes. verified 2026-05-02
 SRC_URI="https://web.archive.org/web/20191023164257if_/http://support.epson.net/linux/src/scanner/iscan/${PN}_$(ver_rs 3 -).tar.gz"
 S="${WORKDIR}/${PN}-$(ver_cut 1-3)"
 LICENSE="GPL-2"
@@ -38,7 +33,6 @@ src_install() {
 	default
 
 	if use udev; then
-	# create udev rules
 		local rulesdir=$(get_udevdir)/rules.d
 		dodir ${rulesdir}
 		"${D}/usr/$(get_libdir)/iscan-data/make-policy-file" \
