@@ -64,7 +64,6 @@ LICENSE="
 	|| ( CC0-1.0 Apache-2.0 )
 	rust? (
 "
-# Dependent crate licenses
 LICENSE+="
 	Apache-2.0-with-LLVM-exceptions BSD-2 Unicode-3.0
 	|| ( Apache-2.0 CC0-1.0 MIT-0 )
@@ -106,8 +105,7 @@ pkg_setup() {
 }
 
 src_unpack() {
-	# Do this unconditionally as it has sensible behaviour even
-	# w/ USE=-rust.
+	# cargo_src_unpack also handles USE=-rust.
 	cargo_src_unpack
 }
 
@@ -119,12 +117,12 @@ PATCHES=(
 src_prepare() {
 	distutils-r1_src_prepare
 
-	# sed the package name and version to improve compatibility
+	# Give the fallback C extension the packaged name and version.
 	sed -e 's:blake3_experimental_c:blake3:' \
 		-e "s:0[.]0[.]1:${PV}:" \
 		-i c_impl/setup.py || die
 
-	# remove vendored C sources to ensure we don't use accidentally
+	# Prevent fallback C builds from using vendored sources.
 	rm -r c_impl/vendor || die
 
 	cat > c_impl/pyproject.toml <<-EOF || die
