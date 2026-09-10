@@ -36,8 +36,7 @@ RDEPEND="
 	i18n? ( >=dev-python/babel-2.9.0[${PYTHON_USEDEP}] )
 "
 
-# The custom hatch build hook compiles the bundled gettext catalogs (.mo)
-# at build time; that needs babel, plus setuptools on py3.12+ (no distutils).
+# The Hatch hook compiles gettext catalogs with Babel and setuptools.
 BDEPEND="
 	dev-python/babel[${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
