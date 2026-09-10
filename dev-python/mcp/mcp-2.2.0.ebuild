@@ -21,10 +21,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cli"
 
-# 2.0 rework vs 1.x: the low-level transport moved from httpx to httpx2 (the
-# Pydantic httpx fork; ::gentoo's httpx2 bundles httpcore2), the shared wire
-# types split out to dev-python/mcp-types (== pinned), and opentelemetry-api
-# was added. httpx-sse and pydantic-settings are no longer imported.
+# MCP 2 moved transport to httpx2, split exact-version wire types into
+# mcp-types, and added OpenTelemetry; it dropped httpx-sse and pydantic-settings.
 RDEPEND="
 	>=dev-python/anyio-4.10.0[${PYTHON_USEDEP}]
 	>=dev-python/httpx2-2.5.0[${PYTHON_USEDEP}]
@@ -48,12 +46,10 @@ RDEPEND="
 BDEPEND="
 	>=dev-python/uv-dynamic-versioning-0.8.0[${PYTHON_USEDEP}]
 "
-# Tests pull pytest-examples (depends on missing ruff Python bindings)
-# plus a pile of dev-python/* deps; not worth running in our overlay.
+# Tests require pytest-examples and unavailable ruff Python bindings.
 RESTRICT="test"
 
-# 2.0 switched the version source to the uv-dynamic-versioning hatch plugin,
-# which derives from VCS; the sdist is not a checkout, so pin it explicitly.
+# Pin the VCS-derived version for the sdist.
 export UV_DYNAMIC_VERSIONING_BYPASS=${PV}
 
 pkg_postinst() {
