@@ -18,11 +18,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
-# scooby uses setuptools_scm to derive its version from git metadata,
-# but PyPI sdist tarballs ship a PKG-INFO file with the version baked
-# in instead — set SETUPTOOLS_SCM_PRETEND_VERSION so the build doesn't
-# fall back to git introspection (which fails in portage's sandbox
-# anyway).
+# The sdist lacks git metadata; pin the version for setuptools-scm.
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
