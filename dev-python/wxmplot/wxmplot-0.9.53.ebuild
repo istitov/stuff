@@ -24,4 +24,3 @@ RDEPEND="
 	>=dev-python/pyyaml-5.0[${PYTHON_USEDEP}]
 	>=dev-python/wxutils-0.2.7[${PYTHON_USEDEP}]
 "
-#dev-python/PyQt4
