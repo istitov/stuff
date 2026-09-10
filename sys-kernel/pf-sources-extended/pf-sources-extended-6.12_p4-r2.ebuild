@@ -5,26 +5,21 @@ EAPI=8
 
 ETYPE="sources"
 
-# Track the latest 6.12.X linux-stable via genpatches. Match
-# gentoo-sources-6.12.96's K_GENPATCHES_VER. verified 2026-07-24.
+# Match gentoo-sources-6.12.96. # verified 2026-07-24
 K_GENPATCHES_VER="108"
 
-# Curated pf delta sets EXTRAVERSION via the patch itself.
+# The curated delta sets EXTRAVERSION.
 K_NOSETEXTRAVERSION="1"
 
-# K_SECURITY_UNSUPPORTED is set because the curated pf delta is not
-# covered by Gentoo's security
-# team — bugs in the pf-specific portions (BBRv3, x86 ISA generic-v2/v3/v4
-# levels, zstd bump, v4l2loopback, DDCCI) need to be reported to natalenko
-# or the overlay maintainers.
+# Gentoo security does not cover the curated pf delta; report its bugs upstream
+# or to overlay maintainers.
 K_SECURITY_UNSUPPORTED="1"
 
 K_WANT_GENPATCHES="base extras"
 
-# Map "6.12_p4" → "6.12" for the kernel.org tarball + genpatches.
 SHPV="${PV/_p*/}"
 
-# Pretend version visible in /lib/modules and /usr/src.
+# Preserve -pf identity in module and source directory names.
 PFPV="${PV/_p/-pf}"
 
 inherit kernel-2 optfeature
@@ -33,10 +28,7 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Vanilla 6.12 from kernel.org + Gentoo's genpatches (stable + non-stable)
-# + our curated pf delta. The codeberg pf-kernel tarball is intentionally
-# not fetched — its content is replaced by the much smaller curated
-# patch in files/.
+# Build vanilla Linux with Gentoo genpatches and a smaller curated pf delta.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
@@ -66,31 +58,22 @@ pkg_setup() {
 }
 
 src_unpack() {
-	# Vanilla kernel.org tarball unpacks to linux-${SHPV} directly; no
-	# rename needed.
 	unpack ${A}
 }
 
 src_prepare() {
-	# Apply genpatches stack. Unlike pf-sources -r1/-r2, we DO NOT
-	# delete `1*linux*.patch` — the linux-stable backport chain
-	# (1000_linux-${SHPV}.1.patch through 1NNN_linux-${SHPV}.X.patch)
-	# is the entire point of this revision.
+	# Keep the 1* linux-stable chain that pf-sources drops.
 	eapply "${WORKDIR}"/*.patch
 
-	# Curated pf-kernel delta on top of gentoo-sources state, as a
-	# numbered series of per-feature patches re-cut from natalenko's
-	# pf-kernel branches (codeberg.org/pf-kernel/linux). Filename order
-	# is apply order; each patch's header explains which natalenko
-	# branch + tip SHA it was derived from. See pkg_postinst for the
-	# kept/dropped breakdown.
+	# Apply the numbered curated pf series in filename order; patch headers record
+	# provenance and pkg_postinst summarizes its scope.
 	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
 }
 
 pkg_postinst() {
-	# Fixes "wrongly" detected directory name, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postinst
 
@@ -116,7 +99,7 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	# Same here, bgo#862534.
+	# Correct kernel-2's directory detection (bug #862534).
 	local KV_FULL="${PFPV}"
 	kernel-2_pkg_postrm
 }
