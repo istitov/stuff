@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=no
-# Upstream wheels now reach cp314 (requires-python = "<3.15,>=3.10").
+# Upstream provides wheels through cp314 and requires Python <3.15.
 PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
@@ -29,10 +29,8 @@ SLOT="0"
 KEYWORDS="-* ~amd64"
 RESTRICT="bindist mirror"
 
-# Upstream ships wheel-only on PyPI (no sdist), and the project source
-# (NVIDIA's CUDA Tile compiler) is not published — so a -bin shape is
-# the only available form. Required transitively by flashinfer-python
-# in vllm's CUDA target. # verified 2026-05-29 against 1.4.0.
+# NVIDIA publishes only proprietary wheels; -bin is the only available shape.
+# Required by vllm's CUDA stack through flashinfer-python.
 RDEPEND="
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
@@ -40,9 +38,7 @@ RDEPEND="
 QA_PREBUILT="usr/lib/python3.*/site-packages/cuda_tile/*.so*"
 
 src_unpack() {
-	# distutils-r1 with DISTUTILS_USE_PEP517=no and a wheel SRC_URI
-	# would try to unpack the .whl directly into S. We instead stash
-	# the per-impl wheels and feed them to `installer` per impl below.
+	# Prevent default wheel unpacking; install each implementation below.
 	mkdir -p "${S}/wheel" || die
 	local f
 	for f in "${A}"; do
@@ -55,7 +51,7 @@ src_install() {
 }
 
 install_wheel() {
-	# EPYTHON gives e.g. python3.13; the matching wheel tag is cp313.
+	# Map python3.13 to its cp313 wheel tag.
 	local pyver=${EPYTHON#python}
 	local cptag=cp${pyver//./}
 	local whl="${MY_PN//-/_}-${MY_PV}-${cptag}-${cptag}-manylinux2014_x86_64.whl"
