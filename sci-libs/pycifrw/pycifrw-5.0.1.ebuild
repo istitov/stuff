@@ -25,7 +25,7 @@ RDEPEND="
 
 EPYTEST_PLUGINS=()
 EPYTEST_DESELECT=(
-	# require the separate tests/dictionaries fixture set
+	# Requires the separate dictionaries fixture set.
 	TestPyCIFRW.py::DictTestCase
 	TestPyCIFRW.py::DDL1TestCase
 	TestPyCIFRW.py::DDLmDicTestCase
