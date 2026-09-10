@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Toolkit-independent GUI abstraction layer for visualization features of Traits"
 HOMEPAGE="https://docs.enthought.com/traitsui/"
-#SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="BSD"
