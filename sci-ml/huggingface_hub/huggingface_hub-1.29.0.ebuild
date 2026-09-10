@@ -20,23 +20,22 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="torch"
 
-# Three upstream requirements carry a major cap that is not mirrored here -
-# click<9.0.0, hf-xet<2.0.0 and httpx<1. None binds: the newest anywhere is
-# click-8.4.2, hf_xet-1.5.2 and httpx-0.28.1-r1. The click floor (raised to
-# 8.4.2 to skip 8.4.0/8.4.1, which shipped a broken fish completion script)
-# and the hf-xet floor (1.27.0 raised it to 1.5.2) are both mirrored.
-# verified 2026-08-27 against 1.29.0
+# Mirror upstream's click, hf-xet, and httpx major caps. The click floor skips
+# broken fish completions in 8.4.0/8.4.1; 1.27 raised hf-xet to 1.5.2.
+# verified 2026-08-27
 RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/click-8.4.2[${PYTHON_USEDEP}]
+		<dev-python/click-9[${PYTHON_USEDEP}]
 		dev-python/filelock[${PYTHON_USEDEP}]
 		dev-python/fsspec[${PYTHON_USEDEP}]
-		dev-python/httpx[${PYTHON_USEDEP}]
+		<dev-python/httpx-1[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/tqdm[${PYTHON_USEDEP}]
 		dev-python/typing-extensions[${PYTHON_USEDEP}]
 		>=sci-ml/hf_xet-1.5.2[${PYTHON_USEDEP}]
+		<sci-ml/hf_xet-2[${PYTHON_USEDEP}]
 		torch? (
 			sci-ml/safetensors[${PYTHON_USEDEP}]
 		)
