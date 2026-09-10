@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
-# pyo3-0.25 supports at most Python 3.14.
+# PyO3 0.25 caps Python at 3.14.
 PYTHON_COMPAT=( python3_{12..14} )
 
 RUST_MIN_VER="1.85.0"
@@ -336,7 +336,6 @@ SRC_URI+="
 "
 
 LICENSE="Apache-2.0"
-# Dependent crate licenses
 LICENSE+="
 	0BSD Apache-2.0 BSD-2 BSD ISC MIT MPL-2.0 Unicode-3.0 ZLIB
 "
@@ -358,6 +357,5 @@ src_test() {
 	distutils-r1_src_test
 }
 
-# Rust extension module — strip wouldn't roundtrip cleanly through QA's
-# generic shared-library check.
+# Rust extension does not expose C/C++ flag provenance to QA.
 QA_FLAGS_IGNORED="usr/lib/python3.*/site-packages/openai_harmony/openai_harmony.abi3.so"
