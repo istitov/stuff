@@ -28,7 +28,7 @@ S="${WORKDIR}/cudnn-frontend-${PV}"
 # LICENSE.txt is a permissive MIT-style notice ("Permission is hereby
 # granted, free of charge...") — pyproject.toml's "NVIDIA Proprietary
 # Software" string is wrong. Confirmed by reading LICENSE.txt verbatim.
-LICENSE="MIT"
+LICENSE="Apache-2.0 MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
