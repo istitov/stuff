@@ -19,10 +19,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="openrc systemd"
 
-# Self-contained SvelteKit Node bundle — `npm run build` with the
-# docker-node adapter emits build/index.js plus a fully self-contained
-# build/ tree. No node_modules needed at runtime, so RDEPEND only
-# pulls nodejs for the interpreter.
+# The docker-node adapter emits a self-contained bundle; runtime needs only
+# the Node interpreter.
 RDEPEND="
 	>=net-libs/nodejs-20
 "
@@ -30,12 +28,7 @@ BDEPEND="
 	>=net-libs/nodejs-20[npm]
 "
 
-# npm fetches several hundred packages (SvelteKit + Vite + Tailwind +
-# Playwright + svelte-check + ...) from the npm registry at build time.
-# Vendoring node_modules into extra-stuff would balloon to ~500MB+ and
-# bit-rots on every upstream bump; lifting the sandbox is the same
-# pragmatic call sci-misc/llama-cpp + sci-misc/llama-swap[ui] already
-# make for their webuis.
+# The large, volatile npm graph is not vendored; build requires registry access.
 PROPERTIES="live"
 RESTRICT="network-sandbox"
 
@@ -53,17 +46,13 @@ src_compile() {
 }
 
 src_install() {
-	# Self-contained SvelteKit Node bundle goes under /opt to keep the
-	# 24 MB tree out of /usr/share; the wrapper at /usr/bin/hollama is
-	# the only thing in $PATH.
+	# Keep the self-contained application under /opt; expose only its wrapper.
 	insinto /opt/hollama
 	doins -r build
 
 	newbin "${FILESDIR}"/hollama.bin hollama
 
-	# systemd + openrc service management; the conf.d defaults are OpenRC's
-	# (systemd ignores HOLLAMA_USER and uses DynamicUser=yes for stateless
-	# isolation), so they install with the OpenRC init under USE=openrc.
+	# conf.d is OpenRC-only; the systemd unit uses DynamicUser.
 	if use systemd; then
 		systemd_dounit "${FILESDIR}"/hollama.service
 	fi
