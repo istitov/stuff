@@ -19,34 +19,20 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# The test suite requires network access and a broad set of optional storage,
-# ML, and database backends.
+# Tests require network access and many optional backends.
 RESTRICT="test"
 
-# dev-python/httpx is deprecated in ::gentoo since 2026-04-01, but httpx2 is
-# not a drop-in replacement and upstream requires httpx<1. verified 2026-08-23,
-# re-verified 2026-08-29 against 5.0.1 (still httpx<1.0.0).
+# Upstream still requires deprecated httpx<1; httpx2 is not compatible.
+# verified 2026-09-10
 #
-# aiohttp is not a base requirement upstream; it comes in via the `fsspec[http]`
-# extra, which Portage cannot express (::gentoo's fsspec carries aiohttp as an
-# optfeature, not a USE flag). Declaring it directly is the only way to make
-# the HTTP filesystem backend actually work on a merged system.
+# Portage cannot express fsspec[http] because fsspec exposes aiohttp only as an
+# optfeature; depend on aiohttp directly for a working HTTP backend.
 #
-# 5.0.1 relaxed three upper bounds, all of which had been holding the tree back
-# to older versions than either repo ships:
-#   dill         <0.4.1    -> <0.4.2   (unblocks dill-0.4.1, the only version
-#                                       ::gentoo has)
-#   multiprocess <0.70.17  -> <0.70.20 (unblocks multiprocess-0.70.19, likewise)
-#   fsspec       <=2025.9.0 -> <=2026.6.0
-# The fsspec ceiling is the interesting one: at <=2025.9.0 this package was the
-# sole reason ::stuff carries a dev-python/fsspec at all, since ::gentoo has
-# only 2026.6.0 and 2026.7.0. At <=2026.6.0 this version resolves against
-# ::gentoo's fsspec directly. datasets-4.3.0 still needs the overlay's
-# 2025.9.0, so it stays for now. verified 2026-08-29 against the 5.0.1 sdist.
+# The relaxed dill, multiprocess, and fsspec ceilings now admit Gentoo's
+# available versions. datasets-4.3.0 still needs overlay fsspec-2025.9.0.
+# verified 2026-09-10
 #
-# The fsspec ceiling carries -r9999, not the -r0 that 4.3.0 uses: upstream's
-# bound is on the upstream version, and a Gentoo revbump of 2026.6.0 is still
-# upstream 2026.6.0, so a packaging fix must not be excluded by our atom.
+# -r9999 admits Gentoo revisions of upstream's maximum fsspec version.
 RDEPEND="
 	>=sci-ml/huggingface_hub-0.25.0[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/huggingface_hub-2[${PYTHON_SINGLE_USEDEP}]
