@@ -39,12 +39,7 @@ RDEPEND="
 	>=dev-python/SciFiReaders-0.12.4[${PYTHON_USEDEP}]
 	dev-python/xraylib[${PYTHON_USEDEP}]
 "
-# 0.2026.6.0 added jupyterlab, jupyter, fastmcp, ollama, and the trivial
-# pypi shims nodejs/npm/pip to [project.dependencies], but none of them is
-# imported anywhere in the package (an unshipped MCP/Jupyter assistant
-# workflow); the library imports and runs without them. Deliberately
-# omitted from RDEPEND -- adding them would pull a heavy unused Jupyter+AI
-# stack and the bogus nodejs/npm pypi wrappers. verified 2026-06-20.
+# Omit unimported Jupyter/MCP/Ollama dependencies and PyPI nodejs/npm/pip shims
+# for an unshipped assistant workflow. verified 2026-06-20
 
-# Upstream ships no test suite in the sdist (testpaths point at tests/
-# and docs/, neither of which is packaged); nothing to run here.
+# The sdist omits both configured test directories.
