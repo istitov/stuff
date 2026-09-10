@@ -27,7 +27,7 @@ src_configure() {
 }
 
 src_install() {
-	# qmltermwidget has overlapping directory and file install targets.
+	# Serialize installation because qmltermwidget targets overlap.
 	emake -j1 INSTALL_ROOT="${D}" install
 	doman packaging/debian/cool-retro-term.1
 }
