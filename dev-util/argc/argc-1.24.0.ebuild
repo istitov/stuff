@@ -143,8 +143,7 @@ SRC_URI="
 	${CARGO_CRATE_URIS}
 "
 
-# Apache-2.0 / MIT dual-licensed at the project root. Per Gentoo
-# convention, leave the choice to the consumer via || ( ).
+# The project is Apache-2.0/MIT dual-licensed.
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
