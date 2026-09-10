@@ -10,8 +10,7 @@ inherit cmake check-reqs edo multiprocessing python-r1 rocm
 
 DESCRIPTION="Next generation FFT implementation for ROCm"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocfft"
-# AMD retired the rocm-* release line at rocm-7.2.4 (2026-05-28); the same
-# per-component assets ship under therock-<major.minor> tags now.
+# ROCm 10 component assets use therock tags; rocm tags end at 7.2.4.
 MY_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)"
 SRC_URI="${MY_URI}/rocfft.tar.gz -> rocfft-${PV}.tar.gz"
 S="${WORKDIR}/rocfft"
@@ -20,7 +19,6 @@ LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
-# RDEPEND: perfscripts? dev-python/plotly[${PYTHON_USEDEP}] # currently masked by arch/amd64/x32/package.mask
 RDEPEND="
 	dev-db/sqlite:3
 	dev-util/hip:${SLOT}
@@ -69,10 +67,10 @@ required_mem() {
 		echo "52G"
 	else
 		if [[ -n "${AMDGPU_TARGETS}" ]]; then
-			# count how many archs user specified in ${AMDGPU_TARGETS}
+			# Count configured GPU targets.
 			local NARCH=$(($(awk -F";" '{print NF-1}' <<< "${AMDGPU_TARGETS}" || die)+1))
 		else
-			# The default number of AMDGPU_TARGETS for rocFFT-4.3.0. May change in the future.
+			# Upstream's default target count.
 			local NARCH=7
 		fi
 		echo "$(($(makeopts_jobs)*${NARCH}*25+2200))M" # A linear function estimating how much memory required
@@ -92,21 +90,19 @@ pkg_setup() {
 src_prepare() {
 	if use perfscripts; then
 		pushd scripts/perf || die
-		# was `|| dir` through 7.2.4 -- a typo, so this sed's failure was never
-		# caught. `sed` also exits 0 on no-match, hence the anchor check too.
+		# Guard the version rewrite because sed accepts no matches.
 		grep -qF 'rocm_info.strip()' perflib/specs.py ||
 			die 'rocm_info.strip() anchor moved in perflib/specs.py'
 		sed -e "/\/opt\/rocm/d" -e "/rocmversion/s,rocm_info.strip(),\"${PV}\"," -i perflib/specs.py || die
-		# Drop the sys.path bootstrap: the modules are installed, not run in-tree.
-		# Scoped to rocfft-perf -- suites.py carries no `top` at all at 10.0, so
-		# listing it here only made a no-match look like a match. verified 2026-08-30.
+		# Drop the in-tree sys.path bootstrap from the installed tool.
+		# verified 2026-08-30
 		grep -q '^top' rocfft-perf || die '^top anchor moved in rocfft-perf'
 		sed -e "/^top/,+1d" -i rocfft-perf || die
 
 		grep -q 'perflib' suites.py || die 'perflib anchor moved in suites.py'
 		sed -e "s,perflib,${PN}_perflib,g" -i rocfft-perf suites.py perflib/*.py || die
 
-		# Repoint the module root at the installed data dir.
+		# Point modules at installed data.
 		local f
 		for f in perflib/pdf.py perflib/generators.py; do
 			grep -q '^top = ' "${f}" || die "^top = anchor moved in ${f}"
@@ -152,7 +148,7 @@ src_install() {
 		dosym rocfft-bench /usr/bin/dyna-rocfft-rider
 
 		if ! use perfscripts; then
-			# prevent collision with dev-util/perf
+			# Avoid collision with dev-util/perf.
 			rm -rf "${ED}"/usr/bin/perf || die
 		fi
 	fi
