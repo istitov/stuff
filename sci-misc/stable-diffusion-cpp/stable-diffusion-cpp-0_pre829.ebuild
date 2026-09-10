@@ -7,10 +7,8 @@ ROCM_VERSION="7.0"
 
 inherit cmake cuda rocm linux-info
 
-# Upstream cuts a release per master commit, tagged master-<build>-<shorthash>
-# (e.g. master-767-885f01a). PV=0_pre<build>; MY_COMMIT pins the short hash so
-# the tag/S resolve. GGML_COMMIT is the ggml submodule gitlink at that release
-# (git ls-tree stable-diffusion.cpp <tag> -- ggml). Re-read both on every bump.
+# Snapshot tags are master-<build>-<hash>; pin that hash and the tag's ggml
+# submodule gitlink on each bump.
 MY_COMMIT="0a565f2"
 GGML_COMMIT="8e800cef2948046cc47f9db6090491c6128ca42c"
 
@@ -20,14 +18,11 @@ HOMEPAGE="https://github.com/leejet/stable-diffusion.cpp"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/leejet/stable-diffusion.cpp.git"
-	# Only ggml is needed at build time: libwebp/libwebm come from system
-	# libs (SD_USE_SYSTEM_*) and the server web frontend is not built.
+	# Other submodules are replaced by system libraries or disabled.
 	EGIT_SUBMODULES=( ggml )
 else
 	MY_PV="master-${PV#0_pre}-${MY_COMMIT}"
-	# ggml is a git submodule; GitHub's release tarball omits submodule
-	# contents, so fetch leejet's ggml fork separately and stage it in
-	# src_unpack. The Manifest hash pins both regardless of fetch host.
+	# GitHub tarballs omit ggml; fetch its pinned gitlink separately.
 	SRC_URI="
 		https://github.com/leejet/stable-diffusion.cpp/archive/refs/tags/${MY_PV}.tar.gz
 			-> ${P}.tar.gz
@@ -38,26 +33,13 @@ else
 	KEYWORDS="~amd64 ~arm64"
 fi
 
-# For the -9999 (git-r3) build the guard added by this patch is a no-op and
-# upstream's git describe supplies the version; for tarball builds it lets the
-# ebuild inject SDCPP_BUILD_VERSION/COMMIT below.
+# Let tarballs inject version metadata; live builds retain git describe.
 PATCHES=( "${FILESDIR}/${PN}-embed-version.patch" )
 
 LICENSE="MIT"
 SLOT="0"
 CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
-# The vendored ggml has no GGML_HIP_ROCWMMA_FATTN option. Verified 2026-08-30
-# against the unpacked tree at GGML_COMMIT 8e800cef: zero hits anywhere in the
-# source, the only occurrences in the whole build being the -D this ebuild
-# passed and the environment file derived from it. CMake silently ignores an
-# unknown -D, so the flag changed nothing about the build while still pulling
-# in sci-libs/rocWMMA -- which ::gentoo ships only up to 7.2.0, so it pinned
-# the ROCm stack at 0/7.2 and made the 10.0 closure unsolvable.
-#
-# Dropped, following sci-misc/llama-cpp at 0.3.0: upstream removed the same
-# option in b10121 (PR #26046, "HIP: remove rocWMMA FlashAttention"), and HIP
-# FlashAttention now runs through the shared ggml-cuda fattn-mma templates.
 IUSE="openblas blis flexiblas rocm cuda opencl vulkan webm webp"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
@@ -95,8 +77,7 @@ RDEPEND="${CDEPEND}
 	opencl? ( dev-libs/opencl-icd-loader )
 	vulkan? ( media-libs/vulkan-loader )
 "
-# The scripts/ conversion helpers (numpy/torch/insightface) are dev tools and
-# are not installed, so they contribute no runtime deps.
+# Uninstalled conversion scripts do not add runtime dependencies.
 BDEPEND="vulkan? ( media-libs/shaderc )"
 
 pkg_setup() {
@@ -115,9 +96,7 @@ src_unpack() {
 		git-r3_src_unpack
 	else
 		default
-		# The release tarball ships an empty ggml/ placeholder for the
-		# submodule; drop it and stage leejet's ggml fork where
-		# add_subdirectory(ggml) expects it.
+		# Replace the empty submodule placeholder with the pinned ggml tree.
 		rm -rf "${S}/ggml" || die
 		mv "${WORKDIR}/ggml-${GGML_COMMIT}" "${S}/ggml" || die
 	fi
@@ -133,9 +112,7 @@ src_configure() {
 		-DCMAKE_SKIP_BUILD_RPATH=ON
 		-DSD_BUILD_SHARED_LIBS=OFF
 		-DSD_BUILD_EXAMPLES=ON	# the sd CLI + sd-server live under examples/
-		# The web frontend needs pnpm + a network fetch; disabling it keeps
-		# the build deterministic (autodetected pnpm would fetch at build
-		# time). sd-server still ships, just without the embedded web UI.
+		# Avoid pnpm's network fetch; sd-server still builds without its web UI.
 		-DSD_SERVER_BUILD_FRONTEND=OFF
 		-DGGML_NATIVE=0	# don't set march
 		-DGGML_RPC=ON
@@ -147,7 +124,7 @@ src_configure() {
 		-DSD_WEBM=$(usex webm)
 		-DSD_USE_SYSTEM_WEBM=$(usex webm)
 
-		# avoid clashing with whisper.cpp / llama.cpp
+		# Isolate libraries shared with whisper.cpp and llama.cpp.
 		-DCMAKE_INSTALL_LIBDIR="${EPREFIX}/usr/$(get_libdir)/stable-diffusion.cpp"
 		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/$(get_libdir)/stable-diffusion.cpp"
 	)
@@ -164,8 +141,7 @@ src_configure() {
 	)
 
 	if [[ ${PV} != *9999* ]]; then
-		# embed the real release (see the embed-version patch); the tarball
-		# is not a git checkout so upstream would report "unknown" otherwise.
+		# Tarballs lack git metadata, so inject the release identity.
 		mycmakeargs+=(
 			-DSDCPP_BUILD_VERSION="${MY_PV}"
 			-DSDCPP_BUILD_COMMIT="${MY_COMMIT}"
@@ -192,7 +168,7 @@ src_configure() {
 
 	if use cuda; then
 		local -x CUDAHOSTCXX="$(cuda_gccdir)/g++"
-		# tries to recreate dev symlinks
+		# nvcc recreates device symlinks during detection.
 		cuda_add_sandbox
 		addpredict "/dev/char/"
 	fi
@@ -210,7 +186,7 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# avoid clashing with whisper.cpp / llama.cpp
+	# All three projects install conflicting ggml headers.
 	rm -rf "${ED}/usr/include" || die
 
 	find "${ED}" -name "*.a" -delete || die
