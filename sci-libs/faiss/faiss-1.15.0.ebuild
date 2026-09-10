@@ -46,10 +46,8 @@ BDEPEND="
 	)
 "
 
-# The AVX512 fast-scan headers gate their use of the AVX512 simd types on
-# bare __AVX512F__, but those types are only defined when COMPILE_SIMD_AVX512
-# is also set (the faiss_avx512 target). A -march that enables AVX512 (e.g.
-# znver5) thus breaks the generic/avx2 targets on gcc-16. verified 2026-06-13
+# AVX512 types require COMPILE_SIMD_AVX512, but upstream gates them only on
+# __AVX512F__; AVX512 -march otherwise breaks generic/avx2. # verified 2026-06-13
 PATCHES=( "${FILESDIR}"/faiss-1.14.2-avx512-fast-scan-compile-guard.patch )
 
 pkg_setup() {
@@ -57,8 +55,7 @@ pkg_setup() {
 }
 
 src_configure() {
-	# FAISS_OPT_LEVEL is hierarchical: avx512 ⊇ avx2 ⊇ generic. The
-	# Python loader picks the highest variant available at runtime.
+	# Build hierarchical variants; Python selects the highest available at runtime.
 	local opt_level="generic"
 	use cpu_flags_x86_avx2 && opt_level="avx2"
 	use cpu_flags_x86_avx512f && opt_level="avx512"
@@ -96,9 +93,7 @@ src_install() {
 	cmake_src_install
 
 	if use python; then
-		# CMake populates BUILD_DIR/faiss/python with setup.py + the
-		# compiled _swigfaiss*.so artifacts; setup.py only packages
-		# the existing files (no compilation step).
+		# CMake produces setup.py and compiled modules; pip only packages them.
 		cd "${BUILD_DIR}/faiss/python" || die
 		"${PYTHON}" -m pip install \
 			--root="${D}" \
@@ -111,19 +106,9 @@ src_install() {
 			--no-warn-script-location \
 			. || die "pip install failed"
 
-		# faiss's python CMake also installs the package (plus a second
-		# copy of libfaiss*.so, ~57M) to ${EPREFIX}/usr/faiss; the
-		# importable package is the pip-installed site-packages copy
-		# above, so drop the redundant CMake copy. verified 2026-06-13
+		# Drop CMake's redundant /usr/faiss copy; site-packages is authoritative.
+		# verified 2026-06-13
 		rm -r "${ED}/usr/faiss" || die
-
-		# faiss builds libfaiss_python_callbacks as a STATIC lib
-		# (faiss/python/CMakeLists.txt) and links it into each
-		# _swigfaiss*.so, so there is no standalone .so in the package dir
-		# to relocate; the modules only DT_NEED libfaiss.so, found via
-		# ldconfig. Earlier faiss shipped it as a shared .so, which the
-		# ebuild moved to /usr/lib64 — obsolete (and the move would fail,
-		# the file no longer exists). verified 2026-06-13.
 
 		python_optimize
 	fi
