@@ -9,9 +9,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1
 
-# GitHub zero-pads the calendar version in the tag (26.08.00); PyPI
-# normalises it to 26.8.0 (${PV}). rmm/VERSION carries 26.08.00 for the
-# scikit-build regex version provider.
+# GitHub and rmm/VERSION use zero-padded 26.08.00; PyPI normalizes to ${PV}.
 MY_PV="26.08.00"
 
 DESCRIPTION="RAPIDS Memory Manager — Python (Cython) bindings"
@@ -29,11 +27,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# The Cython build pulls rapids-cmake (branch-26.08) and the rapids
-# cython helpers through CPM at configure time, and compiles against the
-# CPM-fetched CCCL, so it is non-deterministic and needs network access.
-# librmm (rmm-config.cmake) is found from the installed package via its
-# cmake.prefix entry point.
+# Configure fetches rapids-cmake, Cython helpers, and CCCL through CPM. Installed
+# librmm supplies rmm-config.cmake through its cmake.prefix entry point.
 PROPERTIES="live"
 RESTRICT="network-sandbox test"
 
@@ -48,12 +43,8 @@ DEPEND="
 	${RDEPEND}
 	dev-util/nvidia-cuda-toolkit:=
 "
-# cuda-bindings is needed at build time, not just runtime: the Cython
-# sources `from cuda.bindings.cyruntime cimport cudaMemcpyAsync,
-# cudaStream_t, ...` (device_buffer.pyx + every librmm/*.pxd), so its
-# .pxd headers must be importable when Cython compiles or the runtime
-# symbols degrade to Python objects and fail the nogil blocks.
-# verified 2026-08-06
+# Cython cimports cuda-bindings .pxd headers; without the build dependency,
+# symbols degrade to Python objects that fail nogil blocks. # verified 2026-08-06
 BDEPEND="
 	>=dev-build/cmake-4
 	dev-build/ninja
@@ -65,17 +56,13 @@ BDEPEND="
 "
 
 python_prepare_all() {
-	# Bypass rapids_build_backend for the scikit_build_core.build it wraps
-	# (same rationale as dev-python/dask-cuda and dev-python/librmm).
+	# Use the wrapped scikit-build-core backend directly, as in librmm/dask-cuda.
 	sed -i \
 		-e 's/build-backend = "rapids_build_backend.build"/build-backend = "scikit_build_core.build"/' \
 		-e '/"rapids-build-backend>=0.4.0,<0.5.0",/d' \
 		pyproject.toml || die
 
-	# Same CCCL <cuda/stream_ref> deprecation guard as librmm: the Cython
-	# modules compile against rmm's headers (which still include the
-	# deprecated path) and may build -Werror against the slightly newer
-	# CPM-fetched CCCL. Define the upstream escape macro globally.
+	# Silence CCCL's deprecated stream_ref header under RMM's -Werror build.
 	# verified 2026-06-10
 	sed -i \
 		-e '/^  LANGUAGES CXX)/a add_compile_definitions(CCCL_IGNORE_DEPRECATED_STREAM_REF_HEADER)' \
