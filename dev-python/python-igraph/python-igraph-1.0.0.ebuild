@@ -20,11 +20,9 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Build the bundled igraph C core (vendor/source/igraph, shipped in full in the
-# sdist) with CMake. The system dev-libs/igraph would be cleaner, but it
-# hard-depends on sci-mathematics/glpk, which fails to build against the
-# overlay-masked SuiteSparse -- glpk can't find amd.h. The vendored core needs
-# none of that. verified 2026-06-17
+# Upstream guarantees unbundled compatibility only with its exact C core;
+# version 1.0.0 is bundled while ::gentoo remains on 0.10.x.
+# verified 2026-09-10
 RDEPEND="
 	dev-python/texttable[${PYTHON_USEDEP}]
 "
