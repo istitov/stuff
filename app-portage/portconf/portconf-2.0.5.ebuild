@@ -13,14 +13,7 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="+bash-completion +zsh-completion test"
 RESTRICT="!test? ( test )"
 
-# Runtime deps reflect the tools every dispatch arm reaches for:
-#   eix          — USE-flag / package metadata lookups
-#   portage-utils — qatom (atom parsing), qlist (installed-packages)
-#   tre          — agrep (fuzzy use-flag suggestion in invalid_uses)
-#   portage      — emerge for backup / restore / overlays
-#   eselect      — eselect profile / repository (overlay prune,
-#                  profile probes); pulled in transitively by portage
-#                  but called directly, so declared explicitly
+# Direct tools: eix metadata, qatom/qlist, agrep, emerge, and eselect.
 RDEPEND="
 	>=app-shells/bash-4.4:0
 	app-admin/eselect
@@ -30,10 +23,7 @@ RDEPEND="
 	sys-apps/portage
 	bash-completion? ( app-shells/bash-completion )
 "
-# Test BDEPEND mirrors RDEPEND for the binaries the integration tier
-# actually invokes — duplicate-but-explicit so the test phase gets the
-# guaranteed-installed-before-build ordering BDEPEND provides (RDEPEND
-# is only guaranteed at install time).
+# Repeat runtime tools in BDEPEND so integration tests can invoke them.
 BDEPEND="
 	test? (
 		dev-util/bats
@@ -58,10 +48,7 @@ src_configure() {
 src_test() {
 	bats tests/unit/ || die "bats unit tests failed"
 
-	# A few integration tests (invalid_uses_make, parts of invalid_uses)
-	# need a populated eix cache.  Probe with a real query; if eix has no
-	# data, integration is unreliable — emit a clear hint and continue
-	# with the rest.
+	# Integration tests require a populated eix cache.
 	if ! eix -qe sys-apps/portage >/dev/null 2>&1; then
 		ewarn "eix cache is empty or stale on this system."
 		ewarn "Run \`eix-update\` as root before re-running tests."
