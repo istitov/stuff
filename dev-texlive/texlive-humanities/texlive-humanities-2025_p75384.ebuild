@@ -191,9 +191,8 @@ src_prepare() {
 	if use doc; then
 		pushd texmf-dist/doc/luatex/opbible &> /dev/null || die
 
-		# https://github.com/olsak/OpBible/pull/1
+		# Rebuild the patched generator; https://github.com/olsak/OpBible/pull/1
 		eapply "${FILESDIR}"/${PN}-2023-opbible-improve-Makefile-respect-user-flags.patch
-		# Remove the binary, so that it is rebuild.
 		rm txs-gen/mod2tex || die
 
 		popd &> /dev/null || die
