@@ -17,14 +17,14 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
-	sci-ml/huggingface_hub[${PYTHON_SINGLE_USEDEP}]
-	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/huggingface_hub-0.21.0[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/pytorch-2.0.0[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/numpy[${PYTHON_USEDEP}]
-		dev-python/packaging[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.17[${PYTHON_USEDEP}]
+		>=dev-python/packaging-20.0[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
-		sci-ml/safetensors[${PYTHON_USEDEP}]
+		>=sci-ml/safetensors-0.4.3[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="${RDEPEND}"
@@ -34,7 +34,7 @@ DEPEND="${RDEPEND}"
 BDEPEND="test? (
 	$(python_gen_cond_dep '
 		dev-python/networkx[${PYTHON_USEDEP}]
-		sci-ml/clearml[${PYTHON_USEDEP}]
+		dev-python/parameterized[${PYTHON_USEDEP}]
 	')
 	>=sci-ml/pytorch-2.13.0
 	amd64? ( >=sci-ml/caffe2-2.13.0[gloo] )
