@@ -20,8 +20,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="perf"
 
-# single-impl: sci-ml/{datasets,transformers} are SINGLE_IMPL; rest of stack
-# is multi-impl, wrapped via python_gen_cond_dep.
+# datasets and transformers are single-impl; wrap the multi-impl dependencies.
 RDEPEND="
 	>=sci-ml/datasets-2.21.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.43.0[${PYTHON_SINGLE_USEDEP}]
@@ -54,5 +53,5 @@ BDEPEND="
 	')
 "
 
-# pyproject sets version via setuptools_scm; sdist has no .git
+# The sdist lacks VCS metadata; supply its setuptools_scm version.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
