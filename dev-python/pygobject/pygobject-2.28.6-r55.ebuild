@@ -93,7 +93,8 @@ src_compile() {
 # Multi-ABI tests return 1 even when successful.
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
-	export GIO_USE_VFS="local" # prevents odd issues with deleting ${T}/.gvfs
+	# Avoid gvfs cleanup failures.
+	export GIO_USE_VFS="local"
 
 	testing() {
 		export XDG_CACHE_HOME="${T}/${EPYTHON}"
