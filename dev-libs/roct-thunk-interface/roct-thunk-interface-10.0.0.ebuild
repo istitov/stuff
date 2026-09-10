@@ -3,10 +3,7 @@
 
 EAPI=8
 
-# Tracks the ROCm 10.0 cohort's slot, not the 22 inherited from 7.2.4 --
-# dev-libs/rocm-device-libs-10.0.0 requires clang 23, and the stack is
-# subslot-pinned as one dependency closure, so a mixed 22/23 cohort would ship
-# components compiled by different LLVM majors. verified 2026-08-29.
+# Keep ROCm 10's subslot-pinned stack on LLVM 23. verified 2026-08-29
 LLVM_COMPAT=( 23 )
 ROCM_SKIP_GLOBALS=1
 inherit cmake flag-o-matic linux-info llvm-r2 rocm
@@ -17,8 +14,7 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	S="${WORKDIR}/${P}/projects/rocr-runtime/libhsakmt"
 else
-	# Same upstream archive as dev-libs/rocr-runtime; share the distfile name
-	# to avoid a MatchingChksums hit and let users hardlink/dedup distdir.
+	# Share rocr-runtime's archive and distfile name.
 	SRC_URI="https://github.com/ROCm/rocm-systems/releases/download/therock-$(ver_cut 1-2)/rocr-runtime.tar.gz -> rocr-runtime-${PV}.tar.gz"
 	S="${WORKDIR}/rocr-runtime/libhsakmt"
 	KEYWORDS="~amd64"
@@ -62,15 +58,13 @@ test_wrapper() {
 }
 
 src_prepare() {
-	# `sed` exits 0 on no-match, so a stale anchor here would silently leave
-	# the library versioned 1.0.0 and its SONAME wrong.
+	# Guard the version anchor; a stale sed would preserve the wrong SONAME.
 	grep -qF 'get_version ( "1.0.0" )' CMakeLists.txt ||
 		die 'get_version ( "1.0.0" ) anchor moved in CMakeLists.txt'
 	sed -e "s/get_version ( \"1.0.0\" )/get_version ( \"${PV}\" )/" -i CMakeLists.txt || die
 
+	# Build shared libhsakmt; guard the anchor because sed accepts no matches.
 	# https://github.com/ROCm/ROCR-Runtime/issues/263
-	# `sed` exits 0 on no-match, so a stale anchor here would silently build
-	# libhsakmt STATIC and nothing would link against it.
 	grep -qF '${HSAKMT_TARGET} STATIC' CMakeLists.txt ||
 		die 'HSAKMT_TARGET STATIC anchor moved in CMakeLists.txt'
 	sed -e "s/\${HSAKMT_TARGET} STATIC/\${HSAKMT_TARGET}/" -i CMakeLists.txt || die
@@ -81,18 +75,18 @@ src_prepare() {
 src_configure() {
 	llvm_prepend_path "${LLVM_SLOT}"
 
-	# QA warnings
+	# Silence known source noise.
 	append-cxxflags -Wno-unused-value
 
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DBUILD_SHARED_LIBS=ON
-		-DCMAKE_DISABLE_FIND_PACKAGE_NUMA=ON # skip warning - will use find_library anyways
+		-DCMAKE_DISABLE_FIND_PACKAGE_NUMA=ON # find_library handles NUMA
 	)
 	cmake_src_configure
 
 	if use test; then
-		# ODR violations (bug #956958)
+		# Avoid test ODR violations (Gentoo bug 956958).
 		filter-lto
 
 		export LIBHSAKMT_PATH="${BUILD_DIR}"
@@ -110,7 +104,7 @@ src_compile() {
 src_test() {
 	check_amdgpu
 	cd "${S}/tests/kfdtest_build/" || die
-	# Bug: https://github.com/ROCm/rocm-systems/issues/3635
+	# Known hardware-specific failures: rocm-systems issue 3635.
 	local skipped_tests=(
 		KFDMemoryTest.LargestSysBufferTest   # OOMs with gfx1151
 		KFDMemoryTest.LargestVramBufferTest  # OOMs with gfx1151
