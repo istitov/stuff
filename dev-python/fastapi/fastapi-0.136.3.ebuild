@@ -6,11 +6,8 @@ EAPI=8
 DISTUTILS_USE_PEP517=pdm-backend
 PYTHON_COMPAT=( python3_{12..14} )
 
-# Retained deliberately, do not drop as "older than the last two": this is the
-# last release before 0.137.0 turned router.routes into a tree, which silently
-# breaks the handler overrides dev-python/model-hosting-container-standards
-# installs. dev-python/vllm caps at <0.137.0 for exactly that reason, so this
-# is the only version in the tree that satisfies it. Drop once vllm's cap
+# Keep the last pre-0.137 release: model-hosting-container-standards requires
+# flat router.routes, and vllm caps FastAPI below 0.137. Drop when that cap
 # lifts. verified 2026-07-27
 
 inherit distutils-r1 optfeature
@@ -40,14 +37,11 @@ RDEPEND="
 	>=dev-python/typing-extensions-4.8.0[${PYTHON_USEDEP}]
 	>=dev-python/typing-inspection-0.4.2[${PYTHON_USEDEP}]
 "
-# Tests need a sprawl of dev-python/* deps (pwdlib, sqlmodel,
-# strawberry-graphql) that live in ::guru only.
-# Forking them all just to run fastapi's test suite is overkill for our
-# overlay's needs — RESTRICT them and rely on upstream CI.
+# Full tests require several ::guru-only dependencies; rely on upstream CI.
 RESTRICT="test"
 
 python_prepare_all() {
-	# Dont install fastapi executable as fastapi-cli is supposed to handle it
+	# Omit the executable provided by fastapi-cli.
 	sed -i -e '/\[project.scripts\]/,/^$/d' pyproject.toml || die
 
 	distutils-r1_python_prepare_all
