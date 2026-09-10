@@ -24,9 +24,7 @@ SLOT="0"
 KEYWORDS="-* ~amd64"
 RESTRICT="strip"
 
-# dev-python/installer is multi-impl (python-r1), so it carries
-# PYTHON_TARGETS, not PYTHON_SINGLE_TARGET: the dep has to go through
-# python_gen_cond_dep to pick up ${PYTHON_USEDEP} in a single-impl ebuild.
+# installer is multi-impl despite this ebuild's single implementation.
 BDEPEND="$(python_gen_cond_dep '
 	dev-python/installer[${PYTHON_USEDEP}]
 ')"
