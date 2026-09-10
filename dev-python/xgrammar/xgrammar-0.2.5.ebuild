@@ -34,16 +34,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cuda"
 
-# transformers is capped <5 upstream: v5 breaks tokenizer loading for several
-# models (TokenizerInfo.from_huggingface), so the pyproject pins >=4.38.0,<5.
-#
-# CUDA kernels JIT through PyTorch, so gcc:15 is a runtime dependency; CUDA 13
-# rejects newer hosts. Keep its slot synchronized with the compiler fallback in
-# ${PN}-0.2.2-cuda-host-compiler.patch; cuda_gccdir cannot run at JIT time.
-#
-# Gate virtual/triton like upstream's x86_64 marker, not by USE=cuda: ROCm
-# tensors also report device.type="cuda" and select Triton. The virtual covers
-# both backends and is unavailable on arm64. # verified 2026-09-09
+# Keep transformers<5: v5 breaks TokenizerInfo.from_huggingface for some models.
+# CUDA JIT needs GCC 15 at runtime; synchronize its slot with the patch fallback.
+# cuda_gccdir cannot run at JIT time, and CUDA 13 rejects newer hosts.
+# Gate Triton by amd64, not USE=cuda: ROCm also reports device.type="cuda".
+# The virtual covers both backends and is unavailable on arm64. verified 2026-09-09
 RDEPEND="
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
