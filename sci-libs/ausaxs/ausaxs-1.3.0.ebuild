@@ -95,7 +95,7 @@ src_compile() {
 }
 
 src_test() {
-	cmake_src_test
+	cmake_src_test -j 8
 }
 
 src_install() {
