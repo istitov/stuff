@@ -47,10 +47,8 @@ RDEPEND="${DEPEND}
 "
 BDEPEND="virtual/pkgconfig"
 
-# cerf must precede formfactor-config-fallback: both touch FindLibraries.cmake
-# and applying cerf first (it's the lower hunk) keeps formfactor at its exact
-# line numbers. The two qt6/deploy-bundling patches from 23.0 are dropped:
-# 24.0 removed the GUI (Qt6 + the FixPack deploy step are both gone upstream).
+# cerf must precede formfactor-config-fallback because both patch
+# FindLibraries.cmake and the latter expects exact line numbers.
 PATCHES=(
 	"${FILESDIR}/${PN}-24.0-cerf-use-c-interface.patch"
 	"${FILESDIR}/${PN}-24.0-formfactor-config-fallback.patch"
@@ -63,15 +61,11 @@ pkg_setup() {
 }
 
 src_configure() {
-	# Upstream rejects any CMAKE_BUILD_TYPE other than Release or Debug
-	# (cmake/BornAgain/CompilerInfo.cmake), so override the eclass default.
+	# Upstream accepts only Release or Debug.
 	local CMAKE_BUILD_TYPE=Release
 
-	# BA_PY_PACK assembles the bornagain/ Python package tree in the build
-	# dir (init + SWIG .py wrappers + POST_BUILD-copied .so files) — we
-	# consume it directly from src_install. The ba_wheel custom target is
-	# never invoked, so auditwheel / pip / wheel aren't actually needed
-	# (covered by the skip-wheel-py-deps-check patch).
+	# BA_PY_PACK assembles the package tree consumed in src_install. We never run
+	# ba_wheel, so its auditwheel/pip/wheel checks are unnecessary.
 	local mycmakeargs=(
 		-DBA_TESTS=OFF
 		-DBA_DOCS=OFF
@@ -94,16 +88,11 @@ src_install() {
 
 		[[ -d ${py_pkg_dir} ]] || die "Python package layout missing at ${py_pkg_dir}"
 
-		# 24.0 flattened the package: __init__ + helpers (ba_plot, ba_check,
-		# ...) and the SWIG-generated libBornAgain*.py wrappers all live
-		# directly under py/src/bornagain (23.0 kept wrappers + .so in a lib/
-		# subdir).
+		# Since 24.0, helpers and SWIG wrappers share the package root.
 		insinto "${sitedir}/bornagain"
 		doins "${py_pkg_dir}"/*.py
 
-		# The _libBornAgain*.so files are dual-purpose — linkable C++ libs
-		# in /usr/lib64/ and Python C extensions imported via the bornagain
-		# package. Symlink rather than duplicate ~14 MiB of binaries.
+		# Symlink dual-purpose C++/Python libraries instead of duplicating ~14 MiB.
 		local sopath soname rel
 		rel=$(realpath -m --relative-to="${sitedir}/bornagain" \
 			"/usr/$(get_libdir)") || die "realpath failed"
