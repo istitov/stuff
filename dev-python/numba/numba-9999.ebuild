@@ -19,8 +19,7 @@ SLOT="0"
 IUSE+=" openmp threads"
 RESTRICT="bindist"
 
-# llvmlite ships a compiled binding tied to its LLVM major; depend on its
-# subslot (:=) so numba rebuilds when llvmlite is rebuilt against a new LLVM.
+# Rebuild against llvmlite when its LLVM-bound subslot changes.
 DEPEND+="
 	>=dev-python/numpy-1.11[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2021.6:= )
