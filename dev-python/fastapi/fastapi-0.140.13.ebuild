@@ -33,14 +33,11 @@ RDEPEND="
 	>=dev-python/typing-extensions-4.8.0[${PYTHON_USEDEP}]
 	>=dev-python/typing-inspection-0.4.2[${PYTHON_USEDEP}]
 "
-# Tests need a sprawl of dev-python/* deps (pwdlib, sqlmodel,
-# strawberry-graphql) that live in ::guru only.
-# Forking them all just to run fastapi's test suite is overkill for our
-# overlay's needs — RESTRICT them and rely on upstream CI.
+# Tests require integrations available only in ::guru; rely on upstream CI.
 RESTRICT="test"
 
 python_prepare_all() {
-	# Dont install fastapi executable as fastapi-cli is supposed to handle it
+	# fastapi-cli owns the fastapi executable.
 	grep -qF '[project.scripts]' pyproject.toml || die "project.scripts anchor moved"
 	sed -i -e '/\[project.scripts\]/,/^$/d' pyproject.toml || die
 
