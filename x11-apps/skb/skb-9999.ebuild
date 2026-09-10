@@ -19,12 +19,10 @@ PATCHES=( "${FILESDIR}/${PN}-9999-format-security.patch" )
 
 src_prepare() {
 	default
-	# Drop the strip invocations from Makefile so Portage's debug
-	# machinery stays in control.
+	# Let Portage control stripping.
 	sed -i '/@strip/d' Makefile || die
 
-	# xkb.c uses eprint() without a declaration; GCC 14+ defaults to
-	# -std=c23 where implicit function declarations are errors.
+	# GCC 14+ rejects xkb.c's implicit eprint declaration under C23.
 	sed -i '1i extern void eprint(const char *errstr, ...);' xkb.c || die
 }
 
