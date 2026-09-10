@@ -69,7 +69,3 @@ DEPEND="
 BDEPEND="dev-perl/Module-Build"
 
 mydoc="doc/biber.tex"
-
-# The ::gentoo ebuild's 32-bit-test-disable patch is omitted here
-# because KEYWORDS narrows to ~amd64; the `use amd64 || use arm64
-# || eapply ...` guard would never fire.
