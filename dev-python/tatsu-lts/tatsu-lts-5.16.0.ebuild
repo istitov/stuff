@@ -18,11 +18,8 @@ LICENSE="BSD-4"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream declares dependencies = []; colorama (colorized output) and
-# rich (the optional parproc submodule) are extras only, and the core
-# parser — all beanquery needs — imports neither.
+# The core parser has no runtime dependencies; colorama and rich are extras.
 
-# Stock pytest only; no third-party plugins.
 EPYTEST_PLUGINS=()
 
 distutils_enable_tests pytest
