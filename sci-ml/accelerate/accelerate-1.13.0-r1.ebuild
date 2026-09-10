@@ -29,9 +29,8 @@ RDEPEND="
 	')
 "
 DEPEND="${RDEPEND}"
-# The gloo test dependency applies on amd64 only: gloo requires
-# caffe2[distributed], and both flags are profile-masked everywhere
-# else. verified 2026-09-06
+# gloo requires caffe2[distributed] and is profile-masked outside amd64.
+# Verified 2026-09-06.
 BDEPEND="test? (
 	$(python_gen_cond_dep '
 		dev-python/networkx[${PYTHON_USEDEP}]
