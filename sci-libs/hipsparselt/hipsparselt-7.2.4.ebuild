@@ -98,7 +98,6 @@ src_unpack() {
 src_prepare() {
 	rocm_use_clang
 
-	# Silence known ROCm source noise.
 	append-cxxflags -Wno-explicit-specialization-storage-class
 
 	# Exclude test binaries from installation.
