@@ -51,6 +51,7 @@ LICENSE="AMD-Binary-Only"
 SLOT="0"
 
 RESTRICT="bindist mirror strip"
+[[ ${PV} == 999999 ]] && RESTRICT+=" network-sandbox"
 
 RDEPEND="
 	~dev-util/xrt-${PV}
