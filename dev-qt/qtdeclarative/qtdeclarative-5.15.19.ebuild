@@ -16,7 +16,7 @@ DESCRIPTION="The QML and Quick modules for the Qt5 framework"
 IUSE="cpu_flags_x86_sse2 gles2-only +jit localstorage vulkan +widgets"
 REQUIRED_USE="jit? ( x86? ( cpu_flags_x86_sse2 ) )"
 
-# qtgui[gles2-only=] is needed because of bug 504322
+# Keep qtgui's gles2-only setting aligned; bug 504322.
 DEPEND="
 	=dev-qt/qtcore-${QT5_PV}*
 	=dev-qt/qtgui-${QT5_PV}*:5=[gles2-only=,vulkan=]
@@ -31,9 +31,7 @@ BDEPEND="${PYTHON_DEPS}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-5.14.2-QQuickItemView-fix-maxXY-extent.patch" # QTBUG-83890
-	# CVE-2025-12385 (QTBUG-141515) dropped: already in KDE Qt5 Patch
-	# Collection as 0023-Increase-robustness-of-img-tag-in-Text-component.
-	# verified 2026-05-25
+	# KDE's patchset includes the CVE-2025-12385 fix. Verified 2026-05-25.
 )
 
 src_prepare() {
