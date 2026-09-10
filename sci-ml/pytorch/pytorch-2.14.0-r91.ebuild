@@ -33,12 +33,39 @@ SRC_URI="https://github.com/pytorch/${PN}/archive/refs/tags/v${PV}.tar.gz
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-RESTRICT="test"
 
-REQUIRED_USE=${PYTHON_REQUIRED_USE}
-# The block below mirrors torch's unconditional Requires-Dist verbatim, floors
-# included, so it can be diffed against the built
-# torch-${PV}.dist-info/METADATA. Only typing-extensions is imported by
+# Every flag here only forwards to sci-ml/caffe2, which does the whole C++
+# build; nothing in this package's own build reads them. They exist so that
+# consumers written against ::gentoo's monolithic sci-ml/pytorch, which has
+# this same IUSE, resolve against the split. ::gentoo's torchvision-0.29.0-r1
+# depends on =sci-ml/pytorch-2.14*[numpy,cuda?,rocm?]; with no flags here,
+# portage picked ::gentoo's pytorch instead, which blocks sci-ml/caffe2 and,
+# under rocm, pins dev-util/hip below 7.3. Each flag pulls caffe2 with the
+# same flag, so pytorch[rocm] guarantees caffe2[rocm] without requiring the
+# two USE sets to match. That is spelled as one USE-conditional block per flag
+# rather than as flag? use-dependencies on a single atom: pkgcheck cannot
+# expand 21 conditional use-dependencies on one atom, and then skips checking
+# this package's dependencies altogether (UncheckableDep). REQUIRED_USE is
+# caffe2's minus its amdgpu_targets rule, which only caffe2 can satisfy. numpy
+# also adds numpy at runtime, as ::gentoo's pytorch does. verified 2026-09-10
+IUSE="cuda cusparselt distributed fbgemm flash gloo kineto memefficient
+	mimalloc mkl mpi nccl nnpack +numpy onednn openblas opencl openmp qnnpack
+	rocm xnnpack"
+RESTRICT="test"
+REQUIRED_USE="
+	${PYTHON_REQUIRED_USE}
+	mpi? ( distributed )
+	gloo? ( distributed )
+	?? ( cuda rocm )
+	rocm? ( memefficient? ( flash ) )
+	cusparselt? ( || ( cuda rocm ) )
+	flash? ( || ( cuda rocm ) )
+	memefficient? ( || ( cuda rocm ) )
+	nccl? ( rocm )
+"
+# The python_gen_cond_dep block below mirrors torch's unconditional
+# Requires-Dist verbatim, floors included, so it can be diffed against the
+# built torch-${PV}.dist-info/METADATA. Only typing-extensions is imported by
 # `import torch`; the rest are reached lazily -- sympy and networkx from
 # torch.fx, jinja2 and filelock from the inductor codegen and its compile
 # cache, fsspec from torch.load/save on remote paths, setuptools from
@@ -47,6 +74,27 @@ REQUIRED_USE=${PYTHON_REQUIRED_USE}
 RDEPEND="
 	${PYTHON_DEPS}
 	~sci-ml/caffe2-${PV}[${PYTHON_SINGLE_USEDEP}]
+	cuda? ( ~sci-ml/caffe2-${PV}[cuda] )
+	cusparselt? ( ~sci-ml/caffe2-${PV}[cusparselt] )
+	distributed? ( ~sci-ml/caffe2-${PV}[distributed] )
+	fbgemm? ( ~sci-ml/caffe2-${PV}[fbgemm] )
+	flash? ( ~sci-ml/caffe2-${PV}[flash] )
+	gloo? ( ~sci-ml/caffe2-${PV}[gloo] )
+	kineto? ( ~sci-ml/caffe2-${PV}[kineto] )
+	memefficient? ( ~sci-ml/caffe2-${PV}[memefficient] )
+	mimalloc? ( ~sci-ml/caffe2-${PV}[mimalloc] )
+	mkl? ( ~sci-ml/caffe2-${PV}[mkl] )
+	mpi? ( ~sci-ml/caffe2-${PV}[mpi] )
+	nccl? ( ~sci-ml/caffe2-${PV}[nccl] )
+	nnpack? ( ~sci-ml/caffe2-${PV}[nnpack] )
+	numpy? ( ~sci-ml/caffe2-${PV}[numpy] )
+	onednn? ( ~sci-ml/caffe2-${PV}[onednn] )
+	openblas? ( ~sci-ml/caffe2-${PV}[openblas] )
+	opencl? ( ~sci-ml/caffe2-${PV}[opencl] )
+	openmp? ( ~sci-ml/caffe2-${PV}[openmp] )
+	qnnpack? ( ~sci-ml/caffe2-${PV}[qnnpack] )
+	rocm? ( ~sci-ml/caffe2-${PV}[rocm] )
+	xnnpack? ( ~sci-ml/caffe2-${PV}[xnnpack] )
 	$(python_gen_cond_dep '
 		dev-python/filelock[${PYTHON_USEDEP}]
 		>=dev-python/fsspec-0.8.5[${PYTHON_USEDEP}]
@@ -56,6 +104,9 @@ RDEPEND="
 		>=dev-python/sympy-1.13.3[${PYTHON_USEDEP}]
 		>=dev-python/typing-extensions-4.10.0[${PYTHON_USEDEP}]
 	')
+	numpy? ( $(python_gen_cond_dep '
+		dev-python/numpy[${PYTHON_USEDEP}]
+	') )
 "
 # Upstream's [build-system] requires list, minus cmake and ninja: those are
 # listed only for the CMake half of the build, which wheel.cmake=false turns
