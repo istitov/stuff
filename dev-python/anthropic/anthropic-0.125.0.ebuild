@@ -18,8 +18,6 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# guru's ebuild fetched from GitHub for npm-driven mock-server tests;
-# we strip that and use the PyPI sdist directly.
 RDEPEND="
 	>=dev-python/anyio-3.5.0[${PYTHON_USEDEP}]
 	>=dev-python/distro-1.7.0[${PYTHON_USEDEP}]
@@ -34,8 +32,7 @@ BDEPEND="
 	dev-python/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
 "
 
-# Tests need a Stainless mock-server stack (Node.js + npm registry
-# fixtures); not worth running in our overlay.
+# Tests require a Node.js Stainless mock server and npm fixtures.
 RESTRICT="test"
 
 pkg_postinst() {
