@@ -36,19 +36,12 @@ IUSE="${IUSE_TARGETS[*]/#/+}"
 
 REQUIRED_USE="|| ( ${IUSE_TARGETS[*]} )"
 
-# Triton's isolated wheel build downloads its cmake<4 backend and pinned LLVM,
-# while AOTriton's configure step fetches its pinned aiter source.
+# Triton's wheel build downloads its backend and LLVM; AOTriton fetches aiter.
 PROPERTIES="live"
 RESTRICT="network-sandbox test"
 
-# dev-util/hip cap: this is a SOURCE build, so it has none of the shim-archive
-# constraint that bounds sci-libs/aotriton-bin -- upstream's CMakeLists.txt does
-# a bare `find_package(hip REQUIRED)` with no version argument, and nothing else
-# in the tree gates on a HIP version. The old <7.3 here was inherited from the
-# -bin ebuild, where it tracks which *-rocmX.X-shared.tar.gz shims upstream
-# publishes; carried over to the source build it just excluded the ROCm 10.0
-# stack for no reason. Match the -bin at the same upstream version instead:
-# floor 6.4, cap below 11. verified 2026-08-30 against the 0.13b tag.
+# Source builds have no binary shim constraint; upstream only requires HIP.
+# Match aotriton-bin's 6.4 floor and next-major cap. verified 2026-08-30
 RDEPEND="
 	!!sci-libs/aotriton-bin
 	sys-libs/glibc
@@ -100,8 +93,8 @@ python_check_deps() {
 src_prepare() {
 	cmake_src_prepare
 
-	# Reuse the declared build dependencies in upstream's disposable venv.
-	# The local Triton wheel is still installed into that venv below.
+	# Expose declared build dependencies in the disposable venv; install the
+	# local Triton wheel into it below.
 	sed -i \
 		-e '/execute_process(COMMAND.*-m venv "${VENV_DIR}")/s/-m venv /-m venv --system-site-packages /' \
 		-e '/-m pip install "${CMAKE_CURRENT_LIST_DIR}"/s/pip install/pip install --no-build-isolation --no-deps/' \
@@ -116,8 +109,7 @@ src_configure() {
 	local wheel_dir="${T}/triton-wheel"
 	mkdir -p "${wheel_dir}" "${T}/home" || die
 
-	# Triton builds LLVM/MLIR-heavy translation units; cap parallelism to
-	# avoid exhausting RAM before the AOT kernel build starts.
+	# Cap LLVM/MLIR wheel compilation to avoid exhausting RAM.
 	local -x MAX_JOBS=4
 	local -x HOME="${T}/home"
 	local -x PIP_CACHE_DIR="${T}/pip-cache"
@@ -153,7 +145,7 @@ src_configure() {
 }
 
 src_compile() {
-	# Upstream's install target owns the complete generated-kernel build graph.
+	# The install target owns the generated-kernel build graph.
 	:
 }
 
