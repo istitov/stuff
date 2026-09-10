@@ -18,6 +18,5 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Upstream's requires_dist over-declares its test toolchain (tox/coverage/
-# deepdiff/...); the runtime module only needs six. verified 2026-06-16.
+# Runtime only needs six; upstream metadata includes test tools. Verified 2026-06-16.
 RDEPEND="dev-python/six[${PYTHON_USEDEP}]"
