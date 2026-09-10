@@ -11,8 +11,6 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Generate diffracted intensities from crystals"
 HOMEPAGE="https://danporter.github.io/Dans_Diffraction/"
-#SRC_URI="$(pypi_sdist_url --no-normalize "${MYPN}" "${PV}")"
-
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
