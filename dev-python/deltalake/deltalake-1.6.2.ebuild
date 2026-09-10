@@ -830,13 +830,9 @@ CRATES="
 	zstd@0.13.3
 "
 
-# delta-rs 1.6.1 switched delta-kernel from the crates.io release (buoyant_kernel
-# 0.22.2 in 1.6.0) to the buoyant-data delta-kernel-rs fork, so these two move out
-# of CRATES into GIT_CRATES (fetched + extracted). 1.6.2 pins the fork by an
-# explicit rev (was a branch in 1.6.1) at the same commit. The eclass's generated
-# [patch] does NOT redirect a package-renamed git dep under the maturin/offline
-# build, so src_prepare also repoints the workspace dep at the extracted tree.
-# verified 2026-07-10 against 1.6.2.
+# This version pins package-renamed buoyant_kernel to a git fork. cargo.eclass
+# does not redirect that form, so src_prepare repoints it to GIT_CRATES.
+# verified 2026-07-10
 KERNEL_COMMIT="393fbf662f56c4bb04445e1d36805a33e32b8fbc"
 declare -A GIT_CRATES=(
 	[buoyant_kernel]="https://github.com/buoyant-data/delta-kernel-rs;${KERNEL_COMMIT};delta-kernel-rs-%commit%/kernel"
@@ -851,11 +847,8 @@ HOMEPAGE="
 	https://pypi.org/project/deltalake/
 	https://delta-io.github.io/delta-rs/
 "
-# 1.6.0 is wheel-only on PyPI (no sdist), so source comes from the
-# delta-io/delta-rs monorepo at the python-v${PV} tag. The maturin
-# project lives in python/; its Cargo.lock is NOT committed upstream
-# (gitignored) — CRATES above was generated from `cargo generate-lockfile`
-# (workspace: crates/* + python). See the deltalake memory for the recipe.
+# PyPI is wheel-only. The monorepo omits Cargo.lock, so CRATES comes from a
+# generated workspace lock; see the deltalake memory for the recipe.
 SRC_URI="
 	https://github.com/delta-io/delta-rs/archive/refs/tags/python-v${PV}.tar.gz -> ${P}.gh.tar.gz
 	${CARGO_CRATE_URIS}
@@ -863,7 +856,6 @@ SRC_URI="
 S="${WORKDIR}/delta-rs-python-v${PV}/python"
 
 LICENSE="Apache-2.0"
-# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD CC0-1.0
 	CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0 ZLIB BZIP2
@@ -880,12 +872,8 @@ RDEPEND="
 RESTRICT="test"
 
 src_prepare() {
-	# Repoint delta-rs's branch-pinned + package-renamed `delta_kernel` git dep
-	# at the GIT_CRATES-extracted tree (eclass [patch] doesn't cover it — see the
-	# GIT_CRATES note above; cargo would otherwise attempt a live checkout and die
-	# offline). Upstream ships exactly this as a commented `path =` variant; with
-	# no committed Cargo.lock, cargo then resolves the path dep + vendored registry
-	# crates fully offline. verified 2026-06-25.
+	# Use upstream's path variant so the renamed git dependency resolves offline
+	# from GIT_CRATES. # verified 2026-06-25
 	local ws_toml="${WORKDIR}/delta-rs-python-v${PV}/Cargo.toml"
 	local from='git = "https://github.com/buoyant-data/delta-kernel-rs", rev = "393fbf662f56c4bb04445e1d36805a33e32b8fbc"'
 	local to="path = \"${WORKDIR}/delta-kernel-rs-${KERNEL_COMMIT}/kernel\""
