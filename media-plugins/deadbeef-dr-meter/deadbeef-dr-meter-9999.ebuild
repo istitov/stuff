@@ -39,8 +39,7 @@ src_compile() {
 }
 
 src_install() {
-	# The libdrmeter shared lib lives next to the plugin so deadbeef
-	# can find it without polluting /usr/lib64.
+	# Keep libdrmeter beside the plugin for runtime discovery.
 	exeinto /usr/$(get_libdir)/deadbeef
 	doexe dr_meter/lib/libdrmeter.so* dr_plugin/ddb_dr_meter.so
 	use gtk2 && doexe dr_plugin_gui/ddb_dr_meter_gtk2.so
