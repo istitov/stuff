@@ -46,6 +46,10 @@ distutils_enable_tests pytest
 src_prepare() {
 	# sdist has no git info; pin dynamic version to PV so the dist-info
 	# directory is named correctly instead of bokeh-0.0.0.
+	grep -qF 'dynamic = ' pyproject.toml || die "dynamic anchor moved"
+	grep -qF '[project]' pyproject.toml || die "project anchor moved"
+	grep -qF '[tool.setuptools-git-versioning]' pyproject.toml ||
+		die "setuptools-git-versioning anchor moved"
 	sed -i -e "/^dynamic = /d" \
 		-e "/^\[project\]$/a version = \"${PV}\"" \
 		-e "/^\[tool\.setuptools-git-versioning\]/,/^\[/{/^\[tool\.setuptools-git-versioning\]/d; /^\[/!d}" \
