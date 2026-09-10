@@ -5,14 +5,8 @@ EAPI=8
 
 inherit desktop unpacker xdg
 
-# Upstream tag is v0.1.806-beta. Through 0.1.803-beta the release assets spelled
-# the version with underscores (Unsloth-Desktop-0_1_803_beta-Ubuntu.deb); at
-# 0.1.804-beta upstream dropped the version from every asset name, so the .deb
-# is now just Unsloth-Desktop-Ubuntu.deb. The tag in the URL still pins the
-# fetch, and the -> ${P}.deb rename below keeps the distfile name version-unique,
-# so the unversioned upstream name is not a durability hazard. Settled convention
-# now: it has held unchanged from 0.1.804-beta through 0.1.806-beta, across every
-# platform asset. verified 2026-09-02 against v0.1.806-beta
+# Since 0.1.804_beta, assets use unversioned names; the tag pins the fetch and
+# the rename keeps distfiles unique. # verified through 0.1.807_beta
 MY_TAG="v${PV/_beta/-beta}"
 MY_DEB="Unsloth-Desktop-Ubuntu.deb"
 
@@ -24,23 +18,16 @@ HOMEPAGE="
 SRC_URI="https://github.com/unslothai/unsloth/releases/download/${MY_TAG}/${MY_DEB} -> ${P}.deb"
 S="${WORKDIR}"
 
-# The prebuilt desktop UI (usr/bin/unsloth-studio) is the studio/ tree, which is
-# AGPL-3.0-only in the dual-licensed upstream repo (the Apache-2.0 half is the
-# Python library, packaged separately as sci-ml/unsloth).
+# This studio/ binary is AGPL-3-only; Apache-2.0 covers the separately packaged
+# Python library.
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="-* ~amd64"
 RESTRICT="strip"
 
-# Ground-truth DT_NEEDED of usr/bin/unsloth-studio (readelf -d), NOT the .deb's
-# declared Depends: the .deb over-declares libappindicator3-1, but the binary
-# carries no such NEEDED -- the tray icon is dlopen-optional. The remaining
-# NEEDED (libgdk_pixbuf/gobject/gio/javascriptcoregtk) are covered by the atoms
-# below. verified 2026-09-02 against Unsloth-Desktop-Ubuntu.deb (v0.1.806-beta).
-# This standalone binary installs /usr/bin/unsloth-studio, which collides with
-# sci-ml/unsloth[studio]'s system-launcher of the same name (and pulling that in
-# is the from-source sci-ml/unsloth-desktop path -- a different way to get the
-# same app). Block co-installation rather than ship a file collision.
+# Dependencies follow DT_NEEDED, not the overdeclared Debian metadata;
+# libappindicator is dlopen-optional. Block sci-ml/unsloth[studio], which owns
+# the same /usr/bin/unsloth-studio. # verified 2026-09-02
 RDEPEND="
 	!!sci-ml/unsloth[studio]
 	|| (
@@ -59,13 +46,11 @@ RDEPEND="
 QA_PREBUILT="usr/bin/unsloth-studio"
 
 src_unpack() {
-	# .deb -> extracts the usr/ tree (data.tar) straight into ${WORKDIR}.
 	unpack_deb "${A}"
 }
 
 src_install() {
-	# Preserve the upstream .deb paths: unsloth-studio resolves its bundled
-	# backend installer at /usr/lib/Unsloth/install.sh, so keep it there.
+	# The binary resolves its backend installer at /usr/lib/Unsloth/install.sh.
 	exeinto /usr/bin
 	doexe usr/bin/unsloth-studio
 
