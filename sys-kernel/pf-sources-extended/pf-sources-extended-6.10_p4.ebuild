@@ -3,19 +3,10 @@
 
 EAPI=8
 
-# 6.10 is a non-LTS kernel that reached end-of-life upstream (linux-stable
-# stopped at 6.10.14). The trunk-pinned patches captured here track
-# stable all the way to 6.10.14 — full coverage for this EOL branch.
-#
-# Per-branch judgment on 5xxx (genpatches "experimental" category):
-#   * 5010_enable-cpu-optimizations-universal: NOT included. Same failure
-#     mode as 6.9 — trunk's 5010 is calibrated against pf-flavored
-#     vanilla rather than kernel.org pristine, hunk anchors don't match.
-#     Dropping 5010 lets pf's arch/x86 fall into pf-only naturally so
-#     the curated subset applies pf's full ISA Kconfig.
-#   * 5020_BMQ-and-PDS-io-scheduler + 5021_BMQ-and-PDS-gentoo-defaults:
-#     NOT included. Out of scope for the "minimal pf identity on
-#     gentoo-sources" model.
+# Linux 6.10 is EOL at 6.10.14; these pinned patches cover its final release.
+# Omit 5010: its pf-flavored anchors reject the pristine base, while the
+# curated pf x86 delta supplies the ISA Kconfig. BMQ/PDS is outside this
+# package's minimal pf identity.
 
 ETYPE="sources"
 
@@ -32,10 +23,8 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Per-slot snapshot of alicef's genpatches trunk (a live working dir),
-# bundled as pf-genpatches-${SHPV}.tar.xz on the sister overlay extra-stuff
-# (https://github.com/istitov/extra-stuff), pinned by immutable tag -r70-1
-# (refresh = new tag suffix). The bundle is the durable reference.
+# Pin alicef's mutable genpatches trunk through extra-stuff's -r70-1 tag;
+# refresh snapshots under a new tag suffix.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
