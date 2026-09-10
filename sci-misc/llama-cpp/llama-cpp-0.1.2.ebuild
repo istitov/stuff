@@ -16,9 +16,7 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/ggml-org/llama.cpp.git"
 else
-	# Stable SemVer release track (vX.Y.Z): "slower release cadence, recommended
-	# for downstream distribution" per upstream. The 0_pre<N> ebuilds track the
-	# bleeding-edge b<N> build tags instead ("faster cadence, for developers").
+	# Stable vX.Y.Z track; 0_preN ebuilds follow the faster bN tags.
 	SRC_URI="https://github.com/ggml-org/llama.cpp/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/llama.cpp-${PV}"
 	KEYWORDS="~amd64 ~arm64"
@@ -33,22 +31,13 @@ SRC_URI+="
 
 LICENSE="MIT"
 SLOT="0"
-# ggml also exposes GGML_AVX_VNNI / GGML_AVX512_VNNI / GGML_AVX512_BF16
-# (default OFF). NOT wired here — Gentoo has no cpu_flags_x86_avx_vnni /
-# avx512_vnni / avx512_bf16 USE flags, so Sapphire Rapids+ miss those kernels
-# (would need custom USE flags).
+# GGML's VNNI and BF16 knobs are not yet wired to Gentoo's matching CPU flags.
 CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
-# Upstream removed the GGML_HIP_ROCWMMA_FATTN cmake option in b10121 (PR #26046,
-# "HIP: remove rocWMMA FlashAttention") -- HIP FlashAttention now runs through the
-# shared ggml-cuda fattn-mma template instances, so the old rocWMMA path (and its
-# sci-libs/rocWMMA dep) is gone. The wmma USE flag was dropped here. verified 2026-07-25
 IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui sycl"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
-# The embedded server web UI no longer ships in the tarball as of upstream
-# PR #22937 (~b9163): cmake provisions assets at configure time from a Hugging
-# Face bucket (or a local npm build). USE=webui allows that network fetch.
+# CMake fetches web UI assets from Hugging Face when enabled.
 PROPERTIES="webui? ( live )"
 RESTRICT="webui? ( network-sandbox )"
 
@@ -61,12 +50,8 @@ REQUIRED_USE="
 "
 
 # numpy is used by convert_hf_to_gguf.py.
-#
-# USE=sycl needs a -fsycl-capable C++ compiler (Intel icpx, or clang++ with
-# SYCL patches) — not expressible as a Portage dep; pkg_setup warns if icpx is
-# absent. cmake also auto-detects dev-libs/level-zero and sci-ml/oneDNN and
-# silently disables each if missing — install separately for full performance.
-# UNTESTED 2026-05-17: the sycl path has not been end-to-end built here.
+# SYCL needs an unexpressible -fsycl compiler; level-zero and oneDNN are optional
+# auto-detected accelerators. End-to-end path untested as of 2026-05-17.
 CDEPEND="
 	openblas? ( sci-libs/openblas:= )
 	openmp? ( llvm-runtimes/openmp:= )
@@ -95,9 +80,7 @@ RDEPEND="${CDEPEND}
 BDEPEND="vulkan? ( media-libs/shaderc )"
 
 pkg_setup() {
-	# No ebuild-level way to test the C++ compiler for SYCL support;
-	# cmake's check_cxx_compiler_flag(-fsycl) decides at configure time.
-	# Absent icpx usually means oneAPI isn't installed and cmake fatal-errors.
+	# CMake tests -fsycl; missing icpx usually predicts configure failure.
 	if use sycl && ! type -P icpx &>/dev/null; then
 		ewarn "USE=sycl: Intel icpx (from oneAPI) is not on PATH. If your"
 		ewarn "system clang++ has -fsycl support, ignore this; otherwise"
@@ -128,22 +111,15 @@ src_configure() {
 		-DLLAMA_BUILD_TESTS=OFF
 		-DLLAMA_BUILD_EXAMPLES=$(usex examples)
 		-DLLAMA_BUILD_SERVER=ON
-		# Since b9413, webui gates two knobs: LLAMA_BUILD_UI builds/embeds the
-		# server web UI, LLAMA_USE_PREBUILT_UI fetches the prebuilt bundle from
-		# the HF bucket (scripts/ui-assets.cmake). Both must track USE=webui: the
-		# HF-download step is gated only on HF_ENABLED (no BUILD_UI guard), so
-		# UI=off + PREBUILT_UI=on would still hit the network and break the
-		# sandbox. LLAMA_BUILD_WEBUI / LLAMA_USE_PREBUILT_WEBUI are deprecated
-		# aliases for the *_UI names (tools/ui/CMakeLists.txt:7-12).
+		# Tie both build and fetch switches to USE: fetch alone still downloads with
+		# the UI disabled.
 		-DLLAMA_BUILD_UI=$(usex webui)
 		-DLLAMA_USE_PREBUILT_UI=$(usex webui)
 		-DCMAKE_SKIP_BUILD_RPATH=ON
 		-DGGML_NATIVE=0	# don't set march
 		-DGGML_RPC=ON
 		-DLLAMA_OPENSSL=$(usex openssl)
-		# build-info.cpp compiles LLAMA_BUILD_NUMBER as an integer literal, so the
-		# stable SemVer release maps to its corresponding nightly build number
-		# (v0.1.2 == b10485 per the release notes). Update on each stable bump.
+		# v0.1.2 corresponds to b10485; build-info expects an integer.
 		-DLLAMA_BUILD_NUMBER="10485"
 		-DLLAMA_BUILD_COMMIT="v${PV}"
 		-DGENTOO_REMOVE_CMAKE_BLAS_HACK=ON
@@ -154,7 +130,7 @@ src_configure() {
 		-DGGML_VULKAN=$(usex vulkan)
 		-DGGML_SYCL=$(usex sycl)
 
-		# avoid clashing with whisper.cpp
+		# Isolate libraries shared with whisper.cpp.
 		-DCMAKE_INSTALL_LIBDIR="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
 		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
 	)
@@ -190,7 +166,7 @@ src_configure() {
 
 	if use cuda; then
 		local -x CUDAHOSTCXX="$(cuda_gccdir)/g++"
-		# tries to recreate dev symlinks
+		# nvcc recreates device symlinks during detection.
 		cuda_add_sandbox
 		addpredict "/dev/char/"
 	fi
@@ -207,11 +183,7 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	# rpc-server was renamed to ggml-rpc-server upstream (b9829) and given its
-	# own install rule under LLAMA_TOOLS_INSTALL (on for standalone builds), so
-	# cmake_src_install now places it -- the old manual dobin (bin/rpc-server)
-	# is gone. verified 2026-06-28
 
-	# avoid clashing with whisper.cpp
+	# Both projects install conflicting ggml headers.
 	rm -rf "${ED}/usr/include"
 }
