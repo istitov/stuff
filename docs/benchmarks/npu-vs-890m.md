@@ -12,11 +12,10 @@ These are **September 2026 measurements** of four model pairs on Gentoo:
 They compare the selected runtime and model-format combinations, not isolated
 NPU versus GPU silicon or equal model quality.
 
-!!! note "Draft: supporting evidence release pending"
-    Capture and local analysis have passed verification. The sanitized records
-    for this study have not yet been released to `stuff-benchmarks`. Add its
-    own immutable evidence link before publication; the existing speculative-
-    decoding evidence release does not cover these measurements.
+The [sanitized NPU/iGPU evidence archive](https://raw.githubusercontent.com/istitov/stuff-benchmarks/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/data/npu-vs-890m-2026-09-11.tar.7z)
+and [methods and verification notes](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/docs/FOLLOWUPS.md#npu-versus-radeon-890m)
+are published in the signed evidence release, separately from the MTP and
+Muse DFlash datasets.
 
 For setup, see [the Ryzen AI NPU guide](../guides/ryzen-ai-npu.md),
 [llama.cpp, Ollama and llama-swap](../guides/llama-setup.md), and
@@ -122,9 +121,9 @@ observed request ranges overlap.
 No idle subtraction is applied. Model loading, cooldown and the post-request
 idle tail are excluded from these integrals. The recorded IPU-only rail is
 not FLM's total cost; socket/APU readings overlap and must not be summed.
-The firmware Psys field is retained privately but is not used as a calibrated
-whole-laptop measurement. Separate prefill/decode energy is not reported
-because the timers differ and filtering blurs phase boundaries.
+The firmware Psys field is retained in the public raw telemetry but is not
+used as a calibrated whole-laptop measurement. Separate prefill/decode energy
+is not reported because the timers differ and filtering blurs phase boundaries.
 
 ## Memory: compare the accounting domains
 
@@ -272,5 +271,7 @@ Links to the respective model pages on Hugging Face:
 - [Gemma-4-E4B-it GGUF](https://huggingface.co/unsloth/gemma-4-E4B-it-GGUF)
 
 Please, note: these are model-repository links, not checksum-pinned copies of
-the measured weights. The filenames are listed above; the upcoming evidence
-release must supply the captured artifact hashes and provenance limits.
+the measured weights. The filenames are listed above; the
+[published evidence](data/npu-vs-890m-2026-09-11.md) supplies the captured artifact
+hashes and explains the provenance limits. The weights themselves are not
+distributed.

@@ -32,9 +32,12 @@ measurement accuracy. Use sensible rounding when presenting them.
 | Gemma-4-26B-A4B | `20260906-194520-Gemma-4-26B-A4B-it` |
 | Gemma-4-31B | `20260906-210820-Gemma-4-31B-it` |
 
-The [public evidence directory](https://github.com/istitov/stuff-benchmarks/tree/b3651b931bf851dc3b5cf56d498fcc39927f7a8d/data/september-mtp-2026-09-06)
+The [public MTP evidence archive](https://raw.githubusercontent.com/istitov/stuff-benchmarks/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/data/september-mtp-2026-09-06.tar.7z)
 contains `iterations.jsonl`, `manifest.json`, `bench.py.snapshot`, server logs,
-and saved `/props` responses for each run. Logs and path-bearing records are
+and saved `/props` responses for each run. The verification tools automatically
+unpack its 7-Zip/PPMd container; see the
+[archive layout and 7-Zip installation](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/README.md#dataset-archives-and-7-zip).
+Logs and path-bearing records are
 sanitized derivatives; model-authored chat-template bodies are omitted with
 fingerprints retained. The measurements, corpus, and harness snapshots retain
 their original contents. `SANITIZATION.json` records the transformations and
@@ -53,9 +56,9 @@ The recorded harness hash prefixes are `4f6e7754f7c816b1` for Qwen3.6 and
 the saved snapshots. A corpus or harness hash does not identify the model
 weights or runtime build; those provenance limits are described in the study.
 
-The [analysis and verification instructions](https://github.com/istitov/stuff-benchmarks/blob/b3651b931bf851dc3b5cf56d498fcc39927f7a8d/README.md#verify-and-reproduce-the-calculations)
+The [analysis and verification instructions](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/README.md#verify-and-reproduce-the-calculations)
 reproduce every CSV field without inference. See the
-[corpus attribution](https://github.com/istitov/stuff-benchmarks/blob/b3651b931bf851dc3b5cf56d498fcc39927f7a8d/docs/CORPUS.md)
-and [license boundaries](https://github.com/istitov/stuff-benchmarks/blob/b3651b931bf851dc3b5cf56d498fcc39927f7a8d/NOTICE.md)
+[corpus attribution](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/docs/CORPUS.md)
+and [license boundaries](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/NOTICE.md)
 before redistributing the material. These links are pinned to the published
 commit rather than the moving repository branch.

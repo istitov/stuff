@@ -5,12 +5,19 @@ in [Speculative decoding on Radeon 890M](../speculative-decoding-on-890M.md#muse
 They are separate from the four-model MTP study and all excluded preflights
 or stopped attempts. No slow observation was removed.
 
-!!! note "Draft: supporting evidence release pending"
-    The tables have passed local verification against saved requests, streams,
-    server logs and telemetry. The sanitized raw evidence and verification
-    tools still need a separate immutable `stuff-benchmarks` release. These
-    exports allow the numeric summaries to be recalculated, not independent
-    verification of the original capture or exact prompt replay.
+The [sanitized Muse evidence archive](https://raw.githubusercontent.com/istitov/stuff-benchmarks/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/data/muse-dflash-2026-09-09.tar.7z)
+contains submitted prompts and requests, streams, server logs, telemetry and
+artifact fingerprints. The [verification instructions](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/docs/FOLLOWUPS.md#verification)
+recompute these tables from the retained records without running models.
+Python 3.11+ and [7-Zip with PPMd support](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/README.md#dataset-archives-and-7-zip)
+are required; extraction is automatic. These links pin signed commit
+`d600c05`, not the moving repository branch.
+
+The public records are sanitized derivatives, not a complete unchanged capture;
+weights and model-authored templates are omitted. Recomputing the calculations
+does not authenticate the original capture or reproduce the historical runtime.
+See the [privacy and evidence limits](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/docs/PRIVACY.md)
+and [license boundaries](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/NOTICE.md).
 
 ## Downloads and grouping
 
@@ -73,9 +80,8 @@ blocks for that arm and input length. Thus variation was present without
 DFlash too; these observations do not isolate its cause or measure quality.
 
 The request exports deliberately omit prompts, answer/reasoning text, absolute
-timestamps, host paths and process identifiers. The output-text comparison was
-checked against the private capture; it cannot be repeated from these numeric
-tables alone.
+timestamps, host paths and process identifiers. The output-text comparison can
+be repeated from the archived streams, but not from these numeric tables alone.
 
 ### Memory fields
 
