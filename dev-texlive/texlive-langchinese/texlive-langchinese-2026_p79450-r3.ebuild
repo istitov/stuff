@@ -20,7 +20,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pgfornament-han.r72640
 	qyxf-book.r75712
 	sjtutex.r78164
-	suanpan-l3.r79954
+	suanpan-l3.r80166
 	upzhkinsoku.r47354
 	xpinyin.r79618
 	xtuthesis.r47049
@@ -43,7 +43,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fduthesis.doc.r67231
 	hanzibox.doc.r79715
 	impatient-cn.doc.r54080
-	install-latex-guide-zh-cn.doc.r79570
+	install-latex-guide-zh-cn.doc.r80157
 	latex-notes-zh-cn.doc.r15878
 	lshort-chinese.doc.r73160
 	luatex-cn.doc.r79914
@@ -53,7 +53,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pgfornament-han.doc.r72640
 	qyxf-book.doc.r75712
 	sjtutex.doc.r78164
-	suanpan-l3.doc.r79954
+	suanpan-l3.doc.r80166
 	texlive-zh-cn.doc.r78073
 	texproposal.doc.r43151
 	tlmgr-intro-zh-cn.doc.r59100
