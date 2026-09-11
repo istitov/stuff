@@ -7,7 +7,7 @@ TEXLIVE_MODULE_CONTENTS="
 	collection-langkorean.r54074
 	baekmuk.r56915
 	cjk-ko.r79846
-	kotex-oblivoir.r79618
+	kotex-oblivoir.r80209
 	kotex-plain.r63689
 	kotex-utf.r63690
 	kotex-utils.r79618
@@ -20,7 +20,7 @@ TEXLIVE_MODULE_CONTENTS="
 TEXLIVE_MODULE_DOC_CONTENTS="
 	baekmuk.doc.r56915
 	cjk-ko.doc.r79846
-	kotex-oblivoir.doc.r79618
+	kotex-oblivoir.doc.r80209
 	kotex-plain.doc.r63689
 	kotex-utf.doc.r63690
 	kotex-utils.doc.r79618
