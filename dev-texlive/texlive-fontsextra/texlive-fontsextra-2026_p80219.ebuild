@@ -4,9 +4,9 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-fontsextra.r79823
+	collection-fontsextra.r80219
 	aboensis.r77682
-	academicons.r79395
+	academicons.r80218
 	accanthis.r79618
 	adforn.r78315
 	adfsymbols.r78315
@@ -86,7 +86,7 @@ TEXLIVE_MODULE_CONTENTS="
 	cmathbb.r56414
 	cmbright.r79618
 	cmexb.r54074
-	cmgraded.r79923
+	cmgraded.r80076
 	cmll.r77682
 	cmpica.r15878
 	cmsrb.r76790
@@ -141,7 +141,7 @@ TEXLIVE_MODULE_CONTENTS="
 	epigrafica.r79618
 	epsdice.r79618
 	erewhon.r77682
-	erewhon-math.r78490
+	erewhon-math.r80211
 	esrelation.r76924
 	esstix.r77682
 	esvect.r77682
@@ -225,7 +225,7 @@ TEXLIVE_MODULE_CONTENTS="
 	kpfonts-otf.r79915
 	kurier.r77682
 	lato.r79618
-	lete-sans-math.r78489
+	lete-sans-math.r80210
 	lexend.r77682
 	lfb.r79618
 	libertine.r77682
@@ -264,7 +264,7 @@ TEXLIVE_MODULE_CONTENTS="
 	missaali.r61719
 	mlmodern.r77682
 	mnsymbol.r78931
-	monaspace-otf.r77682
+	monaspace-otf.r80073
 	montserrat.r77682
 	mpfonts.r54512
 	mweights.r77682
@@ -330,7 +330,7 @@ TEXLIVE_MODULE_CONTENTS="
 	schulschriften.r59388
 	semaphor.r18651
 	shobhika.r79121
-	simpleicons.r79907
+	simpleicons.r80179
 	skull.r51907
 	sourcecodepro.r79618
 	sourcesans.r79618
@@ -372,18 +372,18 @@ TEXLIVE_MODULE_CONTENTS="
 	venturisadf.r79618
 	wsuipa.r25469
 	xcharter.r78931
-	xcharter-math.r78488
+	xcharter-math.r80113
 	xits.r55730
 	yfonts.r79618
 	yfonts-otf.r77682
 	yfonts-t1.r36013
 	yinit-otf.r40207
-	ysabeau.r77682
+	ysabeau.r80126
 	zlmtt.r77682
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	aboensis.doc.r77682
-	academicons.doc.r79395
+	academicons.doc.r80218
 	accanthis.doc.r79618
 	adforn.doc.r78315
 	adfsymbols.doc.r78315
@@ -462,7 +462,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	cmathbb.doc.r56414
 	cmbright.doc.r79618
 	cmexb.doc.r54074
-	cmgraded.doc.r79923
+	cmgraded.doc.r80076
 	cmll.doc.r77682
 	cmpica.doc.r15878
 	cmsrb.doc.r76790
@@ -516,7 +516,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	epigrafica.doc.r79618
 	epsdice.doc.r79618
 	erewhon.doc.r77682
-	erewhon-math.doc.r78490
+	erewhon-math.doc.r80211
 	esrelation.doc.r76924
 	esstix.doc.r77682
 	esvect.doc.r77682
@@ -598,7 +598,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	kpfonts-otf.doc.r79915
 	kurier.doc.r77682
 	lato.doc.r79618
-	lete-sans-math.doc.r78489
+	lete-sans-math.doc.r80210
 	lexend.doc.r77682
 	lfb.doc.r79618
 	libertine.doc.r77682
@@ -637,7 +637,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	missaali.doc.r61719
 	mlmodern.doc.r77682
 	mnsymbol.doc.r78931
-	monaspace-otf.doc.r77682
+	monaspace-otf.doc.r80073
 	montserrat.doc.r77682
 	mpfonts.doc.r54512
 	mweights.doc.r77682
@@ -702,7 +702,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	schulschriften.doc.r59388
 	semaphor.doc.r18651
 	shobhika.doc.r79121
-	simpleicons.doc.r79907
+	simpleicons.doc.r80179
 	sourcecodepro.doc.r79618
 	sourcesans.doc.r79618
 	sourceserif.doc.r79618
@@ -743,13 +743,13 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	venturisadf.doc.r79618
 	wsuipa.doc.r25469
 	xcharter.doc.r78931
-	xcharter-math.doc.r78488
+	xcharter-math.doc.r80113
 	xits.doc.r55730
 	yfonts.doc.r79618
 	yfonts-otf.doc.r77682
 	yfonts-t1.doc.r36013
 	yinit-otf.doc.r40207
-	ysabeau.doc.r77682
+	ysabeau.doc.r80126
 	zlmtt.doc.r77682
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
