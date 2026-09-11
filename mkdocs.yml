@@ -47,6 +47,7 @@ nav:
   - Benchmarks:
       - Overview: benchmarks/index.md
       - Speculative decoding on Radeon 890M: benchmarks/speculative-decoding-on-890M.md
+      - NPU versus Radeon 890M (draft): benchmarks/npu-vs-890m.md
 
 markdown_extensions:
   - admonition

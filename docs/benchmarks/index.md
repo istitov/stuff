@@ -7,10 +7,12 @@ so that readers can judge whether the result applies to their own setup.
 | Study | Hardware and backend | Question |
 |---|---|---|
 | [Speculative decoding](speculative-decoding-on-890M.md) | Radeon 890M, llama.cpp Vulkan | How much does MTP improve generation speed, and do model-specific settings help? |
+| [NPU versus Radeon 890M — draft](npu-vs-890m.md) | XDNA 2 / FastFlowLM and Radeon 890M / llama.cpp Vulkan | How do request latency, socket power, estimated energy and memory accounting compare? |
 
 The [benchmark evidence repository](https://github.com/istitov/stuff-benchmarks)
 holds sanitized run records, analysis tools, checksums, and attribution.
-Each study links to the exact evidence commit used for its results.
+Published results link to the exact evidence commit used for their analysis;
+draft additions explicitly identify evidence releases that are still pending.
 
 Start with [the hardware guide](../guides/hardware-targets.md) to identify
 your GPU, and [the llama setup guide](../guides/llama-setup.md) to build and
