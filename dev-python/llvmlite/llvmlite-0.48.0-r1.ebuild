@@ -7,6 +7,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 LLVM_COMPAT=( 22 )
+CMAKE_MAKEFILE_GENERATOR=emake
 
 inherit cmake distutils-r1 llvm-r2
 
@@ -25,8 +26,8 @@ DEPEND="${RDEPEND}"
 distutils_enable_tests unittest
 
 python_compile() {
+	CMAKE_PREFIX_PATH="$(get_llvm_prefix)/$(get_libdir)/cmake" \
 	LLVMLITE_SHARED=ON \
-		LLVM_CONFIG="$(get_llvm_prefix)/bin/llvm-config" \
 		distutils-r1_python_compile
 }
 
