@@ -19,13 +19,12 @@ SLOT="0"
 IUSE+=" openmp threads"
 RESTRICT="bindist"
 
-# Rebuild against llvmlite when its LLVM-bound subslot changes.
 DEPEND+="
 	>=dev-python/numpy-1.11[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2021.6:= )
 "
 RDEPEND+="
-	~dev-python/llvmlite-9999:=[${PYTHON_USEDEP}]
+	~dev-python/llvmlite-9999[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2021.6:= )
 "
