@@ -12,7 +12,7 @@ TEXLIVE_MODULE_CONTENTS="
 	dehyph.r48599
 	dehyph-exptl.r79618
 	dhua.r79618
-	dtk-bibliography.r78985
+	dtk-bibliography.r80158
 	fragoli.r79228
 	german.r79618
 	germbib.r76790
@@ -37,7 +37,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	csquotes-de.doc.r79121
 	dehyph-exptl.doc.r79618
 	dhua.doc.r79618
-	dtk-bibliography.doc.r78985
+	dtk-bibliography.doc.r80158
 	etdipa.doc.r76924
 	etoolbox-de.doc.r79121
 	fifinddo-info.doc.r79618
