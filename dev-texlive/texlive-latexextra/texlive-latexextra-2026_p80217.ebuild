@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-latexextra.r79943
+	collection-latexextra.r80217
 	2up.r55076
 	a0poster.r79618
 	a4wide.r77682
@@ -103,7 +103,7 @@ TEXLIVE_MODULE_CONTENTS="
 	beamertheme-gotham.r78692
 	beamertheme-light.r73158
 	beamertheme-metropolis.r78281
-	beamertheme-mirage.r73516
+	beamertheme-mirage.r80112
 	beamertheme-npbt.r54512
 	beamertheme-phnompenh.r39100
 	beamertheme-pure-minimalistic.r56934
@@ -219,7 +219,7 @@ TEXLIVE_MODULE_CONTENTS="
 	circ.r62977
 	circledsteps.r79268
 	circledtext.r77682
-	cistercian.r77682
+	cistercian.r80037
 	classics.r76924
 	classpack.r55218
 	clawxiv.r78742
@@ -240,7 +240,7 @@ TEXLIVE_MODULE_CONTENTS="
 	cnltx.r76924
 	cntformats.r34668
 	cntperchap.r37572
-	codebox.r76924
+	codebox.r80171
 	codedescribe.r79142
 	codedoc.r17630
 	codehigh.r78632
@@ -301,7 +301,7 @@ TEXLIVE_MODULE_CONTENTS="
 	cprotectinside.r76924
 	crbox.r79618
 	create-theorem.r76924
-	creationboites.r79568
+	creationboites.r80051
 	crefthe.r76924
 	crossreference.r79618
 	crossreftools.r77682
@@ -315,7 +315,7 @@ TEXLIVE_MODULE_CONTENTS="
 	currfile.r77682
 	curriculum-vitae.r75698
 	currvita.r79618
-	customenvs.r79567
+	customenvs.r80194
 	cutwin.r77682
 	cv.r15878
 	cv4tw.r34577
@@ -328,7 +328,7 @@ TEXLIVE_MODULE_CONTENTS="
 	dashrulex.r76924
 	dashundergaps.r77682
 	dataref.r62942
-	datatool.r79847
+	datatool.r80133
 	datax.r61772
 	dateiliste.r79618
 	datenumber.r78101
@@ -450,7 +450,7 @@ TEXLIVE_MODULE_CONTENTS="
 	ehhline.r54676
 	einfart.r78004
 	elegantbook.r78872
-	elegantnote.r78191
+	elegantnote.r80155
 	elegantpaper.r78191
 	elements.r61792
 	ellipsis.r77682
@@ -483,7 +483,7 @@ TEXLIVE_MODULE_CONTENTS="
 	enverb.r76924
 	environ.r79618
 	envlab.r61937
-	epcqrcode.r76924
+	epcqrcode.r80180
 	epigraph.r79461
 	epigraph-keys.r75301
 	epiolmec.r79618
@@ -545,7 +545,7 @@ TEXLIVE_MODULE_CONTENTS="
 	fancylabel.r46736
 	fancynum.r15878
 	fancypar.r77682
-	fancyqr.r78199
+	fancyqr.r80011
 	fancyslides.r36263
 	fancytabs.r41549
 	fancytooltips.r68931
@@ -816,8 +816,8 @@ TEXLIVE_MODULE_CONTENTS="
 	korigamik.r71991
 	ktbox.r76524
 	ktv-texdata.r27369
-	l3build.r79890
-	l3kernel-dev.r79943
+	l3build.r80222
+	l3kernel-dev.r80220
 	labbook.r15878
 	labels.r15878
 	labels4easylist.r51124
@@ -833,7 +833,7 @@ TEXLIVE_MODULE_CONTENTS="
 	latex-firstaid-dev.r79901
 	latex-graphics-dev.r79901
 	latex-lab-dev.r79901
-	latex-tagging-status.r79899
+	latex-tagging-status.r80187
 	latex-tools-dev.r79901
 	latex-uni8.r49729
 	latexcolors.r49888
@@ -1046,7 +1046,7 @@ TEXLIVE_MODULE_CONTENTS="
 	ninecolors.r76924
 	nlctdoc.r79421
 	noconflict.r30140
-	nodepthtext.r73069
+	nodepthtext.r80199
 	noindentafter.r59195
 	noitcrul.r79618
 	nolbreaks.r77682
@@ -1117,7 +1117,7 @@ TEXLIVE_MODULE_CONTENTS="
 	parselines.r21475
 	pas-cours.r55859
 	pas-cv.r32263
-	pas-tableur.r78983
+	pas-tableur.r80185
 	passopt.r76924
 	patchcmd.r79618
 	pauldoc.r79618
@@ -1491,7 +1491,7 @@ TEXLIVE_MODULE_CONTENTS="
 	to-be-determined.r72527
 	tocbibind.r79461
 	tocdata.r77682
-	tocloft.r79961
+	tocloft.r80045
 	tocvsec2.r77682
 	todo.r17746
 	todonotes.r77682
@@ -1597,7 +1597,7 @@ TEXLIVE_MODULE_CONTENTS="
 	wrapfig.r77682
 	wrapfig2.r77682
 	wrapstuff.r78931
-	writeongrid.r77353
+	writeongrid.r80043
 	wtref.r79618
 	xargs.r79618
 	xassoccnt.r61112
@@ -1758,7 +1758,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	beamertheme-gotham.doc.r78692
 	beamertheme-light.doc.r73158
 	beamertheme-metropolis.doc.r78281
-	beamertheme-mirage.doc.r73516
+	beamertheme-mirage.doc.r80112
 	beamertheme-npbt.doc.r54512
 	beamertheme-phnompenh.doc.r39100
 	beamertheme-pure-minimalistic.doc.r56934
@@ -1873,7 +1873,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	circ.doc.r62977
 	circledsteps.doc.r79268
 	circledtext.doc.r77682
-	cistercian.doc.r77682
+	cistercian.doc.r80037
 	classics.doc.r76924
 	classpack.doc.r55218
 	clawxiv.doc.r78742
@@ -1894,7 +1894,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	cnltx.doc.r76924
 	cntformats.doc.r34668
 	cntperchap.doc.r37572
-	codebox.doc.r76924
+	codebox.doc.r80171
 	codedescribe.doc.r79142
 	codedoc.doc.r17630
 	codehigh.doc.r78632
@@ -1955,7 +1955,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	cprotectinside.doc.r76924
 	crbox.doc.r79618
 	create-theorem.doc.r76924
-	creationboites.doc.r79568
+	creationboites.doc.r80051
 	crefthe.doc.r76924
 	crossreference.doc.r79618
 	crossreftools.doc.r77682
@@ -1969,7 +1969,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	currfile.doc.r77682
 	curriculum-vitae.doc.r75698
 	currvita.doc.r79618
-	customenvs.doc.r79567
+	customenvs.doc.r80194
 	cutwin.doc.r77682
 	cv.doc.r15878
 	cv4tw.doc.r34577
@@ -1982,7 +1982,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	dashrulex.doc.r76924
 	dashundergaps.doc.r77682
 	dataref.doc.r62942
-	datatool.doc.r79847
+	datatool.doc.r80133
 	datax.doc.r61772
 	dateiliste.doc.r79618
 	datenumber.doc.r78101
@@ -2105,7 +2105,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ehhline.doc.r54676
 	einfart.doc.r78004
 	elegantbook.doc.r78872
-	elegantnote.doc.r78191
+	elegantnote.doc.r80155
 	elegantpaper.doc.r78191
 	elements.doc.r61792
 	ellipsis.doc.r77682
@@ -2138,7 +2138,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	enverb.doc.r76924
 	environ.doc.r79618
 	envlab.doc.r61937
-	epcqrcode.doc.r76924
+	epcqrcode.doc.r80180
 	epigraph.doc.r79461
 	epigraph-keys.doc.r75301
 	epiolmec.doc.r79618
@@ -2199,7 +2199,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fancylabel.doc.r46736
 	fancynum.doc.r15878
 	fancypar.doc.r77682
-	fancyqr.doc.r78199
+	fancyqr.doc.r80011
 	fancyslides.doc.r36263
 	fancytabs.doc.r41549
 	fancytooltips.doc.r68931
@@ -2470,8 +2470,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	korigamik.doc.r71991
 	ktbox.doc.r76524
 	ktv-texdata.doc.r27369
-	l3build.doc.r79890
-	l3kernel-dev.doc.r79943
+	l3build.doc.r80222
+	l3kernel-dev.doc.r80220
 	labbook.doc.r15878
 	labels.doc.r15878
 	labels4easylist.doc.r51124
@@ -2487,7 +2487,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	latex-firstaid-dev.doc.r79901
 	latex-graphics-dev.doc.r79901
 	latex-lab-dev.doc.r79901
-	latex-tagging-status.doc.r79899
+	latex-tagging-status.doc.r80187
 	latex-tools-dev.doc.r79901
 	latex-uni8.doc.r49729
 	latexcolors.doc.r49888
@@ -2700,7 +2700,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	ninecolors.doc.r76924
 	nlctdoc.doc.r79421
 	noconflict.doc.r30140
-	nodepthtext.doc.r73069
+	nodepthtext.doc.r80199
 	noindentafter.doc.r59195
 	noitcrul.doc.r79618
 	nolbreaks.doc.r77682
@@ -2771,7 +2771,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	parselines.doc.r21475
 	pas-cours.doc.r55859
 	pas-cv.doc.r32263
-	pas-tableur.doc.r78983
+	pas-tableur.doc.r80185
 	passopt.doc.r76924
 	patchcmd.doc.r79618
 	pauldoc.doc.r79618
@@ -3140,7 +3140,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	to-be-determined.doc.r72527
 	tocbibind.doc.r79461
 	tocdata.doc.r77682
-	tocloft.doc.r79961
+	tocloft.doc.r80045
 	tocvsec2.doc.r77682
 	todo.doc.r17746
 	todonotes.doc.r77682
@@ -3246,7 +3246,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	wrapfig.doc.r77682
 	wrapfig2.doc.r77682
 	wrapstuff.doc.r78931
-	writeongrid.doc.r77353
+	writeongrid.doc.r80043
 	wtref.doc.r79618
 	xargs.doc.r79618
 	xassoccnt.doc.r61112
@@ -3467,7 +3467,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	dashbox.source.r77682
 	dashrule.source.r79618
 	dashundergaps.source.r77682
-	datatool.source.r79847
+	datatool.source.r80133
 	datax.source.r61772
 	dateiliste.source.r79618
 	datenumber.source.r78101
@@ -3584,7 +3584,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	enverb.source.r76924
 	environ.source.r79618
 	envlab.source.r61937
-	epcqrcode.source.r76924
+	epcqrcode.source.r80180
 	epigraph.source.r79461
 	epiolmec.source.r79618
 	eq-pin2corr.source.r59477
@@ -3786,8 +3786,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	komacv.source.r57721
 	komacv-rg.source.r49064
 	ktv-texdata.source.r27369
-	l3build.source.r79890
-	l3kernel-dev.source.r79943
+	l3build.source.r80222
+	l3kernel-dev.source.r80220
 	labbook.source.r15878
 	labels.source.r15878
 	labelschanged.source.r77682
@@ -4178,7 +4178,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	to-be-determined.source.r72527
 	tocbibind.source.r79461
 	tocdata.source.r77682
-	tocloft.source.r79961
+	tocloft.source.r80045
 	tocvsec2.source.r77682
 	todo.source.r17746
 	todonotes.source.r77682
