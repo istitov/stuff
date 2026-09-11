@@ -4,11 +4,11 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-binextra.r79980
+	collection-binextra.r80064
 	a2ping.r52964
 	adhocfilelist.r79618
 	arara.r79461
-	bundledoc.r79024
+	bundledoc.r80080
 	checklistings.r38300
 	chklref.r52649
 	clojure-pamphlet.r79618
@@ -75,7 +75,7 @@ TEXLIVE_MODULE_CONTENTS="
 	tex4ebook.r78132
 	texaccents.r64447
 	texblend.r68961
-	texchanges.r79999
+	texchanges.r80026
 	texcount.r79618
 	texdef.r74067
 	texdiff.r79618
@@ -102,7 +102,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	a2ping.doc.r52964
 	adhocfilelist.doc.r79618
 	arara.doc.r79461
-	bundledoc.doc.r79024
+	bundledoc.doc.r80080
 	checklistings.doc.r38300
 	chklref.doc.r52649
 	clojure-pamphlet.doc.r79618
@@ -171,7 +171,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tex4ebook.doc.r78132
 	texaccents.doc.r64447
 	texblend.doc.r68961
-	texchanges.doc.r79999
+	texchanges.doc.r80026
 	texcount.doc.r79618
 	texdef.doc.r74067
 	texdiff.doc.r79618
