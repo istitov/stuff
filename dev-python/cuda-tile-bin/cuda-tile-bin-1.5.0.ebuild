@@ -3,6 +3,7 @@
 
 EAPI=8
 
+DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=no
 # Upstream provides wheels through cp314 and requires Python <3.15.
 PYTHON_COMPAT=( python3_{12..14} )
@@ -44,15 +45,12 @@ src_unpack() {
 	done
 }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+python_install() {
 	# Map python3.13 to its cp313 wheel tag.
 	local pyver=${EPYTHON#python}
 	local cptag=cp${pyver//./}
 	local whl="${MY_PN//-/_}-${MY_PV}-${cptag}-${cptag}-manylinux2014_x86_64.whl"
 	[[ -f ${S}/wheel/${whl} ]] || die "expected wheel ${whl} not found"
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${whl}" || die
+	python_optimize
 }
