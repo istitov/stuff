@@ -48,7 +48,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pst-flags.r76924
 	pst-fourbarlinkage.r77161
 	pst-fr3d.r15878
-	pst-fractal.r79409
+	pst-fractal.r80054
 	pst-fun.r79050
 	pst-func.r77682
 	pst-gantt.r35832
@@ -169,7 +169,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pst-flags.doc.r76924
 	pst-fourbarlinkage.doc.r77161
 	pst-fr3d.doc.r15878
-	pst-fractal.doc.r79409
+	pst-fractal.doc.r80054
 	pst-fun.doc.r79050
 	pst-func.doc.r77682
 	pst-gantt.doc.r35832
