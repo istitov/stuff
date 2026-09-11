@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-pictures.r79927
+	collection-pictures.r80119
 	adigraph.r70422
 	aobs-tikz.r70952
 	askmaps.r56730
@@ -28,7 +28,7 @@ TEXLIVE_MODULE_CONTENTS="
 	cachepic.r78415
 	callouts.r79618
 	celtic.r39797
-	chemfig.r78296
+	chemfig.r80145
 	circuit-macros.r79518
 	circuitikz.r79172
 	circularglyphs.r73069
@@ -80,7 +80,7 @@ TEXLIVE_MODULE_CONTENTS="
 	graphviz.r79618
 	gtrlib-largetrees.r49062
 	harveyballs.r32003
-	hawkdraw.r79956
+	hawkdraw.r80231
 	here.r78348
 	hf-tikz.r34733
 	hobby.r76924
@@ -139,7 +139,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pgfmorepages.r54770
 	pgfopts.r77682
 	pgfornament.r79618
-	pgfplots.r79618
+	pgfplots.r80105
 	pgfplotsthemebeamer.r71954
 	picinpar.r77682
 	pict2e.r77682
@@ -198,7 +198,7 @@ TEXLIVE_MODULE_CONTENTS="
 	tikz-bbox.r57444
 	tikz-cd.r77682
 	tikz-cookingsymbols.r75636
-	tikz-decofonts.r79248
+	tikz-decofonts.r80021
 	tikz-dependency.r79618
 	tikz-dimline.r35805
 	tikz-ext.r79515
@@ -240,7 +240,7 @@ TEXLIVE_MODULE_CONTENTS="
 	tikzfill.r78793
 	tikzfxgraph.r77050
 	tikzinclude.r28715
-	tikzlings.r77682
+	tikzlings.r80034
 	tikzmark.r79232
 	tikzmarmots.r76924
 	tikzorbital.r36439
@@ -313,7 +313,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	cachepic.doc.r78415
 	callouts.doc.r79618
 	celtic.doc.r39797
-	chemfig.doc.r78296
+	chemfig.doc.r80145
 	circuit-macros.doc.r79518
 	circuitikz.doc.r79172
 	circularglyphs.doc.r73069
@@ -366,7 +366,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	graphviz.doc.r79618
 	gtrlib-largetrees.doc.r49062
 	harveyballs.doc.r32003
-	hawkdraw.doc.r79956
+	hawkdraw.doc.r80231
 	here.doc.r78348
 	hf-tikz.doc.r34733
 	hobby.doc.r76924
@@ -425,7 +425,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pgfmorepages.doc.r54770
 	pgfopts.doc.r77682
 	pgfornament.doc.r79618
-	pgfplots.doc.r79618
+	pgfplots.doc.r80105
 	pgfplotsthemebeamer.doc.r71954
 	picinpar.doc.r77682
 	pict2e.doc.r77682
@@ -483,7 +483,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tikz-bbox.doc.r57444
 	tikz-cd.doc.r77682
 	tikz-cookingsymbols.doc.r75636
-	tikz-decofonts.doc.r79248
+	tikz-decofonts.doc.r80021
 	tikz-dependency.doc.r79618
 	tikz-dimline.doc.r35805
 	tikz-ext.doc.r79515
@@ -525,7 +525,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tikzfill.doc.r78793
 	tikzfxgraph.doc.r77050
 	tikzinclude.doc.r28715
-	tikzlings.doc.r77682
+	tikzlings.doc.r80034
 	tikzmark.doc.r79232
 	tikzmarmots.doc.r76924
 	tikzorbital.doc.r36439
@@ -620,7 +620,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	pgfgantt.source.r71565
 	pgfmolbio.source.r71551
 	pgfopts.source.r77682
-	pgfplots.source.r79618
+	pgfplots.source.r80105
 	pict2e.source.r77682
 	postage.source.r55920
 	productbox.source.r79087
