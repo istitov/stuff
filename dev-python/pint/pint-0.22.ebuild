@@ -28,3 +28,8 @@ RDEPEND="
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 	numpy? ( dev-python/numpy[${PYTHON_USEDEP}] )
 "
+
+EPYTEST_PLUGINS=()
+EPYTEST_IGNORE=( pint/testsuite/test_babel.py )
+EPYTEST_DESELECT=( pint/testsuite/test_dask.py::test_async )
+distutils_enable_tests pytest
