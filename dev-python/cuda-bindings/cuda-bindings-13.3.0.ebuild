@@ -26,8 +26,9 @@ S="${WORKDIR}/cuda-python-${PV}/cuda_bindings"
 LICENSE="NVIDIA-CUDA"
 SLOT="0"
 KEYWORDS="~amd64"
+# The autouse context fixture requires an NVIDIA GPU.
 # The NVIDIA EULA forbids mirrored distfiles and redistributed binpkgs.
-RESTRICT="bindist mirror"
+RESTRICT="bindist mirror test"
 
 # build_hooks.py parses toolkit headers and generates Cython with the pinned
 # 3.2.x series. Since 13.3, required profiler headers need toolkit[profiler].
