@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-langarabic.r79885
+	collection-langarabic.r80208
 	alkalami.r79618
 	alpha-persian.r79618
 	amiri.r79618
