@@ -4,14 +4,14 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-latex.r78733
+	collection-latex.r80015
 	ae.r79618
 	amscls.r77682
 	amsmath.r79234
 	atbegshi.r79461
 	atveryend.r79461
 	auxhook.r79461
-	babel.r79911
+	babel.r80223
 	babel-english.r77682
 	babelbib.r76790
 	bigintcalc.r79461
@@ -38,11 +38,10 @@ TEXLIVE_MODULE_CONTENTS="
 	kvdefinekeys.r79461
 	kvoptions.r79461
 	kvsetkeys.r79461
-	l3backend.r79958
-	l3kernel.r79868
+	l3kernel.r80015
 	l3packages.r76637
 	latex.r79618
-	latex-bin.r78282
+	latex-bin.r80015
 	latex-fonts.r79618
 	latex-lab.r79404
 	latexconfig.r68923
@@ -51,7 +50,7 @@ TEXLIVE_MODULE_CONTENTS="
 	ltxmisc.r75878
 	lua-uni-algos.r76195
 	mfnfss.r79618
-	mptopdf.r79834
+	mptopdf.r80212
 	natbib.r79618
 	oberdiek.r79461
 	pagesel.r79461
@@ -64,7 +63,7 @@ TEXLIVE_MODULE_CONTENTS="
 	refcount.r79461
 	rerunfilecheck.r79461
 	stringenc.r79461
-	tagpdf.r79799
+	tagpdf.r80060
 	tools.r79234
 	uniquecounter.r79461
 	url.r77682
@@ -76,7 +75,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	atbegshi.doc.r79461
 	atveryend.doc.r79461
 	auxhook.doc.r79461
-	babel.doc.r79911
+	babel.doc.r80223
 	babel-english.doc.r77682
 	babelbib.doc.r76790
 	bigintcalc.doc.r79461
@@ -103,18 +102,17 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	kvdefinekeys.doc.r79461
 	kvoptions.doc.r79461
 	kvsetkeys.doc.r79461
-	l3backend.doc.r79958
-	l3kernel.doc.r79868
+	l3kernel.doc.r80015
 	l3packages.doc.r76637
 	latex.doc.r79618
-	latex-bin.doc.r78282
+	latex-bin.doc.r80015
 	latex-fonts.doc.r79618
 	latex-lab.doc.r79404
 	letltxmacro.doc.r79461
 	ltxcmds.doc.r79461
 	lua-uni-algos.doc.r76195
 	mfnfss.doc.r79618
-	mptopdf.doc.r79834
+	mptopdf.doc.r80212
 	natbib.doc.r79618
 	oberdiek.doc.r79461
 	pagesel.doc.r79461
@@ -126,7 +124,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	refcount.doc.r79461
 	rerunfilecheck.doc.r79461
 	stringenc.doc.r79461
-	tagpdf.doc.r79799
+	tagpdf.doc.r80060
 	tools.doc.r79234
 	uniquecounter.doc.r79461
 	url.doc.r77682
@@ -138,7 +136,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	atbegshi.source.r79461
 	atveryend.source.r79461
 	auxhook.source.r79461
-	babel.source.r79911
+	babel.source.r80223
 	babel-english.source.r77682
 	bigintcalc.source.r79461
 	bitset.source.r79461
@@ -162,8 +160,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	kvdefinekeys.source.r79461
 	kvoptions.source.r79461
 	kvsetkeys.source.r79461
-	l3backend.source.r79958
-	l3kernel.source.r79868
+	l3kernel.source.r80015
 	l3packages.source.r76637
 	latex.source.r79618
 	latex-lab.source.r79404
@@ -182,7 +179,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	refcount.source.r79461
 	rerunfilecheck.source.r79461
 	stringenc.source.r79461
-	tagpdf.source.r79799
+	tagpdf.source.r80060
 	tools.source.r79234
 	uniquecounter.source.r79461
 "
