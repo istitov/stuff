@@ -32,14 +32,14 @@ TEXLIVE_MODULE_CONTENTS="
 	unisugar.r22357
 	xebaposter.r75290
 	xechangebar.r77682
-	xecjk.r79910
+	xecjk.r80059
 	xecolor.r77682
 	xecyr.r77682
 	xeindex.r77682
 	xelatex-dev.r79947
 	xesearch.r77682
 	xespotcolor.r77682
-	xetex.r77830
+	xetex.r80015
 	xetex-devanagari.r34296
 	xetex-itrans.r55475
 	xetex-pstricks.r17055
@@ -78,13 +78,13 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	unisugar.doc.r22357
 	xebaposter.doc.r75290
 	xechangebar.doc.r77682
-	xecjk.doc.r79910
+	xecjk.doc.r80059
 	xecolor.doc.r77682
 	xecyr.doc.r77682
 	xeindex.doc.r77682
 	xesearch.doc.r77682
 	xespotcolor.doc.r77682
-	xetex.doc.r77830
+	xetex.doc.r80015
 	xetex-devanagari.doc.r34296
 	xetex-itrans.doc.r55475
 	xetex-pstricks.doc.r17055
@@ -100,7 +100,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	fixlatvian.source.r21631
 	fontbook.source.r23608
 	philokalia.source.r45356
-	xecjk.source.r79910
+	xecjk.source.r80059
 	xespotcolor.source.r77682
 "
 
