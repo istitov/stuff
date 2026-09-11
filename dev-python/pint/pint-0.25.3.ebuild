@@ -24,3 +24,8 @@ RDEPEND="
 	numpy? ( dev-python/numpy[${PYTHON_USEDEP}] )
 "
 DEPEND="${RDEPEND}"
+
+EPYTEST_PLUGINS=()
+EPYTEST_IGNORE=( pint/testsuite/benchmarks )
+EPYTEST_DESELECT=( pint/testsuite/test_dask.py::test_async )
+distutils_enable_tests pytest
