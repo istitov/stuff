@@ -117,6 +117,10 @@ src_prepare() {
 	# Match runtime lookup to Gentoo's multilib install path.
 	sed -i -e "s/\"lib\", \"ollama\"/\"$(get_libdir)\", \"ollama\"/g" \
 		ml/path.go || die "libdir sed failed"
+
+	# Keep nested llama.cpp binaries from retaining their build directory.
+	sed -i -e '/set(CMAKE_BUILD_RPATH/a\    set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)' \
+		llama/server/CMakeLists.txt || die "RPATH sed failed"
 }
 
 src_configure() {
