@@ -74,7 +74,7 @@ cuda-toolkit_check_reqs() {
 	"check-reqs_pkg_${EBUILD_PHASE}"
 }
 
-cuda_verify() {
+cuda_verify_driver() {
 	if has_version "sys-apps/grep[pcre]"; then
 		local DRIVER_PV_info
 		DRIVER_PV_info="$(bash "${DISTDIR}/${A}" --info | grep -oP "cuda_${PV}.*run" | cut -d '_' -f 3)"
@@ -83,23 +83,28 @@ cuda_verify() {
 			die "check DRIVER_PV is ${DRIVER_PV} and should be ${DRIVER_PV_info}"
 		fi
 	fi
+}
 
-	# Remaining checks require unpacked sources.
-	[[ "${EBUILD_PHASE}" != prepare ]] && return
+cuda_verify_compilers() {
+	local host_config GCC_HAS_VER CLANG_HAS_VER
+	host_config=( "${S}"/builds/cuda_crt/targets/*/include/crt/host_config.h )
 
-	local compiler_versions GCC_HAS_VER CLANG_HAS_VER
-	compiler_versions="$(
-		grep -oP "unsupported (GNU|clang) version.*(gcc versions later than|clang version must be less than) [0-9]*" \
-			"${S}"/builds/cuda_nvcc/targets/*/include/crt/host_config.h
-	)"
-
-	GCC_HAS_VER="$( echo "${compiler_versions}" | grep gcc | grep -oP "(?<=than )[0-9]*")"
-	if [[ "${GCC_MAX_VER}" -ne "${GCC_HAS_VER}" ]]; then
+	GCC_HAS_VER="$(sed -n -E \
+		's/.*gcc versions later than ([0-9]+).*/\1/p' "${host_config[@]}")"
+	if [[ -z ${GCC_HAS_VER} ]]; then
+		eqawarn "could not determine the supported GCC version"
+	elif [[ "${GCC_MAX_VER}" -ne "${GCC_HAS_VER}" ]]; then
 		eqawarn "check GCC_MAX_VER is ${GCC_MAX_VER} and should be ${GCC_HAS_VER}"
 	fi
 
-	CLANG_HAS_VER="$(( $(echo "${compiler_versions}" | grep clang | grep -oP "(?<=than )[0-9]*") - 1 ))"
-	if [[ "${CLANG_MAX_VER}" -ne "${CLANG_HAS_VER}" ]]; then
+	CLANG_HAS_VER="$(sed -n -E \
+		's/.*clang version must be less than ([0-9]+).*/\1/p' "${host_config[@]}")"
+	if [[ -z ${CLANG_HAS_VER} ]]; then
+		eqawarn "could not determine the supported Clang version"
+	else
+		(( CLANG_HAS_VER-- ))
+	fi
+	if [[ -n ${CLANG_HAS_VER} && "${CLANG_MAX_VER}" -ne "${CLANG_HAS_VER}" ]]; then
 		eqawarn "check CLANG_MAX_VER is ${CLANG_MAX_VER} and should be ${CLANG_HAS_VER}"
 	fi
 }
@@ -126,7 +131,7 @@ pkg_setup() {
 }
 
 src_unpack() {
-	cuda_verify
+	cuda_verify_driver
 
 	local exclude=(
 		"cuda-installer"
@@ -141,6 +146,11 @@ src_unpack() {
 	)
 
 	bash "${DISTDIR}/${A}" --tar xf -X <(printf "%s\n" "${exclude[@]}") || die "failed to extract ${A}"
+}
+
+src_prepare() {
+	cuda_verify_compilers
+	default
 }
 
 src_configure() {
