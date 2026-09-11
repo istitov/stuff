@@ -17,8 +17,7 @@ HOMEPAGE="https://llvmlite.pydata.org/
 EGIT_REPO_URI="https://github.com/numba/llvmlite.git"
 
 LICENSE="BSD-2 Apache-2.0-with-LLVM-exceptions"
-# Track the LLVM ABI major so llvmlite:= consumers rebuild on bumps.
-SLOT="0/${LLVM_COMPAT[0]}"
+SLOT="0"
 KEYWORDS=""
 
 RDEPEND="$(llvm_gen_dep 'llvm-core/llvm:${LLVM_SLOT}=')"
