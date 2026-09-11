@@ -17,8 +17,7 @@ EGIT_REPO_URI="https://github.com/mantidproject/mantid.git"
 if [[ ${PV} = *9999* ]] ; then
 	EGIT_COMMIT="HEAD"
 else
-	# Mantid tags drop Gentoo's underscore in prerelease components:
-	# PV 6.15.0.4_rc1 -> tag v6.15.0.4rc1.
+	# Tags omit Gentoo's prerelease underscore (for example, _rc1 -> rc1).
 	EGIT_COMMIT=v${PV/_/}
 fi
 
@@ -79,23 +78,8 @@ RDEPEND="
 	')
 "
 
-# dev-python/versioningit is deprecated in ::gentoo, and that deprecation
-# deliberately does NOT apply here. ::gentoo's rationale is that versioningit
-# "does not provide any support for building via GitHub archives" -- but this
-# ebuild inherits git-r3 and builds from a real checkout, so the VCS metadata
-# versioningit needs is present.
-#
-# It is also not a PEP 517 backend here: mantid's pyproject.toml declares no
-# [build-system] at all, only [tool.versioningit.*] config, and
-# buildconfig/CMake/VersionNumber.cmake runs `${Python_EXECUTABLE} -m versioningit`
-# as a build step. Its own comment says the implementation "assumes the build is
-# run from a Git repository". Replacing it with setuptools-scm would mean
-# patching that CMake module and reimplementing the version derivation that
-# feeds mantid's PEP440 check and its user-visible version string -- upstream
-# divergence with no functional gain.
-#
-# Revisit if ::gentoo moves versioningit from deprecated to last-rited; that,
-# not the deprecation itself, is what would break this. verified 2026-08-31.
+# CMake runs versioningit against the git-r3 checkout. Revisit if last-rited.
+# Verified 2026-08-31.
 BDEPEND="
 	dev-build/cmake
 	dev-build/ninja
@@ -106,8 +90,7 @@ BDEPEND="
 	')
 "
 
-# gtest is found unconditionally and needed to configure, but is not
-# linked into the installed image.
+# gtest is a configure-only dependency.
 DEPEND="${RDEPEND}
 	dev-cpp/eigen
 	dev-cpp/gtest
@@ -122,92 +105,38 @@ DEPEND="${RDEPEND}
 	)
 "
 
-# Install under /opt rather than /usr: upstream's CMake drops data into
-# top-level /usr children (instrument/, plugins/, scripts/) that aren't
-# FHS-compliant, and mantid is distributed monolithically. A single /opt
-# prefix matches that shape and avoids a whole class of path-rewriting
-# patches.
+# Upstream installs non-FHS top-level data directories; keep its monolithic
+# layout under /opt instead of rewriting every path.
 MY_PREFIX="/opt/mantid"
 
 src_prepare() {
-	# The vendored NeXus C API still makes HDF 4.3's two-argument
-	# Vgetname and Vgetclass calls, byte-identical to 6.16.1.1's, so
-	# that release's HDF 4.4 patch applies. It is applied only while
-	# those calls are there, so an upstream fix does not break the
-	# build. verified 2026-09-10
+	# Apply the HDF 4.4 API fix only while the legacy calls remain.
 	if grep -q 'Vgetclass(groupID, classText);' \
 			Framework/LegacyNexus/src/napi4.cpp; then
 		eapply "${FILESDIR}/${PN}-6.16.1.1-hdf-4.4.patch"
 	fi
 
-	# The no-qt5-webwidgets patch removes a "Prefer WebEngineWidgets
-	# over WebKitWidgets" block that fatal-errors when neither is
-	# available; the block is present in v6.15.0.3 but already gone
-	# from upstream main. Apply only when the block exists so the
-	# 9999 ebuild doesn't trip on an obsolete patch.
+	# Remove the obsolete WebEngine/WebKit preference block when present.
 	if grep -q 'Prefer WebEngineWidgets over WebkitWidgets' \
 			qt/widgets/common/CMakeLists.txt 2>/dev/null; then
 		eapply "${FILESDIR}/${PN}-no-qt5-webwidgets.patch"
 	fi
 
-	# Gentoo's opencascade installs to /usr/{include,lib64}/opencascade
-	# instead of /opt/OpenCASCADE; retarget the finder.
+	# Retarget OpenCascade's finder to Gentoo's path.
 	sed -i -e 's:/OpenCASCADE:/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
 	sed -i -e 's:/opt/opencascade/inc:/usr/include/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
 	sed -i -e 's:/opt/opencascade/lib64:/usr/lib64/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
 
-	# gcc:13+ include-hygiene: PreviewManager.h transitively relied on
-	# <vector> pulling in <stdexcept>; be explicit.
+	# Fix GCC 13+ include hygiene.
 	sed -i -e 's:#include <vector>:#include <vector>\n#include <stdexcept>:' \
 		Framework/API/inc/MantidAPI/PreviewManager.h || die
 
-	# No qt.conf rewrite here, unlike the Qt5 ebuilds. The
-	# "Prefix = ../lib/qt5" that sed targeted lives inside an if(WIN32)
-	# block, so it was never reached on a Linux build, and under Qt6 it
-	# sits in the PyQt5-only resource branch too. The Linux install writes
-	# no qt.conf at all, so Qt resolves plugins from the system prefix,
-	# which is what we want.
-
-	# Gentoo's dev-libs/boost-1.90 ships CMake configs for most
-	# components except boost_system (header-only in newer Boost,
-	# no shared lib / cmake config installed). Drop `system` from
-	# the required components list.
+	# boost_system is header-only and has no Gentoo CMake component.
 	sed -i -e 's/COMPONENTS date_time regex serialization filesystem system/COMPONENTS date_time regex serialization filesystem/' \
 		buildconfig/CMake/CommonSetup.cmake || die
 
-	# buildconfig/CMake/PythonPackageTargetFunctions.cmake runs pip in
-	# two places we have to fix up:
-	#
-	# (a) build-time `pip install --editable .` to drop a .egg-link in
-	#     the build dir for in-tree development. Needs the Gentoo flags
-	#     --break-system-packages (defeat PEP 668 on the marker-tagged
-	#     system Python) and --no-build-isolation (use system setuptools
-	#     instead of fetching from pypi, which the network sandbox blocks
-	#     anyway). Both flags also belong on (b).
-	#
-	# (b) install-time `pip install <SRCDIR>` invoked from an install(
-	#     CODE ...) block. Same flags as (a), plus --prefix and --root so
-	#     pip honours portage's DESTDIR. Without --root=\$ENV{DESTDIR}
-	#     the install-time pip silently fails (PEP 668) or leaks into
-	#     /usr/lib/python.../site-packages on the build host instead of
-	#     landing in ${ED}/opt/mantid/lib/python.../site-packages, which
-	#     is why the in-tree Python wrappers (mantid/__init__.py,
-	#     mantid.simpleapi, the whole workbench/ package, etc.) never
-	#     made it into the merged install.
-	#
-	# Plus: dev-python/vcs-versioning is installed system-wide and auto-
-	# hooks every setuptools build via an entry-point. Its git-based
-	# file finder (vcs_versioning/_file_finders/_git.py) runs `git
-	# rev-parse HEAD` in the source tree. Under portage's install phase
-	# pip runs as root while the source is owned by the portage build
-	# user; git refuses with "dubious ownership" and the file finder
-	# raises SystemExit, killing pip metadata generation. The finder
-	# checks SETUPTOOLS_SCM_IGNORE_DUBIOUS_OWNER and gracefully returns
-	# None if it is set, letting setuptools' default file discovery
-	# take over. SETUPTOOLS_SCM_PRETEND_VERSION isn't strictly needed
-	# here since mantid's setup.py reads MANTID_VERSION_STR directly,
-	# but we still set it to keep vcs-versioning's version-detection
-	# hook from re-entering git later.
+	# Keep pip offline and PEP-668-safe, honor DESTDIR, and skip redundant Git probes.
+
 	sed -i \
 		-e 's|-m pip install --editable . --ignore-installed --no-deps|-m pip install --editable . --ignore-installed --no-deps --break-system-packages --no-build-isolation|' \
 		-e 's|python -m pip install ${CMAKE_CURRENT_SOURCE_DIR} --disable-pip-version-check --upgrade --no-deps --ignore-installed --no-cache-dir -vvv|python -m pip install ${CMAKE_CURRENT_SOURCE_DIR} --disable-pip-version-check --upgrade --no-deps --ignore-installed --no-cache-dir --break-system-packages --no-build-isolation --prefix=${CMAKE_INSTALL_PREFIX} --root=\\$ENV{DESTDIR} -vvv|' \
@@ -221,15 +150,9 @@ src_configure() {
 	python_setup
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="${MY_PREFIX}"
-		# The docs need mantid_sphinx_theme, which no Gentoo
-		# repo ships, so they stay off rather than sit behind a
-		# doc flag that could never build. verified 2026-09-10
+		# mantid_sphinx_theme is unpackaged, so docs cannot build.
 		-DENABLE_DOCS=OFF
-		# Both default ON. USE_CCACHE wraps every compile in
-		# ccache whenever one is installed, regardless of
-		# FEATURES, and ENABLE_PRECOMMIT stops configure without
-		# pre-commit and otherwise runs `pre-commit install` in
-		# the source checkout.
+		# Avoid implicit ccache use and pre-commit source-tree mutation.
 		-DENABLE_PRECOMMIT=OFF
 		-DUSE_CCACHE=OFF
 	)
@@ -239,26 +162,11 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# Upstream ships two launchers shaped for conda layout:
-	#   * launch_mantidworkbench checks $CONDA_PREFIX and aborts otherwise
-	#   * launch_mantidworkbench.standalone hardcodes ${INSTALLDIR}/bin/python
-	# Neither matches a Gentoo /opt install. Drop the conda one outright
-	# and rewrite the standalone to use the system Python plus a PYTHONPATH
-	# that includes our site-packages dir.
+	# Replace conda-only launchers with a system-Python /opt wrapper.
 	rm "${ED}${MY_PREFIX}/bin/launch_mantidworkbench" || die
 	local sp_dir="${MY_PREFIX}/lib/${EPYTHON}/site-packages"
 
-	# Pin the Qt binding the launcher hands to qtpy. qtpy resolves it as
-	# os.environ.get("QT_API", "pyqt5") and only falls through to PyQt6
-	# when PyQt5 cannot be imported - it does NOT prefer the newest
-	# available. mantidqt then loads a toolkit-specific extension selected
-	# by that same variable (_commonqt5 vs _commonqt6), and only the one
-	# matching MANTID_QT_VERSION is built. So on any host that also has
-	# dev-python/pyqt5 installed - which every Qt5 mantid pulls in, and
-	# which this overlay still ships - a Qt6 workbench would otherwise
-	# select PyQt5 and abort with "No module named 'mantidqt._commonqt5'".
-	# ${QT_API:-...} keeps an explicit user override working.
-	# verified 2026-07-27
+	# Select PyQt6 unless the user overrides qtpy.
 	local qt_api=pyqt6
 	sed -i \
 		-e "s|\${INSTALLDIR}/bin/python|${EPYTHON}|" \
@@ -266,24 +174,14 @@ src_install() {
 		-e "s|^LD_PRELOAD=\${LOCAL_PRELOAD}|QT_API=\${QT_API:-${qt_api}} LD_PRELOAD=\${LOCAL_PRELOAD}|" \
 		"${ED}${MY_PREFIX}/bin/launch_mantidworkbench.standalone" || die
 
-	# Wire /opt/mantid's binaries and libraries into PATH/LDPATH via env.d.
-	# PYTHONPATH is deliberately NOT exported globally: it leaks /opt/mantid's
-	# site-packages into every package build's Python and broke
-	# dev-qt/qtwebengine's hermetic chromium/perfetto codegen
-	# (ModuleNotFoundError: No module named 'python.generators'). The workbench
-	# launcher sets its own PYTHONPATH; the mantidpython wrapper below gives
-	# `import mantid` for scripting without polluting the global environment.
+	# Keep PYTHONPATH wrapper-local to avoid polluting unrelated builds.
 	newenvd - 99mantid <<-EOF
 		PATH=${MY_PREFIX}/bin
 		ROOTPATH=${MY_PREFIX}/bin
 		LDPATH=${MY_PREFIX}/lib
 	EOF
 
-	# mantidpython: run the system Python with Mantid's packages importable,
-	# scoped to the invoked process only. PYTHONPATH covers site-packages (the
-	# mantid/mantidqt/workbench wrappers), bin (Mantid.properties, resolved
-	# bin-relative from sys.path via _bin_dirs()), and plugins (algorithm and
-	# Qt .so plugins enumerated at startup).
+	# Scope Mantid's Python paths to the wrapper process.
 	newbin - mantidpython <<-EOF
 		#!/bin/sh
 		export PYTHONPATH="${sp_dir}:${MY_PREFIX}/bin:${MY_PREFIX}/plugins\${PYTHONPATH:+:\${PYTHONPATH}}"
