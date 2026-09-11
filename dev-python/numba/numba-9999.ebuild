@@ -33,7 +33,6 @@ BDEPEND+="
 	>=dev-python/numpy-1.11[${PYTHON_USEDEP}]
 "
 
-distutils_enable_sphinx docs/source dev-python/numpydoc dev-python/sphinx-rtd-theme
 distutils_enable_tests unittest
 
 pkg_setup() {
