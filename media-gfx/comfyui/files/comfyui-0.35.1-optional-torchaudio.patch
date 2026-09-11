@@ -1,0 +1,105 @@
+From: Gentoo ComfyUI maintainers
+Subject: [PATCH] make torchaudio optional for non-audio workflows
+
+Image-only startup imports torchaudio from core modules and mixed video/audio
+node modules.  Defer failures until audio paths are used so USE=-audio retains
+the non-audio nodes.
+
+--- a/comfy/ldm/lightricks/vae/audio_vae.py
++++ b/comfy/ldm/lightricks/vae/audio_vae.py
+@@ -1,7 +1,10 @@
+ import json
+ from dataclasses import dataclass
+ import torch
+-import torchaudio
++try:
++    import torchaudio
++except ImportError:
++    torchaudio = None
+
+ from comfy.ldm.mmaudio.vae.distributions import DiagonalGaussianDistribution
+ from comfy.ldm.lightricks.symmetric_patchifier import AudioPatchifier
+@@ -51,11 +54,15 @@ class AudioPreprocessor:
+     def resample(self, waveform: torch.Tensor, source_rate: int) -> torch.Tensor:
+         if source_rate == self.target_sample_rate:
+             return waveform
++        if torchaudio is None:
++            raise ImportError("torchaudio is required for Lightricks audio VAE processing")
+         return torchaudio.functional.resample(waveform, source_rate, self.target_sample_rate)
+
+     def waveform_to_mel(
+         self, waveform: torch.Tensor, waveform_sample_rate: int, device
+     ) -> torch.Tensor:
++        if torchaudio is None:
++            raise ImportError("torchaudio is required for Lightricks audio VAE processing")
+         waveform = self.resample(waveform, waveform_sample_rate)
+
+         mel_transform = torchaudio.transforms.MelSpectrogram(
+--- a/comfy/text_encoders/gemma4.py
++++ b/comfy/text_encoders/gemma4.py
+@@ -1,6 +1,9 @@
+ import torch
+ import torch.nn as nn
+-import torchaudio.functional as AF
++try:
++    import torchaudio.functional as AF
++except ImportError:
++    AF = None
+ import torchvision.transforms.functional as TVF
+ import numpy as np
+ from tokenizers import Tokenizer
+@@ -1419,6 +1422,8 @@ class Gemma4_Tokenizer():
+             waveform = waveform.unsqueeze(0)
+         audio = waveform.float()
+         if sample_rate != 16000:
++            if AF is None:
++                raise ImportError("torchaudio is required for Gemma 4 audio input")
+             audio = AF.resample(audio, sample_rate, 16000, resampling_method="sinc_interp_kaiser",
+                                 lowpass_filter_width=121, rolloff=0.9568384289091556, beta=21.01531462440614)
+         return audio.squeeze(0).contiguous()
+--- a/comfy_extras/nodes_lt.py
++++ b/comfy_extras/nodes_lt.py
+@@ -1,7 +1,10 @@
+ import nodes
+ import node_helpers
+ import torch
+-import torchaudio
++try:
++    import torchaudio
++except ImportError:
++    torchaudio = None
+ import comfy.ldm.lightricks.duration_head
+ import comfy.model_management
+ import comfy.model_sampling
+@@ -1032,6 +1035,8 @@ class LTXVReferenceAudio(io.ComfyNode):
+         sample_rate = reference_audio["sample_rate"]
+         vae_sample_rate = getattr(audio_vae, "audio_sample_rate", 44100)
+         if vae_sample_rate != sample_rate:
++            if torchaudio is None:
++                raise ImportError("torchaudio is required for LTXV reference audio")
+             waveform = torchaudio.functional.resample(reference_audio["waveform"], sample_rate, vae_sample_rate)
+         else:
+             waveform = reference_audio["waveform"]
+--- a/comfy_extras/nodes_wandancer.py
++++ b/comfy_extras/nodes_wandancer.py
+@@ -2,7 +2,10 @@ import math
+ import nodes
+ import node_helpers
+ import torch
+-import torchaudio
++try:
++    import torchaudio
++except ImportError:
++    torchaudio = None
+ import comfy.model_management
+ import comfy.utils
+ import numpy as np
+@@ -742,6 +745,8 @@ class WanDancerEncodeAudio(io.ComfyNode):
+
+         # resample to the sample rate used for feature extraction
+         resample_sr = base_fps * hop_length
++        if torchaudio is None:
++            raise ImportError("torchaudio is required for WanDancer audio encoding")
+         waveform = torchaudio.functional.resample(waveform, sample_rate, resample_sr)
+
+         waveform_np = waveform.cpu().numpy().squeeze()
