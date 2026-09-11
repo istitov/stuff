@@ -292,13 +292,11 @@ src_prepare() {
 
 src_configure() {
 	if use cuda && [[ -z ${TORCH_CUDA_ARCH_LIST} ]]; then
-		ewarn "WARNING: caffe2 is being built with its default CUDA compute capabilities: 3.5 and 7.0."
-		ewarn "These may not be optimal for your GPU."
+		ewarn "WARNING: caffe2 is being built for CUDA compute capability 7.5."
+		ewarn "This default may not be optimal for your GPU."
 		ewarn ""
-		ewarn "To configure caffe2 with the CUDA compute capability that is optimal for your GPU,"
-		ewarn "set TORCH_CUDA_ARCH_LIST in your make.conf, and re-emerge caffe2."
-		ewarn "For example, to use CUDA capability 7.5 & 3.5, add: TORCH_CUDA_ARCH_LIST=7.5 3.5"
-		ewarn "For a Maxwell model GPU, an example value would be: TORCH_CUDA_ARCH_LIST=Maxwell"
+		ewarn "To target your GPU, set TORCH_CUDA_ARCH_LIST through Portage's package.env"
+		ewarn "mechanism and re-emerge caffe2."
 		ewarn ""
 		ewarn "You can look up your GPU's CUDA compute capability at https://developer.nvidia.com/cuda-gpus"
 		ewarn "or by running /opt/cuda/extras/demo_suite/deviceQuery | grep 'CUDA Capability'"
@@ -371,7 +369,7 @@ src_configure() {
 
 		mycmakeargs+=(
 			-DUSE_CUDNN=ON
-			-DTORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST:-3.5 7.0}"
+			-DTORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST:-7.5}"
 			-DUSE_NCCL=OFF # CUDA NCCL is not packaged; nccl controls RCCL.
 			-DCMAKE_CUDA_FLAGS="$(cuda_gccdir -f | tr -d \")"
 			-DUSE_CUSPARSELT=$(usex cusparselt)
@@ -381,7 +379,7 @@ src_configure() {
 
 		if use flash; then
 			export FLASH_ATTENTION_FORCE_BUILD="TRUE"
-			export FLASH_ATTN_CUDA_ARCHS="${CUDAARCHS:-${TORCH_CUDA_ARCH_LIST:-3.5 7.0}}"
+			export FLASH_ATTN_CUDA_ARCHS="${CUDAARCHS:-${TORCH_CUDA_ARCH_LIST:-7.5}}"
 		fi
 
 	elif use rocm; then
