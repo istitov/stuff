@@ -58,6 +58,7 @@ RDEPEND="
 	dev-python/regex[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
 "
+BDEPEND="dev-python/setuptools-rust[${PYTHON_USEDEP}]"
 
 # Tests require ::guru-only blobfile and network-fetched encodings.
 RESTRICT="test"
