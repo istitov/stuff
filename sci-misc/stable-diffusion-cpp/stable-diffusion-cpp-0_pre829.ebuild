@@ -109,6 +109,7 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
+		-DGGML_CCACHE=OFF
 		-DCMAKE_SKIP_BUILD_RPATH=ON
 		-DSD_BUILD_SHARED_LIBS=OFF
 		-DSD_BUILD_EXAMPLES=ON	# the sd CLI + sd-server live under examples/
