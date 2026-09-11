@@ -56,3 +56,9 @@ export CUDA_HOME=/opt/cuda
 # v-prefixed value leaks into cuda.bindings.__version__ and breaks consumers
 # such as cuda.core. # verified 2026-06-10
 export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_CUDA_BINDINGS="${PV}"
+
+src_prepare() {
+	# Let Portage control stripping and preserve split-debug support.
+	sed -i -e '/extra_link_args += \["-Wl,--strip-all"\]/d' build_hooks.py || die
+	distutils-r1_src_prepare
+}
