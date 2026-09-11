@@ -17,6 +17,11 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
+PATCHES=(
+	"${FILESDIR}/${P}-numpy-2.4.patch"
+	"${FILESDIR}/${P}-python-3.13.patch"
+)
+
 IUSE="numpy"
 
 RDEPEND="

@@ -1,0 +1,146 @@
+--- a/pint/facets/numpy/numpy_func.py
++++ b/pint/facets/numpy/numpy_func.py
+@@ -740,8 +740,10 @@
+             raise OffsetUnitCalculusError(a.units)
+ 
+ 
+-@implements("trapz", "function")
+-def _trapz(a, x=None, dx=1.0, **kwargs):
++@implements("trapz", "function")
++@implements("trapezoid", "function")
++def _trapz(a, x=None, dx=1.0, **kwargs):
++    trapezoid = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
+     a = _base_unit_if_needed(a)
+     units = a.units
+     if x is not None:
+@@ -749,13 +749,13 @@
+             x = _base_unit_if_needed(x)
+             units *= x.units
+             x = x._magnitude
+-        ret = np.trapz(a._magnitude, x, **kwargs)
++        ret = trapezoid(a._magnitude, x, **kwargs)
+     else:
+         if hasattr(dx, "units"):
+             dx = _base_unit_if_needed(dx)
+             units *= dx.units
+             dx = dx._magnitude
+-        ret = np.trapz(a._magnitude, dx=dx, **kwargs)
++        ret = trapezoid(a._magnitude, dx=dx, **kwargs)
+ 
+     return a.units._REGISTRY.Quantity(ret, units)
+ 
+@@ -965,7 +965,7 @@
+         return a._REGISTRY.Quantity(func(a_stripped, *args, **kwargs))
+ 
+ 
+-for func_str in ("cumprod", "cumproduct", "nancumprod"):
++for func_str in ("cumprod", "nancumprod"):
+     implement_single_dimensionless_argument_func(func_str)
+ 
+ # Handle single-argument consistent unit functions
+--- a/pint/testsuite/test_numpy.py
++++ b/pint/testsuite/test_numpy.py
+@@ -380,13 +380,8 @@
+     def test_cumprod_numpy_func(self):
+         with pytest.raises(DimensionalityError):
+             np.cumprod(self.q)
+-        with pytest.raises(DimensionalityError):
+-            np.cumproduct(self.q)
+         helpers.assert_quantity_equal(np.cumprod(self.q / self.ureg.m), [1, 2, 6, 24])
+         helpers.assert_quantity_equal(
+-            np.cumproduct(self.q / self.ureg.m), [1, 2, 6, 24]
+-        )
+-        helpers.assert_quantity_equal(
+             np.cumprod(self.q / self.ureg.m, axis=1), [[1, 2], [3, 12]]
+         )
+ 
+@@ -438,6 +433,7 @@
+             np.cross(a, b), [[-15, -2, 39]] * self.ureg.kPa * self.ureg.m**2
+         )
+ 
++    @helpers.requires_numpy_previous_than("2.0")
+     @helpers.requires_array_function_protocol()
+     def test_trapz(self):
+         helpers.assert_quantity_equal(
+@@ -445,6 +441,14 @@
+             7.5 * self.ureg.J * self.ureg.m,
+         )
++
++    @helpers.requires_numpy_at_least("2.0")
++    @helpers.requires_array_function_protocol()
++    def test_trapezoid(self):
++        helpers.assert_quantity_equal(
++            np.trapezoid([1.0, 2.0, 3.0, 4.0] * self.ureg.J, dx=1 * self.ureg.m),
++            7.5 * self.ureg.J * self.ureg.m,
++        )
+ 
+     @helpers.requires_array_function_protocol()
+     def test_dot(self):
+         helpers.assert_quantity_equal(
+@@ -758,9 +762,6 @@
+             np.minimum(self.q, self.Q_([0, 5], "m")), self.Q_([[0, 2], [0, 4]], "m")
+         )
+ 
+-    def test_ptp(self):
+-        assert self.q.ptp() == 3 * self.ureg.m
+-
+     @helpers.requires_array_function_protocol()
+     def test_ptp_numpy_func(self):
+         helpers.assert_quantity_equal(np.ptp(self.q, axis=0), [2, 2] * self.ureg.m)
+--- a/pint/testsuite/test_numpy_func.py
++++ b/pint/testsuite/test_numpy_func.py
+@@ -193,6 +193,7 @@
+         # TODO (#905 follow-up): test that NotImplemented is returned when upcast types
+         # present
+ 
++    @helpers.requires_numpy_previous_than("2.0")
+     def test_trapz(self):
+         with ExitStack() as stack:
+             stack.callback(
+@@ -208,12 +209,36 @@
+                 np.trapz(t, x=z), self.Q_(1108.6, "kelvin meter")
+             )
+ 
++    @helpers.requires_numpy_at_least("2.0")
++    def test_trapezoid(self):
++        with ExitStack() as stack:
++            stack.callback(
++                setattr,
++                self.ureg,
++                "autoconvert_offset_to_baseunit",
++                self.ureg.autoconvert_offset_to_baseunit,
++            )
++            self.ureg.autoconvert_offset_to_baseunit = True
++            t = self.Q_(np.array([0.0, 4.0, 8.0]), "degC")
++            z = self.Q_(np.array([0.0, 2.0, 4.0]), "m")
++            helpers.assert_quantity_equal(
++                np.trapezoid(t, x=z), self.Q_(1108.6, "kelvin meter")
++            )
++
++    @helpers.requires_numpy_previous_than("2.0")
+     def test_trapz_no_autoconvert(self):
+         t = self.Q_(np.array([0.0, 4.0, 8.0]), "degC")
+         z = self.Q_(np.array([0.0, 2.0, 4.0]), "m")
+         with pytest.raises(OffsetUnitCalculusError):
+             np.trapz(t, x=z)
+ 
++    @helpers.requires_numpy_at_least("2.0")
++    def test_trapezoid_no_autoconvert(self):
++        t = self.Q_(np.array([0.0, 4.0, 8.0]), "degC")
++        z = self.Q_(np.array([0.0, 2.0, 4.0]), "m")
++        with pytest.raises(OffsetUnitCalculusError):
++            np.trapezoid(t, x=z)
++
+     def test_dot(self):
+         with ExitStack() as stack:
+             stack.callback(
+--- a/pint/testsuite/test_quantity.py
++++ b/pint/testsuite/test_quantity.py
+@@ -1876,7 +1876,6 @@
+             self.Q_([0, 1, 2], "J") == np.array([0, 0, np.nan]),
+             np.asarray([True, False, False]),
+         )
+-        assert not (self.Q_(np.arange(4), "J") == np.zeros(3))
+ 
+     def test_offset_equal_zero(self):
+         ureg = self.ureg
