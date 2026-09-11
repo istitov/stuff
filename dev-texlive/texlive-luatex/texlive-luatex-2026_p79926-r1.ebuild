@@ -33,14 +33,14 @@ TEXLIVE_MODULE_CONTENTS="
 	interpreter.r78415
 	kanaparser.r48052
 	kkluaverb.r79443
-	kkran.r78190
-	kksymbols.r79941
+	kkran.r80036
+	kksymbols.r80035
 	ligtype.r78793
 	linebreaker.r77682
 	longmath.r78632
 	lparse.r78101
 	lt3luabridge.r76924
-	lua-list-hyphen.r79861
+	lua-list-hyphen.r80068
 	lua-placeholders.r79056
 	lua-tinyyaml.r73671
 	lua-typo.r77682
@@ -52,7 +52,7 @@ TEXLIVE_MODULE_CONTENTS="
 	luacas.r67247
 	luacensor.r71922
 	luacode.r78415
-	luacolor.r79461
+	luacolor.r80109
 	luacomplex.r68883
 	luagcd.r76790
 	luahttp.r67348
@@ -73,7 +73,7 @@ TEXLIVE_MODULE_CONTENTS="
 	luamaths.r76924
 	luamml.r79442
 	luamodulartables.r68893
-	luamplib.r79953
+	luamplib.r80198
 	luaoptions.r79068
 	luaotfload.r74324
 	luapackageloader.r54779
@@ -85,7 +85,7 @@ TEXLIVE_MODULE_CONTENTS="
 	luatex-type-definitions.r75890
 	luatex85.r77682
 	luatexbase.r77682
-	luatexko.r78005
+	luatexko.r80118
 	luatextra.r77682
 	luatruthtable.r78415
 	luavlna.r77682
@@ -100,7 +100,7 @@ TEXLIVE_MODULE_CONTENTS="
 	nodetree.r76924
 	odsfile.r78415
 	optex.r79618
-	parstat.r77123
+	parstat.r80132
 	pdfarticle.r51127
 	pdfextra.r65184
 	penlight.r73362
@@ -156,14 +156,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	interpreter.doc.r78415
 	kanaparser.doc.r48052
 	kkluaverb.doc.r79443
-	kkran.doc.r78190
-	kksymbols.doc.r79941
+	kkran.doc.r80036
+	kksymbols.doc.r80035
 	ligtype.doc.r78793
 	linebreaker.doc.r77682
 	longmath.doc.r78632
 	lparse.doc.r78101
 	lt3luabridge.doc.r76924
-	lua-list-hyphen.doc.r79861
+	lua-list-hyphen.doc.r80068
 	lua-placeholders.doc.r79056
 	lua-tinyyaml.doc.r73671
 	lua-typo.doc.r77682
@@ -175,7 +175,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	luacas.doc.r67247
 	luacensor.doc.r71922
 	luacode.doc.r78415
-	luacolor.doc.r79461
+	luacolor.doc.r80109
 	luacomplex.doc.r68883
 	luagcd.doc.r76790
 	luahttp.doc.r67348
@@ -196,7 +196,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	luamaths.doc.r76924
 	luamml.doc.r79442
 	luamodulartables.doc.r68893
-	luamplib.doc.r79953
+	luamplib.doc.r80198
 	luaoptions.doc.r79068
 	luaotfload.doc.r74324
 	luapackageloader.doc.r54779
@@ -208,7 +208,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	luatex-type-definitions.doc.r75890
 	luatex85.doc.r77682
 	luatexbase.doc.r77682
-	luatexko.doc.r78005
+	luatexko.doc.r80118
 	luatextra.doc.r77682
 	luatruthtable.doc.r78415
 	luavlna.doc.r77682
@@ -223,7 +223,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	nodetree.doc.r76924
 	odsfile.doc.r78415
 	optex.doc.r79618
-	parstat.doc.r77123
+	parstat.doc.r80132
 	pdfarticle.doc.r51127
 	pdfextra.doc.r65184
 	penlight.doc.r73362
@@ -260,14 +260,14 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	fancymag.source.r75720
 	innerscript.source.r75161
 	lt3luabridge.source.r76924
-	lua-list-hyphen.source.r79861
+	lua-list-hyphen.source.r80068
 	lua-typo.source.r77682
 	lua-uca.source.r74807
 	lua-ul.source.r77682
 	lua-widow-control.source.r77682
 	luaaddplot.source.r72350
 	luacode.source.r78415
-	luacolor.source.r79461
+	luacolor.source.r80109
 	luaindex.source.r25882
 	luainputenc.source.r77682
 	lualatex-math.source.r77682
@@ -275,7 +275,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	lualibs.source.r78415
 	luamathalign.source.r77682
 	luamml.source.r79442
-	luamplib.source.r79953
+	luamplib.source.r80198
 	luaotfload.source.r74324
 	luatex85.source.r77682
 	luatexbase.source.r77682
