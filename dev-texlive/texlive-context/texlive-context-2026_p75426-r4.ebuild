@@ -5,7 +5,7 @@ EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
 	collection-context.r75426
-	context.r79834
+	context.r80212
 	context-animation.r75386
 	context-calendar-examples.r66947
 	context-chat.r72010
@@ -14,7 +14,7 @@ TEXLIVE_MODULE_CONTENTS="
 	context-filter.r62070
 	context-gnuplot.r75301
 	context-handlecsv.r76721
-	context-legacy.r79834
+	context-legacy.r80212
 	context-letter.r77841
 	context-mathsets.r47085
 	context-pocketdiary.r73164
@@ -28,7 +28,7 @@ TEXLIVE_MODULE_CONTENTS="
 	jmn.r45751
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
-	context.doc.r79834
+	context.doc.r80212
 	context-animation.doc.r75386
 	context-calendar-examples.doc.r66947
 	context-chat.doc.r72010
@@ -37,7 +37,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	context-filter.doc.r62070
 	context-gnuplot.doc.r75301
 	context-handlecsv.doc.r76721
-	context-legacy.doc.r79834
+	context-legacy.doc.r80212
 	context-letter.doc.r77841
 	context-mathsets.doc.r47085
 	context-notes-zh-cn.doc.r78640
@@ -51,7 +51,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	context-visualcounter.doc.r79994
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
-	context.source.r79834
+	context.source.r80212
 	context-visualcounter.source.r79994
 "
 
