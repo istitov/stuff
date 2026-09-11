@@ -18,19 +18,9 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Every flag here only forwards to sci-ml/caffe2, which does the whole C++
-# build; nothing in this package's own build reads them. They exist so that
-# consumers written against ::gentoo's monolithic sci-ml/pytorch, which has
-# this same IUSE, resolve against the split. ::gentoo carries no 2.11 and no
-# consumer asks this version for a flag today; the flags keep it in step with
-# the 2.13 and 2.14 forks. Each flag pulls caffe2 with the same flag, so
-# pytorch[rocm] guarantees caffe2[rocm] without requiring the two USE sets to
-# match. That is spelled as one USE-conditional block per flag rather than as
-# flag? use-dependencies on a single atom: pkgcheck cannot expand 21
-# conditional use-dependencies on one atom, and then skips checking this
-# package's dependencies altogether (UncheckableDep). REQUIRED_USE is caffe2's
-# minus its amdgpu_targets rule, which only caffe2 can satisfy. numpy also
-# adds numpy at runtime, as ::gentoo's pytorch does. verified 2026-09-10
+# Mirror ::gentoo's monolithic IUSE by forwarding each flag to split caffe2.
+# Separate atoms avoid pkgcheck's UncheckableDep on many conditional USE deps.
+# verified 2026-09-10
 IUSE="cuda cusparselt distributed fbgemm flash gloo kineto memefficient
 	mimalloc mkl mpi nccl nnpack +numpy onednn openblas opencl openmp qnnpack
 	rocm xnnpack"
@@ -46,21 +36,10 @@ REQUIRED_USE="
 	memefficient? ( || ( cuda rocm ) )
 	nccl? ( rocm )
 "
-# The python_gen_cond_dep block below mirrors torch's unconditional
-# Requires-Dist verbatim, floors included, so it can be diffed against the
-# built torch-${PV}.dist-info/METADATA. Only typing-extensions is imported by
-# `import torch`; the rest are reached lazily -- sympy and networkx from
-# torch.fx, jinja2 and filelock from the inductor codegen and its compile
-# cache, fsspec from torch.load/save on remote paths, setuptools from
-# torch.utils.cpp_extension. Lazy does not mean optional: upstream marks none
-# of them as an extra. Restored as a frozen rollback for the vllm(torch==2.11)
-# stack (2.13.0-r91 forward otherwise). One deliberate deviation from torch
-# 2.11.0's Requires-Dist: it caps setuptools<82, but that cap is unsatisfiable
-# here -- it forces setuptools-79, which collides with any installed consumer
-# needing >=80 (e.g. dev-python/ipython) since no setuptools exists in [80,82).
-# The identical 2.13.0-r91 frontend runs on setuptools 83, and the cap only
-# guards torch's cpp_extension, so relax to the same >=77.0.3 floor (no upper
-# cap). verified 2026-08-08 against torch-2.11.0
+# Mirror unconditional Requires-Dist entries: lazy imports are not optional.
+# This revision is frozen for the vllm/Torch 2.11 stack. Drop setuptools<82:
+# nothing packaged satisfies >=80,<82, while the 2.13 frontend works with 83.
+# verified 2026-09-10
 RDEPEND="
 	${PYTHON_DEPS}
 	~sci-ml/caffe2-${PV}[${PYTHON_SINGLE_USEDEP}]
@@ -110,28 +89,18 @@ PATCHES=(
 )
 
 src_prepare() {
-	# Set build dir for pytorch's setup
 	sed -e "/BUILD_DIR/s|build|/var/lib/caffe2/|" \
 		-i tools/setup_helpers/env.py || die
 
-	# Drop legacy from pyproject.toml
 	sed -e "/build-backend/s|:__legacy__||" \
 		-i pyproject.toml || die
 
 	distutils-r1_src_prepare
 
-	# Replace the placeholder introduced by cpp-extension-multilib.patch.
-	# This MUST run after distutils-r1_src_prepare, which is what applies
-	# PATCHES: the placeholder does not exist upstream, the patch puts it
-	# there, so running the sed first matched nothing, exited 0 and shipped
-	# the literal -- library_paths() then handed ROCm C++ extension builds
-	# /usr/%LIB_DIR% and $HIP_HOME/%LIB_DIR%. Same defect and same fix as
-	# 2.13.0-r92; only the ROCm branch is affected, since the CUDA and CPU
-	# branches compute lib_dir in Python. # verified 2026-09-03
+	# Run after PATCHES creates %LIB_DIR%; otherwise ROCm extensions receive
+	# literal invalid paths. # verified 2026-09-03
 	sed -e "s|%LIB_DIR%|$(get_libdir)|g" \
 		-i torch/utils/cpp_extension.py || die
-	# Fail loudly if the placeholder ever stops being present, rather than
-	# silently shipping an unsubstituted path again.
 	if grep -q '%LIB_DIR%' torch/utils/cpp_extension.py; then
 		die "%LIB_DIR% placeholder survived substitution"
 	fi
