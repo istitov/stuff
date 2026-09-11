@@ -9,10 +9,10 @@ TEXLIVE_MODULE_CONTENTS="
 	antomega.r21933
 	eplain.r71409
 	hitex.r77830
-	jadetex.r79862
+	jadetex.r80015
 	lambda.r45756
 	lollipop.r69742
-	mltex.r71363
+	mltex.r80015
 	mxedruli.r79618
 	omega.r33046
 	omegaware.r77830
@@ -21,16 +21,16 @@ TEXLIVE_MODULE_CONTENTS="
 	psizzl.r69742
 	startex.r69742
 	texsis.r79618
-	xmltex.r76924
+	xmltex.r80015
 "
 TEXLIVE_MODULE_DOC_CONTENTS="
 	aleph.doc.r77830
 	antomega.doc.r21933
 	eplain.doc.r71409
 	hitex.doc.r77830
-	jadetex.doc.r79862
+	jadetex.doc.r80015
 	lollipop.doc.r69742
-	mltex.doc.r71363
+	mltex.doc.r80015
 	mxedruli.doc.r79618
 	omega.doc.r33046
 	omegaware.doc.r77830
@@ -38,12 +38,12 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	psizzl.doc.r69742
 	startex.doc.r69742
 	texsis.doc.r79618
-	xmltex.doc.r76924
+	xmltex.doc.r80015
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
 	antomega.source.r21933
 	eplain.source.r71409
-	jadetex.source.r79862
+	jadetex.source.r80015
 	otibet.source.r45777
 	psizzl.source.r69742
 	startex.source.r69742
