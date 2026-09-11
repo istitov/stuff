@@ -149,14 +149,18 @@ def main() -> int:
         # Strip Portage revision suffix (-rN) — nvchecker tracks upstream
         # version numbers, not our in-overlay revision bumps.
         newest_pv = re.sub(r'-r\d+$', '', newest_pv)
-        # Strip date-based snapshot suffix (_pYYYYMMDD or similar long numeric
-        # suffixes) — these are in-overlay snapshot markers that have no
-        # counterpart in the upstream tag, so emit just the base version.
-        newest_pv = re.sub(r'_p\d{5,}$', '', newest_pv)
+        # Strip date-based snapshot suffixes. tokenspeed-triton is the
+        # exception: its PyPI .postYYYYMMDD is the release version itself.
+        if entry != "dev-python/tokenspeed-triton-bin":
+            newest_pv = re.sub(r'_p\d{5,}$', '', newest_pv)
         # Normalize Portage post-release suffix (_pN with 1-4 digits) to PEP
         # 440 form (.postN) so pypi-sourced entries compare without spurious
         # drift.  Applied after the long-suffix strip above.
         newest_pv = re.sub(r'_p(\d{1,4})$', r'.post\1', newest_pv)
+        # The cuDNN feed is intentionally three-part; the fourth PV component
+        # identifies the artifact selected from that release manifest.
+        if entry == "dev-libs/cudnn":
+            newest_pv = re.sub(r'^(\d+\.\d+\.\d+)\.\d+$', r'\1', newest_pv)
         data[entry] = {"version": newest_pv}
 
     out = {"version": 2, "data": data}

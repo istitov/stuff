@@ -181,6 +181,12 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "from_pattern": r"^release_([0-9]+)_([0-9]+)_([0-9]+)$",
         "to_pattern": r"\1.\2.\3",
     },
+    # Upstream tags releases as vYYYY-MM-DD; Portage uses YYYY.MM.DD.
+    "media-plugins/deadbeef-vgmstream": {
+        "include_regex": r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+        "from_pattern": r"^([0-9]{4})-([0-9]{2})-([0-9]{2})$",
+        "to_pattern": r"\1.\2.\3",
+    },
     # NVIDIA monorepo sub-packages
     "dev-python/cuda-bindings": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
@@ -980,6 +986,9 @@ SKIP_PKGS: dict[str, str] = {
     "x11-apps/skb":                        "polachok/skb has no release tags (verified 2026-08-29: 0 tags; the ebuild pins EGIT_COMMIT)",
     # Upstreams that are gone or use non-public distribution channels.
     "sci-physics/demeter":                 "Demeter removed from CPAN; no public upstream tracking possible",
+    "media-plugins/deadbeef-musical-spectrum": "upstream GitHub repository removed; no release feed",
+    "media-plugins/deadbeef-quick-search":     "upstream GitHub repository removed; no release feed",
+    "media-plugins/deadbeef-vfs-rar":         "upstream GitHub repository removed; no release feed",
     # (amd-quark-bin / runai-model-streamer-bin were here until 2026-07-18 —
     # both now ship public PyPI wheels, so they moved to SPECIAL_SOURCES.)
     # Intentional version pins — upstream advances but a consumer in the

@@ -1182,7 +1182,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (231) ---
+# --- github (228) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2133,21 +2133,9 @@ github = "tokiclover/deadbeef-plugins-jack"
 use_max_tag = true
 prefix = "v"
 
-["media-plugins/deadbeef-musical-spectrum"]
-source = "github"
-github = "cboxdoerfer/ddb_musical_spectrum"
-use_max_tag = true
-prefix = "v"
-
 ["media-plugins/deadbeef-pulse2"]
 source = "github"
 github = "saivert/ddb_output_pulse2"
-use_max_tag = true
-prefix = "v"
-
-["media-plugins/deadbeef-quick-search"]
-source = "github"
-github = "cboxdoerfer/ddb_quick_search"
 use_max_tag = true
 prefix = "v"
 
@@ -2163,17 +2151,13 @@ github = "vovochka404/deadbeef-statusnotifier-plugin"
 use_max_tag = true
 prefix = "v"
 
-["media-plugins/deadbeef-vfs-rar"]
-source = "github"
-github = "DeaDBeeF-Player/vfs_rar"
-use_max_tag = true
-prefix = "v"
-
 ["media-plugins/deadbeef-vgmstream"]
 source = "github"
 github = "jchv/deadbeef-vgmstream"
 use_max_tag = true
-prefix = "v"
+include_regex = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+from_pattern = '^([0-9]{4})-([0-9]{2})-([0-9]{2})$'
+to_pattern = '\1.\2.\3'
 
 ["media-plugins/deadbeef-waveform-seekbar"]
 source = "github"
@@ -3089,6 +3073,9 @@ prefix = "v"
 # ["media-gfx/comfyui-if-trellis"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-plugins/deadbeef-fb"] skipped: we track a 2023 main snapshot; upstream's newest release tag is 20160216
+# ["media-plugins/deadbeef-musical-spectrum"] skipped: upstream GitHub repository removed; no release feed
+# ["media-plugins/deadbeef-quick-search"] skipped: upstream GitHub repository removed; no release feed
+# ["media-plugins/deadbeef-vfs-rar"] skipped: upstream GitHub repository removed; no release feed
 # ["media-sound/deadbeef"] skipped: sourceforge/deadbeef — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-libs/amd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/camd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
