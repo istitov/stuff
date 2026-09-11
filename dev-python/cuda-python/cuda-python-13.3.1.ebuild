@@ -31,8 +31,10 @@ RESTRICT="bindist mirror"
 # purpose is to pull the CUDA Python components.
 RDEPEND="
 	~dev-python/cuda-bindings-${PV}[${PYTHON_USEDEP}]
-	dev-python/cuda-core[${PYTHON_USEDEP}]
-	dev-python/cuda-pathfinder[${PYTHON_USEDEP}]
+	>=dev-python/cuda-core-1.0.0[${PYTHON_USEDEP}]
+	<dev-python/cuda-core-1.1[${PYTHON_USEDEP}]
+	>=dev-python/cuda-pathfinder-1.1[${PYTHON_USEDEP}]
+	<dev-python/cuda-pathfinder-2[${PYTHON_USEDEP}]
 "
 
 src_unpack() {
@@ -40,10 +42,6 @@ src_unpack() {
 	cp "${DISTDIR}/${MY_WHEEL}" "${S}/wheel/" || die
 }
 
-src_install() {
-	python_foreach_impl install_wheel
-}
-
-install_wheel() {
+python_install() {
 	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${MY_WHEEL}" || die
 }
