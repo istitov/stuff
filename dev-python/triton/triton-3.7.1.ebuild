@@ -7,7 +7,7 @@ DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
 PYTHON_COMPAT=( python3_{12..15} )
 
-inherit distutils-r1
+inherit distutils-r1 flag-o-matic
 
 LLVM_REV="1f126a6d"
 
@@ -44,6 +44,12 @@ BDEPEND="
 # Use upstream's pinned LLVM and forbid setup.py downloads.
 export TRITON_OFFLINE_BUILD=1
 export TRITON_BUILD_PROTON=OFF
+
+src_prepare() {
+	# The combined AMD/NVIDIA library violates GCC's ODR checks under LTO.
+	filter-lto
+	distutils-r1_src_prepare
+}
 
 src_unpack() {
 	unpack "${P}.gh.tar.gz"
