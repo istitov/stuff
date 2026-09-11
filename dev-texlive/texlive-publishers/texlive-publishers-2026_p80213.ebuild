@@ -4,13 +4,13 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-publishers.r79938
+	collection-publishers.r80213
 	aastex.r75970
 	abnt.r55471
 	abntex2.r79618
 	abntexto.r78949
 	abntexto-uece.r76157
-	acmart.r79508
+	acmart.r80008
 	acmconf.r79618
 	active-conf.r79618
 	adfathesis.r26048
@@ -54,7 +54,7 @@ TEXLIVE_MODULE_CONTENTS="
 	chem-journal.r15878
 	chifoot.r79461
 	chs-physics-report.r54512
-	ciad-beamertheme.r79091
+	ciad-beamertheme.r80201
 	cidarticle.r68976
 	cje.r68656
 	cjs-rcs-article.r79618
@@ -82,7 +82,7 @@ TEXLIVE_MODULE_CONTENTS="
 	elteiktdk.r71086
 	elteikthesis.r71087
 	emisa.r71883
-	enslyonstage.r79831
+	enslyonstage.r80232
 	erdc.r79618
 	estcpmm.r79618
 	etsvthor.r48186
@@ -91,7 +91,7 @@ TEXLIVE_MODULE_CONTENTS="
 	fcavtex.r38074
 	fcltxdoc.r24500
 	fei.r65352
-	fhj-script.r79844
+	fhj-script.r80221
 	ftc-notebook.r50043
 	gaceta.r15878
 	gammas.r56403
@@ -108,7 +108,7 @@ TEXLIVE_MODULE_CONTENTS="
 	hduthesis.r76924
 	hecthese.r79618
 	hep-paper.r79976
-	heria.r76077
+	heria.r80009
 	hfutexam.r75068
 	hfutthesis.r64025
 	hithesis.r64005
@@ -162,7 +162,7 @@ TEXLIVE_MODULE_CONTENTS="
 	matc3mem.r35773
 	mcmthesis.r69538
 	mentis.r79618
-	mitthesis.r79286
+	mitthesis.r80046
 	mlacls.r72271
 	mluexercise.r56927
 	mnras.r68878
@@ -215,10 +215,10 @@ TEXLIVE_MODULE_CONTENTS="
 	qrbill.r76924
 	quantumarticle.r65242
 	rebuttal.r72851
-	regulatory.r72197
+	regulatory.r80233
 	resphilosophica.r79936
 	resumecls.r54815
-	retosmatematicos.r76358
+	retosmatematicos.r80143
 	revtex.r67271
 	revtex4.r56589
 	revtex4-1.r56590
@@ -237,7 +237,7 @@ TEXLIVE_MODULE_CONTENTS="
 	schule.r77551
 	scientific-thesis-cover.r79352
 	screenwriter.r78965
-	scripture.r79351
+	scripture.r80069
 	scrjrnl.r74998
 	sduthesis.r41401
 	se2thesis.r78585
@@ -246,14 +246,14 @@ TEXLIVE_MODULE_CONTENTS="
 	seuthesix.r40088
 	sfee.r70718
 	shortmathj.r76790
-	siicusp-abstracts.r79898
+	siicusp-abstracts.r80022
 	smflatex.r58910
 	soton.r16215
 	sphdthesis.r34374
 	spie.r75447
 	spim-phdthesisthemes.r79121
 	sr-vorl.r79121
-	srdp-mathematik.r76697
+	srdp-mathematik.r80081
 	sshrc-insight.r79972
 	stellenbosch.r79618
 	stellenbosch-2.r68183
@@ -278,7 +278,7 @@ TEXLIVE_MODULE_CONTENTS="
 	tlc-article.r79935
 	topletter.r48182
 	toptesi.r73464
-	tuda-ci.r79326
+	tuda-ci.r80033
 	tudscr.r64085
 	tugboat.r79461
 	tugboat-plain.r75521
@@ -347,7 +347,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	abntex2.doc.r79618
 	abntexto.doc.r78949
 	abntexto-uece.doc.r76157
-	acmart.doc.r79508
+	acmart.doc.r80008
 	acmconf.doc.r79618
 	active-conf.doc.r79618
 	adfathesis.doc.r26048
@@ -391,7 +391,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	cesenaexam.doc.r44960
 	chifoot.doc.r79461
 	chs-physics-report.doc.r54512
-	ciad-beamertheme.doc.r79091
+	ciad-beamertheme.doc.r80201
 	cidarticle.doc.r68976
 	cje.doc.r68656
 	cjs-rcs-article.doc.r79618
@@ -420,7 +420,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	elteiktdk.doc.r71086
 	elteikthesis.doc.r71087
 	emisa.doc.r71883
-	enslyonstage.doc.r79831
+	enslyonstage.doc.r80232
 	erdc.doc.r79618
 	estcpmm.doc.r79618
 	etsvthor.doc.r48186
@@ -429,7 +429,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	fcavtex.doc.r38074
 	fcltxdoc.doc.r24500
 	fei.doc.r65352
-	fhj-script.doc.r79844
+	fhj-script.doc.r80221
 	ftc-notebook.doc.r50043
 	gaceta.doc.r15878
 	gammas.doc.r56403
@@ -446,7 +446,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	hduthesis.doc.r76924
 	hecthese.doc.r79618
 	hep-paper.doc.r79976
-	heria.doc.r76077
+	heria.doc.r80009
 	hfutexam.doc.r75068
 	hfutthesis.doc.r64025
 	hithesis.doc.r64005
@@ -500,7 +500,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	matc3mem.doc.r35773
 	mcmthesis.doc.r69538
 	mentis.doc.r79618
-	mitthesis.doc.r79286
+	mitthesis.doc.r80046
 	mlacls.doc.r72271
 	mluexercise.doc.r56927
 	mnras.doc.r68878
@@ -553,10 +553,10 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	qrbill.doc.r76924
 	quantumarticle.doc.r65242
 	rebuttal.doc.r72851
-	regulatory.doc.r72197
+	regulatory.doc.r80233
 	resphilosophica.doc.r79936
 	resumecls.doc.r54815
-	retosmatematicos.doc.r76358
+	retosmatematicos.doc.r80143
 	revtex.doc.r67271
 	revtex4.doc.r56589
 	revtex4-1.doc.r56590
@@ -575,7 +575,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	schule.doc.r77551
 	scientific-thesis-cover.doc.r79352
 	screenwriter.doc.r78965
-	scripture.doc.r79351
+	scripture.doc.r80069
 	scrjrnl.doc.r74998
 	sduthesis.doc.r41401
 	se2thesis.doc.r78585
@@ -584,14 +584,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	seuthesix.doc.r40088
 	sfee.doc.r70718
 	shortmathj.doc.r76790
-	siicusp-abstracts.doc.r79898
+	siicusp-abstracts.doc.r80022
 	smflatex.doc.r58910
 	soton.doc.r16215
 	sphdthesis.doc.r34374
 	spie.doc.r75447
 	spim-phdthesisthemes.doc.r79121
 	sr-vorl.doc.r79121
-	srdp-mathematik.doc.r76697
+	srdp-mathematik.doc.r80081
 	sshrc-insight.doc.r79972
 	stellenbosch.doc.r79618
 	stellenbosch-2.doc.r68183
@@ -614,7 +614,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	tlc-article.doc.r79935
 	topletter.doc.r48182
 	toptesi.doc.r73464
-	tuda-ci.doc.r79326
+	tuda-ci.doc.r80033
 	tudscr.doc.r64085
 	tugboat.doc.r79461
 	tugboat-plain.doc.r75521
@@ -679,7 +679,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	york-thesis.doc.r23348
 "
 TEXLIVE_MODULE_SRC_CONTENTS="
-	acmart.source.r79508
+	acmart.source.r80008
 	acmconf.source.r79618
 	active-conf.source.r79618
 	adfathesis.source.r26048
@@ -720,7 +720,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	fbithesis.source.r21340
 	fcltxdoc.source.r24500
 	fei.source.r65352
-	fhj-script.source.r79844
+	fhj-script.source.r80221
 	geradwp.source.r63134
 	gfdl.source.r75712
 	grant.source.r56852
@@ -729,7 +729,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	hduthesis.source.r76924
 	hecthese.source.r79618
 	hep-paper.source.r79976
-	heria.source.r76077
+	heria.source.r80009
 	hithesis.source.r64005
 	hitszbeamer.source.r54381
 	hitszthesis.source.r61073
@@ -802,14 +802,14 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	sblidx.source.r78596
 	sblreport.source.r79741
 	scientific-thesis-cover.source.r79352
-	scripture.source.r79351
+	scripture.source.r80069
 	scrjrnl.source.r74998
 	sduthesis.source.r41401
 	se2thesis.source.r78585
 	seuthesis.source.r33042
 	seuthesix.source.r40088
 	sfee.source.r70718
-	siicusp-abstracts.source.r79898
+	siicusp-abstracts.source.r80022
 	smflatex.source.r58910
 	sr-vorl.source.r79121
 	sshrc-insight.source.r79972
@@ -825,7 +825,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	timbreicmc.source.r49740
 	topletter.source.r48182
 	toptesi.source.r73464
-	tuda-ci.source.r79326
+	tuda-ci.source.r80033
 	tudscr.source.r64085
 	tugboat.source.r79461
 	uaclasses.source.r15878
