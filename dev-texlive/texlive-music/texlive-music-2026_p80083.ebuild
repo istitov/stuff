@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-music.r76267
+	collection-music.r80083
 	abc.r41157
 	bagpipe.r34393
 	chordbars.r70392
