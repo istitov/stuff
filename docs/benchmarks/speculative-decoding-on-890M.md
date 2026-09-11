@@ -6,6 +6,12 @@ generation speed for the two dense models tested. The two mixture-of-experts
 **2–6% on average** over the reference configuration, with different settings
 winning for different models.
 
+A separate [Muse Glimmer-30B DFlash follow-up](#muse-glimmer-30b-dflash-follow-up)
+measured **1.64× and 1.50× median decode speedups** at two input lengths.
+Faster generation did not translate directly into faster first answers:
+on first long requests, later first-visible output largely offset the shorter
+reasoning-to-answer interval.
+
 These are **September 2026 measurements**. They cover llama.cpp's Vulkan backend
 on a Framework 13 with a Ryzen AI 9 HX 370 (`gfx1150`, Strix Point).
 
@@ -14,7 +20,7 @@ For installation and backend selection, see
 The runtime is packaged as `sci-misc/llama-cpp` in `stuff`; these results
 measure runtime configurations and do not compare overlays.
 
-## Results
+## MTP results
 
 Multi-token prediction (MTP) uses a prediction head or a separate drafter to propose tokens that the
 target model then verifies. Here, `n` is the maximum draft length and `p` is
@@ -67,7 +73,7 @@ request speeds or prefill rates.
 | Gemma-4-31B | 3,698 | 3.91 | 7.02 | 7.24 |
 | Gemma-4-31B | 16,164 | 3.74 | 6.43 | 6.43 |
 
-## Workload and software
+## MTP workload and software
 
 | Item | Measured configuration |
 |---|---|
@@ -152,6 +158,141 @@ Two blocks on one corpus provide limited replication. The same observations
 were used to select and evaluate the settings. These are descriptive results,
 without a claim that small differences will persist across workloads or hosts.
 
+## Muse Glimmer-30B: DFlash follow-up
+
+A separate September 2026 experiment compared Muse Glimmer-30B with no
+speculation against `draft-dflash` with maximum draft length **n=3**. This
+was a two-arm comparison, not a draft-length search; n=3 is the tested setting,
+not an established optimum. Its 48 requests are not pooled with the four-model
+MTP results above.
+
+### Generation speed
+
+Each value below is the median of 12 requests; parentheses give the observed
+minimum–maximum. The speedup divides the DFlash median by the baseline median
+at the same input length. These rates include both reasoning and answer tokens.
+
+| Actual input tokens | No speculation (t/s) | DFlash n3 (t/s) | Median decode speedup |
+|---|---:|---:|---:|
+| 874 | 4.82 (3.93–4.86) | 7.91 (6.90–8.32) | 1.64× |
+| 16,255 | 4.78 (2.20–4.81) | 7.15 (6.63–7.24) | 1.50× |
+
+DFlash had the higher within-block median in all four blocks at both input
+lengths. The within-block speedup ranged from **1.51–1.70×** at 874 tokens and
+**1.49–2.13×** at 16,255 tokens. Omitting one block at a time and recalculating
+the pooled long-input ratio gives **1.49–1.86×**. The direction of the gain is
+consistent, but its exact magnitude is less stable. These are descriptive
+block and sensitivity ranges, not confidence intervals.
+
+Baseline performance varied: the slowest long-context request reached
+2.20 t/s, while the short-context minimum was 3.93 t/s. All slow observations
+remain included. The experiment does not establish the cause of that variation.
+
+### Time to an answer
+
+Each block included a first request at each input length followed by two
+heavily cached repeats. There are four first requests and eight repeats per
+arm and input length. The first short request had no cached input; the first
+long request reused a 49-token prefix. Repeats reused 869 or 16,250 input
+tokens, leaving five to evaluate.
+
+| Actual input tokens | Request category | n per arm | Median request time, baseline → DFlash | Median first-answer time, baseline → DFlash |
+|---|---|---:|---:|---:|
+| 874 | First in context | 4 | 117.39 → 75.06 s | 27.87 → 16.51 s |
+| 874 | Cached repeat | 8 | 105.79 → 64.85 s | 19.55 → 7.28 s |
+| 16,255 | First in context | 4 | 271.18 → 246.85 s | 188.98 → 187.72 s |
+| 16,255 | Cached repeat | 8 | 134.06 → 72.74 s | 31.47 → 13.16 s |
+
+Request time runs from sending the request to receiving the completed stream;
+it excludes server startup and model loading. First-answer time is the arrival
+of the first answer text, not the first reasoning token. All responses stopped
+at the output cap, so this is not time to a naturally completed answer.
+
+For the first long request, median request time fell from about 271 to 247
+seconds, but first-answer time was almost unchanged. Median first-visible text
+arrived **later** with DFlash (165.49 → 175.66 s), while the median interval
+from that text to the first answer shortened (23.50 → 12.03 s). Prompt processing
+dominated the initial wait; these opposing changes explain the near-tie.
+The medians are calculated separately and need not add exactly. DFlash's first
+answer was later in two of the four matched blocks, not consistently earlier.
+
+Cached long repeats benefited much more, but varied substantially: request
+times ranged from 107.17–233.20 s without speculation and 71.93–78.27 s with
+DFlash. Keep cache categories separate when judging interactive responsiveness;
+the [request and grouped data](data/muse-dflash-2026-09-09.md) retain all
+observations and their ranges.
+
+### Configuration and verification
+
+The follow-up used the same Framework 13 / Radeon 890M hardware and memory
+configuration described above, with llama.cpp identifying itself as
+`0.4.0-dev (build 10809, commit v0.4.0)` and the Vulkan backend. Its workload
+and thermal procedure differed from the MTP study:
+
+| Item | Muse follow-up configuration |
+|---|---|
+| Target | `Muse-Glimmer-30B-KQuant-17GB-Q4_K_M.gguf` |
+| Separate drafter | `dflash-Muse-Glimmer-30B-Q4_K_M.gguf` |
+| Captured Vulkan driver | Mesa 26.2.1, RADV (`RADV STRIX1`); `media-libs/vulkan-loader-1.4.357.0` |
+| Running kernel | `7.2.0-pf6`, recorded throughout in-arm telemetry |
+| Observed llama threadpool | 12 threads in all eight server instances; no thread-count flag was supplied |
+| DFlash options | `--spec-type draft-dflash --spec-draft-n-max 3 -md /path/to/drafter.gguf -ngld 99` |
+| Shared server settings | `-dev Vulkan0 -ngl 99 --ctx-size 65536 --parallel 1 -ctk q8_0 -ctv q8_0 -fa on` |
+| Request | Temperature 0; 512-token cap; `reasoning_effort: minimal` in `chat_template_kwargs` |
+| Input | The same Russian corpus/question at two lengths, verified as 874 and 16,255 input tokens |
+| Repetitions | Four blocks with alternating arm order; three requests per arm and input length in each block |
+| Power | AC online throughout recorded in-arm samples; `performance` governor; `balanced` platform profile; battery-care cycling allowed around the 80% charge limit |
+| Cooldown | CPU Tctl ≤65°C before each arm's server launch; no additional temperature abort during generation; firmware protections unchanged |
+
+For the baseline, the server was restarted without the drafter or speculative
+options. Unlike the MTP study's requests, **all 48 Muse responses contained
+reasoning as well as answer text**. Each reached the 512-token cap. These are
+repeated timing observations on one workload, not 48 independent tasks or an
+answer-quality evaluation.
+
+At each input length, reasoning text was identical across both arms and all
+repetitions, but answer text differed in **all 24 matched trials** (same block,
+input length and repetition). Answer variation also occurred within the
+baseline: each arm produced three distinct answers per input length, even
+after normalizing whitespace. For a given arm and input length, each
+repetition's answer was identical across all four blocks. The capture does not
+isolate the cause of these differences. The decode gains therefore do not
+demonstrate unchanged answers or quality; textual differences alone do not
+establish quality loss either.
+
+Peak device-wide GTT allocation was about **9.1 GiB without speculation versus
+12.0 GiB with DFlash**; peak VRAM allocation stayed around 7.9 GiB in both arms.
+These are amdgpu accounting peaks during model loading and requests, including
+other users of the device—not isolated process totals or a minimum-RAM
+requirement. On this integrated GPU, do not add them to process memory figures
+as if each represented separate physical RAM. Per-block peaks are in the
+[memory CSV](data/muse-dflash-2026-09-09-memory.csv).
+
+The [data and reproduction notes](data/muse-dflash-2026-09-09.md) give the full
+captured launch commands, request settings, model hashes, and numeric exports:
+48 requests, four arm/input cells, 16 block summaries and eight cache-category
+summaries, with medians and observed ranges.
+
+The audit reconciled every request with its saved stream and server-log
+timings, checked input and output counts, and confirmed DFlash activation.
+Executable, library, and weight hashes matched before and after the run.
+These hashes identify the new follow-up; they do not recover the weights or
+runtime used by earlier historical measurements.
+
+Telemetry retained 11,668 samples with a maximum sampling gap of 0.542 seconds.
+Recorded peaks were 92.5°C CPU Tctl and 99°C on the GPU sensor labelled `edge`.
+Throttle-reason flags were not recorded, so temperatures alone establish
+neither throttling nor its absence. GPU-client visibility was incomplete;
+exclusive GPU use was not proven. Memory bandwidth was not measured.
+
+!!! note "Draft: Muse evidence release pending"
+    The follow-up and numeric exports have passed local verification. Its
+    sanitized raw supporting records and verification tools have not yet been
+    published to `stuff-benchmarks`; the CSVs are not a substitute for that
+    evidence bundle. The pinned evidence links below cover only the four-model
+    MTP study. Add a separate immutable evidence link before publishing this
+    section.
+
 ## Applying the finding
 
 For the measured MTP build, the relevant llama-server options are:
@@ -193,7 +334,7 @@ versus 9,310 / 10,104 for the reference. They are not the equally weighted
 context averages used for the speedup percentages. Measure generation time
 for the workload you use.
 
-## Data and limits
+## MTP data and limits
 
 Download the [80-cell results CSV](data/speculative-decoding-2026-09-06.csv).
 It contains all five tested configurations per model, actual context sizes,
@@ -236,6 +377,8 @@ Links to the respective model pages on Hugging Face:
 - [Qwen3.8-27B GGUFs](https://huggingface.co/unsloth/Qwen3.8-27B-GGUF)
 - [Gemma-4-26B-A4B QAT GGUFs](https://huggingface.co/unsloth/gemma-4-26B-A4B-it-qat-GGUF)
 - [Gemma-4-31B GGUFs](https://huggingface.co/unsloth/gemma-4-31B-it-GGUF)
+- [Muse Glimmer-30B target GGUF](https://huggingface.co/meta-models/Muse-Glimmer-30B-GGUF/blob/main/Muse-Glimmer-30B-KQuant-17GB-Q4_K_M.gguf)
+- [Muse Glimmer-30B DFlash drafter GGUF](https://huggingface.co/meta-models/Muse-Glimmer-30B-GGUF/blob/main/dflash-Muse-Glimmer-30B-Q4_K_M.gguf)
 
 Please, note: these are model-repository links, not checksum-pinned copies of
 the historical weights; the measured filenames are listed above.

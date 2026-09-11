@@ -6,7 +6,7 @@ so that readers can judge whether the result applies to their own setup.
 
 | Study | Hardware and backend | Question |
 |---|---|---|
-| [Speculative decoding](speculative-decoding-on-890M.md) | Radeon 890M, llama.cpp Vulkan | How much does MTP improve generation speed, and do model-specific settings help? |
+| [Speculative decoding](speculative-decoding-on-890M.md) | Radeon 890M, llama.cpp Vulkan | How much do MTP and DFlash improve generation speed, and when does that shorten the wait for an answer? |
 | [NPU versus Radeon 890M — draft](npu-vs-890m.md) | XDNA 2 / FastFlowLM and Radeon 890M / llama.cpp Vulkan | How do request latency, socket power, estimated energy and memory accounting compare? |
 
 The [benchmark evidence repository](https://github.com/istitov/stuff-benchmarks)
