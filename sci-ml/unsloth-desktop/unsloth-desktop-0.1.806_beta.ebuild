@@ -697,12 +697,8 @@ S="${WORKDIR}/unsloth-${PV/_beta/-beta}"
 
 PATCHES=( "${FILESDIR}/${P}-system-backend.patch" )
 
-# The GitHub-generated archive is not immutable. Its Manifest digest pins the
-# current bytes and must be deliberately re-pinned if GitHub rehashes it.
-# studio/LICENSE.AGPL-3.0 is SPDX AGPL-3.0-only; Gentoo's license name is
-# AGPL-3.
-# AGPL-3: the studio UI. OFL-1.1: the bundled Figtree/Inter/Space-Grotesk web
-# fonts (the proprietary Hellix font is stripped in src_compile).
+# The generated archive is mutable; the Manifest pins its accepted bytes.
+# The studio UI is AGPL-3.0-only (AGPL-3 here); bundled web fonts are OFL-1.1.
 LICENSE="AGPL-3 OFL-1.1"
 # Dependent crate licenses
 LICENSE+="
@@ -738,9 +734,7 @@ BDEPEND="
 src_prepare() {
 	default
 
-	# Upstream's Cargo.toml/Cargo.lock carry a placeholder version (2026.4.8)
-	# that the release CI rewrites to the release before building; do the same
-	# so the built app reports the packaged version, not the placeholder.
+	# Mirror release CI's replacement of the 2026.4.8 placeholder version.
 	local relver="${PV/_beta/-beta}"
 	sed -i "s/^version = \"2026\.4\.8\"/version = \"${relver}\"/" \
 		studio/src-tauri/Cargo.toml || die
@@ -752,8 +746,7 @@ src_compile() {
 	pushd studio/frontend >/dev/null || die
 	npm ci --no-audit --no-fund || die
 	npm run build || die
-	# Strip the proprietary Hellix font (copied public/ -> dist/); the UI falls
-	# back to a system font for that text. The OFL-1.1 @fontsource fonts stay.
+	# Strip proprietary Hellix; the UI retains its system-font fallback.
 	find dist -iname '*hellix*' -exec rm -rf {} + || die
 	popd >/dev/null || die
 
