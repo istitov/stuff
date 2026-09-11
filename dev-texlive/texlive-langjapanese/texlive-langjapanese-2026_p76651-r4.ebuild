@@ -38,12 +38,12 @@ TEXLIVE_MODULE_CONTENTS="
 	jpnedumathsymbols.r72959
 	jsclasses.r77682
 	kanbun.r77682
-	luatexja.r79037
+	luatexja.r80041
 	luwa-ul.r77595
 	mendex-doc.r77843
 	morisawa.r77682
 	pbibtex-base.r66085
-	platex.r79947
+	platex.r80015
 	platex-tools.r72097
 	plautopatch.r77682
 	ptex.r77830
@@ -58,7 +58,7 @@ TEXLIVE_MODULE_CONTENTS="
 	pxjodel.r77682
 	pxrubrica.r79461
 	pxufont.r77682
-	uplatex.r79947
+	uplatex.r80015
 	uptex.r77830
 	uptex-base.r77840
 	uptex-fonts.r74119
@@ -101,13 +101,13 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	jsclasses.doc.r77682
 	kanbun.doc.r77682
 	lshort-japanese.doc.r79461
-	luatexja.doc.r79037
+	luatexja.doc.r80041
 	luwa-ul.doc.r77595
 	mendex-doc.doc.r77843
 	morisawa.doc.r77682
 	pbibtex-base.doc.r66085
 	pbibtex-manual.doc.r66181
-	platex.doc.r79947
+	platex.doc.r80015
 	platex-tools.doc.r72097
 	platexcheat.doc.r49557
 	plautopatch.doc.r77682
@@ -125,7 +125,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	pxrubrica.doc.r79461
 	pxufont.doc.r77682
 	texlive-ja.doc.r78540
-	uplatex.doc.r79947
+	uplatex.doc.r80015
 	uptex.doc.r77830
 	uptex-base.doc.r77840
 	uptex-fonts.doc.r74119
@@ -140,13 +140,13 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	japanese-otf.source.r79618
 	jlreq.source.r79733
 	jsclasses.source.r77682
-	luatexja.source.r79037
+	luatexja.source.r80041
 	mendex-doc.source.r77843
 	morisawa.source.r77682
-	platex.source.r79947
+	platex.source.r80015
 	ptex-fontmaps.source.r65953
 	pxrubrica.source.r79461
-	uplatex.source.r79947
+	uplatex.source.r80015
 "
 
 inherit texlive-module
