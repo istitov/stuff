@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-mathscience.r80002
+	collection-mathscience.r80156
 	12many.r79618
 	accents.r79618
 	aiplans.r74462
@@ -19,7 +19,7 @@ TEXLIVE_MODULE_CONTENTS="
 	amscdx.r77682
 	amstex.r77830
 	annotate-equations.r67044
-	apxproof.r79251
+	apxproof.r80104
 	aspen.r78984
 	autobreak.r77682
 	backnaur.r54080
@@ -171,7 +171,7 @@ TEXLIVE_MODULE_CONTENTS="
 	mathsemantics.r63241
 	matlab-prettifier.r34323
 	matrix-skeleton.r65013
-	matrixdiagrams.r80000
+	matrixdiagrams.r80169
 	mattens.r77682
 	mecaso.r60346
 	medmath.r74208
@@ -182,7 +182,7 @@ TEXLIVE_MODULE_CONTENTS="
 	mhchem.r69639
 	mhequ.r64978
 	miller.r79618
-	mismath.r76547
+	mismath.r80012
 	mohelper.r78603
 	moremath.r76924
 	multiobjective.r79618
@@ -192,14 +192,14 @@ TEXLIVE_MODULE_CONTENTS="
 	natded.r32693
 	nath.r77682
 	nchairx.r60196
-	nicematrix.r79760
+	nicematrix.r80186
 	nuc.r79618
 	nucleardata.r47307
 	numbersets.r76924
 	numerica.r77682
 	numerica-plus.r79618
 	numerica-tables.r79461
-	numodel-bundle.r79602
+	numodel-bundle.r80205
 	objectz.r61719
 	odesandpdes.r69485
 	oplotsymbl.r44951
@@ -265,7 +265,7 @@ TEXLIVE_MODULE_CONTENTS="
 	simplewick.r79618
 	sistyle.r79618
 	siunits.r59702
-	siunitx.r79011
+	siunitx.r80206
 	skmath.r79121
 	spalign.r77682
 	spbmark.r76924
@@ -294,7 +294,7 @@ TEXLIVE_MODULE_CONTENTS="
 	temporal-logic.r77281
 	tensind.r79618
 	tensor.r79618
-	tensormatrix.r76005
+	tensormatrix.r80071
 	tensorstyles.r78864
 	tex-ewd.r15878
 	textgreek.r79618
@@ -303,7 +303,7 @@ TEXLIVE_MODULE_CONTENTS="
 	thmbox.r77682
 	thmtools.r77682
 	tikz-chemlab.r79877
-	tikzphysics.r79957
+	tikzphysics.r80188
 	tiscreen.r62602
 	tkz-interval.r76924
 	transition-metals.r79082
@@ -335,7 +335,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	amscdx.doc.r77682
 	amstex.doc.r77830
 	annotate-equations.doc.r67044
-	apxproof.doc.r79251
+	apxproof.doc.r80104
 	aspen.doc.r78984
 	autobreak.doc.r77682
 	backnaur.doc.r54080
@@ -486,7 +486,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	mathsemantics.doc.r63241
 	matlab-prettifier.doc.r34323
 	matrix-skeleton.doc.r65013
-	matrixdiagrams.doc.r80000
+	matrixdiagrams.doc.r80169
 	mattens.doc.r77682
 	mecaso.doc.r60346
 	medmath.doc.r74208
@@ -497,7 +497,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	mhchem.doc.r69639
 	mhequ.doc.r64978
 	miller.doc.r79618
-	mismath.doc.r76547
+	mismath.doc.r80012
 	mohelper.doc.r78603
 	moremath.doc.r76924
 	multiobjective.doc.r79618
@@ -507,14 +507,14 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	natded.doc.r32693
 	nath.doc.r77682
 	nchairx.doc.r60196
-	nicematrix.doc.r79760
+	nicematrix.doc.r80186
 	nuc.doc.r79618
 	nucleardata.doc.r47307
 	numbersets.doc.r76924
 	numerica.doc.r77682
 	numerica-plus.doc.r79618
 	numerica-tables.doc.r79461
-	numodel-bundle.doc.r79602
+	numodel-bundle.doc.r80205
 	objectz.doc.r61719
 	odesandpdes.doc.r69485
 	oplotsymbl.doc.r44951
@@ -580,7 +580,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	simplewick.doc.r79618
 	sistyle.doc.r79618
 	siunits.doc.r59702
-	siunitx.doc.r79011
+	siunitx.doc.r80206
 	skmath.doc.r79121
 	spalign.doc.r77682
 	spbmark.doc.r76924
@@ -609,7 +609,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	temporal-logic.doc.r77281
 	tensind.doc.r79618
 	tensor.doc.r79618
-	tensormatrix.doc.r76005
+	tensormatrix.doc.r80071
 	tensorstyles.doc.r78864
 	tex-ewd.doc.r15878
 	textgreek.doc.r79618
@@ -618,7 +618,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	thmbox.doc.r77682
 	thmtools.doc.r77682
 	tikz-chemlab.doc.r79877
-	tikzphysics.doc.r79957
+	tikzphysics.doc.r80188
 	tiscreen.doc.r62602
 	tkz-interval.doc.r76924
 	transition-metals.doc.r79082
@@ -642,7 +642,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	algorithms.source.r78101
 	aligned-overset.source.r79618
 	amscdx.source.r77682
-	apxproof.source.r79251
+	apxproof.source.r80104
 	autobreak.source.r77682
 	backnaur.source.r54080
 	binomexp.source.r79618
@@ -718,19 +718,19 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	mathfixs.source.r78635
 	mathpartir.source.r77682
 	matlab-prettifier.source.r34323
-	matrixdiagrams.source.r80000
+	matrixdiagrams.source.r80169
 	mattens.source.r77682
 	messagepassing.source.r69123
 	mgltex.source.r63255
 	miller.source.r79618
-	mismath.source.r76547
+	mismath.source.r80012
 	moremath.source.r76924
 	multiobjective.source.r79618
 	naive-ebnf.source.r72843
 	nchairx.source.r60196
-	nicematrix.source.r79760
+	nicematrix.source.r80186
 	nucleardata.source.r47307
-	numodel-bundle.source.r79602
+	numodel-bundle.source.r80205
 	objectz.source.r61719
 	odesandpdes.source.r69485
 	overarrows.source.r76641
@@ -758,7 +758,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	simplewick.source.r79618
 	sistyle.source.r79618
 	siunits.source.r59702
-	siunitx.source.r79011
+	siunitx.source.r80206
 	skmath.source.r79121
 	spalign.source.r77682
 	statistics.source.r79618
