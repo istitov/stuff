@@ -4,14 +4,14 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-games.r79849
+	collection-games.r80153
 	bartel-chess-fonts.r78101
 	cardgame.r78746
 	chess.r78101
 	chess-problem-diagrams.r78101
 	chessboard.r79618
 	chessfss.r79618
-	chinesechess.r78101
+	chinesechess.r80172
 	crossword.r79069
 	crosswrd.r79618
 	customdice.r64089
@@ -77,7 +77,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	chess-problem-diagrams.doc.r78101
 	chessboard.doc.r79618
 	chessfss.doc.r79618
-	chinesechess.doc.r78101
+	chinesechess.doc.r80172
 	crossword.doc.r79069
 	crosswrd.doc.r79618
 	customdice.doc.r64089
