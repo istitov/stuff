@@ -4,7 +4,7 @@
 EAPI=8
 
 TEXLIVE_MODULE_CONTENTS="
-	collection-langother.r78607
+	collection-langother.r80200
 	aalok.r76924
 	akshar.r76924
 	aramaic-serto.r74548
