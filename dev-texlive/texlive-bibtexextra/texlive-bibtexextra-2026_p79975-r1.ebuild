@@ -15,14 +15,14 @@ TEXLIVE_MODULE_CONTENTS="
 	apalike2.r76790
 	archaeologie.r79585
 	authordate.r77682
-	beebe.r79945
+	beebe.r80189
 	besjournals.r76790
 	bestpapers.r76790
 	bib2gls.r76845
 	bib2qr.r71940
 	bibarts.r74384
 	bibbreeze.r76924
-	bibcop.r79293
+	bibcop.r80125
 	biber-ms.r79618
 	bibexport.r50677
 	bibhtml.r31607
@@ -188,7 +188,7 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	bib2qr.doc.r71940
 	bibarts.doc.r74384
 	bibbreeze.doc.r76924
-	bibcop.doc.r79293
+	bibcop.doc.r80125
 	biber-ms.doc.r79618
 	bibexport.doc.r50677
 	bibhtml.doc.r31607
@@ -338,7 +338,7 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	bib2gls.source.r76845
 	bib2qr.source.r71940
 	bibarts.source.r74384
-	bibcop.source.r79293
+	bibcop.source.r80125
 	biber-ms.source.r79618
 	bibexport.source.r50677
 	biblatex-archaeology.source.r53281
