@@ -190,7 +190,7 @@ src_test() {
 	cmake_src_test
 
 	if use python ; then
-		python_test
+		python_foreach_impl python_test
 	fi
 }
 
