@@ -20,7 +20,7 @@ S="${WORKDIR}/python-${PN}-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="numpy"
 
 # CFFI loads system PortAudio at runtime; no link step is required.
