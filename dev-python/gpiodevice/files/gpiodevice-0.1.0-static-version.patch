@@ -1,0 +1,39 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,10 +1,11 @@
+ [build-system]
+-requires = ["hatchling", "hatch-fancy-pypi-readme", "hatch-requirements-txt", "uv-dynamic-versioning"]
++requires = ["hatchling", "hatch-fancy-pypi-readme"]
+ build-backend = "hatchling.build"
+ 
+ [project]
+ name = "gpiodevice"
+-dynamic = ["version", "readme", "optional-dependencies"]
++version = "0.1.0"
++dynamic = ["readme"]
+ description = "Helper library for working with Linux gpiochip devices."
+ license = {file = "LICENSE"}
+ requires-python = ">= 3.9"
+@@ -38,9 +39,6 @@
+     "gpiod"
+ ]
+ 
+-[tool.hatch.metadata.hooks.requirements_txt.optional-dependencies]
+-example-depends = ["requirements-examples.txt"]
+-
+ [project.urls]
+ GitHub = "https://www.github.com/pimoroni/gpiodevice-python"
+ Homepage = "https://www.pimoroni.com"
+@@ -60,12 +58,6 @@
+     "pdoc",
+ ]
+ 
+-[tool.hatch.version]
+-source = "uv-dynamic-versioning"
+-
+-[tool.uv-dynamic-versioning]
+-fallback-version = "0.0.0"
+-
+ [tool.hatch.build]
+ include = [
+     "gpiodevice",
