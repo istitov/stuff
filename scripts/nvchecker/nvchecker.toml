@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (293) ---
+# --- pypi (295) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -329,6 +329,14 @@ pypi = "flexcache"
 ["dev-python/flexparser"]
 source = "pypi"
 pypi = "flexparser"
+
+["dev-python/font-roboto"]
+source = "pypi"
+pypi = "font-roboto"
+
+["dev-python/fonts"]
+source = "pypi"
+pypi = "fonts"
 
 ["dev-python/freetype-py"]
 source = "pypi"
@@ -1182,7 +1190,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (228) ---
+# --- github (238) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1451,6 +1459,18 @@ github = "mewwts/addict"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/ads1015"]
+source = "github"
+github = "pimoroni/ads1015-python"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/astral"]
+source = "github"
+github = "sffjunkie/astral"
+use_max_tag = true
+prefix = ""
+
 ["dev-python/blake3"]
 source = "github"
 github = "oconnor663/blake3-py"
@@ -1536,6 +1556,12 @@ use_max_tag = true
 include_regex = '^en_core_web_sm-\d+\.\d+\.\d+$'
 prefix = "en_core_web_sm-"
 
+["dev-python/enviroplus"]
+source = "github"
+github = "pimoroni/enviroplus-python"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/flashinfer-cubin"]
 source = "github"
 github = "flashinfer-ai/flashinfer"
@@ -1554,9 +1580,21 @@ github = "google-gemini/deprecated-generative-ai-python"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/gpiodevice"]
+source = "github"
+github = "pimoroni/gpiodevice-python"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/h5pyd"]
 source = "github"
 github = "HDFGroup/h5pyd"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/i2cdevice"]
+source = "github"
+github = "pimoroni/i2cdevice-python"
 use_max_tag = true
 prefix = "v"
 
@@ -1602,6 +1640,12 @@ prefix = "v"
 ["dev-python/locket"]
 source = "github"
 github = "mwilliamson/locket.py"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/ltr559"]
+source = "github"
+github = "pimoroni/ltr559-python"
 use_max_tag = true
 prefix = "v"
 
@@ -1709,9 +1753,21 @@ github = "python-periodictable/periodictable"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/pimoroni-bme280"]
+source = "github"
+github = "pimoroni/bme280-python"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/pipcl"]
 source = "github"
 github = "ArtifexSoftware/pipcl"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/pms5003"]
+source = "github"
+github = "pimoroni/pms5003-python"
 use_max_tag = true
 prefix = "v"
 
@@ -1806,9 +1862,21 @@ github = "explosion/spacy-loggers"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/spidev"]
+source = "github"
+github = "doceme/py-spidev"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/spur"]
 source = "github"
 github = "mwilliamson/spur.py"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/st7735"]
+source = "github"
+github = "pimoroni/st7735-python"
 use_max_tag = true
 prefix = "v"
 

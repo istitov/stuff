@@ -175,7 +175,11 @@ PYPI_NAME_BY_PKG: dict[str, str] = {
 
 
 GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
-    # TinyCC tags releases as release_X_Y_Z while the ebuild uses X.Y.Z.
+    # Astral tags releases as bare X.Y versions.
+    "dev-python/astral": {
+        "prefix": "",
+    },
+	# TinyCC tags releases as release_X_Y_Z while the ebuild uses X.Y.Z.
     "dev-lang/tcc": {
         "include_regex": r"^release_[0-9]+_[0-9]+_[0-9]+$",
         "from_pattern": r"^release_([0-9]+)_([0-9]+)_([0-9]+)$",
