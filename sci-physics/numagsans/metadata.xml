@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    NuMagSANS calculates magnetic and nuclear small-angle neutron scattering
+    cross sections from atomistic simulation data using NVIDIA CUDA.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">AdamsMP92/NuMagSANS</remote-id>
+  </upstream>
+</pkgmetadata>

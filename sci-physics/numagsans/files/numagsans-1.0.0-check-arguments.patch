@@ -1,0 +1,8 @@
+--- a/src/NuMagSANS.cu
++++ b/src/NuMagSANS.cu
+@@ -15,0 +16,5 @@ int main(int argc, char* argv[]){
++	if(argc != 2){
++		cerr << "Usage: NuMagSANS <input-file>" << endl;
++		return 1;
++	}
++
