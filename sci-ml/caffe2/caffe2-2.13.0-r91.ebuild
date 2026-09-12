@@ -130,6 +130,8 @@ RDEPEND="
 	openblas? ( sci-libs/openblas )
 "
 
+# PyTorch 2.13.0 pins CUTLASS 4.4.2; newer versions removed the
+# TileScheduler overload used by AsyncMM.cu.
 DEPEND="
 	${RDEPEND}
 	dev-cpp/nlohmann_json
@@ -143,7 +145,7 @@ DEPEND="
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/typing-extensions[${PYTHON_USEDEP}]
 	')
-	cuda? ( >=dev-libs/cutlass-3.9.2[tools(+)] )
+	cuda? ( ~dev-libs/cutlass-4.4.2[tools(+)] )
 	onednn? ( sci-ml/ideep )
 	rocm? (
 		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-11:=
