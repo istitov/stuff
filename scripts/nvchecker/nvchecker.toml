@@ -1190,7 +1190,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (238) ---
+# --- github (239) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2708,6 +2708,12 @@ prefix = "v"
 ["sci-physics/mumax"]
 source = "github"
 github = "mumax/3"
+use_max_tag = true
+prefix = "v"
+
+["sci-physics/numagsans"]
+source = "github"
+github = "AdamsMP92/NuMagSANS"
 use_max_tag = true
 prefix = "v"
 
