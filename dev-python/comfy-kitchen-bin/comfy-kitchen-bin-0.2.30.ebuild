@@ -27,6 +27,10 @@ RESTRICT="bindist mirror strip"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/comfy_kitchen/*"
 
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
+
 # Provides ComfyUI's unconditional RoPE path plus FP8/FP4 kernels.
 
 src_unpack() {

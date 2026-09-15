@@ -31,6 +31,10 @@ RESTRICT="bindist mirror strip"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/comfy_kitchen/*"
 
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
+
 # ComfyUI unconditionally uses apply_rope; the package also supplies FP8/FP4.
 
 src_unpack() {
