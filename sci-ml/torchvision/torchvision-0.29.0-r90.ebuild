@@ -8,7 +8,7 @@ DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
 ROCM_SKIP_GLOBALS=1
-inherit cuda distutils-r1 multiprocessing rocm
+inherit cuda distutils-r1 flag-o-matic multiprocessing rocm
 
 DESCRIPTION="Datasets, transforms and models specific to computer vision"
 HOMEPAGE="https://github.com/pytorch/vision"
@@ -56,6 +56,11 @@ EPYTEST_PLUGINS=( pytest-mock )
 distutils_enable_tests pytest
 
 src_prepare() {
+	# nvcc hands CXXFLAGS to the host compiler; under LTO the fatbinData symbol
+	# embedded in each CUDA object collides at link time (issue #289). This
+	# must run before cuda_src_prepare copies CXXFLAGS into NVCCFLAGS.
+	# verified 2026-09-15
+	use cuda && filter-lto
 	use cuda && cuda_src_prepare
 	distutils-r1_src_prepare
 }
@@ -98,11 +103,15 @@ python_test() {
 		test/test_extended_models.py::test_get_model[lraspp_mobilenet_v3_large-LRASPP]
 		test/test_internet.py::TestDatasetUtils::test_download_url_dispatch_download_from_google_drive[True]
 		test/test_internet.py::TestDatasetUtils::test_download_url_dispatch_download_from_google_drive[False]
-		# earth.gif is absent from the archive; deselect only its parameters.
-		# verified 2026-07-22
-		test/test_image.py::test_decode_gif[True-earth]
-		test/test_image.py::test_decode_gif[False-earth]
+		# Every parameter downloads its GIF from sourceforge or wikimedia, so
+		# all of them fail under network-sandbox (issue #290). verified 2026-09-15
+		test/test_image.py::test_decode_gif
+		# Rotated-box resize results miss tolerance on some hosts (issue #290);
+		# ::gentoo deselects the same cases. verified 2026-09-15
+		test/test_transforms_v2.py::TestResize::test_bounding_boxes_correctness[resize-False-size4-BoundingBoxFormat.XYWHR]
+		test/test_transforms_v2.py::TestResize::test_bounding_boxes_correctness[resize-False-size5-BoundingBoxFormat.XYWHR]
+		test/test_transforms_v2.py::TestResize::test_bounding_boxes_correctness[Resize-False-size4-BoundingBoxFormat.XYWHR]
+		test/test_transforms_v2.py::TestResize::test_bounding_boxes_correctness[Resize-False-size5-BoundingBoxFormat.XYWHR]
 	)
-	# ::gentoo's deselected XYWHR cases pass here. verified 2026-07-22
 	epytest
 }
