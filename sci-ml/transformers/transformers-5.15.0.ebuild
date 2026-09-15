@@ -41,10 +41,13 @@ RDEPEND="
 		>=sci-ml/pytorch-2.5[${PYTHON_SINGLE_USEDEP}]
 	)
 "
+# The model tests load with device_map, which needs accelerate even when
+# USE=torch is off. verified 2026-09-16
 BDEPEND="test? (
 	$(python_gen_cond_dep '
 		>=dev-python/parameterized-0.9[${PYTHON_USEDEP}]
 	')
+	>=sci-ml/accelerate-1.1.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/datasets[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed]
 )"
@@ -57,6 +60,19 @@ python_test() {
 		# Optional dev-python/blobfile is not packaged.
 		tests/models/gpt2/test_tokenization_gpt2.py::GPT2TokenizationTest::test_tokenization_tiktoken
 	)
+	local EPYTEST_IGNORE=()
+	# Each tokenization module downloads its reference tokenizer from
+	# huggingface.co during class setup, so none of its tests can run
+	# behind the network sandbox. With it off they pass, so drop them
+	# only when it is on. verified 2026-09-16
+	if has network-sandbox ${FEATURES}; then
+		EPYTEST_IGNORE+=(
+			tests/models/bert/test_tokenization_bert.py
+			tests/models/distilbert/test_tokenization_distilbert.py
+			tests/models/gpt2/test_tokenization_gpt2.py
+			tests/models/roberta/test_tokenization_roberta.py
+		)
+	fi
 	epytest -n auto --maxprocesses=8 --dist loadfile \
 		tests/models/bert \
 		tests/models/gpt2 \
