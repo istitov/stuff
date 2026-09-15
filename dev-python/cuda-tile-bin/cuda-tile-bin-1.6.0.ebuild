@@ -33,6 +33,9 @@ KEYWORDS="-* ~amd64"
 RDEPEND="
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/cuda_tile/*.so*"
 
@@ -40,7 +43,7 @@ src_unpack() {
 	# Prevent default wheel unpacking; install each implementation below.
 	mkdir -p "${S}/wheel" || die
 	local f
-	for f in "${A}"; do
+	for f in ${A}; do
 		cp "${DISTDIR}/${f}" "${S}/wheel/" || die
 	done
 }
