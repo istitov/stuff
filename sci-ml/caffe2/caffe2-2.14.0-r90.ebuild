@@ -131,6 +131,11 @@ RDEPEND="
 	openblas? ( sci-libs/openblas )
 "
 
+# AsyncMM.cu instantiates a cooperative SM90 GEMM whose tile-scheduler call
+# matches cutlass 4.6 and later; 4.4.2 rejects it as too few arguments. 4.6.1
+# and 4.7.0 both compile it, so the cap stops at the first untested major
+# rather than pinning: that call has already changed once across cutlass
+# releases. verified 2026-09-16
 DEPEND="
 	${RDEPEND}
 	dev-cpp/nlohmann_json
@@ -144,7 +149,7 @@ DEPEND="
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/typing-extensions[${PYTHON_USEDEP}]
 	')
-	cuda? ( >=dev-libs/cutlass-3.9.2[tools(+)] )
+	cuda? ( >=dev-libs/cutlass-4.6.1[tools(+)] <dev-libs/cutlass-4.8[tools(+)] )
 	onednn? ( sci-ml/ideep )
 	rocm? (
 		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-11:=
