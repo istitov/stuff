@@ -59,6 +59,23 @@ python_compile() {
 
 	if use cuda; then
 		export ENABLE_CUDA=1
+
+		# With no list, Torch's CMake emits gencode flags for every architecture
+		# it knows, down to compute_50, which CUDA 13 dropped. Carry PTX with the
+		# fallback: a cubin alone would not load on a GPU newer than the default.
+		# verified 2026-09-16
+		if [[ -z ${TORCH_CUDA_ARCH_LIST} ]]; then
+			ewarn "WARNING: torchcodec is being built for CUDA compute capability 7.5,"
+			ewarn "plus PTX so the driver can JIT for a newer GPU. This default may"
+			ewarn "not be optimal for your GPU."
+			ewarn ""
+			ewarn "To target your GPU, set TORCH_CUDA_ARCH_LIST through Portage's package.env"
+			ewarn "mechanism and re-emerge torchcodec."
+			ewarn ""
+			ewarn "You can look up your GPU's CUDA compute capability at https://developer.nvidia.com/cuda-gpus"
+			ewarn "or by running /opt/cuda/extras/demo_suite/deviceQuery | grep 'CUDA Capability'"
+		fi
+		export TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST:-7.5+PTX}"
 	else
 		export ENABLE_CUDA=
 	fi
