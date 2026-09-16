@@ -41,14 +41,25 @@ src_compile() {
 	local gccdir
 	gccdir=$(cuda_gccdir) || die
 	export CC="${gccdir}/gcc" CXX="${gccdir}/g++"
-	# Respect TORCH_CUDA_ARCH_LIST; otherwise target the visible GPU. With no
-	# GPU, let cpp_extension choose its fallback architecture list.
+	# Respect TORCH_CUDA_ARCH_LIST; otherwise target the visible GPU.
 	if [[ -z ${TORCH_CUDA_ARCH_LIST} ]]; then
 		cuda_add_sandbox -w
 		local native_cc
 		native_cc=$(__nvcc_device_query 2>/dev/null)
-		[[ ${native_cc} =~ ^[0-9]{2,}$ ]] &&
+		if [[ ${native_cc} =~ ^[0-9]{2,}$ ]]; then
 			export TORCH_CUDA_ARCH_LIST="${native_cc%?}.${native_cc: -1}"
+		else
+			# Leaving it unset is not an option: with no device to query, torch
+			# 2.13's cpp_extension collects an empty architecture list and then
+			# indexes it, so the build dies with IndexError. PTX comes along
+			# because this path serves builds that run elsewhere, and a 7.5 cubin
+			# alone would not load on a newer GPU. verified 2026-09-16
+			ewarn "No GPU is visible and TORCH_CUDA_ARCH_LIST is unset; building"
+			ewarn "for compute capability 7.5 plus PTX, so the driver can JIT for"
+			ewarn "a newer GPU. Set TORCH_CUDA_ARCH_LIST through Portage's"
+			ewarn "package.env to target yours, then re-emerge ${PN}."
+			export TORCH_CUDA_ARCH_LIST="7.5+PTX"
+		fi
 	fi
 	export FORCE_CUDA=1 MAX_JOBS="${MAX_JOBS:-4}"
 
