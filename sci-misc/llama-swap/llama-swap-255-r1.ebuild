@@ -22,24 +22,28 @@ SRC_URI="
 "
 
 LICENSE="MIT"
+# Dependent licenses, from vendor/. verified 2026-09-15
+LICENSE+=" Apache-2.0 BSD BSD-2 ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="openrc systemd ui"
 
+# vite 8.1.0 and rolldown require node ^20.19.0 || >=22.12.0; no 22.x below
+# 22.12 exists in ::gentoo. verified 2026-09-15
 BDEPEND="
-	>=dev-lang/go-1.27.0
-	ui? ( net-libs/nodejs[npm] )
+	>=dev-lang/go-1.27.1
+	ui? ( >=net-libs/nodejs-20.19.0[npm] )
 "
 
-# USE=ui fetches the large, bump-sensitive Svelte dependency set from npm,
-# matching sci-misc/llama-cpp's web UI model.
+# USE=ui fetches the large, bump-sensitive Svelte dependency set from npm;
+# upstream releases publish no prebuilt UI assets to ship as a distfile.
 PROPERTIES="ui? ( live )"
 RESTRICT="ui? ( network-sandbox )"
 
 src_compile() {
 	# Since 251, embed_ui controls Vite output in internal/server/ui_dist;
-	# !embed_ui supplies the no-UI implementation. At 253 the lockfile, output,
-	# tag pair, and main.version ldflag target remain valid. # verified 2026-09-04
+	# !embed_ui supplies the no-UI implementation. At 255 the lockfile, output,
+	# tag pair, and main.version ldflag target remain valid. # verified 2026-09-06
 	local build_tags=()
 	if use ui; then
 		pushd ui > /dev/null || die
@@ -51,7 +55,7 @@ src_compile() {
 	fi
 
 	ego build "${build_tags[@]}" \
-		-ldflags="-X main.version=${PV}" \
+		-ldflags="-X main.version=${PV} -X main.commit=v${PV}" \
 		-o "${PN}" .
 }
 

@@ -7,7 +7,7 @@ Wants=network.target
 [Service]
 Type=simple
 User=%i
-Group=%i
+# No Group=: run with the user's primary group, which need not share its name.
 # LLAMA_SWAP_CONFIG must be supplied via /etc/default/llama-swap@%i; we
 # don't default it to e.g. %h/.config/llama-swap.yaml because systemd's
 # %h resolves to /root for system-manager units, and hardcoding a
@@ -15,7 +15,9 @@ Group=%i
 EnvironmentFile=/etc/default/llama-swap@%i
 Environment="LLAMA_SWAP_LISTEN=127.0.0.1:8080"
 Environment="LLAMA_SWAP_EXTRA_OPTS="
-ExecStart=/usr/bin/llama-swap --config ${LLAMA_SWAP_CONFIG} --listen ${LLAMA_SWAP_LISTEN} ${LLAMA_SWAP_EXTRA_OPTS}
+# Unbraced $LLAMA_SWAP_EXTRA_OPTS splits into zero or more arguments; the
+# braced form would pass it as a single (possibly empty) argument.
+ExecStart=/usr/bin/llama-swap --config ${LLAMA_SWAP_CONFIG} --listen ${LLAMA_SWAP_LISTEN} $LLAMA_SWAP_EXTRA_OPTS
 Restart=always
 RestartSec=5s
 

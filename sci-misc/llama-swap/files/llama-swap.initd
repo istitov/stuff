@@ -21,7 +21,6 @@ respawn_max=0
 
 depend() {
 	need net
-	after net
 }
 
 start_pre() {
@@ -47,6 +46,10 @@ start_pre() {
 		eerror "/etc/conf.d/llama-swap."
 		return 1
 	fi
+	# supervise-daemon opens the log after dropping privileges, so the user
+	# must be able to write it. verified 2026-09-15
+	checkpath -f -o "${LLAMA_SWAP_USER}" -m 0640 "${LLAMA_SWAP_LOG}" || return 1
 	command_args="--config ${LLAMA_SWAP_CONFIG} --listen ${LLAMA_SWAP_LISTEN} ${LLAMA_SWAP_EXTRA_OPTS}"
-	command_user="${LLAMA_SWAP_USER}:${LLAMA_SWAP_USER}"
+	# No group: run with the user's primary group, which need not share its name.
+	command_user="${LLAMA_SWAP_USER}"
 }
