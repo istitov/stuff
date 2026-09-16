@@ -25,7 +25,7 @@ KEYWORDS="~amd64 ~arm64"
 # Separate atoms avoid pkgcheck's UncheckableDep on many conditional USE deps.
 # verified 2026-09-10
 IUSE="cuda cusparselt distributed fbgemm flash gloo kineto memefficient
-	mimalloc mkl mpi nccl nnpack +numpy onednn openblas opencl openmp qnnpack
+	mimalloc mkl mpi nccl nnpack +numpy onednn openblas openmp qnnpack
 	rocm xnnpack"
 RESTRICT="test"
 REQUIRED_USE="
@@ -61,7 +61,6 @@ RDEPEND="
 	numpy? ( ~sci-ml/caffe2-${PV}[numpy] )
 	onednn? ( ~sci-ml/caffe2-${PV}[onednn] )
 	openblas? ( ~sci-ml/caffe2-${PV}[openblas] )
-	opencl? ( ~sci-ml/caffe2-${PV}[opencl] )
 	openmp? ( ~sci-ml/caffe2-${PV}[openmp] )
 	qnnpack? ( ~sci-ml/caffe2-${PV}[qnnpack] )
 	rocm? ( ~sci-ml/caffe2-${PV}[rocm] )
