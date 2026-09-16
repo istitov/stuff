@@ -160,6 +160,10 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.8.0-unbundle_pocketfft.patch.xz
 	"${FILESDIR}"/${PN}-2.5.1-cudnn_include_fix.patch.xz
 	"${FILESDIR}"/${PN}-2.4.0-cpp-httplib.patch.xz
+	# cpp-httplib 0.56 made Params an insertion-ordered map, which no longer
+	# converts to the multimap reference the interface returns.
+	# verified 2026-09-16
+	"${FILESDIR}"/${PN}-2.11.0-cpp-httplib-params.patch.xz
 	"${FILESDIR}"/${PN}-2.5.1-glog-0.6.0.patch.xz
 	"${FILESDIR}"/${PN}-2.7.0-glog-0.7.1.patch.xz
 	# Use glog's public initialization API; the internal symbol does not link.
