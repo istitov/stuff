@@ -48,7 +48,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cuda cusparselt distributed fbgemm flash gloo kineto memefficient
-	mimalloc mkl mpi nccl nnpack +numpy onednn openblas opencl openmp qnnpack
+	mimalloc mkl mpi nccl nnpack +numpy onednn openblas openmp qnnpack
 	rocm xnnpack"
 RESTRICT="test"
 REQUIRED_USE="
@@ -103,7 +103,6 @@ RDEPEND="
 		dev-python/numpy[${PYTHON_USEDEP}]
 	') )
 	onednn? ( sci-ml/oneDNN )
-	opencl? ( virtual/opencl )
 	qnnpack? (
 		sci-ml/gemmlowp
 		dev-libs/pthreadpool
@@ -356,7 +355,6 @@ src_configure() {
 		-DUSE_NNPACK=$(usex nnpack)
 		-DUSE_NUMA=OFF
 		-DUSE_NUMPY=$(usex numpy)
-		-DUSE_OPENCL=$(usex opencl)
 		-DUSE_OPENMP=$(usex openmp)
 		-DUSE_PYTORCH_QNNPACK=$(usex qnnpack)
 		-DUSE_PYTORCH_METAL=OFF
