@@ -5,16 +5,41 @@ EAPI=8
 
 ROCM_VERSION="7.0"
 
-inherit cmake cuda git-r3 rocm linux-info toolchain-funcs
+inherit cmake cuda rocm linux-info toolchain-funcs
 
 TINY_LLAMAS_COMMIT="99dd1a73db5a37100bd4ae633f4cfce6560e1567"
 
 DESCRIPTION="Port of Facebook's LLaMA model in C/C++"
 HOMEPAGE="https://github.com/ggml-org/llama.cpp"
 
-EGIT_REPO_URI="https://github.com/ggml-org/llama.cpp.git"
+# The upstream tag this ebuild builds and the build number that goes with
+# it: a release is the vX.Y.Z tag, whose build upstream publishes as
+# nightly-tag.txt; a snapshot is the bN tag itself and is versioned
+# X.Y.Z_pN after the release it follows.
+LLAMA_SRC_TAG="b10955"
+LLAMA_BUILD_NUMBER="10955"
 
-SRC_URI="
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/ggml-org/llama.cpp.git"
+	# No pinned UI distfile exists for a live checkout; CMake builds it with npm
+	# or fetches it from Hugging Face.
+	RESTRICT="webui? ( network-sandbox )"
+else
+	# A release carries upstream's own version; a snapshot is a dev build.
+	[[ ${LLAMA_SRC_TAG} == v* ]] && LLAMA_BUILD_IS_DEV=OFF || LLAMA_BUILD_IS_DEV=ON
+	MY_PV="${LLAMA_SRC_TAG}"
+	S="${WORKDIR}/llama.cpp-${LLAMA_SRC_TAG#v}"
+	LLAMA_UI="llama-b${LLAMA_BUILD_NUMBER}"
+	SRC_URI="
+		https://github.com/ggml-org/llama.cpp/archive/refs/tags/${LLAMA_SRC_TAG}.tar.gz -> ${P}.tar.gz
+		webui? (
+			https://github.com/ggml-org/llama.cpp/releases/download/b${LLAMA_BUILD_NUMBER}/${LLAMA_UI}-ui.tar.gz
+		)
+	"
+fi
+
+SRC_URI+="
 	examples? (
 		https://huggingface.co/ggml-org/tiny-llamas/resolve/${TINY_LLAMAS_COMMIT}/stories15M-q4_0.gguf
 			-> ggml-org_models_tinyllamas_stories15M-q4_0-${TINY_LLAMAS_COMMIT}.gguf
@@ -23,7 +48,9 @@ SRC_URI="
 
 LICENSE="MIT"
 SLOT="0"
-
+# Snapshot of the tip between releases: unkeyworded on purpose, so it has
+# to be requested per version through package.accept_keywords.
+KEYWORDS=""
 CPU_FLAGS_X86=(
 	amx_bf16 amx_int8 amx_tile avx avx2 avx512_bf16 avx512_vnni avx512f
 	avx512vbmi avx_vnni bmi2 f16c fma3 sse4_2
@@ -40,10 +67,6 @@ REQUIRED_USE="
 	)
 	rocm? ( ${ROCM_REQUIRED_USE} )
 "
-
-# No pinned UI distfile exists for a live checkout; CMake builds it with npm
-# or fetches it from Hugging Face.
-RESTRICT="webui? ( network-sandbox )"
 
 # numpy is used by convert_hf_to_gguf.py.
 # SYCL needs an unexpressible -fsycl compiler; level-zero and oneDNN are optional
@@ -106,6 +129,11 @@ src_prepare() {
 		cp "${DISTDIR}/ggml-org_models_tinyllamas_stories15M-q4_0-${TINY_LLAMAS_COMMIT}.gguf" \
 			"${BUILD_DIR}/tinyllamas/stories15M-q4_0.gguf" || die
 	fi
+	# Assets in tools/ui/dist take priority over the npm build and the
+	# Hugging Face download, bug #979245.
+	if use webui && [[ ${PV} != *9999* ]]; then
+		cp -a "${WORKDIR}/${LLAMA_UI}" "${S}/tools/ui/dist" || die
+	fi
 }
 
 src_configure() {
@@ -130,12 +158,24 @@ src_configure() {
 		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
 	)
 
-	# Both switches track USE: the Hugging Face fetch runs even with the
-	# UI build disabled. A live checkout keeps git describe's version.
-	mycmakeargs+=(
-		-DLLAMA_BUILD_UI=$(usex webui)
-		-DLLAMA_USE_PREBUILT_UI=$(usex webui)
-	)
+	if [[ ${PV} == *9999* ]]; then
+		# Both switches track USE: the Hugging Face fetch runs even with the
+		# UI build disabled.
+		mycmakeargs+=(
+			-DLLAMA_BUILD_UI=$(usex webui)
+			-DLLAMA_USE_PREBUILT_UI=$(usex webui)
+		)
+	else
+		mycmakeargs+=(
+			# Never provision the UI over the network; without the distfile
+			# the server is built with an empty UI.
+			-DLLAMA_BUILD_UI=OFF
+			-DLLAMA_USE_PREBUILT_UI=OFF
+			-DLLAMA_BUILD_IS_DEV=${LLAMA_BUILD_IS_DEV}
+			-DLLAMA_BUILD_NUMBER="${LLAMA_BUILD_NUMBER}"
+			-DLLAMA_BUILD_COMMIT="${MY_PV}"
+		)
+	fi
 
 	mycmakeargs+=(
 		-DGGML_SSE42=$(usex cpu_flags_x86_sse4_2)
