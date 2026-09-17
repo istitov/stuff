@@ -6,8 +6,8 @@ number_of_borders() into the BGL package under namespace CGAL, leaving
 CGAL/Polygon_mesh_processing/border.h as a deprecated forwarder. The
 remaining Polygon_mesh_processing headers no longer include that
 forwarder transitively, and MeshBoolean.cpp had relied on exactly that,
-so both of its CGAL::Polygon_mesh_processing::extract_boundary_cycles()
-call sites stop resolving.
+so its extract_boundary_cycles() calls stop resolving -- one call site
+in 2.3.2, two from 2.4.1 on.
 
 Include the header explicitly. The deprecated forwarder is kept in the
 Polygon_mesh_processing namespace, so the call sites are unchanged and

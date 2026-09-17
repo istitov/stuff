@@ -31,7 +31,7 @@ PATCHES=(
 	"${FILESDIR}/${P}-boost-process-v1.patch"
 	"${FILESDIR}/${P}-boost-asio-fs.patch"
 	"${FILESDIR}/${P}-cgal-6.patch"
-	# CGAL 6.2 stopped pulling in the header declaring extract_boundary_cycles().
+	# CGAL 6.2 no longer includes border.h transitively.
 	"${FILESDIR}/${PN}-2.3.2-cgal-6.2-border.patch"
 	"${FILESDIR}/${P}-link-webkit2gtk.patch"
 	"${FILESDIR}/${P}-occt-7.8-tkdestep.patch"
@@ -47,8 +47,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-2.4.0-clipper2-static.patch"
 )
 
-# The CGAL patches assume 6.0: AABB_traits was renamed AABB_traits_3 there and
-# add_property_map() began returning std::optional. verified 2026-09-17
+# CGAL patches need >=6.0 for the AABB_traits_3 rename. verified 2026-09-17
 RDEPEND="
 	app-crypt/libsecret
 	dev-cpp/eigen:3
