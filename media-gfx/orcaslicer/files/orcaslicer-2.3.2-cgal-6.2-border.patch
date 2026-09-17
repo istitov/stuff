@@ -1,0 +1,26 @@
+From: stuff overlay maintainer
+Subject: Include the CGAL header declaring extract_boundary_cycles()
+
+CGAL 6.2 moved extract_boundary_cycles(), border_halfedges() and
+number_of_borders() into the BGL package under namespace CGAL, leaving
+CGAL/Polygon_mesh_processing/border.h as a deprecated forwarder. The
+remaining Polygon_mesh_processing headers no longer include that
+forwarder transitively, and MeshBoolean.cpp had relied on exactly that,
+so both of its CGAL::Polygon_mesh_processing::extract_boundary_cycles()
+call sites stop resolving.
+
+Include the header explicitly. The deprecated forwarder is kept in the
+Polygon_mesh_processing namespace, so the call sites are unchanged and
+this also builds against CGAL 6.0 and 6.1, where
+CGAL/boost/graph/border.h does not exist yet. verified 2026-09-17
+
+--- a/src/libslic3r/MeshBoolean.cpp
++++ b/src/libslic3r/MeshBoolean.cpp
+@@ -16,6 +16,7 @@
+ #include <CGAL/Exact_integer.h>
+ #include <CGAL/Surface_mesh.h>
+ #include <CGAL/Cartesian_converter.h>
++#include <CGAL/Polygon_mesh_processing/border.h>
+ #include <CGAL/Polygon_mesh_processing/orient_polygon_soup.h>
+ #include <CGAL/Polygon_mesh_processing/repair.h>
+ #include <CGAL/Polygon_mesh_processing/remesh.h>

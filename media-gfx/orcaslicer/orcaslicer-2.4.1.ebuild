@@ -38,6 +38,8 @@ PATCHES=(
 	# Replace removed boost::asio::io_service with io_context for Boost 1.87+.
 	"${FILESDIR}/${PN}-2.4.0-boost-asio-io_context.patch"
 	"${FILESDIR}/${PN}-2.3.2-cgal-6.patch"
+	# CGAL 6.2 stopped pulling in the header declaring extract_boundary_cycles().
+	"${FILESDIR}/${PN}-2.3.2-cgal-6.2-border.patch"
 	"${FILESDIR}/${PN}-2.3.2-occt-7.8-tkdestep.patch"
 	"${FILESDIR}/${PN}-2.3.2-opencv-no-world.patch"
 	# System wxGTK enables assertions unlike upstream's bundled build; suppress
@@ -56,6 +58,8 @@ PATCHES=(
 # OpenSSL and unbundled md4c are runtime links; customized Clipper2 is static.
 # libspnav is build-only because 3D-mouse support links libspnav.a.
 # verified 2026-06-20
+# The CGAL patches assume 6.0: AABB_traits was renamed AABB_traits_3 there and
+# add_property_map() began returning std::optional. verified 2026-09-17
 RDEPEND="
 	app-crypt/libsecret
 	dev-cpp/nlohmann_json:=
@@ -86,7 +90,7 @@ RDEPEND="
 	sci-libs/libigl
 	sci-libs/nlopt
 	sci-libs/opencascade:=
-	sci-mathematics/cgal:=
+	>=sci-mathematics/cgal-6.0:=
 	sys-apps/dbus
 	virtual/opengl
 	virtual/zlib:=
