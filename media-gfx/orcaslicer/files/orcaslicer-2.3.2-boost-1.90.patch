@@ -9,17 +9,20 @@ Boost.Asio also no longer transitively pulls in deadline_timer; the
 two files that use asio::deadline_timer must include the header
 explicitly.
 
+The CMakeLists.txt hunk carries one line of context either side. An
+Eigen block replaced the two lines below the find_package() call after
+2.3.2, so the wider context applied with fuzz 2 -- the most patch will
+tolerate. The find_package(Boost ...) line it changes occurs exactly
+once in every version, so one line of context is enough to place it.
+# verified 2026-09-17
+
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -583,7 +583,7 @@
-   cmake_policy(SET CMP0167 NEW)
- endif()
+@@ -585,3 +585,3 @@
  set(Boost_NO_SYSTEM_PATHS TRUE)
 -find_package(Boost 1.83.0 REQUIRED COMPONENTS system filesystem thread log log_setup locale regex chrono atomic date_time iostreams program_options nowide)
 +find_package(Boost 1.83.0 REQUIRED COMPONENTS filesystem thread log log_setup locale regex chrono atomic date_time iostreams program_options nowide)
-
- add_library(boost_libs INTERFACE)
- add_library(boost_headeronly INTERFACE)
+ 
 --- a/src/slic3r/Utils/Bonjour.cpp
 +++ b/src/slic3r/Utils/Bonjour.cpp
 @@ -7,6 +7,7 @@

@@ -10,17 +10,20 @@ live under /usr/include/opencv4 and bare-name target_link_libraries
 entries do not propagate the imported targets INTERFACE include dirs to
 every translation unit (ObjColorUtils.cpp).
 
+The first hunk carries one line of context either side. The wider
+context reached the add_library(libslic3r_cgal STATIC line, which lost
+its trailing space after 2.3.2 and so applied with fuzz on 2.4.1 and
+2.4.2. Both remaining context lines occur exactly once in the file, so
+placement stays unambiguous, and the hunk matches 2.3.2 through 2.4.2
+with no fuzz. # verified 2026-09-17
+
 --- a/src/libslic3r/CMakeLists.txt
 +++ b/src/libslic3r/CMakeLists.txt
-@@ -496,7 +496,7 @@
- cmake_policy(PUSH)
- cmake_policy(SET CMP0011 NEW)
+@@ -498,3 +498,3 @@
  find_package(CGAL REQUIRED)
 -find_package(OpenCV REQUIRED core)
 +find_package(OpenCV REQUIRED core imgproc imgcodecs)
  cmake_policy(POP)
- 
- add_library(libslic3r_cgal STATIC 
 @@ -579,7 +579,9 @@
          libigl
          libnest2d
