@@ -28,10 +28,10 @@ ship without runtime wx asserts.
  #include <wx/log.h>
 +#include <wx/debug.h>
  #include <wx/intl.h>
-
+ 
  #include <wx/dialog.h>
 @@ -2596,6 +2597,17 @@
-
+ 
  bool GUI_App::OnInit()
  {
 +    // stuff overlay: silence wx assertions at runtime to match the
