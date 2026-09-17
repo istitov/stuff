@@ -19,18 +19,24 @@ faiss's own accumulate_loops_512.h:26 already uses the correct guard
 kernels_simd512.h and decompose_qbs.h so the AVX512 fast-scan path is
 compiled only in the TUs that actually pull in the AVX512 simdlib.
 
-Upstream: not yet filed (guard mismatch, applies to 1.14.x).
+Upstream: not yet filed (guard mismatch, still present in 1.15.1).
+
+The first hunk deliberately carries only two lines of trailing context.
+1.15.1 inserted a SIMDLevel::AVX512_VPOPCNT case directly below, which
+made the full three-line context apply with fuzz; the shorter context
+matches 1.14.3 through 1.15.1 exactly instead. COMPILE_SIMD_AVX512 is
+still the right macro to test for that new level, because every target
+defining COMPILE_SIMD_AVX512_VPOPCNT defines COMPILE_SIMD_AVX512 as
+well. # verified 2026-09-17
 --- a/faiss/impl/fast_scan/decompose_qbs.h
 +++ b/faiss/impl/fast_scan/decompose_qbs.h
-@@ -37,7 +37,7 @@
-         const uint8_t* LUT,
+@@ -38,5 +38,5 @@
          ResultHandler& res,
          const Scaler& scaler) {
 -#ifdef __AVX512F__
 +#if defined(COMPILE_SIMD_AVX512) && defined(__AVX512F__)
      if constexpr (
              KernelSL == SIMDLevel::AVX512 ||
-             KernelSL == SIMDLevel::AVX512_SPR) {
 --- a/faiss/impl/fast_scan/kernels_simd512.h
 +++ b/faiss/impl/fast_scan/kernels_simd512.h
 @@ -10,7 +10,7 @@
