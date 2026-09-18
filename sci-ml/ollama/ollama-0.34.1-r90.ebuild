@@ -8,10 +8,9 @@ ROCM_VERSION="7.0"
 
 inherit cuda rocm cmake flag-o-matic go-module linux-info multiprocessing systemd
 
-# Prestage the exact llama.cpp pin from LLAMA_CPP_VERSION, while preserving
-# upstream's compat-patch step. The b10760 pin is unchanged in 0.34.0.
-# Verified 2026-09-11.
-LLAMACPP_COMMIT="b10760"
+# Prestage the llama.cpp pin from LLAMA_CPP_VERSION, keeping upstream's
+# compat-patch step. Re-read it every bump. # verified 2026-09-18
+LLAMACPP_COMMIT="b10864"
 
 DESCRIPTION="Get up and running with Llama 3, Mistral, Gemma, and other language models"
 HOMEPAGE="https://ollama.com"
