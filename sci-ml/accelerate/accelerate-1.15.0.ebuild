@@ -35,8 +35,8 @@ BDEPEND="test? (
 		dev-python/networkx[${PYTHON_USEDEP}]
 		dev-python/parameterized[${PYTHON_USEDEP}]
 	')
-	>=sci-ml/pytorch-2.13.0
-	amd64? ( >=sci-ml/caffe2-2.13.0[gloo] )
+	>=sci-ml/pytorch-2.14.0-r91
+	amd64? ( >=sci-ml/caffe2-2.14.0-r91[gloo] )
 	sci-ml/evaluate[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchdata[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
