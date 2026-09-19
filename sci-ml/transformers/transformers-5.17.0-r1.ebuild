@@ -57,9 +57,12 @@ EPYTEST_PLUGINS=( pytest-xdist )
 distutils_enable_tests pytest
 
 python_test() {
+	local compile_test="tests/models/gpt2/test_modeling_gpt2.py::GPT2ModelTest::test_generate_compilation_all_outputs"
 	local EPYTEST_DESELECT=(
 		# Optional dev-python/blobfile is not packaged.
 		tests/models/gpt2/test_tokenization_gpt2.py::GPT2TokenizationTest::test_tokenization_tiktoken
+		# Running this torch.compile test beside other workers aborts in libtorch.
+		"${compile_test}"
 	)
 	local EPYTEST_IGNORE=()
 	# Each tokenization module downloads its reference tokenizer from
@@ -79,4 +82,9 @@ python_test() {
 		tests/models/gpt2 \
 		tests/models/roberta \
 		tests/models/distilbert
+
+	EPYTEST_DESELECT=(
+		tests/models/gpt2/test_tokenization_gpt2.py::GPT2TokenizationTest::test_tokenization_tiktoken
+	)
+	epytest "${compile_test}"
 }
