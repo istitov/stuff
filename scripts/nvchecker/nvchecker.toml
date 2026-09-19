@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (296) ---
+# --- pypi (295) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -37,10 +37,6 @@ pypi = "anthropic"
 ["dev-python/apache-tvm-ffi"]
 source = "pypi"
 pypi = "apache-tvm-ffi"
-
-["dev-python/arro3-core"]
-source = "pypi"
-pypi = "arro3-core"
 
 ["dev-python/asciitree"]
 source = "pypi"
@@ -1194,7 +1190,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (239) ---
+# --- github (240) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1468,6 +1464,13 @@ source = "github"
 github = "pimoroni/ads1015-python"
 use_max_tag = true
 prefix = "v"
+
+["dev-python/arro3-core"]
+source = "github"
+github = "kylebarron/arro3"
+use_max_tag = true
+include_regex = '^py-v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "py-v"
 
 ["dev-python/astral"]
 source = "github"

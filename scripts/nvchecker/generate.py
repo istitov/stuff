@@ -175,6 +175,14 @@ PYPI_NAME_BY_PKG: dict[str, str] = {
 
 
 GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
+    # arro3 shares its repository with Pyodide and pyo3-arrow tags.
+    "dev-python/arro3-core": {
+        "source": "github",
+        "github": "kylebarron/arro3",
+        "use_max_tag": True,
+        "include_regex": r"^py-v[0-9]+\.[0-9]+\.[0-9]+$",
+        "prefix": "py-v",
+    },
     # Astral tags releases as bare X.Y versions.
     "dev-python/astral": {
         "prefix": "",
