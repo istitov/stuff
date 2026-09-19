@@ -1,0 +1,89 @@
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -14,6 +14,8 @@
+ 
+ list(APPEND SPM_LIBS absl::status)
+-list(APPEND SPM_LIBS absl::status_builder)
++if(TARGET absl::status_builder)
++  list(APPEND SPM_LIBS absl::status_builder)
++endif()
+ list(APPEND SPM_LIBS absl::strings)
+ list(APPEND SPM_LIBS absl::flags)
+ list(APPEND SPM_LIBS absl::flags_parse)
+--- /dev/null
++++ b/src/status_builder_compat.h
+@@ -0,0 +1,34 @@
++#ifndef STATUS_BUILDER_COMPAT_H_
++#define STATUS_BUILDER_COMPAT_H_
++
++#if __has_include("third_party/absl/status/status_builder.h")
++#include "third_party/absl/status/status_builder.h"
++#else
++
++#include <sstream>
++
++#include "third_party/absl/status/status.h"
++
++namespace absl {
++
++class StatusBuilder {
++ public:
++  explicit StatusBuilder(StatusCode code) : code_(code) {}
++
++  template <typename T>
++  StatusBuilder& operator<<(const T& value) {
++    stream_ << value;
++    return *this;
++  }
++
++  operator Status() const { return Status(code_, stream_.str()); }
++
++ private:
++  StatusCode code_;
++  std::ostringstream stream_;
++};
++
++}  // namespace absl
++
++#endif
++#endif  // STATUS_BUILDER_COMPAT_H_
+--- a/src/util.h
++++ b/src/util.h
+@@ -38,7 +38,7 @@
+ #include "third_party/absl/numeric/bits.h"
+ #include "third_party/absl/random/random.h"
+ #include "third_party/absl/status/status.h"
+-#include "third_party/absl/status/status_builder.h"
++#include "status_builder_compat.h"
+ #include "third_party/absl/strings/ascii.h"
+ #include "third_party/absl/strings/numbers.h"
+ #include "third_party/absl/strings/str_cat.h"
+--- a/src/spec_parser.h
++++ b/src/spec_parser.h
+@@ -20,7 +20,7 @@
+ 
+ #include "sentencepiece_processor.h"
+ #include "third_party/absl/status/status.h"
+-#include "third_party/absl/status/status_builder.h"
++#include "status_builder_compat.h"
+ #include "third_party/absl/strings/ascii.h"
+ #include "third_party/absl/strings/numbers.h"
+ #include "third_party/absl/strings/str_split.h"
+--- a/src/common.h
++++ b/src/common.h
+@@ -22,7 +22,15 @@
+ #include "third_party/absl/log/globals.h"
+ #include "third_party/absl/log/log.h"
+ #include "third_party/absl/status/status.h"
++#if __has_include("third_party/absl/status/status_macros.h")
+ #include "third_party/absl/status/status_macros.h"
++#else
++#define ABSL_RETURN_IF_ERROR(expr)       \
++  do {                                   \
++    const auto sp_absl_status = (expr);  \
++    if (!sp_absl_status.ok()) return sp_absl_status; \
++  } while (false)
++#endif
+ #include "third_party/absl/strings/string_view.h"
+ 
+ #if defined(_WIN32) && !defined(__CYGWIN__)

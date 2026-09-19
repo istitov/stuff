@@ -1,0 +1,52 @@
+--- a/python/setup.py
++++ b/python/setup.py
+@@ -41,6 +41,29 @@ def is_gil_disabled():
+   return sysconfig.get_config_var('Py_GIL_DISABLED')
+ 
+ 
++def run_pkg_config(section):
++  try:
++    output = subprocess.check_output([
++        'pkg-config', 'sentencepiece', '--{}'.format(section)
++    ])
++    if sys.version_info >= (3, 0, 0):
++      output = output.decode('utf-8')
++  except subprocess.CalledProcessError:
++    sys.stderr.write('Failed to find sentencepiece pkg-config\n')
++    sys.exit(1)
++  return output.strip().split()
++
++
++def is_sentencepiece_installed():
++  try:
++    subprocess.check_call([
++        'pkg-config', 'sentencepiece', '--libs'
++    ])
++    return True
++  except subprocess.CalledProcessError:
++    return False
++
++
+ def find_abseil_lib(search_root):
+   print('## searching abseil {}'.format(search_root))
+   absl_libs = []
+@@ -109,10 +132,15 @@ class build_ext_unix(_build_ext):
+     cflags.extend(find_absl_include(is_msvc=False))
+ 
+     if len(libs) == 0:
+-      subprocess.check_call(['./build_bundled.sh', __version__])
+-      cflags, libs = get_cflags_and_libs('./build/root')
+-      abseil_libs = find_abseil_lib('./build/third_party')
+-      cflags.extend(find_absl_include(is_msvc=False))
++      if is_sentencepiece_installed():
++        cflags = run_pkg_config('cflags')
++        libs = run_pkg_config('libs')
++        abseil_libs = []
++      else:
++        subprocess.check_call(['./build_bundled.sh', __version__])
++        cflags, libs = get_cflags_and_libs('./build/root')
++        abseil_libs = find_abseil_lib('./build/third_party')
++        cflags.extend(find_absl_include(is_msvc=False))
+ 
+     # Fix compile on some versions of Mac OSX
+     # See: https://github.com/neulab/xnmt/issues/199
