@@ -112,6 +112,8 @@ src_test() {
 		tests/test_utils_http.py::TestUniqueRequestId
 		tests/test_utils_http.py::test_client_get_request
 		tests/test_utils_http.py::test_async_client_get_request
+		# Calls the staging Hub without a production marker.
+		tests/test_utils_http.py::test_flag_as_download_call_decorator
 		tests/test_utils_pagination.py::TestPagination::test_paginate_hf_api
 		tests/test_utils_telemetry.py::TestSendTelemetry::test_topic_multiple
 		tests/test_utils_telemetry.py::TestSendTelemetry::test_topic_normal
