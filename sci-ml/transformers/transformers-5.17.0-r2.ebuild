@@ -44,25 +44,25 @@ RDEPEND="
 "
 # The model tests load with device_map, which needs accelerate even when
 # USE=torch is off. verified 2026-09-16
+# caffe2 before 2.13.0-r92 was built RelWithDebInfo, which strips
+# -DNDEBUG and leaves torch's debug asserts live; the model tests then
+# abort in libtorch_python. # verified 2026-09-20
 BDEPEND="test? (
 	$(python_gen_cond_dep '
 		>=dev-python/parameterized-0.9[${PYTHON_USEDEP}]
 	')
 	>=sci-ml/accelerate-1.1.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/datasets[${PYTHON_SINGLE_USEDEP}]
-	sci-ml/caffe2[distributed]
+	>=sci-ml/caffe2-2.13.0-r92[distributed]
 )"
 
 EPYTEST_PLUGINS=( pytest-xdist )
 distutils_enable_tests pytest
 
 python_test() {
-	local compile_test="tests/models/gpt2/test_modeling_gpt2.py::GPT2ModelTest::test_generate_compilation_all_outputs"
 	local EPYTEST_DESELECT=(
 		# Optional dev-python/blobfile is not packaged.
 		tests/models/gpt2/test_tokenization_gpt2.py::GPT2TokenizationTest::test_tokenization_tiktoken
-		# Running this torch.compile test beside other workers aborts in libtorch.
-		"${compile_test}"
 	)
 	local EPYTEST_IGNORE=()
 	# Each tokenization module downloads its reference tokenizer from
@@ -82,9 +82,4 @@ python_test() {
 		tests/models/gpt2 \
 		tests/models/roberta \
 		tests/models/distilbert
-
-	EPYTEST_DESELECT=(
-		tests/models/gpt2/test_tokenization_gpt2.py::GPT2TokenizationTest::test_tokenization_tiktoken
-	)
-	epytest "${compile_test}"
 }
