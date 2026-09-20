@@ -19,6 +19,12 @@ RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
+# CMakeLists.txt does find_package(nanobind 2.4.0 CONFIG REQUIRED), and
+# nanobind's config-version file is SameMajorVersion, so it rejects a 3.x
+# install for a 2.4.0 request and the wheel build dies at configure.
+# Upstream's pyproject declares an unbounded nanobind >=2.4, which its own
+# CMake then contradicts. # verified 2026-09-20
 BDEPEND="
 	>=dev-python/nanobind-2.4[${PYTHON_USEDEP}]
+	<dev-python/nanobind-3[${PYTHON_USEDEP}]
 "
