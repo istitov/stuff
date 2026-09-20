@@ -5,7 +5,7 @@ EAPI=8
 
 ROCM_VERSION="7.0"
 
-inherit cmake cuda git-r3 rocm linux-info toolchain-funcs
+inherit cmake cuda flag-o-matic git-r3 rocm linux-info toolchain-funcs
 
 TINY_LLAMAS_COMMIT="99dd1a73db5a37100bd4ae633f4cfce6560e1567"
 
@@ -29,7 +29,7 @@ CPU_FLAGS_X86=(
 	avx512vbmi avx_vnni bmi2 f16c fma3 sse4_2
 )
 
-IUSE="openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui sycl"
+IUSE="debug openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui sycl"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
 REQUIRED_USE="
@@ -109,6 +109,17 @@ src_prepare() {
 }
 
 src_configure() {
+	# Upstream releases build Release, which supplies -DNDEBUG; cmake.eclass
+	# blanks CMAKE_*_FLAGS_RELWITHDEBINFO, so it never lands and the plain
+	# assert() calls in ggml and llama stay live -- a configuration upstream
+	# never exercises. GGML_ASSERT is unconditional, so the ggml consistency
+	# checks survive either way. Worth ~1% of token throughput on AVX-512.
+	# USE=debug keeps the asserts for diagnosing an abort. # verified 2026-09-21
+	if ! use debug; then
+		append-cflags "-DNDEBUG"
+		append-cxxflags "-DNDEBUG"
+	fi
+
 	local mycmakeargs=(
 		-DLLAMA_BUILD_TESTS=OFF
 		-DLLAMA_BUILD_EXAMPLES=$(usex examples)
