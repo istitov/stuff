@@ -1,0 +1,444 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{12..14} )
+ROCM_VERSION=6.1
+# Build as Release so upstream defines NDEBUG. cmake.eclass blanks the
+# build type's own flag set, and cmake/Dependencies.cmake strips -DNDEBUG
+# from CXXFLAGS unless the type is exactly Release, so a RelWithDebInfo
+# build keeps every debug-only assert live: torch then aborts on checks
+# upstream compiles out, such as storage().use_count() == 1 in the
+# generated autograd code. verified 2026-09-20
+CMAKE_BUILD_TYPE=Release
+inherit python-single-r1 cmake cuda flag-o-matic prefix rocm toolchain-funcs
+
+MYPN=pytorch
+MYP=${MYPN}-${PV}
+
+# Build against upstream's pinned composable-kernel revision.
+CK_COMMIT=7fe50dc3da2069d6645d9deb8c017a876472a977
+CK_P=composable_kernel-${CK_COMMIT:0:8}
+
+FLASH_PV=2.7.4
+FLASH_PN=flash-attention
+FLASH_P=${FLASH_PN}-${FLASH_PV}
+FLASH_ATT_URI="https://github.com/Dao-AILab/${FLASH_PN}/archive/refs/tags/v${FLASH_PV}.tar.gz -> ${FLASH_P}.gh.tar.gz"
+
+AOTRITON_PV=0.9.2b
+AOTRITON_PN=aotriton
+AOTRITON_P=${AOTRITON_PN}-${AOTRITON_PV}
+AOTRITON_tar=${AOTRITON_P}-manylinux_2_28_x86_64-rocm6.3-shared.tar.gz
+
+DESCRIPTION="A deep learning framework"
+HOMEPAGE="https://pytorch.org/"
+SRC_URI="
+	https://github.com/pytorch/${MYPN}/archive/refs/tags/v${PV}.tar.gz -> ${MYP}.tar.gz
+	rocm? (
+		https://github.com/ROCm/composable_kernel/archive/${CK_COMMIT}.tar.gz
+		-> ${CK_P}.tar.gz
+	)
+	cuda? (
+		flash? ( ${FLASH_ATT_URI} )
+		memefficient? ( ${FLASH_ATT_URI} )
+	)
+"
+
+S="${WORKDIR}"/${MYP}
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="cuda cusparselt distributed fbgemm flash gloo kineto memefficient
+	mimalloc mkl mpi nccl nnpack +numpy onednn openblas opencl openmp qnnpack
+	rocm xnnpack"
+RESTRICT="test"
+REQUIRED_USE="
+	${PYTHON_REQUIRED_USE}
+	mpi? ( distributed )
+	gloo? ( distributed )
+	?? ( cuda rocm )
+	rocm? (
+		|| ( ${ROCM_REQUIRED_USE} )
+		memefficient? ( flash )
+	)
+	cusparselt? ( || ( cuda rocm ) )
+	flash? ( || ( cuda rocm ) )
+	memefficient? ( || ( cuda rocm ) )
+	nccl? ( rocm )
+"
+
+# FBGEMM 1.7 removed Quantize's LEGACY template argument used by this tree;
+# stay on build-verified 1.4. verified 2026-08-07
+RDEPEND="
+	${PYTHON_DEPS}
+	dev-cpp/abseil-cpp:=
+	dev-cpp/gflags:=
+	>=dev-cpp/glog-0.5.0:=
+	>=dev-libs/cpuinfo-2025.11.14
+	dev-libs/libfmt:=
+	dev-libs/protobuf:=
+	dev-libs/sleef
+	sci-ml/onnx
+	virtual/lapack
+	cuda? (
+		dev-libs/cudnn
+		>=sci-ml/cudnn-frontend-1.12.0:=
+		>=dev-util/nvidia-cuda-toolkit-12.9:=[profiler]
+		cusparselt? ( dev-libs/cusparselt )
+	)
+	fbgemm? ( >=sci-ml/FBGEMM-1.4 <sci-ml/FBGEMM-1.5 )
+	gloo? ( >=sci-ml/gloo-2025.06.04[cuda?,rocm?] )
+	kineto? ( ~sci-ml/kineto-0.4.0_p20260323 )
+	mimalloc? ( dev-libs/mimalloc )
+	mpi? ( virtual/mpi )
+	nnpack? (
+		sci-ml/NNPACK
+		dev-libs/pthreadpool
+	)
+	numpy? ( $(python_gen_cond_dep '
+		dev-python/numpy[${PYTHON_USEDEP}]
+	') )
+	onednn? ( sci-ml/oneDNN )
+	opencl? ( virtual/opencl )
+	qnnpack? (
+		sci-ml/gemmlowp
+		dev-libs/pthreadpool
+	)
+	rocm? (
+		nccl? ( >=dev-libs/rccl-6.3:= <dev-libs/rccl-7.3:= )
+		>=dev-util/hip-6.3:=       <dev-util/hip-7.3:=
+		>=dev-util/roctracer-6.3:= <dev-util/roctracer-7.3:=
+		>=sci-libs/hipBLAS-6.3:=   <sci-libs/hipBLAS-7.3:=[rocsolver(+)]
+		>=sci-libs/hipBLASLt-6.3:= <sci-libs/hipBLASLt-7.3:=
+		>=sci-libs/hipFFT-6.3:=    <sci-libs/hipFFT-7.3:=
+		>=sci-libs/hipRAND-6.3:=   <sci-libs/hipRAND-7.3:=
+		>=sci-libs/hipSOLVER-6.3:= <sci-libs/hipSOLVER-7.3:=
+		>=sci-libs/hipSPARSE-6.3:= <sci-libs/hipSPARSE-7.3:=
+		>=sci-libs/miopen-6.3:=    <sci-libs/miopen-7.3:=
+		>=sci-libs/rocBLAS-6.3:=   <sci-libs/rocBLAS-7.3:=
+		>=sci-libs/rocRAND-6.3:=   <sci-libs/rocRAND-7.3:=
+		>=sci-libs/rocSOLVER-6.3:= <sci-libs/rocSOLVER-7.3:=
+		memefficient? ( =sci-libs/aotriton-bin-0.11*:= )
+		distributed? ( >=dev-util/rocm-smi-6.3:= <dev-util/rocm-smi-7.3:= )
+		cusparselt? ( >=sci-libs/hipsparselt-6.3:= <sci-libs/hipsparselt-7.3:= )
+	)
+	distributed? (
+		!rocm? ( sci-ml/tensorpipe[cuda?] )
+		dev-cpp/cpp-httplib:=
+	)
+	xnnpack? (
+		>=sci-ml/XNNPACK-2024.11
+		dev-libs/pthreadpool
+	)
+	mkl? ( sci-libs/mkl )
+	openblas? ( sci-libs/openblas )
+"
+
+DEPEND="
+	${RDEPEND}
+	dev-cpp/nlohmann_json
+	dev-libs/flatbuffers
+	dev-libs/FXdiv
+	dev-libs/pocketfft
+	dev-libs/psimd
+	sci-ml/FP16
+	$(python_gen_cond_dep '
+		<dev-python/pybind11-3.0.2[${PYTHON_USEDEP}]
+		dev-python/pyyaml[${PYTHON_USEDEP}]
+		dev-python/typing-extensions[${PYTHON_USEDEP}]
+	')
+	cuda? ( >=dev-libs/cutlass-3.9.2[tools(+)] )
+	onednn? ( sci-ml/ideep )
+	rocm? (
+		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-7.3:=
+		>=sci-libs/rocPRIM-6.3:=   <sci-libs/rocPRIM-7.3:=
+		>=sci-libs/rocThrust-6.3:= <sci-libs/rocThrust-7.3:=
+	)
+	qnnpack? ( dev-libs/clog )
+"
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-2.5.1-unbundle_fmt.patch.xz
+	"${FILESDIR}"/${PN}-2.5.1-unbundle_kineto.patch.xz
+	"${FILESDIR}"/${PN}-2.8.0-unbundle_pocketfft.patch.xz
+	"${FILESDIR}"/${PN}-2.5.1-cudnn_include_fix.patch.xz
+	"${FILESDIR}"/${PN}-2.4.0-cpp-httplib.patch.xz
+	# cpp-httplib 0.56 made Params an insertion-ordered map, which no longer
+	# converts to the multimap reference the interface returns.
+	# verified 2026-09-16
+	"${FILESDIR}"/${PN}-2.11.0-cpp-httplib-params.patch.xz
+	"${FILESDIR}"/${PN}-2.5.1-glog-0.6.0.patch.xz
+	"${FILESDIR}"/${P}-rocm-fix-std-cpp17.patch.xz
+	"${FILESDIR}"/${PN}-2.7.0-glog-0.7.1.patch.xz
+	"${FILESDIR}"/${PN}-2.7.1-aotriton-fixes.patch.xz
+	"${FILESDIR}"/${PN}-2.8.0-rocm-minus-flash.patch.xz
+	"${FILESDIR}"/${PN}-2.9.0-cmake.patch.xz
+	"${FILESDIR}"/${PN}-2.9.0-rocm-distributed-link.patch.xz
+	"${FILESDIR}"/${PN}-2.9.1-torch_cpu.patch.xz
+	"${FILESDIR}"/${PN}-2.10.0-gentoo.patch.xz
+	"${FILESDIR}"/${P}-mimalloc.patch.xz
+	"${FILESDIR}"/${P}-removekineto-pr178960.patch.xz
+	# gcc-15 -Wtemplate-body rejects typename decltype(...)::difference_type in
+	# template bodies during CUDA .cu compilation; use std::ptrdiff_t instead.
+	# verified 2026-06-02
+	"${FILESDIR}"/${P}-list-inl-gcc15.patch.xz
+
+	# Remove MKL cluster libs from the public link interface and force GNU OpenMP
+	# so downstreams need neither Cluster Edition nor libiomp5. verified 2026-05-08
+	"${FILESDIR}"/${P}-mkl-public-scrub.patch.xz
+)
+
+src_prepare() {
+	# Decompress patches into T because eapply cannot read xz payloads.
+	local p b i
+	mkdir "${T}"/patches || die
+	for p in "${FILESDIR}"/*.patch.xz; do
+		b=${p##*/}
+		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
+	done
+	for i in "${!PATCHES[@]}"; do
+		b=${PATCHES[i]##*/}
+		PATCHES[i]="${T}/patches/${b%.xz}"
+	done
+
+	if use cuda && ( use flash || use memefficient ); then
+		mv "${WORKDIR}"/${FLASH_P}/* third_party/${FLASH_PN}/ || die
+	fi
+	filter-lto #bug 862672
+
+	sed -i \
+		-e 's|::fmt-header-only||' \
+		c10/CMakeLists.txt \
+		cmake/Dependencies.cmake \
+		torch/CMakeLists.txt \
+		|| die
+
+	# tensorpipe is in system, not a build target of caffe2
+	sed -e '/target_compile_options_if_supported(tensorpipe/d' -i cmake/Dependencies.cmake || die
+
+	sed -i \
+		-e '/add_subdirectory.*third_party/d' \
+		CMakeLists.txt \
+		cmake/Dependencies.cmake \
+		cmake/ProtoBuf.cmake \
+		aten/src/ATen/CMakeLists.txt \
+		|| die
+	sed -i \
+		-e "/EXPORT/s|DESTINATION lib)|DESTINATION $(get_libdir))|" \
+		c10/cuda/CMakeLists.txt \
+		c10/CMakeLists.txt \
+		c10/hip/CMakeLists.txt \
+		|| die
+
+	sed -i \
+		-e "s|}/lib|}/\${CMAKE_INSTALL_LIBDIR}|g" \
+		-e "/set(__AOTRITON_LIB/s|lib/|\${CMAKE_INSTALL_LIBDIR}/|g" \
+		cmake/External/aotriton.cmake \
+		|| die
+
+	# Logging.h is incompatible with -Wextra-semi.
+	sed -i 's/-Wextra-semi//' cmake/public/utils.cmake || die
+
+	cmake_src_prepare
+	pushd torch/csrc/jit/serialization > /dev/null || die
+	flatc --cpp --gen-mutable --scoped-enums mobile_bytecode.fbs || die
+	popd > /dev/null || die
+
+	# Prefix hardcoded paths after applying patches.
+	hprefixify \
+		aten/CMakeLists.txt \
+		caffe2/CMakeLists.txt \
+		cmake/Metal.cmake \
+		cmake/Modules/*.cmake \
+		cmake/Modules_CUDA_fix/FindCUDNN.cmake \
+		cmake/Modules_CUDA_fix/upstream/FindCUDA/make2cmake.cmake \
+		cmake/Modules_CUDA_fix/upstream/FindPackageHandleStandardArgs.cmake \
+		cmake/public/LoadHIP.cmake \
+		cmake/public/cuda.cmake \
+		cmake/Dependencies.cmake \
+		torch/CMakeLists.txt \
+		CMakeLists.txt
+
+	if use rocm; then
+		sed -e "s:/opt/rocm:/usr:" \
+			-e "s:lib/cmake:$(get_libdir)/cmake:g" \
+			-i cmake/public/LoadHIP.cmake || die
+
+		# Drop when composable-kernel becomes a system dependency.
+		sed -e "s:third_party/composable_kernel:../composable_kernel-${CK_COMMIT}:g" \
+			-i aten/src/ATen/CMakeLists.txt || die
+
+		# Fix gfx101x targets. bug #959808
+		pushd "${WORKDIR}/composable_kernel-${CK_COMMIT}" > /dev/null || die
+		eapply "${T}"/patches/composable-kernel-7fe50dc-expand-isa.patch
+		popd > /dev/null || die
+
+		if tc-is-clang; then
+			# A Clang-only toolchain must not inherit GCC's ABI-17 workaround.
+			# https://github.com/llvm/llvm-project/issues/102443#issuecomment-2329726287
+			sed -e '/-fclang-abi-compat=17/d' -i cmake/Dependencies.cmake || die
+		fi
+
+		# Work around LLVM issue https://github.com/llvm/llvm-project/issues/100802.
+		sed -e 's/std::memcpy/memcpy/g' -i torch/headeronly/util/Half.h || die
+
+		ebegin "HIPifying cuda sources"
+		FBCODE_BUILD_TOOL="buck" ${EPYTHON} tools/amd_build/build_amd.py || die
+		eend $?
+	fi
+}
+
+src_configure() {
+	if use cuda && [[ -z ${TORCH_CUDA_ARCH_LIST} ]]; then
+		ewarn "WARNING: caffe2 is being built for CUDA compute capability 7.5."
+		ewarn "This default may not be optimal for your GPU."
+		ewarn ""
+		ewarn "To target your GPU, set TORCH_CUDA_ARCH_LIST through Portage's package.env"
+		ewarn "mechanism and re-emerge caffe2."
+		ewarn ""
+		ewarn "You can look up your GPU's CUDA compute capability at https://developer.nvidia.com/cuda-gpus"
+		ewarn "or by running /opt/cuda/extras/demo_suite/deviceQuery | grep 'CUDA Capability'"
+	fi
+
+	local mycmakeargs=(
+		-DBUILD_CUSTOM_PROTOBUF=OFF
+		-DBUILD_TEST=OFF
+		-DLIBSHM_INSTALL_LIB_SUBDIR="${EPREFIX}"/usr/$(get_libdir)
+		-DPython_EXECUTABLE="${PYTHON}"
+		-DTORCH_INSTALL_LIB_DIR="${EPREFIX}"/usr/$(get_libdir)
+		-DUSE_CCACHE=OFF
+		-DUSE_CUDA=$(usex cuda)
+		-DUSE_DISTRIBUTED=$(usex distributed)
+		-DUSE_FBGEMM=$(usex fbgemm)
+		-DUSE_FLASH_ATTENTION=$(usex flash)
+		-DUSE_GFLAGS=ON
+		-DUSE_GLOG=ON
+		-DUSE_GLOO=$(usex gloo)
+		-DUSE_ITT=OFF
+		-DUSE_KINETO=$(usex kineto)
+		# KleidiAI and MAGMA are not packaged.
+		-DUSE_KLEIDIAI=OFF
+		-DUSE_MAGMA=OFF
+		-DUSE_MEM_EFF_ATTENTION=$(usex memefficient)
+		-DUSE_MIMALLOC=$(usex mimalloc)
+		-DUSE_MKLDNN=$(usex onednn)
+		-DUSE_MPI=$(usex mpi)
+		-DUSE_NCCL=OFF
+		-DUSE_NNPACK=$(usex nnpack)
+		-DUSE_NUMA=OFF
+		-DUSE_NUMPY=$(usex numpy)
+		-DUSE_OPENCL=$(usex opencl)
+		-DUSE_OPENMP=$(usex openmp)
+		-DUSE_PYTORCH_QNNPACK=$(usex qnnpack)
+		-DUSE_PYTORCH_METAL=OFF
+		-DUSE_ROCM=$(usex rocm)
+		-DUSE_SYSTEM_CPUINFO=ON
+		-DUSE_SYSTEM_EIGEN_INSTALL=ON
+		-DUSE_SYSTEM_FP16=ON
+		-DUSE_SYSTEM_FXDIV=ON
+		-DUSE_SYSTEM_GLOO=ON
+		-DUSE_SYSTEM_NVTX=ON
+		-DUSE_SYSTEM_ONNX=ON
+		-DUSE_SYSTEM_PSIMD=ON
+		-DUSE_SYSTEM_PTHREADPOOL=ON
+		-DUSE_SYSTEM_PYBIND11=ON
+		-DUSE_SYSTEM_SLEEF=ON
+		-DUSE_SYSTEM_XNNPACK=$(usex xnnpack)
+		-DUSE_TENSORPIPE=$(usex distributed $(usex !rocm))
+		-DUSE_UCC=OFF
+		-DUSE_VALGRIND=OFF
+		-DUSE_XNNPACK=$(usex xnnpack)
+		-DUSE_XPU=OFF
+		-Wno-dev
+	)
+
+	if use mkl; then
+		mycmakeargs+=(-DBLAS=MKL)
+	elif use openblas; then
+		mycmakeargs+=(-DBLAS=OpenBLAS)
+	else
+		mycmakeargs+=(-DBLAS=Generic -DBLAS_LIBRARIES=)
+	fi
+
+	if use cuda; then
+		# Permit CUDA device probing in the sandbox (bugs #867706, #926116).
+		cuda_add_sandbox
+		addpredict "/dev/char/"
+
+		mycmakeargs+=(
+			-DUSE_CUDNN=ON
+			-DTORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST:-7.5}"
+			-DUSE_NCCL=OFF # CUDA NCCL is not packaged; nccl controls RCCL.
+			-DCMAKE_CUDA_FLAGS="$(cuda_gccdir -f | tr -d \")"
+			-DUSE_CUSPARSELT=$(usex cusparselt)
+		)
+
+		[[ -v CUDACXX ]] && export PYTORCH_NVCC="${CUDACXX}"
+
+		if use flash; then
+			export FLASH_ATTENTION_FORCE_BUILD="TRUE"
+			export FLASH_ATTN_CUDA_ARCHS="${CUDAARCHS:-${TORCH_CUDA_ARCH_LIST:-7.5}}"
+		fi
+
+	elif use rocm; then
+		export PYTORCH_ROCM_ARCH="$(get_amdgpu_flags)"
+
+		if use memefficient; then
+			export AOTRITON_INSTALLED_PREFIX="${ESYSROOT}/usr"
+		fi
+
+		mycmakeargs+=(
+			-DUSE_NCCL=$(usex nccl)
+			-DUSE_SYSTEM_NCCL=ON
+			-DCMAKE_REQUIRE_FIND_PACKAGE_HIP=ON
+			-DCMAKE_DISABLE_FIND_PACKAGE_hipsparselt=$(usex !cusparselt) # disable automagic
+			-DUSE_ROCM_CK_SDPA=OFF # requires flash + aiter, works only on gfx90a/gfx942/gfx950
+		)
+
+		append-cxxflags -Wno-deprecated-declarations -Wno-unused-result -Wno-unused-value
+	fi
+
+	if use onednn; then
+		mycmakeargs+=(
+			-DMKLDNN_FOUND=ON
+			-DMKLDNN_LIBRARIES=dnnl
+			-DMKLDNN_INCLUDE_DIR="${ESYSROOT}/usr/include/oneapi/dnnl"
+		)
+	fi
+
+	cmake_src_configure
+}
+
+src_compile() {
+	PYTORCH_BUILD_VERSION=${PV} \
+	PYTORCH_BUILD_NUMBER=0 \
+	cmake_src_compile
+}
+
+python_install() {
+	python_domodule python/torch
+	mkdir "${D}"$(python_get_sitedir)/torch/bin || die
+	mkdir "${D}"$(python_get_sitedir)/torch/lib || die
+	mkdir "${D}"$(python_get_sitedir)/torch/include || die
+	ln -s ../../../../../include/torch \
+		"${D}$(python_get_sitedir)"/torch/include/torch || die # bug 923269
+	ln -s ../../../../../bin/torch_shm_manager \
+		"${D}"/$(python_get_sitedir)/torch/bin/torch_shm_manager || die
+	ln -s ../../../../../$(get_libdir)/libtorch_global_deps.so \
+		"${D}"/$(python_get_sitedir)/torch/lib/libtorch_global_deps.so || die
+}
+
+src_install() {
+	cmake_src_install
+
+	# pytorch reuses this configuration.
+	insinto "/var/lib/${PN}"
+	doins "${BUILD_DIR}"/CMakeCache.txt
+
+	rm -rf python
+	mkdir -p python/torch || die
+	cp torch/version.py python/torch/ || die
+	python_install
+}
