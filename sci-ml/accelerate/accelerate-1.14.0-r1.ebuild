@@ -30,13 +30,16 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 # gloo lives on caffe2, requires caffe2[distributed], and is profile-masked
 # outside amd64. Verified 2026-09-06.
+# caffe2 before 2.13.0-r92 was built RelWithDebInfo, which strips
+# -DNDEBUG and leaves torch's debug asserts live; the compile tests
+# then abort in libtorch_python. # verified 2026-09-20
 BDEPEND="test? (
 	$(python_gen_cond_dep '
 		dev-python/networkx[${PYTHON_USEDEP}]
 		dev-python/parameterized[${PYTHON_USEDEP}]
 	')
 	>=sci-ml/pytorch-2.13.0
-	amd64? ( >=sci-ml/caffe2-2.13.0[gloo] )
+	amd64? ( >=sci-ml/caffe2-2.13.0-r92[gloo] )
 	sci-ml/evaluate[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchdata[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
