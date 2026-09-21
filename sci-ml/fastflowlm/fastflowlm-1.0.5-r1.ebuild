@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3 systemd
+inherit cmake systemd
 
 DESCRIPTION="NPU-first LLM runtime for AMD Ryzen AI (XDNA2) processors"
 HOMEPAGE="
@@ -11,16 +11,32 @@ HOMEPAGE="
 	https://github.com/ROCm/FastFlowLM
 "
 
-EGIT_REPO_URI="https://github.com/ROCm/FastFlowLM.git"
-EGIT_SUBMODULES=( '*' )
+# Pinned tokenizers-cpp tree and its nested submodules; recheck on bumps.
+TOKENIZERS_CPP_COMMIT="acbdc5a27ae01ba74cda756f94da698d40f11dfe"
+SENTENCEPIECE_COMMIT="11051e3b73b3a6222a52acd720e39805dc7545ab"
+MSGPACK_COMMIT="092bc69b6e815980bce7808595c914dd3a29f905"
 
+SRC_URI="
+	https://github.com/ROCm/FastFlowLM/archive/refs/tags/v${PV}.tar.gz
+		-> ${P}.tar.gz
+	https://github.com/mlc-ai/tokenizers-cpp/archive/${TOKENIZERS_CPP_COMMIT}.tar.gz
+		-> tokenizers-cpp-${TOKENIZERS_CPP_COMMIT}.tar.gz
+	https://github.com/google/sentencepiece/archive/${SENTENCEPIECE_COMMIT}.tar.gz
+		-> sentencepiece-${SENTENCEPIECE_COMMIT}.tar.gz
+	https://github.com/msgpack/msgpack-c/archive/${MSGPACK_COMMIT}.tar.gz
+		-> msgpack-c-${MSGPACK_COMMIT}.tar.gz
+"
+S="${WORKDIR}/FastFlowLM-${PV}"
+
+# CLI is MIT; bundled NPU kernels use FastFlowLM-Binary.
 LICENSE="MIT FastFlowLM-Binary"
 SLOT="0"
+KEYWORDS="~amd64"
 IUSE="openrc systemd"
 
-# tokenizers-cpp fetches Rust crates during the live build.
-PROPERTIES="live"
-RESTRICT="network-sandbox"
+# Cargo (inside tokenizers-cpp/rust) fetches crates at build time.
+# Proper GURU submission would require pre-vendored crates via cargo.eclass.
+RESTRICT="mirror network-sandbox"
 
 BDEPEND="
 	>=dev-build/cmake-3.22
@@ -35,18 +51,49 @@ RDEPEND="
 	net-misc/curl:=
 	dev-libs/boost:=
 	sci-libs/fftw:3.0=
+	sys-libs/ncurses:=
 	sys-libs/readline:=
 "
 DEPEND="${RDEPEND}"
 
 CMAKE_USE_DIR="${S}/src"
 
+src_unpack() {
+	default
+
+	rmdir "${S}/third_party/tokenizers-cpp" || die
+	mv "${WORKDIR}/tokenizers-cpp-${TOKENIZERS_CPP_COMMIT}" \
+		"${S}/third_party/tokenizers-cpp" || die
+
+	rmdir "${S}/third_party/tokenizers-cpp/sentencepiece" || die
+	mv "${WORKDIR}/sentencepiece-${SENTENCEPIECE_COMMIT}" \
+		"${S}/third_party/tokenizers-cpp/sentencepiece" || die
+
+	rmdir "${S}/third_party/tokenizers-cpp/msgpack" || die
+	mv "${WORKDIR}/msgpack-c-${MSGPACK_COMMIT}" \
+		"${S}/third_party/tokenizers-cpp/msgpack" || die
+}
+
+src_prepare() {
+	# Replace upstream's /usr/local symlink with an env.d-backed wrapper.
+	sed -i '/if.*NOT WIN32.*CMAKE_INSTALL_PREFIX/,/endif()/d' \
+		"${S}/src/CMakeLists.txt" || die
+	# Exclude a backup binary caught by upstream's *.so* install glob.
+	rm "${S}/src/lib/xrt/libq4_npu_eXpress.so.bak-20260826" || die
+	cmake_src_prepare
+}
+
 src_configure() {
+	# Set preset-only values explicitly. CMAKE_XCLBIN_PREFIX must match the install
+	# path or runtime searches beside the executable (#269); NPU_VERSION only
+	# satisfies a Linux guard. Keep unpackaged HRX disabled to retain XRT.
+	# Verified 2026-09-10.
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="/opt/fastflowlm"
 		-DCMAKE_XCLBIN_PREFIX="/opt/fastflowlm/share/flm"
 		-DFLM_VERSION="${PV}"
 		-DNPU_VERSION="32.0.203.304"
+		-DFLM_USE_HRX=OFF
 	)
 	cmake_src_configure
 }
@@ -56,6 +103,7 @@ src_install() {
 
 	local flm_libdir="/opt/fastflowlm/$(get_libdir)"
 
+	# Expose XRT and bundled libraries at runtime (lemonade-sdk/lemonade#1315).
 	newbin - flm <<-EOF
 	#!/usr/bin/env bash
 	set -euo pipefail
@@ -81,7 +129,7 @@ src_install() {
 
 pkg_postinst() {
 	elog ""
-	elog "FastFlowLM ${PV} (live) installed to /opt/fastflowlm."
+	elog "FastFlowLM ${PV} installed to /opt/fastflowlm."
 	elog ""
 	elog "Quick start (manual):"
 	elog "  flm validate          # verify NPU stack"
@@ -115,8 +163,12 @@ pkg_postinst() {
 	elog "  *  soft  memlock  unlimited"
 	elog "  *  hard  memlock  unlimited"
 	elog ""
-	elog "Run 'env-update && source /etc/profile' to pick up library paths."
-	elog ""
-	elog "This is a live ebuild tracking upstream main. Rebuild with:"
-	elog "  emerge --oneshot =dev-ml/fastflowlm-9999"
+	ewarn ""
+	ewarn "1.0.3 requantised the Qwen3.5 family and Qwen3.6-MoE from Q4_1 to"
+	ewarn "Q4_K. Weights pulled by an earlier FastFlowLM are NOT compatible."
+	ewarn "Re-pull any of these you have cached:"
+	ewarn "    flm pull qwen3.5:0.8b   qwen3.5:2b   qwen3.5:4b"
+	ewarn "    flm pull qwen3.5:9b     qwen3.6-moe:35b-a3b"
+	ewarn ""
+	elog "Run 'env-update && source /etc/profile' to pick up paths."
 }
