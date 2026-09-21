@@ -18,6 +18,12 @@ Portage-specific suffixes (_pN, _rcN, _alphaN, _betaN, _preN, -rN, and a
 trailing letter such as 0.3.25a) to their PEP 440 equivalents.  Versions
 that still can't be parsed fall back to a tuple-of-int-parts key so
 multi-digit segments (e.g. 0.100.0 vs 0.86.0) always rank correctly.
+
+The emitted version is the raw PV minus its revision and snapshot
+suffixes, plus a few per-entry rewrites in main(). Post-release and
+numbered pre-release suffixes take their PEP 440 spelling (0.6.18_p1 ->
+0.6.18.post1, 0.7.0_rc3 -> 0.7.0rc3), so an ebuild at parity with
+upstream compares equal.
 """
 
 from __future__ import annotations
@@ -157,6 +163,16 @@ def main() -> int:
         # 440 form (.postN) so pypi-sourced entries compare without spurious
         # drift.  Applied after the long-suffix strip above.
         newest_pv = re.sub(r'_p(\d{1,4})$', r'.post\1', newest_pv)
+        # Same for numbered pre-releases: Portage spells them _rcN/_alphaN/
+        # _betaN, upstream tags and PyPI rcN/aN/bN. nvcmp string-compares
+        # first and sends two spellings that sort equal down its "newer"
+        # branch, so an ebuild at parity reported "0.7.0_rc3 -> 0.7.0rc3"
+        # every week. No entry renders the Portage spelling upstream-side:
+        # mantid's filter admits _rcN but its tags use rcN, and
+        # unsloth-desktop's _beta carries no number. verified 2026-09-21
+        newest_pv = re.sub(r'_rc(\d+)$', r'rc\1', newest_pv)
+        newest_pv = re.sub(r'_alpha(\d+)$', r'a\1', newest_pv)
+        newest_pv = re.sub(r'_beta(\d+)$', r'b\1', newest_pv)
         # The cuDNN feed is intentionally three-part; the fourth PV component
         # identifies the artifact selected from that release manifest.
         if entry == "dev-libs/cudnn":
