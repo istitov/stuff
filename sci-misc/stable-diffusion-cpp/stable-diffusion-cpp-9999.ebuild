@@ -5,7 +5,7 @@ EAPI=8
 
 ROCM_VERSION="7.0"
 
-inherit cmake cuda rocm linux-info
+inherit cmake cuda flag-o-matic rocm linux-info
 
 # Snapshot tags are master-<build>-<hash>; pin that hash and the tag's ggml
 # submodule gitlink on each bump.
@@ -40,7 +40,7 @@ LICENSE="MIT"
 SLOT="0"
 CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
-IUSE="openblas blis flexiblas rocm cuda opencl vulkan webm webp"
+IUSE="debug openblas blis flexiblas rocm cuda opencl vulkan webm webp"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
 REQUIRED_USE="
@@ -108,6 +108,17 @@ src_prepare() {
 }
 
 src_configure() {
+	# Upstream releases build Release, which supplies -DNDEBUG; cmake.eclass
+	# blanks CMAKE_*_FLAGS_RELWITHDEBINFO, so it never lands and the plain
+	# assert() calls in the vendored ggml stay live -- a configuration upstream
+	# never exercises. GGML_ASSERT is unconditional, so the bulk of this tree's
+	# own checks survive either way. USE=debug keeps the plain asserts for
+	# diagnosing an abort. # verified 2026-09-21
+	if ! use debug; then
+		append-cflags "-DNDEBUG"
+		append-cxxflags "-DNDEBUG"
+	fi
+
 	local mycmakeargs=(
 		-DGGML_CCACHE=OFF
 		-DCMAKE_SKIP_BUILD_RPATH=ON
