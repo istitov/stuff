@@ -1,0 +1,33 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( python3_{12..14} )
+
+inherit distutils-r1 pypi
+
+DESCRIPTION="Hatch plugin to build Sphinx documentation during wheel builds"
+HOMEPAGE="
+	https://github.com/llimeht/hatch-sphinx
+	https://pypi.org/project/hatch-sphinx/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64 ~x86"
+
+RDEPEND="
+	dev-python/hatchling[${PYTHON_USEDEP}]
+	dev-python/sphinx[${PYTHON_USEDEP}]
+"
+
+# pyproject sets [tool.hatch.version] source = "vcs" plus a vcs build hook, so
+# hatch-vcs is needed to build; DISTUTILS_USE_PEP517=hatchling supplies only
+# hatchling. Upstream also excludes hatchling 1.32.3, which ::gentoo never
+# shipped (1.32.0 then 1.32.4), so no blocker is expressed for it.
+# verified 2026-09-21
+BDEPEND="
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
+"
