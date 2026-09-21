@@ -22,3 +22,10 @@ RDEPEND="
 	dev-python/hatchling[${PYTHON_USEDEP}]
 	dev-python/sphinx[${PYTHON_USEDEP}]
 "
+
+# pyproject sets [tool.hatch.version] source = "vcs" plus a vcs build hook, so
+# hatch-vcs is needed to build; DISTUTILS_USE_PEP517=hatchling supplies only
+# hatchling. verified 2026-09-21
+BDEPEND="
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
+"
