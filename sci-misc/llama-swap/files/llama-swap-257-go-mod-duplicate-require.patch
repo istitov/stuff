@@ -1,0 +1,19 @@
+Drop a duplicate require line upstream shipped in 257.
+
+golang.org/x/sync is listed twice in go.mod: once as a direct
+requirement and once more in the indirect block. `go mod tidy` removes
+the indirect copy, and until it is gone every `go build -mod=vendor`
+refuses to start with "updates to go.mod needed", which is the only
+mode a network-sandboxed build can use. Upstream builds from the module
+cache, where the duplicate is harmless, so it went unnoticed.
+
+--- a/go.mod
++++ b/go.mod
+@@ -147,7 +147,6 @@
+ 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
+ 	golang.org/x/net v0.58.0 // indirect
+ 	golang.org/x/oauth2 v0.36.0 // indirect
+-	golang.org/x/sync v0.22.0 // indirect
+ 	golang.org/x/term v0.45.0 // indirect
+ 	golang.org/x/text v0.41.0 // indirect
+ 	golang.org/x/time v0.15.0 // indirect
