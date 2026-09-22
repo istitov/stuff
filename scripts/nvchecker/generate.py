@@ -422,6 +422,13 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "media-gfx/oculante": {
         "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+$",
     },
+    # flxzt/rnote tags releases `vX.Y.Z`, but the list also holds
+    # `vX.Y.Z-betaN` prereleases and `vX.Y.Z-hotfix-N` tags (none since the
+    # 0.5 series). Restrict to the plain release form so a future beta
+    # cannot surface as drift. verified 2026-09-22 against the tag list.
+    "media-gfx/rnote": {
+        "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
+    },
     # NOTE: dev-util/xrt is tracked via SPECIAL_SOURCES (use_latest_release),
     # not here — see the block in SPECIAL_SOURCES for why use_max_tag can't
     # work for XRT's dated/prerelease release scheme.

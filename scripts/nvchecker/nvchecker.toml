@@ -1194,7 +1194,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (240) ---
+# --- github (241) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2103,6 +2103,13 @@ prefix = "v"
 ["media-gfx/orcaslicer"]
 source = "github"
 github = "OrcaSlicer/OrcaSlicer"
+use_max_tag = true
+include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
+prefix = "v"
+
+["media-gfx/rnote"]
+source = "github"
+github = "flxzt/rnote"
 use_max_tag = true
 include_regex = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
