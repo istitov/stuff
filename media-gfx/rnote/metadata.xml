@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Rnote is a vector-based drawing app for sketching, handwritten notes, and
+    annotating documents and pictures, built around pressure-sensitive stylus
+    input. It offers fixed-page, continuous or infinite canvas layouts, a
+    shape tool, PDF, bitmap and SVG import, export to SVG, PDF and Xournal++
+    (.xopp), and a CLI for automation. Written in Rust with GTK 4.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">flxzt/rnote</remote-id>
+    <bugs-to>https://github.com/flxzt/rnote/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
