@@ -22,7 +22,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - uses: actions/configure-pages@v5
-      - run: mkdocs build --strict
+      - run: zensical build --strict --clean
       - uses: actions/upload-pages-artifact@v4
         with:
           path: site

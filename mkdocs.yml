@@ -8,6 +8,7 @@ copyright: Drafted with AI assistance; package claims are checked against the eb
 
 theme:
   name: material
+  variant: classic
   logo: assets/logo.png
   favicon: assets/favicon.png
   palette:

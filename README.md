@@ -1,21 +1,25 @@
 # stuff documentation
 
 Source for the dedicated [stuff overlay documentation](https://istitov.github.io/stuff/),
-built with Material for MkDocs from the orphan `docs` branch.
+built with [Zensical](https://zensical.org) from the orphan `docs` branch.
+Zensical reads `mkdocs.yml` directly; `variant: classic` keeps the Material
+for MkDocs look.
 
 ## Local preview
 
+Zensical is packaged in this overlay as `dev-python/zensical`:
+
 ```sh
-python -m venv .venv
-. .venv/bin/activate
-pip install -r requirements.txt
-mkdocs serve
+emerge --ask dev-python/zensical
+zensical serve
 ```
+
+CI installs the version pinned in `requirements.txt` with pip instead.
 
 Run the same validation as CI before publishing:
 
 ```sh
-mkdocs build --strict
+zensical build --strict --clean
 ```
 
 Pushing this branch deploys through `.github/workflows/pages.yml` after GitHub
