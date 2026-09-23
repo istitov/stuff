@@ -25,7 +25,8 @@ packaging.
     [Check the GPU hardware version](guides/hardware-targets.md). It maps AMD's
     `gfx*` token to `AMDGPU_TARGETS` and NVIDIA compute capability to the
     `CUDAARCHS`, `TORCH_CUDA_ARCH_LIST`, and `NVPTX_TARGETS` forms used by the
-    packages below.
+    packages below. For the split PyTorch build, apply the environment to
+    `sci-ml/caffe2`, which compiles the CUDA core, not only to `sci-ml/pytorch`.
 
 !!! tip "Cross-vendor shortcuts"
     `llama.cpp[vulkan]` runs on both AMD and NVIDIA GPUs with no ROCm or CUDA

@@ -47,8 +47,10 @@ ComfyUI builds against one accelerator backend, set by USE flag (`cuda` and
 Before emerging an accelerated build, follow
 [Check the GPU hardware version](hardware-targets.md): set `AMDGPU_TARGETS` for
 an AMD GPU or `TORCH_CUDA_ARCH_LIST` for the NVIDIA GPU that will run the
-PyTorch stack. The guide also covers `CUDAARCHS` for CMake-built CUDA
-extensions.
+PyTorch stack. For NVIDIA, apply a package-specific environment to `sci-ml/caffe2` and
+the relevant source-built CUDA extensions, not only to `media-gfx/comfyui`.
+The guide also covers `CUDAARCHS` for CMake-built CUDA extensions; these
+settings cannot retarget the prebuilt CUDA wheel components listed above.
 
 !!! warning "TRELLIS is CUDA-only"
     The image-to-3D pipeline below requires an **NVIDIA / CUDA** GPU — its

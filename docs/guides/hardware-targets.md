@@ -47,31 +47,100 @@ that value in several forms:
 | Build family | Portage environment variable | Example for capability 8.6 |
 |---|---|---|
 | CMake CUDA builds, including llama.cpp and Ollama | `CUDAARCHS` | `CUDAARCHS="86"` |
-| PyTorch / LibTorch and consumers such as vLLM and ComfyUI | `TORCH_CUDA_ARCH_LIST` | `TORCH_CUDA_ARCH_LIST="8.6"` |
-| CuPy 13.x | `NVPTX_TARGETS` | `NVPTX_TARGETS="sm_86"` |
+| PyTorch / LibTorch (`sci-ml/caffe2`) and PyTorch-based CUDA extensions | `TORCH_CUDA_ARCH_LIST` | `TORCH_CUDA_ARCH_LIST="8.6"` |
+| CuPy 13.x and 14.x | `NVPTX_TARGETS` | `NVPTX_TARGETS="sm_86"` |
 
-For the common local-AI stack, set the first two in
-`/etc/portage/make.conf`:
+### Apply the environment to the packages that compile CUDA code
 
-```text title="/etc/portage/make.conf"
+In `stuff`'s split PyTorch packaging, **`sci-ml/caffe2` builds LibTorch and
+its CUDA kernels**. An environment assigned only to `sci-ml/pytorch`, vLLM
+or ComfyUI does not configure that dependency's build. Portage applies
+`package.env` entries to the matching packages, not recursively to their
+dependencies.
+
+`make.conf` can supply machine-wide defaults. To make the package scope
+explicit, create a shared environment file and map each relevant source
+package to it. This example is for a GPU reporting capability **8.6**;
+substitute the target of the machine that will run the resulting binaries.
+
+```text title="/etc/portage/env/cuda-sm86"
 CUDAARCHS="86"
 TORCH_CUDA_ARCH_LIST="8.6"
+NVPTX_TARGETS="sm_86"
 ```
 
-If CuPy 13.x is also installed, add `NVPTX_TARGETS="sm_86"`. Multiple CMake
-targets are semicolon-separated (`CUDAARCHS="86;89"`); multiple PyTorch
-targets are space-separated (`TORCH_CUDA_ARCH_LIST="8.6 8.9"`). Restricting a
-build to the hardware that will run it saves compile time and package size,
-but a resulting binary package may no longer be portable to omitted GPU
+Add the applicable entries to `/etc/portage/package.env`, or to a file inside
+it if it is already a directory. Preserve any existing environment mappings:
+
+```text title="/etc/portage/package.env"
+sci-ml/caffe2::stuff cuda-sm86
+dev-python/vllm::stuff cuda-sm86
+sci-misc/llama-cpp::stuff cuda-sm86
+sci-ml/ollama::stuff cuda-sm86
+dev-python/cupy::stuff cuda-sm86
+dev-python/nvdiffrast::stuff cuda-sm86
+```
+
+These mappings do not install packages or enable CUDA. Extend the list to
+the source-built CUDA extensions used by the application; the ComfyUI stack,
+for example, needs the `caffe2` mapping and mappings for its compiled custom
+extensions, not merely an entry for `media-gfx/comfyui`. The `::stuff`
+qualifiers deliberately limit this example to the overlay's ebuilds.
+
+For multiple architectures, CMake targets are semicolon-separated
+(`CUDAARCHS="86;89"`), while PyTorch and CuPy targets are space-separated
+(`TORCH_CUDA_ARCH_LIST="8.6 8.9"`, `NVPTX_TARGETS="sm_86 sm_89"`). Keep the
+lists consistent. Restricting a build to its intended hardware reduces build
+time and package size, but a binary package may not run on omitted GPU
 architectures.
 
-These variables select generated GPU code. They do not enable acceleration by
-themselves: the package still needs its `cuda` or `rocm` USE flag. Individual
-packages can document additional target variables, so check the emerge output
-and package metadata when moving beyond this stack.
+### Rebuild after changing targets
+
+These are **build-time settings**, not runtime switches for an already
+installed PyTorch. After changing them, explicitly rebuild `caffe2` and the
+installed CUDA extensions whose targets changed; `--newuse` alone does not
+describe an environment-variable change.
+
+For example, to rebuild the overlay's PyTorch core from source:
+
+```bash title="root #"
+emerge --ask --verbose --oneshot --usepkg=n --getbinpkg=n sci-ml/caffe2::stuff
+```
+
+Review the proposed version against the PyTorch line required by the
+application. Use an exact version atom if needed to rebuild the installed
+line rather than upgrade it. Rebuilding only `sci-ml/pytorch` is not a
+substitute for rebuilding the CUDA core. Rebuild affected source extensions
+separately; their installed binaries do not change when the environment file
+is edited. These variables also cannot retarget prebuilt wheels, including
+the CUDA wheel components described in the [ComfyUI guide](comfyui.md#gpu-backend).
+
+### Package-specific exceptions
+
+CuPy 13.x uses `NVPTX_TARGETS`. The overlay's CuPy 14.x ebuilds prefer that
+variable too, but fall back to `CUDAARCHS` when it is unset. For an explicit
+target list, the 14.x build checks `nvcc --list-gpu-code` and fails if none
+are supported. A stale `NVPTX_TARGETS` value therefore takes precedence over a
+new `CUDAARCHS` value.
+
+Standalone `dev-python/flash-attn` uses **`FLASH_ATTN_CUDA_ARCHS`**, with
+the packaged 2.8.3_p1 ebuild defaulting to `"80;90"`. Its architecture
+selectors are package-specific: do not derive an override merely by removing
+the decimal point from the GPU capability. Check the source for the version
+being built (see the [upstream 2.8.3 selection logic](https://github.com/Dao-AILab/flash-attention/blob/v2.8.3/setup.py))
+before overriding it, and keep any override in a separate environment mapped
+only to `dev-python/flash-attn`. `TORCH_CUDA_ARCH_LIST` is not a substitute
+for that selector. PyTorch's and vLLM's bundled attention builds are separate
+from this standalone package.
+
+Architecture variables do not enable optional GPU backends: select the
+package's `cuda` or `rocm` USE flag where the ebuild provides one. CUDA-only
+packages may not offer a backend flag. Check the emerge output and package
+metadata for additional package-specific requirements.
 
 ## See also
 
 - [AMD SMI documentation](https://rocm.docs.amd.com/projects/amdsmi/en/latest/)
 - [NVIDIA compute capabilities](https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/compute-capabilities.html)
 - [CMake `CUDAARCHS`](https://cmake.org/cmake/help/latest/envvar/CUDAARCHS.html)
+- [Portage per-package environments](https://wiki.gentoo.org/wiki/Handbook:Parts/Portage/Advanced#Per-package_environment_variables)

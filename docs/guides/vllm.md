@@ -42,7 +42,9 @@ dev-python/vllm cpu
 
 First follow
 [Check the GPU hardware version](hardware-targets.md#nvidia-find-the-compute-capability)
-and set `TORCH_CUDA_ARCH_LIST` for the installed GPU.
+and set `TORCH_CUDA_ARCH_LIST` for the installed GPU. With `package.env`,
+apply the environment to both `dev-python/vllm` and `sci-ml/caffe2`;
+the latter builds PyTorch's CUDA core.
 
 ```text title="/etc/portage/package.use/vllm"
 dev-python/vllm cuda
