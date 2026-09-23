@@ -1,0 +1,19 @@
+Raise the recursion limit for the chatgpt crate.
+
+rustc computes the layout of the async fn body in connectors::list_connectors
+at a query depth 130 above the default limit of 128, and aborts with "queries
+overflow the depth limit". Upstream does not hit this because it pins rustc
+1.95.0 in rust-toolchain.toml; the limit is reached with 1.98.
+
+Upstream already applies exactly this attribute to its other crates that grew
+past the limit -- tui, exec, app-server and the goal extension's tests -- so
+this extends that treatment to chatgpt rather than inventing a workaround.
+
+--- a/chatgpt/src/lib.rs
++++ b/chatgpt/src/lib.rs
+@@ -1,3 +1,5 @@
++#![recursion_limit = "256"]
++
+ pub mod apply_command;
+ mod chatgpt_client;
+ pub mod connectors;
