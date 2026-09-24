@@ -119,16 +119,15 @@ src_install() {
 
 	# Upstream installs systemd files unconditionally. Remove them when disabled;
 	# OpenRC reads a different secrets file, and examples also contain non-systemd
-	# samples. Recheck exact paths on bumps. verified 2026-07-16
+	# samples. Recheck exact paths on bumps. verified 2026-09-24 against master
 	if ! use systemd; then
 		# Unit directories include EPREFIX; pair them with D, not ED.
 		rm "${D}$(systemd_get_systemunitdir)/lemond.service" || die
 		rm "${D}$(systemd_get_userunitdir)/lemond.service" || die
 		rm "${ED}/usr/lib/sysusers.d/lemonade.conf" || die
-		rm "${ED}/etc/lemonade/conf.d/zz-secrets.conf" || die
+		rm "${ED}/etc/default/lemond" || die
 		rm "${ED}/usr/share/lemonade-server/examples/migrate-to-systemd.sh" || die
 		rmdir "${ED}/usr/share/lemonade-server/examples" 2>/dev/null || true
-		rmdir "${ED}/etc/lemonade/conf.d" "${ED}/etc/lemonade" 2>/dev/null || true
 	fi
 
 	if use openrc; then
