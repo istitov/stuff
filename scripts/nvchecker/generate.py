@@ -436,9 +436,10 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     # (bleeding edge, many per day) and, since ~b10566, SemVer `vX.Y.Z` release
     # tags -- "stable, slower release cadence, recommended for downstream
     # distribution" per upstream. Track the stable v* track for drift; the
-    # overlay ships `0.<Y>.<Z>` as the stable ebuild and keeps the last two
-    # `0_pre<N>` (b<N>) ebuilds as an unstable, refresh-on-demand option (those
-    # are not drift-tracked -- the b<N> track moves too fast to bump on).
+    # overlay ships `0.<Y>.<Z>` as the keyworded ebuilds and keeps the last
+    # three unkeyworded `0.<Y>.<Z>_p<N>` (b<N>) snapshots as a
+    # refresh-on-demand option (not drift-tracked -- the b<N> track moves too
+    # fast to bump on).
     "sci-misc/llama-cpp": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
         "from_pattern": r"^v(.+)$",
