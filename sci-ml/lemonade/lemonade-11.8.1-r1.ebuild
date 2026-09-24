@@ -28,8 +28,10 @@ RESTRICT="network-sandbox"
 # Keep the systemd account/state across USE changes; OpenRC uses LEMONADE_USER.
 # Linux always links libdrm_amdgpu; require its flag. verified 2026-07-18
 # backend_versions.json maps TheRock 7.14 to 10.0, so <7.15 excludes 10.x.
-# verified 2026-09-02
-# brotli is macOS-only; zstd-1.5.5 is upstream's floor. verified 2026-09-02
+# verified 2026-08-29
+# brotli is macOS-only; zstd-1.5.5 is upstream's floor. verified 2026-08-29
+# Digest verification links a found mbedtls; only slot 0 matches the probe's
+# names, otherwise a static copy is fetched. verified 2026-09-24
 RDEPEND="
 	>=app-arch/zstd-1.5.5:=
 	>=dev-cpp/cli11-2.4.2
@@ -37,6 +39,7 @@ RDEPEND="
 	>=dev-cpp/nlohmann_json-3.11.3
 	>=net-libs/libwebsockets-4.3.3
 	>=net-misc/curl-8.5.0
+	net-libs/mbedtls:0=
 	sys-libs/libcap
 	x11-libs/libdrm[video_cards_amdgpu]
 	acct-user/lemonade
@@ -79,7 +82,7 @@ src_prepare() {
 
 	# Gentoo lacks the .pc file used for cpp-httplib detection. Repin the fallback
 	# from a CMake-4-broken tag to compatible v0.38.0; match either SHA or tag.
-	# verified 2026-09-02
+	# verified 2026-08-20
 	sed -i \
 		-e '/FetchContent_Declare(httplib/,/GIT_TAG/ s|GIT_TAG .*|GIT_TAG v0.38.0|' \
 		CMakeLists.txt || die

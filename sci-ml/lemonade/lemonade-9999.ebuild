@@ -30,6 +30,8 @@ RESTRICT="network-sandbox"
 # Derive TheRock bounds from backend_versions.json on each live sync.
 # brotli is macOS-only; zstd-1.5.5 is upstream's floor.
 # verified 2026-09-03 against master
+# Digest verification links a found mbedtls; only slot 0 matches the probe's
+# names, otherwise a static copy is fetched. verified 2026-09-24
 RDEPEND="
 	>=app-arch/zstd-1.5.5:=
 	>=dev-cpp/cli11-2.4.2
@@ -37,6 +39,7 @@ RDEPEND="
 	>=dev-cpp/nlohmann_json-3.11.3
 	>=net-libs/libwebsockets-4.3.3
 	>=net-misc/curl-8.5.0
+	net-libs/mbedtls:0=
 	sys-libs/libcap
 	x11-libs/libdrm[video_cards_amdgpu]
 	acct-user/lemonade
