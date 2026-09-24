@@ -1,0 +1,26 @@
+--- a/unsloth_cli/commands/studio.py
++++ b/unsloth_cli/commands/studio.py
+@@ -1907,6 +1907,11 @@
+     # Resolve the child launcher BEFORE the gate: a headless gate strips the seeded password, so aborting afterwards leaves no way to log in.
+     studio_venv_dir = STUDIO_HOME / "unsloth_studio"
+     in_studio_venv = sys.prefix.startswith(str(studio_venv_dir))
++    # Gentoo system install (sci-ml/unsloth[studio]): the studio backend and its
++    # dependencies live in the system interpreter, so serve in-process instead of
++    # re-execing into a ~/.unsloth/studio venv or demanding install.sh.
++    if os.environ.get("UNSLOTH_STUDIO_SYSTEM") == "1":
++        in_studio_venv = True
+     # Before the env reaches a child: an override contradicting single-arch wheels fails every kernel launch, and install.sh's unset cannot reach here (#7331).
+     _clear_hsa_override_before_launch(silent = silent)
+     studio_python = run_py = None
+@@ -2529,6 +2534,11 @@
+ 
+     studio_venv_dir = STUDIO_HOME / "unsloth_studio"
+     in_studio_venv = sys.prefix.startswith(str(studio_venv_dir))
++    # Gentoo system install (sci-ml/unsloth[studio]): the studio backend and its
++    # dependencies live in the system interpreter, so serve in-process instead of
++    # re-execing into a ~/.unsloth/studio venv or demanding install.sh.
++    if os.environ.get("UNSLOTH_STUDIO_SYSTEM") == "1":
++        in_studio_venv = True
+     studio_bin = None
+     resolved_frontend = frontend
+     if not in_studio_venv:
