@@ -1198,7 +1198,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (241) ---
+# --- github (243) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1604,6 +1604,18 @@ prefix = "v"
 ["dev-python/h5pyd"]
 source = "github"
 github = "HDFGroup/h5pyd"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/httpcore2"]
+source = "github"
+github = "pydantic/httpx2"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/httpx2"]
+source = "github"
+github = "pydantic/httpx2"
 use_max_tag = true
 prefix = "v"
 
