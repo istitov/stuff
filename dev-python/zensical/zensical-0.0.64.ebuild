@@ -1,0 +1,347 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517=maturin
+PYTHON_COMPAT=( python3_{12..15} )
+
+RUST_MIN_VER="1.89.0"
+CRATES="
+	ahash@0.8.12
+	aho-corasick@1.1.4
+	allocator-api2@0.2.21
+	anyhow@1.0.103
+	ariadne@0.6.0
+	arraydeque@0.5.1
+	ast_node@7.0.0
+	auto_impl@1.3.0
+	autocfg@1.5.1
+	base64-simd@0.8.0
+	base64@0.22.1
+	better_scoped_tls@1.0.1
+	bitflags@2.13.0
+	block-buffer@0.10.4
+	borrow-or-share@0.2.4
+	bstr@1.12.3
+	bumpalo@3.19.0
+	bytes-str@0.2.8
+	bytes@1.12.0
+	castaway@0.2.4
+	cfg-if@1.0.4
+	combine@4.6.7
+	compact_str@0.9.1
+	cow-utils@0.1.3
+	cpufeatures@0.2.17
+	crossbeam-channel@0.5.16
+	crossbeam-deque@0.8.7
+	crossbeam-epoch@0.9.20
+	crossbeam-queue@0.3.13
+	crossbeam-utils@0.8.22
+	crossbeam@0.8.4
+	crypto-common@0.1.7
+	digest@0.10.7
+	dispatch2@0.3.1
+	displaydoc@0.2.6
+	dragonbox_ecma@0.0.5
+	either@1.18.0
+	encoding_rs@0.8.35
+	equivalent@1.0.2
+	errno@0.3.14
+	fastrand@2.4.1
+	file-id@0.2.3
+	fixedbitset@0.5.7
+	fluent-uri@0.4.1
+	foldhash@0.1.5
+	form_urlencoded@1.2.2
+	from_variant@3.0.0
+	fsevent-sys@4.1.0
+	futures-core@0.3.32
+	futures-task@0.3.32
+	futures-util@0.3.32
+	generic-array@0.14.7
+	getrandom@0.3.4
+	getrandom@0.4.3
+	globset@0.4.18
+	hashbrown@0.14.5
+	hashbrown@0.15.5
+	hashbrown@0.17.1
+	hashlink@0.10.0
+	heck@0.5.0
+	hstr@4.0.1
+	html5gum@0.8.4
+	httparse@1.10.1
+	httpdate@1.0.3
+	icu_casemap@2.2.0
+	icu_casemap_data@2.2.0
+	icu_collections@2.2.0
+	icu_locale_core@2.2.0
+	icu_normalizer@2.2.0
+	icu_normalizer_data@2.2.0
+	icu_properties@2.2.0
+	icu_properties_data@2.2.0
+	icu_provider@2.2.0
+	idna@1.1.0
+	idna_adapter@1.2.2
+	indexmap@2.14.1
+	inotify-sys@0.1.7
+	inotify@0.11.3
+	is-macro@0.3.8
+	itertools@0.14.0
+	itoa@1.0.18
+	jni-macros@0.22.4
+	jni-sys-macros@0.4.1
+	jni-sys@0.4.1
+	jni@0.22.4
+	js-sys@0.3.103
+	kqueue-sys@1.1.2
+	kqueue@1.2.0
+	lazy_static@1.5.0
+	lexical-core@0.8.5
+	lexical-parse-float@0.8.5
+	lexical-parse-integer@0.8.6
+	lexical-util@0.8.5
+	lexical-write-float@0.8.5
+	lexical-write-integer@0.8.5
+	lexical@6.1.1
+	libc@0.2.186
+	linux-raw-sys@0.12.1
+	litemap@0.8.2
+	log@0.4.33
+	matchit@0.9.2
+	memchr@2.8.2
+	memo-map@0.3.3
+	minijinja-contrib@2.21.0
+	minijinja@2.21.0
+	mio@1.2.1
+	ndk-context@0.1.1
+	new_debug_unreachable@1.0.6
+	nonmax@0.5.5
+	notify-types@2.1.0
+	notify@8.2.0
+	nu-ansi-term@0.50.3
+	num-bigint@0.4.8
+	num-integer@0.1.47
+	num-traits@0.2.19
+	objc2-app-kit@0.3.2
+	objc2-core-foundation@0.3.2
+	objc2-encode@4.1.0
+	objc2-foundation@0.3.2
+	objc2@0.6.4
+	once_cell@1.21.4
+	ordered-float@5.4.0
+	outref@0.5.2
+	owo-colors@4.4.0
+	oxc-miette-derive@2.7.1
+	oxc-miette@2.7.1
+	oxc_allocator@0.81.0
+	oxc_ast@0.81.0
+	oxc_ast_macros@0.81.0
+	oxc_ast_visit@0.81.0
+	oxc_cfg@0.81.0
+	oxc_codegen@0.81.0
+	oxc_data_structures@0.81.0
+	oxc_diagnostics@0.81.0
+	oxc_ecmascript@0.81.0
+	oxc_estree@0.81.0
+	oxc_index@3.1.0
+	oxc_parser@0.81.0
+	oxc_regular_expression@0.81.0
+	oxc_semantic@0.81.0
+	oxc_sourcemap@4.0.5
+	oxc_span@0.81.0
+	oxc_syntax@0.81.0
+	percent-encoding@2.3.2
+	petgraph@0.8.3
+	phf@0.12.1
+	phf_generator@0.12.1
+	phf_macros@0.12.1
+	phf_shared@0.12.1
+	pin-project-lite@0.2.17
+	portable-atomic@1.13.1
+	potential_utf@0.1.5
+	ppv-lite86@0.2.21
+	proc-macro2@1.0.106
+	pyo3-build-config@0.29.0
+	pyo3-ffi@0.29.0
+	pyo3-macros-backend@0.29.0
+	pyo3-macros@0.29.0
+	pyo3@0.29.0
+	quote@1.0.46
+	r-efi@5.3.0
+	r-efi@6.0.0
+	rand@0.9.4
+	rand_chacha@0.9.0
+	rand_core@0.9.5
+	ref-cast-impl@1.0.25
+	ref-cast@1.0.25
+	regex-automata@0.4.14
+	regex-syntax@0.8.11
+	regex@1.12.4
+	rustc-hash@2.1.3
+	rustc_version@0.4.1
+	rustix@1.1.4
+	rustversion@1.0.23
+	ryu@1.0.23
+	same-file@1.0.6
+	saphyr-parser@0.0.6
+	saphyr@0.0.6
+	scoped-tls@1.0.1
+	self_cell@1.3.0
+	semver@1.0.28
+	seq-macro@0.3.6
+	serde@1.0.228
+	serde_core@1.0.228
+	serde_derive@1.0.228
+	serde_json@1.0.150
+	sha1_smol@1.0.1
+	sha2@0.10.9
+	sharded-slab@0.1.7
+	simd_cesu8@1.1.1
+	simdutf8@0.1.5
+	siphasher@0.3.11
+	siphasher@1.0.3
+	slab@0.4.12
+	smallvec@1.15.2
+	smawk@0.3.3
+	stable_deref_trait@1.2.1
+	static_assertions@1.1.0
+	string_enum@1.0.2
+	swc_atoms@10.0.0
+	swc_common@26.0.0
+	swc_css@31.0.0
+	swc_css_ast@26.0.0
+	swc_css_codegen@26.0.0
+	swc_css_codegen_macros@1.0.2
+	swc_css_minifier@26.0.0
+	swc_css_parser@26.0.0
+	swc_css_utils@26.0.0
+	swc_css_visit@26.0.0
+	swc_eq_ignore_macros@1.0.1
+	swc_macros_common@1.0.1
+	swc_visit@2.0.2
+	syn@2.0.118
+	synstructure@0.13.2
+	target-lexicon@0.13.5
+	tempfile@3.27.0
+	textwrap@0.16.2
+	thiserror-impl@2.0.18
+	thiserror@2.0.18
+	thread_local@1.1.9
+	tinystr@0.8.3
+	tracing-attributes@0.1.31
+	tracing-chrome@0.7.2
+	tracing-core@0.1.36
+	tracing-log@0.2.0
+	tracing-subscriber@0.3.23
+	tracing@0.1.44
+	triomphe@0.1.16
+	tungstenite@0.29.0
+	typenum@1.20.1
+	unicode-id-start@1.4.0
+	unicode-ident@1.0.24
+	unicode-linebreak@0.1.5
+	unicode-segmentation@1.13.3
+	unicode-width@0.2.2
+	url@2.5.8
+	utf16_iter@1.0.5
+	utf8_iter@1.0.4
+	valuable@0.1.1
+	version_check@0.9.5
+	vsimd@0.8.0
+	walkdir@2.5.0
+	wasi@0.11.1+wasi-snapshot-preview1
+	wasip2@1.0.1+wasi-0.2.4
+	wasm-bindgen-macro-support@0.2.126
+	wasm-bindgen-macro@0.2.126
+	wasm-bindgen-shared@0.2.126
+	wasm-bindgen@0.2.126
+	web-sys@0.3.103
+	webbrowser@1.2.4
+	winapi-util@0.1.11
+	windows-link@0.2.1
+	windows-sys@0.60.2
+	windows-sys@0.61.2
+	windows-targets@0.53.5
+	windows_aarch64_gnullvm@0.53.1
+	windows_aarch64_msvc@0.53.1
+	windows_i686_gnu@0.53.1
+	windows_i686_gnullvm@0.53.1
+	windows_i686_msvc@0.53.1
+	windows_x86_64_gnu@0.53.1
+	windows_x86_64_gnullvm@0.53.1
+	windows_x86_64_msvc@0.53.1
+	wit-bindgen@0.46.0
+	write16@1.0.0
+	writeable@0.6.3
+	yansi@1.0.1
+	yoke-derive@0.8.2
+	yoke@0.8.3
+	zerocopy-derive@0.8.53
+	zerocopy@0.8.53
+	zerofrom-derive@0.1.7
+	zerofrom@0.1.8
+	zerotrie@0.2.4
+	zerovec-derive@0.11.3
+	zerovec@0.11.6
+	zmij@1.0.21
+"
+
+declare -A GIT_CRATES=(
+	[zrx-diagnostic]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx-diagnostic'
+	[zrx-executor]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx-executor'
+	[zrx-graph]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx-graph'
+	[zrx-id]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx-id'
+	[zrx-path]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx-path'
+	[zrx-scheduler]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx-scheduler'
+	[zrx-storage]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx-storage'
+	[zrx-store]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx-store'
+	[zrx-stream]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx-stream'
+	[zrx]='https://github.com/zensical/zrx;60793b586b9e2e2cc65b8f99c88abeda9545c3f9;zrx-%commit%/crates/zrx'
+)
+
+inherit cargo distutils-r1 optfeature pypi
+
+DESCRIPTION="Static site generator from the creators of Material for MkDocs"
+HOMEPAGE="
+	https://zensical.org/
+	https://github.com/zensical/zensical
+	https://pypi.org/project/zensical/
+"
+SRC_URI+=" ${CARGO_CRATE_URIS}"
+
+# Bundled theme assets: Font Awesome icons CC-BY-4.0, Material Design
+# icons Apache-2.0, Lucide ISC, Octicons MIT, Simple Icons CC0-1.0; the
+# JS bundle carries MIT, Apache-2.0 and W3C components.
+LICENSE="MIT CC-BY-4.0 W3C"
+LICENSE+="
+	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD CC0-1.0 ISC MIT MIT-0
+	Unicode-3.0 ZLIB
+"
+SLOT="0"
+KEYWORDS="~amd64"
+
+# tomli is imported unconditionally (config.py) and pinned >=2.4, the
+# first TOML 1.1 release; stdlib tomllib still rejects TOML 1.1 on
+# Python 3.14 (verified 2026-09-24), so pkgcheck's DeprecatedDep stays.
+RDEPEND="
+	>=dev-python/click-8.1.8[${PYTHON_USEDEP}]
+	>=dev-python/deepmerge-2.0[${PYTHON_USEDEP}]
+	>=dev-python/jinja2-3.1[${PYTHON_USEDEP}]
+	>=dev-python/markdown-3.7[${PYTHON_USEDEP}]
+	>=dev-python/pygments-2.20[${PYTHON_USEDEP}]
+	>=dev-python/pymdown-extensions-11.0[${PYTHON_USEDEP}]
+	>=dev-python/pyyaml-6.0.2[${PYTHON_USEDEP}]
+	>=dev-python/tomli-2.4.0[${PYTHON_USEDEP}]
+"
+
+QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/zensical/zensical.*.so"
+
+src_unpack() {
+	cargo_src_unpack
+}
+
+pkg_postinst() {
+	optfeature "the table_reader extension" "dev-python/pandas dev-python/tabulate"
+}
