@@ -1,0 +1,19 @@
+Cython 3.3.0 crashes in OptimizeBuiltinCalls ("NoneType object is unsliceable")
+when a dict comprehension iterates .items() of a function argument while
+annotation_typing is disabled, as setup.py does. Moving the view into a plain
+local is not enough: with infer_types it is typed as a dict-items view and the
+generated C++ references an undeclared __Pyx_PyDictItems_TypePtr. Declaring the
+local as object avoids both code paths; the loop is otherwise unchanged.
+
+--- a/curated_tokenizers/_bbpe.pyx	2026-09-25 10:04:47.464014918 +0200
++++ b/curated_tokenizers/_bbpe.pyx	2026-09-25 10:04:47.489772101 +0200
+@@ -60,7 +60,8 @@
+         self._byte_decoder = {v.decode("utf-8"): k for k, v in self._byte_encoder.items()}
+         self._split_pattern = regex.compile(SPLIT_PATTERN)
+         self._piece_to_id = vocab
+-        self._id_to_piece = {v: k for k, v in vocab.items()}
++        cdef object items = vocab.items()
++        self._id_to_piece = {v: k for k, v in items}
+         cdef vector[pair[string, string]] c_merges
+         for p1, p2 in merges:
+             c_merges.push_back(pair[string, string](p1.encode('utf-8'), p2.encode('utf-8')))

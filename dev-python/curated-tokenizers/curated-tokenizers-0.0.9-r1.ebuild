@@ -32,3 +32,7 @@ BDEPEND="
 	${PYTHON_DEPS}
 	dev-python/cython[${PYTHON_USEDEP}]
 "
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.0.9-cython-3.3-crash.patch
+)
