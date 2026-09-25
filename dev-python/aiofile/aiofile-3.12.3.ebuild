@@ -13,7 +13,7 @@ HOMEPAGE="https://pypi.org/project/aiofile/"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 RDEPEND="
 	>=dev-python/caio-0.12.0[${PYTHON_USEDEP}]
