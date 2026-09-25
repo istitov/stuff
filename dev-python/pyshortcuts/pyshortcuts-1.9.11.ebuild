@@ -14,7 +14,7 @@ HOMEPAGE="https://github.com/newville/pyshortcuts"
 # declares license = "MIT". # verified 2026-09-20
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 # platformdirs became an unconditional top-level import in 1.9.10.
 # Verified 2026-09-01.
