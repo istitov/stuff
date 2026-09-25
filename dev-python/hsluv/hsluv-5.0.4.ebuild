@@ -13,6 +13,6 @@ HOMEPAGE="https://www.hsluv.org https://github.com/hsluv/hsluv-python"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 distutils_enable_tests unittest
