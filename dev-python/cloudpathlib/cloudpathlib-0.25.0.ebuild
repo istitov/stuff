@@ -18,7 +18,7 @@ SRC_URI="https://github.com/drivendataorg/${PN}/archive/refs/tags/v${PV}.tar.gz
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Cloud-backend extras (S3, GS, Azure) are optional and omitted.
 RDEPEND="${PYTHON_DEPS}"
