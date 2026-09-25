@@ -18,7 +18,7 @@ SRC_URI="https://github.com/AnonymouX47/${PN}/archive/refs/tags/v${PV}.tar.gz
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Tests require a TTY with kitty, iTerm2, and Sixel protocols.
 RESTRICT="test"
