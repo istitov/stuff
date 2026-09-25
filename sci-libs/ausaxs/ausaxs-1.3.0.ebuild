@@ -17,7 +17,7 @@ S="${WORKDIR}/AUSAXS-${PV}"
 
 LICENSE="LGPL-3+"
 SLOT="0/1.3"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="doc executables test"
 
 # Disable unused dlib minimizers and their unpackageable FetchContent path.
