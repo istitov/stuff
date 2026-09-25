@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Runtime only needs six; upstream metadata includes test tools. Verified 2026-06-16.
 RDEPEND="dev-python/six[${PYTHON_USEDEP}]"
