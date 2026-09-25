@@ -13,7 +13,7 @@ HOMEPAGE="https://github.com/repo-helper/hatch-requirements-txt"
 SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/hatchling-0.21.0[${PYTHON_USEDEP}]
