@@ -18,6 +18,10 @@ RESTRICT="!test? ( test )"
 RDEPEND="sys-libs/binutils-libs:="
 DEPEND="${RDEPEND}"
 
+PATCHES=(
+	"${FILESDIR}"/${PN}-1.6-missing-dl_info.patch
+)
+
 src_configure() {
 	local mycmakeargs=(
 		-DBACKWARD_SHARED=OFF

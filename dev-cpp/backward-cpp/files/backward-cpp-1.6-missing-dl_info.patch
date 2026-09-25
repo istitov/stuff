@@ -1,0 +1,63 @@
+Upstream: https://github.com/bombela/backward-cpp/pull/221 (merged after v1.6)
+
+Without it <dlfcn.h> is only included for the BFD and DW backends, while
+Dl_info is used on every Linux build; glibc pulls the header in through
+other system headers, musl does not.
+
+From 65fc89e210655aaa707337bc21d19f45805ac8a2 Mon Sep 17 00:00:00 2001
+From: Michael Truog <mjtruog@protonmail.com>
+Date: Mon, 24 May 2021 23:09:51 -0700
+Subject: [PATCH] Fix missing Dl_info type
+
+* Dl_info is required when BACKWARD_SYSTEM_LINUX is defined
+  (was a problem for BACKWARD_HAS_DW == 1)
+---
+ backward.hpp | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
+
+diff --git a/backward.hpp b/backward.hpp
+index 9ca22c5..b0b75e6 100644
+--- a/backward.hpp
++++ b/backward.hpp
+@@ -213,6 +213,13 @@
+ #include <sys/stat.h>
+ #include <syscall.h>
+ #include <unistd.h>
++#ifndef _GNU_SOURCE
++#define _GNU_SOURCE
++#include <dlfcn.h>
++#undef _GNU_SOURCE
++#else
++#include <dlfcn.h>
++#endif
+ 
+ #if BACKWARD_HAS_BFD == 1
+ //              NOTE: defining PACKAGE{,_VERSION} is required before including
+@@ -225,13 +232,6 @@
+ #define PACKAGE_VERSION
+ #endif
+ #include <bfd.h>
+-#ifndef _GNU_SOURCE
+-#define _GNU_SOURCE
+-#include <dlfcn.h>
+-#undef _GNU_SOURCE
+-#else
+-#include <dlfcn.h>
+-#endif
+ #endif
+ 
+ #if BACKWARD_HAS_DW == 1
+@@ -246,13 +246,6 @@
+ #include <libdwarf.h>
+ #include <libelf.h>
+ #include <map>
+-#ifndef _GNU_SOURCE
+-#define _GNU_SOURCE
+-#include <dlfcn.h>
+-#undef _GNU_SOURCE
+-#else
+-#include <dlfcn.h>
+-#endif
+ #endif
+ 
+ #if (BACKWARD_HAS_BACKTRACE == 1) || (BACKWARD_HAS_BACKTRACE_SYMBOL == 1)
