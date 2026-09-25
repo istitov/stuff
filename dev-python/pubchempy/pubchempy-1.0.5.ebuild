@@ -17,6 +17,6 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 # Tests query pubchem.ncbi.nlm.nih.gov.
 RESTRICT="test"
