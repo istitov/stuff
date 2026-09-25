@@ -18,3 +18,6 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 RDEPEND="
 	>=dev-python/numpy-1.15[${PYTHON_USEDEP}]
 "
+BDEPEND="
+	dev-python/versioneer[${PYTHON_USEDEP}]
+"
