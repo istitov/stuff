@@ -15,7 +15,7 @@ S="${WORKDIR}/cuid"
 LICENSE="MIT"
 # Slot by ROCm release, not upstream's 0.x library version.
 SLOT="0/$(ver_cut 1-2)"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 IUSE="examples test"
 RESTRICT="!test? ( test )"
