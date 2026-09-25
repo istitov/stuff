@@ -18,7 +18,7 @@ S="${WORKDIR}/texlive-${PV#*_p}-source/texk/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="iconv"
 
 DEPEND="
