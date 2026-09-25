@@ -23,6 +23,12 @@ src_prepare() {
 }
 
 my_src_configure() {
+	# Real OPL output drives ISA ports with inb/outb, which only exist on x86;
+	# musl's <sys/io.h> lacks them elsewhere. Take the no-hardware path there.
+	if ! use amd64 && ! use x86; then
+		local -x ac_cv_header_sys_io_h=no
+	fi
+
 	econf \
 		$(use_enable debug) \
 		$(use_enable static-libs static)
