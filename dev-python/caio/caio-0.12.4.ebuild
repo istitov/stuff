@@ -14,7 +14,7 @@ HOMEPAGE="https://pypi.org/project/caio/"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 BDEPEND="
 	>=dev-python/setuptools-77[${PYTHON_USEDEP}]
