@@ -20,7 +20,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Tracer invokes strace; perf_event_open needs no userspace dependency.
 RDEPEND="dev-debug/strace"
