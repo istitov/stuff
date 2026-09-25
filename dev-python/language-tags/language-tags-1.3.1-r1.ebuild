@@ -18,7 +18,7 @@ SRC_URI="https://github.com/OnroerendErfgoed/${PN}/archive/refs/tags/${PV}.tar.g
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 BDEPEND+="dev-python/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]"
 
