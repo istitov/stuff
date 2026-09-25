@@ -11,7 +11,7 @@ SRC_URI="https://github.com/BelledonneCommunications/${PN}/archive/refs/tags/${P
 
 LICENSE="GPL-3"
 SLOT="0/${PV}"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 # Upstream assumes a modified Mbed TLS with MBEDTLS_THREADING_ALT; Gentoo's
 # Mbed TLS uses MBEDTLS_THREADING_PTHREAD and cannot build this backend.
