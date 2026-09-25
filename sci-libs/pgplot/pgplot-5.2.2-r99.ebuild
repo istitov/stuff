@@ -43,7 +43,7 @@ src_prepare() {
 	default
 
 	# X drivers store pointers in 4-byte Fortran INTEGERs; widen them on LP64.
-	if use amd64 || use arm64 || use ia64; then
+	if [[ $(tc-get-ptr-size) == 8 ]]; then
 		sed -e 's/INTEGER PIXMAP/INTEGER*8 PIXMAP/g' \
 			-i drivers/{gi,pp,wd}driv.f || die "sed 64bits failed"
 	fi
