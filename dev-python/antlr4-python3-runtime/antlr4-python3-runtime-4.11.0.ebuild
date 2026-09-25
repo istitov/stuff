@@ -23,7 +23,7 @@ S="${WORKDIR}/${MY_P}/runtime/Python3"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Retain 4.11 for lm-eval's exact runtime assertion and math packages' exact
 # pins; ::gentoo consumers are unversioned. verified 2026-05-11
