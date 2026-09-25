@@ -45,6 +45,9 @@ src_configure() {
 	# Avoid strict-aliasing and LTO type failures (Gentoo bug 862720).
 	append-flags -fno-strict-aliasing
 	filter-lto
+	# The mfhdf netCDF-2 code uses old-style (unprototyped) function
+	# pointers, which C23 (the GCC 15+ default) turns into hard errors.
+	append-cflags -std=gnu17
 
 	[[ $(tc-getFC) = *gfortran ]] && append-fflags -fno-range-check
 	# Accept legacy Fortran argument mismatches (Gentoo bug 723014).
