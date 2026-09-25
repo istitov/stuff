@@ -292,8 +292,8 @@ Throttle-reason flags were not recorded, so temperatures alone establish
 neither throttling nor its absence. GPU-client visibility was incomplete;
 exclusive GPU use was not proven. Memory bandwidth was not measured.
 
-The [sanitized Muse evidence archive](https://raw.githubusercontent.com/istitov/stuff-benchmarks/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/data/muse-dflash-2026-09-09.tar.7z)
-and [methods and verification notes](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/docs/FOLLOWUPS.md#muse-dflash)
+The [sanitized Muse evidence archive](https://raw.githubusercontent.com/istitov/stuff-benchmarks/d22bc593998930fa6cee4e0340c2555b4b48a284/data/muse-dflash-2026-09-09.tar.7z)
+and [methods and verification notes](https://github.com/istitov/stuff-benchmarks/blob/d22bc593998930fa6cee4e0340c2555b4b48a284/docs/FOLLOWUPS.md#muse-dflash)
 are published in the signed evidence release. They cover this follow-up
 separately from the four-model MTP study.
 
@@ -346,10 +346,10 @@ six-request medians and ranges, and the block/cache splits. The
 [data description](data/speculative-decoding-2026-09-06.md) explains the
 columns and the retained source records.
 
-The [MTP evidence archive](https://raw.githubusercontent.com/istitov/stuff-benchmarks/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/data/september-mtp-2026-09-06.tar.7z)
+The [MTP evidence archive](https://raw.githubusercontent.com/istitov/stuff-benchmarks/d22bc593998930fa6cee4e0340c2555b4b48a284/data/september-mtp-2026-09-06.tar.7z)
 and its analysis tools are published at signed commit
-[`d600c05`](https://github.com/istitov/stuff-benchmarks/commit/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89).
-The [verification instructions](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/README.md#verify-and-reproduce-the-calculations)
+[`d22bc59`](https://github.com/istitov/stuff-benchmarks/commit/d22bc593998930fa6cee4e0340c2555b4b48a284).
+The [verification instructions](https://github.com/istitov/stuff-benchmarks/blob/d22bc593998930fa6cee4e0340c2555b4b48a284/README.md#verify-and-reproduce-the-calculations)
 use Python and 7-Zip to unpack the archive and reproduce the table without
 running models. Public logs and manifests are
 sanitized derivatives: private filesystem paths are replaced and model-authored

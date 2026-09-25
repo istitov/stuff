@@ -9,15 +9,15 @@ so that readers can judge whether the result applies to their own setup.
 | [Speculative decoding](speculative-decoding-on-890M.md) | Radeon 890M, llama.cpp Vulkan | How much do MTP and DFlash improve generation speed, and when does that shorten the wait for an answer? |
 | [AMD Ryzen AI 300 NPU versus Radeon 890M](npu-vs-890m.md) | XDNA 2 / FastFlowLM and Radeon 890M / llama.cpp Vulkan | How do request latency, socket power, estimated energy and memory accounting compare? |
 
-The [benchmark evidence repository](https://github.com/istitov/stuff-benchmarks/tree/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89)
+The [benchmark evidence repository](https://github.com/istitov/stuff-benchmarks/tree/d22bc593998930fa6cee4e0340c2555b4b48a284)
 publishes the MTP, Muse DFlash and NPU/iGPU datasets at signed commit
-[`d600c05`](https://github.com/istitov/stuff-benchmarks/commit/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89).
+[`d22bc59`](https://github.com/istitov/stuff-benchmarks/commit/d22bc593998930fa6cee4e0340c2555b4b48a284).
 Each study has a sanitized evidence archive compressed with **7-Zip/PPMd**;
 CSV tables, analysis tools, checksums and attribution remain directly readable.
-The [verification instructions](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/README.md#verify-and-reproduce-the-calculations)
+The [verification instructions](https://github.com/istitov/stuff-benchmarks/blob/d22bc593998930fa6cee4e0340c2555b4b48a284/README.md#verify-and-reproduce-the-calculations)
 require Python 3.11+ and 7-Zip and automatically unpack the archives into
 temporary directories. No inference or model downloads are needed.
-See [7-Zip installation and archive layout](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/README.md#dataset-archives-and-7-zip).
+See [7-Zip installation and archive layout](https://github.com/istitov/stuff-benchmarks/blob/d22bc593998930fa6cee4e0340c2555b4b48a284/README.md#dataset-archives-and-7-zip).
 
 Start with [the hardware guide](../guides/hardware-targets.md) to identify
 your GPU, and [the llama setup guide](../guides/llama-setup.md) to build and

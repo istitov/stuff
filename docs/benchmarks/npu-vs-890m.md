@@ -324,9 +324,9 @@ unrounded measurements and descriptive ranges. Column definitions, artifact
 metadata and diagnostic details are documented in the
 [supporting data notes](data/npu-vs-890m-2026-09-11.md).
 
-The [sanitized NPU/iGPU evidence archive](https://raw.githubusercontent.com/istitov/stuff-benchmarks/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/data/npu-vs-890m-2026-09-11.tar.7z)
-and [analysis and verification methods](https://github.com/istitov/stuff-benchmarks/blob/d600c05b6b1bdd69ce6dc2135faaba61c38f2d89/docs/FOLLOWUPS.md#npu-versus-radeon-890m)
-are pinned to signed commit `d600c05`. The evidence is separate from the MTP
+The [sanitized NPU/iGPU evidence archive](https://raw.githubusercontent.com/istitov/stuff-benchmarks/d22bc593998930fa6cee4e0340c2555b4b48a284/data/npu-vs-890m-2026-09-11.tar.7z)
+and [analysis and verification methods](https://github.com/istitov/stuff-benchmarks/blob/d22bc593998930fa6cee4e0340c2555b4b48a284/docs/FOLLOWUPS.md#npu-versus-radeon-890m)
+are pinned to signed commit `d22bc59`. The evidence is separate from the MTP
 and Muse DFlash datasets. Verification reconciles all 288 request streams
 with saved records, checks token/cache accounting and artifact fingerprints,
 and regenerates the published tables. Recomputing the calculations does not
