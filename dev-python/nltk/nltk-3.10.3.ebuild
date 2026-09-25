@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 # defusedxml became mandatory in 3.10: plain nltk imports reach it through the
 # downloader, and corpus readers use it for untrusted XML.
