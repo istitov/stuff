@@ -14,7 +14,7 @@ HOMEPAGE="https://vispy.org/ https://github.com/vispy/vispy"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # The Cython extension uses NumPy headers, so NumPy is also a build dependency.
 RDEPEND="
