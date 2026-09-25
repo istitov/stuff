@@ -9,7 +9,7 @@ SRC_URI="https://github.com/megabaks/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~arm64"
+KEYWORDS="~arm ~arm64"
 
 RDEPEND="
 	app-shells/bash
