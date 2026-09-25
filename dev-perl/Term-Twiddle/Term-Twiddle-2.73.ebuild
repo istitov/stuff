@@ -11,7 +11,7 @@ DESCRIPTION="Twiddles a thingy while-u-wait"
 LICENSE="|| ( Artistic GPL-2 )"
 
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 # Time::HiRes is a core runtime prerequisite; the oldest virtual exceeds
 # upstream's 1.30 floor. Verified 2026-07-27.
