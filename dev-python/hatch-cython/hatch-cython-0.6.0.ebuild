@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Build-backend plugin required by vispy since 0.17. typing-extensions applies
 # only below this package's Python floor. # verified 2026-09-09
