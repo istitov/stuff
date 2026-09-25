@@ -69,8 +69,8 @@ else
 			https://github.com/ShiqiYu/libfacedetection.train/raw/02246e79b1e976c83d1e135a85e0628120c93769/onnx/yunet_s_640_640.onnx -> yunet-202303.onnx
 		)
 	"
-	# Runtime-verified on ~amd64; install-verified on ~arm64.
-	KEYWORDS="~amd64 ~arm64"
+	# Runtime-verified on ~amd64; install-verified on ~arm64 and ~arm.
+	KEYWORDS="~amd64 ~arm ~arm64"
 fi
 
 LICENSE="Apache-2.0"
