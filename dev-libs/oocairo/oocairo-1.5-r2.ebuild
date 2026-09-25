@@ -3,7 +3,10 @@
 
 EAPI="8"
 
-inherit autotools
+# luaL_typerror/luaL_checkint pin the C API to 5.1 (5.2 via its own shims).
+LUA_COMPAT=( lua5-1 luajit )
+
+inherit autotools lua-single
 [[ ${PV} == 9999 ]] && inherit git-r3
 
 DESCRIPTION="oocairo are Lua bindings to the cairo library"
@@ -18,8 +21,9 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
+REQUIRED_USE="${LUA_REQUIRED_USE}"
 
-RDEPEND="dev-lang/lua
+RDEPEND="${LUA_DEPS}
 	x11-libs/cairo"
 DEPEND="${RDEPEND}"
 # Configure requires pod2man and pkg.m4; autotools.eclass supplies the remaining
