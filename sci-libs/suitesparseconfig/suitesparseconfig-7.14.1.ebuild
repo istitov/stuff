@@ -14,7 +14,7 @@ SRC_URI="https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/refs/tags/v$
 S="${WORKDIR}/${Sparse_P}/SuiteSparse_config"
 LICENSE="BSD"
 SLOT="0/7"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="openmp"
 
 # SuiteSparse_config links BLAS, so retain it for consumers at runtime.
