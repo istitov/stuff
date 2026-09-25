@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # 9.16 replaces httpx and fake-useragent with primp; no Python source imports
 # either former dependency. verified 2026-08-27
