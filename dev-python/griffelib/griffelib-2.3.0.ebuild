@@ -13,7 +13,7 @@ HOMEPAGE="https://pypi.org/project/griffelib/"
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 BDEPEND="
 	dev-python/pdm-backend[${PYTHON_USEDEP}]
