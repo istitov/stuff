@@ -70,6 +70,9 @@ src_configure() {
 		-DBUILD_EXECUTABLES=$(usex executables)
 		-DSTATIC_CURL=OFF
 		-DARCH=auto
+		# The per-architecture -march flag is dropped in src_prepare, so the
+		# upstream allow-list only serves to reject other architectures.
+		-DALLOW_UNKNOWN_ARCHITECTURE=ON
 		-DUSE_SYSTEM_GCEM=ON
 		-DUSE_SYSTEM_BACKWARD=ON
 		-DUSE_SYSTEM_CLI11=ON
