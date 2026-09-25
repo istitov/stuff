@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # GitHub tags lag PyPI; Thinc requires MurmurHash <1.1.
 RDEPEND="${PYTHON_DEPS}"
