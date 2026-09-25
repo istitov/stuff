@@ -16,7 +16,7 @@ LICENSE="NCSA-HDF"
 # The CMake port replaces libdf.so.0/libmfhdf.so.0 with libhdf.so.11 and
 # libmfhdf.so.11. Its intended libdf compatibility symlink fails silently.
 SLOT="0/11"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="examples fortran szip static-libs test"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="test? ( szip )"
