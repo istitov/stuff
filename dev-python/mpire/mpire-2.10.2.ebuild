@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/sybrenjansen/mpire"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="dashboard dill numpy"
 
 # Map upstream extras to USE flags; multiprocess implements the dill backend.
