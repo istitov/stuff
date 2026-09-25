@@ -16,7 +16,7 @@ S="${WORKDIR}/formfactor-v${PV}-${COMMIT}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # CMake requests no version; require the current LibHeinz major and avoid the
 # legacy interface fallback. verified 2026-08-05
