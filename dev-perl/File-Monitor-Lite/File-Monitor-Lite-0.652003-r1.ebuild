@@ -10,7 +10,7 @@ inherit perl-module
 DESCRIPTION="Monitor file changes"
 
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 # Runtime modules mirror Makefile.PL except test-only File::Touch.
 # Verified 2026-07-27.
