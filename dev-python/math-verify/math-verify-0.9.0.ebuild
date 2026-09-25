@@ -20,7 +20,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Match upstream's exact 1.11.0 pin while allowing Gentoo revisions.
 RDEPEND="
