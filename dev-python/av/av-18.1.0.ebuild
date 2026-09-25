@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/PyAV-Org/PyAV https://pypi.org/project/av/"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 # Test configuration exits during collection.
 RESTRICT="test"
