@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 # Make the widely used datetime extra unconditional. Version 2 drops pytz for
 # zoneinfo; upstream's tzdata dependency is Windows-only. verified 2026-07-27
