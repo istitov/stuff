@@ -16,7 +16,7 @@ S="${WORKDIR}/heinz-v${PV}-${COMMIT}"
 
 LICENSE="0BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 src_configure() {
 	local mycmakeargs=(
