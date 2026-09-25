@@ -21,7 +21,7 @@ S="${WORKDIR}/${PN}-${PV}"
 # The vendored docutils subset is BSD-2/public-domain and excludes GPL code.
 LICENSE="MIT BSD-2 public-domain"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-python/rich-12.0.0[${PYTHON_USEDEP}]
