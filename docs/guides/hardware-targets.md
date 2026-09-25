@@ -1,3 +1,9 @@
+---
+tags:
+  - ROCm
+  - CUDA
+---
+
 # Check the GPU hardware version
 
 GPU source builds need the compiler target for the installed hardware, not

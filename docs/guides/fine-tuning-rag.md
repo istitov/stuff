@@ -1,3 +1,9 @@
+---
+tags:
+  - ROCm
+  - fine-tuning
+---
+
 # Fine-tuning LLMs, Unsloth, and local RAG (Gentoo)
 
 `stuff` ships the stack to run QLoRA fine-tuning and a local vector store for

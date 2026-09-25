@@ -32,6 +32,23 @@ theme:
 
 docs_dir: docs
 
+plugins:
+  - search
+  - tags:
+      tags_allowed:
+        - NPU
+        - AMD iGPU
+        - NVIDIA GPU
+        - Intel iGPU
+        - CPU
+        - Vulkan
+        - ROCm
+        - CUDA
+        - LLM inference
+        - speech-to-text
+        - image and 3D
+        - fine-tuning
+
 nav:
   - Home: index.md
   - Setup: setup.md
@@ -49,6 +66,7 @@ nav:
       - Overview: benchmarks/index.md
       - Speculative decoding on Radeon 890M: benchmarks/speculative-decoding-on-890M.md
       - AMD Ryzen AI 300 NPU versus Radeon 890M: benchmarks/npu-vs-890m.md
+  - Tags: tags.md
 
 markdown_extensions:
   - admonition

@@ -1,3 +1,10 @@
+---
+tags:
+  - NPU
+  - LLM inference
+  - speech-to-text
+---
+
 # Running LLMs on the AMD Ryzen AI NPU (Gentoo way)
 
 AMD's **Ryzen AI** APUs ship an on-die **NPU** (Neural Processing Unit, AMD's

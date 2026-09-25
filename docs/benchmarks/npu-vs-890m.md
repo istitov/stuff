@@ -1,3 +1,11 @@
+---
+tags:
+  - NPU
+  - AMD iGPU
+  - Vulkan
+  - LLM inference
+---
+
 # AMD Ryzen AI 300 NPU versus Radeon 890M
 
 ## Abstract

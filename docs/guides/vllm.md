@@ -1,3 +1,10 @@
+---
+tags:
+  - ROCm
+  - CUDA
+  - LLM inference
+---
+
 # Serving LLMs with vLLM (Gentoo way)
 
 [vLLM](https://docs.vllm.ai/) is the high-throughput serving option in `stuff`:

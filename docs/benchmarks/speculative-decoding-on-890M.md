@@ -1,3 +1,10 @@
+---
+tags:
+  - AMD iGPU
+  - Vulkan
+  - LLM inference
+---
+
 # Speculative decoding on Radeon 890M
 
 On this Radeon 890M, MTP speculative decoding substantially increased

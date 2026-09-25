@@ -1,3 +1,10 @@
+---
+tags:
+  - ROCm
+  - CUDA
+  - image and 3D
+---
+
 # ComfyUI + TRELLIS image-to-3D (Gentoo)
 
 [**ComfyUI**](https://www.comfy.org/) is a node-based diffusion / generative-AI

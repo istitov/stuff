@@ -1,3 +1,12 @@
+---
+tags:
+  - CPU
+  - Vulkan
+  - ROCm
+  - CUDA
+  - LLM inference
+---
+
 # Setting up llama.cpp, Ollama, and llama-swap (Gentoo way)
 
 The llama stack is the flexible local-inference path in `stuff`. It covers
