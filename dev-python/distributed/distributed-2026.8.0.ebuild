@@ -22,7 +22,7 @@ SRC_URI="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 RESTRICT="test"	# Upstream test suite is flaky / network-dependent.
 
 # Broken tblib 3.2.0/3.2.1 are absent from ::gentoo. Verified 2026-07-14.
