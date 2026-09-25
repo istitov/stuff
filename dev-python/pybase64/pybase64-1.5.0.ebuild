@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="BSD-2"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Build the bundled libbase64 with CMake; no system library is used.
 BDEPEND="
