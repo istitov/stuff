@@ -17,7 +17,7 @@ SRC_URI="https://github.com/HDFGroup/h5pyd/archive/refs/tags/v${PV}.tar.gz -> ${
 
 LICENSE="h5serv"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 # Tests require a live HSDS server.
 RESTRICT="test"
 
