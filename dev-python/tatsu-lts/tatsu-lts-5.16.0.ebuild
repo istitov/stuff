@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="BSD-4"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # The core parser has no runtime dependencies; colorama and rich are extras.
 
