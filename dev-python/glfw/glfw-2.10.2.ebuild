@@ -18,7 +18,7 @@ S="${WORKDIR}/pyGLFW-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # The ctypes wrapper loads libglfw at runtime.
 RDEPEND="media-libs/glfw"
