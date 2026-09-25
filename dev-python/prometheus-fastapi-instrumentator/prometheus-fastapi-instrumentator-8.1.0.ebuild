@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Preserve upstream's major compatibility caps. verified 2026-07-27
 RDEPEND="
