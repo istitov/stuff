@@ -15,7 +15,7 @@ SRC_URI="https://github.com/jamesrhester/${PN}/archive/refs/tags/v${PV}.tar.gz -
 
 LICENSE="PyCifRW"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 RDEPEND="
 	dev-python/numpy[${PYTHON_USEDEP}]
