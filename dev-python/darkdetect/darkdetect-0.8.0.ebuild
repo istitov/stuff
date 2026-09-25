@@ -16,6 +16,6 @@ HOMEPAGE="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 # Linux has no runtime dependencies; upstream's sole dependency is macOS-only.
