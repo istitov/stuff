@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="BSD MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # The sdist bundles xatlas and pybind11 for an offline build; numpy, scipy, and
 # trimesh are test-only.
