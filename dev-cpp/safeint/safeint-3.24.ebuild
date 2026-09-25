@@ -10,7 +10,7 @@ S="${WORKDIR}/SafeInt-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Header-only since 3.19; upstream removed its build system.
 
