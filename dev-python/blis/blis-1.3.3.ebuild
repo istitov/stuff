@@ -17,7 +17,7 @@ HOMEPAGE="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # This Python wrapper vendors BLIS for thinc; system sci-libs/blis is not a
 # drop-in replacement for that pinned layer.
