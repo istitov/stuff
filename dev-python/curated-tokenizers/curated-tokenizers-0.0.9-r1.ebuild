@@ -19,7 +19,7 @@ SRC_URI="https://files.pythonhosted.org/packages/fc/fa/b2d55f0d53c7c7f5dc0b6dbb4
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # The 0.0 line matches spacy-curated-transformers 0.3; 0.9 belongs to its
 # unrelated 2.x branch.
