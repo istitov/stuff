@@ -20,7 +20,7 @@ if [[ ${PV} == "9999" ]] ; then
 else
 	# Use GitHub sources because PyPI omits tests.
 	SRC_URI="https://github.com/wbolster/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.gh.tar.gz"
-	KEYWORDS="~amd64 ~arm64 ~x86"
+	KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 fi
 
 LICENSE="BSD"
