@@ -13,6 +13,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
+PATCHES=(
+	"${FILESDIR}"/${PN}-7.0.0-cstdint.patch
+)
+
 src_prepare() {
 	default
 	# Drop hard-coded optimization and profiling flags.

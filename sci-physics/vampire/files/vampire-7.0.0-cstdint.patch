@@ -1,0 +1,43 @@
+These headers use fixed-width integer types without including <cstdint>.
+glibc supplies it through other standard headers; musl does not.
+
+--- a/hdr/spintransport.hpp	2025-06-05 17:51:31.000000000 +0200
++++ b/hdr/spintransport.hpp	2026-09-25 09:54:37.816756117 +0200
+@@ -14,6 +14,7 @@
+ #define SPINTRANSPORT_H_
+ 
+ // C++ standard library headers
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 
+--- a/hdr/vio.hpp	2025-06-05 17:51:31.000000000 +0200
++++ b/hdr/vio.hpp	2026-09-25 09:54:37.815706709 +0200
+@@ -25,6 +25,7 @@
+ #ifndef VIO_H_
+ #define VIO_H_
+ 
++#include <cstdint>
+ #include <fstream>
+ #include <string>
+ #include <iostream>
+--- a/hdr/vmath.hpp	2025-06-05 17:51:31.000000000 +0200
++++ b/hdr/vmath.hpp	2026-09-25 09:54:37.811739113 +0200
+@@ -10,6 +10,7 @@
+ //------------------------------------------------------------------------------
+ //
+ 
++#include <cstdint>
+ #include <vector>
+ #include <cmath>
+ 
+--- a/hdr/vmpi.hpp	2025-06-05 17:51:31.000000000 +0200
++++ b/hdr/vmpi.hpp	2026-09-25 09:54:37.811988058 +0200
+@@ -27,6 +27,7 @@
+ //==========================================================
+ // Includes
+ //==========================================================
++#include <cstdint>
+ #include "create.hpp"
+ #include <cstdlib>
+ #include <string>
