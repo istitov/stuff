@@ -41,6 +41,12 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 src_prepare() {
+	# PAGE_SIZE only sizes the buffer for hashing the game binary and is not
+	# defined off x86 (e.g. arm64); any chunk works, so use x86's 4096.
+	# verified 2026-09-26
+	sed -i 's/\bPAGE_SIZE\b/4096/g' src/dfinstancelinux.cpp || die
+	grep -q PAGE_SIZE src/dfinstancelinux.cpp && die "PAGE_SIZE left in dfinstancelinux.cpp"
+
 	if use qt6; then
 		# Normalize upstream CRLF sources before applying the local Qt6 port.
 		find src CMakeLists.txt -type f \
