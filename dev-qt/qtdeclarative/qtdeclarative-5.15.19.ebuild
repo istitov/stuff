@@ -52,10 +52,13 @@ src_prepare() {
 src_configure() {
 	replace-flags "-Os" "-O2" # bug 840861
 
+	# With USE=jit, leave qml-jit to Qt's own detection: forcing it fails
+	# configure where Qt has no JIT backend, e.g. ARMv6 (no Thumb-2).
+	# verified 2026-09-26
 	local myqmakeargs=(
 		--
 		-qml-debug
-		$(qt_use jit feature-qml-jit)
+		$(usev !jit -no-feature-qml-jit)
 	)
 	qt5-build_src_configure
 }
