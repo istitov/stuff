@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
 # Release metadata caps Python below 3.13; relaxed below.
-PYTHON_COMPAT=( python3_{12..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi
@@ -39,8 +39,11 @@ DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
 
 src_prepare() {
-	# Backport upstream's metadata-only Python 3.13 enablement.
-	# verified 2026-05-09
-	sed -i 's|>=3.8, <3.13|>=3.8, <3.14|' pyproject.toml || die
+	# Upstream fba12365 raised this cap to 3.14 without touching code, but never
+	# tagged a release carrying it, and has not moved it since. 3.14 goes one
+	# step past that: every module byte-compiles on it and none import stdlib it
+	# removed, and the whole dependency chain already builds for it.
+	# verified 2026-09-26
+	sed -i 's|>=3.8, <3.13|>=3.8, <3.15|' pyproject.toml || die
 	distutils-r1_src_prepare
 }
