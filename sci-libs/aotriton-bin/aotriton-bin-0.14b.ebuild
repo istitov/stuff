@@ -14,12 +14,15 @@ SHIM_URI_PREFIX="${URI_PREFIX}/${MY_P}-manylinux_2_28_x86_64"
 IMAGES_URI_PREFIX="${URI_PREFIX}/${MY_P}-images-amd"
 
 # Fetch all small ROCm shims but unpack only the installed version. ROCm 10
-# reports HIP 7.15, and 0.14b no longer ships a 7.15 shim, so rename the 7.14
-# one to rocm10.0 for selection: it is built against an older HIP than the
-# runtime, which is the compatible direction, whereas the 7.16 shim assumes a
-# newer HIP than ROCm 10.0 provides. Both link against our HIP, so the symbol
-# table cannot distinguish them. gfx1250 has its own image.
-# verified 2026-09-21
+# reports HIP 7.15, and 0.14b was released without a 7.15 shim, so rename the
+# 7.14 one to rocm10.0 for selection: it is built against an older HIP than
+# the runtime, which is the compatible direction, whereas the 7.16 shim
+# assumes a newer HIP than ROCm 10.0 provides. Both link against our HIP, so
+# the symbol table cannot distinguish them. gfx1250 has its own image.
+# verified 2026-09-21. Upstream added a 7.15 shim to the 0.14b release later
+# that day (asset uploaded 2026-09-21 17:43 UTC). 0.14.2b uses its 7.15 shim;
+# switching this version would change the rocm10.0 distfile's contents under
+# the same name. checked 2026-09-26
 SRC_URI="
 	${SHIM_URI_PREFIX}-rocm6.4-shared.tar.gz
 	${SHIM_URI_PREFIX}-rocm7.0-shared.tar.gz
