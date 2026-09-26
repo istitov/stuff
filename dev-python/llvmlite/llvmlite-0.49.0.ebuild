@@ -18,7 +18,7 @@ SRC_URI="https://github.com/numba/llvmlite/archive/refs/tags/v${PV}.tar.gz -> ${
 
 LICENSE="BSD-2 Apache-2.0-with-LLVM-exceptions"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 RDEPEND="$(llvm_gen_dep 'llvm-core/llvm:${LLVM_SLOT}=')"
 DEPEND="${RDEPEND}"
