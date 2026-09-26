@@ -19,25 +19,24 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="udev"
 
-DEPEND="
-	udev? (
-		dev-libs/libxslt
-		media-gfx/sane-backends
-	)"
-
 DOCS=( NEWS SUPPORTED-DEVICES KNOWN-PROBLEMS )
 
 src_install() {
-	ewarn "Some profiles automatically enable udev which will cause install"
-	ewarn "to fail if media-gfx/sane-backends is not already installed."
 	default
 
-	if use udev; then
-		local rulesdir=$(get_udevdir)/rules.d
-		dodir ${rulesdir}
-		"${D}/usr/$(get_libdir)/iscan-data/make-policy-file" \
-			--force --mode udev \
-			-d "${D}/usr/share/iscan-data/epkowa.desc" \
-			-o "${D}${rulesdir}/99-iscan.rules" || die
-	fi
+	# Upstream's make-policy-file copies an Epson rule out of sane-backends'
+	# *sane.rules. sane-backends now installs 65-sane-backends.rules and keeps
+	# its device list in the udev hwdb, so the helper finds no file to read,
+	# and pointed at the new one it finds no Epson rule to copy. That hwdb
+	# already covers most epkowa IDs; a static file covers the rest.
+	# verified 2026-09-26 with sane-backends-1.3.1-r2
+	use udev && udev_dorules "${FILESDIR}"/60-iscan.rules
+}
+
+pkg_postinst() {
+	use udev && udev_reload
+}
+
+pkg_postrm() {
+	use udev && udev_reload
 }

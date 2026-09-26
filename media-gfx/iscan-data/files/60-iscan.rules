@@ -1,0 +1,29 @@
+# Epson scanners that Image Scan! (epkowa) supports and that sane-backends'
+# hwdb does not already tag with libsane_matched=yes; the other 196 IDs in
+# epkowa.desc are covered there. The marker gives these devices what every
+# SANE scanner gets: uaccess for the local session (70-uaccess.rules) and a
+# scanner-group ACL (sane-backends' 66-saned.rules). Both rules read the
+# marker, so this file must sort before 66.
+# Compared against sane-backends-1.3.1-r2 on 2026-09-26.
+
+ACTION=="remove", GOTO="iscan_end"
+SUBSYSTEM!="usb", GOTO="iscan_end"
+ENV{DEVTYPE}!="usb_device", GOTO="iscan_end"
+ATTRS{idVendor}!="04b8", GOTO="iscan_end"
+
+# GT-2200
+ATTRS{idProduct}=="0102", ENV{libsane_matched}="yes"
+# CC-700
+ATTRS{idProduct}=="0108", ENV{libsane_matched}="yes"
+# CC-500L
+ATTRS{idProduct}=="010d", ENV{libsane_matched}="yes"
+# CC-550L
+ATTRS{idProduct}=="011a", ENV{libsane_matched}="yes"
+# F-3200
+ATTRS{idProduct}=="080a", ENV{libsane_matched}="yes"
+# Stylus CX5700F, CX5800F
+ATTRS{idProduct}=="0821", ENV{libsane_matched}="yes"
+# Stylus CX6900F, CX7000F, DX7000F
+ATTRS{idProduct}=="0831", ENV{libsane_matched}="yes"
+
+LABEL="iscan_end"
