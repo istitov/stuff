@@ -517,6 +517,13 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
     "sci-ml/fastflowlm": {
         "include_regex": r"^v[0-9]+\.[0-9]+\.[0-9]+$",
     },
+    # ROCm/FlyDSL tags releases `vX.Y.Z` and fix-ups `vX.Y.Z.W` (v0.3.4.1),
+    # plus `vX.Y.Z.devN` snapshots; none of them follow the org-wide
+    # therock-X.Y line, which would match nothing here. Keep releases only.
+    # verified 2026-09-26.
+    "dev-python/flydsl": {
+        "include_regex": r"^v[0-9]+(?:\.[0-9]+){2,3}$",
+    },
     # unslothai/unsloth is the Unsloth *library* monorepo (date-tagged, e.g.
     # 2025-03), but it ALSO carries the desktop app's own `vX.Y.Z-beta` tags
     # (the studio/ Tauri shell; both unsloth-desktop and -bin fetch
@@ -580,6 +587,11 @@ GITHUB_REPO_OVERRIDES: dict[str, str] = {
     # the pytorch repo, with the same tag filter sci-ml/pytorch uses.
     # verified 2026-08-29.
     "sci-ml/caffe2": "pytorch/pytorch",
+
+    # aotriton builds from git (EGIT_REPO_URI), but since 0.14.2b its SRC_URI
+    # also carries the FlyDSL kernel-source tarball, which the classifier
+    # prefers, so it would track ROCm/FlyDSL. verified 2026-09-26.
+    "sci-libs/aotriton": "ROCm/aotriton",
 }
 
 

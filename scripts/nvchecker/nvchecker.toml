@@ -1202,7 +1202,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (244) ---
+# --- github (245) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1585,6 +1585,13 @@ prefix = "v"
 source = "github"
 github = "flashinfer-ai/flashinfer"
 use_max_tag = true
+prefix = "v"
+
+["dev-python/flydsl"]
+source = "github"
+github = "ROCm/FlyDSL"
+use_max_tag = true
+include_regex = '^v[0-9]+(?:\.[0-9]+){2,3}$'
 prefix = "v"
 
 ["dev-python/glfw"]
@@ -2333,7 +2340,6 @@ github = "ROCm/aotriton"
 use_max_tag = true
 include_regex = '^[0-9]+\.[0-9]+(?:\.[0-9]+)?b$'
 prefix = ""
-# note: from EGIT_REPO_URI
 
 ["sci-libs/aotriton-bin"]
 source = "github"
