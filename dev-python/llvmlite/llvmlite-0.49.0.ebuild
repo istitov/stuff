@@ -23,6 +23,10 @@ KEYWORDS="~amd64 ~arm64"
 RDEPEND="$(llvm_gen_dep 'llvm-core/llvm:${LLVM_SLOT}=')"
 DEPEND="${RDEPEND}"
 
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.49.0-llvm-definitions.patch
+)
+
 distutils_enable_tests unittest
 
 python_compile() {

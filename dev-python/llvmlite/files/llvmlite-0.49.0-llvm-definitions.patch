@@ -1,0 +1,31 @@
+Upstream: https://github.com/numba/llvmlite/commit/9a6edb48ba70 (after 0.49.0)
+
+LLVM_DEFINITIONS is one space-separated string. When it starts with a
+NAME=VALUE define, as it does on musl (-D_GLIBCXX_USE_CXX11_ABI=1 ...),
+add_definitions() turns the whole string into that single macro and
+libstdc++'s #if on it fails with "token = is not valid".
+
+From 9a6edb48ba70e9864676aa468dc22aaff702d8d6 Mon Sep 17 00:00:00 2001
+From: Leon White <l.white@interstellarlab.earth>
+Date: Wed, 2 Sep 2026 17:32:27 +0200
+Subject: [PATCH] fix: <command-line>: error: token '=' is not valid in
+ preprocessor expressions
+
+---
+ ffi/CMakeLists.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/ffi/CMakeLists.txt b/ffi/CMakeLists.txt
+index 4025f4f36..c711aef83 100755
+--- a/ffi/CMakeLists.txt
++++ b/ffi/CMakeLists.txt
+@@ -52,7 +52,8 @@ else()
+ endif()
+ 
+ include_directories(${LLVM_INCLUDE_DIRS})
+-add_definitions(${LLVM_DEFINITIONS})
++separate_arguments(LLVM_DEFINITIONS_LIST NATIVE_COMMAND "${LLVM_DEFINITIONS}")
++add_definitions(${LLVM_DEFINITIONS_LIST})
+ 
+ # Check for presence of the SVML patch in the LLVM build
+ set(CMAKE_REQUIRED_INCLUDES ${LLVM_INCLUDE_DIRS})
