@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (297) ---
+# --- pypi (298) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -1070,6 +1070,10 @@ pypi = "wxutils"
 source = "pypi"
 pypi = "xatlas"
 
+["dev-python/xgrammar"]
+source = "pypi"
+pypi = "xgrammar"
+
 ["dev-python/xraydb"]
 source = "pypi"
 pypi = "xraydb"
@@ -1198,7 +1202,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (243) ---
+# --- github (244) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1726,7 +1730,19 @@ github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
 prefix = "v"
 
+["dev-python/opentelemetry-exporter-http-transport"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+prefix = "v"
+
 ["dev-python/opentelemetry-exporter-otlp"]
+source = "github"
+github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/opentelemetry-exporter-otlp-common"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
 use_max_tag = true
@@ -1922,12 +1938,6 @@ prefix = "v"
 ["dev-python/wasabi"]
 source = "github"
 github = "explosion/wasabi"
-use_max_tag = true
-prefix = "v"
-
-["dev-python/xgrammar"]
-source = "github"
-github = "mlc-ai/xgrammar"
 use_max_tag = true
 prefix = "v"
 
