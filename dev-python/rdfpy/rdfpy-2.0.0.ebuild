@@ -13,7 +13,7 @@ HOMEPAGE="https://github.com/by256/rdfpy"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="test"
 RESTRICT="!test? ( test )"
 # Since 2.0.0, matplotlib is examples-only; core needs SciPy >=1.9 for workers.
