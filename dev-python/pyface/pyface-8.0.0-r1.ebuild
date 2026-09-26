@@ -14,7 +14,7 @@ S=${WORKDIR}/${P}
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="wx +pyqt6 pyside"
 
 # Python 3.12+ needs neither importlib backport. NumPy is optional upstream but
