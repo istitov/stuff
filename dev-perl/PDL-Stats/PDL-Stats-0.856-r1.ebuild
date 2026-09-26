@@ -10,7 +10,7 @@ inherit perl-module
 DESCRIPTION="A collection of statistics modules in Perl Data Language"
 
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="test"
 RESTRICT="!test? ( test )"
 # Map upstream PDL 2.099 to Gentoo's 2.99.0 floor. MakeMaker is build-only;
