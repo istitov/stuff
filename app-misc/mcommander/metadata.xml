@@ -6,16 +6,17 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <longdescription>
-    mc6 is a fork of GNU Midnight Commander, based on 4.8.33, whose panel
-    contents can come from dynamically loaded plugins: git, docker, Kubernetes,
-    MongoDB, S3, FTP/FTPS, SFTP, Samba, systemd, shell connections and an
-    archive manager. It replaces the built-in ftpfs, sftpfs, tarfs and cpiofs
-    VFS modules with those plugins, adds the mcstruct structured binary viewer
-    and a Lua runtime extension, and installs as /usr/bin/mc, so it cannot be
-    installed alongside app-misc/mc.
+    M-Commander (formerly mc6) is a fork of GNU Midnight Commander, based on
+    4.8.33, whose panel contents can come from dynamically loaded plugins: git,
+    docker, Kubernetes, MongoDB, S3, FTP/FTPS, SFTP, Samba, systemd, shell
+    connections and an archive manager. It replaces the built-in ftpfs, sftpfs,
+    tarfs and cpiofs VFS modules with those plugins, and adds the mcstruct
+    structured binary viewer and a Lua runtime extension. Since 6.1.0 its
+    commands are mcommander, mcedit6, mview and mdiff, so it installs alongside
+    app-misc/mc; 6.0.4 still installs as /usr/bin/mc and blocks it.
   </longdescription>
   <use>
-    <flag name="edit">Build the internal editor (mcedit)</flag>
+    <flag name="edit">Build the internal editor (mcedit6; mcedit in 6.0.4)</flag>
     <flag name="ftp">Build the FTP/FTPS panel plugin (needs net-misc/curl)</flag>
     <flag name="lua">Build the Lua runtime extension</flag>
     <flag name="mongodb">Build the MongoDB browser panel plugin</flag>
