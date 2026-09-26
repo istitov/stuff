@@ -13,7 +13,7 @@ S="${WORKDIR}/${PN}-${PV}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="bgmn"
 
 # Upstream's Qt 6 build expects bundled zlib, QuaZIP, and ALGLIB projects.
