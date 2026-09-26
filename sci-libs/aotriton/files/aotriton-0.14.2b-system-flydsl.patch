@@ -1,0 +1,73 @@
+Add AOTRITON_USE_SYSTEM_FLYDSL: take flydsl from the system Python.
+
+Upstream installs FlyDSL into the build venv, either from
+third_party/flydsl-compiler.txt or from a local wheel, and refuses the former
+while third_party/flydsl-llvm.txt pins an LLVM commit, because a FlyDSL built
+against upstream LLVM miscompiles. Gentoo provides dev-python/flydsl built
+against that commit instead, visible through a venv created with
+--system-site-packages. Keep the guarantee the tripwire protects: require the
+pinned commit in the installed version's local segment (+llvm<sha12>).
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -174,6 +174,7 @@
+ option(AOTRITON_INHERIT_SYSTEM_SITE_TRITON "Use system site packages and verify triton availability instead of building from source" OFF)
+ # No plan to support network based pip install
+ set(AOTRITON_USE_LOCAL_TRITON_WHEEL "" CACHE STRING "Substitute install from third_party/triton with install from local pip wheel package.")
++option(AOTRITON_USE_SYSTEM_FLYDSL "Use the flydsl the system Python provides (the venv must include system site packages) instead of installing one into the build venv." OFF)
+ set(AOTRITON_USE_LOCAL_FLYDSL_WHEEL "" CACHE STRING "Substitute the install from third_party/flydsl-compiler.txt with an install from a local flydsl wheel file. Must be an absolute path to an existing .whl.")
+ set(AOTRITON_GPU_BUILD_TIMEOUT "8.0" CACHE STRING "GPU kernel compiler times out after X minutes. 0 for indefinite. Highly recommended if AOTRITON_BUILD_FOR_TUNING=On.")
+ option(AOTRITON_TERMINATE_WHEN_GPU_BUILD_TIMEOUT "compile.py will return error when GPU built timeout. Defensive option for CI" OFF)
+@@ -235,7 +236,7 @@
+     break()
+   endif()
+ endforeach()
+-if(FLYDSL_LLVM_PIN AND NOT AOTRITON_NOIMAGE_MODE AND NOT AOTRITON_USE_LOCAL_FLYDSL_WHEEL)
++if(FLYDSL_LLVM_PIN AND NOT AOTRITON_NOIMAGE_MODE AND NOT AOTRITON_USE_LOCAL_FLYDSL_WHEEL AND NOT AOTRITON_USE_SYSTEM_FLYDSL)
+   message(FATAL_ERROR
+     "third_party/flydsl-llvm.txt pins ${FLYDSL_LLVM_PIN}, which means the FlyDSL "
+     "wheel this release needs cannot be the one third_party/flydsl-compiler.txt "
+@@ -469,7 +470,31 @@
+ if(NOT AOTRITON_NOIMAGE_MODE)
+   # Not the bundled-MLIR extension: its filename carries an LLVM version.
+   set(AOTRITON_FLYDSL_STAMP "${VENV_SITE}/flydsl/__init__.py")
+-  if(AOTRITON_USE_LOCAL_FLYDSL_WHEEL)
++  if(AOTRITON_USE_SYSTEM_FLYDSL)
++    # The wheel-name cache key upstream relies on does not exist here, so
++    # require the LLVM commit in the installed version's local segment
++    # (<version>+llvm<sha12>) whenever flydsl-llvm.txt pins one.
++    execute_process(COMMAND "${VENV_BIN_PYTHON}" -c
++      "import importlib.metadata as m; print(m.version('flydsl'), end='')"
++      RESULT_VARIABLE FLYDSL_SYSTEM_RESULT
++      OUTPUT_VARIABLE FLYDSL_SYSTEM_VERSION)
++    if(NOT FLYDSL_SYSTEM_RESULT EQUAL 0)
++      message(FATAL_ERROR "AOTRITON_USE_SYSTEM_FLYDSL is set but the build venv cannot see a flydsl distribution")
++    endif()
++    if(FLYDSL_LLVM_PIN)
++      if(NOT FLYDSL_LLVM_PIN MATCHES "#([0-9a-fA-F]+)$")
++        message(FATAL_ERROR "cannot read an LLVM commit from third_party/flydsl-llvm.txt: ${FLYDSL_LLVM_PIN}")
++      endif()
++      string(SUBSTRING "${CMAKE_MATCH_1}" 0 12 FLYDSL_LLVM_SHA12)
++      if(NOT FLYDSL_SYSTEM_VERSION MATCHES "\\+(.*\\.)?llvm${FLYDSL_LLVM_SHA12}")
++        message(FATAL_ERROR
++          "system flydsl ${FLYDSL_SYSTEM_VERSION} does not record the LLVM commit "
++          "third_party/flydsl-llvm.txt pins (${FLYDSL_LLVM_PIN})")
++      endif()
++    endif()
++    message(STATUS "[AOTriton] Using system FlyDSL ${FLYDSL_SYSTEM_VERSION}")
++    add_custom_target(aotriton_venv_flydsl ALL)
++  elseif(AOTRITON_USE_LOCAL_FLYDSL_WHEEL)
+     # flydsl wheels are CPython-ABI specific; pip would reject a mismatch, but
+     # only once ninja gets here. Check up front.
+     execute_process(COMMAND "${VENV_BIN_PYTHON}" -c
+@@ -515,7 +540,9 @@
+       DEPENDS "${CMAKE_CURRENT_LIST_DIR}/third_party/flydsl-compiler.txt"
+       VERBATIM)
+   endif()
+-  add_custom_target(aotriton_venv_flydsl ALL DEPENDS "${AOTRITON_FLYDSL_STAMP}")
++  if(NOT AOTRITON_USE_SYSTEM_FLYDSL)
++    add_custom_target(aotriton_venv_flydsl ALL DEPENDS "${AOTRITON_FLYDSL_STAMP}")
++  endif()
+ 
+   ## flydsl-kernel.txt, same shape as third_party/aiter.txt. Supplies kernels/common
+   ## and kernels/attention, which modules/flash/flyc/ imports and the wheel omits.
