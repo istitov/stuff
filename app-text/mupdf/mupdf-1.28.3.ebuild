@@ -107,6 +107,10 @@ _emake() {
 		USE_SYSTEM_GLUT=no
 		USE_SYSTEM_MUJS=$(usex javascript)
 		USE_SYSTEM_ZXINGCPP=$(usex barcode)
+		# zxing-cpp 3's zxing.pc no longer adds the ZXing/ subdirectory that
+		# zxingbarcode.cpp's bare #include "ReadBarcode.h" relies on.
+		# verified with zxing-cpp 3.1.1 on 2026-09-26
+		$(usev barcode "SYS_ZXINGCPP_CFLAGS=-I${ESYSROOT}/usr/include/ZXing")
 		HAVE_OBJCOPY=no
 		"$@"
 	)
