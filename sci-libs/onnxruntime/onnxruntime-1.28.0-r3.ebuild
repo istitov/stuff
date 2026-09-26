@@ -5,10 +5,9 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
 
-inherit cuda cmake edo flag-o-matic python-r1
+inherit cuda cmake edo flag-o-matic multiprocessing python-r1
 
 EIGEN_COMMIT="1d8b82b0740839c0de7f1242a3585e3390ff5f33"
-ABSEIL_VERSION="20250814.1"
 CUTLASS_VERSION="4.4.2"
 CUDNN_FRONTEND_VERSION="1.24.0"
 GTEST_VERSION="1.17.0"
@@ -23,8 +22,6 @@ SRC_URI="
 	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_COMMIT}/eigen-${EIGEN_COMMIT}.tar.bz2 ->
 		eigen-3.4.0_p20250216.tar.bz2
 	cuda? (
-		https://github.com/abseil/abseil-cpp/archive/refs/tags/${ABSEIL_VERSION}.tar.gz ->
-			abseil-cpp-${ABSEIL_VERSION}.tar.gz
 		https://github.com/NVIDIA/cutlass/archive/refs/tags/v${CUTLASS_VERSION}.tar.gz ->
 			cutlass-${CUTLASS_VERSION}.tar.gz
 		https://github.com/NVIDIA/cudnn-frontend/archive/refs/tags/v${CUDNN_FRONTEND_VERSION}.tar.gz ->
@@ -43,18 +40,22 @@ IUSE="cuda python test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
-# Upstream pins ONNX 1.22.0, but this revision still permits the unvalidated
-# 1.20.1 fallback. Raise the dependency in a follow-up logic change.
+# CUDA 13.4's nvcc accepts the installed Abseil headers. 13.3 did not, so CUDA
+# translation units shadowed them with a patched copy of one exact release and
+# the dependency was pinned to it; the toolkit floor is what keeps both gone.
+# verified 2026-09-26
+# The system-libraries patch makes ONNX a required find_package with no version,
+# so its floor lives here, at the 1.22.0 upstream pins in cmake/deps.txt.
+# verified 2026-09-26
 RDEPEND="
-	!cuda? ( dev-cpp/abseil-cpp:= )
+	dev-cpp/abseil-cpp:=
 	dev-libs/cpuinfo
 	dev-libs/protobuf:=
 	dev-libs/re2:=
-	>=sci-ml/onnx-1.20.1[disableStaticReg]
+	>=sci-ml/onnx-1.22.0[disableStaticReg]
 	cuda? (
-		~dev-cpp/abseil-cpp-20250814.1:=
 		dev-libs/cudnn:=
-		dev-util/nvidia-cuda-toolkit:=
+		>=dev-util/nvidia-cuda-toolkit-13.4:=
 	)
 
 	python? (
@@ -98,14 +99,14 @@ PATCHES=(
 
 CMAKE_USE_DIR="${S}/cmake"
 
-src_prepare() {
-	cmake_src_prepare
-
-	if use cuda; then
-		pushd "${WORKDIR}/abseil-cpp-${ABSEIL_VERSION}" >/dev/null || die
-		eapply "${FILESDIR}/${PN}-1.28.0-abseil-nvcc.patch"
-		popd >/dev/null || die
+# CUDA compilation uses >3 GiB per nvcc job; cap it at four without raising a
+# lower user limit. Installation does not need throttling.
+onnxruntime_cmake_phase() {
+	local jobs=$(makeopts_jobs)
+	if use cuda && (( jobs > 4 )); then
+		local -x MAKEOPTS="${MAKEOPTS} -j4"
 	fi
+	"$@"
 }
 
 src_configure() {
@@ -142,7 +143,6 @@ src_configure() {
 		mycmakeargs+=(
 			-DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS:-all-major}"
 			-DCMAKE_CUDA_COMPILER="/opt/cuda/bin/nvcc"
-			-DCMAKE_CUDA_FLAGS="-I${WORKDIR}/abseil-cpp-${ABSEIL_VERSION}"
 			-DCMAKE_CUDA_HOST_COMPILER="${CUDAHOSTCXX}"
 			-DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND="${WORKDIR}/cudnn-frontend-${CUDNN_FRONTEND_VERSION}"
 			-DFETCHCONTENT_SOURCE_DIR_CUTLASS="${WORKDIR}/cutlass-${CUTLASS_VERSION}"
@@ -156,6 +156,10 @@ src_configure() {
 
 	append-ldflags -Wl,-z,noexecstack
 	cmake_src_configure
+}
+
+src_compile() {
+	onnxruntime_cmake_phase cmake_src_compile
 }
 
 # Adapted from `run_onnxruntime_tests` in `tools/ci_build/build.py`
