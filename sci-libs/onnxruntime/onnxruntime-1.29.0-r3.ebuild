@@ -8,9 +8,8 @@ PYTHON_COMPAT=( python3_{12..14} )
 inherit cuda cmake edo flag-o-matic multiprocessing python-r1
 
 EIGEN_COMMIT="1d8b82b0740839c0de7f1242a3585e3390ff5f33"
-ABSEIL_VERSION="20250814.1"
-CUTLASS_VERSION="4.7.0"
-CUDNN_FRONTEND_VERSION="1.27.0"
+CUTLASS_VERSION="4.4.2"
+CUDNN_FRONTEND_VERSION="1.24.0"
 GTEST_VERSION="1.17.0"
 
 DESCRIPTION="Cross-platform, high performance ML inferencing and training accelerator"
@@ -23,8 +22,6 @@ SRC_URI="
 	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_COMMIT}/eigen-${EIGEN_COMMIT}.tar.bz2 ->
 		eigen-3.4.0_p20250216.tar.bz2
 	cuda? (
-		https://github.com/abseil/abseil-cpp/archive/refs/tags/${ABSEIL_VERSION}.tar.gz ->
-			abseil-cpp-${ABSEIL_VERSION}.tar.gz
 		https://github.com/NVIDIA/cutlass/archive/refs/tags/v${CUTLASS_VERSION}.tar.gz ->
 			cutlass-${CUTLASS_VERSION}.tar.gz
 		https://github.com/NVIDIA/cudnn-frontend/archive/refs/tags/v${CUDNN_FRONTEND_VERSION}.tar.gz ->
@@ -43,18 +40,22 @@ IUSE="cuda python test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
-# The system-libraries patch turns upstream's ONNX 1.22.0 pin into a required
-# find_package call; retain that exact floor.
+# CUDA 13.4's nvcc accepts the installed Abseil headers. 13.3 did not, so CUDA
+# translation units shadowed them with a patched copy of one exact release and
+# the dependency was pinned to it; the toolkit floor is what keeps both gone.
+# verified 2026-09-26
+# The system-libraries patch makes ONNX a required find_package, so its floor
+# lives here, and the float6 patch widens tables ONNX sizes from its own
+# data-type enum, which puts that floor at 1.23.0. verified 2026-09-26
 RDEPEND="
-	!cuda? ( dev-cpp/abseil-cpp:= )
+	dev-cpp/abseil-cpp:=
 	dev-libs/cpuinfo
 	dev-libs/protobuf:=
 	dev-libs/re2:=
-	>=sci-ml/onnx-1.22.0[disableStaticReg]
+	>=sci-ml/onnx-1.23.0[disableStaticReg]
 	cuda? (
-		~dev-cpp/abseil-cpp-20250814.1:=
 		dev-libs/cudnn:=
-		dev-util/nvidia-cuda-toolkit:=
+		>=dev-util/nvidia-cuda-toolkit-13.4:=
 	)
 
 	python? (
@@ -93,8 +94,11 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-1.22.2-relax-the-dependency-on-flatbuffers.patch"
 	"${FILESDIR}/${PN}-1.24.4-no-werror.patch"
-	"${FILESDIR}/${PN}-1.30.0-use-system-libraries.patch"
+	"${FILESDIR}/${PN}-1.28.0-use-system-libraries.patch"
 	"${FILESDIR}/${PN}-1.29.0-fix-cuda-test-linking.patch"
+	# Carry the two 6-bit float formats ONNX 1.23 added into the tensor
+	# element-type tables that ONNX sizes from its own enum.
+	"${FILESDIR}/${PN}-1.29.0-onnx-1.23-float6.patch"
 )
 
 CMAKE_USE_DIR="${S}/cmake"
@@ -107,16 +111,6 @@ onnxruntime_cmake_phase() {
 		local -x MAKEOPTS="${MAKEOPTS} -j4"
 	fi
 	"$@"
-}
-
-src_prepare() {
-	cmake_src_prepare
-
-	if use cuda; then
-		pushd "${WORKDIR}/abseil-cpp-${ABSEIL_VERSION}" >/dev/null || die
-		eapply "${FILESDIR}/${PN}-1.28.0-abseil-nvcc.patch"
-		popd >/dev/null || die
-	fi
 }
 
 src_configure() {
@@ -153,7 +147,6 @@ src_configure() {
 		mycmakeargs+=(
 			-DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS:-all-major}"
 			-DCMAKE_CUDA_COMPILER="/opt/cuda/bin/nvcc"
-			-DCMAKE_CUDA_FLAGS="-I${WORKDIR}/abseil-cpp-${ABSEIL_VERSION}"
 			-DCMAKE_CUDA_HOST_COMPILER="${CUDAHOSTCXX}"
 			-DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND="${WORKDIR}/cudnn-frontend-${CUDNN_FRONTEND_VERSION}"
 			-DFETCHCONTENT_SOURCE_DIR_CUTLASS="${WORKDIR}/cutlass-${CUTLASS_VERSION}"
@@ -186,7 +179,7 @@ python_test() {
 }
 
 src_test() {
-	local -x GTEST_FILTER="*:-ActivationOpNoInfTest.Softsign:LayoutTransformationPotentiallyAddedOpsTests.OpsHaveLatestVersions:SamplingTest.Gpt2Sampling_CPU:Random.MultinomialGoodCase:Random.MultinomialDefaultDType"
+	local -x GTEST_FILTER="*:-ActivationOpNoInfTest.Softsign:LayoutTransformationPotentiallyAddedOpsTests.OpsHaveLatestVersions"
 	cmake_src_test
 
 	if use python ; then

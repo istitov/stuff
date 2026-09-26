@@ -1,0 +1,71 @@
+Subject: Extend the tensor element types to the float6 formats added by ONNX 1.23
+
+ONNX 1.23 appends FLOAT6E2M3 and FLOAT6E3M2 to TensorProto::DataType. Two
+consteval self-checks tie onnxruntime's own tables to the size of that enum
+and both stop resolving as soon as it grows:
+
+  - kTensorProtoDataTypeElementSizes is declared with the enum's ARRAYSIZE but
+    initialised only through INT2, so the new slots default to zero and the
+    completeness check reads them as non-numeric types.
+  - IsTensorProtoToOrtElementTypeMapBijective compares that ARRAYSIZE against
+    the public ONNXTensorElementDataType enum, which still ends at FLOAT8E8M0.
+
+Append both formats to the public enum, which keeps every existing value in
+place, and move the bijection's upper bound to the new last entry. The
+mapping switch needs no new case: ONNX and onnxruntime agree on 27 and 28, so
+the existing pass-through default covers them.
+
+Record both as byte-granular in the element-size table, matching every packed
+sub-byte type already listed. That table feeds only the big-endian
+byte-swapping helper, where byte granularity is exactly what the UINT4, INT4,
+FLOAT4E2M1, UINT2 and INT2 entries already express.
+
+The wider initialiser does not fit the narrower ONNX 1.22 enum, so this
+requires ONNX 1.23. verified 2026-09-26
+
+--- a/include/onnxruntime/core/session/onnxruntime_c_api.h
++++ b/include/onnxruntime/core/session/onnxruntime_c_api.h
+@@ -223,6 +223,9 @@
+   ONNX_TENSOR_ELEMENT_DATA_TYPE_INT2,   // maps to 4 packed int2 values (size == 1 byte)
+   // Float8E8M0 type introduced in ONNX 1.21. 8-bit float with 8 exponent bits, 0 mantissa bits, no sign bit.
+   ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E8M0,  // Non-IEEE floating-point format, all values are powers of two
++  // Float6 types were introduced in ONNX 1.23.
++  ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT6E2M3,  // Non-IEEE 6-bit floating-point format, stored packed
++  ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT6E3M2,  // Non-IEEE 6-bit floating-point format, stored packed
+ } ONNXTensorElementDataType;
+ 
+ // Synced with onnx TypeProto oneof
+--- a/onnxruntime/core/framework/onnxruntime_map_type_info.h
++++ b/onnxruntime/core/framework/onnxruntime_map_type_info.h
+@@ -26,8 +26,9 @@
+     return ONNX_TENSOR_ELEMENT_DATA_TYPE_UNDEFINED;
+   }
+ 
+-  // The enums have the same values through FLOAT4E2M1. Their final three entries
+-  // differ because ONNX inserted FLOAT8E8M0 before UINT2 and INT2.
++  // The enums have the same values through FLOAT4E2M1, and again from FLOAT6E2M3
++  // on. The three entries between differ because ONNX inserted FLOAT8E8M0 before
++  // UINT2 and INT2.
+   switch (data_type) {
+     case ONNX_NAMESPACE::TensorProto_DataType_FLOAT8E8M0:
+       return ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E8M0;
+@@ -42,7 +43,7 @@
+ 
+ consteval bool IsTensorProtoToOrtElementTypeMapBijective() {
+   constexpr size_t ort_element_type_count =
+-      static_cast<size_t>(ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E8M0) + 1;
++      static_cast<size_t>(ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT6E3M2) + 1;
+   constexpr size_t onnx_element_type_count = ONNX_NAMESPACE::TensorProto_DataType_DataType_ARRAYSIZE;
+   if constexpr (onnx_element_type_count != ort_element_type_count) {
+     return false;
+--- a/onnxruntime/core/framework/tensorprotoutils.h
++++ b/onnxruntime/core/framework/tensorprotoutils.h
+@@ -58,6 +58,8 @@
+         sizeof(uint8_t),   // FLOAT8E8M0
+         sizeof(uint8_t),   // UINT2
+         sizeof(uint8_t),   // INT2
++        sizeof(uint8_t),   // FLOAT6E2M3
++        sizeof(uint8_t),   // FLOAT6E3M2
+     };
+ 
+ consteval bool IsTensorProtoDataTypeElementSizeMapComplete() {
