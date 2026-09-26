@@ -14,7 +14,7 @@ SRC_URI="https://github.com/astrada/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="ocamlopt test"
 
 # opam requires cryptokit>=1.21, while ::gentoo retains older stable versions;
