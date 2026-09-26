@@ -29,7 +29,7 @@ LICENSE="MIT"
 # Dependent licenses, from vendor/. verified 2026-09-15
 LICENSE+=" Apache-2.0 BSD BSD-2 ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="openrc systemd ui"
 
 # vite 8.1.0 and rolldown require node ^20.19.0 || >=22.12.0; no 22.x below
