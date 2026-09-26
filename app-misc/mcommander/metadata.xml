@@ -26,6 +26,6 @@
     <flag name="sqlite">Build the read-only SQLite database browser panel plugin</flag>
   </use>
   <upstream>
-    <remote-id type="github">blue-panels/mc6</remote-id>
+    <remote-id type="github">blue-panels/mcommander</remote-id>
   </upstream>
 </pkgmetadata>

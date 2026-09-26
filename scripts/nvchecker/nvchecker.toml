@@ -1230,9 +1230,9 @@ github = "KeithDHedger/ManPageEditor"
 use_max_tag = true
 prefix = "v"
 
-["app-misc/mc6"]
+["app-misc/mcommander"]
 source = "github"
-github = "blue-panels/mc6"
+github = "blue-panels/mcommander"
 use_max_tag = true
 prefix = "v"
 

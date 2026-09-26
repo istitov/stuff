@@ -6,10 +6,13 @@ EAPI=8
 inherit flag-o-matic optfeature
 
 DESCRIPTION="Midnight Commander fork with dynamically loaded panel plugins"
-HOMEPAGE="https://blue-panels.github.io/mc6/ https://github.com/blue-panels/mc6"
+HOMEPAGE="https://github.com/blue-panels/mcommander"
 # Use the bootstrapped release asset (configure and mc-version.h), not GitHub's
 # generated archive; its bytes do not change with archive regeneration.
-SRC_URI="https://github.com/blue-panels/mc6/releases/download/v${PV}/${P}.tar.gz"
+# 6.0.4 was released under the old mc6 name.
+MY_P="mc6-${PV}"
+SRC_URI="https://github.com/blue-panels/mcommander/releases/download/v${PV}/${MY_P}.tar.gz"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-3+"
 SLOT="0"
