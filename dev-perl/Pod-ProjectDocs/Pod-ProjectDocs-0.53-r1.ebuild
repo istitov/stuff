@@ -10,7 +10,7 @@ inherit perl-module
 DESCRIPTION="generates CPAN like project documents from pod"
 
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 COMMON_DEPEND="
 	dev-perl/Moose
 	dev-perl/HTML-Parser
