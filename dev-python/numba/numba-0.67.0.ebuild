@@ -16,7 +16,7 @@ SRC_URI="https://github.com/numba/numba/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="0BSD BSD BSD-2 HPND MIT NVIDIA-CUDA PSF-2 PYTHON"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE+=" openmp threads"
 RESTRICT="bindist mirror"
 
