@@ -1,0 +1,10 @@
+# System-wide Codex defaults installed by dev-util/codex.
+# Settings in ~/.codex/config.toml take precedence over this file.
+
+[features]
+# The interactive CLI starts a shared background server by default. It must
+# first copy a complete upstream-layout package (bundled rg and bwrap) into
+# ~/.codex, which this package does not install, so the start fails with
+# "this CLI has no complete local package". Without it, `codex queue` and the
+# agents overview are unavailable; everything else works.
+daemon_auto_start = false

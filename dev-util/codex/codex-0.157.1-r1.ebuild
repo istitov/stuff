@@ -170,4 +170,16 @@ src_install() {
 	dobin "$(cargo_target_dir)/codex"
 	dobin "$(cargo_target_dir)/codex-code-mode-host"
 	einstalldocs
+
+	# Since 0.157.0 the TUI auto-starts a daemon that needs upstream's
+	# package layout with bundled rg and bwrap; ship it disabled instead.
+	# verified 2026-09-27
+	insinto /etc/codex
+	newins "${FILESDIR}"/codex-config.toml config.toml
+}
+
+pkg_postinst() {
+	elog "${EROOT}/etc/codex/config.toml disables the background server"
+	elog "(features.daemon_auto_start), which this package cannot start."
+	elog "Without it, 'codex queue' and the agents overview are unavailable."
 }
