@@ -58,12 +58,14 @@ first is cheap and usually clearer than guessing.
   `eselect repository enable stuff` and `emerge --sync stuff`, or
   point your own overlay config at the working tree.
 - Install the tooling: `dev-util/pkgdev` and `dev-util/pkgcheck`.
-- Keep `dev-python/tree-sitter` below 0.26.0 (today that means
-  0.25.2-r1). 0.26.0 crashes the bash parser `pkgcheck` uses, and it
-  does so *silently*: the affected results are dropped and the scan
-  still exits 0, so a broken toolchain looks like a clean tree. If a
-  scan suddenly reports nothing, check that version before believing
-  it. (verified 2026-07-28)
+- Keep the scan toolchain current. Older setups with
+  `dev-python/tree-sitter` 0.26.0 crashed the bash parser `pkgcheck`
+  uses, and did so *silently*: the affected results were dropped and
+  the scan still exited 0, so a broken toolchain looked like a clean
+  tree. `pkgcheck` 0.10.44 with `dev-libs/tree-sitter` 0.26.13 and
+  `dev-python/tree-sitter` 0.26.0 scans cleanly (verified 2026-09-27).
+  If a scan suddenly reports far fewer findings, or the count changes
+  between identical runs, suspect the toolchain before believing it.
 - The repo declares `masters = gentoo` and `thin-manifests = true`
   — every package depends on `::gentoo` being available, and
   `Manifest` files only carry `DIST` lines.
