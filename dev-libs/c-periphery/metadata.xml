@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    c-periphery is a C library for GPIO, LED, PWM, SPI, I2C, MMIO and
+    serial peripheral I/O access in userspace Linux, for interfacing with
+    external peripherals on embedded boards such as the Raspberry Pi.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">vsergeev/c-periphery</remote-id>
+    <bugs-to>https://github.com/vsergeev/c-periphery/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
