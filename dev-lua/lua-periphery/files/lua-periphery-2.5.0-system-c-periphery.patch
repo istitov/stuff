@@ -1,0 +1,134 @@
+Build against the system libperiphery instead of the c-periphery git
+submodule, which the release tarball leaves empty. The headers are
+found through the pkg-config Cflags, so include them by bare name.
+
+--- a/Makefile
++++ b/Makefile
+@@ -1,8 +1,9 @@
+ LIB = periphery.so
+ SRCS = src/lua_periphery.c src/lua_mmio.c src/lua_gpio.c src/lua_led.c src/lua_pwm.c src/lua_spi.c src/lua_i2c.c src/lua_serial.c
+ 
+-C_PERIPHERY = c-periphery
+-C_PERIPHERY_LIB = $(C_PERIPHERY)/periphery.a
++PKG_CONFIG ?= pkg-config
++C_PERIPHERY_CFLAGS = $(shell $(PKG_CONFIG) --cflags libperiphery)
++C_PERIPHERY_LIBS = $(shell $(PKG_CONFIG) --libs libperiphery)
+ 
+ ifndef LUA
+ LUA = lua
+@@ -20,7 +21,7 @@
+ 
+ MOD_CFLAGS = $(CFLAGS)
+ MOD_CFLAGS += -std=c99 -pedantic -D_XOPEN_SOURCE=700
+-MOD_CFLAGS += -Wall -Wextra -Wno-unused-parameter $(DEBUG) -fPIC -I. $(LUA_CFLAGS)
++MOD_CFLAGS += -Wall -Wextra -Wno-unused-parameter $(DEBUG) -fPIC -I. $(C_PERIPHERY_CFLAGS) $(LUA_CFLAGS)
+ 
+ MOD_LDFLAGS = $(LDFLAGS)
+ MOD_LDFLAGS += -shared
+@@ -36,7 +37,6 @@
+ 
+ .PHONY: clean
+ clean:
+-	$(MAKE) -C $(C_PERIPHERY) clean
+ 	rm -rf $(LIB)
+ 
+ .PHONY: install
+@@ -45,8 +45,5 @@
+ 
+ ###########################################################################
+ 
+-$(LIB): $(C_PERIPHERY_LIB) $(SRCS)
+-	$(CC) $(MOD_CFLAGS) $(MOD_LDFLAGS) $(SRCS) $(C_PERIPHERY_LIB) -o $@
+-
+-$(C_PERIPHERY_LIB): $(C_PERIPHERY)/Makefile
+-	$(MAKE) -C $(C_PERIPHERY)
++$(LIB): $(SRCS)
++	$(CC) $(MOD_CFLAGS) $(MOD_LDFLAGS) $(SRCS) $(C_PERIPHERY_LIBS) -o $@
+--- a/src/lua_gpio.c
++++ b/src/lua_gpio.c
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/gpio.h>
++#include <gpio.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+--- a/src/lua_i2c.c
++++ b/src/lua_i2c.c
+@@ -14,7 +14,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/i2c.h>
++#include <i2c.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+--- a/src/lua_led.c
++++ b/src/lua_led.c
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/led.h>
++#include <led.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+--- a/src/lua_mmio.c
++++ b/src/lua_mmio.c
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/mmio.h>
++#include <mmio.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+--- a/src/lua_periphery.h
++++ b/src/lua_periphery.h
+@@ -7,7 +7,7 @@
+ #ifndef _LUA_PERIPHERY_H
+ #define _LUA_PERIPHERY_H
+ 
+-#include <c-periphery/src/version.h>
++#include <version.h>
+ 
+ #define _STRINGIFY(x)   #x
+ #define STRINGIFY(x)    _STRINGIFY(x)
+--- a/src/lua_pwm.c
++++ b/src/lua_pwm.c
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/pwm.h>
++#include <pwm.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+--- a/src/lua_serial.c
++++ b/src/lua_serial.c
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/serial.h>
++#include <serial.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 
+--- a/src/lua_spi.c
++++ b/src/lua_spi.c
+@@ -13,7 +13,7 @@
+ #include <stdint.h>
+ #include <errno.h>
+ 
+-#include <c-periphery/src/spi.h>
++#include <spi.h>
+ #include "lua_periphery.h"
+ #include "lua_compat.h"
+ 

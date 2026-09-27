@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    lua-periphery is a Lua library for GPIO, LED, PWM, SPI, I2C, MMIO and
+    serial peripheral I/O access in userspace Linux, built on c-periphery.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">vsergeev/lua-periphery</remote-id>
+    <bugs-to>https://github.com/vsergeev/lua-periphery/issues</bugs-to>
+  </upstream>
+</pkgmetadata>

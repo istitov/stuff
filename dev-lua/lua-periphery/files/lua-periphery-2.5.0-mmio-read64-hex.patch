@@ -1,0 +1,24 @@
+MMIO:read64 formats values above LUA_MAXINTEGER with "0x%lux": %lu
+prints decimal and the trailing x is literal, so 2^63 comes back as
+"0x9223372036854775808x". On 32-bit targets %lu is also the wrong
+width for a uint64_t. Print it as hex with PRIx64.
+
+--- a/src/lua_mmio.c
++++ b/src/lua_mmio.c
+@@ -11,6 +11,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdint.h>
++#include <inttypes.h>
+ #include <errno.h>
+ 
+ #include <mmio.h>
+@@ -169,7 +170,7 @@
+ 
+     if (value > LUA_MAXINTEGER) {
+         char buf[24];
+-        snprintf(buf, sizeof(buf), "0x%lux", value);
++        snprintf(buf, sizeof(buf), "0x%" PRIx64, value);
+         lua_pushstring(L, buf);
+     } else {
+         lua_pushlargeinteger(L, value);
