@@ -660,6 +660,14 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "url": "https://www.ctan.org/json/2.0/pkg/glossaries",
         "regex": r'"number"\s*:\s*"([^"]+)"',
     },
+    # lsqlite3 is a Fossil repo with no release files; its zips are built
+    # per check-in, and the tag list names each release vX.Y.Z.
+    # verified 2026-09-27
+    "dev-lua/lsqlite3": {
+        "source": "regex",
+        "url": "https://lua.sqlite.org/home/taglist",
+        "regex": r"\bv([0-9]+\.[0-9]+\.[0-9]+)\b",
+    },
     # claude-code ships from a plain release bucket with no tag scheme, so the
     # generator skips it as "custom upstream". Upstream exposes two channel
     # pointers and the choice is load-bearing: /stable resolves to 2.1.236

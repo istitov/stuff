@@ -1202,7 +1202,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (245) ---
+# --- github (247) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1335,6 +1335,12 @@ include_regex = '^release_[0-9]+_[0-9]+_[0-9]+$'
 from_pattern = '^release_([0-9]+)_([0-9]+)_([0-9]+)$'
 to_pattern = '\1.\2.\3'
 
+["dev-libs/c-periphery"]
+source = "github"
+github = "vsergeev/c-periphery"
+use_max_tag = true
+prefix = "v"
+
 ["dev-libs/hipother"]
 source = "github"
 github = "ROCm/rocm-systems"
@@ -1430,6 +1436,12 @@ prefix = "v"
 ["dev-libs/xrt-xdna"]
 source = "github"
 github = "amd/xdna-driver"
+use_max_tag = true
+prefix = "v"
+
+["dev-lua/lua-periphery"]
+source = "github"
+github = "vsergeev/lua-periphery"
 use_max_tag = true
 prefix = "v"
 
@@ -2936,7 +2948,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (27) ---
+# --- special (28) ---
 
 ["app-text/mupdf"]
 source = "regex"
@@ -2953,6 +2965,11 @@ prefix = "v"
 source = "regex"
 url = "https://developer.download.nvidia.com/compute/cudnn/redist/"
 regex = 'redistrib_(\d+\.\d+\.\d+)\.json'
+
+["dev-lua/lsqlite3"]
+source = "regex"
+url = "https://lua.sqlite.org/home/taglist"
+regex = '\bv([0-9]+\.[0-9]+\.[0-9]+)\b'
 
 ["dev-python/amd-quark-bin"]
 source = "pypi"
