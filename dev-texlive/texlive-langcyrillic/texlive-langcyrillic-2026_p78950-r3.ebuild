@@ -105,6 +105,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xecyrmongolian.source.r53160
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Cyrillic"
