@@ -102,6 +102,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	tdsfrmath.source.r79618
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive French"
