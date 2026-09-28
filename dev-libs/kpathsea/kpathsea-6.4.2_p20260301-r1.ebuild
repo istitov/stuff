@@ -21,6 +21,7 @@ TL_REVISION=79498
 EXTRA_TL_MODULES="kpathsea.r${TL_REVISION}"
 EXTRA_TL_DOC_MODULES="kpathsea.doc.r${TL_REVISION}"
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
 texlive-common_append_to_src_uri EXTRA_TL_MODULES
 
 SRC_URI="${SRC_URI} doc? ( "
