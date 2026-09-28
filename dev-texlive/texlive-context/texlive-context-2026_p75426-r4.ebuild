@@ -55,6 +55,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	context-visualcounter.source.r79994
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit greadme texlive-module
 
 DESCRIPTION="TeXLive ConTeXt and packages"
