@@ -184,6 +184,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	uniquecounter.source.r79461
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive LaTeX fundamental packages"
