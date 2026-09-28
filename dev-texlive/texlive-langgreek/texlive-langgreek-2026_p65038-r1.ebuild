@@ -68,6 +68,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xgreek.source.r79601
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Greek"
