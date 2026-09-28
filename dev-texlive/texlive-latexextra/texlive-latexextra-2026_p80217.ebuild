@@ -4260,6 +4260,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	zugferd.source.r79761
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit optfeature texlive-module
 
 DESCRIPTION="TeXLive LaTeX additional packages"
