@@ -74,6 +74,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 
 TEXLIVE_MODULE_OPTIONAL_ENGINE="luajittex"
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Essential programs and files"
