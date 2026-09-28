@@ -151,6 +151,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	turkmen.source.r79618
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Other European languages"
