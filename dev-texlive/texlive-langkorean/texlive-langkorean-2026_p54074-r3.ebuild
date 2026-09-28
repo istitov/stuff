@@ -32,6 +32,8 @@ TEXLIVE_MODULE_DOC_CONTENTS="
 	unfonts-extra.doc.r56291
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Korean"
