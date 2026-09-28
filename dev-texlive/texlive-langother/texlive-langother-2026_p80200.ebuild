@@ -147,6 +147,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	wnri-latex.source.r22338
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Other languages"
