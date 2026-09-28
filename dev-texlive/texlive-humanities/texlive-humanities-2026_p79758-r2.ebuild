@@ -162,6 +162,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	verse.source.r79919
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Humanities packages"
