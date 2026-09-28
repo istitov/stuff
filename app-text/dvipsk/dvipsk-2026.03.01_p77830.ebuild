@@ -18,6 +18,7 @@ DVIPS_REVISION=$(ver_cut 5)
 EXTRA_TL_MODULES="dvips.r${DVIPS_REVISION}"
 EXTRA_TL_DOC_MODULES="dvips.doc.r${DVIPS_REVISION}"
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
 texlive-common_append_to_src_uri EXTRA_TL_MODULES
 
 SRC_URI+=" doc? ( "
