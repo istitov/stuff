@@ -47,6 +47,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xcjk2uni.source.r54958
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Chinese/Japanese/Korean (base)"
