@@ -104,6 +104,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xespotcolor.source.r77682
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit font texlive-module
 
 DESCRIPTION="TeXLive XeTeX and packages"
