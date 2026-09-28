@@ -112,6 +112,8 @@ TEXLIVE_MODULE_BINLINKS="
 	kpsetool:kpsexpand
 	kpsetool:kpsepath
 "
+
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
 texlive-common_append_to_src_uri TL_CORE_EXTRA_CONTENTS
 
 SRC_URI+=" doc? ( "
