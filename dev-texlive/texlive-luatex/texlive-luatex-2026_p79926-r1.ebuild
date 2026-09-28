@@ -288,6 +288,9 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	semesterplannerlua.source.r71322
 	texfindpkg.source.r72937
 "
+
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit prefix texlive-module
 
 DESCRIPTION="TeXLive LuaTeX packages"
