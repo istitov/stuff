@@ -149,6 +149,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	uplatex.source.r80015
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Japanese"
