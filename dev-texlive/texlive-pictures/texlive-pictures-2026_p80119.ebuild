@@ -660,6 +660,8 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	xpicture.source.r28770
 "
 
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Graphics, pictures, diagrams"
