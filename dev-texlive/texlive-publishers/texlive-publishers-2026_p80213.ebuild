@@ -855,6 +855,9 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	yb-book.source.r79714
 	york-thesis.source.r23348
 "
+
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive Publisher styles, theses, etc."
