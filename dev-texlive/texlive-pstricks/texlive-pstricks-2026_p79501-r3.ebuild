@@ -277,6 +277,9 @@ TEXLIVE_MODULE_SRC_CONTENTS="
 	pst-uml.source.r15878
 	uml.source.r17476
 "
+
+TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+
 inherit texlive-module
 
 DESCRIPTION="TeXLive PSTricks"
