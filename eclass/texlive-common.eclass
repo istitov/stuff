@@ -4,7 +4,12 @@
 # Overlay-local fork (stuff overlay).
 # Vendored from ::gentoo with overlay-specific edits:
 #   - regex-driven TL-year detection that handles split-package PVs.
-#   - TUG historic mirror always emitted as a URL fallback.
+#   - TUG historic archive (Chemnitz and Utah) always emitted as a URL
+#     fallback.
+#   - texlive.info dated tlnet snapshot as a fallback, opted into per
+#     ebuild via TEXLIVE_TLNET_SNAPSHOT.
+#   - tlnet sources listed in reverse of Portage's try order, so CTAN
+#     is asked first and texlive.info last.
 # @MAINTAINER below credits the upstream ::gentoo author and is kept
 # for attribution; report overlay-specific issues at
 # https://github.com/istitov/stuff/issues.
@@ -47,6 +52,23 @@ _TEXLIVE_COMMON_ECLASS=1
 # CTAN_MIRROR_URL='https://ftp.fau.de/ctan/' emerge -1v app-text/texlive-core
 # @CODE
 : "${CTAN_MIRROR_URL:="https://mirrors.ctan.org"}"
+
+# @ECLASS_VARIABLE: TEXLIVE_TLNET_SNAPSHOT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Date (YYYY-MM-DD) of a tlnet state that holds every revision the
+# ebuild pins, normally the day the pins were taken. Each snapshot
+# holds only the revisions current that day, so a date from before a
+# pin was published or after it was superseded misses that file.
+# When set, texlive-common_append_to_src_uri adds texlive.info's
+# archived tlnet snapshot of that day as the last-resort download
+# location. It must be set before that function runs, which for
+# texlive-module.eclass consumers means before the inherit.
+#
+# Example:
+# @CODE
+# TEXLIVE_TLNET_SNAPSHOT=2026-09-11
+# @CODE
 
 # @ECLASS_VARIABLE: TEXLIVE_SCRIPTS_W_FILE_EXT
 # @DEFAULT_UNSET
@@ -266,15 +288,45 @@ texlive-common_append_to_src_uri() {
 
 		tl_uri=( "${tl_uri[@]/%/.${tl_pkgext}}" )
 
-		# Three parallel sources, ordered cheapest-first; the Manifest's
-		# hash pin selects the file regardless of which one serves it.
+		# Up to five parallel sources; the Manifest's hash pin selects
+		# the file regardless of which one serves it.
 		#
-		# CTAN's tlnet/ holds only the CURRENT revision of each package
-		# in the CURRENT TL release, so it answers for a freshly
-		# regenerated ebuild and stops answering, member by member, as
-		# upstream moves on. It stays first anyway: it is the mirror
-		# network built to carry this load, and a miss is one cheap 404.
-		SRC_URI+=" ${tl_uri[*]/#/${CTAN_MIRROR_URL%/}/systems/texlive/tlnet/archive/}"
+		# They are appended in the REVERSE of the intended try order.
+		# Portage (3.0.82.2) tries a file's plain SRC_URI entries
+		# last-listed first: fetch.py reverses its primaryuri list and
+		# then pops from a reversed copy. GENTOO_MIRRORS still go
+		# before all of them. So Portage asks CTAN first and
+		# texlive.info last. pkgcore/pkgdev read the list forward, so
+		# pkgdev manifest reaches texlive.info first. This depends on
+		# Portage internals: re-check with an 'ebuild ... fetch' log
+		# after a Portage upgrade. verified 2026-09-28
+
+		# Tried last: texlive.info. The TL year still in development
+		# has no tlnet-final yet, so once CTAN has moved past a
+		# revision, only flow's mirror might still have it, and only
+		# when an older TL year pinned it too. texlive.info keeps a daily
+		# snapshot of all of tlnet, so the snapshot of the day an
+		# ebuild's pins were taken holds every one of them. The site
+		# sits behind Anubis; its operator lets portage's default
+		# User-Agent (the make.globals FETCHCOMMAND string) through. A
+		# FETCHCOMMAND that sends another User-Agent still gets the HTML
+		# challenge page, which portage records as a checksum failure
+		# rather than a 404. It is one volunteer-run host, not a mirror
+		# network, so it only answers for what the others have lost.
+		# verified 2026-09-28
+		if [[ -n ${TEXLIVE_TLNET_SNAPSHOT} ]]; then
+			[[ ${TEXLIVE_TLNET_SNAPSHOT} =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] \
+				|| die "TEXLIVE_TLNET_SNAPSHOT must be YYYY-MM-DD, got '${TEXLIVE_TLNET_SNAPSHOT}'"
+			local tl_snapshot="https://texlive.info/tlnet-archive/${TEXLIVE_TLNET_SNAPSHOT//-//}/tlnet/archive/"
+			SRC_URI+=" ${tl_uri[*]/#/${tl_snapshot}}"
+		fi
+
+		# Third: flow's ::gentoo dev mirror. It carries the files of the
+		# TL years ::gentoo itself tracks, so it answers only for pins
+		# this overlay shares with those years.
+		for tl_dev in "${texlive_ge_2023_devs[@]}"; do
+			SRC_URI+=" ${tl_uri[*]/#/${tl_2023_uri_prefix/@dev@/${tl_dev}}}"
+		done
 
 		# Three PV shapes touch the TL year:
 		#   dev-texlive/*       : '2025_pNNNNN'      year at PV start
@@ -289,30 +341,26 @@ texlive-common_append_to_src_uri() {
 		else
 			tl_year=${PV%%_*}
 		fi
-		# Frozen TL years move to the TUG historic archive, one final
-		# revision per package, and stay there. This is the durable
-		# source for every year but the one in development. Chemnitz
-		# rather than the ftp.math.utah.edu host ::gentoo names: that
-		# host resolves but accepts no connection, so it contributed
-		# nothing but a fetch timeout. verified 2026-07-27
-		local tl_historic="https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/${tl_year}/tlnet-final/archive/"
-		SRC_URI+=" ${tl_uri[*]/#/${tl_historic}}"
-
-		# The TL year still in development has no tlnet-final yet, so
-		# neither source above can serve a revision CTAN has moved past.
-		# texlive.info keeps dated tlnet snapshots that do, but it sits
-		# behind Anubis, which answers portage's User-Agent with a 200
-		# and an HTML challenge page rather than the tarball - worse
-		# than a 404, since portage banks a checksum failure for every
-		# file. Those ebuilds have to be resynced to current tlnet
-		# instead. verified 2026-07-27
-
-		# Last, flow's ::gentoo dev mirror: it only carries the TL years
-		# ::gentoo itself tracks, so it answers for nothing this overlay
-		# ships ahead of the main tree, but costs nothing to keep.
-		for tl_dev in "${texlive_ge_2023_devs[@]}"; do
-			SRC_URI+=" ${tl_uri[*]/#/${tl_2023_uri_prefix/@dev@/${tl_dev}}}"
+		# Second: the TUG historic archive. Frozen TL years move there,
+		# one final revision per package, and stay. This is the durable
+		# source for every year but the one in development. Two copies,
+		# since each has been down on its own: the Chemnitz mirror,
+		# tried first as the faster one in testing, then the Utah
+		# master that ::gentoo names. Utah accepted no connection on
+		# 2026-07-27 and served every probed file again on 2026-09-28.
+		local tl_historic
+		for tl_historic in \
+			https://ftp.math.utah.edu/pub/tex/historic \
+			https://ftp.tu-chemnitz.de/pub/tug/historic; do
+			SRC_URI+=" ${tl_uri[*]/#/${tl_historic}/systems/texlive/${tl_year}/tlnet-final/archive/}"
 		done
+
+		# Tried first: CTAN's tlnet/. It holds only the CURRENT revision
+		# of each package in the CURRENT TL release, so it answers for a
+		# freshly resynced ebuild and stops answering, member by member,
+		# as upstream moves on. It goes first anyway: it is the mirror
+		# network built to carry this load, and a miss is one cheap 404.
+		SRC_URI+=" ${tl_uri[*]/#/${CTAN_MIRROR_URL%/}/systems/texlive/tlnet/archive/}"
 	fi
 }
 
