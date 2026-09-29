@@ -697,7 +697,9 @@ SRC_URI="
 "
 S="${WORKDIR}/unsloth-${PV/_beta/-beta}"
 
-PATCHES=( "${FILESDIR}/${P}-system-backend.patch" )
+# Shared across versions; applies unchanged to 0.1.814_beta through
+# 0.1.900_beta. Verified 2026-09-29.
+PATCHES=( "${FILESDIR}/${PN}-system-backend.patch" )
 
 # The generated archive is mutable; the Manifest pins its accepted bytes.
 # The studio UI is AGPL-3.0-only (AGPL-3 here); bundled web fonts are OFL-1.1.
