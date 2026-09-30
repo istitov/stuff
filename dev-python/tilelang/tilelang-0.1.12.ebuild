@@ -27,6 +27,8 @@ RESTRICT="test"
 # Mirror upstream's Python <3.14 gate for torch-c-dlpack-ext.
 # verified 2026-06-08
 # Keep TVM's build and runtime tvm-ffi ABIs exact.
+# ROCm kernels JIT-compile against src/tl_templates/hip/common.h, which
+# includes rocwmma/rocwmma.hpp unconditionally. verified 2026-09-30
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	sci-mathematics/z3:=[python,${PYTHON_SINGLE_USEDEP}]
@@ -38,6 +40,7 @@ RDEPEND="
 	rocm? (
 		dev-util/hip:=
 		dev-util/hipcc:=
+		sci-libs/rocWMMA
 		sci-ml/caffe2[rocm]
 	)
 	$(python_gen_cond_dep '
