@@ -20,23 +20,23 @@ KEYWORDS="~amd64 ~arm ~arm64"
 IUSE+=" openmp threads"
 RESTRICT="bindist mirror"
 
-# Building imports NumPy >=2; runtime supports NumPy >=1.22,<2.7.
-# The 2.6 runtime cap was verified 2026-08-11.
+# Building imports NumPy >=2; runtime supports NumPy >=1.22,<2.6, and
+# numba/__init__.py refuses to import on 2.6. verified 2026-09-30
 DEPEND+="
 	>=dev-python/numpy-2.0.0[${PYTHON_USEDEP}]
-	<dev-python/numpy-2.7[${PYTHON_USEDEP}]
+	<dev-python/numpy-2.6[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2021.6:= )
 "
 RDEPEND+="
 	>=dev-python/llvmlite-0.49.0[${PYTHON_USEDEP}]
 	<dev-python/llvmlite-0.50[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.22[${PYTHON_USEDEP}]
-	<dev-python/numpy-2.7[${PYTHON_USEDEP}]
+	<dev-python/numpy-2.6[${PYTHON_USEDEP}]
 	threads? ( >=dev-cpp/tbb-2021.6:= )
 "
 BDEPEND+="
 	>=dev-python/numpy-2.0.0[${PYTHON_USEDEP}]
-	<dev-python/numpy-2.7[${PYTHON_USEDEP}]
+	<dev-python/numpy-2.6[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests unittest
