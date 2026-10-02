@@ -18,6 +18,8 @@ SRC_URI="
 		-> gentoo-tex-patches-${GENTOO_TEX_PATCHES_NUM}.tar.bz2
 	https://bugs.gentoo.org/attachment.cgi?id=908573
 		-> ${PN}-2023-mplib-h.patch
+	https://github.com/Flowdalic/texlive-source/commit/19e9eb6dab7c192b0f5dcee5fc87d46ae63296f0.patch
+		-> ${PN}-2026-xdvipsk-kpathsea.patch
 "
 
 # Extra macros required while installing other packages.
@@ -158,7 +160,7 @@ COMMON_DEPEND="
 	xindy? ( dev-lisp/clisp:= )
 	media-libs/freetype:2
 	>=dev-libs/icu-50:=
-	>=dev-libs/kpathsea-6.4.0:=
+	>=dev-libs/kpathsea-6.4.2:=
 "
 
 BDEPEND="
@@ -171,8 +173,10 @@ DEPEND="
 	${COMMON_DEPEND}
 "
 
+# xdvipsk-cid.pro moved here from texlive-binextra with the xdvipsk build.
 RDEPEND="
 	${COMMON_DEPEND}
+	!<dev-texlive/texlive-binextra-2026_p80064-r1
 	virtual/perl-Getopt-Long
 	dev-perl/File-HomeDir
 	dev-perl/Log-Dispatch
@@ -185,6 +189,12 @@ RDEPEND="
 "
 
 BUILDDIR="${WORKDIR}/${P}_build"
+
+PATCHES=(
+	# Let xdvipsk's man page find <kpathsea/paths.h> in the system kpathsea.
+	# https://github.com/TeX-Live/texlive-source/pull/85
+	"${DISTDIR}"/${PN}-2026-xdvipsk-kpathsea.patch
+)
 
 RELOC_TARGET=texmf-dist
 
@@ -224,6 +234,8 @@ src_prepare() {
 	default
 
 	elibtoolize
+	# The xdvipsk patch changes configure.ac.
+	"${S}"/reautoconf texk/xdvipsk || die
 
 	# Re-run autoconf while the cairo and mplibdir patches remain
 	# (bugs #927714, #853121, #837875).
@@ -298,8 +310,6 @@ src_configure() {
 		--disable-tex4htk
 		--disable-cjkutils
 		--disable-xdvik
-		# xdvipsk requires an in-tree kpathsea header absent from system builds.
-		--disable-xdvipsk
 		--enable-luatex
 		--disable-dvisvgm
 		--disable-ps2eps
