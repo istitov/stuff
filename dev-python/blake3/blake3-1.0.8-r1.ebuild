@@ -67,6 +67,7 @@ LICENSE="
 	|| ( CC0-1.0 Apache-2.0 )
 	rust? (
 "
+# Dependent crate licenses
 LICENSE+="
 	Apache-2.0-with-LLVM-exceptions BSD-2 MIT Unicode-3.0
 	|| ( Apache-2.0 CC0-1.0 MIT-0 )
