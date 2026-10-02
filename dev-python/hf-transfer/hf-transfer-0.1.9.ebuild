@@ -199,5 +199,12 @@ SRC_URI="
 "
 
 LICENSE="Apache-2.0"
+# Dependent crate licenses
+LICENSE+="
+	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD ISC MIT Unicode-3.0
+"
+# ring 0.17.8 states its license in a file: ISC, OpenSSL and SSLeay,
+# plus MIT for third_party/fiat.
+LICENSE+=" ISC openssl SSLeay MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
