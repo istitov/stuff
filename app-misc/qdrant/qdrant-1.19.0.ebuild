@@ -15,6 +15,11 @@ HOMEPAGE="
 SRC_URI="https://github.com/qdrant/qdrant/archive/refs/tags/v${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="Apache-2.0"
+# Dependent crate licenses
+LICENSE+="
+	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD Boost-1.0
+	CC0-1.0 CDDL CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0 ZLIB
+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="openrc systemd"
