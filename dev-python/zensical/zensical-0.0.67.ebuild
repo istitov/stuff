@@ -403,8 +403,9 @@ SRC_URI+=" ${CARGO_CRATE_URIS}"
 # icons Apache-2.0, Lucide ISC, Octicons MIT, Simple Icons CC0-1.0; the
 # JS bundle carries MIT, Apache-2.0 and W3C components.
 LICENSE="MIT CC-BY-4.0 W3C"
+# Dependent crate licenses
 LICENSE+="
-	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD BSD-2 CC0-1.0
+	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD CC0-1.0
 	CDLA-Permissive-2.0 ISC MIT MIT-0 Unicode-3.0 ZLIB
 "
 SLOT="0"
