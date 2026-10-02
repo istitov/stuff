@@ -328,6 +328,7 @@ S="${WORKDIR}/${PN/-/_}-${PV}"
 
 # The package is dual-licensed; append transitive crate licenses.
 LICENSE="|| ( MIT Apache-2.0 )"
+# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD CC0-1.0 ISC MIT
 	Unicode-3.0 ZLIB
