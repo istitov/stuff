@@ -906,8 +906,15 @@ SRC_URI="
 "
 
 LICENSE="MIT"
-# Bundled crates add these licenses.
-LICENSE+=" Apache-2.0 Boost-1.0 BSD BSD-2 ISC MIT MPL-2.0 Unicode-DFS-2016 ZLIB"
+# Dependent crate licenses
+LICENSE+="
+	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD Boost-1.0 CC-PD
+	CC0-1.0 ISC LGPL-2.1 LGPL-3 MIT MPL-2.0 OFL-1.1
+	UbuntuFontLicense-1.0 Unicode-3.0 Unlicense ZLIB
+"
+# ring 0.17.8 states its license in a file: ISC, OpenSSL and SSLeay,
+# plus MIT for third_party/fiat.
+LICENSE+=" ISC openssl SSLeay MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 

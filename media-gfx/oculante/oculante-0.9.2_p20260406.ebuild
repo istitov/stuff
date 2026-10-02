@@ -1032,6 +1032,7 @@ S="${WORKDIR}/${PN}-${COMMIT}"
 
 # The app is MIT; vendored crates add the generated license set below.
 LICENSE="MIT"
+# Dependent crate licenses
 LICENSE+="
 	AGPL-3 Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD
 	Boost-1.0 CC-PD CC0-1.0 CDLA-Permissive-2.0 IJG ISC LGPL-2.1 LGPL-3
