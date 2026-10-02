@@ -234,4 +234,15 @@ LICENSE+="
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-# Bundled rusqlite and pure-Rust miniz_oxide avoid system C dependencies.
+# rusqlite enables the bundled SQLite of libsqlite3-sys 0.28, which checks
+# LIBSQLITE3_SYS_USE_PKG_CONFIG first, so link the system library instead.
+# The one LIKE query only feeds telemetry, so the ICU slowdown of
+# bug #959120 does not apply. verified 2026-10-02
+DEPEND="dev-db/sqlite:3"
+RDEPEND="${DEPEND}"
+BDEPEND="virtual/pkgconfig"
+
+src_configure() {
+	export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
+	cargo_src_configure
+}
