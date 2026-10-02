@@ -1,0 +1,137 @@
+Link xdvipsk against the system libjpeg instead of its bundled IJG
+libjpeg 9b (2016) in texk/xdvipsk/thirdparty/libjpeg.
+
+- configure.ac: find libjpeg with pkg-config.
+- Makefile.am: drop the bundled libjpeg.a and use LIBJPEG_CFLAGS/_LIBS.
+- loadJPEG.cpp: include the standard headers instead of IJG's private
+  jinclude.h, and rename the local jpeg_read_icc_profile(), which
+  libjpeg-turbo exports with the same signature (as ::gentoo's freeimage
+  does for the same FreeImage-derived code).
+
+Gentoo-specific; applies after the xdvipsk-kpathsea patch.
+
+diff --git a/texk/xdvipsk/Makefile.am b/texk/xdvipsk/Makefile.am
+index aa5f57b..82b267e 100644
+--- a/texk/xdvipsk/Makefile.am
++++ b/texk/xdvipsk/Makefile.am
+@@ -131,62 +131,8 @@ xdvipsk_SOURCES = \
+ 	otflib/unicode.c \
+ 	otflib/unicode.h
+ 
+-LIBJPEG_TREE = thirdparty/libjpeg/libjpeg-src
+-LIBJPEG_INCLUDES = -I$(abs_top_srcdir)/$(LIBJPEG_TREE)
+-libjpeg_a_CPPFLAGS = $(LIBJPEG_INCLUDES)
+-MEMORYMGR = jmemnobs
+-
+-libjpeg_a_SOURCES = \
+-	$(LIBJPEG_TREE)/jaricom.c \
+-	$(LIBJPEG_TREE)/jcapimin.c \
+-	$(LIBJPEG_TREE)/jcapistd.c \
+-	$(LIBJPEG_TREE)/jcarith.c \
+-	$(LIBJPEG_TREE)/jccoefct.c \
+-	$(LIBJPEG_TREE)/jccolor.c \
+-	$(LIBJPEG_TREE)/jcdctmgr.c \
+-	$(LIBJPEG_TREE)/jchuff.c \
+-	$(LIBJPEG_TREE)/jcinit.c \
+-	$(LIBJPEG_TREE)/jcmainct.c \
+-	$(LIBJPEG_TREE)/jcmarker.c \
+-	$(LIBJPEG_TREE)/jcmaster.c \
+-	$(LIBJPEG_TREE)/jcomapi.c \
+-	$(LIBJPEG_TREE)/jcparam.c \
+-	$(LIBJPEG_TREE)/jcprepct.c \
+-	$(LIBJPEG_TREE)/jcsample.c \
+-	$(LIBJPEG_TREE)/jctrans.c \
+-	$(LIBJPEG_TREE)/jdapimin.c \
+-	$(LIBJPEG_TREE)/jdapistd.c \
+-	$(LIBJPEG_TREE)/jdarith.c \
+-	$(LIBJPEG_TREE)/jdatadst.c \
+-	$(LIBJPEG_TREE)/jdatasrc.c \
+-	$(LIBJPEG_TREE)/jdcoefct.c \
+-	$(LIBJPEG_TREE)/jdcolor.c \
+-	$(LIBJPEG_TREE)/jddctmgr.c \
+-	$(LIBJPEG_TREE)/jdhuff.c \
+-	$(LIBJPEG_TREE)/jdinput.c \
+-	$(LIBJPEG_TREE)/jdmainct.c \
+-	$(LIBJPEG_TREE)/jdmarker.c \
+-	$(LIBJPEG_TREE)/jdmaster.c \
+-	$(LIBJPEG_TREE)/jdmerge.c \
+-	$(LIBJPEG_TREE)/jdpostct.c \
+-	$(LIBJPEG_TREE)/jdsample.c \
+-	$(LIBJPEG_TREE)/jdtrans.c \
+-	$(LIBJPEG_TREE)/jerror.c \
+-	$(LIBJPEG_TREE)/jfdctflt.c \
+-	$(LIBJPEG_TREE)/jfdctfst.c \
+-	$(LIBJPEG_TREE)/jfdctint.c \
+-	$(LIBJPEG_TREE)/jidctflt.c \
+-	$(LIBJPEG_TREE)/jidctfst.c \
+-	$(LIBJPEG_TREE)/jidctint.c \
+-	$(LIBJPEG_TREE)/jquant1.c \
+-	$(LIBJPEG_TREE)/jquant2.c \
+-	$(LIBJPEG_TREE)/jutils.c \
+-	$(LIBJPEG_TREE)/jmemmgr.c \
+-	$(LIBJPEG_TREE)/$(MEMORYMGR).c
+-
+-LIBJPEG_LIBS = libjpeg.a
+-
+-$(libjpeg_a_OBJECTS): config.force
++## Gentoo: the system libjpeg; configure sets LIBJPEG_CFLAGS and LIBJPEG_LIBS.
++LIBJPEG_INCLUDES = $(LIBJPEG_CFLAGS)
+ 
+ LIBTIFF_TREE = thirdparty/libtiff/libtiff-src
+ LIBTIFF_INCLUDES = -I$(abs_top_srcdir)/$(LIBTIFF_TREE)
+@@ -247,7 +193,7 @@ if cross
+    xdvipsk_LDADD += -lgdi32
+ endif
+ 
+-noinst_LIBRARIES = libdvipsgraph.a $(LIBTIFF_LIBS) $(LIBJPEG_LIBS)
++noinst_LIBRARIES = libdvipsgraph.a $(LIBTIFF_LIBS)
+ 
+ libdvipsgraph_a_dependencies = $(ZLIB_DEPEND) $(LIBPNG_DEPEND) $(LIBJPEG_DEPEND) $(LIBTIFF_DEPEND)
+ libdvipsgraph_a_SOURCES = \
+diff --git a/texk/xdvipsk/configure.ac b/texk/xdvipsk/configure.ac
+index f765e28..1267f43 100644
+--- a/texk/xdvipsk/configure.ac
++++ b/texk/xdvipsk/configure.ac
+@@ -72,6 +72,9 @@ KPSE_ZLIB_FLAGS
+ KPSE_LIBPNG_FLAGS
+ KPSE_FREETYPE2_FLAGS
+ 
++dnl Gentoo: link the system libjpeg instead of thirdparty/libjpeg.
++PKG_CHECK_MODULES([LIBJPEG], [libjpeg])
++
+ echo timestamp >config.force
+ 
+ # distribute additional compiler and linker flags
+diff --git a/texk/xdvipsk/graphlib/loadJPEG.cpp b/texk/xdvipsk/graphlib/loadJPEG.cpp
+index 5fe191f..f4c3f96 100644
+--- a/texk/xdvipsk/graphlib/loadJPEG.cpp
++++ b/texk/xdvipsk/graphlib/loadJPEG.cpp
+@@ -36,7 +36,9 @@ extern "C" {
+ #undef FAR
+ #include <setjmp.h>
+ 
+-#include "jinclude.h"
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ #ifndef HAVE_BOOLEAN
+ #define HAVE_BOOLEAN
+ typedef int boolean;
+@@ -374,7 +376,7 @@ marker_is_icc(jpeg_saved_marker_ptr marker) {
+   return FALSE.  You might want to issue an error message instead.
+ */
+ static BOOL 
+-jpeg_read_icc_profile(j_decompress_ptr cinfo, JOCTET **icc_data_ptr, unsigned *icc_data_len) {
++xdvipsk_jpeg_read_icc_profile(j_decompress_ptr cinfo, JOCTET **icc_data_ptr, unsigned *icc_data_len) {
+ 	jpeg_saved_marker_ptr marker;
+ 	int num_markers = 0;
+ 	int seq_no;
+@@ -588,7 +590,7 @@ read_markers(j_decompress_ptr cinfo, FIBITMAP *dib) {
+ 	BYTE *icc_profile = NULL;
+ 	unsigned icc_length = 0;
+ 
+-	if( jpeg_read_icc_profile(cinfo, &icc_profile, &icc_length) ) {
++	if( xdvipsk_jpeg_read_icc_profile(cinfo, &icc_profile, &icc_length) ) {
+ 		// copy ICC profile data
+ 		Bitmap_CreateICCProfile(dib, icc_profile, icc_length);
+ 		// clean up

@@ -159,6 +159,8 @@ COMMON_DEPEND="
 	)
 	xindy? ( dev-lisp/clisp:= )
 	media-libs/freetype:2
+	media-libs/libjpeg-turbo:=
+	media-libs/tiff:=[jpeg,zlib]
 	>=dev-libs/icu-50:=
 	>=dev-libs/kpathsea-6.4.2:=
 "
@@ -194,6 +196,10 @@ PATCHES=(
 	# Let xdvipsk's man page find <kpathsea/paths.h> in the system kpathsea.
 	# https://github.com/TeX-Live/texlive-source/pull/85
 	"${DISTDIR}"/${PN}-2026-xdvipsk-kpathsea.patch
+	# Link xdvipsk to the system libjpeg and libtiff instead of its bundled
+	# libjpeg 9b and libtiff 4.7.0. verified 2026-10-03
+	"${FILESDIR}"/${PN}-2026-xdvipsk-system-libjpeg.patch
+	"${FILESDIR}"/${PN}-2026-xdvipsk-system-libtiff.patch
 )
 
 RELOC_TARGET=texmf-dist
@@ -233,8 +239,11 @@ src_prepare() {
 
 	default
 
+	# Nothing may fall back to the bundled copies the patches replace.
+	rm -r texk/xdvipsk/thirdparty || die
+
 	elibtoolize
-	# The xdvipsk patch changes configure.ac.
+	# The xdvipsk patches change configure.ac and Makefile.am.
 	"${S}"/reautoconf texk/xdvipsk || die
 
 	# Re-run autoconf while the cairo and mplibdir patches remain

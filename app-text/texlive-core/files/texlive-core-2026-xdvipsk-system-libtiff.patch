@@ -1,0 +1,239 @@
+Link xdvipsk against the system libtiff instead of its bundled libtiff
+4.7.0 in texk/xdvipsk/thirdparty/libtiff.
+
+- configure.ac: find libtiff-4 with pkg-config.
+- Makefile.am: drop the bundled libtiff.a and use LIBTIFF_CFLAGS/_LIBS.
+- loadTIFF.cpp: include the public tiffio.h instead of the private
+  tiffiop.h, and drop the FreeImage-style platform layer that replaced
+  libtiff's tif_unix.c (TIFFOpen, _TIFFmalloc and friends, and the
+  _TIFFerrorHandler/_TIFFwarningHandler globals); the system libtiff
+  provides those. The stream opener becomes a static bitmapTIFFOpen(),
+  since libtiff's own TIFFFdOpen() takes a file descriptor, and it
+  installs the same silent handlers through TIFFSetWarningHandler()
+  and TIFFSetErrorHandler().
+
+Gentoo-specific; applies after the system-libjpeg patch.
+
+diff --git a/texk/xdvipsk/Makefile.am b/texk/xdvipsk/Makefile.am
+index 82b267e..1863416 100644
+--- a/texk/xdvipsk/Makefile.am
++++ b/texk/xdvipsk/Makefile.am
+@@ -134,54 +134,8 @@ xdvipsk_SOURCES = \
+ ## Gentoo: the system libjpeg; configure sets LIBJPEG_CFLAGS and LIBJPEG_LIBS.
+ LIBJPEG_INCLUDES = $(LIBJPEG_CFLAGS)
+ 
+-LIBTIFF_TREE = thirdparty/libtiff/libtiff-src
+-LIBTIFF_INCLUDES = -I$(abs_top_srcdir)/$(LIBTIFF_TREE)
+-libtiff_a_CPPFLAGS = $(LIBJPEG_INCLUDES) $(LIBTIFF_INCLUDES) $(ZLIB_INCLUDES)
+-
+-libtiff_a_SOURCES = \
+-	$(LIBTIFF_TREE)/tif_aux.c \
+-	$(LIBTIFF_TREE)/tif_close.c \
+-	$(LIBTIFF_TREE)/tif_codec.c \
+-	$(LIBTIFF_TREE)/tif_color.c \
+-	$(LIBTIFF_TREE)/tif_compress.c \
+-	$(LIBTIFF_TREE)/tif_dir.c \
+-	$(LIBTIFF_TREE)/tif_dirinfo.c \
+-	$(LIBTIFF_TREE)/tif_dirread.c \
+-	$(LIBTIFF_TREE)/tif_dirwrite.c \
+-	$(LIBTIFF_TREE)/tif_dumpmode.c \
+-	$(LIBTIFF_TREE)/tif_error.c \
+-	$(LIBTIFF_TREE)/tif_extension.c \
+-	$(LIBTIFF_TREE)/tif_fax3.c \
+-	$(LIBTIFF_TREE)/tif_fax3sm.c \
+-	$(LIBTIFF_TREE)/tif_flush.c \
+-	$(LIBTIFF_TREE)/tif_getimage.c \
+-	$(LIBTIFF_TREE)/tif_jbig.c \
+-	$(LIBTIFF_TREE)/tif_jpeg.c \
+-	$(LIBTIFF_TREE)/tif_jpeg_12.c \
+-	$(LIBTIFF_TREE)/tif_luv.c \
+-	$(LIBTIFF_TREE)/tif_lzma.c \
+-	$(LIBTIFF_TREE)/tif_lzw.c \
+-	$(LIBTIFF_TREE)/tif_next.c \
+-	$(LIBTIFF_TREE)/tif_ojpeg.c \
+-	$(LIBTIFF_TREE)/tif_open.c \
+-	$(LIBTIFF_TREE)/tif_packbits.c \
+-	$(LIBTIFF_TREE)/tif_pixarlog.c \
+-	$(LIBTIFF_TREE)/tif_predict.c \
+-	$(LIBTIFF_TREE)/tif_print.c \
+-	$(LIBTIFF_TREE)/tif_read.c \
+-	$(LIBTIFF_TREE)/tif_strip.c \
+-	$(LIBTIFF_TREE)/tif_swab.c \
+-	$(LIBTIFF_TREE)/tif_thunder.c \
+-	$(LIBTIFF_TREE)/tif_tile.c \
+-	$(LIBTIFF_TREE)/tif_version.c \
+-	$(LIBTIFF_TREE)/tif_warning.c \
+-	$(LIBTIFF_TREE)/tif_write.c \
+-	$(LIBTIFF_TREE)/tif_zip.c \
+-	$(LIBTIFF_TREE)/tif_hash_set.c
+-
+-LIBTIFF_LIBS = libtiff.a
+-
+-$(libtiff_a_OBJECTS): config.force
++## Gentoo: the system libtiff; configure sets LIBTIFF_CFLAGS and LIBTIFF_LIBS.
++LIBTIFF_INCLUDES = $(LIBTIFF_CFLAGS)
+ 
+ $(xdvipsk_OBJECTS): $(KPATHSEA_DEPEND) $(LUA_DEPEND) $(ZLIB_DEPEND) $(LIBPNG_DEPEND) \
+                     $(LIBJPEG_DEPEND) $(LIBTIFF_DEPEND) $(FREETYPE2_DEPEND)
+@@ -193,7 +147,7 @@ if cross
+    xdvipsk_LDADD += -lgdi32
+ endif
+ 
+-noinst_LIBRARIES = libdvipsgraph.a $(LIBTIFF_LIBS)
++noinst_LIBRARIES = libdvipsgraph.a
+ 
+ libdvipsgraph_a_dependencies = $(ZLIB_DEPEND) $(LIBPNG_DEPEND) $(LIBJPEG_DEPEND) $(LIBTIFF_DEPEND)
+ libdvipsgraph_a_SOURCES = \
+diff --git a/texk/xdvipsk/configure.ac b/texk/xdvipsk/configure.ac
+index 1267f43..22e9205 100644
+--- a/texk/xdvipsk/configure.ac
++++ b/texk/xdvipsk/configure.ac
+@@ -74,6 +74,8 @@ KPSE_FREETYPE2_FLAGS
+ 
+ dnl Gentoo: link the system libjpeg instead of thirdparty/libjpeg.
+ PKG_CHECK_MODULES([LIBJPEG], [libjpeg])
++dnl Gentoo: likewise the system libtiff instead of thirdparty/libtiff.
++PKG_CHECK_MODULES([LIBTIFF], [libtiff-4])
+ 
+ echo timestamp >config.force
+ 
+diff --git a/texk/xdvipsk/graphlib/loadTIFF.cpp b/texk/xdvipsk/graphlib/loadTIFF.cpp
+index 343db4b..bf5f031 100644
+--- a/texk/xdvipsk/graphlib/loadTIFF.cpp
++++ b/texk/xdvipsk/graphlib/loadTIFF.cpp
+@@ -39,7 +39,7 @@
+ 
+ #include "bitmap.h"
+ #include "utilities.h"
+-#include "tiffiop.h"
++#include <tiffio.h>
+ 
+ #include "bitmapIO.h"
+ 
+@@ -142,73 +142,6 @@ static void
+ _tiffUnmapProc(thandle_t, void* base, toff_t size) {
+ }
+ 
+-/**
+-Open a TIFF file descriptor for reading or writing
+-@param handle File handle
+-@param name Name of the file handle
+-@param mode Specifies if the file is to be opened for reading ("r") or writing ("w")
+-*/
+-TIFF *
+-TIFFFdOpen(thandle_t handle, const char *name, const char *mode) {
+-	TIFF *tif;
+-	
+-	// Open the file; the callback will set everything up
+-	tif = TIFFClientOpen(name, mode, handle,
+-	    _tiffReadProc, _tiffWriteProc, _tiffSeekProc, _tiffCloseProc,
+-	    _tiffSizeProc, _tiffMapProc, _tiffUnmapProc);
+-
+-	return tif;
+-}
+-
+-/**
+-Open a TIFF file for reading or writing
+-@param name
+-@param mode
+-*/
+-TIFF*
+-TIFFOpen(const char* name, const char* mode) {
+-	return 0;
+-}
+-
+-// ----------------------------------------------------------
+-//   TIFF library Bitmap-specific routines.
+-// ----------------------------------------------------------
+-
+-void*
+-_TIFFmalloc(tmsize_t s) {
+-	return malloc(s);
+-}
+-
+-void*
+-_TIFFcalloc(tmsize_t nmemb, tmsize_t siz) {
+-	return calloc(nmemb, siz);
+-}
+-
+-void
+-_TIFFfree(void *p) {
+-	free(p);
+-}
+-
+-void*
+-_TIFFrealloc(void* p, tmsize_t s) {
+-	return realloc(p, s);
+-}
+-
+-void
+-_TIFFmemset(void* p, int v, tmsize_t c) {
+-	memset(p, v, (size_t) c);
+-}
+-
+-void
+-_TIFFmemcpy(void* d, const void* s, tmsize_t c) {
+-	memcpy(d, s, (size_t) c);
+-}
+-
+-int
+-_TIFFmemcmp(const void* p1, const void* p2, tmsize_t c) {
+-	return (memcmp(p1, p2, (size_t) c));
+-}
+-
+ // ----------------------------------------------------------
+ //   in Bitmap warnings and errors are disabled
+ // ----------------------------------------------------------
+@@ -217,8 +150,6 @@ static void
+ msdosWarningHandler(const char* module, const char* fmt, va_list ap) {
+ }
+ 
+-TIFFErrorHandler _TIFFwarningHandler = msdosWarningHandler;
+-
+ static void
+ msdosErrorHandler(const char* module, const char* fmt, va_list ap) {
+ 	
+@@ -232,7 +163,28 @@ msdosErrorHandler(const char* module, const char* fmt, va_list ap) {
+ 	*/
+ }
+ 
+-TIFFErrorHandler _TIFFerrorHandler = msdosErrorHandler;
++/**
++Open a TIFF stream for reading or writing through the BitmapIO callbacks.
++The system libtiff keeps its own TIFFFdOpen and memory routines, so this
++uses a private name and installs the silent handlers through the public API.
++@param handle File handle
++@param name Name of the file handle
++@param mode Specifies if the file is to be opened for reading ("r") or writing ("w")
++*/
++static TIFF *
++bitmapTIFFOpen(thandle_t handle, const char *name, const char *mode) {
++	TIFF *tif;
++	
++	TIFFSetWarningHandler(msdosWarningHandler);
++	TIFFSetErrorHandler(msdosErrorHandler);
++
++	// Open the file; the callback will set everything up
++	tif = TIFFClientOpen(name, mode, handle,
++	    _tiffReadProc, _tiffWriteProc, _tiffSeekProc, _tiffCloseProc,
++	    _tiffSizeProc, _tiffMapProc, _tiffUnmapProc);
++
++	return tif;
++}
+ 
+ // ----------------------------------------------------------
+ 
+@@ -595,11 +547,11 @@ Open(BitmapIO *io, fi_handle handle, BOOL read) {
+ 	fio->handle = handle;
+ 
+ 	if (read) {
+-		fio->tif = TIFFFdOpen((thandle_t)fio, "", "r");
++		fio->tif = bitmapTIFFOpen((thandle_t)fio, "", "r");
+ 	} else {
+ 		// mode = "w"	: write Classic TIFF
+ 		// mode = "w8"	: write Big TIFF
+-		fio->tif = TIFFFdOpen((thandle_t)fio, "", "w");
++		fio->tif = bitmapTIFFOpen((thandle_t)fio, "", "w");
+ 	}
+ 	if(fio->tif == NULL) {
+ 		free(fio);
