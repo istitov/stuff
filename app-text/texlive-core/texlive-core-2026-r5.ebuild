@@ -200,6 +200,8 @@ PATCHES=(
 	# libjpeg 9b and libtiff 4.7.0. verified 2026-10-03
 	"${FILESDIR}"/${PN}-2026-xdvipsk-system-libjpeg.patch
 	"${FILESDIR}"/${PN}-2026-xdvipsk-system-libtiff.patch
+	# Report, rather than crash on, a TIFF that libtiff cannot open.
+	"${FILESDIR}"/${PN}-2026-xdvipsk-tiff-open-check.patch
 )
 
 RELOC_TARGET=texmf-dist

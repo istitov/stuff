@@ -1,0 +1,25 @@
+Do not dereference a failed TIFF open in xdvipsk's LoadTIFF().
+
+Open() returns NULL when libtiff rejects the file (for example a TIFF
+truncated before its directory), and LoadTIFF() read fio->tif from it
+unconditionally, so such an image crashed xdvipsk with SIGSEGV; the
+build with the bundled libtiff crashed the same way. Throw into the
+existing catch block instead, so em:graph reports "Unable to read file".
+
+Not Gentoo-specific; applies after the system-libtiff patch.
+
+diff --git a/texk/xdvipsk/graphlib/loadTIFF.cpp b/texk/xdvipsk/graphlib/loadTIFF.cpp
+index bf5f031..a4f24a4 100644
+--- a/texk/xdvipsk/graphlib/loadTIFF.cpp
++++ b/texk/xdvipsk/graphlib/loadTIFF.cpp
+@@ -730,6 +730,10 @@ LoadTIFF(BitmapIO *io, fi_handle handle, int page, int flags) {
+ 
+ 	try {	
+ 		data = Open(io, handle, TRUE);
++		if (!data) {
++			// Open() has already reported that libtiff rejected the file.
++			throw (char*)NULL;
++		}
+ 		fi_TIFFIO *fio = (fi_TIFFIO*)data;
+ 		tif = fio->tif;
+ 
