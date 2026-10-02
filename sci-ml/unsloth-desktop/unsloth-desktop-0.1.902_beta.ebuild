@@ -701,11 +701,16 @@ PATCHES=( "${FILESDIR}/${PN}-system-backend.patch" )
 # The generated archive is mutable; the Manifest pins its accepted bytes.
 # The studio UI is AGPL-3.0-only (AGPL-3 here); bundled web fonts are OFL-1.1.
 LICENSE="AGPL-3 OFL-1.1"
-# Bundled Rust and JavaScript dependency licenses.
+# Bundled JavaScript dependency licenses, from every package in
+# studio/frontend/package-lock.json. verified 2026-10-02
 LICENSE+="
-	0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD BlueOak-1.0.0
-	Boost-1.0 CC-BY-4.0 CC0-1.0 CDLA-Permissive-2.0 ISC MIT MPL-2.0
-	PYTHON Unicode-3.0 Unlicense ZLIB
+	0BSD Apache-2.0 BSD-2 BSD BlueOak-1.0.0 CC-BY-4.0 ISC MIT MPL-2.0
+	OFL-1.1 PYTHON Unlicense ZLIB
+"
+# Dependent crate licenses
+LICENSE+="
+	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD Boost-1.0 CC0-1.0
+	CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0 ZLIB
 "
 SLOT="0"
 KEYWORDS="-* ~amd64"
