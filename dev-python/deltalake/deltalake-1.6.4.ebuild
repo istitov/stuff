@@ -869,6 +869,7 @@ SRC_URI="
 S="${WORKDIR}/delta-rs-python-v${PV}/python"
 
 LICENSE="Apache-2.0"
+# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD CC0-1.0
 	CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0 ZLIB BZIP2
