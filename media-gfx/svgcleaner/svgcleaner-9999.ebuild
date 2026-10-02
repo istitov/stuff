@@ -39,6 +39,8 @@ SRC_URI="${CARGO_CRATE_URIS}"
 EGIT_BRANCH="master"
 
 LICENSE="GPL-2"
+# Dependent crate licenses
+LICENSE+=" MIT MPL-2.0"
 SLOT="0"
 
 src_unpack() {

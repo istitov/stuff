@@ -28,6 +28,8 @@ SRC_URI="https://github.com/RazrFalcon/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.g
 ${CARGO_CRATE_URIS}"
 
 LICENSE="GPL-2"
+# Dependent crate licenses
+LICENSE+=" MIT MPL-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
