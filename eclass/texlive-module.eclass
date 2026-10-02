@@ -513,6 +513,8 @@ texlive-module_src_install() {
 				texlinks.1
 				texlua.1
 				texluac.1
+				texprof.1
+				texprofile.1
 				tftopl.1
 				tie.1
 				tpic2pdftex.1
@@ -533,6 +535,7 @@ texlive-module_src_install() {
 				vptovf.1
 				weave.1
 				xdvipdfmx.1
+				xdvipsk.1
 				xelatex-dev.1
 				xetex.1
 				xml2pmx.1
