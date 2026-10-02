@@ -439,6 +439,7 @@ HOMEPAGE="
 SRC_URI+=" ${CARGO_CRATE_URIS}"
 
 LICENSE="MIT"
+# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD CDLA-Permissive-2.0
 	ISC MIT Unicode-3.0 ZLIB
