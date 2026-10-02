@@ -328,4 +328,6 @@ TEXLIVE_MODULE_BINLINKS="
 src_install() {
 	texlive-module_src_install
 	keepdir /var/lib/texmf/web2c
+	# texlive-core installs this since it builds xdvipsk.
+	rm "${ED}"/usr/share/texmf-dist/dvips/xdvipsk/xdvipsk-cid.pro || die
 }
