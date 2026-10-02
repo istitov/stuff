@@ -1,0 +1,39 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{12..14} )
+
+# The sdist uses underscored normalization.
+PYPI_PN="google_ai_generativelanguage"
+PYPI_NO_NORMALIZE=1
+
+inherit distutils-r1 pypi
+
+DESCRIPTION="Google AI generative-language API client (generated GAPIC bindings)"
+HOMEPAGE="
+	https://github.com/googleapis/google-cloud-python
+	https://pypi.org/project/google-ai-generativelanguage/
+"
+
+LICENSE="Apache-2.0"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+
+# google-api-core[grpc] supplies grpcio and grpcio-status; request its USE flag
+# instead of enumerating the extra. grpcio remains a direct upstream dependency.
+# verified 2026-07-27
+RDEPEND="
+	>=dev-python/google-api-core-2.28.0[grpc,${PYTHON_USEDEP}]
+	>=dev-python/google-auth-2.14.1[${PYTHON_USEDEP}]
+	>=dev-python/proto-plus-1.26.1[${PYTHON_USEDEP}]
+	<dev-python/proto-plus-2[${PYTHON_USEDEP}]
+	>=dev-python/protobuf-6.33.5[${PYTHON_USEDEP}]
+	>=dev-python/grpcio-1.59.0[${PYTHON_USEDEP}]
+	<dev-python/grpcio-2[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/grpcio-1.75.1[${PYTHON_USEDEP}]
+	' python3_14)
+"
