@@ -7,7 +7,7 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 
-inherit distutils-r1 pypi
+inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="Rigorous evaluation of LLM-synthesised code (HumanEval+, MBPP+)"
 HOMEPAGE="
@@ -21,6 +21,9 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="perf"
 
 # datasets and transformers are single-impl; wrap the multi-impl dependencies.
+# Upstream also requires google-generativeai, but evalplus imports it only
+# for the Gemini backend, and it cannot be installed for python3_14, so it
+# is an optfeature here. verified 2026-10-03
 RDEPEND="
 	>=sci-ml/datasets-2.21.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.43.0[${PYTHON_SINGLE_USEDEP}]
@@ -29,7 +32,6 @@ RDEPEND="
 		dev-python/anthropic[${PYTHON_USEDEP}]
 		dev-python/appdirs[${PYTHON_USEDEP}]
 		>=dev-python/fire-0.6.0[${PYTHON_USEDEP}]
-		>=dev-python/google-generativeai-0.7.2[${PYTHON_USEDEP}]
 		dev-python/multipledispatch[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
 		>=dev-python/openai-1.11.1[${PYTHON_USEDEP}]
@@ -55,3 +57,7 @@ BDEPEND="
 
 # The sdist lacks VCS metadata; supply its setuptools_scm version.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+
+pkg_postinst() {
+	optfeature "the Gemini backend" ">=dev-python/google-generativeai-0.7.2"
+}
