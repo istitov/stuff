@@ -1198,7 +1198,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (242) ---
+# --- github (241) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1905,12 +1905,6 @@ prefix = "v"
 ["dev-python/spidev"]
 source = "github"
 github = "doceme/py-spidev"
-use_max_tag = true
-prefix = "v"
-
-["dev-python/spur"]
-source = "github"
-github = "mwilliamson/spur.py"
 use_max_tag = true
 prefix = "v"
 
