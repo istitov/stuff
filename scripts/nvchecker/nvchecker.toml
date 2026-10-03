@@ -1198,7 +1198,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (247) ---
+# --- github (246) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2310,12 +2310,6 @@ github = "multani/sonata"
 use_max_tag = true
 prefix = "v"
 
-["media-video/fswebcam"]
-source = "github"
-github = "fsphil/fswebcam"
-use_max_tag = true
-prefix = "v"
-
 ["net-im/profanity"]
 source = "github"
 github = "profanity-im/profanity"
@@ -2944,7 +2938,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (28) ---
+# --- special (29) ---
 
 ["app-text/mupdf"]
 source = "regex"
@@ -3054,6 +3048,12 @@ github = "Xilinx/XRT"
 use_latest_release = true
 from_pattern = '^\d{6}\.(\d+\.\d+\.\d+)(?:_.*)?$'
 to_pattern = '\1'
+
+["media-video/fswebcam"]
+source = "gitea"
+gitea = "fsphil/fswebcam"
+host = "codeberg.org"
+use_max_tag = true
 
 ["sci-misc/stable-diffusion-cpp"]
 source = "github"

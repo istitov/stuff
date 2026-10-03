@@ -664,6 +664,16 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         # TOML literal strings, which cannot contain one.
         "regex": r"OOMMF ([0-9]+\.[0-9]+[ab][0-9]+) User.s Guide",
     },
+    # fswebcam moved to Codeberg and archived its GitHub repository, which
+    # the SRC_URI heuristic still finds through the tag archive the release
+    # ebuild fetches; tags there will never move. Codeberg serves the Gitea
+    # API that nvchecker's gitea source reads. verified 2026-10-03
+    "media-video/fswebcam": {
+        "source": "gitea",
+        "gitea": "fsphil/fswebcam",
+        "host": "codeberg.org",
+        "use_max_tag": True,
+    },
     "dev-tex/glossaries": {
         "source": "regex",
         "url": "https://www.ctan.org/json/2.0/pkg/glossaries",
