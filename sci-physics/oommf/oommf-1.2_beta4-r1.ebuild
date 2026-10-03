@@ -23,15 +23,17 @@ dev-lang/tk:="
 RDEPEND="${DEPEND}"
 
 src_compile() {
-	tclsh oommf.tcl pimake distclean
-	tclsh oommf.tcl pimake upgrade
-	tclsh oommf.tcl pimake
+	# pimake's upgrade target only clears files left by an older in-place
+	# install. On a fresh tree it removes nothing, and the build writes the
+	# same tclIndex entries itself, so it is skipped. verified 2026-10-03
+	tclsh oommf.tcl pimake distclean || die
+	tclsh oommf.tcl pimake || die
+	# Here rather than in src_install: OOMMF 2.x refuses to run as root.
+	tclsh oommf.tcl pimake objclean || die
 }
 
 src_install()
 {
-	tclsh oommf.tcl pimake objclean
-
 	use doc && dodoc "./doc/userguide/userguide.pdf"
 	use doc && dodoc "./doc/progman/progman.pdf"
 	rm -rf "./doc"
