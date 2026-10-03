@@ -8,7 +8,11 @@ HOMEPAGE="https://math.nist.gov/oommf/"
 SRC_URI="https://math.nist.gov/oommf/dist/${PN}12b4_20200930.tar.gz"
 S="${WORKDIR}/${PN}"
 
-LICENSE="HPND"
+# NIST's code is not subject to copyright in the US; ::gentoo labels NIST
+# software public-domain (sci-libs/tnt, sci-mathematics/dataplot).
+# The bundled 2dpbc OXS extension carries a GPL-3 LICENSE.
+# verified 2026-10-03
+LICENSE="GPL-3 public-domain"
 SLOT="1.2"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="doc"

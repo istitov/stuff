@@ -8,7 +8,14 @@ HOMEPAGE="https://math.nist.gov/oommf/"
 SRC_URI="https://math.nist.gov/oommf/dist/${PN}21a2_20250930.tar.gz"
 S="${WORKDIR}/${PN}"
 
-LICENSE="HPND"
+# NIST's code is not subject to copyright in the US; ::gentoo labels NIST
+# software public-domain (sci-libs/tnt, sci-mathematics/dataplot).
+# Bundled OXS extensions add GPL-2+ (thetaevolve), GPL-3 (xf_*; 2dpbc
+# shipped a GPL-3 LICENSE in 1.2b4), MIT (oommf-mel) and public
+# domain (MF_extensions, oommf-pbc); DMI_C2v, anv_spintevolve,
+# dmexchange6ngbr, sttevolve and the two southampton anisotropies state
+# no licence. verified 2026-10-03
+LICENSE="GPL-2+ GPL-3 MIT public-domain"
 SLOT="2.1"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="doc"
