@@ -18,7 +18,8 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+# No ~arm64: ::gentoo's dev-python/loguru lacks arm64. verified 2026-10-03
+KEYWORDS="~amd64"
 
 RDEPEND="
 	${PYTHON_DEPS}
