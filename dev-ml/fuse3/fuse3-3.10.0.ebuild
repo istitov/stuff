@@ -17,7 +17,8 @@ S="${WORKDIR}/ocamlfuse-${PV}"
 # LICENSE contains GPL-2 despite opam declaring GPL-1+. Verified 2026-06-23.
 LICENSE="GPL-2"
 SLOT="0/${PV}"
-KEYWORDS="~amd64 ~arm64"
+# No ~arm64: ::gentoo's dev-ml/camlidl lacks arm64. verified 2026-10-03
+KEYWORDS="~amd64"
 IUSE="ocamlopt"
 
 RDEPEND="
