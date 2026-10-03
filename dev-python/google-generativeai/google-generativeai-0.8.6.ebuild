@@ -4,7 +4,9 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{12..14} )
+# Pinned to google-ai-generativelanguage 0.6.15, which needs protobuf <6;
+# ::gentoo's only such version has no python3_14. verified 2026-10-03
+PYTHON_COMPAT=( python3_{12..13} )
 
 inherit distutils-r1
 
