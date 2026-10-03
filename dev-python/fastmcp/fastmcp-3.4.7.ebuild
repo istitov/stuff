@@ -19,7 +19,8 @@ S="${WORKDIR}/${P}/fastmcp_slim"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+# No ~arm64: ::gentoo's dev-python/authlib lacks arm64. verified 2026-10-03
+KEYWORDS="~amd64"
 
 RDEPEND="
 	>=dev-python/platformdirs-4.0.0[${PYTHON_USEDEP}]
