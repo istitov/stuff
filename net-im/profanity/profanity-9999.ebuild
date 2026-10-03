@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} )
-inherit git-r3 meson python-single-r1
+inherit flag-o-matic git-r3 meson python-single-r1
 
 DESCRIPTION="A console based XMPP client inspired by Irssi"
 HOMEPAGE="https://profanity-im.github.io"
@@ -60,6 +60,10 @@ pkg_setup() {
 }
 
 src_configure() {
+	# Mismatched declarations trip -Wlto-type-mismatch (bug #932874);
+	# ::gentoo filters LTO too.
+	filter-lto
+
 	local emesonargs=(
 		-Dc-plugins=enabled
 		$(meson_feature gpg pgp)
