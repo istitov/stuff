@@ -10,7 +10,4 @@
     vectors, rotations, complex helpers) shared by MLZ scientific
     software (libformfactor, BornAgain, Steca).
   </longdescription>
-  <upstream>
-    <remote-id type="gitlab">mlz/lib/heinz</remote-id>
-  </upstream>
 </pkgmetadata>
