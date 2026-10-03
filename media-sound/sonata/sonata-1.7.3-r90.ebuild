@@ -29,6 +29,10 @@ done
 unset X
 
 RDEPEND="
+	dev-libs/glib:2[introspection]
+	x11-libs/gdk-pixbuf:2[introspection]
+	x11-libs/gtk+:3[introspection]
+	x11-libs/pango[introspection]
 	$(python_gen_cond_dep '
 		dev-python/pygobject:3[${PYTHON_USEDEP}]
 		dev-python/python-mpd2[${PYTHON_USEDEP}]
@@ -39,22 +43,35 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	mpd? ( media-sound/mpd )
-	x11-libs/gtk+:3
 "
-BDEPEND="virtual/pkgconfig"
+BDEPEND="
+	sys-devel/gettext
+	virtual/pkgconfig
+"
+
+PATCHES=(
+	# PR https://github.com/multani/sonata/pull/167
+	"${FILESDIR}"/sonata-1.7.3-fix_tagedit.patch
+)
 
 distutils_enable_tests unittest
 
 DOCS="CHANGELOG README.rst TODO TRANSLATORS"
 
 src_prepare() {
-	default
+	distutils-r1_src_prepare
 	local entry file flag
 	for entry in "${LANGS_MAP[@]}" ; do
 		file="${entry%%:*}"
 		flag="${entry#*:}"
 		use "l10n_${flag}" || rm "po/${file}.po" || die
 	done
+}
+
+src_compile() {
+	distutils-r1_src_compile
+	# see bug #956771
+	find "${WORKDIR}" -name 'genversion.*' -delete || die
 }
 
 src_install() {
