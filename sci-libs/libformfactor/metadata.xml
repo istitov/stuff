@@ -10,7 +10,4 @@
     prismatic bodies for the BornAgain small-angle scattering simulator
     and other MLZ scientific tools.
   </longdescription>
-  <upstream>
-    <remote-id type="gitlab">mlz/lib/formfactor</remote-id>
-  </upstream>
 </pkgmetadata>
