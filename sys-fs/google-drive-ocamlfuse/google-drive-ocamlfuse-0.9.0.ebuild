@@ -14,7 +14,9 @@ SRC_URI="https://github.com/astrada/${PN}/archive/v${PV}.tar.gz -> ${P}.gh.tar.g
 
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64 ~arm64"
+# No ~arm64: ::gentoo's dev-ml/camlidl and dev-ml/ocaml-sqlite3 lack arm64.
+# verified 2026-10-03
+KEYWORDS="~amd64"
 IUSE="ocamlopt test"
 
 RDEPEND="
