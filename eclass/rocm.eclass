@@ -14,7 +14,7 @@
 # gfx1151 from unofficial to officially supported and adds gfx1152/gfx1153
 # (absent from ::gentoo's eclass entirely).  The practical effect is that
 # amdgpu_targets_gfx1150 becomes a +default rather than an opt-in, which is
-# what this overlay's haarmek host (Ryzen AI 9 HX 370 / Radeon 890M) needs.
+# what a Ryzen AI 9 HX 370 / Radeon 890M test machine needs.
 #
 # `9999` is deliberately LEFT on the 7.* branch: moving it would silently
 # change target defaults for the existing live ebuilds, which is a separate
