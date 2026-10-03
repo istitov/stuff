@@ -1198,7 +1198,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (245) ---
+# --- github (244) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1659,12 +1659,6 @@ prefix = "v"
 ["dev-python/language-tags"]
 source = "github"
 github = "OnroerendErfgoed/language-tags"
-use_max_tag = true
-prefix = "v"
-
-["dev-python/latexrestricted"]
-source = "github"
-github = "gpoore/latexrestricted"
 use_max_tag = true
 prefix = "v"
 
@@ -2932,7 +2926,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (29) ---
+# --- special (28) ---
 
 ["app-text/mupdf"]
 source = "regex"
@@ -3011,11 +3005,6 @@ regex = '"number"\s*:\s*"([^"]+)"'
 source = "github"
 github = "pgf-tikz/pgf"
 use_latest_release = true
-
-["dev-util/claude-code"]
-source = "regex"
-url = "https://downloads.claude.ai/claude-code-releases/latest"
-regex = '([0-9]+(?:\.[0-9]+)+)'
 
 ["dev-util/codex"]
 source = "github"
