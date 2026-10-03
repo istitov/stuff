@@ -14,7 +14,7 @@ inherit distutils-r1 pypi
 MY_PV="2.4.0.dev12"
 DESCRIPTION="Flexible YAML-based configuration system with variable interpolation"
 HOMEPAGE="
-	https://github.com/omry/omegaconf
+	https://github.com/hydra-ecosystem/omegaconf
 	https://pypi.org/project/omegaconf/
 "
 SRC_URI="$(pypi_sdist_url "${PN}" "${MY_PV}")"
