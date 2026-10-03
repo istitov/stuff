@@ -7,7 +7,7 @@ inherit acct-user
 
 DESCRIPTION="User for libinfinity"
 ACCT_USER_ID=-1
-KEYWORDS="~*"
+KEYWORDS="~amd64 ~arm64 ~x86"
 ACCT_USER_GROUPS=( "${PN}" )
 ACCT_USER_HOME='/var/lib/infinote'
 ACCT_USER_HOME_PERMS=770
