@@ -28,18 +28,26 @@ src_install()
 {
 	tclsh oommf.tcl pimake objclean
 
-	local oommf_dir="/opt/oommf"
 	use doc && dodoc "./doc/userguide/userguide.pdf"
 	use doc && dodoc "./doc/progman/progman.pdf"
 	rm -rf "./doc"
 	dodoc README.md LICENSE.md
-	dodir ${oommf_dir} || die
-	mv  * "${ED}"${oommf_dir} || die
-	cat > oommf.sh <<- EOF
-	#!/usr/bin/env sh
-	/opt/oommf/oommf.tcl
-	EOF
+
+	# Each series gets its own tree and launcher, so the slots install side
+	# by side; they all used /opt/oommf and /opt/bin/oommf.sh before.
+	local oommf_dir="/opt/${PN}-${SLOT}"
+	dodir "${oommf_dir}"
+	mv * "${ED}${oommf_dir}" || die
 
 	exeinto /opt/bin
-	doexe oommf.sh
+	newexe - "${PN}-${SLOT}" <<-EOF
+		#!/bin/sh
+		exec tclsh "${EPREFIX}${oommf_dir}/oommf.tcl" "\$@"
+	EOF
+}
+
+pkg_postinst() {
+	elog "Start OOMMF ${SLOT} with ${PN}-${SLOT}; it lives in"
+	elog "${EPREFIX}/opt/${PN}-${SLOT}, so other OOMMF series can be installed"
+	elog "alongside it. The former /opt/bin/oommf.sh launcher is gone."
 }
