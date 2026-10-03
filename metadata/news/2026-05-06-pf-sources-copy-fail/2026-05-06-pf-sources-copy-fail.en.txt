@@ -1,7 +1,7 @@
-Title: pf-sources: CVE-2026-31431, CVE-2026-43037, and CVE-2026-43038 patched
+Title: pf-sources: CVE-2026-31431, -43037, -43038 fixed
 Author: Ivan S. Titov <iohann.s.titov@gmail.com>
 Posted: 2026-05-06
-Revision: 2
+Revision: 3
 News-Item-Format: 2.0
 Display-If-Installed: =sys-kernel/pf-sources-6.1_p6-r2
 Display-If-Installed: =sys-kernel/pf-sources-6.6_p6-r2
