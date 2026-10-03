@@ -13,7 +13,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Memory-efficient cross entropy loss for PyTorch"
 HOMEPAGE="
-	https://github.com/apple/ml-cross-entropy
+	https://github.com/apple-aiml-research/ml-cross-entropy
 	https://pypi.org/project/cut-cross-entropy/
 "
 
