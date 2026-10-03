@@ -8,7 +8,7 @@
   <longdescription lang="en">
     Python bindings for the MuPDF library: a C++ shim wrapping
     app-text/mupdf's C API plus SWIG-generated Python module. Used by
-    dev-python/PyMuPDF as its low-level layer. Bindings are generated
+    dev-python/pymupdf as its low-level layer. Bindings are generated
     at build time from MuPDF headers using libclang
     (dev-python/clang).
   </longdescription>

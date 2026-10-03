@@ -20,7 +20,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
-	~dev-python/PyMuPDF-${PV}[${PYTHON_USEDEP}]
+	~dev-python/pymupdf-${PV}[${PYTHON_USEDEP}]
 	~dev-python/pymupdf-layout-bin-${PV}[${PYTHON_USEDEP}]
 	dev-python/tabulate[${PYTHON_USEDEP}]
 	dev-python/psutil[${PYTHON_USEDEP}]

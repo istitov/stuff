@@ -9,13 +9,16 @@ DISTUTILS_EXT=1
 
 inherit toolchain-funcs distutils-r1
 
+# The GitHub repository and its archive directory keep upstream's casing.
+MY_P="PyMuPDF-${PV}"
 DESCRIPTION="A Python library for manipulation of PDF documents"
 HOMEPAGE="
 	https://github.com/pymupdf/pymupdf
 	https://pymupdf.readthedocs.io
 "
-SRC_URI="https://github.com/pymupdf/${PN}/archive/${PV}.tar.gz
-	-> ${P}.gh.tar.gz"
+SRC_URI="https://github.com/pymupdf/PyMuPDF/archive/${PV}.tar.gz
+	-> ${MY_P}.gh.tar.gz"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="AGPL-3"
 SLOT="0"

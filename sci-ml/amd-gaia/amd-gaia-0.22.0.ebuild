@@ -74,7 +74,7 @@ RDEPEND="
 		ui? (
 			>=dev-python/httpx-0.27.0[${PYTHON_USEDEP}]
 			>=dev-python/psutil-5.9.0[${PYTHON_USEDEP}]
-			dev-python/PyMuPDF[${PYTHON_USEDEP}]
+			dev-python/pymupdf[${PYTHON_USEDEP}]
 			dev-python/pypdf[${PYTHON_USEDEP}]
 			>=dev-python/python-docx-1.1.0[${PYTHON_USEDEP}]
 			>=dev-python/python-pptx-0.6.21[${PYTHON_USEDEP}]

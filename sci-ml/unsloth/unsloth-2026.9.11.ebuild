@@ -98,7 +98,7 @@ RDEPEND="
 			dev-python/ddgs[${PYTHON_USEDEP}]
 			dev-python/fastmcp[${PYTHON_USEDEP}]
 			dev-python/pymupdf4llm[${PYTHON_USEDEP}]
-			dev-python/PyMuPDF[${PYTHON_USEDEP}]
+			dev-python/pymupdf[${PYTHON_USEDEP}]
 			dev-python/sqlite-vec-bin[${PYTHON_USEDEP}]
 		')
 	)

@@ -36,7 +36,7 @@ KEYWORDS="-* ~amd64 ~arm64"
 RESTRICT="bindist mirror strip"
 
 RDEPEND="
-	~dev-python/PyMuPDF-${PV}[${PYTHON_USEDEP}]
+	~dev-python/pymupdf-${PV}[${PYTHON_USEDEP}]
 	~dev-python/mupdf-${MUPDF_PV}:=[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]

@@ -3,3 +3,4 @@ move dev-python/pyUSID dev-python/pyusid
 move dev-python/SciFiReaders dev-python/scifireaders
 move dev-python/pyTEMlib dev-python/pytemlib
 move dev-python/python-igraph dev-python/igraph
+move dev-python/PyMuPDF dev-python/pymupdf
