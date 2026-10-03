@@ -4,4 +4,7 @@
   <maintainer type="person">
     <email>lebedev.vasya@gmail.com</email>
   </maintainer>
+  <use>
+    <flag name="qt5">Build the workbench against Qt 5 instead of Qt 6, using this overlay's revived Qt 5 set and <pkg>dev-python/pyqt5</pkg></flag>
+  </use>
 </pkgmetadata>
