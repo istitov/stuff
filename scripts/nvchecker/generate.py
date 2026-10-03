@@ -697,7 +697,7 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
     #
     # This WILL report drift the tree is not going to act on immediately, and
     # that is the point: app-text/mupdf, dev-python/mupdf and
-    # dev-python/PyMuPDF move in lockstep (PyMuPDF pins dev-python/mupdf:= and
+    # dev-python/pymupdf move in lockstep (PyMuPDF pins dev-python/mupdf:= and
     # builds against its headers), so mupdf cannot lead PyMuPDF. Upstream is at
     # 1.28.3 while PyPI's PyMuPDF is still 1.28.2 -- previously invisible,
     # since none of the three could signal it. Bump all three together when

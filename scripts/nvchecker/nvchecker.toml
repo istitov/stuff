@@ -18,10 +18,6 @@ pypi = "beancount"
 source = "pypi"
 pypi = "fava"
 
-["dev-python/SciFiReaders"]
-source = "pypi"
-pypi = "SciFiReaders"
-
 ["dev-python/abtem"]
 source = "pypi"
 pypi = "abtem"
@@ -426,6 +422,10 @@ pypi = "hyperspy-gui-traitsui"
 source = "pypi"
 pypi = "hyperspyui"
 
+["dev-python/igraph"]
+source = "pypi"
+pypi = "igraph"
+
 ["dev-python/instanttensor-bin"]
 source = "pypi"
 pypi = "instanttensor"
@@ -694,18 +694,6 @@ pypi = "py-key-value-aio"
 source = "pypi"
 pypi = "py4dstem"
 
-["dev-python/pyNSID"]
-source = "pypi"
-pypi = "pyNSID"
-
-["dev-python/pyTEMlib"]
-source = "pypi"
-pypi = "pyTEMlib"
-
-["dev-python/pyUSID"]
-source = "pypi"
-pypi = "pyUSID"
-
 ["dev-python/pyausaxs"]
 source = "pypi"
 pypi = "pyausaxs"
@@ -778,6 +766,10 @@ pypi = "pymupdf4llm"
 source = "pypi"
 pypi = "pynida"
 
+["dev-python/pynsid"]
+source = "pypi"
+pypi = "pyNSID"
+
 ["dev-python/pyopencl"]
 source = "pypi"
 pypi = "pyopencl"
@@ -814,6 +806,10 @@ pypi = "pyswarms"
 source = "pypi"
 pypi = "pytablewriter"
 
+["dev-python/pytemlib"]
+source = "pypi"
+pypi = "pytemlib"
+
 ["dev-python/pytest-mpl"]
 source = "pypi"
 pypi = "pytest-mpl"
@@ -822,10 +818,6 @@ pypi = "pytest-mpl"
 source = "pypi"
 pypi = "python-docx"
 
-["dev-python/python-igraph"]
-source = "pypi"
-pypi = "igraph"
-
 ["dev-python/python-pptx"]
 source = "pypi"
 pypi = "python-pptx"
@@ -833,6 +825,10 @@ pypi = "python-pptx"
 ["dev-python/python-socketio"]
 source = "pypi"
 pypi = "python-socketio"
+
+["dev-python/pyusid"]
+source = "pypi"
+pypi = "pyUSID"
 
 ["dev-python/pyvista"]
 source = "pypi"
@@ -889,6 +885,10 @@ pypi = "sasdata"
 ["dev-python/sasmodels"]
 source = "pypi"
 pypi = "sasmodels"
+
+["dev-python/scifireaders"]
+source = "pypi"
+pypi = "scifireaders"
 
 ["dev-python/scikit-optimize"]
 source = "pypi"
@@ -1467,12 +1467,6 @@ github = "dmbaturin/otoml"
 use_max_tag = true
 prefix = "v"
 
-["dev-python/PyMuPDF"]
-source = "github"
-github = "pymupdf/PyMuPDF"
-use_max_tag = true
-prefix = "v"
-
 ["dev-python/addict"]
 source = "github"
 github = "mewwts/addict"
@@ -1820,6 +1814,12 @@ prefix = "v"
 ["dev-python/ptyrad"]
 source = "github"
 github = "chiahao3/ptyrad"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/pymupdf"]
+source = "github"
+github = "pymupdf/PyMuPDF"
 use_max_tag = true
 prefix = "v"
 
