@@ -14,7 +14,7 @@ SRC_URI="https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/refs/tags/v$
 S="${WORKDIR}/${Sparse_P}/SuiteSparse_config"
 LICENSE="BSD"
 SLOT="0/7"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="openmp"
 
 # SuiteSparse_config links BLAS, so retain it for consumers at runtime.
@@ -31,7 +31,9 @@ pkg_setup() {
 
 src_configure() {
 	# SuiteSparse 7 uses positive options. Restrict BLAS discovery to libblas.so
-	# so CMake cannot select an untracked MKL under /opt.
+	# so CMake cannot select an untracked MKL under /opt. An empty include
+	# postfix installs headers to /usr/include, where ::gentoo's SuiteSparse
+	# libraries put theirs, instead of /usr/include/suitesparse.
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=ON
 		-DBUILD_STATIC_LIBS=OFF
@@ -40,6 +42,7 @@ src_configure() {
 		-DSUITESPARSE_USE_CUDA=OFF
 		-DSUITESPARSE_USE_PYTHON=OFF
 		-DBLA_VENDOR=Generic
+		-DSUITESPARSE_INCLUDEDIR_POSTFIX=""
 	)
 	cmake_src_configure
 }
