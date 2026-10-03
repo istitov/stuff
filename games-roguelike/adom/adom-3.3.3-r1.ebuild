@@ -20,7 +20,13 @@ KEYWORDS="~amd64 ~arm ~x86"
 RESTRICT="strip"
 QA_FLAGS_IGNORED="/opt/bin/adom"
 
-DEPEND="!arm? ( >=sys-libs/ncurses-5.0[tinfo] )"
+# The amd64 and x86 binaries link libncurses.so.5 and libtinfo.so.5, which
+# ncurses-compat builds only with USE=tinfo; the arm binary is static.
+# verified 2026-10-03
+RDEPEND="
+	amd64? ( sys-libs/ncurses-compat:5[tinfo] )
+	x86? ( sys-libs/ncurses-compat:5[tinfo] )
+"
 
 src_install() {
 	exeinto /opt/bin
@@ -30,8 +36,8 @@ src_install() {
 	echo "${EPREFIX}"/var/lib/${PN} > adom_ds.cfg || die
 	doins adom_ds.cfg
 
-	edos2unix docs/{adomfaq.txt,manual.txt,readme1st.txt}
-	dodoc docs/{adomfaq.txt,manual.txt,readme1st.txt}
+	edos2unix docs/{adomfaq.txt,credits.txt,manual.txt,readme1st.txt}
+	dodoc docs/{adomfaq.txt,credits.txt,manual.txt,readme1st.txt}
 
 	keepdir /var/lib/${PN}
 	fperms g+w /var/lib/${PN}
