@@ -7,4 +7,4 @@ inherit acct-group
 
 DESCRIPTION="Group for libinfinity"
 ACCT_GROUP_ID=-1
-KEYWORDS="~*"
+KEYWORDS="~amd64 ~arm64 ~x86"
