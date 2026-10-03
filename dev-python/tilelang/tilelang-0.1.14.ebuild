@@ -65,7 +65,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${P}-cudahostcxx.patch"
+	"${FILESDIR}/${PN}-0.1.12-cudahostcxx.patch"
 )
 
 # Upstream caps z3-solver at <4.15.5, but Gentoo provides newer versions.

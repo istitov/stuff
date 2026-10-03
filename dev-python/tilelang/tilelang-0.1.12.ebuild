@@ -67,7 +67,7 @@ BDEPEND="
 # Cython >=3.3 rejects upstream's cp38 limited API target; patch it to cp310,
 # matching requires-python >=3.10. # verified 2026-08-31
 PATCHES=(
-	"${FILESDIR}/${P}-cudahostcxx.patch"
+	"${FILESDIR}/${PN}-0.1.12-cudahostcxx.patch"
 	"${FILESDIR}/${P}-py-limited-api-310.patch"
 )
 

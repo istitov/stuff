@@ -65,7 +65,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${P}-cudahostcxx.patch"
+	"${FILESDIR}/${PN}-0.1.12-cudahostcxx.patch"
 	# Cython >=3.3 requires a newer limited API target.
 	"${FILESDIR}/${P}-py-limited-api-310.patch"
 )
