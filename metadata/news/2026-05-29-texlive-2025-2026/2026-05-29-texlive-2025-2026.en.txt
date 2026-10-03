@@ -1,34 +1,35 @@
-Title: TeX Live 2025/2026 imported — masked during initial testing
+Title: TeX Live 2025/2026 imported, masked for testing
 Author: Ivan S. Titov <iohann.s.titov@gmail.com>
 Posted: 2026-05-29
-Revision: 2
+Revision: 3
 News-Item-Format: 2.0
 Display-If-Installed: app-text/texlive-core
 
-The stuff overlay now ships TeX Live 2025 and 2026 -- texlive-core, the 39
-dev-texlive/* collections, and the split build tools -- ahead of ::gentoo's
-TL2024.
+The stuff overlay now ships TeX Live 2025 and 2026 -- texlive-core, the
+39 dev-texlive/* collections, and the split build tools -- ahead of
+::gentoo's TL2024.
 
 == Masked for now ==
 
-The set is ~amd64 and package.masked for an initial testing window, so it is
-not pulled by default, even on ~amd64. Stable amd64 users are unaffected
-(::gentoo's TL2024 is stable).
+The set is ~amd64 and package.masked for an initial testing window, so
+it is not pulled by default, even on ~amd64. Stable amd64 users are
+unaffected (::gentoo's TL2024 is stable).
 
-UPDATE: the mask was lifted on 2026-07-03, later than the 2026-06-12 date
-given when this item was first posted. The TeX Live block is no longer in
-profiles/package.mask, so no unmasking is needed. See the news item
-2026-07-03-texlive-2025-2026-unmasked.
+UPDATE: the mask was lifted on 2026-07-03, later than the 2026-06-12
+date given when this item was first posted. The TeX Live block is no
+longer in profiles/package.mask, so no unmasking is needed. See the news
+item 2026-07-03-texlive-2025-2026-unmasked.
 
 == Upgrading ==
 
-Some packages moved between collections across TL years. The ebuilds carry
-blockers that order the moves, but they resolve cleanly only when the whole
-set upgrades together -- use `emerge -uDN @world`. A partial merge can hit
-protect-owned collisions; add FEATURES="-protect-owned" if you must do one.
+Some packages moved between collections across TL years. The ebuilds
+carry blockers that order the moves, but they resolve cleanly only when
+the whole set upgrades together -- use `emerge -uDN @world`. A partial
+merge can hit protect-owned collisions; add FEATURES="-protect-owned" if
+you must do one.
 
 == Known limitation ==
 
-xelatex font-by-name (\setmainfont{Latin Modern Roman}) needs a fontconfig
-snippet for the texmf font dir -- the standard upstream TeX Live step.
-pdflatex and lualatex are unaffected.
+xelatex font-by-name (\setmainfont{Latin Modern Roman}) needs a
+fontconfig snippet for the texmf font dir -- the standard upstream TeX
+Live step. pdflatex and lualatex are unaffected.
