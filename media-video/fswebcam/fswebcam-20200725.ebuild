@@ -5,7 +5,9 @@ EAPI=8
 
 DESCRIPTION="Neat and simple webcam grabbing app"
 HOMEPAGE="https://www.sanslogic.co.uk/fswebcam/
-	https://github.com/fsphil/fswebcam/"
+	https://codeberg.org/fsphil/fswebcam"
+# The repository moved to Codeberg; GitHub keeps serving this tag's archive,
+# which the Manifest pins.
 SRC_URI="https://github.com/fsphil/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="GPL-2"

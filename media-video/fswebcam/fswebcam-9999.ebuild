@@ -7,8 +7,8 @@ inherit git-r3
 
 DESCRIPTION="Neat and simple webcam grabbing app"
 HOMEPAGE="https://www.sanslogic.co.uk/fswebcam/
-	https://github.com/fsphil/fswebcam/"
-EGIT_REPO_URI="https://github.com/fsphil/fswebcam.git"
+	https://codeberg.org/fsphil/fswebcam"
+EGIT_REPO_URI="https://codeberg.org/fsphil/fswebcam.git"
 
 LICENSE="GPL-2"
 SLOT="0"

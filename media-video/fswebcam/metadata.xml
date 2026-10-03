@@ -9,6 +9,6 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <upstream>
-    <remote-id type="github">fsphil/fswebcam</remote-id>
+    <remote-id type="codeberg">fsphil/fswebcam</remote-id>
   </upstream>
 </pkgmetadata>
