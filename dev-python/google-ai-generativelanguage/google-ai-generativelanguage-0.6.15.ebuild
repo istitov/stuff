@@ -4,7 +4,9 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{12..14} )
+# This release requires protobuf <6, and ::gentoo's only such version,
+# 5.29.6, has no python3_14. verified 2026-10-03
+PYTHON_COMPAT=( python3_{12..13} )
 
 # The sdist uses underscored normalization.
 PYPI_PN="google_ai_generativelanguage"
