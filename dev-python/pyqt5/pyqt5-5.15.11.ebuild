@@ -8,6 +8,10 @@ DISTUTILS_USE_PEP517=sip
 PYPI_NO_NORMALIZE=1
 PYPI_PN=PyQt5
 PYTHON_COMPAT=( python3_{12..14} )
+# qmake-utils defines qt5_get_bindir and qt5_get_qmake_args, used below,
+# only for EAPI 8; pkgcheck's UnusedInherits misses functions defined
+# under that condition, so the finding is false. EAPI 9 would lose them.
+# verified 2026-10-03
 inherit distutils-r1 flag-o-matic multiprocessing pypi qmake-utils
 
 DESCRIPTION="Python bindings for the Qt framework"
