@@ -1,0 +1,26 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
+
+DESCRIPTION="Pythonic bindings for FFmpeg's libraries"
+HOMEPAGE="https://github.com/PyAV-Org/PyAV https://pypi.org/project/av/"
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
+
+# Test configuration exits during collection.
+RESTRICT="test"
+
+RDEPEND="media-video/ffmpeg:="
+DEPEND="${RDEPEND}"
+BDEPEND="
+	>=dev-python/cython-3.3.0[${PYTHON_USEDEP}]
+	<dev-python/cython-4[${PYTHON_USEDEP}]
+	>=dev-python/setuptools-78[${PYTHON_USEDEP}]
+"
