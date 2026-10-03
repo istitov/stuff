@@ -12,7 +12,6 @@
     <flag name="omemo">Enable OMEMO encryption</flag>
     <flag name="omemo-qrcode">Enable ability to display OMEMO QR code</flag>
     <flag name="otr">Enable Off-the-Record support (encryption)</flag>
-    <flag name="spellcheck">Enable spellchecking support via app-text/enchant</flag>
     <flag name="xscreensaver">Use x11-libs/libXScrnSaver for checking idle time</flag>
   </use>
   <upstream>

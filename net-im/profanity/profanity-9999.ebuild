@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/profanity-im/profanity.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="gpg gtk libnotify omemo omemo-qrcode otr python spellcheck test xscreensaver"
+IUSE="gpg gtk libnotify omemo omemo-qrcode otr python spell test xscreensaver"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="
 	omemo-qrcode? ( omemo )
@@ -39,7 +39,7 @@ RDEPEND="
 	omemo-qrcode? ( media-gfx/qrencode:= )
 	otr? ( >=net-libs/libotr-4.0 )
 	python? ( ${PYTHON_DEPS} )
-	spellcheck? ( app-text/enchant:2 )
+	spell? ( app-text/enchant:2 )
 	xscreensaver? (
 		x11-libs/libX11
 		x11-libs/libXScrnSaver
@@ -70,7 +70,7 @@ src_configure() {
 		$(meson_feature omemo-qrcode)
 		$(meson_feature otr)
 		$(meson_feature python python-plugins)
-		$(meson_feature spellcheck)
+		$(meson_feature spell spellcheck)
 		$(meson_feature xscreensaver)
 		-Dtests=$(usex test true false)
 		-Domemo-backend=libsignal
