@@ -1,0 +1,21 @@
+From 90a2922a281dccf15bd2e14853a55b1abfbfc7a9 Mon Sep 17 00:00:00 2001
+From: Philip Heron <phil@sanslogic.co.uk>
+Date: Mon, 3 Apr 2023 22:59:12 +0100
+Subject: [PATCH] Fix use after free / double free in V4L1 source. Issue #60
+
+---
+ src_v4l1.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src_v4l1.c b/src_v4l1.c
+index b815c5b..c32e1e8 100644
+--- a/src_v4l1.c
++++ b/src_v4l1.c
+@@ -668,7 +668,6 @@ int src_v4l_set_read(src_t *src)
+ 	if(!s->buffer)
+ 	{
+ 		ERROR("Out of memory.");
+-		src_v4l_close(src);
+ 		return(-1);
+ 	}
+ 	

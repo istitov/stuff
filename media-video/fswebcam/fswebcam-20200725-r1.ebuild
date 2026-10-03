@@ -16,3 +16,9 @@ KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 DEPEND="media-libs/gd[truetype,png,jpeg]"
 RDEPEND="${DEPEND}"
+
+PATCHES=(
+	# Upstream 90a2922a (2023): the V4L1 source closed itself on a failed
+	# buffer allocation, then its caller closed it again.
+	"${FILESDIR}"/${P}-v4l1-double-free.patch
+)
