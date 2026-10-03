@@ -1,0 +1,9 @@
+# Accepted NonsolvableDepsInStable findings on the stable amd64 profiles,
+# read by amd64-solvable.py. One "<category>/<package> <atom>" per line,
+# <atom> being the unsolvable dependency pkgcheck lists under "solutions".
+# Every entry needs a dated reason above it.
+
+# Upstream Kokoros has never tagged a release, so sci-ml/kokoros exists
+# only as an unkeyworded live ebuild. system-kokoro is off by default, and
+# enabling it means accepting that live package. accepted 2026-10-03
+sci-ml/lemonade sci-ml/kokoros
