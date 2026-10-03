@@ -15,6 +15,7 @@ Emerge with USE=qt5 for mantid. Drop once mantid moves to Qt6.
   </maintainer>
   <use>
     <flag name="designer">Build plugin for Qt Designer</flag>
+    <flag name="qt5">Build the Qt 5 variant of the library, which the Qt 5 build of <pkg>sci-physics/mantid</pkg> links against</flag>
   </use>
   <upstream>
     <maintainer status="active">
