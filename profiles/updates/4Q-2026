@@ -1,1 +1,2 @@
 move dev-python/pyNSID dev-python/pynsid
+move dev-python/pyUSID dev-python/pyusid

@@ -28,7 +28,7 @@ RDEPEND="
 	>=dev-python/sidpy-0.11.2[${PYTHON_USEDEP}]
 	dev-python/numba[${PYTHON_USEDEP}]
 	>=dev-python/ipython-7.1.0[${PYTHON_USEDEP}]
-	dev-python/pyUSID[${PYTHON_USEDEP}]
+	dev-python/pyusid[${PYTHON_USEDEP}]
 	dev-python/gdown[${PYTHON_USEDEP}]
 	dev-python/mrcfile[${PYTHON_USEDEP}]
 	dev-python/pycroscopy-gwyfile[${PYTHON_USEDEP}]
