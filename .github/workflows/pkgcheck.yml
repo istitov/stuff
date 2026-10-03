@@ -74,7 +74,7 @@ jobs:
             fi
           fi
 
-      - uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
+      - uses: pkgcore/pkgcheck-action@e8ab0a10709ca59a3c35f5d9669bd9f6890295e1 # main 2026-09-21
         with:
           # Same by-design exit-set exemption as pkgcheck-full below.  The
           # action defaults to --exit GentooCI (fails on warning-level), and a
@@ -90,14 +90,14 @@ jobs:
       # niche profiles, which also hid real amd64 install failures. Run it
       # on the stable amd64 profiles only, against the accepted list in
       # scripts/pkgcheck/amd64-solvable.expected, in the same image and
-      # with the same ::gentoo sync as pkgcheck-action. verified 2026-10-03
+      # with the same masters sync as pkgcheck-action. verified 2026-10-03
       - name: amd64 dependency solvability
         uses: docker://ghcr.io/pkgcore/pkgcheck:latest
         with:
           entrypoint: /usr/bin/bash
           args: >
             -c "
-            pmaint sync gentoo || exit 1 ;
+            pmaint sync --import-masters . || exit 1 ;
             git config --global --add safe.directory '*' ;
             python3 scripts/pkgcheck/amd64-solvable.py --commits ${{ steps.base.outputs.ref }}
             "
@@ -111,7 +111,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
+      - uses: pkgcore/pkgcheck-action@e8ab0a10709ca59a3c35f5d9669bd9f6890295e1 # main 2026-09-21
         # No --net: pkgcheck-action probes the flat `mirror://gentoo/<file>`
         # form, which 404s under the GLEP 75 hashed-subdir layout — the
         # resulting DeadUrl findings drowned out real issues. The same
@@ -142,7 +142,7 @@ jobs:
           entrypoint: /usr/bin/bash
           args: >
             -c "
-            pmaint sync gentoo || exit 1 ;
+            pmaint sync --import-masters . || exit 1 ;
             git config --global --add safe.directory '*' ;
             python3 scripts/pkgcheck/amd64-solvable.py
             "
@@ -239,7 +239,7 @@ jobs:
           fi
 
       - if: steps.detect.outputs.run == 'true'
-        uses: pkgcore/pkgcheck-action@8491e92faa1010d5c6947c114d23215e5a74684e # main 2026-03-24
+        uses: pkgcore/pkgcheck-action@e8ab0a10709ca59a3c35f5d9669bd9f6890295e1 # main 2026-09-21
         with:
           # Full repo scan => same by-design exit-set exemption as the other
           # two jobs, else a config-only push trips VisibleVcsPkg /
