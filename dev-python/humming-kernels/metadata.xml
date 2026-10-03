@@ -7,7 +7,7 @@
   </maintainer>
   <upstream>
     <remote-id type="pypi">humming-kernels</remote-id>
-    <remote-id type="github">inclusionAI/humming</remote-id>
-    <bugs-to>https://github.com/inclusionAI/humming/issues</bugs-to>
+    <remote-id type="github">vllm-project/humming</remote-id>
+    <bugs-to>https://github.com/vllm-project/humming/issues</bugs-to>
   </upstream>
 </pkgmetadata>

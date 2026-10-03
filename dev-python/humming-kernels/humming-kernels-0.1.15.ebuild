@@ -11,7 +11,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="JIT-compiled quantization GEMM kernel library (vLLM humming backend)"
 HOMEPAGE="
-	https://github.com/inclusionAI/humming
+	https://github.com/vllm-project/humming
 	https://pypi.org/project/humming-kernels/
 "
 S="${WORKDIR}/humming_kernels-${PV}"
