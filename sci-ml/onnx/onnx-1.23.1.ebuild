@@ -36,7 +36,7 @@ BDEPEND="
 	dev-python/nanobind[${PYTHON_USEDEP}]
 "
 
-PATCHES=( "${FILESDIR}/${PN}-1.23.0-export-shared-symbols.patch" )
+PATCHES=( "${FILESDIR}/${PN}-1.22.0-export-shared-symbols.patch" )
 
 src_prepare() {
 	cmake_src_prepare
