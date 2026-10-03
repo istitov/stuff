@@ -24,3 +24,20 @@ RDEPEND=">=dev-python/dill-0.4.1[${PYTHON_USEDEP}]"
 BDEPEND="test? ( dev-python/test[${PYTHON_USEDEP}] )"
 
 distutils_enable_tests unittest
+
+src_prepare() {
+	local PATCHES=(
+		# https://github.com/uqfoundation/multiprocess/pull/197
+		"${FILESDIR}/${PN}-0.70.17-wheel-tag.patch"
+	)
+
+	distutils-r1_src_prepare
+
+	# https://github.com/uqfoundation/multiprocess/issues/196
+	sed -i -e '/python-tag/d' setup.cfg || die
+}
+
+python_test() {
+	cd "${BUILD_DIR}/install$(python_get_sitedir)" || die
+	eunittest
+}
