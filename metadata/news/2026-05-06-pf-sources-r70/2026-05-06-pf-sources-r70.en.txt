@@ -1,7 +1,7 @@
-Title: pf-sources: -r70 curated patch design and tracking commitment
+Title: pf-sources: -r70 curated patch design
 Author: Ivan S. Titov <iohann.s.titov@gmail.com>
 Posted: 2026-05-06
-Revision: 1
+Revision: 2
 News-Item-Format: 2.0
 Display-If-Installed: =sys-kernel/pf-sources-6.1_p6-r70
 Display-If-Installed: =sys-kernel/pf-sources-6.2_p7-r70
