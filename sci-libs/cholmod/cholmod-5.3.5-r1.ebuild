@@ -44,6 +44,8 @@ pkg_setup() {
 
 src_configure() {
 	# SuiteSparse 7 replaces per-module toggles with the grouped CHOLMOD_GPL.
+	# An empty include postfix installs headers to /usr/include, where
+	# ::gentoo's SuiteSparse libraries put theirs, not /usr/include/suitesparse.
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=ON
 		-DBUILD_STATIC_LIBS=OFF
@@ -56,6 +58,7 @@ src_configure() {
 		-DCHOLMOD_USE_CUDA=$(usex cuda ON OFF)
 		-DCHOLMOD_USE_OPENMP=$(usex openmp ON OFF)
 		-DBLA_VENDOR=Generic
+		-DSUITESPARSE_INCLUDEDIR_POSTFIX=""
 	)
 
 	# CUDA 13 rejects SuiteSparse's default compute_52; use 75/80 unless the
