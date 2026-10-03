@@ -38,7 +38,7 @@ DEPEND="
 
 # Early-access preview; recheck on each bump. Direct DMA needs PCI_P2PDMA and a
 # filesystem directly on the device; mapped/stacked storage forces POSIX mode.
-# Only the kernel option is checkable. On haarmek with LVM and no P2PDMA,
+# Only the kernel option is checkable. On a test machine with LVM and no P2PDMA,
 # hipFileRead returned -999 instead of unsupported/fallback. verified 2026-08-31
 CONFIG_CHECK="~PCI_P2PDMA"
 
