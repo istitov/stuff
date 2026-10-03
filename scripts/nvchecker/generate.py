@@ -1069,8 +1069,8 @@ SKIP_PKGS: dict[str, str] = {
     # versioned by the TL release + tlpdb SVN revision and bumped as a set via
     # the tlpdb regenerator, not from any per-package upstream. The standalone
     # tools that DO have independent upstreams (dev-tex/{biber,biblatex,pgf,
-    # latex-beamer,minted,latex2pydata}, app-text/dvisvgm, dev-python/
-    # latexrestricted) are auto-tracked normally and intentionally absent here.
+    # minted,latex2pydata}, app-text/dvisvgm, dev-python/latexrestricted)
+    # are auto-tracked normally and intentionally absent here.
     "dev-texlive/texlive-basic":           _TL_SKIP,
     "dev-texlive/texlive-bibtexextra":     _TL_SKIP,
     "dev-texlive/texlive-binextra":        _TL_SKIP,

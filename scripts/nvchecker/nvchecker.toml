@@ -1198,7 +1198,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (246) ---
+# --- github (245) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1974,12 +1974,6 @@ github = "plk/biblatex"
 use_max_tag = true
 prefix = "v"
 # note: from HOMEPAGE
-
-["dev-tex/latex-beamer"]
-source = "github"
-github = "josephwright/beamer"
-use_max_tag = true
-prefix = "v"
 
 ["dev-tex/latex2pydata"]
 source = "github"
