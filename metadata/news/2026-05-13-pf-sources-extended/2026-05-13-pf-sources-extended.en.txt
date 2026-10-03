@@ -1,7 +1,7 @@
-Title: sys-kernel: pf-sources curated-patchset model relocated to pf-sources-extended
+Title: Curated pf-sources moved to pf-sources-extended
 Author: Ivan S. Titov <iohann.s.titov@gmail.com>
 Posted: 2026-05-13
-Revision: 1
+Revision: 2
 News-Item-Format: 2.0
 Display-If-Installed: =sys-kernel/pf-sources-6.1_p6-r70
 Display-If-Installed: =sys-kernel/pf-sources-6.2_p7-r70
@@ -38,8 +38,8 @@ name now differentiates the model.
 
 == What to do ==
 
-sys-kernel/pf-sources-extended carries KEYWORDS="" and must be explicitly
-accepted. Add it to /etc/portage/package.accept_keywords:
+sys-kernel/pf-sources-extended carries KEYWORDS="" and must be
+explicitly accepted. Add it to /etc/portage/package.accept_keywords:
 
     =sys-kernel/pf-sources-extended-X.Y_pZ **
 
