@@ -9,6 +9,9 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <upstream>
+    <!-- Development moved to Codeberg; the 20200725 release is fetched
+         from the archived GitHub repository. -->
     <remote-id type="codeberg">fsphil/fswebcam</remote-id>
+    <remote-id type="github">fsphil/fswebcam</remote-id>
   </upstream>
 </pkgmetadata>
