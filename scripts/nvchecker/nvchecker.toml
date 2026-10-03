@@ -3019,11 +3019,6 @@ source = "regex"
 url = "https://www.ctan.org/json/2.0/pkg/glossaries"
 regex = '"number"\s*:\s*"([^"]+)"'
 
-["dev-tex/latexmk"]
-source = "regex"
-url = "https://www.ctan.org/json/2.0/pkg/latexmk"
-regex = '"number"\s*:\s*"([^"]+)"'
-
 ["dev-tex/pgf"]
 source = "github"
 github = "pgf-tikz/pgf"
@@ -3071,6 +3066,11 @@ to_pattern = '0_pre\1'
 source = "pypi"
 pypi = "unsloth"
 
+["sci-physics/oommf"]
+source = "regex"
+url = "https://math.nist.gov/oommf/"
+regex = 'OOMMF ([0-9]+\.[0-9]+[ab][0-9]+) User.s Guide'
+
 ["sci-physics/profex"]
 source = "regex"
 url = "https://www.profex-xrd.org/download/linux-2/"
@@ -3090,7 +3090,6 @@ prefix = "v"
 # --- skipped ---
 
 # ["app-portage/portopts"] skipped: live-only ebuild (no release tracking)
-# ["dev-libs/blingbling"] skipped: live-only ebuild (no release tracking)
 # ["dev-libs/libstrophe"] skipped: live-only ebuild (no release tracking)
 # ["dev-util/qbs"] skipped: live-only ebuild (no release tracking)
 # ["games-misc/fortune-mod-lorquotes"] skipped: live-only ebuild (no release tracking)
@@ -3214,18 +3213,13 @@ prefix = "v"
 # ["media-plugins/deadbeef-quick-search"] skipped: upstream GitHub repository removed; no release feed
 # ["media-plugins/deadbeef-vfs-rar"] skipped: upstream GitHub repository removed; no release feed
 # ["media-sound/deadbeef"] skipped: sourceforge/deadbeef — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
-# ["sci-libs/amd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
-# ["sci-libs/camd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
-# ["sci-libs/ccolamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/cholmod"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
-# ["sci-libs/colamd"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-ml/bigcode-eval"] skipped: we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind
 # ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/demeter"] skipped: Demeter removed from CPAN; no public upstream tracking possible
 # ["sci-physics/ifeffit"] skipped: custom upstream at sourceforge.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
-# ["sci-physics/oommf"] skipped: custom upstream at math.nist.gov; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-visualization/gwyddion"] skipped: custom upstream at gwyddion.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sys-kernel/pf-sources"] skipped: branch-tip signal tracked in maintainer-local nvchecker-local.toml — pf-sources uses a GA-only curated-patch model where 'ship vs upstream tag' is not the right drift question; what matters is when codeberg pf-kernel/linux gains a new -pfN tag we want to evaluate for inclusion
 # ["sys-kernel/pf-sources-extended"] skipped: branch-tip signal tracked in maintainer-local nvchecker-local.toml — pf-sources uses a GA-only curated-patch model where 'ship vs upstream tag' is not the right drift question; what matters is when codeberg pf-kernel/linux gains a new -pfN tag we want to evaluate for inclusion

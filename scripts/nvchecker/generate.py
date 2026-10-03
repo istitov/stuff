@@ -619,12 +619,13 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "source": "pypi",
         "pypi": "unsloth",
     },
-    # latexmk and glossaries are TeX Live-shipped but ALSO have independent
-    # upstream releases, and were skipped as untrackable ("no tag scheme",
-    # "add a regex tracker"). CTAN exposes a machine-readable canonical
-    # version per package at /json/2.0/pkg/<name>, so track that: it is the
-    # authoritative release number, independent of whichever TL snapshot we
-    # happen to ship.
+    # glossaries is TeX Live-shipped but ALSO has independent upstream
+    # releases, and was skipped as untrackable ("no tag scheme", "add a regex
+    # tracker"). CTAN exposes a machine-readable canonical version per
+    # package at /json/2.0/pkg/<name>, so track that: it is the authoritative
+    # release number, independent of whichever TL snapshot we happen to ship.
+    # (latexmk was tracked the same way until it left the overlay on
+    # 2026-10-03; ::gentoo carries it.)
     #
     # Deliberately the `regex` source and not `jq`, even though the endpoint is
     # JSON: nvchecker's jq source imports the `jq` Python binding, which is not
@@ -632,9 +633,8 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
     # too. The document contains exactly one `"number"` key (checked), so the
     # anchored regex is unambiguous.
     #
-    # verified 2026-08-29: latexmk 4.88 (2026-03-09), glossaries 5.1
-    # (2026-04-21) -- both equal to the PVs the tree ships, so nothing was
-    # being hidden; they were simply invisible.
+    # verified 2026-08-29: glossaries 5.1 (2026-04-21) -- equal to the PV the
+    # tree ships, so nothing was being hidden; it was simply invisible.
     # profex has no tags, no PyPI, no release API -- upstream is a WordPress
     # site -- so the SRC_URI heuristic classified it "unknown" and it was
     # skipped, meaning no drift report has ever looked at it. It went from
@@ -650,10 +650,19 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "url": "https://www.profex-xrd.org/download/linux-2/",
         "regex": r"profex-([0-9][0-9.]*)\.tar\.gz",
     },
-    "dev-tex/latexmk": {
+    # oommf ships date-stamped tarballs from math.nist.gov with no tags or
+    # API, so it was skipped as a custom upstream, and 2.1a3 (2026-09-30)
+    # went unreported. The dist/ listing names every tarball but answers
+    # most clients with 403; the front page answers nvchecker's own user
+    # agent and links one user's guide per series ("OOMMF 2.1a3 User's
+    # Guide"), so match those and take the maximum. 2.1a3 compares equal to
+    # the PV 2.1_alpha3 under PEP 440. verified 2026-10-03
+    "sci-physics/oommf": {
         "source": "regex",
-        "url": "https://www.ctan.org/json/2.0/pkg/latexmk",
-        "regex": r'"number"\s*:\s*"([^"]+)"',
+        "url": "https://math.nist.gov/oommf/",
+        # `.` stands for the apostrophe in "User's": the generator writes
+        # TOML literal strings, which cannot contain one.
+        "regex": r"OOMMF ([0-9]+\.[0-9]+[ab][0-9]+) User.s Guide",
     },
     "dev-tex/glossaries": {
         "source": "regex",
