@@ -171,7 +171,6 @@ REQUIRED_USE="
 	opengl? ( || ( gtk3 qt6 wayland ) )
 	python? ( ${PYTHON_REQUIRED_USE} )
 	tesseract? ( contrib )
-	truetype? ( contrib )
 	testprograms? ( test )
 	test? ( || ( ffmpeg gstreamer ) jpeg png tiff features )
 	wayland? ( !vtk )
@@ -180,6 +179,10 @@ REQUIRED_USE="
 RESTRICT="!test? ( test )"
 
 # Rebuild for flatbuffers subslot changes despite its header-only API.
+# OpenCV 5 uses freetype only in contrib's gapi text rendering, so truetype
+# pulls it in only with contrib; the desktop profiles enable truetype
+# globally, and requiring contrib for it failed their defaults.
+# verified 2026-10-03
 COMMON_DEPEND="
 	dev-libs/protobuf:=[protoc(+),protobuf(+),${MULTILIB_USEDEP}]
 	virtual/zlib:=[${MULTILIB_USEDEP}]
@@ -269,7 +272,7 @@ COMMON_DEPEND="
 	tbb? ( >=dev-cpp/tbb-2022.1.0:=[${MULTILIB_USEDEP}] )
 	tesseract? ( app-text/tesseract[${MULTILIB_USEDEP}] )
 	tiff? ( media-libs/tiff:=[${MULTILIB_USEDEP}] )
-	truetype? ( media-libs/freetype:2[${MULTILIB_USEDEP}] )
+	contrib? ( truetype? ( media-libs/freetype:2[${MULTILIB_USEDEP}] ) )
 	vaapi? ( media-libs/libva[${MULTILIB_USEDEP}] )
 	vtk? (
 		sci-libs/vtk:=[rendering,cuda=]
