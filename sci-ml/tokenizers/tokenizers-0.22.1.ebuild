@@ -31,6 +31,7 @@ if [[ ${PKGBUMPING} != ${PVR} ]]; then
 fi
 
 LICENSE="Apache-2.0"
+# Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD ISC MIT MPL-2.0
 	Unicode-DFS-2016
