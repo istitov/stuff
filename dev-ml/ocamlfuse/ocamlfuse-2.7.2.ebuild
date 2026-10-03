@@ -15,7 +15,8 @@ SRC_URI="https://github.com/astrada/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0/${PV}"
-KEYWORDS="~amd64 ~arm64"
+# No ~arm64: ::gentoo's dev-ml/camlidl lacks arm64. verified 2026-10-03
+KEYWORDS="~amd64"
 IUSE="ocamlopt"
 
 RDEPEND="
