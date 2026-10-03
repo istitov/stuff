@@ -21,6 +21,7 @@ on:
       - 'licenses/**'
       - 'metadata/layout.conf'
       - 'metadata/pkgcheck.conf'
+      - 'scripts/pkgcheck/**'
       - '.github/workflows/pkgcheck.yml'
   pull_request:
     branches: [master]
@@ -85,6 +86,22 @@ jobs:
           # Keep this list in sync with pkgcheck-full.  verified 2026-07-26.
           args: --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords --commits ${{ steps.base.outputs.ref }}
 
+      # pkgcheck.conf disables NonsolvableDepsInStable repo-wide for the
+      # niche profiles, which also hid real amd64 install failures. Run it
+      # on the stable amd64 profiles only, against the accepted list in
+      # scripts/pkgcheck/amd64-solvable.expected, in the same image and
+      # with the same ::gentoo sync as pkgcheck-action. verified 2026-10-03
+      - name: amd64 dependency solvability
+        uses: docker://ghcr.io/pkgcore/pkgcheck:latest
+        with:
+          entrypoint: /usr/bin/bash
+          args: >
+            -c "
+            pmaint sync gentoo || exit 1 ;
+            git config --global --add safe.directory '*' ;
+            python3 scripts/pkgcheck/amd64-solvable.py --commits ${{ steps.base.outputs.ref }}
+            "
+
   pkgcheck-full:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -116,6 +133,19 @@ jobs:
           # upsert could never reach the auto-close-on-success path. The
           # error-level scan is clean. verified 2026-07-26.
           args: --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords
+
+      # The amd64-only NonsolvableDepsInStable pass, as in pkgcheck-diff,
+      # over the whole repository. Its failure opens the same issue.
+      - name: amd64 dependency solvability
+        uses: docker://ghcr.io/pkgcore/pkgcheck:latest
+        with:
+          entrypoint: /usr/bin/bash
+          args: >
+            -c "
+            pmaint sync gentoo || exit 1 ;
+            git config --global --add safe.directory '*' ;
+            python3 scripts/pkgcheck/amd64-solvable.py
+            "
 
       # Turn a failing scheduled run into a visible issue rather than a
       # silent red dot in the Actions tab. On failure, find an existing
