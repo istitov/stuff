@@ -34,7 +34,7 @@ RDEPEND="
 	dev-python/simpleitk-bin[${PYTHON_USEDEP}]
 	dev-python/scikit-image[${PYTHON_USEDEP}]
 	dev-python/scikit-learn[${PYTHON_USEDEP}]
-	>=dev-python/pyNSID-0.0.7[${PYTHON_USEDEP}]
+	>=dev-python/pynsid-0.0.7[${PYTHON_USEDEP}]
 	>=dev-python/sidpy-0.12.7[${PYTHON_USEDEP}]
 	>=dev-python/SciFiReaders-0.12.4[${PYTHON_USEDEP}]
 	dev-python/xraylib[${PYTHON_USEDEP}]

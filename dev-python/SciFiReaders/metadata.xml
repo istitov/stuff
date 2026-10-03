@@ -8,7 +8,7 @@
   <use>
     <flag name="hyperspy">Enable the HyperSpy converter (<pkg>dev-python/hyperspy</pkg>)</flag>
     <flag name="mcp">Install the Model Context Protocol server (<pkg>dev-python/mcp</pkg>)</flag>
-    <flag name="nsid">Enable the pyNSID reader backend (<pkg>dev-python/pyNSID</pkg>)</flag>
+    <flag name="nsid">Enable the pyNSID reader backend (<pkg>dev-python/pynsid</pkg>)</flag>
     <flag name="tiff">Enable TIFF image support via <pkg>dev-python/tifffile</pkg></flag>
   </use>
   <upstream>

@@ -8,6 +8,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 
 # Preserve the legacy sdist's mixed-case filename.
 PYPI_NO_NORMALIZE=1
+PYPI_PN="pyNSID"
 
 inherit distutils-r1 pypi
 

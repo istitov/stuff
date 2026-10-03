@@ -37,7 +37,7 @@ RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	hyperspy? ( dev-python/hyperspy[${PYTHON_USEDEP}] )
 	mcp? ( <dev-python/mcp-2.0[${PYTHON_USEDEP}] )
-	nsid? ( dev-python/pyNSID[${PYTHON_USEDEP}] )
+	nsid? ( dev-python/pynsid[${PYTHON_USEDEP}] )
 	tiff? ( dev-python/tifffile[${PYTHON_USEDEP}] )
 "
 
