@@ -12,10 +12,7 @@ inherit distutils-r1
 MY_PV="26.06.00"
 
 DESCRIPTION="RAPIDS Memory Manager — C++ library (librmm)"
-HOMEPAGE="
-	https://github.com/rapidsai/rmm
-	https://pypi.org/project/librmm/
-"
+HOMEPAGE="https://github.com/rapidsai/rmm"
 SRC_URI="
 	https://github.com/rapidsai/rmm/archive/refs/tags/v${MY_PV}.tar.gz
 		-> rmm-${MY_PV}.gh.tar.gz
