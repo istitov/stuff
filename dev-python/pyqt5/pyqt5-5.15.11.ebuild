@@ -17,9 +17,16 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc ~ppc64 ~riscv ~x86"
 
+# ::gentoo's desktop profile enabled gui, multimedia, network, printsupport
+# and widgets for pyqt5 (bug #540046) until its Qt5 cleanup of 2026-05-23.
+# Without that entry the desktop profiles fail REQUIRED_USE. Portage would
+# read the same line from this repository's profiles/package.use, but
+# pkgcore and pkgcheck ignore that file, so all but multimedia are IUSE
+# defaults here; no consumer in this overlay needs multimedia.
+# verified 2026-10-03
 IUSE="
-	dbus debug declarative examples gles2-only gui multimedia
-	network opengl printsupport sql +ssl svg testlib widgets x11extras
+	dbus debug declarative examples gles2-only +gui multimedia
+	+network opengl +printsupport sql +ssl svg testlib +widgets x11extras
 "
 
 # Derived from project.py qmake_QT declarations and SIP imports.
