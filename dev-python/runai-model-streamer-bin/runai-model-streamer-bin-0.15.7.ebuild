@@ -17,7 +17,7 @@ MY_WHEEL_ARM64="${MY_PN//-/_}-${MY_PV}-py3-none-manylinux2014_aarch64.whl"
 
 DESCRIPTION="Run:ai's fast multi-tensor PyTorch model streamer (binary wheel)"
 HOMEPAGE="
-	https://github.com/run-ai/runai-model-streamer
+	https://github.com/dsx-ai-factory/model-streamer
 	https://pypi.org/project/runai-model-streamer/
 "
 SRC_URI="
