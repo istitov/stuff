@@ -49,12 +49,12 @@ BDEPEND="virtual/pkgconfig"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.15-CFLAGS.patch
-	"${FILESDIR}"/${P}-Makefile.patch
+	"${FILESDIR}"/${PN}-1.28.3-Makefile.patch
 	"${FILESDIR}"/${PN}-1.24.8-add-desktop-pc-files.patch
-	"${FILESDIR}"/${P}-cross-fixes.patch
+	"${FILESDIR}"/${PN}-1.28.3-cross-fixes.patch
 	"${FILESDIR}"/${PN}-1.24.1-darwin.patch
 	# See bug #662352
-	"${FILESDIR}"/${P}-openssl-x11.patch
+	"${FILESDIR}"/${PN}-1.28.3-openssl-x11.patch
 	# General cross fixes from Debian (refreshed)
 	"${FILESDIR}"/${PN}-1.21.1-fix-aliasing-violation.patch
 )
