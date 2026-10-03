@@ -1,2 +1,3 @@
 move dev-python/pyNSID dev-python/pynsid
 move dev-python/pyUSID dev-python/pyusid
+move dev-python/SciFiReaders dev-python/scifireaders
