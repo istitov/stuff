@@ -64,7 +64,7 @@ RDEPEND="
 		dev-python/pyvista[${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
 			dev-python/xatlas[${PYTHON_USEDEP}]
-			dev-python/python-igraph[${PYTHON_USEDEP}]
+			dev-python/igraph[${PYTHON_USEDEP}]
 			dev-python/pymeshfix[${PYTHON_USEDEP}]
 		')
 	)

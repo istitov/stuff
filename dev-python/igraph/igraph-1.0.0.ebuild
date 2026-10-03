@@ -5,7 +5,6 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
-PYPI_PN="igraph"
 
 inherit distutils-r1 pypi
 
@@ -14,7 +13,6 @@ HOMEPAGE="
 	https://github.com/igraph/python-igraph
 	https://pypi.org/project/igraph/
 "
-S="${WORKDIR}/${PYPI_PN}-${PV}"
 
 LICENSE="GPL-2+"
 SLOT="0"
