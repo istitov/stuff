@@ -13,7 +13,7 @@
 # tex@gentoo.org
 # @AUTHOR:
 # Original Author: Alexis Ballier <aballier@gentoo.org>
-# @SUPPORTED_EAPIS: 7 8
+# @SUPPORTED_EAPIS: 7 8 9
 # @BLURB: Provide generic install functions so that modular texlive's texmf ebuild will only have to inherit this eclass
 # @DESCRIPTION:
 # Purpose: Provide generic install functions so that modular texlive's texmf ebuilds will
@@ -79,14 +79,15 @@
 # e.g. for enabling/disabling a feature
 
 case ${EAPI} in
-	7|8) ;;
+	7|8) inherit eapi9-pipestatus ;;
+	9) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 if [[ -z ${_TEXLIVE_MODULE_ECLASS} ]]; then
 _TEXLIVE_MODULE_ECLASS=1
 
-inherit eapi9-pipestatus texlive-common
+inherit texlive-common
 
 HOMEPAGE="https://www.tug.org/texlive/"
 
@@ -166,7 +167,9 @@ texlive-module_src_unpack() {
 		# collect files with same destination dir
 		files+=( "${i}" )
 	done < "${T}/reloclist"
-	[[ ${#files[@]} -gt 0 ]] && { mv "${files[@]}" "${dir}" || die; }
+	if [[ ${#files[@]} -gt 0 ]]; then
+		mv "${files[@]}" "${dir}" || die
+	fi
 }
 
 # @FUNCTION: texlive-module_add_format
