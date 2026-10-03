@@ -19,7 +19,7 @@
 # tex@gentoo.org
 # @AUTHOR:
 # Original Author: Alexis Ballier <aballier@gentoo.org>
-# @SUPPORTED_EAPIS: 7 8
+# @SUPPORTED_EAPIS: 7 8 9
 # @BLURB: Provide various functions used by both texlive-core and texlive modules
 # @DESCRIPTION:
 # Purpose: Provide various functions used by both texlive-core and texlive
@@ -30,10 +30,11 @@
 case ${EAPI} in
 	7) inherit eapi8-dosym eapi9-pipestatus ;;
 	8) inherit eapi9-pipestatus ;;
+	9) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-inherit edo
+inherit edob
 
 if [[ -z ${_TEXLIVE_COMMON_ECLASS} ]]; then
 _TEXLIVE_COMMON_ECLASS=1
