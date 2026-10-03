@@ -23,10 +23,7 @@ S=${WORKDIR}/${MY_P}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-
-BDEPEND="
-	test? ( dev-python/spur[${PYTHON_USEDEP}] )
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
+# The test suite imports spur at module level, and spur 0.3.23, its last
+# release, requires paramiko <4, which ::gentoo no longer ships.
+# verified 2026-10-03
+RESTRICT="test"
