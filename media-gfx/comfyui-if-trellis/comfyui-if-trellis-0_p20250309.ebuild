@@ -3,7 +3,8 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..13} )
+# dev-python/spconv-cu126 ships only its cp313 wheel. verified 2026-10-03
+PYTHON_COMPAT=( python3_13 )
 
 inherit python-single-r1
 
