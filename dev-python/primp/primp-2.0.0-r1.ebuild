@@ -119,7 +119,7 @@ CRATES="
 	getrandom@0.3.4
 	getrandom@0.4.3
 	glob@0.3.4
-	h2@0.4.15
+	h2@0.4.19
 	h3-quinn@0.0.10
 	h3@0.0.8
 	half@2.7.1
@@ -286,7 +286,7 @@ CRATES="
 	rustls-native-certs@0.8.4
 	rustls-pki-types@1.15.1
 	rustls-webpki@0.103.14
-	rustls@0.23.43
+	rustls@0.23.45
 	rustversion@1.0.23
 	ryu@1.0.23
 	same-file@1.0.6
@@ -443,6 +443,10 @@ QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/primp.*.so"
 
 # Tests require live network access.
 RESTRICT="test"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-2.0.0-cargo-lock-rustsec.patch"
+)
 
 src_unpack() {
 	cargo_src_unpack
