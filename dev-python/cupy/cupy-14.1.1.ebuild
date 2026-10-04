@@ -49,7 +49,7 @@ PATCHES=(
 src_prepare() {
 	# eapply cannot decompress xz patches.
 	local p b
-	mkdir -p "${T}"/patches
+	mkdir -p "${T}"/patches || die
 	for p in "${FILESDIR}"/*.patch.xz; do
 		b=${p##*/}
 		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
