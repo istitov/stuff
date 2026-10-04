@@ -109,7 +109,7 @@ src_prepare() {
 	rocm_use_clang
 	grep -qF 'amdclang' Utilities/Toolchain.py ||
 		die "amdclang anchor moved in Utilities/Toolchain.py; toolchain validation would look for a compiler that is not installed"
-	sed "s/amdclang/$(basename "$CC")/g" -i Utilities/Toolchain.py || die
+	sed "s/amdclang/$(basename "${CC}")/g" -i Utilities/Toolchain.py || die
 
 	popd || die
 
