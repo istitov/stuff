@@ -12,7 +12,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="Tunable pipelines for hyperparameter optimization (atop optuna)"
 HOMEPAGE="
 	https://github.com/pyannote/pyannote-pipeline
-	https://pypi.org/project/pyannote.pipeline/
+	https://pypi.org/project/pyannote-pipeline/
 "
 
 LICENSE="MIT"
