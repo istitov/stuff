@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=9
 
 TL_SOURCE_VERSION=20250308
 inherit branding flag-o-matic toolchain-funcs libtool texlive-common
