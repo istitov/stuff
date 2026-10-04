@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=9
 
 DESCRIPTION="ROCclr runtime implementation for non-AMD HIP platforms, like NVIDIA"
 HOMEPAGE="https://github.com/ROCm/rocm-systems/tree/develop/projects/hipother"
