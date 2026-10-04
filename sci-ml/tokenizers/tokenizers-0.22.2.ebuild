@@ -63,23 +63,23 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	cd bindings/python
+	cd bindings/python || die
 	eapply "${FILESDIR}"/${PN}-0.21.2-test.patch
 	distutils-r1_src_prepare
 }
 
 src_configure() {
-	cd tokenizers
+	cd tokenizers || die
 	cargo_src_configure
-	cd ../bindings/python
+	cd ../bindings/python || die
 	distutils-r1_src_configure
 }
 
 src_compile() {
 	export RUSTONIG_SYSTEM_LIBONIG=1
-	cd tokenizers
+	cd tokenizers || die
 	cargo_src_compile
-	cd ../bindings/python
+	cd ../bindings/python || die
 	distutils-r1_src_compile
 }
 

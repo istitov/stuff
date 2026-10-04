@@ -377,28 +377,28 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	cd bindings/python
+	cd bindings/python || die
 	eapply "${FILESDIR}"/${PN}-0.21.2-test.patch
 	distutils-r1_src_prepare
 }
 
 src_configure() {
-	cd tokenizers
+	cd tokenizers || die
 	cargo_src_configure
-	cd ../bindings/python
+	cd ../bindings/python || die
 	distutils-r1_src_configure
 }
 
 src_compile() {
 	export RUSTONIG_SYSTEM_LIBONIG=1
-	cd tokenizers
+	cd tokenizers || die
 	cargo_src_compile
-	cd ../bindings/python
+	cd ../bindings/python || die
 	distutils-r1_src_compile
 }
 
 src_test() {
-	cd bindings/python
+	cd bindings/python || die
 	local -x EPYTEST_IGNORE=( benches/test_tiktoken.py )
 	local -x EPYTEST_DESELECT=(
 		tests/bindings/test_encoding.py::TestEncoding::test_char_to_token
@@ -460,7 +460,7 @@ src_test() {
 }
 
 src_install() {
-	cd tokenizers
-	cd ../bindings/python
+	cd tokenizers || die
+	cd ../bindings/python || die
 	distutils-r1_src_install
 }
