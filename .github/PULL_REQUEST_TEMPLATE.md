@@ -26,6 +26,8 @@ Short PR descriptions are fine — the diff carries the detail.
       minimal/maximal feature sets where USE flags materially change them.
 - [ ] `pkgcheck scan --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords
       --commits <base>` exits clean locally (the framing and exit set CI uses).
+- [ ] `scripts/pkgcheck/amd64-solvable.py --commits <base>` passes (the
+      stable-amd64 dependency-solvability check CI also runs).
 - [ ] `pkgdev manifest` was re-run if resolved distfiles or checksums changed,
       including for an ordinary version bump.
 - [ ] `scripts/nvchecker/nvchecker.toml` was regenerated for package-set or
