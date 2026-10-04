@@ -1,0 +1,21 @@
+From 4161a01714329600f864bc5cf30192d1893c5a54 Mon Sep 17 00:00:00 2001
+From: Ryan Schmidt <git@ryandesign.com>
+Date: Tue, 1 Aug 2023 15:16:00 -0500
+Subject: [PATCH] Include <stdio.h> for printf
+
+---
+ configure.ac | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.ac b/configure.ac
+index 866227c0..e9bec5d1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -105,6 +105,7 @@ AC_TRY_COMPILE([#include <dirent.h>
+ AC_MSG_CHECKING(for O_NOFOLLOW)
+ AC_TRY_COMPILE([#include <sys/types.h>
+                 #include <sys/stat.h>
++                #include <stdio.h>
+                 #include <fcntl.h> ],
+                [ printf("%d\n", O_NOFOLLOW); ],
+                [ AC_MSG_RESULT(yes)

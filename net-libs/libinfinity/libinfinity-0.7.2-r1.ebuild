@@ -42,6 +42,12 @@ BDEPEND="
 
 DOCS=( AUTHORS ChangeLog NEWS README.md TODO )
 
+PATCHES=(
+	# Upstream 4161a01 (2023): GCC 14 fails the O_NOFOLLOW probe without
+	# <stdio.h>, so directory walks followed symlinks.
+	"${FILESDIR}"/${P}-o-nofollow-probe.patch
+)
+
 src_prepare() {
 	default
 	eautoreconf
@@ -60,6 +66,7 @@ src_configure() {
 
 src_install() {
 	default
+	find "${ED}" -name '*.la' -delete || die
 	if use server; then
 		newinitd "${FILESDIR}/infinoted.initd" infinoted
 		newconfd "${FILESDIR}/infinoted.confd" infinoted
