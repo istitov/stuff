@@ -8,7 +8,7 @@ EAPI=8
 inherit desktop flag-o-matic toolchain-funcs xdg
 
 DESCRIPTION="A lightweight PDF viewer and toolkit written in portable C"
-HOMEPAGE="https://mupdf.com/ https://cgit.ghostscript.com/mupdf.git/"
+HOMEPAGE="https://mupdf.com/"
 SRC_URI="https://mupdf.com/downloads/archive/${P}-source.tar.gz"
 S="${WORKDIR}"/${P}-source
 
