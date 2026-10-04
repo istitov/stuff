@@ -113,7 +113,7 @@ src_prepare() {
 	python_fix_shebang -q "${shebangs[@]}"
 
 	# Make validation accept the selected Clang driver.
-	sed -e "s/amdclang/$(basename "$CC")/g" \
+	sed -e "s/amdclang/$(basename "${CC}")/g" \
 		-i tensilelite/Tensile/Toolchain/Validators.py || die
 	sed -e "s:\$(ROCM_PATH)/bin/amdclang++:$(get_llvm_prefix)/bin/clang++:g" \
 		-i tensilelite/Makefile || die

@@ -153,7 +153,7 @@ src_prepare() {
 	# Make validation accept the selected Clang driver.
 	grep -qF 'amdclang' tensilelite/Tensile/Toolchain/Validators.py ||
 		die "amdclang anchor moved in tensilelite/Tensile/Toolchain/Validators.py"
-	sed -e "s/amdclang/$(basename "$CC")/g" \
+	sed -e "s/amdclang/$(basename "${CC}")/g" \
 		-i tensilelite/Tensile/Toolchain/Validators.py || die
 	grep -qF '$(ROCM_PATH)/bin/amdclang++' tensilelite/Makefile ||
 		die "amdclang++ anchor moved in tensilelite/Makefile"
