@@ -16,8 +16,8 @@ CRATES="
 	aho-corasick@1.1.4
 	atomic-waker@1.1.2
 	autocfg@1.5.0
-	aws-lc-rs@1.15.2
-	aws-lc-sys@0.35.0
+	aws-lc-rs@1.18.1
+	aws-lc-sys@0.45.0
 	base64@0.13.1
 	base64@0.22.1
 	bincode@2.0.1
@@ -25,7 +25,7 @@ CRATES="
 	bitflags@2.10.0
 	bumpalo@3.19.1
 	byteorder@1.5.0
-	bytes@1.11.0
+	bytes@1.12.1
 	castaway@0.2.4
 	cc@1.2.52
 	cfg-if@1.0.4
@@ -35,7 +35,7 @@ CRATES="
 	console@0.15.11
 	crc32fast@1.5.0
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	darling@0.20.11
 	darling_core@0.20.11
@@ -152,8 +152,8 @@ CRATES="
 	ring@0.17.14
 	rustc-hash@2.1.1
 	rustls-pki-types@1.13.2
-	rustls-webpki@0.103.8
-	rustls@0.23.36
+	rustls-webpki@0.103.15
+	rustls@0.23.45
 	rustversion@1.0.22
 	ryu@1.0.22
 	serde-pyobject@0.8.0
@@ -286,7 +286,7 @@ LICENSE="Apache-2.0"
 # Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD CDLA-Permissive-2.0
-	ISC MIT MPL-2.0 openssl Unicode-3.0
+	ISC MIT MPL-2.0 Unicode-3.0
 "
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
@@ -305,6 +305,10 @@ EPYTEST_DESELECT=(
 )
 
 distutils_enable_tests pytest
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.2.14-cargo-lock-rustsec.patch"
+)
 
 src_test() {
 	# Avoid model downloads required by default-feature doctests.
