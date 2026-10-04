@@ -44,7 +44,7 @@ CRATES="
 	core2@0.4.0
 	crc32fast@1.5.0
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	crossterm@0.29.0
 	crossterm_winapi@0.9.1
@@ -188,6 +188,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="icy-sixel sixel"
 REQUIRED_USE="?? ( sixel icy-sixel )"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-1.6.1-cargo-lock-rustsec.patch"
+)
 
 src_configure() {
 	local myfeatures=(
