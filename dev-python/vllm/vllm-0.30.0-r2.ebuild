@@ -190,7 +190,6 @@ CRATES="
 	hex@0.4.3
 	hf-hub@0.5.0
 	hmac@0.12.1
-	hound@3.5.1
 	http-body-util@0.1.3
 	http-body@1.0.1
 	http@1.4.0
@@ -280,7 +279,6 @@ CRATES="
 	moxcms@0.8.1
 	multimap@0.10.1
 	native-tls@0.2.18
-	ndarray@0.16.1
 	ndarray@0.17.2
 	nom@7.1.3
 	nu-ansi-term@0.50.3
@@ -388,7 +386,6 @@ CRATES="
 	rmp-serde@1.3.1
 	rmp@0.8.15
 	rmpv@1.3.1
-	rubato@0.16.2
 	rustc-hash@1.1.0
 	rustc-hash@2.1.1
 	rustc_version@0.4.1
@@ -482,7 +479,7 @@ CRATES="
 	system-configuration@0.7.0
 	target-lexicon@0.13.5
 	task-local@0.1.1
-	tekken-rs@0.1.1
+	tekken@0.2.0
 	tempfile@3.27.0
 	thiserror-ext-derive@0.3.0
 	thiserror-ext@0.3.0
@@ -492,7 +489,6 @@ CRATES="
 	thiserror@2.0.18
 	thread_local@1.1.9
 	tiff@0.11.3
-	tiktoken-rs@0.7.0
 	tiktoken-rs@0.9.1
 	time-core@0.1.8
 	time-macros@0.2.27
@@ -639,7 +635,7 @@ CRATES="
 	zune-jpeg@0.5.15
 "
 declare -A GIT_CRATES=(
-	[llm-multimodal]='https://github.com/smg-project/llm-multimodal;15adba5e025d8636ba4a334fb379b1371f6196a1;llm-multimodal-%commit%'
+	[llm-multimodal]='https://github.com/smg-project/llm-multimodal;24c676dd49d73f05cb4068aade2e60397a5c0afe;llm-multimodal-%commit%'
 	[oss-harmony]='https://github.com/oss-harmony/harmony;76e849426cc092f84509e31a17027755f67d662a;harmony-%commit%'
 )
 
@@ -649,21 +645,23 @@ CARGO_OPTIONAL=1
 inherit cargo cuda distutils-r1 flag-o-matic pypi rocm toolchain-funcs
 
 # Match upstream's CMake revisions and pre-stage every dependency for offline builds.
-VLLM_CUTLASS_TAG="4.4.2"
+VLLM_CUTLASS_TAG="4.7.1"
 VLLM_DEEPGEMM_COMMIT="8b1392b978f5a03c828dd1711090d7fb50958b8a"
 VLLM_DEEPGEMM_CUTLASS_COMMIT="f3fde58372d33e9a5650ba7b80fc48b3b49d40c8"
 VLLM_DEEPGEMM_FMT_COMMIT="553ec11ec06fbe0beebfbb45f9dc3c9eabd83d28"
-VLLM_FA_COMMIT="06bdd47c0d0383daf6a2ff0c418faff9c6da16e5"
+VLLM_DEEPSELECT_COMMIT="d96d33afe1fab0d6066da49cdc91e64c2bee65ea"
+VLLM_DEEPSELECT_CUTLASS_COMMIT="ae6bccf341fb4410241f696ba06873023d5ce4ed"
+VLLM_FA_COMMIT="506341a143fcabd4bb79052a7605ada727d6b3f5"
 VLLM_FA_CUTLASS_COMMIT="62750a2b75c802660e4894434dc55e839f322277"
-VLLM_FLASHMLA_COMMIT="0397728d511c4e3d94ea3a01d8dda8654525a611"
+VLLM_FLASHMLA_COMMIT="0eee43b12f034b657133cf2afca6a72ebb6efccf"
 VLLM_FLASHMLA_CUTLASS_COMMIT="147f5673d0c1c3dcf66f78d677fd647e4a020219"
-VLLM_FMHA_SM100_COMMIT="087c161814d4d9c735b46c21212a09e5f8eb92fa"
+VLLM_FMHA_SM100_COMMIT="f355c37eb4e1413f21ee2ad8bbad25079e6bef9d"
 VLLM_FMHA_SM100_CUTLASS_COMMIT="eb61c911471867a5fd2466bfd8f29306cea6ebf8"
 VLLM_ONEDNN_TAG="3.13"
 VLLM_QUTLASS_COMMIT="e74319e3405ce6d71965732880f5dc1f52371f64"
-VLLM_FLASHKDA_COMMIT="ee0be888cd0e972f9409bf53756f8c38c6652173"
+VLLM_FLASHKDA_COMMIT="b59532f1f464fbd536272780e30df5bf6a2ccc02"
 VLLM_FLASHKDA_CUTLASS_COMMIT="5c149f52a436782210263fb2f19b354443a61c6a"
-VLLM_TML_FA4_COMMIT="b206834606ed5b5f21f8eed6b0683f528ea9cf7d"
+VLLM_TML_FA4_COMMIT="75765e76a9c2c012c1f6ecd64577eb646eb4d303"
 VLLM_TRITON_KERNELS_TAG="3.5.1"
 
 DESCRIPTION="High-throughput, memory-efficient inference and serving engine for LLMs"
@@ -687,6 +685,10 @@ SRC_URI+="
 			-> vllm-DeepGEMM-cutlass-${VLLM_DEEPGEMM_CUTLASS_COMMIT:0:7}.gh.tar.gz
 		https://github.com/fmtlib/fmt/archive/${VLLM_DEEPGEMM_FMT_COMMIT}.tar.gz
 			-> vllm-DeepGEMM-fmt-${VLLM_DEEPGEMM_FMT_COMMIT:0:7}.gh.tar.gz
+		https://github.com/vllm-project/DeepSelect/archive/${VLLM_DEEPSELECT_COMMIT}.tar.gz
+			-> vllm-DeepSelect-${VLLM_DEEPSELECT_COMMIT:0:7}.gh.tar.gz
+		https://github.com/NVIDIA/cutlass/archive/${VLLM_DEEPSELECT_CUTLASS_COMMIT}.tar.gz
+			-> vllm-DeepSelect-cutlass-${VLLM_DEEPSELECT_CUTLASS_COMMIT:0:7}.gh.tar.gz
 		https://github.com/vllm-project/flash-attention/archive/${VLLM_FA_COMMIT}.tar.gz
 			-> vllm-flash-attn-${VLLM_FA_COMMIT:0:7}.gh.tar.gz
 		https://github.com/NVIDIA/cutlass/archive/${VLLM_FA_CUTLASS_COMMIT}.tar.gz
@@ -735,7 +737,7 @@ REQUIRED_USE="
 # Use system OpenMP instead of cpu.txt's proprietary intel-openmp. Require
 # caffe2-r90+ to avoid its former public MKL/MPI link pollution.
 # amd-quark is Quark-only and supports Python 3.11/3.12; install it separately.
-# CUDA pins quack-kernels-0.6.4 and cutlass-dsl-4.6.2 as an ABI-matched pair;
+# CUDA pins quack-kernels-0.6.5 and cutlass-dsl-4.7.1 as an ABI-matched pair;
 # cutlass-dsl supplies cu13 libraries transitively.
 # humming is optional and lazy; verified without humming-kernels 2026-07-05.
 # Single-GPU mode still needs caffe2[distributed,gloo] for CPU coordination and
@@ -746,17 +748,19 @@ REQUIRED_USE="
 # pkgcore cannot validate the protobuf any-of; preserve its 5.29.6-or-6.33.5+
 # gap and review dependency edits manually. Verified 2026-09-02.
 #
-# 0.29.0 keeps torch 2.13 and unchanged CPU/ROCm requirements. It raises the
-# transformers and huggingface_hub floors, pins flashinfer 0.6.18 exactly, and
-# adds instanttensor. CMake moves FA, FlashMLA, and FlashKDA; stage FlashKDA's
-# newly required nested cutlass. Cargo.lock grows to 623 crates. CUDA sm_86
-# built and generated OPT-125M with graphs and torch.compile on 2026-09-09;
-# SM90-only FlashKDA remains compile-unverified.
+# 0.30.0 keeps torch 2.13 and the CPU requirements. It raises the
+# huggingface_hub and openai floors and moves mcp onto the 2.x line that the
+# earlier <2.0 cap was waiting for. CUDA takes flashinfer 0.6.18.post1 and the
+# cutlass-dsl 4.7.1 / quack-kernels 0.6.5 pair. ROCm's new
+# mooncake-transfer-engine-rocm is omitted: every import is guarded and serves
+# only the Mooncake KV connectors. CMake moves FA, FlashMLA, MSA, FlashKDA and
+# tml-fa4, raises CUTLASS to 4.7.1, and adds DeepSelect (SM100-only) with its
+# own nested cutlass. Cargo.lock shrinks to 619 crates. verified 2026-09-22
 RDEPEND="
 	~sci-ml/pytorch-2.13.0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/caffe2[distributed,gloo]
 	>=sci-ml/transformers-5.10.4[${PYTHON_SINGLE_USEDEP}]
-	>=sci-ml/huggingface_hub-1.28.0[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/huggingface_hub-1.31.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/tokenizers-0.21.1[${PYTHON_SINGLE_USEDEP}]
 	>=dev-python/xgrammar-0.2.1[${PYTHON_SINGLE_USEDEP}]
 	<dev-python/xgrammar-1.0.0[${PYTHON_SINGLE_USEDEP}]
@@ -781,7 +785,7 @@ RDEPEND="
 		<dev-python/fastapi-0.137.0[${PYTHON_USEDEP}]
 		>=dev-python/starlette-1.0.1[${PYTHON_USEDEP}]
 		>=dev-python/aiohttp-3.13.3[${PYTHON_USEDEP}]
-		>=dev-python/openai-2.0.0[${PYTHON_USEDEP}]
+		>=dev-python/openai-2.25.0[${PYTHON_USEDEP}]
 		>=dev-python/pydantic-2.12.0[${PYTHON_USEDEP}]
 		>=dev-python/prometheus-client-0.18.0[${PYTHON_USEDEP}]
 		dev-python/pillow[${PYTHON_USEDEP}]
@@ -822,7 +826,8 @@ RDEPEND="
 		>=dev-python/anthropic-0.71.0[${PYTHON_USEDEP}]
 		>=dev-python/model-hosting-container-standards-0.1.14[${PYTHON_USEDEP}]
 		<dev-python/model-hosting-container-standards-1.0.0[${PYTHON_USEDEP}]
-		<dev-python/mcp-2.0[${PYTHON_USEDEP}]
+		>=dev-python/mcp-2.0.0[${PYTHON_USEDEP}]
+		<dev-python/mcp-3[${PYTHON_USEDEP}]
 		>=dev-python/opentelemetry-sdk-1.27.0[${PYTHON_USEDEP}]
 		>=dev-python/opentelemetry-api-1.27.0[${PYTHON_USEDEP}]
 		>=dev-python/opentelemetry-exporter-otlp-1.27.0[${PYTHON_USEDEP}]
@@ -845,11 +850,11 @@ RDEPEND="
 		~sci-ml/torchaudio-2.11.0
 		~sci-ml/torchvision-0.28.0[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/xgrammar-0.2.2[cuda,${PYTHON_SINGLE_USEDEP}]
-		~dev-python/flashinfer-python-0.6.18[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/flashinfer-python-0.6.18_p1[${PYTHON_SINGLE_USEDEP}]
 		>=dev-python/instanttensor-bin-0.1.9[${PYTHON_SINGLE_USEDEP}]
 		>=sci-ml/torchcodec-0.14[cuda,${PYTHON_SINGLE_USEDEP}]
 		~dev-python/tilelang-0.1.12[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
-		~dev-python/quack-kernels-0.6.4[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/quack-kernels-0.6.5[${PYTHON_SINGLE_USEDEP}]
 		humming? ( ~dev-python/humming-kernels-0.1.12[${PYTHON_SINGLE_USEDEP}] )
 		$(python_gen_cond_dep '
 			~dev-python/nvtx-0.2.15[${PYTHON_USEDEP}]
@@ -858,7 +863,7 @@ RDEPEND="
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
 			>=dev-python/fastsafetensors-0.3.3[${PYTHON_SINGLE_USEDEP}]
 			>=dev-python/nvidia-cudnn-frontend-1.19.1[${PYTHON_USEDEP}]
-			~dev-python/nvidia-cutlass-dsl-4.6.2[${PYTHON_USEDEP}]
+			~dev-python/nvidia-cutlass-dsl-4.7.1[${PYTHON_USEDEP}]
 			~virtual/triton-3.7.1[${PYTHON_USEDEP}]
 		')
 		dev-util/nvidia-cuda-toolkit:=
@@ -890,6 +895,15 @@ RDEPEND="
 		>=sci-libs/hipCUB-7.2:=
 	)
 "
+DEPEND="
+	rust? (
+		app-arch/zstd:=
+		dev-libs/libpcre2:=
+		dev-libs/openssl:=
+	)
+"
+RDEPEND+=" ${DEPEND}"
+
 # Gentoo has no viable setuptools <81 slot; setup.py uses no removed APIs.
 # Recheck the upstream cap on bumps. Verified 2026-05-16.
 BDEPEND="
@@ -905,7 +919,7 @@ BDEPEND="
 	')
 	rust? (
 		${RUST_DEPEND}
-		dev-lang/perl
+		virtual/pkgconfig
 	)
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
@@ -923,7 +937,7 @@ RESTRICT="test"
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 
 PATCHES=(
-	"${FILESDIR}/${PN}-0.29.0-cargo-lock-rustsec.patch"
+	"${FILESDIR}/${PN}-0.30.0-cargo-lock-rustsec.patch"
 )
 
 src_unpack() {
@@ -950,6 +964,7 @@ src_prepare() {
 	if use cuda; then
 		# Populate the gitlinks omitted by GitHub-generated archives.
 		local deepgemm_dir="${WORKDIR}/DeepGEMM-${VLLM_DEEPGEMM_COMMIT}"
+		local deepselect_dir="${WORKDIR}/DeepSelect-${VLLM_DEEPSELECT_COMMIT}"
 		local fa_dir="${WORKDIR}/flash-attention-${VLLM_FA_COMMIT}"
 		local flashkda_dir="${WORKDIR}/FlashKDA-${VLLM_FLASHKDA_COMMIT}"
 		local flashmla_dir="${WORKDIR}/FlashMLA-${VLLM_FLASHMLA_COMMIT}"
@@ -961,6 +976,9 @@ src_prepare() {
 		rmdir "${deepgemm_dir}/third-party/fmt" || die
 		mv "${WORKDIR}/fmt-${VLLM_DEEPGEMM_FMT_COMMIT}" \
 			"${deepgemm_dir}/third-party/fmt" || die
+		rmdir "${deepselect_dir}/csrc/3rdparty/cutlass" || die
+		mv "${WORKDIR}/cutlass-${VLLM_DEEPSELECT_CUTLASS_COMMIT}" \
+			"${deepselect_dir}/csrc/3rdparty/cutlass" || die
 		rmdir "${fa_dir}/csrc/cutlass" || die
 		mv "${WORKDIR}/cutlass-${VLLM_FA_CUTLASS_COMMIT}" \
 			"${fa_dir}/csrc/cutlass" || die
@@ -991,6 +1009,13 @@ src_prepare() {
 src_configure() {
 	# Make requested Rust builds fatal instead of silently optional.
 	use rust && export VLLM_REQUIRE_RUST_FRONTEND=1
+	if use rust; then
+		# Link the system libraries the -sys crates would otherwise bundle:
+		# upstream builds the CLI with native-tls-vendored, which compiles
+		# OpenSSL from openssl-src, and zstd-sys builds its own zstd.
+		# pcre2-sys already prefers a libpcre2-8 that pkg-config finds.
+		export OPENSSL_NO_VENDOR=1 ZSTD_SYS_USE_PKG_CONFIG=1
+	fi
 
 	if use cuda || use rocm; then
 		export TRITON_KERNELS_SRC_DIR="${WORKDIR}/triton-${VLLM_TRITON_KERNELS_TAG}/python/triton_kernels/triton_kernels"
@@ -1001,6 +1026,7 @@ src_configure() {
 		# Point every CMake external project at its pre-staged source.
 		export VLLM_CUTLASS_SRC_DIR="${WORKDIR}/cutlass-${VLLM_CUTLASS_TAG}"
 		export DEEPGEMM_SRC_DIR="${WORKDIR}/DeepGEMM-${VLLM_DEEPGEMM_COMMIT}"
+		export DEEPSELECT_SRC_DIR="${WORKDIR}/DeepSelect-${VLLM_DEEPSELECT_COMMIT}"
 		export FLASH_MLA_SRC_DIR="${WORKDIR}/FlashMLA-${VLLM_FLASHMLA_COMMIT}"
 		export FMHA_SM100_SRC_DIR="${WORKDIR}/MSA-${VLLM_FMHA_SM100_COMMIT}"
 		export QUTLASS_SRC_DIR="${WORKDIR}/qutlass-${VLLM_QUTLASS_COMMIT}"
