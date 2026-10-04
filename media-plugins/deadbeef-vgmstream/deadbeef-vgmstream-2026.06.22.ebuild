@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=9
 
 MY_PV=${PV//./-}
 VGMSTREAM_COMMIT="301d49bdd492aaa326e6411710ba7270c36795a9"
