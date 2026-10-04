@@ -11,12 +11,13 @@ HOMEPAGE="https://github.com/Xilinx/XRT"
 
 if [[ ${PV} == 999999 ]] ; then
 	EGIT_REPO_URI="https://github.com/Xilinx/XRT.git"
+	# Upstream keeps adding nested submodules (aiebu's zstd, XDP's
+	# aie-codegen and its aie-regdb), so take them all except the
+	# Windows-only Detours and the kernel driver's libqdma.
 	EGIT_SUBMODULES=(
-		src/runtime_src/aie-rt
-		src/runtime_src/core/common/aiebu
-		src/runtime_src/core/common/elf
-		src/runtime_src/xdp
-		src/runtime_src/core/common/aiebu/src/cpp/ELFIO
+		'*'
+		'-src/runtime_src/core/tools/xbtracer/Detours'
+		'-src/runtime_src/core/pcie/driver/linux/xocl/lib/libqdma'
 	)
 	inherit git-r3
 else
@@ -130,6 +131,9 @@ src_configure() {
 		-DSPEC_TOOL_DEPS_DOWNLOADED=ON
 		-DXRT_ENABLE_WERROR=OFF
 		-DXRT_NPU=ON
+		# Upstream 811d73a: keep the static twins of the shared libraries out
+		# of the install and the xrt-targets export. verified 2026-10-04
+		-DXRT_INSTALL_STATIC_LIBRARY=OFF
 		-Wno-dev
 	)
 	[[ ${PV} != 999999 ]] && mycmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_Git=ON )
