@@ -60,7 +60,7 @@ CRATES="
 	criterion-plot@0.8.1
 	criterion@0.8.1
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	crunchy@0.2.4
 	darling@0.20.11
@@ -383,6 +383,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 QA_FLAGS_IGNORED="usr/lib/python3.*/site-packages/llguidance/_lib*.so"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-1.9.0-cargo-lock-rustsec.patch"
+)
 
 python_test() {
 	"${EPYTHON}" -c "import llguidance; assert llguidance.__version__ == '${PV}'" || die
