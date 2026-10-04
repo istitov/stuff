@@ -1,0 +1,18 @@
+Link lcms2 from the system instead of forcing a static build.
+
+0.9.5 enables lcms2-sys's "static" feature so upstream's bundles never
+depend on a system liblcms2 (oculante #810). Without it lcms2-sys finds
+lcms2 through pkg-config, as it did before 0.9.5; the ebuild depends on
+media-libs/lcms so the system library is always there.
+
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -52,7 +52,7 @@
+ jxl-oxide = "0.8"
+ # Always build lcms2 (used by jxl-oxide) from source. Otherwise it links to the
+ # system library where there is one, which is then missing in our bundles (#810).
+-lcms2-sys = { version = "4", features = ["static"], optional = true }
++lcms2-sys = { version = "4", optional = true }
+ zune-png = "0.5.0-rc1" # upgrade if https://github.com/etemesi254/zune-image/issues/210 is solved
+ # These 3 need to be updated together
+ resvg = "0.46"
