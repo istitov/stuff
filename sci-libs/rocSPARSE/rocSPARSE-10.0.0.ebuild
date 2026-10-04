@@ -77,7 +77,7 @@ src_prepare() {
 
 	# Let Portage fetch test matrices, then convert them locally to CSR.
 	if use test; then
-		mkdir -p "${BUILD_DIR}"/clients/matrices
+		mkdir -p "${BUILD_DIR}"/clients/matrices || die
 		# Optimization flags break the mtx2csr converter build.
 		edo $(tc-getCXX) deps/convert.cpp -o deps/convert
 		find "${WORKDIR}" -maxdepth 2 -regextype egrep -regex ".*/(.*)/\1\.mtx" -print0 |
