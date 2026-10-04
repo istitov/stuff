@@ -13,6 +13,8 @@ HOMEPAGE="https://newville.github.io/wxmplot/"
 
 LICENSE="MIT"
 SLOT="0"
+# No ~x86 since 2026.2: the new dev-python/vispy dependency is not
+# keyworded there; x86 users keep 2026.1.0. verified 2026-10-04
 KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
