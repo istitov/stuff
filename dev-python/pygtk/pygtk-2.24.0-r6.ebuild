@@ -90,7 +90,7 @@ src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 
 	testing() {
-		cd tests
+		cd tests || die
 		virtx emake check-local
 	}
 	python_foreach_impl run_in_build_dir testing
