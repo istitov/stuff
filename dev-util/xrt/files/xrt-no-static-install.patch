@@ -6,6 +6,9 @@ xrt-targets. Every consumer links the shared libraries, so stop
 installing (and therefore exporting) the static archives; XRT's own
 yocto branch already keeps them out of the export for the same
 find_package() reason. aiebu's static-only archive is unaffected.
+
+Upstream 811d73a (2026-04-27) adds -DXRT_INSTALL_STATIC_LIBRARY=OFF
+for the same purpose; drop this patch once a release carries it.
 --- a/src/runtime_src/core/common/CMakeLists.txt
 +++ b/src/runtime_src/core/common/CMakeLists.txt
 @@ -157,13 +157,3 @@

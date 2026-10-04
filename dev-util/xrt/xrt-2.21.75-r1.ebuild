@@ -88,6 +88,8 @@ python_check_deps() {
 	python_has_version -b "dev-python/pyyaml[${PYTHON_USEDEP}]"
 }
 
+PATCHES=( "${FILESDIR}"/${PN}-no-static-install.patch )
+
 src_prepare() {
 	if [[ ${PV} != 999999 ]] ; then
 		for k in $(printf '%s\n' "${!submodules[@]}" | sort); do
