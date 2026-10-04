@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=9
 
 DESCRIPTION="Open source XRD and Rietveld refinement engine"
 # bgmn.de has no TLS endpoint. verified 2026-05-09
