@@ -128,6 +128,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cjk X doc tk +luajittex xetex xindy"
 
+# xdvik probes memicmp without a prototype; glibc has none, so the probe
+# fails as intended and xdvik builds its own fallback. verified 2026-10-04
+QA_CONFIG_IMPL_DECL_SKIP=( memicmp )
+
 TEXMF_PATH=/usr/share/texmf-dist
 MODULAR_X_DEPEND="
 	X? (
