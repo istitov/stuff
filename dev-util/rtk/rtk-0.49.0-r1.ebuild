@@ -35,7 +35,7 @@ CRATES="
 	cpufeatures@0.2.17
 	crc32fast@1.5.0
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	crypto-common@0.1.7
 	digest@0.10.7
@@ -111,8 +111,8 @@ CRATES="
 	rusqlite@0.31.0
 	rustix@1.1.4
 	rustls-pki-types@1.14.0
-	rustls-webpki@0.103.13
-	rustls@0.23.37
+	rustls-webpki@0.103.15
+	rustls@0.23.45
 	rustversion@1.0.22
 	same-file@1.0.6
 	semver@1.0.27
@@ -241,6 +241,10 @@ KEYWORDS="~amd64 ~arm64"
 DEPEND="dev-db/sqlite:3"
 RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.49.0-cargo-lock-rustsec.patch"
+)
 
 src_configure() {
 	export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
