@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v3
 
-EAPI=8
+EAPI=9
 
 DESCRIPTION="A Portage analysis toolkit, written in bash"
 HOMEPAGE="https://github.com/istitov/udept"
