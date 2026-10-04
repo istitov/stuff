@@ -10,7 +10,6 @@ inherit distutils-r1 virtualx pypi
 DESCRIPTION="Interactive analysis of multidimensional datasets tools"
 HOMEPAGE="https://hyperspy.org/"
 SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
-S=${WORKDIR}/${P}
 
 LICENSE="GPL-3"
 SLOT="0"
