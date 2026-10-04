@@ -231,7 +231,7 @@ CRATES="
 	rustix@1.1.4
 	rustls-pki-types@1.15.1
 	rustls-webpki@0.103.15
-	rustls@0.23.43
+	rustls@0.23.45
 	rustversion@1.0.23
 	ryu@1.0.23
 	same-file@1.0.6
@@ -427,6 +427,10 @@ RDEPEND="
 "
 
 QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/zensical/zensical.*.so"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.0.67-cargo-lock-rustsec.patch"
+)
 
 src_unpack() {
 	cargo_src_unpack
