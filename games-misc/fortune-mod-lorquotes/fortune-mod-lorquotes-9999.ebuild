@@ -12,6 +12,7 @@ inherit git-r3
 LICENSE="all-rights-reserved"
 SLOT="0"
 KEYWORDS=""
+RESTRICT="bindist mirror"
 
 RDEPEND="games-misc/fortune-mod"
 # Provides strfile.
