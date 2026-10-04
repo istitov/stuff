@@ -237,8 +237,9 @@ for SPM (AFM / STM) data visualization and analysis.
 
 - [`sci-physics/mantid`](https://www.mantidproject.org/) — SANS reduction
   and analysis. Installs under `/opt/mantid` and keeps building against
-  the current `::gentoo` by carrying a few local deps (see the
-  *Qt5 revival mirror* section below).
+  the current `::gentoo` by carrying a few local deps; the 6.16.1.1 line
+  can still build its workbench against Qt5 (see the *Qt5 revival mirror*
+  section below).
 - [`sci-physics/sasview`](https://www.sasview.org/) + `dev-python/sasmodels`
   + `dev-python/bumps` + `dev-python/periodictable` — SAS modeling and
   fitting.
@@ -283,19 +284,21 @@ latexmk, minted, pgf, tex4ht, …}` build tooling.
 ## Qt5 revival mirror
 
 `::gentoo` last-rited the entire `dev-qt:5` set on 2026-05-15
-(bug #948836) and has since removed it, but
-`sci-physics/mantid` and a few others still need Qt5. This overlay
-carries the full 23-module `dev-qt/*` slot:5 set at
-**v5.15.19-lts-lgpl** — the
+(bug #948836) and has since removed it, but some packages here still
+use Qt5: `games-roguelike/dwarftherapist` (`USE=qt5`; Qt6 is the
+default), `sci-physics/mantid` 6.16.1.1 and `sci-physics/prismatic`
+(`USE=qt5`), `dev-python/qtpy` (`USE=pyqt5`) and `dev-python/fabio`
+2024.9.0 (`USE=gui`) can build against it. This overlay carries the full
+23-module `dev-qt/*` slot:5 set at **v5.15.19-lts-lgpl** — the
 [KDE Qt5 Patch Collection](https://invent.kde.org/qt/qt) applied via
 the local `qt5-build.eclass`, distfiles mirrored on
 [extra-stuff](https://github.com/istitov/extra-stuff) — plus the
 revived `dev-python/pyqt5` and the last Qt5-compatible
-`x11-libs/qscintilla`, all unmasked in `profiles/package.unmask` so
-they stay installable.
+`x11-libs/qscintilla`. `::gentoo`'s mask went away with its Qt5
+packages, so none of these needs an unmask.
 
-Drop the mirror once mantid finishes its Qt6 port and the other
-consumers follow.
+Drop the mirror once those consumers have Qt6 ports or have left the
+overlay.
 
 ## Also here
 
@@ -316,7 +319,7 @@ consumers follow.
   `x11-libs/wxGTK` 3.3 pulled ahead of `::gentoo`'s 3.2 (and a local
   `wxwidgets.eclass` that accepts the new `3.3-gtk3` slot) to build it.
 - **SuiteSparse imports** —
-  [`sci-libs/{amd,camd,cholmod,colamd,ccolamd,umfpack,suitesparseconfig}`](https://people.engr.tamu.edu/davis/suitesparse.html).
+  [`sci-libs/{cholmod,suitesparseconfig}`](https://people.engr.tamu.edu/davis/suitesparse.html).
 - **Retro / fun** —
   [`x11-terms/cool-retro-term`](https://github.com/Swordfish90/cool-retro-term),
   [`games-roguelike/adom`](https://www.adom.de/),
