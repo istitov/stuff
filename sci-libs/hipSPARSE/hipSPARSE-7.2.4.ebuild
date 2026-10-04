@@ -64,7 +64,7 @@ src_prepare() {
 	cmake_src_prepare
 
 	if use test; then
-		mkdir -p "${BUILD_DIR}"/clients/matrices
+		mkdir -p "${BUILD_DIR}"/clients/matrices || die
 		# Build mtx2bin without optimization.
 		edo $(tc-getCXX) deps/convert.cpp -o deps/convert
 		find "${WORKDIR}" -maxdepth 2 -regextype egrep -regex ".*/(.*)/\1\.mtx" -print0 |
