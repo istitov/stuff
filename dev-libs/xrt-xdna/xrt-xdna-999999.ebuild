@@ -116,8 +116,8 @@ src_unpack() {
 			git_url="${submodules[$k]%@*}"
 			commit_hash="${submodules[$k]#*@}"
 			url_prefix="${git_url%.git}"
-			rm -r "$k" || die
-			ln -s "${WORKDIR}/${url_prefix##*/}-${commit_hash}" "$k" || die
+			rm -r "${k}" || die
+			ln -s "${WORKDIR}/${url_prefix##*/}-${commit_hash}" "${k}" || die
 		done
 
 		local actual_vtd_hash=$(grep -oP 'VTD/raw/\K[0-9a-f]+' tools/info.json | head -n1)
