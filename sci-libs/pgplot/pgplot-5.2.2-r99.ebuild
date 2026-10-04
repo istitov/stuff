@@ -48,7 +48,7 @@ src_prepare() {
 			-i drivers/{gi,pp,wd}driv.f || die "sed 64bits failed"
 	fi
 
-	cp sys_linux/g77_gcc.conf local.conf
+	cp sys_linux/g77_gcc.conf local.conf || die
 
 	sed -e "s:FCOMPL=.*:FCOMPL=\"$(tc-getFC)\":g" \
 		-e "s:CCOMPL=.*:CCOMPL=\"$(tc-getCC)\":g" \
