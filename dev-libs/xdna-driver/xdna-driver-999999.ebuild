@@ -82,7 +82,7 @@ pkg_info() {
 		local JQ_EXPR='.firmwares[] | (.url | sub($prefix; "")) as $p | "    [" + $p + "]=" + .fw_name'
 
 		echo 'declare -Ag FIRMWARES=('
-		curl -s "$INFO_FILE" | jq -r --arg prefix "$COMMON_PREFIX" "$JQ_EXPR"
+		curl -s "${INFO_FILE}" | jq -r --arg prefix "${COMMON_PREFIX}" "${JQ_EXPR}"
 		echo ')'
 	fi
 }
