@@ -66,7 +66,7 @@ src_prepare() {
 
 	convert_shebangs() {
 		# Preserve an unconverted copy for python_doscript.
-		cp codegen/codegen.py pygobject-codegen-2.0
+		cp codegen/codegen.py pygobject-codegen-2.0 || die
 		sed -e "s%#! \?/usr/bin/env python%#!${PYTHON}%" \
 			-i codegen/*.py || die "shebang convertion failed"
 	}
