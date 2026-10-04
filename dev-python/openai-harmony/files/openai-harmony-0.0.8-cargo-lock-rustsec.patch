@@ -1,0 +1,57 @@
+Update vendored crates flagged by RustSec to their newest semver-compatible
+releases with `cargo update -p <crate>@<version>`:
+  bytes 1.10.1 -> 1.12.1 (RUSTSEC-2026-0007)
+  crossbeam-epoch 0.9.18 -> 0.9.21 (RUSTSEC-2026-0204)
+  rustls 0.23.27 -> 0.23.45 (RUSTSEC-2026-0285)
+  rustls-webpki 0.103.3 -> 0.103.15 (RUSTSEC-2026-0049, RUSTSEC-2026-0098, RUSTSEC-2026-0099, RUSTSEC-2026-0104)
+
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -261,9 +261,9 @@
+ 
+ [[package]]
+ name = "bytes"
+-version = "1.10.1"
++version = "1.12.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d71b6127be86fdcfddb610f7182ac57211d4b18a3e9c82eb2d17662f2227ad6a"
++checksum = "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
+ 
+ [[package]]
+ name = "cc"
+@@ -399,9 +399,9 @@
+ 
+ [[package]]
+ name = "crossbeam-epoch"
+-version = "0.9.18"
++version = "0.9.21"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5b82ac4a3c2ca9c3460964f020e1402edd5753411d7737aa39c3714ad1b5420e"
++checksum = "dc74980687109a3b14c72fd458107bf0baa1da1a1a805e178d15501ba9b86d9d"
+ dependencies = [
+  "crossbeam-utils",
+ ]
+@@ -1813,9 +1813,9 @@
+ 
+ [[package]]
+ name = "rustls"
+-version = "0.23.27"
++version = "0.23.45"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "730944ca083c1c233a75c09f199e973ca499344a2b7ba9e755c457e86fb4a321"
++checksum = "0d41d731c7d2f962d1ccc364cec258de3c0e93b38c2fb3ba97ac74513048d634"
+ dependencies = [
+  "once_cell",
+  "ring",
+@@ -1846,9 +1846,9 @@
+ 
+ [[package]]
+ name = "rustls-webpki"
+-version = "0.103.3"
++version = "0.103.15"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "e4a72fe2bcf7a6ac6fd7d0b9e5cb68aeb7d4c0a0271730218b3e92d43b4eb435"
++checksum = "f3c3cf1d8b1e7d4927e2d154c3fcb02979afb9939629c62cd9048d4f07b60ac2"
+ dependencies = [
+  "ring",
+  "rustls-pki-types",

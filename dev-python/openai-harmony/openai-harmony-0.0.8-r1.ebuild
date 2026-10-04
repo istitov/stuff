@@ -42,7 +42,7 @@ CRATES="
 	bumpalo@3.17.0
 	bytemuck@1.22.0
 	byteorder-lite@0.1.0
-	bytes@1.10.1
+	bytes@1.12.1
 	cc@1.2.18
 	cfg-expr@0.15.8
 	cfg-if@1.0.0
@@ -58,7 +58,7 @@ CRATES="
 	cpufeatures@0.2.17
 	crc32fast@1.4.2
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	crunchy@0.2.3
 	crypto-common@0.1.6
@@ -198,8 +198,8 @@ CRATES="
 	rustc-hash@2.1.1
 	rustls-pemfile@2.2.0
 	rustls-pki-types@1.12.0
-	rustls-webpki@0.103.3
-	rustls@0.23.27
+	rustls-webpki@0.103.15
+	rustls@0.23.45
 	rustversion@1.0.20
 	ryu@1.0.20
 	serde-wasm-bindgen@0.6.5
@@ -350,6 +350,10 @@ RDEPEND="
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.0.8-cargo-lock-rustsec.patch"
+)
 
 src_test() {
 	# Keep the native and binding tests offline.
