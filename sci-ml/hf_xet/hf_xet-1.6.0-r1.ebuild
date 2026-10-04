@@ -8,7 +8,7 @@ EAPI=8
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
 PYTHON_COMPAT=( python3_{12..14} )
-RUST_MIN_VER="1.88"
+RUST_MIN_VER="1.89.0"
 
 CRATES="
 	addr2line@0.25.1
@@ -24,8 +24,8 @@ CRATES="
 	async-trait@0.1.89
 	atomic-waker@1.1.2
 	autocfg@1.5.0
-	aws-lc-rs@1.16.2
-	aws-lc-sys@0.39.0
+	aws-lc-rs@1.18.1
+	aws-lc-sys@0.45.0
 	axum-core@0.5.6
 	axum@0.8.8
 	backtrace@0.3.76
@@ -254,8 +254,8 @@ CRATES="
 	rustls-pki-types@1.14.0
 	rustls-platform-verifier-android@0.1.1
 	rustls-platform-verifier@0.6.2
-	rustls-webpki@0.103.13
-	rustls@0.23.37
+	rustls-webpki@0.103.15
+	rustls@0.23.45
 	rustversion@1.0.22
 	safe-transmute@0.11.3
 	same-file@1.0.6
@@ -438,6 +438,10 @@ SRC_URI="https://github.com/huggingface/xet-core/archive/refs/tags/v${PV}.tar.gz
 "
 SRC_URI+=" ${CARGO_CRATE_URIS}"
 S="${WORKDIR}"/xet-core-${PV}/hf_xet
+
+PATCHES=(
+	"${FILESDIR}/${PN}-1.6.0-cargo-lock-rustsec.patch"
+)
 
 LICENSE="Apache-2.0"
 # Dependent crate licenses
