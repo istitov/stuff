@@ -480,7 +480,7 @@ python_compile() {
 		done
 		popd >/dev/null || die
 	fi
-	mkdir -p "${BUILD_DIR}/install/usr/include"
+	mkdir -p "${BUILD_DIR}/install/usr/include" || die
 	for dir in PySide6 shiboken6 shiboken6_generator; do
 		if [[ -d ${BUILD_DIR}/install/$(python_get_sitedir)/${dir}/include ]]
 		then
