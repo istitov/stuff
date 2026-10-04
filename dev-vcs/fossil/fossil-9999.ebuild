@@ -18,13 +18,15 @@ IUSE="debug fusefs json system-sqlite +ssl static tcl tcl-stubs
 RESTRICT="test"
 
 # Recheck each release with ./configure --print-minimum-sqlite-version.
+# Trunk has required 3.54.0 since 2026-07-01 (new date/time modifiers),
+# which only sqlite-9999 provides so far. Verified 2026-10-04.
 RDEPEND="
 	virtual/zlib:=
 	|| (
 		sys-libs/readline:0
 		dev-libs/libedit
 	)
-	system-sqlite? ( >=dev-db/sqlite-3.49.0:3 )
+	system-sqlite? ( >=dev-db/sqlite-3.54.0:3 )
 	ssl? ( dev-libs/openssl:0= )
 	tcl? ( dev-lang/tcl:0= )
 "
