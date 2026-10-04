@@ -1038,11 +1038,14 @@ KEYWORDS="~amd64 ~arm64"
 
 IUSE="heif"
 
-# notan, rfd, and codec crates link these libraries. turbojpeg/openjpeg/lcms2
-# remain vendored; nasm/cmake build their -sys crates. Mirrors upstream's PKGBUILD.
+# notan, rfd, and codec crates link these libraries. lcms2-sys links the
+# system lcms2 when pkg-config finds it, so depend on it rather than let the
+# result vary by host. turbojpeg/openjpeg remain vendored; nasm/cmake build
+# their -sys crates. Mirrors upstream's PKGBUILD. verified 2026-10-04
 DEPEND="
 	dev-libs/expat
 	media-libs/freetype
+	media-libs/lcms:2
 	media-libs/libaom
 	media-libs/libwebp
 	x11-libs/cairo
