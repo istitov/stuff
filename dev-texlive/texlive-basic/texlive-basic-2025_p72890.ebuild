@@ -102,7 +102,7 @@ TEXLIVE_MODULE_BINSCRIPTS="
 src_prepare() {
 	default
 	if ! use luajittex; then
-		rm -rf texmf-dist/{,scripts,doc}/luajittex
+		rm -rf texmf-dist/{,scripts,doc}/luajittex || die
 		rm tlpkg/tlpobj/luajittex.* || die
 	fi
 }
