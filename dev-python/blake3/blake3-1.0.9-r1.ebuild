@@ -18,7 +18,7 @@ CRATES="
 	constant_time_eq@0.4.2
 	cpufeatures@0.3.0
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	either@1.16.0
 	find-msvc-tools@0.1.9
@@ -113,6 +113,7 @@ src_unpack() {
 PATCHES=(
 	# Link against shared blake3 library. Bug 943281.
 	"${FILESDIR}/${PN}-1.0.8-use-installed-library.patch"
+	"${FILESDIR}/${PN}-1.0.9-cargo-lock-rustsec.patch"
 )
 
 src_prepare() {
