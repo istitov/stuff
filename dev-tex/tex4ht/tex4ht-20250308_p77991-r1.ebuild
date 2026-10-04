@@ -91,10 +91,10 @@ src_compile() {
 	pushd "${S}/${TEX4HTK_SUBDIR}" > /dev/null || die
 	einfo "Compiling postprocessor sources..."
 	for f in tex4ht t4ht; do
-		$(tc-getCC) ${CPPFLAGS} ${CFLAGS} ${LDFLAGS} -o $f $f.c \
+		$(tc-getCC) ${CPPFLAGS} ${CFLAGS} ${LDFLAGS} -o "${f}" "${f}.c" \
 			-DENVFILE="\"${EPREFIX}${TEXMF}/tex4ht/base/tex4ht.env\"" \
 			-DANSI -DHAVE_DIRENT_H -DKPATHSEA -lkpathsea \
-			|| die "Compiling $f failed"
+			|| die "Compiling ${f} failed"
 	done
 	popd > /dev/null || die
 
