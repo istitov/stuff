@@ -47,7 +47,7 @@ PATCHES=(
 ck_check-reqs() {
 	[[ ${MERGE_TYPE} == binary ]] && return
 
-	targets=($AMDGPU_TARGETS)
+	targets=(${AMDGPU_TARGETS})
 	if [[ ${#targets[@]} -gt 1 ]]; then
 		ewarn "composable-kernel will be compiled for multiple GPU architectures,"
 		ewarn "which will take a significant amount of time."
@@ -161,9 +161,9 @@ src_install() {
 
 		inst_path="${D}$(python_get_sitedir)/ck4inductor"
 		for file in "${package_data[@]}"; do
-			location="${inst_path}/$(dirname "$file")"
-			mkdir -p "${location}"
-			cp "${file}" "${location}"
+			location="${inst_path}/$(dirname "${file}")"
+			mkdir -p "${location}" || die
+			cp "${file}" "${location}" || die
 		done
 	}
 	python_foreach_impl installation
