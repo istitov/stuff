@@ -10,7 +10,6 @@ inherit distutils-r1 virtualx pypi
 DESCRIPTION="EELS and EDS analysis with the HyperSpy framework"
 HOMEPAGE="https://github.com/hyperspy/exspy"
 SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
-S=${WORKDIR}/${P}
 
 LICENSE="GPL-3"
 SLOT="0"
