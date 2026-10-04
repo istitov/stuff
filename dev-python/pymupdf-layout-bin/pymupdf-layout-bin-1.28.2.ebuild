@@ -20,7 +20,6 @@ MUPDF_PV=1.28.3
 
 DESCRIPTION="PyMuPDF document-layout analysis extension (binary wheel)"
 HOMEPAGE="
-	https://pymupdf.readthedocs.io/en/latest/pymupdf-layout/
 	https://github.com/ArtifexSoftware/pymupdf_layout
 	https://pypi.org/project/pymupdf-layout/
 "
