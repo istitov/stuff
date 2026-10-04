@@ -56,7 +56,7 @@ BDEPEND="
 RDEPEND="
 	${CDEPEND}
 	acct-group/${PN}
-	>=acct-user/${PN}-3[cuda?]
+	acct-user/${PN}[cuda?]
 	vulkan? ( media-libs/vulkan-loader )
 "
 

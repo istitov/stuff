@@ -9,8 +9,8 @@ ROCM_VERSION="7.0"
 inherit cuda rocm cmake flag-o-matic go-module linux-info multiprocessing systemd
 
 # Prestage the llama.cpp pin from LLAMA_CPP_VERSION, keeping upstream's
-# compat-patch step. Re-read it every bump. # verified 2026-10-02
-LLAMACPP_COMMIT="b11232"
+# compat-patch step. Re-read it every bump. # verified 2026-09-30
+LLAMACPP_COMMIT="b11081"
 
 DESCRIPTION="Get up and running with Llama 3, Mistral, Gemma, and other language models"
 HOMEPAGE="https://ollama.com"
@@ -56,7 +56,7 @@ BDEPEND="
 RDEPEND="
 	${CDEPEND}
 	acct-group/${PN}
-	>=acct-user/${PN}-3[cuda?]
+	acct-user/${PN}[cuda?]
 	vulkan? ( media-libs/vulkan-loader )
 "
 
