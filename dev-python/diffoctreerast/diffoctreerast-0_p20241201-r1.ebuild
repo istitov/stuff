@@ -14,7 +14,6 @@ HOMEPAGE="https://github.com/JeffreyXiang/diffoctreerast"
 # TRELLIS pins commit b09c20b and its GLM submodule; use the self-contained
 # extra-stuff snapshot because upstream has no release tag.
 SRC_URI="https://raw.githubusercontent.com/istitov/extra-stuff/${P}-r0-0/dev-python/${PN}/${P}.tar.xz -> ${P}-r0-0.tar.xz"
-S="${WORKDIR}/${P}"
 
 # Includes non-commercial Gaussian-Splatting code and MIT-licensed GLM.
 LICENSE="Gaussian-Splatting MIT"
