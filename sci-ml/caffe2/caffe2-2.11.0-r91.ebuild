@@ -437,7 +437,7 @@ src_install() {
 	insinto "/var/lib/${PN}"
 	doins "${BUILD_DIR}"/CMakeCache.txt
 
-	rm -rf python
+	rm -rf python || die
 	mkdir -p python/torch || die
 	cp torch/version.py python/torch/ || die
 	python_install
