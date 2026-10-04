@@ -1,0 +1,33 @@
+Install the static library only for static builds.
+
+With BUILD_SHARED_LIBS=ON the shared libdraco is linked from the
+draco_static archive, which upstream then installs and exports as
+draco::draco_static as well. No consumer needs that copy, since
+draco::draco does not link it, so install and export the archive only
+when it is the library being built.
+--- a/cmake/draco_install.cmake
++++ b/cmake/draco_install.cmake
+@@ -66,11 +66,6 @@
+         ARCHIVE DESTINATION "${libs_path}"
+         LIBRARY DESTINATION "${libs_path}")
+     else()
+-      install(
+-        TARGETS draco_static
+-        EXPORT dracoExport
+-        DESTINATION "${libs_path}")
+-
+       if(BUILD_SHARED_LIBS)
+         install(
+           TARGETS draco_shared
+@@ -78,6 +73,11 @@
+           RUNTIME DESTINATION "${bin_path}"
+           ARCHIVE DESTINATION "${libs_path}"
+           LIBRARY DESTINATION "${libs_path}")
++      else()
++        install(
++          TARGETS draco_static
++          EXPORT dracoExport
++          DESTINATION "${libs_path}")
+       endif()
+     endif()
+ 

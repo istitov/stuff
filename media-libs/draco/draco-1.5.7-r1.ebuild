@@ -14,6 +14,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64"
 
+PATCHES=( "${FILESDIR}"/${P}-no-static-with-shared.patch )
+
 src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=ON
