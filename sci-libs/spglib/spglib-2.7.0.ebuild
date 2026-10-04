@@ -50,6 +50,9 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.6.0-dist_sources.patch
 )
 
+# The tests need only pytest itself; upstream's addopts deselect the
+# benchmark marker that would pull in pytest-benchmark. verified 2026-10-04
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 pkg_pretend() {
