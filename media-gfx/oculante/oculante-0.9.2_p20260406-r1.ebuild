@@ -136,7 +136,6 @@ CRATES="
 	console_error_panic_hook@0.1.7
 	constant_time_eq@0.4.2
 	core-foundation-sys@0.8.7
-	core-foundation@0.10.1
 	core-foundation@0.9.4
 	core-graphics-types@0.1.3
 	core-graphics@0.22.3
@@ -152,7 +151,7 @@ CRATES="
 	criterion@0.5.1
 	crossbeam-channel@0.5.15
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	crunchy@0.2.4
 	crypto-common@0.1.7
@@ -878,7 +877,7 @@ CRATES="
 	wbmp@0.1.2
 	web-sys@0.3.94
 	web-time@1.1.0
-	webbrowser@1.2.0
+	webbrowser@1.2.4
 	webp-animation@0.9.0
 	webpki-roots@1.0.6
 	weezl@0.1.12
@@ -1029,6 +1028,10 @@ SRC_URI="
 	${CARGO_CRATE_URIS}
 "
 S="${WORKDIR}/${PN}-${COMMIT}"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.9.2_p20260406-cargo-lock-rustsec.patch"
+)
 
 # The app is MIT; vendored crates add the generated license set below.
 LICENSE="MIT"
