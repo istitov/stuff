@@ -19,20 +19,29 @@ HOMEPAGE="
 	https://tug.org/tex4ht/
 	https://puszcza.gnu.org.ua/projects/tex4ht/
 "
-# Historic fallback paths must match this TeX Live snapshot.
+# Historic fallback paths must match this TeX Live snapshot. CTAN keeps only
+# the current revision of each tlnet file and has moved past r79930;
+# texlive.info's daily tlnet snapshot from 2026-08-17, the day these pins
+# were taken, still holds all three. Portage tries SRC_URI entries
+# last-listed first, so it is listed first to be asked last.
+# verified 2026-10-04
+MY_TLNET_SNAPSHOT="https://texlive.info/tlnet-archive/2026/08/17/tlnet/archive"
 SRC_URI="
 	https://mirrors.ctan.org/systems/texlive/Source/${MY_SOURCE_FILE}
 	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2026/${MY_SOURCE_FILE}
 	https://dev.gentoo.org/~flow/distfiles/texlive/${MY_SOURCE_FILE}
+	${MY_TLNET_SNAPSHOT}/${MY_P_TEXLIVE}
 	https://mirrors.ctan.org/systems/texlive/tlnet/archive/${MY_P_TEXLIVE}
 	https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2026/tlnet-final/archive/${MY_P_TEXLIVE}
 	https://dev.gentoo.org/~flow/distfiles/texlive/${MY_P_TEXLIVE}
 	source? (
+		${MY_TLNET_SNAPSHOT}/${MY_P_TEXLIVE_SRC}
 		https://mirrors.ctan.org/systems/texlive/tlnet/archive/${MY_P_TEXLIVE_SRC}
 		https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2026/tlnet-final/archive/${MY_P_TEXLIVE_SRC}
 		https://dev.gentoo.org/~flow/distfiles/texlive/${MY_P_TEXLIVE_SRC}
 	)
 	doc? (
+		${MY_TLNET_SNAPSHOT}/${MY_P_TEXLIVE_DOC}
 		https://mirrors.ctan.org/systems/texlive/tlnet/archive/${MY_P_TEXLIVE_DOC}
 		https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2026/tlnet-final/archive/${MY_P_TEXLIVE_DOC}
 		https://dev.gentoo.org/~flow/distfiles/texlive/${MY_P_TEXLIVE_DOC}
