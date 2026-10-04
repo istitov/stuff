@@ -92,6 +92,8 @@ python_check_deps() {
 	python_has_version -b "dev-python/pyyaml[${PYTHON_USEDEP}]"
 }
 
+PATCHES=( "${FILESDIR}"/${P}-no-static-install.patch )
+
 src_prepare() {
 	if [[ ${PV} != 999999 ]] ; then
 		for k in $(printf '%s\n' "${!submodules[@]}" | sort); do
@@ -105,6 +107,7 @@ src_prepare() {
 
 	pushd "src/runtime_src/core/common/aiebu" || die
 	eapply "${FILESDIR}"/aiebu-no-downloads.patch
+	eapply "${FILESDIR}"/${P}-aiebu-no-static-dtrace.patch
 	popd || die
 
 	sed -e 's/-Werror//' -i src/runtime_src/core/common/aiebu/cmake/linux.cmake || die

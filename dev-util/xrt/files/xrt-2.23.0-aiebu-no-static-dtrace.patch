@@ -1,0 +1,17 @@
+Do not install aiebu's static cert_dtrace archive.
+
+cert_dtrace is built shared and static from the same objects, and both
+are installed and exported to aiebu-targets. XRT links the static copy
+into xrt_coreutil at build time, and nothing installed links the
+archive afterwards, so install only the shared library.
+--- a/src/cpp/dtrace/CMakeLists.txt
++++ b/src/cpp/dtrace/CMakeLists.txt
+@@ -61,7 +61,7 @@
+ endif()
+ 
+ 
+-install(TARGETS cert_dtrace cert_dtrace_static
++install(TARGETS cert_dtrace
+   EXPORT aiebu-targets
+   LIBRARY DESTINATION ${AIEBU_INSTALL_LIB_DIR} COMPONENT ${AIEBU_COMPONENT}
+   RUNTIME DESTINATION ${AIEBU_INSTALL_LIB_DIR} COMPONENT ${AIEBU_COMPONENT}
