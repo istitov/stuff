@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=9
 
 DESCRIPTION="Supporting library for Bats test helpers"
 HOMEPAGE="https://github.com/bats-core/bats-support"
