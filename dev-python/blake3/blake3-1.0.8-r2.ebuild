@@ -18,7 +18,7 @@ CRATES="
 	cfg-if@1.0.3
 	constant_time_eq@0.3.1
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	either@1.15.0
 	find-msvc-tools@0.1.2
