@@ -3,7 +3,7 @@
 
 EAPI=9
 
-TL_SOURCE_VERSION=20260301
+TL_SOURCE_VERSION=20250308
 inherit branding flag-o-matic toolchain-funcs libtool texlive-common
 
 MY_P=${PN%-core}-${TL_SOURCE_VERSION}-source
@@ -18,68 +18,67 @@ SRC_URI="
 		-> gentoo-tex-patches-${GENTOO_TEX_PATCHES_NUM}.tar.bz2
 	https://bugs.gentoo.org/attachment.cgi?id=908573
 		-> ${PN}-2023-mplib-h.patch
-	https://github.com/Flowdalic/texlive-source/commit/19e9eb6dab7c192b0f5dcee5fc87d46ae63296f0.patch
-		-> ${PN}-2026-xdvipsk-kpathsea.patch
 "
 
 # Extra macros required while installing other packages.
 TL_CORE_EXTRA_CONTENTS="
-	autosp.r77851
-	axodraw2.r77682
-	chktex.r78219
-	detex.r79618
+	autosp.r69814
+	axodraw2.r77677
+	chktex.r78222
+	detex.r70015
 	dvi2tty.r66186
 	dvidvi.r75712
 	dviljk.r66186
-	dvipdfmx.r78409
+	dvipdfmx.r76377
 	dvipos.r66186
-	extractbb.r77855
-	gsftopk.r79618
-	hyphen-base.r78076
+	extractbb.r73916
+	gsftopk.r52851
+	hyphen-base.r74125
 	lacheck.r75712
-	m-tx.r79618
+	m-tx.r75301
 	makeindex.r75712
-	pmx.r79618
+	pmx.r75301
 	texdoctk.r62186
-	texlive-scripts.r80235
-	texlive-scripts-extra.r78162
-	texlive.infra.r79982
+	texlive-scripts.r78221
+	texlive-scripts-extra.r76585
+	texlive.infra.r76780
 	tpic2pdftex.r75712
-	upmendex.r77845
+	upmendex.r78116
 	velthuis.r66186
 	vlna.r73908
-	xindy.r79990
-	xml2pmx.r79618
+	xindy.r65958
+	xml2pmx.r57972
 "
 TL_CORE_EXTRA_DOC_CONTENTS="
-	autosp.doc.r77851
-	axodraw2.doc.r77682
-	chktex.doc.r78219
-	detex.doc.r79618
+	autosp.doc.r69814
+	axodraw2.doc.r77677
+	chktex.doc.r78222
+	detex.doc.r70015
 	dvi2tty.doc.r66186
 	dvidvi.doc.r75712
 	dviljk.doc.r66186
-	dvipdfmx.doc.r78409
+	dvipdfmx.doc.r76377
 	dvipos.doc.r66186
-	extractbb.doc.r77855
-	gsftopk.doc.r79618
+	extractbb.doc.r73916
+	gsftopk.doc.r52851
 	lacheck.doc.r75712
-	m-tx.doc.r79618
+	m-tx.doc.r75301
 	makeindex.doc.r75712
-	pmx.doc.r79618
+	pmx.doc.r75301
 	texdoctk.doc.r62186
-	texlive-scripts.doc.r80235
-	texlive-scripts-extra.doc.r78162
-	texlive.infra.doc.r79982
+	texlive-scripts.doc.r78221
+	texlive-scripts-extra.doc.r76585
+	texlive.infra.doc.r76780
 	tpic2pdftex.doc.r75712
-	upmendex.doc.r77845
+	upmendex.doc.r78116
 	velthuis.doc.r66186
 	vlna.doc.r73908
-	xindy.doc.r79990
-	xml2pmx.doc.r79618
+	xindy.doc.r65958
+	xml2pmx.doc.r57972
 "
 TEXLIVE_MODULE_BINSCRIPTS="
 	texmf-dist/scripts/extractbb/extractbb.lua
+	texmf-dist/scripts/m-tx/m-tx.lua
 	texmf-dist/scripts/texlive/fmtutil-sys.sh
 	texmf-dist/scripts/texlive/fmtutil-user.sh
 	texmf-dist/scripts/texlive/fmtutil.pl
@@ -114,8 +113,6 @@ TEXLIVE_MODULE_BINLINKS="
 	kpsetool:kpsexpand
 	kpsetool:kpsepath
 "
-
-TEXLIVE_TLNET_SNAPSHOT=2026-09-11
 texlive-common_append_to_src_uri TL_CORE_EXTRA_CONTENTS
 
 SRC_URI+=" doc? ( "
@@ -152,17 +149,15 @@ COMMON_DEPEND="
 	app-text/libpaper:=
 	dev-libs/gmp:=
 	dev-libs/mpfr:=
-	>=dev-libs/ptexenc-1.5.2
+	>=dev-libs/ptexenc-1.5.1
 	xetex? (
 		>=app-text/teckit-2.5.10
 		media-libs/fontconfig
 	)
 	xindy? ( dev-lisp/clisp:= )
 	media-libs/freetype:2
-	media-libs/libjpeg-turbo:=
-	media-libs/tiff:=[jpeg,zlib]
 	>=dev-libs/icu-50:=
-	>=dev-libs/kpathsea-6.4.2:=
+	>=dev-libs/kpathsea-6.4.0:=
 "
 
 BDEPEND="
@@ -175,10 +170,8 @@ DEPEND="
 	${COMMON_DEPEND}
 "
 
-# xdvipsk-cid.pro moved here from texlive-binextra with the xdvipsk build.
 RDEPEND="
 	${COMMON_DEPEND}
-	!<dev-texlive/texlive-binextra-2026_p80064-r1
 	virtual/perl-Getopt-Long
 	dev-perl/File-HomeDir
 	dev-perl/Log-Dispatch
@@ -191,18 +184,6 @@ RDEPEND="
 "
 
 BUILDDIR="${WORKDIR}/${P}_build"
-
-PATCHES=(
-	# Let xdvipsk's man page find <kpathsea/paths.h> in the system kpathsea.
-	# https://github.com/TeX-Live/texlive-source/pull/85
-	"${DISTDIR}"/${PN}-2026-xdvipsk-kpathsea.patch
-	# Link xdvipsk to the system libjpeg and libtiff instead of its bundled
-	# libjpeg 9b and libtiff 4.7.0. verified 2026-10-03
-	"${FILESDIR}"/${PN}-2026-xdvipsk-system-libjpeg.patch
-	"${FILESDIR}"/${PN}-2026-xdvipsk-system-libtiff.patch
-	# Report, rather than crash on, a TIFF that libtiff cannot open.
-	"${FILESDIR}"/${PN}-2026-xdvipsk-tiff-open-check.patch
-)
 
 RELOC_TARGET=texmf-dist
 
@@ -229,24 +210,15 @@ src_prepare() {
 		-e "s,/usr/include /usr/local/include.*echo \$KPATHSEA_INCLUDES.*,${TL_KPATHSEA_INCLUDES}\"," \
 		texk/web2c/configure || die
 
-	# Replace the TL2024-context tlmgr patch with its TL2026 equivalent; the
-	# remaining patchset still applies. verified 2026-05-28
 	local patch_dir="${WORKDIR}/tex-patches-${GENTOO_TEX_PATCHES_NUM}"
-	rm "${patch_dir}/fix-perl-include-path-of-tlmgr.patch" || die
 	eapply "${patch_dir}"
-	eapply "${FILESDIR}/texlive-core-2026-tlmgr-include-path.patch"
 
 	# ICU 75 removed underscored UVS_* aliases; use the live camelCase symbols.
 	eapply "${FILESDIR}/texlive-core-icu-uvs-drop-macros.patch"
 
 	default
 
-	# Nothing may fall back to the bundled copies the patches replace.
-	rm -r texk/xdvipsk/thirdparty || die
-
 	elibtoolize
-	# The xdvipsk patches change configure.ac and Makefile.am.
-	"${S}"/reautoconf texk/xdvipsk || die
 
 	# Re-run autoconf while the cairo and mplibdir patches remain
 	# (bugs #927714, #853121, #837875).
@@ -464,12 +436,12 @@ src_install() {
 
 	if use cjk; then
 		# Keep only euptex; texlive-langjapanese supplies the ptex/uptex names.
-		# TL2026 may omit the standalone ptex binary.
+		# Tolerate releases that omit the standalone ptex binary.
 		rm -f "${ED}/usr/bin/"{,u}ptex || die
 	fi
 
 	if ! use xindy; then
-		rm -rf "${ED}{TEXMF_PATH}"/{,scripts,doc}/xindy
+		rm -rf "${ED}${TEXMF_PATH}"/{,scripts,doc}/xindy || die
 		rm "${ED}"/usr/share/tlpkg/tlpobj/xindy.* || die
 	fi
 
