@@ -1,0 +1,316 @@
+Update vendored crates flagged by RustSec to their newest semver-compatible
+releases with `cargo update -p <crate>@<version>`:
+  aws-lc-rs 1.16.3 -> 1.18.1
+  aws-lc-sys 0.40.0 -> 0.45.0
+  clap_derive 4.6.1 -> (dropped)
+  condtype 1.3.0 -> (dropped)
+  crossbeam-epoch 0.9.18 -> 0.9.21 (RUSTSEC-2026-0204)
+  divan 0.1.21 -> (dropped)
+  divan-macros 0.1.21 -> (dropped)
+  h2 0.4.13 -> 0.4.19 (RUSTSEC-2026-0258)
+  rustls 0.23.38 -> 0.23.45 (RUSTSEC-2026-0285)
+  rustls-webpki 0.103.13 -> 0.103.15
+  terminal_size 0.4.4 -> (dropped)
+The dropped entries are stale: they hang off divan, a benchmark
+dependency of workspace members this source tree does not include, and
+cargo prunes them on any re-resolution.
+
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -168,7 +168,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "40c48f72fd53cd289104fc64099abca73db4166ad86ea0b4341abe65af83dadc"
+ dependencies = [
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -179,7 +179,7 @@
+ dependencies = [
+  "anstyle",
+  "once_cell_polyfill",
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -598,9 +598,9 @@
+ 
+ [[package]]
+ name = "aws-lc-rs"
+-version = "1.16.3"
++version = "1.18.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "0ec6fb3fe69024a75fa7e1bfb48aa6cf59706a101658ea01bfd33b2b248a038f"
++checksum = "b281d307588d634de920874890732659e2e7672f72b5e10e81badc1a8a83621e"
+ dependencies = [
+  "aws-lc-sys",
+  "zeroize",
+@@ -608,14 +608,15 @@
+ 
+ [[package]]
+ name = "aws-lc-sys"
+-version = "0.40.0"
++version = "0.45.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f50037ee5e1e41e7b8f9d161680a725bd1626cb6f8c7e901f91f942850852fe7"
++checksum = "9bff6c3b54fad79a2e60b8102caf565819711497c1f5f092f49508e2f5c31b27"
+ dependencies = [
+  "cc",
+  "cmake",
+  "dunce",
+  "fs_extra",
++ "pkg-config",
+ ]
+ 
+ [[package]]
+@@ -1408,7 +1409,6 @@
+ checksum = "1ddb117e43bbf7dacf0a4190fef4d345b9bad68dfc649cb349e7d17d28428e51"
+ dependencies = [
+  "clap_builder",
+- "clap_derive",
+ ]
+ 
+ [[package]]
+@@ -1417,23 +1417,8 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "714a53001bf66416adb0e2ef5ac857140e7dc3a0c48fb28b2f10762fc4b5069f"
+ dependencies = [
+- "anstream",
+  "anstyle",
+  "clap_lex",
+- "strsim",
+- "terminal_size",
+-]
+-
+-[[package]]
+-name = "clap_derive"
+-version = "4.6.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f2ce8604710f6733aa641a2b3731eaa1e8b3d9973d5e3565da11800813f997a9"
+-dependencies = [
+- "heck",
+- "proc-macro2",
+- "quote",
+- "syn 2.0.117",
+ ]
+ 
+ [[package]]
+@@ -1475,7 +1460,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "faf9468729b8cbcea668e36183cb69d317348c2e08e994829fb56ebfdfbaac34"
+ dependencies = [
+- "windows-sys 0.61.2",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -1529,12 +1514,6 @@
+ ]
+ 
+ [[package]]
+-name = "condtype"
+-version = "1.3.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "baf0a07a401f374238ab8e2f11a104d2851bf9ce711ec69804834de8af45c7af"
+-
+-[[package]]
+ name = "const-oid"
+ version = "0.10.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -1735,9 +1714,9 @@
+ 
+ [[package]]
+ name = "crossbeam-epoch"
+-version = "0.9.18"
++version = "0.9.21"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5b82ac4a3c2ca9c3460964f020e1402edd5753411d7737aa39c3714ad1b5420e"
++checksum = "dc74980687109a3b14c72fd458107bf0baa1da1a1a805e178d15501ba9b86d9d"
+ dependencies = [
+  "crossbeam-utils",
+ ]
+@@ -2612,19 +2591,6 @@
+ ]
+ 
+ [[package]]
+-name = "delta-benchmarks"
+-version = "0.0.1"
+-dependencies = [
+- "anyhow",
+- "clap",
+- "deltalake-core",
+- "divan",
+- "tempfile",
+- "tokio",
+- "url",
+-]
+-
+-[[package]]
+ name = "deltalake"
+ version = "0.32.0"
+ dependencies = [
+@@ -3029,7 +2995,7 @@
+  "libc",
+  "option-ext",
+  "redox_users",
+- "windows-sys 0.61.2",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -3044,31 +3010,6 @@
+ ]
+ 
+ [[package]]
+-name = "divan"
+-version = "0.1.21"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a405457ec78b8fe08b0e32b4a3570ab5dff6dd16eb9e76a5ee0a9d9cbd898933"
+-dependencies = [
+- "cfg-if",
+- "clap",
+- "condtype",
+- "divan-macros",
+- "libc",
+- "regex-lite",
+-]
+-
+-[[package]]
+-name = "divan-macros"
+-version = "0.1.21"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "9556bc800956545d6420a640173e5ba7dfa82f38d3ea5a167eb555bc69ac3323"
+-dependencies = [
+- "proc-macro2",
+- "quote",
+- "syn 2.0.117",
+-]
+-
+-[[package]]
+ name = "dns-lookup"
+ version = "3.0.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -3183,7 +3124,7 @@
+ checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
+ dependencies = [
+  "libc",
+- "windows-sys 0.61.2",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -3659,9 +3600,9 @@
+ 
+ [[package]]
+ name = "h2"
+-version = "0.4.13"
++version = "0.4.19"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2f44da3a8150a6703ed5d34e164b875fd14c2cdab9af1252a9a1020bde2bdc54"
++checksum = "ef8e5e5a340588f4452631496976cf8636d4a7ecf600239fdc27615d2530bc16"
+ dependencies = [
+  "atomic-waker",
+  "bytes",
+@@ -4274,7 +4215,7 @@
+ dependencies = [
+  "hermit-abi",
+  "libc",
+- "windows-sys 0.61.2",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -4820,7 +4761,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
+ dependencies = [
+- "windows-sys 0.61.2",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -6122,14 +6063,14 @@
+  "errno",
+  "libc",
+  "linux-raw-sys",
+- "windows-sys 0.61.2",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+ name = "rustls"
+-version = "0.23.38"
++version = "0.23.45"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "69f9466fb2c14ea04357e91413efb882e2a6d4a406e625449bc0a5d360d53a21"
++checksum = "0d41d731c7d2f962d1ccc364cec258de3c0e93b38c2fb3ba97ac74513048d634"
+ dependencies = [
+  "aws-lc-rs",
+  "once_cell",
+@@ -6180,7 +6121,7 @@
+  "security-framework",
+  "security-framework-sys",
+  "webpki-root-certs",
+- "windows-sys 0.61.2",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -6191,9 +6132,9 @@
+ 
+ [[package]]
+ name = "rustls-webpki"
+-version = "0.103.13"
++version = "0.103.15"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "61c429a8649f110dddef65e2a5ad240f747e85f7758a6bccc7e5777bd33f756e"
++checksum = "f3c3cf1d8b1e7d4927e2d154c3fcb02979afb9939629c62cd9048d4f07b60ac2"
+ dependencies = [
+  "aws-lc-rs",
+  "ring",
+@@ -6502,7 +6443,7 @@
+ checksum = "3a766e1110788c36f4fa1c2b71b387a7815aa65f88ce0229841826633d93723e"
+ dependencies = [
+  "libc",
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -6679,7 +6620,7 @@
+  "getrandom 0.4.2",
+  "once_cell",
+  "rustix",
+- "windows-sys 0.61.2",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -6692,16 +6633,6 @@
+ ]
+ 
+ [[package]]
+-name = "terminal_size"
+-version = "0.4.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "230a1b821ccbd75b185820a1f1ff7b14d21da1e442e22c0863ea5f08771a8874"
+-dependencies = [
+- "rustix",
+- "windows-sys 0.61.2",
+-]
+-
+-[[package]]
+ name = "thiserror"
+ version = "1.0.69"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -7572,7 +7503,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
+ dependencies = [
+- "windows-sys 0.61.2",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]

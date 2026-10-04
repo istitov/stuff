@@ -8,7 +8,6 @@ DISTUTILS_USE_PEP517=maturin
 PYTHON_COMPAT=( python3_{12..14} )
 
 CRATES="
-	RustyXML@0.3.0
 	abi_stable@0.11.3
 	abi_stable_derive@0.11.3
 	abi_stable_shared@0.11.0
@@ -22,15 +21,14 @@ CRATES="
 	android_system_properties@0.1.5
 	anes@0.1.6
 	anstream@1.0.0
-	anstyle@1.0.14
 	anstyle-parse@1.0.0
 	anstyle-query@1.1.5
 	anstyle-wincon@3.0.11
+	anstyle@1.0.14
 	anyhow@1.0.102
 	ar_archive_writer@0.5.1
 	arrayref@0.3.9
 	arrayvec@0.7.6
-	arrow@58.1.0
 	arrow-arith@58.1.0
 	arrow-array@58.1.0
 	arrow-buffer@58.1.0
@@ -45,6 +43,7 @@ CRATES="
 	arrow-schema@58.1.0
 	arrow-select@58.1.0
 	arrow-string@58.1.0
+	arrow@58.1.0
 	as_derive_utils@0.11.0
 	assert-json-diff@2.0.2
 	async-channel@1.9.0
@@ -58,8 +57,8 @@ CRATES="
 	autocfg@1.5.0
 	aws-config@1.8.16
 	aws-credential-types@1.2.14
-	aws-lc-rs@1.16.3
-	aws-lc-sys@0.40.0
+	aws-lc-rs@1.18.1
+	aws-lc-sys@0.45.0
 	aws-runtime@1.7.3
 	aws-sdk-dynamodb@1.111.0
 	aws-sdk-glue@1.143.0
@@ -68,14 +67,14 @@ CRATES="
 	aws-sdk-sts@1.103.0
 	aws-sigv4@1.4.3
 	aws-smithy-async@1.2.14
-	aws-smithy-http@0.63.6
 	aws-smithy-http-client@1.1.12
+	aws-smithy-http@0.63.6
 	aws-smithy-json@0.62.5
 	aws-smithy-observability@0.2.6
 	aws-smithy-query@0.60.15
-	aws-smithy-runtime@1.11.1
-	aws-smithy-runtime-api@1.12.0
 	aws-smithy-runtime-api-macros@1.0.0
+	aws-smithy-runtime-api@1.12.0
+	aws-smithy-runtime@1.11.1
 	aws-smithy-types@1.4.7
 	aws-smithy-xml@0.60.15
 	aws-types@1.3.15
@@ -84,9 +83,9 @@ CRATES="
 	azure_storage_blobs@0.21.0
 	azure_svc_blobstorage@0.21.0
 	backon@1.6.0
+	base64-simd@0.8.0
 	base64@0.13.1
 	base64@0.22.1
-	base64-simd@0.8.0
 	bigdecimal@0.4.10
 	bincode@1.3.3
 	bitflags@1.3.2
@@ -96,15 +95,15 @@ CRATES="
 	block-buffer@0.10.4
 	block-buffer@0.12.0
 	block-padding@0.3.3
-	brotli@8.0.2
 	brotli-decompressor@5.0.0
+	brotli@8.0.2
 	bumpalo@3.20.2
 	buoyant_kernel@0.21.103
 	buoyant_kernel_derive@1.0.0
 	bytemuck@1.25.0
 	byteorder@1.5.0
-	bytes@1.11.1
 	bytes-utils@0.1.4
+	bytes@1.11.1
 	bzip2@0.6.1
 	cast@0.3.0
 	cbc@0.1.2
@@ -113,15 +112,14 @@ CRATES="
 	cfg-if@1.0.4
 	cfg_aliases@0.2.1
 	chacha20@0.10.0
-	chrono@0.4.44
 	chrono-tz@0.10.4
-	ciborium@0.2.2
+	chrono@0.4.44
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
+	ciborium@0.2.2
 	cipher@0.4.4
 	clap@4.6.1
 	clap_builder@4.6.0
-	clap_derive@4.6.1
 	clap_lex@1.1.0
 	cmake@0.1.58
 	cmov@0.5.3
@@ -133,91 +131,88 @@ CRATES="
 	compression-codecs@0.4.37
 	compression-core@0.4.31
 	concurrent-queue@2.5.0
-	condtype@1.3.0
 	const-oid@0.10.2
-	const-random@0.1.18
 	const-random-macro@0.1.16
+	const-random@0.1.18
 	const_panic@0.2.15
 	constant_time_eq@0.4.2
 	convert_case@0.9.0
+	core-foundation-sys@0.8.7
 	core-foundation@0.10.1
 	core-foundation@0.9.4
-	core-foundation-sys@0.8.7
 	core_affinity@0.8.3
 	core_extensions@1.5.4
 	core_extensions_proc_macros@1.5.4
 	cpufeatures@0.2.17
 	cpufeatures@0.3.0
-	crc@3.4.0
 	crc-catalog@2.4.0
 	crc32fast@1.5.0
-	criterion@0.5.1
+	crc@3.4.0
 	criterion-plot@0.5.0
+	criterion@0.5.1
 	crossbeam-channel@0.5.15
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	crunchy@0.2.4
 	crypto-common@0.1.7
 	crypto-common@0.2.1
-	csv@1.4.0
 	csv-core@0.1.13
-	ctor@0.10.0
+	csv@1.4.0
 	ctor-proc-macro@0.0.12
+	ctor@0.10.0
 	ctr@0.9.2
 	ctutils@0.4.2
 	darling@0.20.11
 	darling_core@0.20.11
 	darling_macro@0.20.11
 	dashmap@6.1.0
-	datafusion@53.1.0
-	datafusion-catalog@53.1.0
 	datafusion-catalog-listing@53.1.0
-	datafusion-common@53.1.0
+	datafusion-catalog@53.1.0
 	datafusion-common-runtime@53.1.0
-	datafusion-datasource@53.1.0
+	datafusion-common@53.1.0
 	datafusion-datasource-arrow@53.1.0
 	datafusion-datasource-csv@53.1.0
 	datafusion-datasource-json@53.1.0
 	datafusion-datasource-parquet@53.1.0
+	datafusion-datasource@53.1.0
 	datafusion-doc@53.1.0
 	datafusion-execution@53.1.0
-	datafusion-expr@53.1.0
 	datafusion-expr-common@53.1.0
+	datafusion-expr@53.1.0
 	datafusion-ffi@53.1.0
-	datafusion-functions@53.1.0
-	datafusion-functions-aggregate@53.1.0
 	datafusion-functions-aggregate-common@53.1.0
+	datafusion-functions-aggregate@53.1.0
 	datafusion-functions-nested@53.1.0
 	datafusion-functions-table@53.1.0
-	datafusion-functions-window@53.1.0
 	datafusion-functions-window-common@53.1.0
+	datafusion-functions-window@53.1.0
+	datafusion-functions@53.1.0
 	datafusion-macros@53.1.0
 	datafusion-optimizer@53.1.0
-	datafusion-physical-expr@53.1.0
 	datafusion-physical-expr-adapter@53.1.0
 	datafusion-physical-expr-common@53.1.0
+	datafusion-physical-expr@53.1.0
 	datafusion-physical-optimizer@53.1.0
 	datafusion-physical-plan@53.1.0
-	datafusion-proto@53.1.0
 	datafusion-proto-common@53.1.0
+	datafusion-proto@53.1.0
 	datafusion-pruning@53.1.0
 	datafusion-session@53.1.0
 	datafusion-sql@53.1.0
+	datafusion@53.1.0
 	deranged@0.5.8
 	des@0.8.1
 	diff@0.1.13
 	digest@0.10.7
 	digest@0.11.2
-	dirs@6.0.0
 	dirs-sys@0.5.0
+	dirs@6.0.0
 	displaydoc@0.2.5
-	divan@0.1.21
-	divan-macros@0.1.21
 	dns-lookup@3.0.1
 	dotenvy@0.15.7
-	dtor@0.7.0
 	dtor-proc-macro@0.0.12
+	dtor@0.7.0
 	dunce@1.0.5
 	dyn-clone@1.0.20
 	either@1.15.0
@@ -228,9 +223,9 @@ CRATES="
 	env_logger@0.11.10
 	equivalent@1.0.2
 	errno@0.3.14
+	event-listener-strategy@0.5.4
 	event-listener@2.5.3
 	event-listener@5.4.1
-	event-listener-strategy@0.5.4
 	fastant@0.1.11
 	fastrand@1.9.0
 	fastrand@2.4.1
@@ -241,18 +236,17 @@ CRATES="
 	fnv@1.0.7
 	foldhash@0.1.5
 	foldhash@0.2.0
-	foreign-types@0.3.2
 	foreign-types-shared@0.1.1
+	foreign-types@0.3.2
 	form_urlencoded@1.2.2
-	foyer@0.22.3
 	foyer-common@0.22.3
 	foyer-intrusive-collections@0.10.0-dev
 	foyer-memory@0.22.3
 	foyer-storage@0.22.3
 	foyer-tokio@0.22.3
+	foyer@0.22.3
 	fs4@0.13.1
 	fs_extra@1.3.0
-	futures@0.3.32
 	futures-channel@0.3.32
 	futures-core@0.3.32
 	futures-executor@0.3.32
@@ -263,6 +257,7 @@ CRATES="
 	futures-task@0.3.32
 	futures-timer@3.0.3
 	futures-util@0.3.32
+	futures@0.3.32
 	g2gen@1.2.2
 	g2p@1.2.2
 	g2poly@1.2.2
@@ -273,38 +268,38 @@ CRATES="
 	getrandom@0.3.4
 	getrandom@0.4.2
 	glob@0.3.3
-	h2@0.4.13
+	h2@0.4.19
 	half@2.7.1
 	hashbrown@0.14.5
 	hashbrown@0.15.5
 	hashbrown@0.16.1
 	hashbrown@0.17.0
-	hdfs-native@0.13.5
 	hdfs-native-object-store@0.16.0
-	headers@0.4.1
+	hdfs-native@0.13.5
 	headers-core@0.3.0
+	headers@0.4.1
 	heck@0.5.0
 	hermit-abi@0.5.2
 	hex@0.4.3
 	hmac@0.12.1
 	hmac@0.13.0
-	http@0.2.12
-	http@1.4.0
+	http-body-util@0.1.3
 	http-body@0.4.6
 	http-body@1.0.1
-	http-body-util@0.1.3
 	http-types@2.12.0
+	http@0.2.12
+	http@1.4.0
 	httparse@1.10.1
 	httpdate@1.0.3
 	httpmock@0.8.3
 	humantime@2.3.0
 	hybrid-array@0.4.10
-	hyper@1.9.0
 	hyper-rustls@0.27.9
 	hyper-tls@0.6.0
 	hyper-util@0.1.20
-	iana-time-zone@0.1.65
+	hyper@1.9.0
 	iana-time-zone-haiku@0.1.2
+	iana-time-zone@0.1.65
 	icu_collections@2.2.0
 	icu_locale_core@2.2.0
 	icu_normalizer@2.2.0
@@ -331,12 +326,12 @@ CRATES="
 	itoa@1.0.18
 	jemalloc-sys@0.5.4+5.3.0-patched
 	jemallocator@0.5.4
-	jiff@0.2.23
 	jiff-static@0.2.23
-	jni@0.21.1
+	jiff@0.2.23
+	jni-sys-macros@0.4.1
 	jni-sys@0.3.1
 	jni-sys@0.4.1
-	jni-sys-macros@0.4.1
+	jni@0.21.1
 	jobserver@0.1.34
 	js-sys@0.3.95
 	lazy_static@1.5.0
@@ -351,8 +346,8 @@ CRATES="
 	libc@0.2.185
 	libloading@0.7.4
 	libloading@0.9.0
-	liblzma@0.4.6
 	liblzma-sys@0.4.6
+	liblzma@0.4.6
 	libm@0.2.16
 	libmimalloc-sys@0.1.46
 	libredox@0.1.16
@@ -362,8 +357,8 @@ CRATES="
 	lock_api@0.4.14
 	log@0.4.29
 	lru-slab@0.1.2
-	lz4@1.28.1
 	lz4-sys@1.11.1+lz4-1.10.0
+	lz4@1.28.1
 	lz4_flex@0.13.0
 	maplit@1.0.2
 	matchers@0.2.0
@@ -394,14 +389,14 @@ CRATES="
 	once_cell@1.21.4
 	once_cell_polyfill@1.70.2
 	oorandom@11.1.5
-	openssl@0.10.78
 	openssl-macros@0.1.1
 	openssl-probe@0.2.1
 	openssl-sys@0.9.114
-	opentelemetry@0.31.0
+	openssl@0.10.78
 	opentelemetry-http@0.31.0
 	opentelemetry-otlp@0.31.1
 	opentelemetry-proto@0.31.0
+	opentelemetry@0.31.0
 	opentelemetry_sdk@0.31.0
 	option-ext@0.2.0
 	ordered-float@2.10.1
@@ -414,22 +409,22 @@ CRATES="
 	parquet@58.1.0
 	paste@1.0.15
 	path-tree@0.8.3
-	percent-encoding@2.3.2
 	percent-encoding-rfc3986@0.1.3
+	percent-encoding@2.3.2
 	petgraph@0.8.3
 	phf@0.12.1
 	phf_shared@0.12.1
-	pin-project@1.1.11
 	pin-project-internal@1.1.11
 	pin-project-lite@0.2.17
+	pin-project@1.1.11
 	pin-utils@0.1.0
 	pkg-config@0.3.33
 	plain@0.2.3
-	plotters@0.3.7
 	plotters-backend@0.3.7
 	plotters-svg@0.3.7
-	portable-atomic@1.13.1
+	plotters@0.3.7
 	portable-atomic-util@0.2.7
+	portable-atomic@1.13.1
 	potential_utf@0.1.5
 	powerfmt@0.2.0
 	ppv-lite86@0.2.21
@@ -440,21 +435,21 @@ CRATES="
 	proc-macro-error-attr2@2.0.0
 	proc-macro-error2@2.0.1
 	proc-macro2@1.0.106
-	prost@0.14.3
 	prost-derive@0.14.3
 	prost-types@0.14.3
+	prost@0.14.3
 	psm@0.1.30
-	pyo3@0.28.3
 	pyo3-arrow@0.17.0
 	pyo3-build-config@0.28.3
 	pyo3-ffi@0.28.3
-	pyo3-macros@0.28.3
 	pyo3-macros-backend@0.28.3
+	pyo3-macros@0.28.3
+	pyo3@0.28.3
 	quick-xml@0.31.0
 	quick-xml@0.39.2
-	quinn@0.11.9
 	quinn-proto@0.11.14
 	quinn-udp@0.5.14
+	quinn@0.11.9
 	quote@1.0.45
 	r-efi@5.3.0
 	r-efi@6.0.0
@@ -471,24 +466,24 @@ CRATES="
 	rand_core@0.9.5
 	rand_hc@0.2.0
 	rawpointer@0.2.1
-	rayon@1.12.0
 	rayon-core@1.13.0
-	recursive@0.1.1
+	rayon@1.12.0
 	recursive-proc-macro-impl@0.1.1
+	recursive@0.1.1
 	redox_syscall@0.2.16
 	redox_syscall@0.5.18
 	redox_syscall@0.7.4
 	redox_users@0.5.2
-	regex@1.12.3
 	regex-automata@0.4.14
 	regex-lite@0.1.9
 	regex-syntax@0.8.10
+	regex@1.12.3
 	relative-path@1.9.3
 	repr_offset@0.2.2
-	reqwest@0.12.28
-	reqwest@0.13.2
 	reqwest-middleware@0.4.2
 	reqwest-retry@0.7.0
+	reqwest@0.12.28
+	reqwest@0.13.2
 	retry-policies@0.4.0
 	ring@0.17.14
 	roaring@0.11.3
@@ -498,21 +493,22 @@ CRATES="
 	rustc-hash@2.1.2
 	rustc_version@0.4.1
 	rustix@1.1.4
-	rustls@0.23.38
 	rustls-native-certs@0.8.3
 	rustls-pki-types@1.14.0
-	rustls-platform-verifier@0.6.2
 	rustls-platform-verifier-android@0.1.1
-	rustls-webpki@0.103.13
+	rustls-platform-verifier@0.6.2
+	rustls-webpki@0.103.15
+	rustls@0.23.45
 	rustversion@1.0.22
+	RustyXML@0.3.0
 	ryu@1.0.23
 	same-file@1.0.6
 	scc@2.4.0
 	schannel@0.1.29
 	scopeguard@1.2.0
 	sdd@3.0.10
-	security-framework@3.7.0
 	security-framework-sys@2.17.0
+	security-framework@3.7.0
 	semver@1.0.28
 	seq-macro@0.3.6
 	serde@1.0.228
@@ -552,57 +548,56 @@ CRATES="
 	syn@2.0.117
 	sync_wrapper@1.0.2
 	synstructure@0.13.2
-	system-configuration@0.7.0
 	system-configuration-sys@0.6.0
+	system-configuration@0.7.0
 	tabwriter@1.4.1
 	tagptr@0.2.0
 	target-lexicon@0.13.5
 	tempfile@3.27.0
 	termcolor@1.4.1
-	terminal_size@0.4.4
-	thiserror@1.0.69
-	thiserror@2.0.18
 	thiserror-impl@1.0.69
 	thiserror-impl@2.0.18
+	thiserror@1.0.69
+	thiserror@2.0.18
 	thread_local@1.1.9
 	thrift@0.17.0
-	time@0.3.47
 	time-core@0.1.8
 	time-macros@0.2.27
+	time@0.3.47
 	tiny-keccak@2.0.2
 	tinystr@0.8.3
 	tinytemplate@1.2.1
 	tinyvec@1.11.0
 	tinyvec_macros@0.1.1
-	tokio@1.52.1
 	tokio-macros@2.7.0
 	tokio-native-tls@0.3.1
 	tokio-rustls@0.26.4
 	tokio-stream@0.1.18
 	tokio-test@0.4.5
 	tokio-util@0.7.18
+	tokio@1.52.1
 	toml_datetime@1.1.1+spec-1.1.0
 	toml_edit@0.25.11+spec-1.1.0
 	toml_parser@1.1.2+spec-1.1.0
-	tonic@0.14.5
 	tonic-prost@0.14.5
-	tower@0.5.3
+	tonic@0.14.5
 	tower-http@0.6.8
 	tower-layer@0.3.3
 	tower-service@0.3.3
-	tracing@0.1.44
+	tower@0.5.3
 	tracing-attributes@0.1.31
 	tracing-core@0.1.36
 	tracing-log@0.2.0
 	tracing-opentelemetry@0.32.1
 	tracing-subscriber@0.3.23
+	tracing@0.1.44
 	try-lock@0.2.5
 	tstr@0.2.4
 	tstr_proc_macros@0.2.2
 	twox-hash@2.1.2
 	typed-arena@2.0.2
-	typed-builder@0.23.2
 	typed-builder-macro@0.23.2
+	typed-builder@0.23.2
 	typenum@1.20.0
 	typewit@1.15.2
 	unicode-ident@1.0.24
@@ -629,11 +624,11 @@ CRATES="
 	wasip2@1.0.3+wasi-0.2.9
 	wasip3@0.4.0+wasi-0.3.0-rc-2026-01-06
 	wasite@0.1.0
-	wasm-bindgen@0.2.118
 	wasm-bindgen-futures@0.4.68
-	wasm-bindgen-macro@0.2.118
 	wasm-bindgen-macro-support@0.2.118
+	wasm-bindgen-macro@0.2.118
 	wasm-bindgen-shared@0.2.118
+	wasm-bindgen@0.2.118
 	wasm-encoder@0.244.0
 	wasm-metadata@0.244.0
 	wasm-streams@0.4.2
@@ -646,10 +641,10 @@ CRATES="
 	which@7.0.3
 	which@8.0.2
 	whoami@1.6.1
-	winapi@0.3.9
 	winapi-i686-pc-windows-gnu@0.4.0
 	winapi-util@0.1.11
 	winapi-x86_64-pc-windows-gnu@0.4.0
+	winapi@0.3.9
 	windows-core@0.62.2
 	windows-implement@0.60.2
 	windows-interface@0.59.3
@@ -690,33 +685,36 @@ CRATES="
 	windows_x86_64_msvc@0.53.1
 	winnow@1.0.2
 	winsafe@0.0.19
+	wit-bindgen-core@0.51.0
+	wit-bindgen-rust-macro@0.51.0
+	wit-bindgen-rust@0.51.0
 	wit-bindgen@0.51.0
 	wit-bindgen@0.57.1
-	wit-bindgen-core@0.51.0
-	wit-bindgen-rust@0.51.0
-	wit-bindgen-rust-macro@0.51.0
 	wit-component@0.244.0
 	wit-parser@0.244.0
 	writeable@0.6.3
 	xmlparser@0.13.6
 	yansi@1.0.1
-	yoke@0.8.2
 	yoke-derive@0.8.2
+	yoke@0.8.2
 	z85@3.0.7
-	zerocopy@0.8.48
 	zerocopy-derive@0.8.48
-	zerofrom@0.1.7
+	zerocopy@0.8.48
 	zerofrom-derive@0.1.7
+	zerofrom@0.1.7
 	zeroize@1.8.2
 	zerotrie@0.2.4
-	zerovec@0.11.6
 	zerovec-derive@0.11.3
+	zerovec@0.11.6
 	zlib-rs@0.6.3
 	zmij@1.0.21
-	zstd@0.13.3
 	zstd-safe@7.2.4
 	zstd-sys@2.0.16+zstd.1.5.7
+	zstd@0.13.3
 "
+
+# Match the workspace's rust-version. Verified 2026-10-04.
+RUST_MIN_VER="1.91.1"
 
 inherit cargo distutils-r1 pypi
 
@@ -744,3 +742,7 @@ RDEPEND="
 
 # Tests require networked cloud-service emulators.
 RESTRICT="test"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-1.5.1-cargo-lock-rustsec.patch"
+)
