@@ -99,7 +99,7 @@ CRATES="
 	criterion-plot@0.5.0
 	criterion@0.5.1
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-queue@0.3.12
 	crossbeam-utils@0.8.21
 	crunchy@0.2.4
@@ -178,7 +178,7 @@ CRATES="
 	getrandom@0.3.4
 	getrandom@0.4.2
 	gif@0.14.2
-	h2@0.4.15
+	h2@0.4.19
 	half@2.7.1
 	hashbrown@0.12.3
 	hashbrown@0.14.5
@@ -921,6 +921,10 @@ RESTRICT="test"
 
 # Pretend the version so setuptools-scm doesn't probe git.
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.29.0-cargo-lock-rustsec.patch"
+)
 
 src_unpack() {
 	if use rust; then
