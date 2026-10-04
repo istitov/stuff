@@ -41,7 +41,7 @@ CRATES="
 	bytemuck@1.23.1
 	byteorder@1.5.0
 	bytes-utils@0.1.4
-	bytes@1.10.1
+	bytes@1.12.1
 	cached@0.55.1
 	cached_proc_macro@0.24.0
 	cached_proc_macro_types@0.1.1
@@ -62,7 +62,7 @@ CRATES="
 	cpufeatures@0.2.17
 	crc32fast@1.4.2
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	crossterm@0.25.0
 	crossterm@0.28.1
@@ -73,7 +73,7 @@ CRATES="
 	darling@0.20.11
 	darling_core@0.20.11
 	darling_macro@0.20.11
-	deranged@0.4.0
+	deranged@0.5.8
 	derive_more@0.99.20
 	deunicode@1.6.2
 	diff@0.1.13
@@ -123,7 +123,7 @@ CRATES="
 	getrandom@0.2.16
 	getrandom@0.3.3
 	gimli@0.31.1
-	h2@0.4.11
+	h2@0.4.19
 	hashbrown@0.14.5
 	hashbrown@0.15.4
 	heck@0.5.0
@@ -199,7 +199,7 @@ CRATES="
 	nom@7.1.3
 	nu-ansi-term@0.46.0
 	nu-ansi-term@0.50.1
-	num-conv@0.1.0
+	num-conv@0.2.2
 	num-integer@0.1.46
 	num-traits@0.2.19
 	num_cpus@1.17.0
@@ -280,8 +280,8 @@ CRATES="
 	rustix@1.0.7
 	rustls-native-certs@0.8.1
 	rustls-pki-types@1.12.0
-	rustls-webpki@0.103.3
-	rustls@0.23.28
+	rustls-webpki@0.103.15
+	rustls@0.23.45
 	rustversion@1.0.21
 	ryu@1.0.20
 	same-file@1.0.6
@@ -292,8 +292,9 @@ CRATES="
 	security-framework-sys@2.14.0
 	security-framework@3.2.0
 	selectors@0.26.0
-	serde@1.0.219
-	serde_derive@1.0.219
+	serde@1.0.229
+	serde_core@1.0.229
+	serde_derive@1.0.229
 	serde_json@1.0.140
 	serde_urlencoded@0.7.1
 	serde_yaml@0.9.34+deprecated
@@ -310,7 +311,7 @@ CRATES="
 	signal-hook@0.3.18
 	simplelog@0.12.2
 	siphasher@1.0.1
-	slab@0.4.10
+	slab@0.4.12
 	smallvec@1.15.1
 	smawk@0.3.2
 	socket2@0.5.10
@@ -324,6 +325,7 @@ CRATES="
 	strum_macros@0.26.4
 	subtle@2.6.1
 	syn@2.0.104
+	syn@3.0.6
 	sync_wrapper@1.0.2
 	synstructure@0.13.2
 	syntect@5.2.0
@@ -340,9 +342,9 @@ CRATES="
 	thiserror@1.0.69
 	thiserror@2.0.12
 	thread_local@1.1.9
-	time-core@0.1.4
-	time-macros@0.2.22
-	time@0.3.41
+	time-core@0.1.9
+	time-macros@0.2.32
+	time@0.3.55
 	tinystr@0.8.1
 	tinyvec@1.9.0
 	tinyvec_macros@0.1.1
@@ -472,7 +474,7 @@ CRATES="
 	zerovec@0.11.2
 "
 
-RUST_MIN_VER="1.85.0"
+RUST_MIN_VER="1.88.0"
 inherit cargo
 
 DESCRIPTION="All-in-one LLM CLI: shell assistant, REPL, RAG, agents, multi-provider"
@@ -493,3 +495,7 @@ LICENSE+="
 "
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.30.0-cargo-lock-rustsec.patch"
+)
