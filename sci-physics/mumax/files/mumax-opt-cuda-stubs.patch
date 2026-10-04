@@ -1,0 +1,19 @@
+Link against the CUDA driver stub under /opt/cuda as well.
+
+cgo links -lcuda and already searches /usr/local/cuda/lib64/stubs, the
+stub's location in NVIDIA's default layout, but for /opt/cuda only
+lib64 and lib. Gentoo's nvidia-cuda-toolkit 13 ships libcuda.so only in
+/opt/cuda/lib64/stubs, so the link fails on hosts without the driver.
+The stub carries the libcuda.so.1 soname, so the real driver still
+loads at run time.
+--- a/cuda/cu/cgoflags.go
++++ b/cuda/cu/cgoflags.go
+@@ -13,7 +13,7 @@
+ //#cgo CFLAGS: -I/usr/include
+ //
+ ////arch linux:
+-//#cgo LDFLAGS:-L/opt/cuda/lib64 -L/opt/cuda/lib
++//#cgo LDFLAGS:-L/opt/cuda/lib64 -L/opt/cuda/lib64/stubs -L/opt/cuda/lib
+ //#cgo CFLAGS: -I/opt/cuda/include
+ //
+ ////WINDOWS:

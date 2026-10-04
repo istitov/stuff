@@ -17,6 +17,8 @@ KEYWORDS="~amd64"
 DEPEND=">=dev-util/nvidia-cuda-toolkit-7.5.18-r2"
 RDEPEND="${DEPEND}"
 
+PATCHES=( "${FILESDIR}/${PN}-opt-cuda-stubs.patch" )
+
 src_prepare() {
 	default
 
