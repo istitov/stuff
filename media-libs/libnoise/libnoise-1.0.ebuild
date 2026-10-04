@@ -14,3 +14,7 @@ S="${WORKDIR}/Orca-deps-${PN}-${PV}"
 LICENSE="LGPL-2.1+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64"
+
+# The fork builds only liblibnoise_static.a, and its sole consumer,
+# media-gfx/orcaslicer, links that archive (its Findlibnoise imports a
+# STATIC target), so installing it meets PG0302. verified 2026-10-04
