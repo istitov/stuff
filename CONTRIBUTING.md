@@ -166,6 +166,10 @@ single commit — it makes reverts and bisects painful.
       base-ref framing and exit set as CI. `--exit` selects what fails the
       run, not what gets reported: findings outside that set still print, and
       still deserve a look.
+- [ ] `scripts/pkgcheck/amd64-solvable.py --commits <base>` passes. It runs
+      `NonsolvableDepsInStable` on the stable amd64 profiles, which
+      `metadata/pkgcheck.conf` suppresses repo-wide, and fails on any
+      finding not listed in `scripts/pkgcheck/amd64-solvable.expected`.
 - [ ] No `metadata/md5-cache/` files are staged — the directory
       is gitignored and must stay that way.
 - [ ] No secrets, distfile payloads, or binary blobs snuck in.
@@ -176,17 +180,33 @@ repeating it:
 - `.github/workflows/pkgcheck.yml` re-runs the commit-diff scan on pull
   requests and relevant pushes to `master`; a 3-day cron runs a repo-wide
   scan; and a change to `metadata/layout.conf` or `metadata/pkgcheck.conf`
-  triggers an immediate full validation.
+  triggers an immediate full validation. The diff and repo-wide jobs also
+  run `scripts/pkgcheck/amd64-solvable.py`, and changes under
+  `scripts/pkgcheck/` trigger the workflow.
 - `.github/workflows/nvchecker.yml` checks on pull requests and relevant
   pushes that the generated `nvchecker.toml` is current, and runs a weekly
   upstream drift scan.
 - `.github/workflows/dusty.yml` runs quarterly and reports packages
   untouched for more than 60 days.
+- `.github/workflows/actionlint.yml` lints the workflow files when they
+  change on a pull request or a push to `master`.
+- `.github/workflows/mirror.yml` pushes every branch and tag, and
+  propagates deletions, to the Codeberg and GitLab mirrors on each push.
 
 URL-liveness checks (`pkgcheck scan --net`) are not part of CI — run them
 locally if you change an upstream URL.
 
 ## 🧩 Conventions
+
+### EAPI
+
+Use EAPI 9 whenever every eclass the ebuild inherits supports it, and
+EAPI 8 otherwise; nothing in the overlay uses EAPI 7 or older. Check
+each eclass's `@SUPPORTED_EAPIS`, and also look for helpers an eclass
+defines only for older EAPIs: `qmake-utils.eclass` provides `eqmake5`
+and `qt5_get_*` under EAPI 8 only. Many `::gentoo` eclasses
+(`distutils-r1`, `cmake`, `cargo`, …) do not support EAPI 9 yet, so
+most of the tree is still EAPI 8.
 
 ### `metadata.xml`
 
