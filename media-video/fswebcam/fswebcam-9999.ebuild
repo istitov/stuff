@@ -15,3 +15,11 @@ SLOT="0"
 
 DEPEND="media-libs/gd[truetype,png,jpeg]"
 RDEPEND="${DEPEND}"
+
+src_install() {
+	# The Makefile installs a man page it gzipped itself; let portage
+	# compress docs instead.
+	dobin fswebcam
+	doman fswebcam.1
+	einstalldocs
+}

@@ -22,3 +22,11 @@ PATCHES=(
 	# buffer allocation, then its caller closed it again.
 	"${FILESDIR}"/${P}-v4l1-double-free.patch
 )
+
+src_install() {
+	# The Makefile installs a man page it gzipped itself; let portage
+	# compress docs instead.
+	dobin fswebcam
+	doman fswebcam.1
+	einstalldocs
+}
