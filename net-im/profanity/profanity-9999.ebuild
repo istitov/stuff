@@ -66,6 +66,7 @@ src_configure() {
 
 	local emesonargs=(
 		-Dc-plugins=enabled
+		-Ddocdir="${EPREFIX}"/usr/share/doc/${PF}
 		$(meson_feature gpg pgp)
 		$(meson_feature gtk gdk-pixbuf)
 		$(meson_feature gtk icons-and-clipboard)
