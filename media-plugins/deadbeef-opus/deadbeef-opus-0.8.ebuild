@@ -35,8 +35,10 @@ src_unpack() {
 }
 
 src_prepare(){
-	# Remove the hardcoded /usr/local include path.
-	sed -e 's|-I/usr/local/include/opus||' -i Makefile || die
+	# Remove the hardcoded /usr/local include path, and the -s that strips
+	# the plugin before portage can split debug info.
+	sed -e 's|-I/usr/local/include/opus||' \
+		-e 's|^LDFLAGS+= -s |LDFLAGS+= |' -i Makefile || die
 
 	if use x86;then
 		append-cflags -D_FILE_OFFSET_BITS=64
