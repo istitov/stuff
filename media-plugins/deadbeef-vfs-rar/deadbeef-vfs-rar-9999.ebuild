@@ -31,7 +31,7 @@ src_unpack() {
 	git-r3_src_unpack
 	# Move unpacked UnRAR sources to the Makefile's expected path.
 	unpack "unrar-${UNRAR_PV}.tar.gz"
-	rm -rf "${S}/unrar"
+	rm -rf "${S}/unrar" || die
 	mv "${WORKDIR}/unrar" "${S}/unrar" || die
 }
 
