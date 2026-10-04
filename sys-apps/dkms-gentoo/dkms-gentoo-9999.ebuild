@@ -15,10 +15,22 @@ SLOT="0"
 RDEPEND="
 	app-shells/bash
 	sys-apps/gawk
+	sys-apps/gentoo-functions
 	sys-apps/openrc
 	sys-apps/portage
 "
 DEPEND="${RDEPEND}"
+
+src_prepare() {
+	default
+	sed -i '1s|#!/sbin/runscript|#!/sbin/openrc-run|' dkms-gentoo/dkms || die
+	# Trunk sources isolated-functions.sh from /usr/lib*/portage/bin, which
+	# portage no longer installs, so eend is undefined; use gentoo-functions.
+	sed -i 's|^source /usr/lib\*/portage/bin/isolated-functions\.sh$|. /lib/gentoo/functions.sh|' \
+		dkms-gentoo/dkms-gentoo || die
+	grep -q '^\. /lib/gentoo/functions\.sh$' dkms-gentoo/dkms-gentoo ||
+		die "dkms-gentoo no longer sources isolated-functions.sh; recheck"
+}
 
 src_install() {
 	dosbin dkms-gentoo/dkms-gentoo
