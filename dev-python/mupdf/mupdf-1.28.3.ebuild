@@ -67,7 +67,7 @@ src_compile() {
 			--dir-so "build/shared-release" \
 			--build 01 \
 			|| die
-	mv build/shared-release/libmupdfcpp.so{,.${PV}} .
+	mv build/shared-release/libmupdfcpp.so{,.${PV}} . || die
 	distutils-r1_src_compile
 }
 
