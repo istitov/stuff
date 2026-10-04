@@ -1,7 +1,7 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=9
 
 DESCRIPTION="Copy track info to the clipboard in a custom format, for DeaDBeeF"
 HOMEPAGE="https://github.com/danpla/ddb_copy_info"
