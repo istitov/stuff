@@ -62,5 +62,5 @@ DEPEND="${BDEPEND}
 
 src_unpack() {
 	default
-	rm -rf "${S}/${PN}/third_party/_local"
+	rm -rf "${S}/${PN}/third_party/_local" || die
 }
