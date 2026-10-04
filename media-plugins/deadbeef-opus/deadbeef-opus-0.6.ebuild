@@ -27,6 +27,8 @@ DEPEND_COMMON="
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
 
+PATCHES=( "${FILESDIR}/${P}-gcc16.patch" )
+
 src_prepare(){
 	# Remove the forbidden /usr/local include path.
 	sed -e 's|-I/usr/local/include/opus||' -i Makefile || die
