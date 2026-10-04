@@ -20,7 +20,7 @@ IUSE="openrc systemd"
 
 # tokenizers-cpp fetches Rust crates during the live build.
 PROPERTIES="live"
-RESTRICT="network-sandbox"
+RESTRICT="bindist network-sandbox"
 
 BDEPEND="
 	>=dev-build/cmake-3.22
