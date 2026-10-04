@@ -1,0 +1,63 @@
+Update vendored crates flagged by RustSec to their newest semver-compatible
+releases with `cargo update -p <crate>@<version>`:
+  bytes 1.9.0 -> 1.12.1 (RUSTSEC-2026-0007)
+  h2 0.4.7 -> 0.4.19 (RUSTSEC-2026-0258)
+  openssl 0.10.68 -> 0.10.81 (RUSTSEC-2025-0004, RUSTSEC-2025-0022)
+  openssl-sys 0.9.104 -> 0.9.117
+
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -70,9 +70,9 @@
+ 
+ [[package]]
+ name = "bytes"
+-version = "1.9.0"
++version = "1.12.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "325918d6fe32f23b19878fe4b34794ae41fc19ddbe53b10571a4874d44ffd39b"
++checksum = "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
+ 
+ [[package]]
+ name = "cc"
+@@ -285,9 +285,9 @@
+ 
+ [[package]]
+ name = "h2"
+-version = "0.4.7"
++version = "0.4.19"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ccae279728d634d083c00f6099cb58f01cc99c145b84b8be2f6c74618d79922e"
++checksum = "ef8e5e5a340588f4452631496976cf8636d4a7ecf600239fdc27615d2530bc16"
+ dependencies = [
+  "atomic-waker",
+  "bytes",
+@@ -715,15 +715,14 @@
+ 
+ [[package]]
+ name = "openssl"
+-version = "0.10.68"
++version = "0.10.81"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6174bc48f102d208783c2c84bf931bb75927a617866870de8a4ea85597f871f5"
++checksum = "77823a27f0babb03091cb9ed9ef80af3b39dbc82f97e8fa530374b7dafd87a45"
+ dependencies = [
+  "bitflags",
+  "cfg-if",
+  "foreign-types",
+  "libc",
+- "once_cell",
+  "openssl-macros",
+  "openssl-sys",
+ ]
+@@ -756,9 +755,9 @@
+ 
+ [[package]]
+ name = "openssl-sys"
+-version = "0.9.104"
++version = "0.9.117"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "45abf306cbf99debc8195b66b7346498d7b10c210de50418b5ccd7ceba08c741"
++checksum = "b47e7e6bb2c38cd930d25a23b40fa52e068c10e85f3e03a7f5ba5aaca5713695"
+ dependencies = [
+  "cc",
+  "libc",

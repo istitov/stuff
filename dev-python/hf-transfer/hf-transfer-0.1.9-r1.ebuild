@@ -13,7 +13,7 @@ CRATES="
 	bitflags@2.6.0
 	bumpalo@3.16.0
 	byteorder@1.5.0
-	bytes@1.9.0
+	bytes@1.12.1
 	cc@1.2.5
 	cfg-if@1.0.0
 	core-foundation-sys@0.8.7
@@ -38,7 +38,7 @@ CRATES="
 	futures@0.3.31
 	getrandom@0.2.15
 	gimli@0.31.1
-	h2@0.4.7
+	h2@0.4.19
 	hashbrown@0.15.2
 	heck@0.5.0
 	http-body-util@0.1.2
@@ -81,8 +81,8 @@ CRATES="
 	openssl-macros@0.1.1
 	openssl-probe@0.1.5
 	openssl-src@300.4.1+3.4.0
-	openssl-sys@0.9.104
-	openssl@0.10.68
+	openssl-sys@0.9.117
+	openssl@0.10.81
 	percent-encoding@2.3.1
 	pin-project-lite@0.2.15
 	pin-utils@0.1.0
@@ -184,7 +184,7 @@ CRATES="
 
 DISTUTILS_USE_PEP517=maturin
 PYTHON_COMPAT=( python3_{12..14} )
-RUST_MIN_VER="1.74.0"
+RUST_MIN_VER="1.80.0"
 
 inherit cargo distutils-r1 pypi
 
@@ -208,3 +208,7 @@ LICENSE+="
 LICENSE+=" ISC openssl SSLeay MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.1.9-cargo-lock-rustsec.patch"
+)
