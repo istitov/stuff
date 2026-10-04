@@ -89,7 +89,7 @@ src_configure() {
 
 src_compile() {
 	cmake_src_compile
-	cd python
+	cd python || die
 	PKG_CONFIG_PATH=. distutils-r1_src_compile
 }
 
@@ -98,7 +98,7 @@ src_test() {
 }
 
 python_test() {
-	cd python
+	cd python || die
 	${EPYTHON} test/sentencepiece_test.py || die
 }
 
