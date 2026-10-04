@@ -25,3 +25,14 @@ RDEPEND="
 	dev-python/transforms3d[${PYTHON_USEDEP}]
 	dev-python/psutil[${PYTHON_USEDEP}]
 "
+
+EPYTEST_PLUGINS=()
+# matplotlib 3.11 rejects the list labels the 1D plot helpers pass, and
+# orix 0.15 counts unique equivalents differently in the deprecated
+# get_equivalent_hkl; neither is fixed upstream yet. verified 2026-10-05
+EPYTEST_DESELECT=(
+	diffsims/tests/crystallography/test_get_hkl.py::TestGetHKL::test_get_equivalent_hkl
+	diffsims/tests/sims/test_diffraction_simulation.py::test_plot_profile_simulation
+	diffsims/tests/simulations/test_simulations1d.py::TestSingleSimulation::test_plot
+)
+distutils_enable_tests pytest
