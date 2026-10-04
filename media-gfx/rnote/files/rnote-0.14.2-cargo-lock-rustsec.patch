@@ -1,0 +1,112 @@
+Update vendored crates flagged by RustSec to their newest semver-compatible
+releases with `cargo update -p <crate>@<version>`:
+  crossbeam-epoch 0.9.18 -> 0.9.21 (RUSTSEC-2026-0204)
+  librsvg 2.61.4 -> 2.61.5 (RUSTSEC-2026-0305)
+
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -123,7 +123,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "40c48f72fd53cd289104fc64099abca73db4166ad86ea0b4341abe65af83dadc"
+ dependencies = [
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -134,7 +134,7 @@
+ dependencies = [
+  "anstyle",
+  "once_cell_polyfill",
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -804,9 +804,9 @@
+ 
+ [[package]]
+ name = "crossbeam-epoch"
+-version = "0.9.18"
++version = "0.9.21"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5b82ac4a3c2ca9c3460964f020e1402edd5753411d7737aa39c3714ad1b5420e"
++checksum = "dc74980687109a3b14c72fd458107bf0baa1da1a1a805e178d15501ba9b86d9d"
+ dependencies = [
+  "crossbeam-utils",
+ ]
+@@ -1103,7 +1103,7 @@
+ checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
+ dependencies = [
+  "libc",
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -1550,7 +1550,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "24f8647af4005fa11da47cd56252c6ef030be8fa97bdbf355e7dfb6348f0a82c"
+ dependencies = [
+- "approx 0.5.1",
++ "approx 0.4.0",
+  "num-traits",
+  "rayon",
+  "rstar",
+@@ -1660,7 +1660,7 @@
+  "gobject-sys",
+  "libc",
+  "system-deps",
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -2734,9 +2734,9 @@
+ 
+ [[package]]
+ name = "librsvg"
+-version = "2.61.4"
++version = "2.61.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "14b9be8dd68c76a9a7d131534d80f9e526af5fc9f42ef43d9fca9605ca123065"
++checksum = "63a87a119bcc14ae7ca30abc2d2f47373be57adb6fe70b65f8d73bf9276a3e97"
+ dependencies = [
+  "cairo-rs",
+  "cast",
+@@ -3126,7 +3126,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
+ dependencies = [
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -4339,7 +4339,7 @@
+  "errno",
+  "libc",
+  "linux-raw-sys",
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -4866,7 +4866,7 @@
+  "getrandom 0.4.2",
+  "once_cell",
+  "rustix",
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -5543,7 +5543,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
+ dependencies = [
+- "windows-sys 0.61.2",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]

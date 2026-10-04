@@ -87,7 +87,7 @@ CRATES="
 	cpufeatures@0.3.0
 	crc32fast@1.5.0
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	crunchy@0.2.4
 	cssparser-color@0.3.0
@@ -270,7 +270,7 @@ CRATES="
 	libc@0.2.185
 	libfuzzer-sys@0.4.12
 	libm@0.2.16
-	librsvg@2.61.4
+	librsvg@2.61.5
 	linebender_resource_handle@0.1.1
 	linux-raw-sys@0.12.1
 	litemap@0.8.2
@@ -669,6 +669,10 @@ BDEPEND="
 	sys-devel/gettext
 	virtual/pkgconfig
 "
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.14.2-cargo-lock-rustsec.patch"
+)
 
 src_configure() {
 	meson_src_configure
