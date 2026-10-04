@@ -16,7 +16,7 @@ SRC_URI="
 "
 S="${WORKDIR}/deadbeef-vgmstream-${MY_PV}"
 
-LICENSE="vgmstream"
+LICENSE="ISC"
 SLOT="0"
 KEYWORDS="~arm64"
 

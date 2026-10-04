@@ -9,7 +9,7 @@ DESCRIPTION="A DeaDBeeF plugin for playing streaming video game music using vgms
 HOMEPAGE="https://github.com/jchv/deadbeef-vgmstream"
 EGIT_REPO_URI="https://github.com/jchv/${PN}.git"
 
-LICENSE="vgmstream"
+LICENSE="ISC"
 SLOT="0"
 
 DEPEND_COMMON="
