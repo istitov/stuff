@@ -109,7 +109,7 @@ src_prepare() {
 		-i tensilelite/Makefile || die
 
 	# Make validation accept the selected Clang driver.
-	sed -e "s/amdclang/$(basename "$CC")/g" \
+	sed -e "s/amdclang/$(basename "${CC}")/g" \
 		-i tensilelite/Tensile/Toolchain/Validators.py \
 		-i tensilelite/Tensile/Tests/unit/test_MatrixInstructionConversion.py || die
 

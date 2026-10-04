@@ -127,7 +127,7 @@ src_prepare() {
 		tensilelite/Tensile/Tests/unit/test_MatrixInstructionConversion.py; do
 		grep -qF 'amdclang' "${f}" || die "amdclang anchor moved in ${f}"
 	done
-	sed -e "s/amdclang/$(basename "$CC")/g" \
+	sed -e "s/amdclang/$(basename "${CC}")/g" \
 		-i tensilelite/Tensile/Toolchain/Validators.py \
 		-i tensilelite/Tensile/Tests/unit/test_MatrixInstructionConversion.py || die
 
