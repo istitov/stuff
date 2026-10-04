@@ -4,9 +4,11 @@
 ([bug #948836](https://bugs.gentoo.org/948836)) — "last rites" is Gentoo's
 formal removal announcement, and a **slot** is Gentoo's mechanism for keeping
 incompatible major versions installed side by side (for example, Qt5 = `:5`
-and Qt6 = `:6`) — and no longer carries the slot-5 split set. Plenty of
-software hasn't finished its Qt6 port, including large scientific GUIs such as
-`sci-physics/mantid`, PyQt5 apps, and qscintilla-based editors.
+and Qt6 = `:6`) — and no longer carries the slot-5 split set. Some
+software can still build against Qt5: in this overlay
+`games-roguelike/dwarftherapist` with `USE=qt5`, `sci-physics/mantid`
+6.16.1.1, `sci-physics/prismatic`, `dev-python/qtpy` and older
+`dev-python/fabio`.
 
 `stuff` carries the Qt5 split-module set at **5.15.19-lts-lgpl**, excluding
 QtWebEngine, with the [**KDE Qt5 Patch Collection**][1] applied, so those apps
@@ -17,12 +19,14 @@ keep building. It's a deliberate
 
 !!! tip "Quickstart"
     With the overlay enabled and its keywords accepted ([Setup](../setup.md)),
-    emerge a Qt5 consumer; it resolves against the overlay's 5.15.19. The
-    overlay's profile re-allows the masked `dev-qt:5` set, so no manual unmask is
-    needed. As root:
+    emerge a Qt5 consumer; it resolves against the overlay's 5.15.19.
+    `::gentoo` removed its `dev-qt:5` mask along with the packages, so no
+    unmask is needed. Dwarf Therapist defaults to Qt6, so select its Qt5
+    build first. As root:
 
     ```bash title="root #"
-    emerge -av sci-physics/mantid        # example Qt5 consumer
+    echo "games-roguelike/dwarftherapist qt5 -qt6" >> /etc/portage/package.use/dwarftherapist
+    emerge -av games-roguelike/dwarftherapist   # example Qt5 consumer
     ```
 
 ## What the overlay carries
@@ -39,9 +43,8 @@ keep building. It's a deliberate
 
 ## How to use it
 
-1. **Enable the overlay.** Its `profiles/package.unmask` re-allows the
-   `dev-qt/*:5` set that `::gentoo` masked — applied automatically for anyone
-   with the overlay enabled, so nothing is unmasked by hand.
+1. **Enable the overlay.** `::gentoo` dropped its `dev-qt/*:5` mask together
+   with the packages, so the overlay's set needs no unmasking.
 2. **Accept `~arch` keywords.** The Qt5 ebuilds are keyworded testing
    (`~amd64 …`). On stable amd64, accept them. The simplest form takes the whole
    overlay:
@@ -66,8 +69,8 @@ keep building. It's a deliberate
   [extra-stuff](https://github.com/istitov/extra-stuff) as version-pinned
   distfiles; the eclass fans the `SRC_URI` across the GitHub / Codeberg / GitLab
   raw mirrors, while the upstream Qt tarballs come from `download.qt.io`.
-- `profiles/package.unmask` re-allows the slot; `profiles/package.mask` pins
-  qscintilla to the Qt5 `-r1`.
+- `profiles/package.mask` pins qscintilla to the Qt5 `-r1`; nothing needs
+  unmasking, since `::gentoo` removed its slot 5 mask with the packages.
 
 ## When can the mirror be dropped?
 
@@ -89,8 +92,8 @@ then `emerge --depclean`.
     This mirror exists so Qt5 consumers keep working *through* their Qt6 ports —
     it will be dropped once those land. Don't start new work against Qt5.
 
-- **`qtwebengine:5` is not carried** (it's masked) — apps that need the Qt5
-  WebEngine won't find it here.
+- **`qtwebengine:5` is not carried** (neither `::gentoo` nor the overlay ships
+  it) — apps that need the Qt5 WebEngine won't find it here.
 - **Tree status.** `::gentoo`'s Qt5 removal has executed. The overlay is now the
   source for this split set, and a Qt5 consumer that isn't using it will fail
   to resolve.
