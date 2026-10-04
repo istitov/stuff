@@ -37,6 +37,10 @@ RDEPEND="
 	sci-ml/caffe2[cuda?,rocm?,${PYTHON_SINGLE_USEDEP}]
 	=sci-ml/pytorch-2.13*[${PYTHON_SINGLE_USEDEP}]
 "
+# setup.py imports torch and compiles against caffe2's installed headers, and
+# pyproject.toml lists torch as a build requirement, so the runtime set has to
+# be present at build time too. verified 2026-10-04
+DEPEND="${RDEPEND}"
 
 BDEPEND="
 	test? (
