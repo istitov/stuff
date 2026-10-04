@@ -3,7 +3,7 @@
 
 EAPI=8
 
-RUST_MIN_VER="1.89.0"
+RUST_MIN_VER="1.90.0"
 CRATES="
 	adler2@2.0.1
 	aho-corasick@1.1.4
@@ -28,8 +28,8 @@ CRATES="
 	atomic-waker@1.1.2
 	auto-launch@0.5.0
 	autocfg@1.5.0
-	aws-lc-rs@1.17.3
-	aws-lc-sys@0.43.0
+	aws-lc-rs@1.18.1
+	aws-lc-sys@0.45.0
 	base64@0.21.7
 	base64@0.22.1
 	base64@0.23.1
@@ -183,7 +183,7 @@ CRATES="
 	gtk-sys@0.18.2
 	gtk3-macros@0.18.2
 	gtk@0.18.2
-	h2@0.4.13
+	h2@0.4.19
 	half@2.7.1
 	hashbrown@0.12.3
 	hashbrown@0.14.5
@@ -398,8 +398,8 @@ CRATES="
 	rustls-pki-types@1.14.0
 	rustls-platform-verifier-android@0.1.1
 	rustls-platform-verifier@0.6.2
-	rustls-webpki@0.103.13
-	rustls@0.23.37
+	rustls-webpki@0.103.15
+	rustls@0.23.45
 	rustversion@1.0.22
 	same-file@1.0.6
 	schannel@0.1.29
@@ -694,9 +694,12 @@ SRC_URI="
 "
 S="${WORKDIR}/unsloth-${PV/_beta/-beta}"
 
-# Shared across versions; applies unchanged to 0.1.814_beta through
-# 0.1.902_beta. Verified 2026-10-02.
-PATCHES=( "${FILESDIR}/${PN}-system-backend.patch" )
+# The system-backend patch is shared across versions; it applies
+# unchanged to 0.1.814_beta through 0.1.902_beta. Verified 2026-10-02.
+PATCHES=(
+	"${FILESDIR}/${PN}-system-backend.patch"
+	"${FILESDIR}/${PN}-0.1.902_beta-cargo-lock-rustsec.patch"
+)
 
 # The generated archive is mutable; the Manifest pins its accepted bytes.
 # The studio UI is AGPL-3.0-only (AGPL-3 here); bundled web fonts are OFL-1.1.
