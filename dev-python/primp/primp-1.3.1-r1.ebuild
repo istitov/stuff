@@ -30,8 +30,8 @@ CRATES="
 	async-trait@0.1.89
 	atomic-waker@1.1.2
 	autocfg@1.5.0
-	aws-lc-rs@1.17.0
-	aws-lc-sys@0.41.0
+	aws-lc-rs@1.18.1
+	aws-lc-sys@0.45.0
 	base64@0.22.1
 	bencher@0.1.5
 	bit-vec@0.9.1
@@ -67,7 +67,7 @@ CRATES="
 	critical-section@1.2.0
 	crossbeam-channel@0.5.15
 	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
+	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.21
 	crunchy@0.2.4
 	data-encoding@2.11.0
@@ -105,7 +105,7 @@ CRATES="
 	getrandom@0.2.17
 	getrandom@0.3.4
 	getrandom@0.4.2
-	h2@0.4.14
+	h2@0.4.19
 	h3-quinn@0.0.10
 	h3@0.0.8
 	half@2.7.1
@@ -265,8 +265,8 @@ CRATES="
 	rustls-pki-types@1.14.1
 	rustls-platform-verifier-android@0.1.1
 	rustls-platform-verifier@0.7.0
-	rustls-webpki@0.103.13
-	rustls@0.23.40
+	rustls-webpki@0.103.15
+	rustls@0.23.45
 	rustversion@1.0.22
 	ryu@1.0.23
 	same-file@1.0.6
@@ -447,6 +447,10 @@ QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/primp.*.so"
 
 # Tests require live network access.
 RESTRICT="test"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-1.3.1-cargo-lock-rustsec.patch"
+)
 
 src_unpack() {
 	cargo_src_unpack
