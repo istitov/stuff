@@ -94,8 +94,8 @@ src_prepare() {
 			git_url="${submodules[$k]%@*}"
 			commit_hash="${submodules[$k]#*@}"
 			url_prefix="${git_url%.git}"
-			rm -r "$k" || die
-			ln -s "${WORKDIR}/${url_prefix##*/}-${commit_hash}" "$k" || die
+			rm -r "${k}" || die
+			ln -s "${WORKDIR}/${url_prefix##*/}-${commit_hash}" "${k}" || die
 		done
 	fi
 
