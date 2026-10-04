@@ -10,7 +10,6 @@ HOMEPAGE="https://bitbucket.org/Lithopsian/deadbeef-opus/overview"
 # Releases after 0.6 use tag archives with hash-suffixed roots, renamed below.
 SRC_URI="https://bitbucket.org/Lithopsian/deadbeef-opus/get/v${PV}.tar.gz -> ${P}.tar.gz"
 
-S="${WORKDIR}/${P}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
