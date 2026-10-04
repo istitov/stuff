@@ -78,7 +78,7 @@ src_unpack() {
 	local rocmver="$(ver_cut 1-2 "${hippkg#*hip-}")"
 	local file
 	for file in ${A}; do
-		[[ $file == *-rocm${rocmver}-*.tar.gz || $file == *-gfx*.tar.gz ]] &&
+		[[ ${file} == *-rocm${rocmver}-*.tar.gz || ${file} == *-gfx*.tar.gz ]] &&
 			unpack "${file}"
 	done
 }

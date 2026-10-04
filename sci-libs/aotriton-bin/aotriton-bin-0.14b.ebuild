@@ -91,10 +91,10 @@ src_unpack() {
 	local rocmver="$(ver_cut 1-2 "${hippkg#*hip-}")"
 	local file shim_found=
 	for file in ${A}; do
-		if [[ $file == *-rocm${rocmver}-*.tar.gz ]]; then
+		if [[ ${file} == *-rocm${rocmver}-*.tar.gz ]]; then
 			shim_found=1
 			unpack "${file}"
-		elif [[ $file == *-gfx*.tar.gz ]]; then
+		elif [[ ${file} == *-gfx*.tar.gz ]]; then
 			unpack "${file}"
 		fi
 	done
