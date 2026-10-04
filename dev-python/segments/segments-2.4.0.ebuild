@@ -27,3 +27,11 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
+
+EPYTEST_PLUGINS=( pytest-mock )
+distutils_enable_tests pytest
+
+python_test() {
+	# setup.cfg adds --cov, whose plugin is not loaded here.
+	epytest -o addopts=
+}
