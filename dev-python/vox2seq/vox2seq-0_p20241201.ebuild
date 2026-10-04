@@ -14,7 +14,6 @@ HOMEPAGE="https://github.com/microsoft/TRELLIS"
 # TRELLIS removed this local extension; use the copy vendored from
 # ComfyUI-IF_Trellis in extra-stuff.
 SRC_URI="https://raw.githubusercontent.com/istitov/extra-stuff/${P}-r0-0/dev-python/${PN}/${P}.tar.xz -> ${P}-r0-0.tar.xz"
-S="${WORKDIR}/${P}"
 
 LICENSE="MIT"
 SLOT="0"
