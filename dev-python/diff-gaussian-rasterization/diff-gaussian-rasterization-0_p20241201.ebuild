@@ -13,7 +13,6 @@ DESCRIPTION="Differentiable antialiased Gaussian rasterization (mip-splatting) f
 HOMEPAGE="https://github.com/autonomousvision/mip-splatting"
 # Pin the untagged submodule and bundled GLM through extra-stuff.
 SRC_URI="https://raw.githubusercontent.com/istitov/extra-stuff/${P}-r0-0/dev-python/${PN}/${P}.tar.xz -> ${P}-r0-0.tar.xz"
-S="${WORKDIR}/${P}"
 
 # Package code is research-only; bundled GLM is MIT.
 LICENSE="Gaussian-Splatting MIT"
