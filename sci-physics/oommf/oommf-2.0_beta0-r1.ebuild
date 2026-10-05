@@ -24,6 +24,8 @@ DEPEND="
 dev-lang/tcl:=
 dev-lang/tk:="
 RDEPEND="${DEPEND}"
+# pimake runs under tclsh on the build host.
+BDEPEND="dev-lang/tcl"
 
 src_compile() {
 	# pimake's upgrade target only clears files left by an older in-place
@@ -39,7 +41,7 @@ src_install()
 {
 	use doc && dodoc "./doc/userguide/userguide.pdf"
 	use doc && dodoc "./doc/progman/progman.pdf"
-	rm -rf "./doc"
+	rm -rf "./doc" || die
 	dodoc README
 
 	# Each series gets its own tree and launcher, so the slots install side
