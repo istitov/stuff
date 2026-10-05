@@ -166,10 +166,15 @@ single commit — it makes reverts and bisects painful.
       base-ref framing and exit set as CI. `--exit` selects what fails the
       run, not what gets reported: findings outside that set still print, and
       still deserve a look.
-- [ ] `scripts/pkgcheck/amd64-solvable.py --commits <base>` passes. It runs
-      `NonsolvableDepsInStable` on the stable amd64 profiles, which
-      `metadata/pkgcheck.conf` suppresses repo-wide, and fails on any
-      finding not listed in `scripts/pkgcheck/amd64-solvable.expected`.
+- [ ] `pkgcheck scan -k NonsolvableDepsInStable -p stable -a amd64 <packages>`
+      reports nothing for the packages you touched. This runs the
+      dependency-solvability check that `metadata/pkgcheck.conf` suppresses
+      repo-wide, on the stable amd64 profiles only. Name the packages rather
+      than passing `--commits`, which errors out when the range also touches
+      an eclass; after an eclass or profile change, run it without targets to
+      scan the whole tree. The only expected findings are lemonade's, for its
+      live-only kokoros; CI's gate accepts them through the entry in
+      `scripts/pkgcheck/amd64-solvable.expected`.
 - [ ] No `metadata/md5-cache/` files are staged — the directory
       is gitignored and must stay that way.
 - [ ] No secrets, distfile payloads, or binary blobs snuck in.
