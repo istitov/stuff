@@ -64,8 +64,12 @@ src_prepare() {
 		-e "s:/usr/local/bin:${EPREFIX}/usr/bin:g" \
 		-i src/grgfil.f makehtml maketex || die "sed path failed"
 
-	use motif && sed -i -e '/XMDRIV/s/!//' drivers.list
-	use tk && sed -i -e '/TKDRIV/s/!//' drivers.list
+	if use motif; then
+		sed -i -e '/XMDRIV/s/!//' drivers.list || die
+	fi
+	if use tk; then
+		sed -i -e '/TKDRIV/s/!//' drivers.list || die
+	fi
 }
 
 src_configure() {
@@ -79,7 +83,7 @@ src_configure() {
 	# GCC 10 workaround (Gentoo bug 722190).
 	append-fflags $(test-flags-FC -fallow-argument-mismatch)
 
-	./makemake . linux
+	./makemake . linux || die
 	sed -i -e "s|/usr|${EPREFIX}/usr|g" makefile || die
 }
 
@@ -98,8 +102,8 @@ src_compile() {
 	if use doc; then
 		export VARTEXFONTS="${T}/fonts"
 		emake pgplot.html pgplot-routines.tex
-		pdflatex pgplot-routines.tex
-		pdflatex pgplot-routines.tex
+		pdflatex pgplot-routines.tex || die
+		pdflatex pgplot-routines.tex || die
 	fi
 
 	emake -j1 clean
