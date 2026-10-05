@@ -22,7 +22,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.24.0:2
 	libffi? ( dev-libs/libffi:= )
 	dev-lang/python:2.7
 "
-DEPEND="${COMMON_DEPEND}
+DEPEND="${COMMON_DEPEND}"
+BDEPEND="
+	${PYTHON_DEPS}
 	dev-build/gtk-doc-am
 	virtual/pkgconfig
 	test? (
