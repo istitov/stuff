@@ -399,12 +399,12 @@ src_compile() {
 		texlive-common_is_file_present_in_texmf "${i}" || echo "${i}"
 	done > "${T}/updmap_update" < <(grep -E '^(Mixed|Kanji)?Map' "texmf-dist/web2c/updmap.cfg" | sed 's@.* @@')
 	{
-		sed 's@/@\\/@g; s@^@/^MixedMap[     ]*@; s@$@$/s/^/#! /@' <"${T}/updmap_update"
-		sed 's@/@\\/@g; s@^@/^Map[  ]*@; s@$@$/s/^/#! /@' <"${T}/updmap_update"
-		sed 's@/@\\/@g; s@^@/^KanjiMap[     ]*@; s@$@$/s/^/#! /@' <"${T}/updmap_update"
+		sed 's@/@\\/@g; s@^@/^MixedMap[     ]*@; s@$@$/s/^/#! /@' <"${T}/updmap_update" || die
+		sed 's@/@\\/@g; s@^@/^Map[  ]*@; s@$@$/s/^/#! /@' <"${T}/updmap_update" || die
+		sed 's@/@\\/@g; s@^@/^KanjiMap[     ]*@; s@$@$/s/^/#! /@' <"${T}/updmap_update" || die
 	} > "${T}/updmap_update2"
-	sed -f "${T}/updmap_update2" "texmf-dist/web2c/updmap.cfg" >	"${T}/updmap_update3"\
-		&& cat "${T}/updmap_update3" > "texmf-dist/web2c/updmap.cfg"
+	sed -f "${T}/updmap_update2" "texmf-dist/web2c/updmap.cfg" > "${T}/updmap_update3" || die
+	cat "${T}/updmap_update3" > "texmf-dist/web2c/updmap.cfg" || die
 }
 
 src_test() {
