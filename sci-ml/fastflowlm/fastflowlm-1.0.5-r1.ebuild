@@ -28,8 +28,11 @@ SRC_URI="
 "
 S="${WORKDIR}/FastFlowLM-${PV}"
 
-# CLI is MIT; bundled NPU kernels use FastFlowLM-Binary.
-LICENSE="MIT FastFlowLM-Binary"
+# The CLI is MIT. The bundled NPU kernels are proprietary under upstream's
+# TERMS.md, which replaced the older FastFlowLM-Binary licence (shipped as
+# superseded): free use, commercially up to a revenue threshold, and no
+# grant to redistribute, hence bindist. verified 2026-10-05
+LICENSE="MIT FastFlowLM-Terms"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="openrc systemd"

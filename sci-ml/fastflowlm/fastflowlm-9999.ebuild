@@ -14,7 +14,11 @@ HOMEPAGE="
 EGIT_REPO_URI="https://github.com/ROCm/FastFlowLM.git"
 EGIT_SUBMODULES=( '*' )
 
-LICENSE="MIT FastFlowLM-Binary"
+# The CLI is MIT. The bundled NPU kernels are proprietary under upstream's
+# TERMS.md, which replaced the older FastFlowLM-Binary licence (shipped as
+# superseded): free use, commercially up to a revenue threshold, and no
+# grant to redistribute, hence bindist. verified 2026-10-05
+LICENSE="MIT FastFlowLM-Terms"
 SLOT="0"
 IUSE="openrc systemd"
 
