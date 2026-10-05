@@ -3,18 +3,23 @@
 # also hides this overlay's own TL2026 set, a newer snapshot carried here
 # since 2026-05-28. Portage applies a repository's package.unmask to that
 # repository's packages only, so ::gentoo's TL2026 stays masked. The
-# newer dev-tex/{biber,biblatex,glossaries,latex2pydata,minted} that the
-# same mask covers stay masked here; unmasking them is a separate call.
-# ::gentoo's dvipsk entry reads app-test/dvipsk and matches nothing;
-# ours is listed so a corrected entry does not hide it. Drop this block
-# once ::gentoo lifts its mask. verified 2026-10-03
+# newer dev-tex packages the same mask covers are unmasked too: left
+# masked, an update downgrades latex2pydata below the 0.7.0 that minted
+# 3.8 needs. ::gentoo's dvipsk entry reads app-test/dvipsk and matches
+# nothing; ours is listed so a corrected entry does not hide it. Drop
+# this block once ::gentoo lifts its mask. verified 2026-10-05
 >=app-text/dvipsk-2026
 >=app-text/ps2pkm-1.8_p20260301
 >=app-text/texlive-2026
 >=app-text/texlive-core-2026
 >=dev-libs/kpathsea-6.4.2
 >=dev-libs/ptexenc-1.5.2
+>=dev-tex/biber-2.21
+>=dev-tex/biblatex-3.21
 >=dev-tex/bibtexu-3.72_p20260301
+>=dev-tex/glossaries-5.1
+>=dev-tex/latex2pydata-0.7.0
+>=dev-tex/minted-3.8.0
 >=dev-tex/tex4ht-20260301
 >=dev-texlive/texlive-basic-2026
 >=dev-texlive/texlive-bibtexextra-2026
