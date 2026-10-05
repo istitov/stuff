@@ -13,7 +13,7 @@ KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="test"
 
 RDEPEND="dev-util/bats"
-DEPEND="${RDEPEND}"
+BDEPEND="test? ( dev-util/bats )"
 
 DOCS=( README.md CHANGELOG.md )
 RESTRICT="!test? ( test )"
