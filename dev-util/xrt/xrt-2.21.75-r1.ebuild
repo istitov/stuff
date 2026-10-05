@@ -125,6 +125,14 @@ src_prepare() {
 	sed -e "s/CONFIGURATIONS Debug Release/CONFIGURATIONS Debug Release RelWithDebInfo/" \
 		-i src/runtime_src/core/common/aiebu/src/cpp/utils/asm/CMakeLists.txt || die
 
+	# This aiebu installs its headers only for Debug and Release builds, and
+	# fastflowlm compiles against them.
+	sed -e "s/CONFIGURATIONS Debug Release COMPONENT/CONFIGURATIONS Debug Release RelWithDebInfo COMPONENT/" \
+		-i src/runtime_src/core/common/aiebu/src/cpp/CMakeLists.txt || die
+	grep -q 'CONFIGURATIONS Debug Release RelWithDebInfo COMPONENT' \
+		src/runtime_src/core/common/aiebu/src/cpp/CMakeLists.txt ||
+		die "aiebu header install rule moved; recheck"
+
 	cmake_src_prepare
 }
 

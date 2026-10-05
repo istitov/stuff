@@ -121,6 +121,13 @@ src_prepare() {
 	sed -e "s/CONFIGURATIONS Debug Release/CONFIGURATIONS Debug Release RelWithDebInfo/" \
 		-i src/runtime_src/core/common/aiebu/src/cpp/utils/asm/CMakeLists.txt || die
 
+	# XRT ties aiebu's install to XRT_INSTALL_STATIC_LIBRARY, but fastflowlm
+	# links libaiebu.a and includes aiebu.h, and there is no shared aiebu.
+	sed -e 's/set(AIEBU_INSTALL_STATIC_LIBRARY ${XRT_INSTALL_STATIC_LIBRARY})/set(AIEBU_INSTALL_STATIC_LIBRARY ON)/' \
+		-i src/runtime_src/core/common/CMakeLists.txt || die
+	grep -q 'set(AIEBU_INSTALL_STATIC_LIBRARY ON)' src/runtime_src/core/common/CMakeLists.txt ||
+		die "aiebu install switch moved; recheck"
+
 	cmake_src_prepare
 }
 
