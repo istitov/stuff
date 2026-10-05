@@ -1198,7 +1198,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (241) ---
+# --- github (242) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1772,6 +1772,12 @@ prefix = "v"
 ["dev-python/opentelemetry-semantic-conventions"]
 source = "github"
 github = "open-telemetry/opentelemetry-python"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/oss-harmony"]
+source = "github"
+github = "oss-harmony/harmony"
 use_max_tag = true
 prefix = "v"
 
