@@ -30,6 +30,10 @@ RDEPEND="
 	x11-libs/cairo
 "
 DEPEND="${RDEPEND}"
+BDEPEND="
+	${PYTHON_DEPS}
+	virtual/pkgconfig
+"
 
 PATCHES=( "${FILESDIR}/${MYPN}-1.19.1-py39.patch" )
 
