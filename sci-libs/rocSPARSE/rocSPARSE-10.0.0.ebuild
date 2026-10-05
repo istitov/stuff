@@ -80,13 +80,13 @@ src_prepare() {
 		mkdir -p "${BUILD_DIR}"/clients/matrices || die
 		# Optimization flags break the mtx2csr converter build.
 		edo $(tc-getCXX) deps/convert.cpp -o deps/convert
-		find "${WORKDIR}" -maxdepth 2 -regextype egrep -regex ".*/(.*)/\1\.mtx" -print0 |
-			while IFS= read -r -d '' mtxfile; do
-				destination=${BUILD_DIR}/clients/matrices/$(basename -s '.mtx' "${mtxfile}").csr
-				ebegin "Converting ${mtxfile} to ${destination}"
-				deps/convert "${mtxfile}" "${destination}"
-				eend $?
-			done
+		local mtxfile destination
+		while IFS= read -r -d '' mtxfile; do
+			destination=${BUILD_DIR}/clients/matrices/$(basename -s '.mtx' "${mtxfile}").csr
+			ebegin "Converting ${mtxfile} to ${destination}"
+			deps/convert "${mtxfile}" "${destination}"
+			eend $? || die "converting ${mtxfile} failed"
+		done < <(find "${WORKDIR}" -maxdepth 2 -regextype egrep -regex ".*/(.*)/\1\.mtx" -print0 || die)
 	fi
 }
 
