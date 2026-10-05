@@ -54,7 +54,11 @@ RDEPEND="
 	sys-libs/ncurses:=
 	sys-libs/readline:=
 "
-DEPEND="${RDEPEND}"
+# xrt-2.21.75-r1 is the first to install aiebu's headers.
+DEPEND="
+	${RDEPEND}
+	>=dev-util/xrt-2.21.75-r1
+"
 
 CMAKE_USE_DIR="${S}/src"
 
@@ -80,6 +84,11 @@ src_prepare() {
 		"${S}/src/CMakeLists.txt" || die
 	# Exclude a backup binary caught by upstream's *.so* install glob.
 	rm "${S}/src/lib/xrt/libq4_npu_eXpress.so.bak-20260826" || die
+	# Link XRT's aiebu, not the prebuilt copy upstream ships. flm calls only
+	# aiebu_assembler_get_elf(), declared identically by the aiebu of every
+	# packaged XRT. verified 2026-10-05
+	rm "${S}"/src/lib/xrt/{libaiebu.a,aiebu_static.lib} || die
+	rm -r "${S}"/src/include/aiebu || die
 	cmake_src_prepare
 }
 
