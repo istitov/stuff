@@ -16,6 +16,8 @@ KEYWORDS="~amd64"
 # Prebuilt binaries; ldd shows only glibc libraries. Do not strip.
 RESTRICT="strip mirror"
 
+RDEPEND="sys-libs/glibc"
+
 QA_PREBUILT="opt/bgmn/*"
 
 src_install() {
