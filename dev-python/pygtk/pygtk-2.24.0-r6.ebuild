@@ -28,7 +28,10 @@ RDEPEND="dev-lang/python:2.7
 	>=dev-python/pygobject-2.26.8-r53:2[${PYTHON_USEDEP}]
 	>=gnome-base/libglade-2.5:2.0
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
+	${PYTHON_DEPS}
+	>=dev-python/pygobject-2.26.8-r53:2[${PYTHON_USEDEP}]
 	virtual/pkgconfig
 	doc? (
 		dev-libs/libxslt
