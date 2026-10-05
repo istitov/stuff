@@ -16,8 +16,10 @@ KEYWORDS=""
 DEPEND="
 	media-sound/deadbeef
 	sci-libs/fftw:3.0
+	x11-libs/gtk+:3
 "
 RDEPEND="${DEPEND}"
+BDEPEND="virtual/pkgconfig"
 
 PATCHES=( "${FILESDIR}/${PN}-gcc16.patch" )
 
