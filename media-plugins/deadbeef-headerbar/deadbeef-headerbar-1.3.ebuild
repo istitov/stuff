@@ -15,15 +15,18 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 # Configure requires glib-2.0, gio-2.0, and glib-compile-resources; depend on
-# dev-libs/glib directly instead of reaching it through gtk+.
-# verified 2026-07-27
+# dev-libs/glib directly instead of reaching it through gtk+, and on the build
+# host too for the glib-compile-resources program. verified 2026-10-05
 DEPEND="
 	dev-libs/glib:2
 	media-sound/deadbeef
 	x11-libs/gtk+:3
 "
 RDEPEND="${DEPEND}"
-BDEPEND="virtual/pkgconfig"
+BDEPEND="
+	dev-libs/glib:2
+	virtual/pkgconfig
+"
 
 PATCHES=( "${FILESDIR}/${P}-gcc16-fix-casting.patch" )
 
