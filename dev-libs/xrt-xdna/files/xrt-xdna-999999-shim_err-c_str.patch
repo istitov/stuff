@@ -1,0 +1,24 @@
+Pass C strings to shim_err(), a printf-style variadic function; clang
+rejects passing std::string through it. Master already sizes the
+virtio request buffer at compile time, so the VLA hunk of the
+0_p20251025 patch is not needed here.
+--- a/src/shim/hwq.cpp
++++ b/src/shim/hwq.cpp
+@@ -23,7 +23,7 @@
+ {
+   std::ofstream ofs(dumpfile, std::ios::out | std::ios::binary);
+   if (!ofs.is_open())
+-    shim_err(errno, "Failed to open dump file: %s", dumpfile);
++    shim_err(errno, "Failed to open dump file: %s", dumpfile.c_str());
+ 
+   for (size_t i = 0; i < size; i++)
+     ofs.write(reinterpret_cast<char *>(buf) + i, 1);
+@@ -42,7 +42,7 @@
+   std::error_code ec;
+   std::filesystem::create_directories(dir_path, ec);
+   if (ec)
+-    shim_err(ec.value(), "Failed to create BO dump dir: %s: %s", dir_path, ec.message());
++    shim_err(ec.value(), "Failed to create BO dump dir: %s: %s", dir_path.c_str(), ec.message().c_str());
+ 
+   std::string filename = "exec_buf.";
+   filename += std::to_string(cmd_bo->id().handle);

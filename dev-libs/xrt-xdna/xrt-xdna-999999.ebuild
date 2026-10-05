@@ -11,16 +11,15 @@ HOMEPAGE="https://github.com/amd/xdna-driver"
 
 if [[ ${PV} == 999999 ]] ; then
 	EGIT_REPO_URI="https://github.com/amd/xdna-driver.git"
+	# The VTD archives come from the vtd submodule, and XRT keeps nesting
+	# further submodules; fetch all but the Windows-only Detours and the
+	# kernel driver's libqdma, as dev-util/xrt-999999 does.
 	EGIT_SUBMODULES=(
-		xrt
-		xrt/src/runtime_src/aie-rt
-		xrt/src/runtime_src/core/common/aiebu
-		xrt/src/runtime_src/core/common/elf
-		xrt/src/runtime_src/xdp
+		'*'
+		'-xrt/src/runtime_src/core/tools/xbtracer/Detours'
+		'-xrt/src/runtime_src/core/pcie/driver/linux/xocl/lib/libqdma'
 	)
 	inherit git-r3
-
-	BDEPEND="net-misc/wget"
 else
 	VTD_HASH=c79b5d21568a4ffa5b0612a8279b352fc4e1109a
 
@@ -76,7 +75,7 @@ BDEPEND+="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-0_p20251025-fix-clang.patch
+	"${FILESDIR}"/${PN}-999999-shim_err-c_str.patch
 )
 
 CONFIG_CHECK="~AMD_IOMMU ~DRM_ACCEL"
@@ -88,26 +87,6 @@ python_check_deps() {
 src_unpack() {
 	if [[ ${PV} == 999999 ]] ; then
 		git-r3_src_unpack
-
-		pushd "${S}" || die
-		local VTD_HASH=$(grep -oP 'VTD/raw/\K[0-9a-f]+' tools/info.json | head -n1)
-		[[ "${VTD_HASH}" == "" ]] && die "Failed to extract VTD hash"
-
-		local VTD_FILES=(
-			"https://github.com/Xilinx/VTD/raw/${VTD_HASH}/archive/strx/xrt_smi_strx.a"
-			"https://github.com/Xilinx/VTD/raw/${VTD_HASH}/archive/phx/xrt_smi_phx.a"
-			"https://github.com/Xilinx/VTD/raw/${VTD_HASH}/archive/npu3/xrt_smi_npu3.a"
-		)
-
-		mkdir -p amdxdna_bins/vtd_archives || die
-
-		for url in "${VTD_FILES[@]}"; do
-			if ! wget -nc "${url}" -O "amdxdna_bins/vtd_archives/${url##*/}"; then
-				die "Fetching from ${url} failed"
-			fi
-		done
-
-		popd || die
 	else
 		default
 
@@ -161,8 +140,12 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	insinto /usr/share/xrt/amdxdna/bins
-	doins amdxdna_bins/vtd_archives/*
+	# Upstream's CMake installs the VTD archives itself since they moved
+	# into the vtd submodule; releases still carry them as distfiles.
+	if [[ ${PV} != 999999 ]] ; then
+		insinto /usr/share/xrt/amdxdna/bins
+		doins amdxdna_bins/vtd_archives/*
+	fi
 
 	# Installed by dev-util/xrt.
 	rm -rf "${ED}/bins" || die
