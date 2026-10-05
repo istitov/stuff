@@ -71,7 +71,7 @@ src_configure() {
 		${libc:+--config-${libc}} \
 		--prefix="${EPREFIX}/usr" \
 		--libdir="${EPREFIX}/usr/$(get_libdir)" \
-		--docdir="${EPREFIX}/usr/share/doc/${PF}"
+		--docdir="${EPREFIX}/usr/share/doc/${PF}" || die
 }
 
 src_compile() {
