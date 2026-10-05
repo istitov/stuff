@@ -1041,6 +1041,7 @@ IUSE="heif"
 # notan, rfd, and codec crates link these libraries; lcms2 comes from the
 # system (see the system-lcms2 patch). turbojpeg/openjpeg remain vendored;
 # nasm/cmake build their -sys crates. Mirrors upstream's PKGBUILD.
+# verified 2026-10-05
 DEPEND="
 	dev-libs/expat
 	media-libs/freetype
