@@ -15,10 +15,12 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 
 DEPEND_COMMON="
 	dev-db/sqlite:3
-	media-sound/deadbeef"
+	media-sound/deadbeef
+	x11-libs/gtk+:3"
 
 RDEPEND="${DEPEND_COMMON}"
 DEPEND="${DEPEND_COMMON}"
+BDEPEND="virtual/pkgconfig"
 
 PATCHES=( "${FILESDIR}/${PN}-gcc16.patch" )
 
