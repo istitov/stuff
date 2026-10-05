@@ -30,8 +30,10 @@ RDEPEND="
 	dev-python/traits[${PYTHON_USEDEP}]
 "
 
-DEPEND="${RDEPEND}
-	test? ( >=dev-python/pytest-3.6[${PYTHON_USEDEP}]
+BDEPEND="
+	test? (
+		${RDEPEND}
+		>=dev-python/pytest-3.6[${PYTHON_USEDEP}]
 		dev-python/pytest-mpl[${PYTHON_USEDEP}]
 		dev-python/pytest-xdist[${PYTHON_USEDEP},-test]
 		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
