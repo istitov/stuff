@@ -13,6 +13,10 @@ LICENSE="Artistic-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
+# biblatex is matched by minor version with a glob rather than ~, because
+# upstream issues letter-suffixed patch releases (3.22a) inside one minor and
+# replaces the previous tarball with them. The control file format, which is
+# what couples the two, stays at 3.11 across those. verified 2026-10-05
 RDEPEND="
 	>=dev-lang/perl-5.32
 	dev-perl/autovivification
@@ -53,7 +57,7 @@ RDEPEND="
 	dev-perl/XML-LibXML-Simple
 	dev-perl/XML-LibXSLT
 	dev-perl/XML-Writer
-	~dev-tex/biblatex-3.$(ver_cut 2)
+	=dev-tex/biblatex-3.$(ver_cut 2)*
 "
 DEPEND="
 	${RDEPEND}
