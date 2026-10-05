@@ -29,7 +29,9 @@ src_install() {
 	newinitd dkms-gentoo/dkms dkms
 
 	dodir /var/lib/portage
-	DKMS_DB="${D}/var/lib/portage/dkms_db" "${D}"/usr/sbin/dkms-gentoo --db
+	DKMS_DB="${D}/var/lib/portage/dkms_db" "${D}"/usr/sbin/dkms-gentoo --db || die
+	# The script ends its database run with an unchecked touch and eend 0.
+	[[ -f ${D}/var/lib/portage/dkms_db ]] || die "dkms-gentoo --db did not create the database"
 }
 
 pkg_preinst() {
