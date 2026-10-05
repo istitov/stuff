@@ -28,9 +28,11 @@ KEYWORDS="~amd64"
 # The upstream suite requires supported NVIDIA or AMD accelerator hardware.
 RESTRICT="test"
 
-# Offline mode omits NVIDIA tools, and Triton has no PATH fallback. Without the
-# installed toolkit symlinks, the first CUDA JIT fails to find ptxas.
+# Offline mode omits NVIDIA tools and headers, and Triton has no PATH fallback.
+# Without the installed toolkit symlinks, the first CUDA JIT fails to find
+# ptxas, and before that fails to compile driver.c for want of cuda.h.
 # verified 2026-09-09 against the staged image and knobs.py:193-217
+# verified 2026-10-05 by running JIT kernels from the staged image on CUDA 13.4
 RDEPEND="
 	!!dev-python/triton-bin
 	dev-util/nvidia-cuda-toolkit
@@ -73,10 +75,14 @@ python_install() {
 	# Link toolkit tools into Triton's lookup path. ptxas-blackwell has no toolkit
 	# counterpart, so sm_100+ needs TRITON_PTXAS_BLACKWELL_PATH.
 	# Strip EPREFIX because dodir/dosym add it themselves.
-	local tool bindir="$(python_get_sitedir)"
-	bindir="${bindir#"${EPREFIX}"}/triton/backends/nvidia/bin"
-	dodir "${bindir}"
+	local tool nvdir="$(python_get_sitedir)"
+	nvdir="${nvdir#"${EPREFIX}"}/triton/backends/nvidia"
+	dodir "${nvdir}/bin"
 	for tool in ptxas cuobjdump nvdisasm; do
-		dosym -r "/opt/cuda/bin/${tool}" "${bindir}/${tool}"
+		dosym -r "/opt/cuda/bin/${tool}" "${nvdir}/bin/${tool}"
 	done
+
+	# driver.py compiles driver.c on first use with this directory as its only
+	# CUDA include path; the wheel fills it with a copy of the toolkit headers.
+	dosym -r /opt/cuda/include "${nvdir}/include"
 }
