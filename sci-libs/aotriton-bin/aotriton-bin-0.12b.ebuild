@@ -71,10 +71,15 @@ RDEPEND="
 	>=dev-util/hip-6.4:=
 	<dev-util/hip-7.3:=
 "
+# src_unpack picks the shim matching the HIP this builds against.
+DEPEND="
+	>=dev-util/hip-6.4:=
+	<dev-util/hip-7.3:=
+"
 
 src_unpack() {
 	# Host-code archives overlap, so unpack only the installed HIP version.
-	local hippkg=$(best_version dev-util/hip)
+	local hippkg=$(best_version -d dev-util/hip)
 	local rocmver="$(ver_cut 1-2 "${hippkg#*hip-}")"
 	local file
 	for file in ${A}; do
