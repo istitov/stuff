@@ -43,8 +43,9 @@ RDEPEND="
 	cuda? ( dev-python/cupy[${PYTHON_USEDEP}] )
 "
 
-DEPEND="${RDEPEND}
+BDEPEND="
 	test? (
+		${RDEPEND}
 		dev-python/pooch[${PYTHON_USEDEP}]
 		>=dev-python/pytest-3.6[${PYTHON_USEDEP}]
 		dev-python/pytest-mpl[${PYTHON_USEDEP}]
