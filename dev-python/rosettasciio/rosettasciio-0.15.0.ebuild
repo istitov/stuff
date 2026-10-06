@@ -1,0 +1,43 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_EXT=1
+PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
+
+DESCRIPTION="Reading and writing scientific file formats"
+HOMEPAGE="https://hyperspy.org/rosettasciio/"
+
+LICENSE="GPL-3"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="+hdf5 +image +speed +tiff +zspy"
+
+RDEPEND="
+	>=dev-python/dask-2024.12.0[${PYTHON_USEDEP}]
+	dev-python/python-dateutil[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.25.0[${PYTHON_USEDEP}]
+	>=dev-python/pint-0.8[${PYTHON_USEDEP}]
+	>=dev-python/python-box-6[${PYTHON_USEDEP}]
+	<dev-python/python-box-8[${PYTHON_USEDEP}]
+	dev-python/pyyaml[${PYTHON_USEDEP}]
+	hdf5? ( >=dev-python/h5py-3.8.0[${PYTHON_USEDEP}] )
+	image? (
+		>=dev-python/imageio-2.27[${PYTHON_USEDEP}]
+		>=dev-python/pillow-9.2.0[${PYTHON_USEDEP}]
+	)
+	speed? ( >=dev-python/numba-0.58.0[${PYTHON_USEDEP}] )
+	tiff? (
+		>=dev-python/tifffile-2022.8.12[${PYTHON_USEDEP}]
+	)
+	zspy? (
+		>=dev-python/zarr-2[${PYTHON_USEDEP}]
+		<dev-python/zarr-3[${PYTHON_USEDEP}]
+		dev-python/msgpack[${PYTHON_USEDEP}]
+	)
+"
+DEPEND="${RDEPEND}"
+BDEPEND=">=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]"
