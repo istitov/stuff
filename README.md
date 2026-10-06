@@ -55,6 +55,9 @@ the driver and runtime it needs:
 
 - [`sci-ml/fastflowlm`](https://fastflowlm.com/) — NPU-first LLM runtime
   (chat, model pull).
+- [`sci-ml/openflowlm`](https://github.com/Atomic-Germ/OpenFlowLM-Next) —
+  community fork of FastFlowLM that compiles open NPU kernels from source
+  (live ebuild until its first release).
 - [`sci-ml/lemonade`](https://lemonade-server.ai/) — AMD Lemonade SDK.
 - [`sci-ml/kokoros`](https://github.com/lucasjinreal/Kokoros) — Kokoro
   TTS server (Rust + Python).
