@@ -3,7 +3,9 @@
 
 EAPI=8
 
-inherit cmake git-r3
+PYTHON_COMPAT=( python3_{12..15} )
+
+inherit cmake git-r3 python-any-r1
 
 DESCRIPTION="Port of OpenAI's Whisper model in C/C++"
 HOMEPAGE="https://github.com/ggml-org/whisper.cpp"
@@ -17,15 +19,24 @@ CDEPEND="blas? ( sci-libs/openblas )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	ffmpeg? ( media-video/ffmpeg:= )
 	hip? ( sci-libs/hipBLAS:= )
-	opencl? ( sci-libs/clblast:= )
 	sdl2? ( media-libs/libsdl2:= )"
 DEPEND="${CDEPEND}
+	opencl? ( dev-util/opencl-headers )
 	vulkan? ( dev-util/vulkan-headers )
 "
 RDEPEND="${CDEPEND}
+	opencl? ( dev-libs/opencl-icd-loader )
 	vulkan? ( media-libs/vulkan-loader )
 "
-BDEPEND="vulkan? ( media-libs/shaderc )"
+# The OpenCL backend embeds its kernels with a stdlib-only Python script.
+BDEPEND="
+	opencl? ( ${PYTHON_DEPS} )
+	vulkan? ( media-libs/shaderc )
+"
+
+pkg_setup() {
+	use opencl && python-any-r1_pkg_setup
+}
 
 src_configure() {
 	local mycmakeargs=(
@@ -34,7 +45,11 @@ src_configure() {
 		-DGGML_NATIVE=OFF
 		-DGGML_CCACHE=OFF
 		-DGGML_BLAS=$(usex blas)
-		-DGGML_CLBLAST=$(usex opencl)
+		-DGGML_OPENCL=$(usex opencl)
+		# ggml accepts only Adreno and Intel GPUs, and its Adreno kernels reject
+		# every other device, so they are enabled only where Adreno exists.
+		# verified 2026-10-06
+		-DGGML_OPENCL_USE_ADRENO_KERNELS=$(usex arm64)
 		-DGGML_CUDA=$(usex cuda)
 		-DGGML_HIP=$(usex hip)
 		-DGGML_VULKAN=$(usex vulkan)

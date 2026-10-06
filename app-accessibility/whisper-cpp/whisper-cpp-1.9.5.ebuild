@@ -3,7 +3,9 @@
 
 EAPI=8
 
-inherit cmake
+PYTHON_COMPAT=( python3_{12..15} )
+
+inherit cmake python-any-r1
 
 MY_PN="whisper.cpp"
 MY_P="${MY_PN}-${PV}"
@@ -27,15 +29,24 @@ CDEPEND="blas? ( sci-libs/openblas )
 		sci-libs/hipBLAS:=
 		sci-libs/rocBLAS:=
 	)
-	opencl? ( sci-libs/clblast:= )
 	sdl2? ( media-libs/libsdl2:= )"
 DEPEND="${CDEPEND}
+	opencl? ( dev-util/opencl-headers )
 	vulkan? ( dev-util/vulkan-headers )
 "
 RDEPEND="${CDEPEND}
+	opencl? ( dev-libs/opencl-icd-loader )
 	vulkan? ( media-libs/vulkan-loader )
 "
-BDEPEND="vulkan? ( media-libs/shaderc )"
+# The OpenCL backend embeds its kernels with a stdlib-only Python script.
+BDEPEND="
+	opencl? ( ${PYTHON_DEPS} )
+	vulkan? ( media-libs/shaderc )
+"
+
+pkg_setup() {
+	use opencl && python-any-r1_pkg_setup
+}
 
 src_prepare() {
 	# Drop talk-llama: it fetches llama.cpp during configure. Other SDL2 examples
@@ -51,7 +62,11 @@ src_configure() {
 		-DGGML_NATIVE=OFF
 		-DGGML_CCACHE=OFF
 		-DGGML_BLAS=$(usex blas)
-		-DGGML_CLBLAST=$(usex opencl)
+		-DGGML_OPENCL=$(usex opencl)
+		# ggml accepts only Adreno and Intel GPUs, and its Adreno kernels reject
+		# every other device, so they are enabled only where Adreno exists.
+		# verified 2026-10-06
+		-DGGML_OPENCL_USE_ADRENO_KERNELS=$(usex arm64)
 		-DGGML_CUDA=$(usex cuda)
 		-DGGML_HIP=$(usex hip)
 		-DGGML_VULKAN=$(usex vulkan)

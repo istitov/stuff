@@ -10,7 +10,7 @@
     <flag name="cuda">Enable NVIDIA CUDA GPU backend</flag>
     <flag name="ffmpeg">Enable audio transcoding via media-video/ffmpeg (allows non-WAV input)</flag>
     <flag name="hip">Build a HIP (ROCm) backend</flag>
-    <flag name="opencl">Enable OpenCL GPU backend via sci-libs/clblast</flag>
+    <flag name="opencl">Enable the ggml OpenCL GPU backend (Adreno and Intel GPUs)</flag>
     <flag name="sdl2">Build and install example applications that use media-libs/libsdl2</flag>
     <flag name="vulkan">Enable Vulkan GPU backend</flag>
   </use>
