@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    OpenFlowLM is a community fork of FastFlowLM, the NPU-first LLM runtime
+    for AMD Ryzen AI (XDNA2) processors. For most of its LLM families it
+    replaces the closed NPU kernels with open AIE designs compiled from
+    source with the IRON/mlir-aie toolchain. Families without an open
+    design yet (vision, audio, Gemma 4, GPT-OSS, Whisper) still use
+    FastFlowLM's closed kernels.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">Atomic-Germ/OpenFlowLM-Next</remote-id>
+    <bugs-to>https://github.com/Atomic-Germ/OpenFlowLM-Next/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
