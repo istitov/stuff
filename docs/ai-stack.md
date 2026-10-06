@@ -14,7 +14,7 @@ packaging.
 
 | Hardware | Accelerator | Runtimes | Guide |
 |---|---|---|---|
-| AMD Ryzen AI system (supported XDNA 2 family) | NPU (`amdxdna`) | `fastflowlm`, `lemonade` | [Ryzen AI NPU](guides/ryzen-ai-npu.md) |
+| AMD Ryzen AI system (supported XDNA 2 family) | NPU (`amdxdna`) | `fastflowlm`, `openflowlm`, `lemonade` | [Ryzen AI NPU](guides/ryzen-ai-npu.md) |
 | AMD GPU (RDNA / CDNA) | ROCm 10.0 | `llama.cpp[rocm]`, `vllm[rocm]` (CDNA-first) | [vLLM](guides/vllm.md) · [llama setup](guides/llama-setup.md) |
 | NVIDIA GPU | CUDA | `llama.cpp[cuda]`, `vllm[cuda]` | [vLLM](guides/vllm.md) · [llama setup](guides/llama-setup.md) |
 | Vulkan-capable GPU | Vulkan | `llama.cpp[vulkan]`, `ollama[vulkan]`, `koboldcpp[vulkan]` | [llama setup](guides/llama-setup.md) |
@@ -77,6 +77,8 @@ Each study records its hardware, workload, and software snapshot.
   `lm-format-enforcer`.
 - **`sci-ml/lemonade`** — local OpenAI-compatible server for AMD NPU + GPU.
 - **`sci-ml/fastflowlm`** — NPU-first LLM runtime (see the NPU guide).
+- **`sci-ml/openflowlm`** — community fork of fastflowlm with open NPU kernels
+  compiled from source; live ebuild for now (see the NPU guide).
 - **`sci-misc/koboldcpp`** — all-in-one local AI server (LLM, image, speech,
   TTS) on the ggml/llama.cpp engine; Vulkan by default (`USE=+vulkan`), so it
   runs on AMD and NVIDIA GPUs with neither ROCm nor CUDA installed.

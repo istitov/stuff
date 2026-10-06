@@ -71,11 +71,12 @@ current package list; this page is the orientation.
 
 ### AI & GPU compute
 
-NPU-first LLM tooling for AMD Ryzen AI (`fastflowlm`, `lemonade`, the `amdxdna`
-driver and XRT runtime); backend-agnostic local LLM serving (`llama.cpp`,
-`ollama`, `vllm`, `koboldcpp`, the `llama-swap` proxy, plus CLI and browser
-clients); and a **fine-tuning + RAG stack** (`bitsandbytes`, `peft`, `trl`,
-`unsloth`, and the `qdrant` vector database). Also included: a
+NPU-first LLM tooling for AMD Ryzen AI (`fastflowlm` and its open-kernel fork
+`openflowlm`, `lemonade`, the `amdxdna` driver and XRT runtime);
+backend-agnostic local LLM serving (`llama.cpp`, `ollama`, `vllm`,
+`koboldcpp`, the `llama-swap` proxy, plus CLI and browser clients); and a
+**fine-tuning + RAG stack** (`bitsandbytes`, `peft`, `trl`, `unsloth`, and the
+`qdrant` vector database). Also included: a
 speech / audio ML stack (Whisper, sherpa-onnx, pyannote diarization); the
 surrounding PyTorch / ONNX ecosystem (Lightning, torchmetrics, onnxruntime,
 FAISS); the source-built ROCm / HIP **10.0** line (with 7.2.4 retained as a

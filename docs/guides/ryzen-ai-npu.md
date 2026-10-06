@@ -229,6 +229,61 @@ Model files are user data rather than portage-owned distfiles. Read the elog
 after FastFlowLM upgrades: an upstream quantization-format change can require a
 re-pull before an existing model will load.
 
+## Open kernels: OpenFlowLM
+
+`sci-ml/openflowlm` packages
+[OpenFlowLM](https://github.com/Atomic-Germ/OpenFlowLM-Next), a community fork
+of FastFlowLM that replaces the closed NPU kernels with open AIE designs
+compiled from source. It installs alongside fastflowlm (under
+`/opt/openflowlm`, command `oflm`) and needs the same driver, XRT and
+[locked-memory](#locked-memory-required) setup.
+
+Upstream has not tagged a release yet, so the package is a live ebuild with no
+keywords and has to be accepted explicitly:
+
+```text title="/etc/portage/package.accept_keywords/openflowlm"
+sci-ml/openflowlm **
+```
+
+```bash title="root #"
+emerge -av sci-ml/openflowlm
+```
+
+The build compiles the open kernels in a Python virtual environment holding the
+mlir-aie and Peano toolchain wheels, so it needs network access and adds a
+long kernel-compile step. Two parts are left out:
+
+- the open BERT embedding kernels, whose export needs the NPU itself, so
+  `bge-*`, `all-minilm`, `nomic-embed-text` and `gte-multilingual` do not load;
+- the `granite42-3b` and `phi4-mini-4b` kernel sets, which currently fail to
+  build upstream.
+
+Usage mirrors `flm`, as a normal user:
+
+```bash title="user $"
+oflm validate
+oflm pull lfm2:1.2b
+oflm run lfm2:1.2b
+```
+
+Open kernel sets are matched per model, so not every model uses them — Qwen3
+4B has one, Qwen3 0.6B does not. Those models, and the families without an
+open design (vision, audio, Gemma 4, GPT-OSS, Whisper), run on the closed
+FastFlowLM kernels that OpenFlowLM still ships. The open path announces itself
+when the model loads, for example
+`[OFLM]  LFM2 on the open kernels (…/open_kernels)`; without that line the
+closed path ran.
+
+Unless `OFLM_MODEL_PATH` (or fastflowlm's `FLM_MODEL_PATH`) is set, `oflm`
+keeps its models in `~/.config/oflm/` if that exists and otherwise in
+fastflowlm's `~/.config/flm/`, so models pulled with `flm` serve both
+runtimes. Moving that directory to `~/.config/oflm/`, as `oflm`'s notice
+suggests, would hide the models from `flm`. The installed `oflm` wrapper also
+sets `OFLM_CONFIG_PATH`; leave it set, because `oflm` honours fastflowlm's
+`FLM_CONFIG_PATH` too and would otherwise read FastFlowLM's model catalog.
+There are no service units yet; `oflm serve MODEL` runs the
+OpenAI-compatible server in the foreground.
+
 ## Troubleshooting
 
 !!! warning "Whisper ASR models need one extra command"
@@ -267,6 +322,8 @@ re-pull before an existing model will load.
 ## See also
 
 - [fastflowlm.com](https://fastflowlm.com/) — the NPU LLM runtime
+- [Atomic-Germ/OpenFlowLM-Next](https://github.com/Atomic-Germ/OpenFlowLM-Next)
+  — the open-kernel fork
 - [lemonade-server.ai](https://lemonade-server.ai/) — the local AI server
 - [amd/xdna-driver](https://github.com/amd/xdna-driver) and
   [Xilinx/XRT](https://github.com/Xilinx/XRT) — driver and runtime upstreams
