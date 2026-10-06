@@ -114,13 +114,14 @@ Two optional layers sit on top:
   (`lemond`, default port **13305**). Built with `USE=system-fastflowlm` it
   routes NPU inference through the packaged fastflowlm, giving any
   OpenAI-style client a local NPU endpoint.
-- **`sci-ml/amd-gaia`** — AMD's agent framework. It speaks any
-  OpenAI-compatible endpoint; point it at a lemonade server with the
-  `OPENAI_BASE_URL` environment variable.
+- **`sci-ml/amd-gaia`** — AMD's agent framework. Its default backend is
+  lemonade at lemond's default address (`http://localhost:13305/api/v1`); set
+  `LEMONADE_BASE_URL` to point it at another lemonade server.
 
 !!! note "What about `onnxruntime` / `amd-quark`?"
-    `sci-libs/onnxruntime` in this overlay is the generic CPU build — it has no
-    NPU (VitisAI) execution provider, so it is **not** an NPU inference path.
+    `sci-libs/onnxruntime` in this overlay builds for the CPU, optionally with
+    CUDA (`USE=cuda`) — it has no NPU (VitisAI) execution provider, so it is
+    **not** an NPU inference path.
     `dev-python/amd-quark-bin` is a model-*quantization* toolkit, not a runtime.
     Neither is needed for the NPU LLM path above.
 
@@ -158,6 +159,14 @@ xrt-smi examine
 xrt-smi validate
 ```
 
+For speech-to-text, pull the Whisper model and start the server with ASR
+enabled alongside the chat model:
+
+```bash title="user $"
+flm pull whisper-v3:turbo
+flm serve llama3.2:3b --asr 1
+```
+
 To serve models over an OpenAI-compatible API instead of chatting directly,
 install lemonade with its packaged-fastflowlm integration as root:
 
@@ -172,32 +181,28 @@ Then start the server and use its CLI client, as a normal user:
 ```bash title="user $"
 lemond
 lemonade list
-lemonade run MODEL_FROM_LEMONADE_LIST
+lemonade chat MODEL_FROM_LEMONADE_LIST
 ```
 
 `lemond` starts the server on port 13305. For OpenAI clients, use
-`http://127.0.0.1:13305/api/v1` as the base URL (`/v1` is also accepted);
-`lemonade list` shows lemonade's own model catalog and `lemonade run` is the CLI
-client — use a name from `lemonade list`.
+`http://127.0.0.1:13305/api/v1` as the base URL (`/v1` is also accepted).
+`lemonade list` shows lemonade's own model catalog; `lemonade chat` opens a chat
+REPL in the terminal, while `lemonade run` loads a model and opens the web app
+in a browser — use a name from `lemonade list` with either.
 
 Lemonade uses its own model catalog, so its model names differ from
 fastflowlm's `flm` names. Treat the live output of `lemonade list` as
 authoritative rather than copying a model count or ID from this guide.
-(`lemonade-server` is a deprecated shim that wraps the server and client —
-prefer `lemond` plus `lemonade run`.)
 
 !!! note "NPU versus the integrated GPU"
-    On the maintainer's Strix Point system, sustained generation is generally
-    faster through `llama.cpp[vulkan]` on the Radeon 890M. The NPU is useful as
-    a low-power, low-duty backend and can overtake on sufficiently deep prefill;
-    the crossover depends on model architecture. FastFlowLM changes both its
-    runtime and weight formats quickly, so benchmark the installed version
-    instead of treating an old tokens-per-second table as a hardware constant.
-
-<!-- TODO: Create a dedicated NPU-versus-integrated-GPU benchmark page from the
-recorded Strix Point FastFlowLM and llama.cpp/Vulkan runs. Report the exact
-runtime, model, quantization, and prompt versions; separate prefill from decode;
-then link that page here. -->
+    In the [NPU versus Radeon 890M study](../benchmarks/npu-vs-890m.md) on a
+    Ryzen AI 9 HX 370, median request time was lower through
+    `llama.cpp[vulkan]` on the 890M in all twelve model/input comparisons. The
+    NPU drew less socket power in every comparison, but not consistently less
+    energy per request, and reached the first answer sooner in three
+    longer-context comparisons. FastFlowLM changes both its runtime and weight
+    formats quickly, so benchmark the installed version instead of treating
+    those results as a hardware constant.
 
 ## Running as a service
 
@@ -215,9 +220,9 @@ rc-update add fastflowlm default
 ```
 
 **systemd** — the unit is a per-user template; override `FLM_MODEL` / `FLM_HOST`
-/ `FLM_PORT` / `FLM_ASR` / `FLM_EMBED` in `/etc/default/fastflowlm@alice`
-(replacing `alice` with the serving user) if the defaults don't fit, then
-enable it, as root:
+/ `FLM_PORT` / `FLM_PMODE` / `FLM_ASR` / `FLM_EMBED` / `FLM_EXTRA_OPTS` in
+`/etc/default/fastflowlm@alice` (replacing `alice` with the serving user) if
+the defaults don't fit, then enable it, as root:
 
 ```bash title="root #"
 systemctl enable --now fastflowlm@alice.service
@@ -285,22 +290,6 @@ There are no service units yet; `oflm serve MODEL` runs the
 OpenAI-compatible server in the foreground.
 
 ## Troubleshooting
-
-!!! warning "Whisper ASR models need one extra command"
-    Upstream fastflowlm crashes on a freshly pulled Whisper model
-    ([FastFlowLM#545](https://github.com/ROCm/FastFlowLM/issues/545) —
-    its config validator asserts on fields HuggingFace Whisper configs don't
-    carry). The overlay ships the remedy: after pulling any Whisper model, run
-    the bundled helper once (idempotent; it patches the downloaded
-    `config.json`):
-
-    ```bash title="user $"
-    flm pull whisper-v3:turbo
-    flm-patch-whisper
-    ```
-
-    ASR models then load normally. The helper can be retired when that upstream
-    issue is fixed.
 
 - **`flm` fails immediately / the NPU isn't found** — check that `ulimit -l`
   reports `unlimited` (see above) and that `lsmod | grep amdxdna` shows the
