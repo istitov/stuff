@@ -4,8 +4,9 @@
 EAPI=8
 
 ROCM_VERSION="7.0"
+PYTHON_COMPAT=( python3_{12..15} )
 
-inherit cmake cuda flag-o-matic rocm linux-info
+inherit cmake cuda flag-o-matic rocm linux-info python-any-r1
 
 # Snapshot tags are master-<build>-<hash>; pin that hash and the tag's ggml
 # submodule gitlink on each bump.
@@ -79,9 +80,14 @@ RDEPEND="${CDEPEND}
 	vulkan? ( media-libs/vulkan-loader )
 "
 # Uninstalled conversion scripts do not add runtime dependencies.
-BDEPEND="vulkan? ( media-libs/shaderc )"
+# The OpenCL backend embeds its kernels with a stdlib-only Python script.
+BDEPEND="
+	opencl? ( ${PYTHON_DEPS} )
+	vulkan? ( media-libs/shaderc )
+"
 
 pkg_setup() {
+	use opencl && python-any-r1_pkg_setup
 	if use rocm; then
 		linux-info_pkg_setup
 		if linux-info_get_any_version && linux_config_exists; then
@@ -131,6 +137,10 @@ src_configure() {
 		-DGGML_RPC=ON
 		-DSD_CUDA=$(usex cuda)
 		-DSD_OPENCL=$(usex opencl)
+		# ggml accepts only Adreno and Intel GPUs, and its Adreno kernels reject
+		# every other device, so they are enabled only where Adreno exists.
+		# verified 2026-10-06
+		-DGGML_OPENCL_USE_ADRENO_KERNELS=$(usex arm64)
 		-DSD_VULKAN=$(usex vulkan)
 		-DSD_WEBP=$(usex webp)
 		-DSD_USE_SYSTEM_WEBP=$(usex webp)
