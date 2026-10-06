@@ -135,5 +135,5 @@ pkg_postinst() {
 	elog "Run 'env-update && source /etc/profile' to pick up library paths."
 	elog ""
 	elog "This is a live ebuild tracking upstream main. Rebuild with:"
-	elog "  emerge --oneshot =dev-ml/fastflowlm-9999"
+	elog "  emerge --oneshot =sci-ml/fastflowlm-9999"
 }
