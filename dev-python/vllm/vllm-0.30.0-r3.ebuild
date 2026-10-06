@@ -663,6 +663,7 @@ VLLM_FLASHKDA_COMMIT="b59532f1f464fbd536272780e30df5bf6a2ccc02"
 VLLM_FLASHKDA_CUTLASS_COMMIT="5c149f52a436782210263fb2f19b354443a61c6a"
 VLLM_TML_FA4_COMMIT="75765e76a9c2c012c1f6ecd64577eb646eb4d303"
 VLLM_TRITON_KERNELS_TAG="3.5.1"
+VLLM_ROCM_TRITON_COMMIT="0f380657dbf3ee86eb57558ff71df24f03b5d4e7"
 
 DESCRIPTION="High-throughput, memory-efficient inference and serving engine for LLMs"
 HOMEPAGE="
@@ -713,8 +714,8 @@ SRC_URI+="
 			-> vllm-triton-kernels-${VLLM_TRITON_KERNELS_TAG}.gh.tar.gz
 	)
 	rocm? (
-		https://github.com/triton-lang/triton/archive/refs/tags/v${VLLM_TRITON_KERNELS_TAG}.tar.gz
-			-> vllm-triton-kernels-${VLLM_TRITON_KERNELS_TAG}.gh.tar.gz
+		https://github.com/ROCm/triton/archive/${VLLM_ROCM_TRITON_COMMIT}.tar.gz
+			-> vllm-ROCm-triton-${VLLM_ROCM_TRITON_COMMIT:0:7}.gh.tar.gz
 	)
 "
 
@@ -839,6 +840,7 @@ RDEPEND="
 		~sci-ml/torchaudio-2.11.0
 		~sci-ml/torchvision-0.28.0[-cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
 		>=sci-ml/torchcodec-0.14[-cuda,${PYTHON_SINGLE_USEDEP}]
+		dev-util/google-perftools
 		$(python_gen_cond_dep '
 			>=dev-python/numba-0.65.0[${PYTHON_USEDEP}]
 			<dev-python/numba-0.66[${PYTHON_USEDEP}]
@@ -962,6 +964,15 @@ src_prepare() {
 			setup.py || die
 	fi
 
+	# For the CPU target, setup.py copies whatever libtcmalloc ldconfig finds
+	# into vllm/libs, which vllm preloads at runtime, so the install would
+	# depend on the build host. Skip the copy; python_install links the
+	# system library instead.
+	sed -i '/^def should_bundle_tcmalloc() -> bool:$/a\    return False' \
+		setup.py || die
+	grep -Pzq 'def should_bundle_tcmalloc\(\) -> bool:\n    return False\n' \
+		setup.py || die "tcmalloc bundling changed; revisit the system link"
+
 	if use cuda; then
 		# Populate the gitlinks omitted by GitHub-generated archives.
 		local deepgemm_dir="${WORKDIR}/DeepGEMM-${VLLM_DEEPGEMM_COMMIT}"
@@ -1018,8 +1029,10 @@ src_configure() {
 		export OPENSSL_NO_VENDOR=1 ZSTD_SYS_USE_PKG_CONFIG=1
 	fi
 
-	if use cuda || use rocm; then
+	if use cuda; then
 		export TRITON_KERNELS_SRC_DIR="${WORKDIR}/triton-${VLLM_TRITON_KERNELS_TAG}/python/triton_kernels/triton_kernels"
+	elif use rocm; then
+		export TRITON_KERNELS_SRC_DIR="${WORKDIR}/triton-${VLLM_ROCM_TRITON_COMMIT}/python/triton_kernels/triton_kernels"
 	fi
 
 	if use cuda; then
@@ -1065,6 +1078,16 @@ src_configure() {
 		export VLLM_TARGET_DEVICE=empty
 	fi
 	distutils-r1_src_configure
+}
+
+python_install() {
+	distutils-r1_python_install
+
+	if use cpu; then
+		# vllm preloads the first libtcmalloc it finds under vllm/libs.
+		dosym -r "/usr/$(get_libdir)/libtcmalloc_minimal.so.4" \
+			"$(python_get_sitedir)/vllm/libs/libtcmalloc_minimal.so.4"
+	fi
 }
 
 pkg_postinst() {
