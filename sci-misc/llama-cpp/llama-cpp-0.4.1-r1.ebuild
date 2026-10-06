@@ -4,8 +4,9 @@
 EAPI=8
 
 ROCM_VERSION="7.0"
+PYTHON_COMPAT=( python3_{12..15} )
 
-inherit cmake cuda flag-o-matic rocm linux-info toolchain-funcs
+inherit cmake cuda flag-o-matic rocm linux-info python-any-r1 toolchain-funcs
 
 TINY_LLAMAS_COMMIT="99dd1a73db5a37100bd4ae633f4cfce6560e1567"
 
@@ -16,8 +17,8 @@ HOMEPAGE="https://github.com/ggml-org/llama.cpp"
 # it: a release is the vX.Y.Z tag, whose build upstream publishes as
 # nightly-tag.txt; a snapshot is the bN tag itself and is versioned
 # X.Y.Z_pN after the release it follows.
-LLAMA_SRC_TAG="b11435"
-LLAMA_BUILD_NUMBER="11435"
+LLAMA_SRC_TAG="v0.4.1"
+LLAMA_BUILD_NUMBER="10964"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -48,9 +49,7 @@ SRC_URI+="
 
 LICENSE="MIT"
 SLOT="0"
-# Snapshot of the tip between releases: unkeyworded on purpose, so it has
-# to be requested per version through package.accept_keywords.
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm64"
 CPU_FLAGS_X86=(
 	amx_bf16 amx_int8 amx_tile avx avx2 avx512_bf16 avx512_vnni avx512f
 	avx512vbmi avx_vnni bmi2 f16c fma3 sse4_2
@@ -96,7 +95,11 @@ RDEPEND="${CDEPEND}
 	opencl? ( dev-libs/opencl-icd-loader )
 	vulkan? ( media-libs/vulkan-loader )
 "
-BDEPEND="vulkan? ( media-libs/shaderc )"
+# The OpenCL backend embeds its kernels with a stdlib-only Python script.
+BDEPEND="
+	opencl? ( ${PYTHON_DEPS} )
+	vulkan? ( media-libs/shaderc )
+"
 
 pkg_pretend() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
@@ -104,6 +107,7 @@ pkg_pretend() {
 
 pkg_setup() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
+	use opencl && python-any-r1_pkg_setup
 
 	# CMake tests -fsycl; missing icpx usually predicts configure failure.
 	if use sycl && ! type -P icpx &>/dev/null; then
@@ -160,6 +164,10 @@ src_configure() {
 		-DGGML_CUDA=$(usex cuda)
 		-DGGML_CUDA_NCCL=OFF
 		-DGGML_OPENCL=$(usex opencl)
+		# ggml accepts only Adreno and Intel GPUs, and its Adreno kernels reject
+		# every other device, so they are enabled only where Adreno exists.
+		# verified 2026-10-06
+		-DGGML_OPENCL_USE_ADRENO_KERNELS=$(usex arm64)
 		-DGGML_OPENMP=$(usex openmp)
 		-DGGML_VULKAN=$(usex vulkan)
 		-DGGML_SYCL=$(usex sycl)
