@@ -3082,6 +3082,7 @@ prefix = "v"
 # ["net-im/xmppconsole"] skipped: live-only ebuild (no release tracking)
 # ["net-misc/ipx-utils"] skipped: live-only ebuild (no release tracking)
 # ["sci-ml/kokoros"] skipped: live-only ebuild (no release tracking)
+# ["sci-ml/openflowlm"] skipped: live-only ebuild (no release tracking)
 # ["x11-plugins/e_modules-forecasts"] skipped: live-only ebuild (no release tracking)
 # ["x11-plugins/e_modules-places"] skipped: live-only ebuild (no release tracking)
 # ["x11-terms/cool-retro-term"] skipped: live-only ebuild (no release tracking)
