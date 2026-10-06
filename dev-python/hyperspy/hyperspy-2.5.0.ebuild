@@ -1,0 +1,66 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 virtualx pypi
+
+DESCRIPTION="Interactive analysis of multidimensional datasets tools"
+HOMEPAGE="https://hyperspy.org/"
+SRC_URI="$(pypi_sdist_url "${PN}" "${PV}")"
+
+LICENSE="GPL-3+"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="cuda +learning +gui-jupyter speed +gui-traitsui mrcz test"
+
+RDEPEND="
+	dev-python/cloudpickle[${PYTHON_USEDEP}]
+	>=dev-python/dask-2024.12.0[${PYTHON_USEDEP}]
+	>=dev-python/importlib-metadata-3.6[${PYTHON_USEDEP}]
+	dev-python/jinja2[${PYTHON_USEDEP}]
+	>=dev-python/matplotlib-3.6[${PYTHON_USEDEP}]
+	dev-python/natsort[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.25.0[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
+	>=dev-python/pint-0.10[${PYTHON_USEDEP}]
+	>=dev-python/rosettasciio-0.12.0[hdf5,image,${PYTHON_USEDEP}]
+	>=dev-python/prettytable-2.3[${PYTHON_USEDEP}]
+	dev-python/pyyaml[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.10.0[${PYTHON_USEDEP}]
+	>=dev-python/sympy-1.10[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.59.0[${PYTHON_USEDEP}]
+	>=dev-python/traits-7.0.0[${PYTHON_USEDEP}]
+
+	>=dev-python/scikit-image-0.15[${PYTHON_USEDEP}]
+
+	learning? ( dev-python/scikit-learn[${PYTHON_USEDEP}] )
+	speed? ( >=dev-python/numba-0.58.0[${PYTHON_USEDEP}]
+		dev-python/cython[${PYTHON_USEDEP}]
+		>=dev-python/numexpr-2.8.0[${PYTHON_USEDEP}] )
+	cuda? ( dev-python/cupy[${PYTHON_USEDEP}] )
+"
+
+BDEPEND="
+	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+	test? (
+		${RDEPEND}
+		dev-python/pooch[${PYTHON_USEDEP}]
+		>=dev-python/pytest-3.6[${PYTHON_USEDEP}]
+		dev-python/pytest-mpl[${PYTHON_USEDEP}]
+		dev-python/pytest-xdist[${PYTHON_USEDEP},-test]
+		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
+		dev-python/pytest-timeout[${PYTHON_USEDEP},-test]
+	)
+"
+
+PDEPEND="
+	gui-jupyter? ( >=dev-python/hyperspy-gui-ipywidgets-2.0 )
+	gui-traitsui? ( >=dev-python/hyperspy-gui-traitsui-2.0 )
+"
+
+python_test() {
+	virtx epytest
+}
