@@ -27,7 +27,8 @@ REQUIRED_USE="ui? ( api )"
 RESTRICT="test"
 
 # Dependency map checked against v0.22.0 on 2026-07-17.
-# Lemonade is recommended, not required; any OpenAI-compatible endpoint works.
+# Lemonade is the default backend, not a requirement: gaia also has OpenAI
+# and Claude providers.
 # gaia-mcp imports python-multipart at startup; connectors need keyring >=24,<26.
 # Tavily is a declared core dependency, though imports retain DuckDuckGo fallback.
 # apscheduler and tomli-w implement scheduling; Python >=3.12 supplies tomllib.
@@ -112,12 +113,12 @@ DEPEND="${RDEPEND}"
 BDEPEND="${PYTHON_DEPS}"
 
 pkg_postinst() {
-	elog "GAIA is an LLM-agent framework. It speaks any OpenAI-compatible"
-	elog "endpoint; the AMD-recommended local backend is Lemonade Server"
-	elog "(sci-ml/lemonade in this overlay), which runs models on Ryzen AI"
-	elog "hardware (NPU + iGPU). Point gaia at a server with:"
+	elog "GAIA is an LLM-agent framework. Its default backend is Lemonade"
+	elog "Server (sci-ml/lemonade in this overlay), which runs models on Ryzen"
+	elog "AI hardware (NPU + iGPU). gaia expects it at lemond's default address,"
+	elog "http://localhost:13305/api/v1; point it at another server with:"
 	elog ""
-	elog "  export OPENAI_BASE_URL=http://localhost:8000/api/v1"
+	elog "  export LEMONADE_BASE_URL=http://HOST:PORT/api/v1"
 	elog ""
 	elog "Extras supported via USE flags:"
 	elog "  audio  — sci-ml/pytorch (gaia code doesn't touch torchvision/"
