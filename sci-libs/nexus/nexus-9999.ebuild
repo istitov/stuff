@@ -3,10 +3,10 @@
 
 EAPI=8
 
-inherit cmake git-r3 java-pkg-opt-2
+inherit cmake flag-o-matic git-r3 java-pkg-opt-2
 
 DESCRIPTION="Data format for neutron and x-ray scattering data"
-HOMEPAGE="https://www.nexusformat.org/"
+HOMEPAGE="https://nexusformat.org/"
 EGIT_REPO_URI="https://github.com/nexusformat/code.git"
 
 LICENSE="LGPL-2.1"
@@ -20,8 +20,11 @@ RDEPEND="
 	dev-libs/libxml2
 	media-libs/libjpeg-turbo:=
 	sys-libs/readline
-	hdf4? ( <sci-libs/hdf-4.4:= )
-	hdf5? ( sci-libs/hdf5[zlib] )
+	hdf4? ( >=sci-libs/hdf-4.4:= )
+	hdf5? (
+		sci-libs/hdf5[zlib]
+		virtual/zlib:=
+	)
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
@@ -33,16 +36,29 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Upstream master is still the 5b803b3 snapshot the release pins, so the
+	# live ebuild needs the same fixes. verified 2026-10-07
+	xzcat "${FILESDIR}/474.patch.xz" > "${T}/474.patch" || die
+	eapply "${T}/474.patch"
+	eapply "${FILESDIR}/${PN}-4.4.3-hdf-4.4.patch"
+
 	# The C++ wrapper links only HDF5 C/HL; avoid the unnecessary CXX component,
 	# which conflicts with MPI-enabled HDF5. verified 2026-06-21
 	sed -e 's/COMPONENTS CXX HL REQUIRED/COMPONENTS C HL REQUIRED/' \
 		-i CMakeLists.txt || die
+
+	# Raise the policy baseline for CMake 4.
+	sed -i 's/cmake_minimum_required(VERSION 2.8.7)/cmake_minimum_required(VERSION 3.10)/' \
+		CMakeLists.txt || die
 
 	java-pkg-opt-2_src_prepare
 	cmake_src_prepare
 }
 
 src_configure() {
+	# Pin C++17; this snapshot uses allocator::allocate(n, hint), removed in C++20.
+	append-cxxflags -std=gnu++17
+
 	# Fortran bindings do not compile.
 	local mycmakeargs=(
 		-DENABLE_APPS=ON
