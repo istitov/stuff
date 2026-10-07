@@ -37,8 +37,9 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="openrc systemd"
 
-# Cargo (inside tokenizers-cpp/rust) fetches crates at build time.
-# Proper GURU submission would require pre-vendored crates via cargo.eclass.
+# Cargo (inside tokenizers-cpp/rust) fetches the crates the shipped Cargo.lock
+# pins at build time; vendoring them via cargo.eclass would allow an offline
+# build.
 RESTRICT="bindist mirror network-sandbox"
 
 BDEPEND="
@@ -82,6 +83,16 @@ src_unpack() {
 }
 
 src_prepare() {
+	# tokenizers-cpp ships no Cargo.lock, so cargo would resolve its semver ranges
+	# afresh on every build. Pin the crates and make cargo enforce the pin.
+	# Lockfile generated 2026-10-08 for this tokenizers-cpp commit.
+	local tok="${S}/third_party/tokenizers-cpp"
+	cp "${FILESDIR}/tokenizers-cpp-${TOKENIZERS_CPP_COMMIT:0:7}-Cargo.lock" \
+		"${tok}/rust/Cargo.lock" || die
+	sed -i '/^set(TOKENIZERS_CPP_CARGO_FLAGS "")$/a list(APPEND TOKENIZERS_CPP_CARGO_FLAGS --locked)' \
+		"${tok}/CMakeLists.txt" || die
+	grep -q -- "TOKENIZERS_CPP_CARGO_FLAGS --locked" "${tok}/CMakeLists.txt" || die
+
 	# Replace upstream's /usr/local symlink with an env.d-backed wrapper.
 	sed -i '/if.*NOT WIN32.*CMAKE_INSTALL_PREFIX/,/endif()/d' \
 		"${S}/src/CMakeLists.txt" || die
