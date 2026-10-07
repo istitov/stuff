@@ -24,7 +24,6 @@ REQUIRED_USE="?? ( system-rocm system-therock )"
 
 # Missing cpp-httplib pkg-config metadata and optional libwebsockets cause
 # upstream FetchContent downloads at configure time.
-PROPERTIES="live"
 RESTRICT="network-sandbox"
 
 # Keep the systemd account/state across USE changes; OpenRC uses LEMONADE_USER.

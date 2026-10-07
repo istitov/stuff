@@ -19,7 +19,6 @@ IUSE="fastflowlm openrc system-kokoro system-llamacpp system-sdcpp system-whispe
 
 # Missing cpp-httplib pkg-config metadata and optional libwebsockets cause
 # upstream FetchContent downloads at configure time.
-PROPERTIES="live"
 RESTRICT="network-sandbox"
 
 # Keep the systemd account and state directory across USE changes; OpenRC uses
