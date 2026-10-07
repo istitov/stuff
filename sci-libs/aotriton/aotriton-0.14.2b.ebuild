@@ -44,7 +44,6 @@ IUSE="${IUSE_TARGETS[*]/#/+}"
 REQUIRED_USE="|| ( ${IUSE_TARGETS[*]} )"
 
 # Triton's wheel build downloads its backend and LLVM; AOTriton fetches aiter.
-PROPERTIES="live"
 RESTRICT="network-sandbox test"
 
 # Source builds have no binary shim constraint; upstream only requires HIP.
