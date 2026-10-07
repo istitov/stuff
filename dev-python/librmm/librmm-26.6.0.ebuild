@@ -16,6 +16,8 @@ HOMEPAGE="https://github.com/rapidsai/rmm"
 SRC_URI="
 	https://github.com/rapidsai/rmm/archive/refs/tags/v${MY_PV}.tar.gz
 		-> rmm-${MY_PV}.gh.tar.gz
+	https://github.com/rapidsai/rapids-cmake/archive/refs/tags/v${MY_PV}.tar.gz
+		-> rapids-cmake-${MY_PV}.gh.tar.gz
 "
 # python/librmm's CMake driver builds the repository's cpp/ tree.
 S="${WORKDIR}/rmm-${MY_PV}/python/librmm"
@@ -24,9 +26,9 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Configure fetches rapids-cmake, CCCL, and NVTX through CPM. Installed
-# rapids-logger supplies its config through a cmake.prefix entry point.
-PROPERTIES="live"
+# Configure fetches CCCL and NVTX through CPM, at the commit and SHA256 the
+# pinned rapids-cmake lists. Installed rapids-logger supplies its config
+# through a cmake.prefix entry point.
 RESTRICT="network-sandbox test"
 
 RDEPEND="
@@ -57,4 +59,13 @@ python_prepare_all() {
 		../../cpp/CMakeLists.txt || die
 
 	distutils-r1_python_prepare_all
+}
+
+python_compile() {
+	# rmm checks rapids-cmake out from its moving release/X.Y branch; pin the
+	# matching release tag instead. # verified 2026-10-08
+	local -x CMAKE_ARGS="${CMAKE_ARGS}
+		-DFETCHCONTENT_SOURCE_DIR_RAPIDS-CMAKE=${WORKDIR}/rapids-cmake-${MY_PV}
+	"
+	distutils-r1_python_compile
 }
