@@ -33,7 +33,6 @@ IUSE="studio"
 # Tests need model downloads and accelerator hardware; Studio's npm build needs
 # registry access.
 RESTRICT="test studio? ( network-sandbox )"
-PROPERTIES="studio? ( live )"
 
 # Studio pins older dependencies. Overlay pymupdf4llm/PyMuPDF 1.28.2 preserves
 # its to_markdown API but adds pymupdf-layout/onnxruntime; accept that in-tree dep.
