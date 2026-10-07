@@ -5,12 +5,17 @@ EAPI=8
 
 ETYPE="sources"
 
+# Match gentoo-sources-6.6.158. # verified 2026-10-07
+K_GENPATCHES_VER="172"
+
 # The curated delta sets EXTRAVERSION.
 K_NOSETEXTRAVERSION="1"
 
 # Gentoo security does not cover the curated pf delta; report its bugs upstream
 # or to overlay maintainers.
 K_SECURITY_UNSUPPORTED="1"
+
+K_WANT_GENPATCHES="base extras"
 
 SHPV="${PV/_p*/}"
 
@@ -23,13 +28,15 @@ DESCRIPTION="Linux kernel: gentoo-sources base + curated pf-kernel patchset"
 HOMEPAGE="https://pfkernel.natalenko.name/
 	https://dev.gentoo.org/~alicef/genpatches/"
 
-# Gentoo's genpatches-6.6-158 has aged off official hosts; use an immutable
-# extra-stuff snapshot of its stable chain and extras. A smaller curated delta
-# replaces the full pf-kernel archive. # verified 2026-08-16
+# Build vanilla Linux with Gentoo genpatches and a smaller curated pf delta.
+# extra-stuff hosts the immutable patch snapshot; refreshes require a new tag.
 SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
-	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
-	https://gitlab.com/istitov/extra-stuff/-/raw/pf-genpatches-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-genpatches-${SHPV}.tar.xz -> pf-genpatches-${SHPV}-r70-1.tar.xz
+	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.base.tar.xz
+	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
+	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
 	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
 	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
 	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz"
@@ -56,10 +63,10 @@ src_unpack() {
 }
 
 src_prepare() {
-	# Apply the stable chain and Gentoo extras in filename order.
-	eapply "${WORKDIR}/pf-genpatches-${SHPV}"/*.patch
+	# Keep the 1* linux-stable chain that pf-sources drops.
+	eapply "${WORKDIR}"/*.patch
 
-	# Apply the curated pf series in filename order; patch headers record
+	# Apply the numbered curated pf series in filename order; patch headers record
 	# provenance and pkg_postinst summarizes its scope.
 	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
