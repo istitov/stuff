@@ -24,9 +24,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="openrc systemd"
 
-# Cargo.lock includes pinned git-only raft-rs and tonic revisions, requiring
-# live network fetching. # verified 2026-09-04
-PROPERTIES="live"
+# Cargo.lock pins git-only raft-rs and tonic revisions that cargo fetches
+# over the network; --locked keeps them fixed. # verified 2026-10-08
 RESTRICT="network-sandbox test"
 
 RDEPEND="
