@@ -24,9 +24,9 @@ LICENSE="|| ( Apache-2.0 MIT ) Apache-2.0-with-LLVM-exceptions"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# Cargo, submodules, and LFS fetch at build time; generated crate inputs make
-# rebuilds nondeterministic despite the pinned tag.
-PROPERTIES="live"
+# git-r3 fetches the submodules and LFS objects and marks the ebuild live even
+# with EGIT_COMMIT on a tag; cargo fetches the crates Cargo.lock lists at build
+# time. # verified 2026-10-08
 RESTRICT="network-sandbox test"
 
 # No CRATES list; follow upstream's online edition-2024 xtask build. LLVM needs
