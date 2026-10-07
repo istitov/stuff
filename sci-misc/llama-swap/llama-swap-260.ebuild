@@ -37,7 +37,6 @@ BDEPEND="
 
 # USE=ui fetches the large, bump-sensitive Svelte dependency set from npm;
 # upstream releases publish no prebuilt UI assets to ship as a distfile.
-PROPERTIES="ui? ( live )"
 RESTRICT="ui? ( network-sandbox )"
 
 src_compile() {
