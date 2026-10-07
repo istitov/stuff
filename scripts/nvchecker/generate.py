@@ -1005,12 +1005,7 @@ _TRITON_TRACKS_TORCH = (
 SKIP_PKGS: dict[str, str] = {
     "sys-kernel/pf-sources":          _PF_LOCAL_ONLY,
     "sys-kernel/pf-sources-extended": _PF_LOCAL_ONLY,
-    "sci-libs/amd":     "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
-    "sci-libs/camd":    "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
-    "sci-libs/ccolamd": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
     "sci-libs/cholmod": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
-    "sci-libs/colamd":  "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
-    "sci-libs/umfpack": "SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary",
     # Repositories confirmed to have no release tags (GitHub /git/refs/tags → 404).
     #
     # NB re-audited 2026-08-29: this block used to hold five more packages,
