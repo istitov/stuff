@@ -39,6 +39,9 @@ PROPERTIES="studio? ( live )"
 # its to_markdown API but adds pymupdf-layout/onnxruntime; accept that in-tree dep.
 # ddgs 9.15 retains the used DDGS and exception APIs. Verified 2026-08-24.
 
+# The tag's pyproject lists no torch requirement; the torch bound is the one
+# the published 2026.9.14 wheel declares. Verified 2026-10-07.
+
 RDEPEND="
 	>=dev-python/unsloth-zoo-2026.9.9[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/accelerate-0.34.1[${PYTHON_SINGLE_USEDEP}]
@@ -49,7 +52,7 @@ RDEPEND="
 	>=sci-ml/huggingface_hub-0.34[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/peft-0.18[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/pytorch-2.4[${PYTHON_SINGLE_USEDEP}]
-	<sci-ml/pytorch-2.12[${PYTHON_SINGLE_USEDEP}]
+	<sci-ml/pytorch-2.13[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.51.3[${PYTHON_SINGLE_USEDEP}]
 	<=sci-ml/transformers-5.5.0-r0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/trl-0.18.2[${PYTHON_SINGLE_USEDEP}]
