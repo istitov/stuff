@@ -19,6 +19,9 @@ RESTRICT="test"
 
 RDEPEND="media-video/ffmpeg:="
 DEPEND="${RDEPEND}"
+# av 19 needs Cython >=3.3 to build, while cupy, cuda-bindings and cuda-core
+# cap it below 3.3 upstream, and Cython is unslotted. This is the newest av
+# that can be built on a system with those. verified 2026-10-07
 BDEPEND="
 	>=dev-python/cython-3.1.0[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-77[${PYTHON_USEDEP}]
