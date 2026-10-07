@@ -20,6 +20,8 @@ HOMEPAGE="
 SRC_URI="
 	https://github.com/rapidsai/rmm/archive/refs/tags/v${MY_PV}.tar.gz
 		-> rmm-${MY_PV}.gh.tar.gz
+	https://github.com/rapidsai/rapids-cmake/archive/refs/tags/v${MY_PV}.tar.gz
+		-> rapids-cmake-${MY_PV}.gh.tar.gz
 "
 S="${WORKDIR}/rmm-${MY_PV}/python/rmm"
 
@@ -27,9 +29,9 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# CPM fetches rapids-cmake, Cython helpers, and CCCL; installed librmm provides
-# rmm-config.cmake. The build therefore needs network access.
-PROPERTIES="live"
+# Configure fetches CCCL through CPM, at the commit and SHA256 the pinned
+# rapids-cmake lists. Installed librmm supplies rmm-config.cmake through its
+# cmake.prefix entry point.
 RESTRICT="network-sandbox test"
 
 RDEPEND="
@@ -63,4 +65,13 @@ python_prepare_all() {
 		CMakeLists.txt || die
 
 	distutils-r1_python_prepare_all
+}
+
+python_compile() {
+	# rmm checks rapids-cmake out from its moving release/X.Y branch; pin the
+	# matching release tag instead. # verified 2026-10-08
+	local -x CMAKE_ARGS="${CMAKE_ARGS}
+		-DFETCHCONTENT_SOURCE_DIR_RAPIDS-CMAKE=${WORKDIR}/rapids-cmake-${MY_PV}
+	"
+	distutils-r1_python_compile
 }
