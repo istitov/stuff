@@ -5,8 +5,8 @@ EAPI=8
 
 ETYPE="sources"
 
-# Match gentoo-sources-6.18.39. # verified 2026-07-24
-K_GENPATCHES_VER="46"
+# Match gentoo-sources-6.18.55. # verified 2026-10-07
+K_GENPATCHES_VER="63"
 
 # The curated delta sets EXTRAVERSION.
 K_NOSETEXTRAVERSION="1"
