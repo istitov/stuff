@@ -28,8 +28,8 @@ BDEPEND="
 	>=net-libs/nodejs-20[npm]
 "
 
-# The large, volatile npm graph is not vendored; build requires registry access.
-PROPERTIES="live"
+# The large npm graph is not vendored; npm ci installs it from upstream's
+# lockfile and needs registry access.
 RESTRICT="network-sandbox"
 
 src_compile() {
