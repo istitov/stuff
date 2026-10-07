@@ -78,12 +78,13 @@ jobs:
         with:
           # Same by-design exit-set exemption as pkgcheck-full below.  The
           # action defaults to --exit GentooCI (fails on warning-level), and a
-          # commit that merely *touches* a snapshot-VCS package (zluda,
-          # lemonade, fastflowlm, hollama — git-r3 yet ~amd64 => VisibleVcsPkg)
-          # or an ~amd64-only fork (DroppedKeywords) re-surfaces the
-          # by-design warning and reddens the push gate.  e.g. "zluda: drop
-          # 6_pre75" re-scanned the package and tripped on 6_pre76/6_pre77.
-          # Keep this list in sync with pkgcheck-full.  verified 2026-07-26.
+          # commit that merely *touches* a release that builds from git-r3
+          # (zluda, aotriton, mantid — live via git-r3 yet ~amd64 =>
+          # VisibleVcsPkg) or an ~amd64-only fork (DroppedKeywords)
+          # re-surfaces the by-design warning and reddens the push gate.
+          # e.g. "zluda: drop 6_pre75" re-scanned the package and tripped on
+          # 6_pre76/6_pre77.  Keep this list in sync with pkgcheck-full.
+          # verified 2026-10-08.
           args: --exit GentooCI,-VisibleVcsPkg,-DroppedKeywords --commits ${{ steps.base.outputs.ref }}
 
       # pkgcheck.conf disables NonsolvableDepsInStable repo-wide for the
@@ -124,11 +125,11 @@ jobs:
           # warning-level keywords). Both remain reported in a local
           # `pkgcheck scan`; they just no longer turn the scheduled full
           # scan red on findings that are intentional repo-wide:
-          #   VisibleVcsPkg   - snapshot ebuilds (zluda, lemonade, fastflowlm,
-          #                     hollama) fetch via git-r3 yet ship ~amd64 by
-          #                     design.
-          #   DroppedKeywords - intentional ~amd64-only forks/retentions
-          #                     (opencv-5.0.0-r90, caffe2, fabio x86 fallback).
+          #   VisibleVcsPkg   - releases that build from git-r3 (zluda,
+          #                     aotriton, mantid) yet ship ~amd64 by design.
+          #   DroppedKeywords - intentional keyword narrowing on newer
+          #                     versions (opencv-5.0.0-r90, hdf-4.4.0,
+          #                     wxmplot-2026.2.3). Re-listed 2026-10-08.
           # Without this the scan failed on every run, so the failure-issue
           # upsert could never reach the auto-close-on-success path. The
           # error-level scan is clean. verified 2026-07-26.
