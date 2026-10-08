@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..15} )
 
-inherit cmake python-any-r1
+inherit cuda cmake python-any-r1
 
 MY_PN="whisper.cpp"
 MY_P="${MY_PN}-${PV}"
@@ -74,10 +74,14 @@ src_configure() {
 		-DWHISPER_SDL2=$(usex sdl2)
 	)
 	if use cuda; then
-		# Pin GCC 15 when available; CUDA 13 rejects newer hosts.
-		# verified 2026-05-14 with CUDA 13.2 and active GCC 16
-		local g15=/usr/bin/x86_64-pc-linux-gnu-g++-15
-		[[ -x ${g15} ]] && mycmakeargs+=( -DCMAKE_CUDA_HOST_COMPILER="${g15}" )
+		# nvcc rejects a gcc newer than its toolkit supports; cuda_gccdir picks
+		# the newest installed one it accepts. It returns nothing under a
+		# non-GNU toolchain, and a path that does not exist where CHOST is not
+		# *-pc-linux-gnu; nvcc then keeps its default. verified 2026-10-08
+		local cuda_gcc_bindir
+		if cuda_gcc_bindir="$(cuda_gccdir)" && [[ -x ${cuda_gcc_bindir}/g++ ]]; then
+			mycmakeargs+=( -DCMAKE_CUDA_HOST_COMPILER="${cuda_gcc_bindir}/g++" )
+		fi
 	fi
 	if use blas; then
 		# Require OpenBLAS: generic FindBLAS may choose libblas without cblas_sgemm.

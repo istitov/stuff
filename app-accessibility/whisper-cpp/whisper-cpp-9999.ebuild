@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..15} )
 
-inherit cmake git-r3 python-any-r1
+inherit cuda cmake git-r3 python-any-r1
 
 DESCRIPTION="Port of OpenAI's Whisper model in C/C++"
 HOMEPAGE="https://github.com/ggml-org/whisper.cpp"
@@ -57,9 +57,14 @@ src_configure() {
 		-DWHISPER_SDL2=$(usex sdl2)
 	)
 	if use cuda; then
-		# CUDA 13 rejects GCC >15; prefer GCC 15 when installed. Verified 2026-05-14.
-		local g15=/usr/bin/x86_64-pc-linux-gnu-g++-15
-		[[ -x ${g15} ]] && mycmakeargs+=( -DCMAKE_CUDA_HOST_COMPILER="${g15}" )
+		# nvcc rejects a gcc newer than its toolkit supports; cuda_gccdir picks
+		# the newest installed one it accepts. It returns nothing under a
+		# non-GNU toolchain, and a path that does not exist where CHOST is not
+		# *-pc-linux-gnu; nvcc then keeps its default. verified 2026-10-08
+		local cuda_gcc_bindir
+		if cuda_gcc_bindir="$(cuda_gccdir)" && [[ -x ${cuda_gcc_bindir}/g++ ]]; then
+			mycmakeargs+=( -DCMAKE_CUDA_HOST_COMPILER="${cuda_gcc_bindir}/g++" )
+		fi
 	fi
 	if use blas; then
 		# Generic FindBLAS may select a library without cblas_sgemm.
