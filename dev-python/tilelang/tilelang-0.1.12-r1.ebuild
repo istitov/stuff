@@ -29,11 +29,21 @@ RESTRICT="test"
 # Keep TVM's build and runtime tvm-ffi ABIs exact.
 # ROCm kernels JIT-compile against src/tl_templates/hip/common.h, which
 # includes rocwmma/rocwmma.hpp unconditionally. verified 2026-09-30
+# CUDA kernels are JIT-compiled with nvcc at runtime, so a gcc the toolkit
+# accepts has to stay installed: up to 16 from CUDA 13.4, up to 15 before.
+# verified 2026-10-08
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
-	>=sci-mathematics/z3-4.13.0:=[python,${PYTHON_SINGLE_USEDEP}]
+	sci-mathematics/z3:=[python,${PYTHON_SINGLE_USEDEP}]
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
+		|| (
+			(
+				>=dev-util/nvidia-cuda-toolkit-13.4
+				<sys-devel/gcc-17_pre[cxx]
+			)
+			<sys-devel/gcc-16[cxx]
+		)
 		sci-ml/caffe2[cuda]
 	)
 	rocm? (
@@ -56,7 +66,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
-	>=dev-build/cmake-3.26.1
 	>=dev-util/patchelf-0.17.2
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	$(python_gen_cond_dep '
@@ -64,8 +73,11 @@ BDEPEND="
 	')
 "
 
+# Cython >=3.3 rejects upstream's cp38 limited API target; patch it to cp310,
+# matching requires-python >=3.10. # verified 2026-08-31
 PATCHES=(
 	"${FILESDIR}/${PN}-0.1.12-cudahostcxx.patch"
+	"${FILESDIR}/${P}-py-limited-api-310.patch"
 )
 
 # Upstream caps z3-solver at <4.15.5, but Gentoo provides newer versions.

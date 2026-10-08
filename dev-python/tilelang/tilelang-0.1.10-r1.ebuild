@@ -8,16 +8,13 @@ DISTUTILS_USE_PEP517=scikit-build-core
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 
-inherit cuda distutils-r1
+inherit cuda distutils-r1 pypi
 
 DESCRIPTION="Tile-level programming language for high-performance ML kernels"
 HOMEPAGE="
 	https://github.com/tile-ai/tilelang
 	https://pypi.org/project/tilelang/
 "
-# PyPI carries no 0.1.15 sdist, only wheels; the GitHub release asset is
-# the same sdist layout, 3rdparty sources included. verified 2026-09-30
-SRC_URI="https://github.com/tile-ai/tilelang/releases/download/v${PV}/${P}.tar.gz"
 
 LICENSE="Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD BSD-2 MIT public-domain"
 SLOT="0"
@@ -28,15 +25,25 @@ REQUIRED_USE="^^ ( cuda rocm )"
 RESTRICT="test"
 
 # Mirror upstream's Python <3.14 gate for torch-c-dlpack-ext.
-# verified 2026-06-08
-# Keep TVM's build and runtime tvm-ffi ABIs exact.
+# verified 2026-05-25
+# Retain upstream's tvm-ffi >=0.1.10,<0.2 range; consumers may pin tighter.
 # ROCm kernels JIT-compile against src/tl_templates/hip/common.h, which
 # includes rocwmma/rocwmma.hpp unconditionally. verified 2026-09-30
+# CUDA kernels are JIT-compiled with nvcc at runtime, so a gcc the toolkit
+# accepts has to stay installed: up to 16 from CUDA 13.4, up to 15 before.
+# verified 2026-10-08
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
-	>=sci-mathematics/z3-4.13.0:=[python,${PYTHON_SINGLE_USEDEP}]
+	sci-mathematics/z3:=[python,${PYTHON_SINGLE_USEDEP}]
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
+		|| (
+			(
+				>=dev-util/nvidia-cuda-toolkit-13.4
+				<sys-devel/gcc-17_pre[cxx]
+			)
+			<sys-devel/gcc-16[cxx]
+		)
 		sci-ml/caffe2[cuda]
 	)
 	rocm? (
@@ -46,7 +53,8 @@ RDEPEND="
 		sci-ml/caffe2[rocm]
 	)
 	$(python_gen_cond_dep '
-		~dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
+		>=dev-python/apache-tvm-ffi-0.1.10[${PYTHON_USEDEP}]
+		<dev-python/apache-tvm-ffi-0.2[${PYTHON_USEDEP}]
 		dev-python/cloudpickle[${PYTHON_USEDEP}]
 		dev-python/ml-dtypes[${PYTHON_USEDEP}]
 		>=dev-python/numpy-1.23.5[${PYTHON_USEDEP}]
@@ -59,7 +67,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
-	>=dev-build/cmake-3.26.1
 	>=dev-util/patchelf-0.17.2
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	$(python_gen_cond_dep '
@@ -67,26 +74,16 @@ BDEPEND="
 	')
 "
 
-PATCHES=(
-	"${FILESDIR}/${PN}-0.1.12-cudahostcxx.patch"
-)
-
 # Upstream caps z3-solver at <4.15.5, but Gentoo provides newer versions.
 # Treat it as a tested-version cap unless an incompatibility surfaces. # verified 2026-08-05
 
 # Upstream's Z3 finder searches wheel paths only. Preseed system paths so it
 # creates z3::libz3 from the packaged library.
-python_prepare_all() {
-	# Keep TVM's compiled FFI ABI aligned with the installed Python package.
-	local tvm_ffi_dir="${ESYSROOT}$(python_get_sitedir)/tvm_ffi"
-	[[ -f ${tvm_ffi_dir}/CMakeLists.txt ]] || die "system tvm_ffi sources not found"
-	rm -r 3rdparty/tvm/3rdparty/tvm-ffi || die
-	mkdir 3rdparty/tvm/3rdparty/tvm-ffi || die
-	ln -s "${tvm_ffi_dir}"/{CMakeLists.txt,3rdparty,include,src} \
-		3rdparty/tvm/3rdparty/tvm-ffi/ || die
-	cp -a "${tvm_ffi_dir}"/share/cmake/tvm_ffi \
-		3rdparty/tvm/3rdparty/tvm-ffi/cmake || die
+# Cython >=3.3 rejects upstream's cp38 limited API target; patch it to cp310,
+# matching requires-python >=3.10. # verified 2026-08-31
+PATCHES=( "${FILESDIR}/${P}-py-limited-api-310.patch" )
 
+python_prepare_all() {
 	# Load the platform before initializing imported CUDA targets.
 	sed -e '\|include(${CMAKE_CURRENT_LIST_DIR}/cmake/FindPipCUDAToolkit.cmake)|d' \
 		-e '/project(TILE_LANG C CXX)/a include(${CMAKE_CURRENT_LIST_DIR}/cmake/FindPipCUDAToolkit.cmake)' \
@@ -117,6 +114,10 @@ python_configure_all() {
 DISTUTILS_ARGS=(
 	-DTILELANG_USE_CUDA_STUBS=OFF
 	-DTILELANG_USE_HIP_STUBS=OFF
+	# Leave compiler caching to Portage FEATURES.
+	-DCMAKE_C_COMPILER_LAUNCHER=
+	-DCMAKE_CXX_COMPILER_LAUNCHER=
+	-DCMAKE_CUDA_COMPILER_LAUNCHER=
 )
 
 python_install_all() {
@@ -154,5 +155,5 @@ pkg_postinst() {
 	elog "tilelang JIT-compiles kernels with nvcc at runtime. If the active"
 	elog "compiler is unsupported by CUDA, select the compatible compiler with:"
 	elog ""
-	elog "  export CUDAHOSTCXX='${cuda_gcc_dir}/g++'"
+	elog "  export NVCC_PREPEND_FLAGS='-ccbin ${cuda_gcc_dir}/g++'"
 }

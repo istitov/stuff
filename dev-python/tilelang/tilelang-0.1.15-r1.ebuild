@@ -8,13 +8,16 @@ DISTUTILS_USE_PEP517=scikit-build-core
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 
-inherit cuda distutils-r1 pypi
+inherit cuda distutils-r1
 
 DESCRIPTION="Tile-level programming language for high-performance ML kernels"
 HOMEPAGE="
 	https://github.com/tile-ai/tilelang
 	https://pypi.org/project/tilelang/
 "
+# PyPI carries no 0.1.15 sdist, only wheels; the GitHub release asset is
+# the same sdist layout, 3rdparty sources included. verified 2026-09-30
+SRC_URI="https://github.com/tile-ai/tilelang/releases/download/v${PV}/${P}.tar.gz"
 
 LICENSE="Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD BSD-2 MIT public-domain"
 SLOT="0"
@@ -29,11 +32,21 @@ RESTRICT="test"
 # Keep TVM's build and runtime tvm-ffi ABIs exact.
 # ROCm kernels JIT-compile against src/tl_templates/hip/common.h, which
 # includes rocwmma/rocwmma.hpp unconditionally. verified 2026-09-30
+# CUDA kernels are JIT-compiled with nvcc at runtime, so a gcc the toolkit
+# accepts has to stay installed: up to 16 from CUDA 13.4, up to 15 before.
+# verified 2026-10-08
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	>=sci-mathematics/z3-4.13.0:=[python,${PYTHON_SINGLE_USEDEP}]
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
+		|| (
+			(
+				>=dev-util/nvidia-cuda-toolkit-13.4
+				<sys-devel/gcc-17_pre[cxx]
+			)
+			<sys-devel/gcc-16[cxx]
+		)
 		sci-ml/caffe2[cuda]
 	)
 	rocm? (
@@ -66,8 +79,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-0.1.12-cudahostcxx.patch"
-	# Cython >=3.3 requires a newer limited API target.
-	"${FILESDIR}/${P}-py-limited-api-310.patch"
 )
 
 # Upstream caps z3-solver at <4.15.5, but Gentoo provides newer versions.
