@@ -165,6 +165,9 @@ DEPEND="
 	qnnpack? ( dev-libs/clog )
 "
 
+# Five of these apply here with fuzz (unbundle_fmt, unbundle_kineto,
+# cpp-httplib, mimalloc, removekineto); each hunk was checked to land on
+# the lines it was written for. verified 2026-10-08
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.5.1-unbundle_fmt.patch.xz
 	"${FILESDIR}"/${PN}-2.5.1-unbundle_kineto.patch.xz

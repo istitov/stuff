@@ -136,6 +136,10 @@ RDEPEND="
 	openblas? ( sci-libs/openblas )
 "
 
+# PyTorch 2.11.0 pins pybind11 3.0.1. 3.1.0 does not compile it: two lambdas
+# in torch/csrc/jit/python/init.cpp return py::make_tuple() of differing
+# argument types, which no longer deduce one return type. Upstream gave
+# them explicit return types by 2.13.0. verified 2026-10-08
 DEPEND="
 	${RDEPEND}
 	dev-cpp/nlohmann_json
@@ -159,6 +163,9 @@ DEPEND="
 	qnnpack? ( dev-libs/clog )
 "
 
+# Three of these apply here with fuzz (unbundle_kineto, cmake, mimalloc);
+# each hunk was checked to land on the lines it was written for.
+# verified 2026-10-08
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.5.1-unbundle_fmt.patch.xz
 	"${FILESDIR}"/${PN}-2.5.1-unbundle_kineto.patch.xz
