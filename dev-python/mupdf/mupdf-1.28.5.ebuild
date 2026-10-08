@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=no
 DISTUTILS_EXT=1
-LLVM_COMPAT=( {18..22} )
+LLVM_COMPAT=( {18..23} )
 
 inherit distutils-r1 llvm-r2 toolchain-funcs
 
