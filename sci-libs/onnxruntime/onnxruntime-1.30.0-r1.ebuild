@@ -81,9 +81,13 @@ DEPEND="
 		sci-libs/dlpack
 	)
 "
+# cuda_gccdir needs a gcc that nvcc accepts. The toolkit floor above is 13.4,
+# whose crt/host_config.h accepts up to gcc 16, so this mirrors the toolkit's
+# own gcc bound; the toolkit's dependency can also be met by clang alone,
+# which cuda_gccdir cannot use. verified 2026-10-08
 BDEPEND="
 	${PYTHON_DEPS}
-	cuda? ( sys-devel/gcc:15 )
+	cuda? ( <sys-devel/gcc-17_pre[cxx] )
 	python? ( >=dev-python/setuptools-61[${PYTHON_USEDEP}] )
 
 	test? (
@@ -136,8 +140,9 @@ src_configure() {
 	)
 
 	if use cuda; then
-		# CUDA 13 rejects gcc >15. Use cuda_gccdir for C++, nvcc hosting, and
-		# linking so all stages share one libstdc++ ABI; BDEPEND guarantees it.
+		# nvcc rejects a gcc newer than its toolkit supports. Use cuda_gccdir
+		# for C++, nvcc hosting, and linking so all stages share one libstdc++
+		# ABI; BDEPEND guarantees a gcc it can pick.
 		local cuda_gcc_bindir
 		cuda_gcc_bindir="$(cuda_gccdir)" || die
 		local -x CC="${cuda_gcc_bindir}/gcc"
