@@ -236,10 +236,16 @@ src_prepare() {
 		aten/src/ATen/CMakeLists.txt \
 		|| die
 
-	# System cutlass lacks an optional CuTeDSL example; do not fail mirroring.
-	# Drop if cutlass starts installing it.
-	# verified 2026-08-08
-	sed -i -e 's/message(FATAL_ERROR/message(STATUS/' cmake/FileMirroring.cmake || die
+	# Skip upstream's file mirroring. Outside a wheel build it installs
+	# torchgen data and two valgrind headers into the source tree, which lands
+	# under ${D}${S}; sci-ml/pytorch installs those files instead. With CUDA
+	# it also aborts on the cutlass submodule, which the tarball omits.
+	# verified 2026-10-08
+	[[ $(grep -c 'FileMirroring' CMakeLists.txt) -eq 1 ]] \
+		|| die "expected one FileMirroring include -- upstream moved it"
+	sed -i -e '/^include(cmake\/FileMirroring\.cmake)$/d' CMakeLists.txt || die
+	grep -q 'FileMirroring' CMakeLists.txt \
+		&& die "FileMirroring include survived"
 
 	# The bundled fmt targets do not exist with system libfmt.
 	# verified 2026-07-18
