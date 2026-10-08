@@ -9,7 +9,7 @@ DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_EXT=1
 PYTHON_COMPAT=( python3_{12..14} )
 
-inherit distutils-r1
+inherit cuda distutils-r1
 
 DESCRIPTION="Decode/encode video and audio into PyTorch tensors via FFmpeg"
 HOMEPAGE="
@@ -59,9 +59,18 @@ python_compile() {
 	# of redistributing its S3-vendored binary.
 	export I_CONFIRM_THIS_IS_NOT_A_LICENSE_VIOLATION=1
 
-	# Torch's CMake enables CUDA whenever /opt/cuda exists, even for CPU builds;
-	# CUDA 13 rejects GCC >15, so pin the host compiler unconditionally.
-	export CUDAHOSTCXX="/usr/bin/g++-15"
+	# Torch's CMake enables CUDA whenever the toolkit is installed, even for CPU
+	# builds, and nvcc rejects a gcc newer than its toolkit supports. Let
+	# cuda_gccdir pick the newest installed gcc it accepts. verified 2026-10-08
+	if use cuda || has_version -b dev-util/nvidia-cuda-toolkit; then
+		# It returns nothing under a non-GNU toolchain, and a path that does
+		# not exist where CHOST is not *-pc-linux-gnu; nvcc then keeps its
+		# default host compiler.
+		local cuda_gcc_bindir
+		if cuda_gcc_bindir="$(cuda_gccdir)" && [[ -x ${cuda_gcc_bindir}/g++ ]]; then
+			export CUDAHOSTCXX="${cuda_gcc_bindir}/g++"
+		fi
+	fi
 
 	if use cuda; then
 		export ENABLE_CUDA=1
