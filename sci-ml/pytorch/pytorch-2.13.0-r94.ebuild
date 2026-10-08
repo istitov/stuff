@@ -119,4 +119,27 @@ python_compile() {
 
 python_install() {
 	USE_SYSTEM_LIBS=ON distutils-r1_python_install
+
+	# setup.py packages these from the source tree, where upstream's CMake
+	# install (cmake/FileMirroring.cmake) puts them; that install belongs to
+	# sci-ml/caffe2 and never runs here. Without them torchgen cannot run
+	# outside a source checkout and torch.utils.benchmark cannot build its
+	# callgrind bindings. Of the two rules left out, one fills tools/shared,
+	# which is not installed, and the CuTeDSL kernel comes from the cutlass
+	# submodule, which the tarball omits. verified 2026-10-08
+	[[ $(grep -c 'SKBUILD_PLATLIB_DIR}/' cmake/FileMirroring.cmake) -eq 7 ]] \
+		|| die "cmake/FileMirroring.cmake changed -- re-derive the mirrored files"
+	local sitedir=$(python_get_sitedir)
+	insinto "${sitedir}"/torchgen/packaged/ATen/native
+	doins aten/src/ATen/native/{native_functions,tags}.yaml
+	insinto "${sitedir}"/torchgen/packaged/ATen
+	doins -r aten/src/ATen/templates
+	insinto "${sitedir}"/torchgen/packaged
+	doins -r tools/autograd
+	# Upstream's install rule skips the Bazel files.
+	find "${D}${sitedir}"/torchgen/packaged/autograd \
+		\( -name BUILD.bazel -o -name '*.bzl' \) -delete || die
+	insinto "${sitedir}"/torch/utils/benchmark/utils/valgrind_wrapper
+	doins third_party/valgrind-headers/{callgrind,valgrind}.h
+	python_optimize "${D}${sitedir}"/torchgen/packaged
 }

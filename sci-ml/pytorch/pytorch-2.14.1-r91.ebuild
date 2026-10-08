@@ -91,7 +91,7 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-	"${FILESDIR}"/${P}-cpp-extension-multilib.patch
+	"${FILESDIR}"/${PN}-2.14.0-cpp-extension-multilib.patch
 )
 
 src_prepare() {
@@ -123,4 +123,31 @@ python_compile() {
 	PYTORCH_BUILD_VERSION=${PV} \
 	PYTORCH_BUILD_NUMBER=0 \
 	distutils-r1_python_compile
+}
+
+python_install() {
+	distutils-r1_python_install
+
+	# Upstream copies these into the package trees from CMake
+	# (cmake/FileMirroring.cmake), which wheel.cmake=false skips. Without them
+	# torchgen cannot run outside a source checkout and torch.utils.benchmark
+	# cannot build its callgrind bindings. Install them here rather than
+	# through the wheel: upstream's .gitignore lists them and the package walk
+	# honours it. The CuTeDSL kernel on the same list comes from the cutlass
+	# submodule, which the tarball omits. verified 2026-10-08
+	[[ $(grep -c 'SKBUILD_PLATLIB_DIR}/' cmake/FileMirroring.cmake) -eq 6 ]] \
+		|| die "cmake/FileMirroring.cmake changed -- re-derive the mirrored files"
+	local sitedir=$(python_get_sitedir)
+	insinto "${sitedir}"/torchgen/packaged/ATen/native
+	doins aten/src/ATen/native/{native_functions,tags}.yaml
+	insinto "${sitedir}"/torchgen/packaged/ATen
+	doins -r aten/src/ATen/templates
+	insinto "${sitedir}"/torchgen/packaged
+	doins -r tools/autograd
+	# Upstream's install rule skips the Bazel files; its wheel drops *.md.
+	find "${D}${sitedir}"/torchgen/packaged/autograd \
+		\( -name BUILD.bazel -o -name '*.bzl' -o -name '*.md' \) -delete || die
+	insinto "${sitedir}"/torch/utils/benchmark/utils/valgrind_wrapper
+	doins third_party/valgrind-headers/{callgrind,valgrind}.h
+	python_optimize "${D}${sitedir}"/torchgen/packaged
 }
