@@ -139,6 +139,9 @@ RDEPEND="
 
 # PyTorch 2.13.0 pins CUTLASS 4.4.2; newer versions removed the
 # TileScheduler overload used by AsyncMM.cu.
+# It pins pybind11 3.0.4, where ::gentoo's 2.13.0-r3 stops. 3.1.0 also
+# compiles and the result runs, so the cap moves to the first untested
+# minor. verified 2026-10-08
 DEPEND="
 	${RDEPEND}
 	dev-cpp/nlohmann_json
@@ -148,7 +151,7 @@ DEPEND="
 	dev-libs/psimd
 	sci-ml/FP16
 	$(python_gen_cond_dep '
-		<dev-python/pybind11-3.0.5[${PYTHON_USEDEP}]
+		<dev-python/pybind11-3.2[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/typing-extensions[${PYTHON_USEDEP}]
 	')
