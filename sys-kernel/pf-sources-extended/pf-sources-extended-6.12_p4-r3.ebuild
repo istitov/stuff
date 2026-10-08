@@ -36,9 +36,9 @@ SRC_URI="https://www.kernel.org/pub/linux/kernel/v6.x/linux-${SHPV}.tar.xz
 	https://distfiles.gentoo.org/pub/proj/kernel/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
 	https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
 	https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-${SHPV}-${K_GENPATCHES_VER}.extras.tar.xz
-	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-2/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-2.tar.xz
-	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-2/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-2.tar.xz
-	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-2/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-2.tar.xz"
+	https://raw.githubusercontent.com/istitov/extra-stuff/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
+	https://codeberg.org/istitov/extra-stuff/raw/tag/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz
+	https://gitlab.com/istitov/extra-stuff/-/raw/pf-curated-${SHPV}-r70-1/sys-kernel/pf-sources-extended/pf-curated-${SHPV}.tar.xz -> pf-curated-${SHPV}-r70-1.tar.xz"
 
 S="${WORKDIR}/linux-${SHPV}"
 
@@ -65,9 +65,18 @@ src_prepare() {
 	# Keep the 1* linux-stable chain that pf-sources drops.
 	eapply "${WORKDIR}"/*.patch
 
-	# Apply the r70-2 curated series. 0003 dropped its amd-pstate doc hunk,
-	# which 6.12.110 already carries; pkg_postinst summarizes the scope.
-	# verified 2026-10-07
+	# 6.12.110 already made 0003's amd-pstate doc change, so cut that file's
+	# block out of the patch and keep its code hunks. # verified 2026-10-08
+	local p="${WORKDIR}/pf-curated-${SHPV}/0003-amd-pstate-and-topology.patch"
+	local doc="a/Documentation/admin-guide/pm/amd-pstate.rst"
+	grep -q "^diff --git ${doc} " "${p}" \
+		|| die "0003 no longer touches ${doc}; drop this filter"
+	awk -v f="${doc}" '/^diff --git /{ skip = ($3 == f) } !skip' \
+		"${p}" > "${T}/0003.patch" || die
+	mv "${T}/0003.patch" "${p}" || die
+	grep -q "^diff --git ${doc} " "${p}" && die "failed to filter ${doc} from 0003"
+
+	# Apply the curated series; pkg_postinst summarizes its scope.
 	eapply "${WORKDIR}/pf-curated-${SHPV}"/*.patch
 
 	default
