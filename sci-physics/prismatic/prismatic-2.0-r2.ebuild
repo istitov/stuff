@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cuda cmake
 
 DESCRIPTION="Prismatic Software for STEM Simulation"
 HOMEPAGE="https://prism-em.com"
@@ -72,10 +72,15 @@ src_configure() {
 		-DPRISMATIC_ENABLE_DOUBLE_PRECISION=$(usex double-precision 1 0)
 	)
 
-	# CUDA 13 rejects GCC >15; select the parallel-installed g++-15 explicitly.
+	# nvcc rejects a gcc newer than its toolkit supports; cuda_gccdir picks the
+	# newest installed one it accepts. It returns nothing under a non-GNU
+	# toolchain, and a path that does not exist where CHOST is not
+	# *-pc-linux-gnu; FindCUDA then keeps its default. verified 2026-10-08
 	if use gpu; then
-		local g15=/usr/bin/x86_64-pc-linux-gnu-g++-15
-		[[ -x ${g15} ]] && mycmakeargs+=( -DCUDA_HOST_COMPILER="${g15}" )
+		local cuda_gcc_bindir
+		if cuda_gcc_bindir="$(cuda_gccdir)" && [[ -x ${cuda_gcc_bindir}/g++ ]]; then
+			mycmakeargs+=( -DCUDA_HOST_COMPILER="${cuda_gcc_bindir}/g++" )
+		fi
 	fi
 
 	cmake_src_configure
