@@ -129,11 +129,6 @@ src_configure() {
 		-DSHERPA_ONNX_ENABLE_WASM=OFF
 	)
 
-	if use cuda; then
-		# CUDA 13 nvcc rejects GCC >15.
-		export CUDAHOSTCXX="/usr/bin/g++-15"
-	fi
-
 	cmake_src_configure
 }
 
