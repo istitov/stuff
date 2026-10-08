@@ -5,8 +5,6 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
-# GitHub tarballs have no git metadata; keep setuptools-scm happy.
-export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_DISTRIBUTED=${PV}
 
 inherit distutils-r1
 
@@ -23,14 +21,17 @@ SRC_URI="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-RESTRICT="test"	# Upstream test suite is flaky / network-dependent.
+# Tests are flaky and network-dependent.
+RESTRICT="test"
 
-# Broken tblib 3.2.0/3.2.1 are absent from ::gentoo. Verified 2026-07-14.
+# Before 2026.8.0 the dashboard is stopped synchronously, which Bokeh 3.10
+# rejects on a running event loop: Client.close() and LocalCluster shutdown
+# fail (dask/distributed#9350). verified 2026-10-08
 RDEPEND="
+	!>=dev-python/bokeh-3.10
 	>=dev-python/click-8.0[${PYTHON_USEDEP}]
 	>=dev-python/cloudpickle-3.0.0[${PYTHON_USEDEP}]
-	>=dev-python/dask-${PV}[${PYTHON_USEDEP}]
-	<dev-python/dask-2026.7.2[${PYTHON_USEDEP}]
+	=dev-python/dask-${PV}*[${PYTHON_USEDEP}]
 	>=dev-python/jinja2-2.10.3[${PYTHON_USEDEP}]
 	>=dev-python/locket-1.0.0[${PYTHON_USEDEP}]
 	>=dev-python/msgpack-1.0.2[${PYTHON_USEDEP}]
@@ -39,10 +40,19 @@ RDEPEND="
 	>=dev-python/pyyaml-5.4.1[${PYTHON_USEDEP}]
 	>=dev-python/sortedcontainers-2.0.5[${PYTHON_USEDEP}]
 	>=dev-python/tblib-1.6.0[${PYTHON_USEDEP}]
-	>=dev-python/toolz-0.12.0[${PYTHON_USEDEP}]
+	>=dev-python/toolz-0.11.2[${PYTHON_USEDEP}]
 	>=dev-python/tornado-6.2.0[${PYTHON_USEDEP}]
+	>=dev-python/urllib3-1.26.5[${PYTHON_USEDEP}]
 	>=dev-python/zict-3.0.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	>=dev-python/setuptools-scm-9.0[${PYTHON_USEDEP}]
+	~dev-python/versioneer-0.29[toml(+),${PYTHON_USEDEP}]
 "
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+python_prepare_all() {
+	sed -i -e '/--cov/d' pyproject.toml || die
+	distutils-r1_python_prepare_all
+}
