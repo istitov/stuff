@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (297) ---
+# --- pypi (296) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -810,10 +810,6 @@ pypi = "pytablewriter"
 source = "pypi"
 pypi = "pytemlib"
 
-["dev-python/pytest-mpl"]
-source = "pypi"
-pypi = "pytest-mpl"
-
 ["dev-python/python-docx"]
 source = "pypi"
 pypi = "python-docx"
@@ -1198,7 +1194,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (242) ---
+# --- github (241) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2162,12 +2158,6 @@ github = "google/draco"
 use_max_tag = true
 prefix = "v"
 
-["media-libs/libde265"]
-source = "github"
-github = "strukturag/libde265"
-use_max_tag = true
-prefix = "v"
-
 ["media-libs/libnoise"]
 source = "github"
 github = "SoftFever/Orca-deps-libnoise"
@@ -3064,6 +3054,7 @@ prefix = "v"
 # ["dev-libs/libstrophe"] skipped: live-only ebuild (no release tracking)
 # ["dev-util/qbs"] skipped: live-only ebuild (no release tracking)
 # ["games-misc/fortune-mod-lorquotes"] skipped: live-only ebuild (no release tracking)
+# ["media-libs/libde265"] skipped: live-only ebuild (no release tracking)
 # ["media-libs/libjpeg-turbo"] skipped: live-only ebuild (no release tracking)
 # ["media-libs/mlt"] skipped: live-only ebuild (no release tracking)
 # ["media-plugins/deadbeef-archive-reader"] skipped: live-only ebuild (no release tracking)
