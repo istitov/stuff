@@ -1,0 +1,62 @@
+Query AMDGPU target-ID support through the feature bitset.
+
+comgr asks llvm::AMDGPU::getArchAttrAMDGCN() whether a processor takes the
+xnack and sramecc target-ID modifiers. LLVM 24 replaced that bitmask and its
+FEATURE_* enumerators with a generated feature bitset; the transitional
+copy of the old interface that AMD's LLVM fork still carries at therock-10.1
+is gone from upstream:
+
+    error: 'getArchAttrAMDGCN' is not a member of 'llvm::AMDGPU'
+    error: 'FEATURE_XNACK_ON_OFF_MODES' is not a member of 'llvm::AMDGPU'
+    error: 'FEATURE_SRAMECC' is not a member of 'llvm::AMDGPU'
+
+The replacements are the ones upstream uses for the same decision in
+llvm/lib/TargetParser/AMDGPUTargetParser.cpp, where the fork's
+
+    (ArchAttr & FEATURE_XNACK_ON_OFF_MODES) ? Any : Unsupported
+    (ArchAttr & FEATURE_SRAMECC) ? Any : Unsupported
+
+became tests of FEAT_XNACK_ON_OFF_MODES and FEAT_SRAMECC_SUPPORT.
+
+Result, compared per ISA with comgr 10.0 on LLVM 23: the 56 shared ISAs
+report the same xnack and sramecc support except gfx1250 and gfx1251, which
+no longer take an xnack modifier. That follows upstream, which now treats
+xnack as supported but hard-wired on for them.
+
+--- a/src/comgr-metadata.cpp
++++ b/src/comgr-metadata.cpp
+@@ -473,13 +473,13 @@
+     return false;
+   }
+ 
+-  unsigned ArchAttr = AMDGPU::getArchAttrAMDGCN(
++  const AMDGPU::AMDGPUFeatureBitset &ArchFeatures = AMDGPU::getFeatureBitset(
+       AMDGPU::parseArchAMDGCN(IsaInfos[IsaIndex].Processor));
+ 
+   return (Feature.drop_back() == "xnack" &&
+-          (ArchAttr & AMDGPU::FEATURE_XNACK_ON_OFF_MODES)) ||
++          ArchFeatures.test(AMDGPU::FEAT_XNACK_ON_OFF_MODES)) ||
+          (Feature.drop_back() == "sramecc" &&
+-          (ArchAttr & AMDGPU::FEATURE_SRAMECC));
++          ArchFeatures.test(AMDGPU::FEAT_SRAMECC_SUPPORT));
+ }
+ 
+ const char *getIsaName(size_t Index) { return IsaInfos[Index].IsaName; }
+@@ -511,13 +511,14 @@
+   Root["Version"] = Doc.getNode("1.0.0", /*Copy=*/true);
+ 
+   AMDGPU::GPUKind Kind = AMDGPU::parseArchAMDGCN(IsaInfos[IsaIndex].Processor);
+-  unsigned ArchAttr = AMDGPU::getArchAttrAMDGCN(Kind);
++  const AMDGPU::AMDGPUFeatureBitset &ArchFeatures =
++      AMDGPU::getFeatureBitset(Kind);
+ 
+   auto FeaturesNode = Doc.getMapNode();
+-  if (ArchAttr & AMDGPU::FEATURE_XNACK_ON_OFF_MODES) {
++  if (ArchFeatures.test(AMDGPU::FEAT_XNACK_ON_OFF_MODES)) {
+     FeaturesNode["xnack"] = Doc.getNode("any", /*Copy=*/true);
+   }
+-  if (ArchAttr & AMDGPU::FEATURE_SRAMECC) {
++  if (ArchFeatures.test(AMDGPU::FEAT_SRAMECC_SUPPORT)) {
+     FeaturesNode["sramecc"] = Doc.getNode("any", /*Copy=*/true);
+   }
+ 

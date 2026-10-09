@@ -1,0 +1,28 @@
+Stop naming the clang driver's removed offload-unbundling job class.
+
+UnbundleCommand::getClass() returned
+clang::driver::Action::OffloadUnbundlingJobClass. LLVM 24 dropped that
+enumerator from the driver, while AMD's LLVM fork at therock-10.1 still has
+it:
+
+    error: 'OffloadUnbundlingJobClass' is not a member of
+    'clang::driver::Action'
+
+comgr unbundles through clang::OffloadBundler directly and never runs a
+driver job of that class. The value is only hashed into the cache key
+(CachedCommandAdaptor::getIdentifier), so all it has to do is differ from
+the other commands' values. SPIRVCommand already uses the first unallocated
+one, JobClassLast + 1; take the next.
+
+--- a/src/comgr-unbundle-command.cpp
++++ b/src/comgr-unbundle-command.cpp
+@@ -121,7 +121,8 @@
+ }
+ 
+ CachedCommandAdaptor::ActionClass UnbundleCommand::getClass() const {
+-  return clang::driver::Action::OffloadUnbundlingJobClass;
++  // Only a cache-key tag. SPIRVCommand takes JobClassLast + 1.
++  return clang::driver::Action::ActionClass::JobClassLast + 2;
+ }
+ 
+ void UnbundleCommand::addOptionsIdentifier(HashAlgorithm &H) const {
