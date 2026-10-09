@@ -22,3 +22,5 @@ RDEPEND="
 	>=dev-python/numcodecs-0.10.0[${PYTHON_USEDEP}]
 	<dev-python/numcodecs-0.16[${PYTHON_USEDEP}]
 "
+# The version comes from setuptools-scm.
+BDEPEND=">dev-python/setuptools-scm-8-r0[${PYTHON_USEDEP}]"

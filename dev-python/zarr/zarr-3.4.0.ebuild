@@ -26,3 +26,5 @@ RDEPEND="
 	>=dev-python/typing-extensions-4.14[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
+# The version comes from hatch's "vcs" source, a hatch-vcs plugin.
+BDEPEND="dev-python/hatch-vcs[${PYTHON_USEDEP}]"
