@@ -1,0 +1,21 @@
+Include <cstdint> in the CUDA dynamic sparse attention header.
+
+dynamic_sparse_attention_impl.h, new in 1.31.0, declares a uint32_t parameter
+without including a header that defines the type. By the time nvcc reaches
+it, int32_t and int64_t happen to be declared already and uint32_t is not:
+
+  dynamic_sparse_attention_impl.h(69): error: identifier "uint32_t" is undefined
+
+verified 2026-10-09 with CUDA 13.4.2 hosted by gcc 16
+
+--- a/onnxruntime/contrib_ops/cuda/bert/dynamic_sparse_attention_impl.h
++++ b/onnxruntime/contrib_ops/cuda/bert/dynamic_sparse_attention_impl.h
+@@ -3,6 +3,8 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
++
+ #include <cuda_runtime.h>
+ 
+ #include "contrib_ops/cpu/bert/dynamic_sparse_attention_parameters.h"
