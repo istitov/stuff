@@ -1,0 +1,200 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+ROCM_VERSION=${PV}
+PYTHON_COMPAT=( python3_{12..14} )
+
+inherit check-reqs cmake flag-o-matic multiprocessing python-r1 rocm
+
+GTEST_COMMIT="b85864c64758dec007208e56af933fc3f52044ee"
+GTEST_FILE="gtest-1.14.0_p20220421.tar.gz"
+
+DESCRIPTION="High Performance Composable Kernel for AMD GPUs"
+HOMEPAGE="https://github.com/ROCm/composable_kernel"
+# ROCm assets now use therock-<major.minor>; this asset has no name separator.
+MY_BASE="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)"
+SRC_URI="${MY_BASE}/composablekernel.tar.gz -> ${P}.tar.gz
+	test? ( https://github.com/google/googletest/archive/${GTEST_COMMIT}.tar.gz -> ${GTEST_FILE} )"
+S="${WORKDIR}/composablekernel"
+
+LICENSE="MIT"
+SLOT="0/$(ver_cut 1-2)"
+KEYWORDS="~amd64"
+
+IUSE="debug hiptensor profiler test"
+REQUIRED_USE="${ROCM_REQUIRED_USE} ${PYTHON_REQUIRED_USE}"
+RESTRICT="!test? ( test )"
+
+RDEPEND="
+	dev-util/hip:${SLOT}
+	${PYTHON_DEPS}
+"
+
+DEPEND="${RDEPEND}"
+
+# Vanilla Clang 23 gives amd_wmma.hpp's bf16 builtin an incompatible vector
+# type, so select AMD LLVM through hipcc. Keep this unconditional until a
+# vanilla-LLVM CDNA build is verified. verified 2026-08-30; not re-checked
+# against Clang 24 (2026-10-10).
+BDEPEND="
+	dev-build/rocm-cmake:${SLOT}
+	dev-util/hipcc:${SLOT}[amd-llvm]
+"
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-6.3.0-conditional-kernels.patch.xz
+	"${FILESDIR}"/${PN}-10.0.0-libcxx-includes.patch.xz
+	"${FILESDIR}"/${PN}-10.0.0-expand-isa.patch.xz
+)
+
+ck_check-reqs() {
+	[[ ${MERGE_TYPE} == binary ]] && return
+
+	targets=(${AMDGPU_TARGETS})
+	if [[ ${#targets[@]} -gt 1 ]]; then
+		ewarn "composable-kernel will be compiled for multiple GPU architectures,"
+		ewarn "which will take a significant amount of time."
+		ewarn "Please consider setting AMDGPU_TARGETS USE_EXPAND variable to a single architecture."
+	fi
+
+	# CHECKREQS reserves 3 GiB/job; the advisory limit uses 2 GiB/job.
+	local user_jobs=$(makeopts_jobs)
+	local available_memory_mb=$(free -m | awk '/Mem:/ {print $7}')
+	local max_jobs=$(( available_memory_mb / 2048 ))
+	max_jobs=$(( max_jobs < 1 ? 1 : max_jobs ))
+	local limited_jobs=$(( user_jobs < max_jobs ? user_jobs : max_jobs ))
+	if [[ "${max_jobs}" -lt "${user_jobs}" ]]; then
+		ewarn "${available_memory_mb} MB of free RAM is not enough for ${user_jobs} parallel build jobs (~2Gb per job)."
+		ewarn "Please consider setting MAKEOPTS=\"-j${limited_jobs}\" for this package."
+	fi
+
+	local CHECKREQS_MEMORY=$((user_jobs*3072))M
+	check-reqs_${EBUILD_PHASE_FUNC}
+}
+
+pkg_pretend() {
+	ck_check-reqs
+}
+
+pkg_setup() {
+	ck_check-reqs
+}
+
+src_prepare() {
+	# Decompress oversized patches into T because eapply cannot read xz payloads.
+	local p b i
+	mkdir "${T}"/patches || die
+	for p in "${FILESDIR}"/*.patch.xz; do
+		b=${p##*/}
+		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
+	done
+	for i in "${!PATCHES[@]}"; do
+		b=${PATCHES[i]##*/}
+		PATCHES[i]="${T}/patches/${b%.xz}"
+	done
+
+	# Require the anchor so upstream -Werror cannot return silently.
+	# verified 2026-08-30
+	grep -q -- '-Werror' cmake/EnableCompilerWarnings.cmake ||
+		die "-Werror anchor moved in EnableCompilerWarnings.cmake"
+	sed -e '/-Werror/d' -i cmake/EnableCompilerWarnings.cmake || die
+
+	# Require the anchor so the large example tree cannot return silently.
+	# verified 2026-08-30
+	grep -q 'add_subdirectory(example)' CMakeLists.txt ||
+		die "add_subdirectory(example) anchor moved; the example tree would be built"
+	sed -e "/add_subdirectory(example)/d" -i CMakeLists.txt || die
+
+	# These forced-inlining flags exhaust memory; require both anchors.
+	# llvm-project#86332; verified 2026-08-29
+	local f
+	for f in amdgpu-early-inline-all amdgpu-function-calls; do
+		grep -q -- "${f}" CMakeLists.txt ||
+			die "-${f} anchor moved; build would OOM"
+	done
+	sed -e "/-amdgpu-early-inline-all/d" -e "/-amdgpu-function-calls/d" -i CMakeLists.txt || die
+
+	cmake_src_prepare
+}
+
+src_configure() {
+	rocm_use_clang
+
+	# Match AMD's Release build; active assertions abort gfx1150 codegen.
+	# verified 2026-08-30
+	if ! use debug; then
+		append-cflags "-DNDEBUG"
+		append-cxxflags "-DNDEBUG"
+		CMAKE_BUILD_TYPE="Release"
+	else
+		CMAKE_BUILD_TYPE="Debug"
+	fi
+
+	local mycmakeargs=(
+		-DCMAKE_SKIP_RPATH=ON
+		-DBUILD_DEV=OFF
+		-DGPU_TARGETS="$(get_amdgpu_flags)"
+		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
+		-DBUILD_TESTING=$(usex test ON OFF)
+		# Upstream now provides this profiler switch.
+		-DBUILD_CK_PROFILER=$(usex profiler ON OFF)
+
+		# Restrict instances to MIOpen's required set.
+		-DMIOPEN_REQ_LIBS_ONLY=ON
+
+		# This unions hipTensor's contract/reduce/element instances with MIOpen's
+		# convolution set without enabling the full CK set. verified 2026-08-30
+		-DHIPTENSOR_REQ_LIBS_ONLY=$(usex hiptensor ON OFF)
+		-Wno-dev
+	)
+
+	# Enable fallback DL kernels for supported Navi targets.
+	if use amdgpu_targets_gfx1010 || use amdgpu_targets_gfx1011 || use amdgpu_targets_gfx1012 \
+	|| use amdgpu_targets_gfx1030 || use amdgpu_targets_gfx1031 ; then
+		mycmakeargs+=(-DDL_KERNELS=ON)
+	fi
+
+	if use test; then
+		mycmakeargs+=(
+			-DFETCHCONTENT_SOURCE_DIR_GTEST="${WORKDIR}/googletest-${GTEST_COMMIT}"
+		)
+	fi
+
+	# Configuration calls rocminfo. ROCm/composable_kernel#2994
+	rocm_add_sandbox -w
+	addpredict /dev/random
+
+	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+
+	# shellcheck disable=SC2329
+	installation() {
+		python_domodule python/ck4inductor
+
+		# Install package data manually; upstream is not PEP 517 compliant.
+		shopt -s globstar
+		package_data=(
+			include/ck/**/*.hpp
+			library/src/tensor_operation_instance/gpu/gemm_universal/**/*.hpp
+		)
+		shopt -u globstar
+
+		inst_path="${D}$(python_get_sitedir)/ck4inductor"
+		for file in "${package_data[@]}"; do
+			location="${inst_path}/$(dirname "${file}")"
+			mkdir -p "${location}" || die
+			cp "${file}" "${location}" || die
+		done
+	}
+	python_foreach_impl installation
+}
+
+src_test() {
+	check_amdgpu
+	LD_LIBRARY_PATH="${BUILD_DIR}"/lib cmake_src_test -j1
+}
