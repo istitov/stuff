@@ -1,0 +1,31 @@
+Use the system nanobind for the StinkyTofu Python module.
+
+python_module/CMakeLists.txt pulls nanobind with
+FetchContent_Declare(nanobind GIT_REPOSITORY ...), which fails outright in a
+sandboxed build with no network access.
+
+The module is off by default. rocisa turns it on when gfx1250 is among
+GPU_TARGETS, which is also what an empty GPU_TARGETS resolves to, so those
+builds stop at "Failed to clone repository". Find the installed nanobind
+instead, as the rocisa patch does for rocisa's own bindings; Python is
+already located just above.
+
+--- a/python_module/CMakeLists.txt
++++ b/python_module/CMakeLists.txt
+@@ -43,13 +43,9 @@
+ # nanobind requires find_package(Python ...) not Python3
+ find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
+ 
+-include(FetchContent)
+-FetchContent_Declare(
+-  nanobind
+-  GIT_REPOSITORY https://github.com/wjakob/nanobind.git
+-  GIT_TAG        9b3afa9dbdc23641daf26fadef7743e7127ff92f # v2.6.1
+-)
+-FetchContent_MakeAvailable(nanobind)
++# Use the system nanobind instead of fetching it over the network:
++# package-manager builds run sandboxed with no network access.
++find_package(nanobind REQUIRED CONFIG)
+ 
+ # ============================================================================
+ # Create the Python Module
