@@ -31,3 +31,76 @@ app-portage/portopts
 # users opt in to that runtime self-bootstrap (and the beta status)
 # consciously. Lift once a version reuses system packages, or drop the beta tag.
 sci-ml/unsloth-desktop-bin
+
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-10-09)
+# ROCm 10.1 split stack.
+#
+# ROCm 10.1 (therock-10.1) is built on LLVM 24, and the ebuilds here that
+# use LLVM declare LLVM_COMPAT=( 24 ). ::gentoo has LLVM 24 only as
+# unkeyworded snapshots and USE-masks llvm_slot_24 profile-wide, so those
+# cannot resolve on a stock ~amd64 system, and most of the others depend on
+# them. Building them takes three local steps: accept the LLVM 24 snapshot
+# by keyword, unmask llvm_slot_24 for the ROCm packages that use it
+# (/etc/portage/profile/package.use.mask), and enable it for them.
+#
+# The mask also keeps the stack whole. These share SLOT 0 with 10.0, so an
+# unmasked world update would upgrade it piecemeal while the subslot flips
+# from 0/10.0 to 0/10.1. Lift the whole block at once, never individual
+# entries, and not before ::gentoo keywords an LLVM 24 release and drops
+# the USE mask.
+#
+# ::gentoo's snapshot is newer than the LLVM fork AMD wrote 10.1 against.
+# dev-libs/rocm-comgr carries *-llvm-24-* patches for that, and
+# llvm-core/rocm-llvm builds its own device libraries. Re-check both
+# against each new snapshot and against the 24.1 release.
+#
+# dev-util/therock-bin stays at 10.0.0: there is no rocm-rel-10.1 runfile
+# installer. checked 2026-10-09
+~app-admin/rdc-10.1.0
+~dev-build/rocm-cmake-10.1.0
+~dev-debug/rocr-debug-agent-10.1.0
+~dev-libs/hipother-10.1.0
+~dev-libs/rccl-10.1.0
+~dev-libs/rocdbgapi-10.1.0
+~dev-libs/rocm-comgr-10.1.0
+~dev-libs/rocm-core-10.1.0
+~dev-libs/rocm-device-libs-10.1.0
+~dev-libs/rocm-opencl-runtime-10.1.0
+~dev-libs/rocprofiler-register-10.1.0
+~dev-libs/rocr-runtime-10.1.0
+~dev-libs/roct-thunk-interface-10.1.0
+~dev-util/Tensile-10.1.0
+~dev-util/amdsmi-10.1.0
+~dev-util/hip-10.1.0
+~dev-util/hipcc-10.1.0
+~dev-util/hipify-clang-10.1.0
+~dev-util/rocm-smi-10.1.0
+~dev-util/rocminfo-10.1.0
+~dev-util/roctracer-10.1.0
+~llvm-core/rocm-llvm-10.1.0
+~media-libs/rocDecode-10.1.0
+~media-libs/rocJPEG-10.1.0
+~sci-libs/composable-kernel-10.1.0
+~sci-libs/hipBLAS-10.1.0
+~sci-libs/hipBLAS-common-10.1.0
+~sci-libs/hipBLASLt-10.1.0
+~sci-libs/hipCUB-10.1.0
+~sci-libs/hipFFT-10.1.0
+~sci-libs/hipRAND-10.1.0
+~sci-libs/hipSOLVER-10.1.0
+~sci-libs/hipSPARSE-10.1.0
+~sci-libs/hipTensor-10.1.0
+~sci-libs/hipsparselt-10.1.0
+~sci-libs/miopen-10.1.0
+~sci-libs/rocALUTION-10.1.0
+~sci-libs/rocBLAS-10.1.0
+~sci-libs/rocFFT-10.1.0
+~sci-libs/rocPRIM-10.1.0
+~sci-libs/rocRAND-10.1.0
+~sci-libs/rocSOLVER-10.1.0
+~sci-libs/rocSPARSE-10.1.0
+~sci-libs/rocThrust-10.1.0
+~sci-libs/rocWMMA-10.1.0
+~sys-apps/cuid-10.1.0
+~sys-cluster/rocSHMEM-10.1.0
+~sys-libs/hipFile-10.1.0
