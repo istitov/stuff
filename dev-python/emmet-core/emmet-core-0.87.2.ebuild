@@ -38,3 +38,9 @@ RDEPEND="
 		dev-python/pubchempy[${PYTHON_USEDEP}]
 	')
 "
+# The version comes from setuptools-scm.
+BDEPEND="
+	$(python_gen_cond_dep '
+		>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+	')
+"
