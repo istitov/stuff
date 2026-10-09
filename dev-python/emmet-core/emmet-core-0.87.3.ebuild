@@ -1,0 +1,47 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
+
+inherit distutils-r1 pypi
+
+MY_PN="emmet_core"
+DESCRIPTION="Core Emmet data models for the Materials Project"
+HOMEPAGE="
+	https://github.com/materialsproject/emmet/
+	https://pypi.org/project/emmet-core/
+"
+SRC_URI="$(pypi_sdist_url --no-normalize "${MY_PN}" "${PV}")"
+S="${WORKDIR}/${MY_PN}-${PV}"
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+# Tests require Materials Project fixtures omitted from the sdist.
+RESTRICT="test"
+
+RDEPEND="
+	dev-python/pymatgen[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/pymatgen-core-2026.7.31[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/pymatgen-io-validation-0.1.1[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/monty-2024.2.2[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-2.12[${PYTHON_USEDEP}]
+		>=dev-python/pydantic-settings-2.0[${PYTHON_USEDEP}]
+		>=dev-python/pybtex-0.24[${PYTHON_USEDEP}]
+		>=dev-python/typing-extensions-3.7[${PYTHON_USEDEP}]
+		dev-python/blake3[${PYTHON_USEDEP}]
+		dev-python/inflect[${PYTHON_USEDEP}]
+		dev-python/pubchempy[${PYTHON_USEDEP}]
+	')
+"
+# The version comes from setuptools-scm.
+BDEPEND="
+	$(python_gen_cond_dep '
+		>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+	')
+"
