@@ -1,0 +1,60 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+ROCM_VERSION=${PV}
+
+inherit cmake rocm
+
+DESCRIPTION="Wrapper of rocPRIM or CUB for GPU parallel primitives"
+HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipcub"
+# Per-component assets moved from rocm-* to therock-X.Y after 7.2.4.
+SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)/hipcub.tar.gz -> hipcub-${PV}.tar.gz"
+S="${WORKDIR}/hipcub"
+
+LICENSE="BSD"
+SLOT="0/$(ver_cut 1-2)"
+KEYWORDS="~amd64"
+IUSE="benchmark test"
+REQUIRED_USE="
+	benchmark? ( ${ROCM_REQUIRED_USE} )
+	test? ( ${ROCM_REQUIRED_USE} )
+"
+RESTRICT="!test? ( test )"
+
+RDEPEND="
+	benchmark? (
+		dev-util/hip:${SLOT}
+		dev-cpp/benchmark:=
+	)
+"
+DEPEND="
+	${RDEPEND}
+	dev-util/hip:${SLOT}
+	sci-libs/rocPRIM:${SLOT}
+	test? ( dev-cpp/gtest )
+"
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-10.0.0-no-tests-install.patch
+)
+
+src_configure() {
+	rocm_use_clang
+
+	local mycmakeargs=(
+		-DGPU_TARGETS="$(get_amdgpu_flags)"
+		-DBUILD_TEST=$(usex test ON OFF)
+		-DBUILD_BENCHMARK=$(usex benchmark ON OFF)
+	)
+
+	cmake_src_configure
+}
+
+src_test() {
+	check_amdgpu
+	# gfx1100: ~85s at -j32; DeviceHistogram is skipped for an invalid access.
+	local CMAKE_SKIP_TESTS=(hipcub.DeviceHistogram)
+	cmake_src_test
+}
