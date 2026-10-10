@@ -45,7 +45,6 @@ PATCHES=(
 	"${FILESDIR}/${PN}-10.0.0-functions.patch"
 	"${FILESDIR}/${PN}-10.0.0-extsem-visibility.patch"
 	"${FILESDIR}/kfdtest-6.1.0-skipIPCtest.patch"
-	"${FILESDIR}/kfdtest-6.2.4-fix-llvm-header.patch"
 )
 
 test_wrapper() {
