@@ -50,7 +50,7 @@ RDEPEND="
 	hipblaslt? ( sci-libs/hipBLASLt:${SLOT_NOLIVE} )
 	benchmark? (
 		dev-cpp/gtest:=
-		dev-util/rocm-smi:${SLOT_NOLIVE}
+		dev-util/amdsmi:${SLOT_NOLIVE}
 		llvm-runtimes/openmp
 		sci-libs/flexiblas
 	)
@@ -61,7 +61,7 @@ DEPEND="
 	>=dev-cpp/msgpack-cxx-6.0.0
 	test? (
 		dev-cpp/gtest:=
-		dev-util/rocm-smi:${SLOT_NOLIVE}
+		dev-util/amdsmi:${SLOT_NOLIVE}
 		llvm-runtimes/openmp
 		sci-libs/flexiblas
 	)
