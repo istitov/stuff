@@ -25,7 +25,7 @@ REQUIRED_USE="${ROCM_REQUIRED_USE}"
 # Upstream gates the SDMA implementation but not its factory caller, breaking
 # USE=-sdma at link time. Gate the factory with its backend. verified 2026-08-31
 PATCHES=(
-	"${FILESDIR}"/${P}-gate-sdma-factory.patch
+	"${FILESDIR}"/${PN}-10.0.0-gate-sdma-factory.patch
 )
 
 # librocshmem NEEDED entries include only HSA and HIP. SDMA alone adds hsakmt and
@@ -65,8 +65,14 @@ src_configure() {
 		-DUSE_SDMA=$(usex sdma ON OFF)
 		-DUSE_SINGLE_NODE=$(usex single-node ON OFF)
 		-DUSE_ROCPROFILER_REGISTER=ON
-		-DBUILD_TESTS=OFF
+		# The project's test switches; it has no BUILD_TESTS option.
+		# verified 2026-10-10
+		-DBUILD_FUNCTIONAL_TESTS=OFF
+		-DBUILD_UNIT_TESTS=OFF
 		-DBUILD_EXAMPLES=OFF
+		# The rocshmem_info tool is otherwise installed with a RUNPATH into
+		# the build directory. verified 2026-10-10
+		-DCMAKE_SKIP_RPATH=ON
 		-Wno-dev
 	)
 
