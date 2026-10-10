@@ -15,6 +15,10 @@
     wxwidgets.eclass (which accepts the 3.3-gtk3 SLOT).
   </longdescription>
   <use>
+    <flag name="appindicator">
+      Use <pkg>dev-libs/libayatana-appindicator</pkg> for wxTaskBarIcon,
+      which needs it to work under Wayland.
+    </flag>
     <flag name="gstreamer">
       Enable the wxMediaCtrl class for playing audio and video through
       gstreamer.
@@ -31,5 +35,7 @@
   <slots>
     <slot name="*">Slots reflect MAJOR.MINOR versions which can
       be installed in parallel.</slot>
+    <subslots>From 3.3.4 on, the release number, which the library
+      sonames follow in a development series.</subslots>
   </slots>
 </pkgmetadata>
