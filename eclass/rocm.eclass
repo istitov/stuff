@@ -1,11 +1,11 @@
 # Copyright 2022-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# Overlay-local fork (stuff overlay): identical to ::gentoo's rocm.eclass
-# except _rocm_set_globals() gains a `10.*` branch.  Without it every ROCm
-# 10.x ebuild dies in the depend phase with "Unknown ROCm major version!"
-# (::gentoo's case matches only 5.*, 6.*, 7.*|9999) -- verified 2026-08-28
-# against sci-libs/rocBLAS-10.0.0.
+# Overlay-local fork (stuff overlay): ::gentoo's rocm.eclass with two
+# differences.  First, _rocm_set_globals() gains a `10.*` branch.  Without it
+# every ROCm 10.x ebuild dies in the depend phase with "Unknown ROCm major
+# version!" (::gentoo's case matches only 5.*, 6.*, 7.*|9999) -- verified
+# 2026-08-28 against sci-libs/rocBLAS-10.0.0.
 #
 # AMD renumbered the ROCm release line 7.14 -> 10.0 on 2026-08-27, so 10.0 is
 # a continuation of the 7.x line rather than a jump of three majors; the new
@@ -20,8 +20,15 @@
 # change target defaults for the existing live ebuilds, which is a separate
 # decision from landing ROCm 10.0.
 #
+# Second difference: rocm_hipcc_openmp_args(), which names the OpenMP runtime
+# for CMake projects configured with rocm_use_hipcc.  hipcc 10.1 links through
+# clang-linker-wrapper, and CMake cannot read the libraries from that
+# wrapper's verbose output; the function's own comment has the details.
+#
 # Re-sync (and drop this fork) once ::gentoo's rocm.eclass carries a 10.x
-# branch; the intent is to send this upstream.
+# branch; the intent is to send this upstream.  rocm_hipcc_openmp_args() can
+# go earlier, as soon as find_package(OpenMP) under hipcc reports libomp
+# without it.
 # @MAINTAINER below is upstream ::gentoo's; report overlay-specific issues at
 # https://github.com/istitov/stuff/issues.
 
@@ -368,6 +375,29 @@ rocm_use_hipcc() {
 	# as CMake checks that C compiler can compile a simple test program.
 	export CC=hipcc CXX=hipcc
 	_rocm_strip_unsupported_flags
+}
+
+# @FUNCTION: rocm_hipcc_openmp_args
+# @USAGE: rocm_hipcc_openmp_args
+# @DESCRIPTION:
+# Print the CMake arguments that name the OpenMP runtime for a project
+# configured with rocm_use_hipcc. Call it where the project runs
+# find_package(OpenMP), after rocm_use_hipcc; the ebuild has to depend on
+# llvm-runtimes/openmp:
+# @CODE
+# use openmp && mycmakeargs+=( $(rocm_hipcc_openmp_args) )
+# @CODE
+# hipcc 10.1 links through clang-linker-wrapper, whose verbose output lists
+# libraries as two words ("-l omp"). CMake learns a compiler's implicit
+# libraries from that output and reads only the one-word form ("-lomp"), so
+# FindOpenMP returns the flag -fopenmp=libomp with no library: objects are
+# compiled with OpenMP, nothing links libomp, and the first executable fails
+# on undefined __kmpc_* symbols. Seen with hipcc 10.1.0 and CMake 4.3.5;
+# verified 2026-10-10.
+rocm_hipcc_openmp_args() {
+	echo "-DOpenMP_C_LIB_NAMES=omp"
+	echo "-DOpenMP_CXX_LIB_NAMES=omp"
+	echo "-DOpenMP_omp_LIBRARY=${ESYSROOT}/usr/$(get_libdir)/libomp.so"
 }
 
 # @FUNCTION: rocm_use_clang
