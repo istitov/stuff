@@ -10,7 +10,7 @@ inherit cmake cuda flag-o-matic rocm linux-info python-any-r1
 
 # Snapshot tags are master-<build>-<hash>; pin that hash and the tag's ggml
 # submodule gitlink on each bump.
-MY_COMMIT="a1ded76"
+MY_COMMIT="e16d26a"
 GGML_COMMIT="89c4413f5da6fb20cc796f16033d37f129be81fd"
 
 DESCRIPTION="Diffusion model (SD, Flux, Wan, Qwen-Image, ...) inference in pure C/C++"
@@ -63,6 +63,7 @@ CDEPEND="
 	rocm? (
 		>=dev-util/hip-${ROCM_VERSION}:=
 		>=sci-libs/hipBLAS-${ROCM_VERSION}:=
+		llvm-runtimes/openmp:=
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	webp? ( media-libs/libwebp:= )
@@ -201,6 +202,9 @@ src_configure() {
 		mycmakeargs+=(
 			-DSD_HIPBLAS=ON -DAMDGPU_TARGETS=$(get_amdgpu_flags) -DGPU_TARGETS=$(get_amdgpu_flags)
 		)
+		# ggml builds with OpenMP by default, and hipcc 10.1 hides libomp from
+		# CMake; see rocm_hipcc_openmp_args.
+		mycmakeargs+=( $(rocm_hipcc_openmp_args) )
 	fi
 
 	cmake_src_configure
