@@ -8,9 +8,12 @@ so that readers can judge whether the result applies to their own setup.
 |---|---|---|
 | [Speculative decoding](speculative-decoding-on-890M.md) | Radeon 890M, llama.cpp Vulkan | How much do MTP and DFlash improve generation speed, and when does that shorten the wait for an answer? |
 | [AMD Ryzen AI 300 NPU versus Radeon 890M](npu-vs-890m.md) | XDNA 2 / FastFlowLM and Radeon 890M / llama.cpp Vulkan | How do request latency, socket power, estimated energy and memory accounting compare? |
+| [Whisper accuracy and speed on FLEURS](whisper-on-fleurs.md) | Radeon 890M, XDNA 2 NPU, RTX A4500, Intel UHD and both CPUs; whisper.cpp and FastFlowLM | Does the backend change transcription accuracy, and how fast is each one? |
+| [Socket power and energy on Strix Point](strix-point-energy.md) | Radeon 890M through Vulkan and ROCm, XDNA 2 NPU; whisper.cpp, FastFlowLM and llama.cpp | Which path uses the least energy for speech-to-text and for LLM prefill and decode? |
 
 The [benchmark evidence repository](https://github.com/istitov/stuff-benchmarks/tree/d22bc593998930fa6cee4e0340c2555b4b48a284)
-publishes the MTP, Muse DFlash and NPU/iGPU datasets at signed commit
+publishes the MTP, Muse DFlash, NPU/iGPU, Whisper on FLEURS and Strix Point
+energy datasets at signed commit
 [`d22bc59`](https://github.com/istitov/stuff-benchmarks/commit/d22bc593998930fa6cee4e0340c2555b4b48a284).
 Each study has a sanitized evidence archive compressed with **7-Zip/PPMd**;
 CSV tables, analysis tools, checksums and attribution remain directly readable.

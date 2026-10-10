@@ -167,6 +167,10 @@ flm pull whisper-v3:turbo
 flm serve llama3.2:3b --asr 1
 ```
 
+In the maintainer's measurements this path was slower and less accurate than
+whisper.cpp on the Radeon 890M of the same laptop, especially for Russian; see
+[Whisper accuracy and speed on FLEURS](../benchmarks/whisper-on-fleurs.md).
+
 To serve models over an OpenAI-compatible API instead of chatting directly,
 install lemonade with its packaged-fastflowlm integration as root:
 

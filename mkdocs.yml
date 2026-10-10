@@ -66,6 +66,8 @@ nav:
       - Overview: benchmarks/index.md
       - Speculative decoding on Radeon 890M: benchmarks/speculative-decoding-on-890M.md
       - AMD Ryzen AI 300 NPU versus Radeon 890M: benchmarks/npu-vs-890m.md
+      - Whisper accuracy and speed on FLEURS: benchmarks/whisper-on-fleurs.md
+      - Socket power and energy on Strix Point: benchmarks/strix-point-energy.md
   - Tags: tags.md
 
 markdown_extensions:
