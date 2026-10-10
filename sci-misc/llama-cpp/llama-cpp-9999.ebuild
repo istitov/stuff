@@ -205,6 +205,8 @@ src_configure() {
 		mycmakeargs+=(
 			-DGGML_HIP=ON -DAMDGPU_TARGETS=$(get_amdgpu_flags)
 		)
+		# hipcc 10.1 hides libomp from CMake; see rocm_hipcc_openmp_args.
+		use openmp && mycmakeargs+=( $(rocm_hipcc_openmp_args) )
 	fi
 
 	cmake_src_configure
