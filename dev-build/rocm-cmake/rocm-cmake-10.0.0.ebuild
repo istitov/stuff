@@ -26,7 +26,7 @@ RESTRICT="test"
 DOCS=( CHANGELOG.md LICENSE README.md )
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-6.1.1-license.patch
+	"${FILESDIR}"/${PN}-10.0.0-license.patch
 	"${FILESDIR}"/${PN}-6.1.1-no-rocmchecks-warnings.patch
 )
 
