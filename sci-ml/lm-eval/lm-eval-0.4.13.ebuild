@@ -23,6 +23,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="+api ifeval math onnxruntime sentencepiece statsmodels vllm"
+# dev-python/vllm is not available for python3_12. verified 2026-10-11
+REQUIRED_USE="vllm? ( || ( $(python_gen_useflags python3_{13..14}) ) )"
 
 # Expose only fully packaged extras; omit lazy ONNX backend's unpackaged
 # onnxruntime-genai. rechecked 2026-09-10
@@ -33,7 +35,9 @@ RDEPEND="
 	>=sci-ml/datasets-2.16.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/evaluate-0.4.0[${PYTHON_SINGLE_USEDEP}]
 	onnxruntime? ( sci-ml/transformers[${PYTHON_SINGLE_USEDEP}] )
-	vllm? ( >=dev-python/vllm-0.18.0[${PYTHON_SINGLE_USEDEP}] )
+	vllm? ( $(python_gen_cond_dep '
+		>=dev-python/vllm-0.18.0[${PYTHON_SINGLE_USEDEP}]
+	' python3_{13..14}) )
 	$(python_gen_cond_dep '
 		dev-python/dill[${PYTHON_USEDEP}]
 		dev-python/jinja2[${PYTHON_USEDEP}]

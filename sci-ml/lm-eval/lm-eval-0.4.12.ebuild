@@ -23,6 +23,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="+api ifeval math sentencepiece statsmodels vllm"
+# dev-python/vllm is not available for python3_12. verified 2026-10-11
+REQUIRED_USE="vllm? ( || ( $(python_gen_useflags python3_{13..14}) ) )"
 
 # Expose only fully packaged extras. math asserts antlr4 4.11 at task load;
 # ifeval needs nltk>=3.9.1 for punkt fixes (#2210, nltk #3266). verified 2026-05-13
@@ -30,7 +32,9 @@ IUSE="+api ifeval math sentencepiece statsmodels vllm"
 RDEPEND="
 	>=sci-ml/datasets-2.16.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/evaluate-0.4.0[${PYTHON_SINGLE_USEDEP}]
-	vllm? ( >=dev-python/vllm-0.18.0[${PYTHON_SINGLE_USEDEP}] )
+	vllm? ( $(python_gen_cond_dep '
+		>=dev-python/vllm-0.18.0[${PYTHON_SINGLE_USEDEP}]
+	' python3_{13..14}) )
 	$(python_gen_cond_dep '
 		dev-python/dill[${PYTHON_USEDEP}]
 		dev-python/jinja2[${PYTHON_USEDEP}]
