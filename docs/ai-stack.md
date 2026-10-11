@@ -77,6 +77,8 @@ Each study records its hardware, workload, and software snapshot.
   `lm-format-enforcer`.
 - **`sci-ml/lemonade`** — local OpenAI-compatible server for AMD NPU + GPU.
 - **`sci-ml/fastflowlm`** — NPU-first LLM runtime (see the NPU guide).
+- **`sci-ml/flm-q4nx-converter`** — converts GGUF fine-tunes to FastFlowLM's
+  NPU weight format (see [Fine-tunes on the NPU](guides/npu-custom-models.md)).
 - **`sci-ml/openflowlm`** — community fork of fastflowlm with open NPU kernels
   compiled from source; live ebuild for now (see the NPU guide).
 - **`sci-misc/koboldcpp`** — all-in-one local AI server (LLM, image, speech,

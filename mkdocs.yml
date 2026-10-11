@@ -56,6 +56,7 @@ nav:
   - Guides:
       - Check GPU hardware: guides/hardware-targets.md
       - Ryzen AI NPU: guides/ryzen-ai-npu.md
+      - Fine-tunes on the NPU: guides/npu-custom-models.md
       - vLLM: guides/vllm.md
       - llama.cpp, Ollama & llama-swap: guides/llama-setup.md
       - Fine-tuning, Unsloth & RAG: guides/fine-tuning-rag.md

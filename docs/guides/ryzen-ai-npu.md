@@ -238,6 +238,9 @@ Model files are user data rather than portage-owned distfiles. Read the elog
 after FastFlowLM upgrades: an upstream quantization-format change can require a
 re-pull before an existing model will load.
 
+A fine-tune of a catalog model can be converted and registered beside the
+catalog; see [Running a fine-tune on the NPU](npu-custom-models.md).
+
 ## Open kernels: OpenFlowLM
 
 `sci-ml/openflowlm` packages
