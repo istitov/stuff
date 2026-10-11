@@ -1,0 +1,251 @@
+#!/usr/bin/env python3
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+"""Regenerate the per-user FastFlowLM registry that carries custom NPU models.
+
+A custom model is a set of .q4nx weights converted from a fine-tune of a model
+FastFlowLM already ships. It runs on that base model's NPU kernels. The packaged
+registry and kernels under /opt/fastflowlm belong to the package manager, so
+custom models are kept in the user's own directory:
+
+  ~/.config/flm/custom_models.json   written by hand, see below
+  ~/.config/flm/models/<name>/       the model folder: model.q4nx and support files
+                                     (under $FLM_MODEL_PATH/models/ when that is set)
+  ~/.config/flm/model_list.json      generated: the packaged list plus the custom entries
+  ~/.config/flm/xclbins/<name>       generated: links to the packaged kernel folders,
+                                     plus one per custom model to its base model's kernels
+
+custom_models.json maps each custom tag to its base tag and its folder name:
+
+  {
+    "qwen3.6-moe-mytune:35b-a3b": {
+      "base": "qwen3.6-moe:35b-a3b",
+      "name": "Qwen3.6-35B-A3B-mytune-NPU2"
+    }
+  }
+
+Both tags are written in full, as family:size. The family part of a custom tag
+must not be a packaged family, and the folder name must not be a packaged one.
+Without a custom_models.json the generated list equals the packaged list.
+
+FastFlowLM uses the generated files when these are set in its environment, as
+absolute paths:
+
+  FLM_CONFIG_PATH=$HOME/.config/flm/model_list.json
+  FLM_XCLBIN_PATH=$HOME/.config/flm
+
+A service does not read a login environment: give it both in
+/etc/conf.d/fastflowlm (OpenRC) or /etc/default/fastflowlm@<user> (systemd).
+
+The generated list is a copy. Run this again after every FastFlowLM upgrade and
+restart whatever serves the models. A custom model whose base model now needs
+newer weights is left out and reported: FastFlowLM cannot replace such weights
+and would load them as they are, on kernels built for the new layout. Pull the
+base model again, convert the fine-tune with a converter that writes the new
+layout, and copy the base model's new support files, config.json included.
+
+A custom model with files missing from its folder is left out and reported too.
+"flm pull" cannot fetch or repair a custom tag: it has no download address.
+
+usage: flm-custom-sync [--check]
+  --check   report whether the generated files are current; exit 1 if not, write nothing
+"""
+import copy
+import json
+import os
+import re
+import sys
+
+OFFICIAL_DIR = os.environ.get("FLM_OFFICIAL_DIR", "/opt/fastflowlm/share/flm")
+USER_DIR = os.path.expanduser("~/.config/flm")
+# FastFlowLM keeps models under $FLM_MODEL_PATH, or ~/.config/flm when it is unset.
+MODEL_DIR = os.environ.get("FLM_MODEL_PATH") or USER_DIR
+OFFICIAL_LIST = os.path.join(OFFICIAL_DIR, "model_list.json")
+OFFICIAL_XCLBINS = os.path.join(OFFICIAL_DIR, "xclbins")
+CUSTOM = os.path.join(USER_DIR, "custom_models.json")
+OUT_LIST = os.path.join(USER_DIR, "model_list.json")
+OUT_XCLBINS = os.path.join(USER_DIR, "xclbins")
+# FLM only needs these for `flm pull`; the files are placed by hand, so nothing must be fetched.
+NO_URL = "https://example.invalid/custom-model-not-hosted"
+
+
+def read_json(path):
+    with open(path) as f:
+        return json.load(f)
+
+
+def version(v):
+    """Read a version as FastFlowLM does, with sscanf("%d.%d.%d")."""
+    m = re.match(r"(\d+)\.(\d+)\.(\d+)", str(v))
+    if not m:
+        raise ValueError(f"'{v}' is not a version of the form 1.2.3")
+    return tuple(int(x) for x in m.groups())
+
+
+def build():
+    try:
+        official = read_json(OFFICIAL_LIST)
+        kernels = sorted(os.listdir(OFFICIAL_XCLBINS))
+        families = official["models"]
+        official_names = set(kernels) | {m["name"] for fam in families.values() for m in fam.values()}
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as e:
+        sys.exit(f"{OFFICIAL_DIR}: cannot read the packaged model list and kernel folders: {e!r}")
+    custom = load_custom()
+    merged = copy.deepcopy(official)
+    links = {n: os.path.join(OFFICIAL_XCLBINS, n) for n in kernels}
+    problems = []
+    model_root = os.path.join(MODEL_DIR, official.get("model_path", "models"))
+    seen = set()
+    added = []
+    for tag, spec in custom.items():
+        family, _, sub = tag.partition(":")
+        if not family or not sub:
+            problems.append(f"{tag}: a custom tag must have the form family:size")
+            continue
+        if (not isinstance(spec, dict) or not isinstance(spec.get("base"), str)
+                or not isinstance(spec.get("name"), str)):
+            problems.append(f"{tag}: needs \"base\" and \"name\" strings")
+            continue
+        bfam, _, bsub = spec["base"].partition(":")
+        if not bfam or not bsub:
+            problems.append(f"{tag}: \"base\" must have the form family:size")
+            continue
+        name = spec["name"]
+        if (not name or name in (".", "..") or "/" in name or "\\" in name
+                or any(ord(c) < 32 for c in name)):
+            problems.append(f"{tag}: \"name\" must be a plain folder name")
+            continue
+        if name in official_names:
+            problems.append(f"{tag}: folder name '{name}' belongs to a packaged model")
+            continue
+        if name in seen:
+            problems.append(f"{tag}: folder name '{name}' is used by another custom model")
+            continue
+        seen.add(name)
+        if family in families:
+            problems.append(f"{tag}: family key '{family}' collides with an official family")
+            continue
+        try:
+            base = families[bfam][bsub]
+        except KeyError:
+            problems.append(f"{tag}: base {spec['base']} is not in the official list any more")
+            continue
+        # FLM compares flm_version in the model's config.json with the entry's flm_min_version.
+        # Older weights count as outdated and FLM tries to replace them from its download
+        # metadata. That has no entry for a custom tag, so the pull does nothing and FLM goes
+        # on to load the old weights (seen with 1.0.7, 2026-10-11). Keep such a tag out of the
+        # list until its weights are converted again for the new layout.
+        folder = os.path.join(model_root, name)
+        try:
+            have = read_json(os.path.join(folder, "config.json")).get("flm_version", "0.0.0")
+        except (OSError, ValueError, AttributeError):
+            problems.append(f"{tag}: no readable config.json in {folder}")
+            continue
+        need = base.get("flm_min_version", "0.0.0")
+        try:
+            outdated = version(have) < version(need)
+        except ValueError as e:
+            problems.append(f"{tag}: {e}; left out of the list")
+            continue
+        if outdated:
+            problems.append(f"{tag}: weights are for FLM {have} but {spec['base']} now needs {need}; "
+                            "left out of the list -- convert the model again")
+            continue
+        # An incomplete model would be listed as available, and FLM would then try to
+        # download what is missing from an address that does not exist.
+        if base["name"] not in links:
+            problems.append(f"{tag}: no kernel folder for base model {base['name']}; left out of the list")
+            continue
+        missing = [f for f in base.get("files", []) if not os.path.exists(os.path.join(folder, f))]
+        if missing:
+            problems.append(f"{tag}: missing in {name}/: {', '.join(missing)}; left out of the list")
+            continue
+        entry = copy.deepcopy(base)
+        entry["name"] = name
+        entry["url"] = entry["file_url"] = NO_URL
+        entry.pop("ms_url", None)
+        merged["models"].setdefault(family, {})[sub] = entry
+        added.append(tag)
+        links[name] = links[base["name"]]
+    return merged, links, added, problems
+
+
+def load_custom():
+    if not os.path.exists(CUSTOM):
+        return {}
+    try:
+        custom = read_json(CUSTOM)
+    except OSError as e:
+        sys.exit(f"{CUSTOM}: {e.strerror or e}")
+    except ValueError as e:
+        sys.exit(f"{CUSTOM}: not valid JSON: {e}")
+    if not isinstance(custom, dict):
+        sys.exit(f"{CUSTOM}: must hold one JSON object that maps tags to entries")
+    return custom
+
+
+def current_links():
+    if not os.path.isdir(OUT_XCLBINS):
+        return {}
+    return {n: os.readlink(os.path.join(OUT_XCLBINS, n)) for n in os.listdir(OUT_XCLBINS)
+            if os.path.islink(os.path.join(OUT_XCLBINS, n))}
+
+
+def main():
+    args = sys.argv[1:]
+    if "-h" in args or "--help" in args:
+        print(__doc__)
+        return 0
+    if args not in ([], ["--check"]):
+        print("usage: flm-custom-sync [--check]", file=sys.stderr)
+        return 2
+    check = bool(args)
+    merged, links, added, problems = build()
+    text = json.dumps(merged, indent=1) + "\n"
+    stale = []
+    try:
+        with open(OUT_LIST) as f:
+            if f.read() != text:
+                stale.append("model_list.json")
+    except OSError:
+        stale.append("model_list.json")
+    if current_links() != links:
+        stale.append("xclbins/")
+    if check:
+        for p in problems:
+            print("PROBLEM", p)
+        print("current" if not stale else "STALE: " + ", ".join(stale) + " (run flm-custom-sync, then restart the FastFlowLM service)")
+        return 1 if stale or problems else 0
+    # Refuse before changing anything if the kernel folder is not ours to rewrite.
+    if os.path.islink(OUT_XCLBINS):
+        sys.exit(f"{OUT_XCLBINS} is a symbolic link; it must be a directory of links")
+    os.makedirs(OUT_XCLBINS, exist_ok=True)
+    blocked = [n for n in links if os.path.lexists(os.path.join(OUT_XCLBINS, n))
+               and not os.path.islink(os.path.join(OUT_XCLBINS, n))]
+    if blocked:
+        sys.exit(f"{OUT_XCLBINS}: not a link, remove by hand: {', '.join(sorted(blocked))}")
+    for n in os.listdir(OUT_XCLBINS):
+        p = os.path.join(OUT_XCLBINS, n)
+        if os.path.islink(p) and links.get(n) != os.readlink(p):
+            os.unlink(p)
+    for n, target in links.items():
+        p = os.path.join(OUT_XCLBINS, n)
+        if not os.path.islink(p):
+            os.symlink(target, p)
+    tmp = OUT_LIST + ".tmp"
+    with open(tmp, "w") as f:
+        f.write(text)
+    os.replace(tmp, OUT_LIST)
+    print(f"{OUT_LIST}: {sum(len(v) for v in merged['models'].values())} tags, "
+          f"{len(added)} custom ({', '.join(sorted(added)) or 'none'})")
+    print(f"{OUT_XCLBINS}: {len(links)} kernel folders linked")
+    if not os.path.exists(CUSTOM):
+        print(f"no {CUSTOM}: the list equals the packaged one")
+    print("updated: " + ", ".join(stale) if stale else "nothing changed")
+    for p in problems:
+        print("PROBLEM", p)
+    return 1 if problems else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

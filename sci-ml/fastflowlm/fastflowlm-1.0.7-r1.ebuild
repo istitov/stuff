@@ -3,7 +3,9 @@
 
 EAPI=8
 
-inherit cmake systemd
+PYTHON_COMPAT=( python3_{12..15} )
+
+inherit cmake python-single-r1 systemd
 
 DESCRIPTION="NPU-first LLM runtime for AMD Ryzen AI (XDNA2) processors"
 HOMEPAGE="
@@ -36,6 +38,7 @@ LICENSE="MIT FastFlowLM-Terms"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="openrc systemd"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 # Cargo (inside tokenizers-cpp/rust) fetches the crates the shipped Cargo.lock
 # pins at build time; vendoring them via cargo.eclass would allow an offline
@@ -47,7 +50,9 @@ BDEPEND="
 	dev-build/ninja
 	|| ( dev-lang/rust dev-lang/rust-bin )
 "
+# Python is for flm-custom-sync only.
 RDEPEND="
+	${PYTHON_DEPS}
 	dev-util/xrt
 	dev-libs/xdna-driver
 	dev-libs/xrt-xdna
@@ -139,9 +144,14 @@ src_install() {
 	FLM_CONFIG_PATH="/opt/fastflowlm/share/flm/model_list.json"
 	EOF
 
+	# Registry helper for converted fine-tunes; see its docstring.
+	python_doscript "${FILESDIR}/flm-custom-sync"
+
 	if use openrc; then
-		newinitd "${FILESDIR}/${PN}.initd" "${PN}"
-		newconfd "${FILESDIR}/${PN}.confd" "${PN}"
+		# These hand FLM_CONFIG_PATH and FLM_XCLBIN_PATH to the daemon for
+		# flm-custom-sync. Versions without the helper use the plain names.
+		newinitd "${FILESDIR}/${PN}-1.0.7.initd" "${PN}"
+		newconfd "${FILESDIR}/${PN}-1.0.7.confd" "${PN}"
 	fi
 	if use systemd; then
 		systemd_newunit "${FILESDIR}/${PN}.service" "${PN}@.service"
@@ -174,6 +184,18 @@ pkg_postinst() {
 		elog ""
 	fi
 	elog "Models stored in ~/.config/flm/ (override: FLM_MODEL_PATH)."
+	elog ""
+	elog "Converted fine-tunes are registered per user with flm-custom-sync"
+	elog "(see flm-custom-sync --help). FastFlowLM uses that registry when"
+	elog "FLM_CONFIG_PATH and FLM_XCLBIN_PATH name it."
+	if use openrc; then
+		elog "The OpenRC service takes both from /etc/conf.d/fastflowlm."
+	fi
+	if use systemd; then
+		elog "The systemd service takes both from /etc/default/fastflowlm@<user>."
+	fi
+	elog "Run flm-custom-sync again after every upgrade and restart the"
+	elog "service: its model list is a copy of the packaged one."
 	elog ""
 	elog "Ensure memlock is unlimited for INTERACTIVE 'flm run' use too."
 	if use openrc || use systemd; then
