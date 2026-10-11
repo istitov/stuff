@@ -3180,6 +3180,7 @@ prefix = "v"
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-ml/bigcode-eval"] skipped: we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind
+# ["sci-ml/flm-q4nx-converter"] skipped: ROCm/FLM_Q4NX_Converter has no tags or releases (verified 2026-10-11: 0 tags, 0 releases; the ebuild pins MY_COMMIT, the tip of main)
 # ["sci-physics/bgmn"] skipped: custom upstream at www.profex-xrd.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-physics/demeter"] skipped: Demeter removed from CPAN; no public upstream tracking possible
 # ["sci-physics/ifeffit"] skipped: custom upstream at sourceforge.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted

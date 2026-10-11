@@ -1021,6 +1021,9 @@ SKIP_PKGS: dict[str, str] = {
     # out to be current. When adding to this block, probe the repo the SRC_URI
     # actually resolves to, not <owner>/<PN>.
     "x11-apps/skb":                        "polachok/skb has no release tags (verified 2026-08-29: 0 tags; the ebuild pins EGIT_COMMIT)",
+    # Without this entry the ^ROCm/.+ tag filter would give the repository a
+    # therock-X.Y stanza that can never resolve.
+    "sci-ml/flm-q4nx-converter":           "ROCm/FLM_Q4NX_Converter has no tags or releases (verified 2026-10-11: 0 tags, 0 releases; the ebuild pins MY_COMMIT, the tip of main)",
     # Upstreams that are gone or use non-public distribution channels.
     "sci-physics/demeter":                 "Demeter removed from CPAN; no public upstream tracking possible",
     "media-plugins/deadbeef-musical-spectrum": "upstream GitHub repository removed; no release feed",
