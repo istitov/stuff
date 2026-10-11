@@ -5,7 +5,9 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
-PYTHON_COMPAT=( python3_{12..14} )
+# Not python3_12: dev-python/mistral-common cannot be installed for it.
+# verified 2026-10-11
+PYTHON_COMPAT=( python3_{13..14} )
 DISTUTILS_SINGLE_IMPL=1
 ROCM_VERSION=7.2
 
