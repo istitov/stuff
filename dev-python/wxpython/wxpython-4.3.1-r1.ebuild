@@ -26,8 +26,11 @@ IUSE="test webkit"
 RESTRICT="!test? ( test )"
 
 # Only WebKit can be disabled; require wxGTK's other features.
+# The bindings are generated from the bundled wxWidgets 3.3.3 interface and do
+# not compile against 3.3.4, where wxRibbonBar::AcceptsFocus() is a protected
+# override. Upstream's master still bundles 3.3.3. verified 2026-10-11
 DEPEND="
-	>=x11-libs/wxGTK-3.3.3:${WX_GTK_VER}=[gstreamer,libnotify,opengl,sdl,tiff,webkit?,X]
+	=x11-libs/wxGTK-3.3.3*:${WX_GTK_VER}=[gstreamer,libnotify,opengl,sdl,tiff,webkit?,X]
 	media-libs/libpng:=
 	media-libs/tiff:=
 	media-libs/libjpeg-turbo:=
