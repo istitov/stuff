@@ -4,7 +4,9 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{12..14} )
+# Not python3_12: upstream wants numpy below 2.4 there, and ::gentoo has
+# carried none since 2026-10-11. verified 2026-10-11
+PYTHON_COMPAT=( python3_{13..14} )
 PYPI_NO_NORMALIZE=1
 PYPI_PN=mistral_common
 
@@ -27,18 +29,12 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/pydantic-2.7[${PYTHON_USEDEP}]
 		>=dev-python/tiktoken-0.7.0[${PYTHON_USEDEP}]
-	' python3_{12..13})
+	' python3_13)
 	$(python_gen_cond_dep '
 		>=dev-python/pydantic-2.12[${PYTHON_USEDEP}]
 		>=dev-python/tiktoken-0.12.0[${PYTHON_USEDEP}]
 	' python3_14)
-	$(python_gen_cond_dep '
-		>=dev-python/numpy-1.25[${PYTHON_USEDEP}]
-		<dev-python/numpy-2.4[${PYTHON_USEDEP}]
-	' python3_12)
-	$(python_gen_cond_dep '
-		>=dev-python/numpy-1.25[${PYTHON_USEDEP}]
-	' python3_{13..14})
+	>=dev-python/numpy-1.25[${PYTHON_USEDEP}]
 	>=dev-python/jsonschema-4.21.1[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.11.0[${PYTHON_USEDEP}]
 	>=dev-python/pillow-10.3.0[${PYTHON_USEDEP}]
