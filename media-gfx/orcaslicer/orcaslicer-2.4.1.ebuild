@@ -49,6 +49,8 @@ PATCHES=(
 	"${FILESDIR}/${PN}-2.4.0-link-webkit2gtk.patch"
 	"${FILESDIR}/${PN}-2.4.0-mediactrl-audio-sink-guard.patch"
 	"${FILESDIR}/${PN}-2.4.1-optional-wayland.patch"
+	# wxWidgets 3.3.4 renamed the grid choice editor's close-up handler.
+	"${FILESDIR}/${PN}-2.4.1-wx-3.3.4-grid-editor.patch"
 	# Static-link customized clipper2_z; use system md4c. Uninstalled shared
 	# copies would resolve incorrectly after install-rpath stripping.
 	"${FILESDIR}/${PN}-2.4.0-clipper2-static.patch"

@@ -1,0 +1,39 @@
+wxWidgets 3.3.4 renamed the protected wxGridCellChoiceEditor::OnComboCloseUp()
+to DismissEditor(): same body, no event argument. Call whichever the headers
+in use provide, so that the object table editors build against 3.3.3 and
+3.3.4 alike.
+
+Not upstream as of 2026-10-11: OrcaSlicer main still calls OnComboCloseUp().
+
+--- a/src/slic3r/GUI/GUI_ObjectTable.cpp
++++ b/src/slic3r/GUI/GUI_ObjectTable.cpp
+@@ -202,7 +202,12 @@
+ 
+ void GridCellFilamentsEditor::OnComboCloseUp(wxCommandEvent& evt)
+ {
++#if wxCHECK_VERSION(3, 3, 4)
++    wxUnusedVar(evt);
++    DismissEditor();
++#else
+     wxGridCellChoiceEditor::OnComboCloseUp(evt);
++#endif
+ }
+ 
+ void GridCellFilamentsEditor::BeginEdit(int row, int col, wxGrid* grid)
+@@ -415,7 +420,15 @@
+     wxGridCellChoiceEditor::SetSize(rect);
+ }
+ 
+-void GridCellChoiceEditor::OnComboCloseUp(wxCommandEvent &evt) { wxGridCellChoiceEditor::OnComboCloseUp(evt); }
++void GridCellChoiceEditor::OnComboCloseUp(wxCommandEvent &evt)
++{
++#if wxCHECK_VERSION(3, 3, 4)
++    wxUnusedVar(evt);
++    DismissEditor();
++#else
++    wxGridCellChoiceEditor::OnComboCloseUp(evt);
++#endif
++}
+ 
+ void GridCellChoiceEditor::BeginEdit(int row, int col, wxGrid *grid)
+ {
