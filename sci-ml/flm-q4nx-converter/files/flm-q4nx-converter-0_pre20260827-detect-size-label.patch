@@ -1,0 +1,93 @@
+Use the size label when detecting the model.
+
+gguf-py splits a model name such as "Qwen3.8-27B-MyTune" into the basename
+"Qwen3.8" and the size label "27B". The basename alone is then matched by
+the shorter name "qwen3", the wrong converter is picked, and the run dies
+with KeyError: 'blk.0.attn_gate.weight' unless -f names the model. The same
+happens to a "Qwen3.5" basename of any size. Try "basename-size_label"
+before the bare basename.
+
+A renamed fine-tune ("MyModel-4B") matches no name at all and is rejected
+as unsupported. Fall back to the GGUF architecture joined with the size
+label, which the table already spells "qwen35-4B" for the Qwen3.5 sizes,
+and add "qwen35-27B" for the 27B model. A renamed Qwen3.5-27B or
+Qwen3.6-27B file takes that name too: the three share the architecture,
+and their published configs give the same layers, sizes and head counts
+(compared 2026-10-11). Under their own names those two are still claimed
+by "qwen3", as before. A size label computed from the parameter count
+("4.7B") matches nothing and still needs -f.
+
+A file without a basename no longer dies with an AttributeError: it goes
+through the same fallback, and to the intended "Unsupported model
+architecture" error when that finds nothing.
+
+Not upstream as of 2026-10-11.
+
+--- a/q4nx/constants.py
++++ b/q4nx/constants.py
+@@ -33,7 +33,11 @@
+     ModelArch.QWEN35_OMNI: ["qwen35-omni","qwen3.5-omni"],
+     ModelArch.QWEN35_A3B: ["qwen35moe"],
+     # Listed before QWEN3: names are matched by prefix and "qwen3" would claim it.
+-    ModelArch.QWEN38_27B: ["qwen38-27B", "qwen3.8-27B"],
++    # "qwen35-27B" is the GGUF architecture plus the size label, which is all a
++    # renamed fine-tune keeps. A renamed Qwen3.5-27B or Qwen3.6-27B file matches
++    # it too: their published configs give the same layers, sizes and head
++    # counts (compared 2026-10-11).
++    ModelArch.QWEN38_27B: ["qwen38-27B", "qwen3.8-27B", "qwen35-27B"],
+     ModelArch.QWEN3VL: ["qwen3vl", "qwen3-vl"],
+     ModelArch.QWEN2VL: ["qwen2.5-Vl"],    
+     ModelArch.QWEN2:   ["qwen2"],
+--- a/q4nx/model_converter.py
++++ b/q4nx/model_converter.py
+@@ -1121,11 +1121,14 @@
+     # The architecture is typically stored in the 'general.architecture' field
+     arch_str:str|None = None
+     basename_str:str|None = None
++    size_label_str:str|None = None
+     for field in reader.fields.values():
+         if field.name == 'general.architecture':
+             arch_str = str(field.parts[field.data[0]], encoding='utf-8') if field.data else None
+         elif field.name == 'general.basename':
+             basename_str = str(field.parts[field.data[0]], encoding='utf-8') if field.data else None
++        elif field.name == 'general.size_label':
++            size_label_str = str(field.parts[field.data[0]], encoding='utf-8') if field.data else None
+     
+ 
+     # Map the architecture string to ModelArch enum
+@@ -1135,10 +1138,31 @@
+                 return arch_enum
+     
+ 
+-    for arch_enum, arch_names in ModelArchNames.items():
+-        for arch_name in arch_names:
+-            if basename_str.lower().startswith(arch_name.lower()):
+-                return arch_enum
++    # gguf-py splits a model name such as "Qwen3.8-27B-MyTune" into the basename
++    # "Qwen3.8" and the size label "27B". Match the two joined first: the bare
++    # basename would be claimed by a shorter name such as "qwen3".
++    basenames = []
++    if basename_str and size_label_str:
++        basenames.append(f"{basename_str}-{size_label_str}")
++    if basename_str:
++        basenames.append(basename_str)
++
++    for basename in basenames:
++        for arch_enum, arch_names in ModelArchNames.items():
++            for arch_name in arch_names:
++                if basename.lower().startswith(arch_name.lower()):
++                    return arch_enum
++
++    # A renamed fine-tune ("MyModel-4B") keeps only the architecture and the
++    # size label of its base. Accept the names spelled "<architecture>-<size>",
++    # such as "qwen35-4B", and no shorter one: "gemma4-assistant" is not "gemma4".
++    if size_label_str:
++        arch_prefix = f"{arch_str}-".lower()
++        arch_size = f"{arch_str}-{size_label_str}".lower()
++        for arch_enum, arch_names in ModelArchNames.items():
++            for arch_name in arch_names:
++                if arch_name.lower().startswith(arch_prefix) and arch_size.startswith(arch_name.lower()):
++                    return arch_enum
+ 
+ 
+     raise ValueError(f"Unsupported model architecture: {arch_str}")

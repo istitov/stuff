@@ -1,0 +1,93 @@
+From 8f9de8ac1e7fede6c2a07b151ba5bf28e59d7943 Mon Sep 17 00:00:00 2001
+From: Dmitrii <dmitrii.timoshenko16@gmail.com>
+Date: Sat, 19 Sep 2026 19:31:59 +0200
+Subject: [PATCH] fix(qwen35): write the bf16 prefill copies of
+ ssm_alpha/beta_proj
+
+The dense Qwen3.5 converter stopped emitting
+`model.layers.{bid}.linear_attn.ssm_{alpha,beta}_proj.bf16.weight` in
+d1d5232d: the three lines that store the dequantized copy were commented
+out (with a leftover `sdfsdf` marker), while the comment added above in
+the same commit still states that the bf16 copy "is derived from the
+quantized tensor below".
+
+Both `configs/qwen3.5_*.json` map those names as
+`linear_{alpha,beta}_proj_prefill`, and the official FastFlowLM weights
+contain them, so a model converted from a stock GGUF is missing 48
+tensors and the runtime aborts with
+`Weight not found: model.layers.0.linear_attn.ssm_alpha_proj.bf16.weight`.
+
+Restore the block from `q4nx/models/qwen35_moe.py`, which the same commit
+added with this code intact, including the `len(unpacked) == 3` guard that
+keeps a non-quantized (BF16) source from raising
+`ValueError: not enough values to unpack`.
+
+Verified on Qwen3.5-4B: the converted file now carries all 474 tensors,
+and the 48 restored bf16 copies are byte-identical to the official
+Qwen3.5-4B-NPU2 weights.
+---
+ q4nx/models/qwen35.py | 49 +++++++++++++++++++++++++------------------
+ 1 file changed, 29 insertions(+), 20 deletions(-)
+
+diff --git a/q4nx/models/qwen35.py b/q4nx/models/qwen35.py
+index 30e92b4..57ca855 100644
+--- a/q4nx/models/qwen35.py
++++ b/q4nx/models/qwen35.py
+@@ -119,28 +119,37 @@ def convert(self, q4nx_path: str, weights_type: str = 'language'):
+ 
+                     if ("ssm_alpha_proj" in self.forward_name_map[gguf_tensor.name] or "ssm_beta_proj" in self.forward_name_map[gguf_tensor.name]) \
+                             and "bf16" not in  self.forward_name_map[gguf_tensor.name]: # for ssm_alpha_proj, the order is special
+-               
+-                        d, m, qw = unpacked
+-                        # save bf16 copy
+-                        w = gguf_tensor.dequantize()
+-                        if reorder_linear_required:
+-                            w = rearrange(w, '(q g) c -> (g q) c', q = 2).contiguous()
+-
+-                        # new_name = self.forward_name_map[gguf_tensor.name]
+-                        # new_name = new_name.replace("alpha_proj", "alpha_proj.bf16").replace("beta_proj", "beta_proj.bf16")
+-                        # self.q4nx_tensors[new_name] = w  sdfsdf
+-                        if reorder_linear_required:
+-                            print(f"[INFO] Reorder for {self.forward_name_map[gguf_tensor.name]}")
+-                            d = rearrange(d, '(q g) c -> (g q) c', q = 2).contiguous()
+-                            m = rearrange(m, '(q g) c -> (g q) c', q = 2).contiguous()
+-                            qw = rearrange(qw, '(q g) c -> (g q) c', q = 2).contiguous()
+ 
+-                        if (d.shape[0] < 32): # duplicate on the first dimension for better performance when the state size is small
+-                            d = repeat(d, 'd c -> (r d) c', r = 2).contiguous()
+-                            m = repeat(m, 'd c -> (r d) c', r = 2).contiguous()
+-                            qw = repeat(qw, 'd c -> (r d) c', r = 2).contiguous()
++                        if len(unpacked) == 3:
++                            d, m, qw = unpacked
++                            # save bf16 copy
++                            w = gguf_tensor.dequantize()
++                            if reorder_linear_required:
++                                w = rearrange(w, '(q g) c -> (g q) c', q = 2).contiguous()
++
++                            new_name = self.forward_name_map[gguf_tensor.name]
++                            new_name = new_name.replace("alpha_proj", "alpha_proj.bf16").replace("beta_proj", "beta_proj.bf16")
++                            self.q4nx_tensors[new_name] = w
++                            if reorder_linear_required:
++                                print(f"[INFO] Reorder for {self.forward_name_map[gguf_tensor.name]}")
++                                d = rearrange(d, '(q g) c -> (g q) c', q = 2).contiguous()
++                                m = rearrange(m, '(q g) c -> (g q) c', q = 2).contiguous()
++                                qw = rearrange(qw, '(q g) c -> (g q) c', q = 2).contiguous()
++
++                            if (d.shape[0] < 32): # duplicate on the first dimension for better performance when the state size is small
++                                d = repeat(d, 'd c -> (r d) c', r = 2).contiguous()
++                                m = repeat(m, 'd c -> (r d) c', r = 2).contiguous()
++                                qw = repeat(qw, 'd c -> (r d) c', r = 2).contiguous()
+ 
+-                        unpacked = (d, m, qw)
++                            unpacked = (d, m, qw)
++                        else:
++                            # save in bf16 into the file
++                            w = unpacked[0].contiguous().to(torch.bfloat16)
++                            if reorder_linear_required:
++                                w = rearrange(w, '(q g) c -> (g q) c', q = 2).contiguous()
++                            # save matrix in colum major order instead
++                            self.q4nx_tensors[self.forward_name_map[gguf_tensor.name]] = w.clone().transpose(0,1).contiguous()
++                            continue
+ 
+ 
+                     if "ssm_conv1d" in self.forward_name_map[gguf_tensor.name]:

@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+"""Compare the structure of a converted .q4nx file with a reference one.
+
+A converted model runs on the NPU kernels of the model it is derived from, so
+its file must hold the same tensors, with the same types and shapes, as that
+model's official model.q4nx. The last dimension of a quantised tensor is its
+block size in bytes, so a different quantisation shows up as a shape mismatch.
+
+Only the two file headers are read. Weight values are not compared, so a match
+means the file has the reference layout, not that the model is good.
+
+usage: flm-q4nx-check CONVERTED.q4nx REFERENCE.q4nx
+exit status: 0 if the structure matches, 1 if not or if a file cannot be read
+"""
+import json
+import os
+import struct
+import sys
+
+
+# Bytes per element of every safetensors type.
+SIZES = {"BOOL": 1, "I8": 1, "U8": 1, "F8_E4M3": 1, "F8_E5M2": 1,
+         "I16": 2, "U16": 2, "F16": 2, "BF16": 2,
+         "I32": 4, "U32": 4, "F32": 4, "I64": 8, "U64": 8, "F64": 8}
+
+
+def header(path):
+    """Return the tensor table and the size of the data section, after checking
+    that every tensor's byte range has the length its type and shape imply and
+    that the ranges fill the data section without gaps or overlaps."""
+    try:
+        size = os.path.getsize(path)
+        with open(path, "rb") as f:
+            (n,) = struct.unpack("<Q", f.read(8))
+            if n > min(size - 8, 100 << 20):
+                raise ValueError("header length out of range")
+            tensors = json.loads(f.read(n))
+        if not isinstance(tensors, dict):
+            raise ValueError("the header is not a JSON object")
+        tensors.pop("__metadata__", None)
+        data = size - 8 - n
+        end = 0
+        # Sorting on both offsets keeps an empty tensor ahead of the tensor
+        # that starts at the same byte.
+        for name, t in sorted(tensors.items(), key=lambda kv: tuple(kv[1]["data_offsets"])):
+            lo, hi = t["data_offsets"]
+            if t["dtype"] not in SIZES:
+                raise ValueError(f"tensor {name}: unknown type {t['dtype']}")
+            want = SIZES[t["dtype"]]
+            for d in t["shape"]:
+                if not isinstance(d, int) or isinstance(d, bool) or d < 0:
+                    raise ValueError(f"tensor {name}: shape {t['shape']} is not a list of sizes")
+                want *= d
+            if lo != end or hi - lo != want:
+                raise ValueError(f"tensor {name}: byte range {lo}-{hi} does not fit its type and shape")
+            end = hi
+        if end != data:
+            raise ValueError(f"tensors cover {end} of {data} data bytes")
+    except OSError as e:
+        sys.exit(f"{path}: {e.strerror or e}")
+    except (ValueError, KeyError, TypeError, struct.error) as e:
+        sys.exit(f"{path}: not a well-formed q4nx file: {e!r}")
+    return tensors, data
+
+
+def main():
+    args = sys.argv[1:]
+    if "-h" in args or "--help" in args:
+        print(__doc__)
+        return 0
+    if len(args) != 2:
+        print("usage: flm-q4nx-check CONVERTED.q4nx REFERENCE.q4nx", file=sys.stderr)
+        return 2
+    (new, new_bytes), (ref, ref_bytes) = header(args[0]), header(args[1])
+    missing = sorted(set(ref) - set(new))
+    extra = sorted(set(new) - set(ref))
+    differ = sorted(k for k in set(new) & set(ref)
+                    if (new[k]["dtype"], new[k]["shape"]) != (ref[k]["dtype"], ref[k]["shape"]))
+    for label, names in (("missing", missing), ("unexpected", extra)):
+        for k in names[:20]:
+            print(f"{label}: {k}")
+        if len(names) > 20:
+            print(f"{label}: ... and {len(names) - 20} more")
+    for k in differ[:20]:
+        print(f"differs: {k}: {new[k]['dtype']} {new[k]['shape']}, "
+              f"reference {ref[k]['dtype']} {ref[k]['shape']}")
+    if len(differ) > 20:
+        print(f"differs: ... and {len(differ) - 20} more")
+    print(f"tensors: {len(new)} converted, {len(ref)} reference; "
+          f"{len(missing)} missing, {len(extra)} unexpected, {len(differ)} with another type or shape")
+    print(f"data bytes: {new_bytes} converted, {ref_bytes} reference")
+    ok = not (missing or extra or differ) and new_bytes == ref_bytes
+    print("structure matches the reference" if ok else "STRUCTURE DIFFERS: do not load this file on the NPU")
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

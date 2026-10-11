@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    Converts the weights of a GGUF model file to Q4NX, the safetensors
+    layout FastFlowLM loads on AMD Ryzen AI (XDNA2) NPUs. The converter
+    repacks weights only. The NPU kernels are compiled per model and ship
+    with FastFlowLM, so the source must be a fine-tune of a model that
+    FastFlowLM already supports, with the same architecture and size.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">ROCm/FLM_Q4NX_Converter</remote-id>
+    <bugs-to>https://github.com/ROCm/FLM_Q4NX_Converter/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
