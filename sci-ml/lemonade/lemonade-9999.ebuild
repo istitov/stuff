@@ -3,7 +3,9 @@
 
 EAPI=8
 
-inherit cmake git-r3 desktop systemd
+PYTHON_COMPAT=( python3_{12..15} )
+
+inherit cmake desktop git-r3 python-any-r1 systemd
 
 DESCRIPTION="Local AI server: optimized LLM inference on AMD NPU + GPU"
 HOMEPAGE="
@@ -27,9 +29,10 @@ RESTRICT="network-sandbox"
 
 # Keep the systemd account/state across USE changes; OpenRC uses LEMONADE_USER.
 # Linux always links libdrm_amdgpu; require its flag. verified 2026-07-18
-# Derive TheRock bounds from backend_versions.json on each live sync.
+# Derive TheRock bounds from backend_versions.json on each live sync: main pins
+# 10.0.0 and lemond accepts a major.minor match, so <10.1.
 # brotli is macOS-only; zstd-1.5.5 is upstream's floor.
-# verified 2026-09-03 against master
+# verified 2026-10-12 against main
 # Digest verification links a found mbedtls; only slot 0 matches the probe's
 # names, otherwise a static copy is fetched. verified 2026-09-24
 RDEPEND="
@@ -50,7 +53,7 @@ RDEPEND="
 	system-sdcpp? ( sci-misc/stable-diffusion-cpp )
 	system-kokoro? ( sci-ml/kokoros )
 	system-rocm? ( dev-util/hip )
-	system-therock? ( >=dev-util/therock-bin-7.13.0 <dev-util/therock-bin-7.14 )
+	system-therock? ( >=dev-util/therock-bin-10.0.0 <dev-util/therock-bin-10.1 )
 	webui? (
 		app-misc/jq
 		x11-misc/xdg-utils
@@ -63,6 +66,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
+	${PYTHON_DEPS}
 	>=dev-build/cmake-3.12
 	virtual/pkgconfig
 	system-fastflowlm? ( app-misc/jq )
@@ -98,6 +102,8 @@ src_configure() {
 		-DCMAKE_INSTALL_PREFIX="/usr"
 		-DBUILD_WEB_APP=$(usex webui ON OFF)
 		-DBUILD_TAURI_APP=OFF
+		# Upstream's distro-packaging path; skips unshipped test binaries.
+		-DBUILD_TESTING=OFF
 	)
 	cmake_src_configure
 }
@@ -216,8 +222,9 @@ pkg_postinst() {
 	elog ""
 	ewarn "Privacy: at startup lemond sends a UDP presence broadcast on LAN"
 	ewarn "(RFC1918) interfaces -- on by default, and it fires even with the"
-	ewarn "loopback bind. Disable it by setting no_broadcast to true in"
-	ewarn "~/.cache/lemonade/config.json."
+	ewarn "loopback bind. Disable it by setting broadcast to false in"
+	ewarn "~/.cache/lemonade/config.json (11.7.0 renamed the old no_broadcast"
+	ewarn "key to broadcast, inverting the sense)."
 	elog ""
 	elog "Data lives under ~/.cache/lemonade (config + models) and"
 	elog "~/.cache/huggingface (model cache + HF_TOKEN if set); model pulls"
@@ -270,7 +277,7 @@ pkg_postinst() {
 		elog "  systemctl enable --now lemond          # system-wide, or"
 		elog "  systemctl --user enable --now lemond   # per-user"
 		elog "  host/port live in config.json, not env vars; HF_TOKEN and"
-		elog "  LEMONADE_API_KEY go in /etc/lemonade/conf.d/*.conf"
+		elog "  LEMONADE_API_KEY go in /etc/default/lemond"
 		elog ""
 	fi
 	if use system-llamacpp || use system-whispercpp || use system-sdcpp || use system-kokoro; then
@@ -311,7 +318,7 @@ pkg_postinst() {
 		elog "  export ROCM_PATH=${_rp}"
 		if use system-therock; then
 			elog "dev-util/therock-bin must major.minor-match lemond's pinned ROCm"
-			elog "(7.13); the RDEPEND holds it to the 7.13 line. A mismatched version"
+			elog "(10.0); the RDEPEND holds it to the 10.0 line. A mismatched version"
 			elog "file makes lemond reject it and download TheRock anyway."
 		fi
 		elog ""
