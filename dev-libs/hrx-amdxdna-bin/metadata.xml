@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription lang="en">
+    HRX (HIP Runtime Extended) built with only the amdxdna and local-task
+    drivers: a small runtime that drives AMD Ryzen AI NPUs through the
+    amdxdna kernel driver, without XRT. It contains no AMDGPU driver and no
+    HIP binding, so it does not replace libamdhip64. FastFlowLM can use it
+    as its NPU runtime in place of XRT.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">jtuyls/hrx</remote-id>
+    <bugs-to>https://github.com/ROCm/FastFlowLM/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
