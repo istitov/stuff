@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{12..15} )
 
-inherit cmake git-r3 python-single-r1 systemd
+inherit cmake flag-o-matic git-r3 python-single-r1 systemd toolchain-funcs
 
 DESCRIPTION="NPU-first LLM runtime for AMD Ryzen AI (XDNA2) processors"
 HOMEPAGE="
@@ -22,7 +22,7 @@ EGIT_SUBMODULES=( '*' )
 # grant to redistribute, hence bindist. verified 2026-10-05
 LICENSE="MIT FastFlowLM-Terms"
 SLOT="0"
-IUSE="openrc systemd"
+IUSE="gemma4e-source openrc systemd"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 # tokenizers-cpp fetches Rust crates during the live build.
@@ -54,22 +54,65 @@ DEPEND="
 
 CMAKE_USE_DIR="${S}/src"
 
+# The source-built engine needs OpenMP (find_package REQUIRED).
+pkg_pretend() {
+	if [[ ${MERGE_TYPE} != binary ]] && use gemma4e-source; then
+		tc-check-openmp
+	fi
+}
+
+pkg_setup() {
+	if [[ ${MERGE_TYPE} != binary ]] && use gemma4e-source; then
+		tc-check-openmp
+	fi
+	python-single-r1_pkg_setup
+}
+
 src_prepare() {
 	# Link XRT's aiebu, not the prebuilt copy upstream ships. flm calls only
 	# aiebu_assembler_get_elf(), declared identically by the aiebu of every
 	# packaged XRT. verified 2026-10-05
 	rm "${S}"/src/lib/xrt/{libaiebu.a,aiebu_static.lib} || die
 	rm -r "${S}"/src/include/aiebu || die
+
+	# npu_cmd.hpp uses UCHAR_MAX without <climits>. flm gets it through
+	# other headers; the source-built Gemma 4 engine includes this header
+	# first and fails with GCC 16. The file has CRLF line endings, hence
+	# sed rather than a patch; skipped once upstream adds the include.
+	# verified 2026-10-13 against main
+	local npu_cmd="${S}/src/include/npu_utils/instr_utils/npu_cmd.hpp"
+	if ! grep -q '^#include <climits>' "${npu_cmd}"; then
+		sed -i 's/^#include <cstdint>/#include <climits>\n&/' "${npu_cmd}" || die
+		grep -q '^#include <climits>' "${npu_cmd}" || die "climits include not added"
+	fi
+
 	cmake_src_prepare
 }
 
 src_configure() {
+	# Set preset-only values explicitly. CMAKE_XCLBIN_PREFIX must match the
+	# install path or runtime searches beside the executable (#269);
+	# NPU_VERSION only satisfies a Linux guard. HRX stays off to retain XRT.
+	# The ryzenai-corelib backend stays off: the library is not public, and
+	# a build that links it targets an unreleased NPU generation and offers
+	# none of the current models. USE=gemma4e-source builds the Gemma 4
+	# E2B/E4B engine in place of the prebuilt libgemma4e_npu.so; upstream
+	# compiles it with fixed AVX-512 flags, and FLM_ENGINE_NATIVE_ARCH stays
+	# off so CXXFLAGS decide the rest. verified 2026-10-13 against main
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="/opt/fastflowlm"
 		-DCMAKE_XCLBIN_PREFIX="/opt/fastflowlm/share/flm"
 		-DFLM_VERSION="${PV}"
 		-DNPU_VERSION="32.0.203.304"
+		-DFLM_USE_HRX=OFF
+		-DFLM_ENABLE_RAI=OFF
+		-DFLM_BUILD_GEMMA4E=$(usex gemma4e-source)
+		-DFLM_ENGINE_NATIVE_ARCH=OFF
 	)
+	# The engine source type-puns through pointers (GCC's strict-aliasing
+	# warnings, which Portage reports as a QA notice). verified 2026-10-13
+	use gemma4e-source && append-flags -fno-strict-aliasing
+
 	cmake_src_configure
 }
 
