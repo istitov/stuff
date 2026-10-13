@@ -21,6 +21,7 @@
   </longdescription>
   <use>
     <flag name="gemma4e-source">Build the Gemma 4 E2B/E4B NPU engine from the source upstream opened in 1.0.8 instead of installing the prebuilt library; the other engines stay prebuilt</flag>
+    <flag name="hrx">Use the HRX amdxdna runtime (<pkg>dev-libs/hrx-amdxdna-bin</pkg>) instead of XRT to drive the NPU; an upstream preview</flag>
     <flag name="openrc">Install OpenRC init.d/conf.d files for a supervise-daemon-managed service</flag>
     <flag name="systemd">Install a systemd template service unit (fastflowlm@.service)</flag>
   </use>

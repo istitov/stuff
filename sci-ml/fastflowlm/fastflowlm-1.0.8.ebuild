@@ -37,7 +37,7 @@ S="${WORKDIR}/FastFlowLM-${PV}"
 LICENSE="MIT FastFlowLM-Terms"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="gemma4e-source openrc systemd"
+IUSE="gemma4e-source hrx openrc systemd"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 # Cargo (inside tokenizers-cpp/rust) fetches the crates the shipped Cargo.lock
@@ -49,13 +49,19 @@ BDEPEND="
 	>=dev-build/cmake-3.22
 	dev-build/ninja
 	|| ( dev-lang/rust dev-lang/rust-bin )
+	hrx? ( dev-util/patchelf )
 "
 # Python is for flm-custom-sync only.
+# USE=hrx swaps XRT for the HRX runtime, at the exact release this version
+# names in hrx-integration/hrx-release.env. verified 2026-10-13
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-util/xrt
 	dev-libs/xdna-driver
-	dev-libs/xrt-xdna
+	hrx? ( ~dev-libs/hrx-amdxdna-bin-0.1.0_p20260915 )
+	!hrx? (
+		dev-util/xrt
+		dev-libs/xrt-xdna
+	)
 	media-video/ffmpeg:=
 	net-misc/curl:=
 	dev-libs/boost:=
@@ -66,7 +72,7 @@ RDEPEND="
 # xrt-2.21.75-r1 is the first to install aiebu's headers.
 DEPEND="
 	${RDEPEND}
-	>=dev-util/xrt-2.21.75-r1
+	!hrx? ( >=dev-util/xrt-2.21.75-r1 )
 "
 
 CMAKE_USE_DIR="${S}/src"
@@ -132,7 +138,7 @@ src_prepare() {
 src_configure() {
 	# Set preset-only values explicitly. CMAKE_XCLBIN_PREFIX must match the install
 	# path or runtime searches beside the executable (#269); NPU_VERSION only
-	# satisfies a Linux guard. Keep unpackaged HRX disabled to retain XRT.
+	# satisfies a Linux guard. USE=hrx picks the NPU runtime.
 	# 1.0.8 adds a ryzenai-corelib backend, kept off: the library is not
 	# public, and a build that links it targets an unreleased NPU generation
 	# and offers none of the current models. It also adds the source of the
@@ -145,7 +151,7 @@ src_configure() {
 		-DCMAKE_XCLBIN_PREFIX="/opt/fastflowlm/share/flm"
 		-DFLM_VERSION="${PV}"
 		-DNPU_VERSION="32.0.203.304"
-		-DFLM_USE_HRX=OFF
+		-DFLM_USE_HRX=$(usex hrx)
 		-DFLM_ENABLE_RAI=OFF
 		-DFLM_BUILD_GEMMA4E=$(usex gemma4e-source)
 		-DFLM_ENGINE_NATIVE_ARCH=OFF
@@ -154,6 +160,9 @@ src_configure() {
 	# warnings, which Portage reports as a QA notice). verified 2026-10-13
 	use gemma4e-source && append-flags -fno-strict-aliasing
 
+	use hrx && mycmakeargs+=(
+		-Dhrx_DIR="${ESYSROOT}/opt/hrx-amdxdna/lib/cmake/hrx"
+	)
 	cmake_src_configure
 }
 
@@ -161,18 +170,33 @@ src_install() {
 	cmake_src_install
 
 	local flm_libdir="/opt/fastflowlm/$(get_libdir)"
+	local flm_ldpath="${flm_libdir}:/opt/xilinx/xrt/lib" flm_envd_ldpath="${flm_libdir}"
 
-	# Expose XRT and bundled libraries at runtime (lemonade-sdk/lemonade#1315).
+	if use hrx; then
+		# Upstream's HRX install puts the engines in <libdir>/flm and copies
+		# flm's whole shared-library closure, system libraries included,
+		# into <libdir>. Drop the copies and link the packaged libhrx where
+		# the RUNPATHs of flm and the engines look for it.
+		# verified 2026-10-13
+		[[ -d ${ED}${flm_libdir}/flm ]] || die "HRX engine directory missing"
+		find "${ED}${flm_libdir}" -mindepth 1 -maxdepth 1 ! -type d -delete || die
+		dosym -r /opt/hrx-amdxdna/lib/libhrx.so.0 "${flm_libdir}/libhrx.so.0"
+		flm_ldpath="${flm_libdir}/flm:${flm_libdir}"
+		flm_envd_ldpath="${flm_libdir}/flm"
+	fi
+
+	# Expose the NPU runtime and bundled libraries at runtime
+	# (lemonade-sdk/lemonade#1315).
 	newbin - flm <<-EOF
 	#!/usr/bin/env bash
 	set -euo pipefail
-	export LD_LIBRARY_PATH="${flm_libdir}:/opt/xilinx/xrt/lib\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}"
+	export LD_LIBRARY_PATH="${flm_ldpath}\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}"
 	export FLM_CONFIG_PATH="\${FLM_CONFIG_PATH:-/opt/fastflowlm/share/flm/model_list.json}"
 	exec /opt/fastflowlm/bin/flm "\$@"
 	EOF
 
 	newenvd - 99fastflowlm <<-EOF
-	LDPATH="${flm_libdir}"
+	LDPATH="${flm_envd_ldpath}"
 	PATH="/opt/fastflowlm/bin"
 	FLM_CONFIG_PATH="/opt/fastflowlm/share/flm/model_list.json"
 	EOF
@@ -195,6 +219,11 @@ pkg_postinst() {
 	elog ""
 	elog "FastFlowLM ${PV} installed to /opt/fastflowlm."
 	elog ""
+	if use hrx; then
+		elog "Built on the HRX NPU runtime instead of XRT. Upstream calls its"
+		elog "HRX builds a preview; rebuild with USE=-hrx to return to XRT."
+		elog ""
+	fi
 	elog "Quick start (manual):"
 	elog "  flm validate          # verify NPU stack"
 	elog "  flm pull llama3.2:3b  # download a model"
