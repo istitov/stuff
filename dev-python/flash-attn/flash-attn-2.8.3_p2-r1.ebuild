@@ -47,6 +47,10 @@ BDEPEND="
 	')
 "
 
+PATCHES=(
+	"${FILESDIR}/${PN}-2.8.3-torch-cxx20.patch"
+)
+
 src_prepare() {
 	# Replace the partial bundled copy with the full submodule commit.
 	rm -r csrc/cutlass || die
