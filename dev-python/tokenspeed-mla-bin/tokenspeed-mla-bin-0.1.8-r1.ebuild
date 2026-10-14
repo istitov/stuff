@@ -23,7 +23,12 @@ RDEPEND="
 		dev-python/nvidia-cutlass-dsl[${PYTHON_USEDEP}]
 	')
 	>=dev-python/tokenspeed-triton-bin-3.7.10_p20260531[${PYTHON_SINGLE_USEDEP}]
-	sci-ml/caffe2
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+"
+BDEPEND="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
 "
 QA_PREBUILT="usr/lib*/python*/site-packages/tokenspeed_mla/objs/*.so*"
 

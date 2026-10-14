@@ -10,7 +10,7 @@ inherit distutils-r1
 MY_WHEEL="tokenspeed_mla-${PV}-py3-none-any.whl"
 DESCRIPTION="TokenSpeed multi-head latent attention CUDA kernels"
 HOMEPAGE="https://pypi.org/project/tokenspeed-mla/"
-SRC_URI="https://files.pythonhosted.org/packages/6e/c5/8304eca83161ff18f3cb5135ef5855e103710c5e3e825497558184984f5e/${MY_WHEEL}"
+SRC_URI="https://files.pythonhosted.org/packages/7a/f8/06e03acc393dac9bca455a19b52b857a84950b57dffac6416658a61b44f7/${MY_WHEEL}"
 S=${WORKDIR}
 LICENSE="MIT"
 SLOT="0"
@@ -22,7 +22,12 @@ RDEPEND="
 		>=dev-python/nvidia-cutlass-dsl-4.8.0[${PYTHON_USEDEP}]
 	')
 	>=dev-python/tokenspeed-triton-bin-3.9.10_p20261008[${PYTHON_SINGLE_USEDEP}]
-	sci-ml/caffe2
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
+"
+BDEPEND="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
 "
 python_install() {
 	${EPYTHON} -m installer --destdir="${D}" "${DISTDIR}/${MY_WHEEL}" || die
