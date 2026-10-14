@@ -25,7 +25,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 # The launcher dlopens C++ backends but uses Jinja2 for chat templates. psutil is
 # optional; customtkinter is unpackaged, so this remains CLI-only. Repo-wide
 # requirements for conversion scripts are not launcher dependencies.
-# verified against 1.122.1 on 2026-09-27
+# verified against 1.122 on 2026-09-26
 RDEPEND="
 	${PYTHON_DEPS}
 	$(python_gen_cond_dep '
@@ -82,6 +82,9 @@ src_install() {
 	doins koboldcpp_*.so
 	# Runtime UI, model resources, and chat adapters.
 	doins -r embd_res kcpp_adapters
+	# JSON-schema grammars import json_to_gbnf (stdlib-only) from beside the
+	# launcher. verified 2026-10-14
+	doins json_to_gbnf.py
 
 	python_fix_shebang "${ED}${dest}"/{koboldcpp,kcpp_agent}.py
 
