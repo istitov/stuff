@@ -9,8 +9,9 @@ DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 pypi cuda
 
-# PyPI omits csrc/cutlass; fetch the submodule commit recorded by v${PV}
-# (CUTLASS 4.0.0) separately.
+# The PyPI sdist bundles csrc/cutlass without its collective builders;
+# fetch the full submodule commit recorded by v${PV} (CUTLASS 4.0.0).
+# verified 2026-10-14
 CUTLASS_COMMIT="dc4817921edda44a549197ff3a9dcf5df0636e7b"
 
 DESCRIPTION="Fast and memory-efficient exact attention (FlashAttention-2)"
@@ -30,6 +31,7 @@ KEYWORDS="~amd64"
 RDEPEND="
 	>=dev-util/nvidia-cuda-toolkit-11.7:=
 	sci-ml/caffe2[cuda,-rocm,${PYTHON_SINGLE_USEDEP}]
+	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/einops[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
@@ -46,8 +48,8 @@ BDEPEND="
 "
 
 src_prepare() {
-	# Populate the submodule path expected by setup.py.
-	rmdir csrc/cutlass 2>/dev/null
+	# Replace the partial bundled copy with the full submodule commit.
+	rm -r csrc/cutlass || die
 	mv "${WORKDIR}/cutlass-${CUTLASS_COMMIT}" csrc/cutlass || die
 
 	distutils-r1_src_prepare
