@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 inherit check-reqs toolchain-funcs
 inherit python-r1
 
-DRIVER_PV="610.43.02"
+DRIVER_PV="590.48.01"
 GCC_MAX_VER="15"
 CLANG_MAX_VER="21"
 
@@ -60,6 +60,10 @@ BDEPEND="
 CUDA_PATH="/opt/cuda"
 QA_PREBUILT="${CUDA_PATH#/}/*"
 
+PATCHES=(
+	"${FILESDIR}/nvidia-cuda-toolkit-glibc-2.42.patch"
+)
+
 python_check_deps() {
 	python_has_version "dev-python/defusedxml[${PYTHON_USEDEP}]"
 }
@@ -88,17 +92,13 @@ cuda_verify_driver() {
 cuda_verify_compilers() {
 	local host_config GCC_HAS_VER CLANG_HAS_VER
 	host_config=( "${S}"/builds/cuda_crt/targets/*/include/crt/host_config.h )
-
-	GCC_HAS_VER="$(sed -n -E \
-		's/.*gcc versions later than ([0-9]+).*/\1/p' "${host_config[@]}")"
+	GCC_HAS_VER="$(sed -n -E 's/.*gcc versions later than ([0-9]+).*/\1/p' "${host_config[@]}")"
 	if [[ -z ${GCC_HAS_VER} ]]; then
 		eqawarn "could not determine the supported GCC version"
 	elif [[ "${GCC_MAX_VER}" -ne "${GCC_HAS_VER}" ]]; then
 		eqawarn "check GCC_MAX_VER is ${GCC_MAX_VER} and should be ${GCC_HAS_VER}"
 	fi
-
-	CLANG_HAS_VER="$(sed -n -E \
-		's/.*clang version must be less than ([0-9]+).*/\1/p' "${host_config[@]}")"
+	CLANG_HAS_VER="$(sed -n -E 's/.*clang version must be less than ([0-9]+).*/\1/p' "${host_config[@]}")"
 	if [[ -z ${CLANG_HAS_VER} ]]; then
 		eqawarn "could not determine the supported Clang version"
 	else
@@ -277,6 +277,12 @@ src_install() {
 
 	if ! use rdma; then
 		rm "${ED}/${CUDA_PATH}/targets/${narch}-linux/lib/libcufile_rdma"* || die "failed to remove rdma files"
+		# The cuObject client links libibverbs, librdmacm and libmlx5, and
+		# nothing in the toolkit links or loads it. verified 2026-10-14
+		find "${ED}/${CUDA_PATH}" \( -name 'libcuobjclient*' \
+			-o -name 'cuobjclient-*.pc' -o -name 'cuobj*.h' \) -delete \
+			|| die "failed to remove cuobjclient files"
+		rm -rf "${ED}/${CUDA_PATH}/gds/cuobject" || die
 	fi
 
 	# Fold cuda_crt headers into the target tree so /opt/cuda/include remains

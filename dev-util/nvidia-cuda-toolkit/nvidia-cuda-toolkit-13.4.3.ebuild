@@ -261,6 +261,12 @@ src_install() {
 
 	if ! use rdma; then
 		rm "${ED}/${CUDA_PATH}/targets/${narch}-linux/lib/libcufile_rdma"* || die "failed to remove rdma files"
+		# The cuObject client links libibverbs, librdmacm and libmlx5, and
+		# nothing in the toolkit links or loads it. verified 2026-10-14
+		find "${ED}/${CUDA_PATH}" \( -name 'libcuobjclient*' \
+			-o -name 'cuobjclient-*.pc' -o -name 'cuobj*.h' \) -delete \
+			|| die "failed to remove cuobjclient files"
+		rm -rf "${ED}/${CUDA_PATH}/gds/cuobject" || die
 	fi
 
 	# Fold cuda_crt headers into the target tree so /opt/cuda/include remains

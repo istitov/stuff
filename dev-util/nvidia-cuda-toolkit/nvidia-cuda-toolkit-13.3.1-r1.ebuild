@@ -9,17 +9,18 @@ PYTHON_COMPAT=( python3_{12..14} )
 inherit check-reqs toolchain-funcs
 inherit python-r1
 
-GCC_MAX_VER="16"
-CLANG_MAX_VER="22"
+DRIVER_PV="610.43.02"
+GCC_MAX_VER="15"
+CLANG_MAX_VER="21"
 
 DESCRIPTION="NVIDIA CUDA Toolkit (compiler and friends)"
 HOMEPAGE="https://developer.nvidia.com/cuda"
 SRC_URI="
 	amd64? (
-		https://developer.download.nvidia.com/compute/cuda/${PV}/local_installers/cuda_${PV}_linux.run
+		https://developer.download.nvidia.com/compute/cuda/${PV}/local_installers/cuda_${PV}_${DRIVER_PV}_linux.run
 	)
 	arm64? (
-		https://developer.download.nvidia.com/compute/cuda/${PV}/local_installers/cuda_${PV}_linux_sbsa.run
+		https://developer.download.nvidia.com/compute/cuda/${PV}/local_installers/cuda_${PV}_${DRIVER_PV}_linux_sbsa.run
 	)
 "
 S="${WORKDIR}"
@@ -73,6 +74,17 @@ cuda-toolkit_check_reqs() {
 	"check-reqs_pkg_${EBUILD_PHASE}"
 }
 
+cuda_verify_driver() {
+	if has_version "sys-apps/grep[pcre]"; then
+		local DRIVER_PV_info
+		DRIVER_PV_info="$(bash "${DISTDIR}/${A}" --info | grep -oP "cuda_${PV}.*run" | cut -d '_' -f 3)"
+
+		if [[ "${DRIVER_PV}" != "${DRIVER_PV_info}" ]]; then
+			die "check DRIVER_PV is ${DRIVER_PV} and should be ${DRIVER_PV_info}"
+		fi
+	fi
+}
+
 cuda_verify_compilers() {
 	local host_config GCC_HAS_VER CLANG_HAS_VER
 	host_config=( "${S}"/builds/cuda_crt/targets/*/include/crt/host_config.h )
@@ -96,6 +108,7 @@ cuda_verify_compilers() {
 		eqawarn "check CLANG_MAX_VER is ${CLANG_MAX_VER} and should be ${CLANG_HAS_VER}"
 	fi
 }
+
 pkg_pretend() {
 	cuda-toolkit_check_reqs
 }
@@ -118,9 +131,12 @@ pkg_setup() {
 }
 
 src_unpack() {
+	cuda_verify_driver
+
 	local exclude=(
 		"cuda-installer"
 		"*-uninstaller"
+		"NVIDIA-Linux-${narch}-${DRIVER_PV}.run"
 		"builds/cuda_documentation"
 		"builds/cuda_nsight"
 		"builds/cuda_nvvp"
@@ -261,6 +277,12 @@ src_install() {
 
 	if ! use rdma; then
 		rm "${ED}/${CUDA_PATH}/targets/${narch}-linux/lib/libcufile_rdma"* || die "failed to remove rdma files"
+		# The cuObject client links libibverbs, librdmacm and libmlx5, and
+		# nothing in the toolkit links or loads it. verified 2026-10-14
+		find "${ED}/${CUDA_PATH}" \( -name 'libcuobjclient*' \
+			-o -name 'cuobjclient-*.pc' -o -name 'cuobj*.h' \) -delete \
+			|| die "failed to remove cuobjclient files"
+		rm -rf "${ED}/${CUDA_PATH}/gds/cuobject" || die
 	fi
 
 	# Fold cuda_crt headers into the target tree so /opt/cuda/include remains
@@ -302,7 +324,7 @@ src_install() {
 
 	# Keep aligned with toolkit-supported GCC versions; changes require a revbump.
 	# https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements
-	local cuda_supported_gcc=( 8.5 9.5 10 11 12 13 14 15 "${GCC_MAX_VER}" )
+	local cuda_supported_gcc=( 8.5 9.5 10 11 12 13 14 "${GCC_MAX_VER}" )
 
 	sed \
 		-e "s:CUDA_SUPPORTED_GCC:${cuda_supported_gcc[*]}:g" \
