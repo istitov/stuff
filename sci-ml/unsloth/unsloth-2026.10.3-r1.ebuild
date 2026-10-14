@@ -16,8 +16,8 @@ HOMEPAGE="
 "
 # PyPI withdrew recent sdists; use the monorepo desktop tag whose _version.py
 # matches ${PV}. GitHub archives are mutable, so review any Manifest rehash.
-# Verified 2026-10-13.
-MY_TAG="v0.1.906-beta"
+# Verified 2026-10-09.
+MY_TAG="v0.1.905-beta"
 SRC_URI="https://github.com/unslothai/unsloth/archive/refs/tags/${MY_TAG}.tar.gz -> unsloth-monorepo-${MY_TAG#v}.gh.tar.gz"
 S="${WORKDIR}/${PN}-${MY_TAG#v}"
 
@@ -39,12 +39,12 @@ RESTRICT="test studio? ( network-sandbox )"
 # ddgs 9.15 retains the used DDGS and exception APIs. Verified 2026-08-24.
 
 # The tag's pyproject lists no torch requirement; the torch bound is the one
-# the published 2026.10.4 wheel declares. The datasets (4.4.*, 4.5.0) and
+# the published 2026.10.3 wheel declares. The datasets (4.4.*, 4.5.0) and
 # transformers releases upstream excludes are in neither ::gentoo nor this
-# overlay. Verified 2026-10-13.
+# overlay. Verified 2026-10-09.
 
 RDEPEND="
-	>=dev-python/unsloth-zoo-2026.10.4[${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/unsloth-zoo-2026.10.3[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/accelerate-0.34.1[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/bitsandbytes-0.45.5[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/datasets-3.4.1[${PYTHON_SINGLE_USEDEP}]
@@ -57,7 +57,7 @@ RDEPEND="
 	>=sci-ml/transformers-4.52.4[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/transformers-5.17.1[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/trl-0.18.2[${PYTHON_SINGLE_USEDEP}]
-	<=sci-ml/trl-1.15.0-r0[${PYTHON_SINGLE_USEDEP}]
+	<=sci-ml/trl-1.13.0-r0[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/sentence-transformers[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/xformers-0.0.27_p2[${PYTHON_SINGLE_USEDEP}]
@@ -81,7 +81,8 @@ RDEPEND="
 		>=sci-ml/sentencepiece-0.2[${PYTHON_USEDEP}]
 	')
 	studio? (
-		>=sci-ml/huggingface_hub-1.32[${PYTHON_SINGLE_USEDEP}]
+		>=sci-ml/huggingface_hub-1.31[${PYTHON_SINGLE_USEDEP}]
+		<sci-ml/huggingface_hub-2[${PYTHON_SINGLE_USEDEP}]
 		$(python_gen_cond_dep '
 			dev-python/fastapi[${PYTHON_USEDEP}]
 			dev-python/uvicorn[${PYTHON_USEDEP}]
