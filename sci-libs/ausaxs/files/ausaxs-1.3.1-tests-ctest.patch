@@ -1,0 +1,18 @@
+From: Ivan S. Titov <iohann.s.titov@gmail.com>
+Date: Sat, 17 Oct 2026 00:45:00 +0200
+Subject: [PATCH] tests: register the suite with CTest
+
+tests/CMakeLists.txt includes CTest and Catch, but enable_testing() is
+not called at the top level, so ctest run from the build root finds no
+tests.
+---
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -151,6 +151,7 @@
+ 
+ add_subdirectory(source)
+ if (BUILD_TESTS)
++	enable_testing()
+ 	add_subdirectory(tests)
+ endif()
+ if (BUILD_EXECUTABLES)
