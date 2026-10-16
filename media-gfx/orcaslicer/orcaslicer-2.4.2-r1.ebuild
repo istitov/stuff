@@ -74,7 +74,7 @@ RDEPEND="
 	dev-libs/mpfr:=
 	dev-libs/openssl:=
 	media-gfx/openvdb:=
-	media-libs/draco
+	media-libs/draco:=
 	media-libs/fontconfig
 	media-libs/freetype:2
 	media-libs/glfw
