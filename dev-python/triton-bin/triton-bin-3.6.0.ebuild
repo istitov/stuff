@@ -41,6 +41,12 @@ RESTRICT="bindist mirror strip"
 RDEPEND="!!dev-python/triton"
 QA_PREBUILT="usr/lib/python3.*/site-packages/triton/*"
 
+BDEPEND+="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
+"
+
 src_unpack() {
 	# Stash per-implementation wheels for installer instead of unpacking into S.
 	mkdir -p "${S}/wheel" || die

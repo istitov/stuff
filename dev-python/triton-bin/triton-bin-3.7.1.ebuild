@@ -51,6 +51,12 @@ RESTRICT="bindist mirror strip"
 RDEPEND="!!dev-python/triton"
 QA_PREBUILT="usr/lib/python3.*/site-packages/triton/*"
 
+BDEPEND+="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
+"
+
 src_unpack() {
 	# Prevent distutils-r1 from unpacking wheels directly into S; stage per impl.
 	mkdir -p "${S}/wheel" || die
