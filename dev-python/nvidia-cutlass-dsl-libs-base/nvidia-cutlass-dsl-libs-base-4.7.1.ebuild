@@ -43,6 +43,12 @@ RDEPEND="
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/nvidia_cutlass_dsl/*"
 
+BDEPEND+="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
+"
+
 src_unpack() {
 	mkdir -p "${S}/wheel" || die
 	local f
