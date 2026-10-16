@@ -69,6 +69,12 @@ RDEPEND="
 	')
 "
 
+BDEPEND+="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
+"
+
 src_unpack() {
 	mkdir -p "${S}/wheels" || die
 	cp "${DISTDIR}/${CORE_WHEEL}" "${S}/wheels/" || die
