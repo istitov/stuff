@@ -16,18 +16,18 @@ HOMEPAGE="
 EGIT_REPO_URI="https://github.com/ROCm/FastFlowLM.git"
 EGIT_SUBMODULES=( '*' )
 
-# The CLI is MIT. The bundled NPU kernels are proprietary under upstream's
-# TERMS.md, which replaced the older FastFlowLM-Binary licence (shipped as
-# superseded): free use, commercially up to a revenue threshold, and no
-# grant to redistribute, hence bindist. verified 2026-10-05
-LICENSE="MIT FastFlowLM-Terms"
+# The CLI is MIT. Since 1.0.9 the bundled NPU kernels and engine libraries
+# are under upstream's LICENSE_BINARY.txt, which replaced TERMS.md: closed
+# source, free for any use, redistributable unmodified with the licence.
+# verified 2026-10-16
+LICENSE="MIT FastFlowLM-NPU-Binary"
 SLOT="0"
 IUSE="gemma4e-source hrx openrc systemd"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 # tokenizers-cpp fetches Rust crates during the live build.
 PROPERTIES="live"
-RESTRICT="bindist network-sandbox"
+RESTRICT="network-sandbox"
 
 BDEPEND="
 	>=dev-build/cmake-3.22
