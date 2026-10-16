@@ -44,6 +44,12 @@ RDEPEND="
 
 QA_PREBUILT="usr/lib/python3.*/site-packages/SimpleITK/*.so*"
 
+BDEPEND+="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
+"
+
 src_unpack() {
 	# Prevent default wheel unpacking; install it per implementation below.
 	mkdir -p "${S}/wheel" || die
