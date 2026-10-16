@@ -30,6 +30,12 @@ QA_PREBUILT="
 	usr/lib*/python*/site-packages/pynvvideocodec.*/*.so*
 "
 
+BDEPEND+="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
+"
+
 python_install() {
 	local wheel
 	case ${EPYTHON} in
