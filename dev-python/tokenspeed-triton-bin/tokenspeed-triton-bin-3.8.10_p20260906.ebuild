@@ -19,6 +19,12 @@ KEYWORDS="~amd64"
 RESTRICT="strip"
 QA_PREBUILT="usr/lib*/python*/site-packages/tokenspeed_triton/*/*.so*"
 
+BDEPEND+="
+	$(python_gen_cond_dep '
+		dev-python/installer[${PYTHON_USEDEP}]
+	')
+"
+
 python_install() {
 	${EPYTHON} -m installer --destdir="${D}" "${DISTDIR}/${MY_WHEEL}" || die
 }
