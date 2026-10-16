@@ -1034,8 +1034,7 @@ SKIP_PKGS: dict[str, str] = {
     # Intentional version pins — upstream advances but a consumer in the
     # tree hard-asserts on a specific version range.
     "dev-python/antlr4-python3-runtime":   "pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')",
-    "dev-python/fsspec":                   "pinned to 2025.9.0 for sci-ml/datasets-4.3.0's <=2025.9.0-r0 ceiling; deliberately older than ::gentoo (2026.6.0/2026.7.0), so it flags every run and can never be bumped — goes away with datasets-4.3.0",
-    "dev-libs/hrx-amdxdna-bin":            "pinned to the HRX release sci-ml/fastflowlm names in hrx-integration/hrx-release.env (flm-hrx-amdxdna-v2026.09.15 for 1.0.8); it moves only with a fastflowlm bump, and its date-tagged fork releases would misread as drift",
+    "dev-libs/hrx-amdxdna-bin":            "pinned to the HRX release sci-ml/fastflowlm names in hrx-integration/hrx-release.env (flm-hrx-amdxdna-v2026.10.13 for 1.0.9); it moves only with a fastflowlm bump, and its date-tagged fork releases would misread as drift",
     "dev-python/triton":                   _TRITON_TRACKS_TORCH,
     "dev-python/triton-bin":               _TRITON_TRACKS_TORCH,
     # Snapshots ahead of upstream's only tag.
