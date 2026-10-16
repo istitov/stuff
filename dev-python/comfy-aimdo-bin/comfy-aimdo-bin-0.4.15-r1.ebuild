@@ -33,6 +33,9 @@ QA_PREBUILT="usr/lib/python3.*/site-packages/comfy_aimdo/*"
 
 # ComfyUI hard-imports this module. The CUDA wheel needs its driver/runtime;
 # the fallback imports without GPU offloading.
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/installer[${PYTHON_USEDEP}]
+')"
 
 src_unpack() {
 	cp "${DISTDIR}/${A}" "${WORKDIR}/" || die
