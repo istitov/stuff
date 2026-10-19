@@ -178,6 +178,9 @@ src_configure() {
 		-DGGML_RPC=ON
 		# Otherwise RPC links libibverbs whenever the build host has it.
 		-DGGML_RPC_RDMA=OFF
+		# ggml would wrap the compiler in any ccache it finds; Portage's
+		# FEATURES=ccache decides that instead.
+		-DGGML_CCACHE=OFF
 		-DLLAMA_OPENSSL=$(usex openssl)
 		-DGENTOO_REMOVE_CMAKE_BLAS_HACK=ON
 		-DGGML_CUDA=$(usex cuda)

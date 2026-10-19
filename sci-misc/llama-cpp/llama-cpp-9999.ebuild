@@ -150,6 +150,9 @@ src_configure() {
 		-DGGML_RPC=ON
 		# Otherwise RPC links libibverbs whenever the build host has it.
 		-DGGML_RPC_RDMA=OFF
+		# ggml would wrap the compiler in any ccache it finds; Portage's
+		# FEATURES=ccache decides that instead.
+		-DGGML_CCACHE=OFF
 		-DLLAMA_OPENSSL=$(usex openssl)
 		-DGENTOO_REMOVE_CMAKE_BLAS_HACK=ON
 		-DGGML_CUDA=$(usex cuda)
@@ -234,8 +237,11 @@ src_configure() {
 src_compile() {
 	cmake_src_compile
 
-	# A failed fetch only warns and builds the server without a UI.
-	if use webui && [[ ! -f ${BUILD_DIR}/tools/ui/dist/index.html ]]; then
+	# A failed fetch only warns and builds the server without a UI. Assets
+	# placed in the checkout's tools/ui/dist (e.g. by a user patch) are
+	# embedded from there instead.
+	if use webui && [[ ! -f ${BUILD_DIR}/tools/ui/dist/index.html &&
+		! -f ${S}/tools/ui/dist/index.html ]]; then
 		die "USE=webui: the prebuilt UI could not be fetched from Hugging Face"
 	fi
 }
