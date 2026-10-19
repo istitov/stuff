@@ -36,12 +36,14 @@ CPU_FLAGS_X86=(
 IUSE="debug openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui sycl"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
+# HIP builds the CUDA backend sources, and ggml registers that backend once.
 REQUIRED_USE="
 	?? (
 		openblas
 		blis
 		flexiblas
 	)
+	?? ( cuda rocm )
 	rocm? ( ${ROCM_REQUIRED_USE} )
 "
 
@@ -49,7 +51,6 @@ REQUIRED_USE="
 # or fetches it from Hugging Face.
 RESTRICT="webui? ( network-sandbox )"
 
-# numpy is used by convert_hf_to_gguf.py.
 # SYCL needs an unexpressible -fsycl compiler; level-zero and oneDNN are optional
 # auto-detected accelerators. End-to-end path untested as of 2026-05-17.
 CDEPEND="
@@ -60,10 +61,13 @@ CDEPEND="
 	rocm? (
 		>=dev-util/hip-7.0:=
 		>=sci-libs/hipBLAS-7.0:=[${ROCM_USEDEP}]
+		>=sci-libs/rocBLAS-7.0:=[${ROCM_USEDEP}]
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	sycl? ( sci-libs/mkl:= )
 	openssl? ( dev-libs/openssl:= )
+	opencl? ( dev-libs/opencl-icd-loader )
+	vulkan? ( media-libs/vulkan-loader )
 "
 DEPEND="${CDEPEND}
 	opencl? ( dev-util/opencl-headers )
@@ -72,15 +76,15 @@ DEPEND="${CDEPEND}
 		dev-util/vulkan-headers
 	)
 "
-RDEPEND="${CDEPEND}
-	dev-python/numpy
-	opencl? ( dev-libs/opencl-icd-loader )
-	vulkan? ( media-libs/vulkan-loader )
-"
+RDEPEND="${CDEPEND}"
 # The OpenCL backend embeds its kernels with a stdlib-only Python script.
+# The BLAS backend finds its library through pkg-config.
 BDEPEND="
 	opencl? ( ${PYTHON_DEPS} )
 	vulkan? ( media-libs/shaderc )
+	openblas? ( virtual/pkgconfig )
+	blis? ( virtual/pkgconfig )
+	flexiblas? ( virtual/pkgconfig )
 "
 
 pkg_pretend() {
@@ -141,6 +145,8 @@ src_configure() {
 		-DCMAKE_SKIP_BUILD_RPATH=ON
 		-DGGML_NATIVE=0	# don't set march
 		-DGGML_RPC=ON
+		# Otherwise RPC links libibverbs whenever the build host has it.
+		-DGGML_RPC_RDMA=OFF
 		-DLLAMA_OPENSSL=$(usex openssl)
 		-DGENTOO_REMOVE_CMAKE_BLAS_HACK=ON
 		-DGGML_CUDA=$(usex cuda)
