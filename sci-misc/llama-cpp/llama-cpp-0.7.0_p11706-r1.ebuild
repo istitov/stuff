@@ -99,12 +99,15 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}"
 # The OpenCL backend embeds its kernels with a stdlib-only Python script.
 # The BLAS backend finds its library through pkg-config.
+# The GPU backends compile with the build host's hipcc or nvcc.
 BDEPEND="
 	opencl? ( ${PYTHON_DEPS} )
 	vulkan? ( media-libs/shaderc )
 	openblas? ( virtual/pkgconfig )
 	blis? ( virtual/pkgconfig )
 	flexiblas? ( virtual/pkgconfig )
+	rocm? ( >=dev-util/hipcc-${ROCM_VERSION} )
+	cuda? ( dev-util/nvidia-cuda-toolkit )
 "
 
 pkg_pretend() {

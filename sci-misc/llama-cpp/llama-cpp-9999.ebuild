@@ -47,8 +47,8 @@ REQUIRED_USE="
 	rocm? ( ${ROCM_REQUIRED_USE} )
 "
 
-# No pinned UI distfile exists for a live checkout; CMake builds it with npm
-# or fetches it from Hugging Face.
+# No pinned UI distfile exists for a live checkout; CMake fetches it from
+# Hugging Face at build time.
 RESTRICT="webui? ( network-sandbox )"
 
 # SYCL needs an unexpressible -fsycl compiler; level-zero and oneDNN are optional
@@ -79,12 +79,15 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}"
 # The OpenCL backend embeds its kernels with a stdlib-only Python script.
 # The BLAS backend finds its library through pkg-config.
+# The GPU backends compile with the build host's hipcc or nvcc.
 BDEPEND="
 	opencl? ( ${PYTHON_DEPS} )
 	vulkan? ( media-libs/shaderc )
 	openblas? ( virtual/pkgconfig )
 	blis? ( virtual/pkgconfig )
 	flexiblas? ( virtual/pkgconfig )
+	rocm? ( >=dev-util/hipcc-7.0 )
+	cuda? ( dev-util/nvidia-cuda-toolkit )
 "
 
 pkg_pretend() {
@@ -165,10 +168,12 @@ src_configure() {
 		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
 	)
 
-	# Both switches track USE: the Hugging Face fetch runs even with the
-	# UI build disabled. A live checkout keeps git describe's version.
+	# USE=webui fetches upstream's prebuilt UI from Hugging Face (the
+	# checkout's build number, else "latest"). The npm build stays off:
+	# it would run only when the build host happens to have npm.
+	# A live checkout keeps git describe's version.
 	mycmakeargs+=(
-		-DLLAMA_BUILD_UI=$(usex webui)
+		-DLLAMA_BUILD_UI=OFF
 		-DLLAMA_USE_PREBUILT_UI=$(usex webui)
 	)
 
@@ -224,6 +229,15 @@ src_configure() {
 	fi
 
 	cmake_src_configure
+}
+
+src_compile() {
+	cmake_src_compile
+
+	# A failed fetch only warns and builds the server without a UI.
+	if use webui && [[ ! -f ${BUILD_DIR}/tools/ui/dist/index.html ]]; then
+		die "USE=webui: the prebuilt UI could not be fetched from Hugging Face"
+	fi
 }
 
 src_install() {
