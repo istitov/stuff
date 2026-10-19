@@ -17,8 +17,8 @@ HOMEPAGE="https://github.com/ggml-org/llama.cpp"
 # it: a release is the vX.Y.Z tag, whose build upstream publishes as
 # nightly-tag.txt; a snapshot is the bN tag itself and is versioned
 # X.Y.Z_pN after the release it follows.
-LLAMA_SRC_TAG="v0.5.0"
-LLAMA_BUILD_NUMBER="11146"
+LLAMA_SRC_TAG="v0.6.0"
+LLAMA_BUILD_NUMBER="11429"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -55,21 +55,22 @@ CPU_FLAGS_X86=(
 	avx512vbmi avx_vnni bmi2 f16c fma3 sse4_2
 )
 
-IUSE="debug openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui sycl"
+IUSE="debug openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
+# HIP builds the CUDA backend sources, and ggml registers that backend once.
 REQUIRED_USE="
 	?? (
 		openblas
 		blis
 		flexiblas
 	)
+	?? ( cuda rocm )
 	rocm? ( ${ROCM_REQUIRED_USE} )
 "
 
-# numpy is used by convert_hf_to_gguf.py.
-# SYCL needs an unexpressible -fsycl compiler; level-zero and oneDNN are optional
-# auto-detected accelerators. End-to-end path untested as of 2026-05-17.
+# No sycl flag: the SYCL backend needs Intel's icpx, MKL's SYCL API and a
+# GPU-enabled oneDNN, none of which ::gentoo packages. checked 2026-10-19
 CDEPEND="
 	openblas? ( sci-libs/openblas:= )
 	openmp? ( llvm-runtimes/openmp:= )
@@ -78,10 +79,12 @@ CDEPEND="
 	rocm? (
 		>=dev-util/hip-${ROCM_VERSION}:=
 		>=sci-libs/hipBLAS-${ROCM_VERSION}:=[${ROCM_USEDEP}]
+		>=sci-libs/rocBLAS-${ROCM_VERSION}:=[${ROCM_USEDEP}]
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
-	sycl? ( sci-libs/mkl:= )
 	openssl? ( dev-libs/openssl:= )
+	opencl? ( dev-libs/opencl-icd-loader )
+	vulkan? ( media-libs/vulkan-loader )
 "
 DEPEND="${CDEPEND}
 	opencl? ( dev-util/opencl-headers )
@@ -90,15 +93,18 @@ DEPEND="${CDEPEND}
 		dev-util/vulkan-headers
 	)
 "
-RDEPEND="${CDEPEND}
-	dev-python/numpy
-	opencl? ( dev-libs/opencl-icd-loader )
-	vulkan? ( media-libs/vulkan-loader )
-"
+RDEPEND="${CDEPEND}"
 # The OpenCL backend embeds its kernels with a stdlib-only Python script.
+# The BLAS backend finds its library through pkg-config.
+# The GPU backends compile with the build host's hipcc or nvcc.
 BDEPEND="
 	opencl? ( ${PYTHON_DEPS} )
 	vulkan? ( media-libs/shaderc )
+	openblas? ( virtual/pkgconfig )
+	blis? ( virtual/pkgconfig )
+	flexiblas? ( virtual/pkgconfig )
+	rocm? ( >=dev-util/hipcc-${ROCM_VERSION} )
+	cuda? ( dev-util/nvidia-cuda-toolkit )
 "
 
 pkg_pretend() {
@@ -109,12 +115,6 @@ pkg_setup() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 	use opencl && python-any-r1_pkg_setup
 
-	# CMake tests -fsycl; missing icpx usually predicts configure failure.
-	if use sycl && ! type -P icpx &>/dev/null; then
-		ewarn "USE=sycl: Intel icpx (from oneAPI) is not on PATH. If your"
-		ewarn "system clang++ has -fsycl support, ignore this; otherwise"
-		ewarn "install oneAPI before continuing or cmake will fatal-error."
-	fi
 	if use rocm; then
 		linux-info_pkg_setup
 		if linux-info_get_any_version && linux_config_exists; then
@@ -164,6 +164,11 @@ src_configure() {
 		-DCMAKE_SKIP_BUILD_RPATH=ON
 		-DGGML_NATIVE=0	# don't set march
 		-DGGML_RPC=ON
+		# Otherwise RPC links libibverbs whenever the build host has it.
+		-DGGML_RPC_RDMA=OFF
+		# ggml would wrap the compiler in any ccache it finds; Portage's
+		# FEATURES=ccache decides that instead.
+		-DGGML_CCACHE=OFF
 		-DLLAMA_OPENSSL=$(usex openssl)
 		-DGENTOO_REMOVE_CMAKE_BLAS_HACK=ON
 		-DGGML_CUDA=$(usex cuda)
@@ -175,7 +180,7 @@ src_configure() {
 		-DGGML_OPENCL_USE_ADRENO_KERNELS=$(usex arm64)
 		-DGGML_OPENMP=$(usex openmp)
 		-DGGML_VULKAN=$(usex vulkan)
-		-DGGML_SYCL=$(usex sycl)
+		-DGGML_SYCL=OFF
 
 		# Isolate libraries shared with whisper.cpp.
 		-DCMAKE_INSTALL_LIBDIR="${EPREFIX}/usr/$(get_libdir)/llama.cpp"

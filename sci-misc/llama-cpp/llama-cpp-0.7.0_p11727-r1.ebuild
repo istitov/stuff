@@ -60,7 +60,7 @@ CPU_FLAGS_X86=(
 	avx512vbmi avx_vnni bmi2 f16c fma3 sse4_2
 )
 
-IUSE="debug openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui sycl"
+IUSE="debug openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
 # HIP builds the CUDA backend sources, and ggml registers that backend once.
@@ -74,8 +74,8 @@ REQUIRED_USE="
 	rocm? ( ${ROCM_REQUIRED_USE} )
 "
 
-# SYCL needs an unexpressible -fsycl compiler; level-zero and oneDNN are optional
-# auto-detected accelerators. End-to-end path untested as of 2026-05-17.
+# No sycl flag: the SYCL backend needs Intel's icpx, MKL's SYCL API and a
+# GPU-enabled oneDNN, none of which ::gentoo packages. checked 2026-10-19
 CDEPEND="
 	openblas? ( sci-libs/openblas:= )
 	openmp? ( llvm-runtimes/openmp:= )
@@ -87,7 +87,6 @@ CDEPEND="
 		>=sci-libs/rocBLAS-7.0:=[${ROCM_USEDEP}]
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
-	sycl? ( sci-libs/mkl:= )
 	openssl? ( dev-libs/openssl:= )
 	opencl? ( dev-libs/opencl-icd-loader )
 	vulkan? ( media-libs/vulkan-loader )
@@ -121,12 +120,6 @@ pkg_setup() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 	use opencl && python-any-r1_pkg_setup
 
-	# CMake tests -fsycl; missing icpx usually predicts configure failure.
-	if use sycl && ! type -P icpx &>/dev/null; then
-		ewarn "USE=sycl: Intel icpx (from oneAPI) is not on PATH. If your"
-		ewarn "system clang++ has -fsycl support, ignore this; otherwise"
-		ewarn "install oneAPI before continuing or cmake will fatal-error."
-	fi
 	if use rocm; then
 		linux-info_pkg_setup
 		if linux-info_get_any_version && linux_config_exists; then
@@ -192,7 +185,7 @@ src_configure() {
 		-DGGML_OPENCL_USE_ADRENO_KERNELS=$(usex arm64)
 		-DGGML_OPENMP=$(usex openmp)
 		-DGGML_VULKAN=$(usex vulkan)
-		-DGGML_SYCL=$(usex sycl)
+		-DGGML_SYCL=OFF
 
 		# Isolate libraries shared with whisper.cpp.
 		-DCMAKE_INSTALL_LIBDIR="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
