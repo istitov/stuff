@@ -1,34 +1,32 @@
 # Copyright 2022-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# Overlay-local fork (stuff overlay): ::gentoo's rocm.eclass with two
-# differences.  First, _rocm_set_globals() gains a `10.*` branch.  Without it
-# every ROCm 10.x ebuild dies in the depend phase with "Unknown ROCm major
-# version!" (::gentoo's case matches only 5.*, 6.*, 7.*|9999) -- verified
-# 2026-08-28 against sci-libs/rocBLAS-10.0.0.
+# Overlay-local fork (stuff overlay) of ::gentoo's rocm.eclass.
 #
-# AMD renumbered the ROCm release line 7.14 -> 10.0 on 2026-08-27, so 10.0 is
-# a continuation of the 7.x line rather than a jump of three majors; the new
-# branch is seeded from the 7.* lists and then corrected against AMD's ROCm
-# 10.0.0 compatibility matrix, which promotes gfx1102, gfx1103, gfx1150 and
-# gfx1151 from unofficial to officially supported and adds gfx1152/gfx1153
-# (absent from ::gentoo's eclass entirely).  The practical effect is that
-# amdgpu_targets_gfx1150 becomes a +default rather than an opt-in, which is
-# what a Ryzen AI 9 HX 370 / Radeon 890M test machine needs.
+# The fork began 2026-08-28 to add a `10.*` branch to _rocm_set_globals():
+# ::gentoo then matched only 5.*, 6.*, 7.*|9999, so ROCm 10.x ebuilds that
+# use the eclass's target lists (not ROCM_SKIP_GLOBALS) died in the depend
+# phase with "Unknown ROCm major version!".  AMD
+# renumbered the release line 7.14 -> 10.0 on 2026-08-27; our branch was
+# seeded from the 7.* lists and corrected against AMD's ROCm 10.0.0
+# compatibility matrix, which promotes gfx1102, gfx1103, gfx1150 and gfx1151
+# to officially supported (so they default on) and adds gfx1152/gfx1153.
 #
-# `9999` is deliberately LEFT on the 7.* branch: moving it would silently
-# change target defaults for the existing live ebuilds, which is a separate
-# decision from landing ROCm 10.0.
+# ::gentoo has since added its own `10.*|9999` branch (seen 2026-10-19) with
+# the same official list.  Three differences remain:
 #
-# Second difference: rocm_hipcc_openmp_args(), which names the OpenMP runtime
-# for CMake projects configured with rocm_use_hipcc.  hipcc 10.1 links through
-# clang-linker-wrapper, and CMake cannot read the libraries from that
-# wrapper's verbose output; the function's own comment has the details.
+# - `9999` stays on the 7.* branch here.  Moving it changes the target
+#   defaults of the live ebuilds, which is a separate decision.
+# - Our 10.* unofficial list keeps gfx940 and gfx941; ::gentoo's drops them
+#   and adds gfx90c and gfx1032-gfx1036.
+# - rocm_hipcc_openmp_args(), which names the OpenMP runtime for CMake
+#   projects configured with rocm_use_hipcc.  hipcc 10.1 links through
+#   clang-linker-wrapper, and CMake cannot read the libraries from that
+#   wrapper's verbose output; the function's own comment has the details.
 #
-# Re-sync (and drop this fork) once ::gentoo's rocm.eclass carries a 10.x
-# branch; the intent is to send this upstream.  rocm_hipcc_openmp_args() can
-# go earlier, as soon as find_package(OpenMP) under hipcc reports libomp
-# without it.
+# Drop the fork once the first two are settled in favour of ::gentoo's
+# lists and find_package(OpenMP) under hipcc reports libomp without
+# rocm_hipcc_openmp_args() (or ::gentoo carries it).
 # @MAINTAINER below is upstream ::gentoo's; report overlay-specific issues at
 # https://github.com/istitov/stuff/issues.
 
