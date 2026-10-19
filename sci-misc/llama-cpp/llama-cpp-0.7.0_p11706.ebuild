@@ -127,6 +127,11 @@ pkg_setup() {
 	fi
 }
 
+PATCHES=(
+	# Stock LLVM 23+ rejects __bf16 vectors for the bf16 WMMA/MFMA builtins.
+	"${FILESDIR}"/${PN}-hip-bf16-builtin-args.patch
+)
+
 src_prepare() {
 	use cuda && cuda_src_prepare
 	cmake_src_prepare
