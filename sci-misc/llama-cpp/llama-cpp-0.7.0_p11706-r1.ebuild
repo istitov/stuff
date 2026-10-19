@@ -23,8 +23,8 @@ LLAMA_BUILD_NUMBER="11706"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/ggml-org/llama.cpp.git"
-	# No pinned UI distfile exists for a live checkout; CMake builds it with npm
-	# or fetches it from Hugging Face.
+	# No pinned UI distfile exists for a live checkout; CMake fetches it from
+	# Hugging Face at build time.
 	RESTRICT="webui? ( network-sandbox )"
 else
 	# A release carries upstream's own version; a snapshot is a dev build.
@@ -190,10 +190,11 @@ src_configure() {
 	)
 
 	if [[ ${PV} == *9999* ]]; then
-		# Both switches track USE: the Hugging Face fetch runs even with the
-		# UI build disabled.
+		# USE=webui fetches upstream's prebuilt UI from Hugging Face (the
+		# checkout's build number, else "latest"). The npm build stays off:
+		# it would run only when the build host happens to have npm.
 		mycmakeargs+=(
-			-DLLAMA_BUILD_UI=$(usex webui)
+			-DLLAMA_BUILD_UI=OFF
 			-DLLAMA_USE_PREBUILT_UI=$(usex webui)
 		)
 	else
@@ -260,6 +261,19 @@ src_configure() {
 	fi
 
 	cmake_src_configure
+}
+
+src_compile() {
+	cmake_src_compile
+
+	# A failed fetch only warns and builds the server without a UI. Assets
+	# placed in the checkout's tools/ui/dist (e.g. by a user patch) are
+	# embedded from there instead.
+	if [[ ${PV} == *9999* ]] && use webui &&
+		[[ ! -f ${BUILD_DIR}/tools/ui/dist/index.html &&
+		! -f ${S}/tools/ui/dist/index.html ]]; then
+		die "USE=webui: the prebuilt UI could not be fetched from Hugging Face"
+	fi
 }
 
 src_install() {
