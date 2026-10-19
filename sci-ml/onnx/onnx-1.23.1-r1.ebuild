@@ -55,12 +55,19 @@ src_configure() {
 }
 
 python_compile() {
+	# disableStaticReg is for the shared libonnx (onnxruntime registers
+	# the schemas it needs itself). The Python extension links its own
+	# static copy and never registers them, so with the flag it ships an
+	# empty schema registry and onnx.checker / shape inference fail on
+	# every op. Keep static registration on for it.
 	local mycmakeargs=(
 		"${mycmakeargs[@]}"
 		-DBUILD_SHARED_LIBS=OFF
+		-DONNX_DISABLE_STATIC_REGISTRATION=OFF
 		-Dnanobind_DIR="$(python_get_sitedir)/nanobind/cmake"
 	)
 	rm -rf .setuptools-cmake-build || die
+	ONNX_DISABLE_STATIC_REGISTRATION=OFF \
 	CMAKE_ARGS="${mycmakeargs[@]}" distutils-r1_python_compile
 }
 
