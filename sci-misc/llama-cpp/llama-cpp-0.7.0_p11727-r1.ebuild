@@ -3,7 +3,10 @@
 
 EAPI=8
 
-ROCM_VERSION="7.0"
+# Selects rocm.eclass's 10.x target list, the first with gfx1152/gfx1153.
+# The hip/hipBLAS floor stays at 7.0 below: ROCM_USEDEP already requires a
+# hipBLAS built for every enabled target.
+ROCM_VERSION="10.0"
 PYTHON_COMPAT=( python3_{12..15} )
 
 inherit cmake cuda flag-o-matic rocm linux-info python-any-r1 toolchain-funcs
@@ -17,8 +20,8 @@ HOMEPAGE="https://github.com/ggml-org/llama.cpp"
 # it: a release is the vX.Y.Z tag, whose build upstream publishes as
 # nightly-tag.txt; a snapshot is the bN tag itself and is versioned
 # X.Y.Z_pN after the release it follows.
-LLAMA_SRC_TAG="v0.7.0"
-LLAMA_BUILD_NUMBER="11669"
+LLAMA_SRC_TAG="b11727"
+LLAMA_BUILD_NUMBER="11727"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -49,7 +52,9 @@ SRC_URI+="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+# Snapshot of the tip between releases: unkeyworded on purpose, so it has
+# to be requested per version through package.accept_keywords.
+KEYWORDS=""
 CPU_FLAGS_X86=(
 	amx_bf16 amx_int8 amx_tile avx avx2 avx512_bf16 avx512_vnni avx512f
 	avx512vbmi avx_vnni bmi2 f16c fma3 sse4_2
@@ -76,8 +81,8 @@ CDEPEND="
 	blis? ( sci-libs/blis:= )
 	flexiblas? ( sci-libs/flexiblas:= )
 	rocm? (
-		>=dev-util/hip-${ROCM_VERSION}:=
-		>=sci-libs/hipBLAS-${ROCM_VERSION}:=[${ROCM_USEDEP}]
+		>=dev-util/hip-7.0:=
+		>=sci-libs/hipBLAS-7.0:=[${ROCM_USEDEP}]
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	sycl? ( sci-libs/mkl:= )

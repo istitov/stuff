@@ -3,7 +3,10 @@
 
 EAPI=8
 
-ROCM_VERSION="7.0"
+# Selects rocm.eclass's 10.x target list, the first with gfx1152/gfx1153.
+# The hip/hipBLAS floor stays at 7.0 below: ROCM_USEDEP already requires a
+# hipBLAS built for every enabled target.
+ROCM_VERSION="10.0"
 PYTHON_COMPAT=( python3_{12..15} )
 
 inherit cmake cuda flag-o-matic git-r3 rocm linux-info python-any-r1 toolchain-funcs
@@ -55,8 +58,8 @@ CDEPEND="
 	blis? ( sci-libs/blis:= )
 	flexiblas? ( sci-libs/flexiblas:= )
 	rocm? (
-		>=dev-util/hip-${ROCM_VERSION}:=
-		>=sci-libs/hipBLAS-${ROCM_VERSION}:=[${ROCM_USEDEP}]
+		>=dev-util/hip-7.0:=
+		>=sci-libs/hipBLAS-7.0:=[${ROCM_USEDEP}]
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	sycl? ( sci-libs/mkl:= )
