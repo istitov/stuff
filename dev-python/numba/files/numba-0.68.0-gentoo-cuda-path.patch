@@ -1,0 +1,17 @@
+Look for the toolkit under /opt/cuda, where dev-util/nvidia-cuda-toolkit
+installs it, after Conda, CUDA_HOME/CUDA_PATH and /usr/local/cuda. Without
+this, libdevice and libnvvm are not found unless CUDA_HOME is exported.
+
+--- a/numba/cuda/cuda_paths.py
++++ b/numba/cuda/cuda_paths.py
+@@ -118,6 +118,10 @@
+         base = '/usr/local/cuda'
+         if os.path.exists(base):
+             return os.path.join(base, *subdirs)
++        # Gentoo installs dev-util/nvidia-cuda-toolkit under /opt/cuda.
++        base = '/opt/cuda'
++        if os.path.exists(base):
++            return os.path.join(base, *subdirs)
+ 
+ 
+ def get_conda_ctk():

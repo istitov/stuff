@@ -39,6 +39,13 @@ BDEPEND+="
 	<dev-python/numpy-2.6[${PYTHON_USEDEP}]
 "
 
+# The built-in CUDA target finds libdevice and libnvvm only via Conda,
+# CUDA_HOME/CUDA_PATH or /usr/local/cuda; add Gentoo's /opt/cuda last.
+# NUMBA_CUDA_USE_NVIDIA_BINDING=1 still fails: driver.py imports cuda.cuda,
+# which cuda-bindings 13 removed. That mode is opt-in; upstream's fix is the
+# separate numba-cuda target. verified 2026-10-22
+PATCHES=( "${FILESDIR}/${P}-gentoo-cuda-path.patch" )
+
 distutils_enable_tests unittest
 
 pkg_setup() {
