@@ -23,9 +23,11 @@ RDEPEND="
 	>=dev-python/anyio-4.4.0[${PYTHON_USEDEP}]
 	>=dev-python/keyring-25.6.0[${PYTHON_USEDEP}]
 "
+# Upstream caps uv_build <0.12; distutils-r1 calls the backend directly and
+# does not enforce it, and ::gentoo caps no uv-build consumer. Builds with
+# uv-build 0.13.4. verified 2026-10-22
 BDEPEND="
 	>=dev-python/uv-build-0.11.4[${PYTHON_USEDEP}]
-	<dev-python/uv-build-0.12[${PYTHON_USEDEP}]
 "
 
 # Tests require optional backends and development dependencies.
