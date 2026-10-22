@@ -1,0 +1,6 @@
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-10-22)
+# lemonade 2026.43.3 pins TheRock 10.1.0, but AMD has not yet published
+# the 10.1 runfile installer that dev-util/therock-bin packages
+# (repo.radeon.com stops at rocm-rel-10.0). verified 2026-10-22
+# Remove once therock-bin-10.1.0 is in the tree.
+=sci-ml/lemonade-2026.43.3 system-therock
