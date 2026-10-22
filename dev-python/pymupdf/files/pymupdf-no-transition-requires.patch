@@ -1,0 +1,19 @@
+PYMUPDF_SETUP_REQUIRE_LAYOUT_4LLM=0 drops the empty pymupdf_layout and
+pymupdf4llm transition packages from Requires-Dist, but the hyphenated
+pymupdf-layout spelling is added unconditionally. Gate it the same way.
+
+--- a/setup.py
++++ b/setup.py
+@@ -263,11 +263,11 @@
+             'numpy',
+             'onnxruntime',
+             'pyyaml',
+-            f'pymupdf-layout=={version_p}',
+             ]
+ 
+     if PYMUPDF_SETUP_REQUIRE_LAYOUT_4LLM != '0':
+         g_requires_dist += [
++                f'pymupdf-layout=={version_p}',
+                 f'pymupdf_layout=={version_p}',
+                 ]
+ 

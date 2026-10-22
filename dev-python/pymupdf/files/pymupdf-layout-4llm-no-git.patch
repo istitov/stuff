@@ -1,0 +1,44 @@
+Collect the embedded pymupdf_layout and pymupdf4llm sources by walking the
+unpacked release tarballs; pipcl.git_items() runs `git ls-files` and fails
+outside a git checkout.
+
+--- a/setup.py
++++ b/setup.py
+@@ -892,7 +892,7 @@
+         ret.append( (f'{g_root}/src/build/{sharedlibrary_leaf_tgif}', to_dir) )
+         ret.append( (f'{g_root}/src/build/{sharedlibrary_leaf_features}', to_dir) )
+ 
+-        for p in pipcl.git_items(f'{PYMUPDF_SETUP_PATH_LAYOUT}/source/layout'):
++        for p in _tree_items(f'{PYMUPDF_SETUP_PATH_LAYOUT}/source/layout'):
+             ret.append( (f'{PYMUPDF_SETUP_PATH_LAYOUT}/source/layout/{p}', f'{to_dir}layout/{p}'))
+         
+         build_py = ''
+@@ -906,7 +906,7 @@
+     if PYMUPDF_SETUP_PATH_4LLM:
+         # 4llm
+         pipcl.run(f'git config --global --add safe.directory {PYMUPDF_SETUP_PATH_4LLM}', check=0)
+-        for p in pipcl.git_items(f'{PYMUPDF_SETUP_PATH_4LLM}/src'):
++        for p in _tree_items(f'{PYMUPDF_SETUP_PATH_4LLM}/src'):
+             ret.append((f'{PYMUPDF_SETUP_PATH_4LLM}/src/{p}', f'pymupdf4llm/{p}'))
+         ret.append((
+                 textwrap.dedent(f'''
+@@ -925,6 +925,19 @@
+     return ret
+ 
+ 
++def _tree_items(directory):
++    '''
++    Like pipcl.git_items(), but also works on a release tarball that is not a
++    git checkout.
++    '''
++    ret = []
++    for dirpath, dirnames, filenames in os.walk(directory):
++        dirnames[:] = sorted(d for d in dirnames if d != '__pycache__')
++        for filename in sorted(filenames):
++            ret.append(os.path.relpath(os.path.join(dirpath, filename), directory))
++    return ret
++
++
+ def env_add(env, name, value, sep=' ', prepend=False, verbose=False):
+     '''
+     Appends/prepends `<value>` to `env[name]`.

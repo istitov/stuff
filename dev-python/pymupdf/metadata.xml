@@ -12,7 +12,10 @@
     document-loader half of sci-ml/amd-gaia's ui extra (RAG over PDFs).
 
     Builds against system app-text/mupdf via dev-python/mupdf, not the
-    bundled copy in the upstream tarball.
+    bundled copy in the upstream tarball. From 2.0 it also contains the
+    pymupdf.layout document-layout analysis module (ONNX models run by
+    sci-libs/onnxruntime) and the pymupdf4llm Markdown converter, which
+    were separate packages in 1.x.
   </longdescription>
   <upstream>
     <remote-id type="github">pymupdf/pymupdf</remote-id>
