@@ -4,7 +4,7 @@
 EAPI=8
 
 ROCM_VERSION=${PV}
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{10..15} python3_13t )
 
 inherit check-reqs cmake flag-o-matic multiprocessing python-r1 rocm
 
@@ -13,9 +13,8 @@ GTEST_FILE="gtest-1.14.0_p20220421.tar.gz"
 
 DESCRIPTION="High Performance Composable Kernel for AMD GPUs"
 HOMEPAGE="https://github.com/ROCm/composable_kernel"
-# ROCm assets now use therock-<major.minor>; this asset has no name separator.
-MY_BASE="https://github.com/ROCm/rocm-libraries/releases/download/therock-$(ver_cut 1-2)"
-SRC_URI="${MY_BASE}/composablekernel.tar.gz -> ${P}.tar.gz
+SRC_URI="
+	https://github.com/ROCm/rocm-libraries/releases/download/therock-${PV%.0}/composablekernel.tar.gz -> ${P}.tar.gz
 	test? ( https://github.com/google/googletest/archive/${GTEST_COMMIT}.tar.gz -> ${GTEST_FILE} )"
 S="${WORKDIR}/composablekernel"
 
@@ -23,6 +22,8 @@ LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
+# Forked from ::gentoo's 10.1.0 for USE=hiptensor, which sci-libs/hipTensor
+# needs, and the gfx101x DPP kernel fix.
 IUSE="debug hiptensor profiler test"
 REQUIRED_USE="${ROCM_REQUIRED_USE} ${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
@@ -34,32 +35,26 @@ RDEPEND="
 
 DEPEND="${RDEPEND}"
 
-# Vanilla Clang 23 gives amd_wmma.hpp's bf16 builtin an incompatible vector
-# type, so select AMD LLVM through hipcc. Keep this unconditional until a
-# vanilla-LLVM CDNA build is verified. verified 2026-08-30; not re-checked
-# against Clang 24 (2026-10-10).
 BDEPEND="
-	dev-build/rocm-cmake:${SLOT}
-	dev-util/hipcc:${SLOT}[amd-llvm]
+	dev-build/rocm-cmake
 "
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-6.3.0-conditional-kernels.patch.xz
-	"${FILESDIR}"/${PN}-10.0.0-libcxx-includes.patch.xz
 	"${FILESDIR}"/${PN}-10.0.0-expand-isa.patch.xz
 )
 
 ck_check-reqs() {
 	[[ ${MERGE_TYPE} == binary ]] && return
 
-	targets=(${AMDGPU_TARGETS})
+	targets=($AMDGPU_TARGETS)
 	if [[ ${#targets[@]} -gt 1 ]]; then
 		ewarn "composable-kernel will be compiled for multiple GPU architectures,"
 		ewarn "which will take a significant amount of time."
 		ewarn "Please consider setting AMDGPU_TARGETS USE_EXPAND variable to a single architecture."
 	fi
 
-	# CHECKREQS reserves 3 GiB/job; the advisory limit uses 2 GiB/job.
+	# It takes ~3GB of RAM per build thread
 	local user_jobs=$(makeopts_jobs)
 	local available_memory_mb=$(free -m | awk '/Mem:/ {print $7}')
 	local max_jobs=$(( available_memory_mb / 2048 ))
@@ -83,38 +78,29 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Decompress oversized patches into T because eapply cannot read xz payloads.
+	# eapply cannot read xz payloads; the patches are stored compressed.
 	local p b i
 	mkdir "${T}"/patches || die
-	for p in "${FILESDIR}"/*.patch.xz; do
+	for i in "${!PATCHES[@]}"; do
+		p=${PATCHES[i]}
 		b=${p##*/}
 		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
-	done
-	for i in "${!PATCHES[@]}"; do
-		b=${PATCHES[i]##*/}
 		PATCHES[i]="${T}/patches/${b%.xz}"
 	done
 
-	# Require the anchor so upstream -Werror cannot return silently.
-	# verified 2026-08-30
-	grep -q -- '-Werror' cmake/EnableCompilerWarnings.cmake ||
-		die "-Werror anchor moved in EnableCompilerWarnings.cmake"
-	sed -e '/-Werror/d' -i cmake/EnableCompilerWarnings.cmake || die
+	# libc++: device headers use std::map without including <map>
+	sed -e "/^#pragma once/a #include <map>" -i include/ck/utility/common_header.hpp || die
 
-	# Require the anchor so the large example tree cannot return silently.
-	# verified 2026-08-30
-	grep -q 'add_subdirectory(example)' CMakeLists.txt ||
-		die "add_subdirectory(example) anchor moved; the example tree would be built"
-	sed -e "/add_subdirectory(example)/d" -i CMakeLists.txt || die
+	# don't build examples
+	cmake_comment_add_subdirectory example
 
-	# These forced-inlining flags exhaust memory; require both anchors.
-	# llvm-project#86332; verified 2026-08-29
-	local f
-	for f in amdgpu-early-inline-all amdgpu-function-calls; do
-		grep -q -- "${f}" CMakeLists.txt ||
-			die "-${f} anchor moved; build would OOM"
-	done
+	# Flag -amdgpu-early-inline-all explodes memory consumption
+	# https://github.com/llvm/llvm-project/issues/86332
 	sed -e "/-amdgpu-early-inline-all/d" -e "/-amdgpu-function-calls/d" -i CMakeLists.txt || die
+
+	# build ckprofiler with MIOPEN_REQ_LIBS_ONLY if requested
+	sed -e "s/^\(    if (NOT MIOPEN_REQ_LIBS_ONLY AND NOT HIPTENSOR_REQ_LIBS_ONLY\))$/\1 OR CK_USE_PROFILER)/" \
+		-i CMakeLists.txt || die
 
 	cmake_src_prepare
 }
@@ -122,8 +108,6 @@ src_prepare() {
 src_configure() {
 	rocm_use_clang
 
-	# Match AMD's Release build; active assertions abort gfx1150 codegen.
-	# verified 2026-08-30
 	if ! use debug; then
 		append-cflags "-DNDEBUG"
 		append-cxxflags "-DNDEBUG"
@@ -138,22 +122,23 @@ src_configure() {
 		-DGPU_TARGETS="$(get_amdgpu_flags)"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DBUILD_TESTING=$(usex test ON OFF)
-		# Upstream now provides this profiler switch.
-		-DBUILD_CK_PROFILER=$(usex profiler ON OFF)
+		-DCK_USE_PROFILER=$(usex profiler ON OFF)
 
-		# Restrict instances to MIOpen's required set.
+		# Builds 2x less files, but faster.
+		# See https://github.com/ROCm/TheRock/blob/5cb6abaa43ad664c85a99ac37bd4d3abf9b6260e/ml-libs/CMakeLists.txt#L37
 		-DMIOPEN_REQ_LIBS_ONLY=ON
-
-		# This unions hipTensor's contract/reduce/element instances with MIOpen's
-		# convolution set without enabling the full CK set. verified 2026-08-30
+		# Adds hipTensor's contraction, reduction and elementwise instances
+		# to MIOpen's convolution set, without the full instance set.
+		# verified 2026-08-30
 		-DHIPTENSOR_REQ_LIBS_ONLY=$(usex hiptensor ON OFF)
+		-DCMAKE_DISABLE_FIND_PACKAGE_Git=ON
 		-Wno-dev
 	)
 
-	# Enable fallback DL kernels for supported Navi targets.
+	# Navi 1x/2x without WMMA need the fallback DL kernels.
 	if use amdgpu_targets_gfx1010 || use amdgpu_targets_gfx1011 || use amdgpu_targets_gfx1012 \
 	|| use amdgpu_targets_gfx1030 || use amdgpu_targets_gfx1031 ; then
-		mycmakeargs+=(-DDL_KERNELS=ON)
+		mycmakeargs+=( -DDL_KERNELS=ON )
 	fi
 
 	if use test; then
@@ -162,7 +147,8 @@ src_configure() {
 		)
 	fi
 
-	# Configuration calls rocminfo. ROCm/composable_kernel#2994
+	# rocminfo call during configuration; should not happen
+	# Bug: https://github.com/ROCm/composable_kernel/issues/2994
 	rocm_add_sandbox -w
 	addpredict /dev/random
 
@@ -176,7 +162,7 @@ src_install() {
 	installation() {
 		python_domodule python/ck4inductor
 
-		# Install package data manually; upstream is not PEP 517 compliant.
+		# install package-data manually, as there is no PEP517 compliance
 		shopt -s globstar
 		package_data=(
 			include/ck/**/*.hpp
@@ -186,7 +172,7 @@ src_install() {
 
 		inst_path="${D}$(python_get_sitedir)/ck4inductor"
 		for file in "${package_data[@]}"; do
-			location="${inst_path}/$(dirname "${file}")"
+			location="${inst_path}/$(dirname "$file")"
 			mkdir -p "${location}" || die
 			cp "${file}" "${location}" || die
 		done
