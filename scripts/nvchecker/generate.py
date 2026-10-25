@@ -1034,7 +1034,7 @@ SKIP_PKGS: dict[str, str] = {
     # Intentional version pins — upstream advances but a consumer in the
     # tree hard-asserts on a specific version range.
     "dev-python/antlr4-python3-runtime":   "pinned to 4.11.x for sci-ml/lm-eval which asserts version().startswith('4.11')",
-    "dev-libs/hrx-amdxdna-bin":            "pinned to the HRX release sci-ml/fastflowlm names in hrx-integration/hrx-release.env (flm-hrx-amdxdna-v2026.10.13 for 1.0.9); it moves only with a fastflowlm bump, and its date-tagged fork releases would misread as drift",
+    "dev-libs/hrx-amdxdna-bin":            "pinned to the HRX release sci-ml/fastflowlm names in hrx-integration/hrx-release.env (flm-hrx-amdxdna-v2026.10.13 for 1.0.9 and 1.0.10); it moves only with a fastflowlm bump, and its date-tagged fork releases would misread as drift",
     "dev-python/triton":                   _TRITON_TRACKS_TORCH,
     "dev-python/triton-bin":               _TRITON_TRACKS_TORCH,
     "dev-python/pymupdf-layout-bin":       "1.x-only wheel for dev-python/pymupdf-1.28.2; from 2.0 the layout module ships inside dev-python/pymupdf and PyPI pymupdf-layout is an empty transition wheel (verified 2026-10-22), so it goes when 1.28.2 does",
