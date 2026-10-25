@@ -9,7 +9,7 @@
     <flag name="cuda">Build the NVIDIA CUDA backend (requires CUDA Toolkit and a compiler version supported by nvcc)</flag>
     <flag name="portaudio">Build the example CLI tools that record/play audio (portaudio is vendored + statically linked by upstream cmake)</flag>
     <flag name="python">Build and install the Python bindings (pybind11) into site-packages</flag>
-    <flag name="tts">Build text-to-speech support (pulls vendored espeak-ng-for-piper at build time)</flag>
+    <flag name="tts">Build text-to-speech support (before 2.0 this also builds vendored espeak-ng and piper-phonemize)</flag>
     <flag name="websocket">Build the WebSocket server and client examples</flag>
   </use>
   <longdescription>

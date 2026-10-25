@@ -1,0 +1,60 @@
+diff --git a/cmake/eigen.cmake b/cmake/eigen.cmake
+index ef02511..bed5d54 100644
+--- a/cmake/eigen.cmake
++++ b/cmake/eigen.cmake
+@@ -1,17 +1,17 @@
+ function(download_eigen)
+   include(FetchContent)
+ 
+-  set(eigen_URL  "https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.gz")
+-  set(eigen_HASH "SHA256=e9c326dc8c05cd1e044c71f30f1b2e34a6161a3b6ecf445d56b53ff1669e3dec")
++  set(eigen_URL  "https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.bz2")
++  set(eigen_HASH "SHA256=e4de6b08f33fd8b8985d2f204381408c660bffa6170ac65b68ae1bd3cd575c0a")
+ 
+   # If you don't have access to the Internet,
+   # please pre-download eigen
+   set(possible_file_locations
+-    $ENV{HOME}/Downloads/eigen-5.0.1.tar.gz
+-    ${CMAKE_SOURCE_DIR}/eigen-5.0.1.tar.gz
+-    ${CMAKE_BINARY_DIR}/eigen-5.0.1.tar.gz
+-    /tmp/eigen-5.0.1.tar.gz
+-    /star-fj/fangjun/download/github/eigen-5.0.1.tar.gz
++    $ENV{HOME}/Downloads/eigen-5.0.1.tar.bz2
++    ${CMAKE_SOURCE_DIR}/eigen-5.0.1.tar.bz2
++    ${CMAKE_BINARY_DIR}/eigen-5.0.1.tar.bz2
++    /tmp/eigen-5.0.1.tar.bz2
++    /star-fj/fangjun/download/github/eigen-5.0.1.tar.bz2
+   )
+ 
+   foreach(f IN LISTS possible_file_locations)
+diff --git a/cmake/websocketpp.cmake b/cmake/websocketpp.cmake
+index 79b0585..864b929 100644
+--- a/cmake/websocketpp.cmake
++++ b/cmake/websocketpp.cmake
+@@ -2,18 +2,18 @@ function(download_websocketpp)
+   include(FetchContent)
+ 
+   # The latest commit on the develop branch os as 2022-10-22
+-  set(websocketpp_URL  "https://github.com/zaphoyd/websocketpp/archive/b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip")
+-  set(websocketpp_URL2  "https://hf-mirror.com/csukuangfj/sherpa-onnx-cmake-deps/resolve/main/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip")
+-  set(websocketpp_HASH "SHA256=1385135ede8191a7fbef9ec8099e3c5a673d48df0c143958216cd1690567f583")
++  set(websocketpp_URL  "https://github.com/zaphoyd/websocketpp/archive/b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz")
++  set(websocketpp_URL2)
++  set(websocketpp_HASH "SHA256=167a44121a332e71c51608e08c741c3d3b462f06eba06d4b4882b268cd944f36")
+ 
+   # If you don't have access to the Internet,
+   # please pre-download websocketpp
+   set(possible_file_locations
+-    $ENV{HOME}/Downloads/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+-    ${CMAKE_SOURCE_DIR}/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+-    ${CMAKE_BINARY_DIR}/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+-    /tmp/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
+-    /star-fj/fangjun/download/github/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.zip
++    $ENV{HOME}/Downloads/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
++    ${CMAKE_SOURCE_DIR}/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
++    ${CMAKE_BINARY_DIR}/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
++    /tmp/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
++    /star-fj/fangjun/download/github/websocketpp-b9aeec6eaf3d5610503439b4fae3581d9aff08e8.tar.gz
+   )
+ 
+   foreach(f IN LISTS possible_file_locations)
