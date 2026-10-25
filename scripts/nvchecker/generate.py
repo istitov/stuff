@@ -1037,6 +1037,7 @@ SKIP_PKGS: dict[str, str] = {
     "dev-libs/hrx-amdxdna-bin":            "pinned to the HRX release sci-ml/fastflowlm names in hrx-integration/hrx-release.env (flm-hrx-amdxdna-v2026.10.13 for 1.0.9); it moves only with a fastflowlm bump, and its date-tagged fork releases would misread as drift",
     "dev-python/triton":                   _TRITON_TRACKS_TORCH,
     "dev-python/triton-bin":               _TRITON_TRACKS_TORCH,
+    "dev-python/pymupdf-layout-bin":       "1.x-only wheel for dev-python/pymupdf-1.28.2; from 2.0 the layout module ships inside dev-python/pymupdf and PyPI pymupdf-layout is an empty transition wheel (verified 2026-10-22), so it goes when 1.28.2 does",
     # Snapshots ahead of upstream's only tag.
     "sci-ml/bigcode-eval":                 "we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind",
     "media-plugins/deadbeef-fb":            "we track a 2023 main snapshot; upstream's newest release tag is 20160216",

@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (294) ---
+# --- pypi (293) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -749,10 +749,6 @@ pypi = "pymeshfix"
 ["dev-python/pympler"]
 source = "pypi"
 pypi = "pympler"
-
-["dev-python/pymupdf-layout-bin"]
-source = "pypi"
-pypi = "pymupdf-layout"
 
 ["dev-python/pymupdf4llm"]
 source = "pypi"
@@ -3086,6 +3082,7 @@ prefix = "v"
 # ["dev-python/pycairo-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygobject"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/pygtk"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
+# ["dev-python/pymupdf-layout-bin"] skipped: 1.x-only wheel for dev-python/pymupdf-1.28.2; from 2.0 the layout module ships inside dev-python/pymupdf and PyPI pymupdf-layout is an empty transition wheel (verified 2026-10-22), so it goes when 1.28.2 does
 # ["dev-python/pyside"] skipped: custom upstream at wiki.qt.io; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-python/setuptools-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
 # ["dev-python/setuptools_scm-python2"] skipped: py2-pinned: upstream has moved past py2 support; drift tracking would produce permanent false positives
