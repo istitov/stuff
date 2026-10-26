@@ -1,0 +1,28 @@
+Keep Studio workers on the system transformers in a Gentoo system install.
+
+Studio's training, inference and export workers prepend a per-model
+transformers sidecar (~/.unsloth/studio/.venv_t5_530, _550, _510,
+.venv_t4_457, .venv_t5_latest) to sys.path. Those sidecars are installed
+with --no-deps, so they run against the system tokenizers and friends;
+transformers 5.5.0 then refuses tokenizers 0.23.3 and training fails with
+"Failed to import ML libraries". UNSLOTH_STUDIO_SYSTEM=1, set by the
+unsloth-studio wrapper and by unsloth-desktop, now skips the sidecars.
+
+Bug: https://github.com/istitov/stuff/issues/303
+
+--- a/studio/backend/utils/transformers_version.py
++++ b/studio/backend/utils/transformers_version.py
+@@ -434,6 +434,13 @@
+ 
+ def activate_transformers_for_subprocess(model_name: str, hf_token: str | None = None) -> None:
+     """Must run before ML imports; token forwarded for gated repos; full checkpoints tier by local config.json, since _name_or_path may be unreachable."""
++    # Gentoo system install (sci-ml/unsloth[studio]): workers run on the
++    # system transformers. The ~/.unsloth/studio/.venv_t* sidecars hold
++    # --no-deps transformers pins whose bounds the system packages do not
++    # meet (transformers 5.5.0 rejects tokenizers 0.23.3, for one).
++    if os.environ.get("UNSLOTH_STUDIO_SYSTEM") == "1":
++        logger.info("System install: using the system transformers for %s", model_name)
++        return
+     tier = get_transformers_activation_tier(model_name, hf_token)
+ 
+     if tier == "latest":

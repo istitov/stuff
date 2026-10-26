@@ -124,6 +124,10 @@ src_prepare() {
 	# 2026.10.1 reworked studio.py, but both hunks still land after the
 	# in_studio_venv assignment. Verified 2026-10-09.
 	use studio && PATCHES+=( "${FILESDIR}/${PN}-2026.9.12-system-studio.patch" )
+	# In the same mode, keep workers off the ~/.unsloth/studio transformers
+	# sidecars, whose --no-deps pins reject the system tokenizers.
+	# Verified 2026-10-26.
+	use studio && PATCHES+=( "${FILESDIR}/${PN}-2026.10.9-system-transformers.patch" )
 
 	# find_packages includes 88 KiB of MoE tests absent from upstream's wheel.
 	# Verified 2026-09-10.
