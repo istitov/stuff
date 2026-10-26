@@ -35,7 +35,13 @@ else
 fi
 
 # Let tarballs inject version metadata; live builds retain git describe.
-PATCHES=( "${FILESDIR}/${PN}-embed-version.patch" )
+PATCHES=(
+	"${FILESDIR}/${PN}-embed-version.patch"
+	# ROCm 10.1's stock LLVM 23 rejects __bf16 vectors for the bf16
+	# WMMA/MFMA builtins in the bundled ggml; same fix as
+	# sci-misc/llama-cpp. verified 2026-10-26
+	"${FILESDIR}/${PN}-hip-bf16-builtin-args.patch"
+)
 
 # Bundled Oniguruma is BSD-2; utf8proc is MIT with Unicode data; darts-clone
 # is BSD; kuba--/zip is Unlicense. verified 2026-10-22
