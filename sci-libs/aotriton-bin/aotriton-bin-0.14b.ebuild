@@ -22,7 +22,8 @@ IMAGES_URI_PREFIX="${URI_PREFIX}/${MY_P}-images-amd"
 # verified 2026-09-21. Upstream added a 7.15 shim to the 0.14b release later
 # that day (asset uploaded 2026-09-21 17:43 UTC). 0.14.2b uses its 7.15 shim;
 # switching this version would change the rocm10.0 distfile's contents under
-# the same name. checked 2026-09-26
+# the same name. checked 2026-09-26. ROCm 10.1 reports HIP 7.16, which the
+# 7.16 shim matches exactly, so it is renamed to rocm10.1. verified 2026-10-26
 SRC_URI="
 	${SHIM_URI_PREFIX}-rocm6.4-shared.tar.gz
 	${SHIM_URI_PREFIX}-rocm7.0-shared.tar.gz
@@ -30,6 +31,8 @@ SRC_URI="
 	${SHIM_URI_PREFIX}-rocm7.2-shared.tar.gz
 	${SHIM_URI_PREFIX}-rocm7.14-shared.tar.gz
 		-> ${MY_P}-manylinux_2_28_x86_64-rocm10.0-shared.tar.gz
+	${SHIM_URI_PREFIX}-rocm7.16-shared.tar.gz
+		-> ${MY_P}-manylinux_2_28_x86_64-rocm10.1-shared.tar.gz
 
 	amdgpu_targets_gfx90a? ( ${IMAGES_URI_PREFIX}-gfx90a.tar.gz )
 	amdgpu_targets_gfx942? ( ${IMAGES_URI_PREFIX}-gfx942.tar.gz )
@@ -106,7 +109,7 @@ src_unpack() {
 
 	# Reject HIP versions omitted from upstream's sparse shim set.
 	[[ -n ${shim_found} ]] ||
-		die "no aotriton shim for dev-util/hip-${rocmver}; SRC_URI lists rocm6.4/7.0/7.1/7.2 and rocm7.14 (as rocm10.0)"
+		die "no aotriton shim for dev-util/hip-${rocmver}; SRC_URI lists rocm6.4/7.0/7.1/7.2, rocm7.14 (as rocm10.0) and rocm7.16 (as rocm10.1)"
 }
 
 src_install() {

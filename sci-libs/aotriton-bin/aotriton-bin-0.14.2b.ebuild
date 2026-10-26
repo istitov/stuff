@@ -13,9 +13,9 @@ URI_PREFIX="https://github.com/ROCm/${MY_PN}/releases/download/${PV}"
 SHIM_URI_PREFIX="${URI_PREFIX}/${MY_P}-manylinux_2_28_x86_64"
 IMAGES_URI_PREFIX="${URI_PREFIX}/${MY_P}-images-amd"
 
-# Fetch all small ROCm shims but unpack only the installed version. ROCm 10
-# reports HIP 7.15, so rename that shim to rocm10.0 for selection. gfx1250 has
-# its own image. verified 2026-09-26
+# Fetch all small ROCm shims but unpack only the installed version. ROCm 10.0
+# and 10.1 report HIP 7.15 and 7.16, so rename those shims to rocm10.0 and
+# rocm10.1 for selection. gfx1250 has its own image. verified 2026-10-26
 SRC_URI="
 	${SHIM_URI_PREFIX}-rocm6.4-shared.tar.gz
 	${SHIM_URI_PREFIX}-rocm7.0-shared.tar.gz
@@ -23,6 +23,8 @@ SRC_URI="
 	${SHIM_URI_PREFIX}-rocm7.2-shared.tar.gz
 	${SHIM_URI_PREFIX}-rocm7.15-shared.tar.gz
 		-> ${MY_P}-manylinux_2_28_x86_64-rocm10.0-shared.tar.gz
+	${SHIM_URI_PREFIX}-rocm7.16-shared.tar.gz
+		-> ${MY_P}-manylinux_2_28_x86_64-rocm10.1-shared.tar.gz
 
 	amdgpu_targets_gfx90a? ( ${IMAGES_URI_PREFIX}-gfx90a.tar.gz )
 	amdgpu_targets_gfx942? ( ${IMAGES_URI_PREFIX}-gfx942.tar.gz )
@@ -99,7 +101,7 @@ src_unpack() {
 
 	# Reject HIP versions omitted from upstream's sparse shim set.
 	[[ -n ${shim_found} ]] ||
-		die "no aotriton shim for dev-util/hip-${rocmver}; SRC_URI lists rocm6.4/7.0/7.1/7.2 and rocm7.15 (as rocm10.0)"
+		die "no aotriton shim for dev-util/hip-${rocmver}; SRC_URI lists rocm6.4/7.0/7.1/7.2, rocm7.15 (as rocm10.0) and rocm7.16 (as rocm10.1)"
 }
 
 src_install() {
