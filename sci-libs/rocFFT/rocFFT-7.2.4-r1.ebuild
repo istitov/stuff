@@ -132,7 +132,7 @@ src_install() {
 		cd "${BUILD_DIR}"/clients/staging || die
 		dobin dyna-rocfft-bench rocfft-bench
 		dosym dyna-rocfft-bench /usr/bin/dyna-rocfft-rider
-		dosym rocfft-bench /usr/bin/dyna-rocfft-rider
+		dosym rocfft-bench /usr/bin/rocfft-rider
 
 		if ! use perfscripts; then
 			# Avoid collision with dev-util/perf.
