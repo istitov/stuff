@@ -36,15 +36,9 @@ sci-ml/unsloth-desktop-bin
 # ROCm 10.1 follows ::gentoo, which builds it on LLVM 23. These are the
 # overlay's own 10.1.0 ebuilds (components ::gentoo does not ship, plus the
 # composable-kernel fork), still awaiting a build-check against that stack.
-# Lift each entry once it passes; rocprofiler-register and rocm-smi are
-# already built and installed here.
+# Lift each entry once it passes. rdc needs net-libs/grpc and hipTensor
+# needs composable-kernel[hiptensor] installed to build; the fork's own
+# build-check is pending. verified 2026-10-26
 ~app-admin/rdc-10.1.0
-~dev-debug/rocr-debug-agent-10.1.0
-~media-libs/rocDecode-10.1.0
-~media-libs/rocJPEG-10.1.0
 =sci-libs/composable-kernel-10.1.0-r90
 ~sci-libs/hipTensor-10.1.0
-~sci-libs/rocALUTION-10.1.0
-~sys-apps/cuid-10.1.0
-~sys-cluster/rocSHMEM-10.1.0
-~sys-libs/hipFile-10.1.0
