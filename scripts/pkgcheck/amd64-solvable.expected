@@ -7,3 +7,9 @@
 # only as an unkeyworded live ebuild. system-kokoro is off by default, and
 # enabling it means accepting that live package. accepted 2026-10-03
 sci-ml/lemonade sci-ml/kokoros
+
+# lemonade 2026.43.3 bounds system-therock to therock-bin 10.1, whose
+# runfile installer AMD has not published. profiles/package.use.mask masks
+# the flag for that version for Portage, but this check still reports the
+# dependency. Remove with that mask. accepted 2026-10-26
+sci-ml/lemonade >=dev-util/therock-bin-10.1.0
