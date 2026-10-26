@@ -108,6 +108,9 @@ src_prepare() {
 	if ! grep -q '#include <fstream>' common/common.h; then
 		eapply "${FILESDIR}/${PN}-gcc17-fstream.patch"
 	fi
+	# ROCm 10.1's stock LLVM 23 rejects __bf16 vectors for the bf16
+	# WMMA/MFMA builtins; same fix as sci-misc/llama-cpp. Verified 2026-10-26
+	eapply "${FILESDIR}/${PN}-llama-cpp-hip-bf16-builtin-args.patch"
 	popd >/dev/null || die
 
 	# Do not apply llama/compat here: the symlinked ExternalProject retains
