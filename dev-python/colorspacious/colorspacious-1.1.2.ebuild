@@ -17,18 +17,32 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="doc"
 
 RDEPEND="dev-python/numpy[${PYTHON_USEDEP}]"
+# The docs build once, under any implementation that has the Sphinx stack;
+# ::gentoo's sphinxcontrib-bibtex lacks python3_12. verified 2026-10-26
 BDEPEND="${RDEPEND}
 	doc? (
-		${RDEPEND}
-		dev-python/sphinxcontrib-bibtex[${PYTHON_USEDEP}]
-		dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
-		dev-python/ipython[${PYTHON_USEDEP}]
-		dev-python/matplotlib[${PYTHON_USEDEP}]
+		$(python_gen_any_dep '
+			dev-python/ipython[${PYTHON_USEDEP}]
+			dev-python/matplotlib[${PYTHON_USEDEP}]
+			dev-python/numpy[${PYTHON_USEDEP}]
+			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
+			dev-python/sphinxcontrib-bibtex[${PYTHON_USEDEP}]
+		')
 		media-gfx/graphviz
 	)
 "
 
 PATCHES=( "${FILESDIR}"/${P}-fix-deprecated-confpy.patch )
+
+python_check_deps() {
+	use doc || return 0
+	python_has_version \
+		"dev-python/ipython[${PYTHON_USEDEP}]" \
+		"dev-python/matplotlib[${PYTHON_USEDEP}]" \
+		"dev-python/numpy[${PYTHON_USEDEP}]" \
+		"dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]" \
+		"dev-python/sphinxcontrib-bibtex[${PYTHON_USEDEP}]"
+}
 
 python_compile_all() {
 	if use doc; then
