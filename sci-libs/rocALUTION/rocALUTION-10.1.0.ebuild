@@ -5,7 +5,7 @@ EAPI=8
 
 ROCM_VERSION=${PV}
 
-inherit cmake rocm
+inherit cmake rocm toolchain-funcs
 
 DESCRIPTION="Sparse iterative solvers and preconditioners on the ROCm platform"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocalution"
@@ -37,11 +37,19 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	sci-libs/rocPRIM:${SLOT}
+	test? ( dev-cpp/gtest )
 "
 BDEPEND="
 	dev-build/rocm-cmake:${SLOT}
-	test? ( dev-cpp/gtest )
 "
+
+pkg_pretend() {
+	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
+}
+
+pkg_setup() {
+	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
+}
 
 src_configure() {
 	rocm_use_clang
