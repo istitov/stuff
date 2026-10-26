@@ -46,11 +46,11 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	sci-libs/composable-kernel:${SLOT}[hiptensor]
+	sci-libs/composable-kernel:${SLOT}[hiptensor(-)]
+	test? ( dev-cpp/gtest )
 "
 BDEPEND="
 	dev-build/rocm-cmake:${SLOT}
-	test? ( dev-cpp/gtest )
 "
 
 # RDNA builds but is unusable in 10.0: gfx1150 contraction returns ARCH_MISMATCH;
