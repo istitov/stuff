@@ -1,0 +1,308 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+CRATES="
+	adler2@2.0.1
+	aho-corasick@1.1.4
+	allocator-api2@0.2.21
+	android_system_properties@0.1.5
+	anstream@0.6.21
+	anstyle-parse@0.2.7
+	anstyle-query@1.1.5
+	anstyle-wincon@3.0.11
+	anstyle@1.0.13
+	anyhow@1.0.102
+	autocfg@1.5.0
+	base64@0.22.1
+	bitflags@2.11.0
+	block-buffer@0.10.4
+	bstr@1.12.1
+	bumpalo@3.20.2
+	cassowary@0.3.0
+	castaway@0.2.4
+	cc@1.2.56
+	cfg-if@1.0.4
+	chrono@0.4.44
+	clap@4.5.60
+	clap_builder@4.5.60
+	clap_derive@4.5.55
+	clap_lex@1.0.0
+	codepage@0.1.2
+	colorchoice@1.0.4
+	colored@3.1.1
+	compact_str@0.8.2
+	core-foundation-sys@0.8.7
+	core_detect@1.0.0
+	cpufeatures@0.2.17
+	crc32fast@1.5.0
+	crossbeam-deque@0.8.6
+	crossbeam-epoch@0.9.21
+	crossbeam-utils@0.8.21
+	crossterm@0.28.1
+	crossterm_winapi@0.9.1
+	crypto-common@0.1.7
+	darling@0.24.1
+	darling_core@0.24.1
+	darling_macro@0.24.1
+	digest@0.10.7
+	dirs-sys@0.5.0
+	dirs@7.0.0
+	displaydoc@0.2.5
+	either@1.18.0
+	encoding_rs@0.8.42
+	equivalent@1.0.2
+	errno@0.3.14
+	fallible-iterator@0.3.0
+	fallible-streaming-iterator@0.1.9
+	fastrand@2.3.0
+	find-msvc-tools@0.1.9
+	flate2@1.1.9
+	foldhash@0.1.5
+	form_urlencoded@1.2.2
+	generic-array@0.14.7
+	getrandom@0.2.17
+	getrandom@0.4.2
+	globset@0.4.18
+	hashbrown@0.15.5
+	hashbrown@0.16.1
+	hashlink@0.10.0
+	heck@0.5.0
+	htmd@0.5.5
+	html5ever@0.38.0
+	iana-time-zone-haiku@0.1.2
+	iana-time-zone@0.1.65
+	icu_collections@2.1.1
+	icu_locale_core@2.1.1
+	icu_normalizer@2.1.1
+	icu_normalizer_data@2.1.1
+	icu_properties@2.1.2
+	icu_properties_data@2.1.2
+	icu_provider@2.1.1
+	id-arena@2.3.0
+	ident_case@1.0.1
+	idna@1.1.0
+	idna_adapter@1.2.1
+	ignore@0.4.32
+	indexmap@2.13.0
+	indoc@2.0.7
+	instability@0.3.13
+	is_terminal_polyfill@1.70.2
+	itertools@0.13.0
+	itoa@1.0.17
+	js-sys@0.3.91
+	leb128fmt@0.1.0
+	libc@0.2.182
+	libredox@0.1.14
+	libsqlite3-sys@0.32.0
+	linux-raw-sys@0.12.1
+	linux-raw-sys@0.4.15
+	litemap@0.8.1
+	lock_api@0.4.14
+	log@0.4.29
+	lru@0.12.5
+	markup5ever@0.38.0
+	markup5ever_rcdom@0.38.0+unofficial
+	memchr@2.8.0
+	miniz_oxide@0.8.9
+	mio@1.1.1
+	multiversion_no_op@1.0.0
+	new_debug_unreachable@1.0.6
+	num-traits@0.2.19
+	oem_cp@2.1.2
+	once_cell@1.21.3
+	once_cell_polyfill@1.70.2
+	option-ext@0.2.0
+	parking_lot@0.12.5
+	parking_lot_core@0.9.12
+	paste@1.0.15
+	percent-encoding@2.3.2
+	phf@0.11.3
+	phf@0.13.1
+	phf_codegen@0.13.1
+	phf_generator@0.13.1
+	phf_macros@0.13.1
+	phf_shared@0.11.3
+	phf_shared@0.13.1
+	pkg-config@0.3.32
+	potential_utf@0.1.4
+	precomputed-hash@0.1.1
+	prettyplease@0.2.37
+	proc-macro2@1.0.106
+	quick-xml@0.37.5
+	quote@1.0.45
+	r-efi@6.0.0
+	ratatui@0.29.0
+	redox_syscall@0.5.18
+	redox_users@0.5.3
+	regex-automata@0.4.14
+	regex-syntax@0.8.10
+	regex@1.12.3
+	ring@0.17.14
+	rusqlite@0.34.0
+	rustix@0.38.44
+	rustix@1.1.4
+	rustls-pki-types@1.14.0
+	rustls-webpki@0.103.15
+	rustls@0.23.45
+	rustversion@1.0.22
+	ryu@1.0.23
+	same-file@1.0.6
+	scopeguard@1.2.0
+	semver@1.0.27
+	serde@1.0.229
+	serde_core@1.0.229
+	serde_derive@1.0.229
+	serde_json@1.0.149
+	serde_spanned@0.6.9
+	sha2@0.10.9
+	shlex@1.3.0
+	signal-hook-mio@0.2.5
+	signal-hook-registry@1.4.8
+	signal-hook@0.3.18
+	simd-adler32@0.3.8
+	simdutf8@0.1.5
+	siphasher@1.0.3
+	smallvec@1.15.1
+	stable_deref_trait@1.2.1
+	static_assertions@1.1.0
+	string_cache@0.9.0
+	string_cache_codegen@0.6.1
+	strsim@0.11.1
+	strum@0.26.3
+	strum_macros@0.26.4
+	subtle@2.6.1
+	syn@2.0.117
+	syn@3.0.5
+	synstructure@0.13.2
+	temp-env@0.3.6
+	tempfile@3.26.0
+	tendril@0.5.1
+	thiserror-impl@2.0.20
+	thiserror@2.0.20
+	tinystr@0.8.2
+	toml@0.8.23
+	toml_datetime@0.6.11
+	toml_edit@0.22.27
+	toml_write@0.1.2
+	toon-format@0.5.0
+	typenum@1.19.0
+	unicode-ident@1.0.24
+	unicode-segmentation@1.13.3
+	unicode-truncate@1.1.0
+	unicode-width@0.1.14
+	unicode-width@0.2.0
+	unicode-xid@0.2.6
+	untrusted@0.9.0
+	ureq@2.12.1
+	url@2.5.8
+	utf8_iter@1.0.4
+	utf8parse@0.2.2
+	vcpkg@0.2.15
+	version_check@0.9.5
+	walkdir@2.5.0
+	wasi@0.11.1+wasi-snapshot-preview1
+	wasip2@1.0.2+wasi-0.2.9
+	wasip3@0.4.0+wasi-0.3.0-rc-2026-01-06
+	wasm-bindgen-macro-support@0.2.114
+	wasm-bindgen-macro@0.2.114
+	wasm-bindgen-shared@0.2.114
+	wasm-bindgen@0.2.114
+	wasm-encoder@0.244.0
+	wasm-metadata@0.244.0
+	wasmparser@0.244.0
+	web_atoms@0.2.6
+	webpki-roots@0.26.11
+	webpki-roots@1.0.6
+	which@8.0.6
+	winapi-i686-pc-windows-gnu@0.4.0
+	winapi-util@0.1.11
+	winapi-x86_64-pc-windows-gnu@0.4.0
+	winapi@0.3.9
+	windows-core@0.62.2
+	windows-implement@0.60.2
+	windows-interface@0.59.3
+	windows-link@0.2.1
+	windows-result@0.4.1
+	windows-strings@0.5.1
+	windows-sys@0.52.0
+	windows-sys@0.61.2
+	windows-targets@0.52.6
+	windows_aarch64_gnullvm@0.52.6
+	windows_aarch64_msvc@0.52.6
+	windows_i686_gnu@0.52.6
+	windows_i686_gnullvm@0.52.6
+	windows_i686_msvc@0.52.6
+	windows_x86_64_gnu@0.52.6
+	windows_x86_64_gnullvm@0.52.6
+	windows_x86_64_msvc@0.52.6
+	winnow@0.7.15
+	wit-bindgen-core@0.51.0
+	wit-bindgen-rust-macro@0.51.0
+	wit-bindgen-rust@0.51.0
+	wit-bindgen@0.51.0
+	wit-component@0.244.0
+	wit-parser@0.244.0
+	writeable@0.6.2
+	xml5ever@0.38.0
+	yoke-derive@0.8.1
+	yoke@0.8.1
+	zerofrom-derive@0.1.6
+	zerofrom@0.1.6
+	zeroize@1.8.2
+	zerotrie@0.2.3
+	zerovec-derive@0.11.2
+	zerovec@0.11.5
+	zmij@1.0.21
+"
+
+RUST_MIN_VER="1.91.0"
+inherit cargo
+
+DESCRIPTION="Rust Token Killer — CLI proxy that reduces LLM token consumption"
+HOMEPAGE="
+	https://www.rtk-ai.app/
+	https://github.com/rtk-ai/rtk
+"
+SRC_URI="
+	https://github.com/rtk-ai/rtk/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
+	${CARGO_CRATE_URIS}
+"
+
+# The default build links the rtk-engine compression core, which is
+# BUSL-1.1 with an Additional Use Grant; USE=-engine builds the Apache-2.0
+# edition without it. verified 2026-10-14
+LICENSE="Apache-2.0 engine? ( BUSL-1.1 )"
+# Dependent crate licenses
+LICENSE+="
+	Apache-2.0 BSD CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0 ZLIB
+"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="+engine"
+
+# rusqlite enables the bundled SQLite of libsqlite3-sys 0.32, which checks
+# LIBSQLITE3_SYS_USE_PKG_CONFIG first, so link the system library instead.
+# The one LIKE query only feeds telemetry, so the ICU slowdown of
+# bug #959120 does not apply. verified 2026-10-02
+DEPEND="dev-db/sqlite:3"
+RDEPEND="${DEPEND}"
+BDEPEND="virtual/pkgconfig"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-1.0.0-cargo-lock-rustsec.patch"
+)
+
+src_configure() {
+	export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
+	local myfeatures=( $(usev engine) )
+	cargo_src_configure --no-default-features
+}
+
+src_install() {
+	cargo_src_install
+	if use engine; then
+		newdoc engine/LICENSE LICENSE-ENGINE
+	fi
+}
