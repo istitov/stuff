@@ -23,12 +23,12 @@ RESTRICT="!test? ( test )"
 # The release omits its glog/fmt submodules, so disable configure-time fetching
 # and use system libraries. Direct SONAME links require := rebuild operators.
 # verified 2026-08-30
-DEPEND="
+RDEPEND="
 	dev-cpp/glog:=
 	dev-libs/libfmt:=
 "
-RDEPEND="${DEPEND}"
-BDEPEND="
+DEPEND="
+	${RDEPEND}
 	test? ( dev-cpp/gtest )
 "
 
