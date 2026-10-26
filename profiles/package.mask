@@ -31,14 +31,3 @@ app-portage/portopts
 # users opt in to that runtime self-bootstrap (and the beta status)
 # consciously. Lift once a version reuses system packages, or drop the beta tag.
 sci-ml/unsloth-desktop-bin
-
-# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-10-26)
-# ROCm 10.1 follows ::gentoo, which builds it on LLVM 23. These are the
-# overlay's own 10.1.0 ebuilds (components ::gentoo does not ship, plus the
-# composable-kernel fork), still awaiting a build-check against that stack.
-# Lift each entry once it passes. rdc needs net-libs/grpc and hipTensor
-# needs composable-kernel[hiptensor] installed to build; the fork's own
-# build-check is pending. verified 2026-10-26
-~app-admin/rdc-10.1.0
-=sci-libs/composable-kernel-10.1.0-r90
-~sci-libs/hipTensor-10.1.0
