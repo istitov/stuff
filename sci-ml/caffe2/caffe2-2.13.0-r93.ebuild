@@ -71,6 +71,9 @@ REQUIRED_USE="
 # torch._C moved here in 2.13; block older pytorch copies before merge.
 # Upstream aotriton-0.12b lacks ROCm 10's rocm7.15 shim; 0.13b keeps the ABI
 # and adds it. This remains a system dependency. verified 2026-08-30
+# ROCm stays below 10.1: the composable_kernel snapshot (7fe50dc) does not
+# build with its compiler, whose matrix builtins take ext_vector operands;
+# 2.14.x carries the fix. verified 2026-10-26
 RDEPEND="
 	${PYTHON_DEPS}
 	!!<sci-ml/pytorch-2.13.0
@@ -108,22 +111,22 @@ RDEPEND="
 		dev-libs/pthreadpool
 	)
 	rocm? (
-		nccl? ( >=dev-libs/rccl-6.3:= <dev-libs/rccl-11:= )
-		>=dev-util/hip-6.3:=       <dev-util/hip-11:=
-		>=dev-util/roctracer-6.3:= <dev-util/roctracer-11:=
-		>=sci-libs/hipBLAS-6.3:=   <sci-libs/hipBLAS-11:=[rocsolver(+)]
-		>=sci-libs/hipBLASLt-6.3:= <sci-libs/hipBLASLt-11:=
-		>=sci-libs/hipFFT-6.3:=    <sci-libs/hipFFT-11:=
-		>=sci-libs/hipRAND-6.3:=   <sci-libs/hipRAND-11:=
-		>=sci-libs/hipSOLVER-6.3:= <sci-libs/hipSOLVER-11:=
-		>=sci-libs/hipSPARSE-6.3:= <sci-libs/hipSPARSE-11:=
-		>=sci-libs/miopen-6.3:=    <sci-libs/miopen-11:=
-		>=sci-libs/rocBLAS-6.3:=   <sci-libs/rocBLAS-11:=
-		>=sci-libs/rocRAND-6.3:=   <sci-libs/rocRAND-11:=
-		>=sci-libs/rocSOLVER-6.3:= <sci-libs/rocSOLVER-11:=
+		nccl? ( >=dev-libs/rccl-6.3:= <dev-libs/rccl-10.1:= )
+		>=dev-util/hip-6.3:=       <dev-util/hip-10.1:=
+		>=dev-util/roctracer-6.3:= <dev-util/roctracer-10.1:=
+		>=sci-libs/hipBLAS-6.3:=   <sci-libs/hipBLAS-10.1:=[rocsolver(+)]
+		>=sci-libs/hipBLASLt-6.3:= <sci-libs/hipBLASLt-10.1:=
+		>=sci-libs/hipFFT-6.3:=    <sci-libs/hipFFT-10.1:=
+		>=sci-libs/hipRAND-6.3:=   <sci-libs/hipRAND-10.1:=
+		>=sci-libs/hipSOLVER-6.3:= <sci-libs/hipSOLVER-10.1:=
+		>=sci-libs/hipSPARSE-6.3:= <sci-libs/hipSPARSE-10.1:=
+		>=sci-libs/miopen-6.3:=    <sci-libs/miopen-10.1:=
+		>=sci-libs/rocBLAS-6.3:=   <sci-libs/rocBLAS-10.1:=
+		>=sci-libs/rocRAND-6.3:=   <sci-libs/rocRAND-10.1:=
+		>=sci-libs/rocSOLVER-6.3:= <sci-libs/rocSOLVER-10.1:=
 		memefficient? ( =sci-libs/aotriton-bin-0.13*:= )
-		distributed? ( >=dev-util/rocm-smi-6.3:= <dev-util/rocm-smi-11:= )
-		cusparselt? ( >=sci-libs/hipsparselt-6.3:= <sci-libs/hipsparselt-11:= )
+		distributed? ( >=dev-util/rocm-smi-6.3:= <dev-util/rocm-smi-10.1:= )
+		cusparselt? ( >=sci-libs/hipsparselt-6.3:= <sci-libs/hipsparselt-10.1:= )
 	)
 	distributed? (
 		!rocm? ( sci-ml/tensorpipe[cuda?] )
@@ -158,9 +161,9 @@ DEPEND="
 	cuda? ( ~dev-libs/cutlass-4.4.2[tools(+)] )
 	onednn? ( sci-ml/ideep )
 	rocm? (
-		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-11:=
-		>=sci-libs/rocPRIM-6.3:=   <sci-libs/rocPRIM-11:=
-		>=sci-libs/rocThrust-6.3:= <sci-libs/rocThrust-11:=
+		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-10.1:=
+		>=sci-libs/rocPRIM-6.3:=   <sci-libs/rocPRIM-10.1:=
+		>=sci-libs/rocThrust-6.3:= <sci-libs/rocThrust-10.1:=
 	)
 	qnnpack? ( dev-libs/clog )
 "
