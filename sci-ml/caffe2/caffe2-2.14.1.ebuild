@@ -320,6 +320,11 @@ src_prepare() {
 		# verified 2026-09-02
 		pushd "${WORKDIR}/composable_kernel-${CK_COMMIT}" > /dev/null || die
 		eapply "${T}"/patches/composable-kernel-5a74dec0-expand-isa.patch
+		# The ROCm 10.1 compiler moved the AMDGPU builtins to ext_vector
+		# types; backport CK's adaptation for it. verified 2026-10-26
+		if has_version ">=dev-util/hip-10.1"; then
+			eapply "${T}"/patches/composable-kernel-5a74dec0-ext-vector.patch
+		fi
 		popd > /dev/null || die
 
 		# Work around LLVM issue https://github.com/llvm/llvm-project/issues/100802.
