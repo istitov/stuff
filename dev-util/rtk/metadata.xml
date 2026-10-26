@@ -11,6 +11,9 @@
     developer commands (cargo, npm, pytest, etc.) before it reaches
     your LLM session. Single Rust binary, no runtime dependencies.
   </longdescription>
+  <use>
+    <flag name="engine">Link the rtk-engine compression core, licensed BUSL-1.1 with an Additional Use Grant</flag>
+  </use>
   <upstream>
     <remote-id type="github">rtk-ai/rtk</remote-id>
   </upstream>
