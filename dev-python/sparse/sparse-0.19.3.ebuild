@@ -1,0 +1,34 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{12..14} )
+
+inherit distutils-r1 pypi
+
+DESCRIPTION="Sparse multi-dimensional arrays for the PyData ecosystem"
+HOMEPAGE="
+	https://github.com/pydata/sparse
+	https://pypi.org/project/sparse/
+"
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="~amd64 ~arm ~arm64"
+
+RDEPEND="
+	>=dev-python/numpy-1.17[${PYTHON_USEDEP}]
+	>=dev-python/numba-0.49[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	>=dev-python/setuptools-64[${PYTHON_USEDEP}]
+	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+"
+
+# Pin the version in the VCS-less sdist.
+export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+
+# Tests are a large Numba/Hypothesis matrix.
+RESTRICT="test"
