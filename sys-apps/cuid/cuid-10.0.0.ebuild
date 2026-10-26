@@ -25,7 +25,10 @@ RESTRICT="!test? ( test )"
 RDEPEND="
 	dev-libs/openssl:=
 "
-DEPEND="${RDEPEND}"
+DEPEND="
+	${RDEPEND}
+	test? ( dev-cpp/gtest )
+"
 
 src_configure() {
 	local mycmakeargs=(
