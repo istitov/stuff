@@ -13,6 +13,12 @@ one persists last week's upstream snapshot as the baseline and reports
 upstream has now," which is the right framing for CI-driven bump
 detection (drift relative to the tree, not relative to time).
 
+With ``--gentoo DIR`` (a ::gentoo checkout), the released ebuilds ::gentoo
+carries for the same package count as well, so the baseline is the newest
+version a user of this overlay can already install. A package the overlay
+follows from ::gentoo (ROCm 10.1 since 2026-10-22) then reports drift only
+once upstream is ahead of both.
+
 Versioned sort order: packaging.version.Version is used after normalising
 Portage-specific suffixes (_pN, _rcN, _alphaN, _betaN, _preN, -rN, and a
 trailing letter such as 0.3.25a) to their PEP 440 equivalents.  Versions
@@ -28,6 +34,7 @@ upstream compares equal.
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sys
@@ -88,7 +95,34 @@ def _pv_sort_key(pv: str) -> tuple:
     return (1, tuple(int_parts), pv)
 
 
+def _released_ebuilds(pkgdir: Path, pkg: str) -> list[tuple[str, Path]]:
+    """Non-live ebuilds in *pkgdir* as (PV, path) pairs."""
+    released = []
+    for eb in pkgdir.glob(f"{pkg}-*.ebuild"):
+        pv = eb.stem[len(pkg) + 1:]
+        base_pv = pv.split("-r")[0]
+        # Live ebuilds use an all-9s PV of live magnitude once the revision
+        # is stripped and dots ignored: 9999, 9999-rN, 999999, 9.9999.
+        # Require >=4 nines so bare real releases like "9" (e.g.
+        # dev-python/pipcl-9), "99", or "999" are not mistaken for live.
+        digits = base_pv.replace(".", "")
+        if len(digits) >= 4 and set(digits) == {"9"}:
+            continue
+        released.append((pv, eb))
+    return released
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument(
+        "--gentoo", metavar="DIR", type=Path,
+        help="::gentoo checkout whose released ebuilds also count")
+    args = parser.parse_args()
+    if args.gentoo is not None and not (args.gentoo / "profiles").is_dir():
+        print(f"error: {args.gentoo} is not a repository checkout",
+              file=sys.stderr)
+        return 2
+
     here = Path(__file__).resolve().parent
     overlay_root = here.parent.parent
     config_path = here / "nvchecker.toml"
@@ -111,21 +145,9 @@ def main() -> int:
         pkgdir = overlay_root / cat / pkg
         if not pkgdir.is_dir():
             continue
-        # Newest non-live ebuild.  Live ebuilds are marked by an all-9s PV:
-        # the standard 9999, revision-bumped 9999-rN, snapshot conventions
-        # like 999999, or dotted variants like 9.9999.  Strip the revision
-        # suffix and check whether what remains is all 9s ignoring dots.
-        released = []
-        for eb in pkgdir.glob(f"{pkg}-*.ebuild"):
-            pv = eb.stem[len(pkg) + 1:]
-            base_pv = pv.split("-r")[0]
-            # Live ebuilds use an all-9s PV of live magnitude (9999, 999999,
-            # 9.9999).  Require >=4 nines so bare real releases like "9" (e.g.
-            # dev-python/pipcl-9), "99", or "999" are not mistaken for live.
-            digits = base_pv.replace(".", "")
-            if len(digits) >= 4 and set(digits) == {"9"}:
-                continue
-            released.append((pv, eb))
+        released = _released_ebuilds(pkgdir, pkg)
+        if args.gentoo is not None and (args.gentoo / cat / pkg).is_dir():
+            released += _released_ebuilds(args.gentoo / cat / pkg, pkg)
         if not released:
             continue
         released.sort(key=lambda pair: _pv_sort_key(pair[0]))

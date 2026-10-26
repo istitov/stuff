@@ -110,6 +110,21 @@ jobs:
           } > ~/.config/nvchecker/keyfile.toml
           chmod 600 ~/.config/nvchecker/keyfile.toml
 
+      # ::gentoo's ebuilds for the tracked packages, so a package counts
+      # as current when ::gentoo already ships the upstream version (the
+      # ROCm 10.1 stack the overlay follows from it). Blob-less and
+      # sparse: only profiles/repo_name and the tracked packages'
+      # ebuilds are fetched, about 19 MB. verified 2026-10-26
+      - name: Fetch ::gentoo ebuilds of tracked packages
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/gentoo"
+          git clone --quiet --depth 1 --filter=blob:none --sparse \
+            https://github.com/gentoo/gentoo.git "$dir"
+          python3 -c 'import tomllib; [print(f"/{k}/*.ebuild") for k in tomllib.load(open("scripts/nvchecker/nvchecker.toml", "rb")) if "/" in k]' \
+            | { echo /profiles/repo_name; cat; } \
+            | git -C "$dir" sparse-checkout set --no-cone --stdin
+
       # Baseline is "current ebuild PVs", not "last week's upstream
       # snapshot". See scripts/nvchecker/tree_baseline.py for the
       # framing — CI cares about drift relative to the tree, not
@@ -119,7 +134,8 @@ jobs:
         run: |
           set -euo pipefail
           baseline="$RUNNER_TEMP/old_ver.json"
-          python3 scripts/nvchecker/tree_baseline.py > "$baseline"
+          python3 scripts/nvchecker/tree_baseline.py \
+            --gentoo "$RUNNER_TEMP/gentoo" > "$baseline"
           entries=$(python3 -c "import json,sys;print(len(json.load(open('${baseline}'))['data']))")
           echo "Baseline entries: ${entries}"
           echo "entries=${entries}" >> "$GITHUB_OUTPUT"

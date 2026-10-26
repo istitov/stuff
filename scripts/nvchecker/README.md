@@ -30,7 +30,7 @@ State lives under `$XDG_STATE_HOME/stuff-nvchecker/` (default
 | `nvchecker.toml` | Generated config: one entry per trackable package, skip comments for untrackable ones |
 | `run.sh` | Cron-friendly runner: executes `nvchecker`, diffs against last run via `nvcmp`, prints drift |
 | `silent_entries.py` | Reports tracked entries missing from two consecutive local-run result sets |
-| `tree_baseline.py` | Emits an nvchecker `oldver` baseline from current ebuild PVs (the CI "what does upstream have that we don't ship?" framing) |
+| `tree_baseline.py` | Emits an nvchecker `oldver` baseline from current ebuild PVs, optionally raised to ::gentoo's (`--gentoo DIR`; the CI "what does upstream have that we don't ship?" framing) |
 | `nvtemplate_audit.py` | Audits per-package version-template *correctness* — detects templates that have gone stale vs upstream's current scheme (silent omission) |
 | `requirements.txt` | Pins the nvchecker version installed by the CI runner |
 
@@ -198,12 +198,15 @@ Pull requests and relevant pushes run a cheap config-drift gate: the workflow
 regenerates `nvchecker.toml` and fails if the committed result is stale. A
 weekly upstream scan runs on Mondays at 06:00 UTC. It builds its baseline from
 current ebuild PVs (via `tree_baseline.py`) rather than persisting last week's
-upstream snapshot, so it answers a different question:
+upstream snapshot, so it answers a different question. It also passes a sparse
+::gentoo checkout (`--gentoo`), so a package counts as current when ::gentoo
+already ships the upstream version, as with the ROCm 10.1 stack the overlay
+follows from it:
 
 | Runner | Baseline | Question answered |
 | ------ | -------- | ----------------- |
 | local cron (`run.sh`) | last run's upstream snapshot | "what changed upstream since last week?" |
-| CI (`nvchecker.yml`) | current ebuild PVs (`tree_baseline.py`) | "what does upstream have that we don't ship?" |
+| CI (`nvchecker.yml`) | newest of current ebuild PVs and ::gentoo's (`tree_baseline.py --gentoo`) | "what does upstream have that neither we nor ::gentoo ship?" |
 
 The two can coexist — the local runner's state lives in
 `$XDG_STATE_HOME` outside the repo and doesn't touch CI in any way.
