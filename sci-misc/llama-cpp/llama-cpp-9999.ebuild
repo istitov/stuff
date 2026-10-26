@@ -108,8 +108,9 @@ pkg_setup() {
 }
 
 PATCHES=(
-	# Stock LLVM 23+ rejects __bf16 vectors for the bf16 WMMA/MFMA builtins.
-	"${FILESDIR}"/${PN}-hip-bf16-builtin-args.patch
+	# Stock LLVM 23+ rejects __bf16 vectors for the bf16 MFMA builtins;
+	# upstream fixed the WMMA half in 9145ddb955. verified 2026-10-26
+	"${FILESDIR}"/${PN}-0.7.0_p11906-hip-bf16-mfma.patch
 )
 
 src_prepare() {
