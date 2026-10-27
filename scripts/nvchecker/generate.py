@@ -1038,6 +1038,7 @@ SKIP_PKGS: dict[str, str] = {
     "dev-python/triton":                   _TRITON_TRACKS_TORCH,
     "dev-python/triton-bin":               _TRITON_TRACKS_TORCH,
     "dev-python/pymupdf-layout-bin":       "1.x-only wheel for dev-python/pymupdf-1.28.2; from 2.0 the layout module ships inside dev-python/pymupdf and PyPI pymupdf-layout is an empty transition wheel (verified 2026-10-22), so it goes when 1.28.2 does",
+    "llvm-core/rocm-llvm":                 "kept only at 10.0.0 for the 10.0 cohort's dev-util/hipcc[amd-llvm]; ::gentoo's hipcc from 10.1 needs no AMD LLVM fork, so 10.1.0 was dropped (2026-10-22) and the package goes with the 10.0 cohort",
     # Snapshots ahead of upstream's only tag.
     "sci-ml/bigcode-eval":                 "we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind",
     "media-plugins/deadbeef-fb":            "we track a 2023 main snapshot; upstream's newest release tag is 20160216",
