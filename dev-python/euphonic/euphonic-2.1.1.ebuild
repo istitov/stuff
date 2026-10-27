@@ -29,6 +29,7 @@ RDEPEND="
 		>=dev-python/threadpoolctl-3.0.0[${PYTHON_USEDEP}]
 		>=dev-python/toolz-0.12.1[${PYTHON_USEDEP}]
 		>=dev-python/typing-extensions-4.0[${PYTHON_USEDEP}]
+		<dev-python/typing-extensions-5[${PYTHON_USEDEP}]
 		matplotlib? ( >=dev-python/matplotlib-3.8.0[${PYTHON_USEDEP}] )
 		phonopy-reader? (
 			>=dev-python/h5py-3.6.0[${PYTHON_USEDEP}]
@@ -37,3 +38,10 @@ RDEPEND="
 	')
 "
 DEPEND="${RDEPEND}"
+
+# Meson executes the build interpreter to locate NumPy headers.
+# pyproject.toml also requires packaging at build time. verified 2026-10-27
+BDEPEND="$(python_gen_cond_dep '
+	>=dev-python/numpy-1.24.0[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
+')"

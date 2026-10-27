@@ -37,3 +37,10 @@ RDEPEND="
 	')
 "
 DEPEND="${RDEPEND}"
+
+# Meson executes the build interpreter to locate NumPy headers.
+# pyproject.toml also requires packaging at build time. verified 2026-10-27
+BDEPEND="$(python_gen_cond_dep '
+	>=dev-python/numpy-1.24.0[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
+')"
