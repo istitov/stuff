@@ -21,7 +21,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
-	>=sci-ml/caffe2-2.5.1[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/pytorch-2.5.1[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/kornia-rs-bin-0.2.0[${PYTHON_USEDEP}]
 		>=dev-python/numpy-1.21[${PYTHON_USEDEP}]
