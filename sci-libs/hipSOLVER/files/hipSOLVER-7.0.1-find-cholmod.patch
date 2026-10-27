@@ -1,4 +1,8 @@
 Gentoo install cholmod.h into /usr/include directly and uses PkgConfig
+
+cholmod 3.x names its pkg-config module "cholmod"; the SuiteSparse 7
+based cholmod 5.x names it "CHOLMOD". pkg-config names are
+case-sensitive, so search for both.
 --- a/library/src/CMakeLists.txt
 +++ b/library/src/CMakeLists.txt
 @@ -153,14 +153,10 @@ if(NOT USE_CUDA)
@@ -12,7 +16,7 @@ Gentoo install cholmod.h into /usr/include directly and uses PkgConfig
 -      find_package(CHOLMOD REQUIRED)
 -    endif()
 +    find_package(PkgConfig REQUIRED)
-+    pkg_check_modules(CHOLMOD REQUIRED IMPORTED_TARGET cholmod)
++    pkg_search_module(CHOLMOD REQUIRED IMPORTED_TARGET cholmod CHOLMOD)
  
 -    target_link_libraries( hipsolver PRIVATE roc::rocsparse SuiteSparse::CHOLMOD)
 +    target_link_libraries( hipsolver PRIVATE roc::rocsparse PkgConfig::CHOLMOD)
