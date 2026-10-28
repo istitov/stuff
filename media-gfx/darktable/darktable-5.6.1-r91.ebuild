@@ -71,7 +71,7 @@ DEPEND="dev-db/sqlite:3
 	x11-libs/pango
 	ai? (
 		app-arch/libarchive
-		sci-libs/onnxruntime
+		sci-libs/onnxruntime:=
 	)
 	avif? ( >=media-libs/libavif-0.8.2:= )
 	colord? ( x11-libs/colord-gtk:= )

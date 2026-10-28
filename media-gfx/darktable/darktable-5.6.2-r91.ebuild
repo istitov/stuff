@@ -35,8 +35,9 @@ else
 
 	KEYWORDS="~amd64 ~arm64 -x86"
 	# Keep synchronized with release po/: stale entries make locale pruning die.
-	# verified 2026-07-04
-	LANGS=" cs de es fi fr hu ja nb nl pl pt-BR ru sl sq sv uk zh-CN zh-TW"
+	# ko_KR.po has no matching L10N value, so it always installs.
+	# verified 2026-10-04
+	LANGS=" cs de es fi fr hu ja lo nb nl pl pt-BR ru sl sq sv uk zh-CN zh-TW"
 fi
 
 IUSE="X ai avif colord cpu_flags_x86_avx cpu_flags_x86_sse3 cups doc gamepad geolocation keyring gphoto2 graphicsmagick heif jpeg2k jpegxl kwallet lto lua midi opencl openmp openexr test tools wayland webp
@@ -71,7 +72,7 @@ DEPEND="dev-db/sqlite:3
 	x11-libs/pango
 	ai? (
 		app-arch/libarchive
-		sci-libs/onnxruntime
+		sci-libs/onnxruntime:=
 	)
 	avif? ( >=media-libs/libavif-0.8.2:= )
 	colord? ( x11-libs/colord-gtk:= )
