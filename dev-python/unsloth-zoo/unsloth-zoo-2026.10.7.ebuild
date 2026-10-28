@@ -39,7 +39,10 @@ RDEPEND="
 	>=sci-ml/transformers-4.52.4[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/transformers-5.17.1[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/trl-0.18.2[${PYTHON_SINGLE_USEDEP}]
-	<=sci-ml/trl-1.15.0-r0[${PYTHON_SINGLE_USEDEP}]
+	|| (
+		<sci-ml/trl-1.15.0[${PYTHON_SINGLE_USEDEP}]
+		~sci-ml/trl-1.15.0[${PYTHON_SINGLE_USEDEP}]
+	)
 	$(python_gen_cond_dep '
 		dev-python/einops[${PYTHON_USEDEP}]
 		dev-python/filelock[${PYTHON_USEDEP}]
