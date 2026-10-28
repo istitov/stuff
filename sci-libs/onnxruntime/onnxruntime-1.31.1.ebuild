@@ -1,0 +1,248 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{12..14} )
+
+inherit cuda cmake edo flag-o-matic multiprocessing python-r1
+
+EIGEN_COMMIT="1d8b82b0740839c0de7f1242a3585e3390ff5f33"
+CUTLASS_VERSION="4.7.0"
+CUDNN_FRONTEND_VERSION="1.27.0"
+DEEP_GEMM_COMMIT="559d79fb6994a58b8a15b4b93bf13ccc16edf247"
+GTEST_VERSION="1.17.0"
+
+DESCRIPTION="Cross-platform, high performance ML inferencing and training accelerator"
+HOMEPAGE="
+	https://onnxruntime.ai
+	https://github.com/microsoft/onnxruntime
+"
+SRC_URI="
+	https://github.com/microsoft/onnxruntime/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
+	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_COMMIT}/eigen-${EIGEN_COMMIT}.tar.bz2 ->
+		eigen-3.4.0_p20250216.tar.bz2
+	cuda? (
+		https://github.com/NVIDIA/cutlass/archive/refs/tags/v${CUTLASS_VERSION}.tar.gz ->
+			cutlass-${CUTLASS_VERSION}.tar.gz
+		https://github.com/NVIDIA/cudnn-frontend/archive/refs/tags/v${CUDNN_FRONTEND_VERSION}.tar.gz ->
+			cudnn-frontend-${CUDNN_FRONTEND_VERSION}.tar.gz
+		https://github.com/deepseek-ai/DeepGEMM/archive/${DEEP_GEMM_COMMIT}.tar.gz ->
+			DeepGEMM-${DEEP_GEMM_COMMIT}.tar.gz
+	)
+	test? (
+		https://github.com/google/googletest/archive/refs/tags/v${GTEST_VERSION}.tar.gz ->
+			googletest-${GTEST_VERSION}.tar.gz
+	)
+"
+
+LICENSE="Apache-2.0 BSD MIT"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="cuda python test"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+RESTRICT="!test? ( test )"
+
+# CUDA 13.4's nvcc accepts the installed Abseil headers. 13.3 did not, so CUDA
+# translation units shadowed them with a patched copy of one exact release and
+# the dependency was pinned to it; the toolkit floor is what keeps both gone.
+# verified 2026-09-26
+# The system-libraries patch makes ONNX a required find_package, so its floor
+# lives here, and the float6 patch widens tables ONNX sizes from its own
+# data-type enum, which puts that floor at 1.23.0. verified 2026-09-26
+RDEPEND="
+	dev-cpp/abseil-cpp:=
+	dev-libs/cpuinfo
+	dev-libs/protobuf:=
+	dev-libs/re2:=
+	>=sci-ml/onnx-1.23.0[disableStaticReg]
+	cuda? (
+		dev-libs/cudnn:=
+		>=dev-util/nvidia-cuda-toolkit-13.4:=
+	)
+
+	python? (
+		${PYTHON_DEPS}
+		dev-python/flatbuffers[${PYTHON_USEDEP}]
+		>=dev-python/numpy-1.21.6[${PYTHON_USEDEP}]
+		dev-python/packaging[${PYTHON_USEDEP}]
+		>=dev-python/protobuf-4.25.8[${PYTHON_USEDEP}]
+		dev-python/sympy[${PYTHON_USEDEP}]
+	)
+"
+DEPEND="
+	${RDEPEND}
+	dev-cpp/ms-gsl
+	dev-cpp/nlohmann_json
+	dev-cpp/safeint
+	dev-libs/boost
+	dev-libs/date
+	dev-libs/flatbuffers
+
+	python? (
+		dev-python/pybind11[${PYTHON_USEDEP}]
+		sci-libs/dlpack
+	)
+"
+# cuda_gccdir needs a gcc that nvcc accepts. The toolkit floor above is 13.4,
+# whose crt/host_config.h accepts up to gcc 16, so this mirrors the toolkit's
+# own gcc bound; the toolkit's dependency can also be met by clang alone,
+# which cuda_gccdir cannot use. verified 2026-10-08
+BDEPEND="
+	${PYTHON_DEPS}
+	cuda? ( <sys-devel/gcc-17_pre[cxx] )
+	python? ( >=dev-python/setuptools-61[${PYTHON_USEDEP}] )
+
+	test? (
+		python? ( dev-python/pytest[${PYTHON_USEDEP}] )
+	)
+"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-1.22.2-relax-the-dependency-on-flatbuffers.patch"
+	"${FILESDIR}/${PN}-1.24.4-no-werror.patch"
+	"${FILESDIR}/${PN}-1.31.0-use-system-libraries.patch"
+	"${FILESDIR}/${PN}-1.31.0-fix-cuda-test-linking.patch"
+	# Carry the two 6-bit float formats ONNX 1.23 added into the tensor
+	# element-type tables that ONNX sizes from its own enum.
+	"${FILESDIR}/${PN}-1.31.0-onnx-1.23-float6.patch"
+	"${FILESDIR}/${PN}-1.31.0-cuda-dynamic-sparse-attention-cstdint.patch"
+)
+
+CMAKE_USE_DIR="${S}/cmake"
+
+# CUDA compilation uses >3 GiB per nvcc job; cap it at four without raising a
+# lower user limit. Installation does not need throttling.
+onnxruntime_cmake_phase() {
+	local jobs=$(makeopts_jobs)
+	if use cuda && (( jobs > 4 )); then
+		local -x MAKEOPTS="${MAKEOPTS} -j4"
+	fi
+	"$@"
+}
+
+src_prepare() {
+	cmake_src_prepare
+
+	if use cuda; then
+		# Prestaging CUTLASS bypasses the patch step of upstream's FetchContent
+		# declaration, so apply that patch here, with the option upstream
+		# passes. The patches upstream applies to cudnn-frontend the same way
+		# only concern Windows. verified 2026-10-09
+		pushd "${WORKDIR}/cutlass-${CUTLASS_VERSION}" >/dev/null || die
+		eapply --ignore-whitespace \
+			"${S}/cmake/patches/cutlass/cutlass_${CUTLASS_VERSION}.patch"
+		popd >/dev/null || die
+	fi
+}
+
+src_configure() {
+	# Python is an unconditional build tool.
+	python_setup
+
+	local mycmakeargs=(
+		-Donnxruntime_BUILD_SHARED_LIB=on
+
+		-Donnxruntime_BUILD_UNIT_TESTS=$(usex test)
+		-Donnxruntime_ENABLE_PYTHON=$(usex python)
+		-Donnxruntime_USE_CUDA=$(usex cuda)
+
+		# Gentoo's Eigen 3.4.0 lacks required fixes, while 5.x is unsupported.
+		# Use upstream's pinned 3.4 commit until a newer tagged 3.4.x lands or
+		# onnxruntime gains Eigen 5 support. # verified 2026-05-16
+		-DFETCHCONTENT_SOURCE_DIR_EIGEN3="${WORKDIR}/eigen-${EIGEN_COMMIT}"
+
+		# Expose installed onnx-ml.proto to find_path.
+		-DCMAKE_INCLUDE_PATH="$(python_get_sitedir)"
+
+		-Wno-dev
+	)
+
+	if use cuda; then
+		# nvcc rejects a gcc newer than its toolkit supports. Use cuda_gccdir
+		# for C++, nvcc hosting, and linking so all stages share one libstdc++
+		# ABI; BDEPEND guarantees a gcc it can pick.
+		local cuda_gcc_bindir
+		cuda_gcc_bindir="$(cuda_gccdir)" || die
+		local -x CC="${cuda_gcc_bindir}/gcc"
+		local -x CXX="${cuda_gcc_bindir}/g++"
+		local -x CUDAHOSTCXX="${CXX}"
+		cuda_add_sandbox -w
+		mycmakeargs+=(
+			-DCMAKE_CUDA_COMPILER="/opt/cuda/bin/nvcc"
+			-DCMAKE_CUDA_HOST_COMPILER="${CUDAHOSTCXX}"
+			-DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND="${WORKDIR}/cudnn-frontend-${CUDNN_FRONTEND_VERSION}"
+			-DFETCHCONTENT_SOURCE_DIR_CUTLASS="${WORKDIR}/cutlass-${CUTLASS_VERSION}"
+			# Header-only; upstream includes it for SM90 and newer targets.
+			-DFETCHCONTENT_SOURCE_DIR_DEEP_GEMM="${WORKDIR}/DeepGEMM-${DEEP_GEMM_COMMIT}"
+			-Donnxruntime_CUDA_HOME="/opt/cuda"
+			-Donnxruntime_CUDNN_HOME="/opt/cuda"
+		)
+		# Without CUDAARCHS, upstream builds for the architectures it has
+		# tuned. Its "all-major" keyword names the same set but resolves only
+		# for a normal variable: passed with -D it stays in the cache, survives
+		# the macro's unset() and aborts configure. verified 2026-10-09
+		[[ -n ${CUDAARCHS} ]] \
+			&& mycmakeargs+=( -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" )
+	fi
+	use test && mycmakeargs+=(
+		-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST="${WORKDIR}/googletest-${GTEST_VERSION}"
+	)
+
+	# Telemetry's 1DS/curl/mbedTLS FetchContent deps remain inactive while its
+	# default-off option is unwired. Revisit if enabling it. # verified 2026-08-12
+	append-ldflags -Wl,-z,noexecstack
+	cmake_src_configure
+}
+
+src_compile() {
+	onnxruntime_cmake_phase cmake_src_compile
+}
+
+# Adapted from `run_onnxruntime_tests` in `tools/ci_build/build.py`
+python_test() {
+	cd "${S}/cmake_build" || die
+	epytest --pyargs \
+		onnxruntime_test_python.py \
+		onnxruntime_test_python_backend.py \
+		onnxruntime_test_python_mlops.py \
+		onnxruntime_test_python_sparse_matmul.py
+}
+
+src_test() {
+	local -x GTEST_FILTER="*:-ActivationOpNoInfTest.Softsign:LayoutTransformationPotentiallyAddedOpsTests.OpsHaveLatestVersions:SamplingTest.Gpt2Sampling_CPU:Random.MultinomialGoodCase:Random.MultinomialDefaultDType"
+	cmake_src_test
+
+	if use python ; then
+		python_foreach_impl python_test
+	fi
+}
+
+python_install() {
+	cd "${S}/cmake_build" || die
+	edo "${EPYTHON}" ../setup.py install \
+		--prefix="${EPREFIX}/usr" \
+		--root="${D}"
+
+	local libs=(
+		"libonnxruntime.so.${PV}"
+		"libonnxruntime_providers_shared.so"
+	)
+	use cuda && libs+=( "libonnxruntime_providers_cuda.so" )
+	for lib in "${libs[@]}"; do
+		ln -fsr "${ED}/usr/$(get_libdir)/${lib}" "${D}/$(python_get_sitedir)/onnxruntime/capi/${lib}" || die
+	done
+
+	rm -rf "${D}/$(python_get_sitedir)"/*.egg-info || die
+	python_optimize
+}
+
+src_install() {
+	cmake_src_install
+
+	if use python ; then
+		python_foreach_impl python_install
+	fi
+
+	dodoc "${S}/"{README.md,LICENSE}
+}
