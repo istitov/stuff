@@ -37,7 +37,11 @@ SRC_URI="
 "
 
 LICENSE="Apache-2.0 BSD MIT"
-SLOT="0"
+# tools/ci_build/gen_def.py exports every symbol under a single
+# VERS_${PV} node and keeps no older ones, so even a patch release breaks
+# binaries linked against the previous one; the SONAME stays .so.1.
+# verified 2026-10-28
+SLOT="0/${PV}"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cuda python test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
