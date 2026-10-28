@@ -19,10 +19,22 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
+# trl/trainer/utils.py and trl/models/utils.py import torch.distributed.tensor
+# and FSDP at module level, so every trainer needs torch built with
+# distributed support.
+# ::gentoo's split pytorch-2.12 carries the flag on caffe2 instead.
+# verified 2026-10-28
 RDEPEND="
 	>=sci-ml/accelerate-1.10.1[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/datasets-4.7.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/huggingface_hub-0.34.0[${PYTHON_SINGLE_USEDEP}]
+	|| (
+		sci-ml/pytorch[distributed(-),${PYTHON_SINGLE_USEDEP}]
+		(
+			=sci-ml/pytorch-2.12*[${PYTHON_SINGLE_USEDEP}]
+			=sci-ml/caffe2-2.12*[distributed,${PYTHON_SINGLE_USEDEP}]
+		)
+	)
 	>=sci-ml/transformers-4.56.2[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/jinja2[${PYTHON_USEDEP}]

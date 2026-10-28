@@ -19,9 +19,20 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
+# The GRPO, RLOO and online DPO trainers import FSDP at module level, so
+# they need torch built with distributed support.
+# ::gentoo's split pytorch-2.12 carries the flag on caffe2 instead.
+# verified 2026-10-28
 RDEPEND="
 	>=sci-ml/accelerate-1.4.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/datasets-3.0.0[${PYTHON_SINGLE_USEDEP}]
+	|| (
+		sci-ml/pytorch[distributed(-),${PYTHON_SINGLE_USEDEP}]
+		(
+			=sci-ml/pytorch-2.12*[${PYTHON_SINGLE_USEDEP}]
+			=sci-ml/caffe2-2.12*[distributed,${PYTHON_SINGLE_USEDEP}]
+		)
+	)
 	>=sci-ml/transformers-4.56.1[${PYTHON_SINGLE_USEDEP}]
 "
 
