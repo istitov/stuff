@@ -55,6 +55,12 @@ BDEPEND="
 	')
 "
 
+PATCHES=(
+	# clang 23 (ROCm 10.1) rejects bf16x2 operands to
+	# __builtin_amdgcn_fdot2_f32_bf16. # verified 2026-10-28
+	"${FILESDIR}"/${PN}-0.50.0-bf16-dot2-operands.patch
+)
+
 src_prepare() {
 	distutils-r1_src_prepare
 	use cuda && cuda_src_prepare

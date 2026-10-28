@@ -1,0 +1,26 @@
+--- a/csrc/gemm_4bit_simt.cu
++++ b/csrc/gemm_4bit_simt.cu
+@@ -381,10 +381,22 @@
+                         // avoids the bf16-multiply round-to-nearest-even emulation on RDNA.
+                         const uint4 a_packed4 = *reinterpret_cast<const uint4*>(&A[m_global * K + a_k]);
+                         const bf16x2_t* a_pairs_d = reinterpret_cast<const bf16x2_t*>(&a_packed4);
++                        // clang 23+ rejects bf16x2 operands here: it declares
++                        // the builtin with short2 and no longer converts
++                        // implicitly. Convert to whichever type is declared.
++                        using short2_t = short __attribute__((ext_vector_type(2)));
++                        struct dot2_arg {
++                            bf16x2_t value;
++                            __device__ __forceinline__ operator bf16x2_t() const { return value; }
++                            __device__ __forceinline__ operator short2_t() const {
++                                return __builtin_bit_cast(short2_t, value);
++                            }
++                        };
+                         float partial = 0.0f;
+ #pragma unroll
+                         for (int k = 0; k < 4; k++)
+-                            partial = __builtin_amdgcn_fdot2_f32_bf16(a_pairs_d[k], b_chunk_d[k], partial, false);
++                            partial = __builtin_amdgcn_fdot2_f32_bf16(
++                                dot2_arg{a_pairs_d[k]}, dot2_arg{b_chunk_d[k]}, partial, false);
+                         acc[m] += partial * scale_f;
+ #endif
+                     } else if constexpr (HIP_FP16_DOT2) {
