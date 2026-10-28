@@ -58,7 +58,10 @@ RDEPEND="
 	>=sci-ml/transformers-4.52.4[${PYTHON_SINGLE_USEDEP}]
 	<sci-ml/transformers-5.17.1[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/trl-0.18.2[${PYTHON_SINGLE_USEDEP}]
-	<=sci-ml/trl-1.15.0-r0[${PYTHON_SINGLE_USEDEP}]
+	|| (
+		<sci-ml/trl-1.15.0[${PYTHON_SINGLE_USEDEP}]
+		~sci-ml/trl-1.15.0[${PYTHON_SINGLE_USEDEP}]
+	)
 	sci-ml/sentence-transformers[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchvision[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/xformers-0.0.27_p2[${PYTHON_SINGLE_USEDEP}]
