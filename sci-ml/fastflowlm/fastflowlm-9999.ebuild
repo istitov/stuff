@@ -38,11 +38,11 @@ BDEPEND="
 # Python is for flm-custom-sync only.
 # USE=hrx swaps XRT for the HRX runtime. main names one exact HRX release
 # in hrx-integration/hrx-release.env; re-read it when a sync fails here.
-# verified 2026-10-13 against main
+# verified 2026-10-29 against main
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-libs/xdna-driver
-	hrx? ( ~dev-libs/hrx-amdxdna-bin-0.1.0_p20260915 )
+	hrx? ( ~dev-libs/hrx-amdxdna-bin-0.1.0_p20261023 )
 	!hrx? (
 		dev-util/xrt
 		dev-libs/xrt-xdna
