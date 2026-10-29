@@ -96,7 +96,8 @@ CMAKE_USE_DIR="${S}/src"
 # 1.0.11), opus, ogg and vorbis at build time; use the system libraries
 # instead. verified 2026-10-29
 PATCHES=(
-	"${FILESDIR}/${PN}-1.0.11-system-codecs.patch"
+	"${FILESDIR}/${PN}-1.0.11-system-image-codecs.patch"
+	"${FILESDIR}/${PN}-1.0.10-system-audio-codecs.patch"
 )
 
 # The source-built engine needs OpenMP (find_package REQUIRED).

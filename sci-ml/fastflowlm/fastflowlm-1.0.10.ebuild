@@ -94,7 +94,8 @@ CMAKE_USE_DIR="${S}/src"
 # 1.0.10 fetches and statically builds libjpeg-turbo, opus, ogg and vorbis
 # at build time; use the system libraries instead. verified 2026-10-25
 PATCHES=(
-	"${FILESDIR}/${PN}-1.0.10-system-codecs.patch"
+	"${FILESDIR}/${PN}-1.0.10-system-image-codecs.patch"
+	"${FILESDIR}/${PN}-1.0.10-system-audio-codecs.patch"
 )
 
 # The source-built engine needs OpenMP (find_package REQUIRED).
