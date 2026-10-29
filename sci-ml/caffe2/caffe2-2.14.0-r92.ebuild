@@ -71,6 +71,8 @@ REQUIRED_USE="
 # verified 2026-09-02
 # aotriton-0.13b now matches upstream and supplies ROCm 10's rocm7.15 shim.
 # verified 2026-09-02
+# 2.12 moved IntraNodeComm to the amd_smi header, loading libamd_smi at
+# run time; 2.14 dropped the rocm_smi lookup. verified 2026-10-29
 # torch._C lives here; block older pytorch copies before merge.
 RDEPEND="
 	${PYTHON_DEPS}
@@ -122,7 +124,7 @@ RDEPEND="
 		>=sci-libs/rocRAND-6.3:=   <sci-libs/rocRAND-11:=
 		>=sci-libs/rocSOLVER-6.3:= <sci-libs/rocSOLVER-11:=
 		memefficient? ( =sci-libs/aotriton-bin-0.13*:= )
-		distributed? ( >=dev-util/rocm-smi-6.3:= <dev-util/rocm-smi-11:= )
+		distributed? ( >=dev-util/amdsmi-6.3:= <dev-util/amdsmi-11:= )
 		cusparselt? ( >=sci-libs/hipsparselt-6.3:= <sci-libs/hipsparselt-11:= )
 	)
 	distributed? (

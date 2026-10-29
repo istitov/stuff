@@ -12,7 +12,7 @@ ROCM_VERSION=10.0
 # from CXXFLAGS unless the type is exactly Release, so a RelWithDebInfo
 # build keeps every debug-only assert live: torch then aborts on checks
 # upstream compiles out, such as storage().use_count() == 1 in the
-# generated autograd code. verified 2026-09-20
+# generated autograd code. verified 2026-09-16
 CMAKE_BUILD_TYPE=Release
 inherit python-single-r1 cmake cuda flag-o-matic prefix rocm
 
@@ -20,7 +20,7 @@ MYPN=pytorch
 MYP=${MYPN}-${PV}
 
 # Build against upstream's pinned composable-kernel revision.
-CK_COMMIT=7fe50dc3da2069d6645d9deb8c017a876472a977
+CK_COMMIT=5a74dec07a894484b9489d0c0e00cd3b52652d18
 CK_P=composable_kernel-${CK_COMMIT:0:8}
 
 FLASH_PV=2.7.4
@@ -48,7 +48,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="cuda cusparselt distributed fbgemm flash gloo kineto memefficient
-	mimalloc mkl mpi nccl nnpack +numpy onednn openblas opencl openmp qnnpack
+	mimalloc mkl mpi nccl nnpack +numpy onednn openblas openmp qnnpack
 	rocm xnnpack"
 RESTRICT="test"
 REQUIRED_USE="
@@ -66,14 +66,14 @@ REQUIRED_USE="
 	nccl? ( rocm )
 "
 
-# FBGEMM 1.7 removed Quantize's LEGACY template argument used by this tree;
-# stay on build-verified 1.4. verified 2026-08-08
-# torch._C moved here in 2.13; block older pytorch copies before merge.
-# Upstream aotriton-0.12b lacks ROCm 10's rocm7.15 shim; 0.13b keeps the ABI
-# and adds it. This remains a system dependency. verified 2026-08-30
-# ROCm stays below 10.1: the composable_kernel snapshot (7fe50dc) does not
-# build with its compiler, whose matrix builtins take ext_vector operands;
-# 2.14.x carries the fix. verified 2026-10-26
+# The one-argument Quantize API works with FBGEMM 1.4 and 1.7, but 1.7's
+# new rounding path is untested; retain the build-verified 1.4 cap.
+# verified 2026-09-02
+# aotriton-0.13b now matches upstream and supplies ROCm 10's rocm7.15 shim.
+# verified 2026-09-02
+# 2.12 moved IntraNodeComm to the amd_smi header, loading libamd_smi at
+# run time; 2.14 dropped the rocm_smi lookup. verified 2026-10-29
+# torch._C lives here; block older pytorch copies before merge.
 RDEPEND="
 	${PYTHON_DEPS}
 	!!<sci-ml/pytorch-2.13.0
@@ -105,28 +105,27 @@ RDEPEND="
 		dev-python/numpy[${PYTHON_USEDEP}]
 	') )
 	onednn? ( sci-ml/oneDNN )
-	opencl? ( virtual/opencl )
 	qnnpack? (
 		sci-ml/gemmlowp
 		dev-libs/pthreadpool
 	)
 	rocm? (
-		nccl? ( >=dev-libs/rccl-6.3:= <dev-libs/rccl-10.1:= )
-		>=dev-util/hip-6.3:=       <dev-util/hip-10.1:=
-		>=dev-util/roctracer-6.3:= <dev-util/roctracer-10.1:=
-		>=sci-libs/hipBLAS-6.3:=   <sci-libs/hipBLAS-10.1:=[rocsolver(+)]
-		>=sci-libs/hipBLASLt-6.3:= <sci-libs/hipBLASLt-10.1:=
-		>=sci-libs/hipFFT-6.3:=    <sci-libs/hipFFT-10.1:=
-		>=sci-libs/hipRAND-6.3:=   <sci-libs/hipRAND-10.1:=
-		>=sci-libs/hipSOLVER-6.3:= <sci-libs/hipSOLVER-10.1:=
-		>=sci-libs/hipSPARSE-6.3:= <sci-libs/hipSPARSE-10.1:=
-		>=sci-libs/miopen-6.3:=    <sci-libs/miopen-10.1:=
-		>=sci-libs/rocBLAS-6.3:=   <sci-libs/rocBLAS-10.1:=
-		>=sci-libs/rocRAND-6.3:=   <sci-libs/rocRAND-10.1:=
-		>=sci-libs/rocSOLVER-6.3:= <sci-libs/rocSOLVER-10.1:=
+		nccl? ( >=dev-libs/rccl-6.3:= <dev-libs/rccl-11:= )
+		>=dev-util/hip-6.3:=       <dev-util/hip-11:=
+		>=dev-util/roctracer-6.3:= <dev-util/roctracer-11:=
+		>=sci-libs/hipBLAS-6.3:=   <sci-libs/hipBLAS-11:=[rocsolver(+)]
+		>=sci-libs/hipBLASLt-6.3:= <sci-libs/hipBLASLt-11:=
+		>=sci-libs/hipFFT-6.3:=    <sci-libs/hipFFT-11:=
+		>=sci-libs/hipRAND-6.3:=   <sci-libs/hipRAND-11:=
+		>=sci-libs/hipSOLVER-6.3:= <sci-libs/hipSOLVER-11:=
+		>=sci-libs/hipSPARSE-6.3:= <sci-libs/hipSPARSE-11:=
+		>=sci-libs/miopen-6.3:=    <sci-libs/miopen-11:=
+		>=sci-libs/rocBLAS-6.3:=   <sci-libs/rocBLAS-11:=
+		>=sci-libs/rocRAND-6.3:=   <sci-libs/rocRAND-11:=
+		>=sci-libs/rocSOLVER-6.3:= <sci-libs/rocSOLVER-11:=
 		memefficient? ( =sci-libs/aotriton-bin-0.13*:= )
-		distributed? ( >=dev-util/rocm-smi-6.3:= <dev-util/rocm-smi-10.1:= )
-		cusparselt? ( >=sci-libs/hipsparselt-6.3:= <sci-libs/hipsparselt-10.1:= )
+		distributed? ( >=dev-util/amdsmi-6.3:= <dev-util/amdsmi-11:= )
+		cusparselt? ( >=sci-libs/hipsparselt-6.3:= <sci-libs/hipsparselt-11:= )
 	)
 	distributed? (
 		!rocm? ( sci-ml/tensorpipe[cuda?] )
@@ -140,11 +139,11 @@ RDEPEND="
 	openblas? ( sci-libs/openblas )
 "
 
-# PyTorch 2.13.0 pins CUTLASS 4.4.2; newer versions removed the
-# TileScheduler overload used by AsyncMM.cu.
-# It pins pybind11 3.0.4, where ::gentoo's 2.13.0-r3 stops. 3.1.0 also
-# compiles and the result runs, so the cap moves to the first untested
-# minor. verified 2026-10-08
+# AsyncMM.cu instantiates a cooperative SM90 GEMM whose tile-scheduler call
+# matches cutlass 4.6 and later; 4.4.2 rejects it as too few arguments. 4.6.1
+# and 4.7.0 both compile it, so the cap stops at the first untested major
+# rather than pinning: that call has already changed once across cutlass
+# releases. verified 2026-09-16
 DEPEND="
 	${RDEPEND}
 	dev-cpp/nlohmann_json
@@ -154,29 +153,29 @@ DEPEND="
 	dev-libs/psimd
 	sci-ml/FP16
 	$(python_gen_cond_dep '
-		<dev-python/pybind11-3.2[${PYTHON_USEDEP}]
+		dev-python/pybind11[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/typing-extensions[${PYTHON_USEDEP}]
 	')
-	cuda? ( ~dev-libs/cutlass-4.4.2[tools(+)] )
+	cuda? ( >=dev-libs/cutlass-4.6.1[tools(+)] <dev-libs/cutlass-4.8[tools(+)] )
 	onednn? ( sci-ml/ideep )
 	rocm? (
-		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-10.1:=
-		>=sci-libs/rocPRIM-6.3:=   <sci-libs/rocPRIM-10.1:=
-		>=sci-libs/rocThrust-6.3:= <sci-libs/rocThrust-10.1:=
+		>=sci-libs/hipCUB-6.3:=    <sci-libs/hipCUB-11:=
+		>=sci-libs/rocPRIM-6.3:=   <sci-libs/rocPRIM-11:=
+		>=sci-libs/rocThrust-6.3:= <sci-libs/rocThrust-11:=
 	)
 	qnnpack? ( dev-libs/clog )
 "
 
-# Five of these apply here with fuzz (unbundle_fmt, unbundle_kineto,
-# cpp-httplib, mimalloc, removekineto); each hunk was checked to land on
-# the lines it was written for. verified 2026-10-08
+# Rebase against the post-sed source tree and keep shared patch names while
+# their context remains exact. All patches apply without fuzz. verified 2026-09-02
 PATCHES=(
-	"${FILESDIR}"/${PN}-2.5.1-unbundle_fmt.patch.xz
-	"${FILESDIR}"/${PN}-2.5.1-unbundle_kineto.patch.xz
-	"${FILESDIR}"/${PN}-2.8.0-unbundle_pocketfft.patch.xz
+	"${FILESDIR}"/${PN}-2.14.0-unbundle_fmt.patch.xz
+	"${FILESDIR}"/${PN}-2.14.0-unbundle_kineto.patch.xz
+	# Rebased for the Torch_SOURCE_DIR rename.
+	"${FILESDIR}"/${PN}-2.14.0-unbundle_pocketfft.patch.xz
 	"${FILESDIR}"/${PN}-2.5.1-cudnn_include_fix.patch.xz
-	"${FILESDIR}"/${PN}-2.4.0-cpp-httplib.patch.xz
+	"${FILESDIR}"/${PN}-2.14.0-cpp-httplib.patch.xz
 	# cpp-httplib 0.56 made Params an insertion-ordered map, which no longer
 	# converts to the multimap reference the interface returns.
 	# verified 2026-09-16
@@ -184,22 +183,28 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.5.1-glog-0.6.0.patch.xz
 	"${FILESDIR}"/${PN}-2.7.0-glog-0.7.1.patch.xz
 	# Use glog's public initialization API; the internal symbol does not link.
-	# verified 2026-07-18
-	"${FILESDIR}"/${P}-glog-exception-init.patch.xz
+	# verified 2026-09-02
+	"${FILESDIR}"/${PN}-2.13.0-glog-exception-init.patch.xz
+	# Applies after the libaotriton-path rewrite below.
 	"${FILESDIR}"/${PN}-2.12.0-aotriton-fixes.patch.xz
 	"${FILESDIR}"/${PN}-2.8.0-rocm-minus-flash.patch.xz
-	"${FILESDIR}"/${PN}-2.12.0-rocm-distributed-link.patch.xz
+	"${FILESDIR}"/${PN}-2.14.0-rocm-distributed-link.patch.xz
+	# hipFile is discovered but unused by PyTorch's CUDA-only CUFILE path; keep
+	# it optional until ROCm storage support exists. verified 2026-09-03
+	"${FILESDIR}"/${PN}-2.14.0-rocm-hipfile-optional.patch.xz
 	"${FILESDIR}"/${PN}-2.9.1-torch_cpu.patch.xz
-	"${FILESDIR}"/${PN}-2.10.0-gentoo.patch.xz
-	"${FILESDIR}"/${PN}-2.11.0-mimalloc.patch.xz
-	"${FILESDIR}"/${PN}-2.12.0-removekineto-pr178960.patch.xz
+	# Rebased around the new adjacent perfetto section.
+	"${FILESDIR}"/${PN}-2.14.0-gentoo.patch.xz
+	"${FILESDIR}"/${PN}-2.14.0-mimalloc.patch.xz
+	# Preserve 2.14's expanded activity list while guarding Kineto.
+	"${FILESDIR}"/${PN}-2.14.0-removekineto-pr178960.patch.xz
 
 	# Skip the submodule check for tarballs with system/prestaged deps.
 	# verified 2026-07-18
-	"${FILESDIR}"/${P}-prebuildsteps-tarball-guard.patch.xz
+	"${FILESDIR}"/${PN}-2.13.0-prebuildsteps-tarball-guard.patch.xz
 
 	# Route install-time header wrapping through DESTDIR. verified 2026-07-18
-	"${FILESDIR}"/${P}-wrap-headers-destdir.patch.xz
+	"${FILESDIR}"/${PN}-2.13.0-wrap-headers-destdir.patch.xz
 
 	# Remove MKL cluster libs from the public link interface and force GNU OpenMP
 	# so downstreams need neither Cluster Edition nor libiomp5. verified 2026-05-08
@@ -209,7 +214,7 @@ PATCHES=(
 src_prepare() {
 	# Decompress patches into T because eapply cannot read xz payloads.
 	local p b i
-	mkdir "${T}"/patches || die
+	mkdir -p "${T}"/patches || die
 	for p in "${FILESDIR}"/*.patch.xz; do
 		b=${p##*/}
 		xz -dc "${p}" > "${T}/patches/${b%.xz}" || die
@@ -300,13 +305,28 @@ src_prepare() {
 			-e "s:lib/cmake:$(get_libdir)/cmake:g" \
 			-i cmake/public/LoadHIP.cmake || die
 
+		# Every find_package(Torch) consumer reads the installed LoadHIP,
+		# which otherwise falls back to an unslotted LLVM path when the
+		# consumer has no HIP_CLANG_PATH; default it to HIP's clang.
+		# verified 2026-10-01
+		sed -e "s:\${ROCM_PATH}/lib/llvm/bin:$(hipconfig -l):" \
+			-i cmake/public/LoadHIP.cmake || die
+		grep -qF "set(_hip_clang_dir \"$(hipconfig -l)\")" \
+			cmake/public/LoadHIP.cmake || die "LoadHIP clang default not rewritten"
+
 		# Drop when composable-kernel becomes a system dependency.
 		sed -e "s:third_party/composable_kernel:../composable_kernel-${CK_COMMIT}:g" \
 			-i aten/src/ATen/CMakeLists.txt || die
 
-		# Fix gfx101x targets. bug #959808
+		# Keep the remaining gfx101x ISA guard missing upstream. bug #959808;
+		# verified 2026-09-02
 		pushd "${WORKDIR}/composable_kernel-${CK_COMMIT}" > /dev/null || die
-		eapply "${T}"/patches/composable-kernel-7fe50dc-expand-isa.patch
+		eapply "${T}"/patches/composable-kernel-5a74dec0-expand-isa.patch
+		# The ROCm 10.1 compiler moved the AMDGPU builtins to ext_vector
+		# types; backport CK's adaptation for it. verified 2026-10-26
+		if has_version ">=dev-util/hip-10.1"; then
+			eapply "${T}"/patches/composable-kernel-5a74dec0-ext-vector.patch
+		fi
 		popd > /dev/null || die
 
 		# Work around LLVM issue https://github.com/llvm/llvm-project/issues/100802.
@@ -357,7 +377,6 @@ src_configure() {
 		-DUSE_NNPACK=$(usex nnpack)
 		-DUSE_NUMA=OFF
 		-DUSE_NUMPY=$(usex numpy)
-		-DUSE_OPENCL=$(usex opencl)
 		-DUSE_OPENMP=$(usex openmp)
 		-DUSE_PYTORCH_QNNPACK=$(usex qnnpack)
 		-DUSE_PYTORCH_METAL=OFF
@@ -474,12 +493,13 @@ src_install() {
 	# CMake leaks wheel-layout files into /usr; keep only torch._C in
 	# site-packages because pytorch supplies the pure-Python package.
 	# verified 2026-07-22
+	# Require the extension glob to match: silently deleting torch._C would pass
+	# install yet break imports. Its destination has changed across releases.
 	local _c_ext=( "${ED}"/usr/_C.cpython-*.so )
-	if [[ -f ${_c_ext[0]} ]]; then
-		local _torchdir="${D}$(python_get_sitedir)/torch"
-		mkdir -p "${_torchdir}" || die
-		cp -p "${_c_ext[0]}" "${_torchdir}/" || die
-	fi
+	[[ -f ${_c_ext[0]} ]] || die "torch._C not found at ${ED}/usr/ -- upstream moved its install destination"
+	local _torchdir="${D}$(python_get_sitedir)/torch"
+	mkdir -p "${_torchdir}" || die
+	cp -p "${_c_ext[0]}" "${_torchdir}/" || die
 	local d
 	for d in "${ED}"/usr/*; do
 		case ${d##*/} in
@@ -487,8 +507,9 @@ src_install() {
 			*) rm -rf "${d}" || die ;;
 		esac
 	done
-	# Remove CMake's stray /usr/lib payload, preserving site-packages.
-	if [[ -d ${ED}/usr/lib ]]; then
+	# On lib64 profiles remove leaked /usr/lib symlinks; never do this when
+	# lib is the real payload directory.
+	if [[ $(get_libdir) != lib && -d ${ED}/usr/lib ]]; then
 		find "${ED}"/usr/lib -mindepth 1 -maxdepth 1 ! -name 'python*' \
 			-exec rm -rf {} + || die
 	fi
