@@ -1182,7 +1182,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (240) ---
+# --- github (241) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2595,6 +2595,12 @@ prefix = "v"
 ["sci-ml/huggingface_hub"]
 source = "github"
 github = "huggingface/huggingface_hub"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/kineto"]
+source = "github"
+github = "pytorch/kineto"
 use_max_tag = true
 prefix = "v"
 
