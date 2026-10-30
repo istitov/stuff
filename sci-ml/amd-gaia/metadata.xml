@@ -16,11 +16,10 @@
   </longdescription>
   <use>
     <flag name="api">Install FastAPI / uvicorn HTTP-server bindings (gaia.api)</flag>
-    <flag name="audio">Before 0.25: pull sci-ml/pytorch for the gaia.audio module (Whisper ASR / Kokoro TTS prereq; upstream's audio extra also lists torchvision/torchaudio but gaia code never imports them)</flag>
     <flag name="eval">Install evaluation harness deps (anthropic, reportlab, tiktoken; scikit-learn before 0.25, pyarrow from 0.25) for gaia.eval benchmarks</flag>
     <flag name="image">Pull dev-python/term-image for terminal-rendered image output (gaia.image)</flag>
     <flag name="mcp">Install Model Context Protocol client/server support (gaia.mcp)</flag>
-    <flag name="talk">Pull sounddevice (audio I/O) for gaia.talk's voice pipeline; before 0.25 also openai-whisper and Kokoro, which run inside Lemonade Server from 0.25</flag>
+    <flag name="talk">Pull sounddevice (audio I/O) for gaia.talk's voice pipeline; Whisper and Kokoro run inside Lemonade Server</flag>
     <flag name="ui">Build the gaia.ui web frontend (FastAPI + faiss-backed RAG over documents via PyMuPDF; sentence-transformers before 0.25); requires +api</flag>
   </use>
   <upstream>
