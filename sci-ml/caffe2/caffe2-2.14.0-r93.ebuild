@@ -72,7 +72,8 @@ REQUIRED_USE="
 # aotriton-0.13b now matches upstream and supplies ROCm 10's rocm7.15 shim.
 # verified 2026-09-02
 # 2.12 moved IntraNodeComm to the amd_smi header, loading libamd_smi at
-# run time; 2.14 dropped the rocm_smi lookup. verified 2026-10-29
+# run time; 2.14 dropped the rocm_smi lookup and link, so this package needs
+# neither rocm-smi nor the rsmi_init link patch. verified 2026-10-30
 # torch._C lives here; block older pytorch copies before merge.
 RDEPEND="
 	${PYTHON_DEPS}
@@ -188,7 +189,6 @@ PATCHES=(
 	# Applies after the libaotriton-path rewrite below.
 	"${FILESDIR}"/${PN}-2.12.0-aotriton-fixes.patch.xz
 	"${FILESDIR}"/${PN}-2.8.0-rocm-minus-flash.patch.xz
-	"${FILESDIR}"/${P}-rocm-distributed-link.patch.xz
 	# hipFile is discovered but unused by PyTorch's CUDA-only CUFILE path; keep
 	# it optional until ROCm storage support exists. verified 2026-09-03
 	"${FILESDIR}"/${P}-rocm-hipfile-optional.patch.xz
