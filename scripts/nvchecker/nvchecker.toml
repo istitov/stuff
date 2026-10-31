@@ -2894,7 +2894,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (28) ---
+# --- special (29) ---
 
 ["app-text/mupdf"]
 source = "regex"
@@ -3031,6 +3031,11 @@ regex = 'profex-([0-9][0-9.]*)\.tar\.gz'
 source = "regex"
 url = "https://gwyddion.net/download.php"
 regex = 'gwyddion-(3\.[0-9]+(?:\.[0-9]+)?)\.tar\.xz'
+
+["www-client/torbrowser"]
+source = "regex"
+url = "https://dist.torproject.org/torbrowser/"
+regex = 'href="([0-9]+\.[0-9]+(?:\.[0-9]+)?)/"'
 
 ["x11-libs/wxGTK"]
 source = "github"

@@ -650,6 +650,15 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "url": "https://www.profex-xrd.org/download/linux-2/",
         "regex": r"profex-([0-9][0-9.]*)\.tar\.gz",
     },
+    # torbrowser's only github.com SRC_URI is the bundled wasi-sdk, which the
+    # heuristic would track instead. The dist directory lists one entry per
+    # release; the pattern takes stable ones and leaves out alphas such as
+    # 16.0a14. verified 2026-10-31
+    "www-client/torbrowser": {
+        "source": "regex",
+        "url": "https://dist.torproject.org/torbrowser/",
+        "regex": r'href="([0-9]+\.[0-9]+(?:\.[0-9]+)?)/"',
+    },
     # oommf ships date-stamped tarballs from math.nist.gov with no tags or
     # API, so it was skipped as a custom upstream, and 2.1a3 (2026-09-30)
     # went unreported. The dist/ listing names every tarball but answers
