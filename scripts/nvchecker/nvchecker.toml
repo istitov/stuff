@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (293) ---
+# --- pypi (294) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -1077,6 +1077,10 @@ pypi = "zarr"
 ["dev-python/zensical"]
 source = "pypi"
 pypi = "zensical"
+
+["dev-python/zensical-ui"]
+source = "pypi"
+pypi = "zensical-ui"
 
 ["dev-python/zict"]
 source = "pypi"
