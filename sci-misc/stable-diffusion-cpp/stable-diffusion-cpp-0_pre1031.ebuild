@@ -77,6 +77,7 @@ CDEPEND="
 	webm? ( media-libs/libwebm:= )
 "
 DEPEND="${CDEPEND}
+	cuda? ( dev-libs/cutlass )
 	opencl? ( dev-util/opencl-headers )
 	vulkan? (
 		dev-util/spirv-headers
@@ -200,7 +201,17 @@ src_configure() {
 	if use cuda; then
 		local -x CUDAHOSTCXX="$(cuda_gccdir)/g++"
 		# ggml autodetects and links NCCL, which is unpackaged. verified 2026-10-22
-		mycmakeargs+=( -DGGML_CUDA_NCCL=OFF )
+		# The ggml tarball leaves its CUTLASS submodule empty, which is a configure
+		# error. The path cannot be /usr: it would put /usr/include on nvcc's
+		# system include list, ahead of what libstdc++ needs for its #include_next
+		# of math.h. verified 2026-11-01
+		local cutlass="${T}/cutlass"
+		mkdir -p "${cutlass}/include" || die
+		ln -s "${ESYSROOT}"/usr/include/{cutlass,cute} "${cutlass}/include/" || die
+		mycmakeargs+=(
+			-DGGML_CUDA_NCCL=OFF
+			-DGGML_CUDA_CUTLASS_PATH="${cutlass}"
+		)
 		# nvcc recreates device symlinks during detection.
 		cuda_add_sandbox
 		addpredict "/dev/char/"
