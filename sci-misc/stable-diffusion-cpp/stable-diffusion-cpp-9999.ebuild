@@ -10,8 +10,8 @@ inherit cmake cuda flag-o-matic rocm linux-info python-any-r1
 
 # Snapshot tags are master-<build>-<hash>; pin that hash and the tag's ggml
 # submodule gitlink on each bump.
-MY_COMMIT="885f01a"
-GGML_COMMIT="eced84c86f8b012c752c016f7fe789adea168e1e"
+MY_COMMIT="c6dfa9d"
+GGML_COMMIT="c57b71a3448809d07d49360273201bb5a5e7cafb"
 
 DESCRIPTION="Diffusion model (SD, Flux, Wan, Qwen-Image, ...) inference in pure C/C++"
 HOMEPAGE="https://github.com/leejet/stable-diffusion.cpp"
@@ -31,13 +31,21 @@ else
 			-> ${PN}-ggml-${GGML_COMMIT}.tar.gz
 	"
 	S="${WORKDIR}/stable-diffusion.cpp-${MY_PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 # Let tarballs inject version metadata; live builds retain git describe.
-PATCHES=( "${FILESDIR}/${PN}-embed-version.patch" )
+PATCHES=(
+	"${FILESDIR}/${PN}-embed-version.patch"
+	# ROCm 10.1's stock LLVM 23 rejects __bf16 vectors for the bf16
+	# WMMA/MFMA builtins in the bundled ggml; same fix as
+	# sci-misc/llama-cpp. verified 2026-10-26
+	"${FILESDIR}/${PN}-hip-bf16-builtin-args.patch"
+)
 
-LICENSE="MIT"
+# Bundled Oniguruma is BSD-2; utf8proc is MIT with Unicode data; darts-clone
+# is BSD; kuba--/zip is Unlicense. verified 2026-10-22
+LICENSE="MIT BSD BSD-2 Unicode-DFS-2016 Unlicense"
 SLOT="0"
 CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
 
@@ -69,6 +77,7 @@ CDEPEND="
 	webm? ( media-libs/libwebm:= )
 "
 DEPEND="${CDEPEND}
+	cuda? ( dev-libs/cutlass )
 	opencl? ( dev-util/opencl-headers )
 	vulkan? (
 		dev-util/spirv-headers
@@ -191,6 +200,18 @@ src_configure() {
 
 	if use cuda; then
 		local -x CUDAHOSTCXX="$(cuda_gccdir)/g++"
+		# ggml autodetects and links NCCL, which is unpackaged. verified 2026-10-22
+		# ggml leaves its nested CUTLASS submodule empty, which is a configure
+		# error. The path cannot be /usr: it would put /usr/include on nvcc's
+		# system include list, ahead of what libstdc++ needs for its #include_next
+		# of math.h. verified 2026-11-01
+		local cutlass="${T}/cutlass"
+		mkdir -p "${cutlass}/include" || die
+		ln -s "${ESYSROOT}"/usr/include/{cutlass,cute} "${cutlass}/include/" || die
+		mycmakeargs+=(
+			-DGGML_CUDA_NCCL=OFF
+			-DGGML_CUDA_CUTLASS_PATH="${cutlass}"
+		)
 		# nvcc recreates device symlinks during detection.
 		cuda_add_sandbox
 		addpredict "/dev/char/"
