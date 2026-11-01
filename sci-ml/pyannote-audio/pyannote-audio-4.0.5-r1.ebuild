@@ -25,6 +25,9 @@ IUSE="cli"
 # Diarization needs a separately accepted/downloaded Hugging Face model; import
 # does not. Add undeclared top-level imports used by core pipelines.
 # verified 2026-06-23
+# pytorch-metric-learning 3 reads ArcFaceLoss margins as radians, and the
+# default of 28.6 degrees here would still run, with a meaningless loss.
+# verified 2026-11-01
 RDEPEND="
 	sci-ml/pytorch[${PYTHON_SINGLE_USEDEP}]
 	sci-ml/torchaudio[${PYTHON_SINGLE_USEDEP}]
@@ -34,6 +37,7 @@ RDEPEND="
 	>=sci-ml/asteroid-filterbanks-0.4.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/torch-audiomentations-0.12.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/pytorch-metric-learning-2.8.1[${PYTHON_SINGLE_USEDEP}]
+	<sci-ml/pytorch-metric-learning-3[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/huggingface_hub-0.28.1[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		>=sci-ml/pyannote-core-6.0.1[${PYTHON_USEDEP}]
