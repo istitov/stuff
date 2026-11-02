@@ -41,6 +41,10 @@ PATCHES=(
 	# WMMA/MFMA builtins in the bundled ggml; same fix as
 	# sci-misc/llama-cpp. verified 2026-10-26
 	"${FILESDIR}/${PN}-hip-bf16-builtin-args.patch"
+	# Both still apply at master-1039; see the 0_pre1039 ebuild.
+	# verified 2026-11-02
+	"${FILESDIR}/${PN}-0_pre1039-rpc-op-count.patch"
+	"${FILESDIR}/${PN}-0_pre1039-cuda-architectures.patch"
 )
 
 # Bundled Oniguruma is BSD-2; utf8proc is MIT with Unicode data; darts-clone
@@ -201,16 +205,16 @@ src_configure() {
 	if use cuda; then
 		local -x CUDAHOSTCXX="$(cuda_gccdir)/g++"
 		# ggml autodetects and links NCCL, which is unpackaged. verified 2026-10-22
-		# ggml leaves its nested CUTLASS submodule empty, which is a configure
-		# error. The path cannot be /usr: it would put /usr/include on nvcc's
-		# system include list, ahead of what libstdc++ needs for its #include_next
-		# of math.h. verified 2026-11-01
+		# Only the ggml submodule is fetched, so thirdparty/cutlass stays empty,
+		# which is a configure error. The path cannot be /usr: it would put
+		# /usr/include on nvcc's system include list, ahead of what libstdc++
+		# needs for its #include_next of math.h. verified 2026-11-01
 		local cutlass="${T}/cutlass"
 		mkdir -p "${cutlass}/include" || die
 		ln -s "${ESYSROOT}"/usr/include/{cutlass,cute} "${cutlass}/include/" || die
 		mycmakeargs+=(
 			-DGGML_CUDA_NCCL=OFF
-			-DGGML_CUDA_CUTLASS_PATH="${cutlass}"
+			-DSD_CUDA_CUTLASS_PATH="${cutlass}"
 		)
 		# nvcc recreates device symlinks during detection.
 		cuda_add_sandbox
