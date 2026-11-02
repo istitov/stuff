@@ -1,0 +1,19 @@
+The CUDA kernels that moved out of ggml into stable-diffusion.cpp are built
+in this project's scope, whose cmake_minimum_required(3.12) leaves CMP0104
+OLD, so nvcc gets no architecture and falls back to its default. The CUTLASS
+INT8 and CuTe attention kernels then lack cp.async and fail at launch on
+sm_86. Build them for the architectures ggml-cuda selected.
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -369,6 +369,10 @@
+         include(cmake/hip.cmake)
+     endif()
+     add_subdirectory(src/core/cuda)
++    if(SD_CUDA AND TARGET ggml-cuda)
++        get_target_property(SD_CUDA_ARCHS ggml-cuda CUDA_ARCHITECTURES)
++        set_target_properties(${SD_LIB} sd-cuda PROPERTIES CUDA_ARCHITECTURES "${SD_CUDA_ARCHS}")
++    endif()
+     foreach(VENDOR CUDA HIP MUSA)
+         if(SD_${VENDOR} OR (VENDOR STREQUAL "HIP" AND SD_HIPBLAS))
+             string(TOLOWER "${VENDOR}" NAMESPACE)
