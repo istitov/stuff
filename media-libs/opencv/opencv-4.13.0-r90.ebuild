@@ -368,6 +368,9 @@ PATCHES=(
 
 	"${FILESDIR}/${PN}-4.12.0-cmake-4.patch"
 
+	# FFmpeg 9 removed AVCodec::pix_fmts and ::supported_framerates; backport
+	# of upstream PR #29533 (Gentoo bug 980612).
+	"${FILESDIR}/${PN}-4.12.0-ffmpeg-9.patch"
 )
 
 cuda_get_host_compiler() {

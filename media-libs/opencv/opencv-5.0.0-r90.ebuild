@@ -371,6 +371,10 @@ PATCHES=(
 	# upstream's stale protoc-3.19 output no longer compiles. istitov/stuff#271;
 	# contribdnn build verified 2026-06-07.
 	"${FILESDIR}/${PN}-5.0.0-dnn-restore-caffe-proto.patch"
+
+	# FFmpeg 9 removed AVCodec::pix_fmts and ::supported_framerates; backport
+	# of upstream PR #29533 (Gentoo bug 980612).
+	"${FILESDIR}/${PN}-4.12.0-ffmpeg-9.patch"
 )
 
 cuda_get_host_compiler() {

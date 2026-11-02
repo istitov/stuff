@@ -375,6 +375,10 @@ PATCHES=(
 
 	"${FILESDIR}/${PN}-4.11.0-ffmpeg8.patch" # PR 27691
 	"${DISTDIR}/${P}-fix_videowriter_raw_return_code.patch"
+
+	# FFmpeg 9 removed AVCodec::pix_fmts and ::supported_framerates; backport
+	# of upstream PR #29533 (Gentoo bug 980612).
+	"${FILESDIR}/${PN}-4.12.0-ffmpeg-9.patch"
 )
 
 cuda_get_host_compiler() {
