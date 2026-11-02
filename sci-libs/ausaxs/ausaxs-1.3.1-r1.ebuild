@@ -47,6 +47,12 @@ src_prepare() {
 		cmake/setup_compile_commands.cmake || die
 	sed -i -e '/^set(CMAKE_CXX_FLAGS "")/d' tests/CMakeLists.txt || die
 
+	# dobin takes the executable from the build tree, so keep the build-tree
+	# RUNPATH out of it; it links the ausaxs libraries statically.
+	printf '\n%s\n' \
+		'set_target_properties(ausaxs PROPERTIES BUILD_WITH_INSTALL_RPATH ON)' \
+		>> executable/CMakeLists.txt || die
+
 	cmake_src_prepare
 }
 
