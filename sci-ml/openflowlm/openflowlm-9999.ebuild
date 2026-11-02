@@ -63,6 +63,10 @@ src_prepare() {
 	# Link XRT's aiebu, not the prebuilt copy upstream ships.
 	rm "${S}"/src/lib/xrt/{libaiebu.a,aiebu_static.lib} || die
 	rm -r "${S}"/src/include/aiebu || die
+	# test/ names its sources as ${CMAKE_SOURCE_DIR}/src/..., which assumes a
+	# repo-root configure; from src/ it resolves to src/src/ and cmake fails.
+	# Nothing here runs the tests. verified 2026-11-02
+	cmake_comment_add_subdirectory -f src test
 	cmake_src_prepare
 }
 
