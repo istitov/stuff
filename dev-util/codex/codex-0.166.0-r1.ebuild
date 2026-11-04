@@ -23,7 +23,11 @@ EAPI=8
 # pycargoebuild rejects workspace roots; self-hosting ~150 MiB per release is
 # disproportionate. Revisit if verification fails or the publisher disappears.
 
+# The tarball's openssl-sys 0.9.111 rejects OpenSSL 4; these replace it and
+# its openssl crate, with the matching Cargo.lock patch. verified 2026-11-04
 CRATES="
+	openssl@0.10.82
+	openssl-sys@0.9.118
 "
 
 declare -A GIT_CRATES=(
@@ -73,6 +77,8 @@ SRC_URI="
 "
 
 S="${WORKDIR}/${PN}-rust-v${PV}/codex-rs"
+
+PATCHES=( "${FILESDIR}/${PN}-0.166.0-openssl-4.patch" )
 
 LICENSE="Apache-2.0"
 # Dependent crate licenses
