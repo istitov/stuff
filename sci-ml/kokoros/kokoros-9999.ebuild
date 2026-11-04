@@ -39,6 +39,11 @@ src_compile() {
 	local RUSTFLAGS="${RUSTFLAGS} -l pcaudio"
 	export RUSTFLAGS
 
+	# Upstream locks openssl-sys 0.9.109, which rejects OpenSSL 4; support
+	# needs openssl-sys >= 0.9.114 with openssl >= 0.10.78, and 4.1 needs
+	# 0.9.118. Move both within semver. verified 2026-11-04
+	cargo update -p openssl -p openssl-sys || die "cargo update failed"
+
 	cargo build --release --bin koko || die "cargo build failed"
 }
 
