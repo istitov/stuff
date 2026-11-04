@@ -1,0 +1,51 @@
+Replace the scalar f16 inline asm on ROCm with plain _Float16 code.
+
+v_cvt_f32_f16, v_cvt_f16_f32, v_add_f16 and v_mul_f16 take 16-bit
+operands. With LLVM 23.1.4 and HIP 10.1 on gfx1150 the device link
+rejects their 32-bit "=v"/"v" register constraints ("operands are not
+valid for this GPU or mode"), which fits gfx11's true16 encoding wanting
+register halves. Plain _Float16 conversions and arithmetic let the
+compiler pick the encoding; under the default rounding mode both round
+to nearest even, as the asm did. The packed v_pk_* forms take 32-bit
+registers and stay as they are.
+
+--- a/csrc/core/vec_dtypes/dtype_float16.cuh
++++ b/csrc/core/vec_dtypes/dtype_float16.cuh
+@@ -89,7 +89,7 @@
+ #ifndef USE_ROCM
+   asm volatile("cvt.f32.f16 %0, %1;\n" : "=f"(f) : "h"(h));
+ #else
+-  asm volatile("v_cvt_f32_f16 %0, %1;" : "=v"(f) : "v"(h));
++  f = static_cast<float>(__builtin_bit_cast(_Float16, h));
+ #endif
+   return f;
+ }
+@@ -120,7 +120,7 @@
+ #ifndef USE_ROCM
+   asm volatile("cvt.rn.f16.f32 %0, %1;\n" : "=h"(tmp.u16[0]) : "f"(f));
+ #else
+-  asm volatile("v_cvt_f16_f32 %0, %1;\n" : "=v"(tmp.u32) : "v"(f));
++  tmp.u16[0] = __builtin_bit_cast(uint16_t, static_cast<_Float16>(f));
+ #endif
+   return tmp.u16[0];
+ }
+@@ -152,7 +152,8 @@
+ #ifndef USE_ROCM
+   asm volatile("add.f16 %0, %1, %2;\n" : "=h"(c) : "h"(a), "h"(b));
+ #else
+-  asm volatile("v_add_f16 %0, %1, %2;\n" : "=v"(c) : "v"(a), "v"(b));
++  c = __builtin_bit_cast(uint16_t, static_cast<_Float16>(
++      __builtin_bit_cast(_Float16, a) + __builtin_bit_cast(_Float16, b)));
+ #endif
+   return c;
+ }
+@@ -211,7 +212,8 @@
+ #ifndef USE_ROCM
+   asm volatile("mul.f16 %0, %1, %2;\n" : "=h"(c) : "h"(a), "h"(b));
+ #else
+-  asm volatile("v_mul_f16 %0, %1, %2;\n" : "=v"(c) : "v"(a), "v"(b));
++  c = __builtin_bit_cast(uint16_t, static_cast<_Float16>(
++      __builtin_bit_cast(_Float16, a) * __builtin_bit_cast(_Float16, b)));
+ #endif
+   return c;
+ }
