@@ -36,6 +36,7 @@ RESTRICT="test"
 RDEPEND="
 	!!dev-python/triton-bin
 	dev-util/nvidia-cuda-toolkit
+	virtual/zlib:=
 "
 # 3.8.0 always resolves nlohmann/json and, offline, insists on JSON_SYSPATH;
 # the system header-only copy replaces the v3.11.3 download. verified 2026-11-04
