@@ -25,6 +25,8 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
+PATCHES=( "${FILESDIR}"/${PN}-5.15.19-openssl-4.patch )
+
 QT5_TARGET_SUBDIRS=(
 	src/network
 	src/plugins/bearer/generic
