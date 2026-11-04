@@ -943,6 +943,7 @@ export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 
 PATCHES=(
 	"${FILESDIR}/${PN}-0.31.0-cargo-lock-rustsec.patch"
+	"${FILESDIR}/${PN}-0.30.0-rocm-f16-asm-true16.patch"
 )
 
 src_unpack() {
