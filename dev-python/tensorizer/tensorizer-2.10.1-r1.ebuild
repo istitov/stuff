@@ -32,6 +32,10 @@ RDEPEND="
 	')
 "
 
+PATCHES=(
+	"${FILESDIR}/${P}-py314-annotations.patch"
+)
+
 distutils_enable_tests unittest
 
 python_test() {

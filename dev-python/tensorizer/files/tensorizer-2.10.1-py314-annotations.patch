@@ -1,0 +1,72 @@
+Python 3.14 (PEP 649) stores class annotations as an __annotate__
+function, so Constants.__new__ found no __annotations__ and failed with
+KeyError: 'crypto_stream_salsa20_NONCEBYTES' at import time.
+
+Backport of the upstream fix shipped in tensorizer 2.12.1.
+
+--- a/tensorizer/_crypt/_encryption.py
++++ b/tensorizer/_crypt/_encryption.py
+@@ -4,6 +4,7 @@
+ import enum
+ import io
+ import mmap
++import sys
+ import typing
+ from concurrent.futures import ThreadPoolExecutor
+ from contextlib import AbstractContextManager
+@@ -31,6 +32,9 @@
+ import libnacl
+ from libnacl import nacl
+ 
++if sys.version_info >= (3, 14):
++    import annotationlib
++
+ try:
+     from ._cgroup_cpu_count import effective_cpu_count
+     from ._exceptions import CryptographyError
+@@ -346,6 +350,27 @@
+ sodium_memzero = init_sodium_memzero()
+ 
+ 
++def _pop_annotations(dct: dict) -> dict:
++    """
++    Extract annotations from a metaclass namespace dict.
++
++    In Python 3.14+ (PEP 649), annotations are lazily evaluated and stored
++    as an *annotate function* instead of the ``__annotations__`` attribute.
++    """
++    if "__annotations__" in dct:
++        return dct.pop("__annotations__")
++    elif (
++        sys.version_info >= (3, 14)
++        and (annotate := annotationlib.get_annotate_from_class_namespace(dct))
++        is not None
++    ):
++        return annotationlib.call_annotate_function(
++            annotate, format=annotationlib.Format.VALUE
++        )
++    else:
++        return {}
++
++
+ class Constants(type):
+     @staticmethod
+     def _get_constant(name, typ) -> int:
+@@ -355,7 +380,7 @@
+         return getter()
+ 
+     def __new__(cls, name: str, bases: tuple, dct: dict) -> NamedTuple:
+-        annotations = dct.pop("__annotations__", {})
++        annotations = _pop_annotations(dct)
+         entries = {}
+         for constant_name, constant_type in dct.items():
+             if constant_name.startswith("_"):
+@@ -364,7 +389,7 @@
+                 constant_name.lower(), constant_type
+             )
+         constant_class = typing.cast(
+-            type, NamedTuple(name, **{k: annotations[k] for k in entries})
++            type, NamedTuple(name, [(k, annotations[k]) for k in entries])
+         )
+         return constant_class(**entries)
+ 
