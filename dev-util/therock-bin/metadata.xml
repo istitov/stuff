@@ -10,11 +10,11 @@
     TheRock bundles all ROCm subprojects (rocm-runtime, HIP, LLVM-with-AMD,
     rocBLAS, hipBLAS, rocFFT, hipFFT, rocSPARSE, rocSOLVER, MIOpen, RCCL,
     composable_kernel, rocWMMA, rocPRIM, rocThrust, profilers) into one
-    self-contained SDK, including its own clang. This package slices AMD's
-    official ROCm runfile installer (rocm-installer-VER-BUILD.run, a Makeself
-    archive from repo.radeon.com) and flatten-merges the shared base plus the
-    selected GPU family into /opt/therock-bin, so it coexists with a system
-    ROCm installed in /usr.
+    self-contained SDK, including its own clang. From 10.1 this package
+    unpacks AMD's per-family SDK tarball (therock-dist-linux-FAMILY-VER.tar.gz
+    from stable.repo.amd.com) for the selected GPU; older versions slice the
+    runfile installer (rocm-installer-VER-BUILD.run). Either way the SDK lands
+    in /opt/therock-bin, so it coexists with a system ROCm installed in /usr.
 
     Because it carries its own toolchain it can ship ROCm releases whose
     from-source build would require a newer LLVM than the system provides:
