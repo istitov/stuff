@@ -1,0 +1,59 @@
+Build the bundled gSOAP client against OpenSSL 4.
+
+OpenSSL 4 returns const pointers from X509_get_subject_name() and
+X509_NAME_ENTRY_get_data() and drops ASN1_STRING_data() and
+ERR_remove_state(). Take the names as const, read them through
+ASN1_STRING_get0_data(), and drop the ERR_remove_state(0) calls, which
+have been no-ops since OpenSSL 1.1.0.
+
+--- a/Framework/ICat/src/GSoap/stdsoap2.cpp
++++ b/Framework/ICat/src/GSoap/stdsoap2.cpp
+@@ -3969,7 +3969,7 @@
+         return SOAP_INVALID_SOCKET;
+       }
+       if (!(soap->ssl_flags & SOAP_SSL_SKIP_HOST_CHECK)) {
+-        X509_NAME *subj;
++        const X509_NAME *subj;
+         STACK_OF(CONF_VALUE) *val = nullptr;
+ #if (OPENSSL_VERSION_NUMBER >= 0x0090800fL)
+         GENERAL_NAMES *names = nullptr;
+@@ -4065,13 +4065,13 @@
+         if (!ok && (subj = X509_get_subject_name(peer))) {
+           int i = -1;
+           do {
+-            ASN1_STRING *name;
++            const ASN1_STRING *name;
+             i = X509_NAME_get_index_by_NID(subj, NID_commonName, i);
+             if (i == -1)
+               break;
+             name = X509_NAME_ENTRY_get_data(X509_NAME_get_entry(subj, i));
+             if (name) {
+-              if (!soap_tag_cmp(host, (const char *)ASN1_STRING_data(name)))
++              if (!soap_tag_cmp(host, (const char *)ASN1_STRING_get0_data(name)))
+                 ok = 1;
+               else {
+                 unsigned char *tmp = nullptr;
+@@ -4323,7 +4323,6 @@
+             DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Connection lost...\n"));
+             soap->fclosesocket(soap, soap->socket);
+             soap->socket = SOAP_INVALID_SOCKET;
+-            ERR_remove_state(0);
+             SSL_free(soap->ssl);
+             soap->ssl = nullptr;
+             return SOAP_OK;
+@@ -4348,7 +4347,6 @@
+     soap->ssl = nullptr;
+     if (s)
+       return SOAP_SSL_ERROR;
+-    ERR_remove_state(0);
+   }
+ #endif
+ #ifdef WITH_GNUTLS
+@@ -4915,7 +4913,6 @@
+       soap->ctx = nullptr;
+     }
+   }
+-  ERR_remove_state(0);
+ #endif
+ #ifdef WITH_GNUTLS
+   if (soap->state == SOAP_INIT) {

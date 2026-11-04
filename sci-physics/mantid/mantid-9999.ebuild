@@ -116,6 +116,12 @@ src_prepare() {
 		eapply "${FILESDIR}/${PN}-6.16.1.1-hdf-4.4.patch"
 	fi
 
+	# Apply the OpenSSL 4 gSOAP fix only while the removed calls remain.
+	if grep -q 'ERR_remove_state(0);' \
+			Framework/ICat/src/GSoap/stdsoap2.cpp; then
+		eapply "${FILESDIR}/${PN}-6.16.1.1-openssl-4.patch"
+	fi
+
 	# Remove the obsolete WebEngine/WebKit preference block when present.
 	if grep -q 'Prefer WebEngineWidgets over WebkitWidgets' \
 			qt/widgets/common/CMakeLists.txt 2>/dev/null; then

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{13..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 git-r3 cmake
@@ -23,14 +23,17 @@ fi
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-# 6.16.1.2 removes the Qt5 build (MANTID_QT_VERSION accepts only 6) and
-# requires Python 3.13 and CMake 4.2. Qt6 needs upstream's 6.11 floor, now
-# also the deprecation baseline. verified 2026-09-15
+# Qt6 fully merged and runtime-smoked; Qt5 fully built and installed but not
+# runtime-tested. Both completed 3028 build steps on amd64. The HDF 4.4 patch
+# was compile/link tested without a NeXus fixture. Verified 2026-09-10.
 #
-# lz4 is required by the GUI crash handler. Omit unavailable pystack and
-# quickBayes; only their crash/algorithm paths degrade.
+# Select Qt5 or Qt6 explicitly because upstream defaults vary by platform.
+# Qt5 needs the deprecation-guard workaround and overlay-only PyQt5; Qt6 needs
+# upstream's 6.11 floor. pyqt5 supplies the Qt5-only pyrcc5 build tool.
+# lz4 is required by the GUI crash handler. Omit unavailable pystack,
+# quasielasticbayes, and quickBayes; only their crash/algorithm paths degrade.
 # No CUDA sources or build integration exist.
-IUSE="test"
+IUSE="qt5 +qt6 test"
 RESTRICT="!test? ( test )"
 
 # hdf5[cxx,mpi] additionally needs hdf5[unsupported].
@@ -48,9 +51,22 @@ RDEPEND="
 	dev-libs/poco:=[crypt,net,util,xml]
 	dev-python/pyvista[${PYTHON_SINGLE_USEDEP}]
 	dev-python/pyvistaqt[${PYTHON_SINGLE_USEDEP}]
-	x11-libs/qscintilla:=[qt6(+)]
-	>=dev-qt/qtbase-6.11:6[concurrent,gui,network,opengl,widgets,xml]
-	>=dev-qt/qttools-6.11:6[assistant]
+	qt6? (
+		x11-libs/qscintilla:=[qt6(+)]
+		>=dev-qt/qtbase-6.11:6[concurrent,gui,network,opengl,widgets,xml]
+		>=dev-qt/qttools-6.11:6[assistant]
+	)
+	qt5? (
+		x11-libs/qscintilla:=[qt5(-)]
+		dev-qt/qtconcurrent:5
+		dev-qt/qtgui:5
+		dev-qt/qthelp:5
+		dev-qt/qtnetwork:5
+		dev-qt/qtprintsupport:5
+		dev-qt/qtsql:5
+		dev-qt/qtwidgets:5
+		dev-qt/qtxml:5
+	)
 	dev-cpp/tbb:=
 	sci-libs/opencascade:=
 	virtual/glu
@@ -64,11 +80,13 @@ RDEPEND="
 		>=dev-python/pydantic-2.11.4[${PYTHON_USEDEP}]
 		<dev-python/pydantic-3[${PYTHON_USEDEP}]
 		sci-libs/pycifrw[${PYTHON_USEDEP}]
-		dev-python/pyqt6[${PYTHON_USEDEP},gui,widgets,printsupport]
+		qt6? ( dev-python/pyqt6[${PYTHON_USEDEP},gui,widgets,printsupport] )
+		qt5? ( dev-python/pyqt5[${PYTHON_USEDEP},gui,widgets,printsupport] )
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/orsopy[${PYTHON_USEDEP}]
 		dev-python/qtconsole[${PYTHON_USEDEP}]
-		dev-python/qtpy[${PYTHON_USEDEP},pyqt6(-)]
+		qt6? ( dev-python/qtpy[${PYTHON_USEDEP},pyqt6(-)] )
+		qt5? ( dev-python/qtpy[${PYTHON_USEDEP},pyqt5(-)] )
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/superqt[${PYTHON_USEDEP}]
 		dev-python/scipy[${PYTHON_USEDEP}]
@@ -82,7 +100,7 @@ RDEPEND="
 # CMake runs versioningit against the git-r3 checkout. Revisit if last-rited.
 # Verified 2026-08-31.
 BDEPEND="
-	>=dev-build/cmake-4.2
+	dev-build/cmake
 	dev-build/ninja
 	$(python_gen_cond_dep '
 		dev-python/pip[${PYTHON_USEDEP}]
@@ -91,10 +109,14 @@ BDEPEND="
 	')
 "
 
-# gtest is a configure-only dependency.
+# gtest and Qt5's OpenGL/Test modules are configure-only dependencies.
 DEPEND="${RDEPEND}
 	dev-cpp/eigen
 	dev-cpp/gtest
+	qt5? (
+		dev-qt/qtopengl:5
+		dev-qt/qttest:5
+	)
 	test? (
 		sys-apps/pciutils
 		x11-libs/libXcomposite
@@ -106,12 +128,33 @@ DEPEND="${RDEPEND}
 	)
 "
 
+REQUIRED_USE="^^ ( qt5 qt6 )"
+
 # Upstream installs non-FHS top-level data directories; keep its monolithic
 # layout under /opt instead of rewriting every path.
 MY_PREFIX="/opt/mantid"
 
 src_prepare() {
 	eapply "${FILESDIR}/${PN}-6.16.1.1-hdf-4.4.patch"
+	eapply "${FILESDIR}/${PN}-6.16.1.1-openssl-4.patch"
+
+	# Backport the Python 3.13 keyword-argument fix (#41974).
+	eapply "${FILESDIR}/${PN}-6.16.1.1-python3.13.patch"
+
+	# Remove the obsolete WebEngine/WebKit preference block when present.
+	if grep -q 'Prefer WebEngineWidgets over WebkitWidgets' \
+			qt/widgets/common/CMakeLists.txt 2>/dev/null; then
+		eapply "${FILESDIR}/${PN}-no-qt5-webwidgets.patch"
+	fi
+
+	if use qt5; then
+		# Upstream's _BEFORE=0x050F00 guard removes still-used Qt 5.15 APIs.
+		# Restore 6.16.1's _UP_TO spelling for Qt5 only. verified 2026-07-27
+		sed -i -e 's/QT_DISABLE_DEPRECATED_BEFORE=0x050F00/QT_DISABLE_DEPRECATED_UP_TO=0x050F00/' \
+			CMakeLists.txt || die
+		grep -q 'QT_DISABLE_DEPRECATED_UP_TO=0x050F00' CMakeLists.txt ||
+			die "deprecation-guard rename did not apply"
+	fi
 
 	# Retarget OpenCascade's finder from upstream's /opt path to Gentoo's path.
 	sed -i -e 's:/OpenCASCADE:/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die
@@ -146,6 +189,8 @@ src_configure() {
 		# Avoid implicit ccache use and pre-commit source-tree mutation.
 		-DENABLE_PRECOMMIT=OFF
 		-DUSE_CCACHE=OFF
+		# Do not inherit upstream's platform-dependent toolkit default.
+		-DMANTID_QT_VERSION=$(usex qt6 6 5)
 	)
 	cmake_src_configure
 }
@@ -157,11 +202,12 @@ src_install() {
 	rm "${ED}${MY_PREFIX}/bin/launch_mantidworkbench" || die
 	local sp_dir="${MY_PREFIX}/lib/${EPYTHON}/site-packages"
 
-	# Select the PyQt6 qtpy binding unless the user overrides it.
+	# Select the matching qtpy binding unless the user overrides it.
+	local qt_api=$(usex qt6 pyqt6 pyqt5)
 	sed -i \
 		-e "s|\${INSTALLDIR}/bin/python|${EPYTHON}|" \
 		-e "s|LOCAL_PYTHONPATH=\${INSTALLDIR}/bin:\${INSTALLDIR}/lib:\${INSTALLDIR}/plugins|LOCAL_PYTHONPATH=${sp_dir}:\${INSTALLDIR}/bin:\${INSTALLDIR}/lib:\${INSTALLDIR}/plugins|" \
-		-e "s|^LD_PRELOAD=\${LOCAL_PRELOAD}|QT_API=\${QT_API:-pyqt6} LD_PRELOAD=\${LOCAL_PRELOAD}|" \
+		-e "s|^LD_PRELOAD=\${LOCAL_PRELOAD}|QT_API=\${QT_API:-${qt_api}} LD_PRELOAD=\${LOCAL_PRELOAD}|" \
 		"${ED}${MY_PREFIX}/bin/launch_mantidworkbench.standalone" || die
 
 	# Keep PYTHONPATH wrapper-local to avoid polluting unrelated builds.
@@ -196,21 +242,22 @@ pkg_postinst() {
 	elog
 	elog "    mantidpython yourscript.py       # or: mantidpython  (REPL)"
 	elog
-	elog "This build links Qt6 and its Python layer binds pyqt6."
-	elog "qtpy does not pick the newest binding available - it reads"
-	elog "QT_API and falls back to pyqt5 - so the launcher below exports"
-	elog "QT_API=pyqt6 for you. Use it rather than invoking the workbench"
-	elog "directly:"
+	local qt_api=$(usex qt6 pyqt6 pyqt5)
+	elog "This build links Qt$(usex qt6 6 5) and its Python layer binds"
+	elog "${qt_api}. qtpy does not pick the newest binding available - it"
+	elog "reads QT_API and falls back to pyqt5 - so the launcher below"
+	elog "exports QT_API=${qt_api} for you. Use it rather than invoking"
+	elog "the workbench directly:"
 	elog
 	elog "    ${MY_PREFIX}/bin/launch_mantidworkbench.standalone"
 	elog
 	elog "Calling ${MY_PREFIX}/bin/workbench by hand needs QT_API set"
 	elog "explicitly, or mantidqt looks for the extension of whichever"
 	elog "toolkit qtpy picked and aborts with a ModuleNotFoundError for"
-	elog "mantidqt._commonqt5 - only _commonqt6 is built:"
+	elog "mantidqt._commonqt5 / _commonqt6 - only _common${qt_api#py} is built:"
 	elog
 	elog "    env LD_PRELOAD=/usr/lib64/libtbbmalloc_proxy.so.2 \\"
-	elog "        QT_API=pyqt6 \\"
+	elog "        QT_API=${qt_api} \\"
 	elog "        PYTHONPATH=${MY_PREFIX}/lib/${EPYTHON}/site-packages:${MY_PREFIX}/bin:${MY_PREFIX}/plugins \\"
 	elog "        ${MY_PREFIX}/bin/workbench"
 	elog
