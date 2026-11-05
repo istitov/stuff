@@ -26,10 +26,9 @@ S="${WORKDIR}/cudnn-frontend-${PV}"
 LICENSE="Apache-2.0 MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-
-# Python CMake fetches its pinned DLPack 1.3, which Gentoo does not package.
-# verified 2026-09-02
-RESTRICT="network-sandbox"
+# Both test suites need an NVIDIA GPU and a cuDNN backend at runtime, and
+# conftest.py initializes CUDA on import. verified 2026-11-05
+RESTRICT="test"
 
 # 1.29.0 moves the CuTe DSL stack into the base requirements. The kernels
 # still import it lazily, but upstream now declares it required. The other
@@ -42,6 +41,11 @@ DEPEND="
 RDEPEND="${DEPEND}
 	>=dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
 	>=dev-python/nvidia-cutlass-dsl-4.8.0[${PYTHON_USEDEP}]
+"
+# DLPack is header-only; 1.3 declares the DLPackExchangeAPI the bindings use,
+# and 1.3-r1 is the first install whose CMake config reports its version.
+DEPEND+="
+	>=sci-libs/dlpack-1.3-r1
 "
 # Root CMake and the backend require the stated floors; Ninja is optional.
 # 1.32.0 moves the bindings from pybind11 to nanobind; setup.py points CMake
@@ -58,6 +62,19 @@ src_prepare() {
 	# redefines _POSIX_C_SOURCE and _XOPEN_SOURCE, which upstream's -Werror
 	# turns fatal. verified 2026-10-28
 	sed -i -e 's/ -Werror / /' CMakeLists.txt || die
+
+	# The Python bindings fetch DLPack from GitHub unless the system-DLPack
+	# option is on, and setup.py passes no CMake arguments through, so flip
+	# the option's default. verified 2026-11-05
+	sed -i -e '/option(CUDNN_FRONTEND_USE_SYSTEM_DLPACK/s/ OFF)$/ ON)/' \
+		python/CMakeLists.txt || die
+	grep -q 'option(CUDNN_FRONTEND_USE_SYSTEM_DLPACK .* ON)$' \
+		python/CMakeLists.txt || die "system-dlpack option not switched on"
+
+	# nanobind strips release-build modules itself; leave stripping and split
+	# debug info to Portage. verified 2026-11-05
+	sed -i -e 's/^\(    NOMINSIZE\)$/\1\n    NOSTRIP/' python/CMakeLists.txt || die
+	grep -qx '    NOSTRIP' python/CMakeLists.txt || die "NOSTRIP not added"
 
 	distutils-r1_src_prepare
 }
