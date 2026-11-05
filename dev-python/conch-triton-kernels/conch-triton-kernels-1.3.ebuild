@@ -3,6 +3,7 @@
 
 EAPI=8
 
+DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 
@@ -19,16 +20,22 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 # Map accelerator extras to unified virtual/triton; 1.3 also imports torch
-# through Caffe2. virtual/triton entered the tree on 2026-06-14.
+# through Caffe2. virtual/triton entered the tree on 2026-06-14. Caffe2 is
+# single-impl, so this package is too: a multi-impl ebuild cannot carry
+# ${PYTHON_SINGLE_USEDEP}, and Portage masked 1.3 as invalid. 2026-11-05
 RDEPEND="
-	>=dev-python/numpy-1.26.4[${PYTHON_USEDEP}]
-	>=virtual/triton-3.3[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep 'sci-ml/caffe2[${PYTHON_SINGLE_USEDEP}]')
+	sci-ml/caffe2[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/numpy-1.26.4[${PYTHON_USEDEP}]
+		>=virtual/triton-3.3[${PYTHON_USEDEP}]
+	')
 "
 BDEPEND="
-	>=dev-python/setuptools-42[${PYTHON_USEDEP}]
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
-	dev-python/wheel[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/setuptools-42[${PYTHON_USEDEP}]
+		dev-python/setuptools-scm[${PYTHON_USEDEP}]
+		dev-python/wheel[${PYTHON_USEDEP}]
+	')
 "
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
