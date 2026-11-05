@@ -1,0 +1,14 @@
+Do not strip the Python extension at link time; Portage strips and splits
+debug information itself.
+
+--- a/python/setup.py
++++ b/python/setup.py
+@@ -142,8 +142,6 @@
+       )
+       libs.append('-Wl,--gc-sections')
+       libs.append('-Wl,--version-script=exports.txt')
+-      cflags.append('-Wl,-strip-all')
+-      libs.append('-Wl,-strip-all')
+ 
+     if sys.platform == 'linux':
+       libs.append('-Wl,-Bsymbolic')

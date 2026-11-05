@@ -1,0 +1,62 @@
+Build the Python extension against the installed shared sentencepiece,
+found through pkg-config, instead of searching ../build for static archives
+or running build_bundled.sh. The extension calls Abseil and protobuf
+directly, so it links those itself.
+
+--- a/python/setup.py
++++ b/python/setup.py
+@@ -33,6 +33,35 @@
+   return sysconfig.get_config_var('Py_GIL_DISABLED')
+ 
+ 
++def run_pkg_config(section, modules):
++  try:
++    output = subprocess.check_output(
++        ['pkg-config', '--{}'.format(section)] + modules
++    ).decode('utf-8')
++  except (OSError, subprocess.CalledProcessError):
++    sys.stderr.write('Failed to query pkg-config for {}\n'.format(modules))
++    sys.exit(1)
++  return output.strip().split()
++
++
++def is_sentencepiece_installed():
++  try:
++    subprocess.check_call(['pkg-config', '--exists', 'sentencepiece'])
++    return True
++  except (OSError, subprocess.CalledProcessError):
++    return False
++
++
++# The extension calls Abseil and protobuf directly, besides the libraries
++# sentencepiece links privately, so it links them itself.
++SYSTEM_PC_MODULES = [
++    'sentencepiece',
++    'absl_status',
++    'absl_synchronization',
++    'protobuf-lite',
++]
++
++
+ def find_abseil_lib(search_root):
+   print('## searching abseil and protobuf {}'.format(search_root))
+   absl_libs = []
+@@ -99,8 +128,16 @@
+   """Override build_extension to run cmake."""
+ 
+   def build_extension(self, ext):
+-    cflags, libs = get_cflags_and_libs('../build')
+-    abseil_libs = find_abseil_lib('../build')
++    if is_sentencepiece_installed():
++      # Link the shared sentencepiece found through pkg-config; its Cflags
++      # cover the generated headers, and the source tree supplies the rest.
++      cflags = (['-std=c++20'] + get_build_includes('../build', is_msvc=False)
++                + run_pkg_config('cflags', SYSTEM_PC_MODULES))
++      libs = run_pkg_config('libs', SYSTEM_PC_MODULES)
++      abseil_libs = []
++    else:
++      cflags, libs = get_cflags_and_libs('../build')
++      abseil_libs = find_abseil_lib('../build')
+ 
+     if len(libs) == 0:
+       cflags, libs = get_cflags_and_libs('./build')

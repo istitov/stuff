@@ -1,0 +1,27 @@
+Link absl::status_builder only when Abseil provides it. Releases before
+StatusBuilder was published, ::gentoo's 20260107.1 among them, have no such
+target; the ebuild supplies header-only shims for status_builder.h and
+status_macros.h instead.
+
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -18,7 +18,6 @@
+ list(APPEND SPM_LIBS
+   absl::status
+   absl::statusor
+-  absl::status_builder
+   absl::strings
+   absl::flags
+   absl::flags_parse
+@@ -35,6 +34,11 @@
+   ${PROTOBUF_LITE_LIBRARY}
+ )
+ 
++# Abseil releases before StatusBuilder was published have no such target;
++# the header-only compat shim covers them.
++if (TARGET absl::status_builder)
++  list(APPEND SPM_LIBS absl::status_builder)
++endif()
+ if (TARGET utf8_validity)
+   list(APPEND SPM_LIBS utf8_validity)
+ endif()

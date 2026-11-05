@@ -1,0 +1,24 @@
+Add SPM_USE_SYSTEM_FLATBUFFERS, which takes the FlatBuffers library and
+flatc from an installed package instead of fetching and building a copy
+with FetchContent, which also needs the network.
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -256,6 +256,17 @@
+ endif()
+ 
+ # FlatBuffers
++# Use an installed FlatBuffers: its library through the name the rest of the
++# build links, and its flatc through SPM_FLATC_EXECUTABLE.
++option(SPM_USE_SYSTEM_FLATBUFFERS "Use an installed FlatBuffers" OFF)
++if (SPM_USE_SYSTEM_FLATBUFFERS AND NOT TARGET flatbuffers)
++  find_package(flatbuffers CONFIG REQUIRED)
++  add_library(flatbuffers INTERFACE)
++  target_link_libraries(flatbuffers INTERFACE flatbuffers::flatbuffers_shared)
++  if (NOT SPM_FLATC_EXECUTABLE)
++    set(SPM_FLATC_EXECUTABLE "$<TARGET_FILE:flatbuffers::flatc>")
++  endif()
++endif()
+ if (NOT TARGET flatbuffers)
+   include(FetchContent)
+   set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Disable flatbuffers tests" FORCE)
