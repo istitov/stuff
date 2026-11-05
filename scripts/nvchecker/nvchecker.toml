@@ -3162,6 +3162,7 @@ prefix = "v"
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["llvm-core/rocm-llvm"] skipped: kept only at 10.0.0 for the 10.0 cohort's dev-util/hipcc[amd-llvm]; ::gentoo's hipcc from 10.1 needs no AMD LLVM fork, so 10.1.0 was dropped (2026-10-22) and the package goes with the 10.0 cohort
 # ["media-gfx/comfyui-if-trellis"] skipped: comfyui-if-trellis 3D-asset stack — pinned to a vendored commit-snapshot (0_p<date>); there is no upstream release tag to compare against the snapshot PV and the HOMEPAGE-derived repos are monorepos/forks that don't tag the sub-component, so re-pinning is a manual commit-bump rather than a trackable version bump
+# ["media-gfx/dibuja"] skipped: custom upstream at launchpad.net; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-gfx/iscan-data"] skipped: custom upstream at web.archive.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["media-plugins/deadbeef-fb"] skipped: we track a 2023 main snapshot; upstream's newest release tag is 20160216
 # ["media-plugins/deadbeef-musical-spectrum"] skipped: upstream GitHub repository removed; no release feed

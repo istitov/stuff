@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="exif">Read and write EXIF metadata with <pkg>media-libs/gexiv2</pkg></flag>
+  </use>
+  <upstream>
+    <remote-id type="launchpad">dibuja</remote-id>
+  </upstream>
+</pkgmetadata>
