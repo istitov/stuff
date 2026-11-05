@@ -15,21 +15,24 @@ HOMEPAGE="https://github.com/ROCm/TheRock"
 # is unpacked as-is into /opt/therock-bin. verified 2026-11-04
 TARBALL_URI="https://stable.repo.amd.com/rocm/core/tarball"
 
-# Offered targets; each maps to one tarball below. The gfx101X-dgpu and
-# gfx125X-dcgpu tarballs also exist but are not offered here yet.
+# Offered targets; each maps to one tarball below. gfx101X-dgpu carries
+# gfx1010-gfx1012 and gfx125X-dcgpu only gfx1250. verified 2026-11-05
 AMDGPU_ARCHS=(
+	gfx1010 gfx1011 gfx1012
 	gfx1030 gfx1100 gfx1101 gfx1102 gfx1103
 	gfx1150 gfx1151 gfx1152 gfx1153
-	gfx1200 gfx1201 gfx908 gfx90a gfx942 gfx950
+	gfx1200 gfx1201 gfx1250 gfx908 gfx90a gfx942 gfx950
 )
 
 # Map a fine arch to the tarball that carries it.
 _therock_family() {
 	case $1 in
+		gfx101[0-2]) echo gfx101X-dgpu ;;
 		gfx1030) echo gfx103X-all ;;
 		gfx110[0-3]) echo gfx110X-all ;;
 		gfx115[0-3]) echo "$1" ;;
 		gfx120[01]) echo gfx120X-all ;;
+		gfx1250) echo gfx125X-dcgpu ;;
 		gfx908|gfx90a) echo "$1" ;;
 		gfx942) echo gfx94X-dcgpu ;;
 		gfx950) echo gfx950-dcgpu ;;
