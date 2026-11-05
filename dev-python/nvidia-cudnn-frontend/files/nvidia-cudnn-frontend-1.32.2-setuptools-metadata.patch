@@ -1,0 +1,39 @@
+Silence setuptools' metadata deprecation warnings without changing what
+is installed.
+
+- project.license as a TOML table is deprecated; PEP 639 takes the SPDX
+  expression as a string (setuptools >= 77.0.0).
+- License classifiers are deprecated alongside a license expression.
+- The headers under include/ are installed as package data, but only the
+  top-level "include" package was listed, so setuptools warned about each
+  subdirectory. List the subpackages too.
+
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@
+ description = "NVIDIA cuDNN Frontend — Python and C++ Graph API with SOTA attention (SDPA / Flash Attention), MoE grouped GEMM fusions, and FP8/MXFP8 kernels for Hopper, Blackwell, and Rubin GPUs."
+ readme = "README.md"
+ requires-python = ">=3.10"
+-license = {text = "Apache-2.0 AND MIT"}
++license = "Apache-2.0 AND MIT"
+ keywords = [
+     "cudnn",
+     "cuda",
+@@ -31,8 +31,6 @@
+     "Development Status :: 5 - Production/Stable",
+     "Intended Audience :: Developers",
+     "Intended Audience :: Science/Research",
+-    "License :: OSI Approved :: Apache Software License",
+-    "License :: OSI Approved :: MIT License",
+     "Operating System :: POSIX :: Linux",
+     "Operating System :: Microsoft :: Windows",
+     "Programming Language :: C++",
+@@ -136,7 +134,7 @@
+ build-backend = "setuptools.build_meta"
+ 
+ [tool.setuptools]
+-packages = {find = {where = ["python", "."], include = ["cudnn*", "include"], namespaces = true}}
++packages = {find = {where = ["python", "."], include = ["cudnn*", "include", "include.*"], namespaces = true}}
+ package-dir = {"" = "python", "include" = "include"}
+ include-package-data = true
+ 

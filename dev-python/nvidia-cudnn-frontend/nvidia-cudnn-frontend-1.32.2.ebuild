@@ -26,6 +26,9 @@ S="${WORKDIR}/cudnn-frontend-${PV}"
 LICENSE="Apache-2.0 MIT"
 SLOT="0"
 KEYWORDS="~amd64"
+# Both test suites need an NVIDIA GPU and a cuDNN backend at runtime, and
+# conftest.py initializes CUDA on import. verified 2026-11-05
+RESTRICT="test"
 
 # 1.29.0 moves the CuTe DSL stack into the base requirements. The kernels
 # still import it lazily, but upstream now declares it required. The other
@@ -46,13 +49,18 @@ DEPEND+="
 "
 # Root CMake and the backend require the stated floors; Ninja is optional.
 # 1.32.0 moves the bindings from pybind11 to nanobind; setup.py points CMake
-# at the installed nanobind on Linux instead of fetching it.
+# at the installed nanobind on Linux instead of fetching it. The metadata
+# patch uses a PEP 639 license string, which needs setuptools 77.
 BDEPEND="
 	>=dev-build/cmake-3.26
 	>=dev-python/nanobind-3.0.1[${PYTHON_USEDEP}]
 	<dev-python/nanobind-4[${PYTHON_USEDEP}]
-	>=dev-python/setuptools-64[${PYTHON_USEDEP}]
+	>=dev-python/setuptools-77[${PYTHON_USEDEP}]
 "
+
+PATCHES=(
+	"${FILESDIR}"/${P}-setuptools-metadata.patch
+)
 
 src_prepare() {
 	# nanobind includes Python.h after libstdc++ headers, so pyconfig.h
@@ -67,6 +75,11 @@ src_prepare() {
 		python/CMakeLists.txt || die
 	grep -q 'option(CUDNN_FRONTEND_USE_SYSTEM_DLPACK .* ON)$' \
 		python/CMakeLists.txt || die "system-dlpack option not switched on"
+
+	# nanobind strips release-build modules itself; leave stripping and split
+	# debug info to Portage. verified 2026-11-05
+	sed -i -e 's/^\(    NOMINSIZE\)$/\1\n    NOSTRIP/' python/CMakeLists.txt || die
+	grep -qx '    NOSTRIP' python/CMakeLists.txt || die "NOSTRIP not added"
 
 	distutils-r1_src_prepare
 }
