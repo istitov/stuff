@@ -53,6 +53,7 @@ BDEPEND="
 		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 		dev-python/pytest-timeout[${PYTHON_USEDEP},-test]
 	)
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 
 PDEPEND="
