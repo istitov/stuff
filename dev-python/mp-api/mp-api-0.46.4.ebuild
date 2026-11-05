@@ -40,3 +40,7 @@ RDEPEND="
 		<dev-python/deltalake-1.6.0[${PYTHON_USEDEP}]
 	')
 "
+
+BDEPEND="
+	$(python_gen_cond_dep 'dev-python/setuptools-scm[${PYTHON_USEDEP}]')
+"
