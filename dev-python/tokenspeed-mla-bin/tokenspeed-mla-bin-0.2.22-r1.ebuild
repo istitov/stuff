@@ -12,7 +12,9 @@ DESCRIPTION="TokenSpeed multi-head latent attention CUDA kernels"
 HOMEPAGE="https://pypi.org/project/tokenspeed-mla/"
 SRC_URI="https://files.pythonhosted.org/packages/7a/f8/06e03acc393dac9bca455a19b52b857a84950b57dffac6416658a61b44f7/${MY_WHEEL}"
 S=${WORKDIR}
-LICENSE="MIT"
+# Portions derive from CUTLASS (BSD-3-Clause) and FlashInfer (Apache-2.0),
+# per the wheel's THIRDPARTYNOTICES. verified 2026-11-05
+LICENSE="MIT Apache-2.0 BSD"
 SLOT="0"
 KEYWORDS="~amd64"
 RDEPEND="
