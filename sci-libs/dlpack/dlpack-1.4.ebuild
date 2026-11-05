@@ -26,6 +26,17 @@ PATCHES=(
 	"${FILESDIR}/${PN}-1.1-dont-turn-warnings-into-errors-when-building-docs.patch"
 )
 
+src_prepare() {
+	# Upstream's project() still declares VERSION 0.6, which ends up in
+	# dlpackConfigVersion.cmake, so find_package(dlpack 1.3) rejects the
+	# install. Declare the real version. verified 2026-11-05
+	sed -i -e "s/^project(dlpack VERSION 0\.6 /project(dlpack VERSION $(ver_cut 1-2) /" \
+		CMakeLists.txt || die
+	grep -q "^project(dlpack VERSION $(ver_cut 1-2) " CMakeLists.txt ||
+		die "project version not set"
+	cmake_src_prepare
+}
+
 src_configure() {
 	local mycmakeargs=(
 		-DBUILD_DOCS=$(usex doc)
