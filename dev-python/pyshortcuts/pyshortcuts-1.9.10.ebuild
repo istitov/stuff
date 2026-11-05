@@ -22,3 +22,7 @@ RDEPEND="
 	dev-python/tabulate[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
