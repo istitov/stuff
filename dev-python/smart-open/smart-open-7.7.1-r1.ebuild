@@ -27,4 +27,11 @@ RDEPEND="
 	dev-python/wrapt[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
-BDEPEND="${PYTHON_DEPS}"
+BDEPEND="
+	${PYTHON_DEPS}
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
+
+# Archives lack VCS metadata; supply the setuptools_scm version.
+# verified 2026-11-05
+export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
