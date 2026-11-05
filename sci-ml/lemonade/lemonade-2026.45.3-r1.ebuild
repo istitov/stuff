@@ -113,7 +113,9 @@ src_compile() {
 
 	# This standalone target is not part of all.
 	if use tauri; then
-		cmake_src_compile tauri-app
+		# Cargo.toml's release profile strips the binary itself; leave
+		# stripping and split debug info to Portage. verified 2026-11-05
+		CARGO_PROFILE_RELEASE_STRIP=false cmake_src_compile tauri-app
 	fi
 }
 
