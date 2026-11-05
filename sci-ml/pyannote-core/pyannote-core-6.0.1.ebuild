@@ -29,5 +29,9 @@ RDEPEND="
 	>=dev-python/sortedcontainers-2.4.0[${PYTHON_USEDEP}]
 "
 
+BDEPEND="
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
+"
+
 # Tests require matplotlib and additional scaffolding.
 RESTRICT="test"
