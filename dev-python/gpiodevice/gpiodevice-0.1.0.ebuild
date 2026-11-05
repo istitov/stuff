@@ -22,7 +22,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64"
 
 RDEPEND="dev-libs/libgpiod[python]"
-BDEPEND="dev-python/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]"
+BDEPEND="
+	dev-python/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
+	dev-python/uv-dynamic-versioning[${PYTHON_USEDEP}]
+"
 
 DOCS=( CHANGELOG.md README.md )
 PATCHES=( "${FILESDIR}/${P}-static-version.patch" )
