@@ -23,3 +23,7 @@ RDEPEND="
 	<dev-python/pyparsing-4[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
