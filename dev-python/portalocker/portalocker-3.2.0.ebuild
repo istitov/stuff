@@ -30,6 +30,7 @@ BDEPEND="
 		>=dev-python/pytest-timeout-2.1.0[${PYTHON_USEDEP}]
 		>=dev-python/sphinx-6.0.0[${PYTHON_USEDEP}]
 	)
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 
 EPYTEST_PLUGINS=( pytest-{rerunfailures,timeout} )
