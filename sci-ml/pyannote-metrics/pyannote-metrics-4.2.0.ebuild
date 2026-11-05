@@ -35,4 +35,8 @@ RDEPEND="
 	>=dev-python/tabulate-0.9.0[${PYTHON_USEDEP}]
 "
 
+BDEPEND="
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
+"
+
 RESTRICT="test"
