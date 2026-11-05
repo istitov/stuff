@@ -46,10 +46,13 @@ RDEPEND="
 # JSON_SYSPATH; the system header-only copy replaces the v3.11.3 download.
 # verified 2026-11-05 against 3.9.0's setup.py and build_helpers.py
 DEPEND="dev-cpp/nlohmann_json"
+# 3.9.0 moved its bindings from pybind11 to nanobind (find_package(nanobind
+# CONFIG REQUIRED)); upstream pins nanobind==2.10.2, which ::gentoo lacks, and
+# the haarmek build links nanobind 3.1.0. verified 2026-11-05
 BDEPEND="
 	dev-build/cmake
 	dev-build/ninja
-	dev-python/pybind11[${PYTHON_USEDEP}]
+	dev-python/nanobind[${PYTHON_USEDEP}]
 "
 
 # Use upstream's pinned LLVM and forbid setup.py downloads.
