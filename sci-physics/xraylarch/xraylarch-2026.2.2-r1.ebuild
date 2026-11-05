@@ -73,3 +73,7 @@ RDEPEND="
 	')
 "
 DEPEND="${RDEPEND}"
+
+BDEPEND="
+	$(python_gen_cond_dep 'dev-python/setuptools-scm[${PYTHON_USEDEP}]')
+"
