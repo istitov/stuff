@@ -26,6 +26,7 @@ RDEPEND="
 BDEPEND="
 	app-arch/unzip
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 
 EPYTEST_PLUGINS=()
