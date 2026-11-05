@@ -25,3 +25,7 @@ RDEPEND="
 	dev-python/ipympl[${PYTHON_USEDEP}]
 	dev-python/link-traits[${PYTHON_USEDEP}]
 "
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
