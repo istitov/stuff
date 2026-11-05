@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=no
+DISTUTILS_USE_PEP517=standalone
 # Upstream provides wheels through cp314 and requires Python <3.15.
 PYTHON_COMPAT=( python3_{12..14} )
 
@@ -33,27 +33,22 @@ KEYWORDS="-* ~amd64"
 RDEPEND="
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
-BDEPEND="$(python_gen_cond_dep '
-	dev-python/installer[${PYTHON_USEDEP}]
-')"
 
-QA_PREBUILT="usr/lib/python3.*/site-packages/cuda_tile/*.so*"
+QA_PREBUILT="usr/lib/python3.*/site-packages/cuda/tile/*.so"
 
 src_unpack() {
-	# Prevent default wheel unpacking; install each implementation below.
-	mkdir -p "${S}/wheel" || die
-	local f
-	for f in ${A}; do
-		cp "${DISTDIR}/${f}" "${S}/wheel/" || die
-	done
+	# The wheels are installed as they are in python_compile.
+	:
 }
 
-python_install() {
-	# Map python3.13 to its cp313 wheel tag.
+python_compile() {
+	# The wheel carries the cutile-cache console script. Installing each
+	# implementation straight into ${D} collides on /usr/bin; staging them
+	# with distutils_wheel_install lets the eclass wrap the script with
+	# python-exec. verified 2026-11-05
 	local pyver=${EPYTHON#python}
 	local cptag=cp${pyver//./}
 	local whl="${MY_PN//-/_}-${MY_PV}-${cptag}-${cptag}-manylinux2014_x86_64.whl"
-	[[ -f ${S}/wheel/${whl} ]] || die "expected wheel ${whl} not found"
-	${EPYTHON} -m installer --destdir="${D}" "${S}/wheel/${whl}" || die
-	python_optimize
+	[[ -f ${DISTDIR}/${whl} ]] || die "expected wheel ${whl} not found"
+	distutils_wheel_install "${BUILD_DIR}/install" "${DISTDIR}/${whl}"
 }
