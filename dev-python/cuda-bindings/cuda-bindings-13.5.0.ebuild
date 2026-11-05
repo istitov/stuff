@@ -31,8 +31,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 # The autouse context fixture requires an NVIDIA GPU.
 RESTRICT="test"
-# build_hooks.py parses CUDA headers with Cython 3.2.x. Required profiler
-# headers make the toolkit's profiler USE flag mandatory.
+# Required profiler headers make the toolkit's profiler USE flag mandatory.
 RDEPEND="
 	>=dev-python/cuda-pathfinder-1.5[${PYTHON_USEDEP}]
 	dev-util/nvidia-cuda-toolkit:=[profiler]
@@ -45,6 +44,10 @@ DEPEND="
 "
 # standalone adds no backend dependency, so require upstream's setuptools >=80
 # directly. The build backend also imports cuda-pathfinder. # verified 2026-07-27
+# Upstream pins Cython below 3.3. Its own 3.3 bump (NVIDIA/cuda-python#2771)
+# is still open over a benchmark regression, and 3.3 enforces declared
+# container item types at runtime, so the EGL frame setters reject raw ints.
+# The cap is kept; ::gentoo still has 3.2.9. verified 2026-11-05
 BDEPEND="
 	>=dev-python/cuda-pathfinder-1.5[${PYTHON_USEDEP}]
 	>=dev-python/cython-3.2.5[${PYTHON_USEDEP}]
