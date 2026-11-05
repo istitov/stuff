@@ -40,3 +40,7 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}"
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
