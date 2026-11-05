@@ -43,6 +43,19 @@ BDEPEND="
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
+src_prepare() {
+	# Pin the version in the VCS-less sdist.
+	grep -qF 'dynamic = ' pyproject.toml || die "dynamic anchor moved"
+	grep -qF '[project]' pyproject.toml || die "project anchor moved"
+	grep -qF '[tool.setuptools-git-versioning]' pyproject.toml ||
+		die "setuptools-git-versioning anchor moved"
+	sed -i -e "/^dynamic = /d" \
+		-e "/^\[project\]$/a version = \"${PV}\"" \
+		-e "/^\[tool\.setuptools-git-versioning\]/,/^\[/{/^\[tool\.setuptools-git-versioning\]/d; /^\[/!d}" \
+		pyproject.toml || die
+	distutils-r1_src_prepare
+}
+
 python_test() {
 	# Skip network-dependent tests.
 	local SKIP_TESTS=" \
