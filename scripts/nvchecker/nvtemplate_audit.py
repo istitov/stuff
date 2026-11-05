@@ -81,12 +81,15 @@ def vkey(pv: str):
 # A tag that plausibly denotes a release (rules out ciflow/*, branch, sha tags).
 _PRERELEASE_RE = re.compile(r'(?i)(rc|alpha|beta|dev|preview|nightly|snapshot|pre|test)\d*')
 # Nightly / build / calver-alpha / foreign-project channels that live alongside a
-# repo's stable tags and are intentionally excluded: ROCm's therock-*/hip-version_*,
-# the LLVM (llvmorg-*) and AMD driver (amdgpu-*) tags that ride in ROCm's LLVM-based
-# repos, YYYYMMDD build/nightly dates (dash/underscore/dot-delimited, incl. mantid's
+# repo's stable tags and are intentionally excluded: ROCm's hip-version_*, the LLVM
+# (llvmorg-*) and AMD driver (amdgpu-*) tags that ride in ROCm's LLVM-based repos,
+# YYYYMMDD build/nightly dates (dash/underscore/dot-delimited, incl. mantid's
 # vX.Y.YYYYMMDD.HHMM), and trailing-letter calver alphas like v26.10.00a.
+# therock-X.Y is NOT excluded: it is ROCm's release line since 7.x, so a tracker
+# still on rocm-X.Y.Z must surface it as a suspect. Dated and rc therock builds
+# are still dropped by the date and prerelease rules.
 _NIGHTLY_RE = re.compile(
-    r'(?i)(therock|hip-version|llvmorg|amdgpu)|(^|[-_.])\d{8}([-_.]|$)|\d\.\d+(?:\.\d+)?[a-z]$')
+    r'(?i)(hip-version|llvmorg|amdgpu)|(^|[-_.])\d{8}([-_.]|$)|\d\.\d+(?:\.\d+)?[a-z]$')
 
 
 def numcore(tag: str) -> str:
