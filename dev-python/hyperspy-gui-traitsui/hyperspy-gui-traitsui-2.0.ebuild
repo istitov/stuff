@@ -28,3 +28,7 @@ RDEPEND="
 	>=dev-python/traits-5.0[${PYTHON_USEDEP}]
 	>=dev-python/traitsui-6.1[${PYTHON_USEDEP},pyqt6=,pyside=,wx=]
 "
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
