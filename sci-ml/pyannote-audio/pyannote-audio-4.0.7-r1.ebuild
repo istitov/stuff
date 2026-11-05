@@ -61,5 +61,9 @@ RDEPEND="
 	')
 "
 
+BDEPEND="
+	$(python_gen_cond_dep 'dev-python/hatch-vcs[${PYTHON_USEDEP}]')
+"
+
 # Tests require papermill and a predownloaded model bundle.
 RESTRICT="test"
