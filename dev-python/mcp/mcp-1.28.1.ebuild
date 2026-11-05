@@ -44,6 +44,11 @@ RDEPEND="
 		>=dev-python/typer-0.16.0[${PYTHON_USEDEP}]
 	)
 "
+
+BDEPEND="
+	dev-python/uv-dynamic-versioning[${PYTHON_USEDEP}]
+"
+
 # Tests require pytest-examples and unavailable Ruff Python bindings.
 RESTRICT="test"
 
