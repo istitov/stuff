@@ -27,4 +27,8 @@ RDEPEND="
 	cli? ( >=dev-python/typer-0.15.1[${PYTHON_USEDEP}] )
 "
 
+BDEPEND="
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
+"
+
 RESTRICT="test"
