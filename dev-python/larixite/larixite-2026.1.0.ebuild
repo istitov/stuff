@@ -31,3 +31,7 @@ RDEPEND="
 		dev-python/requests[${PYTHON_USEDEP}]
 	')
 "
+
+BDEPEND="
+	$(python_gen_cond_dep 'dev-python/setuptools-scm[${PYTHON_USEDEP}]')
+"
