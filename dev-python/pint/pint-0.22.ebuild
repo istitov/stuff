@@ -29,6 +29,10 @@ RDEPEND="
 	numpy? ( dev-python/numpy[${PYTHON_USEDEP}] )
 "
 
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
+
 EPYTEST_PLUGINS=()
 EPYTEST_IGNORE=( pint/testsuite/test_babel.py )
 EPYTEST_DESELECT=( pint/testsuite/test_dask.py::test_async )

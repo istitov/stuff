@@ -25,6 +25,10 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
+BDEPEND="
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
+"
+
 EPYTEST_PLUGINS=()
 EPYTEST_IGNORE=( pint/testsuite/benchmarks )
 EPYTEST_DESELECT=( pint/testsuite/test_dask.py::test_async )
