@@ -2894,7 +2894,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (29) ---
+# --- special (28) ---
 
 ["app-text/mupdf"]
 source = "regex"
@@ -2963,11 +2963,6 @@ source = "pypi"
 pypi = "tokenspeed-triton"
 from_pattern = '^(\d+\.\d+\.\d+)\.post(\d+)$'
 to_pattern = '\1_p\2'
-
-["dev-tex/glossaries"]
-source = "regex"
-url = "https://www.ctan.org/json/2.0/pkg/glossaries"
-regex = '"number"\s*:\s*"([^"]+)"'
 
 ["dev-tex/pgf"]
 source = "github"

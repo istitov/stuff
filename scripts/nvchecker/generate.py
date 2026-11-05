@@ -683,11 +683,6 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "host": "codeberg.org",
         "use_max_tag": True,
     },
-    "dev-tex/glossaries": {
-        "source": "regex",
-        "url": "https://www.ctan.org/json/2.0/pkg/glossaries",
-        "regex": r'"number"\s*:\s*"([^"]+)"',
-    },
     # lsqlite3 is a Fossil repo with no release files; its zips are built
     # per check-in, and the tag list names each release vX.Y.Z.
     # verified 2026-09-27
