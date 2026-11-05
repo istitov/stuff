@@ -31,4 +31,8 @@ RDEPEND="
 	>=dev-python/tqdm-4.67.1[${PYTHON_USEDEP}]
 "
 
+BDEPEND="
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
+"
+
 RESTRICT="test"
