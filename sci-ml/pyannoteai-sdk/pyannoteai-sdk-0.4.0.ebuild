@@ -21,3 +21,7 @@ KEYWORDS="~amd64 ~arm ~arm64"
 RDEPEND="
 	>=dev-python/requests-2.32.3[${PYTHON_USEDEP}]
 "
+
+BDEPEND="
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
+"
