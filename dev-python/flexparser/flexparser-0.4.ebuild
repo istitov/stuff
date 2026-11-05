@@ -19,5 +19,9 @@ RDEPEND="
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
 
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
+
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
