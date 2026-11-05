@@ -25,4 +25,5 @@ BDEPEND="
 		dev-python/pytest-cov[${PYTHON_USEDEP}]
 		dev-util/ruff
 	)
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 "
