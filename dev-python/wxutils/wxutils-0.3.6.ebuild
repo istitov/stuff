@@ -17,3 +17,7 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 RDEPEND="
 	dev-python/wxpython:*[${PYTHON_USEDEP}]
 "
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"

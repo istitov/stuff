@@ -21,3 +21,7 @@ RDEPEND="
 	dev-python/jeepney[${PYTHON_USEDEP}]
 	>=dev-python/packaging-26.2[${PYTHON_USEDEP}]
 "
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"

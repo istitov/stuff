@@ -20,3 +20,7 @@ RDEPEND="
 	dev-python/darkdetect[${PYTHON_USEDEP}]
 	dev-python/jeepney[${PYTHON_USEDEP}]
 "
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
