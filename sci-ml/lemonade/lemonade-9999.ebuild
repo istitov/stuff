@@ -22,10 +22,11 @@ IUSE="openrc system-fastflowlm system-kokoro system-llamacpp system-rocm system-
 # Only one system ROCm source can define ROCM_PATH.
 REQUIRED_USE="?? ( system-rocm system-therock )"
 
-# Missing cpp-httplib pkg-config metadata and optional libwebsockets cause
-# upstream FetchContent downloads at configure time.
+# The C++ dependencies all come from the system (cpp-httplib through its
+# CMake package); only the web and Tauri app builds run npm install, which
+# downloads. Mirrors 2026.45.3; not re-checked against main. 2026-11-05
 PROPERTIES="live"
-RESTRICT="network-sandbox"
+RESTRICT="webui? ( network-sandbox ) tauri? ( network-sandbox )"
 
 # Keep the systemd account/state across USE changes; OpenRC uses LEMONADE_USER.
 # Linux always links libdrm_amdgpu; require its flag. verified 2026-07-18
@@ -83,13 +84,6 @@ BDEPEND="
 
 src_prepare() {
 	cmake_src_prepare
-
-	# Gentoo lacks the .pc file used for cpp-httplib detection. Repin the fallback
-	# from a CMake-4-broken tag to compatible v0.38.0; match either SHA or tag.
-	# verified 2026-07-15
-	sed -i \
-		-e '/FetchContent_Declare(httplib/,/GIT_TAG/ s|GIT_TAG .*|GIT_TAG v0.38.0|' \
-		CMakeLists.txt || die
 }
 
 src_configure() {
@@ -121,9 +115,6 @@ src_compile() {
 
 src_install() {
 	cmake_src_install
-
-	# Do not ship the FetchContent dependency's private static archive.
-	find "${ED}" -name 'libwebsockets.a' -delete || die
 
 	# Upstream installs systemd files unconditionally. Remove them when disabled;
 	# OpenRC reads a different secrets file, and examples also contain non-systemd
