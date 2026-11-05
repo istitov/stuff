@@ -26,3 +26,7 @@ RDEPEND="
 	>=dev-python/pyyaml-5.0[${PYTHON_USEDEP}]
 	>=dev-python/pyshortcuts-1.9.5[${PYTHON_USEDEP}]
 "
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"

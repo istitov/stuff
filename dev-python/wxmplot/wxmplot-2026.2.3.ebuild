@@ -31,3 +31,7 @@ RDEPEND="
 	>=dev-python/pyopengl-3.1.10[${PYTHON_USEDEP}]
 	>=dev-python/pyopengl-accelerate-3.1.10[${PYTHON_USEDEP}]
 "
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
