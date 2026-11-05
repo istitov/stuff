@@ -31,3 +31,20 @@ RDEPEND="
 		>=dev-python/pydantic-settings-2.0.0[${PYTHON_USEDEP}]
 	')
 "
+BDEPEND="
+	$(python_gen_cond_dep '
+		>=dev-python/setuptools-65[${PYTHON_USEDEP}]
+	')
+"
+
+src_prepare() {
+	# Pin the version in the VCS-less sdist and remove versioningit.
+	grep -qF '"versioningit >= 1,< 4", ' pyproject.toml ||
+		die "versioningit anchor moved"
+	grep -qF 'dynamic = ["version"]' pyproject.toml || die "version anchor moved"
+	sed -i \
+		-e 's/"versioningit >= 1,< 4", //' \
+		-e 's/dynamic = \["version"\]/version = "'"${PV}"'"/' \
+		pyproject.toml || die
+	distutils-r1_src_prepare
+}
