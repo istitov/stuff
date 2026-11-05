@@ -135,6 +135,16 @@ pkg_postinst() {
 	elog "  export PATH=/opt/therock-bin/bin:\${PATH}"
 	elog "  export LD_LIBRARY_PATH=/opt/therock-bin/lib:\${LD_LIBRARY_PATH}"
 	elog ""
+	# clang adds the SDK's include/ with -idirafter, after /usr/include, so
+	# an installed dev-util/hip shadows TheRock's HIP headers.
+	# verified 2026-11-05 with 10.1.0's clang++ and hipcc
+	elog "With a system ROCm installed, its /usr/include/hip headers take"
+	elog "precedence over TheRock's own. To build against TheRock's headers, add:"
+	elog ""
+	elog "  export HIPCC_COMPILE_FLAGS_APPEND=\"-isystem /opt/therock-bin/include\""
+	elog ""
+	elog "or pass -isystem /opt/therock-bin/include when calling clang++ directly."
+	elog ""
 	elog "The GPU target was chosen via AMDGPU_TARGETS at emerge time; re-emerge"
 	elog "with a different single amdgpu_targets_* value to switch architectures."
 	elog ""
