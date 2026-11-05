@@ -30,6 +30,7 @@ BDEPEND="
 		>=dev-python/dask-1.0[${PYTHON_USEDEP}]
 		>=dev-python/scipy-1.8.0[${PYTHON_USEDEP}]
 	)
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests unittest
