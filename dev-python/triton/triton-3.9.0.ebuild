@@ -42,8 +42,9 @@ RDEPEND="
 	dev-util/nvidia-cuda-toolkit
 	virtual/zlib:=
 "
-# 3.8.0 always resolves nlohmann/json and, offline, insists on JSON_SYSPATH;
-# the system header-only copy replaces the v3.11.3 download. verified 2026-11-04
+# Since 3.8.0 the build always resolves nlohmann/json and, offline, insists on
+# JSON_SYSPATH; the system header-only copy replaces the v3.11.3 download.
+# verified 2026-11-05 against 3.9.0's setup.py and build_helpers.py
 DEPEND="dev-cpp/nlohmann_json"
 BDEPEND="
 	dev-build/cmake
