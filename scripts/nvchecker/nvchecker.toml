@@ -1186,7 +1186,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (241) ---
+# --- github (242) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2139,6 +2139,12 @@ prefix = "adplug-"
 ["media-libs/draco"]
 source = "github"
 github = "google/draco"
+use_max_tag = true
+prefix = "v"
+
+["media-libs/harfbuzz"]
+source = "github"
+github = "harfbuzz/harfbuzz"
 use_max_tag = true
 prefix = "v"
 
