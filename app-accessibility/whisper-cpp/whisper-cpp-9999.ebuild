@@ -13,18 +13,29 @@ EGIT_REPO_URI="https://github.com/ggml-org/whisper.cpp"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="blas cuda ffmpeg hip opencl sdl2 vulkan"
+IUSE="blas cuda ffmpeg hip opencl sdl2 system-ggml vulkan"
+# ::gentoo ggml has no BLAS backend.
+REQUIRED_USE="system-ggml? ( !blas )"
 
 CDEPEND="blas? ( sci-libs/openblas )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	ffmpeg? ( media-video/ffmpeg:= )
-	hip? ( sci-libs/hipBLAS:= )
-	sdl2? ( media-libs/libsdl2:= )"
+	hip? (
+		dev-util/hip:=
+		sci-libs/hipBLAS:=
+		sci-libs/rocBLAS:=
+	)
+	sdl2? ( media-libs/libsdl2:= )
+	system-ggml? (
+		sci-ml/ggml:=[cuda?,opencl?,vulkan?]
+		hip? ( sci-ml/ggml[rocm] )
+	)"
 DEPEND="${CDEPEND}
 	opencl? ( dev-util/opencl-headers )
 	vulkan? ( dev-util/vulkan-headers )
 "
 RDEPEND="${CDEPEND}
+	!system-ggml? ( !sci-ml/ggml )
 	opencl? ( dev-libs/opencl-icd-loader )
 	vulkan? ( media-libs/vulkan-loader )
 "
@@ -36,6 +47,13 @@ BDEPEND="
 
 pkg_setup() {
 	use opencl && python-any-r1_pkg_setup
+}
+
+src_prepare() {
+	# Drop talk-llama: it fetches llama.cpp during configure. Other SDL2 examples
+	# remain available. verified 2026-08-24
+	sed -i '/add_subdirectory(talk-llama)/d' examples/CMakeLists.txt || die
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -53,8 +71,11 @@ src_configure() {
 		-DGGML_CUDA=$(usex cuda)
 		-DGGML_HIP=$(usex hip)
 		-DGGML_VULKAN=$(usex vulkan)
-		-DWHISPER_FFMPEG=$(usex ffmpeg)
+		-DWHISPER_COMMON_FFMPEG=$(usex ffmpeg)
 		-DWHISPER_SDL2=$(usex sdl2)
+		# The bundled ggml installs the same headers and libraries as
+		# sci-ml/ggml, hence the blocker without the flag.
+		-DWHISPER_USE_SYSTEM_GGML=$(usex system-ggml)
 	)
 	if use cuda; then
 		# nvcc rejects a gcc newer than its toolkit supports; cuda_gccdir picks
@@ -67,7 +88,7 @@ src_configure() {
 		fi
 	fi
 	if use blas; then
-		# Generic FindBLAS may select a library without cblas_sgemm.
+		# Require OpenBLAS: generic FindBLAS may choose libblas without cblas_sgemm.
 		mycmakeargs+=( -DGGML_BLAS_VENDOR=OpenBLAS )
 	fi
 	cmake_src_configure
