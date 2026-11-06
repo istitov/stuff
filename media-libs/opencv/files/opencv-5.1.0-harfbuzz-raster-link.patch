@@ -1,0 +1,20 @@
+OpenCV 5.1.0 picks the split harfbuzz-raster library when the system
+ships it, but stores the choice only as CACHE INTERNAL. pkg_check_modules()
+has already set normal HARFBUZZ_LIBRARIES / HARFBUZZ_INCLUDE_DIR variables
+for plain harfbuzz, and under policy CMP0126 a normal variable shadows the
+cache entry, so imgproc links -lharfbuzz without -lharfbuzz-raster and
+fails on every hb_raster_* symbol. Set the normal variables as well.
+
+--- a/cmake/OpenCVFindHarfBuzz.cmake	2026-11-06 13:34:46.897219960 +0100
++++ b/cmake/OpenCVFindHarfBuzz.cmake	2026-11-06 13:34:46.908155181 +0100
+@@ -73,6 +73,10 @@
+       if(HARFBUZZ_HAS_RASTER)
+         set(HARFBUZZ_INCLUDE_DIR "${_hb_inc}" CACHE INTERNAL "")
+         set(HARFBUZZ_LIBRARIES "${_hb_libs}" CACHE INTERNAL "")
++        # pkg_check_modules() left normal variables of these names, which
++        # shadow the cache entries under CMP0126 and drop -lharfbuzz-raster.
++        set(HARFBUZZ_INCLUDE_DIR "${_hb_inc}")
++        set(HARFBUZZ_LIBRARIES "${_hb_libs}")
+         set(HAVE_HARFBUZZ 1)
+       else()
+         message(STATUS "HarfBuzz: found system version ${HARFBUZZ_VERSION} but it lacks the hb-raster API; building the bundled copy instead")
