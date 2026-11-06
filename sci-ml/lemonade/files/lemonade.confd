@@ -12,8 +12,9 @@ LEMONADE_USER=""
 # reach the host over SSH / WireGuard. lemond ships no transport
 # encryption; the bind is the security boundary for the HTTP API. (Note:
 # lemond also emits a UDP presence broadcast on LAN interfaces at startup,
-# on by default and independent of this bind; turn it off by setting
-# no_broadcast to true in ~/.cache/lemonade/config.json.)
+# on by default and independent of this bind; turn it off in
+# ~/.cache/lemonade/config.json by setting broadcast to false on 11.7.0
+# and later, or no_broadcast to true on older versions.)
 #LEMONADE_HOST="127.0.0.1"
 
 # Port. Leave empty to use lemond's default (13305) / the config.json value.
