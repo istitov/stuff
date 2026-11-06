@@ -19,7 +19,9 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
-IUSE="blas cuda ffmpeg hip opencl sdl2 vulkan"
+IUSE="blas cuda ffmpeg hip opencl sdl2 system-ggml vulkan"
+# ::gentoo ggml has no BLAS backend.
+REQUIRED_USE="system-ggml? ( !blas )"
 
 CDEPEND="blas? ( sci-libs/openblas )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
@@ -29,12 +31,17 @@ CDEPEND="blas? ( sci-libs/openblas )
 		sci-libs/hipBLAS:=
 		sci-libs/rocBLAS:=
 	)
-	sdl2? ( media-libs/libsdl2:= )"
+	sdl2? ( media-libs/libsdl2:= )
+	system-ggml? (
+		sci-ml/ggml:=[cuda?,opencl?,vulkan?]
+		hip? ( sci-ml/ggml[rocm] )
+	)"
 DEPEND="${CDEPEND}
 	opencl? ( dev-util/opencl-headers )
 	vulkan? ( dev-util/vulkan-headers )
 "
 RDEPEND="${CDEPEND}
+	!system-ggml? ( !sci-ml/ggml )
 	opencl? ( dev-libs/opencl-icd-loader )
 	vulkan? ( media-libs/vulkan-loader )
 "
@@ -72,6 +79,9 @@ src_configure() {
 		-DGGML_VULKAN=$(usex vulkan)
 		-DWHISPER_COMMON_FFMPEG=$(usex ffmpeg)
 		-DWHISPER_SDL2=$(usex sdl2)
+		# The bundled ggml (0.23.0 in 1.9.4) installs the same headers and
+		# libraries as sci-ml/ggml, hence the blocker without the flag.
+		-DWHISPER_USE_SYSTEM_GGML=$(usex system-ggml)
 	)
 	if use cuda; then
 		# nvcc rejects a gcc newer than its toolkit supports; cuda_gccdir picks
