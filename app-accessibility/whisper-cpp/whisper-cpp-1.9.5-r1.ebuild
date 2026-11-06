@@ -1,0 +1,108 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{12..15} )
+
+inherit cuda cmake python-any-r1
+
+MY_PN="whisper.cpp"
+MY_P="${MY_PN}-${PV}"
+
+DESCRIPTION="Port of OpenAI's Whisper model in C/C++"
+HOMEPAGE="https://github.com/ggml-org/whisper.cpp"
+SRC_URI="https://github.com/ggml-org/whisper.cpp/archive/refs/tags/v${PV}.tar.gz -> ${MY_P}.tar.gz"
+
+S="${WORKDIR}/${MY_P}"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="blas cuda ffmpeg hip opencl sdl2 system-ggml vulkan"
+# ::gentoo ggml has no BLAS backend.
+REQUIRED_USE="system-ggml? ( !blas )"
+
+CDEPEND="blas? ( sci-libs/openblas )
+	cuda? ( dev-util/nvidia-cuda-toolkit:= )
+	ffmpeg? ( media-video/ffmpeg:= )
+	hip? (
+		dev-util/hip:=
+		sci-libs/hipBLAS:=
+		sci-libs/rocBLAS:=
+	)
+	sdl2? ( media-libs/libsdl2:= )
+	system-ggml? (
+		sci-ml/ggml:=[cuda?,opencl?,vulkan?]
+		hip? ( sci-ml/ggml[rocm] )
+	)"
+DEPEND="${CDEPEND}
+	opencl? ( dev-util/opencl-headers )
+	vulkan? ( dev-util/vulkan-headers )
+"
+RDEPEND="${CDEPEND}
+	!system-ggml? ( !sci-ml/ggml )
+	opencl? ( dev-libs/opencl-icd-loader )
+	vulkan? ( media-libs/vulkan-loader )
+"
+# The OpenCL backend embeds its kernels with a stdlib-only Python script.
+BDEPEND="
+	opencl? ( ${PYTHON_DEPS} )
+	vulkan? ( media-libs/shaderc )
+"
+
+pkg_setup() {
+	use opencl && python-any-r1_pkg_setup
+}
+
+src_prepare() {
+	# Drop talk-llama: it fetches llama.cpp during configure. Other SDL2 examples
+	# remain available. verified 2026-08-24
+	sed -i '/add_subdirectory(talk-llama)/d' examples/CMakeLists.txt || die
+	cmake_src_prepare
+}
+
+src_configure() {
+	local mycmakeargs=(
+		-DWHISPER_BUILD_EXAMPLES=ON
+		-DWHISPER_BUILD_TESTS=OFF
+		-DGGML_NATIVE=OFF
+		-DGGML_CCACHE=OFF
+		-DGGML_BLAS=$(usex blas)
+		-DGGML_OPENCL=$(usex opencl)
+		# ggml accepts only Adreno and Intel GPUs, and its Adreno kernels reject
+		# every other device, so they are enabled only where Adreno exists.
+		# verified 2026-10-06
+		-DGGML_OPENCL_USE_ADRENO_KERNELS=$(usex arm64)
+		-DGGML_CUDA=$(usex cuda)
+		-DGGML_HIP=$(usex hip)
+		-DGGML_VULKAN=$(usex vulkan)
+		-DWHISPER_COMMON_FFMPEG=$(usex ffmpeg)
+		-DWHISPER_SDL2=$(usex sdl2)
+		# The bundled ggml (0.26.0 in 1.9.5) installs the same headers and
+		# libraries as sci-ml/ggml, hence the blocker without the flag.
+		-DWHISPER_USE_SYSTEM_GGML=$(usex system-ggml)
+	)
+	if use cuda; then
+		# nvcc rejects a gcc newer than its toolkit supports; cuda_gccdir picks
+		# the newest installed one it accepts. It returns nothing under a
+		# non-GNU toolchain, and a path that does not exist where CHOST is not
+		# *-pc-linux-gnu; nvcc then keeps its default. verified 2026-10-08
+		local cuda_gcc_bindir
+		if cuda_gcc_bindir="$(cuda_gccdir)" && [[ -x ${cuda_gcc_bindir}/g++ ]]; then
+			mycmakeargs+=( -DCMAKE_CUDA_HOST_COMPILER="${cuda_gcc_bindir}/g++" )
+		fi
+	fi
+	if use blas; then
+		# Require OpenBLAS: generic FindBLAS may choose libblas without cblas_sgemm.
+		mycmakeargs+=( -DGGML_BLAS_VENDOR=OpenBLAS )
+	fi
+	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+
+	newinitd "${FILESDIR}/${PN}.init" "${PN}"
+	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
+}
