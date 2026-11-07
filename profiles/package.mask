@@ -31,3 +31,19 @@ app-portage/portopts
 # users opt in to that runtime self-bootstrap (and the beta status)
 # consciously. Lift once a version reuses system packages, or drop the beta tag.
 sci-ml/unsloth-desktop-bin
+
+# Ivan S. Titov <iohann.s.titov@gmail.com> (2026-11-07)
+# OCCT 8.0 is source-incompatible with 7.8, and ::gentoo ships only 7.8.
+# Unmasked, 8.0.1 would replace it under every ::gentoo consumer (freecad,
+# kicad, prusaslicer, superslicer, netgen, gmsh, dealii, librepcb, opencv),
+# most of which do not cap it and were not written for 8.0; vtk caps it
+# below 8. Only orcaslicer 2.5.0 needs 8.0 (its Design tab); mantid and
+# orcaslicer 2.4.2-r2 are patched for it. Unmask both entries together to
+# use orcaslicer 2.5.0.
+# Built against 8.0.1: freecad-1.1.3, prusaslicer-2.9.7, superslicer-2.7.61.10,
+# dealii-9.8.0-r1[opencascade], gmsh-4.14.1[opencascade] and
+# librepcb-1.3.0-r1[opencascade] fail; netgen-6.2.2607[opencascade] builds;
+# kicad was not tested. verified 2026-11-07
+# Lift once ::gentoo moves to OCCT 8.
+>=sci-libs/opencascade-8
+>=media-gfx/orcaslicer-2.5.0
