@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    libjuice is a lightweight C implementation of Interactive Connectivity
+    Establishment (ICE, RFC 8445) over UDP, with STUN and TURN client and
+    server support. It is the default ICE backend of libdatachannel.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">paullouisageneau/libjuice</remote-id>
+    <bugs-to>https://github.com/paullouisageneau/libjuice/issues</bugs-to>
+  </upstream>
+</pkgmetadata>

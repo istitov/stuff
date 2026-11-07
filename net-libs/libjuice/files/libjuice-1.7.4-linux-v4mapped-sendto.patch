@@ -1,0 +1,33 @@
+Map IPv4 destinations to v4-mapped IPv6 on Linux too.
+
+udp_sendto() hands an AF_INET sockaddr straight to a dual-stack AF_INET6
+socket on Linux, relying on the kernel to accept it. The IPv6 UDP code
+does, but the Smack LSM's socket_sendmsg hook returns EINVAL for any
+destination that is not AF_INET6 on an AF_INET6 socket
+(security/smack/smack_lsm.c; the v4-mapped form passes). On a kernel
+with Smack active every IPv4 STUN/TURN request fails and candidate
+gathering times out. Take
+the getsockname() + v4-mapped path that other platforms already use;
+addr_map_inet6_v4mapped() leaves IPv6 destinations and IPv4 sockets
+untouched. verified 2026-11-07
+
+--- a/src/udp.c
++++ b/src/udp.c
+@@ -202,7 +202,6 @@
+ }
+ 
+ int udp_sendto(socket_t sock, const char *data, size_t size, const addr_record_t *dst) {
+-#ifndef __linux__
+ 	addr_record_t tmp = *dst;
+ 	addr_record_t name;
+ 	name.len = sizeof(name.addr);
+@@ -214,9 +213,6 @@
+ 		JLOG_WARN("getsockname failed, errno=%d", sockerrno);
+ 	}
+ 	return sendto(sock, data, (socklen_t)size, 0, (const struct sockaddr *)&tmp.addr, tmp.len);
+-#else
+-	return sendto(sock, data, size, 0, (const struct sockaddr *)&dst->addr, dst->len);
+-#endif
+ }
+ 
+ int udp_sendto_self(socket_t sock, const char *data, size_t size) {
