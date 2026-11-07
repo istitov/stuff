@@ -193,6 +193,12 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "from_pattern": r"^release_([0-9]+)_([0-9]+)_([0-9]+)$",
         "to_pattern": r"\1.\2.\3",
     },
+    # OCCT tags releases as VX_Y_Z, besides _betaN, _rcN and _pN tags.
+    "sci-libs/opencascade": {
+        "include_regex": r"^V[0-9]+_[0-9]+_[0-9]+$",
+        "from_pattern": r"^V([0-9]+)_([0-9]+)_([0-9]+)$",
+        "to_pattern": r"\1.\2.\3",
+    },
     # Upstream tags releases as vYYYY-MM-DD; Portage uses YYYY.MM.DD.
     "media-plugins/deadbeef-vgmstream": {
         "include_regex": r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
