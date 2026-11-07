@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    Open CASCADE Technology 8, ahead of ::gentoo, which carries 7.8.
+    <pkg>media-gfx/orcaslicer</pkg> 2.5.0 needs the 8.0 API for its
+    parametric Design tab.
+  </longdescription>
+  <use>
+    <flag name="freeimage">Enable support for image i/o via <pkg>media-libs/freeimage</pkg></flag>
+    <flag name="jemalloc">Enable jemalloc allocator support via <pkg>dev-libs/jemalloc</pkg></flag>
+    <flag name="json">Enable JSON support through <pkg>dev-libs/rapidjson</pkg></flag>
+    <flag name="optimize">Don't clear allocated memory. Use optimized memory manager unless USE="tbb" is set</flag>
+    <flag name="tbb">Enable multithreading with the Intel Threads Building Block <pkg>dev-cpp/tbb</pkg></flag>
+    <flag name="vtk">Enable Visualization Toolkit support via <pkg>sci-libs/vtk</pkg></flag>
+  </use>
+  <upstream>
+    <bugs-to>https://github.com/Open-Cascade-SAS/OCCT/issues</bugs-to>
+    <changelog>https://github.com/Open-Cascade-SAS/OCCT/releases</changelog>
+    <doc>https://github.com/Open-Cascade-SAS/OCCT/wiki</doc>
+    <remote-id type="github">Open-Cascade-SAS/OCCT</remote-id>
+  </upstream>
+</pkgmetadata>

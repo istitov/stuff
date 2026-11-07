@@ -1,0 +1,17 @@
+Subject: [PATCH] match glibc posix_memalign exception spec
+
+The fallback declaration (taken on non-x86 GCC) conflicts with glibc's
+noexcept one. Rebased onto OCCT 8.0.1 from ::gentoo
+opencascade-7.8.0-jemalloc-noexcept.
+
+--- a/src/FoundationClasses/TKernel/Standard/Standard.cxx
++++ b/src/FoundationClasses/TKernel/Standard/Standard.cxx
+@@ -29,7 +29,7 @@
+        && (defined(__i386) || defined(__x86_64)))
+   #include <mm_malloc.h>
+ #else
+-extern "C" int posix_memalign(void** thePtr, size_t theAlign, size_t theSize);
++extern "C" int posix_memalign(void** thePtr, size_t theAlign, size_t theSize) throw();
+ #endif
+ 
+ namespace
