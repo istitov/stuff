@@ -44,10 +44,10 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
 PATCHES=(
-	"${FILESDIR}/${P}-boost-1.89-system.patch"
-	"${FILESDIR}/${P}-boost-asio-resolver.patch"
-	"${FILESDIR}/${P}-boost-filesystem-copy-options.patch"
-	"${FILESDIR}/${P}-opencv-no-world.patch"
+	"${FILESDIR}/${P}-boost-1.89-system.patch.xz"
+	"${FILESDIR}/${P}-boost-asio-resolver.patch.xz"
+	"${FILESDIR}/${P}-boost-filesystem-copy-options.patch.xz"
+	"${FILESDIR}/${P}-opencv-no-world.patch.xz"
 	# System wxGTK enables assertions unlike upstream's bundled build; suppress
 	# the modal assertion dialog that otherwise wedges startup.
 	"${FILESDIR}/${PN}-2.3.2-wx-noop-assert-handler.patch"
@@ -60,12 +60,12 @@ PATCHES=(
 	"${FILESDIR}/${PN}-2.4.0-md4c-system.patch"
 	# Embed the system Python instead of a bundled 3.12.13 runtime, and look
 	# for the system uv instead of downloading one.
-	"${FILESDIR}/${P}-system-python.patch"
+	"${FILESDIR}/${P}-system-python.patch.xz"
 	# The plugin sandbox only gates 3.12's thread entry point; on 3.13+
 	# plugins could start threads without the Threading grant.
-	"${FILESDIR}/${P}-plugin-audit-py313-threads.patch"
+	"${FILESDIR}/${P}-plugin-audit-py313-threads.patch.xz"
 	# Do not copy upstream's bundled FFmpeg libraries into the install.
-	"${FILESDIR}/${P}-system-ffmpeg.patch"
+	"${FILESDIR}/${P}-system-ffmpeg.patch.xz"
 )
 
 # OpenSSL and unbundled md4c are runtime links; customized Clipper2 is static.
@@ -153,6 +153,17 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# 2.5.0's own patches ship xz-compressed to keep files/ under pkgcheck's
+	# size limit; eapply does not decompress, so expand them into ${T}.
+	local i b
+	mkdir "${T}"/patches || die
+	for i in "${!PATCHES[@]}"; do
+		[[ ${PATCHES[i]} == *.xz ]] || continue
+		b=${PATCHES[i]##*/}
+		xz -dc "${PATCHES[i]}" > "${T}/patches/${b%.xz}" || die
+		PATCHES[i]="${T}/patches/${b%.xz}"
+	done
+
 	# Upstream's deps tree replaces SolveSpaceLib's demo-only CMakeLists.
 	cp deps/SLVS/CMakeLists.txt.in \
 		"${WORKDIR}/SolveSpaceLib-${SLVS_COMMIT}/CMakeLists.txt" || die
