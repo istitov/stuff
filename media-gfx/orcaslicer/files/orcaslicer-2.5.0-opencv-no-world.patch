@@ -1,0 +1,32 @@
+From: stuff overlay maintainer
+Subject: Link the OpenCV modules instead of opencv_world
+
+Upstream's deps build produces the monolithic opencv_world library;
+Gentoo's OpenCV installs per-module libraries. libslic3r uses core,
+imgproc and imgcodecs.
+# verified 2026-11-07
+
+diff --git a/src/libslic3r/CMakeLists.txt b/src/libslic3r/CMakeLists.txt
+index 034f8b57..5f540837 100644
+--- a/src/libslic3r/CMakeLists.txt
++++ b/src/libslic3r/CMakeLists.txt
+@@ -625,7 +625,7 @@ cmake_policy(SET CMP0011 NEW)
+ # can't reach it; the default opts its Boost lookup into BoostConfig (CMP0167).
+ set(CMAKE_POLICY_DEFAULT_CMP0167 NEW)
+ find_package(CGAL 6.2 REQUIRED)
+-find_package(OpenCV REQUIRED core)
++find_package(OpenCV REQUIRED core imgproc imgcodecs)
+ find_package(assimp REQUIRED)
+ unset(CMAKE_POLICY_DEFAULT_CMP0167)
+ cmake_policy(POP)
+@@ -763,7 +763,9 @@ target_link_libraries(libslic3r
+         libigl
+         libnest2d
+         miniz
+-        opencv_world
++        opencv_core
++        opencv_imgproc
++        opencv_imgcodecs
+         assimp::assimp
+     PRIVATE
+         ${CMAKE_DL_LIBS}

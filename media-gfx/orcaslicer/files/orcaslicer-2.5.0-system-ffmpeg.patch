@@ -1,0 +1,45 @@
+From: stuff overlay maintainer
+Subject: Optionally skip copying the bundled FFmpeg libraries
+
+2.5.0 replaces the GStreamer camera backend with FFmpeg. On Linux it
+already finds libav* through pkg-config, but orcaslicer_copy_sos()
+still copies the deps tree's FFmpeg 7.1 shared objects, by exact
+soname, next to the binary and the tests, and two install rules put
+them into the install prefix. With ORCA_SYSTEM_FFMPEG=ON the helper
+copies nothing and neither rule runs, so the binary links and runs
+against the system libraries. Applies after the system-python patch.
+# verified 2026-11-07
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index af9954ee..7b980b10 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -125,6 +125,7 @@ option(SLIC3R_ASAN              "Enable ASan on Clang and GCC" 0)
+ option(ORCA_BUILD_PYTHON_STUBGEN_MODULE "Build importable Python module for pybind11-stubgen" ON)
+ set(ORCA_BUNDLED_UV_EXECUTABLE "" CACHE FILEPATH "Path to a uv executable to bundle for Python package installation. Leave empty to auto-download.")
+ option(ORCA_SYSTEM_PYTHON "Embed the system Python and use the system uv instead of bundling them" OFF)
++option(ORCA_SYSTEM_FFMPEG "Link the system FFmpeg in place and do not copy or install the bundled one" OFF)
+ set(ORCA_SYSTEM_UV_EXECUTABLE "/usr/bin/uv" CACHE FILEPATH "uv looked up at runtime when ORCA_SYSTEM_PYTHON is ON")
+ 
+ # Auto-download uv if not provided by the user.
+@@ -1185,6 +1186,11 @@ endfunction()
+ 
+ function(orcaslicer_copy_sos target config postfix output_sos)
+ 
++    if (ORCA_SYSTEM_FFMPEG)
++        set(${output_sos} "" PARENT_SCOPE)
++        return()
++    endif ()
++
+     get_property(_is_multi GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+     get_target_property(_alt_out_dir ${target} RUNTIME_OUTPUT_DIRECTORY)
+ 
+@@ -1358,7 +1364,7 @@ else ()
+     endif()
+ endif ()
+ 
+-if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
++if (CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT ORCA_SYSTEM_FFMPEG)
+     set(LIBRARY_FILES
+     ${LIBDIR_BIN}/libavformat.so.61
+     ${LIBDIR_BIN}/libavformat.so.61.1.100

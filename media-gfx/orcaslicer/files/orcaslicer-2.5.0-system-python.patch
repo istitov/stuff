@@ -1,0 +1,140 @@
+From: stuff overlay maintainer
+Subject: Optionally embed the system Python and use the system uv
+
+2.5.0 embeds CPython through pybind11 for its plugin system and
+requires exactly the 3.12.13 runtime its deps tree builds from
+source, plus a uv binary downloaded at configure time. The embedding
+itself is version-neutral: the interpreter is set up through PyConfig,
+plugin packages live under a cpXY directory taken from the headers, and
+the bundled pybind11 3.0.1 supports 3.14. The plugin audit sandbox is
+not; see the plugin-audit-py313-threads patch.
+
+ORCA_SYSTEM_PYTHON=ON finds the interpreter given in Python3_EXECUTABLE
+and records its sys.base_prefix as the runtime home; drops the
+bundled-runtime rpath and the build-tree copies next to the app and the
+slic3rutils tests; and skips both the uv download and its installation,
+compiling in ORCA_SYSTEM_UV_EXECUTABLE instead, which the runtime only
+uses if it exists. The stdlib and interpreter names are derived from
+PY_MAJOR_VERSION/PY_MINOR_VERSION instead of the hard-coded
+"python3.12". The default (OFF) keeps upstream's bundled behaviour.
+# verified 2026-11-07
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 21ee7c03..af9954ee 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -124,6 +124,8 @@ option(SLIC3R_ASAN              "Enable ASan on Clang and GCC" 0)
+ # Python stubgen module
+ option(ORCA_BUILD_PYTHON_STUBGEN_MODULE "Build importable Python module for pybind11-stubgen" ON)
+ set(ORCA_BUNDLED_UV_EXECUTABLE "" CACHE FILEPATH "Path to a uv executable to bundle for Python package installation. Leave empty to auto-download.")
++option(ORCA_SYSTEM_PYTHON "Embed the system Python and use the system uv instead of bundling them" OFF)
++set(ORCA_SYSTEM_UV_EXECUTABLE "/usr/bin/uv" CACHE FILEPATH "uv looked up at runtime when ORCA_SYSTEM_PYTHON is ON")
+ 
+ # Auto-download uv if not provided by the user.
+ # uv is pinned: the executable ships inside the signed app, so the build must
+@@ -163,7 +165,10 @@ if(FLATPAK AND NOT ORCA_BUNDLED_UV_EXECUTABLE AND EXISTS "${ORCA_UV_FLATPAK_BINA
+     set(ORCA_BUNDLED_UV_EXECUTABLE "${ORCA_UV_FLATPAK_BINARY}")
+ endif()
+ 
+-if(NOT ORCA_BUNDLED_UV_EXECUTABLE)
++if(ORCA_SYSTEM_PYTHON)
++    # Neither downloaded nor installed; the runtime checks this path itself.
++    set(ORCA_BUNDLED_UV_EXECUTABLE "")
++elseif(NOT ORCA_BUNDLED_UV_EXECUTABLE)
+     if(NOT EXISTS "${ORCA_UV_BINARY}")
+         # Select uv by TARGET arch. On macOS universal builds each leg sets a single
+         # CMAKE_OSX_ARCHITECTURES (and the x86_64 leg cross-builds on an arm64 runner),
+@@ -257,6 +262,9 @@ else()
+     set(ORCA_BUNDLED_UV_EXECUTABLE_CONFIG "")
+     set(ORCA_BUNDLED_UV_FILENAME "")
+ endif()
++if(ORCA_SYSTEM_PYTHON)
++    set(ORCA_BUNDLED_UV_EXECUTABLE_CONFIG "${ORCA_SYSTEM_UV_EXECUTABLE}")
++endif()
+ 
+ # If SLIC3R_FHS is 1 -> SLIC3R_DESKTOP_INTEGRATION is always 0, othrewise variable.
+ CMAKE_DEPENDENT_OPTION(SLIC3R_DESKTOP_INTEGRATION "Allow performing desktop integration during runtime" 1 "NOT SLIC3R_FHS" 0)
+@@ -974,6 +982,18 @@ endforeach()
+ 
+ find_package(NLopt 1.4 REQUIRED)
+ 
++if(ORCA_SYSTEM_PYTHON)
++    # Python3_EXECUTABLE selects the interpreter; its prefix becomes the
++    # runtime home that PythonInterpreter::initialize() validates.
++    find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter Development.Embed)
++    execute_process(
++        COMMAND "${Python3_EXECUTABLE}" -c "import sys; print(sys.base_prefix)"
++        OUTPUT_VARIABLE _bundled_python_root
++        OUTPUT_STRIP_TRAILING_WHITESPACE
++        COMMAND_ERROR_IS_FATAL ANY
++    )
++    message(STATUS "Embedding system Python ${Python3_VERSION} from ${_bundled_python_root}")
++else()
+ # Use bundled Python from deps instead of system Python
+ set(_bundled_python_version "3.12.13")
+ set(_bundled_python_abi "312")
+@@ -1037,6 +1057,7 @@ endif()
+ find_package(Python3 ${_bundled_python_version} EXACT REQUIRED
+     COMPONENTS Interpreter Development.Embed
+ )
++endif()
+ 
+ # Provide a minimal pybind11::embed target sourced from deps_src/pybind11 headers.
+ set(PYBIND11_SOURCE_DIR "${CMAKE_SOURCE_DIR}/deps_src/pybind11")
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index c8d882f2..61d5bff4 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -159,7 +159,7 @@ if (APPLE)
+     # A linker flag rather than the BUILD_RPATH property because the release
+     # flow uses the Xcode generator, which does not honor BUILD_RPATH.
+     target_link_options(OrcaSlicer PRIVATE "LINKER:-rpath,@executable_path/python/lib")
+-elseif (UNIX AND NOT WIN32)
++elseif (UNIX AND NOT WIN32 AND NOT ORCA_SYSTEM_PYTHON)
+     set_target_properties(OrcaSlicer PROPERTIES
+         # Build tree + AppImage, which packages the build-tree binary.
+         BUILD_RPATH "$ORIGIN/python/lib;$ORIGIN/../lib/python/lib"
+@@ -360,11 +360,13 @@ else ()
+         COMMAND ln -sfn "${SLIC3R_RESOURCES_DIR}" "${BIN_RESOURCES_DIR}"
+         COMMENT "Symlinking the resources directory into the build tree"
+         VERBATIM)
++    if (NOT ORCA_SYSTEM_PYTHON)
+     add_custom_command(TARGET OrcaSlicer POST_BUILD
+         COMMAND ${CMAKE_COMMAND} -E rm -rf "${BIN_DIR}/python"
+         COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_PREFIX_PATH}/libpython" "${BIN_DIR}/python"
+         COMMENT "Copying Python runtime into the build tree"
+         VERBATIM)
++    endif ()
+     # Stage uv next to the binary for the build-tree/.app flows, which never
+     # run install() -- see the layout map above; lookup is bundled_uv_path().
+     if(ORCA_BUNDLED_UV_EXECUTABLE AND EXISTS "${ORCA_BUNDLED_UV_EXECUTABLE}")
+diff --git a/src/slic3r/plugin/PythonInterpreter.cpp b/src/slic3r/plugin/PythonInterpreter.cpp
+index bc231c29..59dc994b 100644
+--- a/src/slic3r/plugin/PythonInterpreter.cpp
++++ b/src/slic3r/plugin/PythonInterpreter.cpp
+@@ -177,8 +177,10 @@ std::string format_python_error(PyObject* ptype, PyObject* pvalue, PyObject* ptr
+ constexpr const char* PYTHON_DLL       = "python312.dll";
+ constexpr const char* PYTHON_DEBUG_DLL = "python312_d.dll";
+ #else
+-constexpr const char* PYTHON_STDLIB_DIR = "python3.12";
+-constexpr const char* PYTHON_EXECUTABLE = "python3.12";
++#define ORCA_PY_STR2(x) #x
++#define ORCA_PY_STR(x) ORCA_PY_STR2(x)
++constexpr const char* PYTHON_STDLIB_DIR = "python" ORCA_PY_STR(PY_MAJOR_VERSION) "." ORCA_PY_STR(PY_MINOR_VERSION);
++constexpr const char* PYTHON_EXECUTABLE = "python" ORCA_PY_STR(PY_MAJOR_VERSION) "." ORCA_PY_STR(PY_MINOR_VERSION);
+ #endif
+ 
+ std::string executable_name(const char* base)
+diff --git a/tests/slic3rutils/CMakeLists.txt b/tests/slic3rutils/CMakeLists.txt
+index 07306e8d..eeebf93f 100644
+--- a/tests/slic3rutils/CMakeLists.txt
++++ b/tests/slic3rutils/CMakeLists.txt
+@@ -93,6 +93,8 @@ if (WIN32)
+         COMMENT "Copying Python runtime for slic3rutils plugin host API tests"
+         VERBATIM
+     )
++elseif (ORCA_SYSTEM_PYTHON)
++    # The system interpreter is found through ORCA_BUNDLED_PYTHON_ROOT.
+ elseif (NOT FLATPAK)
+     # The CI unit-test runner only receives the build/tests tree, so both the
+     # interpreter and the libpython the test binary links have to travel next to
