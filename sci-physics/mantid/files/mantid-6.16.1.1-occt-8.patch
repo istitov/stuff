@@ -1,0 +1,46 @@
+Subject: [PATCH] gate the OCCT 7.6 triangulation API on OCC_VERSION_HEX
+
+MAJOR >= 7 && MINOR >= 6 is false for OCCT 8.0, which then compiles the
+pre-7.6 Poly_Triangulation::Nodes()/Triangles() shim against an API
+that no longer has them.
+
+--- a/Framework/Geometry/src/Rendering/GeometryTriangulator.cpp
++++ b/Framework/Geometry/src/Rendering/GeometryTriangulator.cpp
+@@ -55,7 +55,7 @@
+ 
+ namespace {
+ auto getNode(const Handle(Poly_Triangulation) facing, Standard_Integer i) {
+-#if OCC_VERSION_MAJOR >= 7 && OCC_VERSION_MINOR >= 6
++#if OCC_VERSION_HEX >= 0x070600
+   return facing->Node(i);
+ #else
+   // Compat shim to support OCCT 7.5 and below
+@@ -66,7 +66,7 @@
+ }
+ 
+ auto getTriangle(const Handle(Poly_Triangulation) facing, Standard_Integer i) {
+-#if OCC_VERSION_MAJOR >= 7 && OCC_VERSION_MINOR >= 6
++#if OCC_VERSION_HEX >= 0x070600
+   return facing->Triangle(i);
+ #else
+   // Compat shim to support OCCT 7.5 and below
+--- a/Framework/Geometry/src/Rendering/RenderingHelpersOpenGL.cpp
++++ b/Framework/Geometry/src/Rendering/RenderingHelpersOpenGL.cpp
+@@ -57,7 +57,7 @@
+ 
+ namespace {
+ auto getNode(const Handle(Poly_Triangulation) facing, Standard_Integer i) {
+-#if OCC_VERSION_MAJOR >= 7 && OCC_VERSION_MINOR >= 6
++#if OCC_VERSION_HEX >= 0x070600
+   return facing->Node(i);
+ #else
+   // Compat shim to support OCCT 7.5 and below
+@@ -69,7 +69,7 @@
+ }
+ 
+ auto getTriangle(const Handle(Poly_Triangulation) facing, Standard_Integer i) {
+-#if OCC_VERSION_MAJOR >= 7 && OCC_VERSION_MINOR >= 6
++#if OCC_VERSION_HEX >= 0x070600
+   return facing->Triangle(i);
+ #else
+   // Compat shim to support OCCT 7.5 and below

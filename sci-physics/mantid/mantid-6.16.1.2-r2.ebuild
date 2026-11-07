@@ -113,6 +113,8 @@ MY_PREFIX="/opt/mantid"
 src_prepare() {
 	eapply "${FILESDIR}/${PN}-6.16.1.1-hdf-4.4.patch"
 	eapply "${FILESDIR}/${PN}-6.16.1.1-openssl-4.patch"
+	# The OCCT 7.6 API gate reads false on 8.0.
+	eapply "${FILESDIR}/${PN}-6.16.1.1-occt-8.patch"
 
 	# Retarget OpenCascade's finder from upstream's /opt path to Gentoo's path.
 	sed -i -e 's:/OpenCASCADE:/opencascade:' buildconfig/CMake/FindOpenCascade.cmake || die

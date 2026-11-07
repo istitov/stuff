@@ -137,6 +137,8 @@ MY_PREFIX="/opt/mantid"
 src_prepare() {
 	eapply "${FILESDIR}/${PN}-6.16.1.1-hdf-4.4.patch"
 	eapply "${FILESDIR}/${PN}-6.16.1.1-openssl-4.patch"
+	# The OCCT 7.6 API gate reads false on 8.0.
+	eapply "${FILESDIR}/${PN}-6.16.1.1-occt-8.patch"
 
 	# Backport the Python 3.13 keyword-argument fix (#41974).
 	eapply "${FILESDIR}/${PN}-6.16.1.1-python3.13.patch"

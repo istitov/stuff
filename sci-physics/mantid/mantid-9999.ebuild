@@ -122,6 +122,12 @@ src_prepare() {
 		eapply "${FILESDIR}/${PN}-6.16.1.1-openssl-4.patch"
 	fi
 
+	# The OCCT 7.6 API gate reads false on 8.0; fix it while it remains.
+	if grep -q 'OCC_VERSION_MAJOR >= 7 && OCC_VERSION_MINOR >= 6' \
+			Framework/Geometry/src/Rendering/GeometryTriangulator.cpp; then
+		eapply "${FILESDIR}/${PN}-6.16.1.1-occt-8.patch"
+	fi
+
 	# Remove the obsolete WebEngine/WebKit preference block when present.
 	if grep -q 'Prefer WebEngineWidgets over WebkitWidgets' \
 			qt/widgets/common/CMakeLists.txt 2>/dev/null; then
