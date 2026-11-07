@@ -48,6 +48,9 @@ PATCHES=(
 )
 
 # CGAL patches need >=6.0 for the AABB_traits_3 rename. verified 2026-09-17
+# 2.4.2 needed a patch for headers and typedefs OCCT 8 removed; this
+# version is assumed to share that code; it was not built against 8.
+# 2026-11-07
 RDEPEND="
 	app-crypt/libsecret
 	dev-cpp/eigen:3
@@ -81,7 +84,7 @@ RDEPEND="
 	net-misc/curl[adns]
 	sci-libs/libigl
 	sci-libs/nlopt
-	sci-libs/opencascade:=
+	<sci-libs/opencascade-8:=
 	>=sci-mathematics/cgal-6.0:=
 	sys-apps/dbus
 	virtual/opengl
