@@ -1,0 +1,38 @@
+Subject: [PATCH] build against OCCT 8
+
+OCCT 8.0 no longer pulls TDF_LabelSequence.hxx and
+TColStd_SequenceOfHAsciiString.hxx in transitively, and it removed the
+NCollection_Utf8Iter typedef. Include the headers and let the UTF-8
+iterator type be deduced. Both headers also exist in 7.8; the patched
+sources were only built against 8.0.1.
+# verified 2026-11-07
+
+--- a/src/libslic3r/Format/STEP.cpp
++++ b/src/libslic3r/Format/STEP.cpp
+@@ -24,6 +24,7 @@
+ #include "Interface_Static.hxx"
+ #include "XCAFDoc_DocumentTool.hxx"
+ #include "XCAFDoc_ShapeTool.hxx"
++#include "TDF_LabelSequence.hxx"
+ #include "XCAFApp_Application.hxx"
+ #include "TopoDS_Solid.hxx"
+ #include "TopoDS_Compound.hxx"
+--- a/src/libslic3r/Shape/TextShape.cpp
++++ b/src/libslic3r/Shape/TextShape.cpp
+@@ -27,6 +27,7 @@
+ #include "Font_BRepTextBuilder.hxx"
+ #include "BRepPrimAPI_MakePrism.hxx"
+ #include "Font_FontMgr.hxx"
++#include "TColStd_SequenceOfHAsciiString.hxx"
+ 
+ #include <boost/log/trivial.hpp>
+ 
+@@ -133,7 +134,7 @@
+     // get the text width
+     text_width                  = 0;
+     NCollection_String coll_str = aText;
+-    for (NCollection_Utf8Iter anIter = coll_str.Iterator(); *anIter != 0;) {
++    for (auto anIter = coll_str.Iterator(); *anIter != 0;) {
+         const Standard_Utf32Char aCharThis = *anIter;
+         const Standard_Utf32Char aCharNext = *++anIter;
+         double                   width     = aFont.AdvanceX(aCharThis, aCharNext);

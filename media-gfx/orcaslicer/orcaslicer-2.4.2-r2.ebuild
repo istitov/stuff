@@ -31,6 +31,10 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 PATCHES=(
+	# OCCT 8 dropped transitive includes and the NCollection_Utf8Iter typedef.
+	"${FILESDIR}/${P}-occt-8.patch"
+	# Without libspnav[static-libs], 3D-mouse support was silently left out.
+	"${FILESDIR}/${P}-spnav-shared.patch"
 	# Reuse matching older patches rather than create DuplicateFiles copies.
 	"${FILESDIR}/${PN}-2.3.2-boost-1.90.patch"
 	"${FILESDIR}/${PN}-2.3.2-boost-process-v1.patch"
@@ -58,8 +62,8 @@ PATCHES=(
 )
 
 # OpenSSL and unbundled md4c are runtime links; customized Clipper2 is static.
-# libspnav is build-only because 3D-mouse support links libspnav.a.
-# verified 2026-06-20
+# 3D-mouse support links libspnav, the shared library unless
+# libspnav[static-libs] is set. verified 2026-11-07
 # CGAL patches need >=6.0 for the AABB_traits_3 rename. verified 2026-09-17
 RDEPEND="
 	app-crypt/libsecret
@@ -70,6 +74,7 @@ RDEPEND="
 	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/gmp:=
+	dev-libs/libspnav
 	dev-libs/md4c
 	dev-libs/mpfr:=
 	dev-libs/openssl:=
@@ -85,7 +90,7 @@ RDEPEND="
 	media-libs/libpng:0=
 	media-libs/nanosvg:=
 	media-libs/qhull:=
-	media-libs/opencv:=
+	media-libs/opencv:=[jpeg,png]
 	net-libs/webkit-gtk:4.1
 	net-misc/curl[adns]
 	sci-libs/libigl
@@ -96,11 +101,12 @@ RDEPEND="
 	virtual/opengl
 	virtual/zlib:=
 	x11-libs/gtk+:3
+	x11-libs/libX11
+	x11-libs/pango
 	x11-libs/wxGTK:${WX_GTK_VER}=[X,curl,gstreamer,keyring,opengl,webkit]
 "
 DEPEND="${RDEPEND}
 	media-libs/qhull[static-libs]
-	dev-libs/libspnav
 "
 BDEPEND="
 	sys-devel/gettext
@@ -182,6 +188,11 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
+
+	# The vendored header-only stb_dxt installs its header and a CMake
+	# export; it is compiled into the binary and is nobody's dependency.
+	rm -r "${ED}"/usr/include/stb_dxt "${ED}"/usr/lib/cmake/stb_dxt || die
+	find "${ED}"/usr/include "${ED}"/usr/lib -depth -type d -empty -delete || die
 
 	# Relocate upstream's FHS-violating /usr/LICENSE.txt.
 	if [[ -f ${ED}/usr/LICENSE.txt ]]; then

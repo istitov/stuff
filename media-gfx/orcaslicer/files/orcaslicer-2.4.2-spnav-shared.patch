@@ -1,0 +1,18 @@
+Subject: [PATCH] accept a shared libspnav
+
+2.4.2 looks only for libspnav.a, which Gentoo installs only with
+libspnav[static-libs], so 3D-mouse support is otherwise silently left
+out. Backport 2.5.0's lookup, which falls back to the shared library.
+# verified 2026-11-07
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -768,7 +768,7 @@
+ 
+ find_path(SPNAV_INCLUDE_DIR spnav.h)
+ if (SPNAV_INCLUDE_DIR)
+-    find_library(SPNAV_LIB NAMES libspnav.a) # Force linking libspnav statically
++    find_library(SPNAV_LIB NAMES libspnav.a spnav)
+     if (SPNAV_LIB)
+         add_definitions(-DHAVE_SPNAV)
+         message(STATUS "SPNAV library found")
