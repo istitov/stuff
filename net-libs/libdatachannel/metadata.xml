@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <longdescription>
+    libdatachannel is a standalone C/C++ implementation of WebRTC Data
+    Channels, WebRTC Media Transport and WebSockets. It uses
+    <pkg>net-libs/libjuice</pkg> for ICE and <pkg>net-libs/usrsctp</pkg>
+    for SCTP. <pkg>media-gfx/orcaslicer</pkg> uses it for printer camera
+    streams.
+  </longdescription>
+  <use>
+    <flag name="media">Enable WebRTC media transport (SRTP) via <pkg>net-libs/libsrtp</pkg></flag>
+    <flag name="websocket">Enable WebSocket client and server support</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">paullouisageneau/libdatachannel</remote-id>
+    <bugs-to>https://github.com/paullouisageneau/libdatachannel/issues</bugs-to>
+    <doc>https://github.com/paullouisageneau/libdatachannel/blob/master/DOC.md</doc>
+  </upstream>
+</pkgmetadata>
