@@ -6,7 +6,7 @@
     <name>Ivan S. Titov</name>
   </maintainer>
   <use>
-    <flag name="harfbuzz">Shape text in the GUI with <pkg>media-libs/harfbuzz</pkg></flag>
+    <flag name="harfbuzz">Shape text with <pkg>media-libs/harfbuzz</pkg> (in 20251009, only in the GUI, so it needs USE=gtk)</flag>
     <flag name="truetype-debugger">Enable truetype debugger in fontforge</flag>
     <flag name="woff2">Enable support for WOFF2 format</flag>
   </use>

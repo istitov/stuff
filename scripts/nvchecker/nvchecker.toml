@@ -2108,6 +2108,7 @@ github = "fontforge/fontforge"
 use_max_tag = true
 include_regex = '^[0-9]{8}$'
 prefix = "v"
+# note: from EGIT_REPO_URI
 
 ["media-gfx/oculante"]
 source = "github"
