@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="harfbuzz">Shape text in the GUI with <pkg>media-libs/harfbuzz</pkg></flag>
+    <flag name="truetype-debugger">Enable truetype debugger in fontforge</flag>
+    <flag name="woff2">Enable support for WOFF2 format</flag>
+  </use>
+  <upstream>
+    <bugs-to>https://github.com/fontforge/fontforge/issues</bugs-to>
+    <remote-id type="github">fontforge/fontforge</remote-id>
+  </upstream>
+</pkgmetadata>
