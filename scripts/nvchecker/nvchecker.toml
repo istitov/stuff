@@ -1186,7 +1186,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (247) ---
+# --- github (248) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2082,6 +2082,12 @@ github = "tutao/tutanota"
 use_max_tag = true
 include_regex = '^tutanota-desktop-release-\d+\.\d+\.\d+$'
 prefix = "tutanota-desktop-release-"
+
+["media-fonts/roboto"]
+source = "github"
+github = "googlefonts/roboto-3-classic"
+use_max_tag = true
+prefix = "v"
 
 ["media-gfx/comfyui"]
 source = "github"
