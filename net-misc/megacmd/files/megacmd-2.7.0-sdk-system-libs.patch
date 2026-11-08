@@ -1,0 +1,114 @@
+Use system http-parser, libutf8proc and zxcvbn-c in the bundled SDK.
+
+sdk/third_party carries copies of http-parser 2.6.0, utf8proc 2.1.0 and
+zxcvbn-c. Link the system libraries instead and include their headers
+from the top-level include directory, where Gentoo installs them.
+
+diff --git a/sdk/cmake/modules/sdklib_libraries.cmake b/sdk/cmake/modules/sdklib_libraries.cmake
+index e51fb8e..f8b3868 100644
+--- a/sdk/cmake/modules/sdklib_libraries.cmake
++++ b/sdk/cmake/modules/sdklib_libraries.cmake
+@@ -9,9 +9,11 @@ macro(load_sdklib_libraries)
+     if(NOT HAVE_GLOB_H AND NOT WIN32)
+         target_link_libraries(SDKlib PUBLIC glob)
+     endif()
+-    target_link_libraries(SDKlib PUBLIC http_parser)
+-    target_link_libraries(SDKlib PUBLIC utf8proc)
+-    target_link_libraries(SDKlib PUBLIC zxcvbn-c)
++    # Gentoo: system net-libs/http-parser, dev-libs/libutf8proc and
++    # dev-libs/zxcvbn-c instead of the copies in third_party/.
++    find_package(PkgConfig REQUIRED)
++    pkg_check_modules(utf8proc REQUIRED IMPORTED_TARGET libutf8proc)
++    target_link_libraries(SDKlib PUBLIC http_parser PkgConfig::utf8proc zxcvbn)
+ 
+     if(VCPKG_ROOT)
+         find_package(cryptopp CONFIG REQUIRED)
+diff --git a/sdk/include/mega/utils.h b/sdk/include/mega/utils.h
+index 52c1975..db37e7a 100644
+--- a/sdk/include/mega/utils.h
++++ b/sdk/include/mega/utils.h
+@@ -32,7 +32,7 @@
+ #include <thread>
+ #include <type_traits>
+ #undef SSIZE_MAX
+-#include <utf8proc/utf8proc.h>
++#include <utf8proc.h>
+ #undef SSIZE_MAX
+ 
+ // Include ICU headers
+diff --git a/sdk/include/megaapi_impl.h b/sdk/include/megaapi_impl.h
+index ac4491b..25ccdfe 100644
+--- a/sdk/include/megaapi_impl.h
++++ b/sdk/include/megaapi_impl.h
+@@ -47,7 +47,7 @@
+ #ifdef HAVE_LIBUV
+ #include "uv.h"
+ 
+-#include <http_parser/http_parser.h>
++#include <http_parser.h>
+ 
+ #ifdef USE_OPENSSL
+ #include <evt-tls/evt_tls.h>
+diff --git a/sdk/src/filesystem.cpp b/sdk/src/filesystem.cpp
+index 2c4320a..23487d4 100644
+--- a/sdk/src/filesystem.cpp
++++ b/sdk/src/filesystem.cpp
+@@ -29,7 +29,7 @@
+ #include "mega/sync.h"
+ #include "megafs.h"
+ 
+-#include <utf8proc/utf8proc.h>
++#include <utf8proc.h>
+ 
+ #include <cassert>
+ #include <cctype>
+diff --git a/sdk/src/json.cpp b/sdk/src/json.cpp
+index acaf0a4..c23936d 100644
+--- a/sdk/src/json.cpp
++++ b/sdk/src/json.cpp
+@@ -24,7 +24,7 @@
+ #include "mega/logging.h"
+ #include "mega/megaclient.h"
+ 
+-#include <utf8proc/utf8proc.h>
++#include <utf8proc.h>
+ 
+ #include <cctype>
+ #include <cstdint>
+diff --git a/sdk/src/megaapi_impl.cpp b/sdk/src/megaapi_impl.cpp
+index baebdb9..7669258 100644
+--- a/sdk/src/megaapi_impl.cpp
++++ b/sdk/src/megaapi_impl.cpp
+@@ -85,7 +85,7 @@
+ #include <openssl/rand.h>
+ #endif
+ 
+-#include <zxcvbn-c/zxcvbn.h>
++#include <zxcvbn.h>
+ 
+ // FUSE
+ #include <mega/fuse/common/mount_event.h>
+diff --git a/sdk/src/utils.cpp b/sdk/src/utils.cpp
+index cb8592a..48ee9ba 100644
+--- a/sdk/src/utils.cpp
++++ b/sdk/src/utils.cpp
+@@ -34,7 +34,7 @@
+ #include <unicode/ucol.h>
+ #include <unicode/unistr.h>
+ #include <unicode/utypes.h>
+-#include <utf8proc/utf8proc.h>
++#include <utf8proc.h>
+ 
+ #include <cctype>
+ #include <iomanip>
+diff --git a/sdk/third_party/CMakeLists.txt b/sdk/third_party/CMakeLists.txt
+index aa1f61b..fd11d08 100644
+--- a/sdk/third_party/CMakeLists.txt
++++ b/sdk/third_party/CMakeLists.txt
+@@ -6,6 +6,3 @@ endif()
+ if(NOT WIN32 AND NOT HAVE_GLOB_H)
+ 	add_subdirectory(glob)
+ endif()
+-add_subdirectory(http_parser)
+-add_subdirectory(utf8proc)
+-add_subdirectory(zxcvbn-c)

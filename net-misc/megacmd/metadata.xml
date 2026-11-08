@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="fuse">Build the mega-fuse-* commands that mount MEGA folders via <pkg>sys-fs/fuse</pkg></flag>
+    <flag name="pcre">Add --use-pcre (Perl regular expressions via <pkg>dev-libs/libpcre</pkg>) to find, ls and other path-pattern commands</flag>
+  </use>
+  <upstream>
+    <bugs-to>https://github.com/meganz/MEGAcmd/issues</bugs-to>
+    <remote-id type="github">meganz/MEGAcmd</remote-id>
+  </upstream>
+</pkgmetadata>

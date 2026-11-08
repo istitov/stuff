@@ -1,0 +1,25 @@
+Link readline and zlib where MEGAcmd calls them directly.
+
+megacmdshell.cpp (mega-cmd) calls readline(), add_history() and friends,
+and megacmd_rotating_logger.cpp (mega-cmd-server) calls gzputs() and
+friends. Neither target links the library: readline reaches them only
+through SDKlib's private link interface, and zlib not at all, so the
+links fail.
+
+diff --git a/build/cmake/modules/megacmd_libraries.cmake b/build/cmake/modules/megacmd_libraries.cmake
+index 59f9acb..9a2ad63 100644
+--- a/build/cmake/modules/megacmd_libraries.cmake
++++ b/build/cmake/modules/megacmd_libraries.cmake
+@@ -20,6 +20,12 @@ macro(load_megacmdserver_libraries)
+             target_link_libraries(LMegacmdServer PRIVATE PkgConfig::pcre)
+             set(USE_PCRE 1)
+         endif()
++
++        pkg_check_modules(readline REQUIRED IMPORTED_TARGET readline)
++        target_link_libraries(mega-cmd PRIVATE PkgConfig::readline)
++
++        pkg_check_modules(zlib REQUIRED IMPORTED_TARGET zlib)
++        target_link_libraries(LMegacmdServer PRIVATE PkgConfig::zlib)
+     endif()
+ 
+ endmacro()

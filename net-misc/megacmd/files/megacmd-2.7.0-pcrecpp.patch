@@ -1,0 +1,18 @@
+Link libpcrecpp for USE_PCRE.
+
+megacmdutils.cpp includes <pcrecpp.h> and uses pcrecpp::RE, which lives
+in libpcrecpp, not libpcre. Upstream marks this path "UNTESTED".
+
+diff --git a/build/cmake/modules/megacmd_libraries.cmake b/build/cmake/modules/megacmd_libraries.cmake
+index aa3c2d7..59f9acb 100644
+--- a/build/cmake/modules/megacmd_libraries.cmake
++++ b/build/cmake/modules/megacmd_libraries.cmake
+@@ -16,7 +16,7 @@ macro(load_megacmdserver_libraries)
+         find_package(PkgConfig REQUIRED) # For libraries loaded using pkg-config
+ 
+         if(USE_PCRE) #TODO: UNTESTED!
+-            pkg_check_modules(pcre REQUIRED IMPORTED_TARGET libpcre)
++            pkg_check_modules(pcre REQUIRED IMPORTED_TARGET libpcrecpp)
+             target_link_libraries(LMegacmdServer PRIVATE PkgConfig::pcre)
+             set(USE_PCRE 1)
+         endif()
