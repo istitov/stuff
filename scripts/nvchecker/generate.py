@@ -199,6 +199,10 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "from_pattern": r"^V([0-9]+)_([0-9]+)_([0-9]+)$",
         "to_pattern": r"\1.\2.\3",
     },
+    # Releases are tagged YYYYMMDD; old v2.1.0 / vYYYYMMDD-b tags linger.
+    "media-gfx/fontforge": {
+        "include_regex": r"^[0-9]{8}$",
+    },
     # Each release is tagged per platform: X.Y.Z_Linux, _Win, _macOS.
     "net-misc/megacmd": {
         "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+_Linux$",
