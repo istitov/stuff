@@ -1186,7 +1186,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (245) ---
+# --- github (246) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2303,6 +2303,14 @@ github = "BelledonneCommunications/ortp"
 use_max_tag = true
 include_regex = '^[0-9]+\.[0-9]+\.[0-9]+$'
 prefix = "v"
+
+["net-misc/megacmd"]
+source = "github"
+github = "meganz/MEGAcmd"
+use_max_tag = true
+include_regex = '^[0-9]+\.[0-9]+\.[0-9]+_Linux$'
+from_pattern = '^([0-9]+\.[0-9]+\.[0-9]+)_Linux$'
+to_pattern = '\1'
 
 ["net-misc/pla-util"]
 source = "github"

@@ -199,6 +199,12 @@ GITHUB_TAG_FILTERS_BY_PKG: dict[str, dict] = {
         "from_pattern": r"^V([0-9]+)_([0-9]+)_([0-9]+)$",
         "to_pattern": r"\1.\2.\3",
     },
+    # Each release is tagged per platform: X.Y.Z_Linux, _Win, _macOS.
+    "net-misc/megacmd": {
+        "include_regex": r"^[0-9]+\.[0-9]+\.[0-9]+_Linux$",
+        "from_pattern": r"^([0-9]+\.[0-9]+\.[0-9]+)_Linux$",
+        "to_pattern": r"\1",
+    },
     # Upstream tags releases as vYYYY-MM-DD; Portage uses YYYY.MM.DD.
     "media-plugins/deadbeef-vgmstream": {
         "include_regex": r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
