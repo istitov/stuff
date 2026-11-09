@@ -18,7 +18,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # spaCy 3.8.19 accepts Thinc 8.3 and 10; earlier 3.8 releases stay on
 # <8.4, which is why 8.3.13 is retained.
