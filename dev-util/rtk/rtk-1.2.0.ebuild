@@ -274,7 +274,7 @@ LICENSE+="
 	Apache-2.0 BSD CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0 ZLIB
 "
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="+engine"
 
 # rusqlite enables the bundled SQLite of libsqlite3-sys 0.32, which checks
