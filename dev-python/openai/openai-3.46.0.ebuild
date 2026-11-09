@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Preserve upstream's major-version caps; pydantic 2.0-2.3 are unavailable
 # here, and sniffio is deliberately unbounded. verified 2026-09-30
