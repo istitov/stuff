@@ -494,7 +494,7 @@ LICENSE+="
 	Unicode-3.0 ZLIB
 "
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-0.30.0-cargo-lock-rustsec.patch"
