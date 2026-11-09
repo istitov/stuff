@@ -12,7 +12,8 @@ PATCHES=( "${FILESDIR}/${P}-pdl-2.100.patch" )
 DESCRIPTION="A collection of statistics modules in Perl Data Language"
 
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+# PDL, a hard dependency, carries no arm64 keyword. verified 2026-11-09
+KEYWORDS="~amd64 ~x86"
 IUSE="test"
 RESTRICT="!test? ( test )"
 # Map upstream PDL 2.057 to Gentoo's 2.57.0 floor. MakeMaker is build-only;
