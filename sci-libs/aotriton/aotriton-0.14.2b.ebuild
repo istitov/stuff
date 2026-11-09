@@ -57,6 +57,9 @@ RDEPEND="
 	<dev-util/hip-11:=
 "
 DEPEND="${RDEPEND}"
+# The system-flydsl patch requires the LLVM commit pinned in
+# third_party/flydsl-llvm.txt (78302f03ff25); of the flydsl ebuilds only
+# 0.3.1 builds against it. verified 2026-11-09
 BDEPEND="
 	>=dev-build/cmake-3.27
 	>=dev-build/ninja-1.11
@@ -77,7 +80,7 @@ BDEPEND="
 		dev-python/wheel[${PYTHON_USEDEP}]
 	')
 	$(python_gen_any_dep '
-		dev-python/flydsl[${PYTHON_SINGLE_USEDEP}]
+		~dev-python/flydsl-0.3.1[${PYTHON_SINGLE_USEDEP}]
 	')
 "
 
@@ -98,7 +101,7 @@ python_check_deps() {
 		python_has_version "dev-python/pyyaml[${PYTHON_USEDEP}]" &&
 		python_has_version ">=dev-python/setuptools-64[${PYTHON_USEDEP}]" &&
 		python_has_version "dev-python/wheel[${PYTHON_USEDEP}]" &&
-		python_has_version "dev-python/flydsl[${PYTHON_SINGLE_USEDEP}]"
+		python_has_version "~dev-python/flydsl-0.3.1[${PYTHON_SINGLE_USEDEP}]"
 }
 
 src_unpack() {
