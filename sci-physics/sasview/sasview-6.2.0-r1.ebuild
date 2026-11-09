@@ -21,7 +21,7 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="opencl"
 
 RDEPEND="
-	amd64? ( dev-python/pyausaxs[${PYTHON_USEDEP}] )
+	dev-python/pyausaxs[${PYTHON_USEDEP}]
 	dev-python/bumps[${PYTHON_USEDEP}]
 	dev-python/cffi[${PYTHON_USEDEP}]
 	dev-python/docutils[${PYTHON_USEDEP}]
@@ -68,8 +68,8 @@ BDEPEND="
 "
 
 # Omit soft xhtml2pdf: only PDF export needs its large pyHanko stack.
-# pyausaxs accelerates SANS Debye on amd64; its x86-64-only binary leaves other
-# architectures on SasView's Python fallback. # verified 2026-07-31
+# pyausaxs accelerates SANS Debye. Since 1.3 it builds from source, so it is
+# no longer limited to amd64. verified 2026-11-09
 
 src_prepare() {
 	# Normalize CRLF so the following $-anchored table matches work.
