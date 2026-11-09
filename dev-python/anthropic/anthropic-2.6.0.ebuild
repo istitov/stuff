@@ -18,7 +18,7 @@ HOMEPAGE="
 # before the change. verified 2026-10-22
 LICENSE="Apache-2.0 MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # Use the PyPI sdist; GitHub adds only npm mock-server test fixtures. Preserve
 # upstream's declared major ceilings as API bounds. verified 2026-10-22
