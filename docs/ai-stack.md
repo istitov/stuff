@@ -70,7 +70,7 @@ Each study records its hardware, workload, and software snapshot.
 ## Runtimes and servers
 
 - **`sci-misc/llama-cpp`** — the universal runtime: CPU (OpenBLAS / BLIS), ROCm,
-  CUDA, Vulkan, SYCL, or OpenCL by USE flag, with a bundled web UI
+  CUDA, Vulkan, or OpenCL by USE flag, with a bundled web UI
   (`USE=webui`).
 - **[`dev-python/vllm`](guides/vllm.md)** — high-throughput serving engine;
   `cpu`, `cuda`, and

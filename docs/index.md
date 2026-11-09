@@ -48,6 +48,8 @@ Step-by-step walkthroughs for the overlay's headline stacks:
   variables.
 - [**AMD Ryzen AI NPU**](guides/ryzen-ai-npu.md) — the XDNA driver plus an
   NPU-first LLM runtime; from a stock install to a model running on the NPU.
+- [**Fine-tunes on the NPU**](guides/npu-custom-models.md) — convert your own
+  fine-tune to FastFlowLM's format and serve it on the NPU.
 - [**vLLM**](guides/vllm.md) — high-throughput serving on CPU, NVIDIA CUDA, or
   AMD ROCm, with backend-specific build and host setup.
 - [**llama.cpp, Ollama & llama-swap**](guides/llama-setup.md) — the lighter local
@@ -59,7 +61,7 @@ Step-by-step walkthroughs for the overlay's headline stacks:
 - [**ComfyUI + TRELLIS**](guides/comfyui.md) — node-based generative-AI
   workflows, plus the TRELLIS image-to-3D pipeline (Gaussian-splat / mesh).
 - [**Qt5 LTS**](guides/qt5-lts.md) — the 5.15.19 LTS mirror and KDE patch
-  collection, so Qt5 apps keep building after `::gentoo` drops the slot.
+  collection, so Qt5 apps keep building now that `::gentoo` has dropped the slot.
 - [**TeX Live**](guides/texlive.md) — the current TL2025 / TL2026 collections
   kept ahead of `::gentoo`, with the LaTeX build tooling.
 

@@ -130,7 +130,7 @@ are supported. A stale `NVPTX_TARGETS` value therefore takes precedence over a
 new `CUDAARCHS` value.
 
 Standalone `dev-python/flash-attn` uses **`FLASH_ATTN_CUDA_ARCHS`**, with
-the packaged 2.8.3_p1 ebuild defaulting to `"80;90"`. Its architecture
+the packaged 2.8.3 ebuilds defaulting to `"80;90"`. Its architecture
 selectors are package-specific: do not derive an override merely by removing
 the decimal point from the GPU capability. Check the source for the version
 being built (see the [upstream 2.8.3 selection logic](https://github.com/Dao-AILab/flash-attention/blob/v2.8.3/setup.py))
