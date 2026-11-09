@@ -129,9 +129,10 @@ compiled on a system that only has the toolkit.
 
 ## AMD ROCm setup
 
-`stuff` carries a coherent source-built ROCm 10 cohort under `/usr`, with 7.2.4
-retained as a rollback anchor. Enabling `vllm[rocm]` pulls the required HIP and
-PyTorch components from that stack.
+ROCm 10.1 comes from `::gentoo` together with the 10.1 packages `stuff` adds,
+all source-built under `/usr`; the overlay keeps 10.0 and 7.2.4 as rollback
+anchors. Enabling `vllm[rocm]` pulls the required HIP and PyTorch components
+from that stack.
 
 ### Hardware and permissions
 
@@ -156,8 +157,9 @@ portability tradeoff in
 
 ### Build cost and hardware fit
 
-The ROCm 10 stack pulls AMD's LLVM fork; its ebuild requires at least **30 GiB**
-of free build space before compilation. vLLM then compiles its own HIP kernels,
+ROCm 10.1 from `::gentoo` builds with the system LLVM. Only the overlay's 10.0
+rollback pulls AMD's LLVM fork, whose ebuild requires at least **30 GiB** of
+free build space before compilation. vLLM then compiles its own HIP kernels,
 whose template instantiations can each consume several GiB of RAM. Reduce
 `MAX_JOBS` before retrying an OOM-killed build.
 

@@ -79,8 +79,8 @@ backend-agnostic local LLM serving (`llama.cpp`, `ollama`, `vllm`,
 `qdrant` vector database). Also included: a
 speech / audio ML stack (Whisper, sherpa-onnx, pyannote diarization); the
 surrounding PyTorch / ONNX ecosystem (Lightning, torchmetrics, onnxruntime,
-FAISS); the source-built ROCm / HIP **10.0** line (with 7.2.4 retained as a
-rollback anchor) ahead of `::gentoo`; and
+FAISS); source-built ROCm / HIP **10.1** packages that `::gentoo` lacks, with
+the 10.0 and 7.2.4 lines kept as rollback anchors; and
 NVIDIA CUDA, RAPIDS GPU dataframes, and a 3D-generative (Gaussian-splat / mesh)
 cluster. Start with the [AI / ML stack map](ai-stack.md), the
 [fine-tuning & RAG guide](guides/fine-tuning-rag.md), or the

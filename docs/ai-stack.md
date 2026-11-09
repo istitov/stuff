@@ -1,9 +1,9 @@
 # The AI / ML stack in `stuff`
 
 Currently, `::gentoo` carries the ML foundations — including
-PyTorch 2.14 and the usual Python libraries — but less of the local-inference
-application layer: no Ryzen AI NPU stack or vLLM, and its coherent ROCm line
-tops out at 7.2. (`llama.cpp` is available from GURU, not the main tree.)
+PyTorch 2.15, ROCm 10.1 and the usual Python libraries — but less of the
+local-inference application layer: no Ryzen AI NPU stack or vLLM. (`llama.cpp`
+is available from GURU, not the main tree.)
 `stuff` complements that base with four actively packaged accelerator paths:
 AMD's Ryzen AI **NPU**, AMD GPUs through **ROCm 10**, NVIDIA through **CUDA**,
 and cross-vendor **Vulkan** — plus plain CPU. It supplies LLM runtimes, serving
@@ -15,7 +15,7 @@ packaging.
 | Hardware | Accelerator | Runtimes | Guide |
 |---|---|---|---|
 | AMD Ryzen AI system (supported XDNA 2 family) | NPU (`amdxdna`) | `fastflowlm`, `openflowlm`, `lemonade` | [Ryzen AI NPU](guides/ryzen-ai-npu.md) |
-| AMD GPU (RDNA / CDNA) | ROCm 10.0 | `llama.cpp[rocm]`, `vllm[rocm]` (CDNA-first) | [vLLM](guides/vllm.md) · [llama setup](guides/llama-setup.md) |
+| AMD GPU (RDNA / CDNA) | ROCm 10.1 | `llama.cpp[rocm]`, `vllm[rocm]` (CDNA-first) | [vLLM](guides/vllm.md) · [llama setup](guides/llama-setup.md) |
 | NVIDIA GPU | CUDA | `llama.cpp[cuda]`, `vllm[cuda]` | [vLLM](guides/vllm.md) · [llama setup](guides/llama-setup.md) |
 | Vulkan-capable GPU | Vulkan | `llama.cpp[vulkan]`, `ollama[vulkan]`, `koboldcpp[vulkan]` | [llama setup](guides/llama-setup.md) |
 | No discrete GPU | CPU | `llama.cpp` (OpenBLAS / BLIS), `vllm[cpu]` | [vLLM](guides/vllm.md) · [llama setup](guides/llama-setup.md) |
@@ -46,11 +46,14 @@ Each study records its hardware, workload, and software snapshot.
 - **NPU** — `dev-libs/xdna-driver` (the `amdxdna` module + firmware),
   `dev-util/xrt`, `dev-libs/xrt-xdna`. Full setup in the
   [Ryzen AI NPU guide](guides/ryzen-ai-npu.md).
-- **AMD GPU — ROCm 10.0** — the complete source-built ROCm 10.0 cohort
-  (`dev-libs/rocm-*`, `sci-libs/{roc,hip}*` — rocBLAS, hipBLAS, rocFFT,
-  rocSOLVER, `sci-libs/miopen`, `sci-libs/composable-kernel`, `dev-libs/rccl`,
-  …), with AMD's matching `llvm-core/rocm-llvm` fork where the math stack needs
-  it. The final 7.x release, 7.2.4, remains available as a rollback anchor.
+- **AMD GPU — ROCm 10.1** — `::gentoo` carries the shared ROCm 10.1 stack
+  (`dev-util/hip`, `dev-libs/rocr-runtime`, rocBLAS, `sci-libs/miopen`, …).
+  `stuff` adds 10.1 packages that `::gentoo` lacks, such as `sci-libs/hipTensor`,
+  `sci-libs/rocALUTION`, `sys-cluster/rocSHMEM`, `media-libs/rocDecode` and
+  `app-admin/rdc`, and `-r90` forks of `composable-kernel` (for hipTensor),
+  `hipSOLVER` and `rocSPARSE`. Its complete source-built 10.0 cohort, with AMD's matching
+  `llvm-core/rocm-llvm` fork, and the final 7.x release, 7.2.4, remain
+  available as rollback anchors.
   `dev-util/therock-bin` installs
   AMD's prebuilt ROCm SDK under `/opt` for a per-host `AMDGPU_TARGETS` — note
   these are **pre-built AMD binaries** (the ebuild sets the matching
@@ -115,15 +118,13 @@ Each study records its hardware, workload, and software snapshot.
 `::gentoo` and `stuff` both package PyTorch, but arrange its C++ and Python
 halves differently. Currently:
 
-- **`::gentoo`** carries `sci-ml/pytorch` 2.14 as a complete Python + C++
-  build with CPU, CUDA, and ROCm USE paths. Its separately useful
-  `sci-ml/caffe2` (LibTorch/C++) remains at 2.12, and the main-tree PyTorch
-  ROCm dependency window is below 7.3.
-- **`stuff`** carries a matched 2.14 split. `sci-ml/caffe2` builds LibTorch,
-  `torch._C`, and the selected CPU/CUDA/ROCm backend; `sci-ml/pytorch`
+- **`::gentoo`** carries `sci-ml/pytorch` 2.14 and 2.15 as complete Python +
+  C++ builds with CPU, CUDA, and ROCm USE paths, built against its ROCm 10.1.
+  Its separately useful `sci-ml/caffe2` (LibTorch/C++) remains at 2.12.
+- **`stuff`** carries a matched 2.14 and 2.15 split. `sci-ml/caffe2` builds
+  LibTorch, `torch._C`, and the selected CPU/CUDA/ROCm backend; `sci-ml/pytorch`
   packages the Python trees and exact-depends on the matching `caffe2`. This
-  avoids building LibTorch twice and lets the Python stack use the overlay's
-  ROCm 10 cohort.
+  avoids building LibTorch twice.
 
 Around that base, the overlay also carries:
 
