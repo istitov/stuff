@@ -445,7 +445,7 @@ LICENSE+="
 	ISC MIT Unicode-3.0 ZLIB
 "
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/primp.*.so"
 
