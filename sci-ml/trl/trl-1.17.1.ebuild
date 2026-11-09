@@ -17,7 +17,9 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+# ::gentoo masks the distributed flag of pytorch and caffe2 on arm64, so
+# the torch dependency below cannot be met there. verified 2026-11-09
+KEYWORDS="~amd64"
 
 # trl/trainer/utils.py and trl/models/utils.py import torch.distributed.tensor
 # and FSDP at module level, so every trainer needs torch built with

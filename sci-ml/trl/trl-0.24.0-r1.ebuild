@@ -17,7 +17,9 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+# ::gentoo masks the distributed flag of pytorch and caffe2 on arm64, so
+# the torch dependency below cannot be met there. verified 2026-11-09
+KEYWORDS="~amd64"
 
 # The GRPO, RLOO and online DPO trainers import FSDP at module level, so
 # they need torch built with distributed support.
