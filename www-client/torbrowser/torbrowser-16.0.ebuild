@@ -75,7 +75,6 @@ REQUIRED_USE+="
 "
 
 RESTRICT="!test? ( test )"
-RESTRICT+=" primaryuri"
 BDEPEND="${PYTHON_DEPS}
 	$(llvm_gen_dep '
 		llvm-core/clang:${LLVM_SLOT}
