@@ -289,7 +289,7 @@ LICENSE+="
 	ISC MIT MPL-2.0 Unicode-3.0
 "
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 BDEPEND="
 	test? ( dev-python/pydantic[${PYTHON_USEDEP}] )
