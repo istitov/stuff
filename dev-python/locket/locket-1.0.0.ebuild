@@ -22,7 +22,7 @@ S=${WORKDIR}/${MY_P}
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 # The test suite imports spur at module level, and spur 0.3.23, its last
 # release, requires paramiko <4, which ::gentoo no longer ships.
 # verified 2026-10-03
