@@ -7,7 +7,7 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_SINGLE_IMPL=1
 
-inherit distutils-r1 optfeature pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="Rigorous evaluation of LLM-synthesised code (HumanEval+, MBPP+)"
 HOMEPAGE="
@@ -21,9 +21,10 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="perf"
 
 # datasets and transformers are single-impl; wrap the multi-impl dependencies.
-# Upstream also requires google-generativeai, but evalplus imports it only
-# for the Gemini backend, and it cannot be installed for python3_14, so it
-# is an optfeature here. verified 2026-10-03
+# Upstream also requires google-generativeai, imported only by the Gemini
+# backend. It is left out: it needs google-ai-generativelanguage 0.6.15,
+# whose protobuf <6 pin no longer solves against ::gentoo, so that backend
+# is unavailable. verified 2026-11-09
 RDEPEND="
 	>=sci-ml/datasets-2.21.0[${PYTHON_SINGLE_USEDEP}]
 	>=sci-ml/transformers-4.43.0[${PYTHON_SINGLE_USEDEP}]
@@ -57,7 +58,3 @@ BDEPEND="
 
 # The sdist lacks VCS metadata; supply its setuptools_scm version.
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
-
-pkg_postinst() {
-	optfeature "the Gemini backend" ">=dev-python/google-generativeai-0.7.2"
-}
