@@ -21,7 +21,7 @@ VIRTUALX_REQUIRED="manual"
 WASI_SDK_VER=34.0
 WASI_SDK_LLVM_VER=23
 
-inherit check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
+inherit check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r2 multiprocessing \
 	optfeature pax-utils python-any-r1 rust toolchain-funcs virtualx xdg
 
 PATCH_URIS=(
@@ -360,7 +360,7 @@ pkg_setup() {
 		fi
 
 		check-reqs_pkg_setup
-		llvm-r1_pkg_setup
+		llvm-r2_pkg_setup
 		rust_pkg_setup
 		python-any-r1_pkg_setup
 
