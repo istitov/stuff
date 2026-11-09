@@ -20,7 +20,7 @@ HOMEPAGE="
 # verified 2026-09-03
 LICENSE="h5serv"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 RDEPEND="
 	>=dev-python/h5py-3.10[${PYTHON_USEDEP}]
