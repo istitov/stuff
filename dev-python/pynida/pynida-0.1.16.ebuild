@@ -12,7 +12,8 @@ HOMEPAGE="https://github.com/LebedevV/pynida"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+# pandas, a hard dependency, carries no x86 keyword. verified 2026-11-09
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	dev-python/matplotlib[${PYTHON_USEDEP}]
