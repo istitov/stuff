@@ -18,7 +18,7 @@ S="${WORKDIR}/${MY_P}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 IUSE="blas cuda ffmpeg hip opencl sdl2 system-ggml vulkan"
 # ::gentoo ggml has no BLAS backend.
 REQUIRED_USE="system-ggml? ( !blas )"
