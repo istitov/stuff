@@ -21,7 +21,7 @@ S="${WORKDIR}/spaCy-release-v${PV}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # From 3.8.19 upstream accepts thinc >=8.3.12,!=9.*,<10.1 and excludes
 # preshed 3.0.14; neither thinc 9 nor preshed 3.0.14 is packaged.
