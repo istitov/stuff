@@ -342,7 +342,7 @@ LICENSE+="
 	UoI-NCSA Unicode-3.0
 "
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 RDEPEND="
 	>=dev-python/pydantic-2.11.7[${PYTHON_USEDEP}]
