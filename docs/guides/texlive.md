@@ -1,11 +1,10 @@
 # Current TeX Live on Gentoo (the stuff mirror)
 
-`::gentoo`'s TeX Live tracks a stabilized, older release. `stuff` carries the
-**current** TeX Live — the full `dev-texlive/*` collection set (39 collections)
-plus `app-text/texlive-core`, at the **TL2025** and **TL2026** releases (recent
-`tlpdb` revisions) — so documents that need newer packages, fonts, or fixes keep
-building. The `app-text/texlive` meta itself stays in `::gentoo`; the overlay
-provides the higher-versioned collections it pulls.
+`::gentoo` carries TeX Live 2024 as stable and 2026 as `~arch`. `stuff` keeps
+**TL2025**, which `::gentoo` skipped, and tracks newer `tlpdb` revisions of
+**TL2026**: `app-text/texlive-core`, the `app-text/texlive` meta and the full
+`dev-texlive/*` collection set (39 collections), so documents that need newer
+packages, fonts, or fixes keep building.
 
 ## Quickstart
 
@@ -31,8 +30,7 @@ provides the higher-versioned collections it pulls.
   2026 `tlpdb` revisions, with upstream additions / removals / relocations
   tracked per release.
 - **`dev-tex/*`** build tooling kept alongside: `biber`, `biblatex`,
-  `latexmk`, `minted`, `pgf`, `tex4ht`, `glossaries`, `latex-beamer`,
-  `bibtexu`, `latex2pydata`.
+  `minted`, `pgf`, `tex4ht`, `bibtexu`, `latex2pydata`.
 
 ## Selecting collections
 
@@ -50,7 +48,7 @@ Representative flags: `xetex`, `luatex`, `context` (engines / formats);
 `science`, `publishers`, `humanities`, `music`, `games` (subject collections);
 and `l10n_*` for the language sets (e.g. `l10n_de`, `l10n_ru`, `l10n_fr`) which
 map to the `texlive-lang*` collections. The full flag list is on the
-`app-text/texlive` ebuild in `::gentoo`.
+`app-text/texlive` ebuild.
 
 A single collection can also be pulled directly — useful to add one set without
 touching the meta's USE flags:
@@ -62,7 +60,8 @@ emerge -av dev-texlive/texlive-mathscience
 ## Build tooling
 
 Bibliography, build-loop, and conversion tools commonly paired with TeX Live are
-carried as first-class packages rather than bundled scripts. As root:
+packaged rather than bundled scripts; `latexmk` comes from `::gentoo`, the others
+from the overlay. As root:
 
 ```bash title="root #"
 emerge -av dev-tex/latexmk dev-tex/biber dev-tex/minted
@@ -122,9 +121,9 @@ no database rebuild is needed; files added to a *system* tree
     entry above is required; expect the usual testing-branch caveats and pin
     versions for reproducibility.
 
-- **Coexistence with `::gentoo`.** The overlay only raises the versions of
-  collections and `texlive-core`; the `app-text/texlive` meta and the USE-flag
-  mechanism are unchanged, so an existing TeX Live setup upgrades in place.
+- **Coexistence with `::gentoo`.** The overlay's `app-text/texlive` meta has
+  the same USE flags as `::gentoo`'s, so an existing TeX Live setup upgrades in
+  place.
 - **Don't add packages with `tlmgr`.** TeX Live's own `tlmgr` is shipped and
   runs, but on Gentoo the collections are portage-managed — installing or
   updating through `tlmgr` bypasses portage, and those files are clobbered on
