@@ -31,7 +31,7 @@ else
 			-> ${PN}-ggml-${GGML_COMMIT}.tar.gz
 	"
 	S="${WORKDIR}/stable-diffusion.cpp-${MY_PV}"
-	KEYWORDS="~amd64 ~arm64"
+	KEYWORDS="~amd64 ~arm ~arm64"
 fi
 
 # Let tarballs inject version metadata; live builds retain git describe.
