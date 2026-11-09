@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # The 1.0 line exists only on PyPI and satisfies spaCy's >=1,<2 constraint.
 # httpx is deprecated in ::gentoo but remains mandatory upstream.
