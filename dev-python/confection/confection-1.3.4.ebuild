@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # This release implements validation and serialization internally. Its only
 # conditional dependency is typing-extensions on Python <3.11, outside our
