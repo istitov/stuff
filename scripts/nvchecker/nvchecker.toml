@@ -1186,7 +1186,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (248) ---
+# --- github (247) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1587,12 +1587,6 @@ prefix = "v"
 ["dev-python/glfw"]
 source = "github"
 github = "FlorianRhiem/pyGLFW"
-use_max_tag = true
-prefix = "v"
-
-["dev-python/google-generativeai"]
-source = "github"
-github = "google-gemini/deprecated-generative-ai-python"
 use_max_tag = true
 prefix = "v"
 
