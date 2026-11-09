@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYPI_PN=QtPy
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1 virtualx pypi
 
@@ -23,32 +23,54 @@ KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86"
 # that path by policy, causing fallback to PyQt6 where QDesktopWidget is gone;
 # enabling the flag preserves QT_API=pyqt5.
 _IUSE_QT_MODULES="
-	bluetooth dbus designer +gui help multimedia +network nfc opengl pdfium
-	positioning printsupport qml quick quick3d remoteobjects scxml sensors
+	bluetooth +dbus designer +gui help multimedia +network nfc opengl pdfium
+	positioning +printsupport qml quick quick3d remoteobjects scxml sensors
 	serialport spatialaudio speech +sql svg testlib vulkan webchannel
 	webengine websockets +widgets +xml
 "
 IUSE="pyqt5 +pyqt6 pyside6 ${_IUSE_QT_MODULES}"
 unset _IUSE_QT_MODULES
 
+# The overlay's dev-python/pyqt5 stops at python3_14. verified 2026-11-09
 REQUIRED_USE="
 	|| ( pyqt5 pyqt6 pyside6 )
+	pyqt5? ( !python_targets_python3_15 )
 "
 
+# These flags are currently *not* common to the PySide2/6 and PyQt5/6 ebuilds
+# Disable them for now, please check periodically if this is still up to date.
+# 	3d? ( pyside6 only )
+# 	charts? ( pyside6 only )
+# 	concurrent? ( pyside6 only )
+# 	httpserver? ( pyside6 only )
+#	uitools? ( pyside6 only )
+#	location? ( pyside6 only)
+# 	network-auth? ( pyside6 only )
+
+# WARNING: the obvious solution of using || for PyQt5/pyside2 is not going
+# to work. The package only checks whether PyQt5/pyside2 is installed, it does
+# not verify whether they have the necessary modules (i.e. satisfy the USE dep).
+#
+# webengine+pdfium are special cases, because PyQt6 provides them in separate
+# packages while PySide6 does so in the same one.
 RDEPEND="
 	dev-python/packaging[${PYTHON_USEDEP}]
 	pyqt5? (
-		dev-python/pyqt5[${PYTHON_USEDEP},gui?,widgets?]
+		$(python_gen_cond_dep '
+			dev-python/pyqt5[${PYTHON_USEDEP},gui?,widgets?]
+		' python3_{12..14})
 	)
 	pyqt6? (
 		dev-python/pyqt6[${PYTHON_USEDEP}]
 		dev-python/pyqt6[bluetooth?,dbus?,designer?,gui?,help?,multimedia?]
-		dev-python/pyqt6[network?,nfc?,opengl?,pdfium?,positioning?]
+		dev-python/pyqt6[network?,nfc?,opengl?,positioning?]
 		dev-python/pyqt6[printsupport?,qml?,quick?,quick3d?,remoteobjects?]
 		dev-python/pyqt6[scxml(-)?,sensors?,serialport?,spatialaudio?,speech?]
 		dev-python/pyqt6[sql?,svg?,testlib?,vulkan?,webchannel?,websockets?]
 		dev-python/pyqt6[widgets?,xml?]
+		pdfium? ( dev-python/pyqt6-pdf[${PYTHON_USEDEP},widgets?] )
 		webengine? ( dev-python/pyqt6-webengine[${PYTHON_USEDEP},widgets?,quick?] )
+
 	)
 	pyside6? (
 		dev-python/pyside:6[${PYTHON_USEDEP},core(+)]
@@ -61,15 +83,19 @@ RDEPEND="
 	)
 "
 
+# The QtPy testsuite skips tests for bindings that are not installed, so here we
+# ensure that everything is available and all tests are run. Note that not
+# all flags are available in PyQt5/PySide2, so some tests are still skipped.
 BDEPEND="
 	test? (
 		pyqt6? (
 			dev-python/pyqt6[${PYTHON_USEDEP}]
 			dev-python/pyqt6[bluetooth,dbus,designer,gui,help,multimedia]
-			dev-python/pyqt6[network,nfc,opengl,pdfium,positioning,printsupport]
+			dev-python/pyqt6[network,nfc,opengl,positioning,printsupport]
 			dev-python/pyqt6[qml,quick,quick3d,scxml(-),sensors,serialport]
 			dev-python/pyqt6[spatialaudio,speech,sql,svg,testlib,webchannel]
 			dev-python/pyqt6[vulkan(-),websockets,widgets,xml]
+			dev-python/pyqt6-pdf[${PYTHON_USEDEP},widgets]
 			dev-python/pyqt6-webengine[${PYTHON_USEDEP},widgets,quick]
 			dev-qt/qtbase:6[sqlite]
 		)
@@ -91,6 +117,7 @@ distutils_enable_tests pytest
 
 src_prepare() {
 	distutils-r1_src_prepare
+	# Disable Qt for Python implementations that are not selected
 
 	# Preserve ::gentoo's Qt5-deprecation default unless explicitly enabled.
 	if ! use pyqt5; then
@@ -100,11 +127,11 @@ src_prepare() {
 			-i qtpy/__init__.py || die
 	fi
 
-	# Do not strand the next binding check as elif.
+	# We need to ensure the first option is an 'if' not 'elif'
 	sed -e 's/elif "PySide2" in sys.modules:/if "PySide2" in sys.modules:/g' \
 		-i qtpy/__init__.py || die
 
-	# PySide2 has no supported USE flag; disable it unconditionally.
+	# Always disable PySide2
 	sed \
 		-e "s/from PySide2 import/raise ImportError #/" \
 		-e "s/from PySide2.QtCore import/raise ImportError #/" \
@@ -139,6 +166,9 @@ python_test() {
 	local -a EPYTEST_DESELECT
 	local other
 
+	# Test for each enabled Qt4Python target.
+	# Deselect the other targets, their test fails if we specify QT_API
+	# or if we have disabled their corresponding inherit in __init__.py above
 	for QT_API in PyQt5 PyQt6 PySide6; do
 		if use "${QT_API,,}"; then
 			EPYTEST_DESELECT=()
