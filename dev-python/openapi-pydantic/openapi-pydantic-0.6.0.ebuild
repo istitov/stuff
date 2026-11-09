@@ -13,7 +13,7 @@ HOMEPAGE="https://pypi.org/project/openapi-pydantic/"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 RDEPEND="
 	>=dev-python/pydantic-1.8[${PYTHON_USEDEP}]
