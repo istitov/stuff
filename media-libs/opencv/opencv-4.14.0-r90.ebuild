@@ -70,7 +70,7 @@ else
 		)
 	"
 	# Fork of ::gentoo 4.14.0 for FFmpeg 9; other arches use ::gentoo.
-	KEYWORDS="~amd64 ~arm64"
+	KEYWORDS="~amd64 ~arm ~arm64"
 fi
 
 LICENSE="Apache-2.0"
