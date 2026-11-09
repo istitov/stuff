@@ -16,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 # cryptography is unconditional: agent_idp imports its serialization and
 # Ed25519 APIs at module scope, and the package root imports agent_idp.
