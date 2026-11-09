@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1 flag-o-matic
 
-LLVM_REV="1f126a6d"
+LLVM_REV="5f07f818"
 
 DESCRIPTION="Language and compiler for custom deep-learning primitives"
 HOMEPAGE="https://github.com/triton-lang/triton"
@@ -24,6 +24,7 @@ SRC_URI="https://github.com/triton-lang/triton/archive/refs/tags/v${PV}.tar.gz
 LICENSE="MIT Apache-2.0-with-LLVM-exceptions UoI-NCSA"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="cuda"
 
 # The upstream suite requires supported NVIDIA or AMD accelerator hardware.
 RESTRICT="test"
@@ -33,10 +34,15 @@ RESTRICT="test"
 # ptxas, and before that fails to compile driver.c for want of cuda.h.
 # verified 2026-09-09 against the staged image and knobs.py:193-217
 # verified 2026-10-05 by running JIT kernels from the staged image on CUDA 13.4
+# USE=cuda adds the toolkit and links; only the NVIDIA backend uses them.
 RDEPEND="
 	!!dev-python/triton-bin
-	dev-util/nvidia-cuda-toolkit
+	virtual/zlib:=
+	cuda? ( dev-util/nvidia-cuda-toolkit )
 "
+# 3.8.0 always resolves nlohmann/json and, offline, insists on JSON_SYSPATH;
+# the system header-only copy replaces the v3.11.3 download. verified 2026-11-04
+DEPEND="dev-cpp/nlohmann_json"
 BDEPEND="
 	dev-build/cmake
 	dev-build/ninja
@@ -62,6 +68,7 @@ src_unpack() {
 
 python_compile() {
 	local -x LLVM_SYSPATH="${WORKDIR}/llvm/llvm-${LLVM_REV}-ubuntu-x64-1"
+	local -x JSON_SYSPATH="${ESYSROOT}/usr"
 	# LLVM translation units use multiple GiB each; cap default concurrency.
 	local -x MAX_JOBS="${MAX_JOBS:-4}"
 	distutils-r1_python_compile
@@ -69,20 +76,22 @@ python_compile() {
 
 python_install() {
 	distutils-r1_python_install
-	rm -r "${D}$(python_get_sitedir)/triton/plugins" || die
 	rm "${D}$(python_get_sitedir)/triton/instrumentation/libGPUInstrumentationTestLib.so" || die
 
-	# Link toolkit tools into Triton's lookup path. ptxas-blackwell has no toolkit
-	# counterpart, so sm_100+ needs TRITON_PTXAS_BLACKWELL_PATH.
-	# Strip EPREFIX because dodir/dosym add it themselves.
-	local tool nvdir="$(python_get_sitedir)"
-	nvdir="${nvdir#"${EPREFIX}"}/triton/backends/nvidia"
-	dodir "${nvdir}/bin"
-	for tool in ptxas cuobjdump nvdisasm; do
-		dosym -r "/opt/cuda/bin/${tool}" "${nvdir}/bin/${tool}"
-	done
+	if use cuda; then
+		# Link toolkit tools into Triton's lookup path. ptxas-blackwell has
+		# no toolkit counterpart, so sm_100+ needs TRITON_PTXAS_BLACKWELL_PATH.
+		# Strip EPREFIX because dodir/dosym add it themselves.
+		local tool nvdir="$(python_get_sitedir)"
+		nvdir="${nvdir#"${EPREFIX}"}/triton/backends/nvidia"
+		dodir "${nvdir}/bin"
+		for tool in ptxas cuobjdump nvdisasm; do
+			dosym -r "/opt/cuda/bin/${tool}" "${nvdir}/bin/${tool}"
+		done
 
-	# driver.py compiles driver.c on first use with this directory as its only
-	# CUDA include path; the wheel fills it with a copy of the toolkit headers.
-	dosym -r /opt/cuda/include "${nvdir}/include"
+		# driver.py compiles driver.c on first use with this directory as its
+		# only CUDA include path; the wheel fills it with a copy of the toolkit
+		# headers.
+		dosym -r /opt/cuda/include "${nvdir}/include"
+	fi
 }
