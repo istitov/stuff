@@ -14,7 +14,9 @@ SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+# msgspec, a hard dependency of zarr 3.4, carries no x86 keyword.
+# verified 2026-11-09
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	>=dev-python/donfig-0.8[${PYTHON_USEDEP}]

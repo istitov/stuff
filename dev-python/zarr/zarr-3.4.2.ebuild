@@ -14,7 +14,9 @@ SRC_URI="$(pypi_sdist_url "${PN^}" "${PV}")"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+# msgspec, a hard dependency of zarr 3.4, carries no x86 keyword.
+# verified 2026-11-09
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream wants numcodecs >=0.16.6,!=0.17.0 (GHSA-jqc8-qjfv-5m6r); no 0.16.6
 # exists, so 0.17.1 is the first fixed release.
