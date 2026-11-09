@@ -278,11 +278,11 @@ neutron / X-ray data format), and `sci-libs/pycifrw` (CIF read/write).
 
 ## TeX Live
 
-Current TeX Live, kept ahead of `::gentoo`'s stabilized line: the full
-`dev-texlive/*` collection set at the TL2025 and TL2026 releases (recent
-tlpdb revisions), with upstream package additions, removals, and
-relocations tracked per release — plus `dev-tex/{biber, biblatex,
-latexmk, minted, pgf, tex4ht, …}` build tooling.
+TeX Live 2025, which `::gentoo` skipped, and newer tlpdb revisions of
+TL2026 than `::gentoo`'s: `app-text/texlive-core`, the `app-text/texlive`
+meta and the full `dev-texlive/*` collection set, with upstream package
+additions, removals, and relocations tracked per release — plus
+`dev-tex/{biber, biblatex, minted, pgf, tex4ht, …}` build tooling.
 
 ## Qt5 revival mirror
 
