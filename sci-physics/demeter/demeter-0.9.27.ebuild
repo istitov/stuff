@@ -13,7 +13,9 @@ S="${WORKDIR}/${PN}-${PV}"
 
 LICENSE="Artistic GPL-1+"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+# PDL, PDL-Stats, Wx and a dozen other Perl dependencies carry no arm64
+# keyword. verified 2026-11-09
+KEYWORDS="~amd64"
 IUSE="doc test"
 
 RDEPEND="
