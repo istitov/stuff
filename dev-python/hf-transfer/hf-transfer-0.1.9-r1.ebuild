@@ -207,7 +207,7 @@ LICENSE+="
 # plus MIT for third_party/fiat.
 LICENSE+=" ISC openssl SSLeay MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-0.1.9-cargo-lock-rustsec.patch"
