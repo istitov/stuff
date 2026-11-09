@@ -3200,6 +3200,7 @@ prefix = "v"
 # ["dev-texlive/texlive-pstricks"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
 # ["dev-texlive/texlive-publishers"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
 # ["dev-texlive/texlive-xetex"] skipped: TeX Live release component — PV tracks the annual TL release + tlpdb SVN revision, regenerated as a set from the tlpdb, no independent upstream
+# ["dev-util/claude-code"] skipped: custom upstream at claude.com; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["dev-vcs/fossil"] skipped: custom upstream at www.fossil-scm.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["games-roguelike/adom"] skipped: custom upstream at www.adom.de; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["llvm-core/rocm-llvm"] skipped: kept only at 10.0.0 for the 10.0 cohort's dev-util/hipcc[amd-llvm]; ::gentoo's hipcc from 10.1 needs no AMD LLVM fork, so 10.1.0 was dropped (2026-10-22) and the package goes with the 10.0 cohort
