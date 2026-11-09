@@ -239,7 +239,8 @@ after FastFlowLM upgrades: an upstream quantization-format change can require a
 re-pull before an existing model will load.
 
 A fine-tune of a catalog model can be converted and registered beside the
-catalog; see [Running a fine-tune on the NPU](npu-custom-models.md).
+catalog; see [Running a fine-tune on the NPU](npu-custom-models.md), which
+also lists ready-made conversions.
 
 ## Open kernels: OpenFlowLM
 

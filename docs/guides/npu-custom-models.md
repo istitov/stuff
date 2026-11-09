@@ -30,13 +30,70 @@ Two paths were verified by the maintainer on a Ryzen AI 9 HX 370 with
 FastFlowLM 1.0.7: Qwen3.5-2B and Qwen3.6-35B-A3B. The converter has
 configurations for more families (Qwen2.5, Qwen3, Gemma 3, Gemma 4, Llama,
 LFM2, Phi-4, GPT-OSS and others); those were not tested here. Upstream has
-none for Qwen3.8-27B; the package adds one by a local patch, which was not
-tested here either.
+none for Qwen3.8-27B; the package adds one by local patches. The published
+Qwen3.8-27B conversion below was made with the same converter commit and the
+patch included in its repository.
+
+FastFlowLM's Llama and GPT-OSS files use Q4_1 blocks (Llama for every
+projection, GPT-OSS for attention and the output layer), which this guide
+does not cover. Their published conversions below needed a newer upstream
+commit than the package's and a script that reorders the Q4_1 blocks into
+FastFlowLM's layout; each repository describes the steps and includes the
+script.
 
 The commands in this guide were run with a stock Qwen3.5-2B GGUF standing in
 for the fine-tune. That makes the result checkable: the converted file has to
 match the weights FastFlowLM ships for the same model. A fine-tune of
 Qwen3.5-2B takes the same path.
+
+## Ready-made conversions
+
+The maintainer publishes converted models on
+[Hugging Face](https://huggingface.co/istitov). They are Heretic builds, which
+their authors modified to refuse less often; each model card has a content
+warning, the source and the conversion steps. Decode speeds are from a
+Ryzen AI 9 HX 370. The two Qwen conversions were tested on FastFlowLM 1.0.7,
+and on 1.0.12 only with a short prompt; the other two on 1.0.12.
+
+| Repository | Tag | Base tag | Download | Decode, tokens/s |
+|---|---|---|---:|---:|
+| [Llama-3.1-8B-Instruct-heretic-NPU2](https://huggingface.co/istitov/Llama-3.1-8B-Instruct-heretic-NPU2) | `llama3.1-heretic:8b` | `llama3.1:8b` | 5.8 GB | 11.3 |
+| [GPT-OSS-20B-heretic-ara-v4-NPU2](https://huggingface.co/istitov/GPT-OSS-20B-heretic-ara-v4-NPU2) | `gpt-oss-heretic-ara:20b` | `gpt-oss:20b` | 14.5 GB | 18.4 |
+| [Qwen3.6-35B-A3B-llmfan46-Heretic-NPU2](https://huggingface.co/istitov/Qwen3.6-35B-A3B-llmfan46-Heretic-NPU2) | `qwen3.6-moe-llmfan46:35b-a3b` | `qwen3.6-moe:35b-a3b` | 22.1 GB | 14–18 |
+| [Qwen3.8-27B-llmfan46-Ultra-Heretic-NPU2](https://huggingface.co/istitov/Qwen3.8-27B-llmfan46-Ultra-Heretic-NPU2) | `qwen3.8-mtp-llmfan46:27b` | `qwen3.8-mtp:27b` | 18.1 GB | 1.4–2.7 |
+
+The model cards install with the community tool `flm-add`. On Gentoo,
+register them with `flm-custom-sync` instead, as for a conversion of your
+own; use one of the two, not both. Download the repository into the models
+folder (under `$FLM_MODEL_PATH/models/` when that is set) with `hf` from
+`sci-ml/huggingface_hub`:
+
+```bash title="user $"
+hf download istitov/Llama-3.1-8B-Instruct-heretic-NPU2 \
+  --local-dir ~/.config/flm/models/Llama-3.1-8B-Instruct-heretic-NPU2
+```
+
+Then add its tag, base tag and folder name to `custom_models.json` as in
+[step 6](#step-6-register-the-model), and run it as in
+[step 7](#step-7-run-it). Qwen3.8-27B uses a 4,096-token context unless
+`--ctx-len 8192` is given, and 8,192 is its limit.
+
+[OpenFlowLM](ryzen-ai-npu.md#open-kernels-openflowlm) registers the same
+repositories with its own command, `oflm add`. In the maintainer's tests at
+OpenFlowLM commit `96b915d`, Llama-3.1-8B ran on the open kernels and
+GPT-OSS-20B on the closed FastFlowLM kernels that OpenFlowLM ships.
+Qwen3.6-35B-A3B ran only with `OFLM_QWEN36_ENGINE=closed`, because the open
+kernels cannot read its Q4_K layout, and Qwen3.8-27B did not run at all.
+
+```bash title="user $"
+oflm add istitov/Llama-3.1-8B-Instruct-heretic-NPU2 --tag llama3.1-heretic:8b
+oflm run llama3.1-heretic:8b
+```
+
+`oflm add` downloads its own copy into `~/.config/oflm/models/` and keeps its
+registry in `~/.config/oflm/settings.json`. Once `~/.config/oflm/` exists,
+`oflm` looks for all its models there, so models pulled with `flm` have to be
+pulled again for `oflm`.
 
 ## Quickstart
 
@@ -236,8 +293,9 @@ reports it. To bring it back:
 
 - The NPU kernels stay FastFlowLM's proprietary binaries. Conversion changes
   weights only.
-- A converted Qwen3.6-35B-A3B ran at the speed of the official one in the
-  maintainer's measurement. Other models were not timed.
+- Converted models ran at about the speed of the official ones in the
+  maintainer's measurements: Qwen3.6-35B-A3B at the same speed, GPT-OSS-20B
+  at 18.4 against 18.7 tokens/s, and Llama-3.1-8B at 11.3 against 12.0.
 - Tool calling and reasoning mode were not tested on converted models.
 - A real FastFlowLM upgrade has not happened since the helper was written; its
   guard was tested against a simulated one.
