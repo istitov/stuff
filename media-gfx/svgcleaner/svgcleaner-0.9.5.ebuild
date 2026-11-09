@@ -69,7 +69,7 @@ LICENSE="GPL-2"
 # Dependent crate licenses
 LICENSE+=" MIT MPL-2.0 Unicode-DFS-2016"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 src_unpack() {
 	unpack ${P}.tar.gz
