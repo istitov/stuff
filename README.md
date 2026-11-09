@@ -156,13 +156,13 @@ alongside the speech stack above and broadly useful on its own:
 
 ### ROCm stack
 
-An unmasked, source-built [ROCm](https://rocm.docs.amd.com/) / HIP 10.0
-cohort ahead of `::gentoo`: AMD's LLVM 23 fork (`llvm-core/rocm-llvm`), the
-runtime and compiler, math / communication libraries (`rocm-core`, `hip`,
-`hipBLAS` / `rocBLAS`, `hipFFT` / `rocFFT`, `MIOpen`,
-`composable-kernel`, `rccl`, …), debugging and profiling tools, media
-libraries, and `rocm-smi` / `rocminfo`. The 7.2.4 line is kept as the last
-7.x rollback anchor.
+`::gentoo` carries the shared [ROCm](https://rocm.docs.amd.com/) / HIP 10.1
+stack. This overlay adds the source-built 10.1 packages that `::gentoo` lacks
+(`hipTensor`, `rocALUTION`, `rocSHMEM`, `rocDecode` / `rocJPEG`, `rdc`,
+`rocm-smi`, debugging and profiling tools, …) and `-r90` forks of
+`composable-kernel`, `hipSOLVER` and `rocSPARSE`. It keeps the complete 10.0
+cohort, including AMD's LLVM 23 fork (`llvm-core/rocm-llvm`), and the 7.2.4
+line as rollback anchors.
 
 [`dev-util/therock-bin`](https://github.com/ROCm/TheRock) is a
 /opt-installed ROCm SDK sliced out of AMD's official ROCm runfile
