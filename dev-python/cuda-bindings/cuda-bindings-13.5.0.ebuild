@@ -48,16 +48,14 @@ DEPEND="
 # is still open over a benchmark regression, and 3.3 enforces declared
 # container item types at runtime, so the EGL frame setters reject raw ints.
 # The cap is kept; ::gentoo still has 3.2.9. verified 2026-11-05
+# Upstream wants setuptools-scm >=8,!=10.1; ::gentoo starts above 10.1, so
+# the floor alone expresses it. verified 2026-11-09
 BDEPEND="
 	>=dev-python/cuda-pathfinder-1.5[${PYTHON_USEDEP}]
 	>=dev-python/cython-3.2.5[${PYTHON_USEDEP}]
 	<dev-python/cython-3.3[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-80[${PYTHON_USEDEP}]
-	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
-	|| (
-		<dev-python/setuptools-scm-10.1[${PYTHON_USEDEP}]
-		>=dev-python/setuptools-scm-10.1.1[${PYTHON_USEDEP}]
-	)
+	>=dev-python/setuptools-scm-10.1.1[${PYTHON_USEDEP}]
 "
 
 # build_hooks.py requires CUDA_HOME to locate headers.
