@@ -385,7 +385,7 @@ KEYWORDS="~amd64 ~arm64"
 QA_FLAGS_IGNORED="usr/lib/python3.*/site-packages/llguidance/_lib*.so"
 
 PATCHES=(
-	"${FILESDIR}/${PN}-1.7.6-cargo-lock-rustsec.patch"
+	"${FILESDIR}/${PN}-cargo-lock-rustsec.patch"
 )
 
 python_test() {
