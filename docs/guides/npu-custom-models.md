@@ -91,9 +91,10 @@ oflm run llama3.1-heretic:8b
 ```
 
 `oflm add` downloads its own copy into `~/.config/oflm/models/` and keeps its
-registry in `~/.config/oflm/settings.json`. Once `~/.config/oflm/` exists,
-`oflm` looks for all its models there, so models pulled with `flm` have to be
-pulled again for `oflm`.
+registry in `~/.config/oflm/settings.json`. Unless `OFLM_MODEL_PATH` or
+`FLM_MODEL_PATH` is set, `oflm` looks for all its models in `~/.config/oflm/`
+once that folder exists, so models pulled with `flm` have to be pulled again
+for `oflm`.
 
 ## Quickstart
 
