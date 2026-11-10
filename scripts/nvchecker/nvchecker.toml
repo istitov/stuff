@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (294) ---
+# --- pypi (298) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -41,6 +41,10 @@ pypi = "asciitree"
 ["dev-python/ase"]
 source = "pypi"
 pypi = "ase"
+
+["dev-python/asteval"]
+source = "pypi"
+pypi = "asteval"
 
 ["dev-python/atomap"]
 source = "pypi"
@@ -438,6 +442,10 @@ pypi = "ipympl"
 source = "pypi"
 pypi = "jiter"
 
+["dev-python/jupyter-server-proxy"]
+source = "pypi"
+pypi = "jupyter-server-proxy"
+
 ["dev-python/kokoro"]
 source = "pypi"
 pypi = "kokoro"
@@ -473,6 +481,10 @@ pypi = "llguidance"
 ["dev-python/lm-format-enforcer"]
 source = "pypi"
 pypi = "lm-format-enforcer"
+
+["dev-python/lmfit"]
+source = "pypi"
+pypi = "lmfit"
 
 ["dev-python/math-verify"]
 source = "pypi"
@@ -1014,6 +1026,10 @@ pypi = "uctools"
 source = "pypi"
 pypi = "uncalled-for"
 
+["dev-python/uncertainties"]
+source = "pypi"
+pypi = "uncertainties"
+
 ["dev-python/unsloth-zoo"]
 source = "pypi"
 pypi = "unsloth_zoo"
@@ -1186,7 +1202,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (247) ---
+# --- github (249) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -1336,6 +1352,12 @@ to_pattern = '\1.0'
 ["dev-libs/oocairo"]
 source = "github"
 github = "awesomeWM/oocairo"
+use_max_tag = true
+prefix = "v"
+
+["dev-libs/pocketfft"]
+source = "github"
+github = "mreineck/pocketfft"
 use_max_tag = true
 prefix = "v"
 
@@ -1662,6 +1684,12 @@ prefix = "v"
 ["dev-python/model-hosting-container-standards"]
 source = "github"
 github = "aws/model-hosting-container-standards"
+use_max_tag = true
+prefix = "v"
+
+["dev-python/msgspec"]
+source = "github"
+github = "msgspec/msgspec"
 use_max_tag = true
 prefix = "v"
 
@@ -2870,7 +2898,7 @@ bitbucket = "Lithopsian/deadbeef-opus"
 use_max_tag = true
 prefix = "v"
 
-# --- cpan (16) ---
+# --- cpan (17) ---
 
 ["dev-perl/Chemistry-Elements"]
 source = "cpan"
@@ -2883,6 +2911,10 @@ cpan = "Encoding-FixLatin"
 ["dev-perl/Encoding-FixLatin-XS"]
 source = "cpan"
 cpan = "Encoding-FixLatin-XS"
+
+["dev-perl/ExtUtils-F77"]
+source = "cpan"
+cpan = "ExtUtils-F77"
 
 ["dev-perl/File-CountLines"]
 source = "cpan"
@@ -3214,6 +3246,7 @@ prefix = "v"
 # ["media-sound/deadbeef"] skipped: sourceforge/deadbeef — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-libs/cholmod"] skipped: SuiteSparse sub-library — use sci-libs/suitesparseconfig as canary
 # ["sci-libs/pgplot"] skipped: custom upstream at sites.astro.caltech.edu; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
+# ["sci-libs/vtk"] skipped: custom upstream at www.vtk.org; hand-add an nvchecker `regex` or `htmlparser` entry if tracking is wanted
 # ["sci-mathematics/sofastatistics"] skipped: sourceforge/sofastatistics — no built-in source in nvchecker 2.x; add a `regex` entry against the RSS feed if tracking is wanted
 # ["sci-ml/bigcode-eval"] skipped: we track main HEAD via 0_pre<date>; upstream's sole tag v0.1.0 (2024-04-20) is far behind
 # ["sci-ml/flm-q4nx-converter"] skipped: ROCm/FLM_Q4NX_Converter has no tags or releases (verified 2026-10-11: 0 tags, 0 releases; the ebuild pins MY_COMMIT, the tip of main)
