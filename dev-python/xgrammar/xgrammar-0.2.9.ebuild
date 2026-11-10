@@ -1,0 +1,79 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517=scikit-build-core
+PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_SINGLE_IMPL=1
+
+inherit distutils-r1 pypi
+
+DESCRIPTION="Efficient, flexible structured generation engine for LLMs"
+HOMEPAGE="
+	https://xgrammar.mlc.ai/
+	https://github.com/mlc-ai/xgrammar
+	https://pypi.org/project/xgrammar/
+"
+
+LICENSE="Apache-2.0 BSD-2"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="cuda"
+
+# transformers-5.16.1 includes the fixes that made the former <5 cap necessary.
+# CUDA JIT needs GCC 15 at runtime; synchronize its slot with the patch fallback.
+# cuda_gccdir cannot run at JIT time, and CUDA 13 rejects newer hosts.
+# Gate Triton by amd64, not USE=cuda: ROCm also reports device.type="cuda".
+# The virtual covers both backends and is unavailable on arm64. verified 2026-09-09
+RDEPEND="
+	cuda? (
+		dev-util/nvidia-cuda-toolkit:=
+		sys-devel/gcc:15
+	)
+	amd64? (
+		$(python_gen_cond_dep '
+			virtual/triton[${PYTHON_USEDEP}]
+		')
+	)
+	>=sci-ml/pytorch-1.10.0[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/transformers-4.38.0[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
+		dev-python/pydantic[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		>=dev-python/typing-extensions-4.9.0[${PYTHON_USEDEP}]
+	')
+"
+BDEPEND="
+	>=dev-build/cmake-3.18
+	$(python_gen_cond_dep '
+		>=dev-python/apache-tvm-ffi-0.1.11[${PYTHON_USEDEP}]
+		>=dev-python/scikit-build-core-0.10[${PYTHON_USEDEP}]
+		>=dev-python/setuptools-scm-8.1[${PYTHON_USEDEP}]
+	')
+"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-respect-toolchain-flags.patch"
+	"${FILESDIR}/${PN}-0.2.2-cuda-host-compiler.patch"
+)
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+src_configure() {
+	local device
+	# tvm_ffi imports PyTorch, which probes available accelerator devices.
+	for device in /dev/kfd /dev/dri/render* /dev/accel/accel*; do
+		[[ -e ${device} ]] && addpredict "${device}"
+	done
+
+	distutils-r1_src_configure
+}
+
+python_test() {
+	# The excluded tests download gated or multi-gigabyte model tokenizers.
+	epytest -m "not hf_token_required"
+}
