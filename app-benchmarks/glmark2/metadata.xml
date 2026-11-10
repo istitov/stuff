@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>iohann.s.titov@gmail.com</email>
+    <name>Ivan S. Titov</name>
+  </maintainer>
+  <use>
+    <flag name="drm">Build the DRM/KMS and offscreen GBM flavours (glmark2-drm, glmark2-gbm)</flag>
+    <flag name="gles2">Build the OpenGL ES 2.0 flavours (glmark2-es2*)</flag>
+    <flag name="opengl">Build the desktop OpenGL flavours</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">glmark2/glmark2</remote-id>
+  </upstream>
+</pkgmetadata>

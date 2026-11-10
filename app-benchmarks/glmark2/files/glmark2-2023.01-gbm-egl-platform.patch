@@ -1,0 +1,18 @@
+Give the gbm- flavours an EGL platform; without one they fall back to
+eglGetDisplay() on a GBM device.
+
+Backport of upstream 22c527cb0556 ("Add missing EGL platform for gbm-
+flavors"), rebased onto 2023.01, which predates the GLMARK2_USE_NULL
+branch the upstream hunk carries as context.
+
+--- a/src/gl-state-egl.cpp
++++ b/src/gl-state-egl.cpp
+@@ -479,6 +479,8 @@
+ #define GLMARK2_NATIVE_EGL_DISPLAY_ENUM EGL_PLATFORM_WAYLAND_KHR
+ #elif  GLMARK2_USE_DRM
+ #define GLMARK2_NATIVE_EGL_DISPLAY_ENUM EGL_PLATFORM_GBM_KHR
++#elif  GLMARK2_USE_GBM
++#define GLMARK2_NATIVE_EGL_DISPLAY_ENUM EGL_PLATFORM_GBM_KHR
+ #else
+ // Platforms not in the above platform enums fall back to eglGetDisplay.
+ #define GLMARK2_NATIVE_EGL_DISPLAY_ENUM 0
