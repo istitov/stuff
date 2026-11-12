@@ -667,13 +667,14 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "regex": r"profex-([0-9][0-9.]*)\.tar\.gz",
     },
     # torbrowser's only github.com SRC_URI is the bundled wasi-sdk, which the
-    # heuristic would track instead. The dist directory lists one entry per
-    # release; the pattern takes stable ones and leaves out alphas such as
-    # 16.0a14. verified 2026-10-31
+    # heuristic would track instead. The dist directory also gets Android-only
+    # releases (16.0.2 had no Linux build), so read the desktop updater's
+    # stable-channel feed and match its Linux tarball; alphas are on another
+    # channel. verified 2026-11-12
     "www-client/torbrowser": {
         "source": "regex",
-        "url": "https://dist.torproject.org/torbrowser/",
-        "regex": r'href="([0-9]+\.[0-9]+(?:\.[0-9]+)?)/"',
+        "url": "https://aus1.torproject.org/torbrowser/update_3/release/downloads.json",
+        "regex": r"tor-browser-linux-x86_64-([0-9]+\.[0-9]+(?:\.[0-9]+)?)\.tar\.xz",
     },
     # oommf ships date-stamped tarballs from math.nist.gov with no tags or
     # API, so it was skipped as a custom upstream, and 2.1a3 (2026-09-30)

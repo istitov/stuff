@@ -3115,8 +3115,8 @@ regex = 'gwyddion-(3\.[0-9]+(?:\.[0-9]+)?)\.tar\.xz'
 
 ["www-client/torbrowser"]
 source = "regex"
-url = "https://dist.torproject.org/torbrowser/"
-regex = 'href="([0-9]+\.[0-9]+(?:\.[0-9]+)?)/"'
+url = "https://aus1.torproject.org/torbrowser/update_3/release/downloads.json"
+regex = 'tor-browser-linux-x86_64-([0-9]+\.[0-9]+(?:\.[0-9]+)?)\.tar\.xz'
 
 ["x11-libs/wxGTK"]
 source = "github"
@@ -3196,7 +3196,7 @@ prefix = "v"
 # ["dev-qt/qtquickcontrols"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qtquickcontrols2"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qtsql"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
-# ["dev-qt/qtsvg"] skipped: no recognizable upstream
+# ["dev-qt/qtsvg"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qttest"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qttranslations"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
 # ["dev-qt/qtwayland"] skipped: qt5-build snapshot; release-version tracking is intentionally skipped because KDE branch-tip movement is a maintainer-local check
