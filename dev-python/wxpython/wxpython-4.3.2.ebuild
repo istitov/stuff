@@ -38,12 +38,15 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 "
+# Upstream requires sip >=6.10,<7; the floor is the 6.17.1 its released
+# bindings were generated with. verified 2026-11-12
 BDEPEND="
 	app-text/doxygen
 	>=dev-python/cython-3.0.10[${PYTHON_USEDEP}]
 	>=dev-python/requests-2.26[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-70.1[${PYTHON_USEDEP}]
-	~dev-python/sip-6.17.1[${PYTHON_USEDEP}]
+	>=dev-python/sip-6.17.1[${PYTHON_USEDEP}]
+	<dev-python/sip-7[${PYTHON_USEDEP}]
 	test? (
 		${VIRTUALX_DEPEND}
 		dev-python/appdirs[${PYTHON_USEDEP}]
