@@ -1,0 +1,19 @@
+Keep the python-only build's requirements independent of the build host.
+
+In python-only mode setup.py picks the build variant from whichever
+PyTorch happens to be installed and, for a ROCm one, records a hard
+flydsl requirement. Record flydsl only for an actual ROCm build, so
+the metadata of a python-only package does not depend on the host.
+
+--- a/setup.py
++++ b/setup.py
+@@ -779,8 +779,7 @@
+         # FlyDSL is a mandatory ROCm-only backend.
+         + (
+             [f"flydsl=={_flydsl_version()}"]
+-            if (build.variant() if not _PYTHON_ONLY else _detect_build_variant())
+-            == "rocm"
++            if not _PYTHON_ONLY and build.variant() == "rocm"
+             else []
+         ),
+         extras_require=extras_require,
