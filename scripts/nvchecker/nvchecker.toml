@@ -1202,7 +1202,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (251) ---
+# --- github (252) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2693,6 +2693,12 @@ prefix = "v"
 ["sci-ml/lemonade"]
 source = "github"
 github = "lemonade-sdk/lemonade"
+use_max_tag = true
+prefix = "v"
+
+["sci-ml/mslk"]
+source = "github"
+github = "meta-pytorch/MSLK"
 use_max_tag = true
 prefix = "v"
 
