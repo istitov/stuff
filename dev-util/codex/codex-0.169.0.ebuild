@@ -55,6 +55,10 @@ RUST_MIN_VER="1.95.0"
 
 # python3 .github/scripts/rusty_v8_bazel.py resolved-v8-crate-version
 RUSTY_V8_TAG="152.2.0"
+# code-mode-runtime builds the v8 crate with v8_enable_sandbox, which needs
+# the pointer-compression + sandbox archive; with the plain one its
+# linked_v8_has_sandbox_enabled test fails. verified 2026-11-15
+RUSTY_V8_FLAVOR="ptrcomp_sandbox_release"
 
 inherit cargo check-reqs multiprocessing toolchain-funcs
 
@@ -68,16 +72,16 @@ SRC_URI="
 	https://github.com/openai/${PN}/archive/rust-v${PV}.tar.gz -> ${P}.tar.gz
 	https://github.com/gentoo-zh-drafts/codex/releases/download/rust-v${PV}/codex-rust-v${PV}-crates.tar.xz
 	amd64? (
-		https://github.com/openai/codex/releases/download/rusty-v8-v${RUSTY_V8_TAG}/librusty_v8_release_x86_64-unknown-linux-musl.a.gz
-			-> rusty_v8_${RUSTY_V8_TAG}_librusty_v8_release_x86_64-unknown-linux-musl.a.gz
-		https://github.com/openai/codex/releases/download/rusty-v8-v${RUSTY_V8_TAG}/src_binding_release_x86_64-unknown-linux-musl.rs
-			-> rusty_v8_${RUSTY_V8_TAG}_src_binding_release_x86_64-unknown-linux-musl.rs
+		https://github.com/openai/codex/releases/download/rusty-v8-v${RUSTY_V8_TAG}/librusty_v8_${RUSTY_V8_FLAVOR}_x86_64-unknown-linux-musl.a.gz
+			-> rusty_v8_${RUSTY_V8_TAG}_librusty_v8_${RUSTY_V8_FLAVOR}_x86_64-unknown-linux-musl.a.gz
+		https://github.com/openai/codex/releases/download/rusty-v8-v${RUSTY_V8_TAG}/src_binding_${RUSTY_V8_FLAVOR}_x86_64-unknown-linux-musl.rs
+			-> rusty_v8_${RUSTY_V8_TAG}_src_binding_${RUSTY_V8_FLAVOR}_x86_64-unknown-linux-musl.rs
 	)
 	arm64? (
-		https://github.com/openai/codex/releases/download/rusty-v8-v${RUSTY_V8_TAG}/librusty_v8_release_aarch64-unknown-linux-musl.a.gz
-			-> rusty_v8_${RUSTY_V8_TAG}_librusty_v8_release_aarch64-unknown-linux-musl.a.gz
-		https://github.com/openai/codex/releases/download/rusty-v8-v${RUSTY_V8_TAG}/src_binding_release_aarch64-unknown-linux-musl.rs
-			-> rusty_v8_${RUSTY_V8_TAG}_src_binding_release_aarch64-unknown-linux-musl.rs
+		https://github.com/openai/codex/releases/download/rusty-v8-v${RUSTY_V8_TAG}/librusty_v8_${RUSTY_V8_FLAVOR}_aarch64-unknown-linux-musl.a.gz
+			-> rusty_v8_${RUSTY_V8_TAG}_librusty_v8_${RUSTY_V8_FLAVOR}_aarch64-unknown-linux-musl.a.gz
+		https://github.com/openai/codex/releases/download/rusty-v8-v${RUSTY_V8_TAG}/src_binding_${RUSTY_V8_FLAVOR}_aarch64-unknown-linux-musl.rs
+			-> rusty_v8_${RUSTY_V8_TAG}_src_binding_${RUSTY_V8_FLAVOR}_aarch64-unknown-linux-musl.rs
 	)
 	${CARGO_CRATE_URIS}
 "
@@ -170,8 +174,8 @@ src_compile() {
 		local -x MAKEOPTS="-j${memjobs}"
 	fi
 
-	RUSTY_V8_ARCHIVE="${DISTDIR}/rusty_v8_${RUSTY_V8_TAG}_librusty_v8_release_${rusty_v8_triple}.a.gz" \
-	RUSTY_V8_SRC_BINDING_PATH="${DISTDIR}/rusty_v8_${RUSTY_V8_TAG}_src_binding_release_${rusty_v8_triple}.rs" \
+	RUSTY_V8_ARCHIVE="${DISTDIR}/rusty_v8_${RUSTY_V8_TAG}_librusty_v8_${RUSTY_V8_FLAVOR}_${rusty_v8_triple}.a.gz" \
+	RUSTY_V8_SRC_BINDING_PATH="${DISTDIR}/rusty_v8_${RUSTY_V8_TAG}_src_binding_${RUSTY_V8_FLAVOR}_${rusty_v8_triple}.rs" \
 		cargo_src_compile \
 			--bin codex \
 			--bin codex-code-mode-host
