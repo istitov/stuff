@@ -6,12 +6,12 @@ EAPI=8
 ROCM_VERSION="7.0"
 PYTHON_COMPAT=( python3_{12..15} )
 
-inherit cmake cuda flag-o-matic rocm linux-info python-any-r1
+inherit cmake cuda flag-o-matic rocm linux-info python-any-r1 toolchain-funcs
 
 # Snapshot tags are master-<build>-<hash>; pin that hash and the tag's ggml
 # submodule gitlink on each bump.
-MY_COMMIT="c6dfa9d"
-GGML_COMMIT="c57b71a3448809d07d49360273201bb5a5e7cafb"
+MY_COMMIT="532d2c1"
+GGML_COMMIT="eeda9ec48fc84a3df0bb9dcc19ae9053075a2539"
 
 DESCRIPTION="Diffusion model (SD, Flux, Wan, Qwen-Image, ...) inference in pure C/C++"
 HOMEPAGE="https://github.com/leejet/stable-diffusion.cpp"
@@ -37,13 +37,13 @@ fi
 # Let tarballs inject version metadata; live builds retain git describe.
 PATCHES=(
 	"${FILESDIR}/${PN}-embed-version.patch"
-	# ROCm 10.1's stock LLVM 23 rejects __bf16 vectors for the bf16
-	# WMMA/MFMA builtins in the bundled ggml; same fix as
-	# sci-misc/llama-cpp. verified 2026-10-26
-	"${FILESDIR}/${PN}-hip-bf16-builtin-args.patch"
-	# Both still apply at master-1039; see the 0_pre1039 ebuild.
-	# verified 2026-11-02
-	"${FILESDIR}/${PN}-0_pre1039-rpc-op-count.patch"
+	# ROCm 10.1's stock LLVM 23 rejects __bf16 vectors for the bf16 MFMA
+	# builtins in the bundled ggml, whose pin already carries the WMMA half
+	# of the fix; same patch as sci-misc/llama-cpp. verified 2026-11-16 at
+	# ggml eeda9ec4
+	"${FILESDIR}/${PN}-0_pre1104-hip-bf16-mfma.patch"
+	# Built without an architecture, the CUTLASS kernels crash on an
+	# RTX A4500 (sm_86). verified 2026-11-02
 	"${FILESDIR}/${PN}-0_pre1039-cuda-architectures.patch"
 )
 
@@ -51,9 +51,12 @@ PATCHES=(
 # is BSD; kuba--/zip is Unlicense. verified 2026-10-22
 LICENSE="MIT BSD BSD-2 Unicode-DFS-2016 Unlicense"
 SLOT="0"
-CPU_FLAGS_X86=( avx avx2 avx512f avx512vbmi bmi2 f16c fma3 sse4_2 )
+CPU_FLAGS_X86=(
+	amx_bf16 amx_int8 amx_tile avx avx2 avx512_bf16 avx512_vnni avx512f
+	avx512vbmi avx_vnni bmi2 f16c fma3 sse4_2
+)
 
-IUSE="debug openblas blis flexiblas rocm cuda opencl vulkan webm webp"
+IUSE="debug openblas +openmp blis flexiblas hipblaslt rocm cuda opencl vulkan webm webp"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
 REQUIRED_USE="
@@ -65,6 +68,7 @@ REQUIRED_USE="
 	webm? (
 		webp
 	)
+	hipblaslt? ( rocm )
 "
 
 CDEPEND="
@@ -74,7 +78,8 @@ CDEPEND="
 	rocm? (
 		>=dev-util/hip-${ROCM_VERSION}:=
 		>=sci-libs/hipBLAS-${ROCM_VERSION}:=
-		llvm-runtimes/openmp:=
+		openmp? ( llvm-runtimes/openmp:= )
+		hipblaslt? ( >=sci-libs/hipBLASLt-${ROCM_VERSION}:= )
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	webp? ( media-libs/libwebp:= )
@@ -99,7 +104,14 @@ BDEPEND="
 	vulkan? ( media-libs/shaderc )
 "
 
+# hipcc builds against LLVM's libomp, declared under rocm; otherwise the
+# toolchain's own OpenMP runtime is used.
+pkg_pretend() {
+	[[ ${MERGE_TYPE} != binary ]] && use openmp && ! use rocm && tc-check-openmp
+}
+
 pkg_setup() {
+	[[ ${MERGE_TYPE} != binary ]] && use openmp && ! use rocm && tc-check-openmp
 	use opencl && python-any-r1_pkg_setup
 	if use rocm; then
 		linux-info_pkg_setup
@@ -148,6 +160,8 @@ src_configure() {
 		-DSD_SERVER_BUILD_FRONTEND=OFF
 		-DGGML_NATIVE=0	# don't set march
 		-DGGML_RPC=ON
+		# ggml enables OpenMP by default whenever the compiler supports it.
+		-DGGML_OPENMP=$(usex openmp)
 		-DSD_CUDA=$(usex cuda)
 		-DSD_OPENCL=$(usex opencl)
 		# ggml accepts only Adreno and Intel GPUs, and its Adreno kernels reject
@@ -160,20 +174,26 @@ src_configure() {
 		-DSD_WEBM=$(usex webm)
 		-DSD_USE_SYSTEM_WEBM=$(usex webm)
 
-		# Isolate libraries shared with whisper.cpp and llama.cpp.
+		# A private libdir keeps the static build's leftovers apart from the
+		# system's; src_install removes it.
 		-DCMAKE_INSTALL_LIBDIR="${EPREFIX}/usr/$(get_libdir)/stable-diffusion.cpp"
-		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/$(get_libdir)/stable-diffusion.cpp"
 	)
 
 	mycmakeargs+=(
 		-DGGML_SSE42=$(usex cpu_flags_x86_sse4_2)
 		-DGGML_AVX=$(usex cpu_flags_x86_avx)
+		-DGGML_AVX_VNNI=$(usex cpu_flags_x86_avx_vnni)
 		-DGGML_AVX2=$(usex cpu_flags_x86_avx2)
 		-DGGML_BMI2=$(usex cpu_flags_x86_bmi2)
 		-DGGML_F16C=$(usex cpu_flags_x86_f16c)
 		-DGGML_FMA=$(usex cpu_flags_x86_fma3)
 		-DGGML_AVX512=$(usex cpu_flags_x86_avx512f)
 		-DGGML_AVX512_VBMI=$(usex cpu_flags_x86_avx512vbmi)
+		-DGGML_AVX512_VNNI=$(usex cpu_flags_x86_avx512_vnni)
+		-DGGML_AVX512_BF16=$(usex cpu_flags_x86_avx512_bf16)
+		-DGGML_AMX_TILE=$(usex cpu_flags_x86_amx_tile)
+		-DGGML_AMX_INT8=$(usex cpu_flags_x86_amx_int8)
+		-DGGML_AMX_BF16=$(usex cpu_flags_x86_amx_bf16)
 	)
 
 	if [[ ${PV} != *9999* ]]; then
@@ -226,9 +246,14 @@ src_configure() {
 		mycmakeargs+=(
 			-DSD_HIPBLAS=ON -DAMDGPU_TARGETS=$(get_amdgpu_flags) -DGPU_TARGETS=$(get_amdgpu_flags)
 		)
-		# ggml builds with OpenMP by default, and hipcc 10.1 hides libomp from
-		# CMake; see rocm_hipcc_openmp_args.
-		mycmakeargs+=( $(rocm_hipcc_openmp_args) )
+		# hipcc 10.1 hides libomp from CMake; see rocm_hipcc_openmp_args.
+		use openmp && mycmakeargs+=( $(rocm_hipcc_openmp_args) )
+		# The int8 GEMM links hipBLASLt whenever CMake finds it (package
+		# version 1.0 or newer); USE=hipblaslt decides instead. verified
+		# 2026-11-15
+		mycmakeargs+=(
+			-DCMAKE_DISABLE_FIND_PACKAGE_hipblaslt=$(usex hipblaslt OFF ON)
+		)
 	fi
 
 	cmake_src_configure
@@ -237,8 +262,11 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	# All three projects install conflicting ggml headers.
-	rm -rf "${ED}/usr/include" || die
-
-	find "${ED}" -name "*.a" -delete || die
+	# Install the two programs only. ggml and libstable-diffusion are static
+	# and linked into them, their headers conflict with whisper.cpp and
+	# llama.cpp, and the cmake and pkg-config files describe those removed
+	# libraries. LICENSE covers the third-party license files. verified
+	# 2026-11-16
+	rm -r "${ED}/usr/include" "${ED}/usr/$(get_libdir)/stable-diffusion.cpp" \
+		"${ED}/usr/share/licenses" || die
 }
