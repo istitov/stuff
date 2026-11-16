@@ -12,14 +12,19 @@
     connections and an archive manager. It replaces the built-in ftpfs, sftpfs,
     tarfs and cpiofs VFS modules with those plugins, and adds the mcstruct
     structured binary viewer and a Lua runtime extension. Since 6.1.0 its
-    commands are mcommander, mcedit6, mview and mdiff, so it installs alongside
-    app-misc/mc; 6.0.4 still installs as /usr/bin/mc and blocks it.
+    commands are mcommander, mcedit6, mview and mdiff (mcdiff6 since 6.2.0),
+    so it installs alongside app-misc/mc; 6.0.4 still installs as /usr/bin/mc
+    and blocks it.
   </longdescription>
   <use>
+    <flag name="acl">Build the access control list editor panel plugin (6.2.0 and newer)</flag>
     <flag name="edit">Build the internal editor (mcedit6; mcedit in 6.0.4)</flag>
     <flag name="ftp">Build the FTP/FTPS panel plugin (needs net-misc/curl)</flag>
+    <flag name="jpeg">Compare JPEG pictures by content in the duplicates panel plugin (6.2.0 and newer)</flag>
     <flag name="lua">Build the Lua runtime extension</flag>
     <flag name="mongodb">Build the MongoDB browser panel plugin</flag>
+    <flag name="png">Compare PNG pictures by content in the duplicates panel plugin (6.2.0 and newer)</flag>
+    <flag name="postgres">Build the PostgreSQL browser panel plugin (6.2.0 and newer)</flag>
     <flag name="s3">Build the S3 object storage panel plugin (needs net-misc/curl with AWS SigV4)</flag>
     <flag name="sftp">Build the SFTP panel plugin and use net-libs/libssh2 as the shell-link transport</flag>
     <flag name="slang">Use sys-libs/slang instead of sys-libs/ncurses as the screen library</flag>
