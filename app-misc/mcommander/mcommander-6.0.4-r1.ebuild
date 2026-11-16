@@ -40,7 +40,7 @@ COMMON_DEPEND="
 		>=dev-libs/mongo-c-driver-1.21
 	)
 	s3? ( >=net-misc/curl-7.75.0 )
-	samba? ( net-fs/samba[client] )
+	samba? ( net-fs/samba:=[client] )
 	sftp? ( >=net-libs/libssh2-1.9.0 )
 	slang? ( >=sys-libs/slang-2 )
 	!slang? ( sys-libs/ncurses:= )
