@@ -8,7 +8,7 @@
 # packages with no detectable upstream). To track a skipped
 # package by hand, uncomment the block and fill in the source.
 
-# --- pypi (298) ---
+# --- pypi (300) ---
 
 ["app-office/beancount"]
 source = "pypi"
@@ -241,6 +241,10 @@ pypi = "diffpy.utils"
 ["dev-python/diffsims"]
 source = "pypi"
 pypi = "diffsims"
+
+["dev-python/discord-py"]
+source = "pypi"
+pypi = "discord.py"
 
 ["dev-python/docstring-parser"]
 source = "pypi"
@@ -781,6 +785,10 @@ pypi = "pyopencl"
 ["dev-python/pyopengl-accelerate"]
 source = "pypi"
 pypi = "pyopengl-accelerate"
+
+["dev-python/pypdfium2"]
+source = "pypi"
+pypi = "pypdfium2"
 
 ["dev-python/pyqode-core"]
 source = "pypi"
