@@ -30,7 +30,7 @@ CRATES="
 	anstyle-query@1.1.5
 	anstyle-wincon@3.0.11
 	anstyle@1.0.13
-	anyhow@1.0.102
+	anyhow@1.0.104
 	arc-swap@1.9.0
 	arrayref@0.3.9
 	arrayvec@0.7.6
@@ -182,7 +182,7 @@ CRATES="
 	getrandom@0.3.4
 	getrandom@0.4.2
 	gif@0.14.2
-	h2@0.4.19
+	h2@0.4.20
 	half@2.7.1
 	hashbrown@0.12.3
 	hashbrown@0.14.5
@@ -351,7 +351,7 @@ CRATES="
 	protox-parse@0.9.0
 	protox@0.9.1
 	pulldown-cmark-to-cmark@22.0.0
-	pulldown-cmark@0.13.3
+	pulldown-cmark@0.13.6
 	pxfm@0.1.29
 	quick-error@2.0.1
 	quote@1.0.45
@@ -392,10 +392,10 @@ CRATES="
 	rustc-hash@2.1.1
 	rustc_version@0.4.1
 	rustfft@6.4.1
-	rustix@1.1.4
+	rustix@1.1.6
 	rustls-pki-types@1.14.1
-	rustls-webpki@0.103.15
-	rustls@0.23.37
+	rustls-webpki@0.103.17
+	rustls@0.23.46
 	rustpython-ast@0.4.0
 	rustpython-parser-core@0.4.0
 	rustpython-parser-vendored@0.4.0
@@ -507,7 +507,7 @@ CRATES="
 	tokio-stream@0.1.18
 	tokio-tungstenite@0.28.0
 	tokio-util@0.7.18
-	tokio@1.52.3
+	tokio@1.54.1
 	toml_datetime@1.1.1+spec-1.1.0
 	toml_edit@0.25.11+spec-1.1.0
 	toml_parser@1.1.2+spec-1.1.0
@@ -582,8 +582,8 @@ CRATES="
 	wasmparser@0.244.0
 	web-sys@0.3.91
 	web-time@1.1.0
-	webpki-root-certs@1.0.8
-	webpki-roots@1.0.8
+	webpki-root-certs@1.0.12
+	webpki-roots@1.0.12
 	weezl@0.1.12
 	win_uds@0.2.2
 	winapi-i686-pc-windows-gnu@0.4.0
@@ -629,9 +629,9 @@ CRATES="
 	zerovec-derive@0.11.2
 	zerovec@0.11.5
 	zmij@1.0.21
-	zstd-safe@7.2.4
-	zstd-sys@2.0.16+zstd.1.5.7
-	zstd@0.13.3
+	zstd-safe@7.4.1
+	zstd-sys@2.1.3+zstd.1.5.7
+	zstd@0.13.5
 	zune-core@0.5.1
 	zune-jpeg@0.5.15
 "
