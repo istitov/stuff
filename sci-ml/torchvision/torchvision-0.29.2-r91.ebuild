@@ -35,8 +35,13 @@ RDEPEND="
 	png? ( media-libs/libpng:= )
 	webp? ( media-libs/libwebp )
 	sci-ml/caffe2[cuda?,rocm?,${PYTHON_SINGLE_USEDEP}]
-	=sci-ml/pytorch-2.14*[${PYTHON_SINGLE_USEDEP}]
+	>=sci-ml/pytorch-2.14[${PYTHON_SINGLE_USEDEP}]
 "
+
+# Open bound on pytorch: the extensions (_C_stable.so, image_stable.so) build
+# against libtorch's stable ABI, so a 2.14 build loads and runs on 2.15 without
+# a rebuild, and the test suite fails the same tests against 2.14 and 2.15
+# (issue #309). verified 2026-11-17
 
 # setup.py imports torch and compiles against caffe2's installed headers, and
 # pyproject.toml lists torch as a build requirement, so the runtime set has to
