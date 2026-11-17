@@ -232,10 +232,11 @@ src_compile() {
 	cmake_src_compile
 
 	# A failed fetch only warns and builds the server without a UI. Assets
-	# placed in the checkout's tools/ui/dist (e.g. by a user patch) are
-	# embedded from there instead.
-	if use webui && [[ ! -f ${BUILD_DIR}/tools/ui/dist/index.html &&
-		! -f ${S}/tools/ui/dist/index.html ]]; then
+	# placed in the checkout's ui/apps/chat/dist (e.g. by a user patch) are
+	# embedded from there instead; the UI moved there from tools/ui in
+	# b12451. verified 2026-11-17
+	if use webui && [[ ! -f ${BUILD_DIR}/ui/apps/chat/dist/index.html &&
+		! -f ${S}/ui/apps/chat/dist/index.html ]]; then
 		die "USE=webui: the prebuilt UI could not be fetched from Hugging Face"
 	fi
 }
