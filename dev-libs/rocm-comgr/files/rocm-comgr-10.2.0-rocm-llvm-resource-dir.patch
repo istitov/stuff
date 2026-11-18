@@ -1,0 +1,25 @@
+Use the resource directory of the LLVM Comgr is built against.
+
+Comgr's in-process clang derives its resource directory from an LLVM prefix:
+LLVM_PATH if set, else layouts probed relative to libamd_comgr.so. Installed
+in /usr/lib64, the last probe accepts /usr, i.e. the system clang's
+/usr/lib/clang tree. This Comgr links AMD's LLVM from llvm-core/rocm-llvm,
+so default to that prefix (substituted for @ROCM_LLVM_PREFIX@ by the
+ebuild) and keep LLVM_PATH as the override.
+--- a/src/comgr-env.cpp	2026-11-18 17:34:51.010917611 +0100
++++ b/src/comgr-env.cpp	2026-11-18 17:34:51.053443291 +0100
+@@ -149,6 +149,14 @@
+     if (EnvLLVMPath && StringRef(EnvLLVMPath) != "")
+       return makeClangInstallPaths(EnvLLVMPath);
+ 
++    // Prefer the LLVM this Comgr was built against. Probing relative to the
++    // library finds /usr/lib/clang, the system clang's resource tree, whose
++    // builtin headers belong to a different LLVM major than AMD's fork.
++    ClangInstallPaths BuiltLayout =
++        makeClangInstallPaths("@ROCM_LLVM_PREFIX@");
++    if (probeClangResourceDir(BuiltLayout.ClangBinaryPath))
++      return BuiltLayout;
++
+ #ifndef _WIN32
+     Dl_info Info;
+     if (dladdr(reinterpret_cast<void *>(&getClangInstallPaths), &Info) &&
