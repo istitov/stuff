@@ -1,0 +1,23 @@
+Export functions used by rocr-runtime and kfdtest from shared libhsakmt
+
+Rebased onto 10.2, which adds hsaKmtSetPersistingCacheSize to the list;
+the eight functions are still defined and still missing from it.
+
+Bug: https://github.com/ROCm/rocm-systems/issues/284
+--- a/src/libhsakmt.ver
++++ b/src/libhsakmt.ver
+@@ -114,6 +114,14 @@
+ hsaKmtSetSigbusDelay;
+ hsaKmtGetAmdGPUDeviceFd;
+ hsaKmtSetPersistingCacheSize;
++hsaKmtCreateQueueExt;
++hsaKmtCreateQueueV2;
++hsaKmtRegisterGraphicsHandleToNodesExt;
++hsaKmtModelEnabled;
++hsaKmtOpenKFDCtx;
++hsaKmtCloseKFDCtx;
++hsaKmtOpenSecondaryKFDCtx;
++hsaKmtCloseSecondaryKFDCtx;
+ local: *;
+ };
+ 
