@@ -32,17 +32,25 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
-# Installed cdylibs directly link HIP, rocm-smi, rocBLAS, hipBLASLt, and
-# rocSPARSE; := forces rebuilds across ROCm SONAME changes. FFT is a stub, while
-# LZ4 and LLVM are bundled; amd-comgr is no longer linked. verified 2026-05-27
+# Installed cdylibs directly link HIP, rocm-smi, hipFFT, rocBLAS, hipBLASLt,
+# and rocSPARSE; := forces rebuilds across ROCm SONAME changes. cuFFT went from
+# a stub to hipFFT in 7_pre11. LZ4 and LLVM are bundled; amd-comgr is no longer
+# linked. verified 2026-11-18
 RDEPEND="
 	dev-util/hip:=
 	dev-util/rocm-smi:=
+	sci-libs/hipFFT:=
 	sci-libs/rocBLAS:=
 	sci-libs/hipBLASLt:=
 	sci-libs/rocSPARSE:=
 "
-DEPEND="${RDEPEND}"
+# cuda_types links miopen-sys into every cdylib, so -lMIOpen must resolve at
+# link time; --as-needed then drops it from every installed library.
+# verified 2026-11-18
+DEPEND="
+	${RDEPEND}
+	sci-libs/miopen
+"
 
 src_compile() {
 	# Build default members and their declared Linux CUDA symlinks.
