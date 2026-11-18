@@ -100,6 +100,11 @@ src_configure() {
 	local mycmakeargs=(
 		# A private prefix prevents conflicts with Gentoo's slotted LLVM.
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr/lib/${PN}"
+		# Match llvm-core/llvm: rocm_use_clang calls the ${CHOST}-clang driver,
+		# which looks for compiler-rt under lib/${CHOST}; the default
+		# x86_64-unknown-linux-gnu runtime dir breaks host links such as
+		# rocRAND's tools. verified 2026-11-18
+		-DLLVM_HOST_TRIPLE="${CHOST}"
 
 		# HIP needs AMDGPU device code and an X86 host compiler.
 		-DLLVM_TARGETS_TO_BUILD="AMDGPU;X86"
