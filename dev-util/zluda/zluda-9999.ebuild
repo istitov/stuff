@@ -19,6 +19,7 @@ EGIT_SUBMODULES=( '*' )
 # The bundled LLVM submodule adds its linking-exception license.
 LICENSE="|| ( Apache-2.0 MIT ) Apache-2.0-with-LLVM-exceptions"
 SLOT="0"
+IUSE="system-highs +system-sqlite +system-zstd"
 # Cargo, submodules, and LFS fetch at build time.
 PROPERTIES="live"
 RESTRICT="network-sandbox test"
@@ -32,10 +33,16 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
+# system-* link ::gentoo copies of the bundled HiGHS, SQLite and zstd. LZ4
+# stays bundled: lz4-sys always compiles its own copy, and xtask builds
+# --locked, so a replacement crate would need a patched Cargo.lock. LLVM is
+# ZLUDA's fork of AMD's staging branch with its own passes and intrinsics.
+# verified 2026-11-18
+
 # Installed cdylibs directly link HIP, rocm-smi, hipFFT, rocBLAS, hipBLASLt,
 # and rocSPARSE; := forces rebuilds across ROCm SONAME changes. cuFFT went from
-# a stub to hipFFT in 7_pre11. LZ4 and LLVM are bundled; amd-comgr is no longer
-# linked. verified 2026-11-18
+# a stub to hipFFT in 7_pre11, and amd-comgr is no longer linked.
+# verified 2026-11-18
 RDEPEND="
 	dev-util/hip:=
 	dev-util/rocm-smi:=
@@ -43,6 +50,9 @@ RDEPEND="
 	sci-libs/rocBLAS:=
 	sci-libs/hipBLASLt:=
 	sci-libs/rocSPARSE:=
+	system-highs? ( sci-mathematics/highs:=[-index64] )
+	system-sqlite? ( dev-db/sqlite:3 )
+	system-zstd? ( app-arch/zstd:= )
 "
 # cuda_types links miopen-sys into every cdylib, so -lMIOpen must resolve at
 # link time; --as-needed then drops it from every installed library.
@@ -52,7 +62,18 @@ DEPEND="
 	sci-libs/miopen
 "
 
+src_prepare() {
+	use system-highs && eapply "${FILESDIR}/${PN}-6-system-highs.patch"
+	default
+}
+
 src_compile() {
+	# libsqlite3-sys and zstd-sys honour these over their bundled builds;
+	# HIGHS_SYS_USE_SYSTEM comes from the system-highs patch.
+	use system-highs && export HIGHS_SYS_USE_SYSTEM=1
+	use system-sqlite && export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
+	use system-zstd && export ZSTD_SYS_USE_PKG_CONFIG=1
+
 	# Build default members and their declared Linux CUDA symlinks.
 	cargo xtask --release || die "cargo xtask --release failed"
 

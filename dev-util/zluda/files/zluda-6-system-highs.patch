@@ -1,0 +1,25 @@
+Link the system HiGHS when HIGHS_SYS_USE_SYSTEM is set (USE=system-highs).
+
+ZLUDA's vendored highs-sys only builds the ext/HiGHS submodule: its
+pkg-config "discover" path calls a bindgen helper upstream commented out.
+This switch skips the build and links libhighs; the pre-generated 1.11
+bindings stay in use. The 20 C functions the highs crate calls keep the
+same prototypes in HiGHS 1.16 and the 1.11 constants keep their values;
+the ebuild requires HiGHS without index64 so HighsInt stays a C int.
+--- a/ext/highs-sys/build.rs	2026-11-18 13:49:52.241181543 +0100
++++ b/ext/highs-sys/build.rs	2026-11-18 13:49:52.252077730 +0100
+@@ -129,6 +129,14 @@
+ }
+ 
+ fn main() {
++    // Link a system libhighs instead of building the HiGHS submodule. The
++    // shipped src/c_bindings.rs stays in use, so bindgen is not needed.
++    println!("cargo:rerun-if-env-changed=HIGHS_SYS_USE_SYSTEM");
++    if env::var_os("HIGHS_SYS_USE_SYSTEM").is_some() {
++        println!("cargo:rustc-link-lib=dylib=highs");
++        return;
++    }
++
+     if cfg!(all(
+         any(
+             feature = "highs_release",
