@@ -8,12 +8,14 @@ ROCM_VERSION=${PV}
 inherit cmake rocm
 
 DESCRIPTION="HIP back-end for the parallel algorithm library Thrust"
-HOMEPAGE="https://github.com/ROCm/rocThrust"
+HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocthrust"
+# Fixed rocm-libraries release asset, as ::gentoo uses; same tree as the old
+# per-repo archive, which GitHub may regenerate. verified 2026-11-19
 SRC_URI="
-	https://github.com/ROCm/${PN}/archive/rocm-${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/rocthrust.tar.gz -> rocthrust-${PV}.tar.gz
 	test? ( https://www.sqlite.org/2023/sqlite-amalgamation-3430200.zip )
 "
-S="${WORKDIR}/${PN}-rocm-${PV}"
+S="${WORKDIR}/rocthrust"
 
 LICENSE="Apache-2.0"
 SLOT="0/$(ver_cut 1-2)"
