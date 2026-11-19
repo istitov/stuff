@@ -65,7 +65,6 @@ IUSE="benchmark perfscripts test"
 REQUIRED_USE="perfscripts? ( benchmark ) ${PYTHON_REQUIRED_USE} ${ROCM_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
-
 required_mem() {
 	if use test; then
 		echo "52G"
