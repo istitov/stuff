@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{12..14} )
 ROCM_VERSION=${PV}
 
-inherit cmake check-reqs edo multiprocessing python-r1 rocm
+inherit cmake check-reqs edo flag-o-matic multiprocessing python-r1 rocm
 
 DESCRIPTION="Next generation FFT implementation for ROCm"
 HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocfft"
@@ -104,6 +104,10 @@ src_prepare() {
 
 src_configure() {
 	rocm_use_clang
+
+	# The library builds with -fgpu-rdc, which LTO breaks (Gentoo bug 977921;
+	# ROCm/hip#3879). Adopted from ::gentoo 7.2.0. verified 2026-11-19
+	filter-lto
 
 	local mycmakeargs=(
 		-DCMAKE_SKIP_RPATH=ON
