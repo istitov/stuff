@@ -88,9 +88,11 @@ RDEPEND="${DEPEND}
 PATCHES=(
 	"${FILESDIR}/${PN}-6.3.0-no-isystem-usr-include.patch"
 	"${FILESDIR}/${PN}-6.3.0-clr-fix-libcxx.patch"
-	"${FILESDIR}/${PN}-7.0.2-fix-libcxx-noinline.patch"
-	"${FILESDIR}/${PN}-7.0.2-fix-libcxx-ranges.patch"
 	"${FILESDIR}/${PN}-7.1.0-no-hipother-install.patch"
+	# ::gentoo's successors to the 7.0.2 libc++ patches: they also cover
+	# libstdc++-16 <format> (bug 982294) and libc++ <deque>. adopted 2026-11-19
+	"${FILESDIR}/${PN}-7.2.0-noinline-fixes.patch"
+	"${FILESDIR}/${PN}-7.2.0-local-fixes.patch"
 )
 
 QA_FLAGS_IGNORED="usr/lib.*/libhiprtc-builtins.*"
@@ -175,6 +177,11 @@ src_configure() {
 		-DROCM_PATH="${EPREFIX}/usr"
 
 		-DCMAKE_DISABLE_FIND_PACKAGE_Git=ON
+
+		# hiprtc-builtins embeds headers preprocessed by this clang; pin it to
+		# the LLVM slot rocm-comgr uses, as ::gentoo's 7.2.0-r2 does.
+		-Dclang="$(get_llvm_prefix)/bin/clang"
+		-Dllvm-mc="$(get_llvm_prefix)/bin/llvm-mc"
 	)
 
 	if use video_cards_amdgpu; then
