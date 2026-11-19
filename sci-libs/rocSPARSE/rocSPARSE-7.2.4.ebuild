@@ -9,9 +9,11 @@ ROCM_VERSION=${PV}
 inherit cmake edo flag-o-matic python-any-r1 toolchain-funcs rocm
 
 DESCRIPTION="Basic Linear Algebra Subroutines for sparse computation"
-HOMEPAGE="https://github.com/ROCm/rocSPARSE"
+HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocsparse"
 
-SRC_URI="https://github.com/ROCm/${PN}/archive/rocm-${PV}.tar.gz -> ${P}.tar.gz
+# Fixed rocm-libraries release asset, as ::gentoo uses; same tree as the old
+# per-repo archive, which GitHub may regenerate. verified 2026-11-19
+SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/rocsparse.tar.gz -> rocsparse-${PV}.tar.gz
 test? (
 http://sparse-files.engr.tamu.edu/MM/SNAP/amazon0312.tar.gz -> ${PN}_amazon0312.tar.gz
 http://sparse-files.engr.tamu.edu/MM/Muite/Chebyshev4.tar.gz -> ${PN}_Chebyshev4.tar.gz
@@ -39,7 +41,7 @@ http://sparse-files.engr.tamu.edu/MM/Chevron/Chevron3.tar.gz -> ${PN}_Chevron3.t
 http://sparse-files.engr.tamu.edu/MM/Chevron/Chevron4.tar.gz -> ${PN}_Chevron4.tar.gz
 )"
 
-S="${WORKDIR}/${PN}-rocm-${PV}"
+S="${WORKDIR}/rocsparse"
 
 LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
