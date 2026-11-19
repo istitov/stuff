@@ -8,10 +8,12 @@ ROCM_VERSION=${PV}
 inherit cmake edo flag-o-matic rocm
 
 DESCRIPTION="Implementation of a subset of LAPACK functionality on the ROCm platform"
-HOMEPAGE="https://github.com/ROCm/rocSOLVER"
+HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocsolver"
 
-SRC_URI="https://github.com/ROCm/${PN}/archive/rocm-${PV}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-rocm-${PV}"
+# Fixed rocm-libraries release asset, as ::gentoo uses; same tree as the old
+# per-repo archive, which GitHub may regenerate. verified 2026-11-19
+SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/rocsolver.tar.gz -> rocsolver-${PV}.tar.gz"
+S="${WORKDIR}/rocsolver"
 
 LICENSE="BSD-2 BSD"
 SLOT="0/$(ver_cut 1-2)"
