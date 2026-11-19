@@ -8,9 +8,11 @@ ROCM_VERSION=${PV}
 inherit cmake rocm
 
 DESCRIPTION="Generate pseudo-random and quasi-random numbers"
-HOMEPAGE="https://github.com/ROCm/rocRAND"
-SRC_URI="https://github.com/ROCm/${PN}/archive/rocm-${PV}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-rocm-${PV}"
+HOMEPAGE="https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocrand"
+# Fixed rocm-libraries release asset, as ::gentoo uses; same tree as the old
+# per-repo archive, which GitHub may regenerate. verified 2026-11-19
+SRC_URI="https://github.com/ROCm/rocm-libraries/releases/download/rocm-${PV}/rocrand.tar.gz -> rocrand-${PV}.tar.gz"
+S="${WORKDIR}/rocrand"
 
 LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
