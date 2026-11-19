@@ -24,7 +24,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
-
 src_configure() {
 	rocm_use_clang
 
