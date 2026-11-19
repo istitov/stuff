@@ -89,6 +89,14 @@ src_unpack() {
 	# Identically structured shim archives overwrite each other; unpack one.
 	local hippkg=$(best_version -d dev-util/hip)
 	local rocmver="$(ver_cut 1-2 "${hippkg#*hip-}")"
+	# Upstream stopped this release's shims at rocm7.16 (ROCm 10.1); 0.15b
+	# adds 7.17, but caffe2 2.15 pins <0.15. The shim only links
+	# libamdhip64.so.7, which ROCm 10.2 keeps, so reuse the 10.1 shim there.
+	# verified 2026-11-19
+	if [[ ${rocmver} == 10.2 ]]; then
+		ewarn "Using the ROCm 10.1 aotriton shim with ROCm 10.2 (no upstream 10.2 shim for ${PV})"
+		rocmver=10.1
+	fi
 	local file shim_found=
 	for file in ${A}; do
 		if [[ ${file} == *-rocm${rocmver}-*.tar.gz ]]; then
