@@ -1,0 +1,76 @@
+Update vendored crates flagged by RustSec to their newest semver-compatible
+releases with `cargo update -p <crate>@<version> --precise <version>`:
+  crossbeam-epoch 0.9.18 -> 0.9.21 (RUSTSEC-2026-0204)
+  rustix 1.1.4 -> 1.1.6 (RUSTSEC-2026-0486)
+cargo also re-resolved the Windows-only windows-sys requirements of
+dependents to 0.52.0, which a Linux build never compiles.
+
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -323,7 +323,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "faf9468729b8cbcea668e36183cb69d317348c2e08e994829fb56ebfdfbaac34"
+ dependencies = [
+- "windows-sys 0.61.2",
++ "windows-sys 0.52.0",
+ ]
+ 
+ [[package]]
+@@ -441,9 +441,9 @@
+ 
+ [[package]]
+ name = "crossbeam-epoch"
+-version = "0.9.18"
++version = "0.9.21"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5b82ac4a3c2ca9c3460964f020e1402edd5753411d7737aa39c3714ad1b5420e"
++checksum = "dc74980687109a3b14c72fd458107bf0baa1da1a1a805e178d15501ba9b86d9d"
+ dependencies = [
+  "crossbeam-utils",
+ ]
+@@ -673,7 +673,7 @@
+ checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
+ dependencies = [
+  "libc",
+- "windows-sys 0.61.2",
++ "windows-sys 0.52.0",
+ ]
+ 
+ [[package]]
+@@ -2045,15 +2045,15 @@
+ 
+ [[package]]
+ name = "rustix"
+-version = "1.1.4"
++version = "1.1.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b6fe4565b9518b83ef4f91bb47ce29620ca828bd32cb7e408f0062e9930ba190"
++checksum = "e5e76742e5294153d4dde1207dbec5bdd81eef6fabdc0d2118babadabfd858aa"
+ dependencies = [
+  "bitflags 2.13.2",
+  "errno",
+  "libc",
+  "linux-raw-sys",
+- "windows-sys 0.61.2",
++ "windows-sys 0.52.0",
+ ]
+ 
+ [[package]]
+@@ -2407,7 +2407,7 @@
+  "getrandom 0.4.3",
+  "once_cell",
+  "rustix",
+- "windows-sys 0.61.2",
++ "windows-sys 0.52.0",
+ ]
+ 
+ [[package]]
+@@ -2966,7 +2966,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
+ dependencies = [
+- "windows-sys 0.61.2",
++ "windows-sys 0.52.0",
+ ]
+ 
+ [[package]]
