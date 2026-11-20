@@ -20,8 +20,8 @@ HOMEPAGE="https://github.com/ggml-org/llama.cpp"
 # it: a release is the vX.Y.Z tag, whose build upstream publishes as
 # nightly-tag.txt; a snapshot is the bN tag itself and is versioned
 # X.Y.Z_pN after the release it follows.
-LLAMA_SRC_TAG="b12503"
-LLAMA_BUILD_NUMBER="12503"
+LLAMA_SRC_TAG="b12532"
+LLAMA_BUILD_NUMBER="12532"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -35,8 +35,10 @@ else
 	MY_PV="${LLAMA_SRC_TAG}"
 	S="${WORKDIR}/llama.cpp-${LLAMA_SRC_TAG#v}"
 	LLAMA_UI="llama-b${LLAMA_BUILD_NUMBER}"
+	# -r0 shipped b12503's source as ${P}.tar.gz, and distdirs that fetched it
+	# keep those bytes under that name; name this distfile after the tag.
 	SRC_URI="
-		https://github.com/ggml-org/llama.cpp/archive/refs/tags/${LLAMA_SRC_TAG}.tar.gz -> ${P}.tar.gz
+		https://github.com/ggml-org/llama.cpp/archive/refs/tags/${LLAMA_SRC_TAG}.tar.gz -> ${PN}-${LLAMA_SRC_TAG}.tar.gz
 		webui? (
 			https://github.com/ggml-org/llama.cpp/releases/download/b${LLAMA_BUILD_NUMBER}/${LLAMA_UI}-ui.tar.gz
 		)
