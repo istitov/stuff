@@ -1,0 +1,22 @@
+Keep Studio from pip-installing usearch in a Gentoo system install.
+
+From 2026.11.7 Studio fetches the hash-pinned usearch/numkong wheels in
+a background thread the first time a large RAG scope needs HNSW search,
+installing them into sys.prefix with uv or pip. Under the system
+interpreter that prefix is /usr, which a user cannot write, and a failed
+attempt is retried every ten minutes. UNSLOTH_STUDIO_SYSTEM=1 now reads as
+RAG_VEC_ANN_AUTO_INSTALL=0, and RAG keeps its exact-search fallback.
+
+--- a/studio/backend/core/rag/hnsw_runtime.py
++++ b/studio/backend/core/rag/hnsw_runtime.py
+@@ -58,6 +58,10 @@
+ 
+ 
+ def _auto_install_off() -> bool:
++    # Gentoo system install (sci-ml/unsloth[studio]): never pip-install into
++    # the system prefix; RAG falls back to exact search without usearch.
++    if os.environ.get("UNSLOTH_STUDIO_SYSTEM") == "1":
++        return True
+     return os.environ.get("RAG_VEC_ANN_AUTO_INSTALL", "1").strip().lower() in _OFF
+ 
+ 
