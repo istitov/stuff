@@ -147,6 +147,10 @@ src_prepare() {
 	# Nor pip-install usearch into the system prefix on demand.
 	# Verified 2026-11-20.
 	use studio && PATCHES+=( "${FILESDIR}/${PN}-2026.11.7-system-hnsw.patch" )
+	# Enable NPU: run the packaged lemond and flm, not Lemonade's Ubuntu build
+	# and the FastFlowLM it fetches. Verified 2026-11-20 with lemonade
+	# 2026.47.1 and fastflowlm 1.0.13 on an XDNA 2 NPU.
+	use studio && PATCHES+=( "${FILESDIR}/${PN}-2026.11.7-system-npu.patch" )
 
 	# find_packages includes 88 KiB of MoE tests absent from upstream's wheel.
 	# Verified 2026-09-10.
@@ -203,5 +207,7 @@ pkg_postinst() {
 		elog "It runs in-process against the system interpreter -- no ~/.unsloth/studio"
 		elog "venv and no runtime download."
 		optfeature "S3 dataset loading in Studio" dev-python/boto3
+		optfeature "AMD Ryzen AI (XDNA 2) NPU inference in Studio" \
+			"sci-ml/lemonade sci-ml/fastflowlm"
 	fi
 }
