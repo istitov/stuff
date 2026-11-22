@@ -1,0 +1,150 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+CRATES="
+	aho-corasick@1.1.5
+	anstyle@1.0.14
+	anyhow@1.0.104
+	assert_cmd@2.2.2
+	assert_fs@1.1.4
+	autocfg@1.5.1
+	base64@0.23.1
+	bitflags@2.13.2
+	bstr@1.14.0
+	cfg-if@1.0.5
+	console@0.16.6
+	convert_case@0.12.0
+	crossbeam-deque@0.8.8
+	crossbeam-epoch@0.9.21
+	crossbeam-utils@0.8.23
+	difflib@0.4.0
+	dirs-sys@0.5.0
+	dirs@7.0.0
+	displaydoc@0.2.7
+	either@1.19.0
+	encode_unicode@1.0.0
+	equivalent@1.0.3
+	errno@0.3.15
+	fastrand@2.5.0
+	float-cmp@0.10.0
+	foldhash@0.2.0
+	futures-core@0.3.34
+	futures-task@0.3.34
+	futures-timer@3.0.4
+	futures-util@0.3.34
+	getrandom@0.4.3
+	glob@0.3.4
+	globset@0.4.21
+	globwalk@0.9.1
+	hashbrown@0.17.1
+	hermit-abi@0.5.3
+	icu_collections@2.4.0
+	icu_locale_core@2.4.0
+	icu_locale_fallback@2.4.0
+	icu_locale_fallback_data@2.4.0
+	icu_provider@2.4.0
+	icu_segmenter@2.4.0
+	icu_segmenter_data@2.4.0
+	ignore@0.4.34
+	indexmap@2.14.2
+	insta@1.49.0
+	itoa@1.0.19
+	libc@0.2.191
+	libredox@0.1.25
+	linux-raw-sys@0.12.1
+	litemap@0.8.3
+	log@0.4.35
+	memchr@2.8.3
+	natord@1.0.9
+	nom@8.0.0
+	normalize-line-endings@0.3.0
+	num-traits@0.2.19
+	num_cpus@1.17.0
+	once_cell@1.21.4
+	option-ext@0.2.0
+	pin-project-lite@0.2.18
+	potential_utf@0.1.6
+	predicates-core@1.0.10
+	predicates-tree@1.0.13
+	predicates@3.1.4
+	proc-macro-crate@3.5.0
+	proc-macro2@1.0.107
+	quote@1.0.47
+	r-efi@6.0.0
+	redox_users@0.5.3
+	regex-automata@0.4.19
+	regex-syntax@0.8.12
+	regex@1.13.2
+	relative-path@1.9.3
+	roff@1.1.1
+	rstest@0.28.0
+	rstest_macros@0.28.0
+	rustc_version@0.4.1
+	rustix@1.1.6
+	same-file@1.0.6
+	semver@1.0.28
+	serde@1.0.229
+	serde_core@1.0.229
+	serde_derive@1.0.229
+	serde_json@1.0.154
+	shell-words@1.1.1
+	similar@2.7.0
+	smallvec@1.16.6
+	smawk@0.3.3
+	stable_deref_trait@1.2.1
+	syn@2.0.119
+	syn@3.0.10
+	synstructure@0.14.0
+	tempfile@3.27.0
+	termtree@0.5.1
+	textwrap@0.16.4
+	thiserror-impl@2.0.21
+	thiserror@2.0.21
+	threadpool@1.8.1
+	tinystr@0.8.5
+	toml_datetime@1.1.3+spec-1.1.0
+	toml_edit@0.25.19+spec-1.1.0
+	toml_parser@1.1.5+spec-1.1.0
+	unicode-ident@1.0.27
+	unicode-segmentation@1.13.3
+	unicode-width@0.2.3
+	utf8_iter@1.1.0
+	utf_types@1.0.0
+	wait-timeout@0.2.1
+	walkdir@2.5.0
+	which@8.0.6
+	winapi-util@0.1.11
+	windows-link@0.2.1
+	windows-sys@0.61.2
+	winnow@1.0.5
+	writeable@0.6.4
+	yoke-derive@0.8.4
+	yoke@0.8.4
+	zerofrom-derive@0.1.8
+	zerofrom@0.1.8
+	zerotrie@0.2.5
+	zerovec-derive@0.11.7
+	zerovec@0.11.9
+	zmij@1.0.23
+"
+
+RUST_MIN_VER="1.88.0"
+inherit cargo
+
+DESCRIPTION="Bash CLI framework + command runner (argcfile / Argcfile.sh)"
+HOMEPAGE="
+	https://github.com/sigoden/argc
+"
+SRC_URI="
+	https://github.com/sigoden/argc/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
+	${CARGO_CRATE_URIS}
+"
+
+# The project is Apache-2.0/MIT dual-licensed.
+LICENSE="|| ( Apache-2.0 MIT )"
+# Dependent crate licenses
+LICENSE+=" Apache-2.0 MIT MPL-2.0 Unicode-3.0 ZLIB"
+SLOT="0"
+KEYWORDS="~amd64 ~arm ~arm64"
