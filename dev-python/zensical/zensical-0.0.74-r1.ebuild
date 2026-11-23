@@ -79,7 +79,7 @@ CRATES="
 	foldhash@0.1.5
 	font-types@0.12.4
 	fontdb@0.24.0
-	form_urlencoded@1.2.2
+	form_urlencoded@1.2.3
 	from_variant@3.0.0
 	fsevent-sys@4.1.0
 	futures-core@0.3.32
@@ -151,13 +151,13 @@ CRATES="
 	kqueue@1.2.0
 	kurbo@0.13.1
 	lazy_static@1.5.0
-	lexical-core@1.0.6
-	lexical-parse-float@1.0.6
-	lexical-parse-integer@1.0.6
-	lexical-util@1.0.7
-	lexical-write-float@1.0.6
-	lexical-write-integer@1.0.6
-	lexical@7.0.5
+	lexical-core@0.8.5
+	lexical-parse-float@0.8.5
+	lexical-parse-integer@0.8.6
+	lexical-util@0.8.5
+	lexical-write-float@0.8.5
+	lexical-write-integer@0.8.5
+	lexical@6.1.1
 	libc@0.2.186
 	libm@0.2.16
 	linux-raw-sys@0.12.1
@@ -272,6 +272,7 @@ CRATES="
 	simd_cesu8@1.1.1
 	simdutf8@0.1.5
 	simplecss@0.2.2
+	siphasher@0.3.11
 	siphasher@1.0.3
 	skrifa@0.44.0
 	slab@0.4.12
@@ -285,15 +286,15 @@ CRATES="
 	subtle@2.6.1
 	svgtypes@0.16.1
 	swc_atoms@10.0.0
-	swc_common@27.0.0
-	swc_css@33.0.0
-	swc_css_ast@27.0.0
-	swc_css_codegen@27.0.0
+	swc_common@26.0.0
+	swc_css@31.0.0
+	swc_css_ast@26.0.0
+	swc_css_codegen@26.0.0
 	swc_css_codegen_macros@1.0.2
-	swc_css_minifier@27.0.0
-	swc_css_parser@27.0.0
-	swc_css_utils@27.0.0
-	swc_css_visit@27.0.0
+	swc_css_minifier@26.0.0
+	swc_css_parser@26.0.0
+	swc_css_utils@26.0.0
+	swc_css_visit@26.0.0
 	swc_eq_ignore_macros@1.0.1
 	swc_macros_common@1.0.1
 	swc_visit@2.0.2
@@ -331,7 +332,7 @@ CRATES="
 	untrusted@0.9.0
 	ureq-proto@0.6.1
 	ureq@3.4.0
-	url@2.5.8
+	url@2.5.9
 	usvg@0.48.1
 	utf16_iter@1.0.5
 	utf8-zero@0.8.1
@@ -431,6 +432,7 @@ KEYWORDS="~amd64"
 # Python 3.14 (verified 2026-09-24), so pkgcheck's DeprecatedDep stays.
 RDEPEND="
 	>=dev-python/click-8.1.8[${PYTHON_USEDEP}]
+	>=dev-python/deepmerge-2.0[${PYTHON_USEDEP}]
 	>=dev-python/jinja2-3.1[${PYTHON_USEDEP}]
 	>=dev-python/markdown-3.7[${PYTHON_USEDEP}]
 	>=dev-python/pathspec-1.0.4[${PYTHON_USEDEP}]
@@ -438,10 +440,14 @@ RDEPEND="
 	>=dev-python/pymdown-extensions-11.0[${PYTHON_USEDEP}]
 	>=dev-python/pyyaml-6.0.2[${PYTHON_USEDEP}]
 	>=dev-python/tomli-2.4.0[${PYTHON_USEDEP}]
-	~dev-python/zensical-ui-0.0.42[${PYTHON_USEDEP}]
+	~dev-python/zensical-ui-0.0.41[${PYTHON_USEDEP}]
 "
 
 QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/zensical/zensical.*.so"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.0.74-cargo-lock-rustsec.patch"
+)
 
 src_unpack() {
 	cargo_src_unpack

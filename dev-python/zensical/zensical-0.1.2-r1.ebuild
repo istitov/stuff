@@ -79,7 +79,7 @@ CRATES="
 	foldhash@0.1.5
 	font-types@0.12.4
 	fontdb@0.24.0
-	form_urlencoded@1.2.2
+	form_urlencoded@1.2.3
 	from_variant@3.0.0
 	fsevent-sys@4.1.0
 	futures-core@0.3.32
@@ -331,7 +331,7 @@ CRATES="
 	untrusted@0.9.0
 	ureq-proto@0.6.1
 	ureq@3.4.0
-	url@2.5.8
+	url@2.5.9
 	usvg@0.48.1
 	utf16_iter@1.0.5
 	utf8-zero@0.8.1
@@ -442,6 +442,11 @@ RDEPEND="
 "
 
 QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/zensical/zensical.*.so"
+
+# Applies unchanged to 0.1.2. verified 2026-11-23
+PATCHES=(
+	"${FILESDIR}/${PN}-0.1.3-cargo-lock-rustsec.patch"
+)
 
 src_unpack() {
 	cargo_src_unpack

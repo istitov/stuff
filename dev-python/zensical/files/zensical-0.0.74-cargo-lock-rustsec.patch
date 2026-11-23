@@ -1,0 +1,74 @@
+Update vendored crates flagged by RustSec to fixed releases with
+`cargo update -p <crate>@<version> --precise <new>`; the rustls crates
+move to the versions zensical 0.1.1 locks:
+  url 2.5.8 -> 2.5.9 (RUSTSEC-2026-0592)
+  rustls 0.23.45 -> 0.23.46 (RUSTSEC-2026-0346, RUSTSEC-2026-0347,
+    RUSTSEC-2026-0348, RUSTSEC-2026-0349)
+  rustls-webpki 0.103.15 -> 0.103.16 (RUSTSEC-2026-0382)
+  webpki-roots 1.0.9 -> 1.0.11 (RUSTSEC-2026-0381)
+url 2.5.9 requires form_urlencoded 1.2.3, so cargo moved it from 1.2.2.
+lexical 6 and lexical-core 0.8 (RUSTSEC-2023-0055, RUSTSEC-2023-0086) stay:
+the fixed releases are semver-incompatible with swc_css_parser 26.
+
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -598,9 +598,9 @@
+ 
+ [[package]]
+ name = "form_urlencoded"
+-version = "1.2.2"
++version = "1.2.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "cb4cb245038516f5f85277875cdaa4f7d2c9a0fa0468de06ed190163b1581fcf"
++checksum = "afa489199eaffb1211795df1c6236ce1ad0d41a6fa45250add73e3b02420f06e"
+ dependencies = [
+  "percent-encoding",
+ ]
+@@ -2329,9 +2329,9 @@
+ 
+ [[package]]
+ name = "rustls"
+-version = "0.23.45"
++version = "0.23.46"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "0d41d731c7d2f962d1ccc364cec258de3c0e93b38c2fb3ba97ac74513048d634"
++checksum = "48e13bd8c0e9365c43cfa5c9e8f9ad49d3c8444926c9aac819e0e4dc503c8fdf"
+ dependencies = [
+  "log",
+  "once_cell",
+@@ -2353,9 +2353,9 @@
+ 
+ [[package]]
+ name = "rustls-webpki"
+-version = "0.103.15"
++version = "0.103.16"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f3c3cf1d8b1e7d4927e2d154c3fcb02979afb9939629c62cd9048d4f07b60ac2"
++checksum = "4443b1b6d39d7c663139942cc4558262562d2c84123bb6282ef177009ca8b281"
+ dependencies = [
+  "ring",
+  "rustls-pki-types",
+@@ -3134,9 +3134,9 @@
+ 
+ [[package]]
+ name = "url"
+-version = "2.5.8"
++version = "2.5.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ff67a8a4397373c3ef660812acab3268222035010ab8680ec4215f38ba3d0eed"
++checksum = "f00cd2407bb42c0ef17be88d4cf020f5cceffd121665bac9b8b9493a369b3b1a"
+ dependencies = [
+  "form_urlencoded",
+  "idna",
+@@ -3305,9 +3305,9 @@
+ 
+ [[package]]
+ name = "webpki-roots"
+-version = "1.0.9"
++version = "1.0.11"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7dcd9d09a39985f5344844e66b0c530a33843579125f23e21e9f0f220850f22a"
++checksum = "f5f280bbb2b287bc8e7de7e3852945a0ff50d1bbcb5ed42b6c7a568c546df171"
+ dependencies = [
+  "rustls-pki-types",
+ ]
