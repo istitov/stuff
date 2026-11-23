@@ -6,7 +6,7 @@ EAPI=8
 inherit desktop unpacker xdg
 
 # Since 0.1.804_beta, assets use unversioned names; the tag pins the fetch and
-# the rename keeps distfiles unique. Verified through 0.1.920_beta.
+# the rename keeps distfiles unique. Verified through 0.1.907_beta.
 MY_TAG="v${PV/_beta/-beta}"
 MY_DEB="Unsloth-Desktop-Ubuntu.deb"
 
@@ -25,9 +25,11 @@ SLOT="0"
 KEYWORDS="-* ~amd64"
 RESTRICT="strip"
 
-# Dependencies follow DT_NEEDED, not the overdeclared Debian metadata;
-# libappindicator is dlopen-optional. Block sci-ml/unsloth[studio], which owns
-# the same /usr/bin/unsloth-studio. Verified 2026-09-10.
+# Dependencies follow DT_NEEDED, not the overdeclared Debian metadata, plus
+# libayatana-appindicator: the tray code dlopen()s it at startup and panics
+# when it is missing (issue #312, verified 2026-11-23). Block
+# sci-ml/unsloth[studio], which owns the same /usr/bin/unsloth-studio.
+# Verified 2026-09-10.
 RDEPEND="
 	!!sci-ml/unsloth[studio]
 	|| (
@@ -35,6 +37,7 @@ RDEPEND="
 		net-misc/wget
 	)
 	dev-libs/glib:2
+	dev-libs/libayatana-appindicator
 	net-libs/libsoup:3.0
 	net-libs/webkit-gtk:4.1
 	sys-apps/dbus
