@@ -139,7 +139,7 @@ CRATES="
 	foreign-types-macros@0.2.3
 	foreign-types-shared@0.3.1
 	foreign-types@0.5.0
-	form_urlencoded@1.2.2
+	form_urlencoded@1.2.3
 	fs_extra@1.3.0
 	futures-channel@0.3.32
 	futures-core@0.3.32
@@ -485,7 +485,7 @@ CRATES="
 	unicode-segmentation@1.12.0
 	unicode-xid@0.2.6
 	untrusted@0.9.0
-	url@2.5.8
+	url@2.5.9
 	urlpattern@0.6.0
 	utf-8@0.7.6
 	utf8_iter@1.0.4
@@ -625,9 +625,13 @@ S="${WORKDIR}/unsloth-${PV/_beta/-beta}"
 # 0.1.911_beta shortened the doc comment above resolve_backend_binary(),
 # which broke that hunk's context, so the system-backend patch was
 # rebased; the hunks are otherwise unchanged. Verified 2026-10-26.
-# Applies unchanged to 0.1.920_beta. Verified 2026-11-20.
+# Applies unchanged to 0.1.919_beta. Verified 2026-11-17.
 PATCHES=(
 	"${FILESDIR}/${PN}-0.1.911-system-backend.patch"
+	# url 2.5.8, reachable through tauri, overflows the stack on nested
+	# blob: URLs (RUSTSEC-2026-0592). The lockfile is identical to
+	# 0.1.922_beta's. Verified 2026-11-23.
+	"${FILESDIR}/${PN}-0.1.922-cargo-lock-rustsec.patch"
 )
 
 # The generated archive is mutable; the Manifest pins its accepted bytes.
