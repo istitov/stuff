@@ -58,23 +58,28 @@ CPU_FLAGS_X86=(
 	avx512vbmi avx_vnni bmi2 f16c fma3 sse4_2
 )
 
-IUSE="debug openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui"
+IUSE="debug openblas +openmp blis rocm cuda opencl +openssl vulkan flexiblas examples +webui sycl"
 IUSE+=" ${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}"
 
 # HIP builds the CUDA backend sources, and ggml registers that backend once.
+# USE=sycl sets CC/CXX to icx/icpx for the whole build, while USE=rocm sets
+# them to hipcc; sycl with cuda is untested.
 REQUIRED_USE="
 	?? (
 		openblas
 		blis
 		flexiblas
 	)
-	?? ( cuda rocm )
+	?? ( cuda rocm sycl )
 	rocm? ( ${ROCM_REQUIRED_USE} )
 "
 
-# No sycl flag: the SYCL backend needs Intel's icpx, MKL's SYCL API and a
-# GPU-enabled oneDNN, none of which ::gentoo packages. checked 2026-10-19
+# The SYCL backend needs Intel's icpx, MKL's SYCL BLAS and the GPU build of
+# oneDNN, none of which ::gentoo packages, so USE=sycl builds against an
+# oneAPI install outside portage (ONEAPI_ROOT, see pkg_setup). The Level Zero
+# loader is ::gentoo's. verified 2026-11-23 on oneAPI 2026.2
 CDEPEND="
+	sycl? ( dev-libs/level-zero:= )
 	openblas? ( sci-libs/openblas:= )
 	openmp? ( llvm-runtimes/openmp:= )
 	blis? ( sci-libs/blis:= )
@@ -96,7 +101,10 @@ DEPEND="${CDEPEND}
 		dev-util/vulkan-headers
 	)
 "
-RDEPEND="${CDEPEND}"
+# oneAPI's libumf (see src_install) links libhwloc.so.15.
+RDEPEND="${CDEPEND}
+	sycl? ( sys-apps/hwloc )
+"
 # The OpenCL backend embeds its kernels with a stdlib-only Python script.
 # The BLAS backend finds its library through pkg-config.
 # The GPU backends compile with the build host's hipcc or nvcc.
@@ -108,6 +116,7 @@ BDEPEND="
 	flexiblas? ( virtual/pkgconfig )
 	rocm? ( >=dev-util/hipcc-7.0 )
 	cuda? ( dev-util/nvidia-cuda-toolkit )
+	sycl? ( virtual/pkgconfig )
 "
 
 pkg_pretend() {
@@ -117,6 +126,26 @@ pkg_pretend() {
 pkg_setup() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 	use opencl && python-any-r1_pkg_setup
+
+	if use sycl && [[ ${MERGE_TYPE} != binary ]]; then
+		: "${ONEAPI_ROOT:=/opt/intel/oneapi}"
+		# ::gentoo's sci-libs/mkl also installs /opt/intel/oneapi/mkl/latest
+		# with an MKLConfig.cmake, but without the SYCL libraries.
+		local f
+		for f in compiler/latest/bin/icpx \
+			mkl/latest/lib/libmkl_sycl_blas.so \
+			dnnl/latest/lib/cmake/dnnl/dnnl-config.cmake; do
+			[[ -e ${ONEAPI_ROOT}/${f} ]] && continue
+			eerror "USE=sycl needs Intel oneAPI's DPC++/C++ compiler, oneMKL and"
+			eerror "oneDNN, installed with Intel's installer. ${ONEAPI_ROOT}/${f}"
+			eerror "is missing; set ONEAPI_ROOT (e.g. in package.env) if oneAPI"
+			eerror "lives elsewhere than /opt/intel/oneapi."
+			die "oneAPI not found under ${ONEAPI_ROOT}"
+		done
+		# See src_install; without UMF, SYCL still runs, over OpenCL.
+		[[ -d ${ONEAPI_ROOT}/umf/latest/lib ]] ||
+			ewarn "No ${ONEAPI_ROOT}/umf/latest/lib: SYCL will fall back to OpenCL."
+	fi
 
 	if use rocm; then
 		linux-info_pkg_setup
@@ -161,6 +190,23 @@ src_configure() {
 		append-cxxflags "-DNDEBUG"
 	fi
 
+	local d rpath="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
+	# The SYCL runtime, SVML, libiomp5, oneMKL, oneDNN and TBB are not on the
+	# loader path; find them without sourcing setvars.sh, at link time (the
+	# executables link them only indirectly) and at run time. Some of
+	# oneAPI's own libraries carry no RUNPATH (its libOpenCL needs libirng)
+	# and share sonames with dev-cpp/tbb, sci-ml/oneDNN and
+	# opencl-icd-loader, so emit DT_RPATH, which also covers the dependencies
+	# of libraries without a RUNPATH, as setvars.sh would.
+	# verified 2026-11-23
+	if use sycl; then
+		for d in compiler mkl dnnl tbb; do
+			rpath+=";${ONEAPI_ROOT}/${d}/latest/lib"
+			append-ldflags "-Wl,-rpath-link,${ONEAPI_ROOT}/${d}/latest/lib"
+		done
+		append-ldflags -Wl,--disable-new-dtags
+	fi
+
 	local mycmakeargs=(
 		-DLLAMA_BUILD_TESTS=OFF
 		-DLLAMA_BUILD_EXAMPLES=$(usex examples)
@@ -186,11 +232,11 @@ src_configure() {
 		-DGGML_OPENCL_USE_ADRENO_KERNELS=$(usex arm64)
 		-DGGML_OPENMP=$(usex openmp)
 		-DGGML_VULKAN=$(usex vulkan)
-		-DGGML_SYCL=OFF
+		-DGGML_SYCL=$(usex sycl)
 
 		# Isolate libraries shared with whisper.cpp.
 		-DCMAKE_INSTALL_LIBDIR="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
-		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/$(get_libdir)/llama.cpp"
+		-DCMAKE_INSTALL_RPATH="${rpath}"
 	)
 
 	if [[ ${PV} == *9999* ]]; then
@@ -264,6 +310,28 @@ src_configure() {
 		use openmp && mycmakeargs+=( $(rocm_hipcc_openmp_args) )
 	fi
 
+	if use sycl; then
+		# ggml-sycl checks ENV{ONEAPI_ROOT} to tell icpx from a SYCL clang.
+		export ONEAPI_ROOT
+		export PATH="${ONEAPI_ROOT}/compiler/latest/bin:${PATH}"
+		export CC=icx CXX=icpx
+		strip-unsupported-flags
+		# Point at oneAPI's MKL and oneDNN explicitly: ::gentoo's sci-libs/mkl
+		# (no SYCL BLAS, and its env.d exports MKLROOT, which MKLConfig
+		# prefers) and CPU-only sci-ml/oneDNN would otherwise be found, and
+		# ggml-sycl rejects a oneDNN without DNNL_GPU_VENDOR.
+		# verified 2026-11-23
+		mycmakeargs+=(
+			-DGGML_SYCL_TARGET=INTEL
+			-DGGML_SYCL_F16=ON
+			-DMKL_ROOT="${ONEAPI_ROOT}/mkl/latest"
+			-DMKL_DIR="${ONEAPI_ROOT}/mkl/latest/lib/cmake/mkl"
+			-DDNNL_DIR="${ONEAPI_ROOT}/dnnl/latest/lib/cmake/dnnl"
+			# oneDNN's config would otherwise take dev-cpp/tbb's.
+			-DTBB_DIR="${ONEAPI_ROOT}/tbb/latest/lib/cmake/tbb"
+		)
+	fi
+
 	cmake_src_configure
 }
 
@@ -285,4 +353,13 @@ src_install() {
 
 	# Both projects install conflicting ggml headers.
 	rm -r "${ED}/usr/include" || die
+
+	# The SYCL runtime's Level Zero adapter finds libumf only through the
+	# loader path (its RUNPATH is $ORIGIN, which overrides our RPATH);
+	# without it SYCL silently falls back to OpenCL. verified 2026-11-23
+	if use sycl; then
+		newenvd - 99${PN}-sycl <<-EOF
+			LDPATH="${ONEAPI_ROOT}/umf/latest/lib"
+		EOF
+	fi
 }

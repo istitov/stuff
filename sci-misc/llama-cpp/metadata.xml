@@ -27,6 +27,11 @@
     <flag name="openblas">Build an OpenBLAS backend</flag>
     <flag name="opencl">Build an OpenCL backend, so far only works on Adreno and Intel GPUs</flag>
     <flag name="openssl">Use openssl to support HTTPS</flag>
+    <flag name="sycl">Build the SYCL backend for Intel GPUs (Arc, Xe iGPUs,
+    Data Center). Needs Intel oneAPI's DPC++/C++ compiler, oneMKL and
+    oneDNN from Intel's installer under ONEAPI_ROOT (default
+    /opt/intel/oneapi), and <pkg>dev-libs/intel-compute-runtime</pkg>
+    with USE=level-zero to run.</flag>
     <flag name="webui">Embed the llama-server web UI, using the prebuilt
     assets upstream publishes with each release (the live ebuild builds
     or downloads them at configure time); disable for a server binary
