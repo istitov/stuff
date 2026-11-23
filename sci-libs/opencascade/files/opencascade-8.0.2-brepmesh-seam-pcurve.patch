@@ -1,0 +1,37 @@
+Subject: [PATCH] BRepMesh: select the seam pcurve closer to the discrete one
+
+Taken from OrcaSlicer 2.5.2 deps/OCCT (#17720), which revised the
+2.5.0 patch for its bundled OCCT 8.0.1. Both pcurves of a seam are
+evaluated at the edge's first parameter, because a Geom2d_Line's
+FirstParameter() is -Precision::Infinite() (Open-Cascade-SAS/OCCT#572),
+and the closer one is taken instead of testing against
+Precision::Confusion(): BRepMesh_ModelHealer has already moved the
+discrete pcurve's ends onto neighbouring pcurves that can end past the
+seam, so the fixed threshold swapped the pcurves and cone faces lost
+their triangulation.
+
+diff --git a/src/ModelingAlgorithms/TKMesh/BRepMesh/BRepMesh_ModelPreProcessor.cxx b/src/ModelingAlgorithms/TKMesh/BRepMesh/BRepMesh_ModelPreProcessor.cxx
+index 6f63781..97a20d3 100644
+--- a/src/ModelingAlgorithms/TKMesh/BRepMesh/BRepMesh_ModelPreProcessor.cxx
++++ b/src/ModelingAlgorithms/TKMesh/BRepMesh/BRepMesh_ModelPreProcessor.cxx
+@@ -223,10 +223,16 @@ private:
+       return false;
+     }
+ 
+-    // Select the correct pcurve of the seam-edge.
+-    const gp_Pnt2d& aFPntOfPC1 = aPC1->Value(aPC1->FirstParameter());
+-
+-    if (std::abs(aLPntOfIPC1.X() - aFPntOfPC1.X()) > Precision::Confusion())
++    // Select the correct pcurve of the seam-edge: the one closer to the discrete pcurve.
++    // Both pcurves of a seam share the edge's range, so evaluate them at its start. A
++    // Geom2d_Line's FirstParameter() is -Precision::Infinite(), where a direction of (2e-16, -1)
++    // from rounding error gives an X far outside the U range. A Precision::Confusion() threshold
++    // fails too, because BRepMesh_ModelHealer has already moved the ends of the discrete pcurve
++    // onto those of the neighbouring edges, whose pcurves can end slightly past the seam.
++    const gp_Pnt2d aFPntOfPC1 = aPC1->Value(af);
++    const gp_Pnt2d aFPntOfPC2 = aPC2->Value(af);
++
++    if (std::abs(aLPntOfIPC1.X() - aFPntOfPC1.X()) > std::abs(aLPntOfIPC1.X() - aFPntOfPC2.X()))
+     {
+       std::swap(aPC1, aPC2);
+     }
