@@ -1,0 +1,18 @@
+# Do not pass Go's -s -w link flags, so the ollama binary keeps its symbol
+# table / DWARF and Portage's install-time strip + splitdebug can do their
+# job (upstream hard-codes -s -w, defeating both). Adopted from ::gentoo
+# sci-ml/ollama (tupone@gentoo.org).
+
+# Rebased for 0.40.18, which appends OLLAMA_GO_EXTRA_LDFLAGS after this line.
+
+--- a/cmake/local.cmake
++++ b/cmake/local.cmake
+@@ -742,7 +742,7 @@
+     get_filename_component(OLLAMA_GO_OUTPUT_DIR "${OLLAMA_GO_OUTPUT}" DIRECTORY)
+ 
+     set(OLLAMA_GO_LDFLAGS
+-        "-s -w -X=github.com/ollama/ollama/version.Version=${OLLAMA_VERSION} -X=github.com/ollama/ollama/server.mode=release")
++        "-X=github.com/ollama/ollama/version.Version=${OLLAMA_VERSION} -X=github.com/ollama/ollama/server.mode=release")
+     if(OLLAMA_GO_EXTRA_LDFLAGS)
+         string(APPEND OLLAMA_GO_LDFLAGS " ${OLLAMA_GO_EXTRA_LDFLAGS}")
+     endif()
