@@ -112,6 +112,18 @@ PATCHES=(
 
 CMAKE_USE_DIR="${S}/cmake"
 
+# Microsoft removed microsoft/onnxruntime from GitHub without a redirect,
+# so the source archive fails to fetch; PyPI ships only wheels and the
+# Gentoo mirrors lack it. Tell users how to supply it. verified 2026-11-24
+pkg_nofetch() {
+	eerror "${P}.tar.gz may fail to fetch: Microsoft removed the"
+	eerror "microsoft/onnxruntime repository from GitHub (around 2026-11-18)."
+	eerror "If you have a copy of the GitHub archive of tag v${PV}, e.g. from"
+	eerror "another machine's distfiles, place it as ${P}.tar.gz in your"
+	eerror "distfiles directory, which 'portageq distdir' prints. It must match"
+	eerror "the Manifest checksums; an archive rebuilt from a git checkout will not."
+}
+
 # CUDA compilation uses >3 GiB per nvcc job; cap it at four without raising a
 # lower user limit. Installation does not need throttling.
 onnxruntime_cmake_phase() {
