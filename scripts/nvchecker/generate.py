@@ -635,6 +635,14 @@ SPECIAL_SOURCES: dict[str, dict[str, object]] = {
         "source": "pypi",
         "pypi": "unsloth",
     },
+    # Microsoft pulled microsoft/onnxruntime from GitHub around 2026-11-18
+    # without a redirect, so both the API and tag listing return 404. The
+    # onnxruntime wheels on PyPI still carry the source release's version
+    # number, so track those instead. # verified 2026-11-24
+    "sci-libs/onnxruntime": {
+        "source": "pypi",
+        "pypi": "onnxruntime",
+    },
     # glossaries is TeX Live-shipped but ALSO has independent upstream
     # releases, and was skipped as untrackable ("no tag scheme", "add a regex
     # tracker"). CTAN exposes a machine-readable canonical version per

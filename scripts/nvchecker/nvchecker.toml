@@ -1214,7 +1214,7 @@ pypi = "sasview"
 source = "pypi"
 pypi = "xraylarch"
 
-# --- github (252) ---
+# --- github (251) ---
 
 ["app-accessibility/whisper-cpp"]
 source = "github"
@@ -2521,12 +2521,6 @@ github = "nexusformat/code"
 use_max_tag = true
 prefix = "v"
 
-["sci-libs/onnxruntime"]
-source = "github"
-github = "microsoft/onnxruntime"
-use_max_tag = true
-prefix = "v"
-
 ["sci-libs/opencascade"]
 source = "github"
 github = "Open-Cascade-SAS/OCCT"
@@ -2998,7 +2992,7 @@ cpan = "Term-Sk"
 source = "cpan"
 cpan = "Term-Twiddle"
 
-# --- special (28) ---
+# --- special (29) ---
 
 ["app-text/mupdf"]
 source = "regex"
@@ -3104,6 +3098,10 @@ source = "gitea"
 gitea = "fsphil/fswebcam"
 host = "codeberg.org"
 use_max_tag = true
+
+["sci-libs/onnxruntime"]
+source = "pypi"
+pypi = "onnxruntime"
 
 ["sci-misc/stable-diffusion-cpp"]
 source = "github"
