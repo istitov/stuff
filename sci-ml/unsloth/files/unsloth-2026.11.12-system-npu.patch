@@ -1,0 +1,161 @@
+Run the packaged Lemonade and FastFlowLM for the NPU in a Gentoo system
+install.
+
+Enabling the NPU makes Studio download a pinned FastFlowLM, either
+directly (with flm_host.py standing in for lemond) or through Lemonade's
+Ubuntu build in ~/.unsloth/studio/lemonade. With UNSLOTH_STUDIO_SYSTEM=1
+(set by the unsloth-studio wrapper and by unsloth-desktop) it now runs
+/usr/bin/lemond from sci-ml/lemonade, overridable with
+UNSLOTH_STUDIO_LEMOND, and the installer reports a missing lemond or flm
+as a package to emerge.
+
+Since 2026.11.12 Studio itself can run a local FastFlowLM named by
+UNSLOTH_FLM_NPU_BIN: it skips lemond's FastFlowLM install and the
+pinned-version check, hands the binary to lemond as
+LEMONADE_FLM_NPU_BIN, and validates the runtime through lemond's
+/v1/system-info. In system mode that binary defaults to
+/opt/fastflowlm/bin/flm from sci-ml/fastflowlm (UNSLOTH_STUDIO_FLM, the
+override earlier Gentoo builds read, still applies). That default does
+not count as a user-configured runtime when detecting hardware, so
+machines without an NPU are not offered one.
+
+Only in b/studio: __pycache__
+Only in b/studio/backend/utils: __pycache__
+Only in b/studio/backend/utils/hardware: __pycache__
+--- a/studio/backend/utils/hardware/npu.py
++++ b/studio/backend/utils/hardware/npu.py
+@@ -10,7 +10,7 @@
+ from pathlib import Path
+ from typing import Any, Optional
+ 
+-from ..npu_runtime_config import custom_runtime_configured
++from ..npu_runtime_config import custom_runtime_configured, system_default_flm
+ 
+ _AMD_VENDOR = "1022"
+ _XDNA2_DEVICE = "17f0"
+@@ -134,7 +134,8 @@
+     info["enabled"] = npu_enabled()
+     known_npu = bool(info.get("present")) and info.get("family") == "XDNA2"
+     runtime_probe = (sys.platform.startswith("linux") or sys.platform == "win32") and (
+-        custom_runtime_configured()
++        # The Gentoo system default is not a user's request to probe the device.
++        custom_runtime_configured() and not system_default_flm()
+     )
+     # An explicitly configured runtime gets to probe the device when the user enables it.
+     info["supported"] = info["enabled"] and (known_npu or runtime_probe)
+--- a/studio/backend/utils/npu_runtime_config.py
++++ b/studio/backend/utils/npu_runtime_config.py
+@@ -18,8 +18,23 @@
+     return Path(value) if value else None
+ 
+ 
++def system_runtime() -> bool:
++    """Gentoo system install (sci-ml/unsloth[studio], UNSLOTH_STUDIO_SYSTEM=1)."""
++    return os.environ.get("UNSLOTH_STUDIO_SYSTEM") == "1"
++
++
++def system_default_flm() -> bool:
++    """Whether the packaged FastFlowLM stands in for an unset UNSLOTH_FLM_NPU_BIN."""
++    return system_runtime() and not os.environ.get(FLM_BINARY_ENV, "").strip()
++
++
+ def local_flm_binary() -> Optional[Path]:
+     value = os.environ.get(FLM_BINARY_ENV, "").strip()
++    if not value and system_runtime():
++        # The real binary, not the /usr/bin/flm wrapper: Studio finds FastFlowLM's
++        # model_list.json at <prefix>/share/flm relative to it. UNSLOTH_STUDIO_FLM
++        # is the override earlier Gentoo builds read.
++        value = os.environ.get("UNSLOTH_STUDIO_FLM", "/opt/fastflowlm/bin/flm")
+     return Path(value) if value else None
+ 
+ 
+--- a/studio/install_lemonade_prebuilt.py
++++ b/studio/install_lemonade_prebuilt.py
+@@ -16,6 +16,7 @@
+ import os
+ import platform
+ import shutil
++import subprocess
+ import sys
+ import tempfile
+ import threading
+@@ -33,7 +34,9 @@
+ from backend.utils.npu_runtime_config import (  # noqa: E402
+     LEMONADE_ARCHIVE_ENV,
+     custom_runtime_configured,
++    local_flm_binary,
+     local_lemonade_archive,
++    system_runtime,
+ )
+ 
+ PINS_PATH = Path(_STUDIO_DIR) / "lemonade_prebuilt_pins.json"
+@@ -90,6 +93,13 @@
+     return "lemond.exe" if sys.platform == "win32" else "lemond"
+ 
+ 
++# Gentoo system install (sci-ml/unsloth[studio]): UNSLOTH_STUDIO_SYSTEM=1 runs
++# the packaged sci-ml/lemonade instead of downloading Lemonade's Ubuntu build.
++# local_flm_binary() names the packaged sci-ml/fastflowlm in that mode.
++def system_lemond() -> Path:
++    return Path(os.environ.get("UNSLOTH_STUDIO_LEMOND", "/usr/bin/lemond"))
++
++
+ def install_dir(root: Path, pins: Optional[dict] = None) -> Path:
+     pins = pins or load_pins()
+     archive = local_lemonade_archive()
+@@ -140,6 +150,9 @@
+ 
+ def installed_lemond(root: Path, pins: Optional[dict] = None) -> Optional[Path]:
+     """The lemond binary of a complete install matching the pin, else None."""
++    if system_runtime():
++        binary = system_lemond()
++        return binary if binary.is_file() else None
+     pins = pins or load_pins()
+     if direct_flm():
+         return installed_flm_host(root, pins)
+@@ -165,8 +178,32 @@
+     return binary if binary.is_file() else None
+ 
+ 
++@lru_cache(maxsize = 4)
++def _system_lemond_version(lemond: str, mtime_ns: int, size: int) -> Optional[str]:
++    """Run once per binary, as status reads would otherwise spawn lemond each time."""
++    try:
++        completed = subprocess.run(
++            [lemond, "--version"],
++            capture_output = True,
++            stdin = subprocess.DEVNULL,
++            text = True,
++            timeout = 10,
++        )
++    except (OSError, subprocess.SubprocessError):
++        return None
++    words = completed.stdout.split()
++    return words[-1] if completed.returncode == 0 and words else None
++
++
+ def installed_version(lemond: Path) -> Optional[str]:
+     """The Lemonade version recorded beside an installed lemond, or None."""
++    if system_runtime():
++        # No marker beside a packaged lemond; ask it ("lemond version 2026.47.1").
++        try:
++            stat = lemond.stat()
++        except OSError:
++            return None
++        return _system_lemond_version(str(lemond), stat.st_mtime_ns, stat.st_size)
+     marker = _read_marker(lemond.parent)
+     version = marker.get("version") if marker else None
+     return str(version) if version else None
+@@ -231,6 +268,12 @@
+ 
+     Verify and extract in a temporary directory before replacing the installation.
+     """
++    if system_runtime():
++        for binary, package in ((system_lemond(), "sci-ml/lemonade"),
++                                (local_flm_binary(), "sci-ml/fastflowlm")):
++            if not binary.is_file():
++                raise RuntimeError(f"{binary} is missing; emerge {package} to use the NPU.")
++        return system_lemond()
+     pins = load_pins(pins_path)
+     key = host_asset_key()
+     if key is None:
