@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{13..14} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 virtualx pypi
+inherit distutils-r1 optfeature virtualx pypi
 
 DESCRIPTION="Interactive analysis of multidimensional datasets tools"
 HOMEPAGE="https://hyperspy.org/"
@@ -63,4 +63,9 @@ PDEPEND="
 
 python_test() {
 	virtx epytest
+}
+
+pkg_postinst() {
+	optfeature "orthogonal distance regression fits (optimizer='odr')" \
+		dev-python/odrpack
 }
