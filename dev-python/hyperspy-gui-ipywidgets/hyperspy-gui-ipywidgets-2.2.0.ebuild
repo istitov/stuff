@@ -1,0 +1,31 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{13..14} )
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
+
+MYPN="${PN/hyperspy-gui-ipywidgets/hyperspy_gui_ipywidgets}"
+MYP="${MYPN}-${PV}"
+
+DESCRIPTION="Interactive analysis of multidimensional datasets tools"
+HOMEPAGE="https://hyperspy.org/"
+SRC_URI="$(pypi_sdist_url "${MYPN^}" "${PV}")"
+
+S="${WORKDIR}/${MYP}"
+LICENSE="GPL-3"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+
+RDEPEND="
+	>=dev-python/hyperspy-2.6.0[${PYTHON_USEDEP}]
+	>=dev-python/ipywidgets-8.0[${PYTHON_USEDEP}]
+	dev-python/ipympl[${PYTHON_USEDEP}]
+	dev-python/link-traits[${PYTHON_USEDEP}]
+"
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
