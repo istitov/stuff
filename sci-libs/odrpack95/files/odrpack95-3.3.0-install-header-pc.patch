@@ -1,0 +1,18 @@
+--- a/meson.build
++++ b/meson.build
+@@ -115,6 +115,15 @@
+   link_with: [odrpack_lib]
+ )
+ 
++# Install the C API header and a pkg-config file, so other projects can
++# link the installed library.
++install_headers('c/include/odrpack/odrpack.h', subdir: 'odrpack')
++pkg = import('pkgconfig')
++pkg.generate(
++  odrpack_lib,
++  description: 'Weighted orthogonal distance regression (ODR) library',
++)
++
+ # Examples
+ if get_option('build_examples')
+   subdir('example')
