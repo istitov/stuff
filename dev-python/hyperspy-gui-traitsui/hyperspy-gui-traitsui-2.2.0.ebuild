@@ -1,0 +1,33 @@
+# Copyright 1999-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{13..14} )
+DISTUTILS_USE_PEP517=setuptools
+inherit distutils-r1 pypi
+
+MYPN="${PN/hyperspy-gui-traitsui/hyperspy_gui_traitsui}"
+MYP="${MYPN}-${PV}"
+
+DESCRIPTION="Provides traitsui graphic user interface (GUI) elements for hyperspy"
+HOMEPAGE="https://hyperspy.org/"
+SRC_URI="$(pypi_sdist_url "${MYPN^}" "${PV}")"
+
+S="${WORKDIR}/${MYP}"
+
+LICENSE="GPL-3"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE="+pyqt6 pyside wx"
+REQUIRED_USE="^^ ( pyqt6 pyside wx )"
+
+RDEPEND="
+	>=dev-python/hyperspy-2.6.0[${PYTHON_USEDEP}]
+	>=dev-python/traits-7.0.2[${PYTHON_USEDEP}]
+	>=dev-python/traitsui-7.4.1[${PYTHON_USEDEP},pyqt6=,pyside=,wx=]
+"
+
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
